@@ -73,6 +73,7 @@ namespace hal
     {
         const auto& net_selection = g_selection_relay.m_selected_nets;
 
+        Q_EMIT layoutAboutToBeChanged();
         QVector<u32> net_ids;
         net_ids.reserve(net_selection.size());
 

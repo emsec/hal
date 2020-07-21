@@ -75,6 +75,7 @@ namespace hal
     {
         const auto& gate_selection = g_selection_relay.m_selected_gates;
 
+        Q_EMIT layoutAboutToBeChanged();
         QVector<u32> gate_ids;
         gate_ids.reserve(gate_selection.size());
 

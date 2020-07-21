@@ -16,6 +16,8 @@
 #include <QScrollBar>
 #include <QTableWidget>
 #include <QVBoxLayout>
+#include <QLabel>
+#include <QPixmap>
 
 namespace hal
 {
@@ -90,7 +92,13 @@ namespace hal
         m_id_item->setFlags(Qt::ItemIsEnabled);
         m_type_item->setFlags(Qt::ItemIsEnabled);
 
+        // place module icon
+        QLabel* img = new QLabel(this);
+        img->setPixmap(QPixmap(":/icons/sel_module","PNG").scaled(60,60));
+        img->setFixedSize(64,64);
+
         intermediate_layout_gt->addWidget(m_general_table);
+        intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_ip->addWidget(m_input_ports_table);
         intermediate_layout_ip->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));

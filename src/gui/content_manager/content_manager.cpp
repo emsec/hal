@@ -97,12 +97,17 @@ namespace hal
 
         //-------------------------Test Buttons---------------------------
 
+        /*
         ContentWidget* blue = new ContentWidget("blue");
+        blue->setObjectName("blue");
         blue->setStyleSheet("* {background-color: #2B3856;}");
         ContentWidget* venomgreen = new ContentWidget("venomgreen");
+        venomgreen->setObjectName("venomgreen");
         venomgreen->setStyleSheet("* {background-color: #728C00;}");
         ContentWidget* jade = new ContentWidget("jade");
+        jade->setObjectName("jade";
         jade->setStyleSheet("* {background-color: #C3FDB8;}");
+*/
 
         //    m_MainWindow->add_content(blue, content_anchor::left);
         //    m_MainWindow->add_content(venomgreen, content_anchor::left);

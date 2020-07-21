@@ -104,8 +104,14 @@ namespace hal
         m_id_item->setFlags(Qt::ItemIsEnabled);
         m_general_table->setItem(2, 1, m_id_item);
 
+        // place net icon
+        QLabel* img = new QLabel(this);
+        img->setPixmap(QPixmap(":/icons/sel_net","PNG").scaled(60,60));
+        img->setFixedSize(64,64);
+
         //adding things to intermediate layout (the one thats neccessary for the left spacing)
         intermediate_layout_gt->addWidget(m_general_table);
+        intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_sources->addWidget(m_source_pins_table);
         intermediate_layout_sources->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));

@@ -139,8 +139,14 @@ namespace hal
         m_boolean_functions_container_layout->setSpacing(0);
         m_boolean_functions_container->setLayout(m_boolean_functions_container_layout);
 
+        // place gate icon
+        QLabel* img = new QLabel(this);
+        img->setPixmap(QPixmap(":/icons/sel_gate","PNG").scaled(60,60));
+        img->setFixedSize(64,64);
+
         //adding things to intermediate layout (the one thats neccessary for the left spacing)
         intermediate_layout_gt->addWidget(m_general_table);
+        intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_ip->addWidget(m_input_pins_table);
         intermediate_layout_ip->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));

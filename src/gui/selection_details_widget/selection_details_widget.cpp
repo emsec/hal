@@ -1,4 +1,8 @@
 #include "selection_details_widget/selection_details_widget.h"
+#include "selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "selection_details_widget/gate_details_widget.h"
+#include "selection_details_widget/net_details_widget.h"
+#include "selection_details_widget/module_details_widget.h"
 
 #include "gui_globals.h"
 #include "netlist/gate.h"
@@ -13,26 +17,37 @@
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <QShortcut>
+#include <QSplitter>
+#include <QListWidget>
 
 namespace hal
 {
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent) : ContentWidget("Details", parent)
     {
-        m_stacked_widget = new QStackedWidget(this);
+        mSplitter         = new QSplitter(Qt::Horizontal, this);
+        mSplitter->setStretchFactor(0,5);
+        mSplitter->setStretchFactor(1,10);
+        mSelectionTreeView  = new SelectionTreeView(mSplitter);
+        connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handle_single_selection);
 
-        m_empty_widget = new QWidget(this);
+        mSelectionDetails = new QWidget(mSplitter);
+        QVBoxLayout* selDetailsLayout = new QVBoxLayout(mSelectionDetails);
+
+        m_stacked_widget = new QStackedWidget(mSelectionDetails);
+
+        m_empty_widget = new QWidget(mSelectionDetails);
         m_stacked_widget->addWidget(m_empty_widget);
 
-        m_gate_details = new GateDetailsWidget(this);
+        m_gate_details = new GateDetailsWidget(mSelectionDetails);
         m_stacked_widget->addWidget(m_gate_details);
 
-        m_net_details = new NetDetailsWidget(this);
+        m_net_details = new NetDetailsWidget(mSelectionDetails);
         m_stacked_widget->addWidget(m_net_details);
 
         m_module_details = new ModuleDetailsWidget(this);
         m_stacked_widget->addWidget(m_module_details);
 
-        m_item_deleted_label = new QLabel(this);
+        m_item_deleted_label = new QLabel(mSelectionDetails);
         m_item_deleted_label->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
         m_item_deleted_label->setWordWrap(true);
         m_item_deleted_label->setAlignment(Qt::AlignmentFlag::AlignTop);
@@ -40,11 +55,14 @@ namespace hal
 
         m_stacked_widget->setCurrentWidget(m_empty_widget);
 
-        m_searchbar = new Searchbar(this);
+        m_searchbar = new Searchbar(mSelectionDetails);
         m_searchbar->hide();
 
-        m_content_layout->addWidget(m_stacked_widget);
-        m_content_layout->addWidget(m_searchbar);
+        selDetailsLayout->addWidget(m_stacked_widget);
+        selDetailsLayout->addWidget(m_searchbar);
+        mSplitter->addWidget(mSelectionTreeView);
+        mSplitter->addWidget(mSelectionDetails);
+        m_content_layout->addWidget(mSplitter);
 
         //    m_table_widget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
         //    m_table_widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -70,35 +88,67 @@ namespace hal
 
         unsigned int number_selected_items = g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() + g_selection_relay.m_selected_nets.size();
 
-        if(number_selected_items != 1)
+        switch (number_selected_items) {
+        case 0:
         {
-            m_module_details->update(0);
-            m_stacked_widget->setCurrentWidget(m_empty_widget);
-            set_name("Details");
+            handle_single_selection(SelectionTreeItem::NullItem,0);
+            // clear and hide tree
+            mSelectionTreeView->populate(false);
             return;
+        }
+        case 1:
+            mSelectionTreeView->populate(false);
+            break;
+        default:
+            // more than 1 item selected, populate and make visible
+            mSelectionTreeView->populate(true);
+            break;
         }
 
         if (!g_selection_relay.m_selected_modules.isEmpty())
         {
-            m_module_details->update(*g_selection_relay.m_selected_modules.begin());
-            m_stacked_widget->setCurrentWidget(m_module_details);
-            set_name("Module Details");
+            handle_single_selection(SelectionTreeItem::ModuleItem,
+                                    *g_selection_relay.m_selected_modules.begin());
         }
         else if (!g_selection_relay.m_selected_gates.isEmpty())
         {
-            m_searchbar->hide();
-            m_module_details->update(0);
-            m_gate_details->update(*g_selection_relay.m_selected_gates.begin());
-            m_stacked_widget->setCurrentWidget(m_gate_details);
-            set_name("Gate Details");
+            handle_single_selection(SelectionTreeItem::GateItem,
+                                    *g_selection_relay.m_selected_gates.begin());
         }
         else if (!g_selection_relay.m_selected_nets.isEmpty())
         {
+            handle_single_selection(SelectionTreeItem::NetItem,
+                                    *g_selection_relay.m_selected_nets.begin());
+        }
+    }
+
+    void SelectionDetailsWidget::handle_single_selection(SelectionTreeItem::itemType_t t, u32 id)
+    {
+        switch (t) {
+        case SelectionTreeItem::NullItem:
+            m_module_details->update(0);
+            m_stacked_widget->setCurrentWidget(m_empty_widget);
+            set_name("Selection Details");
+            break;
+        case SelectionTreeItem::ModuleItem:
+            m_module_details->update(id);
+            m_stacked_widget->setCurrentWidget(m_module_details);
+            set_name("Module Details");
+            break;
+        case SelectionTreeItem::GateItem:
             m_searchbar->hide();
             m_module_details->update(0);
-            m_net_details->update(*g_selection_relay.m_selected_nets.begin());
+            m_gate_details->update(id);
+            m_stacked_widget->setCurrentWidget(m_gate_details);
+            set_name("Gate Details");
+            break;
+        case SelectionTreeItem::NetItem:
+            m_searchbar->hide();
+            m_module_details->update(0);
+            m_net_details->update(id);
             m_stacked_widget->setCurrentWidget(m_net_details);
             set_name("Net Details");
+            break;
         }
     }
 
