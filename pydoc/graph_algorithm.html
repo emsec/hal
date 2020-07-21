@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Graph Algorithm &mdash; hal_py v2.0.0-417-gef17722ea documentation</title>
+  <title>Graph Algorithm &mdash; hal_py v2.0.0-419-gddf0265b2 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-417-gef17722ea
+                v2.0.0-419-gddf0265b2
               </div>
             
           
@@ -181,7 +181,7 @@
 <em class="property">class </em><code class="descclassname">hal_plugins.libgraph_algorithm.</code><code class="descname">graph_algorithm</code><a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="hal_plugins.libgraph_algorithm.graph_algorithm.get_communities_fast_greedy">
-<code class="descname">get_communities_fast_greedy</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm</em>, <em>netlist: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_communities_fast_greedy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_communities_fast_greedy</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm</em>, <em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_communities_fast_greedy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the map of community-IDs to communities running the fast-greedy clustering algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -205,7 +205,7 @@
 
 <dl class="method">
 <dt id="hal_plugins.libgraph_algorithm.graph_algorithm.get_communities_multilevel">
-<code class="descname">get_communities_multilevel</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm</em>, <em>netlist: hal_py.netlist</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_communities_multilevel" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_communities_multilevel</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm</em>, <em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_communities_multilevel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the map of community-IDs to communities running the multilevel clustering algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -229,7 +229,7 @@
 
 <dl class="method">
 <dt id="hal_plugins.libgraph_algorithm.graph_algorithm.get_communities_spinglass">
-<code class="descname">get_communities_spinglass</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm</em>, <em>nl: hal_py.netlist</em>, <em>spins: int</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_communities_spinglass" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_communities_spinglass</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm</em>, <em>nl: hal_py.Netlist</em>, <em>spins: int</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_communities_spinglass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the map of community-IDs to communities running the spinglass clustering algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -271,7 +271,7 @@
 
 <dl class="method">
 <dt id="hal_plugins.libgraph_algorithm.graph_algorithm.get_graph_cut">
-<code class="descname">get_graph_cut</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm</em>, <em>netlist: hal_py.netlist</em>, <em>current_gate: hal_py.Gate</em>, <em>depth: int = 4294967295</em>, <em>terminal_gate_type: Set[str] = set()</em><span class="sig-paren">)</span> &#x2192; List[Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_graph_cut" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_graph_cut</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm</em>, <em>netlist: hal_py.Netlist</em>, <em>current_gate: hal_py.Gate</em>, <em>depth: int = 4294967295</em>, <em>terminal_gate_type: Set[str] = set()</em><span class="sig-paren">)</span> &#x2192; List[Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_graph_cut" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a graph cut for a specific gate and depth.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -313,7 +313,7 @@
 
 <dl class="method">
 <dt id="hal_plugins.libgraph_algorithm.graph_algorithm.get_strongly_connected_components">
-<code class="descname">get_strongly_connected_components</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm, netlist: hal_py.netlist, gates: Set[hal_py.Gate]</em><span class="sig-paren">)</span> &#x2192; List[Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_strongly_connected_components" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_strongly_connected_components</code><span class="sig-paren">(</span><em>self: hal_plugins.libgraph_algorithm.graph_algorithm, netlist: hal_py.Netlist, gates: Set[hal_py.Gate]</em><span class="sig-paren">)</span> &#x2192; List[Set[hal_py.Gate]]<a class="headerlink" href="#hal_plugins.libgraph_algorithm.graph_algorithm.get_strongly_connected_components" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the set of strongly connected components.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
