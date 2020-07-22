@@ -5,7 +5,7 @@ namespace hal
     void netlist_init(py::module& m)
     {
         py::class_<Netlist, std::shared_ptr<Netlist>> py_netlist(
-            m, "netlist", R"(Netlist class containing information about the netlist including its gates, modules, and nets, as well as the underlying gate library.)");
+            m, "Netlist", R"(Netlist class containing information about the netlist including its gates, modules, and nets, as well as the underlying gate library.)");
 
         py_netlist.def(py::init<std::shared_ptr<GateLibrary>>(), R"(
         Construct a new netlist for a specified gate library.

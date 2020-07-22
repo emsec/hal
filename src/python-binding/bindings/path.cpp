@@ -4,7 +4,7 @@ namespace hal
 {
     void path_init(py::module& m)
     {
-        py::class_<std::filesystem::path> py_path(m, "hal_path");
+        py::class_<std::filesystem::path> py_path(m, "HalPath");
 
         py_path.def(py::init<>());
 
