@@ -58,13 +58,24 @@ namespace hal
 
     //------- Module ----
     SelectionTreeItemModule::SelectionTreeItemModule(u32 id_)
-        : SelectionTreeItem(SelectionTreeItem::ModuleItem, id_)
+        : SelectionTreeItem(SelectionTreeItem::ModuleItem, id_), mIsRoot(false)
     {;}
 
     SelectionTreeItemModule::~SelectionTreeItemModule()
     {
         for (SelectionTreeItem* sti : mChildItem)
             delete sti;
+    }
+
+    SelectionTreeItemRoot::SelectionTreeItemRoot()
+        : SelectionTreeItemModule(0)
+    {
+        mIsRoot = true;
+    }
+
+    bool SelectionTreeItemModule::isRoot() const
+    {
+        return mIsRoot;
     }
 
     int SelectionTreeItemModule::childCount() const

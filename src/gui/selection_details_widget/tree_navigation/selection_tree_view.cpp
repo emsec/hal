@@ -43,7 +43,7 @@ namespace hal {
     void SelectionTreeView::populate(bool visible)
     {
         setSelectionMode(QAbstractItemView::NoSelection);
-        setCurrentIndex(QModelIndex());
+        selectionModel()->clear();
         mSelectionTreeModel->fetchSelection(visible);
         if (visible)
             show();

@@ -1,4 +1,5 @@
 #include "selection_details_widget/module_details_widget.h"
+#include "selection_details_widget/disputed_big_icon.h"
 
 #include "graph_widget/graph_navigation_widget.h"
 #include "gui_globals.h"
@@ -52,7 +53,7 @@ namespace hal
         intermediate_layout_op->setContentsMargins(3, 3, 0, 0);
         intermediate_layout_op->setSpacing(0);
 
-        m_general_info_button = new QPushButton("General Information", this);
+        m_general_info_button = new QPushButton("Module Information", this);
         m_general_info_button->setEnabled(false);
         m_input_ports_button  = new QPushButton("Input Ports", this);
         m_output_ports_button = new QPushButton("Output Ports", this);
@@ -93,13 +94,12 @@ namespace hal
         m_type_item->setFlags(Qt::ItemIsEnabled);
 
         // place module icon
-        QLabel* img = new QLabel(this);
-        img->setPixmap(QPixmap(":/icons/sel_module","PNG").scaled(60,60));
-        img->setFixedSize(64,64);
+        QLabel* img = new DisputedBigIcon("sel_module", this);
 
         intermediate_layout_gt->addWidget(m_general_table);
-        intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        intermediate_layout_gt->addWidget(img);
+        intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
         intermediate_layout_ip->addWidget(m_input_ports_table);
         intermediate_layout_ip->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_op->addWidget(m_output_ports_table);

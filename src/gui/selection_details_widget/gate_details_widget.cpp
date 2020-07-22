@@ -1,4 +1,5 @@
 #include "selection_details_widget/gate_details_widget.h"
+#include "selection_details_widget/disputed_big_icon.h"
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
@@ -70,7 +71,7 @@ namespace hal
         intermediate_layout_df->setSpacing(0);
 
         // buttons
-        m_general_info_button = new QPushButton("General Information", this);
+        m_general_info_button = new QPushButton("Gate Information", this);
         m_general_info_button->setEnabled(false);
         m_input_pins_button = new QPushButton("Input Pins", this);
         m_output_pins_button = new QPushButton("Output Pins", this);
@@ -140,14 +141,13 @@ namespace hal
         m_boolean_functions_container->setLayout(m_boolean_functions_container_layout);
 
         // place gate icon
-        QLabel* img = new QLabel(this);
-        img->setPixmap(QPixmap(":/icons/sel_gate","PNG").scaled(60,60));
-        img->setFixedSize(64,64);
+        QLabel* img = new DisputedBigIcon("sel_gate", this);
 
         //adding things to intermediate layout (the one thats neccessary for the left spacing)
         intermediate_layout_gt->addWidget(m_general_table);
-        intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        intermediate_layout_gt->addWidget(img);
+        intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
         intermediate_layout_ip->addWidget(m_input_pins_table);
         intermediate_layout_ip->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_op->addWidget(m_output_pins_table);

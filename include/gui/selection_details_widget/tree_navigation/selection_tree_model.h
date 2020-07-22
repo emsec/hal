@@ -39,6 +39,7 @@ namespace hal
 {
     class SelectionTreeItem;
     class SelectionTreeItemModule;
+    class SelectionTreeItemRoot;
 
     class SelectionTreeModel : public QAbstractItemModel
     {
@@ -74,7 +75,10 @@ namespace hal
         void moduleRecursion(SelectionTreeItemModule* modItem);
         bool doNotDisturb(const QModelIndex& inx = QModelIndex()) const;
 
-        SelectionTreeItemModule* mRootItem;
+
+        SelectionTreeItemRoot* mRootItem;
+
+        /// avoid calls while model is under reconstruction
         int mDoNotDisturb;
     };
 
@@ -82,13 +86,13 @@ namespace hal
     {
         Q_OBJECT
     public:
-        SelectionTreeModelDisposer(SelectionTreeItemModule* stim, QObject* parent=nullptr);
+        SelectionTreeModelDisposer(SelectionTreeItemRoot* stim, QObject* parent=nullptr);
 
     public Q_SLOTS:
         void dispose();
 
     private:
-        SelectionTreeItemModule* mRootItem;
+        SelectionTreeItemRoot* mRootItem;
     };
 
 

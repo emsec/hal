@@ -6,13 +6,15 @@
 #include "netlist/module.h"
 #include "gui_utils/graphics.h"
 #include <QTimer>
+#include <QDebug>
 
 namespace hal
 {
     SelectionTreeModel::SelectionTreeModel(QObject* parent)
         : QAbstractItemModel(parent), mDoNotDisturb(0)
     {
-        mRootItem = new SelectionTreeItemModule(SelectionTreeItem::RootItem);  // root item has no parent
+        mRootItem = new SelectionTreeItemRoot();
+        // root item has no parent
     }
 
     SelectionTreeModel::~SelectionTreeModel()
@@ -22,13 +24,7 @@ namespace hal
 
     bool SelectionTreeModel::doNotDisturb(const QModelIndex& inx) const
     {
-        if (inx.isValid())
-        {
-            intptr_t ptr = reinterpret_cast<intptr_t>(inx.internalPointer());
-            if (ptr && ptr < 0x100) {
-                return false;
-            }
-        }
+        Q_UNUSED(inx); // could do some tests for debugging
         return (mDoNotDisturb != 0);
     }
 
@@ -106,6 +102,8 @@ namespace hal
         if (!currentItem) return QModelIndex();
 
         SelectionTreeItem* parentItem   = currentItem->parent();
+
+        // toplevel entries dont reveal their parent
         if (parentItem == mRootItem) return QModelIndex();
 
         return indexFromItem(parentItem);
@@ -134,8 +132,8 @@ namespace hal
 
     void SelectionTreeModel::fetchSelection(bool hasEntries)
     {
-        SelectionTreeItemModule* nextRootItem
-                = new SelectionTreeItemModule(SelectionTreeItem::RootItem);
+        SelectionTreeItemRoot* nextRootItem
+                = new SelectionTreeItemRoot();
 
         if (hasEntries)
         {
@@ -156,6 +154,8 @@ namespace hal
         Q_EMIT layoutAboutToBeChanged();
 
         ++mDoNotDisturb;
+        // delay disposal of old entries
+        //    until all clients are notified that indexes are not valid any more
         SelectionTreeModelDisposer* disposer = new SelectionTreeModelDisposer(mRootItem,this);
         mRootItem = nextRootItem;
         QTimer::singleShot(50,disposer,&SelectionTreeModelDisposer::dispose);
@@ -166,7 +166,7 @@ namespace hal
 
     void SelectionTreeModel::moduleRecursion(SelectionTreeItemModule* modItem)
     {
-        if (modItem->id() <= 0) return;
+        if (modItem->isRoot()) return;
         std::shared_ptr<Module> mod = g_netlist->get_module_by_id(modItem->id());
         if (!mod) return;
         for (std::shared_ptr<Module> m : mod->get_submodules() )
@@ -213,7 +213,7 @@ namespace hal
 
 
 
-    SelectionTreeModelDisposer::SelectionTreeModelDisposer(SelectionTreeItemModule* stim, QObject* parent)
+    SelectionTreeModelDisposer::SelectionTreeModelDisposer(SelectionTreeItemRoot *stim, QObject* parent)
         : QObject(parent), mRootItem(stim)
     {;}
 
@@ -222,5 +222,4 @@ namespace hal
         delete mRootItem;
         deleteLater();
     }
-
 }

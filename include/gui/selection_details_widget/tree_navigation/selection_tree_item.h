@@ -34,8 +34,6 @@ namespace hal
     class SelectionTreeItem
     {
     public:
-        static const int RootItem = 1;
-
         enum itemType_t
         {
             NullItem, ModuleItem, GateItem, NetItem
@@ -72,8 +70,16 @@ namespace hal
         virtual QVariant name() const;
         virtual QIcon    icon() const;
         void addChild(SelectionTreeItem* cld);
-    private:
+        bool isRoot() const;
+    protected:
+        bool mIsRoot;
         QList<SelectionTreeItem*> mChildItem;
+    };
+
+    class SelectionTreeItemRoot : public SelectionTreeItemModule
+    {
+    public :
+        SelectionTreeItemRoot();
     };
 
     class SelectionTreeItemGate : public SelectionTreeItem

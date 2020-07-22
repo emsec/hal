@@ -1,4 +1,5 @@
 #include "selection_details_widget/net_details_widget.h"
+#include "selection_details_widget/disputed_big_icon.h"
 
 #include "gui_globals.h"
 #include "netlist/gate.h"
@@ -54,7 +55,7 @@ namespace hal
         intermediate_layout_destinations->setSpacing(0);
 
         //buttons
-        m_general_info_button = new QPushButton("General Information", this);
+        m_general_info_button = new QPushButton("Net Information", this);
         m_general_info_button->setEnabled(false);
         m_source_pins_button      = new QPushButton("Source Pins", this);
         m_destination_pins_button = new QPushButton("Destination Pins", this);
@@ -105,14 +106,13 @@ namespace hal
         m_general_table->setItem(2, 1, m_id_item);
 
         // place net icon
-        QLabel* img = new QLabel(this);
-        img->setPixmap(QPixmap(":/icons/sel_net","PNG").scaled(60,60));
-        img->setFixedSize(64,64);
+        QLabel* img = new DisputedBigIcon("sel_net", this);
 
         //adding things to intermediate layout (the one thats neccessary for the left spacing)
         intermediate_layout_gt->addWidget(m_general_table);
-        intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        intermediate_layout_gt->addWidget(img);
+        intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
         intermediate_layout_sources->addWidget(m_source_pins_table);
         intermediate_layout_sources->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_destinations->addWidget(m_destination_pins_table);
