@@ -32,6 +32,13 @@ namespace hal
         connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &selection_widget::update);
     }
 
+    void selection_widget::handle_selection_update(void* sender)
+    {
+        Q_UNUSED(sender);
+        // TODO: implementation
+        // this is only a dummy routine to fix the macOS build
+    }
+
     void selection_widget::selection_widget::update()
     {
         m_gate_table_model->fetch_selection();
