@@ -28,13 +28,26 @@
 
 namespace hal
 {
+    /**
+     * Abstract preview widget for a global setting, such as a font size.
+     */
     class PreviewWidget : public QFrame
     {
         Q_OBJECT
 
     public:
+        /**
+         * Construct a new preview widget.
+         * 
+         * @param[in] parent - The Qt parent object.
+         */
         explicit PreviewWidget(QWidget* parent = 0);
 
+        /**
+         * Show a preview of this value.
+         * 
+         * @param[in] value - The value to preview.
+         */
         virtual void update(const QVariant& value) = 0;
 
     protected:

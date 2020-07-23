@@ -28,16 +28,94 @@
 
 namespace hal
 {
+    /**
+     * Global settings management and file-backed storage.<br>
+     * Default settings can be shipped in the application-wide config directory
+     * (@see core_utils::get_config_directory) via guidefaults.ini.
+     * Per-user settings will be stored in the user's config directory
+     * (@see core_utils::get_user_config_directory) and will override any
+     * default settings.
+     * 
+     * Settings are identified by a key string "group/item" and contain any
+     * QVariant.
+     */
     class SettingsManager : public QObject
     {
     public:
+        /**
+         * Constructs a new settings manager.
+         * 
+         * @param[in] parent - The Qt parent object.
+         */
         explicit SettingsManager(QObject* parent = nullptr);
         ~SettingsManager();
+
+        /**
+         * Get the value of the specified setting.<br>
+         * 
+         * If no user specified value exists in guisettings.ini, then the
+         * value from guidefaults.ini is used. If no value exists there
+         * either, QVariant() is returned.
+         * 
+         * @param[in] key - The setting's key.
+         * @returns The setting's value or QVariant() if nonexistent.
+         */
         QVariant get(const QString& key);
+
+        /**
+         * Get the value of the specified setting.<br>
+         * 
+         * If no user specified value exists in guisettings.ini, then
+         * defaultVal is returned without checking guidefaults.ini.
+         * 
+         * @param[in] key - The setting's key.
+         * @returns The setting's value or defaultValue if nonexistent.
+         */
         QVariant get(const QString& key, const QVariant& defaultVal);
+
+        /**
+         * Get the package maintainer's default of the specified setting.<br>
+         * 
+         * If no maintainer specified value exists in guidefaults.ini,
+         * QVariant() is returned.
+         * 
+         * @param[in] key - The setting's key.
+         * @returns The setting's default value or QVariant() if nonexistent.
+         */
         QVariant get_default(const QString& key);
+
+        /**
+         * Clear the user specified value of the specified setting if
+         * one exists, reverting to the default value from guidefaults.ini.
+         * This will remove the key from guisettings.ini.
+         * 
+         * A setting changed signal will fire from the settings relay.
+         * 
+         * @param[in] key - The setting's key.
+         * @returns The default value of the setting.
+         */
         QVariant reset(const QString& key);
+
+        /**
+         * Set the setting specified by the key to the given value.<br>
+         * 
+         * If the supplied value matches the default value from
+         * guidefaults.ini, then the key is removed from guisettings.ini.<br>
+         * 
+         * A setting changed signal will fire from the settings relay.
+         * 
+         * @param[in] key - The setting's key.
+         * @param[in] value - The setting's new value.
+         */
         void update(const QString& key, const QVariant& value);
+
+        /**
+         * Force the user specified settings to synchronize.<br>
+         * 
+         * External changes to the settings file will NOT fire
+         * setting changed signals from the settings relay.
+         * 
+         */
         void sync();
 
     private:

@@ -33,16 +33,59 @@
 
 namespace hal
 {
+    /**
+     * Helper to create keybinds from global settings and update them
+     * when that setting's value changes.
+     */
     class KeybindManager : public QObject
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructs a new keybind manager.
+         * 
+         * @param[in] parent - The Qt parent object.
+         */
         explicit KeybindManager(QObject* parent = nullptr);
+
+        /**
+         * Associate an Action with a global setting and keep it updated.
+         * 
+         * @param[in] action - The Action object.
+         * @param[in] key - The setting's key.
+         */
         void bind(Action* action, const QString& key);
+
+        /**
+         * Associate a QShortcut with a global setting and keep it updated.
+         * 
+         * @param[in] shortcut - The QShortcut object.
+         * @param[in] key - The setting's key.
+         */
         void bind(QShortcut* shortcut, const QString& key);
+
+        /**
+         * Stop keeping track of an Action.
+         * 
+         * @param[in] action - The Action object.
+         */
         void release(Action* action);
+
+        /**
+         * Stop keeping track of a QShortcut.
+         * 
+         * @param[in] shortcut - The QShortcut object.
+         */
         void release(QShortcut* shortcut);
+
+        /**
+         * Convenience method to create a QShortcut and keep track of it immediately,
+         * as if bind was called on it.
+         * 
+         * @param[in] parent - The QShortcut's Qt parent object.
+         * @param[in] key - The key of the setting to associate.
+         */
         QShortcut* make_shortcut(QWidget* parent, const QString& key);
 
     private Q_SLOTS:

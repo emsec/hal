@@ -31,20 +31,33 @@ namespace hal
 {
     class SettingsRelay : public QObject
     {
+        friend class SettingsManager; // can access relay_setting_changed
+
         Q_OBJECT
 
     public:
+        /**
+         * Constructs a new settings relay.
+         * 
+         * @param[in] parent - The Qt parent object.
+         */
         explicit SettingsRelay(QObject* parent = nullptr);
-        // TODO do we need a sender registry?
-        // void register_sender(void* sender, QString name);
-        // void remove_sender(void* sender);
-
-        void relay_setting_changed(void* sender, const QString& key, const QVariant& val);
 
     Q_SIGNALS:
+        /**
+         * Signals the change of a global setting.
+         * 
+         * @param[in] sender - The signal's sender.
+         * @param[in] key - The setting's key.
+         * @param[in] val - The setting's new value.
+         */
         void setting_changed(void* sender, const QString& key, const QVariant& val);
 
-    public Q_SLOTS:
+    
+    protected:
+        void relay_setting_changed(void* sender, const QString& key, const QVariant& val);
+
+    private Q_SLOTS:
         void debug(void* sender, const QString& key, const QVariant& val);
 
     // private:

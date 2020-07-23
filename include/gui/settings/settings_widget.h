@@ -38,6 +38,12 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * Widget that is bound to a global setting and allows the user to edit that
+     * setting's value.<br>
+     * This is an abstract class, see the implementations for the different data
+     * types.
+     */
     class SettingsWidget : public QFrame
     {
         Q_OBJECT
@@ -46,43 +52,158 @@ namespace hal
         Q_PROPERTY(bool conflicts READ conflicts WRITE set_conflicts)
 
     public:
+        /**
+         * Specifies the position of the preview widget.
+         */
         enum class preview_position
         {
             bottom = 0,
             right = 1
         };
 
+        /**
+         * Constructs a new settings widget for the specified setting.
+         * 
+         * @param[in] key - The key of the setting to bind to.
+         * @param[in] parent - The Qt parent object.
+         */
         explicit SettingsWidget(const QString& key, QWidget* parent = 0);
 
+        /**
+         * Get the search result's highlight color.
+         * 
+         * @returns The highlight color.
+         */
         QColor highlight_color();
+        
+        /**
+         * Get the key of the setting this widget is bound to.
+         * 
+         * @return The setting's key.
+         */
         QString key();
+
+        /**
+         * Set the search result's highlight color.
+         * 
+         * @param[in] color - The new highlight color.
+         */
         void set_highlight_color(const QColor& color);
 
+        /**
+         * Reset the search highlight.
+         */
         void reset_labels();
+
+        /**
+         * Highlight the search phrase on the labels.
+         * 
+         * @param[in] string - The search phrase.
+         * @return True iff the search phrase matched at least once.
+         */
         bool match_labels(const QString& string);
 
-        void trigger_setting_updated();
-        void set_dirty(bool dirty);
+        /**
+         * Check whether the widget has unsaved changes.
+         * 
+         * @return True iff the widget has unsaved changes.
+         */
         bool dirty() const;
+
+        /**
+         * Make the widget ready for display by loading the specified
+         * values and marking the widget not dirty.
+         * 
+         * @param[in] value - The value to load.
+         * @param[in] default_value - The default value to load when the user clicks "default".
+         */
         void prepare(const QVariant& value, const QVariant& default_value);
+        
+        /**
+         * Mark the widget not dirty and accept the current value.<br>
+         * If the user makes another change and clicks "undo", the current
+         * value will now be restored instead of the one the widget was
+         * initialized with.
+         */
         void mark_saved();
+
+        /**
+         * Update the conflict flag, showing whether the widget's value conflicts
+         * with another setting, such as a keybind assigned to more than one
+         * function.
+         * Setting the flag will show the widget in a warning state.
+         * 
+         * @param[in] conflicts - The conflict flag.
+         */
         void set_conflicts(bool conflicts);
+
+        /**
+         * Get the conflict flag.
+         * 
+         * @returns The conflict flag.
+         */
         bool conflicts() const;
 
+        /**
+         * Insert or replace the preview widget and update it.
+         * 
+         * @param[in] widget - The preview widget.
+         */
         void set_preview_widget(PreviewWidget* widget);
+
+        /**
+         * Set the preview widget's position.<br>
+         * This can be safely called before or after the preview
+         * widget itself is set.
+         * 
+         * @param[in] position - The position value.
+         */
         void set_preview_position(preview_position position);
 
-        virtual void load(const QVariant& value) = 0;
+        /**
+         * Initialize the widget's display with the given value.<br>
+         * Implementations for different data types are required to override
+         * this method.
+         * 
+         * @param[in] value - The value to load.
+         */
+        virtual void load(const QVariant& value)  = 0;
+
+        /**
+         * Get the value the widget is currently displaying.<br>
+         * Implementations for different data types are required to override
+         * this method.
+         * 
+         * @returns The current value.
+         */
         virtual QVariant value()                  = 0;
 
     public Q_SLOTS:
+        /**
+         * Discard all unsaved user changes.
+         */
         void handle_rollback();
+
+        /**
+         * Revert to the default value.
+         */
         void handle_reset();
 
     Q_SIGNALS:
+        /**
+         * Signals that the user has changed the value of this setting.
+         * The @see MainSettingsWidget subscribes to this signal.
+         * 
+         * @param[in] sender - The signal's sender.
+         * @param[in] key - The setting's key.
+         * @param[in] val - The setting's new value.
+         */
         void setting_updated(SettingsWidget* sender, const QString& key, const QVariant& value);
 
     protected:
+        void set_dirty(bool dirty);
+        void trigger_setting_updated();
+
         QVBoxLayout* m_layout;
         QBoxLayout* m_container;
         QHBoxLayout* m_top_bar;
