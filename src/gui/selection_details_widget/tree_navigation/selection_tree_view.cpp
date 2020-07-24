@@ -25,19 +25,11 @@ namespace hal {
     {
         Q_UNUSED(previous);
 
-        SelectionTreeItem::itemType_t tp = SelectionTreeItem::NullItem;
-        u32 id = 0;
-
         const SelectionTreeItem* sti = current.isValid()
                 ? static_cast<const SelectionTreeItem*>(mSelectionTreeModel->itemFromIndex(current))
                 : nullptr;
 
-        if (sti)
-        {
-            tp = sti->itemType();
-            id = sti->id();
-        }
-        Q_EMIT triggerSelection(tp,id);
+        Q_EMIT triggerSelection(sti);
     }
 
     void SelectionTreeView::populate(bool visible)

@@ -28,7 +28,7 @@ namespace hal
         mSplitter->setStretchFactor(0,5);
         mSplitter->setStretchFactor(1,10);
         mSelectionTreeView  = new SelectionTreeView(mSplitter);
-        connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handle_single_selection);
+        connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
 
         mSelectionDetails = new QWidget(mSplitter);
         QVBoxLayout* selDetailsLayout = new QVBoxLayout(mSelectionDetails);
@@ -91,7 +91,7 @@ namespace hal
         switch (number_selected_items) {
         case 0:
         {
-            handle_single_selection(SelectionTreeItem::NullItem,0);
+            singleSelectionInternal(nullptr);
             // clear and hide tree
             mSelectionTreeView->populate(false);
             return;
@@ -107,45 +107,58 @@ namespace hal
 
         if (!g_selection_relay.m_selected_modules.isEmpty())
         {
-            handle_single_selection(SelectionTreeItem::ModuleItem,
-                                    *g_selection_relay.m_selected_modules.begin());
+            SelectionTreeItemModule sti(*g_selection_relay.m_selected_modules.begin());
+            singleSelectionInternal(&sti);
         }
         else if (!g_selection_relay.m_selected_gates.isEmpty())
         {
-            handle_single_selection(SelectionTreeItem::GateItem,
-                                    *g_selection_relay.m_selected_gates.begin());
+            SelectionTreeItemGate sti(*g_selection_relay.m_selected_gates.begin());
+            singleSelectionInternal(&sti);
         }
         else if (!g_selection_relay.m_selected_nets.isEmpty())
         {
-            handle_single_selection(SelectionTreeItem::NetItem,
-                                    *g_selection_relay.m_selected_nets.begin());
+            SelectionTreeItemNet sti(*g_selection_relay.m_selected_nets.begin());
+            singleSelectionInternal(&sti);
         }
+        Q_EMIT triggerHighlight(QVector<const SelectionTreeItem*>());
     }
 
-    void SelectionDetailsWidget::handle_single_selection(SelectionTreeItem::itemType_t t, u32 id)
+    void SelectionDetailsWidget::handleTreeSelection(const SelectionTreeItem *sti)
     {
-        switch (t) {
+        singleSelectionInternal(sti);
+        QVector<const SelectionTreeItem*> highlight;
+        if (sti) highlight.append(sti);
+        Q_EMIT triggerHighlight(highlight);
+    }
+
+    void SelectionDetailsWidget::singleSelectionInternal(const SelectionTreeItem *sti)
+    {
+        SelectionTreeItem::itemType_t tp = sti
+                ? sti->itemType()
+                : SelectionTreeItem::NullItem;
+
+        switch (tp) {
         case SelectionTreeItem::NullItem:
             m_module_details->update(0);
             m_stacked_widget->setCurrentWidget(m_empty_widget);
             set_name("Selection Details");
             break;
         case SelectionTreeItem::ModuleItem:
-            m_module_details->update(id);
+            m_module_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_module_details);
             set_name("Module Details");
             break;
         case SelectionTreeItem::GateItem:
             m_searchbar->hide();
             m_module_details->update(0);
-            m_gate_details->update(id);
+            m_gate_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_gate_details);
             set_name("Gate Details");
             break;
         case SelectionTreeItem::NetItem:
             m_searchbar->hide();
             m_module_details->update(0);
-            m_net_details->update(id);
+            m_net_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_net_details);
             set_name("Net Details");
             break;

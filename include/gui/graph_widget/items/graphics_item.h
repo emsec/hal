@@ -28,6 +28,7 @@
 #include "gui/gui_def.h"
 
 #include <QColor>
+#include <QStyle>
 #include <QGraphicsItem>
 
 namespace hal
@@ -42,12 +43,17 @@ namespace hal
 
         hal::item_type item_type() const;
         u32 id() const;
+        void setHightlight(bool hl);
 
     protected:
         static qreal s_lod;
-        static QColor s_selection_color;
+        static QColor s_selectionColor;
+        static QColor s_highlightColor;
+
+        QColor penColor(QStyle::State state) const;
 
         hal::item_type m_item_type; // USE QT ITEM TYPE SYSTEM INSTEAD ???
+        bool m_highlight;  // paint with hightlight color
         u32 m_id;
         QColor m_color;
     };

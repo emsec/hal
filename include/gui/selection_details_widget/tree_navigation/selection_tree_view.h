@@ -12,7 +12,7 @@ namespace hal {
         Q_OBJECT
 
     Q_SIGNALS:
-        void triggerSelection(SelectionTreeItem::itemType_t t, u32 id);
+        void triggerSelection(const SelectionTreeItem* sti);
 
     protected:
         virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous) Q_DECL_OVERRIDE;

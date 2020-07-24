@@ -50,12 +50,17 @@ namespace hal
         SelectionDetailsWidget(QWidget* parent = 0);
         void clear();
 
+    Q_SIGNALS:
+        void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
+
     public Q_SLOTS:
         void handle_selection_update(void* sender);
-        void handle_single_selection(SelectionTreeItem::itemType_t t, u32 id);
+        void handleTreeSelection(const SelectionTreeItem* sti);
         QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
     private:
+        void singleSelectionInternal(const SelectionTreeItem* sti);
+
         QSplitter*           mSplitter;
         SelectionTreeView*   mSelectionTreeView;
         QWidget*             mSelectionDetails;
