@@ -6,9 +6,11 @@
 
 namespace hal
 {
+    // TODO check if all the QShortcuts and QActions should be weak pointers
+
     KeybindManager::KeybindManager(QObject* parent) : QObject(parent)
     {
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &KeybindManager::handle_global_setting_changed);
+        connect(&g_settings_manager, &SettingsManager::setting_changed, this, &KeybindManager::handle_global_setting_changed);
     }
 
     void KeybindManager::bind(Action* action, const QString& key)

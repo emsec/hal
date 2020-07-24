@@ -31,10 +31,10 @@
 namespace hal
 {
     MainSettingsWidget::MainSettingsWidget(QWidget* parent)
-        : QWidget(parent), m_layout(new QHBoxLayout()), m_expanding_list_widget(new ExpandingListWidget()), m_vertical_layout(new QVBoxLayout()), m_scrollbar(new QScrollBar()),
-          m_searchbar_container(new QFrame()), m_searchbar_layout(new QHBoxLayout()), m_searchbar(new Searchbar()), m_scroll_area(new QScrollArea()), m_content(new QFrame()),
-          m_content_layout(new QHBoxLayout()), m_settings_container(new QFrame()), m_container_layout(new QVBoxLayout()), m_button_layout(new QHBoxLayout()), m_restore_defaults(new QPushButton()),
-          m_cancel(new QPushButton()), m_ok(new QPushButton())
+        : QWidget(parent), m_layout(new QHBoxLayout()), m_expanding_list_widget(new ExpandingListWidget(this)), m_vertical_layout(new QVBoxLayout()), m_scrollbar(new QScrollBar(this)),
+          m_searchbar_container(new QFrame(this)), m_searchbar_layout(new QHBoxLayout()), m_searchbar(new Searchbar(this)), m_scroll_area(new QScrollArea(this)), m_content(new QFrame(this)),
+          m_content_layout(new QHBoxLayout()), m_settings_container(new QFrame(this)), m_container_layout(new QVBoxLayout()), m_button_layout(new QHBoxLayout()), m_restore_defaults(new QPushButton(this)),
+          m_cancel(new QPushButton(this)), m_ok(new QPushButton(this))
     {
         setWindowModality(Qt::ApplicationModal);
 
@@ -133,6 +133,20 @@ namespace hal
         standard_sort_mechanisms.insert("Lexical", QVariant(gui_utility::sort_mechanism::lexical));
 
         /************* ADD NEW SETTINGS WIDGETS HERE *************/
+
+        /*
+         * TODO
+         * Refactor the settings initialization:
+         * - Have a new "Setting" class for each setting type
+         * - This class will also construct the widget
+         * - The class will provide a notifier, getter and setter, so the using
+         *   classes don't need to implement their own handlers
+         * - All Settings will need to be registered with the SettingsManager
+         * - The MainSettingsWidget will pull these widgets in
+         * => The widgets then live directly where the setting is needed, so
+         *    we don't need to update this method here for every setting we
+         *    create or change.
+         */
 
         make_section("Style", "style-item", ":/icons/eye");
 

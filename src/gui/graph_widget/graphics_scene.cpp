@@ -314,7 +314,7 @@ namespace hal
 
     void GraphicsScene::connect_all()
     {
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+        connect(&g_settings_manager, &SettingsManager::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
 
         connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
 
@@ -324,7 +324,7 @@ namespace hal
 
     void GraphicsScene::disconnect_all()
     {
-        disconnect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+        disconnect(&g_settings_manager, &SettingsManager::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
 
         disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
 

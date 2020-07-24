@@ -138,7 +138,7 @@ namespace hal
         connect(m_destination_pins_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_destinations_table_menu_requeted);
 
         //settings
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &NetDetailsWidget::handle_global_settings_changed);
+        connect(&g_settings_manager, &SettingsManager::setting_changed, this, &NetDetailsWidget::handle_global_settings_changed);
 
         //install eventfilter to change the cursor when hovering over the second colums of the pin tables
         m_destination_pins_table->viewport()->setMouseTracking(true);

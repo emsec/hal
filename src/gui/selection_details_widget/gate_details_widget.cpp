@@ -196,7 +196,7 @@ namespace hal
         connect(m_data_fields_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_data_table_menu_requested);
 
         //settings
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GateDetailsWidget::handle_global_settings_changed);
+        connect(&g_settings_manager, &SettingsManager::setting_changed, this, &GateDetailsWidget::handle_global_settings_changed);
 
         //install eventfilers
         m_general_table->viewport()->setMouseTracking(true);

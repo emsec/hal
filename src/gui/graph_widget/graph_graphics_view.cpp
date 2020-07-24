@@ -49,7 +49,7 @@ namespace hal
     {
         connect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphGraphicsView::conditional_update);
         connect(this, &GraphGraphicsView::customContextMenuRequested, this, &GraphGraphicsView::show_context_menu);
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphGraphicsView::handle_global_setting_changed);
+        connect(&g_settings_manager, &SettingsManager::setting_changed, this, &GraphGraphicsView::handle_global_setting_changed);
 
         initialize_settings();
 

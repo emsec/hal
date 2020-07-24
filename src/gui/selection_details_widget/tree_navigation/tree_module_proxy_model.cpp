@@ -8,7 +8,7 @@ namespace hal
     TreeModuleProxyModel::TreeModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
     {
         m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager.get("navigation/sort_mechanism").toInt());
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &TreeModuleProxyModel::handle_global_setting_changed);
+        connect(&g_settings_manager, &SettingsManager::setting_changed, this, &TreeModuleProxyModel::handle_global_setting_changed);
     }
 
     bool TreeModuleProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const

@@ -34,7 +34,6 @@
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/settings/keybind_manager.h"
-#include "gui/settings/settings_relay.h"
 #include "gui/settings/settings_manager.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
@@ -57,7 +56,6 @@ namespace hal
     extern NetlistRelay g_netlist_relay;
     extern PluginRelay g_plugin_relay;
     extern SelectionRelay g_selection_relay;
-    extern SettingsRelay g_settings_relay;
 
     extern SettingsManager g_settings_manager;
 

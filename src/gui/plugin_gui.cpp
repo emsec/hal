@@ -16,7 +16,6 @@
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/settings/keybind_manager.h"
 #include "gui/settings/settings_manager.h"
-#include "gui/settings/settings_relay.h"
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
@@ -38,10 +37,9 @@ namespace hal
     QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
     QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
 
-    SettingsManager g_settings_manager;
-    // this relay MUST be initialized before everything else since other components
+    // this MUST be initialized before everything else since other components
     // need to connect() to it when initializing
-    SettingsRelay g_settings_relay;
+    SettingsManager g_settings_manager;
 
     KeybindManager g_keybind_manager;
 

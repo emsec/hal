@@ -41,6 +41,8 @@ namespace hal
      */
     class SettingsManager : public QObject
     {
+        Q_OBJECT
+
     public:
         /**
          * Constructs a new settings manager.
@@ -117,6 +119,16 @@ namespace hal
          * 
          */
         void sync();
+
+    Q_SIGNALS:
+        /**
+         * Signals the change of a global setting.
+         * 
+         * @param[in] sender - The signal's sender.
+         * @param[in] key - The setting's key.
+         * @param[in] val - The setting's new value.
+         */
+        void setting_changed(void* sender, const QString& key, const QVariant& val);
 
     private:
         QSettings* m_settings;
