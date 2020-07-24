@@ -43,10 +43,15 @@ namespace hal
         update();
     }
 
-    QColor GraphicsItem::penColor(QStyle::State state) const
+    QColor GraphicsItem::selectionColor() const
     {
         if (m_highlight) return s_highlightColor;
-        if (state & QStyle::State_Selected) return s_selectionColor;
+        return s_selectionColor;
+    }
+
+    QColor GraphicsItem::penColor(QStyle::State state) const
+    {
+        if (state & QStyle::State_Selected) return selectionColor();
         return m_color;
     }
 }

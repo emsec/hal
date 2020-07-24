@@ -128,7 +128,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         if (g_selection_relay.m_focus_type == SelectionRelay::item_type::gate)
             if (g_selection_relay.m_focus_id == m_id)
             {
-                s_pen.setColor(s_selectionColor);  // TODO : check color
+                s_pen.setColor(selectionColor());  // TODO : check color
                 painter->setPen(s_pen);
 
                 switch (g_selection_relay.m_subfocus)
@@ -179,7 +179,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
         if (option->state & QStyle::State_Selected)
         {
-            s_pen.setColor(s_selectionColor);
+            s_pen.setColor(selectionColor());
             s_pen.setCosmetic(true);
             painter->setPen(s_pen);
             s_pen.setCosmetic(false);

@@ -36,7 +36,7 @@ namespace hal
     public:
         enum itemType_t
         {
-            NullItem, ModuleItem, GateItem, NetItem
+            NullItem, ModuleItem, GateItem, NetItem, MaxItem
         };
 
         SelectionTreeItem(itemType_t t = NullItem, u32 id_ = 0);

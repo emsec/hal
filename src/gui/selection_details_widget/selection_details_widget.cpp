@@ -162,6 +162,8 @@ namespace hal
             m_stacked_widget->setCurrentWidget(m_net_details);
             set_name("Net Details");
             break;
+        default:
+            break;
         }
     }
 
