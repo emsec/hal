@@ -15,7 +15,7 @@ namespace hal
           m_default(new QToolButton()), m_highlight_color(52, 56, 57), m_key(key)
     {
         setFrameStyle(QFrame::NoFrame);
-        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         m_layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
         m_layout->setContentsMargins(0, 0, 0, 0);
         m_layout->setSpacing(0);
@@ -24,13 +24,23 @@ namespace hal
 
         setLayout(m_layout);
 
-        m_revert->setText("R");
+        m_revert->setText("Undo");
         m_revert->setToolTip("Revert your last change");
-        m_revert->setMaximumWidth(20);
+        //m_revert->setMaximumWidth(20);
+        m_revert->setVisible(false);
+        m_revert->setEnabled(false);
+        QSizePolicy sp_revert = m_revert->sizePolicy();
+        sp_revert.setRetainSizeWhenHidden(true);
+        m_revert->setSizePolicy(sp_revert);
         connect(m_revert, &QToolButton::clicked, this, &SettingsWidget::handle_rollback);
-        m_default->setText("D");
+        m_default->setText("Default");
         m_default->setToolTip("Load the default value");
-        m_default->setMaximumWidth(20);
+        //m_default->setMaximumWidth(20);
+        m_default->setVisible(false);
+        m_default->setEnabled(false);
+        QSizePolicy sp_default = m_default->sizePolicy();
+        sp_default.setRetainSizeWhenHidden(true);
+        m_default->setSizePolicy(sp_default);
         connect(m_default, &QToolButton::clicked, this, &SettingsWidget::handle_reset);
         m_top_bar->addWidget(m_name);
         m_top_bar->addStretch();
@@ -119,10 +129,11 @@ namespace hal
         if (m_signals_enabled)
         {
             Q_EMIT setting_updated(this, key(), val);
-    #ifndef SETTINGS_UPDATE_IMMEDIATELY
-            set_dirty(m_loaded_value != val);
-    #endif
         }
+        #ifndef SETTINGS_UPDATE_IMMEDIATELY
+        set_dirty(m_loaded_value != val);
+        #endif
+        m_default->setEnabled(m_default_value != val);
     }
 
     void SettingsWidget::handle_reset()
@@ -130,10 +141,7 @@ namespace hal
         if (m_prepared)
         {
             load(m_default_value);
-            Q_EMIT setting_updated(this, key(), m_loaded_value);
-    #ifndef SETTINGS_UPDATE_IMMEDIATELY
-            set_dirty(m_loaded_value != m_default_value);
-    #endif
+            trigger_setting_updated();
         }
     }
 
@@ -142,16 +150,16 @@ namespace hal
         if (m_prepared)
         {
             load(m_loaded_value);
-            Q_EMIT setting_updated(this, key(), m_loaded_value);
-    #ifndef SETTINGS_UPDATE_IMMEDIATELY
-            set_dirty(false);
-    #endif
+            trigger_setting_updated();
         }
     }
 
     void SettingsWidget::set_dirty(bool dirty)
     {
         m_dirty   = dirty;
+
+        m_revert->setEnabled(dirty);
+
         QStyle* s = style();
         s->unpolish(this);
         s->polish(this);
@@ -171,6 +179,7 @@ namespace hal
         m_signals_enabled = true;
         m_prepared        = true;
         set_dirty(false);
+        m_default->setEnabled(m_default_value != m_loaded_value);
     }
 
     void SettingsWidget::mark_saved()
@@ -221,5 +230,19 @@ namespace hal
                 return;
         }
         m_container->setDirection(direction);
+    }
+
+    void SettingsWidget::enterEvent(QEvent* event)
+    {
+        Q_UNUSED(event);
+        m_revert->setVisible(true);
+        m_default->setVisible(true);
+    }
+
+    void SettingsWidget::leaveEvent(QEvent* event)
+    {
+        Q_UNUSED(event);
+        m_revert->setVisible(false);
+        m_default->setVisible(false);
     }
 }
