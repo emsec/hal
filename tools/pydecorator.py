@@ -149,7 +149,7 @@ if "__decorated__" not in dir():
 
 	########## Net Decorator
 
-	def net_get_src(message, f):
+	def net_get_source(message, f):
 		@wraps(f)
 		def decorated(*args, **kwargs):
 			result = f(*args, **kwargs)
@@ -160,7 +160,7 @@ if "__decorated__" not in dir():
 			return result
 		return decorated
 
-	def net_get_dests(message, f):
+	def net_get_destinations_get_sources(message, f):
 		@wraps(f)
 		def decorated(*args, **kwargs):
 			result = f(*args, **kwargs)
@@ -218,40 +218,41 @@ if "__decorated__" not in dir():
 	##### Decorate actual functions
 
 	####### Netlist functions
-	hal_py.netlist.get_gate_by_id = netlist_get_gate_or_net_by_id("netlist.get_gate_by_id", "Gate", hal_py.netlist.get_gate_by_id)
-	hal_py.netlist.get_gates = netlist_get_gates("netlist.get_gates", hal_py.netlist.get_gates)
-	hal_py.netlist.get_net_by_id = netlist_get_gate_or_net_by_id("netlist.get_net_by_id", "Net", hal_py.netlist.get_net_by_id)
-	hal_py.netlist.get_nets = netlist_get_nets("netlist.get_nets", hal_py.netlist.get_nets)
-	hal_py.netlist.create_module = netlist_create_module("netlist.create_module", hal_py.netlist.create_module)
-	hal_py.netlist.delete_module = netlist_delete_module("netlist.delete_module", hal_py.netlist.delete_module)
-	hal_py.netlist.get_module_by_id = netlist_get_module_by_id("netlist.get_module_by_id", hal_py.netlist.get_module_by_id)
-	hal_py.netlist.get_modules = netlist_get_modules("netlist.get_modules", hal_py.netlist.get_modules)
+	hal_py.Netlist.get_gate_by_id = netlist_get_gate_or_net_by_id("Netlist.get_gate_by_id", "Gate", hal_py.Netlist.get_gate_by_id)
+	hal_py.Netlist.get_gates = netlist_get_gates("Netlist.get_gates", hal_py.Netlist.get_gates)
+	hal_py.Netlist.get_net_by_id = netlist_get_gate_or_net_by_id("Netlist.get_net_by_id", "Net", hal_py.Netlist.get_net_by_id)
+	hal_py.Netlist.get_nets = netlist_get_nets("Netlist.get_nets", hal_py.Netlist.get_nets)
+	hal_py.Netlist.create_module = netlist_create_module("Netlist.create_module", hal_py.Netlist.create_module)
+	hal_py.Netlist.delete_module = netlist_delete_module("Netlist.delete_module", hal_py.Netlist.delete_module)
+	hal_py.Netlist.get_module_by_id = netlist_get_module_by_id("Netlist.get_module_by_id", hal_py.Netlist.get_module_by_id)
+	hal_py.Netlist.get_modules = netlist_get_modules("Netlist.get_modules", hal_py.Netlist.get_modules)
 
 	####### Gate Functions
-	hal_py.gate.get_name = generic_decorator("gate.get_name", "Gate", hal_py.gate.get_name)
-	hal_py.gate.get_id = generic_decorator("gate.get_id", "Gate", hal_py.gate.get_id)
-	hal_py.gate.get_type = generic_decorator("gate.get_type", "Gate", hal_py.gate.get_type)
-	hal_py.gate.get_data_by_key = generic_decorator("gate.get_data_by_key", "Gate", hal_py.gate.get_data_by_key)
-	hal_py.gate.set_data = generic_decorator("gate.set_data", "Gate", hal_py.gate.set_data)
-	hal_py.gate.set_name = generic_decorator("gate.set_name", "Gate", hal_py.gate.set_name)
-	hal_py.gate.get_predecessors = gate_get_predecessors_or_successors("gate.get_predecessors", "Predecessor", hal_py.gate.get_predecessors)
-	hal_py.gate.get_successors = gate_get_predecessors_or_successors("gate.get_successors", "Successor", hal_py.gate.get_successors)
-	hal_py.gate.get_predecessor = gate_get_predecessor("gate.get_predecessor", hal_py.gate.get_predecessor)
+	hal_py.Gate.get_name = generic_decorator("Gate.get_name", "Gate", hal_py.Gate.get_name)
+	hal_py.Gate.get_id = generic_decorator("Gate.get_id", "Gate", hal_py.Gate.get_id)
+	hal_py.Gate.get_type = generic_decorator("Gate.get_type", "Gate", hal_py.Gate.get_type)
+	hal_py.Gate.get_data_by_key = generic_decorator("Gate.get_data_by_key", "Gate", hal_py.Gate.get_data_by_key)
+	hal_py.Gate.set_data = generic_decorator("Gate.set_data", "Gate", hal_py.Gate.set_data)
+	hal_py.Gate.set_name = generic_decorator("Gate.set_name", "Gate", hal_py.Gate.set_name)
+	hal_py.Gate.get_predecessors = gate_get_predecessors_or_successors("Gate.get_predecessors", "Predecessor", hal_py.Gate.get_predecessors)
+	hal_py.Gate.get_successors = gate_get_predecessors_or_successors("Gate.get_successors", "Successor", hal_py.Gate.get_successors)
+	hal_py.Gate.get_predecessor = gate_get_predecessor("Gate.get_predecessor", hal_py.Gate.get_predecessor)
 
 	####### Net Functions
-	hal_py.net.get_id = generic_decorator("net.get_id", "Net", hal_py.net.get_id)
-	hal_py.net.get_name = generic_decorator("net.get_name", "Net", hal_py.net.get_name)
-	hal_py.net.set_data = generic_decorator("net.set_data", "Net", hal_py.net.set_data)
-	hal_py.net.set_name = generic_decorator("net.set_name", "Net", hal_py.net.set_name)
-	hal_py.net.get_src = net_get_src("net.get_src", hal_py.net.get_src)
-	hal_py.net.get_dsts = net_get_dests("net.get_dsts", hal_py.net.get_dsts)
+	hal_py.Net.get_id = generic_decorator("Net.get_id", "Net", hal_py.Net.get_id)
+	hal_py.Net.get_name = generic_decorator("Net.get_name", "Net", hal_py.Net.get_name)
+	hal_py.Net.set_data = generic_decorator("Net.set_data", "Net", hal_py.Net.set_data)
+	hal_py.Net.set_name = generic_decorator("Net.set_name", "Net", hal_py.Net.set_name)
+	hal_py.Net.get_source = net_get_source("Net.get_source", hal_py.Net.get_source)
+	hal_py.Net.get_sources = net_get_destinations_get_sources("Net.get_sources", hal_py.Net.get_sources)
+	hal_py.Net.get_destinations = net_get_destinations_get_sources("Net.get_destinations", hal_py.Net.get_destinations)
 
 	####### Module Functions
-	hal_py.module.assign_gate = module_assign_gate("module.assign_gate", hal_py.module.assign_gate)
-	hal_py.module.get_gates = module_gates("module.gates", hal_py.module.get_gates)
+	hal_py.Module.assign_gate = module_assign_gate("Module.assign_gate", hal_py.Module.assign_gate)
+	hal_py.Module.get_gates = module_gates("Module.get_gates", hal_py.Module.get_gates)
 
 	###### Endpoint Functions
-	hal_py.endpoint.get_gate = endpoint_get_gate("endpoint.get_gate", hal_py.endpoint.get_gate)
+	hal_py.Endpoint.get_gate = endpoint_get_gate("Endpoint.get_gate", hal_py.Endpoint.get_gate)
 
 else:
 	hal_py.log_info("Already decorated. Not applying again.")
