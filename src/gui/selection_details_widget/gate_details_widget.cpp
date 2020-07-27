@@ -1,4 +1,5 @@
 #include "selection_details_widget/gate_details_widget.h"
+#include "selection_details_widget/data_fields_table.h"
 #include "selection_details_widget/disputed_big_icon.h"
 
 #include "netlist/gate.h"
@@ -8,7 +9,6 @@
 #include "gui_utils/geometry.h"
 
 #include "graph_widget/graph_navigation_widget.h"
-#include "input_dialog/input_dialog.h"
 #include "netlist/module.h"
 
 #include <QApplication>
@@ -31,15 +31,8 @@
 
 namespace hal
 {
-    GateDetailsWidget::GateDetailsWidget(QWidget* parent) : QWidget(parent)
+    GateDetailsWidget::GateDetailsWidget(QWidget* parent) : DetailsWidget(DetailsWidget::GateDetails, parent)
     {
-        //NEW
-        // general initializations
-        init_settings();
-        m_current_id = 0;
-        m_key_font = QFont("Iosevka");
-        m_key_font.setBold(true);
-        m_key_font.setPixelSize(13);
 
         //this line throws a warning that there is already an existing layout, yet there is no layout set and
         //even after calling delete layout(); and then setting the layout, the warning continues
@@ -83,11 +76,11 @@ namespace hal
         m_general_table = new QTableWidget(4,2,this);
         m_input_pins_table = new QTableWidget(0,3, this);
         m_output_pins_table = new QTableWidget(0,3, this);
-        m_data_fields_table = new QTableWidget(0, 2, this);
+        m_dataFieldsTable = new DataFieldsTable(this);
 
         //shared stlye options (every option is applied to each table)
         QList<QTableWidget*> tmp;
-        tmp << m_general_table << m_input_pins_table << m_output_pins_table << m_data_fields_table;
+        tmp << m_general_table << m_input_pins_table << m_output_pins_table << m_dataFieldsTable;
         for(auto & table : tmp)
         {
             //table->horizontalHeader()->setStretchLastSection(true);
@@ -112,7 +105,7 @@ namespace hal
         {
             auto item = tmp_general_info_list.at(i);
             item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-            item->setFont(m_key_font);
+            item->setFont(m_keyFont);
             m_general_table->setItem(i, 0, item);
         }
 
@@ -153,7 +146,7 @@ namespace hal
         intermediate_layout_ip->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_op->addWidget(m_output_pins_table);
         intermediate_layout_op->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_df->addWidget(m_data_fields_table);
+        intermediate_layout_df->addWidget(m_dataFieldsTable);
         intermediate_layout_df->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
         //adding things to the main layout
@@ -199,7 +192,6 @@ namespace hal
         connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_general_table_menu_requested);
         connect(m_input_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_input_pin_table_menu_requested);
         connect(m_output_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_output_pin_table_menu_requested);
-        connect(m_data_fields_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_data_table_menu_requested);
 
         //settings
         connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GateDetailsWidget::handle_global_settings_changed);
@@ -229,13 +221,13 @@ namespace hal
 
     void GateDetailsWidget::handle_gate_name_changed(std::shared_ptr<Gate> gate)
     {
-        if (m_current_id == gate->get_id())
-            update(m_current_id);
+        if (m_currentId == gate->get_id())
+            update(m_currentId);
     }
 
     void GateDetailsWidget::handle_gate_removed(std::shared_ptr<Gate> gate)
     {
-        if (m_current_id == gate->get_id())
+        if (m_currentId == gate->get_id())
         {
             m_general_table->setHidden(true);
             m_scroll_area->setHidden(true);
@@ -249,7 +241,7 @@ namespace hal
         //check if currently shown gate is a src of renamed net
         for (auto& e : net->get_sources())
         {
-            if (m_current_id == e.get_gate()->get_id())
+            if (m_currentId == e.get_gate()->get_id())
             {
                 update_needed = true;
                 break;
@@ -261,7 +253,7 @@ namespace hal
         {
             for (auto& e : net->get_destinations())
             {
-                if (m_current_id == e.get_gate()->get_id())
+                if (m_currentId == e.get_gate()->get_id())
                 {
                     update_needed = true;
                     break;
@@ -270,35 +262,35 @@ namespace hal
         }
 
         if (update_needed)
-            update(m_current_id);
+            update(m_currentId);
     }
 
     void GateDetailsWidget::handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id)
     {
         Q_UNUSED(net);
-        if (m_current_id == src_gate_id)
-            update(m_current_id);
+        if (m_currentId == src_gate_id)
+            update(m_currentId);
     }
 
     void GateDetailsWidget::handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id)
     {
         Q_UNUSED(net);
-        if (m_current_id == src_gate_id)
-            update(m_current_id);
+        if (m_currentId == src_gate_id)
+            update(m_currentId);
     }
 
     void GateDetailsWidget::handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id)
     {
         Q_UNUSED(net);
-        if (m_current_id == dst_gate_id)
-            update(m_current_id);
+        if (m_currentId == dst_gate_id)
+            update(m_currentId);
     }
 
     void GateDetailsWidget::handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id)
     {
         Q_UNUSED(net);
-        if (m_current_id == dst_gate_id)
-            update(m_current_id);
+        if (m_currentId == dst_gate_id)
+            update(m_currentId);
     }
 
     void GateDetailsWidget::handle_buttons_clicked()
@@ -420,21 +412,20 @@ namespace hal
 
         QMenu menu;
 
-        auto curr_item = m_input_pins_table->itemAt(pos);
-        auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
+        auto clicked_net = g_netlist->get_net_by_id(m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toInt());
         if(!g_netlist->is_global_input_net(clicked_net))
         {
-            menu.addAction("Jump to source gate", [this, curr_item](){
-                handle_input_pin_item_clicked(curr_item);
+            menu.addAction("Jump to source gate", [this, pos](){
+                handle_input_pin_item_clicked(m_input_pins_table->itemAt(pos));
             });
         }
 
-        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, curr_item](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
+        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, pos](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
         });
 
-        menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)",[this, curr_item](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_sources()" );
+        menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)",[this, pos](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_input_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ").get_sources()" );
         });
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
@@ -449,74 +440,43 @@ namespace hal
 
         QMenu menu;
 
-        auto curr_item = m_output_pins_table->itemAt(pos);
-        auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
+        auto clicked_net = g_netlist->get_net_by_id(m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toInt());
         if(!g_netlist->is_global_output_net(clicked_net))
         {
-            menu.addAction("Jump to destination gate", [this, curr_item](){
-                handle_output_pin_item_clicked(curr_item);
+            menu.addAction("Jump to destination gate", [this, pos](){
+                handle_output_pin_item_clicked(m_output_pins_table->itemAt(pos));
             });
         }
-        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, curr_item](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
+        menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)",[this, pos](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ")");
         });
 
-        menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)",[this, curr_item](){
-            QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_destinations()" );
+        menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)",[this, pos](){
+            QApplication::clipboard()->setText("netlist.get_net_by_id(" + m_output_pins_table->itemAt(pos)->data(Qt::UserRole).toString() + ").get_destinations()" );
         });
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
     }
 
-    void GateDetailsWidget::handle_data_table_menu_requested(const QPoint &pos)
-    {
-        if(!m_data_fields_table->itemAt(pos) || m_data_fields_table->itemAt(pos)->column() != 1)
-            return;
-
-        QMenu menu;
-        menu.addAction(QIcon(":/icons/python"), "Exctract data as python code (copy to clipboard)", [this, pos](){
-           int row = m_data_fields_table->itemAt(pos)->row();
-           QString key = m_data_fields_table->item(row, 0)->text().left(m_data_fields_table->item(row, 0)->text().length()-1);//-1 since the key in the table ends with ':'
-           QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(m_current_id) + ").data[(\"" + m_data_fields_table->item(row, 0)->data(Qt::UserRole).toString() + "\", \"" + key + "\")]");//(’generic’, ’data’)
-        });
-
-        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
-        menu.exec();
-
-    }
     void GateDetailsWidget::handle_general_table_menu_requested(const QPoint &pos)
     {
         if(!m_general_table->itemAt(pos) || m_general_table->itemAt(pos)->column() != 1)
             return;
 
-        auto curr_item = m_general_table->itemAt(pos);
         QMenu menu;
         QString description;
-        QString python_command = "netlist.get_gate_by_id(" + QString::number(m_current_id) + ").";
+        QString python_command = "netlist.get_gate_by_id(" + QString::number(m_currentId) + ").";
         QString raw_string = "", raw_desc = "";
-        switch(curr_item->row())
+        switch(m_general_table->itemAt(pos)->row())
         {
             case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)";
-                    raw_string = curr_item->text(); raw_desc = "Extract raw name (copy to clipboard)"; break;
+                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw name (copy to clipboard)"; break;
             case 1: python_command += "get_type()"; description = "Extract type as python code (copy to clipboard)";
-                    raw_string = curr_item->text(); raw_desc = "Extraxt raw type(copy to clipboard)";break;
+                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extraxt raw type(copy to clipboard)";break;
             case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)";
-                    raw_string = curr_item->text(); raw_desc = "Extract raw id as string (copy to clipboard)";break;
+                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw id as string (copy to clipboard)";break;
             case 3: python_command += "get_module()"; description = "Extract module as python code (copy to clipboard)"; break;
-        }
-
-        //special case row 0, change name is also an option
-        if(curr_item->row() == 0)
-        {
-            menu.addAction("Change name", [this, curr_item](){
-                InputDialog ipd("Change name", "New name", curr_item->text());
-                if(ipd.exec() == QDialog::Accepted)
-                {
-                    g_netlist->get_gate_by_id(m_current_id)->set_name(ipd.text_value().toStdString());
-                    update(m_current_id);
-                }
-            });
         }
 
         if(!raw_desc.isEmpty())
@@ -587,18 +547,13 @@ namespace hal
         m_top_lvl_layout->update();
     }
 
-    void GateDetailsWidget::init_settings()
-    {
-        m_hide_empty_sections = g_settings_manager.get("selection_details/hide_empty_sections", false).toBool();
-    }
-
     void GateDetailsWidget::handle_global_settings_changed(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender)
         if(key == "selection_details/hide_empty_sections")
         {
-            m_hide_empty_sections = value.toBool();
-            if(!m_hide_empty_sections)
+            m_hideEmptySections = value.toBool();
+            if(!m_hideEmptySections)
                 show_all_sections();
             else
                 hide_empty_sections();
@@ -607,34 +562,34 @@ namespace hal
 
     void GateDetailsWidget::handle_module_removed(std::shared_ptr<Module> module)
     {
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
-        auto g = g_netlist->get_gate_by_id(m_current_id);
+        auto g = g_netlist->get_gate_by_id(m_currentId);
 
         if (module->contains_gate(g))
         {
-            update(m_current_id);
+            update(m_currentId);
         }
     }
 
     void GateDetailsWidget::handle_module_name_changed(std::shared_ptr<Module> module)
     {
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
-        auto g = g_netlist->get_gate_by_id(m_current_id);
+        auto g = g_netlist->get_gate_by_id(m_currentId);
 
         if (module->contains_gate(g))
         {
-            update(m_current_id);
+            update(m_currentId);
         }
     }
 
     void GateDetailsWidget::handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(module);
-        if (m_current_id == associated_data)
+        if (m_currentId == associated_data)
         {
-            update(m_current_id);
+            update(m_currentId);
         }
     }
 
@@ -644,9 +599,9 @@ namespace hal
         if (!g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(associated_data)))
             return;
 
-        if (m_current_id == associated_data)
+        if (m_currentId == associated_data)
         {
-            update(m_current_id);
+            update(m_currentId);
         }
     }
 
@@ -694,9 +649,9 @@ namespace hal
     void GateDetailsWidget::update(const u32 gate_id)
     {
         auto g = g_netlist->get_gate_by_id(gate_id);
-        m_current_id = gate_id;
+        m_currentId = gate_id;
 
-        if(!g || m_current_id == 0)
+        if(!g || m_currentId == 0)
             return;
 
         show_all_sections();
@@ -704,7 +659,7 @@ namespace hal
         //update (1)general info section
         m_name_item->setText(QString::fromStdString(g->get_name()));
         m_type_item->setText(QString::fromStdString(g->get_type()->get_name()));
-        m_id_item->setText(QString::number(m_current_id));
+        m_id_item->setText(QString::number(m_currentId));
 
         QString module_text = "";
         for (const auto sub : g_netlist->get_modules())
@@ -791,26 +746,7 @@ namespace hal
 
         //update(4) data fields section
         m_data_fields_button->setText(QString::fromStdString("Data Fields (") + QString::number(g->get_data().size()) + QString::fromStdString(")"));
-        m_data_fields_table->clearContents();
-        m_data_fields_table->setRowCount(g->get_data().size());
-        m_data_fields_table->setMaximumHeight(m_data_fields_table->verticalHeader()->length());
-        index = 0;
-        for(const auto& [key, value] : g->get_data())
-        {
-            QTableWidgetItem* key_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(key)) + QString(":"));
-            key_item->setFont(m_key_font);
-            key_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-            key_item->setData(Qt::UserRole, QString::fromStdString(std::get<0>(key)));
-            QTableWidgetItem* value_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(value)));
-            value_item->setFlags(Qt::ItemIsEnabled);
-
-            m_data_fields_table->setItem(index, 0, key_item);
-            m_data_fields_table->setItem(index, 1, value_item);
-            index++;
-        }
-        m_data_fields_table->resizeColumnsToContents();
-        m_data_fields_table->setFixedWidth(calculate_table_size(m_data_fields_table).width());
-
+        m_dataFieldsTable->updateData(gate_id,g->get_data());
 
         //update(5) boolean functions section
         //clear container layout
@@ -843,14 +779,14 @@ namespace hal
             delete last_line;
         }
 
-        if(m_hide_empty_sections)
+        if(m_hideEmptySections)
             hide_empty_sections();
 
         //to prevent any updating(render) errors that can occur, manually tell the tables to update
         m_general_table->update();
         m_input_pins_table->update();
         m_output_pins_table->update();
-        m_data_fields_table->update();
+        m_dataFieldsTable->update();
     }
 
     void GateDetailsWidget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates)

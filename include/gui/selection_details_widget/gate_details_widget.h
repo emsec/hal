@@ -28,10 +28,10 @@
 #include "gui/gui_def.h"
 #include "netlist/endpoint.h"
 #include "netlist_relay/netlist_relay.h"
+#include "selection_details_widget/details_widget.h"
 
 #include <QWidget>
 
-/* forward declaration */
 class QTableWidget;
 class QTableWidgetItem;
 class QVBoxLayout;
@@ -44,8 +44,9 @@ namespace hal
 {
     /* forward declaration */
     class GraphNavigationWidget;
+    class DataFieldsTable;
 
-    class GateDetailsWidget : public QWidget
+    class GateDetailsWidget : public DetailsWidget
     {
         Q_OBJECT
     public:
@@ -87,9 +88,6 @@ namespace hal
         //used to set the boolean function container to its appropriate size, width "must be"
         //extracted from the stylesheet
         int m_scrollbar_width;
-        bool m_hide_empty_sections;
-        QFont m_key_font;
-        u32 m_current_id;
         GraphNavigationWidget* m_navigation_table;
 
         //All sections together are encapsulated in a container to make it scrollable
@@ -120,8 +118,8 @@ namespace hal
         //(3) output-pins section
         QTableWidget* m_output_pins_table;
 
-        //(4) data-fields section (label or also table? if table: maybe tooltip if data is too long)
-        QTableWidget* m_data_fields_table;
+        //(4) data-fields section
+        DataFieldsTable* m_dataFieldsTable;
 
         //(5) boolean-function section (consisting of a container that encapsulates multiple labels and design structures)
         QWidget* m_boolean_functions_container;
@@ -149,7 +147,6 @@ namespace hal
 
         void show_all_sections();
         void hide_empty_sections();
-        void init_settings();
         void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
     };
 }

@@ -27,10 +27,10 @@
 #include "gui/gui_def.h"
 #include "netlist/endpoint.h"
 #include "netlist_relay/netlist_relay.h"
+#include "selection_details_widget/details_widget.h"
 
 #include <QWidget>
 
-/* forward declaration */
 class QTableWidget;
 class QTableWidgetItem;
 class QVBoxLayout;
@@ -43,8 +43,9 @@ namespace hal
 {
     /*forward declaration*/
     class GraphNavigationWidget;
+    class DataFieldsTable;
 
-    class ModuleDetailsWidget : public QWidget
+    class ModuleDetailsWidget : public DetailsWidget
     {
         Q_OBJECT
     public:
@@ -80,9 +81,6 @@ namespace hal
         void handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id);
 
     private:
-        u32 m_current_id;
-        bool m_hide_empty_sections;
-        QFont m_key_font;
         GraphNavigationWidget* m_navigation_table;
 
         QScrollArea* m_scroll_area;
@@ -108,7 +106,7 @@ namespace hal
 
         QTableWidget* m_output_ports_table;
 
-        QTableWidget* m_data_fields_table;
+        DataFieldsTable* m_dataFieldsTable;
 
         //Utility list to show/hide empty sections
         QList<QPushButton*> m_util_list;
@@ -134,7 +132,6 @@ namespace hal
         //settings related functions
         void show_all_sections();
         void hide_empty_sections();
-        void init_settings();
         void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
     };
 }    // namespace hal

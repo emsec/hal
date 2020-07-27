@@ -1,4 +1,5 @@
 #include "selection_details_widget/net_details_widget.h"
+#include "selection_details_widget/data_fields_table.h"
 #include "selection_details_widget/disputed_big_icon.h"
 
 #include "gui_globals.h"
@@ -20,14 +21,9 @@
 
 namespace hal
 {
-    NetDetailsWidget::NetDetailsWidget(QWidget* parent) : QWidget(parent)
+    NetDetailsWidget::NetDetailsWidget(QWidget* parent) : DetailsWidget(DetailsWidget::NetDetails, parent)
     {
         //general initializations
-        init_settings();
-        m_current_id = 0;
-        m_key_font   = QFont("Iosevka");
-        m_key_font.setBold(true);
-        m_key_font.setPixelSize(13);
 
         m_scroll_area       = new QScrollArea();
         m_top_lvl_container = new QWidget();
@@ -53,20 +49,25 @@ namespace hal
         QHBoxLayout* intermediate_layout_destinations = new QHBoxLayout();
         intermediate_layout_destinations->setContentsMargins(3, 3, 0, 0);
         intermediate_layout_destinations->setSpacing(0);
+        QHBoxLayout* intermediate_layout_df = new QHBoxLayout();
+        intermediate_layout_df->setContentsMargins(3, 3, 0, 0);
+        intermediate_layout_df->setSpacing(0);
 
         //buttons
         m_general_info_button = new QPushButton("Net Information", this);
         m_general_info_button->setEnabled(false);
         m_source_pins_button      = new QPushButton("Source Pins", this);
         m_destination_pins_button = new QPushButton("Destination Pins", this);
+        m_data_fields_button      = new QPushButton("Data Fields", this);
 
         //table initializations
         m_general_table          = new QTableWidget(3, 2);
         m_source_pins_table      = new QTableWidget(0, 3);
         m_destination_pins_table = new QTableWidget(0, 3);
+        m_dataFieldsTable        = new DataFieldsTable(this);
 
         QList<QTableWidget*> tmp;
-        tmp << m_general_table << m_source_pins_table << m_destination_pins_table;
+        tmp << m_general_table << m_source_pins_table << m_destination_pins_table << m_dataFieldsTable;
         for (auto& table : tmp)
         {
             table->horizontalHeader()->hide();
@@ -88,7 +89,7 @@ namespace hal
         {
             auto item = tmp_general_info_list.at(i);
             item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-            item->setFont(m_key_font);
+            item->setFont(m_keyFont);
             m_general_table->setItem(i, 0, item);
         }
 
@@ -117,6 +118,8 @@ namespace hal
         intermediate_layout_sources->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_destinations->addWidget(m_destination_pins_table);
         intermediate_layout_destinations->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        intermediate_layout_df->addWidget(m_dataFieldsTable);
+        intermediate_layout_df->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
         //adding things to the main layout
         m_top_lvl_layout->addWidget(m_general_info_button);
@@ -127,6 +130,8 @@ namespace hal
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
         m_top_lvl_layout->addWidget(m_destination_pins_button);
         m_top_lvl_layout->addLayout(intermediate_layout_destinations);
+        m_top_lvl_layout->addWidget(m_data_fields_button);
+        m_top_lvl_layout->addLayout(intermediate_layout_df);
 
         //necessary to add at the end
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -135,6 +140,7 @@ namespace hal
         //connect the buttons
         connect(m_source_pins_button, &QPushButton::clicked, this, &NetDetailsWidget::handle_buttons_clicked);
         connect(m_destination_pins_button, &QPushButton::clicked, this, &NetDetailsWidget::handle_buttons_clicked);
+        connect(m_data_fields_button, &QPushButton::clicked, this, &NetDetailsWidget::handle_buttons_clicked);
 
         //connect the tables
         connect(m_source_pins_table, &QTableWidget::itemDoubleClicked, this, &NetDetailsWidget::handle_table_item_clicked);
@@ -194,17 +200,17 @@ namespace hal
 
     void NetDetailsWidget::update(u32 net_id)
     {
-        m_current_id = net_id;
+        m_currentId = net_id;
         auto n       = g_netlist->get_net_by_id(net_id);
 
-        if (m_current_id == 0 || !n)
+        if (m_currentId == 0 || !n)
             return;
 
         show_all_sections();
 
         // (1) update general info section
         m_name_item->setText(QString::fromStdString(n->get_name()));
-        m_id_item->setText(QString::number(m_current_id));
+        m_id_item->setText(QString::number(m_currentId));
 
         //get net type
         QString n_type = "Standard";
@@ -277,13 +283,16 @@ namespace hal
         m_destination_pins_table->resizeColumnsToContents();
         m_destination_pins_table->setFixedWidth(calculate_table_size(m_destination_pins_table).width());
 
-        if (m_hide_empty_sections)
+        m_dataFieldsTable->updateData(net_id,  n->get_data());
+
+        if (m_hideEmptySections)
             hide_empty_sections();
 
         //to prevent any updating(render) erros that can occur, manually tell the tables to update
         m_general_table->update();
         m_source_pins_table->update();
         m_destination_pins_table->update();
+        m_dataFieldsTable->update();
     }
 
     void NetDetailsWidget::handle_net_removed(const std::shared_ptr<Net> n)
@@ -293,7 +302,7 @@ namespace hal
 
     void NetDetailsWidget::handle_net_name_changed(const std::shared_ptr<Net> n)
     {
-        if (m_current_id == n->get_id())
+        if (m_currentId == n->get_id())
             m_name_item->setText(QString::fromStdString(n->get_name()));
     }
 
@@ -301,54 +310,54 @@ namespace hal
     {
         Q_UNUSED(src_gate_id);
 
-        if (m_current_id == n->get_id())
-            update(m_current_id);
+        if (m_currentId == n->get_id())
+            update(m_currentId);
     }
 
     void NetDetailsWidget::handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id)
     {
         Q_UNUSED(src_gate_id);
 
-        if (m_current_id == n->get_id())
-            update(m_current_id);
+        if (m_currentId == n->get_id())
+            update(m_currentId);
     }
 
     void NetDetailsWidget::handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id)
     {
         Q_UNUSED(dst_gate_id);
 
-        if (m_current_id == n->get_id())
-            update(m_current_id);
+        if (m_currentId == n->get_id())
+            update(m_currentId);
     }
 
     void NetDetailsWidget::handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id)
     {
         Q_UNUSED(dst_gate_id);
 
-        if (m_current_id == n->get_id())
-            update(m_current_id);
+        if (m_currentId == n->get_id())
+            update(m_currentId);
     }
 
     void NetDetailsWidget::handle_gate_name_changed(const std::shared_ptr<Gate> g)
     {
         Q_UNUSED(g)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
         bool update_needed = false;
 
         //current net
-        auto n = g_netlist->get_net_by_id(m_current_id);
+        auto n = g_netlist->get_net_by_id(m_currentId);
 
-        //check if current net is in netlist (m_current_id is unassigned if netlist details widget hasn't been shown once)
+        //check if current net is in netlist (m_currentId is unassigned if netlist details widget hasn't been shown once)
         if (!g_netlist->is_net_in_netlist(n))
             return;
 
         //check if renamed gate is a src of the currently shown net
         for (auto e : n->get_sources())
         {
-            if (e.get_gate()->get_id() == m_current_id)
+            if (e.get_gate()->get_id() == m_currentId)
             {
                 update_needed = true;
                 break;
@@ -360,7 +369,7 @@ namespace hal
         {
             for (auto e : n->get_destinations())
             {
-                if (e.get_gate()->get_id() == m_current_id)
+                if (e.get_gate()->get_id() == m_currentId)
                 {
                     update_needed = true;
                     break;
@@ -369,7 +378,7 @@ namespace hal
         }
 
         if (update_needed)
-            update(m_current_id);
+            update(m_currentId);
     }
 
     void NetDetailsWidget::handle_buttons_clicked()
@@ -427,7 +436,7 @@ namespace hal
         auto curr_item = m_general_table->itemAt(pos);
         QMenu menu;
         QString description;
-        QString python_command = "netlist.get_net_by_id(" + QString::number(m_current_id) + ").";
+        QString python_command = "netlist.get_net_by_id(" + QString::number(m_currentId) + ").";
         QString raw_string = "", raw_desc = "";
         switch (curr_item->row())
         {
@@ -453,8 +462,8 @@ namespace hal
                 InputDialog ipd("Change name", "New name", curr_item->text());
                 if(ipd.exec() == QDialog::Accepted)
                 {
-                    g_netlist->get_net_by_id(m_current_id)->set_name(ipd.text_value().toStdString());
-                    update(m_current_id);
+                    g_netlist->get_net_by_id(m_currentId)->set_name(ipd.text_value().toStdString());
+                    update(m_currentId);
                 }
             });
         }
@@ -544,18 +553,13 @@ namespace hal
         m_top_lvl_layout->update();
     }
 
-    void NetDetailsWidget::init_settings()
-    {
-        m_hide_empty_sections = g_settings_manager.get("selection_details/hide_empty_sections", false).toBool();
-    }
-
     void NetDetailsWidget::handle_global_settings_changed(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender)
         if (key == "selection_details/hide_empty_sections")
         {
-            m_hide_empty_sections = value.toBool();
-            if (!m_hide_empty_sections)
+            m_hideEmptySections = value.toBool();
+            if (!m_hideEmptySections)
                 show_all_sections();
             else
                 hide_empty_sections();

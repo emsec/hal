@@ -6,7 +6,6 @@
 #include "netlist/module.h"
 #include "gui_utils/graphics.h"
 #include <QTimer>
-#include <QDebug>
 
 namespace hal
 {

@@ -1,4 +1,5 @@
 #include "selection_details_widget/module_details_widget.h"
+#include "selection_details_widget/data_fields_table.h"
 #include "selection_details_widget/disputed_big_icon.h"
 
 #include "graph_widget/graph_navigation_widget.h"
@@ -23,14 +24,8 @@
 
 namespace hal
 {
-    ModuleDetailsWidget::ModuleDetailsWidget(QWidget* parent) : QWidget(parent)
+    ModuleDetailsWidget::ModuleDetailsWidget(QWidget* parent) : DetailsWidget(DetailsWidget::ModuleDetails, parent)
     {
-        init_settings();
-        m_current_id = 0;
-        m_key_font = QFont("Iosevka");
-        m_key_font.setBold(true);
-        m_key_font.setPixelSize(13);
-
         m_scroll_area       = new QScrollArea();
         m_top_lvl_container = new QWidget();
         m_top_lvl_layout    = new QVBoxLayout(m_top_lvl_container);
@@ -66,9 +61,9 @@ namespace hal
         m_general_table      = new QTableWidget(6, 2);
         m_input_ports_table  = new QTableWidget(0, 3);
         m_output_ports_table = new QTableWidget(0, 3);
-        m_data_fields_table = new QTableWidget(0, 2);
+        m_dataFieldsTable    = new DataFieldsTable(this);
 
-        QList<QTableWidget*> tmp_tables = {m_general_table, m_input_ports_table, m_output_ports_table, m_data_fields_table};
+        QList<QTableWidget*> tmp_tables = {m_general_table, m_input_ports_table, m_output_ports_table, m_dataFieldsTable};
 
         QList<QTableWidgetItem*> tmp_general_table_static_items = {new QTableWidgetItem("Name:"),
                                                                    new QTableWidgetItem("Id:"),
@@ -110,7 +105,7 @@ namespace hal
         intermediate_layout_ip->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_op->addWidget(m_output_ports_table);
         intermediate_layout_op->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_df->addWidget(m_data_fields_table);
+        intermediate_layout_df->addWidget(m_dataFieldsTable);
         intermediate_layout_df->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
         m_top_lvl_layout->addWidget(m_general_info_button);
@@ -214,9 +209,9 @@ namespace hal
 
     void ModuleDetailsWidget::update(const u32 module_id)
     {
-        m_current_id = module_id;
+        m_currentId = module_id;
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
         auto m = g_netlist->get_module_by_id(module_id);
@@ -228,7 +223,7 @@ namespace hal
 
         //update table with general information
         m_name_item->setText(QString::fromStdString(m->get_name()));
-        m_id_item->setText(QString::number(m_current_id));
+        m_id_item->setText(QString::number(m_currentId));
         m_number_of_submodules_item->setText(QString::number(m->get_submodules(nullptr, true).size()));
         m_number_of_nets_item->setText(QString::number(m->get_internal_nets().size()));
 
@@ -320,28 +315,9 @@ namespace hal
         m_output_ports_table->setFixedWidth(calculate_table_size(m_output_ports_table).width());
 
         //update data fields table
-        m_data_fields_table->clearContents();
-        m_data_fields_button->setText("Data Fields (" + QString::number(m->get_data().size()) + ")");
-        m_data_fields_table->setRowCount(m->get_data().size());
-        m_data_fields_table->setMaximumHeight(m_data_fields_table->verticalHeader()->length());
-        index = 0;
-        for(const auto& [key, value] : m->get_data())
-        {
-            QTableWidgetItem* key_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(key)) + QString(":"));
-            key_item->setFont(m_key_font);
-            key_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-            key_item->setData(Qt::UserRole, QString::fromStdString(std::get<0>(key)));
-            QTableWidgetItem* value_item = new QTableWidgetItem(QString::fromStdString(std::get<1>(value)));
-            value_item->setFlags(Qt::ItemIsEnabled);
+        m_dataFieldsTable->updateData(module_id, m->get_data());
 
-            m_data_fields_table->setItem(index, 0, key_item);
-            m_data_fields_table->setItem(index, 1, value_item);
-            index++;
-        }
-        m_data_fields_table->resizeColumnsToContents();
-        m_data_fields_table->setFixedWidth(calculate_table_size(m_data_fields_table).width());
-
-        if(m_hide_empty_sections)
+        if(m_hideEmptySections)
             hide_empty_sections();
     }
 
@@ -349,10 +325,10 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
@@ -363,7 +339,7 @@ namespace hal
 
             if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
-                update(m_current_id);
+                update(m_currentId);
                 return;
             }
         }
@@ -373,10 +349,10 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
@@ -387,7 +363,7 @@ namespace hal
 
             if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
-                update(m_current_id);
+                update(m_currentId);
                 return;
             }
         }
@@ -397,10 +373,10 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
@@ -411,7 +387,7 @@ namespace hal
 
             if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
-                update(m_current_id);
+                update(m_currentId);
                 return;
             }
         }
@@ -421,10 +397,10 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
@@ -435,7 +411,7 @@ namespace hal
 
             if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
-                update(m_current_id);
+                update(m_currentId);
                 return;
             }
         }
@@ -445,10 +421,10 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
@@ -459,7 +435,7 @@ namespace hal
 
             if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
-                update(m_current_id);
+                update(m_currentId);
                 return;
             }
         }
@@ -469,10 +445,10 @@ namespace hal
     {
         Q_UNUSED(netlist)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
@@ -483,7 +459,7 @@ namespace hal
 
             if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
             {
-                update(m_current_id);
+                update(m_currentId);
                 return;
             }
         }
@@ -491,151 +467,151 @@ namespace hal
 
     void ModuleDetailsWidget::handle_module_name_changed(std::shared_ptr<Module> module)
     {
-        if (m_current_id == module->get_id())
-            update(m_current_id);
+        if (m_currentId == module->get_id())
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_submodule_added(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto current_module = g_netlist->get_module_by_id(m_current_id);
+        auto current_module = g_netlist->get_module_by_id(m_currentId);
 
-        if (m_current_id == module->get_id() || current_module->contains_module(module, true))
-            update(m_current_id);
+        if (m_currentId == module->get_id() || current_module->contains_module(module, true))
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_submodule_removed(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto current_module = g_netlist->get_module_by_id(m_current_id);
+        auto current_module = g_netlist->get_module_by_id(m_currentId);
 
-        if (m_current_id == module->get_id() || current_module->contains_module(module, true))
-            update(m_current_id);
+        if (m_currentId == module->get_id() || current_module->contains_module(module, true))
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto current_module = g_netlist->get_module_by_id(m_current_id);
+        auto current_module = g_netlist->get_module_by_id(m_currentId);
 
-        if (m_current_id == module->get_id() || current_module->contains_module(module, true))
-            update(m_current_id);
+        if (m_currentId == module->get_id() || current_module->contains_module(module, true))
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto current_module = g_netlist->get_module_by_id(m_current_id);
+        auto current_module = g_netlist->get_module_by_id(m_currentId);
 
-        if (m_current_id == module->get_id() || current_module->contains_module(module, true))
-            update(m_current_id);
+        if (m_currentId == module->get_id() || current_module->contains_module(module, true))
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_module_input_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
-        if (m_current_id == module->get_id())
-            update(m_current_id);
+        if (m_currentId == module->get_id())
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_module_output_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
-        if (m_current_id == module->get_id())
-            update(m_current_id);
+        if (m_currentId == module->get_id())
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_module_type_changed(std::shared_ptr<Module> module)
     {
-        if (m_current_id == module->get_id())
-            update(m_current_id);
+        if (m_currentId == module->get_id())
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_net_name_changed(std::shared_ptr<Net> net)
     {
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module      = g_netlist->get_module_by_id(m_current_id);
+        auto module      = g_netlist->get_module_by_id(m_currentId);
         auto input_nets  = module->get_input_nets();
         auto output_nets = module->get_output_nets();
 
         if (input_nets.find(net) != input_nets.end() || output_nets.find(net) != output_nets.end())
-            update(m_current_id);
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id)
     {
         Q_UNUSED(net)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gate   = g_netlist->get_gate_by_id(src_gate_id);
 
         if (module->contains_gate(gate, true))
-            update(m_current_id);
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id)
     {
         Q_UNUSED(net)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gate   = g_netlist->get_gate_by_id(src_gate_id);
 
         if (module->contains_gate(gate, true))
-            update(m_current_id);
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id)
     {
         Q_UNUSED(net)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gate   = g_netlist->get_gate_by_id(dst_gate_id);
 
         if (module->contains_gate(gate, true))
-            update(m_current_id);
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id)
     {
         Q_UNUSED(net)
 
-        if (m_current_id == 0)
+        if (m_currentId == 0)
             return;
 
-        auto module = g_netlist->get_module_by_id(m_current_id);
+        auto module = g_netlist->get_module_by_id(m_currentId);
         auto gate   = g_netlist->get_gate_by_id(dst_gate_id);
 
         if (module->contains_gate(gate, true))
-            update(m_current_id);
+            update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_buttons_clicked()
@@ -664,7 +640,7 @@ namespace hal
         static int row_index = 0;
 
         item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-        item->setFont(m_key_font);
+        item->setFont(m_keyFont);
         m_general_table->setItem(row_index, 0, item);
 
         row_index++;
@@ -726,7 +702,7 @@ namespace hal
 
         QMenu menu;
         QString description;
-        QString python_command = "netlist.get_module_by_id(" + QString::number(m_current_id) + ").";
+        QString python_command = "netlist.get_module_by_id(" + QString::number(m_currentId) + ").";
         QString raw_string = curr_item->text(), raw_desc = "";
         switch (curr_item->row())
         {
@@ -755,8 +731,8 @@ namespace hal
                 InputDialog ipd("Change name", "New name", curr_item->text());
                 if(ipd.exec() == QDialog::Accepted)
                 {
-                    g_netlist->get_module_by_id(m_current_id)->set_name(ipd.text_value().toStdString());
-                    update(m_current_id);
+                    g_netlist->get_module_by_id(m_currentId)->set_name(ipd.text_value().toStdString());
+                    update(m_currentId);
                 }
             });
         }
@@ -767,8 +743,8 @@ namespace hal
                 InputDialog ipd("Change type", "New type", curr_item->text());
                 if(ipd.exec() == QDialog::Accepted)
                 {
-                    g_netlist->get_module_by_id(m_current_id)->set_type(ipd.text_value().toStdString());
-                    update(m_current_id);
+                    g_netlist->get_module_by_id(m_currentId)->set_type(ipd.text_value().toStdString());
+                    update(m_currentId);
                 }
             });
         }
@@ -814,8 +790,8 @@ namespace hal
                     auto corresponding_net = g_netlist->get_net_by_id(m_input_ports_table->item(curr_item->row(), 2)->data(Qt::UserRole).toInt());
                     if(!corresponding_net)
                         return;
-                    g_netlist->get_module_by_id(m_current_id)->set_input_port_name(corresponding_net, ipd.text_value().toStdString());
-                    update(m_current_id);
+                    g_netlist->get_module_by_id(m_currentId)->set_input_port_name(corresponding_net, ipd.text_value().toStdString());
+                    update(m_currentId);
                 }
             });
         }
@@ -855,8 +831,8 @@ namespace hal
                     auto corresponding_net = g_netlist->get_net_by_id(m_output_ports_table->item(curr_item->row(), 2)->data(Qt::UserRole).toInt());
                     if(!corresponding_net)
                         return;
-                    g_netlist->get_module_by_id(m_current_id)->set_output_port_name(corresponding_net, ipd.text_value().toStdString());
-                    update(m_current_id);
+                    g_netlist->get_module_by_id(m_currentId)->set_output_port_name(corresponding_net, ipd.text_value().toStdString());
+                    update(m_currentId);
                 }
             });
         }
@@ -1027,18 +1003,13 @@ namespace hal
         m_top_lvl_layout->update();
     }
 
-    void ModuleDetailsWidget::init_settings()
-    {
-        m_hide_empty_sections = g_settings_manager.get("selection_details/hide_empty_sections", false).toBool();
-    }
-
     void ModuleDetailsWidget::handle_global_settings_changed(void *sender, const QString &key, const QVariant &value)
     {
         Q_UNUSED(sender)
         if(key == "selection_details/hide_empty_sections")
         {
-            m_hide_empty_sections = value.toBool();
-            if(!m_hide_empty_sections)
+            m_hideEmptySections = value.toBool();
+            if(!m_hideEmptySections)
                 show_all_sections();
             else
                 hide_empty_sections();
