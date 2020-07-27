@@ -5,11 +5,11 @@
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
+#include "input_dialog/input_dialog.h"
 
 #include <QApplication>
 #include <QClipboard>
 #include <QHeaderView>
-#include <QLabel>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPushButton>
@@ -424,11 +424,12 @@ namespace hal
         if (!m_general_table->itemAt(pos) || m_general_table->itemAt(pos)->column() != 1 || m_general_table->itemAt(pos)->row() == 1)
             return;
 
+        auto curr_item = m_general_table->itemAt(pos);
         QMenu menu;
         QString description;
         QString python_command = "netlist.get_net_by_id(" + QString::number(m_current_id) + ").";
         QString raw_string = "", raw_desc = "";
-        switch (m_general_table->itemAt(pos)->row())
+        switch (curr_item->row())
         {
             case 0:
                 python_command += "get_name()";
@@ -444,6 +445,18 @@ namespace hal
                 raw_string  = m_general_table->itemAt(pos)->text();
                 raw_desc    = "Ectract raw id (copy to clipboard)";
                 break;
+        }
+
+        if(m_general_table->itemAt(pos)->row() == 0)
+        {
+            menu.addAction("Change name", [this, curr_item](){
+                InputDialog ipd("Change name", "New name", curr_item->text());
+                if(ipd.exec() == QDialog::Accepted)
+                {
+                    g_netlist->get_net_by_id(m_current_id)->set_name(ipd.text_value().toStdString());
+                    update(m_current_id);
+                }
+            });
         }
 
         if (!raw_string.isEmpty())
