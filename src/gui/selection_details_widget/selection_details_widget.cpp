@@ -22,32 +22,33 @@
 
 namespace hal
 {
-    SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent) : ContentWidget("Details", parent)
+    SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
+        : ContentWidget("Details", parent), m_numberSelectedItems(0)
     {
-        mSplitter         = new QSplitter(Qt::Horizontal, this);
-        mSplitter->setStretchFactor(0,5);
-        mSplitter->setStretchFactor(1,10);
-        mSelectionTreeView  = new SelectionTreeView(mSplitter);
-        connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
+        m_splitter         = new QSplitter(Qt::Horizontal, this);
+        m_splitter->setStretchFactor(0,5);
+        m_splitter->setStretchFactor(1,10);
+        m_selectionTreeView  = new SelectionTreeView(m_splitter);
+        connect(m_selectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
 
-        mSelectionDetails = new QWidget(mSplitter);
-        QVBoxLayout* selDetailsLayout = new QVBoxLayout(mSelectionDetails);
+        m_selectionDetails = new QWidget(m_splitter);
+        QVBoxLayout* selDetailsLayout = new QVBoxLayout(m_selectionDetails);
 
-        m_stacked_widget = new QStackedWidget(mSelectionDetails);
+        m_stacked_widget = new QStackedWidget(m_selectionDetails);
 
-        m_empty_widget = new QWidget(mSelectionDetails);
+        m_empty_widget = new QWidget(m_selectionDetails);
         m_stacked_widget->addWidget(m_empty_widget);
 
-        m_gate_details = new GateDetailsWidget(mSelectionDetails);
+        m_gate_details = new GateDetailsWidget(m_selectionDetails);
         m_stacked_widget->addWidget(m_gate_details);
 
-        m_net_details = new NetDetailsWidget(mSelectionDetails);
+        m_net_details = new NetDetailsWidget(m_selectionDetails);
         m_stacked_widget->addWidget(m_net_details);
 
         m_module_details = new ModuleDetailsWidget(this);
         m_stacked_widget->addWidget(m_module_details);
 
-        m_item_deleted_label = new QLabel(mSelectionDetails);
+        m_item_deleted_label = new QLabel(m_selectionDetails);
         m_item_deleted_label->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
         m_item_deleted_label->setWordWrap(true);
         m_item_deleted_label->setAlignment(Qt::AlignmentFlag::AlignTop);
@@ -55,14 +56,14 @@ namespace hal
 
         m_stacked_widget->setCurrentWidget(m_empty_widget);
 
-        m_searchbar = new Searchbar(mSelectionDetails);
+        m_searchbar = new Searchbar(m_selectionDetails);
         m_searchbar->hide();
 
         selDetailsLayout->addWidget(m_stacked_widget);
         selDetailsLayout->addWidget(m_searchbar);
-        mSplitter->addWidget(mSelectionTreeView);
-        mSplitter->addWidget(mSelectionDetails);
-        m_content_layout->addWidget(mSplitter);
+        m_splitter->addWidget(m_selectionTreeView);
+        m_splitter->addWidget(m_selectionDetails);
+        m_content_layout->addWidget(m_splitter);
 
         //    m_table_widget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
         //    m_table_widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -74,6 +75,7 @@ namespace hal
         //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
         connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
+        m_selectionTreeView->hide();
     }
 
     void SelectionDetailsWidget::handle_selection_update(void* sender)
@@ -86,22 +88,23 @@ namespace hal
             return;
         }
 
-        unsigned int number_selected_items = g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() + g_selection_relay.m_selected_nets.size();
+        m_numberSelectedItems = g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() + g_selection_relay.m_selected_nets.size();
 
-        switch (number_selected_items) {
+        switch (m_numberSelectedItems) {
         case 0:
         {
             singleSelectionInternal(nullptr);
             // clear and hide tree
-            mSelectionTreeView->populate(false);
+            m_selectionTreeView->populate(false);
             return;
         }
         case 1:
-            mSelectionTreeView->populate(false);
+            m_selectionTreeView->populate(false);
             break;
         default:
             // more than 1 item selected, populate and make visible
-            mSelectionTreeView->populate(true);
+            set_name("Selection Details");
+            m_selectionTreeView->populate(true);
             break;
         }
 
@@ -146,21 +149,21 @@ namespace hal
         case SelectionTreeItem::ModuleItem:
             m_module_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_module_details);
-            set_name("Module Details");
+            if (m_numberSelectedItems==1) set_name("Module Details");
             break;
         case SelectionTreeItem::GateItem:
             m_searchbar->hide();
             m_module_details->update(0);
             m_gate_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_gate_details);
-            set_name("Gate Details");
+            if (m_numberSelectedItems==1) set_name("Gate Details");
             break;
         case SelectionTreeItem::NetItem:
             m_searchbar->hide();
             m_module_details->update(0);
             m_net_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_net_details);
-            set_name("Net Details");
+            if (m_numberSelectedItems==1) set_name("Net Details");
             break;
         default:
             break;

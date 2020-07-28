@@ -1,6 +1,7 @@
 #include "selection_details_widget/gate_details_widget.h"
 #include "selection_details_widget/data_fields_table.h"
 #include "selection_details_widget/disputed_big_icon.h"
+#include "selection_details_widget/details_section_widget.h"
 
 #include "netlist/gate.h"
 #include "netlist/net.h"
@@ -36,11 +37,11 @@ namespace hal
 
         //this line throws a warning that there is already an existing layout, yet there is no layout set and
         //even after calling delete layout(); and then setting the layout, the warning continues
-        m_content_layout = new QVBoxLayout(this);
         m_scroll_area = new QScrollArea(this);
         m_top_lvl_container = new QWidget(this);
         m_top_lvl_layout = new QVBoxLayout(m_top_lvl_container);
         m_top_lvl_container->setLayout(m_top_lvl_layout);;
+		m_content_layout = new QVBoxLayout(this);
         m_scroll_area->setWidget(m_top_lvl_container);
         m_scroll_area->setWidgetResizable(true);
 
@@ -54,49 +55,24 @@ namespace hal
         QHBoxLayout *intermediate_layout_gt = new QHBoxLayout();
         intermediate_layout_gt->setContentsMargins(3,3,0,0);
         intermediate_layout_gt->setSpacing(0);
-        QHBoxLayout *intermediate_layout_ip = new QHBoxLayout();
-        intermediate_layout_ip->setContentsMargins(3,3,0,0);
-        intermediate_layout_ip->setSpacing(10);
-        QHBoxLayout *intermediate_layout_op = new QHBoxLayout();
-        intermediate_layout_op->setContentsMargins(3,3,0,0);
-        intermediate_layout_op->setSpacing(0);
-        QHBoxLayout *intermediate_layout_df = new QHBoxLayout();
-        intermediate_layout_df->setContentsMargins(3,3,0,0);
-        intermediate_layout_df->setSpacing(0);
 
         // buttons
         m_general_info_button = new QPushButton("Gate Information", this);
         m_general_info_button->setEnabled(false);
-        m_input_pins_button = new QPushButton("Input Pins", this);
-        m_output_pins_button = new QPushButton("Output Pins", this);
-        m_data_fields_button = new QPushButton("Data Fields", this);
-        m_boolean_functions_button = new QPushButton("Boolean Functions", this);
 
         // table initializations (section 1-4)
-        m_general_table = new QTableWidget(4,2,this);
-        m_input_pins_table = new QTableWidget(0,3, this);
+        m_general_table     = new QTableWidget(4,2,this);
+        m_input_pins_table  = new QTableWidget(0,3, this);
         m_output_pins_table = new QTableWidget(0,3, this);
-        m_dataFieldsTable = new DataFieldsTable(this);
+        m_dataFieldsTable   = new DataFieldsTable(this);
+
+        // sections
+        m_inputPinsSection  = new DetailsSectionWidget("Input Pins (%1)", m_input_pins_table, this);
+        m_outputPinsSection = new DetailsSectionWidget("Output Pins (%1)", m_output_pins_table, this);
+        m_dataFieldsSection = new DetailsSectionWidget("Data Fields (%1)", m_dataFieldsTable, this);
 
         //shared stlye options (every option is applied to each table)
-        QList<QTableWidget*> tmp;
-        tmp << m_general_table << m_input_pins_table << m_output_pins_table << m_dataFieldsTable;
-        for(auto & table : tmp)
-        {
-            //table->horizontalHeader()->setStretchLastSection(true);
-            table->horizontalHeader()->hide();
-            table->verticalHeader()->hide();
-            table->verticalHeader()->setDefaultSectionSize(16);
-            table->resizeColumnToContents(0);
-            table->setShowGrid(false);
-            table->setFocusPolicy(Qt::NoFocus);
-            table->setFrameStyle(QFrame::NoFrame);
-            table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            table->setMaximumHeight(table->verticalHeader()->length());
-            table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            table->setContextMenuPolicy(Qt::CustomContextMenu);
-        }
+        DetailsSectionWidget::setDefaultTableStyle(m_general_table);
 
         //customize general section by adding the fixed iitems
         QList<QTableWidgetItem*> tmp_general_info_list = {new QTableWidgetItem("Name:"), new QTableWidgetItem("Type:"),
@@ -133,6 +109,7 @@ namespace hal
         m_boolean_functions_container_layout->setContentsMargins(6,5,0,0);
         m_boolean_functions_container_layout->setSpacing(0);
         m_boolean_functions_container->setLayout(m_boolean_functions_container_layout);
+        m_booleanFunctionsSection = new DetailsSectionWidget(m_boolean_functions_container, "Boolean Functions (%1)", this);
 
         // place gate icon
         QLabel* img = new DisputedBigIcon("sel_gate", this);
@@ -142,28 +119,15 @@ namespace hal
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
-        intermediate_layout_ip->addWidget(m_input_pins_table);
-        intermediate_layout_ip->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_op->addWidget(m_output_pins_table);
-        intermediate_layout_op->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_df->addWidget(m_dataFieldsTable);
-        intermediate_layout_df->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
         //adding things to the main layout
         m_top_lvl_layout->addWidget(m_general_info_button);
         m_top_lvl_layout->addLayout(intermediate_layout_gt);
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        m_top_lvl_layout->addWidget(m_input_pins_button);
-        m_top_lvl_layout->addLayout(intermediate_layout_ip);
-        m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        m_top_lvl_layout->addWidget(m_output_pins_button);
-        m_top_lvl_layout->addLayout(intermediate_layout_op);
-        m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        m_top_lvl_layout->addWidget(m_data_fields_button);
-        m_top_lvl_layout->addLayout(intermediate_layout_df);
-        m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        m_top_lvl_layout->addWidget(m_boolean_functions_button);
-        m_top_lvl_layout->addWidget(m_boolean_functions_container);
+        m_top_lvl_layout->addWidget(m_inputPinsSection);
+        m_top_lvl_layout->addWidget(m_outputPinsSection);
+        m_top_lvl_layout->addWidget(m_dataFieldsSection);
+        m_top_lvl_layout->addWidget(m_booleanFunctionsSection);
 
         //necessary to add at the end
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -177,13 +141,6 @@ namespace hal
         m_navigation_table->hide();
         connect(m_navigation_table, &GraphNavigationWidget::navigation_requested, this, &GateDetailsWidget::handle_navigation_jump_requested);
 
-        //some connections (maybe connect to simple toggle_hide_show functiom_boolean_functions_container_layoutn of widgets)
-        connect(m_general_info_button, &QPushButton::clicked, this, &GateDetailsWidget::handle_buttons_clicked);
-        connect(m_input_pins_button, &QPushButton::clicked, this, &GateDetailsWidget::handle_buttons_clicked);
-        connect(m_output_pins_button, &QPushButton::clicked, this, &GateDetailsWidget::handle_buttons_clicked);
-        connect(m_data_fields_button, &QPushButton::clicked, this, &GateDetailsWidget::handle_buttons_clicked);
-        connect(m_boolean_functions_button, &QPushButton::clicked, this, &GateDetailsWidget::handle_buttons_clicked);
-
         connect(m_input_pins_table, &QTableWidget::itemDoubleClicked, this, &GateDetailsWidget::handle_input_pin_item_clicked);
         connect(m_output_pins_table, &QTableWidget::itemDoubleClicked, this, &GateDetailsWidget::handle_output_pin_item_clicked);
         connect(m_general_table, &QTableWidget::itemDoubleClicked, this, &GateDetailsWidget::handle_general_table_item_clicked);
@@ -192,9 +149,6 @@ namespace hal
         connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_general_table_menu_requested);
         connect(m_input_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_input_pin_table_menu_requested);
         connect(m_output_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_output_pin_table_menu_requested);
-
-        //settings
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GateDetailsWidget::handle_global_settings_changed);
 
         //install eventfilers
         m_general_table->viewport()->setMouseTracking(true);
@@ -210,8 +164,6 @@ namespace hal
         QRegularExpression re(".+?QScrollBar:vertical ?{[^}]+?(?: *width *?|; *width *?): *([0-9]*)[^;]*");
         QRegularExpressionMatch ma = re.match(main_stylesheet);
         m_scrollbar_width = (ma.hasMatch()) ? ma.captured(1).toInt() : 0;
-
-        m_util_list << m_input_pins_button  << m_output_pins_button  << m_data_fields_button << m_boolean_functions_button;
     }
 
     GateDetailsWidget::~GateDetailsWidget()
@@ -293,29 +245,6 @@ namespace hal
             update(m_currentId);
     }
 
-    void GateDetailsWidget::handle_buttons_clicked()
-    {
-        //function that (perhaps) is changed by a toggle-slot of the widget
-        QPushButton* btn = dynamic_cast<QPushButton*>(sender());
-        if(!btn)
-            return;
-
-        int index = m_top_lvl_layout->indexOf(btn);
-        QWidget* widget;
-
-        if(btn != m_boolean_functions_button)
-            widget = m_top_lvl_layout->itemAt(index+1)->layout()->itemAt(0)->widget();
-        else
-            widget = m_top_lvl_layout->itemAt(index+1)->widget();
-
-        if(!widget)
-            return;
-
-        if(widget->isHidden())
-            widget->show();
-        else
-            widget->hide();
-    }
 
     void GateDetailsWidget::handle_input_pin_item_clicked(const QTableWidgetItem *item)
     {
@@ -510,55 +439,6 @@ namespace hal
 
     }
 
-    void GateDetailsWidget::show_all_sections()
-    {
-        for(auto section_btn : m_util_list)
-        {
-            int index = m_top_lvl_layout->indexOf(section_btn);
-            section_btn->show();
-            if(section_btn != m_boolean_functions_button)
-            {
-                m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,7,QSizePolicy::Expanding, QSizePolicy::Fixed);
-                m_top_lvl_layout->itemAt(index+2)->spacerItem()->invalidate();
-            }
-        }
-        m_top_lvl_layout->invalidate();
-        m_top_lvl_layout->update();
-    }
-
-    void GateDetailsWidget::hide_empty_sections()
-    {
-        //hide when necessary
-        for(auto section_btn : m_util_list)
-        {
-            QPushButton* curr_btn = dynamic_cast<QPushButton*>(section_btn);
-            if(curr_btn->text().contains("(0)"))
-            {
-                curr_btn->hide();
-                int index = m_top_lvl_layout->indexOf(section_btn);
-                if(section_btn != m_boolean_functions_button)
-                {
-                    m_top_lvl_layout->itemAt(index+2)->spacerItem()->changeSize(0,0,QSizePolicy::Fixed, QSizePolicy::Fixed);
-                    m_top_lvl_layout->itemAt(index+2)->spacerItem()->invalidate();
-                }
-            }
-        }
-        m_top_lvl_layout->invalidate();
-        m_top_lvl_layout->update();
-    }
-
-    void GateDetailsWidget::handle_global_settings_changed(void* sender, const QString& key, const QVariant& value)
-    {
-        Q_UNUSED(sender)
-        if(key == "selection_details/hide_empty_sections")
-        {
-            m_hideEmptySections = value.toBool();
-            if(!m_hideEmptySections)
-                show_all_sections();
-            else
-                hide_empty_sections();
-        }
-    }
 
     void GateDetailsWidget::handle_module_removed(std::shared_ptr<Module> module)
     {
@@ -654,8 +534,6 @@ namespace hal
         if(!g || m_currentId == 0)
             return;
 
-        show_all_sections();
-
         //update (1)general info section
         m_name_item->setText(QString::fromStdString(g->get_name()));
         m_type_item->setText(QString::fromStdString(g->get_type()->get_name()));
@@ -676,7 +554,7 @@ namespace hal
 
         //update (2)input-pin section
         m_input_pins_table->clearContents();
-        m_input_pins_button->setText(QString::fromStdString("Input Pins (") + QString::number(g->get_input_pins().size()) + QString::fromStdString(")"));
+        m_inputPinsSection->setRowCount(g->get_input_pins().size());
         m_input_pins_table->setRowCount(g->get_input_pins().size());
         m_input_pins_table->setMaximumHeight(m_input_pins_table->verticalHeader()->length());
         int index = 0;
@@ -711,7 +589,7 @@ namespace hal
 
         //update(3) output pins section
         m_output_pins_table->clearContents();
-        m_output_pins_button->setText(QString::fromStdString("Output Pins (") + QString::number(g->get_output_pins().size()) + QString::fromStdString(")"));
+        m_outputPinsSection->setRowCount(g->get_output_pins().size());
         m_output_pins_table->setRowCount(g->get_output_pins().size());
         m_output_pins_table->setMaximumHeight(m_output_pins_table->verticalHeader()->length());
         index = 0;
@@ -745,7 +623,7 @@ namespace hal
         m_output_pins_table->setFixedWidth(calculate_table_size(m_output_pins_table).width());
 
         //update(4) data fields section
-        m_data_fields_button->setText(QString::fromStdString("Data Fields (") + QString::number(g->get_data().size()) + QString::fromStdString(")"));
+        m_dataFieldsSection->setRowCount(g->get_data().size());
         m_dataFieldsTable->updateData(gate_id,g->get_data());
 
         //update(5) boolean functions section
@@ -757,7 +635,7 @@ namespace hal
             delete i;
         }
 
-        m_boolean_functions_button->setText(QString("Boolean Functions (") + QString::number(g->get_boolean_functions().size()) + QString(")"));
+        m_booleanFunctionsSection->setRowCount(g->get_boolean_functions().size());
         QFrame* last_line = nullptr; //unexpected behaviour below otherwise
         for(const auto& it : g->get_boolean_functions())
         {
@@ -778,9 +656,6 @@ namespace hal
             m_boolean_functions_container_layout->removeWidget(last_line);
             delete last_line;
         }
-
-        if(m_hideEmptySections)
-            hide_empty_sections();
 
         //to prevent any updating(render) errors that can occur, manually tell the tables to update
         m_general_table->update();

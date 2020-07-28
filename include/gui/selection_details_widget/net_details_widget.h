@@ -44,6 +44,7 @@ namespace hal
     class Net;
     class Gate;
     class DataFieldsTable;
+    class DetailsSectionWidget;
 
     class NetDetailsWidget : public DetailsWidget
     {
@@ -75,9 +76,9 @@ namespace hal
 
         //buttons to fold/unfold the corresponding sections
         QPushButton* m_general_info_button;
-        QPushButton* m_source_pins_button;
-        QPushButton* m_destination_pins_button;
-        QPushButton* m_data_fields_button;
+        DetailsSectionWidget* m_sourcePinsSection;
+        DetailsSectionWidget* m_destinationPinsSection;
+        DetailsSectionWidget* m_dataFieldsSection;
 
         //the sections to unfold
         //(1) general information section
@@ -96,7 +97,6 @@ namespace hal
         DataFieldsTable* m_dataFieldsTable;
 
         //function section
-        void handle_buttons_clicked();
         void handle_table_item_clicked(QTableWidgetItem* item);
 
         //straightforward context menu handlers
@@ -106,9 +106,5 @@ namespace hal
 
         //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
         QSize calculate_table_size(QTableWidget* table);
-
-        void show_all_sections();
-        void hide_empty_sections();
-        void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
     };
 }    // namespace hal

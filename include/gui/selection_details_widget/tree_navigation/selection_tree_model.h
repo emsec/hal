@@ -59,6 +59,7 @@ namespace hal
         int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
         void fetchSelection(bool hasEntries);
+        QModelIndex defaultIndex() const;
 
         //helper functions to convert between index and item
         SelectionTreeItem* itemFromIndex(const QModelIndex& index) const;
@@ -76,10 +77,10 @@ namespace hal
         bool doNotDisturb(const QModelIndex& inx = QModelIndex()) const;
 
 
-        SelectionTreeItemRoot* mRootItem;
+        SelectionTreeItemRoot* m_rootItem;
 
         /// avoid calls while model is under reconstruction
-        int mDoNotDisturb;
+        int m_doNotDisturb;
     };
 
     class SelectionTreeModelDisposer : public QObject
@@ -92,7 +93,7 @@ namespace hal
         void dispose();
 
     private:
-        SelectionTreeItemRoot* mRootItem;
+        SelectionTreeItemRoot* m_rootItem;
     };
 
 

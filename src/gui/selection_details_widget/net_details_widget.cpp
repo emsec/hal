@@ -1,6 +1,7 @@
 #include "selection_details_widget/net_details_widget.h"
 #include "selection_details_widget/data_fields_table.h"
 #include "selection_details_widget/disputed_big_icon.h"
+#include "selection_details_widget/details_section_widget.h"
 
 #include "gui_globals.h"
 #include "netlist/gate.h"
@@ -43,22 +44,10 @@ namespace hal
         QHBoxLayout* intermediate_layout_gt = new QHBoxLayout();
         intermediate_layout_gt->setContentsMargins(3, 3, 0, 0);
         intermediate_layout_gt->setSpacing(0);
-        QHBoxLayout* intermediate_layout_sources = new QHBoxLayout();
-        intermediate_layout_sources->setContentsMargins(3, 3, 0, 0);
-        intermediate_layout_sources->setSpacing(10);
-        QHBoxLayout* intermediate_layout_destinations = new QHBoxLayout();
-        intermediate_layout_destinations->setContentsMargins(3, 3, 0, 0);
-        intermediate_layout_destinations->setSpacing(0);
-        QHBoxLayout* intermediate_layout_df = new QHBoxLayout();
-        intermediate_layout_df->setContentsMargins(3, 3, 0, 0);
-        intermediate_layout_df->setSpacing(0);
 
         //buttons
         m_general_info_button = new QPushButton("Net Information", this);
         m_general_info_button->setEnabled(false);
-        m_source_pins_button      = new QPushButton("Source Pins", this);
-        m_destination_pins_button = new QPushButton("Destination Pins", this);
-        m_data_fields_button      = new QPushButton("Data Fields", this);
 
         //table initializations
         m_general_table          = new QTableWidget(3, 2);
@@ -66,23 +55,11 @@ namespace hal
         m_destination_pins_table = new QTableWidget(0, 3);
         m_dataFieldsTable        = new DataFieldsTable(this);
 
-        QList<QTableWidget*> tmp;
-        tmp << m_general_table << m_source_pins_table << m_destination_pins_table << m_dataFieldsTable;
-        for (auto& table : tmp)
-        {
-            table->horizontalHeader()->hide();
-            table->verticalHeader()->hide();
-            table->verticalHeader()->setDefaultSectionSize(16);
-            table->resizeColumnToContents(0);
-            table->setShowGrid(false);
-            table->setFocusPolicy(Qt::NoFocus);
-            table->setFrameStyle(QFrame::NoFrame);
-            table->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            table->setMaximumHeight(table->verticalHeader()->length());
-            table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            table->setContextMenuPolicy(Qt::CustomContextMenu);
-        }
+        m_sourcePinsSection      = new DetailsSectionWidget("Source Pins (%1)", m_source_pins_table, this);
+        m_destinationPinsSection = new DetailsSectionWidget("Destination Pins (%1)", m_destination_pins_table, this);
+        m_dataFieldsSection      = new DetailsSectionWidget("Data Fields (%1)", m_dataFieldsTable, this);
+
+        DetailsSectionWidget::setDefaultTableStyle(m_general_table);
 
         QList<QTableWidgetItem*> tmp_general_info_list = {new QTableWidgetItem("Name:"), new QTableWidgetItem("Type:"), new QTableWidgetItem("ID:")};
         for (int i = 0; i < tmp_general_info_list.size(); i++)
@@ -114,33 +91,18 @@ namespace hal
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
-        intermediate_layout_sources->addWidget(m_source_pins_table);
-        intermediate_layout_sources->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_destinations->addWidget(m_destination_pins_table);
-        intermediate_layout_destinations->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_df->addWidget(m_dataFieldsTable);
-        intermediate_layout_df->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
         //adding things to the main layout
         m_top_lvl_layout->addWidget(m_general_info_button);
         m_top_lvl_layout->addLayout(intermediate_layout_gt);
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        m_top_lvl_layout->addWidget(m_source_pins_button);
-        m_top_lvl_layout->addLayout(intermediate_layout_sources);
-        m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        m_top_lvl_layout->addWidget(m_destination_pins_button);
-        m_top_lvl_layout->addLayout(intermediate_layout_destinations);
-        m_top_lvl_layout->addWidget(m_data_fields_button);
-        m_top_lvl_layout->addLayout(intermediate_layout_df);
+        m_top_lvl_layout->addWidget(m_sourcePinsSection);
+        m_top_lvl_layout->addWidget(m_destinationPinsSection);
+        m_top_lvl_layout->addWidget(m_dataFieldsSection);
 
         //necessary to add at the end
         m_top_lvl_layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
         m_content_layout->addWidget(m_scroll_area);
-
-        //connect the buttons
-        connect(m_source_pins_button, &QPushButton::clicked, this, &NetDetailsWidget::handle_buttons_clicked);
-        connect(m_destination_pins_button, &QPushButton::clicked, this, &NetDetailsWidget::handle_buttons_clicked);
-        connect(m_data_fields_button, &QPushButton::clicked, this, &NetDetailsWidget::handle_buttons_clicked);
 
         //connect the tables
         connect(m_source_pins_table, &QTableWidget::itemDoubleClicked, this, &NetDetailsWidget::handle_table_item_clicked);
@@ -149,8 +111,6 @@ namespace hal
         connect(m_source_pins_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_sources_table_menu_requeted);
         connect(m_destination_pins_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_destinations_table_menu_requeted);
 
-        //settings
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &NetDetailsWidget::handle_global_settings_changed);
 
         //install eventfilter to change the cursor when hovering over the second colums of the pin tables
         m_destination_pins_table->viewport()->setMouseTracking(true);
@@ -206,8 +166,6 @@ namespace hal
         if (m_currentId == 0 || !n)
             return;
 
-        show_all_sections();
-
         // (1) update general info section
         m_name_item->setText(QString::fromStdString(n->get_name()));
         m_id_item->setText(QString::number(m_currentId));
@@ -226,7 +184,7 @@ namespace hal
 
         // (2) update sources section
         m_source_pins_table->clearContents();
-        m_source_pins_button->setText("Sources (" + QString::number(n->get_sources().size()) + ")");
+        m_sourcePinsSection->setRowCount(n->get_sources().size());
         m_source_pins_table->setRowCount(n->get_sources().size());
         m_source_pins_table->setMaximumHeight(m_source_pins_table->verticalHeader()->length());
         int index = 0;
@@ -256,7 +214,7 @@ namespace hal
 
         // (3) update destinations section
         m_destination_pins_table->clearContents();
-        m_destination_pins_button->setText("Destinations (" + QString::number(n->get_destinations().size()) + ")");
+        m_destinationPinsSection->setRowCount(n->get_destinations().size());
         m_destination_pins_table->setRowCount(n->get_destinations().size());
         m_destination_pins_table->setMaximumHeight(m_destination_pins_table->verticalHeader()->length());
         index = 0;
@@ -283,10 +241,8 @@ namespace hal
         m_destination_pins_table->resizeColumnsToContents();
         m_destination_pins_table->setFixedWidth(calculate_table_size(m_destination_pins_table).width());
 
+        m_dataFieldsSection->setRowCount(n->get_data().size());
         m_dataFieldsTable->updateData(net_id,  n->get_data());
-
-        if (m_hideEmptySections)
-            hide_empty_sections();
 
         //to prevent any updating(render) erros that can occur, manually tell the tables to update
         m_general_table->update();
@@ -379,25 +335,6 @@ namespace hal
 
         if (update_needed)
             update(m_currentId);
-    }
-
-    void NetDetailsWidget::handle_buttons_clicked()
-    {
-        QPushButton* btn = dynamic_cast<QPushButton*>(sender());
-        if (!btn)
-            return;
-
-        int index = m_top_lvl_layout->indexOf(btn);
-        QWidget* widget;
-        widget = m_top_lvl_layout->itemAt(index + 1)->layout()->itemAt(0)->widget();
-
-        if (!widget)
-            return;
-
-        if (widget->isHidden())
-            widget->show();
-        else
-            widget->hide();
     }
 
     void NetDetailsWidget::handle_table_item_clicked(QTableWidgetItem* item)
@@ -523,46 +460,5 @@ namespace hal
         for (int i = 0; i < table->rowCount(); i++)
             h += table->rowHeight(i);
         return QSize(w + 5, h);
-    }
-
-    void NetDetailsWidget::show_all_sections()
-    {
-        //no need to be dynamic like in the GateDetailsWidget since there are only 2 sections that could be hidden
-        m_source_pins_button->show();
-        m_top_lvl_layout->itemAt(5)->spacerItem()->changeSize(0, 7, QSizePolicy::Expanding, QSizePolicy::Fixed);
-        m_top_lvl_layout->itemAt(5)->spacerItem()->invalidate();
-        m_destination_pins_button->show();
-        m_top_lvl_layout->invalidate();
-        m_top_lvl_layout->update();
-    }
-
-    void NetDetailsWidget::hide_empty_sections()
-    {
-        //as in show_all_sections, no need to be dynamic, only 2 possible sections that can be hidden
-        if (m_source_pins_button->text().contains("(0)"))
-        {
-            m_source_pins_button->hide();
-            m_top_lvl_layout->itemAt(5)->spacerItem()->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-            m_top_lvl_layout->itemAt(5)->spacerItem()->invalidate();
-        }
-
-        if (m_destination_pins_button->text().contains("(0)"))
-            m_destination_pins_button->hide();
-
-        m_top_lvl_layout->invalidate();
-        m_top_lvl_layout->update();
-    }
-
-    void NetDetailsWidget::handle_global_settings_changed(void* sender, const QString& key, const QVariant& value)
-    {
-        Q_UNUSED(sender)
-        if (key == "selection_details/hide_empty_sections")
-        {
-            m_hideEmptySections = value.toBool();
-            if (!m_hideEmptySections)
-                show_all_sections();
-            else
-                hide_empty_sections();
-        }
     }
 }    // namespace hal

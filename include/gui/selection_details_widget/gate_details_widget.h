@@ -45,6 +45,7 @@ namespace hal
     /* forward declaration */
     class GraphNavigationWidget;
     class DataFieldsTable;
+    class DetailsSectionWidget;
 
     class GateDetailsWidget : public DetailsWidget
     {
@@ -98,10 +99,10 @@ namespace hal
 
         // buttons to fold/unfold corresponding sections
         QPushButton* m_general_info_button;//(1)
-        QPushButton* m_input_pins_button;//(2)
-        QPushButton* m_output_pins_button;//(3)
-        QPushButton* m_data_fields_button;//(4)
-        QPushButton* m_boolean_functions_button;//(5)
+        DetailsSectionWidget* m_inputPinsSection;//(2)
+        DetailsSectionWidget* m_outputPinsSection;//(3)
+        DetailsSectionWidget* m_dataFieldsSection;//(4)
+        DetailsSectionWidget* m_booleanFunctionsSection;//(5)
 
         // widgets / sections to be unfold (not all structures are sections in itself, it may be a container necessary)
 
@@ -125,13 +126,9 @@ namespace hal
         QWidget* m_boolean_functions_container;
         QVBoxLayout* m_boolean_functions_container_layout;
 
-        //utility container to hide/show empty sections
-        QList<QPushButton*> m_util_list;
-
         //function section
         void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
 
-        void handle_buttons_clicked();
         void handle_input_pin_item_clicked(const QTableWidgetItem* item);
         void handle_output_pin_item_clicked(const QTableWidgetItem* item);
         void handle_general_table_item_clicked(const QTableWidgetItem* item);
@@ -144,9 +141,5 @@ namespace hal
 
         //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
         QSize calculate_table_size(QTableWidget* table);
-
-        void show_all_sections();
-        void hide_empty_sections();
-        void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
     };
 }

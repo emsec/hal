@@ -24,6 +24,6 @@ namespace hal {
         void populate(bool visible);
 
     private:
-        SelectionTreeModel*  mSelectionTreeModel;
+        SelectionTreeModel*  m_selectionTreeModel;
     };
 }

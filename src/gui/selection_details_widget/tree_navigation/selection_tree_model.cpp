@@ -10,21 +10,21 @@
 namespace hal
 {
     SelectionTreeModel::SelectionTreeModel(QObject* parent)
-        : QAbstractItemModel(parent), mDoNotDisturb(0)
+        : QAbstractItemModel(parent), m_doNotDisturb(0)
     {
-        mRootItem = new SelectionTreeItemRoot();
+        m_rootItem = new SelectionTreeItemRoot();
         // root item has no parent
     }
 
     SelectionTreeModel::~SelectionTreeModel()
     {
-        delete mRootItem;
+        delete m_rootItem;
     }
 
     bool SelectionTreeModel::doNotDisturb(const QModelIndex& inx) const
     {
         Q_UNUSED(inx); // could do some tests for debugging
-        return (mDoNotDisturb != 0);
+        return (m_doNotDisturb != 0);
     }
 
     QVariant SelectionTreeModel::data(const QModelIndex& index, int role) const
@@ -74,6 +74,15 @@ namespace hal
         return QVariant();
     }
 
+    QModelIndex SelectionTreeModel::defaultIndex() const
+    {
+        if (doNotDisturb()) return QModelIndex();
+
+        if (!m_rootItem->childCount()) return QModelIndex();
+        SelectionTreeItem* sti = m_rootItem->child(0);
+        return createIndex(0,0,sti);
+    }
+
     QModelIndex SelectionTreeModel::index(int row, int column, const QModelIndex& parent) const
     {
         if (doNotDisturb(parent)) return QModelIndex();
@@ -82,7 +91,7 @@ namespace hal
 
         SelectionTreeItem* parentItem = parent.isValid()
                 ? itemFromIndex(parent)
-                : mRootItem;
+                : m_rootItem;
 
         SelectionTreeItem* childItem  = parentItem->child(row);
         if (childItem)
@@ -103,7 +112,7 @@ namespace hal
         SelectionTreeItem* parentItem   = currentItem->parent();
 
         // toplevel entries dont reveal their parent
-        if (parentItem == mRootItem) return QModelIndex();
+        if (parentItem == m_rootItem) return QModelIndex();
 
         return indexFromItem(parentItem);
     }
@@ -119,7 +128,7 @@ namespace hal
 
         SelectionTreeItem* item = parent.isValid()
                 ? itemFromIndex(parent)
-                : mRootItem;
+                : m_rootItem;
         return item->childCount();
     }
 
@@ -152,13 +161,13 @@ namespace hal
 
         Q_EMIT layoutAboutToBeChanged();
 
-        ++mDoNotDisturb;
+        ++m_doNotDisturb;
         // delay disposal of old entries
         //    until all clients are notified that indexes are not valid any more
-        SelectionTreeModelDisposer* disposer = new SelectionTreeModelDisposer(mRootItem,this);
-        mRootItem = nextRootItem;
+        SelectionTreeModelDisposer* disposer = new SelectionTreeModelDisposer(m_rootItem,this);
+        m_rootItem = nextRootItem;
         QTimer::singleShot(50,disposer,&SelectionTreeModelDisposer::dispose);
-        --mDoNotDisturb;
+        --m_doNotDisturb;
 
         Q_EMIT layoutChanged();
     }
@@ -197,7 +206,7 @@ namespace hal
         SelectionTreeItem* parentItem = item->parent();
 
         if (!parentItem) // must be root
-            return createIndex(0,0,mRootItem);
+            return createIndex(0,0,m_rootItem);
 
         int n = parentItem->childCount();
         for (int irow=0; irow<n; irow++)
@@ -213,12 +222,12 @@ namespace hal
 
 
     SelectionTreeModelDisposer::SelectionTreeModelDisposer(SelectionTreeItemRoot *stim, QObject* parent)
-        : QObject(parent), mRootItem(stim)
+        : QObject(parent), m_rootItem(stim)
     {;}
 
     void SelectionTreeModelDisposer::dispose()
     {
-        delete mRootItem;
+        delete m_rootItem;
         deleteLater();
     }
 }

@@ -37,7 +37,6 @@ namespace hal
 {
     class Searchbar;
     class SelectionTreeView;
-    class SelectionTreeModel;
     class ModuleDetailsWidget;
     class GateDetailsWidget;
     class NetDetailsWidget;
@@ -61,9 +60,10 @@ namespace hal
     private:
         void singleSelectionInternal(const SelectionTreeItem* sti);
 
-        QSplitter*           mSplitter;
-        SelectionTreeView*   mSelectionTreeView;
-        QWidget*             mSelectionDetails;
+        QSplitter*           m_splitter;
+        SelectionTreeView*   m_selectionTreeView;
+        QWidget*             m_selectionDetails;
+        unsigned int         m_numberSelectedItems;
 
         QStackedWidget* m_stacked_widget;
 

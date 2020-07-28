@@ -7,8 +7,8 @@ namespace hal {
         : QTreeView(parent)
     {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        mSelectionTreeModel = new SelectionTreeModel(this);
-        setModel(mSelectionTreeModel);
+        m_selectionTreeModel = new SelectionTreeModel(this);
+        setModel(m_selectionTreeModel);
         setDefaultColumnWidth();
     }
 
@@ -26,7 +26,7 @@ namespace hal {
         Q_UNUSED(previous);
 
         const SelectionTreeItem* sti = current.isValid()
-                ? static_cast<const SelectionTreeItem*>(mSelectionTreeModel->itemFromIndex(current))
+                ? static_cast<const SelectionTreeItem*>(m_selectionTreeModel->itemFromIndex(current))
                 : nullptr;
 
         Q_EMIT triggerSelection(sti);
@@ -36,11 +36,16 @@ namespace hal {
     {
         setSelectionMode(QAbstractItemView::NoSelection);
         selectionModel()->clear();
-        mSelectionTreeModel->fetchSelection(visible);
+        m_selectionTreeModel->fetchSelection(visible);
         if (visible)
+        {
             show();
+            setSelectionMode(QAbstractItemView::SingleSelection);
+            QModelIndex defaultSel = m_selectionTreeModel->defaultIndex();
+            if (defaultSel.isValid())
+                selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect);
+        }
         else
             hide();
-        setSelectionMode(QAbstractItemView::SingleSelection);
     }
 }
