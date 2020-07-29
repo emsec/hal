@@ -38,7 +38,7 @@ namespace hal
         //this line throws a warning that there is already an existing layout, yet there is no layout set and
         //even after calling delete layout(); and then setting the layout, the warning continues
         m_scroll_area = new QScrollArea(this);
-        m_top_lvl_container = new QWidget(this);
+        m_top_lvl_container = new QWidget(m_scroll_area);
         m_top_lvl_layout = new QVBoxLayout(m_top_lvl_container);
         m_top_lvl_container->setLayout(m_top_lvl_layout);;
 		m_content_layout = new QVBoxLayout(this);
@@ -105,7 +105,7 @@ namespace hal
 
         //(5) Boolean Function section
         m_boolean_functions_container = new QWidget(this);
-        m_boolean_functions_container_layout = new QVBoxLayout(this);
+        m_boolean_functions_container_layout = new QVBoxLayout(m_boolean_functions_container);
         m_boolean_functions_container_layout->setContentsMargins(6,5,0,0);
         m_boolean_functions_container_layout->setSpacing(0);
         m_boolean_functions_container->setLayout(m_boolean_functions_container_layout);
