@@ -23,7 +23,8 @@
 
 #pragma once
 
-#include "overlay/overlay.h"
+#include "gui/dialogs/dialog.h"
+#include "gui/overlay/overlay.h"
 
 class QVBoxLayout;
 
@@ -36,13 +37,16 @@ namespace hal
     public:
         DialogOverlay(QWidget* parent = nullptr);
 
-        void set_widget(QWidget* widget);
+        void set_dialog(Dialog* dialog);
 
-    //protected:
-    //    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+    protected:
+        void resizeEvent(QResizeEvent* event) override;
+
+    private Q_SLOTS:
+        void position_dialog();
 
     private:
         QVBoxLayout* m_layout;
-        QWidget* m_widget;
+        Dialog* m_dialog;
     };
 }

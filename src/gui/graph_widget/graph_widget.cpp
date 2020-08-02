@@ -17,7 +17,7 @@
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
 #include "gui/content_manager/content_manager.h"
-#include "gui/overlay/dialog_overlay.h"
+#include "gui/overlay/widget_overlay.h"
 #include "gui/toolbar/toolbar.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 
@@ -33,20 +33,20 @@
 namespace hal
 {
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
-        : ContentWidget("Graph", parent), m_view(new GraphGraphicsView(this)), m_context(context), m_Overlay(new DialogOverlay(this)),
+        : ContentWidget("Graph", parent), m_view(new GraphGraphicsView(this)), m_context(context), m_overlay(new WidgetOverlay(this)),
           m_navigation_widget_v2(new GraphNavigationWidgetV2(nullptr)),
           m_spinner_widget(new GraphLayoutSpinnerWidget(this)), m_current_expansion(0)
     {
         connect(m_navigation_widget_v2, &GraphNavigationWidgetV2::navigation_requested, this, &GraphWidget::handle_navigation_jump_requested);
-        connect(m_navigation_widget_v2, &GraphNavigationWidgetV2::close_requested, m_Overlay, &DialogOverlay::hide);
+        connect(m_navigation_widget_v2, &GraphNavigationWidgetV2::close_requested, m_overlay, &WidgetOverlay::hide);
         connect(m_navigation_widget_v2, &GraphNavigationWidgetV2::close_requested, this, &GraphWidget::reset_focus);
 
-        connect(m_Overlay, &DialogOverlay::clicked, m_Overlay, &DialogOverlay::hide);
+        connect(m_overlay, &WidgetOverlay::clicked, m_overlay, &WidgetOverlay::hide);
 
         connect(m_view, &GraphGraphicsView::module_double_clicked, this, &GraphWidget::handle_module_double_clicked);
 
-        m_Overlay->hide();
-        m_Overlay->set_widget(m_navigation_widget_v2);
+        m_overlay->hide();
+        m_overlay->set_widget(m_navigation_widget_v2);
         m_spinner_widget->hide();
         m_content_layout->addWidget(m_view);
 
@@ -73,11 +73,11 @@ namespace hal
     {
         m_view->setScene(m_context->scene());
 
-        connect(m_Overlay, &DialogOverlay::clicked, m_Overlay, &DialogOverlay::hide);
+        connect(m_overlay, &WidgetOverlay::clicked, m_overlay, &WidgetOverlay::hide);
 
-        m_Overlay->hide();
+        m_overlay->hide();
         m_spinner_widget->hide();
-        m_Overlay->set_widget(m_navigation_widget_v2);
+        m_overlay->set_widget(m_navigation_widget_v2);
 
         if (hasFocus())
             m_view->setFocus();
@@ -87,12 +87,12 @@ namespace hal
     {
         m_view->setScene(nullptr);
 
-        disconnect(m_Overlay, &DialogOverlay::clicked, m_Overlay, &DialogOverlay::hide);
+        disconnect(m_overlay, &WidgetOverlay::clicked, m_overlay, &WidgetOverlay::hide);
 
-        m_Overlay->set_widget(m_spinner_widget);
+        m_overlay->set_widget(m_spinner_widget);
 
-        if (m_Overlay->isHidden())
-            m_Overlay->show();
+        if (m_overlay->isHidden())
+            m_overlay->show();
     }
 
     void GraphWidget::handle_context_about_to_be_deleted()
@@ -304,7 +304,7 @@ namespace hal
         auto n = g_netlist->get_net_by_id(via_net);
         if (!n || (to_gates.empty() && to_modules.empty())) {
             // prevent stuck navigation widget
-            m_Overlay->hide();
+            m_overlay->hide();
             m_view->setFocus();
             return;
         }
@@ -357,7 +357,7 @@ namespace hal
         {
             // if we don't need to add anything, we're done here
 
-            m_Overlay->hide();
+            m_overlay->hide();
             //if (hasFocus())
             m_view->setFocus();
         }
@@ -512,7 +512,7 @@ namespace hal
                     {
                         m_navigation_widget_v2->setup(false);
                         m_navigation_widget_v2->setFocus();
-                        m_Overlay->show();
+                        m_overlay->show();
                     }
                 }
                 else if (g->get_input_pins().size())
@@ -543,7 +543,7 @@ namespace hal
                 {
                     m_navigation_widget_v2->setup(false);
                     m_navigation_widget_v2->setFocus();
-                    m_Overlay->show();
+                    m_overlay->show();
                 }
 
                 return;
@@ -585,7 +585,7 @@ namespace hal
                     {
                         m_navigation_widget_v2->setup(false);
                         m_navigation_widget_v2->setFocus();
-                        m_Overlay->show();
+                        m_overlay->show();
                     }
                 }
                 else if (m->get_input_nets().size())
@@ -635,7 +635,7 @@ namespace hal
                     {
                         m_navigation_widget_v2->setup(true);
                         m_navigation_widget_v2->setFocus();
-                        m_Overlay->show();
+                        m_overlay->show();
                     }
                 }
                 else if (g->get_output_pins().size())
@@ -666,7 +666,7 @@ namespace hal
                 {
                     m_navigation_widget_v2->setup(true);
                     m_navigation_widget_v2->setFocus();
-                    m_Overlay->show();
+                    m_overlay->show();
                 }
 
                 return;
@@ -708,7 +708,7 @@ namespace hal
                     {
                         m_navigation_widget_v2->setup(true);
                         m_navigation_widget_v2->setFocus();
-                        m_Overlay->show();
+                        m_overlay->show();
                     }
                 }
                 else if (m->get_output_nets().size())

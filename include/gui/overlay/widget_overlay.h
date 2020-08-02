@@ -23,20 +23,26 @@
 
 #pragma once
 
-#include <QFrame>
+#include "overlay/overlay.h"
 
-class QKeyEvent;
+class QVBoxLayout;
 
 namespace hal
 {
-    class WindowLayoutContainer : public QFrame
+    class WidgetOverlay : public Overlay
     {
         Q_OBJECT
 
     public:
-        explicit WindowLayoutContainer(QWidget* parent = nullptr);
+        WidgetOverlay(QWidget* parent = nullptr);
 
-    protected:
-        void keyPressEvent(QKeyEvent* event);
+        void set_widget(QWidget* widget);
+
+    //protected:
+    //    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+
+    private:
+        QVBoxLayout* m_layout;
+        QWidget* m_widget;
     };
 }

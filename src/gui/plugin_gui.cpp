@@ -168,7 +168,7 @@ namespace hal
 
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
-        //    g_window_manager       = new WindowManager();
+        g_window_manager       = new WindowManager();
         g_notification_manager = new NotificationManager();
 
         g_thread_pool = new ThreadPool();
@@ -180,6 +180,7 @@ namespace hal
         MainWindow w;
         handle_program_arguments(args);
         w.show();
+
         auto ret = a.exec();
         return ret;
     }

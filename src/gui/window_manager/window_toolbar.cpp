@@ -17,7 +17,6 @@ namespace hal
 
     void WindowToolbar::add_widget(QWidget* widget)
     {
-        // ADD FANCY ANIMATIONS MAYBE ?
         m_layout->addWidget(widget);
     }
 

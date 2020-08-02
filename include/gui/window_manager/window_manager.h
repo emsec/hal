@@ -30,13 +30,13 @@ class QAction;
 
 namespace hal
 {
-    class Window;
     class MainSettingsWidget;
     class PluginScheduleWidget;
     class WelcomeScreen;
-    class work_space; // TEMP NAME ?
+    class Window;
+    class WindowToolbar;
 
-    class WindowManager : public QObject
+    class WindowManager final : public QObject
     {
         Q_OBJECT
 
@@ -47,7 +47,7 @@ namespace hal
 
         void add_window();
         void remove_window(Window* window);
-        void set_MainWindow(Window* window);
+        void set_main_window(Window* window);
 
         void lock_all();
         void unlock_all();
@@ -60,7 +60,7 @@ namespace hal
         void repolish();
 
     public Q_SLOTS:
-        void handle_Overlay_clicked();
+        void handle_overlay_clicked();
 
     private Q_SLOTS:
         void handle_action_open();
@@ -73,9 +73,10 @@ namespace hal
         void handle_action_about();
 
     private:
-        Window* m_MainWindow;
-
+        Window* m_main_window;
         QVector<Window*> m_windows;
+
+        WindowToolbar* m_toolbar;
 
         bool m_static_windows;
         bool m_shared_minimize;
@@ -91,7 +92,7 @@ namespace hal
         QAction* m_action_about;
 
         WelcomeScreen* m_welcome_screen;
-        PluginScheduleWidget* m_PluginScheduleWidget;
+        PluginScheduleWidget* m_plugin_schedule_widget;
         MainSettingsWidget* m_main_settings_widget;
     };
 }

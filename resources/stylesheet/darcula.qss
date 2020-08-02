@@ -1518,6 +1518,10 @@ QMenu::item:disabled{
     color: #777777;
 }
 
+hal--Window {
+border: 1px solid #555;
+}
+
 /*
 COLOR CONTRASTS
 BACKGROUND #090b0d

@@ -25,28 +25,18 @@
 
 #include <QFrame>
 
-class QActionEvent;
-class QHBoxLayout;
+class QKeyEvent;
 
 namespace hal
 {
-    class WindowToolbar final : public QFrame
+    class WindowEffectLayer : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit WindowToolbar(QWidget* parent = nullptr);
-
-        void add_widget(QWidget* widget);
-        void add_spacer();
-        void clear();
-
-        void repolish();
+        explicit WindowEffectLayer(QWidget* parent = nullptr);
 
     protected:
-        void actionEvent(QActionEvent* event) override;
-
-    private:
-        QHBoxLayout* m_layout;
+        void keyPressEvent(QKeyEvent* event);
     };
 }
