@@ -89,6 +89,8 @@ namespace hal
         }
 
         m_numberSelectedItems = g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() + g_selection_relay.m_selected_nets.size();
+        QVector<const SelectionTreeItem*> defaultHighlight;
+        const SelectionTreeModel* treeModel;
 
         switch (m_numberSelectedItems) {
         case 0:
@@ -105,6 +107,8 @@ namespace hal
             // more than 1 item selected, populate and make visible
             set_name("Selection Details");
             m_selectionTreeView->populate(true);
+            treeModel = static_cast<const SelectionTreeModel*>(m_selectionTreeView->model());
+            defaultHighlight.append(treeModel->itemFromIndex(treeModel->defaultIndex()));
             break;
         }
 
@@ -123,7 +127,7 @@ namespace hal
             SelectionTreeItemNet sti(*g_selection_relay.m_selected_nets.begin());
             singleSelectionInternal(&sti);
         }
-        Q_EMIT triggerHighlight(QVector<const SelectionTreeItem*>());
+        Q_EMIT triggerHighlight(defaultHighlight);
     }
 
     void SelectionDetailsWidget::handleTreeSelection(const SelectionTreeItem *sti)

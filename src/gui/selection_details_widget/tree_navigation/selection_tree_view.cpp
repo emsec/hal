@@ -43,7 +43,7 @@ namespace hal {
             setSelectionMode(QAbstractItemView::SingleSelection);
             QModelIndex defaultSel = m_selectionTreeModel->defaultIndex();
             if (defaultSel.isValid())
-                selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect);
+                selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         }
         else
             hide();
