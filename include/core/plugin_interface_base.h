@@ -40,7 +40,7 @@ namespace hal
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
     class BasePluginInterface;
-    extern "C" PLUGIN_API std::shared_ptr<BasePluginInterface> get_plugin_instance();
+    extern "C" PLUGIN_API std::unique_ptr<BasePluginInterface> get_plugin_instance();
 #ifdef COMPILER_CLANG
 #pragma clang diagnostic pop
 #endif
@@ -100,7 +100,7 @@ namespace hal
          * @param[in] args - The format string, followed by values.
          */
         template<typename... Args>
-        inline void log(const Args&... args)
+        inline void log(const Args&... args) const
         {
             log_info(get_name(), args...);
         }
@@ -129,5 +129,5 @@ namespace hal
         virtual void initialize_logging() const;
     };
 
-    using instantiate_plugin_function = std::shared_ptr<BasePluginInterface> (*)();
+    using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();
 }    // namespace hal

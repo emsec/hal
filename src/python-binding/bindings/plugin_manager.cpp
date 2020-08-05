@@ -40,7 +40,7 @@ namespace hal
 )");
 
         py_plugin_manager.def(
-            "get_plugin_instance", [](const std::string& plugin_name) -> std::shared_ptr<BasePluginInterface> { return PluginManager::get_plugin_instance<BasePluginInterface>(plugin_name, true); }, py::arg("plugin_name"), R"(
+            "get_plugin_instance", [](const std::string& plugin_name) -> BasePluginInterface* { return PluginManager::get_plugin_instance<BasePluginInterface>(plugin_name, true); }, py::arg("plugin_name"), R"(
         Gets the basic interface for a plugin specified by name.
 
         :param str plugin_name: The plugin name.

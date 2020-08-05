@@ -39,21 +39,30 @@ namespace hal
     /**
      * @ingroup hdl_parsers
      */
-    namespace HDLParserDispatcher
+    namespace HDLParserManager
     {
         /**
-         * Returns the command line interface options of the hdl parser dispatcher
+         * Returns the command line interface options of the hdl parser manager
          *
          * @returns The options.
          */
         ProgramOptions get_cli_options();
 
         /**
-         * Returns the command language options for the parse() function.
+         * Registers a new HDL parser for a selection of file types.
+         * If parsers for some of the extensions already exist, they are not changed, only the new ones are registered.
          *
-         * @returns The language options.
+         * @param[in] parser - The parser to register.
+         * @param[in] supported_file_extensions - The file extensions this parser can process.
          */
-        std::set<std::string> get_gui_option();
+        void register_parser(HDLParser* parser, const std::vector<std::string>& supported_file_extensions);
+
+        /**
+         * Unregisters a specific parser.
+         *
+         * @param[in] parser - The parser to unregister.
+         */
+        void unregister_parser(HDLParser* parser);
 
         /**
          * Returns the netlist for the file and specified command line options.
@@ -65,13 +74,12 @@ namespace hal
         std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args);
 
         /**
-         * Returns the netlist for a file, parsed with a defined parser_name and gate library.
+         * Returns the netlist for a file, parsed with a defined gate library.
          *
-         * @param[in] gate_library - The gate library used in the file.
-         * @param[in] parser_name - The name of the parser to use, e.g. vhdl, verilog...
          * @param[in] file_name - The input file.
+         * @param[in] gate_library - The gate library used in the file.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        std::shared_ptr<Netlist> parse(const std::shared_ptr<GateLibrary>& gate_library, const std::string& parser_name, const std::filesystem::path& file_name);
-    }    // namespace HDLParserDispatcher
+        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const std::shared_ptr<GateLibrary>& gate_library);
+    }    // namespace HDLParserManager
 }    // namespace hal

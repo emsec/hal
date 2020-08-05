@@ -55,11 +55,10 @@ namespace hal
          * Creates a new netlist for a specific file.
          *
          * @param[in] hdl_file - Name of the hdl file.
-         * @param[in] language - Programming language used in \p file_name.
          * @param[in] gate_library_file - Name of hardware gate library file.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& language, const std::filesystem::path& gate_library_file);
+        NETLIST_API std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file);
 
         /**
          * Creates a new netlist for a specific '.hal' file.

@@ -11,7 +11,6 @@
 #include "netlist/gate_library/gate_type/gate_type.h"
 #include "netlist/gate_library/gate_type/gate_type_lut.h"
 #include "netlist/gate_library/gate_type/gate_type_sequential.h"
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
 #include "netlist/hdl_writer/hdl_writer_dispatcher.h"
 #include "netlist/module.h"
 #include "netlist/net.h"

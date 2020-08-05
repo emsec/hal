@@ -10,7 +10,7 @@
 #include "hal_version.h"
 #include "netlist/event_system/event_log.h"
 #include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_parser/hdl_parser_manager.h"
 #include "netlist/hdl_writer/hdl_writer_dispatcher.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
@@ -51,7 +51,7 @@ void initialize_cli_options(ProgramOptions& cli_options)
     generic_options.add("--no-log", "prevents hal from creating a .log file");
 
     /* initialize hdl parser options */
-    generic_options.add(HDLParserDispatcher::get_cli_options());
+    generic_options.add(HDLParserManager::get_cli_options());
 
     /* initialize hdl writer options */
     generic_options.add(HDLWriterDispatcher::get_cli_options());

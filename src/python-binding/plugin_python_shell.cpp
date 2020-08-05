@@ -9,9 +9,9 @@
 
 namespace hal
 {
-    extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
+    extern std::unique_ptr<BasePluginInterface> get_plugin_instance()
     {
-        return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<PluginPythonShell>());
+        return std::make_unique<PluginPythonShell>();
     }
 
     std::string PluginPythonShell::get_name() const

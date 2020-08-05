@@ -64,7 +64,7 @@ namespace hal
          *
          * @returns A map from flag to plugin name.
          */
-        std::map<std::string, std::string> get_flag_to_plugin_mapping();
+        std::unordered_map<std::string, std::string> get_flag_to_plugin_mapping();
 
         /**
          * Returns command line interface options for all plugins
@@ -114,7 +114,7 @@ namespace hal
          * @param[in] initialize - If false, the plugin's initialize function is not called.
          * @returns A plugin instance.
          */
-        std::shared_ptr<BasePluginInterface> get_plugin_instance(const std::string& plugin_name, bool initialize = true);
+        BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize = true);
 
         /**
          * Gets a specific interface for a plugin specified by name.
@@ -125,9 +125,9 @@ namespace hal
          * @returns A plugin instance.
          */
         template<typename T>
-        std::shared_ptr<T> get_plugin_instance(const std::string& plugin_name, bool initialize = true)
+        T* get_plugin_instance(const std::string& plugin_name, bool initialize = true)
         {
-            return std::dynamic_pointer_cast<T>(get_plugin_instance(plugin_name, initialize));
+            return dynamic_cast<T*>(get_plugin_instance(plugin_name, initialize));
         }
 
         /**

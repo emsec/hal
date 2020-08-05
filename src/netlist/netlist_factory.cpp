@@ -4,7 +4,7 @@
 #include "core/program_arguments.h"
 #include "netlist/event_system/event_controls.h"
 #include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_parser/hdl_parser_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/persistent/netlist_serializer.h"
 
@@ -27,7 +27,7 @@ namespace hal
             return std::make_shared<Netlist>(gate_library);
         }
 
-        std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& language, const std::filesystem::path& gate_library_file)
+        std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file)
         {
             if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
             {
@@ -43,7 +43,7 @@ namespace hal
                 return nullptr;
             }
 
-            std::shared_ptr<Netlist> nl = HDLParserDispatcher::parse(lib, language, hdl_file);
+            std::shared_ptr<Netlist> nl = HDLParserManager::parse(hdl_file, lib);
 
             return nl;
         }
@@ -87,7 +87,7 @@ namespace hal
             }
             else
             {
-                nl = HDLParserDispatcher::parse(file_name, args);
+                nl = HDLParserManager::parse(file_name, args);
             }
 
             return nl;

@@ -4,9 +4,9 @@
 
 namespace hal
 {
-    extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
+    extern std::unique_ptr<BasePluginInterface> get_plugin_instance()
     {
-        return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<plugin_graph_algorithm>());
+        return std::make_unique<plugin_graph_algorithm>();
     }
 
     std::string plugin_graph_algorithm::get_name() const

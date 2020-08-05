@@ -21,10 +21,10 @@ namespace hal
         namespace
         {
             // stores library and factory identified by plugin name)
-            std::map<std::string, std::tuple<LibraryLoader*, instantiate_plugin_function>> m_plugin;
+            std::unordered_map<std::string, std::tuple<LibraryLoader*, std::unique_ptr<BasePluginInterface>>> m_loaded_plugins;
 
             // stores the CLI parser option for each plugin
-            std::map<std::string, std::string> m_cli_option_to_plugin_name;
+            std::unordered_map<std::string, std::string> m_cli_option_to_plugin_name;
 
             // stores the GUI callback
             CallbackHook<void(bool, std::string const&, std::string const&)> m_hook;
@@ -55,8 +55,10 @@ namespace hal
                     auto dep_plugin_name        = std::filesystem::path(file_name).stem().string();
                     auto dep_file_name_with_ext = file_name + "." + LIBRARY_FILE_EXTENSION;
 
-                    if (m_plugin.find(dep_plugin_name) != m_plugin.end())
+                    if (m_loaded_plugins.find(dep_plugin_name) != m_loaded_plugins.end())
+                    {
                         continue;
+                    }
                     std::filesystem::path file_path = core_utils::get_file(dep_file_name_with_ext, m_plugin_folders);
                     if (file_path == "" || !load(dep_plugin_name, file_path))
                     {
@@ -87,14 +89,14 @@ namespace hal
         std::set<std::string> get_plugin_names()
         {
             std::set<std::string> names;
-            for (const auto& it : m_plugin)
+            for (const auto& it : m_loaded_plugins)
             {
                 names.insert(it.first);
             }
             return names;
         }
 
-        std::map<std::string, std::string> get_flag_to_plugin_mapping()
+        std::unordered_map<std::string, std::string> get_flag_to_plugin_mapping()
         {
             return m_cli_option_to_plugin_name;
         }
@@ -140,7 +142,7 @@ namespace hal
                 return false;
             }
 
-            if (m_plugin.find(plugin_name) != m_plugin.end())
+            if (m_loaded_plugins.find(plugin_name) != m_loaded_plugins.end())
             {
                 log_debug("core", "plugin '{}' is already loaded", plugin_name);
                 return true;
@@ -149,7 +151,9 @@ namespace hal
             /* load library */
             LibraryLoader* lib = new LibraryLoader();
             if (!lib->load_library(file_name.string()))
+            {
                 return false;
+            }
 
             /* get factory of library */
             auto factory = (instantiate_plugin_function)lib->get_function("get_plugin_instance");
@@ -168,14 +172,18 @@ namespace hal
             /* solve dependencies */
             std::set<std::string> dep_file_name = instance->get_dependencies();
             if (!solve_dependencies(plugin_name, dep_file_name))
+            {
                 return false;
+            }
 
             /* add cli options */
             if (instance->has_type(PluginInterfaceType::cli))
             {
-                auto plugin = std::dynamic_pointer_cast<CLIPluginInterface>(instance);
+                auto plugin = dynamic_cast<CLIPluginInterface*>(instance.get());
                 if (plugin == nullptr)
+                {
                     return false;
+                }
 
                 auto cli_options = plugin->get_cli_options();
                 for (const auto& cli_option : cli_options.get_options())
@@ -198,11 +206,12 @@ namespace hal
                 }
                 m_plugin_options.add(cli_options);
             }
-            m_plugin[plugin_name] = std::make_tuple(lib, factory);
 
             instance->initialize_logging();
 
             instance->on_load();
+
+            m_loaded_plugins[plugin_name] = std::make_tuple(lib, std::move(instance));
 
             /* notify callback that a plugin was loaded*/
             m_hook(true, plugin_name, file_name.string());
@@ -213,25 +222,27 @@ namespace hal
 
         bool unload_all_plugins()
         {
-            if (m_plugin.size() == 0)
+            if (m_loaded_plugins.size() == 0)
             {
                 log_debug("core", "no plugins to unload");
                 return true;
             }
-            auto tmp_m_plugin = m_plugin;
-            for (const auto& it : tmp_m_plugin)
+            auto loaded_plugin_names = get_plugin_names();
+            for (const auto& name : loaded_plugin_names)
             {
-                if (!unload(it.first))
-                    return false;
+                if (!unload(name))
+                {
+                    log_error("core", "could not unload plugin '{}'", name);
+                }
             }
-            log_info("core", "unloaded all {} plugins", (int)tmp_m_plugin.size());
+            log_info("core", "unloaded all {} plugins", loaded_plugin_names.size());
             return true;
         }
 
         bool unload(const std::string& plugin_name)
         {
-            auto it = m_plugin.find(plugin_name);
-            if (it == m_plugin.end())
+            auto it = m_loaded_plugins.find(plugin_name);
+            if (it == m_loaded_plugins.end())
             {
                 log_debug("core", "cannot find plugin '{}' to unload it", plugin_name);
                 return true;
@@ -239,21 +250,20 @@ namespace hal
 
             log_info("core", "unloading plugin '{}'...", plugin_name);
 
-            /* store file name for callback Notification */
-            auto file_name = std::get<0>(it->second)->get_file_name();
-
-            /* unload and delete factory */
-            auto factory = std::get<1>(it->second);
-            factory()->on_unload();
-
-            /* unload and delete library */
+            /* unload */
             auto library = std::get<0>(it->second);
-            if (!library->unload_library())
-                return false;
-            delete library;
+            std::get<1>(it->second)->on_unload();
 
             /* remove plugin */
-            m_plugin.erase(it);
+            m_loaded_plugins.erase(it);
+
+            /* unload and delete library */
+            auto file_name = library->get_file_name();
+            if (!library->unload_library())
+            {
+                return false;
+            }
+            delete library;
 
             /* notify callback that a plugin was unloaded */
             m_hook(false, plugin_name, file_name);
@@ -262,26 +272,21 @@ namespace hal
             return true;
         }
 
-        std::shared_ptr<BasePluginInterface> get_plugin_instance(const std::string& plugin_name, bool initialize)
+        BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize)
         {
-            auto it = m_plugin.find(plugin_name);
-            if (it == m_plugin.end())
+            auto it = m_loaded_plugins.find(plugin_name);
+            if (it == m_loaded_plugins.end())
             {
                 log_error("core", "plugin '{}' is not loaded", plugin_name);
                 return nullptr;
             }
 
-            auto factory = std::get<1>(it->second);
-            if (factory != nullptr)
+            auto instance = std::get<1>(it->second).get();
+            if (instance != nullptr && initialize)
             {
-                auto ptr = factory();
-                if (ptr != nullptr && initialize)
-                {
-                    ptr->initialize();
-                }
-                return ptr;
+                instance->initialize();
             }
-            return nullptr;
+            return instance;
         }
 
         u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback)
