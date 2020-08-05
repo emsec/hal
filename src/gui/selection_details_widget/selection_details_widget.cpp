@@ -98,11 +98,13 @@ namespace hal
             singleSelectionInternal(nullptr);
             // clear and hide tree
             m_selectionTreeView->populate(false);
+            set_name("Selection Details (nothing selected)");
             return;
         }
-        case 1:
-            m_selectionTreeView->populate(false);
-            break;
+// executive decision: treat single selected item the same way as multiple
+//        case 1:
+//            m_selectionTreeView->populate(false);
+//            break;
         default:
             // more than 1 item selected, populate and make visible
             set_name("Selection Details");
