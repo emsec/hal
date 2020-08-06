@@ -46,7 +46,7 @@ PLUGIN_H_TEMPLATE = """#pragma once
 
 namespace hal
 {
-    class PLUGIN_API ##CLASSNAME##Plugin : virtual public BasePluginInterface
+    class PLUGIN_API ##CLASSNAME##Plugin : public BasePluginInterface
     {
     public:
 

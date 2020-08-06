@@ -32,7 +32,7 @@ namespace hal
         std::string get_name() const override;
         std::string get_version() const override;
 
-        void initialize_logging() const override;
+        void initialize_logging() override;
 
         bool exec(ProgramArguments& args) override;
     };

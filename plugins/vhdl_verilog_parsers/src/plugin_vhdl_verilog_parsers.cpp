@@ -22,17 +22,15 @@ namespace hal
         return std::string("0.1");
     }
 
-    void VhdlVerilogParsersPlugin::on_load() const
+    void VhdlVerilogParsersPlugin::on_load()
     {
-        m_verilog_parser = std::make_unique<HDLParserVerilog>();
-        m_vhdl_parser = std::make_unique<HDLParserVHDL>();
-        HDLParserManager::register_parser(m_verilog_parser.get(), {".v"});
-        HDLParserManager::register_parser(m_vhdl_parser.get(), {".vhd", ".vhdl"});
+        HDLParserManager::register_parser(&m_verilog_parser, {".v"});
+        HDLParserManager::register_parser(&m_vhdl_parser, {".vhd", ".vhdl"});
     }
 
-    void VhdlVerilogParsersPlugin::on_unload() const
+    void VhdlVerilogParsersPlugin::on_unload()
     {
-        HDLParserManager::unregister_parser(m_verilog_parser.get());
-        HDLParserManager::unregister_parser(m_vhdl_parser.get());
+        HDLParserManager::unregister_parser(&m_verilog_parser);
+        HDLParserManager::unregister_parser(&m_vhdl_parser);
     }
 }    // namespace hal

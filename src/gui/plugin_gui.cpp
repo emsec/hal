@@ -194,7 +194,7 @@ namespace hal
         return std::string("0.1");
     }
 
-    void PluginGui::initialize_logging() const
+    void PluginGui::initialize_logging()
     {
         LogManager& l = LogManager::get_instance();
         l.add_channel("user", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");

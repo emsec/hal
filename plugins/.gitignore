@@ -7,5 +7,7 @@
 !graph_algorithm/**/*
 !quine_mccluskey*
 !quine_mccluskey/**/*
+!vhdl_verilog_parsers*
+!vhdl_verilog_parsers/**/*
 !CMakeLists.txt
 !.gitignore

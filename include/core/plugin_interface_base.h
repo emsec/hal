@@ -115,18 +115,18 @@ namespace hal
         /**
          * This function is automatically executed when the factory is loaded by the plugin manager
          */
-        virtual void on_load() const;
+        virtual void on_load();
 
         /**
          * This function is automatically executed when the factory is unloaded by the plugin manager
          */
-        virtual void on_unload() const;
+        virtual void on_unload();
 
         /**
          * Initializes the logging channel(s) of a plugin. <br>
          * If not overwritten, a logging channel equal to the plugin name is created.
          */
-        virtual void initialize_logging() const;
+        virtual void initialize_logging();
     };
 
     using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();
