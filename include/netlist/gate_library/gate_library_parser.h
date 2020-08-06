@@ -37,34 +37,26 @@ namespace hal
     /**
      * @ingroup netlist
      */
-    class NETLIST_API GateLibaryParser
+    class NETLIST_API GateLibraryParser
     {
     public:
-        /**
-         * Construct a gate library parser object.
-         * 
-         * @param[in] file_path - Path to the file containing the gate library definition.
-         * @param[in] file_content - The string stream containing the gate library definition.
-         */
-        explicit GateLibaryParser(const std::filesystem::path& file_path, std::stringstream& file_content);
+        GateLibraryParser()          = default;
+        virtual ~GateLibraryParser() = default;
 
-        virtual ~GateLibaryParser() = default;
+        /**
+         * Returns a human-readable name for this parser.
+         *
+         * @returns The name of this parser.
+         */
+        virtual std::string get_name() const = 0;
 
         /**
          * Parses the gate library definition file.
          *
+         * @param[in] file_path - Path to the file containing the gate library definition.
+         * @param[in] file_content - The string stream containing the gate library definition.
          * @returns The gate library or a nullptr on error.
          */
-        virtual std::shared_ptr<GateLibrary> parse() = 0;
-
-    protected:
-        // stores the gate library
-        std::shared_ptr<GateLibrary> m_gate_lib;
-
-        // stores the input stream to the file
-        std::stringstream& m_fs;
-
-        // stores the path to the parsed file
-        std::filesystem::path m_path;
+        virtual std::shared_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream* file_content) = 0;
     };
 }    // namespace hal

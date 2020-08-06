@@ -1,4 +1,4 @@
-#include "netlist/gate_library/gate_library_parser/gate_library_parser_liberty.h"
+#include "liberty_parser.h"
 
 #include "core/log.h"
 #include "netlist/boolean_function.h"
@@ -7,12 +7,16 @@
 
 namespace hal
 {
-    GateLibraryParserLiberty::GateLibraryParserLiberty(const std::filesystem::path& file_path, std::stringstream& file_content) : GateLibaryParser(file_path, file_content)
+
+    std::string LibertyParser::get_name() const
     {
+        return "Default Liberty Parser";
     }
 
-    std::shared_ptr<GateLibrary> GateLibraryParserLiberty::parse()
+    std::shared_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path, std::stringstream* file_content)
     {
+        m_path = file_path;
+        m_fs = file_content;
         // tokenize file
         if (!tokenize())
         {
@@ -43,7 +47,7 @@ namespace hal
         return m_gate_lib;
     }
 
-    bool GateLibraryParserLiberty::tokenize()
+    bool LibertyParser::tokenize()
     {
         std::string delimiters = "{}()[];:\",";
         std::string current_token;
@@ -56,7 +60,7 @@ namespace hal
 
         std::vector<Token<std::string>> parsed_tokens;
 
-        while (std::getline(m_fs, line))
+        while (std::getline(*m_fs, line))
         {
             line_number++;
             this->remove_comments(line, multi_line_comment);
@@ -105,7 +109,7 @@ namespace hal
         return true;
     }
 
-    bool GateLibraryParserLiberty::parse_tokens()
+    bool LibertyParser::parse_tokens()
     {
         m_token_stream.consume("library", true);
         m_token_stream.consume("(", true);
@@ -154,7 +158,7 @@ namespace hal
         return m_token_stream.remaining() == 0;
     }
 
-    std::optional<GateLibraryParserLiberty::type_group> GateLibraryParserLiberty::parse_type(TokenStream<std::string>& str)
+    std::optional<LibertyParser::type_group> LibertyParser::parse_type(TokenStream<std::string>& str)
     {
         type_group type;
         i32 width     = 1;
@@ -244,7 +248,7 @@ namespace hal
         return type;
     }
 
-    std::optional<GateLibraryParserLiberty::cell_group> GateLibraryParserLiberty::parse_cell(TokenStream<std::string>& str)
+    std::optional<LibertyParser::cell_group> LibertyParser::parse_cell(TokenStream<std::string>& str)
     {
         cell_group cell;
 
@@ -325,8 +329,8 @@ namespace hal
         return cell;
     }
 
-    std::optional<GateLibraryParserLiberty::pin_group>
-        GateLibraryParserLiberty::parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
+    std::optional<LibertyParser::pin_group>
+        LibertyParser::parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
     {
         pin_group pin;
 
@@ -458,7 +462,7 @@ namespace hal
         return pin;
     }
 
-    std::optional<GateLibraryParserLiberty::bus_group> GateLibraryParserLiberty::parse_bus(TokenStream<std::string>& str, cell_group& cell)
+    std::optional<LibertyParser::bus_group> LibertyParser::parse_bus(TokenStream<std::string>& str, cell_group& cell)
     {
         bus_group bus;
         std::vector<u32> range;
@@ -540,7 +544,7 @@ namespace hal
         return bus;
     }
 
-    std::optional<GateLibraryParserLiberty::ff_group> GateLibraryParserLiberty::parse_ff(TokenStream<std::string>& str)
+    std::optional<LibertyParser::ff_group> LibertyParser::parse_ff(TokenStream<std::string>& str)
     {
         ff_group ff;
 
@@ -622,7 +626,7 @@ namespace hal
         return ff;
     }
 
-    std::optional<GateLibraryParserLiberty::latch_group> GateLibraryParserLiberty::parse_latch(TokenStream<std::string>& str)
+    std::optional<LibertyParser::latch_group> LibertyParser::parse_latch(TokenStream<std::string>& str)
     {
         latch_group latch;
 
@@ -692,7 +696,7 @@ namespace hal
         return latch;
     }
 
-    std::optional<GateLibraryParserLiberty::lut_group> GateLibraryParserLiberty::parse_lut(TokenStream<std::string>& str)
+    std::optional<LibertyParser::lut_group> LibertyParser::parse_lut(TokenStream<std::string>& str)
     {
         lut_group lut;
 
@@ -741,7 +745,7 @@ namespace hal
         return lut;
     }
 
-    std::shared_ptr<GateType> GateLibraryParserLiberty::construct_gate_type(cell_group& cell)
+    std::shared_ptr<GateType> LibertyParser::construct_gate_type(cell_group& cell)
     {
         std::shared_ptr<GateType> gt;
         std::vector<std::string> input_pins;
@@ -1029,7 +1033,7 @@ namespace hal
         return gt;
     }
 
-    void GateLibraryParserLiberty::remove_comments(std::string& line, bool& multi_line_comment)
+    void LibertyParser::remove_comments(std::string& line, bool& multi_line_comment)
     {
         bool repeat = true;
 
@@ -1082,7 +1086,7 @@ namespace hal
         }
     }
 
-    std::vector<std::string> GateLibraryParserLiberty::tokenize_function(const std::string& function)
+    std::vector<std::string> LibertyParser::tokenize_function(const std::string& function)
     {
         std::string delimiters = "()[]:!'^+|&* ";
         std::string current_token;
@@ -1114,7 +1118,7 @@ namespace hal
     }
 
     std::map<std::string, std::string>
-        GateLibraryParserLiberty::expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function)
+        LibertyParser::expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function)
     {
         auto tokenized_funtion = tokenize_function(function);
         std::map<std::string, std::string> res;
@@ -1189,7 +1193,7 @@ namespace hal
         return res;
     }
 
-    std::string GateLibraryParserLiberty::prepare_pin_function(const std::map<std::string, bus_group>& buses, const std::string& function)
+    std::string LibertyParser::prepare_pin_function(const std::map<std::string, bus_group>& buses, const std::string& function)
     {
         auto tokenized_funtion = tokenize_function(function);
         std::string res        = "";
@@ -1221,7 +1225,7 @@ namespace hal
         return res;
     }
 
-    std::map<std::string, BooleanFunction> GateLibraryParserLiberty::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
+    std::map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
     {
         std::map<std::string, BooleanFunction> res;
 

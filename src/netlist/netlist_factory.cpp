@@ -43,7 +43,7 @@ namespace hal
                 return nullptr;
             }
 
-            std::shared_ptr<Netlist> nl = HDLParserManager::parse(hdl_file, lib);
+            std::shared_ptr<Netlist> nl = hdl_parser_manager::parse(hdl_file, lib);
 
             return nl;
         }
@@ -87,7 +87,7 @@ namespace hal
             }
             else
             {
-                nl = HDLParserManager::parse(file_name, args);
+                nl = hdl_parser_manager::parse(file_name, args);
             }
 
             return nl;

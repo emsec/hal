@@ -26,7 +26,7 @@
 #include "core/token_stream.h"
 #include "def.h"
 #include "netlist/boolean_function.h"
-#include "netlist/gate_library/gate_library_parser/gate_library_parser.h"
+#include "netlist/gate_library/gate_library_parser.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
 #include "netlist/gate_library/gate_type/gate_type_sequential.h"
 
@@ -38,21 +38,16 @@ namespace hal
     /**
      * @ingroup netlist
      */
-    class NETLIST_API GateLibraryParserLiberty : public GateLibaryParser
+    class NETLIST_API LibertyParser : public GateLibraryParser
     {
     public:
-        /**
-         * Construct a liberty gate library parser object.
-         * 
-         * @param[in] file_path - Path to the file containing the gate library definition.
-         * @param[in] file_content - The string stream containing the gate library definition.
-         */
-        explicit GateLibraryParserLiberty(const std::filesystem::path& file_path, std::stringstream& file_content);
+        LibertyParser() = default;
+        ~LibertyParser() = default;
 
-        ~GateLibraryParserLiberty() = default;
+        std::string get_name() const override;
 
         /**
-         * Deserializes a gate library in Liberty format from the internal string stream into a gate library object.
+         * Deserializes a gate library in Liberty format from the string stream into a gate library object.
          * In order to also support lookup tables (LUTs) the following extension is allowed:
          *
          * lut(<function name>) {
@@ -64,9 +59,11 @@ namespace hal
          * <category> and <identifier> refer to the location where the LUT configuration string is stored, for example "generic" and "init".
          * direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
          *
-         * @returns The deserialized gate library.
+         * @param[in] file_path - Path to the file containing the gate library definition.
+         * @param[in] file_content - The string stream containing the gate library definition.
+         * @returns The gate library or a nullptr on error.
          */
-        std::shared_ptr<GateLibrary> parse() override;
+        std::shared_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream* file_content) override;
 
     private:
         enum class pin_direction
@@ -152,6 +149,10 @@ namespace hal
             std::set<std::string> pin_names;
             std::map<std::string, std::string> special_functions;
         };
+
+        std::shared_ptr<GateLibrary> m_gate_lib;
+        std::stringstream* m_fs;
+        std::filesystem::path m_path;
 
         TokenStream<std::string> m_token_stream;
         std::map<std::string, type_group> m_bus_types;

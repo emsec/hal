@@ -92,9 +92,9 @@ namespace hal {
                 EXPECT_TRUE(suc);
 
                 // Verify the correctness of the output by parsing it
-                std::shared_ptr<Netlist> parsed_nl_vhdl = HDLParserManager::parse(out_path_vhdl, m_gl);
+                std::shared_ptr<Netlist> parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
                 std::shared_ptr<Netlist>
-                    parsed_nl_verilog = HDLParserManager::parse(out_path_verilog, m_gl);
+                    parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
 
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
                 parsed_nl_verilog->get_top_module()->set_type("top_module_type");
@@ -124,9 +124,9 @@ namespace hal {
                 EXPECT_TRUE(suc_verilog);
 
                 // Verify the correctness of the output by parsing it
-                std::shared_ptr<Netlist> parsed_nl_vhdl = HDLParserManager::parse(out_path_vhdl, m_gl);
+                std::shared_ptr<Netlist> parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
                 std::shared_ptr<Netlist>
-                    parsed_nl_verilog = HDLParserManager::parse(out_path_verilog, m_gl);
+                    parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
 
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
                 parsed_nl_verilog->get_top_module()->set_type("top_module_type");

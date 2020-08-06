@@ -39,14 +39,14 @@ namespace hal
     /**
      * @ingroup hdl_parsers
      */
-    namespace HDLParserManager
+    namespace hdl_parser_manager
     {
         /**
          * Returns the command line interface options of the hdl parser manager
          *
          * @returns The options.
          */
-        ProgramOptions get_cli_options();
+        NETLIST_API ProgramOptions get_cli_options();
 
         /**
          * Registers a new HDL parser for a selection of file types.
@@ -55,14 +55,14 @@ namespace hal
          * @param[in] parser - The parser to register.
          * @param[in] supported_file_extensions - The file extensions this parser can process.
          */
-        void register_parser(HDLParser* parser, const std::vector<std::string>& supported_file_extensions);
+        NETLIST_API void register_parser(HDLParser* parser, const std::vector<std::string>& supported_file_extensions);
 
         /**
          * Unregisters a specific parser.
          *
          * @param[in] parser - The parser to unregister.
          */
-        void unregister_parser(HDLParser* parser);
+        NETLIST_API void unregister_parser(HDLParser* parser);
 
         /**
          * Returns the netlist for the file and specified command line options.
@@ -71,7 +71,7 @@ namespace hal
          * @param[in] args - The command line options.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args);
+        NETLIST_API std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args);
 
         /**
          * Returns the netlist for a file, parsed with a defined gate library.
@@ -80,6 +80,6 @@ namespace hal
          * @param[in] gate_library - The gate library used in the file.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const std::shared_ptr<GateLibrary>& gate_library);
-    }    // namespace HDLParserManager
+        NETLIST_API std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const std::shared_ptr<GateLibrary>& gate_library);
+    }    // namespace hdl_parser_manager
 }    // namespace hal

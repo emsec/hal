@@ -51,7 +51,7 @@ void initialize_cli_options(ProgramOptions& cli_options)
     generic_options.add("--no-log", "prevents hal from creating a .log file");
 
     /* initialize hdl parser options */
-    generic_options.add(HDLParserManager::get_cli_options());
+    generic_options.add(hdl_parser_manager::get_cli_options());
 
     /* initialize hdl writer options */
     generic_options.add(HDLWriterDispatcher::get_cli_options());

@@ -38,9 +38,9 @@ namespace hal {
 
         virtual void SetUp() {
             test_utils::init_log_channels();
+            PluginManager::load_all_plugins();
             test_utils::create_sandbox_directory();
             m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
-            PluginManager::load_all_plugins();
         }
 
         virtual void TearDown() {

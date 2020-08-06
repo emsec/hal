@@ -24,6 +24,7 @@
 #pragma once
 
 #include "def.h"
+#include "netlist/gate_library/gate_library_parser.h"
 
 #include <map>
 #include <memory>
@@ -38,6 +39,22 @@ namespace hal
      */
     namespace gate_library_manager
     {
+        /**
+         * Registers a new gate library parser for a selection of file types.
+         * If parsers for some of the extensions already exist, they are not changed, only the new ones are registered.
+         *
+         * @param[in] parser - The parser to register.
+         * @param[in] supported_file_extensions - The file extensions this parser can process.
+         */
+        NETLIST_API void register_parser(GateLibraryParser* parser, const std::vector<std::string>& supported_file_extensions);
+
+        /**
+         * Unregisters a specific parser.
+         *
+         * @param[in] parser - The parser to unregister.
+         */
+        NETLIST_API void unregister_parser(GateLibraryParser* parser);
+
         /**
          * Loads a gate library file.
          *

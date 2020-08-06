@@ -9,5 +9,7 @@
 !quine_mccluskey/**/*
 !vhdl_verilog_parsers*
 !vhdl_verilog_parsers/**/*
+!liberty_parser*
+!liberty_parser/**/*
 !CMakeLists.txt
 !.gitignore

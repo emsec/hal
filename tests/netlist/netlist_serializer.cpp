@@ -4,6 +4,7 @@
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
+#include "core/plugin_manager.h"
 
 #include "gtest/gtest.h"
 #include <core/log.h>
@@ -49,6 +50,7 @@ namespace hal {
         virtual void SetUp() {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
+            PluginManager::load_all_plugins();
             test_utils::create_sandbox_directory();
             m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
             m_gl = gate_library_manager::load_file(m_g_lib_path);
@@ -56,6 +58,7 @@ namespace hal {
 
         virtual void TearDown() {
             test_utils::remove_sandbox_directory();
+            PluginManager::unload_all_plugins();
         }
 
         // ===== Example Serializer Netlists =====

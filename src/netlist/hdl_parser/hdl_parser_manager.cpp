@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    namespace HDLParserManager
+    namespace hdl_parser_manager
     {
         namespace
         {
@@ -191,5 +191,5 @@ namespace hal
             }
             return dispatch_parse(file_name, parser, {gate_library});
         }
-    }    // namespace HDLParserManager
+    }    // namespace hdl_parser_manager
 }    // namespace hal

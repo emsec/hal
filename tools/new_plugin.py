@@ -66,9 +66,9 @@ PLUGIN_CPP_TEMPLATE = """#include "plugin_##LOWER##.h"
 namespace hal
 {
 
-    extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
+    extern std::unique_ptr<BasePluginInterface> get_plugin_instance()
     {
-        return std::make_shared<##CLASSNAME##Plugin>();
+        return std::make_unique<##CLASSNAME##Plugin>();
     }
 
     std::string ##CLASSNAME##Plugin::get_name() const
@@ -113,7 +113,7 @@ namespace hal
         py::module m("##LOWER##", "hal ##CLASSNAME##Plugin python bindings");
     #endif    // ifdef PYBIND11_MODULE
 
-        py::class_<##LOWER##, std::shared_ptr<##CLASSNAME##Plugin>, BasePluginInterface>(m, "##LOWER##")
+        py::class_<##LOWER##, ##CLASSNAME##Plugin*, BasePluginInterface>(m, "##LOWER##")
             .def_property_readonly("name", &##CLASSNAME##Plugin::get_name)
             .def("get_name", &##CLASSNAME##Plugin::get_name)
             .def_property_readonly("version", &##CLASSNAME##Plugin::get_version)

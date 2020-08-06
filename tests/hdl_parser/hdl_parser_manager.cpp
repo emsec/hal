@@ -10,7 +10,7 @@
 #include <sstream>
 
 namespace hal {
-    class HDLParserManagerTest : public ::testing::Test {
+    class hdl_parser_managerTest : public ::testing::Test {
     protected:
         const std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY) {\n"
                                              "    define(cell);\n"
@@ -78,10 +78,10 @@ namespace hal {
      *
      * Functions: get_cli_options
      */
-    TEST_F(HDLParserManagerTest, check_cli_options) {
+    TEST_F(hdl_parser_managerTest, check_cli_options) {
         TEST_START
             {// Access the cli-options (should be empty)
-                EXPECT_TRUE(HDLParserManager::get_cli_options().get_options().empty());
+                EXPECT_TRUE(hdl_parser_manager::get_cli_options().get_options().empty());
             }
         TEST_END
     }
@@ -91,7 +91,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserManagerTest, check_parse_by_program_args) {
+    TEST_F(hdl_parser_managerTest, check_parse_by_program_args) {
         TEST_START
             // Create the files to parse
             auto vhdl_file_with_extension = test_utils::create_sandbox_file("tmp_vhdl_file.vhdl", m_valid_vhdl_content);
@@ -113,8 +113,8 @@ namespace hal {
                 std::shared_ptr<Netlist> nl_verilog;
                 {
                     NO_COUT_BLOCK;
-                    nl_vhdl = HDLParserManager::parse(vhdl_file_with_extension, p_args_empty);
-                    nl_verilog = HDLParserManager::parse(verilog_file_with_extension, p_args_empty);
+                    nl_vhdl = hdl_parser_manager::parse(vhdl_file_with_extension, p_args_empty);
+                    nl_verilog = hdl_parser_manager::parse(verilog_file_with_extension, p_args_empty);
                 }
 
                 EXPECT_NE(nl_vhdl, nullptr);
@@ -128,7 +128,7 @@ namespace hal {
                 std::shared_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = HDLParserManager::parse("this/path/does/not/exist.v", p_args);
+                    nl = hdl_parser_manager::parse("this/path/does/not/exist.v", p_args);
                 }
                 EXPECT_EQ(nl, nullptr);
             }
@@ -139,7 +139,7 @@ namespace hal {
                 std::shared_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = HDLParserManager::parse(vhdl_file_with_extension, p_args);
+                    nl = hdl_parser_manager::parse(vhdl_file_with_extension, p_args);
                 }
                 EXPECT_EQ(nl, nullptr);
             }
@@ -150,7 +150,7 @@ namespace hal {
                 std::shared_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = HDLParserManager::parse(file_with_unknown_extension, p_args);
+                    nl = hdl_parser_manager::parse(file_with_unknown_extension, p_args);
                 }
                 EXPECT_EQ(nl, nullptr);
             }
@@ -161,7 +161,7 @@ namespace hal {
                 std::shared_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = HDLParserManager::parse(file_without_extension, p_args);
+                    nl = hdl_parser_manager::parse(file_without_extension, p_args);
                 }
                 EXPECT_EQ(nl, nullptr);
             }
@@ -174,7 +174,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(HDLParserManagerTest, check_parse_by_parser_name) {
+    TEST_F(hdl_parser_managerTest, check_parse_by_parser_name) {
         TEST_START
             // Create the files to parse
             auto vhdl_file = test_utils::create_sandbox_file("tmp_vhdl_file.vhd", m_valid_vhdl_content);
@@ -193,8 +193,8 @@ namespace hal {
                 std::shared_ptr<Netlist> nl_verilog;
                 {
                     NO_COUT_BLOCK;
-                    nl_vhdl = HDLParserManager::parse(vhdl_file, min_gl);
-                    nl_verilog = HDLParserManager::parse(verilog_file, min_gl);
+                    nl_vhdl = hdl_parser_manager::parse(vhdl_file, min_gl);
+                    nl_verilog = hdl_parser_manager::parse(verilog_file, min_gl);
                 }
 
                 EXPECT_NE(nl_vhdl, nullptr);
@@ -206,7 +206,7 @@ namespace hal {
                 std::shared_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = HDLParserManager::parse("this/path/does/not/exist.v", min_gl);
+                    nl = hdl_parser_manager::parse("this/path/does/not/exist.v", min_gl);
                 }
 
                 EXPECT_EQ(nl, nullptr);
@@ -216,7 +216,7 @@ namespace hal {
                 std::shared_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = HDLParserManager::parse(file_with_unknown_extension, min_gl);
+                    nl = hdl_parser_manager::parse(file_with_unknown_extension, min_gl);
                 }
 
                 EXPECT_EQ(nl, nullptr);
@@ -226,7 +226,7 @@ namespace hal {
                 std::shared_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
-                    nl = HDLParserManager::parse(file_without_extension, min_gl);
+                    nl = hdl_parser_manager::parse(file_without_extension, min_gl);
                 }
 
                 EXPECT_EQ(nl, nullptr);
