@@ -2,13 +2,14 @@
 
 #include "core/program_arguments.h"
 #include "core/utils.h"
+#include "core/log.h"
+#include "core/plugin_manager.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/netlist.h"
 #include "netlist/persistent/netlist_serializer.h"
 #include "netlist_test_utils.h"
 
 #include "gtest/gtest.h"
-#include <core/log.h>
 #include <experimental/filesystem>
 #include <fstream>
 #include <iostream>
@@ -39,10 +40,12 @@ namespace hal {
             test_utils::init_log_channels();
             test_utils::create_sandbox_directory();
             m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
+            PluginManager::load_all_plugins();
         }
 
         virtual void TearDown() {
             test_utils::remove_sandbox_directory();
+            PluginManager::unload_all_plugins();
         }
 
         /**
@@ -119,7 +122,7 @@ namespace hal {
                                                                                       "    );\n"
                                                                                       "end STRUCTURE;");
             {
-                std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, "vhdl", m_g_lib_path);
+                std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, m_g_lib_path);
 
                 ASSERT_NE(nl, nullptr);
                 EXPECT_EQ(nl->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY");
@@ -128,9 +131,7 @@ namespace hal {
                 // Try to create a netlist by a non-accessible (non-existing) file
                 NO_COUT_TEST_BLOCK;
                 std::shared_ptr<Netlist> nl =
-                    netlist_factory::load_netlist(std::filesystem::path("/this/file/does/not/exist"),
-                                                  "vhdl",
-                                                  m_g_lib_path);
+                    netlist_factory::load_netlist("/this/file/does/not/exist", m_g_lib_path);
 
                 EXPECT_EQ(nl, nullptr);
             }
@@ -138,10 +139,7 @@ namespace hal {
                 // Try to create a netlist by passing a path that does not lead to a Gate library
                 NO_COUT_TEST_BLOCK;
 
-                std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path,
-                                                                            "vhdl",
-                                                                            std::filesystem::path(
-                                                                                "/this/file/does/not/exist"));
+                std::shared_ptr<Netlist> nl = netlist_factory::load_netlist(tmp_hdl_file_path, "/this/file/does/not/exist");
 
                 EXPECT_EQ(nl, nullptr);
             }

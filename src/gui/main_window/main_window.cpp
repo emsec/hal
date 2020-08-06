@@ -21,7 +21,7 @@
 #include "netlist/event_system/event_controls.h"
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_parser/hdl_parser_manager.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"

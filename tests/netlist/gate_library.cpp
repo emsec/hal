@@ -2,10 +2,10 @@
 #include "gtest/gtest.h"
 #include <core/log.h>
 #include <iostream>
-#include <netlist/gate_library/gate_library.h>
-#include <netlist/gate_library/gate_type/gate_type.h>
-#include <netlist/gate_library/gate_type/gate_type_lut.h>
-#include <netlist/gate_library/gate_type/gate_type_sequential.h>
+#include "netlist/gate_library/gate_library.h"
+#include "netlist/gate_library/gate_type/gate_type.h"
+#include "netlist/gate_library/gate_type/gate_type_lut.h"
+#include "netlist/gate_library/gate_type/gate_type_sequential.h"
 
 namespace hal {
     /*

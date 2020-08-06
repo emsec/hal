@@ -235,20 +235,6 @@ namespace hal
             return;
         }
 
-        QString language = "";
-        if (file_name.endsWith(".v"))
-            language = "verilog";
-        else if (file_name.endsWith(".vhd") || file_name.endsWith(".vhdl"))
-            language = "vhdl";
-
-        if (language == "")
-        {
-            std::string error_message("Unable to determine file language. Files have to end with .v, .vhd or .vhdl");
-            log_error("gui", "{}", error_message);
-            display_error_message(QString::fromStdString(error_message));
-            return;
-        }
-
         QList<QPair<std::string, std::shared_ptr<Netlist>>> list;
 
         for (const auto& lib : gate_library_manager::get_gate_libraries())
@@ -257,7 +243,7 @@ namespace hal
 
             log_info("gui", "Trying to use gate library '{}'...", name);
             event_controls::enable_all(false);
-            std::shared_ptr<Netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), language.toStdString(), lib->get_path());
+            std::shared_ptr<Netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), lib->get_path());
             event_controls::enable_all(true);
 
             if (netlist)

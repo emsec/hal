@@ -1,9 +1,10 @@
 #include "netlist/hdl_writer/hdl_writer_dispatcher.h"
 
 #include "netlist/gate.h"
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_parser/hdl_parser_manager.h"
 #include "netlist/netlist.h"
 #include "netlist_test_utils.h"
+#include "core/plugin_manager.h"
 
 #include "gtest/gtest.h"
 #include <core/program_arguments.h>
@@ -29,6 +30,7 @@ namespace hal {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
             test_utils::create_sandbox_directory();
+            PluginManager::load_all_plugins();
             m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
             m_gl = gate_library_manager::load_file(m_g_lib_path);
         }
@@ -36,6 +38,7 @@ namespace hal {
         virtual void TearDown() {
             test_utils::remove_sandbox_directory();
             // std::filesystem::remove_all(m_tmp_dir);
+            PluginManager::unload_all_plugins();
         }
 
         // Creates the following netlist:     global_in ---= INV =--- global_out
@@ -89,9 +92,9 @@ namespace hal {
                 EXPECT_TRUE(suc);
 
                 // Verify the correctness of the output by parsing it
-                std::shared_ptr<Netlist> parsed_nl_vhdl = HDLParserDispatcher::parse(m_gl, "vhdl", out_path_vhdl);
+                std::shared_ptr<Netlist> parsed_nl_vhdl = HDLParserManager::parse(out_path_vhdl, m_gl);
                 std::shared_ptr<Netlist>
-                    parsed_nl_verilog = HDLParserDispatcher::parse(m_gl, "verilog", out_path_verilog);
+                    parsed_nl_verilog = HDLParserManager::parse(out_path_verilog, m_gl);
 
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
                 parsed_nl_verilog->get_top_module()->set_type("top_module_type");
@@ -121,9 +124,9 @@ namespace hal {
                 EXPECT_TRUE(suc_verilog);
 
                 // Verify the correctness of the output by parsing it
-                std::shared_ptr<Netlist> parsed_nl_vhdl = HDLParserDispatcher::parse(m_gl, "vhdl", out_path_vhdl);
+                std::shared_ptr<Netlist> parsed_nl_vhdl = HDLParserManager::parse(out_path_vhdl, m_gl);
                 std::shared_ptr<Netlist>
-                    parsed_nl_verilog = HDLParserDispatcher::parse(m_gl, "verilog", out_path_verilog);
+                    parsed_nl_verilog = HDLParserManager::parse(out_path_verilog, m_gl);
 
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
                 parsed_nl_verilog->get_top_module()->set_type("top_module_type");

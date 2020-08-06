@@ -62,7 +62,7 @@ namespace hal
 
         QFormLayout* m_form_layout;
 
-        std::shared_ptr<CLIPluginInterface> m_plugin;
+        CLIPluginInterface* m_plugin;
 
         QVector<QPair<QPushButton*, QLineEdit*>> m_vector;
 

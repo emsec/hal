@@ -38,7 +38,7 @@ namespace hal
 
         if (selection == PluginInterfaceType::cli)
         {
-            auto plugin = std::dynamic_pointer_cast<CLIPluginInterface>(pl);
+            auto plugin = dynamic_cast<CLIPluginInterface*>(pl);
             plugin->initialize();
             ExtendedCliDialog dialog(QString::fromStdString(plugin_name));
             dialog.exec();
@@ -46,7 +46,7 @@ namespace hal
         }
         else if (selection == PluginInterfaceType::gui)
         {
-            auto plugin = std::dynamic_pointer_cast<GUIPluginInterface>(pl);
+            auto plugin = dynamic_cast<GUIPluginInterface*>(pl);
             plugin->initialize();
 
             // show gui dialog, return results

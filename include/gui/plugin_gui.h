@@ -36,10 +36,4 @@ namespace hal
 
         bool exec(ProgramArguments& args) override;
     };
-
-
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wreturn-type-c-linkage"
-    extern "C" PLUGIN_API std::shared_ptr<BasePluginInterface> get_plugin_instance();
-    #pragma GCC diagnostic pop
 }

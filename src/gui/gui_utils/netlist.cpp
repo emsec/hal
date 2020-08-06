@@ -74,7 +74,7 @@ namespace hal
         {
             assert(m);
             QSet<u32> parents;
-            while (m = m->get_parent_module())
+            while ((m = m->get_parent_module()) != nullptr)
             {
                 parents.insert(m->get_id());
             }
