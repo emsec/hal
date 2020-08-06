@@ -92,14 +92,14 @@ namespace hal {
             // NO_COUT_TEST_BLOCK;
             create_test_lib();
             // Load the Gate library twice by its filename
-            std::shared_ptr<GateLibrary> test_lib_0 = gate_library_manager::get_gate_library(m_test_lib_path);
-            std::shared_ptr<GateLibrary> test_lib_1 = gate_library_manager::get_gate_library(m_test_lib_path);
+            GateLibrary* test_lib_0 = gate_library_manager::get_gate_library(m_test_lib_path);
+            GateLibrary* test_lib_1 = gate_library_manager::get_gate_library(m_test_lib_path);
             EXPECT_NE(test_lib_0, nullptr);
             EXPECT_NE(test_lib_1, nullptr);
 
             // Check that the test library can be found in the get_gate_libraries vector
             bool found_test_lib = false;
-            for (std::shared_ptr<GateLibrary> gl : gate_library_manager::get_gate_libraries()) {
+            for (GateLibrary* gl : gate_library_manager::get_gate_libraries()) {
                 if (gl->get_name() == m_test_lib_name) {
                     found_test_lib = true;
                     break;
@@ -125,7 +125,7 @@ namespace hal {
 
             // Check that the test library can be found in the get_gate_libraries vector
             bool found_test_lib = false;
-            for (std::shared_ptr<GateLibrary> gl : gate_library_manager::get_gate_libraries()) {
+            for (GateLibrary* gl : gate_library_manager::get_gate_libraries()) {
                 if (gl->get_name() == m_test_lib_name) {
                     found_test_lib = true;
                     break;
@@ -152,7 +152,7 @@ namespace hal {
                             "}";
 
                 test_lib.close();
-                std::shared_ptr<GateLibrary> empty_lib = gate_library_manager::get_gate_library(m_test_lib_path);
+                GateLibrary* empty_lib = gate_library_manager::get_gate_library(m_test_lib_path);
                 ASSERT_NE(empty_lib, nullptr);
                 auto g_types = empty_lib->get_gate_types();
                 // Check the creation of a gnd Gate type
@@ -180,7 +180,7 @@ namespace hal {
             {
                 // The file path does not exist
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<GateLibrary>
+                GateLibrary*
                     test_lib = gate_library_manager::get_gate_library("/non/existing/path.lib");
                 EXPECT_EQ(test_lib, nullptr);
             }

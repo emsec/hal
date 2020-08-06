@@ -21,7 +21,7 @@ namespace hal
     //###                      gates                                     ###
     //######################################################################
 
-    std::shared_ptr<Gate> NetlistInternalManager::create_gate(const u32 id, const std::shared_ptr<const GateType>& gt, const std::string& name, float x, float y)
+    std::shared_ptr<Gate> NetlistInternalManager::create_gate(const u32 id, const GateType* gt, const std::string& name, float x, float y)
     {
         if (id == 0)
         {
@@ -122,7 +122,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::is_gate_type_invalid(const std::shared_ptr<const GateType>& gt) const
+    bool NetlistInternalManager::is_gate_type_invalid(const GateType* gt) const
     {
         auto gate_types = m_netlist->m_gate_library->get_gate_types();
         auto it         = gate_types.find(gt->get_name());

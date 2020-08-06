@@ -63,7 +63,7 @@ namespace hal
          * @param[in] file_content - The string stream containing the gate library definition.
          * @returns The gate library or a nullptr on error.
          */
-        std::shared_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream* file_content) override;
+        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream* file_content) override;
 
     private:
         enum class pin_direction
@@ -150,7 +150,7 @@ namespace hal
             std::map<std::string, std::string> special_functions;
         };
 
-        std::shared_ptr<GateLibrary> m_gate_lib;
+        std::unique_ptr<GateLibrary> m_gate_lib;
         std::stringstream* m_fs;
         std::filesystem::path m_path;
 
@@ -170,7 +170,7 @@ namespace hal
         std::optional<ff_group> parse_ff(TokenStream<std::string>& str);
         std::optional<latch_group> parse_latch(TokenStream<std::string>& str);
         std::optional<lut_group> parse_lut(TokenStream<std::string>& str);
-        std::shared_ptr<GateType> construct_gate_type(cell_group& cell);
+        std::unique_ptr<GateType> construct_gate_type(cell_group& cell);
 
         void remove_comments(std::string& line, bool& multi_line_comment);
         std::vector<std::string> tokenize_function(const std::string& function);

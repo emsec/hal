@@ -18,7 +18,7 @@ namespace hal {
     protected:
 
         const std::string m_gate_suffix = "";
-        std::shared_ptr<GateLibrary> m_gl;
+        GateLibrary* m_gl;
 
         virtual void SetUp() {
             NO_COUT_BLOCK;

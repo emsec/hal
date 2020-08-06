@@ -27,7 +27,7 @@ namespace hal {
     class NetlistSerializerTest : public ::testing::Test {
     protected:
         std::filesystem::path m_g_lib_path;
-        std::shared_ptr<GateLibrary> m_gl;
+        GateLibrary* m_gl;
 
         std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY) {\n"
                                        "    define(cell);\n"

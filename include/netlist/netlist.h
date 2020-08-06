@@ -59,7 +59,7 @@ namespace hal
          *
          * @param[in] library - Shared pointer to gate library.
          */
-        explicit Netlist(std::shared_ptr<GateLibrary> library);
+        explicit Netlist(const GateLibrary* library);
 
         ~Netlist();
 
@@ -132,7 +132,7 @@ namespace hal
          *
          * @returns A pointer to the gate library.
          */
-        std::shared_ptr<GateLibrary> get_gate_library() const;
+        const GateLibrary* get_gate_library() const;
 
         /*
          * ################################################################
@@ -235,7 +235,7 @@ namespace hal
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr on error.
          */
-        std::shared_ptr<Gate> create_gate(const u32 id, std::shared_ptr<const GateType> gt, const std::string& name = "", float x = -1, float y = -1);
+        std::shared_ptr<Gate> create_gate(const u32 id, const GateType* gt, const std::string& name = "", float x = -1, float y = -1);
 
         /**
          * Creates and adds a new gate to the netlist.<br>
@@ -247,7 +247,7 @@ namespace hal
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr on error.
          */
-        std::shared_ptr<Gate> create_gate(std::shared_ptr<const GateType> gt, const std::string& name = "", float x = -1, float y = -1);
+        std::shared_ptr<Gate> create_gate(const GateType* gt, const std::string& name = "", float x = -1, float y = -1);
 
         /**
          * Removes a gate from the netlist.
@@ -477,7 +477,7 @@ namespace hal
         NetlistInternalManager* m_manager;
 
         /* stores the gate library */
-        std::shared_ptr<GateLibrary> m_gate_library;
+        const GateLibrary* m_gate_library;
 
         /* stores the netlist id */
         u32 m_netlist_id;

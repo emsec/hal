@@ -113,7 +113,7 @@ namespace hal
          * @param gate_library_name - the name of the Gate library, the GateType can be found in. If empty, the example Gate library (g_lib_name) is taken.
          * @return the GateType pointer if found. If no Gate type matches, return nullptr
          */
-        std::shared_ptr<const GateType> get_gate_type_by_name(std::string name, std::shared_ptr<GateLibrary> GateLibrary = nullptr);
+        const GateType* get_gate_type_by_name(std::string name, GateLibrary* GateLibrary = nullptr);
 
         /**
          * Given a vector of endpoints. Returns the first Endpoint that has a certain pin type
@@ -237,7 +237,7 @@ namespace hal
         /**
          * Creates a Gate library dedicated solely to testing. Construction of that Gate library is independent of the Gate library parser.
          */
-        std::shared_ptr<GateLibrary> get_testing_gate_library();
+        GateLibrary* get_testing_gate_library();
 
         // ===== Example Netlists =====
 

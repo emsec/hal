@@ -85,7 +85,7 @@ namespace hal
          * @param[in] gl - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        std::shared_ptr<Netlist> instantiate(const std::shared_ptr<GateLibrary>& gl)
+        std::shared_ptr<Netlist> instantiate(const GateLibrary* gl)
         {
             // create empty netlist
             m_netlist = netlist_factory::create_netlist(gl);
@@ -1006,7 +1006,7 @@ namespace hal
         std::map<T, std::vector<T>> m_nets_to_merge;
 
         // buffer gate types
-        std::map<T, std::shared_ptr<const GateType>> m_tmp_gate_types;
+        std::map<T, const GateType*> m_tmp_gate_types;
         std::map<std::shared_ptr<Net>, std::tuple<port_direction, std::string, std::shared_ptr<Module>>> m_module_ports;
 
         bool build_netlist(const T& top_module)
@@ -1383,8 +1383,8 @@ namespace hal
                 m_nets_to_merge[b].push_back(a);
             }
 
-            std::map<T, std::shared_ptr<const GateType>> vcc_gate_types;
-            std::map<T, std::shared_ptr<const GateType>> gnd_gate_types;
+            std::map<T, const GateType*> vcc_gate_types;
+            std::map<T, const GateType*> gnd_gate_types;
 
             if constexpr (std::is_same<T, std::string>::value)
             {

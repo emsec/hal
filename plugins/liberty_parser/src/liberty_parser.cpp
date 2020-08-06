@@ -12,8 +12,10 @@ namespace hal
         return "Default Liberty Parser";
     }
 
-    std::shared_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path, std::stringstream* file_content)
+    std::unique_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path, std::stringstream* file_content)
     {
+        cleanup();
+
         m_path = file_path;
         m_fs   = file_content;
         // tokenize file
@@ -43,9 +45,7 @@ namespace hal
             return nullptr;
         }
 
-        auto lib = m_gate_lib;
-        cleanup();
-        return lib;
+        return std::move(m_gate_lib);
     }
 
     void LibertyParser::cleanup()
@@ -124,7 +124,7 @@ namespace hal
         auto lib_name = m_token_stream.consume();
         m_token_stream.consume(")", true);
         m_token_stream.consume("{", true);
-        m_gate_lib       = std::make_shared<GateLibrary>(m_path, lib_name.string);
+        m_gate_lib       = std::make_unique<GateLibrary>(m_path, lib_name.string);
         auto library_str = m_token_stream.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, false);
         m_token_stream.consume("}", false);
 
@@ -150,7 +150,7 @@ namespace hal
                     return false;
                 }
 
-                m_gate_lib->add_gate_type(gt);
+                m_gate_lib->add_gate_type(std::move(gt));
             }
             else if (next_token == "type" && library_str.peek() == "(")
             {
@@ -752,9 +752,9 @@ namespace hal
         return lut;
     }
 
-    std::shared_ptr<GateType> LibertyParser::construct_gate_type(cell_group& cell)
+    std::unique_ptr<GateType> LibertyParser::construct_gate_type(cell_group& cell)
     {
-        std::shared_ptr<GateType> gt;
+        std::unique_ptr<GateType> gt;
         std::vector<std::string> input_pins;
         std::vector<std::string> output_pins;
         std::map<std::string, std::map<u32, std::string>> input_pin_groups;
@@ -792,11 +792,11 @@ namespace hal
 
         if (cell.type == GateType::BaseType::combinatorial)
         {
-            gt = std::make_shared<GateType>(cell.name);
+            gt = std::make_unique<GateType>(cell.name);
         }
         else if (cell.type == GateType::BaseType::ff)
         {
-            auto seq_gt = std::make_shared<GateTypeSequential>(cell.name, cell.type);
+            auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
 
             if (!cell.ff.clocked_on.empty())
             {
@@ -869,11 +869,11 @@ namespace hal
                 }
             }
 
-            gt = seq_gt;
+            gt = std::move(seq_gt);
         }
         else if (cell.type == GateType::BaseType::latch)
         {
-            auto seq_gt = std::make_shared<GateTypeSequential>(cell.name, cell.type);
+            auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
 
             if (!cell.latch.enable.empty())
             {
@@ -944,11 +944,11 @@ namespace hal
                 }
             }
 
-            gt = seq_gt;
+            gt = std::move(seq_gt);
         }
         else if (cell.type == GateType::BaseType::lut)
         {
-            auto lut_gt = std::make_shared<GateTypeLut>(cell.name);
+            auto lut_gt = std::make_unique<GateTypeLut>(cell.name);
 
             lut_gt->set_config_data_category(cell.lut.data_category);
             lut_gt->set_config_data_identifier(cell.lut.data_identifier);
@@ -983,7 +983,7 @@ namespace hal
                 }
             }
 
-            gt = lut_gt;
+            gt = std::move(lut_gt);
         }
 
         gt->add_input_pins(input_pins);
@@ -1037,7 +1037,7 @@ namespace hal
             }
         }
 
-        return gt;
+        return std::move(gt);
     }
 
     void LibertyParser::remove_comments(std::string& line, bool& multi_line_comment)

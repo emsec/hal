@@ -52,9 +52,9 @@ namespace hal
         ~NetlistInternalManager() = default;
 
         // gate functions
-        std::shared_ptr<Gate> create_gate(u32 id, const std::shared_ptr<const GateType>& gt, const std::string& name, float x, float y);
+        std::shared_ptr<Gate> create_gate(u32 id, const GateType* gt, const std::string& name, float x, float y);
         bool delete_gate(std::shared_ptr<Gate> gate);
-        bool is_gate_type_invalid(const std::shared_ptr<const GateType>& gt) const;
+        bool is_gate_type_invalid(const GateType* gt) const;
 
         // net functions
         std::shared_ptr<Net> create_net(u32 id, const std::string& name);

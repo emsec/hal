@@ -13,7 +13,7 @@
 
 namespace hal
 {
-    Gate::Gate(std::shared_ptr<Netlist> const g, const u32 id, std::shared_ptr<const GateType> gt, const std::string& name, float x, float y)
+    Gate::Gate(std::shared_ptr<Netlist> const g, const u32 id, const GateType* gt, const std::string& name, float x, float y)
     {
         assert(g != nullptr);
         m_netlist = g;
@@ -56,7 +56,7 @@ namespace hal
         }
     }
 
-    std::shared_ptr<const GateType> Gate::get_type() const
+    const GateType* Gate::get_type() const
     {
         return m_type;
     }
@@ -124,7 +124,7 @@ namespace hal
 
         if (m_type->get_base_type() == GateType::BaseType::lut)
         {
-            auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
+            auto lut_type = static_cast<const GateTypeLut*>(m_type);
             auto lut_pins = lut_type->get_output_from_init_string_pins();
             if (lut_pins.find(name) != lut_pins.end())
             {
@@ -162,7 +162,7 @@ namespace hal
 
         if (!only_custom_functions && m_type->get_base_type() == GateType::BaseType::lut)
         {
-            auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
+            auto lut_type = static_cast<const GateTypeLut*>(m_type);
             for (auto pin : lut_type->get_output_from_init_string_pins())
             {
                 res.emplace(pin, get_lut_function(pin));
@@ -176,7 +176,7 @@ namespace hal
     {
         UNUSED(pin);
 
-        auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
+        auto lut_type = static_cast<const GateTypeLut*>(m_type);
 
         std::string category   = lut_type->get_config_data_category();
         std::string key        = lut_type->get_config_data_identifier();
@@ -275,7 +275,7 @@ namespace hal
             auto output_pins = m_type->get_output_pins();
             if (!output_pins.empty() && name == output_pins[0])
             {
-                auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
+                auto lut_type = static_cast<const GateTypeLut*>(m_type);
                 auto tt       = func.get_truth_table(get_input_pins());
 
                 u64 config_value = 0;

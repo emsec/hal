@@ -62,7 +62,7 @@ namespace hal
          * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
          * @returns Pointer to the loaded gate library or nullptr on error.
          */
-        NETLIST_API std::shared_ptr<GateLibrary> load_file(std::filesystem::path path, bool reload_if_existing = false);
+        NETLIST_API GateLibrary* load_file(std::filesystem::path path, bool reload_if_existing = false);
 
         /**
          * Loads all gate libraries which are available.
@@ -77,15 +77,14 @@ namespace hal
          * @param[in] file_name - file name of the gate library.
          * @returns Pointer to the gate library object or nullptr on error.
          */
-        NETLIST_API std::shared_ptr<GateLibrary> get_gate_library(const std::string& file_name);
+        NETLIST_API GateLibrary* get_gate_library(const std::string& file_name);
 
         /**
          * Get all loaded gate libraries.
          *
          * @returns A vector of pointers to the gate library objects.
          */
-        NETLIST_API std::vector<std::shared_ptr<GateLibrary>> get_gate_libraries();
+        NETLIST_API std::vector<GateLibrary*> get_gate_libraries();
 
-        void unload();
     }    // namespace gate_library_manager
 }    // namespace hal

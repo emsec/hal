@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    Netlist::Netlist(std::shared_ptr<GateLibrary> library) : m_gate_library(library)
+    Netlist::Netlist(const GateLibrary* library) : m_gate_library(library)
     {
         m_manager        = new NetlistInternalManager(this);
         m_netlist_id     = 1;
@@ -87,7 +87,7 @@ namespace hal
         }
     }
 
-    std::shared_ptr<GateLibrary> Netlist::get_gate_library() const
+    const GateLibrary* Netlist::get_gate_library() const
     {
         return m_gate_library;
     }
@@ -179,12 +179,12 @@ namespace hal
         return m_next_gate_id;
     }
 
-    std::shared_ptr<Gate> Netlist::create_gate(const u32 id, std::shared_ptr<const GateType> gt, const std::string& name, float x, float y)
+    std::shared_ptr<Gate> Netlist::create_gate(const u32 id, const GateType* gt, const std::string& name, float x, float y)
     {
         return m_manager->create_gate(id, gt, name, x, y);
     }
 
-    std::shared_ptr<Gate> Netlist::create_gate(std::shared_ptr<const GateType> gt, const std::string& name, float x, float y)
+    std::shared_ptr<Gate> Netlist::create_gate(const GateType* gt, const std::string& name, float x, float y)
     {
         return create_gate(get_unique_gate_id(), gt, name, x, y);
     }

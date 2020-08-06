@@ -87,7 +87,7 @@ namespace hal
          *
          * @returns The gate's type.
          */
-        std::shared_ptr<const GateType> get_type() const;
+        const GateType* get_type() const;
 
         /**
          * Checks whether the gate's location in the layout is available.
@@ -309,7 +309,7 @@ namespace hal
         std::vector<Endpoint> get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
 
     private:
-        Gate(std::shared_ptr<Netlist> const g, u32 id, std::shared_ptr<const GateType> gt, const std::string& name, float x, float y);
+        Gate(std::shared_ptr<Netlist> const g, u32 id, const GateType* gt, const std::string& name, float x, float y);
 
         Gate(const Gate&) = delete;               //disable copy-constructor
         Gate& operator=(const Gate&) = delete;    //disable copy-assignment
@@ -326,7 +326,7 @@ namespace hal
         std::string m_name;
 
         /* type of the gate */
-        std::shared_ptr<const GateType> m_type;
+        const GateType* m_type;
 
         /* location */
         float m_x;

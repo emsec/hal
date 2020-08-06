@@ -363,7 +363,7 @@ namespace hal {
             gt_vcc->add_boolean_function("O", BooleanFunction(BooleanFunction::value::ONE));
 
             {
-                std::shared_ptr<GateLibrary> gl(new GateLibrary("imaginary_path", "gl_name"));
+                GateLibrary* gl(new GateLibrary("imaginary_path", "gl_name"));
                 // Check the name
                 EXPECT_EQ(gl->get_name(), "gl_name");
 
@@ -374,13 +374,13 @@ namespace hal {
                 gl->add_gate_type(gt_vcc);
                 // -- get the Gate types
                 EXPECT_EQ(gl->get_gate_types(),
-                          (std::map<std::string, std::shared_ptr<const GateType>>({{"gt_and", gt_and},
+                          (std::map<std::string, const GateType*>({{"gt_and", gt_and},
                                                                                    {"gt_gnd", gt_gnd},
                                                                                    {"gt_vcc", gt_vcc}})));
                 EXPECT_EQ(gl->get_vcc_gate_types(),
-                          (std::map<std::string, std::shared_ptr<const GateType>>({{"gt_vcc", gt_vcc}})));
+                          (std::map<std::string, const GateType*>({{"gt_vcc", gt_vcc}})));
                 EXPECT_EQ(gl->get_gnd_gate_types(),
-                          (std::map<std::string, std::shared_ptr<const GateType>>({{"gt_gnd", gt_gnd}})));
+                          (std::map<std::string, const GateType*>({{"gt_gnd", gt_gnd}})));
 
                 // Check the addition of includes
                 gl->add_include("in.clu.de");

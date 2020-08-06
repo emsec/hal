@@ -16,7 +16,7 @@ namespace hal
 {
     namespace netlist_factory
     {
-        std::shared_ptr<Netlist> create_netlist(const std::shared_ptr<GateLibrary>& gate_library)
+        std::shared_ptr<Netlist> create_netlist(const GateLibrary* gate_library)
         {
             if (gate_library == nullptr)
             {

@@ -13,7 +13,7 @@ namespace hal {
 
     class HDLParserVHDLTest : public ::testing::Test {
     protected:
-        std::shared_ptr<GateLibrary> m_gl;
+        GateLibrary* m_gl;
 
         virtual void SetUp() {
             NO_COUT_BLOCK;

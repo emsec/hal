@@ -49,7 +49,7 @@ namespace hal
          * @param[in] gate_library - The underlying gate library.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> create_netlist(const std::shared_ptr<GateLibrary>& gate_library);
+        NETLIST_API std::shared_ptr<Netlist> create_netlist(const GateLibrary* gate_library);
 
         /**
          * Creates a new netlist for a specific file.

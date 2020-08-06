@@ -4,7 +4,7 @@ namespace hal
 {
     void gate_library_init(py::module& m)
     {
-        py::class_<GateLibrary, std::shared_ptr<GateLibrary>> py_gate_library(m, "GateLibrary", R"(Gate library class containing information about the gates contained in the library.)");
+        py::class_<GateLibrary> py_gate_library(m, "GateLibrary", R"(Gate library class containing information about the gates contained in the library.)");
 
         py_gate_library.def_property_readonly("name", &GateLibrary::get_name, R"(
         The name of the library.
@@ -32,11 +32,11 @@ namespace hal
         :rtype: hal_py.hal_path
 )");
 
-        py_gate_library.def("add_gate_types", &GateLibrary::add_gate_type, py::arg("gt"), R"(
-        Add a gate type to the gate library.
+//         py_gate_library.def("add_gate_types", &GateLibrary::add_gate_type, py::arg("gt"), R"(
+//         Add a gate type to the gate library.
 
-        :param hal_py.Gate_type gt: The gate type object.
-)");
+//         :param hal_py.Gate_type gt: The gate type object.
+// )");
 
         py_gate_library.def_property_readonly("gate_types", &GateLibrary::get_gate_types, R"(
         A dict from gate type names to gate type objects containing all gate types of the gate library.

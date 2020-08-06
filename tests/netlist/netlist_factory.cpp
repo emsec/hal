@@ -53,7 +53,7 @@ namespace hal {
          * if print_error is true and the library can't be loaded
          */
         bool gate_library_exists(std::string lib_name, bool print_error = true) {
-            std::shared_ptr<GateLibrary> gLib;
+            GateLibrary* gLib;
             {
                 NO_COUT_BLOCK;
                 gLib = gate_library_manager::get_gate_library(test_utils::g_lib_name);

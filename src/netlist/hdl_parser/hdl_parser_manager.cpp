@@ -36,12 +36,12 @@ namespace hal
                     return nullptr;
                 }
 
-                log_info("hdl_parser", "selected hdl parser '{}'", parser->get_name());
+                log_info("hdl_parser", "selected parser: {}", parser->get_name());
 
                 return parser;
             }
 
-            std::shared_ptr<Netlist> dispatch_parse(const std::filesystem::path& file_name, HDLParser* parser, const std::vector<std::shared_ptr<GateLibrary>>& gate_libraries)
+            std::shared_ptr<Netlist> dispatch_parse(const std::filesystem::path& file_name, HDLParser* parser, const std::vector<const GateLibrary*>& gate_libraries)
             {
                 auto begin_time = std::chrono::high_resolution_clock::now();
 
@@ -158,7 +158,7 @@ namespace hal
                 return nullptr;
             }
 
-            std::vector<std::shared_ptr<GateLibrary>> gate_libraries;
+            std::vector<const GateLibrary*> gate_libraries;
 
             if (args.is_option_set("--gate-library"))
             {
@@ -183,7 +183,7 @@ namespace hal
             return dispatch_parse(file_name, parser, gate_libraries);
         }
 
-        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const std::shared_ptr<GateLibrary>& gate_library)
+        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library)
         {
             auto parser = get_parser_for_file(file_name);
             if (parser == nullptr)

@@ -31,9 +31,6 @@
 
 namespace hal
 {
-    /* forward declaration*/
-    class Netlist;
-
     /**
      * @ingroup netlist
      */
@@ -57,6 +54,6 @@ namespace hal
          * @param[in] file_content - The string stream containing the gate library definition.
          * @returns The gate library or a nullptr on error.
          */
-        virtual std::shared_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream* file_content) = 0;
+        virtual std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream* file_content) = 0;
     };
 }    // namespace hal

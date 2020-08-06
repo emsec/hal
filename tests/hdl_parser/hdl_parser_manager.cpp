@@ -53,7 +53,7 @@ namespace hal {
 
         // std::string m_invalid_input         = "(#+;$: INVALID INPUT :$;+#(";
         std::string m_invalid_input = "(+;$: INVALID INPUT :$;+(";
-        //std::shared_ptr<GateLibrary> m_gl;
+        //GateLibrary* m_gl;
         std::filesystem::path m_g_lib_path;
 
         virtual void SetUp() {
@@ -182,7 +182,7 @@ namespace hal {
             auto file_with_unknown_extension = test_utils::create_sandbox_file("unknown_ext.seuifsiuef", m_invalid_input);
             auto file_without_extension = test_utils::create_sandbox_file("no_ext", m_invalid_input);
             // Load a gate library
-            std::shared_ptr<GateLibrary> min_gl;
+            GateLibrary* min_gl;
             {
                 NO_COUT_BLOCK;
                 min_gl = gate_library_manager::load_file(m_g_lib_path);

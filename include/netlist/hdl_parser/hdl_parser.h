@@ -63,7 +63,7 @@ namespace hal
          * @param[in] gl - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        virtual std::shared_ptr<Netlist> instantiate(const std::shared_ptr<GateLibrary>& gl) = 0;
+        virtual std::shared_ptr<Netlist> instantiate(const GateLibrary* gl) = 0;
 
 
         /**
@@ -72,7 +72,7 @@ namespace hal
          * @param[in] gl - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        std::shared_ptr<Netlist> parse_and_instantiate(std::stringstream* stream, const std::shared_ptr<GateLibrary>& gl)
+        std::shared_ptr<Netlist> parse_and_instantiate(std::stringstream* stream, const GateLibrary* gl)
         {
             if (parse(stream))
             {

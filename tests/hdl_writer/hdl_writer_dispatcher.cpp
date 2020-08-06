@@ -25,7 +25,7 @@ namespace hal {
                                              "        pin(O) { direction: output; function: \"1\"; } }\n"
                                              "}";
         std::filesystem::path m_g_lib_path;
-        std::shared_ptr<GateLibrary> m_gl;
+        GateLibrary* m_gl;
         virtual void SetUp() {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();

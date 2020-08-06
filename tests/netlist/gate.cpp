@@ -754,7 +754,7 @@ namespace hal {
             BooleanFunction bf_i = BooleanFunction::from_string("I", std::vector<std::string>({"I"}));
             BooleanFunction bf_i_invert = BooleanFunction::from_string("!I", std::vector<std::string>({"I"}));
 
-            std::shared_ptr<GateLibrary> inv_gl(new GateLibrary("imaginary_path", "TEST_LIB"));
+            GateLibrary* inv_gl(new GateLibrary("imaginary_path", "TEST_LIB"));
             std::shared_ptr<GateType> inv_gate_type(new GateType("gate_1_to_1_inv"));
             inv_gate_type->add_input_pin("I");
             inv_gate_type->add_output_pin("O");
@@ -808,7 +808,7 @@ namespace hal {
             }
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
-                std::shared_ptr<GateLibrary> gl(new GateLibrary("imaginary_path", "TEST_LIB"));
+                GateLibrary* gl(new GateLibrary("imaginary_path", "TEST_LIB"));
                 std::shared_ptr<GateType> empty_gate_type(new GateType("EMPTY_GATE"));
                 gl->add_gate_type(empty_gate_type);
 
@@ -818,7 +818,7 @@ namespace hal {
             }
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
-                std::shared_ptr<GateLibrary> gl(new GateLibrary("imaginary_path", "TEST_LIB"));
+                GateLibrary* gl(new GateLibrary("imaginary_path", "TEST_LIB"));
                 std::shared_ptr<GateType> empty_gate_type(new GateType("EMPTY_GATE"));
                 empty_gate_type->add_output_pin("");
                 gl->add_gate_type(empty_gate_type);
@@ -842,7 +842,7 @@ namespace hal {
     TEST_F(GateTest, check_lut_function) {
         TEST_START
             // Create a custom GateLibrary which contains custom lut gates
-            std::shared_ptr<GateLibrary> gl(new GateLibrary("imaginary_path", "TEST_LIB"));
+            GateLibrary* gl(new GateLibrary("imaginary_path", "TEST_LIB"));
             std::shared_ptr<GateTypeLut> lut(new GateTypeLut("LUT_GATE"));
 
             std::vector<std::string> input_pins({"I0", "I1", "I2"});

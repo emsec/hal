@@ -11,7 +11,7 @@ namespace hal
     std::shared_ptr<Netlist> test_utils::create_empty_netlist(const int id)
     {
         NO_COUT_BLOCK;
-        // std::shared_ptr<GateLibrary> gl = gate_library_manager::get_gate_library(g_lib_name);
+        // GateLibrary* gl = gate_library_manager::get_gate_library(g_lib_name);
         std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(get_testing_gate_library());
 
         if (id >= 0)
@@ -101,9 +101,9 @@ namespace hal
         return tt;
     }
 
-    std::shared_ptr<const GateType> test_utils::get_gate_type_by_name(std::string name, std::shared_ptr<GateLibrary> gate_lib)
+    const GateType* test_utils::get_gate_type_by_name(std::string name, GateLibrary* gate_lib)
     {
-        std::shared_ptr<GateLibrary> gl;
+        GateLibrary* gl;
         if (gate_lib == nullptr)
         {
             gl = get_testing_gate_library();
@@ -214,10 +214,10 @@ namespace hal
         return f_path;
     }
 
-    std::shared_ptr<GateLibrary> test_utils::get_testing_gate_library()
+    GateLibrary* test_utils::get_testing_gate_library()
     {
-        //std::shared_ptr<GateLibrary> gl = std::make_shared<GateLibrary>("Testing Library");
-        static std::shared_ptr<GateLibrary> gl = nullptr;
+        //GateLibrary* gl = std::make_shared<GateLibrary>("Testing Library");
+        static GateLibrary* gl = nullptr;
         if (gl != nullptr)
         {
             return gl;
@@ -318,7 +318,7 @@ namespace hal
     std::shared_ptr<Netlist> test_utils::create_example_netlist(const int id)
     {
         NO_COUT_BLOCK;
-        std::shared_ptr<GateLibrary> gl = get_testing_gate_library();
+        GateLibrary* gl = get_testing_gate_library();
         std::shared_ptr<Netlist> nl     = create_empty_netlist(id);
         if (id >= 0)
         {
@@ -364,7 +364,7 @@ namespace hal
     std::shared_ptr<Netlist> test_utils::create_example_netlist_2(const int id)
     {
         NO_COUT_BLOCK;
-        std::shared_ptr<GateLibrary> gl = get_testing_gate_library();
+        GateLibrary* gl = get_testing_gate_library();
         std::shared_ptr<Netlist> nl     = create_empty_netlist(id);
 
         // Create the gates
@@ -392,7 +392,7 @@ namespace hal
     std::shared_ptr<Netlist> test_utils::create_example_netlist_negative(const int id)
     {
         NO_COUT_BLOCK;
-        std::shared_ptr<GateLibrary> gl = get_testing_gate_library();
+        GateLibrary* gl = get_testing_gate_library();
         std::shared_ptr<Netlist> nl     = create_empty_netlist(id);
 
         // Create the Gate
@@ -412,7 +412,7 @@ namespace hal
     std::shared_ptr<Netlist> test_utils::create_example_parse_netlist(int id)
     {
         NO_COUT_BLOCK;
-        std::shared_ptr<GateLibrary> gl = get_testing_gate_library();
+        GateLibrary* gl = get_testing_gate_library();
         std::shared_ptr<Netlist> nl     = create_empty_netlist(id);
 
         // Create the gates
@@ -461,7 +461,7 @@ namespace hal
 
     std::shared_ptr<Gate> test_utils::create_test_gate(std::shared_ptr<Netlist> nl, const u32 id)
     {
-        std::shared_ptr<GateLibrary> gl = get_testing_gate_library();
+        GateLibrary* gl = get_testing_gate_library();
         std::shared_ptr<Gate> res_gate  = nl->create_gate(id, gl->get_gate_types().at("gate_3_to_1"), "gate_" + std::to_string(id));
 
         return res_gate;

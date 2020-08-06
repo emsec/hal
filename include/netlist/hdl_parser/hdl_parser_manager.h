@@ -80,6 +80,6 @@ namespace hal
          * @param[in] gate_library - The gate library used in the file.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        NETLIST_API std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const std::shared_ptr<GateLibrary>& gate_library);
+        NETLIST_API std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library);
     }    // namespace hdl_parser_manager
 }    // namespace hal

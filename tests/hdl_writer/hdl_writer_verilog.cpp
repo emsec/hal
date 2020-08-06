@@ -20,7 +20,7 @@ namespace hal {
         const std::string m_pseudo_simprim_lib_name = "PSEUDO_SIMPRIM_GATE_LIBRARY";
         const std::string m_gate_suffix = "_inst";
         std::filesystem::path m_pseudo_simprim_lib_path;
-        std::shared_ptr<GateLibrary> m_gl;
+        GateLibrary* m_gl;
 
         virtual void SetUp() {
             NO_COUT_BLOCK;
@@ -518,7 +518,7 @@ namespace hal {
             {
                 // Testing the handling of special Gate names
                 std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
-                std::shared_ptr<GateLibrary> gl = m_gl;
+                GateLibrary* gl = m_gl;
 
                 // Create various gates with special Gate name characters
                 std::shared_ptr<Gate>
@@ -764,7 +764,7 @@ namespace hal {
                  * ISSUE: reversed order of input nets (parser or writer issue?)
                  * create_temp_gate_lib();
                 // Testing the usage of a pin vector using the temp Gate library
-                std::shared_ptr<GateLibrary> gl = gate_library_manager::get_gate_library(temp_lib_name);
+                GateLibrary* gl = gate_library_manager::get_gate_library(temp_lib_name);
                 std::shared_ptr<Netlist> nl(new Netlist(gl));
 
                 std::shared_ptr<Gate> gnd_gate = nl->create_gate(MIN_GATE_ID + 0, "GND", "gnd_gate");
@@ -840,7 +840,7 @@ namespace hal {
                 // NOTE: GLOBAL_GND / GLOBAL_VCC gates are removed. Why?
                 /*
                             // Testing the usage of nets connected to a X_ZERO Gate
-                            std::shared_ptr<GateLibrary> gl = gate_library_manager::get_gate_library(m_pseudo_simprim_lib_name);
+                            GateLibrary* gl = gate_library_manager::get_gate_library(m_pseudo_simprim_lib_name);
                             std::shared_ptr<Netlist> nl(new Netlist(gl));
 
                             std::shared_ptr<Gate> x_zero_gate_0 = nl->create_gate("X_ZERO", "x_zero_gate_0");

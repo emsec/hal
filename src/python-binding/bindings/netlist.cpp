@@ -7,7 +7,7 @@ namespace hal
         py::class_<Netlist, std::shared_ptr<Netlist>> py_netlist(
             m, "Netlist", R"(Netlist class containing information about the netlist including its gates, modules, and nets, as well as the underlying gate library.)");
 
-        py_netlist.def(py::init<std::shared_ptr<GateLibrary>>(), R"(
+        py_netlist.def(py::init<GateLibrary*>(), R"(
         Construct a new netlist for a specified gate library.
 
         :param hal_py.GateLibrary library: The gate library.
@@ -89,18 +89,18 @@ namespace hal
         :param str divice_name: Name of hardware device.
 )");
 
-        py_netlist.def_property_readonly("GateLibrary", &Netlist::get_gate_library, R"(
-        Get the gate library associated with the netlist.
+//         py_netlist.def_property_readonly("GateLibrary", &Netlist::get_gate_library, R"(
+//         Get the gate library associated with the netlist.
 
-        :type: hal_py.GateLibrary
-)");
+//         :type: hal_py.GateLibrary
+// )");
 
-        py_netlist.def("get_gate_library", &Netlist::get_gate_library, R"(
-        Get the gate library associated with the netlist.
+//         py_netlist.def("get_gate_library", &Netlist::get_gate_library, R"(
+//         Get the gate library associated with the netlist.
 
-        :returns: The gate library.
-        :rtype: hal_py.GateLibrary
-)");
+//         :returns: The gate library.
+//         :rtype: hal_py.GateLibrary
+// )");
 
         py_netlist.def("get_unique_module_id", &Netlist::get_unique_module_id, R"(
         Gets an unoccupied module id. The value of 0 is reserved and represents an invalid id.
@@ -208,7 +208,7 @@ Checks whether a module is registered in the netlist.
 )");
 
         py_netlist.def("create_gate",
-                       py::overload_cast<u32, std::shared_ptr<const GateType>, const std::string&, float, float>(&Netlist::create_gate),
+                       py::overload_cast<u32, const GateType*, const std::string&, float, float>(&Netlist::create_gate),
                        py::arg("id"),
                        py::arg("gt"),
                        py::arg("name"),
@@ -227,7 +227,7 @@ Checks whether a module is registered in the netlist.
 )");
 
         py_netlist.def("create_gate",
-                       py::overload_cast<std::shared_ptr<const GateType>, const std::string&, float, float>(&Netlist::create_gate),
+                       py::overload_cast<const GateType*, const std::string&, float, float>(&Netlist::create_gate),
                        py::arg("gt"),
                        py::arg("name"),
                        py::arg("x") = -1,

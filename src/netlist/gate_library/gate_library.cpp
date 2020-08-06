@@ -16,9 +16,9 @@ namespace hal
         return m_path;
     }
 
-    void GateLibrary::add_gate_type(std::shared_ptr<const GateType> gt)
+    void GateLibrary::add_gate_type(std::unique_ptr<const GateType> gt)
     {
-        m_gate_type_map.emplace(gt->get_name(), gt);
+        m_gate_type_map.emplace(gt->get_name(), gt.get());
 
         auto out_pins = gt->get_output_pins();
 
@@ -32,27 +32,29 @@ namespace hal
 
                 if (bf.is_constant_one())
                 {
-                    m_vcc_gate_types.emplace(gt->get_name(), gt);
+                    m_vcc_gate_types.emplace(gt->get_name(), gt.get());
                 }
                 else if (bf.is_constant_zero())
                 {
-                    m_gnd_gate_types.emplace(gt->get_name(), gt);
+                    m_gnd_gate_types.emplace(gt->get_name(), gt.get());
                 }
             }
         }
+
+        m_gate_types.push_back(std::move(gt));
     }
 
-    const std::map<std::string, std::shared_ptr<const GateType>>& GateLibrary::get_gate_types()
+    std::map<std::string, const GateType*> GateLibrary::get_gate_types() const
     {
         return m_gate_type_map;
     }
 
-    const std::map<std::string, std::shared_ptr<const GateType>>& GateLibrary::get_vcc_gate_types()
+    std::map<std::string, const GateType*> GateLibrary::get_vcc_gate_types() const
     {
         return m_vcc_gate_types;
     }
 
-    const std::map<std::string, std::shared_ptr<const GateType>>& GateLibrary::get_gnd_gate_types()
+    std::map<std::string, const GateType*> GateLibrary::get_gnd_gate_types() const
     {
         return m_gnd_gate_types;
     }

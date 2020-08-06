@@ -18,7 +18,8 @@ namespace hal
         {
             std::unordered_map<GateLibraryParser*, std::vector<std::string>> m_parser_to_extensions;
             std::unordered_map<std::string, GateLibraryParser*> m_extension_to_parser;
-            std::map<std::filesystem::path, std::shared_ptr<GateLibrary>> m_gate_libraries;
+
+            std::map<std::filesystem::path, std::unique_ptr<GateLibrary>> m_gate_libraries;
 
             GateLibraryParser* get_parser_for_file(const std::filesystem::path& file_name)
             {
@@ -39,12 +40,12 @@ namespace hal
                     return nullptr;
                 }
 
-                log_info("gate_library_manager", "selected gate library parser '{}'", parser->get_name());
+                log_info("gate_library_manager", "selected parser: {}", parser->get_name());
 
                 return parser;
             }
 
-            std::shared_ptr<GateLibrary> load_liberty(const std::filesystem::path& path)
+            std::unique_ptr<GateLibrary> load_liberty(const std::filesystem::path& path)
             {
                 auto parser = get_parser_for_file(path);
 
@@ -76,7 +77,7 @@ namespace hal
                 return lib;
             }
 
-            bool prepare_library(std::shared_ptr<GateLibrary>& lib)
+            bool prepare_library(const std::unique_ptr<GateLibrary>& lib)
             {
                 auto types = lib->get_gate_types();
 
@@ -92,10 +93,10 @@ namespace hal
                         log_error("gate_library_manager", "no GND gate found in parsed library but gate types 'GND' and '{}' already exist.", name);
                         return false;
                     }
-                    auto gt = std::make_shared<GateType>(name);
+                    auto gt = std::make_unique<GateType>(name);
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ZERO);
-                    lib->add_gate_type(gt);
+                    lib->add_gate_type(std::move(gt));
                     log_info("gate_library_manager", "gate library did not contain a GND gate, auto-generated type '{}'", name);
                 }
 
@@ -111,10 +112,10 @@ namespace hal
                         log_error("gate_library_manager", "no VCC gate found in parsed library but gate types 'VCC' and '{}' already exist.", name);
                         return false;
                     }
-                    auto gt = std::make_shared<GateType>(name);
+                    auto gt = std::make_unique<GateType>(name);
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ONE);
-                    lib->add_gate_type(gt);
+                    lib->add_gate_type(std::move(gt));
                     log_info("gate_library_manager", "gate library did not contain a VCC gate, auto-generated type '{}'", name);
                 }
 
@@ -159,7 +160,7 @@ namespace hal
             }
         }
 
-        std::shared_ptr<GateLibrary> load_file(std::filesystem::path path, bool reload_if_existing)
+        GateLibrary* load_file(std::filesystem::path path, bool reload_if_existing)
         {
             if (!std::filesystem::exists(path))
             {
@@ -178,11 +179,11 @@ namespace hal
                 if (it != m_gate_libraries.end())
                 {
                     log_info("gate_library_manager", "the gate library file '{}' is already loaded.", path.string());
-                    return it->second;
+                    return it->second.get();
                 }
             }
 
-            std::shared_ptr<GateLibrary> lib;
+            std::unique_ptr<GateLibrary> lib;
             auto begin_time = std::chrono::high_resolution_clock::now();
             if (core_utils::ends_with(path.string(), std::string(".lib")))
             {
@@ -208,9 +209,9 @@ namespace hal
 
             log_info("gate_library_manager", "loaded gate library '{}' in {:2.2f} seconds.", lib->get_name(), elapsed);
 
-            m_gate_libraries[path.string()] = lib;
-
-            return lib;
+            auto res = lib.get();
+            m_gate_libraries[path.string()] = std::move(lib);
+            return res;
         }
 
         void load_all(bool reload_if_existing)
@@ -233,7 +234,7 @@ namespace hal
             }
         }
 
-        std::shared_ptr<GateLibrary> get_gate_library(const std::string& file_name)
+        GateLibrary* get_gate_library(const std::string& file_name)
         {
             std::filesystem::path absolute_path;
 
@@ -259,27 +260,22 @@ namespace hal
             // absolute path to file is known, check if it is already loaded
             if (auto it = m_gate_libraries.find(absolute_path.string()); it != m_gate_libraries.end())
             {
-                return it->second;
+                return it->second.get();
             }
 
             // not already loaded -> load
             return load_file(absolute_path);
         }
 
-        std::vector<std::shared_ptr<GateLibrary>> get_gate_libraries()
+        std::vector<GateLibrary*> get_gate_libraries()
         {
-            std::vector<std::shared_ptr<GateLibrary>> res;
+            std::vector<GateLibrary*> res;
             res.reserve(m_gate_libraries.size());
             for (const auto& it : m_gate_libraries)
             {
-                res.push_back(it.second);
+                res.push_back(it.second.get());
             }
             return res;
-        }
-
-        void unload()
-        {
-            m_gate_libraries.clear();
         }
     }    // namespace gate_library_manager
 }    // namespace hal
