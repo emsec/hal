@@ -7,7 +7,6 @@
 
 namespace hal
 {
-
     std::string LibertyParser::get_name() const
     {
         return "Default Liberty Parser";
@@ -16,7 +15,7 @@ namespace hal
     std::shared_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path, std::stringstream* file_content)
     {
         m_path = file_path;
-        m_fs = file_content;
+        m_fs   = file_content;
         // tokenize file
         if (!tokenize())
         {
@@ -44,7 +43,16 @@ namespace hal
             return nullptr;
         }
 
-        return m_gate_lib;
+        auto lib = m_gate_lib;
+        cleanup();
+        return lib;
+    }
+
+    void LibertyParser::cleanup()
+    {
+        m_gate_lib = nullptr;
+        m_bus_types.clear();
+        m_cell_names.clear();
     }
 
     bool LibertyParser::tokenize()
@@ -329,8 +337,7 @@ namespace hal
         return cell;
     }
 
-    std::optional<LibertyParser::pin_group>
-        LibertyParser::parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
+    std::optional<LibertyParser::pin_group> LibertyParser::parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
     {
         pin_group pin;
 
@@ -1117,8 +1124,7 @@ namespace hal
         return res;
     }
 
-    std::map<std::string, std::string>
-        LibertyParser::expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function)
+    std::map<std::string, std::string> LibertyParser::expand_bus_function(const std::map<std::string, bus_group>& buses, const std::vector<std::string>& pin_names, const std::string& function)
     {
         auto tokenized_funtion = tokenize_function(function);
         std::map<std::string, std::string> res;

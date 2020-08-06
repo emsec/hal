@@ -146,6 +146,7 @@ namespace hal
                         log_info("hdl_parser", "unregistered hdl parser '{}' which was registered for file type '{}'", parser->get_name(), ext);
                     }
                 }
+                m_parser_to_extensions.erase(it);
             }
         }
 

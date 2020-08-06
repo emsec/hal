@@ -48,7 +48,6 @@ namespace hal
          * @param[in] name - Name of the gate library.
          */
         GateLibrary(const std::filesystem::path& path, const std::string& name);
-
         ~GateLibrary() = default;
 
         /**

@@ -161,6 +161,8 @@ namespace hal
         bool tokenize();
         bool parse_tokens();
 
+        void cleanup();
+
         std::optional<cell_group> parse_cell(TokenStream<std::string>& library_stream);
         std::optional<type_group> parse_type(TokenStream<std::string>& str);
         std::optional<pin_group> parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction = pin_direction::UNKNOWN, const std::string& external_pin_name = "");

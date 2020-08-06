@@ -85,5 +85,7 @@ namespace hal
          * @returns A vector of pointers to the gate library objects.
          */
         NETLIST_API std::vector<std::shared_ptr<GateLibrary>> get_gate_libraries();
+
+        void unload();
     }    // namespace gate_library_manager
 }    // namespace hal

@@ -16,9 +16,9 @@ namespace hal
     {
         namespace
         {
-            std::map<std::filesystem::path, std::shared_ptr<GateLibrary>> m_gate_libraries;
             std::unordered_map<GateLibraryParser*, std::vector<std::string>> m_parser_to_extensions;
             std::unordered_map<std::string, GateLibraryParser*> m_extension_to_parser;
+            std::map<std::filesystem::path, std::shared_ptr<GateLibrary>> m_gate_libraries;
 
             GateLibraryParser* get_parser_for_file(const std::filesystem::path& file_name)
             {
@@ -155,6 +155,7 @@ namespace hal
                         log_info("gate_library_manager", "unregistered gate library parser '{}' which was registered for file type '{}'", parser->get_name(), ext);
                     }
                 }
+                m_parser_to_extensions.erase(it);
             }
         }
 
@@ -274,6 +275,11 @@ namespace hal
                 res.push_back(it.second);
             }
             return res;
+        }
+
+        void unload()
+        {
+            m_gate_libraries.clear();
         }
     }    // namespace gate_library_manager
 }    // namespace hal
