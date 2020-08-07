@@ -36,4 +36,4 @@ namespace hal
 
         bool exec(ProgramArguments& args) override;
     };
-}
+}    // namespace hal

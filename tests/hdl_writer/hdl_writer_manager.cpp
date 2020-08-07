@@ -1,4 +1,4 @@
-#include "netlist/hdl_writer/hdl_writer_dispatcher.h"
+#include "netlist/hdl_writer/hdl_writer_manager.h"
 
 #include "netlist/gate.h"
 #include "netlist/hdl_parser/hdl_parser_manager.h"
@@ -36,20 +36,21 @@ namespace hal {
         }
 
         virtual void TearDown() {
+            NO_COUT_BLOCK;
             test_utils::remove_sandbox_directory();
             // std::filesystem::remove_all(m_tmp_dir);
             PluginManager::unload_all_plugins();
         }
 
         // Creates the following netlist:     global_in ---= INV =--- global_out
-        std::shared_ptr<Netlist> create_simple_netlist() {
-            std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(m_gl);
+        std::unique_ptr<Netlist> create_simple_netlist() {
+            auto nl = std::make_unique<Netlist>(m_gl);
             nl->set_design_name("top_module");
             nl->get_top_module()->set_name("top_module");
             nl->get_top_module()->set_type("top_module_type");
-            std::shared_ptr<Gate> inv_gate = nl->create_gate(test_utils::MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "inv_gate_inst");
-            std::shared_ptr<Net> g_in_net = nl->create_net("global_in");
-            std::shared_ptr<Net> g_out_net = nl->create_net("global_out");
+            Gate* inv_gate = nl->create_gate(test_utils::MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "inv_gate_inst");
+            Net* g_in_net = nl->create_net("global_in");
+            Net* g_out_net = nl->create_net("global_out");
             nl->mark_global_input_net(g_in_net);
             nl->mark_global_output_net(g_out_net);
             g_in_net->add_destination(inv_gate, "I");
@@ -83,23 +84,25 @@ namespace hal {
                 std::string out_path_vhdl = test_utils::create_sandbox_path("writer_out_vhdl.vhd").string();
                 std::string out_path_verilog = test_utils::create_sandbox_path("writer_out_verilog.v").string();
                 ProgramArguments p_args_vhdl;
-                p_args_vhdl.set_option("--write-vhdl", std::vector<std::string>({out_path_vhdl}));
-                p_args_vhdl.set_option("--write-verilog", std::vector<std::string>({out_path_verilog}));
+                ProgramArguments p_args_verilog;
+                p_args_vhdl.set_option("--write-hdl", std::vector<std::string>({out_path_vhdl}));
+                p_args_verilog.set_option("--write-hdl", std::vector<std::string>({out_path_verilog}));
 
-                std::shared_ptr<Netlist> simple_nl = create_simple_netlist();
+                auto simple_nl = create_simple_netlist();
                 // Write the two files
-                bool suc = hdl_writer_manager::write(simple_nl, p_args_vhdl);
+                bool suc = hdl_writer_manager::write(simple_nl.get(), p_args_vhdl);
+                EXPECT_TRUE(suc);
+                suc = hdl_writer_manager::write(simple_nl.get(), p_args_verilog);
                 EXPECT_TRUE(suc);
 
                 // Verify the correctness of the output by parsing it
-                std::shared_ptr<Netlist> parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
-                std::shared_ptr<Netlist>
-                    parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
+                auto parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
+                auto parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
 
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
                 parsed_nl_verilog->get_top_module()->set_type("top_module_type");
-                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_vhdl, simple_nl, true));
-                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_verilog, simple_nl, true));
+                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_vhdl.get(), simple_nl.get(), true));
+                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_verilog.get(), simple_nl.get(), true));
             }
         TEST_END
     }
@@ -116,31 +119,30 @@ namespace hal {
                 std::filesystem::path out_path_vhdl = test_utils::create_sandbox_path("writer_out_vhdl.vhd");
                 std::filesystem::path out_path_verilog = test_utils::create_sandbox_path("writer_out_verilog.v");
 
-                std::shared_ptr<Netlist> simple_nl = create_simple_netlist();
+                auto simple_nl = create_simple_netlist();
                 // Write the two files
-                bool suc_vhdl = hdl_writer_manager::write(simple_nl, "vhdl", out_path_vhdl);
-                bool suc_verilog = hdl_writer_manager::write(simple_nl, "verilog", out_path_verilog);
+                bool suc_vhdl = hdl_writer_manager::write(simple_nl.get(), out_path_vhdl);
+                bool suc_verilog = hdl_writer_manager::write(simple_nl.get(), out_path_verilog);
                 EXPECT_TRUE(suc_vhdl);
                 EXPECT_TRUE(suc_verilog);
 
                 // Verify the correctness of the output by parsing it
-                std::shared_ptr<Netlist> parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
-                std::shared_ptr<Netlist>
-                    parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
+                auto parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
+                auto parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
 
                 parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
                 parsed_nl_verilog->get_top_module()->set_type("top_module_type");
-                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_vhdl, simple_nl, true));
-                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_verilog, simple_nl, true));
+                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_vhdl.get(), simple_nl.get(), true));
+                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_verilog.get(), simple_nl.get(), true));
             }
             // NEAGTIVE
             {
                 // The format is unknown
-                std::filesystem::path out_path = test_utils::create_sandbox_path("unknown_format.txt");
+                std::filesystem::path out_path = test_utils::create_sandbox_path("unknown_format.sdfwefsdfs");
 
-                std::shared_ptr<Netlist> simple_nl = create_simple_netlist();
+                auto simple_nl = create_simple_netlist();
                 // Write the two files
-                EXPECT_FALSE(hdl_writer_manager::write(simple_nl, "<unknown_format>", out_path));
+                EXPECT_FALSE(hdl_writer_manager::write(simple_nl.get(), out_path));
             }
         TEST_END
     }

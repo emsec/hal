@@ -1,6 +1,6 @@
 #include "vhdl_editor/vhdl_editor.h"
 
-#include "netlist/hdl_writer/hdl_writer_vhdl.h"
+#include "netlist/hdl_writer/hdl_writer_manager.h"
 
 #include "code_editor/syntax_highlighter/vhdl_syntax_highlighter.h"
 #include "gui_globals.h"
@@ -22,8 +22,7 @@ namespace hal
         new VhdlSyntaxHighlighter(m_code_editor->minimap()->document());
 
         std::stringstream stream;
-        HDLWriterVHDL writer(stream);
-        writer.write(g_netlist);
+        hdl_writer_manager::write(g_netlist, ".vhd", stream);
         QString string = QString::fromStdString(stream.str());
         m_code_editor->setPlainText(string);
 

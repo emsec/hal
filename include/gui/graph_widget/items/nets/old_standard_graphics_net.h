@@ -62,8 +62,8 @@ namespace hal
         static void load_settings();
         static void update_alpha();
 
-        //StandardGraphicsNet(const std::shared_ptr<const Net> n, const lines& l);
-        OldStandardGraphicsNet(const std::shared_ptr<const Net> n, lines& l, bool complete = true);
+        //StandardGraphicsNet(Net* n, const lines& l);
+        OldStandardGraphicsNet(Net* n, lines& l, bool complete = true);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 

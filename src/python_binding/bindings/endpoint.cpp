@@ -1,4 +1,4 @@
-#include "bindings.h"
+#include "python_binding/bindings.h"
 
 namespace hal
 {
@@ -6,7 +6,7 @@ namespace hal
     {
         py::class_<Endpoint, std::shared_ptr<Endpoint>> py_endpoint(m, "Endpoint");
 
-        py_endpoint.def(py::init<const std::shared_ptr<Gate>&, const std::string&, bool>(), py::arg("gate"), py::arg("pin"), py::arg("is_a_destination"), R"(
+        py_endpoint.def(py::init<Gate*, const std::string&, bool>(), py::arg("gate"), py::arg("pin"), py::arg("is_a_destination"), R"(
         Construct a new endpoint.
 )");
 

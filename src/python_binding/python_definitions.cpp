@@ -1,4 +1,4 @@
-#include "bindings.h"
+#include "python_binding/bindings.h"
 
 namespace hal
 {
@@ -12,8 +12,7 @@ namespace hal
         py::module m("hal_py", "hal python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
-        m.def(
-            "log_info", [](std::string& message) { log_info("PythonContext", message); }, R"( some documentation info)");
+        m.def( "log_info", [](std::string& message) { log_info("PythonContext", message); }, R"( some documentation info)");
 
         path_init(m);
 

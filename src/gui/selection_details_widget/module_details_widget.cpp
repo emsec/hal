@@ -337,7 +337,7 @@ namespace hal
             hide_empty_sections();
     }
 
-    void ModuleDetailsWidget::handle_netlist_marked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_marked_global_input(Netlist* netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -361,7 +361,7 @@ namespace hal
         }
     }
 
-    void ModuleDetailsWidget::handle_netlist_marked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_marked_global_output(Netlist* netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -385,7 +385,7 @@ namespace hal
         }
     }
 
-    void ModuleDetailsWidget::handle_netlist_marked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_marked_global_inout(Netlist* netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -409,7 +409,7 @@ namespace hal
         }
     }
 
-    void ModuleDetailsWidget::handle_netlist_unmarked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_unmarked_global_input(Netlist* netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -433,7 +433,7 @@ namespace hal
         }
     }
 
-    void ModuleDetailsWidget::handle_netlist_unmarked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_unmarked_global_output(Netlist* netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -457,7 +457,7 @@ namespace hal
         }
     }
 
-    void ModuleDetailsWidget::handle_netlist_unmarked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data)
+    void ModuleDetailsWidget::handle_netlist_unmarked_global_inout(Netlist* netlist, u32 associated_data)
     {
         Q_UNUSED(netlist)
 
@@ -481,13 +481,13 @@ namespace hal
         }
     }
 
-    void ModuleDetailsWidget::handle_module_name_changed(std::shared_ptr<Module> module)
+    void ModuleDetailsWidget::handle_module_name_changed(Module* module)
     {
         if (m_current_id == module->get_id())
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_submodule_added(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_submodule_added(Module* module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -500,7 +500,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_submodule_removed(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_submodule_removed(Module* module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -513,7 +513,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_module_gate_assigned(Module* module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -526,7 +526,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_module_gate_removed(Module* module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -539,7 +539,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_module_input_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_module_input_port_name_changed(Module* module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -547,7 +547,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_module_output_port_name_changed(std::shared_ptr<Module> module, u32 associated_data)
+    void ModuleDetailsWidget::handle_module_output_port_name_changed(Module* module, u32 associated_data)
     {
         Q_UNUSED(associated_data);
 
@@ -555,13 +555,13 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_module_type_changed(std::shared_ptr<Module> module)
+    void ModuleDetailsWidget::handle_module_type_changed(Module* module)
     {
         if (m_current_id == module->get_id())
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_net_name_changed(std::shared_ptr<Net> net)
+    void ModuleDetailsWidget::handle_net_name_changed(Net* net)
     {
         if (m_current_id == 0)
             return;
@@ -574,7 +574,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id)
+    void ModuleDetailsWidget::handle_net_source_added(Net* net, const u32 src_gate_id)
     {
         Q_UNUSED(net)
 
@@ -588,7 +588,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id)
+    void ModuleDetailsWidget::handle_net_source_removed(Net* net, const u32 src_gate_id)
     {
         Q_UNUSED(net)
 
@@ -602,7 +602,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id)
+    void ModuleDetailsWidget::handle_net_destination_added(Net* net, const u32 dst_gate_id)
     {
         Q_UNUSED(net)
 
@@ -616,7 +616,7 @@ namespace hal
             update(m_current_id);
     }
 
-    void ModuleDetailsWidget::handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id)
+    void ModuleDetailsWidget::handle_net_destination_removed(Net* net, const u32 dst_gate_id)
     {
         Q_UNUSED(net)
 
@@ -863,7 +863,7 @@ namespace hal
             return;
 
         int net_id                       = item->data(Qt::UserRole).toInt();
-        std::shared_ptr<Net> clicked_net = g_netlist->get_net_by_id(net_id);
+        Net* clicked_net = g_netlist->get_net_by_id(net_id);
 
         if (!clicked_net)
             return;

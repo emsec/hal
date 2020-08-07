@@ -199,15 +199,15 @@ namespace hal
         // This is broken because it can attempt to insert a child before its parent
         // which will cause an assertion failure and then crash
 
-        // std::set<std::shared_ptr<Module>> s = g_netlist->get_modules();
+        // std::set<Module*> s = g_netlist->get_modules();
         // s.erase(g_netlist->get_top_module());
-        // for (std::shared_ptr<Module> m : s)
+        // for (Module* m : s)
         //     add_module(m->get_id(), m->get_parent_module()->get_id());
 
         // This works
 
         // recursively insert modules
-        std::shared_ptr<Module> m = g_netlist->get_top_module();
+        Module* m = g_netlist->get_top_module();
         add_recursively(m->get_submodules());
     }
 
@@ -246,7 +246,7 @@ namespace hal
         endInsertRows();
     }
 
-    void ModuleModel::add_recursively(std::set<std::shared_ptr<Module>> modules)
+    void ModuleModel::add_recursively(std::set<Module*> modules)
     {
         for (auto &m : modules)
         {

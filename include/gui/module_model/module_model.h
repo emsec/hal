@@ -65,7 +65,7 @@ namespace hal
         void clear();
 
         void add_module(const u32 id, const u32 parent_module);
-        void add_recursively(std::set<std::shared_ptr<Module>> modules);
+        void add_recursively(std::set<Module*> modules);
         void remove_module(const u32 id);
         void update_module(const u32 id);
 

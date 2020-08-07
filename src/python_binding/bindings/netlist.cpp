@@ -1,10 +1,10 @@
-#include "bindings.h"
+#include "python_binding/bindings.h"
 
 namespace hal
 {
     void netlist_init(py::module& m)
     {
-        py::class_<Netlist, std::shared_ptr<Netlist>> py_netlist(
+        py::class_<Netlist, RawPtrWrapper<Netlist>> py_netlist(
             m, "Netlist", R"(Netlist class containing information about the netlist including its gates, modules, and nets, as well as the underlying gate library.)");
 
         py_netlist.def(py::init<GateLibrary*>(), R"(
@@ -89,18 +89,18 @@ namespace hal
         :param str divice_name: Name of hardware device.
 )");
 
-//         py_netlist.def_property_readonly("GateLibrary", &Netlist::get_gate_library, R"(
-//         Get the gate library associated with the netlist.
+        py_netlist.def_property_readonly("GateLibrary", [](Netlist* nl){return RawPtrWrapper(nl->get_gate_library());}, R"(
+        Get the gate library associated with the netlist.
 
-//         :type: hal_py.GateLibrary
-// )");
+        :type: hal_py.GateLibrary
+)");
 
-//         py_netlist.def("get_gate_library", &Netlist::get_gate_library, R"(
-//         Get the gate library associated with the netlist.
+        py_netlist.def("get_gate_library", [](Netlist* nl){return RawPtrWrapper(nl->get_gate_library());}, R"(
+        Get the gate library associated with the netlist.
 
-//         :returns: The gate library.
-//         :rtype: hal_py.GateLibrary
-// )");
+        :returns: The gate library.
+        :rtype: hal_py.GateLibrary
+)");
 
         py_netlist.def("get_unique_module_id", &Netlist::get_unique_module_id, R"(
         Gets an unoccupied module id. The value of 0 is reserved and represents an invalid id.
@@ -110,11 +110,11 @@ namespace hal
 )");
 
         py_netlist.def("create_module",
-                       py::overload_cast<const u32, const std::string&, std::shared_ptr<Module>, const std::vector<std::shared_ptr<Gate>>&>(&Netlist::create_module),
+                       py::overload_cast<const u32, const std::string&, Module*, const std::vector<Gate*>&>(&Netlist::create_module),
                        py::arg("id"),
                        py::arg("name"),
                        py::arg("parent"),
-                       py::arg("gates") = std::vector<std::shared_ptr<Gate>>(),
+                       py::arg("gates") = std::vector<Gate*>(),
                        R"(
         Creates and adds a new module to the netlist. It is identifiable via its unique id.
 
@@ -127,10 +127,10 @@ namespace hal
 )");
 
         py_netlist.def("create_module",
-                       py::overload_cast<const std::string&, std::shared_ptr<Module>, const std::vector<std::shared_ptr<Gate>>&>(&Netlist::create_module),
+                       py::overload_cast<const std::string&, Module*, const std::vector<Gate*>&>(&Netlist::create_module),
                        py::arg("name"),
                        py::arg("parent"),
-                       py::arg("gates") = std::vector<std::shared_ptr<Gate>>(),
+                       py::arg("gates") = std::vector<Gate*>(),
                        R"(
         Creates and adds a new module to the netlist. It is identifiable via its unique ID which is automatically set to the next free ID.
 
@@ -271,7 +271,7 @@ Checks whether a module is registered in the netlist.
 )");
 
         py_netlist.def_property_readonly(
-            "gates", [](const std::shared_ptr<Netlist>& n) { return n->get_gates(); }, R"(
+            "gates", [](Netlist* n) { return n->get_gates(); }, R"(
         A set containing all gates of the netlist.
 
         :type: set[hal_py.Gate]
@@ -413,7 +413,7 @@ Unmark a global vcc gate.
 )");
 
         py_netlist.def_property_readonly(
-            "nets", [](const std::shared_ptr<Netlist>& n) { return n->get_nets(); }, R"(
+            "nets", [](Netlist* n) { return n->get_nets(); }, R"(
         A set containing all nets of the netlist.
 
         :type: set[hal_py.Net]

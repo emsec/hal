@@ -11,7 +11,7 @@
 #include "netlist/gate_library/gate_type/gate_type.h"
 #include "netlist/gate_library/gate_type/gate_type_lut.h"
 #include "netlist/gate_library/gate_type/gate_type_sequential.h"
-#include "netlist/hdl_writer/hdl_writer_dispatcher.h"
+#include "netlist/hdl_writer/hdl_writer_manager.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
@@ -33,6 +33,21 @@
 #include "pybind11/stl_bind.h"
 
 #pragma GCC diagnostic pop
+
+template <class T> class RawPtrWrapper
+{
+    public:
+        RawPtrWrapper() : ptr(nullptr) {}
+        RawPtrWrapper(T* ptr) : ptr(ptr) {}
+        RawPtrWrapper(const RawPtrWrapper& other) : ptr(other.ptr) {}
+        T& operator* () const { return *ptr; }
+        T* operator->() const { return  ptr; }
+        T* get() const { return ptr; }
+        void destroy() {  }
+    private:
+        T* ptr;
+};
+PYBIND11_DECLARE_HOLDER_TYPE(T, RawPtrWrapper<T>, true);
 
 namespace hal
 {

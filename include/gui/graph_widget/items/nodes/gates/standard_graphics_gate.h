@@ -33,7 +33,7 @@ namespace hal
         static void load_settings();
         static void update_alpha();
 
-        StandardGraphicsGate(const std::shared_ptr<const Gate> g, const bool adjust_size_to_grid = true);
+        StandardGraphicsGate(Gate* g, const bool adjust_size_to_grid = true);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 

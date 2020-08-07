@@ -1,10 +1,10 @@
-#include "bindings.h"
+#include "python_binding/bindings.h"
 
 namespace hal
 {
     void gate_init(py::module& m)
     {
-        py::class_<Gate, DataContainer, std::shared_ptr<Gate>> py_gate(m, "Gate", R"(Gate class containing information about a gate including its location, functions, and module.)");
+        py::class_<Gate, RawPtrWrapper<Gate>> py_gate(m, "Gate", R"(Gate class containing information about a gate including its location, functions, and module.)");
 
         py_gate.def_property_readonly("id", &Gate::get_id, R"(
         The unique ID of the gate.
@@ -19,13 +19,13 @@ namespace hal
         :type: int
 )");
 
-        py_gate.def_property_readonly("netlist", &Gate::get_netlist, R"(
+        py_gate.def_property_readonly("netlist", [](Gate* g){return RawPtrWrapper(g->get_netlist());}, R"(
         The parent netlist of the gate.
 
         :type: hal_py.Netlist
 )");
 
-        py_gate.def("get_netlist", &Gate::get_netlist, R"(
+        py_gate.def("get_netlist", [](Gate* g){return RawPtrWrapper(g->get_netlist());}, R"(
         Gets the parent netlist of the gate.
 
         :returns: The netlist.
@@ -152,7 +152,7 @@ namespace hal
 )");
 
         py_gate.def_property_readonly(
-            "boolean_functions", [](const std::shared_ptr<Gate>& g) { return g->get_boolean_functions(); }, R"(
+            "boolean_functions", [](Gate* g) { return g->get_boolean_functions(); }, R"(
         A map from function name to boolean function for all boolean functions associated with this gate.
 
         :rtype: dict[str,hal_py.BooleanFunction]
@@ -285,7 +285,7 @@ namespace hal
 )");
 
         py_gate.def_property_readonly(
-            "unique_predecessors", [](const std::shared_ptr<Gate>& g) { return g->get_unique_predecessors(); }, R"(
+            "unique_predecessors", [](Gate* g) { return g->get_unique_predecessors(); }, R"(
         A set of all unique predecessor gates of the gate.
 
         :type: list[hal_py.Gate]
@@ -300,7 +300,7 @@ namespace hal
 )");
 
         py_gate.def_property_readonly(
-            "predecessors", [](const std::shared_ptr<Gate>& g) { return g->get_predecessors(); }, R"(
+            "predecessors", [](Gate* g) { return g->get_predecessors(); }, R"(
         A list of all all direct predecessor endpoints of the gate.
 
         :type: list[hal_py.Endpoint]
@@ -323,7 +323,7 @@ namespace hal
 )");
 
         py_gate.def_property_readonly(
-            "unique_successors", [](const std::shared_ptr<Gate>& g) { return g->get_unique_successors(); }, R"(
+            "unique_successors", [](Gate* g) { return g->get_unique_successors(); }, R"(
         A set of all unique successor gates of the gate.
 
         :type: list[hal_py.Gate]
@@ -338,7 +338,7 @@ namespace hal
 )");
 
         py_gate.def_property_readonly(
-            "successors", [](const std::shared_ptr<Gate>& g) { return g->get_successors(); }, R"(
+            "successors", [](Gate* g) { return g->get_successors(); }, R"(
         A list of all direct successor endpoints of the gate.
 
         :type: list[hal_py.Endpoint]

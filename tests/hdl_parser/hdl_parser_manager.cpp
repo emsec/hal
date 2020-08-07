@@ -109,8 +109,8 @@ namespace hal {
                 ProgramArguments p_args_empty;
                 p_args_empty.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
 
-                std::shared_ptr<Netlist> nl_vhdl;
-                std::shared_ptr<Netlist> nl_verilog;
+                std::unique_ptr<Netlist> nl_vhdl;
+                std::unique_ptr<Netlist> nl_verilog;
                 {
                     NO_COUT_BLOCK;
                     nl_vhdl = hdl_parser_manager::parse(vhdl_file_with_extension, p_args_empty);
@@ -125,7 +125,7 @@ namespace hal {
                 // Pass a non-existing netlist
                 ProgramArguments p_args;
                 p_args.set_option("--gate-library", m_g_lib_path);
-                std::shared_ptr<Netlist> nl;
+                std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
                     nl = hdl_parser_manager::parse("this/path/does/not/exist.v", p_args);
@@ -136,7 +136,7 @@ namespace hal {
                 // Pass a non-existing gate library
                 ProgramArguments p_args;
                 p_args.set_option("--gate-library", "this/path/does/not/exist.v");
-                std::shared_ptr<Netlist> nl;
+                std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
                     nl = hdl_parser_manager::parse(vhdl_file_with_extension, p_args);
@@ -147,7 +147,7 @@ namespace hal {
                 // Pass an invalid file extension
                 ProgramArguments p_args;
                 p_args.set_option("--gate-library", m_g_lib_path);
-                std::shared_ptr<Netlist> nl;
+                std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
                     nl = hdl_parser_manager::parse(file_with_unknown_extension, p_args);
@@ -158,7 +158,7 @@ namespace hal {
                 // Pass file without extension
                 ProgramArguments p_args;
                 p_args.set_option("--gate-library", m_g_lib_path);
-                std::shared_ptr<Netlist> nl;
+                std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
                     nl = hdl_parser_manager::parse(file_without_extension, p_args);
@@ -189,8 +189,8 @@ namespace hal {
             }
             {
                 // Parse a vhdl and a verilog file by GateLibrary
-                std::shared_ptr<Netlist> nl_vhdl;
-                std::shared_ptr<Netlist> nl_verilog;
+                std::unique_ptr<Netlist> nl_vhdl;
+                std::unique_ptr<Netlist> nl_verilog;
                 {
                     NO_COUT_BLOCK;
                     nl_vhdl = hdl_parser_manager::parse(vhdl_file, min_gl);
@@ -203,7 +203,7 @@ namespace hal {
             // NEGATIVE
             {
                 // Pass an unknown file path
-                std::shared_ptr<Netlist> nl;
+                std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
                     nl = hdl_parser_manager::parse("this/path/does/not/exist.v", min_gl);
@@ -213,7 +213,7 @@ namespace hal {
             }
             {
                 // Pass an unknown file extension
-                std::shared_ptr<Netlist> nl;
+                std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
                     nl = hdl_parser_manager::parse(file_with_unknown_extension, min_gl);
@@ -223,7 +223,7 @@ namespace hal {
             }
             {
                 // Pass a file without extension
-                std::shared_ptr<Netlist> nl;
+                std::unique_ptr<Netlist> nl;
                 {
                     NO_COUT_BLOCK;
                     nl = hdl_parser_manager::parse(file_without_extension, min_gl);

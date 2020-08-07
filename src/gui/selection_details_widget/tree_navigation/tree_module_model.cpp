@@ -165,13 +165,13 @@ namespace hal
         m_gates_item->set_data(NAME_COLUMN, "Gates (" + QString::number(gates.size()) + ")");
         m_nets_item->set_data(NAME_COLUMN, "Nets (" + QString::number(nets.size()) + ")");
 
-        for(const std::shared_ptr<Gate> &_g : gates)
+        for(Gate* _g : gates)
         {
             TreeModuleItem* item = new TreeModuleItem(QVector<QVariant>() << QString::fromStdString(_g->get_name()) << _g->get_id() << QString::fromStdString(_g->get_type()->get_name()), TreeModuleItem::item_type::gate, m_gates_item);
             insert_item(m_gates_item, m_gates_item->get_child_count(), item);
         }
 
-        for(const std::shared_ptr<Net> &_n : nets)
+        for(Net* _n : nets)
         {
             TreeModuleItem* item = new TreeModuleItem(QVector<QVariant>() << QString::fromStdString(_n->get_name()) << _n->get_id() << "", TreeModuleItem::item_type::net, m_nets_item);
             insert_item(m_nets_item, m_nets_item->get_child_count(), item);

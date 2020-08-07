@@ -1,4 +1,4 @@
-#include "bindings.h"
+#include "python_binding/bindings.h"
 
 namespace hal
 {
@@ -13,9 +13,8 @@ namespace hal
                 :rtype: list(list(str, list(str), set(str)))
                 )")
             .def("write",
-                 py::overload_cast<std::shared_ptr<Netlist>, const std::string&, const std::filesystem::path&>(&hdl_writer_manager::write),
+                 py::overload_cast<Netlist*, const std::filesystem::path&>(&hdl_writer_manager::write),
                  py::arg("netlist"),
-                 py::arg("format"),
                  py::arg("file_name"),
                  R"(
                 Writes the netlist into a file with a defined format.

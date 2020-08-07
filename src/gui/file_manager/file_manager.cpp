@@ -185,7 +185,7 @@ namespace hal
             }
         }
 
-        LogManager& lm                = LogManager::get_instance();
+        LogManager& lm                 = LogManager::get_instance();
         std::filesystem::path log_path = file_name.toStdString();
         lm.set_file_name(std::filesystem::path(log_path.replace_extension(".log")));
 
@@ -218,11 +218,12 @@ namespace hal
         if (file_name.endsWith(".hal"))
         {
             event_controls::enable_all(false);
-            std::shared_ptr<Netlist> netlist = netlist_factory::load_netlist(file_name.toStdString());
+            auto netlist = netlist_factory::load_netlist(file_name.toStdString());
             event_controls::enable_all(true);
             if (netlist)
             {
-                g_netlist = netlist;
+                g_netlist_owner = std::move(netlist);
+                g_netlist       = g_netlist_owner.get();
                 file_successfully_loaded(logical_file_name);
             }
             else
@@ -235,7 +236,7 @@ namespace hal
             return;
         }
 
-        QList<QPair<std::string, std::shared_ptr<Netlist>>> list;
+        std::vector<std::pair<std::string, std::unique_ptr<Netlist>>> list;
 
         for (const auto& lib : gate_library_manager::get_gate_libraries())
         {
@@ -243,12 +244,12 @@ namespace hal
 
             log_info("gui", "Trying to use gate library '{}'...", name);
             event_controls::enable_all(false);
-            std::shared_ptr<Netlist> netlist = netlist_factory::load_netlist(file_name.toStdString(), lib->get_path());
+            auto netlist = netlist_factory::load_netlist(file_name.toStdString(), lib->get_path());
             event_controls::enable_all(true);
 
             if (netlist)
             {
-                list.append(QPair(name, netlist));
+                list.push_back(std::make_pair(name, std::move(netlist)));
             }
             else
             {
@@ -256,7 +257,7 @@ namespace hal
             }
         }
 
-        if (list.isEmpty())
+        if (list.empty())
         {
             std::string error_message("Unable to find a compatible gate library. Deserialization failed!");
             log_error("gui", "{}", error_message);
@@ -264,21 +265,24 @@ namespace hal
             return;
         }
 
-        if (list.length() == 1)
+        if (list.size() == 1)
         {
             log_info("gui", "One compatible gate library found.");
-            g_netlist = list.at(0).second;
+            g_netlist_owner = std::move(list.at(0).second);
+            g_netlist       = g_netlist_owner.get();
         }
 
         else
         {
-            log_info("gui", "{} compatible gate libraries found. User has to select one.", list.length());
+            log_info("gui", "{} compatible gate libraries found. User has to select one.", list.size());
             QInputDialog dialog;
 
             QStringList libs;
 
             for (auto& element : list)
+            {
                 libs.append(QString::fromStdString(element.first));
+            }
 
             dialog.setComboBoxItems(libs);
             dialog.setWindowTitle("Select gate library");
@@ -291,11 +295,16 @@ namespace hal
                 for (auto& element : list)
                 {
                     if (element.first == selection)
-                        g_netlist = element.second;
+                    {
+                        g_netlist_owner = std::move(element.second);
+                        g_netlist       = g_netlist_owner.get();
+                    }
                 }
             }
             else
+            {
                 return;
+            }
         }
 
         file_successfully_loaded(logical_file_name);
@@ -416,4 +425,4 @@ namespace hal
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.exec();
     }
-}
+}    // namespace hal

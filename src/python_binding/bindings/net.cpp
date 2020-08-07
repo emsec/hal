@@ -1,10 +1,10 @@
-#include "bindings.h"
+#include "python_binding/bindings.h"
 
 namespace hal
 {
     void net_init(py::module& m)
     {
-        py::class_<Net, DataContainer, std::shared_ptr<Net>> py_net(m, "Net", R"(Net class containing information about a net including its source and destination.)");
+        py::class_<Net, RawPtrWrapper<Net>> py_net(m, "Net", R"(Net class containing information about a net including its source and destination.)");
 
         py_net.def_property_readonly("id", &Net::get_id, R"(
         The unique id of the net.
@@ -38,7 +38,7 @@ namespace hal
         :param str name: The new name.
 )");
 
-        py_net.def("add_source", py::overload_cast<const std::shared_ptr<Gate>&, const std::string&>(&Net::add_source), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("add_source", py::overload_cast<Gate*, const std::string&>(&Net::add_source), py::arg("gate"), py::arg("pin"), R"(
         Add a source to this net.
 
         :param hal_py.Gate gate: The source gate.
@@ -56,7 +56,7 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("remove_source", py::overload_cast<const std::shared_ptr<Gate>&, const std::string&>(&Net::remove_source), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("remove_source", py::overload_cast<Gate*, const std::string&>(&Net::remove_source), py::arg("gate"), py::arg("pin"), R"(
         Removes the source of the net.
         :param hal_py.get_gate() gate: The source gate.
         :param str pin: The pin of the source gate.
@@ -72,7 +72,7 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("is_a_source", py::overload_cast<const std::shared_ptr<Gate>&, const std::string&>(&Net::is_a_source, py::const_), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("is_a_source", py::overload_cast<Gate*, const std::string&>(&Net::is_a_source, py::const_), py::arg("gate"), py::arg("pin"), R"(
         Check whether a gate's input pin is a source of this net.
 
         :param gate: The source gate.
@@ -105,7 +105,7 @@ namespace hal
 )");
 
         py_net.def_property_readonly(
-            "sources", [](const std::shared_ptr<Net>& n) { return n->get_sources(); }, R"(
+            "sources", [](Net* n) { return n->get_sources(); }, R"(
         Get the vector of sources of the net.
 
         :type: set[hal_py.Net]
@@ -128,7 +128,7 @@ namespace hal
         :rtype: hal_py.Endpoint
 )");
 
-        py_net.def("add_destination", py::overload_cast<const std::shared_ptr<Gate>&, const std::string&>(&Net::add_destination), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("add_destination", py::overload_cast<Gate*, const std::string&>(&Net::add_destination), py::arg("gate"), py::arg("pin"), R"(
         Add a destination to this net.
 
         :param gate: The destination gate.
@@ -147,7 +147,7 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("remove_destination", py::overload_cast<const std::shared_ptr<Gate>&, const std::string&>(&Net::remove_destination), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("remove_destination", py::overload_cast<Gate*, const std::string&>(&Net::remove_destination), py::arg("gate"), py::arg("pin"), R"(
         Remove a destination from this net.
 
         :param gate: The destination gate.
@@ -166,7 +166,7 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("is_a_destination", py::overload_cast<const std::shared_ptr<Gate>&, const std::string&>(&Net::is_a_destination, py::const_), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("is_a_destination", py::overload_cast<Gate*, const std::string&>(&Net::is_a_destination, py::const_), py::arg("gate"), py::arg("pin"), R"(
         Check whether a gate's input pin is a destination of this net.
 
         :param gate: The destination gate.
@@ -199,7 +199,7 @@ namespace hal
 )");
 
         py_net.def_property_readonly(
-            "destinations", [](const std::shared_ptr<Net>& n) { return n->get_destinations(); }, R"(
+            "destinations", [](Net* n) { return n->get_destinations(); }, R"(
         Get the vector of destinations of the net.
 
         :type: set[hal_py.Net]

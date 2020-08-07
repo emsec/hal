@@ -59,7 +59,7 @@ namespace hal
          * @param[in] id - Id of the netlist
          * @returns An empty netlist
          */
-        std::shared_ptr<hal::Netlist> create_empty_netlist(const int id = -1);
+        std::unique_ptr<hal::Netlist> create_empty_netlist(const int id = -1);
         /**
          * Initializes all log channels used by hal.
          */
@@ -75,7 +75,7 @@ namespace hal
          * @param[in] is_destination - direction of Endpoint
          * @returns the Endpoint object
          */
-        Endpoint get_endpoint(const std::shared_ptr<Netlist>& nl, const int gate_id, const std::string& pin_type, bool is_destination);
+        Endpoint get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination);
 
         /**
          * Creating an Endpoint object by passing the Gate and the pin_type. The is_destination flag is taken from the
@@ -85,7 +85,7 @@ namespace hal
          * @param[in] pin_type - pin type
          * @returns the Endpoint object
          */
-        Endpoint get_endpoint(const std::shared_ptr<Gate> g, const std::string& pin_type);
+        Endpoint get_endpoint(Gate* g, const std::string& pin_type);
 
         /**
          * Checks if an Endpoint is empty (i.e. (nullptr, ""))
@@ -132,7 +132,7 @@ namespace hal
          * @param[in] id - id of the Gate
          * @returns an already created AND3 Gate
          */
-        std::shared_ptr<Gate> create_test_gate(std::shared_ptr<Netlist> nl, const u32 id);
+        Gate* create_test_gate(Netlist* nl, const u32 id);
         /**
          * Checks if two vectors have the same content regardless of their order. Shouldn't be used for
          * large vectors, since it isn't really efficient.
@@ -190,7 +190,7 @@ namespace hal
          * @param subname - substring of the Net name
          * @returns the Net pointer if there is exactly one Net with the subname. Returns nullptr otherwise.
          */
-        std::shared_ptr<Net> get_net_by_subname(std::shared_ptr<Netlist> nl, const std::string subname);
+        Net* get_net_by_subname(Netlist* nl, const std::string subname);
 
         /**
          * Get the pointer of a Gate, which name contains a certain substring. There must be only one name with this subname.
@@ -199,7 +199,7 @@ namespace hal
          * @param subname - substring of the Net name
          * @returns the Gate pointer if there is exactly one Gate with the subname. Returns nullptr otherwise.
          */
-        std::shared_ptr<Gate> get_gate_by_subname(std::shared_ptr<Netlist> nl, const std::string subname);
+        Gate* get_gate_by_subname(Netlist* nl, const std::string subname);
 
         // ===== File Management =====
         /**
@@ -261,7 +261,7 @@ namespace hal
          * @param[in] id - id of the netlist
          * @returns the created netlist object
          */
-        std::shared_ptr<Netlist> create_example_netlist(const int id = -1);
+        std::unique_ptr<Netlist> create_example_netlist(const int id = -1);
 
         /*
          *      example netlist II
@@ -285,7 +285,7 @@ namespace hal
          * @param[in] id - id of the netlist
          * @returns the created netlist object
          */
-        std::shared_ptr<Netlist> create_example_netlist_2(const int id = -1);
+        std::unique_ptr<Netlist> create_example_netlist_2(const int id = -1);
 
         /*
          *      example netlist negative
@@ -299,7 +299,7 @@ namespace hal
          * @param[in] id - id of the netlist
          * @returns the created netlist object
          */
-        std::shared_ptr<Netlist> create_example_netlist_negative(const int id = -1);
+        std::unique_ptr<Netlist> create_example_netlist_negative(const int id = -1);
 
         /*
           *      Example netlist circuit diagram (Id in brackets). Used for get fan in and
@@ -325,7 +325,7 @@ namespace hal
          * @param[in] id - id of the netlist
          * @returns the created netlist object
          */
-        std::shared_ptr<Netlist> create_example_parse_netlist(int id = -1);
+        std::unique_ptr<Netlist> create_example_parse_netlist(int id = -1);
 
         // ===== Netlist Comparison Functions (mainly used to test parser and writer) =====
 
@@ -346,7 +346,7 @@ namespace hal
          * @param ignore_name - if the names should be ignored in comparison
          * @returns TRUE if n0 and n1 are equal under the considered conditions. FALSE otherwise.
          */
-        bool nets_are_equal(const std::shared_ptr<Net> n0, const std::shared_ptr<Net> n1, const bool ignore_id = false, const bool ignore_name = false);
+        bool nets_are_equal(Net* n0, Net* n1, const bool ignore_id = false, const bool ignore_name = false);
 
         /**
          * Checks if two gates are equal regardless if they are in the same netlist (they doesn't share a pointer).
@@ -359,7 +359,7 @@ namespace hal
          * @param ignore_name - if the names should be ignored in comparison
          * @return
          */
-        bool gates_are_equal(const std::shared_ptr<Gate> g0, const std::shared_ptr<Gate> g1, const bool ignore_id = false, const bool ignore_name = false);
+        bool gates_are_equal(Gate* g0, Gate* g1, const bool ignore_id = false, const bool ignore_name = false);
 
         /**
          * Checks if two modules are equal regardless if they are in the same netlist (they doesn't share a pointer).
@@ -373,7 +373,7 @@ namespace hal
          * @param ignore_name - if the names should be ignored in comparison
          * @returns TRUE if m_0 and m_1 are equal under the considered conditions. FALSE otherwise.
          */
-        bool modules_are_equal(const std::shared_ptr<Module> m_0, const std::shared_ptr<Module> m_1, const bool ignore_id = false, const bool ignore_name = false);
+        bool modules_are_equal(Module* m_0, Module* m_1, const bool ignore_id = false, const bool ignore_name = false);
 
         /**
          * Checks if two netlist are equal regardless if they are the same object.
@@ -389,7 +389,7 @@ namespace hal
          * @param ignore_id - if the ids should be ignored in comparison (in this case the module-,Gate-,Net names must be unique)
          * @returns TRUE if nl_0 and nl_1 are equal under the considered conditions. FALSE otherwise.
          */
-        bool netlists_are_equal(const std::shared_ptr<Netlist> nl_0, const std::shared_ptr<Netlist> nl_1, const bool ignore_id = false);
+        bool netlists_are_equal(Netlist* nl_0, Netlist* nl_1, const bool ignore_id = false);
 
         // ===== Filter Factory Functions (used in module::get_gates, netlist::get_nets, moduleget_submodules, Gate::get_sucessors, Gate::get_predecessors) =====
 
@@ -401,7 +401,7 @@ namespace hal
          * @param name - the name of the modules the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::shared_ptr<Module>&)> module_name_filter(const std::string& name);
+        std::function<bool(Module*)> module_name_filter(const std::string& name);
 
         // +++ Gate Filter +++
 
@@ -412,7 +412,7 @@ namespace hal
          * @param name - the name of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::shared_ptr<Gate>&)> gate_filter(const std::string& type, const std::string& name);
+        std::function<bool(Gate*)> gate_filter(const std::string& type, const std::string& name);
 
         /**
          * Filter returns true for gates with the name 'name'
@@ -420,7 +420,7 @@ namespace hal
          * @param name - the name of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::shared_ptr<Gate>&)> gate_name_filter(const std::string& name);
+        std::function<bool(Gate*)> gate_name_filter(const std::string& name);
 
         /**
          * Filter returns true for gates of type 'type'
@@ -428,7 +428,7 @@ namespace hal
          * @param type - the type of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::shared_ptr<Gate>&)> gate_type_filter(const std::string& type);
+        std::function<bool(Gate*)> gate_type_filter(const std::string& type);
 
         // +++ Net Filter +++
 
@@ -438,7 +438,7 @@ namespace hal
          * @param name - the name of the nets the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::shared_ptr<Net>&)> net_name_filter(const std::string& name);
+        std::function<bool(Net*)> net_name_filter(const std::string& name);
 
         // +++ Endpoint Filter +++
 

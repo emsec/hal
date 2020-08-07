@@ -75,7 +75,7 @@ namespace hal
             s_alpha = 1;
     }
 
-    StandardGraphicsNet::StandardGraphicsNet(const std::shared_ptr<const Net> n, const lines& l) : GraphicsNet(n)
+    StandardGraphicsNet::StandardGraphicsNet(Net* n, const lines& l) : GraphicsNet(n)
     {
         for (const h_line& h : l.h_lines)
         {

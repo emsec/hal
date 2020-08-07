@@ -1,4 +1,4 @@
-#include "bindings.h"
+#include "python_binding/bindings.h"
 
 namespace hal
 {
@@ -31,12 +31,6 @@ namespace hal
         :returns: The path.
         :rtype: hal_py.hal_path
 )");
-
-//         py_gate_library.def("add_gate_types", &GateLibrary::add_gate_type, py::arg("gt"), R"(
-//         Add a gate type to the gate library.
-
-//         :param hal_py.Gate_type gt: The gate type object.
-// )");
 
         py_gate_library.def_property_readonly("gate_types", &GateLibrary::get_gate_types, R"(
         A dict from gate type names to gate type objects containing all gate types of the gate library.

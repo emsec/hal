@@ -62,7 +62,7 @@ namespace hal
         s_arrow.closeSubpath();
     }
 
-    ArrowSeparatedNet::ArrowSeparatedNet(const std::shared_ptr<const Net> n) : SeparatedGraphicsNet(n)
+    ArrowSeparatedNet::ArrowSeparatedNet(Net* n) : SeparatedGraphicsNet(n)
     {
     }
 

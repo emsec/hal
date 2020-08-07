@@ -60,7 +60,7 @@ namespace hal
         //         )")
         //     .def(
         //         "get_communities_fast_greedy",
-        //         [](plugin_graph_algorithm& a, std::shared_ptr<Netlist> const nl) -> std::map<int, std::set<std::shared_ptr<Gate>>> { return a.get_communities_fast_greedy(nl); },
+        //         [](plugin_graph_algorithm& a, Netlist* const nl) -> std::map<int, std::set<Gate*>> { return a.get_communities_fast_greedy(nl); },
         //         py::arg("netlist"),
         //         R"(
         //         Returns the map of community-IDs to communities running the fast-greedy clustering algorithm.
@@ -72,7 +72,7 @@ namespace hal
         //         )")
         //     .def(
         //         "get_communities_multilevel",
-        //         [](plugin_graph_algorithm& a, std::shared_ptr<Netlist> const nl) -> std::map<int, std::set<std::shared_ptr<Gate>>> { return a.get_communities_multilevel(nl); },
+        //         [](plugin_graph_algorithm& a, Netlist* const nl) -> std::map<int, std::set<Gate*>> { return a.get_communities_multilevel(nl); },
         //         py::arg("netlist"),
         //         R"(
         //         Returns the map of community-IDs to communities running the multilevel clustering algorithm.
@@ -92,8 +92,8 @@ namespace hal
         //         )")
         //     .def(
         //         "get_strongly_connected_components",
-        //         [](plugin_graph_algorithm& a, std::shared_ptr<Netlist> const nl, const std::set<std::shared_ptr<Gate>> gates = {}) -> std::vector<std::set<std::shared_ptr<Gate>>> {
-        //             std::vector<std::set<std::shared_ptr<Gate>>> s;
+        //         [](plugin_graph_algorithm& a, Netlist* const nl, const std::set<Gate*> gates = {}) -> std::vector<std::set<Gate*>> {
+        //             std::vector<std::set<Gate*>> s;
         //             auto vals = a.get_strongly_connected_components(nl, gates);
         //             std::copy(vals.begin(), vals.end(), std::back_inserter(s));
         //             return s;

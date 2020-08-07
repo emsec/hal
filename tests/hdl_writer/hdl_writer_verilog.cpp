@@ -73,7 +73,7 @@ namespace hal {
         TEST_START
             {
                 // Write and parse the example netlist (with some additions) and compare the result with the original netlist
-                std::shared_ptr<Netlist> nl = test_utils::create_example_parse_netlist(0);
+                Netlist* nl = test_utils::create_example_parse_netlist(0);
 
                 // Mark the global gates as such
                 nl->mark_gnd_gate(nl->get_gate_by_id(test_utils::MIN_GATE_ID + 1));
@@ -95,7 +95,7 @@ namespace hal {
                 HDLParserVerilog verilog_parser(parser_input);
 
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -153,10 +153,10 @@ namespace hal {
         TEST_START
             {
                 // Add 2 global input nets to an empty netlist
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+                Netlist* nl = test_utils::create_empty_netlist(0);
 
-                std::shared_ptr<Net> global_in_0 = nl->create_net(test_utils::MIN_NET_ID + 0, "0_global_in");
-                std::shared_ptr<Net> global_in_1 = nl->create_net(test_utils::MIN_NET_ID + 1, "1_global_in");
+                Net* global_in_0 = nl->create_net(test_utils::MIN_NET_ID + 0, "0_global_in");
+                Net* global_in_1 = nl->create_net(test_utils::MIN_NET_ID + 1, "1_global_in");
 
                 nl->mark_global_input_net(global_in_0);
                 nl->mark_global_input_net(global_in_1);
@@ -175,7 +175,7 @@ namespace hal {
 
                 HDLParserVerilog verilog_parser(parser_input);
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -184,21 +184,21 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the nets are written/parsed correctly
-                std::shared_ptr<Net> p_global_in_0 = test_utils::get_net_by_subname(parsed_nl, "0_global_in");
+                Net* p_global_in_0 = test_utils::get_net_by_subname(parsed_nl, "0_global_in");
                 ASSERT_NE(p_global_in_0, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_input_net(p_global_in_0));
 
-                std::shared_ptr<Net> p_global_in_1 = test_utils::get_net_by_subname(parsed_nl, "1_global_in");
+                Net* p_global_in_1 = test_utils::get_net_by_subname(parsed_nl, "1_global_in");
                 ASSERT_NE(p_global_in_1, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_input_net(p_global_in_1));
 
             }
             {
                 // Add 2 global output nets to an empty netlist
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+                Netlist* nl = test_utils::create_empty_netlist(0);
 
-                std::shared_ptr<Net> global_out_0 = nl->create_net(test_utils::MIN_NET_ID + 0, "0_global_out");
-                std::shared_ptr<Net> global_out_1 = nl->create_net(test_utils::MIN_NET_ID + 1, "1_global_out");
+                Net* global_out_0 = nl->create_net(test_utils::MIN_NET_ID + 0, "0_global_out");
+                Net* global_out_1 = nl->create_net(test_utils::MIN_NET_ID + 1, "1_global_out");
 
                 nl->mark_global_output_net(global_out_0);
                 nl->mark_global_output_net(global_out_1);
@@ -217,7 +217,7 @@ namespace hal {
 
                 HDLParserVerilog verilog_parser(parser_input);
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -226,21 +226,21 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the nets are written/parsed correctly
-                std::shared_ptr<Net> p_global_out_0 = test_utils::get_net_by_subname(parsed_nl, "0_global_out");
+                Net* p_global_out_0 = test_utils::get_net_by_subname(parsed_nl, "0_global_out");
                 ASSERT_NE(p_global_out_0, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_output_net(p_global_out_0));
 
-                std::shared_ptr<Net> p_global_out_1 = test_utils::get_net_by_subname(parsed_nl, "1_global_out");
+                Net* p_global_out_1 = test_utils::get_net_by_subname(parsed_nl, "1_global_out");
                 ASSERT_NE(p_global_out_1, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_output_net(p_global_out_1));
 
             }
             /*{ // NOTE: Inout nets are not handled by the parser currently
                 // Add 2 global inout nets to an empty netlist
-                std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+                Netlist* nl = create_empty_netlist(0);
 
-                std::shared_ptr<Net> global_inout_0 = nl->create_net( test_utils::MIN_NET_ID+0, "0_global_inout");
-                std::shared_ptr<Net> global_inout_1 = nl->create_net( test_utils::MIN_NET_ID+1, "1_global_inout");
+                Net* global_inout_0 = nl->create_net( test_utils::MIN_NET_ID+0, "0_global_inout");
+                Net* global_inout_1 = nl->create_net( test_utils::MIN_NET_ID+1, "1_global_inout");
 
                 nl->mark_global_inout_net(global_inout_0);
                 nl->mark_global_inout_net(global_inout_1);
@@ -259,7 +259,7 @@ namespace hal {
 
                 HDLParserVerilog verilog_parser(parser_input);
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -268,11 +268,11 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the nets are written/parsed correctly
-                std::shared_ptr<Net> p_global_inout_0 = get_net_by_subname(parsed_nl, "0_global_inout");
+                Net* p_global_inout_0 = get_net_by_subname(parsed_nl, "0_global_inout");
                 ASSERT_NE(p_global_inout_0, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_inout_net(p_global_inout_0));
 
-                std::shared_ptr<Net> p_global_inout_1 = get_net_by_subname(parsed_nl, "1_global_inout");
+                Net* p_global_inout_1 = get_net_by_subname(parsed_nl, "1_global_inout");
                 ASSERT_NE(p_global_inout_1, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_inout_net(p_global_inout_1));
 
@@ -292,23 +292,23 @@ namespace hal {
         TEST_START
             /*{ //NOTE: generic data isn't handled correctly in this version (parser issue)
                 // Add a Gate to the netlist and store some data
-                std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+                Netlist* nl = create_empty_netlist(0);
 
-                std::shared_ptr<Net> global_in = nl->create_net( MIN_NET_ID+0, "global_in");
+                Net* global_in = nl->create_net( MIN_NET_ID+0, "global_in");
                 nl->mark_global_input_net(global_in);
 
-                std::shared_ptr<Gate> test_gate_0 = nl->create_gate( MIN_GATE_ID+0, "gate_1_to_1", "test_gate_0");
-                std::shared_ptr<Gate> test_gate_1 = nl->create_gate( MIN_GATE_ID+1, "gate_1_to_1", "test_gate_1");
-                std::shared_ptr<Gate> test_gate_2 = nl->create_gate( MIN_GATE_ID+2, "gate_1_to_1", "test_gate_2");
-                std::shared_ptr<Gate> test_gate_3 = nl->create_gate( MIN_GATE_ID+3, "gate_1_to_1", "test_gate_3");
-                std::shared_ptr<Gate> test_gate_4 = nl->create_gate( MIN_GATE_ID+4, "gate_1_to_1", "test_gate_4");
-                std::shared_ptr<Gate> test_gate_5 = nl->create_gate( MIN_GATE_ID+5, "gate_1_to_1", "test_gate_5");
-                std::shared_ptr<Gate> test_gate_6 = nl->create_gate( MIN_GATE_ID+6, "gate_1_to_1", "test_gate_6");
+                Gate* test_gate_0 = nl->create_gate( MIN_GATE_ID+0, "gate_1_to_1", "test_gate_0");
+                Gate* test_gate_1 = nl->create_gate( MIN_GATE_ID+1, "gate_1_to_1", "test_gate_1");
+                Gate* test_gate_2 = nl->create_gate( MIN_GATE_ID+2, "gate_1_to_1", "test_gate_2");
+                Gate* test_gate_3 = nl->create_gate( MIN_GATE_ID+3, "gate_1_to_1", "test_gate_3");
+                Gate* test_gate_4 = nl->create_gate( MIN_GATE_ID+4, "gate_1_to_1", "test_gate_4");
+                Gate* test_gate_5 = nl->create_gate( MIN_GATE_ID+5, "gate_1_to_1", "test_gate_5");
+                Gate* test_gate_6 = nl->create_gate( MIN_GATE_ID+6, "gate_1_to_1", "test_gate_6");
 
                 // Create output nets for all gates to create a valid netlist
                 unsigned int idx = 0;
                 for (auto g : nl->get_gates()){
-                    std::shared_ptr<Net> out_net = nl->create_net("net_" + std::to_string(idx));
+                    Net* out_net = nl->create_net("net_" + std::to_string(idx));
                     out_net->add_source(g,"O");
                     idx++;
                 }
@@ -360,7 +360,7 @@ namespace hal {
                 HDLParserVerilog verilog_parser(parser_input);
 
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -369,33 +369,33 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the data is written/parsed correctly
-                std::shared_ptr<Gate> p_test_gate_0 = get_gate_by_subname(parsed_nl, "test_gate_0");
+                Gate* p_test_gate_0 = get_gate_by_subname(parsed_nl, "test_gate_0");
                 ASSERT_NE(p_test_gate_0, nullptr);
                 EXPECT_EQ(p_test_gate_0->get_data(), test_gate_0->get_data());
 
-                std::shared_ptr<Gate> p_test_gate_1 = get_gate_by_subname(parsed_nl, "test_gate_1");
+                Gate* p_test_gate_1 = get_gate_by_subname(parsed_nl, "test_gate_1");
                 ASSERT_NE(p_test_gate_1, nullptr);
                 EXPECT_EQ(p_test_gate_1->get_data(), test_gate_1->get_data());
 
-                std::shared_ptr<Gate> p_test_gate_2 = get_gate_by_subname(parsed_nl, "test_gate_2");
+                Gate* p_test_gate_2 = get_gate_by_subname(parsed_nl, "test_gate_2");
                 ASSERT_NE(p_test_gate_2, nullptr);
                 EXPECT_EQ(p_test_gate_2->get_data(), test_gate_2->get_data());
 
-                std::shared_ptr<Gate> p_test_gate_3 = get_gate_by_subname(parsed_nl, "test_gate_3");
+                Gate* p_test_gate_3 = get_gate_by_subname(parsed_nl, "test_gate_3");
                 ASSERT_NE(p_test_gate_3, nullptr);
                 EXPECT_EQ(p_test_gate_3->get_data(), test_gate_3->get_data());
 
-                std::shared_ptr<Gate> p_test_gate_4 = get_gate_by_subname(parsed_nl, "test_gate_4");
+                Gate* p_test_gate_4 = get_gate_by_subname(parsed_nl, "test_gate_4");
                 ASSERT_NE(p_test_gate_4, nullptr);
                 EXPECT_EQ(p_test_gate_4->get_data(), test_gate_4->get_data());
 
-                std::shared_ptr<Gate> p_test_gate_5 = get_gate_by_subname(parsed_nl, "test_gate_5");
+                Gate* p_test_gate_5 = get_gate_by_subname(parsed_nl, "test_gate_5");
                 ASSERT_NE(p_test_gate_5, nullptr);
                 auto test_gate_5_data_without_invalid = test_gate_5->get_data();
                 test_gate_5_data_without_invalid.erase(std::make_tuple("generic", "0_key_invalid"));
                 EXPECT_EQ(p_test_gate_5->get_data(), test_gate_5_data_without_invalid);
 
-                std::shared_ptr<Gate> p_test_gate_6 = get_gate_by_subname(parsed_nl, "test_gate_6");
+                Gate* p_test_gate_6 = get_gate_by_subname(parsed_nl, "test_gate_6");
                 ASSERT_NE(p_test_gate_6, nullptr);
                 EXPECT_EQ(p_test_gate_6->get_data(), test_gate_6->get_data());
             }*/
@@ -414,9 +414,9 @@ namespace hal {
         TEST_START
             {
                 // Add a Gate to the netlist and store some data
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+                Netlist* nl = test_utils::create_empty_netlist(0);
 
-                std::shared_ptr<Net> global_in = nl->create_net(test_utils::MIN_NET_ID + 0, "123");
+                Net* global_in = nl->create_net(test_utils::MIN_NET_ID + 0, "123");
                 nl->mark_global_input_net(global_in);
 
                 // Write and parse the netlist now
@@ -434,7 +434,7 @@ namespace hal {
                 HDLParserVerilog verilog_parser(parser_input);
 
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -444,7 +444,7 @@ namespace hal {
 
                 // Check if the net_name is written/parsed correctly
                 ASSERT_EQ(parsed_nl->get_nets().size(), (size_t) 1);
-                std::shared_ptr<Net> p_global_in = *parsed_nl->get_nets().begin();
+                Net* p_global_in = *parsed_nl->get_nets().begin();
                 EXPECT_EQ(p_global_in->get_name(), "NET_123");
 
             }
@@ -465,18 +465,18 @@ namespace hal {
         TEST_START
             {
                 // Testing the handling of special Net names
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+                Netlist* nl = test_utils::create_empty_netlist(0);
 
-                std::shared_ptr<Net> bracket_net = nl->create_net(test_utils::MIN_NET_ID + 0, "Net(0)");
-                std::shared_ptr<Net> comma_net = nl->create_net(test_utils::MIN_NET_ID + 1, "Net,1");
-                std::shared_ptr<Net> comma_space_net = nl->create_net(test_utils::MIN_NET_ID + 2, "Net, 2");
-                std::shared_ptr<Net> slash_net = nl->create_net(test_utils::MIN_NET_ID + 3, "Net/_3");
-                std::shared_ptr<Net> backslash_net = nl->create_net(test_utils::MIN_NET_ID + 4, "Net\\_4");
-                std::shared_ptr<Net> curly_bracket_net = nl->create_net(test_utils::MIN_NET_ID + 5, "Net[5]");
-                std::shared_ptr<Net> angle_bracket_net = nl->create_net(test_utils::MIN_NET_ID + 6, "Net<6>");
-                std::shared_ptr<Net> double_underscore_net = nl->create_net(test_utils::MIN_NET_ID + 7, "net__7");
-                std::shared_ptr<Net> edges_underscore_net = nl->create_net(test_utils::MIN_NET_ID + 8, "_net_8_");
-                std::shared_ptr<Net>
+                Net* bracket_net = nl->create_net(test_utils::MIN_NET_ID + 0, "Net(0)");
+                Net* comma_net = nl->create_net(test_utils::MIN_NET_ID + 1, "Net,1");
+                Net* comma_space_net = nl->create_net(test_utils::MIN_NET_ID + 2, "Net, 2");
+                Net* slash_net = nl->create_net(test_utils::MIN_NET_ID + 3, "Net/_3");
+                Net* backslash_net = nl->create_net(test_utils::MIN_NET_ID + 4, "Net\\_4");
+                Net* curly_bracket_net = nl->create_net(test_utils::MIN_NET_ID + 5, "Net[5]");
+                Net* angle_bracket_net = nl->create_net(test_utils::MIN_NET_ID + 6, "Net<6>");
+                Net* double_underscore_net = nl->create_net(test_utils::MIN_NET_ID + 7, "net__7");
+                Net* edges_underscore_net = nl->create_net(test_utils::MIN_NET_ID + 8, "_net_8_");
+                Net*
                     digit_only_net = nl->create_net(test_utils::MIN_NET_ID + 9, "9"); // should be converted to NET_9
 
                 // Write and parse the netlist now
@@ -493,7 +493,7 @@ namespace hal {
 
                 HDLParserVerilog verilog_parser(parser_input);
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -517,36 +517,36 @@ namespace hal {
             }
             {
                 // Testing the handling of special Gate names
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+                Netlist* nl = test_utils::create_empty_netlist(0);
                 GateLibrary* gl = m_gl;
 
                 // Create various gates with special Gate name characters
-                std::shared_ptr<Gate>
+                Gate*
                     bracket_gate = nl->create_gate(test_utils::MIN_GATE_ID + 0, gl->get_gate_types().at("gate_1_to_1"), "gate(0)");
-                std::shared_ptr<Gate>
+                Gate*
                     comma_gate = nl->create_gate(test_utils::MIN_GATE_ID + 1, gl->get_gate_types().at("gate_1_to_1"), "gate,1");
-                std::shared_ptr<Gate>
+                Gate*
                     comma_space_gate = nl->create_gate(test_utils::MIN_GATE_ID + 2, gl->get_gate_types().at("gate_1_to_1"), "gate, 2");
-                std::shared_ptr<Gate>
+                Gate*
                     slash_gate = nl->create_gate(test_utils::MIN_GATE_ID + 3, gl->get_gate_types().at("gate_1_to_1"), "gate/_3");
-                std::shared_ptr<Gate>
+                Gate*
                     backslash_gate = nl->create_gate(test_utils::MIN_GATE_ID + 4, gl->get_gate_types().at("gate_1_to_1"), "gate\\_4");
-                std::shared_ptr<Gate>
+                Gate*
                     curly_bracket_gate = nl->create_gate(test_utils::MIN_GATE_ID + 5, gl->get_gate_types().at("gate_1_to_1"), "gate[5]");
-                std::shared_ptr<Gate>
+                Gate*
                     angle_bracket_gate = nl->create_gate(test_utils::MIN_GATE_ID + 6, gl->get_gate_types().at("gate_1_to_1"), "gate<6>");
-                std::shared_ptr<Gate> double_underscore_gate =
+                Gate* double_underscore_gate =
                     nl->create_gate(test_utils::MIN_GATE_ID + 7, gl->get_gate_types().at("gate_1_to_1"), "gate__7");
-                std::shared_ptr<Gate> edges_underscore_gate =
+                Gate* edges_underscore_gate =
                     nl->create_gate(test_utils::MIN_GATE_ID + 8, gl->get_gate_types().at("gate_1_to_1"), "_gate_8_");
-                std::shared_ptr<Gate> digit_only_gate = nl->create_gate(test_utils::MIN_GATE_ID + 9,
+                Gate* digit_only_gate = nl->create_gate(test_utils::MIN_GATE_ID + 9,
                                                                         gl->get_gate_types().at("gate_1_to_1"),
                                                                         "9"); // should be converted to GATE_9
 
                 // Create output nets for all gates to create a valid netlist
                 unsigned int idx = 0;
                 for (auto g : nl->get_gates()) {
-                    std::shared_ptr<Net> out_net = nl->create_net("net_" + std::to_string(idx));
+                    Net* out_net = nl->create_net("net_" + std::to_string(idx));
                     out_net->add_source(g, "O");
                     idx++;
                 }
@@ -565,7 +565,7 @@ namespace hal {
 
                 HDLParserVerilog verilog_parser(parser_input);
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -600,10 +600,10 @@ namespace hal {
         TEST_START
             {
                 // Testing the handling of two gates with the same name
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
+                Netlist* nl = test_utils::create_empty_netlist(0);
 
-                std::shared_ptr<Net> test_net = nl->create_net(test_utils::MIN_NET_ID + 0, "gate_net_name");
-                std::shared_ptr<Gate>
+                Net* test_net = nl->create_net(test_utils::MIN_NET_ID + 0, "gate_net_name");
+                Gate*
                     test_gate = nl->create_gate(test_utils::MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_net_name");
 
                 test_net->add_destination(test_gate, "I");
@@ -623,7 +623,7 @@ namespace hal {
                 HDLParserVerilog verilog_parser(parser_input);
 
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -651,15 +651,15 @@ namespace hal {
         TEST_START
             /*{ FIXME, NOTE: GND/VCC gates are replaced (but not deleted) by global_gnd/global_vcc
                 // Testing the Net name translation of a '0' Net
-                std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+                Netlist* nl = create_empty_netlist(0);
 
-                std::shared_ptr<Gate> gnd_gate = nl->create_gate(test_utils::MIN_GATE_ID+0, test_utils::get_gate_type_by_name("GND"), "gnd_gate");
-                std::shared_ptr<Net> global_out = nl->create_net(test_utils::MIN_NET_ID+0, "global_out");
+                Gate* gnd_gate = nl->create_gate(test_utils::MIN_GATE_ID+0, test_utils::get_gate_type_by_name("GND"), "gnd_gate");
+                Net* global_out = nl->create_net(test_utils::MIN_NET_ID+0, "global_out");
                 nl->mark_global_output_net(global_out);
-                std::shared_ptr<Gate> test_gate = nl->create_gate( test_utils::MIN_GATE_ID+1, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
+                Gate* test_gate = nl->create_gate( test_utils::MIN_GATE_ID+1, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
                 global_out->add_source(test_gate, "O");
 
-                std::shared_ptr<Net> gnd_net = nl->create_net(test_utils::MIN_NET_ID+1, "'0'");
+                Net* gnd_net = nl->create_net(test_utils::MIN_NET_ID+1, "'0'");
                 gnd_net->add_source(gnd_gate, "O");
                 gnd_net->add_destination(test_gate, "I");
 
@@ -678,7 +678,7 @@ namespace hal {
                 HDLParserVerilog verilog_parser(parser_input);
 
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -688,7 +688,7 @@ namespace hal {
 
                 // Check if a Net name is correctly translated
                 ASSERT_EQ(parsed_nl->get_nets("1'b0").size(), 1);
-                std::shared_ptr<Net> gnd_net_translated = *parsed_nl->get_nets("1'b0").begin();
+                Net* gnd_net_translated = *parsed_nl->get_nets("1'b0").begin();
                 ASSERT_NE(gnd_net_translated->get_source().get_gate(), nullptr);
                 EXPECT_EQ(gnd_net_translated->get_source().get_gate()->get_type()->get_name(), "GND");
                 ASSERT_EQ(gnd_net_translated->get_destinations().size(), 1);
@@ -696,15 +696,15 @@ namespace hal {
             }
             {
                 // Testing the Net name translation of a '0' Net
-                std::shared_ptr<Netlist> nl = create_empty_netlist(0);
+                Netlist* nl = create_empty_netlist(0);
 
-                std::shared_ptr<Gate> vcc_gate = nl->create_gate(test_utils::MIN_GATE_ID+0, test_utils::get_gate_type_by_name("vcc"), "vcc_gate");
-                std::shared_ptr<Net> global_out = nl->create_net(test_utils::MIN_NET_ID+0, "global_out");
+                Gate* vcc_gate = nl->create_gate(test_utils::MIN_GATE_ID+0, test_utils::get_gate_type_by_name("vcc"), "vcc_gate");
+                Net* global_out = nl->create_net(test_utils::MIN_NET_ID+0, "global_out");
                 nl->mark_global_output_net(global_out);
-                std::shared_ptr<Gate> test_gate = nl->create_gate( test_utils::MIN_GATE_ID+1, get_gate_type_by_name("gate_1_to_1"), "test_gate");
+                Gate* test_gate = nl->create_gate( test_utils::MIN_GATE_ID+1, get_gate_type_by_name("gate_1_to_1"), "test_gate");
                 global_out->add_source(test_gate, "O");
 
-                std::shared_ptr<Net> vcc_net = nl->create_net(test_utils::MIN_NET_ID+1, "'1'");
+                Net* vcc_net = nl->create_net(test_utils::MIN_NET_ID+1, "'1'");
                 vcc_net->add_source(vcc_gate, "O");
                 vcc_net->add_destination(test_gate, "I");
 
@@ -723,7 +723,7 @@ namespace hal {
                 HDLParserVerilog verilog_parser(parser_input);
 
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -733,7 +733,7 @@ namespace hal {
 
                 // Check if a Net name is correctly translated
                 ASSERT_EQ(parsed_nl->get_nets("1'b1").size(), 1);
-                std::shared_ptr<Net> vcc_net_translated = *parsed_nl->get_nets("1'b1").begin();
+                Net* vcc_net_translated = *parsed_nl->get_nets("1'b1").begin();
                 ASSERT_NE(vcc_net_translated->get_source().get_gate(), nullptr);
                 EXPECT_EQ(vcc_net_translated->get_source().get_gate()->get_type()->get_name(), "VCC");
                 ASSERT_EQ(vcc_net_translated->get_destinations().size(), 1);
@@ -765,17 +765,17 @@ namespace hal {
                  * create_temp_gate_lib();
                 // Testing the usage of a pin vector using the temp Gate library
                 GateLibrary* gl = gate_library_manager::get_gate_library(temp_lib_name);
-                std::shared_ptr<Netlist> nl(new Netlist(gl));
+                Netlist* nl(new Netlist(gl));
 
-                std::shared_ptr<Gate> gnd_gate = nl->create_gate(MIN_GATE_ID + 0, "GND", "gnd_gate");
-                std::shared_ptr<Gate> vcc_gate = nl->create_gate(MIN_GATE_ID + 1, "VCC", "vcc_gate");
-                std::shared_ptr<Net> global_out = nl->create_net(MIN_NET_ID + 0, "global_out");
+                Gate* gnd_gate = nl->create_gate(MIN_GATE_ID + 0, "GND", "gnd_gate");
+                Gate* vcc_gate = nl->create_gate(MIN_GATE_ID + 1, "VCC", "vcc_gate");
+                Net* global_out = nl->create_net(MIN_NET_ID + 0, "global_out");
                 nl->mark_global_output_net(global_out);
-                std::shared_ptr<Gate> test_gate = nl->create_gate(MIN_GATE_ID + 2, "GATE_4^1_IN_1^0_OUT", "test_gate");
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 2, "GATE_4^1_IN_1^0_OUT", "test_gate");
                 global_out->add_source(test_gate, "O");
 
-                std::shared_ptr<Net> gnd_net = nl->create_net(MIN_NET_ID + 2, "test_gnd_net");
-                std::shared_ptr<Net> vcc_net = nl->create_net(MIN_NET_ID + 3, "test_vcc_net");
+                Net* gnd_net = nl->create_net(MIN_NET_ID + 2, "test_gnd_net");
+                Net* vcc_net = nl->create_net(MIN_NET_ID + 3, "test_vcc_net");
 
                 gnd_net->add_source(gnd_gate, "O");
                 vcc_net->add_source(vcc_gate, "O");
@@ -800,7 +800,7 @@ namespace hal {
                 HDLParserVerilog verilog_parser(parser_input);
 
                 // Parse the .verilog file
-                std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -810,11 +810,11 @@ namespace hal {
 
                 ASSERT_EQ(parsed_nl->get_nets("test_gnd_net").size(), 1);
                 ASSERT_EQ(parsed_nl->get_nets("test_vcc_net").size(), 1);
-                std::shared_ptr<Net> test_gnd_net_ref = *parsed_nl->get_nets("test_gnd_net").begin();
-                std::shared_ptr<Net> test_vcc_net_ref = *parsed_nl->get_nets("test_vcc_net").begin();
+                Net* test_gnd_net_ref = *parsed_nl->get_nets("test_gnd_net").begin();
+                Net* test_vcc_net_ref = *parsed_nl->get_nets("test_vcc_net").begin();
 
                 ASSERT_EQ(parsed_nl->get_gates("GATE_4^1_IN_1^0_OUT").size(), 1);
-                std::shared_ptr<Gate> test_gate_ref = *parsed_nl->get_gates("GATE_4^1_IN_1^0_OUT").begin();
+                Gate* test_gate_ref = *parsed_nl->get_gates("GATE_4^1_IN_1^0_OUT").begin();
                 EXPECT_EQ(test_gate_ref->get_fan_in_net("I(0)"), test_gnd_net_ref);
                 EXPECT_EQ(test_gate_ref->get_fan_in_net("I(1)"), test_vcc_net_ref);
                 EXPECT_EQ(test_gate_ref->get_fan_in_net("I(2)"), test_gnd_net_ref);
@@ -841,18 +841,18 @@ namespace hal {
                 /*
                             // Testing the usage of nets connected to a X_ZERO Gate
                             GateLibrary* gl = gate_library_manager::get_gate_library(m_pseudo_simprim_lib_name);
-                            std::shared_ptr<Netlist> nl(new Netlist(gl));
+                            Netlist* nl(new Netlist(gl));
 
-                            std::shared_ptr<Gate> x_zero_gate_0 = nl->create_gate("X_ZERO", "x_zero_gate_0");
-                            std::shared_ptr<Gate> x_zero_gate_1 = nl->create_gate("X_ZERO", "x_zero_gate_1");
-                            std::shared_ptr<Gate> test_gate = nl->create_gate("X_AND4", "test_gate");
+                            Gate* x_zero_gate_0 = nl->create_gate("X_ZERO", "x_zero_gate_0");
+                            Gate* x_zero_gate_1 = nl->create_gate("X_ZERO", "x_zero_gate_1");
+                            Gate* test_gate = nl->create_gate("X_AND4", "test_gate");
 
-                            std::shared_ptr<Net> global_out_net = nl->create_net("global_out");
+                            Net* global_out_net = nl->create_net("global_out");
                             global_out_net->add_source(test_gate, "O");
                             nl->mark_global_output_net(global_out_net);
 
-                            std::shared_ptr<Net> x_zero_net_0 = nl->create_net("x_zero_net_0");
-                            std::shared_ptr<Net> x_zero_net_1 = nl->create_net("x_zero_net_1");
+                            Net* x_zero_net_0 = nl->create_net("x_zero_net_0");
+                            Net* x_zero_net_1 = nl->create_net("x_zero_net_1");
 
                             x_zero_net_0->add_source(x_zero_gate_0, "O");
                             x_zero_net_1->add_source(x_zero_gate_1, "O");
@@ -875,7 +875,7 @@ a
                             HDLParserVerilog verilog_parser(parser_input);
 
                             // Parse the .verilog file
-                            std::shared_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_pseudo_simprim_lib_name);
+                            Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_pseudo_simprim_lib_name);
 
                             if (parsed_nl == nullptr) {
                                 //std::cout << test_def::get_captured_stdout() << std::endl;

@@ -8,11 +8,11 @@
 //namespace test_utils = hal;
 namespace hal
 {
-    std::shared_ptr<Netlist> test_utils::create_empty_netlist(const int id)
+    std::unique_ptr<Netlist> test_utils::create_empty_netlist(const int id)
     {
         NO_COUT_BLOCK;
         // GateLibrary* gl = gate_library_manager::get_gate_library(g_lib_name);
-        std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(get_testing_gate_library());
+        auto nl = std::make_unique<Netlist>(get_testing_gate_library());
 
         if (id >= 0)
         {
@@ -42,25 +42,25 @@ namespace hal
         }
     }
 
-    Endpoint test_utils::get_endpoint(const std::shared_ptr<Netlist>& nl, const int gate_id, const std::string& pin_type, bool is_destination)
+    Endpoint test_utils::get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination)
     {
-        std::shared_ptr<Gate> g = nl->get_gate_by_id(gate_id);
+        Gate* g = nl->get_gate_by_id(gate_id);
         if (g != nullptr)
             return Endpoint(g, pin_type, is_destination);
         else
             return Endpoint(nullptr, "", is_destination);
     }
 
-    Endpoint test_utils::get_endpoint(const std::shared_ptr<Gate> g, const std::string& pin_type)
+    Endpoint test_utils::get_endpoint(Gate* g, const std::string& pin_type)
     {
         if (g == nullptr || pin_type == "")
         {
             return Endpoint(nullptr, "", false);
         }
-        std::shared_ptr<Netlist> nl = g->get_netlist();
-        int gate_id                 = g->get_id();
-        auto in_pins                = g->get_type()->get_input_pins();
-        bool is_destination         = (std::find(in_pins.begin(), in_pins.end(), pin_type) != in_pins.end());
+        auto nl         = g->get_netlist();
+        int gate_id         = g->get_id();
+        auto in_pins        = g->get_type()->get_input_pins();
+        bool is_destination = (std::find(in_pins.begin(), in_pins.end(), pin_type) != in_pins.end());
         return get_endpoint(nl, gate_id, pin_type, is_destination);
     }
 
@@ -130,12 +130,12 @@ namespace hal
         return (str.find(sub_str) != std::string::npos);
     }
 
-    std::shared_ptr<Net> test_utils::get_net_by_subname(std::shared_ptr<Netlist> nl, const std::string subname)
+    Net* test_utils::get_net_by_subname(Netlist* nl, const std::string subname)
     {
         if (nl == nullptr)
             return nullptr;
-        std::unordered_set<std::shared_ptr<Net>> nets = nl->get_nets();
-        std::shared_ptr<Net> res                      = nullptr;
+        std::unordered_set<Net*> nets = nl->get_nets();
+        Net* res                      = nullptr;
         for (auto n : nets)
         {
             std::string n_name = n->get_name();
@@ -152,12 +152,12 @@ namespace hal
         return res;
     }
 
-    std::shared_ptr<Gate> test_utils::get_gate_by_subname(std::shared_ptr<Netlist> nl, const std::string subname)
+    Gate* test_utils::get_gate_by_subname(Netlist* nl, const std::string subname)
     {
         if (nl == nullptr)
             return nullptr;
-        std::set<std::shared_ptr<Gate>> gates = nl->get_gates();
-        std::shared_ptr<Gate> res             = nullptr;
+        std::set<Gate*> gates = nl->get_gates();
+        Gate* res             = nullptr;
         for (auto g : gates)
         {
             std::string g_name = g->get_name();
@@ -216,253 +216,253 @@ namespace hal
 
     GateLibrary* test_utils::get_testing_gate_library()
     {
-        //GateLibrary* gl = std::make_shared<GateLibrary>("Testing Library");
-        static GateLibrary* gl = nullptr;
+        //GateLibrary* gl = std::make_unique<GateLibrary>("Testing Library");
+        static std::unique_ptr<GateLibrary> gl = nullptr;
         if (gl != nullptr)
         {
-            return gl;
+            return gl.get();
         }
-        gl = std::make_shared<GateLibrary>("imaginary_path", "Testing Library");
+        gl = std::make_unique<GateLibrary>("imaginary_path", "Testing Library");
 
-        std::shared_ptr<GateType> gt;
+        std::unique_ptr<GateType> gt;
 
-        gt = std::make_shared<GateType>("gate_1_to_1");
+        gt = std::make_unique<GateType>("gate_1_to_1");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_2_to_2");
+        gt = std::make_unique<GateType>("gate_2_to_2");
         gt->add_input_pins({"I0", "I1"});
         gt->add_output_pins({"O0", "O1"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_2_to_1");
+        gt = std::make_unique<GateType>("gate_2_to_1");
         gt->add_input_pins({"I0", "I1"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_1_to_2");
+        gt = std::make_unique<GateType>("gate_1_to_2");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_3_to_3");
+        gt = std::make_unique<GateType>("gate_3_to_3");
         gt->add_input_pins({"I0", "I1", "I2"});
         gt->add_output_pins({"O0", "O1", "O2"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_3_to_1");
+        gt = std::make_unique<GateType>("gate_3_to_1");
         gt->add_input_pins({"I0", "I1", "I2"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_1_to_3");
+        gt = std::make_unique<GateType>("gate_1_to_3");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_4_to_4");
+        gt = std::make_unique<GateType>("gate_4_to_4");
         gt->add_input_pins({"I0", "I1", "I2", "I3"});
         gt->add_output_pins({"O0", "O1", "O2", "O3"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_4_to_1");
+        gt = std::make_unique<GateType>("gate_4_to_1");
         gt->add_input_pins({"I0", "I1", "I2", "I3"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_1_to_4");
+        gt = std::make_unique<GateType>("gate_1_to_4");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2", "O3"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_8_to_8");
+        gt = std::make_unique<GateType>("gate_8_to_8");
         gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
         gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_8_to_1");
+        gt = std::make_unique<GateType>("gate_8_to_1");
         gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_1_to_8");
+        gt = std::make_unique<GateType>("gate_1_to_8");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gate_2_to_0");
+        gt = std::make_unique<GateType>("gate_2_to_0");
         gt->add_input_pins({"I0", "I1"});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("pin_group_gate_4_to_4");
+        gt = std::make_unique<GateType>("pin_group_gate_4_to_4");
         gt->add_input_pins({"I(0)", "I(1)", "I(2)", "I(3)"});
         gt->add_output_pins({"O(0)", "O(1)", "O(2)", "O(3)"});
         gt->assign_input_pin_group("I", {{0, "I(0)"}, {1, "I(1)"}, {2, "I(2)"}, {3, "I(3)"}});
         gt->assign_output_pin_group("O", {{0, "O(0)"}, {1, "O(1)"}, {2, "O(2)"}, {3, "O(3)"}});
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("gnd");
+        gt = std::make_unique<GateType>("gnd");
         gt->add_output_pins({"O"});
         gt->add_boolean_function("O", BooleanFunction::from_string("0"));
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_shared<GateType>("vcc");
+        gt = std::make_unique<GateType>("vcc");
         gt->add_output_pins({"O"});
         gt->add_boolean_function("O", BooleanFunction::from_string("1"));
-        gl->add_gate_type(gt);
+        gl->add_gate_type(std::move(gt));
 
-        return gl;
+        return gl.get();
     }
 
-    std::shared_ptr<Netlist> test_utils::create_example_netlist(const int id)
+    std::unique_ptr<Netlist> test_utils::create_example_netlist(const int id)
     {
         NO_COUT_BLOCK;
-        GateLibrary* gl = get_testing_gate_library();
-        std::shared_ptr<Netlist> nl     = create_empty_netlist(id);
+        GateLibrary* gl             = get_testing_gate_library();
+        auto nl = create_empty_netlist(id);
         if (id >= 0)
         {
             nl->set_id(id);
         }
 
         // Create the gates
-        std::shared_ptr<Gate> gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_2_to_1"), "gate_0");
-        std::shared_ptr<Gate> gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("gnd"), "gate_1");
-        std::shared_ptr<Gate> gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("vcc"), "gate_2");
-        std::shared_ptr<Gate> gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_1_to_1"), "gate_3");
-        std::shared_ptr<Gate> gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_types().at("gate_1_to_1"), "gate_4");
-        std::shared_ptr<Gate> gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_types().at("gate_2_to_1"), "gate_5");
-        std::shared_ptr<Gate> gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_types().at("gate_2_to_0"), "gate_6");
-        std::shared_ptr<Gate> gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_types().at("gate_2_to_1"), "gate_7");
-        std::shared_ptr<Gate> gate_8 = nl->create_gate(MIN_GATE_ID + 8, gl->get_gate_types().at("gate_2_to_1"), "gate_8");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_2_to_1"), "gate_0");
+        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("gnd"), "gate_1");
+        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("vcc"), "gate_2");
+        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_1_to_1"), "gate_3");
+        Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_types().at("gate_1_to_1"), "gate_4");
+        Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_types().at("gate_2_to_1"), "gate_5");
+        Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_types().at("gate_2_to_0"), "gate_6");
+        Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_types().at("gate_2_to_1"), "gate_7");
+        Gate* gate_8 = nl->create_gate(MIN_GATE_ID + 8, gl->get_gate_types().at("gate_2_to_1"), "gate_8");
 
         // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
-        std::shared_ptr<Net> net_1_3 = nl->create_net(MIN_NET_ID + 13, "net_1_3");
+        Net* net_1_3 = nl->create_net(MIN_NET_ID + 13, "net_1_3");
         net_1_3->add_source(gate_1, "O");
         net_1_3->add_destination(gate_3, "I");
 
-        std::shared_ptr<Net> net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
+        Net* net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
         net_3_0->add_source(gate_3, "O");
         net_3_0->add_destination(gate_0, "I0");
 
-        std::shared_ptr<Net> net_2_0 = nl->create_net(MIN_NET_ID + 20, "net_2_0");
+        Net* net_2_0 = nl->create_net(MIN_NET_ID + 20, "net_2_0");
         net_2_0->add_source(gate_2, "O");
         net_2_0->add_destination(gate_0, "I1");
 
-        std::shared_ptr<Net> net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
+        Net* net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
         net_0_4_5->add_source(gate_0, "O");
         net_0_4_5->add_destination(gate_4, "I");
         net_0_4_5->add_destination(gate_5, "I0");
 
-        std::shared_ptr<Net> net_7_8 = nl->create_net(MIN_NET_ID + 78, "net_7_8");
+        Net* net_7_8 = nl->create_net(MIN_NET_ID + 78, "net_7_8");
         net_7_8->add_source(gate_7, "O");
         net_7_8->add_destination(gate_8, "I0");
 
         return nl;
     }
 
-    std::shared_ptr<Netlist> test_utils::create_example_netlist_2(const int id)
+    std::unique_ptr<Netlist> test_utils::create_example_netlist_2(const int id)
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        std::shared_ptr<Netlist> nl     = create_empty_netlist(id);
+        auto nl     = create_empty_netlist(id);
 
         // Create the gates
-        std::shared_ptr<Gate> gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_4_to_1"), "gate_0");
-        std::shared_ptr<Gate> gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("gate_4_to_1"), "gate_1");
-        std::shared_ptr<Gate> gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("gate_4_to_1"), "gate_2");
-        std::shared_ptr<Gate> gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_4_to_1"), "gate_3");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_4_to_1"), "gate_0");
+        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("gate_4_to_1"), "gate_1");
+        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("gate_4_to_1"), "gate_2");
+        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_4_to_1"), "gate_3");
 
         // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
 
-        std::shared_ptr<Net> net_0_1_3 = nl->create_net(MIN_NET_ID + 013, "net_0_1_3");
+        Net* net_0_1_3 = nl->create_net(MIN_NET_ID + 013, "net_0_1_3");
         net_0_1_3->add_source(gate_0, "O");
         net_0_1_3->add_destination(gate_1, "I0");
         net_0_1_3->add_destination(gate_1, "I1");
         net_0_1_3->add_destination(gate_1, "I2");
         net_0_1_3->add_destination(gate_3, "I0");
 
-        std::shared_ptr<Net> net_2_1 = nl->create_net(MIN_NET_ID + 21, "net_2_1");
+        Net* net_2_1 = nl->create_net(MIN_NET_ID + 21, "net_2_1");
         net_2_1->add_source(gate_2, "O");
         net_2_1->add_destination(gate_1, "I3");
 
         return nl;
     }
 
-    std::shared_ptr<Netlist> test_utils::create_example_netlist_negative(const int id)
+    std::unique_ptr<Netlist> test_utils::create_example_netlist_negative(const int id)
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        std::shared_ptr<Netlist> nl     = create_empty_netlist(id);
+        auto nl     = create_empty_netlist(id);
 
         // Create the Gate
-        std::shared_ptr<Gate> gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_1_to_1"), "gate_0");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_1_to_1"), "gate_0");
 
         // Net connected to the input pin
-        std::shared_ptr<Net> net_X_1 = nl->create_net(MIN_GATE_ID + 0, "net_X_1");
+        Net* net_X_1 = nl->create_net(MIN_GATE_ID + 0, "net_X_1");
         net_X_1->add_destination(gate_0, "I");
 
         // Net connected to the output pin
-        std::shared_ptr<Net> net_1_X = nl->create_net(MIN_GATE_ID + 1, "net_1_X");
+        Net* net_1_X = nl->create_net(MIN_GATE_ID + 1, "net_1_X");
         net_1_X->add_source(gate_0, "O");
 
         return nl;
     }
 
-    std::shared_ptr<Netlist> test_utils::create_example_parse_netlist(int id)
+    std::unique_ptr<Netlist> test_utils::create_example_parse_netlist(int id)
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        std::shared_ptr<Netlist> nl     = create_empty_netlist(id);
+        auto nl     = create_empty_netlist(id);
 
         // Create the gates
-        std::shared_ptr<Gate> gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_2_to_1"), "gate_0");
-        std::shared_ptr<Gate> gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("gnd"), "gate_1");
-        std::shared_ptr<Gate> gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("vcc"), "gate_2");
-        std::shared_ptr<Gate> gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_1_to_1"), "gate_3");
-        std::shared_ptr<Gate> gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_types().at("gate_1_to_1"), "gate_4");
-        std::shared_ptr<Gate> gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_types().at("gate_2_to_1"), "gate_5");
-        std::shared_ptr<Gate> gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_types().at("gate_2_to_1"), "gate_6");
-        std::shared_ptr<Gate> gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_types().at("gate_2_to_1"), "gate_7");
+        Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_2_to_1"), "gate_0");
+        Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("gnd"), "gate_1");
+        Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("vcc"), "gate_2");
+        Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_1_to_1"), "gate_3");
+        Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_types().at("gate_1_to_1"), "gate_4");
+        Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_types().at("gate_2_to_1"), "gate_5");
+        Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_types().at("gate_2_to_1"), "gate_6");
+        Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, gl->get_gate_types().at("gate_2_to_1"), "gate_7");
 
         // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
-        std::shared_ptr<Net> net_1_3 = nl->create_net(MIN_NET_ID + 13, "gnd_net");
+        Net* net_1_3 = nl->create_net(MIN_NET_ID + 13, "gnd_net");
         net_1_3->add_source(gate_1, "O");
         net_1_3->add_destination(gate_3, "I");
 
-        std::shared_ptr<Net> net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
+        Net* net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
         net_3_0->add_source(gate_3, "O");
         net_3_0->add_destination(gate_0, "I0");
 
-        std::shared_ptr<Net> net_2_0 = nl->create_net(MIN_NET_ID + 20, "vcc_net");
+        Net* net_2_0 = nl->create_net(MIN_NET_ID + 20, "vcc_net");
         net_2_0->add_source(gate_2, "O");
         net_2_0->add_destination(gate_0, "I1");
 
-        std::shared_ptr<Net> net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
+        Net* net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
         net_0_4_5->add_source(gate_0, "O");
         net_0_4_5->add_destination(gate_4, "I");
         net_0_4_5->add_destination(gate_5, "I0");
 
-        std::shared_ptr<Net> net_6_7 = nl->create_net(MIN_NET_ID + 67, "net_6_7");
+        Net* net_6_7 = nl->create_net(MIN_NET_ID + 67, "net_6_7");
         net_6_7->add_source(gate_6, "O");
         net_6_7->add_destination(gate_7, "I0");
 
-        std::shared_ptr<Net> net_4_out = nl->create_net(MIN_NET_ID + 400, "net_4_out");
+        Net* net_4_out = nl->create_net(MIN_NET_ID + 400, "net_4_out");
         net_4_out->add_source(gate_4, "O");
 
-        std::shared_ptr<Net> net_5_out = nl->create_net(MIN_NET_ID + 500, "net_5_out");
+        Net* net_5_out = nl->create_net(MIN_NET_ID + 500, "net_5_out");
         net_5_out->add_source(gate_5, "O");
 
-        std::shared_ptr<Net> net_7_out = nl->create_net(MIN_NET_ID + 700, "net_7_out");
+        Net* net_7_out = nl->create_net(MIN_NET_ID + 700, "net_7_out");
         net_7_out->add_source(gate_7, "O");
 
         return nl;
     }
 
-    std::shared_ptr<Gate> test_utils::create_test_gate(std::shared_ptr<Netlist> nl, const u32 id)
+    Gate* test_utils::create_test_gate(Netlist* nl, const u32 id)
     {
         GateLibrary* gl = get_testing_gate_library();
-        std::shared_ptr<Gate> res_gate  = nl->create_gate(id, gl->get_gate_types().at("gate_3_to_1"), "gate_" + std::to_string(id));
+        Gate* res_gate  = nl->create_gate(id, gl->get_gate_types().at("gate_3_to_1"), "gate_" + std::to_string(id));
 
         return res_gate;
     }
@@ -479,7 +479,7 @@ namespace hal
         return {nullptr, "", true};
     }
 
-    bool test_utils::nets_are_equal(const std::shared_ptr<Net> n0, const std::shared_ptr<Net> n1, const bool ignore_id, const bool ignore_name)
+    bool test_utils::nets_are_equal(Net* n0, Net* n1, const bool ignore_id, const bool ignore_name)
     {
         if (n0 == nullptr || n1 == nullptr)
         {
@@ -513,7 +513,7 @@ namespace hal
         return true;
     }
 
-    bool test_utils::gates_are_equal(const std::shared_ptr<Gate> g0, const std::shared_ptr<Gate> g1, const bool ignore_id, const bool ignore_name)
+    bool test_utils::gates_are_equal(Gate* g0, Gate* g1, const bool ignore_id, const bool ignore_name)
     {
         if (g0 == nullptr || g1 == nullptr)
         {
@@ -537,7 +537,7 @@ namespace hal
         return true;
     }
 
-    bool test_utils::modules_are_equal(const std::shared_ptr<Module> m_0, const std::shared_ptr<Module> m_1, const bool ignore_id, const bool ignore_name)
+    bool test_utils::modules_are_equal(Module* m_0, Module* m_1, const bool ignore_id, const bool ignore_name)
     {
         // Not only one of them may be a nullptr
         if (m_0 == nullptr || m_1 == nullptr)
@@ -565,7 +565,7 @@ namespace hal
             return false;
         for (auto g_0 : m_0->get_gates())
         {
-            std::shared_ptr<Gate> g_1 = m_1->get_netlist()->get_gate_by_id(g_0->get_id());
+            Gate* g_1 = m_1->get_netlist()->get_gate_by_id(g_0->get_id());
             if (!gates_are_equal(g_0, g_1, ignore_id, ignore_name))
                 return false;
             if (!m_1->contains_gate(g_1))
@@ -582,7 +582,7 @@ namespace hal
             auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
             if (n_1_list.size() != 1)
                 return false;
-            std::shared_ptr<Net> n_1 = *n_1_list.begin();
+            Net* n_1 = *n_1_list.begin();
             if (m_1_input_port_names.find(n_1) == m_1_input_port_names.end())
                 return false;
             if (m_1_input_port_names[n_1] != p_name_0)
@@ -597,7 +597,7 @@ namespace hal
             auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
             if (n_1_list.size() != 1)
                 return false;
-            std::shared_ptr<Net> n_1 = *n_1_list.begin();
+            Net* n_1 = *n_1_list.begin();
             if (m_1_output_port_names.find(n_1) == m_1_output_port_names.end())
                 return false;
             if (m_1_output_port_names[n_1] != p_name_0)
@@ -626,7 +626,7 @@ namespace hal
         return true;
     }
 
-    bool test_utils::netlists_are_equal(const std::shared_ptr<Netlist> nl_0, const std::shared_ptr<Netlist> nl_1, const bool ignore_id)
+    bool test_utils::netlists_are_equal(Netlist* nl_0, Netlist* nl_1, const bool ignore_id)
     {
         if (nl_0 == nullptr || nl_1 == nullptr)
         {
@@ -691,13 +691,13 @@ namespace hal
         // -- Check if the modules are the same
         if (nl_0->get_modules().size() != nl_1->get_modules().size())
             return false;
-        std::set<std::shared_ptr<Module>> mods_1 = nl_1->get_modules();
+        std::set<Module*> mods_1 = nl_1->get_modules();
         for (auto m_0 : nl_0->get_modules())
         {
             if (ignore_id)
             {
                 auto m_1_all = nl_1->get_modules();
-                auto m_1     = std::find_if(m_1_all.begin(), m_1_all.end(), [m_0](const std::shared_ptr<Module> m) { return m->get_name() == m_0->get_name(); });
+                auto m_1     = std::find_if(m_1_all.begin(), m_1_all.end(), [m_0](Module* m) { return m->get_name() == m_0->get_name(); });
                 if (m_1 == m_1_all.end())
                     return false;
                 if (!modules_are_equal(m_0, *m_1, ignore_id))
@@ -715,29 +715,29 @@ namespace hal
 
     // Filter Functions
 
-    std::function<bool(const std::shared_ptr<Module>&)> test_utils::module_name_filter(const std::string& name)
+    std::function<bool(Module*)> test_utils::module_name_filter(const std::string& name)
     {
-        return [name](auto& m) { return m->get_name() == name; };
+        return [name](auto m) { return m->get_name() == name; };
     }
 
-    std::function<bool(const std::shared_ptr<Gate>&)> test_utils::gate_filter(const std::string& type, const std::string& name)
+    std::function<bool(Gate*)> test_utils::gate_filter(const std::string& type, const std::string& name)
     {
-        return [name, type](auto& g) { return g->get_name() == name && g->get_type()->get_name() == type; };
+        return [name, type](auto g) { return g->get_name() == name && g->get_type()->get_name() == type; };
     }
 
-    std::function<bool(const std::shared_ptr<Gate>&)> test_utils::gate_name_filter(const std::string& name)
+    std::function<bool(Gate*)> test_utils::gate_name_filter(const std::string& name)
     {
-        return [name](auto& g) { return g->get_name() == name; };
+        return [name](auto g) { return g->get_name() == name; };
     }
 
-    std::function<bool(const std::shared_ptr<Gate>&)> test_utils::gate_type_filter(const std::string& type)
+    std::function<bool(Gate*)> test_utils::gate_type_filter(const std::string& type)
     {
-        return [type](auto& g) { return g->get_type()->get_name() == type; };
+        return [type](auto g) { return g->get_type()->get_name() == type; };
     }
 
-    std::function<bool(const std::shared_ptr<Net>&)> test_utils::net_name_filter(const std::string& name)
+    std::function<bool(Net*)> test_utils::net_name_filter(const std::string& name)
     {
-        return [name](auto& n) { return n->get_name() == name; };
+        return [name](auto n) { return n->get_name() == name; };
     }
 
     std::function<bool(const Endpoint&)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
@@ -768,4 +768,4 @@ namespace hal
     {
         return [type](auto&, auto& ep) { return ep.get_gate()->get_type()->get_name() == type; };
     }
-}
+}    // namespace hal

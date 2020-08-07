@@ -16,7 +16,7 @@ namespace hal
             s_alpha = 1;
     }
 
-    SeparatedGraphicsNet::SeparatedGraphicsNet(const std::shared_ptr<const Net> n) : GraphicsNet(n)
+    SeparatedGraphicsNet::SeparatedGraphicsNet(Net* n) : GraphicsNet(n)
     {
     }
 

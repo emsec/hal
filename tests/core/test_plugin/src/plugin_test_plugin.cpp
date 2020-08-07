@@ -33,7 +33,7 @@ ProgramOptions plugin_test_plugin::get_cli_options() const
     return description;
 }
 
-bool plugin_test_plugin::handle_cli_call(std::shared_ptr<Netlist> nl, ProgramArguments& args)
+bool plugin_test_plugin::handle_cli_call(Netlist* nl, ProgramArguments& args)
 {
     UNUSED(nl);
     UNUSED(args);

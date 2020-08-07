@@ -115,8 +115,6 @@ namespace hal
                 return false;
             }
 
-            bool write_success = false;
-
             auto begin_time = std::chrono::high_resolution_clock::now();
 
             if (!writer->write(netlist, stream))
@@ -134,7 +132,17 @@ namespace hal
                      file_name.string(),
                      (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
-            return write_success;
+            return true;
+        }
+
+        bool write(Netlist* netlist, const std::string& type_extension, std::stringstream& stream)
+        {
+            auto writer = get_writer_for_file("fake_file."+type_extension);
+            if (writer == nullptr)
+            {
+                return false;
+            }
+            return writer->write(netlist, stream);
         }
     }    // namespace hdl_writer_manager
 }    // namespace hal

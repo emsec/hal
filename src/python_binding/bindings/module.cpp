@@ -1,10 +1,10 @@
-#include "bindings.h"
+#include "python_binding/bindings.h"
 
 namespace hal
 {
     void module_init(py::module& m)
     {
-        py::class_<Module, std::shared_ptr<Module>, DataContainer> py_module(m, "Module", R"(Module class containing information about a module including its gates, submodules, and parent module.)");
+        py::class_<Module, RawPtrWrapper<Module>> py_module(m, "Module", R"(Module class containing information about a module including its gates, submodules, and parent module.)");
 
         py_module.def_property_readonly("id", &Module::get_id, R"(
         The unique ID of the module object.
@@ -80,7 +80,7 @@ namespace hal
 )");
 
         py_module.def_property_readonly(
-            "submodules", [](const std::shared_ptr<Module>& mod) { return mod->get_submodules(); }, R"(
+            "submodules", [](Module* mod) { return mod->get_submodules(); }, R"(
         A set of all direct submodules of this module.
 
         :type: set[hal_py.Module]
@@ -107,13 +107,13 @@ namespace hal
         :rtype: bool
 )");
 
-        py_module.def_property_readonly("netlist", &Module::get_netlist, R"(
+        py_module.def_property_readonly("netlist", [](Module* m){return RawPtrWrapper(m->get_netlist());}, R"(
         The netlist this module is associated with.
 
         :type: hal_py.Netlist
 )");
 
-        py_module.def("get_netlist", &Module::get_netlist, R"(
+        py_module.def("get_netlist", [](Module* m){return RawPtrWrapper(m->get_netlist());}, R"(
         Get the netlist this module is associated with.
 
         :returns: The netlist.
@@ -163,7 +163,7 @@ namespace hal
 )");
 
         py_module.def_property_readonly(
-            "gates", [](const std::shared_ptr<Module>& mod) { return mod->get_gates(); }, R"(
+            "gates", [](Module* mod) { return mod->get_gates(); }, R"(
         The set of all gates belonging to the module.
 
         :type: set[hal_py.Gate]

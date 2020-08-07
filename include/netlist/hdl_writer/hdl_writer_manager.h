@@ -78,5 +78,14 @@ namespace hal
          * @returns True on success.
          */
         bool write(Netlist* netlist, const std::filesystem::path& file_name);
+
+        /**
+         * Writes the netlist into a stringstream with a defined format
+         * @param[in] netlist - The netlist.
+         * @param[in] type_extension - The file extension of the output format
+         * @param[out] stream - The output stream.
+         * @returns True on success.
+         */
+        bool write(Netlist* netlist, const std::string& type_extension, std::stringstream& stream);
     }    // namespace hdl_writer_manager
 }    // namespace hal
