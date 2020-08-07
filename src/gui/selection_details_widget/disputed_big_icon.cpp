@@ -7,8 +7,8 @@ namespace hal
         : QLabel(parent)
     {
         if (!iconName.isEmpty())
-            setPixmap(QPixmap(QString(":/icons/%1").arg(iconName),"PNG").scaled(60,60));
-        setFixedSize(64,64);
+            setPixmap(QPixmap(QString(":/icons/%1").arg(iconName),"PNG").scaled(64,64));
+        setFixedSize(68,68);
         connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &DisputedBigIcon::handleGlobalSettingsChanged);
         mIsVisible = g_settings_manager.get("selection_details/show_big_icon", true).toBool();
         showOrHide();
