@@ -12,7 +12,7 @@
 
 namespace hal
 {
-    const std::string ProgramOptions::REQUIRED_PARAM = "__REQUIRED_PARAM__";
+    const std::string ProgramOptions::A_REQUIRED_PARAMETER = "__A_REQUIRED_PARAMETER__";
 
     ProgramOptions::ProgramOptions(const std::string& name)
     {
@@ -26,7 +26,7 @@ namespace hal
 
     ProgramArguments ProgramOptions::parse(int argc, const char* argv[])
     {
-        std::shared_ptr<option> current_option = nullptr;
+        const Option* current_option = nullptr;
 
         m_unknown_options.clear();
 
@@ -45,7 +45,7 @@ namespace hal
 
             // search through all options for a recognized flag
             bool opt_found = false;
-            for (const auto& opt : all_options)
+            for (auto opt : all_options)
             {
                 if (std::find(opt->flags.begin(), opt->flags.end(), arg) != opt->flags.end())
                 {
@@ -53,7 +53,7 @@ namespace hal
 
                     if (current_option != nullptr)
                     {
-                        if (current_option->parameters[param_pos] == REQUIRED_PARAM)
+                        if (current_option->parameters[param_pos] == A_REQUIRED_PARAMETER)
                         {
                             die("core",
                                 "the option with flags {}is missing a required parameter!",
@@ -101,7 +101,7 @@ namespace hal
 
         if (current_option != nullptr)
         {
-            if (param_pos < current_option->parameters.size() && current_option->parameters[param_pos] == REQUIRED_PARAM)
+            if (param_pos < current_option->parameters.size() && current_option->parameters[param_pos] == A_REQUIRED_PARAMETER)
             {
                 die("core",
                     "the option with flags {}is missing at least one required parameter!",
@@ -116,7 +116,7 @@ namespace hal
 
     bool ProgramOptions::is_registered(const std::string& flag) const
     {
-        for (const auto& opt : get_all_options())
+        for (auto opt : get_all_options())
         {
             if (std::find(opt->flags.begin(), opt->flags.end(), flag) != opt->flags.end())
             {
@@ -152,7 +152,7 @@ namespace hal
         }
 
         // look for already registered option, abort if found
-        for (const auto& opt : get_all_options())
+        for (auto opt : get_all_options())
         {
             if (opt->description == description)
             {
@@ -180,7 +180,7 @@ namespace hal
         bool found_not_required = false;
         for (const auto& param : parameters)
         {
-            if (param == REQUIRED_PARAM)
+            if (param == A_REQUIRED_PARAMETER)
             {
                 if (found_not_required)
                 {
@@ -188,17 +188,17 @@ namespace hal
                     return false;
                 }
             }
-            else if (param != REQUIRED_PARAM)
+            else if (param != A_REQUIRED_PARAMETER)
             {
                 found_not_required = true;
             }
         }
 
         // create new option
-        auto opt         = std::make_shared<option>();
-        opt->description = description;
-        opt->parameters  = parameters;
-        opt->flags       = flags;
+        Option opt;
+        opt.description = description;
+        opt.parameters  = parameters;
+        opt.flags       = flags;
 
         m_options.push_back(opt);
 
@@ -208,9 +208,9 @@ namespace hal
     bool ProgramOptions::add(const ProgramOptions& other_options, const std::string& category)
     {
         // look for conflicts
-        for (const auto& other_opt : other_options.get_all_options())
+        for (auto other_opt : other_options.get_all_options())
         {
-            for (const auto& opt : get_all_options())
+            for (auto opt : get_all_options())
             {
                 if (opt->description == other_opt->description)
                 {
@@ -257,18 +257,18 @@ namespace hal
     std::vector<std::tuple<std::set<std::string>, std::string>> ProgramOptions::get_options() const
     {
         std::vector<std::tuple<std::set<std::string>, std::string>> options;
-        for (const auto& opt : get_all_options())
+        for (auto opt : get_all_options())
         {
             options.push_back(std::make_tuple(opt->flags, opt->description));
         }
         return options;
     }
 
-    std::vector<std::shared_ptr<ProgramOptions::option>> ProgramOptions::get_all_options() const
+    std::vector<const ProgramOptions::Option*> ProgramOptions::get_all_options() const
     {
-        std::vector<std::shared_ptr<ProgramOptions::option>> options;
+        std::vector<const ProgramOptions::Option*> options;
 
-        options.insert(options.end(), m_options.begin(), m_options.end());
+        std::transform(m_options.begin(), m_options.end(), std::back_inserter(options), [](auto& opt) { return &opt; });
 
         for (const auto& it : m_suboptions)
         {
@@ -287,11 +287,11 @@ namespace hal
         for (const auto& opt : m_options)
         {
             size_t opt_len = 0;
-            for (const auto& f : opt->flags)
+            for (const auto& f : opt.flags)
             {
                 opt_len += f.size() + 2;
             }
-            for (size_t j = 0; j < opt->parameters.size(); ++j)
+            for (size_t j = 0; j < opt.parameters.size(); ++j)
             {
                 opt_len += 4;    //" arg"
             }
@@ -331,11 +331,11 @@ namespace hal
         {
             auto& opt = m_options[i];
 
-            std::string flags = "  " + core_utils::join(", ", std::vector<std::string>(opt->flags.begin(), opt->flags.end()));
+            std::string flags = "  " + core_utils::join(", ", std::vector<std::string>(opt.flags.begin(), opt.flags.end()));
 
-            for (const auto& flag : opt->parameters)
+            for (const auto& flag : opt.parameters)
             {
-                if (flag == REQUIRED_PARAM)
+                if (flag == A_REQUIRED_PARAMETER)
                 {
                     flags += " ARG";
                 }
@@ -352,7 +352,7 @@ namespace hal
                 s += " ";
             }
 
-            std::string description     = opt->description;
+            std::string description     = opt.description;
             bool first_description_line = true;
 
             while (!description.empty())

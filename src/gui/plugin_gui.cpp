@@ -202,7 +202,7 @@ namespace hal
         l.add_channel("python", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
 
-    extern std::unique_ptr<BasePluginInterface> get_plugin_instance()
+    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<PluginGui>();
     }

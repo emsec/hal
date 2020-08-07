@@ -4,7 +4,7 @@
 namespace hal
 {
 
-    extern std::unique_ptr<BasePluginInterface> get_plugin_instance()
+    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<LibertyParserPlugin>();
     }

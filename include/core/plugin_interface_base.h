@@ -40,7 +40,7 @@ namespace hal
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
     class BasePluginInterface;
-    extern "C" PLUGIN_API std::unique_ptr<BasePluginInterface> get_plugin_instance();
+    extern "C" PLUGIN_API std::unique_ptr<BasePluginInterface> create_plugin_instance();
 #ifdef COMPILER_CLANG
 #pragma clang diagnostic pop
 #endif

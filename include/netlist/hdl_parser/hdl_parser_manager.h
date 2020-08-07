@@ -71,7 +71,7 @@ namespace hal
          * @param[in] args - The command line options.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        NETLIST_API std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args);
+        NETLIST_API std::unique_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args);
 
         /**
          * Returns the netlist for a file, parsed with a defined gate library.
@@ -80,6 +80,6 @@ namespace hal
          * @param[in] gate_library - The gate library used in the file.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        NETLIST_API std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library);
+        NETLIST_API std::unique_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library);
     }    // namespace hdl_parser_manager
 }    // namespace hal

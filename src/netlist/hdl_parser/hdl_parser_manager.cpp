@@ -41,7 +41,7 @@ namespace hal
                 return parser;
             }
 
-            std::shared_ptr<Netlist> dispatch_parse(const std::filesystem::path& file_name, HDLParser* parser, const std::vector<const GateLibrary*>& gate_libraries)
+            std::unique_ptr<Netlist> dispatch_parse(const std::filesystem::path& file_name, HDLParser* parser, const std::vector<const GateLibrary*>& gate_libraries)
             {
                 auto begin_time = std::chrono::high_resolution_clock::now();
 
@@ -86,7 +86,7 @@ namespace hal
                         return nullptr;
                     }
 
-                    std::shared_ptr<Netlist> netlist = parser->instantiate(gl);
+                    std::unique_ptr<Netlist> netlist = parser->instantiate(gl);
                     if (netlist == nullptr)
                     {
                         log_error("hdl_parser", "parser cannot instantiate file '{}' using gate library '{}'.", file_name.string(), gate_library->get_name());
@@ -150,7 +150,7 @@ namespace hal
             }
         }
 
-        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args)
+        std::unique_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args)
         {
             auto parser = get_parser_for_file(file_name);
             if (parser == nullptr)
@@ -183,7 +183,7 @@ namespace hal
             return dispatch_parse(file_name, parser, gate_libraries);
         }
 
-        std::shared_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library)
+        std::unique_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library)
         {
             auto parser = get_parser_for_file(file_name);
             if (parser == nullptr)

@@ -5,15 +5,15 @@ namespace hal
     void hdl_writer_dispatcher_init(py::module& m)
     {
         // hdl_file_writer/HDLWriter
-        m.def_submodule("HDLWriterDispatcher")
-            .def("get_cli_options", &HDLWriterDispatcher::get_cli_options, R"(
+        m.def_submodule("hdl_writer_manager")
+            .def("get_cli_options", &hdl_writer_manager::get_cli_options, R"(
                 Returns the command line interface options of the hdl writer dispatcher.
 
                 :returns: The options.
                 :rtype: list(list(str, list(str), set(str)))
                 )")
             .def("write",
-                 py::overload_cast<std::shared_ptr<Netlist>, const std::string&, const std::filesystem::path&>(&HDLWriterDispatcher::write),
+                 py::overload_cast<std::shared_ptr<Netlist>, const std::string&, const std::filesystem::path&>(&hdl_writer_manager::write),
                  py::arg("netlist"),
                  py::arg("format"),
                  py::arg("file_name"),

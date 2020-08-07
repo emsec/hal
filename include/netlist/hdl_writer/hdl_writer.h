@@ -25,12 +25,7 @@
 
 #include "def.h"
 
-#include <cctype>
-#include <fstream>
-#include <set>
 #include <sstream>
-#include <string>
-#include <vector>
 
 namespace hal
 {
@@ -43,26 +38,23 @@ namespace hal
     class HDL_FILE_WRITER_API HDLWriter
     {
     public:
-        /**
-         * @param[out] stream - The string stream which will be filled with the hdl code.
-         */
-        explicit HDLWriter(std::stringstream& stream);
-
+        HDLWriter() = default;
         virtual ~HDLWriter() = default;
+
+        /**
+         * Returns a human-readable name for this writer.
+         *
+         * @returns The name of this writer.
+         */
+        virtual std::string get_name() const = 0;
 
         /**
          * Serializes the netlist into hdl code.
          *
-         * @param[in] g - The netlist.
+         * @param[in] netlist - The netlist.
+         * @param[out] stream - The string stream which will be filled with the hdl code.
          * @returns True on success.
          */
-        virtual bool write(std::shared_ptr<Netlist> const g) = 0;
-
-    protected:
-        // stores the netlist
-        std::shared_ptr<Netlist> m_netlist;
-
-        // holds the output stream to the file
-        std::stringstream& m_stream;
+        virtual bool write(Netlist* netlist, std::stringstream& stream) = 0;
     };
 }    // namespace hal

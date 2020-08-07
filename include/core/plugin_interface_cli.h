@@ -58,6 +58,6 @@ namespace hal
          * @param[in] args - Program options.
          * @returns True on success.
          */
-        virtual bool handle_cli_call(std::shared_ptr<Netlist> netlist, ProgramArguments& args) = 0;
+        virtual bool handle_cli_call(Netlist* netlist, ProgramArguments& args) = 0;
     };
 }    // namespace hal

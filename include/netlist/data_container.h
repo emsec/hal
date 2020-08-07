@@ -91,12 +91,6 @@ namespace hal
         std::vector<std::tuple<std::string, std::string>> get_data_keys() const;
 
     protected:
-        /**
-         * A function called when data has changed.
-         * Has to be implemented by the child class.
-         */
-        //virtual void notify_updated() = 0;
-
         std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> m_data;
     };
 }    // namespace hal

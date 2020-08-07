@@ -49,7 +49,7 @@ namespace hal
          * @param[in] gate_library - The underlying gate library.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> create_netlist(const GateLibrary* gate_library);
+        NETLIST_API std::unique_ptr<Netlist> create_netlist(const GateLibrary* gate_library);
 
         /**
          * Creates a new netlist for a specific file.
@@ -58,7 +58,7 @@ namespace hal
          * @param[in] gate_library_file - Name of hardware gate library file.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file);
 
         /**
          * Creates a new netlist for a specific '.hal' file.
@@ -67,7 +67,7 @@ namespace hal
          * file.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hal_file);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hal_file);
 
         /**
          * Creates a new netlist entirely from program options.
@@ -76,6 +76,6 @@ namespace hal
          * @param[in] args - Command line options.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> load_netlist(const ProgramArguments& args);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args);
     }    // namespace netlist_factory
 }    // namespace hal

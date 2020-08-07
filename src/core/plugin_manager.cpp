@@ -156,10 +156,10 @@ namespace hal
             }
 
             /* get factory of library */
-            auto factory = (instantiate_plugin_function)lib->get_function("get_plugin_instance");
+            auto factory = (instantiate_plugin_function)lib->get_function("create_plugin_instance");
             if (factory == nullptr)
             {
-                log_error("core", "file does not seem to be a HAL plugin since it does not contain a factory function 'get_plugin_instance'.");
+                log_error("core", "file does not seem to be a HAL plugin since it does not contain a factory function 'create_plugin_instance'.");
                 return false;
             }
             auto instance = factory();

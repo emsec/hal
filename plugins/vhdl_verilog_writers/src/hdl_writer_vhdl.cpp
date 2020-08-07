@@ -1,48 +1,49 @@
-#include "netlist/hdl_writer/hdl_writer_vhdl.h"
+#include "hdl_writer_vhdl.h"
 
 #include "core/log.h"
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 
-#include <fstream>
 
 namespace hal
 {
-    HDLWriterVHDL::HDLWriterVHDL(std::stringstream& stream) : HDLWriter(stream)
+    std::string HDLWriterVHDL::get_name() const
     {
+        return "Default VHDL Writer";
     }
 
-    bool HDLWriterVHDL::write(std::shared_ptr<Netlist> const g)
+    bool HDLWriterVHDL::write(Netlist* netlist, std::stringstream& stream)
     {
-        m_netlist = g;
+        m_netlist = netlist;
+        m_stream = &stream;
 
         this->prepare_signal_names();
 
         auto library_includes = m_netlist->get_gate_library()->get_includes();
 
-        m_stream << "library IEEE;" << std::endl;
-        m_stream << "use IEEE.STD_LOGIC_1164.all;" << std::endl;
-        m_stream << "use IEEE.NUMERIC_STD.all;" << std::endl;
-        m_stream << std::endl;
+        *m_stream << "library IEEE;" << std::endl;
+        *m_stream << "use IEEE.STD_LOGIC_1164.all;" << std::endl;
+        *m_stream << "use IEEE.NUMERIC_STD.all;" << std::endl;
+        *m_stream << std::endl;
         for (const auto& inc : library_includes)
         {
-            m_stream << "use " << inc << "all;" << std::endl;
+            *m_stream << "use " << inc << "all;" << std::endl;
         }
 
         this->print_module_interface_vhdl();
 
         std::string entity_name = m_netlist->get_design_name();
 
-        m_stream << std::endl << "architecture STRUCTURE of " << entity_name << " is" << std::endl;
+        *m_stream << std::endl << "architecture STRUCTURE of " << entity_name << " is" << std::endl;
 
         this->print_signal_definition_vhdl();
 
-        m_stream << "begin" << std::endl;
+        *m_stream << "begin" << std::endl;
 
         this->print_gate_definitions_vhdl();
 
-        m_stream << "end STRUCTURE;" << std::endl;
+        *m_stream << "end STRUCTURE;" << std::endl;
 
         return true;
     }
@@ -97,7 +98,7 @@ namespace hal
             m_only_wire_names_str_to_net[wire_name.second] = wire_name.first;
         }
         //input entity
-        std::set<std::shared_ptr<Net>> in_nets = m_netlist->get_global_input_nets();
+        std::set<Net*> in_nets = m_netlist->get_global_input_nets();
         for (auto it : in_nets)
         {
             m_in_names[it]                                = this->get_net_name(it);
@@ -106,7 +107,7 @@ namespace hal
             m_only_wire_names_str_to_net.erase(this->get_net_name(it));
         }
         //output entity
-        std::set<std::shared_ptr<Net>> out_nets = m_netlist->get_global_output_nets();
+        std::set<Net*> out_nets = m_netlist->get_global_output_nets();
         for (auto it : out_nets)
         {
             m_out_names[it]                                = this->get_net_name(it);
@@ -118,7 +119,7 @@ namespace hal
         //vcc gates
         for (auto n : m_netlist->get_vcc_gates())
         {
-            std::set<std::shared_ptr<Net>> o_nets = n->get_fan_out_nets();
+            std::set<Net*> o_nets = n->get_fan_out_nets();
             for (auto e : o_nets)
             {
                 if (e->get_name() == "'1'")
@@ -132,7 +133,7 @@ namespace hal
         //gnd gates
         for (auto n : m_netlist->get_gnd_gates())
         {
-            std::set<std::shared_ptr<Net>> o_nets = n->get_fan_out_nets();
+            std::set<Net*> o_nets = n->get_fan_out_nets();
             for (auto e : o_nets)
             {
                 if (e->get_name() == "'0'")
@@ -164,7 +165,7 @@ namespace hal
         }
     }
 
-    std::string HDLWriterVHDL::get_net_name(const std::shared_ptr<Net> n)
+    std::string HDLWriterVHDL::get_net_name(Net* n)
     {
         std::string name = n->get_name();
 
@@ -206,7 +207,7 @@ namespace hal
         return name;
     }
 
-    std::string HDLWriterVHDL::get_gate_name(const std::shared_ptr<Gate> g)
+    std::string HDLWriterVHDL::get_gate_name(Gate* g)
     {
         std::string name = g->get_name();
 
@@ -258,19 +259,19 @@ namespace hal
         std::string entity_name = m_netlist->get_design_name();
 
         //Print module interface
-        m_stream << "entity " << entity_name << " is" << std::endl;
-        m_stream << "  port (" << std::endl;
+        *m_stream << "entity " << entity_name << " is" << std::endl;
+        *m_stream << "  port (" << std::endl;
         bool begin = true;
         for (auto in_name : m_in_names_str_to_net)
         {
             if (begin)
             {
-                m_stream << in_name.first << " : in STD_LOGIC := 'X'";
+                *m_stream << in_name.first << " : in STD_LOGIC := 'X'";
                 begin = false;
             }
             else
             {
-                m_stream << "; " << std::endl << "  " << in_name.first << " : in STD_LOGIC := 'X'";
+                *m_stream << "; " << std::endl << "  " << in_name.first << " : in STD_LOGIC := 'X'";
             }
         }
 
@@ -278,25 +279,25 @@ namespace hal
         {
             if (begin)
             {
-                m_stream << out_name.first << " : out STD_LOGIC";
+                *m_stream << out_name.first << " : out STD_LOGIC";
                 begin = false;
             }
             else
             {
-                m_stream << "; " << std::endl << "  " << out_name.first << " : out STD_LOGIC";
+                *m_stream << "; " << std::endl << "  " << out_name.first << " : out STD_LOGIC";
             }
         }
 
-        m_stream << std::endl;
-        m_stream << ");" << std::endl;
-        m_stream << "end " << entity_name << ";" << std::endl;
+        *m_stream << std::endl;
+        *m_stream << ");" << std::endl;
+        *m_stream << "end " << entity_name << ";" << std::endl;
     }
 
     void HDLWriterVHDL::print_signal_definition_vhdl()
     {
         //Declare all wires
 
-        std::vector<std::tuple<std::string, std::shared_ptr<Net>>> nets;
+        std::vector<std::tuple<std::string, Net*>> nets;
         for (auto name : m_only_wire_names_str_to_net)
         {
             if (name.second->get_name() == "'1'" || name.second->get_name() == "'0'")
@@ -304,51 +305,51 @@ namespace hal
             nets.emplace_back(name.first, name.second);
         }
 
-        std::sort(nets.begin(), nets.end(), [](const std::tuple<std::string, std::shared_ptr<Net>>& a, const std::tuple<std::string, std::shared_ptr<Net>>& b) -> bool {
+        std::sort(nets.begin(), nets.end(), [](const std::tuple<std::string, Net*>& a, const std::tuple<std::string, Net*>& b) -> bool {
             return std::get<1>(a)->get_id() < std::get<1>(b)->get_id();
         });
 
         for (auto tup : nets)
         {
-            m_stream << "  signal " << std::get<0>(tup) << " : STD_LOGIC;" << std::endl;
+            *m_stream << "  signal " << std::get<0>(tup) << " : STD_LOGIC;" << std::endl;
         }
 
         for (auto name : m_vcc_names_str_to_net)
         {
-            m_stream << "  signal " << name.first << " : STD_LOGIC := '1';" << std::endl;
+            *m_stream << "  signal " << name.first << " : STD_LOGIC := '1';" << std::endl;
         }
         for (auto name : m_gnd_names_str_to_net)
         {
-            m_stream << "  signal " << name.first << " : STD_LOGIC := '0';" << std::endl;
+            *m_stream << "  signal " << name.first << " : STD_LOGIC := '0';" << std::endl;
         }
     }
 
     void HDLWriterVHDL::print_gate_definitions_vhdl()
     {
         auto unsorted_gates = m_netlist->get_gates();
-        std::vector<std::shared_ptr<Gate>> gates(unsorted_gates.begin(), unsorted_gates.end());
-        std::sort(gates.begin(), gates.end(), [](const std::shared_ptr<Gate>& a, const std::shared_ptr<Gate>& b) -> bool { return a->get_id() < b->get_id(); });
+        std::vector<Gate*> gates(unsorted_gates.begin(), unsorted_gates.end());
+        std::sort(gates.begin(), gates.end(), [](Gate* a, Gate* b) -> bool { return a->get_id() < b->get_id(); });
 
         for (auto&& gate : gates)
         {
             if (gate->get_type()->get_name() == "GLOBAL_GND" || gate->get_type()->get_name() == "GLOBAL_VCC")
                 continue;
-            m_stream << get_gate_name(gate);
-            m_stream << " : " << gate->get_type()->get_name() << std::endl;
+            *m_stream << get_gate_name(gate);
+            *m_stream << " : " << gate->get_type()->get_name() << std::endl;
 
             this->print_generic_map_vhdl(gate);
 
-            m_stream << " port map (" << std::endl;
+            *m_stream << " port map (" << std::endl;
 
             bool begin_signal_list = true;
             begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_input_pins(), begin_signal_list, std::bind(&Gate::get_fan_in_net, gate, std::placeholders::_1));
             begin_signal_list      = this->print_gate_signal_list_vhdl(gate, gate->get_output_pins(), begin_signal_list, std::bind(&Gate::get_fan_out_net, gate, std::placeholders::_1));
 
-            m_stream << std::endl << ");" << std::endl;
+            *m_stream << std::endl << ");" << std::endl;
         }
     }
 
-    void HDLWriterVHDL::print_generic_map_vhdl(std::shared_ptr<Gate> const& n)
+    void HDLWriterVHDL::print_generic_map_vhdl(Gate* n)
     {
         // Map init value
         bool first_generic = true;
@@ -370,99 +371,99 @@ namespace hal
             {
                 if (first_generic)
                 {
-                    m_stream << "  generic map(" << std::endl;
+                    *m_stream << "  generic map(" << std::endl;
                     first_generic = false;
                 }
                 else
                 {
-                    m_stream << "," << std::endl;
+                    *m_stream << "," << std::endl;
                 }
-                m_stream << "    " << std::get<1>(d.first) << " => " << content.c_str();
+                *m_stream << "    " << std::get<1>(d.first) << " => " << content.c_str();
             }
             if (type == "bit_vector")
             {
                 std::string bit_string = "X\"" + content + "\"";
                 if (first_generic)
                 {
-                    m_stream << "  generic map(" << std::endl;
+                    *m_stream << "  generic map(" << std::endl;
                     first_generic = false;
                 }
                 else
                 {
-                    m_stream << "," << std::endl;
+                    *m_stream << "," << std::endl;
                 }
-                m_stream << "   " << std::get<1>(d.first) << " => " << bit_string.c_str();
+                *m_stream << "   " << std::get<1>(d.first) << " => " << bit_string.c_str();
             }
             else if (type == "string")
             {
                 if (first_generic)
                 {
-                    m_stream << "  generic map(" << std::endl;
+                    *m_stream << "  generic map(" << std::endl;
                     first_generic = false;
                 }
                 else
                 {
-                    m_stream << "," << std::endl;
+                    *m_stream << "," << std::endl;
                 }
-                m_stream << "   " << std::get<1>(d.first) << " => "
+                *m_stream << "   " << std::get<1>(d.first) << " => "
                          << "\"" << content << "\"";
             }
             else if (type == "bit_value")
             {
                 if (first_generic)
                 {
-                    m_stream << "  generic map(" << std::endl;
+                    *m_stream << "  generic map(" << std::endl;
                     first_generic = false;
                 }
                 else
                 {
-                    m_stream << "," << std::endl;
+                    *m_stream << "," << std::endl;
                 }
-                m_stream << "   " << std::get<1>(d.first) << " => "
+                *m_stream << "   " << std::get<1>(d.first) << " => "
                          << "\'" << content << "\'";
             }
             else if (type == "boolean")
             {
                 if (first_generic)
                 {
-                    m_stream << "  generic map(" << std::endl;
+                    *m_stream << "  generic map(" << std::endl;
                     first_generic = false;
                 }
                 else
                 {
-                    m_stream << "," << std::endl;
+                    *m_stream << "," << std::endl;
                 }
                 std::string val = (content == "true") ? "true" : "false";
-                m_stream << "   " << std::get<1>(d.first) << " => " << val.c_str();
+                *m_stream << "   " << std::get<1>(d.first) << " => " << val.c_str();
             }
             else if (type == "integer")
             {
                 if (first_generic)
                 {
-                    m_stream << "  generic map(" << std::endl;
+                    *m_stream << "  generic map(" << std::endl;
                     first_generic = false;
                 }
                 else
                 {
-                    m_stream << "," << std::endl;
+                    *m_stream << "," << std::endl;
                 }
-                m_stream << "   " << std::get<1>(d.first) << " => " << content.c_str();
+                *m_stream << "   " << std::get<1>(d.first) << " => " << content.c_str();
             }
         }
         if (!first_generic)
         {
-            m_stream << std::endl << "  )" << std::endl;
+            *m_stream << std::endl << "  )" << std::endl;
         }
     }
 
-    bool HDLWriterVHDL::print_gate_signal_list_vhdl(std::shared_ptr<Gate> n, std::vector<std::string> port_types, bool is_first, std::function<std::shared_ptr<Net>(std::string)> get_net_fkt)
+    bool HDLWriterVHDL::print_gate_signal_list_vhdl(Gate* n, std::vector<std::string> port_types, bool is_first, std::function<Net*(std::string)> get_net_fkt)
     {
         std::vector<std::string> port_types_sorted;
         std::copy(port_types.begin(), port_types.end(), std::back_inserter(port_types_sorted));
         std::sort(port_types_sorted.begin(), port_types_sorted.end());
         for (auto&& port_type : port_types_sorted)
         {
-            std::shared_ptr<Net> e = get_net_fkt(port_type);
+            Net* e = get_net_fkt(port_type);
             if (e == nullptr)
             {
                 log_info("hdl_writer", "VHDL serializer skipped signal translation for gate {} with type {} and port {} NO EDGE available", n->get_name(), n->get_type()->get_name(), port_type);
@@ -471,9 +472,9 @@ namespace hal
             {
                 if (!is_first)
                 {
-                    m_stream << "," << std::endl;
+                    *m_stream << "," << std::endl;
                 }
-                m_stream << "   " << port_type << " => " << m_printable_signal_names.find(e)->second;
+                *m_stream << "   " << port_type << " => " << m_printable_signal_names.find(e)->second;
                 is_first = false;
             }
         }

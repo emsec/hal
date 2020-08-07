@@ -12,7 +12,7 @@
 
 namespace hal {
 
-    class HDLWriterDispatcherTest : public ::testing::Test {
+    class hdl_writer_managerTest : public ::testing::Test {
     protected:
         const std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY) {\n"
                                              "    define(cell);\n"
@@ -64,10 +64,10 @@ namespace hal {
      *
      * Functions: get_cli_options
      */
-    TEST_F(HDLWriterDispatcherTest, check_cli_options) {
+    TEST_F(hdl_writer_managerTest, check_cli_options) {
         TEST_START
             {// Access the gui-options and the cli-options (shouldn't  be empty)
-                EXPECT_FALSE(HDLWriterDispatcher::get_cli_options().get_options().empty());
+                EXPECT_FALSE(hdl_writer_manager::get_cli_options().get_options().empty());
             }
         TEST_END
     }
@@ -77,7 +77,7 @@ namespace hal {
      *
      * Functions: get_cli_options
      */
-    TEST_F(HDLWriterDispatcherTest, check_write_by_program_args) {
+    TEST_F(hdl_writer_managerTest, check_write_by_program_args) {
         TEST_START
             {// Write a netlist to two files, by passing the file path in the arguments
                 std::string out_path_vhdl = test_utils::create_sandbox_path("writer_out_vhdl.vhd").string();
@@ -88,7 +88,7 @@ namespace hal {
 
                 std::shared_ptr<Netlist> simple_nl = create_simple_netlist();
                 // Write the two files
-                bool suc = HDLWriterDispatcher::write(simple_nl, p_args_vhdl);
+                bool suc = hdl_writer_manager::write(simple_nl, p_args_vhdl);
                 EXPECT_TRUE(suc);
 
                 // Verify the correctness of the output by parsing it
@@ -109,7 +109,7 @@ namespace hal {
      *
      * Functions: get_cli_options
      */
-    TEST_F(HDLWriterDispatcherTest, check_write_by_format_and_filename) {
+    TEST_F(hdl_writer_managerTest, check_write_by_format_and_filename) {
         TEST_START
             {
                 // Write a netlist to two files, by passing the file path in the arguments
@@ -118,8 +118,8 @@ namespace hal {
 
                 std::shared_ptr<Netlist> simple_nl = create_simple_netlist();
                 // Write the two files
-                bool suc_vhdl = HDLWriterDispatcher::write(simple_nl, "vhdl", out_path_vhdl);
-                bool suc_verilog = HDLWriterDispatcher::write(simple_nl, "verilog", out_path_verilog);
+                bool suc_vhdl = hdl_writer_manager::write(simple_nl, "vhdl", out_path_vhdl);
+                bool suc_verilog = hdl_writer_manager::write(simple_nl, "verilog", out_path_verilog);
                 EXPECT_TRUE(suc_vhdl);
                 EXPECT_TRUE(suc_verilog);
 
@@ -140,7 +140,7 @@ namespace hal {
 
                 std::shared_ptr<Netlist> simple_nl = create_simple_netlist();
                 // Write the two files
-                EXPECT_FALSE(HDLWriterDispatcher::write(simple_nl, "<unknown_format>", out_path));
+                EXPECT_FALSE(hdl_writer_manager::write(simple_nl, "<unknown_format>", out_path));
             }
         TEST_END
     }

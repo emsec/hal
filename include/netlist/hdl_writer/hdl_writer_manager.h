@@ -39,7 +39,7 @@ namespace hal
     /**
      * @ingroup hdl_writers
      */
-    namespace HDLWriterDispatcher
+    namespace hdl_writer_manager
     {
         /**
          * Returns the command line interface options of the hdl writer dispatcher
@@ -48,20 +48,35 @@ namespace hal
         ProgramOptions get_cli_options();
 
         /**
+         * Registers a new HDL writer for a selection of file types.
+         * If writers for some of the extensions already exist, they are not changed, only the new ones are registered.
+         *
+         * @param[in] writer - The writer to register.
+         * @param[in] supported_file_extensions - The file extensions this writer can process.
+         */
+        NETLIST_API void register_writer(HDLWriter* writer, const std::vector<std::string>& supported_file_extensions);
+
+        /**
+         * Unregisters a specific writer.
+         *
+         * @param[in] writer - The writer to unregister.
+         */
+        NETLIST_API void unregister_writer(HDLWriter* writer);
+
+        /**
          * Writes the netlist into a file specified in command line options.
-         * @param[in] g - The netlist.
+         * @param[in] netlist - The netlist.
          * @param[in] args - The command line options.
          * @returns True on success.
          */
-        bool write(std::shared_ptr<Netlist> g, const ProgramArguments& args);
+        bool write(Netlist* netlist, const ProgramArguments& args);
 
         /**
          * Writes the netlist into a file with a defined format
-         * @param[in] g - The netlist.
-         * @param[in] format - The target format of the file, e.g. vhdl, verilog...
-         * @param[in] file_name - The input file.
+         * @param[in] netlist - The netlist.
+         * @param[in] file_name - The output file name.
          * @returns True on success.
          */
-        bool write(std::shared_ptr<Netlist> g, const std::string& format, const std::filesystem::path& file_name);
-    }    // namespace HDLWriterDispatcher
+        bool write(Netlist* netlist, const std::filesystem::path& file_name);
+    }    // namespace hdl_writer_manager
 }    // namespace hal

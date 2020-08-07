@@ -85,10 +85,12 @@ namespace hal
          * @param[in] gl - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        std::shared_ptr<Netlist> instantiate(const GateLibrary* gl)
+        std::unique_ptr<Netlist> instantiate(const GateLibrary* gl)
         {
             // create empty netlist
-            m_netlist = netlist_factory::create_netlist(gl);
+            auto result = netlist_factory::create_netlist(gl);
+            m_netlist = result.get();
+
             if (m_netlist == nullptr)
             {
                 // error printed in subfunction
@@ -320,7 +322,7 @@ namespace hal
                 }
             }
 
-            return m_netlist;
+            return result;
         }
 
     protected:
@@ -990,8 +992,8 @@ namespace hal
         T m_last_entity;
 
     private:
-        // stores the netlist
-        std::shared_ptr<Netlist> m_netlist;
+        // temporarily stores the netlist during serialization
+        Netlist* m_netlist;
 
         // unique alias generation
         std::map<T, u32> m_signal_name_occurrences;
@@ -1000,14 +1002,14 @@ namespace hal
         std::map<T, u32> m_current_instance_index;
 
         // net generation
-        std::shared_ptr<Net> m_zero_net;
-        std::shared_ptr<Net> m_one_net;
-        std::map<T, std::shared_ptr<Net>> m_net_by_name;
+        Net* m_zero_net;
+        Net* m_one_net;
+        std::map<T, Net*> m_net_by_name;
         std::map<T, std::vector<T>> m_nets_to_merge;
 
         // buffer gate types
         std::map<T, const GateType*> m_tmp_gate_types;
-        std::map<std::shared_ptr<Net>, std::tuple<port_direction, std::string, std::shared_ptr<Module>>> m_module_ports;
+        std::map<Net*, std::tuple<port_direction, std::string, Module*>> m_module_ports;
 
         bool build_netlist(const T& top_module)
         {
@@ -1078,7 +1080,7 @@ namespace hal
 
                 for (const auto& expanded_name : expanded_ports.at(port_name))
                 {
-                    std::shared_ptr<Net> new_net = m_netlist->create_net(core_strings::convert_string<T, std::string>(expanded_name));
+                    Net* new_net = m_netlist->create_net(core_strings::convert_string<T, std::string>(expanded_name));
                     if (new_net == nullptr)
                     {
                         log_error("hdl_parser", "could not create new net '{}'", expanded_name);
@@ -1234,7 +1236,7 @@ namespace hal
             return true;
         }
 
-        std::shared_ptr<Module> instantiate(const instance& entity_inst, std::shared_ptr<Module> parent, const std::map<T, T>& parent_module_assignments)
+        Module* instantiate(const instance& entity_inst, Module* parent, const std::map<T, T>& parent_module_assignments)
         {
             std::map<T, T> signal_alias;
             std::map<T, T> instance_alias;
@@ -1246,7 +1248,7 @@ namespace hal
 
             instance_alias[entity_inst_name] = get_unique_alias(m_instance_name_occurrences, entity_inst_name);
 
-            std::shared_ptr<Module> module;
+            Module* module;
 
             if (parent == nullptr)
             {
@@ -1466,7 +1468,7 @@ namespace hal
                 // if the instance is another entity, recursively instantiate it
                 if (m_entities.find(inst_type) != m_entities.end())
                 {
-                    container = instantiate(inst, module, instance_assignments).get();
+                    container = instantiate(inst, module, instance_assignments);
                     if (container == nullptr)
                     {
                         return nullptr;
@@ -1478,7 +1480,7 @@ namespace hal
                     // create the new gate
                     instance_alias[inst_name] = get_unique_alias(m_instance_name_occurrences, inst_name);
 
-                    std::shared_ptr<Gate> new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::convert_string<T, std::string>(instance_alias.at(inst_name)));
+                    Gate* new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::convert_string<T, std::string>(instance_alias.at(inst_name)));
                     if (new_gate == nullptr)
                     {
                         log_error("hdl_parser", "could not instantiate gate '{}' within entity '{}'", inst_name, e.get_name());
@@ -1486,7 +1488,7 @@ namespace hal
                     }
 
                     module->assign_gate(new_gate);
-                    container = new_gate.get();
+                    container = new_gate;
 
                     // if gate is a global type, register it as such
                     if (vcc_gate_types.find(inst_type) != vcc_gate_types.end() && !new_gate->mark_vcc_gate())

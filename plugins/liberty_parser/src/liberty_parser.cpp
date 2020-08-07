@@ -1037,7 +1037,7 @@ namespace hal
             }
         }
 
-        return std::move(gt);
+        return gt;
     }
 
     void LibertyParser::remove_comments(std::string& line, bool& multi_line_comment)

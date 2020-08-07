@@ -289,8 +289,8 @@ namespace hal
     {
         if (m_descriptions.get_options().empty())
         {
-            m_descriptions.add("--log.level", "set default log level", {ProgramOptions::REQUIRED_PARAM});
-            m_descriptions.add("--log.enabled", "default setting for enable logging", {ProgramOptions::REQUIRED_PARAM});
+            m_descriptions.add("--log.level", "set default log level", {ProgramOptions::A_REQUIRED_PARAMETER});
+            m_descriptions.add("--log.enabled", "default setting for enable logging", {ProgramOptions::A_REQUIRED_PARAMETER});
 
             for (const auto& channel : this->get_channels())
             {
@@ -298,8 +298,8 @@ namespace hal
                 auto level_string   = start + ".level";
                 auto enabled_string = start + ".enabled";
 
-                m_descriptions.add(level_string, "set log level for channel: " + channel, {ProgramOptions::REQUIRED_PARAM});
-                m_descriptions.add(enabled_string, "enable logging level for channel: " + channel, {ProgramOptions::REQUIRED_PARAM});
+                m_descriptions.add(level_string, "set log level for channel: " + channel, {ProgramOptions::A_REQUIRED_PARAMETER});
+                m_descriptions.add(enabled_string, "enable logging level for channel: " + channel, {ProgramOptions::A_REQUIRED_PARAMETER});
             }
         }
 

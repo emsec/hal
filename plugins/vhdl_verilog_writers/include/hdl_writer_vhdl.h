@@ -24,7 +24,7 @@
 #pragma once
 
 #include "def.h"
-#include "hdl_writer.h"
+#include "netlist/hdl_writer/hdl_writer.h"
 
 #include <functional>
 #include <map>
@@ -42,65 +42,67 @@ namespace hal
     class HDL_FILE_WRITER_API HDLWriterVHDL : public HDLWriter
     {
     public:
-        /**
-         * @param[out] stream - The string stream which will be filled with the hdl code.
-         */
-        explicit HDLWriterVHDL(std::stringstream& stream);
-
+        HDLWriterVHDL() = default;
         ~HDLWriterVHDL() = default;
 
+        std::string get_name() const override;
+
         /**
-         * Serializes a netlist into the internal string stream in VHDL format.
+         * Serializes the netlist into hdl code.
          *
-         * @param[in] g - The netlist to serialize.
+         * @param[in] netlist - The netlist.
+         * @param[out] stream - The string stream which will be filled with the hdl code.
          * @returns True on success.
          */
-        bool write(std::shared_ptr<Netlist> const g) override;
+        bool write(Netlist* netlist, std::stringstream& stream) override;
 
     private:
+        Netlist* m_netlist;
+        std::stringstream* m_stream;
+
         void print_module_interface_vhdl();
 
         void print_signal_definition_vhdl();
 
         void print_gate_definitions_vhdl();
 
-        void print_generic_map_vhdl(std::shared_ptr<Gate> const& n);
+        void print_generic_map_vhdl(Gate* n);
 
-        bool print_gate_signal_list_vhdl(std::shared_ptr<Gate> n, std::vector<std::string> port_types, bool is_first, std::function<std::shared_ptr<Net>(std::string)> get_net_fkt);
+        bool print_gate_signal_list_vhdl(Gate* n, std::vector<std::string> port_types, bool is_first, std::function<Net*(std::string)> get_net_fkt);
 
         void prepare_signal_names();
 
-        std::string get_net_name(const std::shared_ptr<Net> n);
+        std::string get_net_name(Net* n);
 
-        std::string get_gate_name(const std::shared_ptr<Gate> g);
+        std::string get_gate_name(Gate* g);
 
         std::string get_port_name(std::string pin);
 
         /**
          * Following maps saves prepared net names used internally.
          */
-        std::map<std::shared_ptr<Net>, std::string> m_printable_signal_names;
+        std::map<Net*, std::string> m_printable_signal_names;
 
-        std::map<std::string, std::shared_ptr<Net>> m_printable_signal_names_str_to_net;
+        std::map<std::string, Net*> m_printable_signal_names_str_to_net;
 
-        std::map<std::shared_ptr<Net>, std::string> m_only_wire_names;
+        std::map<Net*, std::string> m_only_wire_names;
 
-        std::map<std::string, std::shared_ptr<Net>> m_only_wire_names_str_to_net;
+        std::map<std::string, Net*> m_only_wire_names_str_to_net;
 
-        std::map<std::shared_ptr<Net>, std::string> m_in_names;
+        std::map<Net*, std::string> m_in_names;
 
-        std::map<std::string, std::shared_ptr<Net>> m_in_names_str_to_net;
+        std::map<std::string, Net*> m_in_names_str_to_net;
 
-        std::map<std::shared_ptr<Net>, std::string> m_out_names;
+        std::map<Net*, std::string> m_out_names;
 
-        std::map<std::string, std::shared_ptr<Net>> m_out_names_str_to_net;
+        std::map<std::string, Net*> m_out_names_str_to_net;
 
-        std::map<std::shared_ptr<Net>, std::string> m_gnd_names;
+        std::map<Net*, std::string> m_gnd_names;
 
-        std::map<std::string, std::shared_ptr<Net>> m_gnd_names_str_to_net;
+        std::map<std::string, Net*> m_gnd_names_str_to_net;
 
-        std::map<std::shared_ptr<Net>, std::string> m_vcc_names;
+        std::map<Net*, std::string> m_vcc_names;
 
-        std::map<std::string, std::shared_ptr<Net>> m_vcc_names_str_to_net;
+        std::map<std::string, Net*> m_vcc_names_str_to_net;
     };
 }    // namespace hal

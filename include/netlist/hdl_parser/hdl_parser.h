@@ -39,7 +39,6 @@ namespace hal
     {
     public:
         HDLParser() = default;
-
         virtual ~HDLParser() = default;
 
         /**
@@ -63,7 +62,7 @@ namespace hal
          * @param[in] gl - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        virtual std::shared_ptr<Netlist> instantiate(const GateLibrary* gl) = 0;
+        virtual std::unique_ptr<Netlist> instantiate(const GateLibrary* gl) = 0;
 
 
         /**
@@ -72,7 +71,7 @@ namespace hal
          * @param[in] gl - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        std::shared_ptr<Netlist> parse_and_instantiate(std::stringstream* stream, const GateLibrary* gl)
+        std::unique_ptr<Netlist> parse_and_instantiate(std::stringstream* stream, const GateLibrary* gl)
         {
             if (parse(stream))
             {
