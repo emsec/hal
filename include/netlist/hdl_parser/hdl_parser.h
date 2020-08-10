@@ -61,6 +61,7 @@ namespace hal
         /**
          * Parses and instantiates a netlist using the specified gate library.
          *
+         * @param[in] stream - The string stream filled with the hdl code.
          * @param[in] gl - The gate library.
          * @returns A pointer to the resulting netlist.
          */

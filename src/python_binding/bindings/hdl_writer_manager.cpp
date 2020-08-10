@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    void hdl_writer_dispatcher_init(py::module& m)
+    void hdl_writer_manager_init(py::module& m)
     {
         // hdl_file_writer/HDLWriter
         m.def_submodule("hdl_writer_manager")
