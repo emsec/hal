@@ -42,7 +42,7 @@ namespace hal
      *
      * @ingroup core
      */
-    namespace PluginManager
+    namespace plugin_manager
     {
         /**
          * Add existing program options.<br>
@@ -147,5 +147,5 @@ namespace hal
          * @param[in] id - The id of the registered callback.
          */
         void remove_model_changed_callback(u64 id);
-    }    // namespace PluginManager
+    }    // namespace plugin_manager
 }    // namespace hal

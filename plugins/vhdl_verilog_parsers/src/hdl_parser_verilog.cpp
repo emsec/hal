@@ -7,18 +7,13 @@
 
 namespace hal
 {
-    std::string HDLParserVerilog::get_name() const
-    {
-        return "Default Verilog Parser";
-    }
-
     // ###########################################################################
     // ###########          Parse HDL into intermediate format          ##########
     // ###########################################################################
 
-    bool HDLParserVerilog::parse(std::stringstream* stream)
+    bool HDLParserVerilog::parse(std::stringstream& stream)
     {
-        m_fs = stream;
+        m_fs = &stream;
         // tokenize file
         if (!tokenize())
         {

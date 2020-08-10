@@ -14,10 +14,10 @@ namespace hal
     {
         namespace
         {
-            std::unordered_map<HDLParser*, std::vector<std::string>> m_parser_to_extensions;
-            std::unordered_map<std::string, HDLParser*> m_extension_to_parser;
+            std::unordered_map<std::string, std::vector<std::string>> m_parser_to_extensions;
+            std::unordered_map<std::string, std::pair<std::string, ParserFactory>> m_extension_to_parser;
 
-            HDLParser* get_parser_for_file(const std::filesystem::path& file_name)
+            ParserFactory get_parser_factory_for_file(const std::filesystem::path& file_name)
             {
                 auto extension = core_utils::to_lower(file_name.extension().string());
                 if (!extension.empty() && extension[0] != '.')
@@ -25,23 +25,17 @@ namespace hal
                     extension = "." + extension;
                 }
 
-                HDLParser* parser = nullptr;
                 if (auto it = m_extension_to_parser.find(extension); it != m_extension_to_parser.end())
                 {
-                    parser = it->second;
-                }
-                if (parser == nullptr)
-                {
-                    log_error("hdl_parser", "no hdl parser registered for file type '{}'", extension);
-                    return nullptr;
+                    log_info("hdl_parser", "selected parser: {}", it->second.first);
+                    return it->second.second;
                 }
 
-                log_info("hdl_parser", "selected parser: {}", parser->get_name());
-
-                return parser;
+                log_error("hdl_parser", "no hdl parser registered for file type '{}'", extension);
+                return ParserFactory();
             }
 
-            std::unique_ptr<Netlist> dispatch_parse(const std::filesystem::path& file_name, HDLParser* parser, const std::vector<const GateLibrary*>& gate_libraries)
+            std::unique_ptr<Netlist> dispatch_parse(const std::filesystem::path& file_name, std::unique_ptr<HDLParser> parser, const std::vector<const GateLibrary*>& gate_libraries)
             {
                 auto begin_time = std::chrono::high_resolution_clock::now();
 
@@ -61,16 +55,14 @@ namespace hal
                     ifs.close();
                 }
 
-                if (!parser->parse(&stream))
+                if (!parser->parse(stream))
                 {
                     log_error("hdl_parser", "parser cannot parse file '{}'.", file_name.string());
                     return nullptr;
                 }
 
                 log_info("hdl_parser",
-                         "'{}' parsed '{}' in {:2.2f} seconds.",
-                         parser->get_name(),
-                         file_name.string(),
+                         "finished parsing in {:2.2f} seconds.",
                          (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
                 for (const auto& gate_library : gate_libraries)
@@ -113,7 +105,7 @@ namespace hal
             return ProgramOptions();
         }
 
-        void register_parser(HDLParser* parser, const std::vector<std::string>& supported_file_extensions)
+        void register_parser(const std::string& name, const ParserFactory& parser_factory, const std::vector<std::string>& supported_file_extensions)
         {
             for (auto ext : supported_file_extensions)
             {
@@ -124,26 +116,26 @@ namespace hal
                 }
                 if (auto it = m_extension_to_parser.find(ext); it != m_extension_to_parser.end())
                 {
-                    log_warning("hdl_parser", "file type '{}' already has associated parser '{}', it remains unchanged", ext, it->second->get_name());
+                    log_warning("hdl_parser", "file type '{}' already has associated parser '{}', it remains unchanged", ext, it->second.first);
                     continue;
                 }
-                m_extension_to_parser.emplace(ext, parser);
-                m_parser_to_extensions[parser].push_back(ext);
+                m_extension_to_parser.emplace(ext, std::make_pair(name, parser_factory));
+                m_parser_to_extensions[name].push_back(ext);
 
-                log_info("hdl_parser", "registered hdl parser '{}' for file type '{}'", parser->get_name(), ext);
+                log_info("hdl_parser", "registered hdl parser '{}' for file type '{}'", name, ext);
             }
         }
 
-        void unregister_parser(HDLParser* parser)
+        void unregister_parser(const std::string& name)
         {
-            if (auto it = m_parser_to_extensions.find(parser); it != m_parser_to_extensions.end())
+            if (auto it = m_parser_to_extensions.find(name); it != m_parser_to_extensions.end())
             {
                 for (const auto& ext : it->second)
                 {
                     if (auto rm_it = m_extension_to_parser.find(ext); rm_it != m_extension_to_parser.end())
                     {
                         m_extension_to_parser.erase(rm_it);
-                        log_info("hdl_parser", "unregistered hdl parser '{}' which was registered for file type '{}'", parser->get_name(), ext);
+                        log_info("hdl_parser", "unregistered hdl parser '{}' which was registered for file type '{}'", name, ext);
                     }
                 }
                 m_parser_to_extensions.erase(it);
@@ -152,8 +144,8 @@ namespace hal
 
         std::unique_ptr<Netlist> parse(const std::filesystem::path& file_name, const ProgramArguments& args)
         {
-            auto parser = get_parser_for_file(file_name);
-            if (parser == nullptr)
+            auto factory = get_parser_factory_for_file(file_name);
+            if (!factory)
             {
                 return nullptr;
             }
@@ -180,17 +172,17 @@ namespace hal
                 }
             }
 
-            return dispatch_parse(file_name, parser, gate_libraries);
+            return dispatch_parse(file_name, factory(), gate_libraries);
         }
 
         std::unique_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library)
         {
-            auto parser = get_parser_for_file(file_name);
-            if (parser == nullptr)
+            auto factory = get_parser_factory_for_file(file_name);
+            if (!factory)
             {
                 return nullptr;
             }
-            return dispatch_parse(file_name, parser, {gate_library});
+            return dispatch_parse(file_name, factory(), {gate_library});
         }
     }    // namespace hdl_parser_manager
 }    // namespace hal

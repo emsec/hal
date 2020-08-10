@@ -69,13 +69,13 @@ int redirect_control_to_interactive_ui(const std::string& name, ProgramArguments
     {
         file_name = core_utils::get_file(std::string(name + ".so"), {core_utils::get_library_directory()});
     }
-    if (!PluginManager::load(name, file_name))
+    if (!plugin_manager::load(name, file_name))
     {
         return ERROR;
     }
 
     log_info("core", "Starting {}.", name);
-    auto plugin = PluginManager::get_plugin_instance<InteractiveUIPluginInterface>(name);
+    auto plugin = plugin_manager::get_plugin_instance<InteractiveUIPluginInterface>(name);
     if (plugin == nullptr)
     {
         return ERROR;
@@ -87,7 +87,7 @@ int redirect_control_to_interactive_ui(const std::string& name, ProgramArguments
 
 int cleanup()
 {
-    if (!PluginManager::unload_all_plugins())
+    if (!plugin_manager::unload_all_plugins())
     {
         return ERROR;
     }
@@ -146,19 +146,19 @@ int main(int argc, const char* argv[])
     }
 
     /* initialize plugin manager */
-    PluginManager::add_existing_options_description(cli_options);
+    plugin_manager::add_existing_options_description(cli_options);
 
-    if (!PluginManager::load_all_plugins())
+    if (!plugin_manager::load_all_plugins())
     {
         return ERROR;
     }
 
     /* add plugin cli options */
-    auto ProgramOptions = PluginManager::get_cli_plugin_options();
+    auto ProgramOptions = plugin_manager::get_cli_plugin_options();
     if (!ProgramOptions.get_options().empty())
     {
-        cli_options.add(PluginManager::get_cli_plugin_options());
-        all_options.add(PluginManager::get_cli_plugin_options());
+        cli_options.add(plugin_manager::get_cli_plugin_options());
+        all_options.add(plugin_manager::get_cli_plugin_options());
     }
 
     /* process help output */
@@ -267,7 +267,7 @@ int main(int argc, const char* argv[])
 
     /* parse plugin options */
     std::vector<std::string> plugins_to_execute;
-    auto option_to_plugin_name = PluginManager::get_flag_to_plugin_mapping();
+    auto option_to_plugin_name = plugin_manager::get_flag_to_plugin_mapping();
     for (const auto& option : args.get_set_options())
     {
         auto it = option_to_plugin_name.find(option);
@@ -283,7 +283,7 @@ int main(int argc, const char* argv[])
     bool plugins_successful = true;
     for (const auto& plugin_name : plugins_to_execute)
     {
-        auto plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin_name);
+        auto plugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin_name);
         if (plugin == nullptr)
         {
             return cleanup();

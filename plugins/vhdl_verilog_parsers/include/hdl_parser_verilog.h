@@ -42,10 +42,8 @@ namespace hal
     class HDL_PARSER_API HDLParserVerilog : public HDLParserTemplate<std::string>
     {
     public:
-        HDLParserVerilog() = default;
+        HDLParserVerilog()  = default;
         ~HDLParserVerilog() = default;
-
-        std::string get_name() const override;
 
         /**
          * Parses a verilog netlist into an intermediate format.
@@ -53,7 +51,7 @@ namespace hal
          * @param[in] stream - The string stream filled with the hdl code.
          * @returns True on success, false otherwise.
          */
-        bool parse(std::stringstream* stream) override;
+        bool parse(std::stringstream& stream) override;
 
     private:
         TokenStream<std::string> m_token_stream;

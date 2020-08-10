@@ -68,7 +68,7 @@ namespace hal
         /**
          * Plugins utilize two phase construction.
          * Always populate all members etc in the initialize function which is automatically called by
-         * PluginManager::get_plugin_instance()
+         * plugin_manager::get_plugin_instance()
          */
         virtual void initialize();
 

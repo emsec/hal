@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/plugin_interface_base.h"
-#include "liberty_parser.h"
 
 namespace hal
 {
@@ -13,8 +12,5 @@ namespace hal
 
         void on_load() override;
         void on_unload() override;
-
-    private:
-        LibertyParser m_parser;
     };
 }    // namespace hal

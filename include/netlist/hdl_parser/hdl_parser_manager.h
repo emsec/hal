@@ -30,6 +30,7 @@
 #include <set>
 #include <string>
 #include <tuple>
+#include <functional>
 
 namespace hal
 {
@@ -41,6 +42,8 @@ namespace hal
      */
     namespace hdl_parser_manager
     {
+        using ParserFactory = std::function<std::unique_ptr<HDLParser>()>;
+
         /**
          * Returns the command line interface options of the hdl parser manager
          *
@@ -52,17 +55,18 @@ namespace hal
          * Registers a new HDL parser for a selection of file types.
          * If parsers for some of the extensions already exist, they are not changed, only the new ones are registered.
          *
-         * @param[in] parser - The parser to register.
+         * @param[in] name - The name of the parser.
+         * @param[in] parser_factory - A factory function that constructs a new parser instance.
          * @param[in] supported_file_extensions - The file extensions this parser can process.
          */
-        NETLIST_API void register_parser(HDLParser* parser, const std::vector<std::string>& supported_file_extensions);
+        NETLIST_API void register_parser(const std::string& name, const ParserFactory& parser_factory, const std::vector<std::string>& supported_file_extensions);
 
         /**
          * Unregisters a specific parser.
          *
-         * @param[in] parser - The parser to unregister.
+         * @param[in] name - The name of the parser.
          */
-        NETLIST_API void unregister_parser(HDLParser* parser);
+        NETLIST_API void unregister_parser(const std::string& name);
 
         /**
          * Returns the netlist for the file and specified command line options.

@@ -77,7 +77,7 @@ namespace hal
          *
          * @returns True on success, false otherwise.
          */
-        virtual bool parse(std::stringstream* stream) = 0;
+        virtual bool parse(std::stringstream& stream) = 0;
 
         /**
          * Instantiates a previously parsed netlist using the specified gate library.

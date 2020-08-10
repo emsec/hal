@@ -41,19 +41,12 @@ namespace hal
         virtual ~GateLibraryParser() = default;
 
         /**
-         * Returns a human-readable name for this parser.
-         *
-         * @returns The name of this parser.
-         */
-        virtual std::string get_name() const = 0;
-
-        /**
          * Parses the gate library definition file.
          *
          * @param[in] file_path - Path to the file containing the gate library definition.
          * @param[in] file_content - The string stream containing the gate library definition.
          * @returns The gate library or a nullptr on error.
          */
-        virtual std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream* file_content) = 0;
+        virtual std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream& file_content) = 0;
     };
 }    // namespace hal

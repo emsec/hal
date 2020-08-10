@@ -8,17 +8,13 @@
 
 namespace hal
 {
-    std::string HDLParserVHDL::get_name() const
-    {
-        return "Default VHDL Parser";
-    }
     // ###########################################################################
     // ###########          Parse HDL into intermediate format          ##########
     // ###########################################################################
 
-    bool HDLParserVHDL::parse(std::stringstream* stream)
+    bool HDLParserVHDL::parse(std::stringstream& stream)
     {
-        m_fs = stream;
+        m_fs = &stream;
         // tokenize file
         if (!tokenize())
         {

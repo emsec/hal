@@ -16,12 +16,12 @@ namespace hal
     {
         namespace
         {
-            std::unordered_map<GateLibraryParser*, std::vector<std::string>> m_parser_to_extensions;
-            std::unordered_map<std::string, GateLibraryParser*> m_extension_to_parser;
+            std::unordered_map<std::string, std::vector<std::string>> m_parser_to_extensions;
+            std::unordered_map<std::string, std::pair<std::string, ParserFactory>> m_extension_to_parser;
 
             std::map<std::filesystem::path, std::unique_ptr<GateLibrary>> m_gate_libraries;
 
-            GateLibraryParser* get_parser_for_file(const std::filesystem::path& file_name)
+            ParserFactory get_parser_factory_for_file(const std::filesystem::path& file_name)
             {
                 auto extension = core_utils::to_lower(file_name.extension().string());
                 if (!extension.empty() && extension[0] != '.')
@@ -29,27 +29,21 @@ namespace hal
                     extension = "." + extension;
                 }
 
-                GateLibraryParser* parser = nullptr;
                 if (auto it = m_extension_to_parser.find(extension); it != m_extension_to_parser.end())
                 {
-                    parser = it->second;
-                }
-                if (parser == nullptr)
-                {
-                    log_error("gate_library_manager", "no gate library parser registered for file type '{}'", extension);
-                    return nullptr;
+                    log_info("hdl_parser", "selected parser: {}", it->second.first);
+                    return it->second.second;
                 }
 
-                log_info("gate_library_manager", "selected parser: {}", parser->get_name());
-
-                return parser;
+                log_error("hdl_parser", "no hdl parser registered for file type '{}'", extension);
+                return ParserFactory();
             }
 
-            std::unique_ptr<GateLibrary> load_liberty(const std::filesystem::path& path)
+            std::unique_ptr<GateLibrary> dispatch_parse(const std::filesystem::path& path)
             {
-                auto parser = get_parser_for_file(path);
+                auto factory = get_parser_factory_for_file(path);
 
-                if (parser == nullptr)
+                if (!factory)
                 {
                     return nullptr;
                 }
@@ -67,7 +61,8 @@ namespace hal
                     ifs.close();
                 }
 
-                auto lib = parser->parse(path, &stream);
+                auto parser = factory();
+                auto lib = parser->parse(path, stream);
 
                 if (lib == nullptr)
                 {
@@ -123,7 +118,7 @@ namespace hal
             }
         }    // namespace
 
-        void register_parser(GateLibraryParser* parser, const std::vector<std::string>& supported_file_extensions)
+        void register_parser(const std::string& name, const ParserFactory& parser_factory, const std::vector<std::string>& supported_file_extensions)
         {
             for (auto ext : supported_file_extensions)
             {
@@ -134,26 +129,26 @@ namespace hal
                 }
                 if (auto it = m_extension_to_parser.find(ext); it != m_extension_to_parser.end())
                 {
-                    log_warning("gate_library_manager", "file type '{}' already has associated parser '{}', it remains unchanged", ext, it->second->get_name());
+                    log_warning("gate_library_manager", "file type '{}' already has associated parser '{}', it remains unchanged", ext, it->second.first);
                     continue;
                 }
-                m_extension_to_parser.emplace(ext, parser);
-                m_parser_to_extensions[parser].push_back(ext);
+                m_extension_to_parser.emplace(ext, std::make_pair(name, parser_factory));
+                m_parser_to_extensions[name].push_back(ext);
 
-                log_info("gate_library_manager", "registered gate library parser '{}' for file type '{}'", parser->get_name(), ext);
+                log_info("gate_library_manager", "registered gate library parser '{}' for file type '{}'", name, ext);
             }
         }
 
-        void unregister_parser(GateLibraryParser* parser)
+        void unregister_parser(const std::string& name)
         {
-            if (auto it = m_parser_to_extensions.find(parser); it != m_parser_to_extensions.end())
+            if (auto it = m_parser_to_extensions.find(name); it != m_parser_to_extensions.end())
             {
                 for (const auto& ext : it->second)
                 {
                     if (auto rm_it = m_extension_to_parser.find(ext); rm_it != m_extension_to_parser.end())
                     {
                         m_extension_to_parser.erase(rm_it);
-                        log_info("gate_library_manager", "unregistered gate library parser '{}' which was registered for file type '{}'", parser->get_name(), ext);
+                        log_info("gate_library_manager", "unregistered gate library parser '{}' which was registered for file type '{}'", name, ext);
                     }
                 }
                 m_parser_to_extensions.erase(it);
@@ -188,7 +183,7 @@ namespace hal
             if (core_utils::ends_with(path.string(), std::string(".lib")))
             {
                 log_info("gate_library_manager", "loading file '{}'...", path.string());
-                lib = load_liberty(path);
+                lib = dispatch_parse(path);
             }
             else
             {

@@ -8,11 +8,6 @@
 
 namespace hal
 {
-    std::string HDLWriterVHDL::get_name() const
-    {
-        return "Default VHDL Writer";
-    }
-
     bool HDLWriterVHDL::write(Netlist* netlist, std::stringstream& stream)
     {
         m_netlist = netlist;

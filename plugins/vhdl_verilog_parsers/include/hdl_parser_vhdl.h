@@ -45,15 +45,13 @@ namespace hal
         HDLParserVHDL() = default;
         ~HDLParserVHDL() = default;
 
-        std::string get_name() const override;
-
         /**
          * Parses a VHDL netlist into an intermediate format.
          *
          * @param[in] stream - The string stream filled with the hdl code.
          * @returns True on success, false otherwise.
          */
-        bool parse(std::stringstream* stream) override;
+        bool parse(std::stringstream& stream) override;
 
     private:
         enum class AttributeTarget

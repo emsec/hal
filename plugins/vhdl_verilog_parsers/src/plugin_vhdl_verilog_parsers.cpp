@@ -24,13 +24,13 @@ namespace hal
 
     void VhdlVerilogParsersPlugin::on_load()
     {
-        hdl_parser_manager::register_parser(&m_verilog_parser, {".v"});
-        hdl_parser_manager::register_parser(&m_vhdl_parser, {".vhd", ".vhdl"});
+        hdl_parser_manager::register_parser("Default Verilog Parser", [](){return std::make_unique<HDLParserVerilog>();}, {".v"});
+        hdl_parser_manager::register_parser("Default VHDL Parser", [](){return std::make_unique<HDLParserVHDL>();}, {".vhd", ".vhdl"});
     }
 
     void VhdlVerilogParsersPlugin::on_unload()
     {
-        hdl_parser_manager::unregister_parser(&m_verilog_parser);
-        hdl_parser_manager::unregister_parser(&m_vhdl_parser);
+        hdl_parser_manager::unregister_parser("Default Verilog Parser");
+        hdl_parser_manager::unregister_parser("Default VHDL Parser");
     }
 }    // namespace hal

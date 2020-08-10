@@ -80,7 +80,7 @@ namespace hal
 
     //    //USE EXECUTION MANAGER
 
-    //    i_factory* factory_ptr = PluginManager::get_plugin_factory(plugin.toStdString());
+    //    i_factory* factory_ptr = plugin_manager::get_plugin_factory(plugin.toStdString());
     //    if (!factory_ptr)
     //    {
     //        //log_msg(l_error, "failed to get factory for plugin '%s'\n", plugin_name.c_str());
@@ -120,7 +120,7 @@ namespace hal
         }
         m_vector.clear();
 
-        m_plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin_name.toStdString(), false);
+        m_plugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin_name.toStdString(), false);
         if (!m_plugin)
         {
             //log_msg(l_warning, "Plugin %s is not castable to CLIPluginInterface!\n", plugin_name.c_str());

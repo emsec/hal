@@ -7,17 +7,10 @@
 
 namespace hal
 {
-    std::string LibertyParser::get_name() const
+    std::unique_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path, std::stringstream& file_content)
     {
-        return "Default Liberty Parser";
-    }
-
-    std::unique_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path, std::stringstream* file_content)
-    {
-        cleanup();
-
         m_path = file_path;
-        m_fs   = file_content;
+        m_fs   = &file_content;
         // tokenize file
         if (!tokenize())
         {
@@ -46,13 +39,6 @@ namespace hal
         }
 
         return std::move(m_gate_lib);
-    }
-
-    void LibertyParser::cleanup()
-    {
-        m_gate_lib = nullptr;
-        m_bus_types.clear();
-        m_cell_names.clear();
     }
 
     bool LibertyParser::tokenize()

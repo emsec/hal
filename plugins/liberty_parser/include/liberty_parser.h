@@ -44,8 +44,6 @@ namespace hal
         LibertyParser() = default;
         ~LibertyParser() = default;
 
-        std::string get_name() const override;
-
         /**
          * Deserializes a gate library in Liberty format from the string stream into a gate library object.
          * In order to also support lookup tables (LUTs) the following extension is allowed:
@@ -63,7 +61,7 @@ namespace hal
          * @param[in] file_content - The string stream containing the gate library definition.
          * @returns The gate library or a nullptr on error.
          */
-        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream* file_content) override;
+        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream& file_content) override;
 
     private:
         enum class pin_direction
@@ -160,8 +158,6 @@ namespace hal
 
         bool tokenize();
         bool parse_tokens();
-
-        void cleanup();
 
         std::optional<cell_group> parse_cell(TokenStream<std::string>& library_stream);
         std::optional<type_group> parse_type(TokenStream<std::string>& str);

@@ -16,7 +16,7 @@
 
 namespace hal
 {
-    namespace PluginManager
+    namespace plugin_manager
     {
         namespace
         {
@@ -308,5 +308,5 @@ namespace hal
         {
             m_existing_options.add(existing_options);
         }
-    }    // namespace PluginManager
+    }    // namespace plugin_manager
 }    // namespace hal

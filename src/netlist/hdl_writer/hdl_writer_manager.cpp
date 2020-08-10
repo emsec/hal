@@ -14,10 +14,10 @@ namespace hal
     {
         namespace
         {
-            std::unordered_map<HDLWriter*, std::vector<std::string>> m_writer_to_extensions;
-            std::unordered_map<std::string, HDLWriter*> m_extension_to_writer;
+            std::unordered_map<std::string, std::vector<std::string>> m_writer_to_extensions;
+            std::unordered_map<std::string, std::pair<std::string, WriterFactory>> m_extension_to_writer;
 
-            HDLWriter* get_writer_for_file(const std::filesystem::path& file_name)
+            WriterFactory get_writer_factory_for_file(const std::filesystem::path& file_name)
             {
                 auto extension = core_utils::to_lower(file_name.extension().string());
                 if (!extension.empty() && extension[0] != '.')
@@ -25,20 +25,14 @@ namespace hal
                     extension = "." + extension;
                 }
 
-                HDLWriter* writer = nullptr;
                 if (auto it = m_extension_to_writer.find(extension); it != m_extension_to_writer.end())
                 {
-                    writer = it->second;
-                }
-                if (writer == nullptr)
-                {
-                    log_error("hdl_writer", "no hdl writer registered for file type '{}'", extension);
-                    return nullptr;
+                    log_info("hdl_writer", "selected writer: {}", it->second.first);
+                    return it->second.second;
                 }
 
-                log_info("hdl_writer", "selected writer: {}", writer->get_name());
-
-                return writer;
+                log_error("hdl_writer", "no hdl writer registered for file type '{}'", extension);
+                return WriterFactory();
             }
         }    // namespace
 
@@ -49,7 +43,7 @@ namespace hal
             return description;
         }
 
-        void register_writer(HDLWriter* writer, const std::vector<std::string>& supported_file_extensions)
+        void register_writer(const std::string& name, const WriterFactory& writer_factory, const std::vector<std::string>& supported_file_extensions)
         {
             for (auto ext : supported_file_extensions)
             {
@@ -60,26 +54,26 @@ namespace hal
                 }
                 if (auto it = m_extension_to_writer.find(ext); it != m_extension_to_writer.end())
                 {
-                    log_warning("hdl_writer", "file type '{}' already has associated writer '{}', it remains unchanged", ext, it->second->get_name());
+                    log_warning("gate_library_manager", "file type '{}' already has associated writer '{}', it remains unchanged", ext, it->second.first);
                     continue;
                 }
-                m_extension_to_writer.emplace(ext, writer);
-                m_writer_to_extensions[writer].push_back(ext);
+                m_extension_to_writer.emplace(ext, std::make_pair(name, writer_factory));
+                m_writer_to_extensions[name].push_back(ext);
 
-                log_info("hdl_writer", "registered hdl writer '{}' for file type '{}'", writer->get_name(), ext);
+                log_info("gate_library_manager", "registered gate library writer '{}' for file type '{}'", name, ext);
             }
         }
 
-        void unregister_writer(HDLWriter* writer)
+        void unregister_writer(const std::string& name)
         {
-            if (auto it = m_writer_to_extensions.find(writer); it != m_writer_to_extensions.end())
+            if (auto it = m_writer_to_extensions.find(name); it != m_writer_to_extensions.end())
             {
                 for (const auto& ext : it->second)
                 {
                     if (auto rm_it = m_extension_to_writer.find(ext); rm_it != m_extension_to_writer.end())
                     {
                         m_extension_to_writer.erase(rm_it);
-                        log_info("hdl_writer", "unregistered hdl writer '{}' which was registered for file type '{}'", writer->get_name(), ext);
+                        log_info("gate_library_manager", "unregistered gate library writer '{}' which was registered for file type '{}'", name, ext);
                     }
                 }
                 m_writer_to_extensions.erase(it);
@@ -99,8 +93,8 @@ namespace hal
 
         bool write(Netlist* netlist, const std::filesystem::path& file_name)
         {
-            auto writer = get_writer_for_file(file_name);
-            if (writer == nullptr)
+            auto factory = get_writer_factory_for_file(file_name);
+            if (!factory)
             {
                 return false;
             }
@@ -117,6 +111,7 @@ namespace hal
 
             auto begin_time = std::chrono::high_resolution_clock::now();
 
+            auto writer = factory();
             if (!writer->write(netlist, stream))
             {
                 return false;
@@ -137,11 +132,12 @@ namespace hal
 
         bool write(Netlist* netlist, const std::string& type_extension, std::stringstream& stream)
         {
-            auto writer = get_writer_for_file("fake_file."+type_extension);
-            if (writer == nullptr)
+            auto factory = get_writer_factory_for_file("fake_file." + type_extension);
+            if (!factory)
             {
                 return false;
             }
+            auto writer = factory();
             return writer->write(netlist, stream);
         }
     }    // namespace hdl_writer_manager

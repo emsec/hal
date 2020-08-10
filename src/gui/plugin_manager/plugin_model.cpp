@@ -17,15 +17,15 @@ namespace hal
             m_columns.append(item.first);
         }
         m_model_changed_callback_id =
-            PluginManager::add_model_changed_callback(std::bind(&PluginModel::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+            plugin_manager::add_model_changed_callback(std::bind(&PluginModel::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
         connect(this, &PluginModel::load_plugin, this, &PluginModel::handle_load_plugin);
         connect(this, &PluginModel::unload_plugin, this, &PluginModel::handle_unload_plugin);
-        PluginManager::load_all_plugins();
+        // plugin_manager::load_all_plugins(); // already loaded
     }
 
     PluginModel::~PluginModel()
     {
-        PluginManager::remove_model_changed_callback(m_model_changed_callback_id);
+        plugin_manager::remove_model_changed_callback(m_model_changed_callback_id);
     }
 
     bool PluginModel::is_valid_index(const QModelIndex& idx)
@@ -152,7 +152,7 @@ namespace hal
 
     void PluginModel::handle_load_plugin(QString name, QString path)
     {
-        auto plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(name.toStdString(), false);
+        auto plugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(name.toStdString(), false);
         if (plugin == nullptr)
         {
             return;
@@ -239,7 +239,7 @@ namespace hal
     {
         std::string p_name = name.toLocal8Bit().constData();
         std::string p_path = path.toLocal8Bit().constData();
-        PluginManager::load(p_name, p_path);
+        plugin_manager::load(p_name, p_path);
     }
 
     void PluginModel::request_unload_plugin(QModelIndexList idx)
@@ -248,7 +248,7 @@ namespace hal
             return;
 
         int row_idx = idx.at(0).row();
-        PluginManager::unload((std::string)m_items.at(row_idx).name.toLocal8Bit().constData());
+        plugin_manager::unload((std::string)m_items.at(row_idx).name.toLocal8Bit().constData());
     }
 
     const QList<PluginItem> PluginModel::get_plugin_list()

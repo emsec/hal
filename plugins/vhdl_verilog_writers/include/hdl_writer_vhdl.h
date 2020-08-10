@@ -45,8 +45,6 @@ namespace hal
         HDLWriterVHDL() = default;
         ~HDLWriterVHDL() = default;
 
-        std::string get_name() const override;
-
         /**
          * Serializes the netlist into hdl code.
          *

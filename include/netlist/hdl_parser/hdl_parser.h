@@ -42,19 +42,12 @@ namespace hal
         virtual ~HDLParser() = default;
 
         /**
-         * Returns a human-readable name for this parser.
-         *
-         * @returns The name of this parser.
-         */
-        virtual std::string get_name() const = 0;
-
-        /**
          * Parses a netlist into an internal intermediate format.
          *
          * @param[in] stream - The string stream filled with the hdl code.
          * @returns True on success, false otherwise.
          */
-        virtual bool parse(std::stringstream* stream) = 0;
+        virtual bool parse(std::stringstream& stream) = 0;
 
         /**
          * Instantiates the parsed netlist using a specific gate library.
@@ -71,7 +64,7 @@ namespace hal
          * @param[in] gl - The gate library.
          * @returns A pointer to the resulting netlist.
          */
-        std::unique_ptr<Netlist> parse_and_instantiate(std::stringstream* stream, const GateLibrary* gl)
+        std::unique_ptr<Netlist> parse_and_instantiate(std::stringstream& stream, const GateLibrary* gl)
         {
             if (parse(stream))
             {

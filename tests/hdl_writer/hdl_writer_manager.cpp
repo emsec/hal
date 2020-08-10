@@ -30,7 +30,7 @@ namespace hal {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
             test_utils::create_sandbox_directory();
-            PluginManager::load_all_plugins();
+            plugin_manager::load_all_plugins();
             m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
             m_gl = gate_library_manager::load_file(m_g_lib_path);
         }
@@ -39,7 +39,7 @@ namespace hal {
             NO_COUT_BLOCK;
             test_utils::remove_sandbox_directory();
             // std::filesystem::remove_all(m_tmp_dir);
-            PluginManager::unload_all_plugins();
+            plugin_manager::unload_all_plugins();
         }
 
         // Creates the following netlist:     global_in ---= INV =--- global_out

@@ -25,7 +25,7 @@ namespace hal {
         virtual void SetUp() {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
-            PluginManager::load_all_plugins();
+            plugin_manager::load_all_plugins();
             m_lib_file_name = "test_lib";
             m_test_lib_name = "TEST_GATE_LIBRARY";
             m_test_lib_path = (core_utils::get_gate_library_directories()[0]) / (m_lib_file_name + ".lib");
@@ -33,7 +33,7 @@ namespace hal {
 
         virtual void TearDown() {
             std::filesystem::remove(m_test_lib_path);
-            PluginManager::unload_all_plugins();
+            plugin_manager::unload_all_plugins();
         }
 
         /**

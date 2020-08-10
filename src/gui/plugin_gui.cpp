@@ -143,6 +143,7 @@ namespace hal
 
         // LOGGER HERE
 
+        plugin_manager::load_all_plugins();
         gate_library_manager::load_all();
 
         // TEST

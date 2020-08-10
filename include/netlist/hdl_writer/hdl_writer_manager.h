@@ -29,6 +29,7 @@
 #include <set>
 #include <string>
 #include <tuple>
+#include <functional>
 
 namespace hal
 {
@@ -41,6 +42,8 @@ namespace hal
      */
     namespace hdl_writer_manager
     {
+        using WriterFactory = std::function<std::unique_ptr<HDLWriter>()>;
+
         /**
          * Returns the command line interface options of the hdl writer dispatcher
          * @returns The options.
@@ -51,17 +54,18 @@ namespace hal
          * Registers a new HDL writer for a selection of file types.
          * If writers for some of the extensions already exist, they are not changed, only the new ones are registered.
          *
-         * @param[in] writer - The writer to register.
+         * @param[in] name - The name of the writer.
+         * @param[in] writer_factory - A factory function that constructs a new writer instance.
          * @param[in] supported_file_extensions - The file extensions this writer can process.
          */
-        NETLIST_API void register_writer(HDLWriter* writer, const std::vector<std::string>& supported_file_extensions);
+        NETLIST_API void register_writer(const std::string& name, const WriterFactory& writer_factory, const std::vector<std::string>& supported_file_extensions);
 
         /**
          * Unregisters a specific writer.
          *
-         * @param[in] writer - The writer to unregister.
+         * @param[in] name - The name of the writer.
          */
-        NETLIST_API void unregister_writer(HDLWriter* writer);
+        NETLIST_API void unregister_writer(const std::string& name);
 
         /**
          * Writes the netlist into a file specified in command line options.

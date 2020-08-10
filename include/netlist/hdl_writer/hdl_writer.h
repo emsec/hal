@@ -42,13 +42,6 @@ namespace hal
         virtual ~HDLWriter() = default;
 
         /**
-         * Returns a human-readable name for this writer.
-         *
-         * @returns The name of this writer.
-         */
-        virtual std::string get_name() const = 0;
-
-        /**
          * Serializes the netlist into hdl code.
          *
          * @param[in] netlist - The netlist.

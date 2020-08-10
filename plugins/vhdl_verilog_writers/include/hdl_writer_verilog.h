@@ -42,10 +42,8 @@ namespace hal
     class HDL_FILE_WRITER_API HDLWriterVerilog : public HDLWriter
     {
     public:
-        HDLWriterVerilog() = default;
+        HDLWriterVerilog()  = default;
         ~HDLWriterVerilog() = default;
-
-        std::string get_name() const override;
 
         /**
          * Serializes the netlist into hdl code.

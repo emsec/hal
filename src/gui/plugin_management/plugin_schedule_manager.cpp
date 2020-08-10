@@ -50,7 +50,7 @@ namespace hal
 
     void PluginScheduleManager::add_plugin(const QString& plugin, int index)
     {
-        auto cli = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin.toStdString(), false);
+        auto cli = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin.toStdString(), false);
 
         if (!cli)
             return;

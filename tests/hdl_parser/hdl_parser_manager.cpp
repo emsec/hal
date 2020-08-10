@@ -60,7 +60,7 @@ namespace hal {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
             test_utils::create_sandbox_directory();
-            PluginManager::load_all_plugins();
+            plugin_manager::load_all_plugins();
             //m_gl = test_utils::get_testing_gate_library();
             m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
 
@@ -68,7 +68,7 @@ namespace hal {
 
         virtual void TearDown() {
             NO_COUT_BLOCK;
-            PluginManager::unload_all_plugins();
+            plugin_manager::unload_all_plugins();
             test_utils::remove_sandbox_directory();
         }
     };

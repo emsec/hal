@@ -8,11 +8,6 @@
 
 namespace hal
 {
-    std::string HDLWriterVerilog::get_name() const
-    {
-        return "Default Verilog Writer";
-    }
-
     bool HDLWriterVerilog::write(Netlist* netlist, std::stringstream& stream)
     {
         m_netlist = netlist;
