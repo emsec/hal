@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/plugin_interface_gui.h"
 #include "core/log.h"
+#include "core/plugin_interface_gui.h"
 #include "core/plugin_manager.h"
 #include "core/utils.h"
 #include "def.h"
@@ -39,21 +39,32 @@
  *
  * @param[in] m - the python module
  */
-template <class T> class RawPtrWrapper
+template<class T>
+class RawPtrWrapper
 {
-    public:
-        RawPtrWrapper() : m_ptr(nullptr) {}
-        RawPtrWrapper(T* ptr) : m_ptr(ptr) {}
-        RawPtrWrapper(const RawPtrWrapper& other) : m_ptr(other.m_ptr) {}
-        /*
+public:
+    RawPtrWrapper() : m_ptr(nullptr)
+    {
+    }
+    RawPtrWrapper(T* ptr) : m_ptr(ptr)
+    {
+    }
+    RawPtrWrapper(const RawPtrWrapper& other) : m_ptr(other.m_ptr)
+    {
+    }
+    /*
          *  Pybind needs a get() method that returns the raw ptr.
          * @returns the raw pointer.
          */
-        T* get() const { return m_ptr; }
-    private:
-        T* m_ptr;
+    T* get() const
+    {
+        return m_ptr;
+    }
+
+private:
+    T* m_ptr;
 };
-PYBIND11_DECLARE_HOLDER_TYPE(T, RawPtrWrapper<T>, true);
+PYBIND11_DECLARE_HOLDER_TYPE(T, RawPtrWrapper<T>, true)
 
 namespace hal
 {
