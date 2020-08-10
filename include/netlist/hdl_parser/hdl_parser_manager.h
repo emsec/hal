@@ -27,10 +27,10 @@
 #include "def.h"
 #include "netlist/hdl_parser/hdl_parser.h"
 
+#include <functional>
 #include <set>
 #include <string>
 #include <tuple>
-#include <functional>
 
 namespace hal
 {
@@ -84,6 +84,14 @@ namespace hal
          * @param[in] gate_library - The gate library used in the file.
          * @returns The netlist representation of the hdl code or a nullpointer on error.
          */
-        NETLIST_API std::unique_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library);
+        NETLIST_API std::unique_ptr<Netlist> parse(const std::filesystem::path& file_name, const GateLibrary* gate_library = nullptr);
+
+        /**
+          * Tries to match the HDL file with each of the preloaded gate libraries and returns a vector of netlist objects for which the matching was successful.
+          *
+          * @param[in] hdl_file - The netlist file.
+          * @returns A vector containing one netlist per matching gate library.
+          */
+        std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name);
     }    // namespace hdl_parser_manager
 }    // namespace hal

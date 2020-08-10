@@ -31,15 +31,14 @@ namespace hal
         {
             if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
             {
-                log_critical("netlist", "cannot access file '{}'.", hdl_file.string());
+                log_critical("netlist", "could not access file '{}'.", hdl_file.string());
                 return nullptr;
             }
 
-            auto lib = gate_library_manager::load_file(gate_library_file);
-
+            GateLibrary* lib = gate_library_manager::load_file(gate_library_file);
             if (!lib)
             {
-                log_critical("netlist", "cannot read netlist without gate library.");
+                log_critical("netlist", "could not read netlist without gate library.");
                 return nullptr;
             }
 
@@ -50,7 +49,7 @@ namespace hal
         {
             if (access(hal_file.c_str(), F_OK | R_OK) == -1)
             {
-                log_critical("netlist", "cannot access file '{}'.", hal_file.string());
+                log_critical("netlist", "could not access file '{}'.", hal_file.string());
                 return nullptr;
             }
 
@@ -81,6 +80,17 @@ namespace hal
             }
 
             return hdl_parser_manager::parse(file_name, args);
+        }
+
+        std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& hdl_file)
+        {
+            if (access(hdl_file.c_str(), F_OK | R_OK) == -1)
+            {
+                log_critical("netlist", "could not access file '{}'.", hdl_file.string());
+                return {};
+            }
+
+            return hdl_parser_manager::parse_all(hdl_file);
         }
     }    // namespace netlist_factory
 }    // namespace hal

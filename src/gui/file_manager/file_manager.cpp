@@ -236,52 +236,33 @@ namespace hal
             return;
         }
 
-        std::vector<std::pair<std::string, std::unique_ptr<Netlist>>> list;
+        event_controls::enable_all(false);
+        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(file_name.toStdString());
+        event_controls::enable_all(true);
 
-        for (const auto& lib : gate_library_manager::get_gate_libraries())
-        {
-            std::string name = lib->get_name();
-
-            log_info("gui", "Trying to use gate library '{}'...", name);
-            event_controls::enable_all(false);
-            auto netlist = netlist_factory::load_netlist(file_name.toStdString(), lib->get_path());
-            event_controls::enable_all(true);
-
-            if (netlist)
-            {
-                list.push_back(std::make_pair(name, std::move(netlist)));
-            }
-            else
-            {
-                log_info("gui", "Failed");
-            }
-        }
-
-        if (list.empty())
+        if (netlists.empty())
         {
             std::string error_message("Unable to find a compatible gate library. Deserialization failed!");
             log_error("gui", "{}", error_message);
             display_error_message(QString::fromStdString(error_message));
             return;
         }
-
-        if (list.size() == 1)
+        else if (netlists.size() == 1)
         {
             log_info("gui", "One compatible gate library found.");
-            g_netlist_owner = std::move(list.at(0).second);
+            g_netlist_owner = std::move(netlists.at(0));
             g_netlist       = g_netlist_owner.get();
         }
-
         else
         {
-            log_info("gui", "{} compatible gate libraries found. User has to select one.", list.size());
-            QInputDialog dialog;
+            log_info("gui", "{} compatible gate libraries found. User has to select one.", netlists.size());
 
+            QInputDialog dialog;
             QStringList libs;
 
-            for (auto& element : list)
+            for (auto& n : netlists)
             {
-                libs.append(QString::fromStdString(element.first));
+                libs.append(QString::fromStdString(n->get_gate_library()->get_name()));
             }
 
             dialog.setComboBoxItems(libs);
@@ -292,11 +273,11 @@ namespace hal
             {
                 std::string selection = dialog.textValue().toStdString();
 
-                for (auto& element : list)
+                for (auto& n : netlists)
                 {
-                    if (element.first == selection)
+                    if (n->get_gate_library()->get_name() == selection)
                     {
-                        g_netlist_owner = std::move(element.second);
+                        g_netlist_owner = std::move(n);
                         g_netlist       = g_netlist_owner.get();
                     }
                 }

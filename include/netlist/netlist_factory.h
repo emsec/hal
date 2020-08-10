@@ -54,8 +54,8 @@ namespace hal
         /**
          * Creates a new netlist for a specific file.
          *
-         * @param[in] hdl_file - Name of the hdl file.
-         * @param[in] gate_library_file - Name of hardware gate library file.
+         * @param[in] hdl_file - Path to the HDL file.
+         * @param[in] gate_library_file - Path to the gate library file.
          * @returns The new netlist.
          */
         NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file);
@@ -77,5 +77,13 @@ namespace hal
          * @returns The new netlist.
          */
         NETLIST_API std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args);
+
+        /**
+          * Creates a new netlist from an HDL file for each matching pre-loaded gate library.
+          *
+          * @param[in] hdl_file - Path to the HDL file.
+          * @returns A vector of netlists.
+          */
+        NETLIST_API std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& hdl_file);
     }    // namespace netlist_factory
 }    // namespace hal
