@@ -30,6 +30,7 @@
 #include "netlist/gate_library/gate_type/gate_type.h"
 #include "netlist/gate_library/gate_type/gate_type_sequential.h"
 
+#include <filesystem>
 #include <optional>
 #include <unordered_map>
 
@@ -41,7 +42,7 @@ namespace hal
     class NETLIST_API LibertyParser : public GateLibraryParser
     {
     public:
-        LibertyParser() = default;
+        LibertyParser()  = default;
         ~LibertyParser() = default;
 
         /**
@@ -139,11 +140,11 @@ namespace hal
             u32 line_number;
             std::string name;
             GateType::BaseType type = GateType::BaseType::combinatorial;
-            std::map<std::string, bus_group> buses;
             ff_group ff;
             latch_group latch;
             lut_group lut;
             std::vector<pin_group> pins;
+            std::map<std::string, bus_group> buses;
             std::set<std::string> pin_names;
             std::map<std::string, std::string> special_functions;
         };

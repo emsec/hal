@@ -517,6 +517,7 @@ namespace hal
                     return std::nullopt;
                 }
 
+                cell.pins.push_back(pin.value());
                 bus.pins.push_back(pin.value());
             }
         } while (bus_str.remaining() > 0);
@@ -760,18 +761,46 @@ namespace hal
             }
         }
 
+        // check if there are any duplicate pin names
+        std::vector<std::string> pins_unique = input_pins;
+        std::sort(pins_unique.begin(), pins_unique.end());
+        pins_unique.erase(std::unique(pins_unique.begin(), pins_unique.end()), pins_unique.end());
+        if (pins_unique.size() != input_pins.size())
+        {
+            log_error("liberty_parser", "input pin must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
+            return nullptr;
+        }
+        pins_unique.clear();
+
+        pins_unique = output_pins;
+        std::sort(pins_unique.begin(), pins_unique.end());
+        pins_unique.erase(std::unique(pins_unique.begin(), pins_unique.end()), pins_unique.end());
+        if (pins_unique.size() != output_pins.size())
+        {
+            log_error("liberty_parser", "output pin must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
+            return nullptr;
+        }
+
         // get input and output pins from bus groups
         for (const auto& bus : cell.buses)
         {
             if (bus.second.direction == pin_direction::IN || bus.second.direction == pin_direction::INOUT)
             {
-                input_pins.insert(input_pins.end(), bus.second.pin_names.begin(), bus.second.pin_names.end());
+                if (input_pin_groups.find(bus.first) != input_pin_groups.end())
+                {
+                    log_error("liberty_parser", "input pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
+                    return nullptr;
+                }
                 input_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
             }
 
             if (bus.second.direction == pin_direction::OUT || bus.second.direction == pin_direction::INOUT)
             {
-                output_pins.insert(output_pins.end(), bus.second.pin_names.begin(), bus.second.pin_names.end());
+                if (output_pin_groups.find(bus.first) != output_pin_groups.end())
+                {
+                    log_error("liberty_parser", "output pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
+                    return nullptr;
+                }
                 output_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
             }
         }
