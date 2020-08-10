@@ -69,7 +69,7 @@ namespace hal
                 {
                     begin_time = std::chrono::high_resolution_clock::now();
 
-                    log_info("hdl_parser", "instantiating with gate library '{}'...", file_name.string(), gate_library->get_name());
+                    log_info("hdl_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), gate_library->get_name());
 
                     auto gl = gate_library_manager::get_gate_library(gate_library->get_path());
                     if (gl == nullptr)
