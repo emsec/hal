@@ -76,6 +76,7 @@ namespace hal
 
         connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
         m_selectionTreeView->hide();
+        set_name("Selection Details");
     }
 
     void SelectionDetailsWidget::handle_selection_update(void* sender)
@@ -98,7 +99,7 @@ namespace hal
             singleSelectionInternal(nullptr);
             // clear and hide tree
             m_selectionTreeView->populate(false);
-            set_name("Selection Details (nothing selected)");
+//            set_name("Selection Details (nothing selected)");
             return;
         }
 // executive decision: treat single selected item the same way as multiple
@@ -107,7 +108,6 @@ namespace hal
 //            break;
         default:
             // more than 1 item selected, populate and make visible
-            set_name("Selection Details");
             m_selectionTreeView->populate(true);
             treeModel = static_cast<const SelectionTreeModel*>(m_selectionTreeView->model());
             defaultHighlight.append(treeModel->itemFromIndex(treeModel->defaultIndex()));
@@ -150,26 +150,26 @@ namespace hal
         case SelectionTreeItem::NullItem:
             m_module_details->update(0);
             m_stacked_widget->setCurrentWidget(m_empty_widget);
-            set_name("Selection Details");
+//            set_name("Selection Details");
             break;
         case SelectionTreeItem::ModuleItem:
             m_module_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_module_details);
-            if (m_numberSelectedItems==1) set_name("Module Details");
+//            if (m_numberSelectedItems==1) set_name("Module Details");
             break;
         case SelectionTreeItem::GateItem:
             m_searchbar->hide();
             m_module_details->update(0);
             m_gate_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_gate_details);
-            if (m_numberSelectedItems==1) set_name("Gate Details");
+//            if (m_numberSelectedItems==1) set_name("Gate Details");
             break;
         case SelectionTreeItem::NetItem:
             m_searchbar->hide();
             m_module_details->update(0);
             m_net_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_net_details);
-            if (m_numberSelectedItems==1) set_name("Net Details");
+//            if (m_numberSelectedItems==1) set_name("Net Details");
             break;
         default:
             break;
