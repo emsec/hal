@@ -436,7 +436,6 @@ namespace hal
                 const auto component_name = m_token_stream.consume().string;
                 m_token_stream.consume_until("end");
                 m_token_stream.consume("end", true);
-                m_token_stream.consume();
                 m_token_stream.consume("component", true);
                 if (m_token_stream.peek() != ";")
                 {
