@@ -29,11 +29,11 @@
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library.h"
 #include "netlist/gate_library/gate_type/gate_type.h"
+#include "netlist/hdl_parser/hdl_parser.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
-#include "netlist/hdl_parser/hdl_parser.h"
 
 #include <cctype>
 #include <cstdlib>
@@ -89,7 +89,7 @@ namespace hal
         {
             // create empty netlist
             auto result = netlist_factory::create_netlist(gl);
-            m_netlist = result.get();
+            m_netlist   = result.get();
 
             if (m_netlist == nullptr)
             {
@@ -231,9 +231,8 @@ namespace hal
 
                                 if (left_size != right_size)
                                 {
-                                    log_error(
+                                    log_warning(
                                         "hdl_parser", "port assignment width mismatch: port has width {} and assigned signal has width {} in line {}", left_size, right_size, port.get_line_number());
-                                    return nullptr;
                                 }
                             }
                         }
@@ -1441,7 +1440,8 @@ namespace hal
                     }
                 }
 
-                for (unsigned int i = 0; i < expanded_ports.size(); i++)
+                unsigned int limit = (instance_assignments.size() < expanded_ports.size()) ? instance_assignments.size() : expanded_ports.size();
+                for (unsigned int i = 0; i < limit; i++)
                 {
                     if (const auto it = parent_module_assignments.find(expanded_assignments[i]); it != parent_module_assignments.end())
                     {
@@ -1459,7 +1459,7 @@ namespace hal
                         }
                         else
                         {
-                            log_error("hdl_parser", "signal assignment \"{} = {}\" of instance {} is invalid", expanded_ports[i], expanded_assignments[i], inst_name);
+                            log_error("hdl_parser", "signal assignment \"{} = {}\" of instance '{}' is invalid", expanded_ports[i], expanded_assignments[i], inst_name);
                             return nullptr;
                         }
                     }
