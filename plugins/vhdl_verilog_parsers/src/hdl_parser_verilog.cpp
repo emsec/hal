@@ -976,14 +976,22 @@ namespace hal
             }
 
             case 'h': {
-                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'); }))
+                std::string res;
+
+                for (const auto& c : number)
                 {
-                    log_error("hdl_parser", "invalid character within hexadecimal number literal {} in line {}", value, line_number);
-                    return "";
+                    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))
+                    {
+                        res += c;
+                    }
+                    else
+                    {
+                        log_error("hdl_parser", "invalid character within hexadecimal number literal {} in line {}", value, line_number);
+                        return "";
+                    }
                 }
 
-                base = 16;
-                break;
+                return res;
             }
 
             default: {

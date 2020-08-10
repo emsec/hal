@@ -1143,7 +1143,8 @@ namespace hal
 
             default: {
                 log_error("hdl_parser", "invalid base '{}' within number literal {} in line {}", prefix, value, line_number);
-                return "";
+                res = "";
+                break;
             }
         }
 
@@ -1155,10 +1156,10 @@ namespace hal
         const auto line_number = value_token.number;
         const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
 
-        i32 len = -1;
         char prefix;
         core_strings::CaseInsensitiveString number;
-        u32 base;
+        core_strings::CaseInsensitiveString res;
+        std::stringstream res_ss;
 
         if (value[0] != '\"')
         {
@@ -1181,8 +1182,8 @@ namespace hal
                     return "";
                 }
 
-                len  = number.size() + 3 / 4;
-                base = 2;
+                res_ss << std::hex << stoull(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(number), 0, 2);
+                res = core_strings::CaseInsensitiveString(res_ss.str().data());
                 break;
             }
 
@@ -1193,8 +1194,8 @@ namespace hal
                     return "";
                 }
 
-                len  = number.size() + 1 / 2;
-                base = 8;
+                res_ss << std::hex << stoull(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(number), 0, 8);
+                res = core_strings::CaseInsensitiveString(res_ss.str().data());
                 break;
             }
 
@@ -1205,38 +1206,35 @@ namespace hal
                     return "";
                 }
 
-                base = 10;
+                res_ss << std::hex << stoull(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(number), 0, 10);
+                res = core_strings::CaseInsensitiveString(res_ss.str().data());
                 break;
             }
 
             case 'x': {
-                if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'); }))
+                for (const auto& c : number)
                 {
-                    log_error("hdl_parser", "invalid character within hexadecimal number literal {} in line {}", value, line_number);
-                    return "";
+                    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))
+                    {
+                        res += c;
+                    }
+                    else
+                    {
+                        log_error("hdl_parser", "invalid character within hexadecimal number literal {} in line {}", value, line_number);
+                        return "";
+                    }
                 }
 
-                len  = number.size();
-                base = 16;
                 break;
             }
 
             default: {
                 log_error("hdl_parser", "invalid base '{}' within number literal {} in line {}", prefix, value, line_number);
-                return "";
+                res = "";
+                break;
             }
         }
 
-        std::stringstream ss;
-        if (len != -1)
-        {
-            // fill with '0'
-            ss << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(number), 0, base);
-        }
-        else
-        {
-            ss << std::hex << stoull(core_strings::convert_string<core_strings::CaseInsensitiveString, std::string>(number), 0, base);
-        }
-        return core_strings::CaseInsensitiveString(ss.str().data());
+        return res;
     }
 }    // namespace hal
