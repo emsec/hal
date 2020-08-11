@@ -192,7 +192,8 @@ namespace hal
                 gate_library                  = gate_library_manager::get_gate_library(gate_library_file);
                 if (gate_library == nullptr)
                 {
-                    log_warning("hdl_parser", "invalid gate library '{}' specified by user.", gate_library_file);
+                    log_error("hdl_parser", "invalid gate library '{}' specified by user.", gate_library_file);
+                    return nullptr;
                 }
             }
 
