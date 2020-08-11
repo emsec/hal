@@ -63,20 +63,21 @@ namespace hal {
                 gt.add_output_pins(std::vector<std::string>({"OUT_1", "OUT_2"})); // Multiple
                 EXPECT_EQ(gt.get_output_pins(), std::vector<std::string>({"OUT_0", "OUT_1", "OUT_2"}));
             }
-            // NEGATIVE TESTS
-            {
-                // Try to add the same input/ouput pin twice (should not work)
-                NO_COUT_TEST_BLOCK;
-                GateType gt("gt_name");
+            // TODO remove
+            // // NEGATIVE TESTS
+            // {
+            //     // Try to add the same input/ouput pin twice (should not work)
+            //     NO_COUT_TEST_BLOCK;
+            //     GateType gt("gt_name");
 
-                gt.add_input_pin("IN_PIN");
-                gt.add_input_pin("IN_PIN");
-                EXPECT_EQ(gt.get_input_pins().size(), 1);
+            //     gt.add_input_pin("IN_PIN");
+            //     gt.add_input_pin("IN_PIN");
+            //     EXPECT_EQ(gt.get_input_pins().size(), 1);
 
-                gt.add_output_pin("OUT_PIN");
-                gt.add_output_pin("OUT_PIN");
-                EXPECT_EQ(gt.get_output_pins().size(), 1);
-            }
+            //     gt.add_output_pin("OUT_PIN");
+            //     gt.add_output_pin("OUT_PIN");
+            //     EXPECT_EQ(gt.get_output_pins().size(), 1);
+            // }
         TEST_END
     }
 
