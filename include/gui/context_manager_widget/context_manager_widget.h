@@ -28,9 +28,16 @@
 #include "def.h"
 
 #include "graph_widget/contexts/graph_context.h"
+#include "context_manager_widget/models/context_table_model.h"
+#include "context_manager_widget/models/context_table_proxy_model.h"
+#include "gui/searchbar/searchbar.h"
 
 #include <QListWidget>
 #include <QPoint>
+#include <QTableView>
+#include <QPushButton>
+#include <QMenu>
+
 
 namespace hal
 {
@@ -48,11 +55,11 @@ namespace hal
         Q_PROPERTY(QString delete_icon_style READ delete_icon_style WRITE set_delete_icon_style)
         Q_PROPERTY(QString duplicate_icon_path READ duplicate_icon_path WRITE set_duplicate_icon_path)
         Q_PROPERTY(QString duplicate_icon_style READ duplicate_icon_style WRITE set_duplicate_icon_style)
+        Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
+        Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
 
     public:
         ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
-        void resizeEvent(QResizeEvent* event) override;
-        void handle_create_context_clicked();
 
         void select_view_context(GraphContext* context);
 
@@ -66,8 +73,8 @@ namespace hal
         QString delete_icon_style() const;
         QString duplicate_icon_path() const;
         QString duplicate_icon_style() const;
-        QString timestamp_icon_path() const;
-        QString timestamp_icon_style() const;
+        QString open_icon_path() const;
+        QString open_icon_style() const;
 
         void set_new_view_icon_path(const QString &path);
         void set_new_view_icon_style(const QString &style);
@@ -77,16 +84,22 @@ namespace hal
         void set_delete_icon_style(const QString &style);
         void set_duplicate_icon_path(const QString &path);
         void set_duplicate_icon_style(const QString &style);
+        void set_open_icon_path(const QString &path);
+        void set_open_icon_style(const QString &style);
 
     public Q_SLOTS:
-        void handle_context_created(GraphContext* context);
-        void handle_context_renamed(GraphContext* context);
-        void handle_context_removed(GraphContext* context);
+        //void handle_context_created(GraphContext* context);
+        //void handle_context_renamed(GraphContext* context);
+        //void handle_context_removed(GraphContext* context);
 
     private:
         GraphTabWidget* m_tab_view;
 
-        QListWidget* m_list_widget;
+        QTableView* m_context_table_view;
+        ContextTableModel* m_context_table_model;
+        ContextTableProxyModel* m_context_table_proxy_model;
+
+        Searchbar m_searchbar;
 
         QAction* m_new_view_action;
         QString m_new_view_icon_path;
@@ -104,22 +117,25 @@ namespace hal
         QString m_delete_icon_path;
         QString m_delete_icon_style;
 
-        u32 m_context_counter = 0;
+        QAction* m_open_action;
+        QString m_open_icon_path;
+        QString m_open_icon_style;
 
-        std::map<QListWidgetItem*, GraphContext*> m_assigned_pointers;
-
-        bool m_show_timestamps = true;
-
-        void handle_context_menu_request(const QPoint& point);
-
+        void handle_create_context_clicked();
         void handle_open_context_clicked();
         void handle_rename_context_clicked();
         void handle_duplicate_context_clicked();
         void handle_delete_context_clicked();
-        void handle_toggle_timestamps_clicked();
 
-        void handle_item_double_clicked(QListWidgetItem*);
+        void handle_context_menu_request(const QPoint& point);
+        void handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected);
 
-        void handle_selection_changed();
+        void set_toolbar_buttons_enabled(bool enabled);
+
+        void toggle_searchbar();
+
+        GraphContext* get_current_context();
+
+        QList<QShortcut*> create_shortcuts();
     };
 }

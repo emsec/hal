@@ -40,6 +40,8 @@ namespace hal
     class GraphShader;
     class GraphContext;
 
+    class ContextTableModel;
+
     class GraphContextManager : public QObject
     {
         Q_OBJECT
@@ -82,6 +84,8 @@ namespace hal
         GraphLayouter* get_default_layouter(GraphContext* const context) const;
         GraphShader* get_default_shader(GraphContext* const context) const;
 
+        ContextTableModel* get_context_table_model() const;
+
     Q_SIGNALS:
         void context_created(GraphContext* context);
         void context_renamed(GraphContext* context);
@@ -89,5 +93,7 @@ namespace hal
 
     private:
         QVector<GraphContext*> m_graph_contexts;
+
+        ContextTableModel* m_context_table_model;
     };
 }
