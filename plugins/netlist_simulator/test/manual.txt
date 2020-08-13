@@ -1,0 +1,17 @@
+Start with project directory counter (Vivado project from sources counter.vhd and counter_TB.vhd) to generate a flattened netlist counter_flattened.vhd (in directory netlist_vivado).
+The flattened netlist is read in hal and given out (hal_py.hdl_writer_dispatcher.write(netlist, “vhdl”, “/Users/eve/netlistManipulated.vhd”) in python console or --write_vhdl in terminal). During this process the netlist is flattened further.
+The resulting netlist netlistManipulated.vhd is located in the directory netlist_flattened_by_hal.
+A new vivado project is created on base of the netlistManipulated.vhd netlist. It uses the same Testbench as the first project (counter_TB.vhd).
+Here we generate a vcd file from the simulation: in tcl console after running the post-synthesis functional simualtion
+open_vcd
+log_vcd
+restart
+run all (run 300 ns in our case)
+close_vcd
+
+The resulting vcd dump.vcd is located in the simulation files.
+
+We start the hal gui with the flattened netlist netlistManipulated.vhd and run the hal_TB.py testbench in the python console (adjust path to vcd file in validate_simulation())
+(In other use cases it is necessary to adjust the clock cycle time for validate_simulation().)
+
+validate_simulation() compares the traces resulting from the hal simulation and the traces parsed from the vcd file.

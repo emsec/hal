@@ -9,6 +9,8 @@
 !liberty_parser/**/*
 !quine_mccluskey*
 !quine_mccluskey/**/*
+!netlist_simulator*
+!netlist_simulator/**/*
 !vhdl_verilog_parsers*
 !vhdl_verilog_parsers/**/*
 !vhdl_verilog_writers*

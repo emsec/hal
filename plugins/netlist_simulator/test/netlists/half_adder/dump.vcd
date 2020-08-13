@@ -1,0 +1,68 @@
+$date
+   Thu Jun 27 14:21:37 2019
+$end
+$version
+  2018.2
+$end
+$timescale
+  1ps
+$end
+$scope module Half_Adder_TB $end
+$var wire 1 ) A $end
+$var wire 1 * B $end
+$var wire 1 + S $end
+$var wire 1 , C $end
+$scope module UUT $end
+$var wire 1 ! A $end
+$var wire 1 " A_IBUF $end
+$var wire 1 # B $end
+$var wire 1 $ B_IBUF $end
+$var wire 1 % C $end
+$var wire 1 & C_OBUF $end
+$var wire 1 ' S $end
+$var wire 1 ( S_OBUF $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0!
+0"
+0#
+0$
+0%
+0&
+0'
+0(
+0)
+0*
+0+
+0,
+$end
+#10000
+1#
+1$
+0&
+1'
+1(
+1*
+1+
+#20000
+1!
+1"
+0#
+0$
+0&
+1(
+1)
+0*
+#30000
+1#
+1$
+1%
+1&
+0'
+0(
+1*
+0+
+1,

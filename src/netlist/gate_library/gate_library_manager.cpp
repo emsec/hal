@@ -62,7 +62,7 @@ namespace hal
                 }
 
                 auto parser = factory();
-                auto lib = parser->parse(path, stream);
+                auto lib    = parser->parse(path, stream);
 
                 if (lib == nullptr)
                 {
@@ -204,7 +204,7 @@ namespace hal
 
             log_info("gate_library_manager", "loaded gate library '{}' in {:2.2f} seconds.", lib->get_name(), elapsed);
 
-            auto res = lib.get();
+            auto res                        = lib.get();
             m_gate_libraries[path.string()] = std::move(lib);
             return res;
         }
@@ -260,6 +260,18 @@ namespace hal
 
             // not already loaded -> load
             return load_file(absolute_path);
+        }
+
+        GateLibrary* get_gate_library_by_name(const std::string& lib_name)
+        {
+            for (const auto& it : m_gate_libraries)
+            {
+                if (it.second->get_name() == lib_name)
+                {
+                    return it.second.get();
+                }
+            }
+            return nullptr;
         }
 
         std::vector<GateLibrary*> get_gate_libraries()

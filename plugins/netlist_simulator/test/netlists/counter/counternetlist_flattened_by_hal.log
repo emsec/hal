@@ -1,0 +1,45 @@
+[04.07.2019 17:01:24] [gui] [info] Trying to use gate library 'EXAMPLE_GATE_LIBRARY'...
+[04.07.2019 17:01:24] [netlist.internal] [error] [/opt/hal/src/netlist/netlist_internal_manager.cpp:37] netlist::create_gate: gate type 'FDCE' is invalid.
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_vhdl.cpp:411] line 45: cannot parse instance
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_dispatcher.cpp:127] error while parsing '/opt/hal/tests/plugins/simulator/netlists/counter/counternetlist_flattened_by_hal.vhd'!
+[04.07.2019 17:01:24] [gui] [info] Failed
+[04.07.2019 17:01:24] [gui] [info] Trying to use gate library 'GSCLIB_3_0'...
+[04.07.2019 17:01:24] [netlist.internal] [error] [/opt/hal/src/netlist/netlist_internal_manager.cpp:37] netlist::create_gate: gate type 'LUT4' is invalid.
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_vhdl.cpp:411] line 34: cannot parse instance
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_dispatcher.cpp:127] error while parsing '/opt/hal/tests/plugins/simulator/netlists/counter/counternetlist_flattened_by_hal.vhd'!
+[04.07.2019 17:01:24] [gui] [info] Failed
+[04.07.2019 17:01:24] [gui] [info] Trying to use gate library 'SYNOPSYS_90NM'...
+[04.07.2019 17:01:24] [netlist.internal] [error] [/opt/hal/src/netlist/netlist_internal_manager.cpp:37] netlist::create_gate: gate type 'LUT4' is invalid.
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_vhdl.cpp:411] line 34: cannot parse instance
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_dispatcher.cpp:127] error while parsing '/opt/hal/tests/plugins/simulator/netlists/counter/counternetlist_flattened_by_hal.vhd'!
+[04.07.2019 17:01:24] [gui] [info] Failed
+[04.07.2019 17:01:24] [gui] [info] Trying to use gate library 'UMX_0_18UM'...
+[04.07.2019 17:01:24] [netlist.internal] [error] [/opt/hal/src/netlist/netlist_internal_manager.cpp:37] netlist::create_gate: gate type 'LUT4' is invalid.
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_vhdl.cpp:411] line 34: cannot parse instance
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_dispatcher.cpp:127] error while parsing '/opt/hal/tests/plugins/simulator/netlists/counter/counternetlist_flattened_by_hal.vhd'!
+[04.07.2019 17:01:24] [gui] [info] Failed
+[04.07.2019 17:01:24] [gui] [info] Trying to use gate library 'XILINX_SIMPRIM'...
+[04.07.2019 17:01:24] [netlist.internal] [error] [/opt/hal/src/netlist/netlist_internal_manager.cpp:37] netlist::create_gate: gate type 'LUT4' is invalid.
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_vhdl.cpp:411] line 34: cannot parse instance
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_dispatcher.cpp:127] error while parsing '/opt/hal/tests/plugins/simulator/netlists/counter/counternetlist_flattened_by_hal.vhd'!
+[04.07.2019 17:01:24] [gui] [info] Failed
+[04.07.2019 17:01:24] [gui] [info] Trying to use gate library 'XILINX_UNISIM'...
+[04.07.2019 17:01:24] [hdl_parser] [info] parsed '/opt/hal/tests/plugins/simulator/netlists/counter/counternetlist_flattened_by_hal.vhd' in 0,00 seconds.
+[04.07.2019 17:01:24] [gui] [info] Trying to use gate library 'YOSYS_MYCELL'...
+[04.07.2019 17:01:24] [netlist.internal] [error] [/opt/hal/src/netlist/netlist_internal_manager.cpp:37] netlist::create_gate: gate type 'LUT4' is invalid.
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_vhdl.cpp:411] line 34: cannot parse instance
+[04.07.2019 17:01:24] [hdl_parser] [error] [/opt/hal/src/hdl_parser/hdl_parser_dispatcher.cpp:127] error while parsing '/opt/hal/tests/plugins/simulator/netlists/counter/counternetlist_flattened_by_hal.vhd'!
+[04.07.2019 17:01:24] [gui] [info] Failed
+[04.07.2019 17:01:24] [gui] [info] One compatible gate library found.
+[04.07.2019 17:01:24] [python] [info] Python console execute: "print("Python " + sys.version)".
+[04.07.2019 17:01:24] [python] [info] Python 3.6.8 (default, Jan 14 2019, 11:02:34) 
+[GCC 8.0.1 20180414 (experimental) [trunk revision 259383]]
+[04.07.2019 17:01:24] [python] [info] Python console execute: "print(sys.executable + " on " + sys.platform)".
+[04.07.2019 17:01:24] [python] [info] /usr/bin/python3 on linux
+[04.07.2019 17:01:24] [user] [info] Starting at zoomlevel: 3
+[04.07.2019 17:01:24] [gui] [info] GUI gained focus.
+[04.07.2019 17:01:42] [gui] [info] GUI lost focus.
+[04.07.2019 17:01:52] [gui] [info] GUI gained focus.
+[04.07.2019 17:01:54] [gui] [info] GUI lost focus.
+[04.07.2019 17:01:54] [core] [info] Closing hal_gui.
+[04.07.2019 17:01:54] [core] [info] unloaded all 26 plugins

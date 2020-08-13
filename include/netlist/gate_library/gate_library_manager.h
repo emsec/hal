@@ -84,6 +84,15 @@ namespace hal
         NETLIST_API GateLibrary* get_gate_library(const std::string& file_name);
 
         /**
+         * Get a gate library object by library name.
+         * If no library with the given name is loaded this function returns nullptr.
+         *
+         * @param[in] lib_name - name of the gate library.
+         * @returns Pointer to the gate library object or nullptr on error.
+         */
+        NETLIST_API GateLibrary* get_gate_library_by_name(const std::string& lib_name);
+
+        /**
          * Get all loaded gate libraries.
          *
          * @returns A vector of pointers to the gate library objects.

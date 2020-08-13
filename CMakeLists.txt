@@ -140,9 +140,11 @@ if(UNIX)
     enable_cxx_compile_option_if_supported("-pedantic" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-Wshadow" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-Wno-undef" "" "PRIVATE")
+    enable_cxx_compile_option_if_supported("-Werror=return-type" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fcolor-diagnostics" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fdiagnostics-color=always" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fsized-deallocation" "" "PRIVATE")
+
 
     enable_cxx_compile_option_if_supported("-O0" "Debug" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "Debug" "PUBLIC")
