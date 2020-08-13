@@ -146,7 +146,7 @@ else()
     set(spdlog_VERSION 1.5.0)
     add_library(spdlog::spdlog INTERFACE IMPORTED)
     set_target_properties(spdlog::spdlog PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog/include"
+                          INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.5.0/include"
                           )
 endif()
 
