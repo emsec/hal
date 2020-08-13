@@ -26,7 +26,7 @@ namespace hal
         m_events[ev.affected_net].push_back(ev);
     }
 
-    std::unordered_map<Net*, std::vector<Event>> Simulation::get_events()
+    std::unordered_map<Net*, std::vector<Event>> Simulation::get_events() const
     {
         return m_events;
     }

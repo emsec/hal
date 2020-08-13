@@ -46,10 +46,22 @@ namespace hal
             return sim->get_current_state();
         }
 
-        bool cmp_sim_data(Simulation a, Simulation b)
+        bool cmp_sim_data(const Simulation& vcd_sim, const Simulation& hal_sim)
         {
-            auto a_events = a.get_events();
-            auto b_events = b.get_events();
+            auto a_events = vcd_sim.get_events();
+            auto b_events = hal_sim.get_events();
+            for (auto it = b_events.begin(); it != b_events.end();)
+            {
+                auto srcs = it->first->get_sources();
+                if (srcs.size() == 1 && (srcs[0].get_gate()->is_gnd_gate() || srcs[0].get_gate()->is_vcc_gate()))
+                {
+                    it = b_events.erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
 
             auto signal_to_string = [](auto v) -> std::string {
                 if (v >= 0)
@@ -71,33 +83,91 @@ namespace hal
                 }
             }
 
+            u64 earliest_mismatch = -1;
+            std::vector<Net*> earliest_mismatch_nets;
+            auto update_mismatch = [&](auto ev) {
+                if (ev.time < earliest_mismatch)
+                {
+                    earliest_mismatch      = ev.time;
+                    earliest_mismatch_nets = {ev.affected_net};
+                }
+                else if (ev.time == earliest_mismatch)
+                {
+                    earliest_mismatch_nets.push_back(ev.affected_net);
+                }
+            };
+
             for (auto [name, net] : sorted_unmatching_events)
             {
-                auto& events_a = a_events[net];
-                auto& events_b = b_events[net];
+                auto& events_a        = a_events[net];
+                auto& events_b        = b_events[net];
+                u32 max_number_length = std::to_string(std::max(events_a.back().time, events_b.back().time)).size();
                 std::cout << "difference in net " << net->get_name() << " id=" << net->get_id() << ":" << std::endl;
-                std::cout << "vcd:            hal:" << std::endl;
-                for (u32 i = 0; i < std::max(events_a.size(), events_b.size()); ++i)
+                std::cout << "vcd:" << std::setfill(' ') << std::setw(max_number_length + 5) << ""
+                          << "hal:" << std::endl;
+                for (u32 i = 0, j = 0; i < events_a.size() || j < events_b.size();)
                 {
-                    std::cout << "  ";
-                    if (i < events_a.size())
+                    if (i < events_a.size() && j < events_b.size())
                     {
-                        std::stringstream s;
-                        s << signal_to_string(events_a[i].new_value) << " @ " << events_a[i].time << "ns";
-                        std::cout << std::setfill(' ') << std::setw(10) << s.str();
+                        if (events_a[i] == events_b[j])
+                        {
+                            std::cout << signal_to_string(events_a[i].new_value) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].time << "ns";
+                            std::cout << " | ";
+                            std::cout << signal_to_string(events_b[j].new_value) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].time << "ns";
+                            std::cout << std::endl;
+                            i++;
+                            j++;
+                        }
+                        else if (events_a[i].time == events_b[j].time)
+                        {
+                            update_mismatch(events_a[i]);
+                            std::cout << signal_to_string(events_a[i].new_value) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].time << "ns";
+                            std::cout << " | ";
+                            std::cout << signal_to_string(events_b[j].new_value) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].time << "ns";
+                            std::cout << "  <--" << std::endl;
+                            i++;
+                            j++;
+                        }
+                        else
+                        {
+                            if (events_a[i].time < events_b[j].time)
+                            {
+                                update_mismatch(events_a[i]);
+                                std::cout << signal_to_string(events_a[i].new_value) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].time << "ns";
+                                std::cout << " | ";
+                                std::cout << std::endl;
+                                i++;
+                            }
+                            else
+                            {
+                                update_mismatch(events_b[j]);
+                                std::cout << "    " << std::setfill(' ') << std::setw(max_number_length) << ""
+                                          << "  ";
+                                std::cout << " | ";
+                                std::cout << signal_to_string(events_b[j].new_value) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].time << "ns";
+                                std::cout << std::endl;
+                                j++;
+                            }
+                        }
+                    }
+                    else if (i < events_a.size())
+                    {
+                        update_mismatch(events_a[i]);
+                        std::cout << signal_to_string(events_a[i].new_value) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_a[i].time << "ns";
+                        std::cout << " | ";
+                        std::cout << std::endl;
+                        i++;
                     }
                     else
                     {
-                        std::cout << std::setfill(' ') << std::setw(10) << "";
+                        update_mismatch(events_b[j]);
+                        std::cout << "    " << std::setfill(' ') << std::setw(max_number_length) << ""
+                                  << "  ";
+                        std::cout << " | ";
+                        std::cout << signal_to_string(events_b[j].new_value) << " @ " << std::setfill(' ') << std::setw(max_number_length) << events_b[j].time << "ns";
+                        std::cout << std::endl;
+                        j++;
                     }
-                    std::cout << " vs ";
-                    if (i < events_b.size())
-                    {
-                        std::stringstream s;
-                        s << signal_to_string(events_b[i].new_value) << " @ " << events_b[i].time << "ns";
-                        std::cout << std::setfill(' ') << std::setw(10) << s.str();
-                    }
-                    std::cout << std::endl;
                 }
                 std::cout << std::endl;
             }
@@ -113,6 +183,13 @@ namespace hal
                 {
                     std::cout << "more nets are captured in the simulation output" << std::endl;
                 }
+            }
+
+            if (!earliest_mismatch_nets.empty())
+            {
+                std::cout << "earliest mismatch at " << earliest_mismatch << "ns" << std::endl;
+                for (auto net : earliest_mismatch_nets)
+                    std::cout << "mismatch at " << net->get_name() << std::endl;
             }
 
             return a_events == b_events;
@@ -230,7 +307,6 @@ namespace hal
 
     TEST_F(SimulatorTest, half_adder)
     {
-        return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -307,7 +383,6 @@ namespace hal
 
     TEST_F(SimulatorTest, counter)
     {
-        return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -422,15 +497,6 @@ namespace hal
                 FAIL() << "netlist couldn't be parsed";
             }
         }
-
-        // auto g = *(nl->get_gates([](auto x) { return x->get_name() == "FSM_onehot_STATE_REG_reg_2"; }).begin());
-        // auto one_net =g->get_fan_in_net("CE");
-        // std::cout << one_net->get_name() << std::endl;
-        // auto src  =one_net->get_source().get_gate();
-        // std::cout << src->get_name() << std::endl;
-        // std::cout << src->get_boolean_function().to_string() << std::endl;
-
-        // return;
 
         //path to vcd
         std::string path_vcd = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/dump.vcd";

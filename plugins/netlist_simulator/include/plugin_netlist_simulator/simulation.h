@@ -14,7 +14,7 @@ namespace hal
         void add_event(const Event& ev);
 
         // WARNING: use for testing only
-        std::unordered_map<Net*, std::vector<Event>> get_events();
+        std::unordered_map<Net*, std::vector<Event>> get_events() const;
 
         /*
         * Generates vcd

@@ -108,6 +108,8 @@ namespace hal
 
         std::unordered_map<Net*, std::vector<Gate*>> m_successors;
 
+        bool simulate(Gate* gate, Event& event, std::map<std::pair<Net*, u64>, SignalValue>& new_events);
+        void simulate_ff(Gate* gate, std::map<std::pair<Net*, u64>, SignalValue>& new_events);
         void compute_input_nets();
         void compute_output_nets();
         void initialize();
