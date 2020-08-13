@@ -138,16 +138,15 @@ endif()
 #####   spdlog
 ################################
 
-find_package(spdlog 1.4.2 EXACT CONFIG)
+find_package(spdlog 1.5.0 CONFIG)
 if(${spdlog_FOUND})
-    message(VERBOSE "Found spdlog >= 1.4.2")
+    message(VERBOSE "Found spdlog >= 1.5.0")
 else()
-    message(STATUS "spdlog >= 1.4.2 not found")
-    #    include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-1.4.2/include")
-    set(spdlog_VERSION 1.4.2)
+    message(STATUS "spdlog >= 1.5.0 not found")
+    set(spdlog_VERSION 1.5.0)
     add_library(spdlog::spdlog INTERFACE IMPORTED)
     set_target_properties(spdlog::spdlog PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.4.2/include"
+                          INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog/include"
                           )
 endif()
 

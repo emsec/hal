@@ -27,7 +27,7 @@ namespace hal
 
     bool GraphicsScene::s_grid_enabled = true;
     bool GraphicsScene::s_grid_clusters_enabled = true;
-    graph_widget_constants::grid_type GraphicsScene::s_grid_type = graph_widget_constants::grid_type::lines;
+    graph_widget_constants::grid_type GraphicsScene::s_grid_type = graph_widget_constants::grid_type::Lines;
 
     QColor GraphicsScene::s_grid_base_line_color = QColor(30, 30, 30);
     QColor GraphicsScene::s_grid_cluster_line_color = QColor(15, 15, 15);
@@ -383,25 +383,25 @@ namespace hal
         int nets = 0;
         int modules = 0;
 
-        for (const QGraphicsItem* const item : selectedItems())
+        for (const QGraphicsItem* item : selectedItems())
         {
-            switch (static_cast<const GraphicsItem* const>(item)->item_type())
+            switch (static_cast<const GraphicsItem*>(item)->item_type())
             {
             case hal::item_type::gate:
             {
-                g_selection_relay.m_selected_gates.insert(static_cast<const GraphicsItem* const>(item)->id());
+                g_selection_relay.m_selected_gates.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++gates;
                 break;
             }
             case hal::item_type::net:
             {
-                g_selection_relay.m_selected_nets.insert(static_cast<const GraphicsItem* const>(item)->id());
+                g_selection_relay.m_selected_nets.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++nets;
                 break;
             }
             case hal::item_type::module:
             {
-                g_selection_relay.m_selected_modules.insert(static_cast<const GraphicsItem* const>(item)->id());
+                g_selection_relay.m_selected_modules.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++modules;
                 break;
             }
@@ -546,7 +546,9 @@ namespace hal
 
         switch (s_grid_type)
         {
-        case graph_widget_constants::grid_type::lines:
+        case graph_widget_constants::grid_type::None:
+            return; // nothing to do
+        case graph_widget_constants::grid_type::Lines:
         {
             QVarLengthArray<QLine, 512> base_lines;
             QVarLengthArray<QLine, 64> cluster_lines;
@@ -584,7 +586,7 @@ namespace hal
             break;
         }
 
-        case graph_widget_constants::grid_type::dots:
+        case graph_widget_constants::grid_type::Dots:
         {
             QVector<QPoint> base_points;
             QVector<QPoint> cluster_points;

@@ -31,6 +31,7 @@
 
 class QTableWidget;
 class QStackedWidget;
+class QLabel;
 
 namespace hal
 {

@@ -432,6 +432,14 @@ SettingsWidget #name-label {
     font       : 14px bold "Iosevka";
 }
 
+hal--SettingsWidget QToolButton {
+    color : #000;
+}
+
+hal--SettingsWidget QToolButton:disabled {
+    color : #808080;
+}
+
 /* LABEL_BUTTON */
 
 SettingsWidget label_button {
