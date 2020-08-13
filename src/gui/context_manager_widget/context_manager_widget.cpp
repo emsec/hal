@@ -31,7 +31,7 @@ namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
         : ContentWidget("View Manager", parent), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
-          m_delete_action(new QAction(this)), m_open_action(new QAction(this))
+          m_delete_action(new QAction(this)), m_open_action(new QAction(this)), m_search_action(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -42,12 +42,14 @@ namespace hal
         m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_rename_icon_style, m_rename_icon_path));
         m_duplicate_action->setIcon(gui_utility::get_styled_svg_icon(m_duplicate_icon_style, m_duplicate_icon_path));
         m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
+        m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
 
         m_open_action->setToolTip("Open");
         m_new_view_action->setToolTip("New");
         m_rename_action->setToolTip("Rename");
         m_duplicate_action->setToolTip("Duplicate");
         m_delete_action->setToolTip("Delete");
+        m_search_action->setToolTip("Search");
 
         m_open_action->setText("Open View");
         m_new_view_action->setText("Create New View");
@@ -90,12 +92,14 @@ namespace hal
         connect(m_rename_action, &QAction::triggered, this, &ContextManagerWidget::handle_rename_context_clicked);
         connect(m_duplicate_action, &QAction::triggered, this, &ContextManagerWidget::handle_duplicate_context_clicked);
         connect(m_delete_action, &QAction::triggered, this, &ContextManagerWidget::handle_delete_context_clicked);
+        connect(m_search_action, &QAction::triggered, this, &ContextManagerWidget::toggle_searchbar);
 
         connect(m_context_table_view, &QTableView::customContextMenuRequested, this, &ContextManagerWidget::handle_context_menu_request);
         connect(m_context_table_view, &QTableView::doubleClicked, this, &ContextManagerWidget::handle_open_context_clicked);
         connect(m_context_table_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handle_selection_changed);
 
         connect(&m_searchbar, &Searchbar::text_edited, m_context_table_proxy_model, &ContextTableProxyModel::handle_filter_text_changed);
+        connect(&m_searchbar, &Searchbar::text_edited, this, &ContextManagerWidget::handle_filter_text_changed);
     }
 
     void ContextManagerWidget::handle_create_context_clicked()
@@ -175,6 +179,14 @@ namespace hal
         context_menu.exec(m_context_table_view->viewport()->mapToGlobal(point));
     }
 
+    void ContextManagerWidget::handle_filter_text_changed(const QString& filter_text)
+    {
+        if(filter_text.isEmpty())
+            m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
+        else
+            m_search_action->setIcon(gui_utility::get_styled_svg_icon("all->#30ac4f", m_search_icon_path)); //color test, integrate into stylsheet later
+    }
+
     void ContextManagerWidget::select_view_context(GraphContext* context)
     {
         const QModelIndex source_model_index = m_context_table_model->get_index(context);
@@ -194,13 +206,14 @@ namespace hal
         return m_context_table_model->get_context(source_model_index); 
     }
 
-    void ContextManagerWidget::setup_toolbar(Toolbar* Toolbar)
+    void ContextManagerWidget::setup_toolbar(Toolbar* toolbar)
     {
-        Toolbar->addAction(m_new_view_action);
-        Toolbar->addAction(m_open_action);
-        Toolbar->addAction(m_duplicate_action);
-        Toolbar->addAction(m_rename_action);
-        Toolbar->addAction(m_delete_action);
+        toolbar->addAction(m_new_view_action);
+        toolbar->addAction(m_open_action);
+        toolbar->addAction(m_duplicate_action);
+        toolbar->addAction(m_rename_action);
+        toolbar->addAction(m_delete_action);
+        toolbar->addAction(m_search_action);
     }
 
     void ContextManagerWidget::set_toolbar_buttons_enabled(bool enabled)
@@ -275,7 +288,7 @@ namespace hal
         return m_delete_icon_style;
     }
 
-        QString ContextManagerWidget::open_icon_path() const
+    QString ContextManagerWidget::open_icon_path() const
     {
         return m_open_icon_path;
     }
@@ -283,6 +296,16 @@ namespace hal
     QString ContextManagerWidget::open_icon_style() const
     {
         return m_open_icon_style;
+    }
+
+    QString ContextManagerWidget::search_icon_path() const
+    {
+        return m_search_icon_path;
+    }
+
+    QString ContextManagerWidget::search_icon_style() const
+    {
+        return m_search_icon_style;
     }
 
     void ContextManagerWidget::set_new_view_icon_path(const QString& path)
@@ -334,4 +357,14 @@ namespace hal
     {
         m_open_icon_style = style;
     }
+
+    void ContextManagerWidget::set_search_icon_path(const QString& path)
+    {
+        m_search_icon_path = path;
+    }
+
+    void ContextManagerWidget::set_search_icon_style(const QString& style)
+    {
+        m_search_icon_style = style;
+    }    
 }

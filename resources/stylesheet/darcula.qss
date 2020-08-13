@@ -1393,6 +1393,9 @@ qproperty-delete_icon_path: ":/icons/trashcan";
 
 qproperty-open_icon_style: "all->#e8e8e8";
 qproperty-open_icon_path: ":/icons/open-alt";
+
+qproperty-search_icon_style: "all->#e8e8e8";
+qproperty-search_icon_path: ":/icons/search";
 }
 
 hal--MainWindow {

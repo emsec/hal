@@ -57,13 +57,15 @@ namespace hal
         Q_PROPERTY(QString duplicate_icon_style READ duplicate_icon_style WRITE set_duplicate_icon_style)
         Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
         Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
+        Q_PROPERTY(QString search_icon_path READ search_icon_path WRITE set_search_icon_path)
+        Q_PROPERTY(QString search_icon_style READ search_icon_style WRITE set_search_icon_style)
 
     public:
         ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
         void select_view_context(GraphContext* context);
 
-        virtual void setup_toolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
+        virtual void setup_toolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
 
         QString new_view_icon_path() const;
         QString new_view_icon_style() const;
@@ -75,6 +77,8 @@ namespace hal
         QString duplicate_icon_style() const;
         QString open_icon_path() const;
         QString open_icon_style() const;
+        QString search_icon_path() const;
+        QString search_icon_style() const;
 
         void set_new_view_icon_path(const QString &path);
         void set_new_view_icon_style(const QString &style);
@@ -86,6 +90,8 @@ namespace hal
         void set_duplicate_icon_style(const QString &style);
         void set_open_icon_path(const QString &path);
         void set_open_icon_style(const QString &style);
+        void set_search_icon_path(const QString &path);
+        void set_search_icon_style(const QString &style);
 
     public Q_SLOTS:
         //void handle_context_created(GraphContext* context);
@@ -121,6 +127,10 @@ namespace hal
         QString m_open_icon_path;
         QString m_open_icon_style;
 
+        QAction* m_search_action;
+        QString m_search_icon_path;
+        QString m_search_icon_style;
+
         void handle_create_context_clicked();
         void handle_open_context_clicked();
         void handle_rename_context_clicked();
@@ -129,6 +139,7 @@ namespace hal
 
         void handle_context_menu_request(const QPoint& point);
         void handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected);
+        void handle_filter_text_changed(const QString& filter_text);
 
         void set_toolbar_buttons_enabled(bool enabled);
 
