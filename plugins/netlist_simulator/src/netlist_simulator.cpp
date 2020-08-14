@@ -469,6 +469,7 @@ namespace hal
 
             auto output_pins     = gate_type->get_state_output_pins();
             auto inv_output_pins = gate_type->get_inverted_state_output_pins();
+            auto clock_pins      = gate_type->get_clock_pins();
 
             if (async_set == BooleanFunction::value::ONE && async_reset == BooleanFunction::value::ONE)
             {
@@ -565,30 +566,20 @@ namespace hal
                 }
             }
 
+            if (std::any_of(clock_pins.begin(), clock_pins.end(), [&event, gate](auto& pin) { return gate->get_fan_in_net(pin) == event.affected_net; }))
             {
-                auto clocked_on_func    = gate->get_boolean_function("clock");
-                bool is_change_to_clock = false;
-                for (auto pin : clocked_on_func.get_variables())
-                {
-                    if (gate->get_fan_in_net(pin) == event.affected_net)
-                    {
-                        is_change_to_clock = true;
-                        break;
-                    }
-                }
-                if (!is_change_to_clock)
-                {
-                    log_info("netlist simulator", "  not connected to a clock pin -> skip");
-                    return true;
-                }
+                auto clocked_on_func = gate->get_boolean_function("clock");
                 log_info("netlist simulator", "  clocked on {}", clocked_on_func.to_string());
                 if (clocked_on_func.evaluate(input_values) != BooleanFunction::ONE)
                 {
                     log_info("netlist simulator", "  clock function not satisfied -> skip");
                     return true;
                 }
-
                 return false;
+            }
+            else
+            {
+                log_info("netlist simulator", "  not connected to a clock pin -> skip");
             }
         }
         else

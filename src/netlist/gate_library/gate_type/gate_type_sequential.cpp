@@ -12,7 +12,7 @@ namespace hal
 
     void GateTypeSequential::add_state_output_pin(std::string pin_name)
     {
-        if (const auto& it = std::find(m_output_pins.begin(), m_output_pins.end(), pin_name); it == m_output_pins.end())
+        if (std::find(m_output_pins.begin(), m_output_pins.end(), pin_name) == m_output_pins.end())
         {
             log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring state output pin assignment", pin_name, m_name);
             return;
@@ -23,7 +23,7 @@ namespace hal
 
     void GateTypeSequential::add_inverted_state_output_pin(std::string pin_name)
     {
-        if (const auto& it = std::find(m_output_pins.begin(), m_output_pins.end(), pin_name); it == m_output_pins.end())
+        if (std::find(m_output_pins.begin(), m_output_pins.end(), pin_name) == m_output_pins.end())
         {
             log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring inverted state output pin assignment", pin_name, m_name);
             return;
@@ -34,7 +34,7 @@ namespace hal
 
     void GateTypeSequential::add_clock_pin(std::string pin_name)
     {
-        if (const auto& it = std::find(m_input_pins.begin(), m_input_pins.end(), pin_name); it == m_input_pins.end())
+        if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
         {
             log_warning("gate_type", "pin '{}' of gate type '{}' is not an input pin, ignoring clock input pin assignment", pin_name, m_name);
             return;

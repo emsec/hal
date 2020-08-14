@@ -25,12 +25,9 @@ namespace hal
         virtual void SetUp()
         {
             NO_COUT_BLOCK;
-            //load simulator from plugins
+
             plugin_manager::load_all_plugins();
-
-            //load all gate libraries
             gate_library_manager::load_all();
-
             auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
         }
 
@@ -101,7 +98,11 @@ namespace hal
             {
                 auto& events_a        = a_events[net];
                 auto& events_b        = b_events[net];
-                u32 max_number_length = std::to_string(std::max(events_a.back().time, events_b.back().time)).size();
+                u32 max_number_length = 0;
+                if (!events_a.empty() && !events_b.empty())
+                {
+                    max_number_length = std::to_string(std::max(events_a.back().time, events_b.back().time)).size();
+                }
                 std::cout << "difference in net " << net->get_name() << " id=" << net->get_id() << ":" << std::endl;
                 std::cout << "vcd:" << std::setfill(' ') << std::setw(max_number_length + 5) << ""
                           << "hal:" << std::endl;
@@ -191,8 +192,13 @@ namespace hal
                 for (auto net : earliest_mismatch_nets)
                     std::cout << "mismatch at " << net->get_name() << std::endl;
             }
+            if (a_events == b_events)
+            {
+                std::cout << "simulation correct!" << std::endl;
+                return true;
+            }
 
-            return a_events == b_events;
+            return false;
         }
 
         Simulation parse_vcd(Netlist* netlist, const std::string vcdfile, const int duration_clk_cycle)
@@ -325,7 +331,7 @@ namespace hal
 
         std::unique_ptr<Netlist> nl;
         {
-            NO_COUT_BLOCK;
+            // NO_COUT_BLOCK;
             nl = hdl_parser_manager::parse(path_netlist, lib);
             if (nl == nullptr)
             {
