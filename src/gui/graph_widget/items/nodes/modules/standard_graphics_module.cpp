@@ -85,7 +85,7 @@ namespace hal
             s_alpha = 0;
     }
 
-    StandardGraphicsModule::StandardGraphicsModule(const std::shared_ptr<Module> m, bool adjust_size_to_grid) : GraphicsModule(m)
+    StandardGraphicsModule::StandardGraphicsModule(Module* m, bool adjust_size_to_grid) : GraphicsModule(m)
     {
         format(adjust_size_to_grid);
     }

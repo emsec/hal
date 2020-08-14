@@ -23,7 +23,7 @@ namespace hal
             };
         }
 
-        GraphicsModule* create_graphics_module(const std::shared_ptr<Module> m, const int type)
+        GraphicsModule* create_graphics_module(Module* m, const int type)
         {
             assert(m);
 
@@ -34,7 +34,7 @@ namespace hal
             }
         }
 
-        GraphicsGate* create_graphics_gate(const std::shared_ptr<const Gate> g, const int type)
+        GraphicsGate* create_graphics_gate(Gate* g, const int type)
         {
             assert(g);
 

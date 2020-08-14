@@ -34,7 +34,7 @@ namespace hal
     class GraphicsModule : public GraphicsNode
     {
     public:
-        explicit GraphicsModule(const std::shared_ptr<Module> m);
+        explicit GraphicsModule(Module* m);
 
     protected:
         struct module_pin

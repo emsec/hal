@@ -92,7 +92,7 @@ namespace hal
 
     QVariant SelectionTreeItemModule::name() const
     {
-        const std::shared_ptr<Module>& module = g_netlist->get_module_by_id(mId);
+        Module* module = g_netlist->get_module_by_id(mId);
         if(!module) return QVariant();
         return QString::fromStdString(module->get_name());
     }
@@ -115,7 +115,7 @@ namespace hal
 
     QVariant SelectionTreeItemGate::name() const
     {
-        const std::shared_ptr<Gate>& gate = g_netlist->get_gate_by_id(mId);
+        Gate* gate = g_netlist->get_gate_by_id(mId);
         if(!gate) return QVariant();
         return QString::fromStdString(gate->get_name());
     }
@@ -127,7 +127,7 @@ namespace hal
 
     QVariant SelectionTreeItemGate::gateType() const
     {
-        const std::shared_ptr<Gate>& gate = g_netlist->get_gate_by_id(mId);
+        Gate* gate = g_netlist->get_gate_by_id(mId);
         if(!gate) return QVariant();
         return QString::fromStdString(gate->get_type()->get_name());
     }
@@ -139,7 +139,7 @@ namespace hal
 
     QVariant SelectionTreeItemNet::name() const
     {
-        const std::shared_ptr<Net>& net = g_netlist->get_net_by_id(mId);
+        Net* net = g_netlist->get_net_by_id(mId);
         if(!net) return QVariant();
         return QString::fromStdString(net->get_name());
     }

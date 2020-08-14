@@ -29,7 +29,7 @@ namespace hal
             return;
 
 
-        if (!m_drag_state->dragging /*&& mwlayout->pluggingWidget == 0*/ && (event->pos() - m_drag_state->pressPos).manhattanLength() > QApplication::startDragDistance())
+        if (!m_drag_state->dragging /*& mwlayout->pluggingWidget == 0*/ && (event->pos() - m_drag_state->pressPos).manhattanLength() > QApplication::startDragDistance())
         {
             start_drag(false);
 

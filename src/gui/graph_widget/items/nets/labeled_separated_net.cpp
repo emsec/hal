@@ -29,7 +29,7 @@ namespace hal
         s_font_ascend = fm.ascent();
     }
 
-    LabeledSeparatedNet::LabeledSeparatedNet(const std::shared_ptr<const Net> n, const QString& text) : SeparatedGraphicsNet(n),
+    LabeledSeparatedNet::LabeledSeparatedNet(Net* n, const QString& text) : SeparatedGraphicsNet(n),
       m_text(text)
     {
         QFontMetricsF fm(s_font);

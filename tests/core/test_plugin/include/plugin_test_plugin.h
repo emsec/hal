@@ -33,7 +33,7 @@ namespace hal
         ProgramOptions get_cli_options() const override;
 
         /** interface implementation: CLIPluginInterface */
-        bool handle_cli_call(std::shared_ptr<Netlist> nl, ProgramArguments& args) override;
+        bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
     };
 
 }    // namespace hal

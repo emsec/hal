@@ -5,7 +5,13 @@
 !gate_libraries/**/*
 !graph_algorithm*
 !graph_algorithm/**/*
+!liberty_parser*
+!liberty_parser/**/*
 !quine_mccluskey*
 !quine_mccluskey/**/*
+!vhdl_verilog_parsers*
+!vhdl_verilog_parsers/**/*
+!vhdl_verilog_writers*
+!vhdl_verilog_writers/**/*
 !CMakeLists.txt
 !.gitignore

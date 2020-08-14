@@ -44,6 +44,8 @@
 
 namespace hal
 {
+    class Netlist;
+
     //extern QSettings g_settings;
     extern QSettings g_gui_state;
 
@@ -52,7 +54,8 @@ namespace hal
 
     extern ContentManager* g_content_manager;
 
-    extern std::shared_ptr<Netlist> g_netlist;
+    extern std::unique_ptr<Netlist> g_netlist_owner;
+    extern Netlist* g_netlist;
 
     extern NetlistRelay g_netlist_relay;
     extern PluginRelay g_plugin_relay;

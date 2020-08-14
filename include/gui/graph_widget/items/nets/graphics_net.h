@@ -46,7 +46,7 @@ namespace hal
 
         static void load_settings();
 
-        GraphicsNet(const std::shared_ptr<const Net> n);
+        GraphicsNet(Net* n);
 
         QRectF boundingRect() const override;
         QPainterPath shape() const override;

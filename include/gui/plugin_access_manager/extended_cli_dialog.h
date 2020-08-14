@@ -59,7 +59,7 @@ namespace hal
         QDialogButtonBox* m_button_box;
 
         ProgramArguments m_args;
-        std::shared_ptr<CLIPluginInterface> m_plugin;
+        CLIPluginInterface* m_plugin;
 
         std::vector<std::pair<QPushButton*, QLineEdit*>> m_vector;
 

@@ -34,7 +34,7 @@ namespace hal
     class GraphicsGate : public GraphicsNode
     {
     public:
-        GraphicsGate(const std::shared_ptr<const Gate> g);
+        GraphicsGate(Gate* g);
 
     protected:
         QString m_type;

@@ -49,7 +49,7 @@ namespace hal
         // MANUAL UPDATE OF SUBSCRIBERS
     }
 
-    void ModuleRelay::handle_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data)
+    void ModuleRelay::handle_module_event(module_event_handler::event ev, Module* object, u32 associated_data)
     {
         Q_UNUSED(associated_data);
         switch (ev)

@@ -13,7 +13,7 @@ namespace hal {
 
     class HDLParserVHDLTest : public ::testing::Test {
     protected:
-        std::shared_ptr<GateLibrary> m_gl;
+        GateLibrary* m_gl;
 
         virtual void SetUp() {
             NO_COUT_BLOCK;
@@ -81,7 +81,7 @@ namespace hal {
                                     "");
             test_def::capture_stdout();
             HDLParserVHDL vhdl_parser(input);
-            std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+            Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
             if (nl == nullptr) {
                 std::cout << test_def::get_captured_stdout();
             } else {
@@ -95,11 +95,11 @@ namespace hal {
 
             // Check if the gates are parsed correctly
             ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-            std::shared_ptr<Gate> gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
+            Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
             ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
-            std::shared_ptr<Gate> gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
+            Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
             ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
-            std::shared_ptr<Gate> gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
+            Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
 
             ASSERT_NE(gate_0, nullptr);
             EXPECT_EQ(gate_0->get_name(), "gate_0");
@@ -111,10 +111,10 @@ namespace hal {
             EXPECT_EQ(gate_2->get_name(), "gate_2");
 
             // Check if the nets are parsed correctly
-            std::shared_ptr<Net> net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
-            std::shared_ptr<Net> net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
-            std::shared_ptr<Net> net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
-            std::shared_ptr<Net>
+            Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
+            Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
+            Net* net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
+            Net*
                 net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
 
             ASSERT_NE(net_0, nullptr);
@@ -186,7 +186,7 @@ namespace hal {
                                         "gate_2:gate_3_to_1 port map(I0 => net_0,I1 => net_1,O => net_global_out);end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -197,11 +197,11 @@ namespace hal {
 
                 // Check if the gates are parsed correctly
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                std::shared_ptr<Gate> gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin());
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).size(), 1);
-                std::shared_ptr<Gate> gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
+                Gate* gate_1 = *(nl->get_gates(test_utils::gate_type_filter("gate_2_to_1")).begin());
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).size(), 1);
-                std::shared_ptr<Gate> gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
+                Gate* gate_2 = *(nl->get_gates(test_utils::gate_type_filter("gate_3_to_1")).begin());
 
                 ASSERT_NE(gate_0, nullptr);
                 EXPECT_EQ(gate_0->get_name(), "gate_0");
@@ -213,11 +213,11 @@ namespace hal {
                 EXPECT_EQ(gate_2->get_name(), "gate_2");
 
                 // Check if the nets are parsed correctly
-                std::shared_ptr<Net> net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
-                std::shared_ptr<Net> net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
-                std::shared_ptr<Net>
+                Net* net_0 = *(nl->get_nets(test_utils::net_name_filter("net_0")).begin());
+                Net* net_1 = *(nl->get_nets(test_utils::net_name_filter("net_1")).begin());
+                Net*
                     net_global_in = *(nl->get_nets(test_utils::net_name_filter("net_global_in")).begin());
-                std::shared_ptr<Net>
+                Net*
                     net_global_out = *(nl->get_nets(test_utils::net_name_filter("net_global_out")).begin());
 
                 ASSERT_NE(net_0, nullptr);
@@ -297,7 +297,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -307,7 +307,7 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
 
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
-                std::shared_ptr<Gate> gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
 
                 // Integers are stored in their hex representation
                 EXPECT_EQ(gate_0->get_data_by_key("generic", "key_integer"), std::make_tuple("integer", "1234"));
@@ -388,7 +388,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -406,9 +406,9 @@ namespace hal {
                 }
                 for (unsigned i = 0; i < 4; i++) {
                     std::string i_str = std::to_string(i);
-                    std::shared_ptr<Net>
+                    Net*
                         n_vec_1_i = *nl->get_nets(test_utils::net_name_filter("n_vec_1(" + i_str + ")")).begin();
-                    std::shared_ptr<Net>
+                    Net*
                         n_vec_2_i = *nl->get_nets(test_utils::net_name_filter("n_vec_2(" + i_str + ")")).begin();
                     EXPECT_EQ(n_vec_1_i->get_source().get_pin(), "O" + i_str);
                     EXPECT_EQ((*n_vec_1_i->get_destinations().begin()).get_pin(), "I" + i_str);
@@ -447,7 +447,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -461,7 +461,7 @@ namespace hal {
                 unsigned pin = 0;
                 for (auto n : std::vector<std::string>({"n_vec(0)(2)", "n_vec(0)(3)", "n_vec(1)(2)", "n_vec(1)(3)"})) {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter(n)).empty());
-                    std::shared_ptr<Net> n_vec_i_j = *nl->get_nets(test_utils::net_name_filter(n)).begin();
+                    Net* n_vec_i_j = *nl->get_nets(test_utils::net_name_filter(n)).begin();
                     EXPECT_EQ(n_vec_i_j->get_source().get_pin(), "O" + std::to_string(pin));
                     EXPECT_EQ((*n_vec_i_j->get_destinations().begin()).get_pin(), "I" + std::to_string(pin));
                     pin++;
@@ -506,7 +506,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -521,7 +521,7 @@ namespace hal {
                       "(1)(1)(1)"});
                 for (size_t idx = 0; idx < 8; idx++) {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).empty());
-                    std::shared_ptr<Net>
+                    Net*
                         n_vec_i_j = *nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).begin();
                     EXPECT_EQ(n_vec_i_j->get_source().get_pin(), "O" + std::to_string(idx));
                     EXPECT_EQ((*n_vec_i_j->get_destinations().begin()).get_pin(), "I" + std::to_string(idx));
@@ -555,7 +555,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -565,7 +565,7 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
 
                 ASSERT_NE(nl->get_gnd_gates().size(), 0);
-                std::shared_ptr<Gate> global_gnd = *nl->get_gnd_gates().begin();
+                Gate* global_gnd = *nl->get_gnd_gates().begin();
                 EXPECT_EQ(global_gnd->get_name(), "g_gnd_gate");
             }
             {
@@ -585,7 +585,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -595,7 +595,7 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
 
                 ASSERT_NE(nl->get_vcc_gates().size(), 0);
-                std::shared_ptr<Gate> global_vcc = *nl->get_vcc_gates().begin();
+                Gate* global_vcc = *nl->get_vcc_gates().begin();
                 EXPECT_EQ(global_vcc->get_name(), "g_vcc_gate");
             }
         TEST_END
@@ -633,7 +633,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -643,12 +643,12 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).size(), 1);
-                std::shared_ptr<Gate> gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
-                std::shared_ptr<Gate> gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
 
                 // Test that the nets '0' and '1' are created and connected
-                std::shared_ptr<Net> net_gnd = gate_0->get_fan_in_net("I");
-                std::shared_ptr<Net> net_vcc = gate_1->get_fan_in_net("I");
+                Net* net_gnd = gate_0->get_fan_in_net("I");
+                Net* net_vcc = gate_1->get_fan_in_net("I");
                 ASSERT_NE(net_gnd, nullptr);
                 ASSERT_NE(net_vcc, nullptr);
                 EXPECT_EQ(net_gnd->get_name(), "\'0\'");
@@ -739,7 +739,7 @@ namespace hal {
                                         "end ENT_TOP;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -752,11 +752,11 @@ namespace hal {
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).size(), 1);
-                std::shared_ptr<Gate> gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
-                std::shared_ptr<Gate> gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
-                std::shared_ptr<Gate>
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                Gate* gate_1 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1")).begin();
+                Gate*
                     gate_0_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0_child")).begin();
-                std::shared_ptr<Gate>
+                Gate*
                     gate_1_child = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_1_child")).begin();
 
                 // Test that all nets are created
@@ -765,13 +765,13 @@ namespace hal {
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_global_in")).size(), 1);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_global_out")).size(), 1);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0_child")).size(), 1);
-                std::shared_ptr<Net> net_0 = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
-                std::shared_ptr<Net> net_1 = *nl->get_nets(test_utils::net_name_filter("net_1")).begin();
-                std::shared_ptr<Net>
+                Net* net_0 = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
+                Net* net_1 = *nl->get_nets(test_utils::net_name_filter("net_1")).begin();
+                Net*
                     net_global_in = *nl->get_nets(test_utils::net_name_filter("net_global_in")).begin();
-                std::shared_ptr<Net>
+                Net*
                     net_global_out = *nl->get_nets(test_utils::net_name_filter("net_global_out")).begin();
-                std::shared_ptr<Net> net_0_child = *nl->get_nets(test_utils::net_name_filter("net_0_child")).begin();
+                Net* net_0_child = *nl->get_nets(test_utils::net_name_filter("net_0_child")).begin();
 
                 // Test that all nets are connected correctly
                 EXPECT_EQ(gate_0->get_fan_in_net("I"), net_global_in);
@@ -787,12 +787,12 @@ namespace hal {
                           std::make_tuple("string", "child_net_attribute"));
 
                 // Test that the modules are created and assigned correctly
-                std::shared_ptr<Module> top_mod = nl->get_top_module();
+                Module* top_mod = nl->get_top_module();
                 ASSERT_EQ(top_mod->get_submodules().size(), 1);
-                std::shared_ptr<Module> child_mod = *top_mod->get_submodules().begin();
+                Module* child_mod = *top_mod->get_submodules().begin();
                 EXPECT_EQ(child_mod->get_name(), "child_mod");
-                EXPECT_EQ(top_mod->get_gates(), std::set<std::shared_ptr<Gate>>({gate_0, gate_1}));
-                EXPECT_EQ(child_mod->get_gates(), std::set<std::shared_ptr<Gate>>({gate_0_child, gate_1_child}));
+                EXPECT_EQ(top_mod->get_gates(), std::set<Gate*>({gate_0, gate_1}));
+                EXPECT_EQ(child_mod->get_gates(), std::set<Gate*>({gate_0_child, gate_1_child}));
                 EXPECT_EQ(child_mod->get_data_by_key("attribute", "child_attri"),
                           std::make_tuple("string", "child_attribute"));
             }
@@ -886,7 +886,7 @@ namespace hal {
                                         "end ENT_TOP;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -897,18 +897,18 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
                 EXPECT_EQ(nl->get_gates().size(), 5);      // 3 * gate_child_two + gate_child_one + gate_top
                 EXPECT_EQ(nl->get_modules().size(), 5);    // 3 * ENT_CHILD_TWO + ENT_CHILD_ONE + ENT_TOP
-                std::shared_ptr<Module> top_module = nl->get_top_module();
+                Module* top_module = nl->get_top_module();
 
                 ASSERT_EQ(top_module->get_submodules().size(), 2);
-                std::shared_ptr<Module> top_child_one = *top_module->get_submodules().begin();
-                std::shared_ptr<Module> top_child_two = *(++top_module->get_submodules().begin());
+                Module* top_child_one = *top_module->get_submodules().begin();
+                Module* top_child_two = *(++top_module->get_submodules().begin());
                 if (top_child_one->get_submodules().empty()) {
                     std::swap(top_child_one, top_child_two);
                 }
 
                 ASSERT_EQ(top_child_one->get_submodules().size(), 2);
-                std::shared_ptr<Module> one_child_0 = *(top_child_one->get_submodules().begin());
-                std::shared_ptr<Module> one_child_1 = *(++top_child_one->get_submodules().begin());
+                Module* one_child_0 = *(top_child_one->get_submodules().begin());
+                Module* one_child_1 = *(++top_child_one->get_submodules().begin());
 
                 // Test if all names that are used multiple times are substituted correctly
                 std::string module_suffix = "";
@@ -934,9 +934,9 @@ namespace hal {
                 ASSERT_EQ(top_child_two->get_gates().size(), 1);
                 ASSERT_EQ(one_child_0->get_gates().size(), 1);
                 ASSERT_EQ(one_child_1->get_gates().size(), 1);
-                std::shared_ptr<Gate> gate_child_two_0 = *top_child_two->get_gates().begin();
-                std::shared_ptr<Gate> gate_child_two_1 = *one_child_0->get_gates().begin();
-                std::shared_ptr<Gate> gate_child_two_2 = *one_child_1->get_gates().begin();
+                Gate* gate_child_two_0 = *top_child_two->get_gates().begin();
+                Gate* gate_child_two_1 = *one_child_0->get_gates().begin();
+                Gate* gate_child_two_2 = *one_child_1->get_gates().begin();
 
                 EXPECT_TRUE(core_utils::starts_with(gate_child_two_0->get_name(), "gate_child_two" + gate_suffix));
                 EXPECT_TRUE(core_utils::starts_with(gate_child_two_1->get_name(), "gate_child_two" + gate_suffix));
@@ -1001,7 +1001,7 @@ namespace hal {
                                         "end STRUCTURE_TOP;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1012,19 +1012,19 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
                 EXPECT_EQ(nl->get_gates().size(), 3);      // 1 in top + 2 in mod
                 EXPECT_EQ(nl->get_modules().size(), 2);    // top + mod
-                std::shared_ptr<Module> top_module = nl->get_top_module();
+                Module* top_module = nl->get_top_module();
 
                 ASSERT_EQ(top_module->get_submodules().size(), 1);
-                std::shared_ptr<Module> mod = *top_module->get_submodules().begin();
+                Module* mod = *top_module->get_submodules().begin();
 
                 ASSERT_EQ(mod->get_gates(test_utils::gate_name_filter("gate_a")).size(), 1);
                 ASSERT_EQ(mod->get_gates(test_utils::gate_name_filter("gate_b")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_name_filter("gate_top")).size(), 1);
-                std::shared_ptr<Gate> gate_a = *mod->get_gates(test_utils::gate_name_filter("gate_a")).begin();
-                std::shared_ptr<Gate> gate_b = *mod->get_gates(test_utils::gate_name_filter("gate_b")).begin();
-                std::shared_ptr<Gate> gate_top = *nl->get_gates(test_utils::gate_name_filter("gate_top")).begin();
+                Gate* gate_a = *mod->get_gates(test_utils::gate_name_filter("gate_a")).begin();
+                Gate* gate_b = *mod->get_gates(test_utils::gate_name_filter("gate_b")).begin();
+                Gate* gate_top = *nl->get_gates(test_utils::gate_name_filter("gate_top")).begin();
 
-                std::shared_ptr<Net> mod_out = gate_a->get_fan_out_net("O");
+                Net* mod_out = gate_a->get_fan_out_net("O");
                 ASSERT_NE(mod_out, nullptr);
                 ASSERT_EQ(mod->get_output_nets().size(), 1);
                 EXPECT_EQ(*mod->get_output_nets().begin(), mod_out);
@@ -1053,7 +1053,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr)
                 {
                     std::cout << test_def::get_captured_stdout();
@@ -1130,7 +1130,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1140,13 +1140,13 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
                 EXPECT_EQ(nl->get_nets().size(), 3);    // global_in + global_out + net_master
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_master")).size(), 1);
-                std::shared_ptr<Net> net_master = *nl->get_nets(test_utils::net_name_filter("net_master")).begin();
+                Net* net_master = *nl->get_nets(test_utils::net_name_filter("net_master")).begin();
 
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_3_to_1", "gate_1")).size(), 1);
 
-                std::shared_ptr<Gate> g_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
-                std::shared_ptr<Gate> g_1 = *nl->get_gates(test_utils::gate_filter("gate_3_to_1", "gate_1")).begin();
+                Gate* g_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                Gate* g_1 = *nl->get_gates(test_utils::gate_filter("gate_3_to_1", "gate_1")).begin();
 
                 // Check the connections
                 EXPECT_EQ(g_0->get_fan_out_net("O"), net_master);
@@ -1197,7 +1197,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1208,8 +1208,8 @@ namespace hal {
 
                 ASSERT_EQ(nl->get_gates(test_utils::gate_name_filter("gate_0")).size(), 1);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_name_filter("gate_1")).size(), 1);
-                std::shared_ptr<Gate> gate_0 = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
-                std::shared_ptr<Gate> gate_1 = *nl->get_gates(test_utils::gate_name_filter("gate_1")).begin();
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
+                Gate* gate_1 = *nl->get_gates(test_utils::gate_name_filter("gate_1")).begin();
 
                 ASSERT_NE(gate_0->get_fan_out_net("O"), nullptr);
                 ASSERT_NE(gate_1->get_fan_in_net("I0"), nullptr);
@@ -1249,7 +1249,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1258,24 +1258,24 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                std::shared_ptr<Gate>
+                Gate*
                     gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_in_nets().size(), 2);
 
-                std::shared_ptr<Net> net_0 = gate_0->get_fan_in_net("I(0)");
+                Net* net_0 = gate_0->get_fan_in_net("I(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "'0'");
 
-                std::shared_ptr<Net> net_1 = gate_0->get_fan_in_net("I(1)");
+                Net* net_1 = gate_0->get_fan_in_net("I(1)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "'1'");
 
-                std::shared_ptr<Net> net_2 = gate_0->get_fan_in_net("I(2)");
+                Net* net_2 = gate_0->get_fan_in_net("I(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "'0'");
 
-                std::shared_ptr<Net> net_3 = gate_0->get_fan_in_net("I(3)");
+                Net* net_3 = gate_0->get_fan_in_net("I(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "'1'");
             }
@@ -1296,7 +1296,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1305,24 +1305,24 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                std::shared_ptr<Gate>
+                Gate*
                     gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
 
-                std::shared_ptr<Net> net_0 = gate_0->get_fan_out_net("O(0)");
+                Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
 
-                std::shared_ptr<Net> net_1 = gate_0->get_fan_out_net("O(1)");
+                Net* net_1 = gate_0->get_fan_out_net("O(1)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "l_vec(1)");
 
-                std::shared_ptr<Net> net_2 = gate_0->get_fan_out_net("O(2)");
+                Net* net_2 = gate_0->get_fan_out_net("O(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "l_vec(2)");
 
-                std::shared_ptr<Net> net_3 = gate_0->get_fan_out_net("O(3)");
+                Net* net_3 = gate_0->get_fan_out_net("O(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "l_vec(3)");
             }
@@ -1344,7 +1344,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1353,16 +1353,16 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                std::shared_ptr<Gate>
+                Gate*
                     gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
-                std::shared_ptr<Net> net_1 = gate_0->get_fan_out_net("O(3)");
+                Net* net_1 = gate_0->get_fan_out_net("O(3)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "l_vec(1)");
 
-                std::shared_ptr<Net> net_2 = gate_0->get_fan_out_net("O(2)");
+                Net* net_2 = gate_0->get_fan_out_net("O(2)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "l_vec(2)");
             }
@@ -1383,7 +1383,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1392,16 +1392,16 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                std::shared_ptr<Gate>
+                Gate*
                     gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
-                std::shared_ptr<Net> net_1 = gate_0->get_fan_out_net("O(2)");
+                Net* net_1 = gate_0->get_fan_out_net("O(2)");
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "l_vec(2)");
 
-                std::shared_ptr<Net> net_2 = gate_0->get_fan_out_net("O(3)");
+                Net* net_2 = gate_0->get_fan_out_net("O(3)");
                 ASSERT_NE(net_2, nullptr);
                 EXPECT_EQ(net_2->get_name(), "l_vec(1)");
             }
@@ -1443,7 +1443,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1452,7 +1452,7 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).size(), 1);
-                std::shared_ptr<Gate>
+                Gate*
                     test_gate = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "test_gate")).begin();
 
                 // Test that the comments did not removed other parts (all no_comment_n generics should be created)
@@ -1503,7 +1503,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1512,7 +1512,7 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                std::shared_ptr<Gate> attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
                 EXPECT_EQ(attri_gate->get_data_by_key("attribute", "attri_name"),
                           std::make_tuple("attri_type", "attri_value"));
             }
@@ -1543,7 +1543,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1552,7 +1552,7 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
-                std::shared_ptr<Net> attri_net = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
+                Net* attri_net = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
                 EXPECT_NE(attri_net, nullptr);
                 EXPECT_EQ(attri_net->get_data_by_key("attribute", "attri_name"),
                           std::make_tuple("attri_type", "attri_value"));
@@ -1585,7 +1585,7 @@ namespace hal {
                                     "end STRUCTURE;");
             test_def::capture_stdout();
             HDLParserVHDL vhdl_parser(input);
-            std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+            Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
             if (nl == nullptr) {
                 std::cout << test_def::get_captured_stdout();
             } else {
@@ -1633,7 +1633,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(g_lib_name);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(g_lib_name);
                 if (nl == nullptr) {
                     std::cout << test_def::get_captured_stdout();
                 } else {
@@ -1641,7 +1641,7 @@ namespace hal {
                 }
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(gate_type_filter("COMP_GATE")).size(), 1);
-                std::shared_ptr<Gate> comp_gate = *nl->get_gates(gate_type_filter("COMP_GATE")).begin();
+                Gate* comp_gate = *nl->get_gates(gate_type_filter("COMP_GATE")).begin();
                 EXPECT_NE(comp_gate->get_fan_in_net("COMP_IN"), nullptr);
                 EXPECT_NE(comp_gate->get_fan_out_net("COMP_OUT"), nullptr);
                 // EXPECT_EQ(comp_gate->get_inout_pin_types(), std::vector<std::string>({"COMP_INOUT"})); FIXME
@@ -1675,7 +1675,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 ASSERT_EQ(nl, nullptr);
             }
             {
@@ -1697,7 +1697,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
@@ -1706,7 +1706,7 @@ namespace hal {
                 NO_COUT_TEST_BLOCK;
                 std::stringstream input("");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
@@ -1744,7 +1744,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
 
                 EXPECT_NE(nl, nullptr);
             }
@@ -1776,7 +1776,7 @@ namespace hal {
                                         "    ); "
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
@@ -1796,7 +1796,7 @@ namespace hal {
                                             "    );\n"
                                             "end STRUCTURE;");
                     HDLParserVHDL vhdl_parser(input);
-                    std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(temp_lib_name);
+                    Netlist* nl = vhdl_parser.parse_and_instantiate(temp_lib_name);
                     EXPECT_EQ(nl, nullptr);
                 }*/
             // ------ VHDL specific tests ------
@@ -1817,7 +1817,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
@@ -1839,7 +1839,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
@@ -1863,7 +1863,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 EXPECT_EQ(nl, nullptr);
             }
             {
@@ -1882,10 +1882,10 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).empty());
-                std::shared_ptr<Gate> gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
                 EXPECT_TRUE(gate_0->get_fan_out_nets().empty());
                 EXPECT_TRUE(gate_0->get_fan_in_nets().empty());
             }
@@ -1909,11 +1909,11 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
 
                 EXPECT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
-                std::shared_ptr<Gate> attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
                 EXPECT_EQ(attri_gate->get_data_by_key("attribute", "attri_name"),
                           std::make_tuple("unknown", "attri_value"));
             }
@@ -1937,7 +1937,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
 
                 EXPECT_EQ(nl, nullptr);
             }
@@ -1959,7 +1959,7 @@ namespace hal {
                                         "    );\n"
                                         "end STRUCTURE;");
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl != nullptr) {
                     EXPECT_EQ(nl->get_nets().size(), 1);
                 }
@@ -1981,7 +1981,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr)
                 {
                     std::cout << test_def::get_captured_stdout();
@@ -1993,7 +1993,7 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                std::shared_ptr<Gate> gate_0 = *(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                Gate* gate_0 = *(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 0);
             }
@@ -2013,7 +2013,7 @@ namespace hal {
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser(input);
-                std::shared_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(m_gl);
+                Netlist* nl = vhdl_parser.parse_and_instantiate(m_gl);
                 if (nl == nullptr)
                 {
                     std::cout << test_def::get_captured_stdout();
@@ -2025,7 +2025,7 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                std::shared_ptr<Gate> gate_0 = *(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                Gate* gate_0 = *(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_in_nets().size(), 0);
             }*/

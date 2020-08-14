@@ -3,9 +3,9 @@
 
 using namespace hal;
 
-extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
+extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
 {
-    return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<plugin_test_plugin>());
+    return std::make_unique<plugin_test_plugin>();
 }
 
 std::string plugin_test_plugin::get_name() const
@@ -33,7 +33,7 @@ ProgramOptions plugin_test_plugin::get_cli_options() const
     return description;
 }
 
-bool plugin_test_plugin::handle_cli_call(std::shared_ptr<Netlist> nl, ProgramArguments& args)
+bool plugin_test_plugin::handle_cli_call(Netlist* nl, ProgramArguments& args)
 {
     UNUSED(nl);
     UNUSED(args);

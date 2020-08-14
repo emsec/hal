@@ -236,7 +236,7 @@ namespace hal
     {
         for (const u32 id : m_context->nets())
         {
-            std::shared_ptr<Net> n = g_netlist->get_net_by_id(id);
+            Net* n = g_netlist->get_net_by_id(id);
             assert(n);
 
             if (n->is_unrouted())
@@ -721,7 +721,7 @@ namespace hal
         // ROADS AND JUNCTIONS FILLED LEFT TO RIGHT, TOP TO BOTTOM
         for (const u32 id : m_context->nets())
         {
-            std::shared_ptr<Net> n = g_netlist->get_net_by_id(id);
+            Net* n = g_netlist->get_net_by_id(id);
             assert(n);
 
             if (n->is_unrouted())

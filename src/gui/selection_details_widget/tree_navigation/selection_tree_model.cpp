@@ -175,19 +175,19 @@ namespace hal
     void SelectionTreeModel::moduleRecursion(SelectionTreeItemModule* modItem)
     {
         if (modItem->isRoot()) return;
-        std::shared_ptr<Module> mod = g_netlist->get_module_by_id(modItem->id());
+        Module* mod = g_netlist->get_module_by_id(modItem->id());
         if (!mod) return;
-        for (std::shared_ptr<Module> m : mod->get_submodules() )
+        for (Module* m : mod->get_submodules() )
         {
             SelectionTreeItemModule* subItem = new SelectionTreeItemModule(m->get_id());
             moduleRecursion(subItem);
             modItem->addChild(subItem);
         }
-        for (std::shared_ptr<Gate> g : mod->get_gates() )
+        for (Gate* g : mod->get_gates() )
         {
             modItem->addChild(new SelectionTreeItemGate(g->get_id()));
         }
-        for (std::shared_ptr<Net> n : mod->get_internal_nets() )
+        for (Net* n : mod->get_internal_nets() )
         {
             modItem->addChild(new SelectionTreeItemNet(n->get_id()));
         }

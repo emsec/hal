@@ -330,7 +330,7 @@ namespace hal
             // (so the cone view nicely extends to the right or left)
             // either they're all inputs or all outputs, so just check the first one
 
-            std::set<std::shared_ptr<Net>> in_nets;
+            std::set<Net*> in_nets;
             if (to_gates.empty())
             {
                 in_nets = g_netlist->get_module_by_id(*to_modules.constBegin())->get_input_nets();
@@ -483,7 +483,7 @@ namespace hal
             }
             case SelectionRelay::item_type::gate:
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
                 if (!g)
                     return;
@@ -491,7 +491,7 @@ namespace hal
                 if (g_selection_relay.m_subfocus == SelectionRelay::subfocus::left)
                 {
                     std::string pin_type   = g->get_input_pins()[g_selection_relay.m_subfocus_index];
-                    std::shared_ptr<Net> n = g->get_fan_in_net(pin_type);
+                    Net* n = g->get_fan_in_net(pin_type);
 
                     if (!n)
                         return;
@@ -527,7 +527,7 @@ namespace hal
             }
             case SelectionRelay::item_type::net:
             {
-                std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+                Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
                 if (!n)
                     return;
@@ -550,7 +550,7 @@ namespace hal
             }
             case SelectionRelay::item_type::module:
             {
-                std::shared_ptr<Module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+                Module* m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
 
                 if (!m)
                     return;
@@ -611,7 +611,7 @@ namespace hal
             }
             case SelectionRelay::item_type::gate:
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
                 if (!g)
                     return;
@@ -650,7 +650,7 @@ namespace hal
             }
             case SelectionRelay::item_type::net:
             {
-                std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+                Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
                 if (!n)
                     return;
@@ -673,7 +673,7 @@ namespace hal
             }
             case SelectionRelay::item_type::module:
             {
-                std::shared_ptr<Module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+                Module* m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
 
                 if (!m)
                     return;

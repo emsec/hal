@@ -32,7 +32,7 @@ namespace hal
     public:
         static void load_settings();
 
-        ArrowSeparatedNet(const std::shared_ptr<const Net> n);
+        ArrowSeparatedNet(Net* n);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 

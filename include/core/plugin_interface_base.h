@@ -40,7 +40,7 @@ namespace hal
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
     class BasePluginInterface;
-    extern "C" PLUGIN_API std::shared_ptr<BasePluginInterface> get_plugin_instance();
+    extern "C" PLUGIN_API std::unique_ptr<BasePluginInterface> create_plugin_instance();
 #ifdef COMPILER_CLANG
 #pragma clang diagnostic pop
 #endif
@@ -68,7 +68,7 @@ namespace hal
         /**
          * Plugins utilize two phase construction.
          * Always populate all members etc in the initialize function which is automatically called by
-         * PluginManager::get_plugin_instance()
+         * plugin_manager::get_plugin_instance()
          */
         virtual void initialize();
 
@@ -100,7 +100,7 @@ namespace hal
          * @param[in] args - The format string, followed by values.
          */
         template<typename... Args>
-        inline void log(const Args&... args)
+        inline void log(const Args&... args) const
         {
             log_info(get_name(), args...);
         }
@@ -115,19 +115,19 @@ namespace hal
         /**
          * This function is automatically executed when the factory is loaded by the plugin manager
          */
-        virtual void on_load() const;
+        virtual void on_load();
 
         /**
          * This function is automatically executed when the factory is unloaded by the plugin manager
          */
-        virtual void on_unload() const;
+        virtual void on_unload();
 
         /**
          * Initializes the logging channel(s) of a plugin. <br>
          * If not overwritten, a logging channel equal to the plugin name is created.
          */
-        virtual void initialize_logging() const;
+        virtual void initialize_logging();
     };
 
-    using instantiate_plugin_function = std::shared_ptr<BasePluginInterface> (*)();
+    using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();
 }    // namespace hal

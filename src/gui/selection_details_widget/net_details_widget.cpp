@@ -251,18 +251,18 @@ namespace hal
         m_dataFieldsTable->update();
     }
 
-    void NetDetailsWidget::handle_net_removed(const std::shared_ptr<Net> n)
+    void NetDetailsWidget::handle_net_removed(Net* n)
     {
         Q_UNUSED(n)
     }
 
-    void NetDetailsWidget::handle_net_name_changed(const std::shared_ptr<Net> n)
+    void NetDetailsWidget::handle_net_name_changed(Net* n)
     {
         if (m_currentId == n->get_id())
             m_name_item->setText(QString::fromStdString(n->get_name()));
     }
 
-    void NetDetailsWidget::handle_net_source_added(const std::shared_ptr<Net> n, const u32 src_gate_id)
+    void NetDetailsWidget::handle_net_source_added(Net* n, const u32 src_gate_id)
     {
         Q_UNUSED(src_gate_id);
 
@@ -270,7 +270,7 @@ namespace hal
             update(m_currentId);
     }
 
-    void NetDetailsWidget::handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id)
+    void NetDetailsWidget::handle_net_source_removed(Net* n, const u32 src_gate_id)
     {
         Q_UNUSED(src_gate_id);
 
@@ -278,7 +278,7 @@ namespace hal
             update(m_currentId);
     }
 
-    void NetDetailsWidget::handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id)
+    void NetDetailsWidget::handle_net_destination_added(Net* n, const u32 dst_gate_id)
     {
         Q_UNUSED(dst_gate_id);
 
@@ -286,7 +286,7 @@ namespace hal
             update(m_currentId);
     }
 
-    void NetDetailsWidget::handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id)
+    void NetDetailsWidget::handle_net_destination_removed(Net* n, const u32 dst_gate_id)
     {
         Q_UNUSED(dst_gate_id);
 
@@ -294,7 +294,7 @@ namespace hal
             update(m_currentId);
     }
 
-    void NetDetailsWidget::handle_gate_name_changed(const std::shared_ptr<Gate> g)
+    void NetDetailsWidget::handle_gate_name_changed(Gate* g)
     {
         Q_UNUSED(g)
 

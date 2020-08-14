@@ -70,19 +70,19 @@ namespace hal
 
     public Q_SLOTS:
 
-        void handle_gate_name_changed(std::shared_ptr<Gate> gate);
-        void handle_gate_removed(std::shared_ptr<Gate> gate);
+        void handle_gate_name_changed(Gate* gate);
+        void handle_gate_removed(Gate* gate);
 
-        void handle_module_name_changed(std::shared_ptr<Module> module);
-        void handle_module_removed(std::shared_ptr<Module> module);
-        void handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data);
+        void handle_module_name_changed(Module* module);
+        void handle_module_removed(Module* module);
+        void handle_module_gate_assigned(Module* module, u32 associated_data);
+        void handle_module_gate_removed(Module* module, u32 associated_data);
 
-        void handle_net_name_changed(std::shared_ptr<Net> net);
-        void handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id);
-        void handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id);
-        void handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id);
-        void handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id);
+        void handle_net_name_changed(Net* net);
+        void handle_net_source_added(Net* net, const u32 src_gate_id);
+        void handle_net_source_removed(Net* net, const u32 src_gate_id);
+        void handle_net_destination_added(Net* net, const u32 dst_gate_id);
+        void handle_net_destination_removed(Net* net, const u32 dst_gate_id);
 
     private:
         //general

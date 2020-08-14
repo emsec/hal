@@ -13,10 +13,9 @@
 
 namespace hal
 {
-    Gate::Gate(std::shared_ptr<Netlist> const g, const u32 id, std::shared_ptr<const GateType> gt, const std::string& name, float x, float y)
+    Gate::Gate(Netlist* nl, const u32 id, const GateType* gt, const std::string& name, float x, float y)
     {
-        assert(g != nullptr);
-        m_netlist = g;
+        m_netlist = nl;
         m_id      = id;
         m_type    = gt;
         m_name    = name;
@@ -29,7 +28,7 @@ namespace hal
         return m_id;
     }
 
-    std::shared_ptr<Netlist> Gate::get_netlist() const
+    Netlist* Gate::get_netlist() const
     {
         return m_netlist;
     }
@@ -52,11 +51,11 @@ namespace hal
 
             m_name = name;
 
-            gate_event_handler::notify(gate_event_handler::event::name_changed, shared_from_this());
+            gate_event_handler::notify(gate_event_handler::event::name_changed, this);
         }
     }
 
-    std::shared_ptr<const GateType> Gate::get_type() const
+    const GateType* Gate::get_type() const
     {
         return m_type;
     }
@@ -86,7 +85,7 @@ namespace hal
         if (x != m_x)
         {
             m_x = x;
-            gate_event_handler::notify(gate_event_handler::event::location_changed, shared_from_this());
+            gate_event_handler::notify(gate_event_handler::event::location_changed, this);
         }
     }
 
@@ -95,7 +94,7 @@ namespace hal
         if (y != m_y)
         {
             m_y = y;
-            gate_event_handler::notify(gate_event_handler::event::location_changed, shared_from_this());
+            gate_event_handler::notify(gate_event_handler::event::location_changed, this);
         }
     }
 
@@ -105,7 +104,7 @@ namespace hal
         set_location_y(location.second);
     }
 
-    std::shared_ptr<Module> Gate::get_module() const
+    Module* Gate::get_module() const
     {
         return m_module;
     }
@@ -124,7 +123,7 @@ namespace hal
 
         if (m_type->get_base_type() == GateType::BaseType::lut)
         {
-            auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
+            auto lut_type = static_cast<const GateTypeLut*>(m_type);
             auto lut_pins = lut_type->get_output_from_init_string_pins();
             if (lut_pins.find(name) != lut_pins.end())
             {
@@ -162,7 +161,7 @@ namespace hal
 
         if (!only_custom_functions && m_type->get_base_type() == GateType::BaseType::lut)
         {
-            auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
+            auto lut_type = static_cast<const GateTypeLut*>(m_type);
             for (auto pin : lut_type->get_output_from_init_string_pins())
             {
                 res.emplace(pin, get_lut_function(pin));
@@ -176,7 +175,7 @@ namespace hal
     {
         UNUSED(pin);
 
-        auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
+        auto lut_type = static_cast<const GateTypeLut*>(m_type);
 
         std::string category   = lut_type->get_config_data_category();
         std::string key        = lut_type->get_config_data_identifier();
@@ -275,7 +274,7 @@ namespace hal
             auto output_pins = m_type->get_output_pins();
             if (!output_pins.empty() && name == output_pins[0])
             {
-                auto lut_type = std::static_pointer_cast<const GateTypeLut>(m_type);
+                auto lut_type = static_cast<const GateTypeLut*>(m_type);
                 auto tt       = func.get_truth_table(get_input_pins());
 
                 u64 config_value = 0;
@@ -310,32 +309,32 @@ namespace hal
 
     bool Gate::mark_vcc_gate()
     {
-        return m_netlist->mark_vcc_gate(shared_from_this());
+        return m_netlist->mark_vcc_gate(this);
     }
 
     bool Gate::mark_gnd_gate()
     {
-        return m_netlist->mark_gnd_gate(shared_from_this());
+        return m_netlist->mark_gnd_gate(this);
     }
 
     bool Gate::unmark_vcc_gate()
     {
-        return m_netlist->unmark_vcc_gate(shared_from_this());
+        return m_netlist->unmark_vcc_gate(this);
     }
 
     bool Gate::unmark_gnd_gate()
     {
-        return m_netlist->unmark_gnd_gate(shared_from_this());
+        return m_netlist->unmark_gnd_gate(this);
     }
 
-    bool Gate::is_vcc_gate() const
+    bool Gate::is_vcc_gate()
     {
-        return m_netlist->is_vcc_gate(const_cast<Gate*>(this)->shared_from_this());
+        return m_netlist->is_vcc_gate(this);
     }
 
-    bool Gate::is_gnd_gate() const
+    bool Gate::is_gnd_gate()
     {
-        return m_netlist->is_gnd_gate(const_cast<Gate*>(this)->shared_from_this());
+        return m_netlist->is_gnd_gate(this);
     }
 
     std::vector<std::string> Gate::get_input_pins() const
@@ -348,9 +347,9 @@ namespace hal
         return m_type->get_output_pins();
     }
 
-    std::set<std::shared_ptr<Net>> Gate::get_fan_in_nets() const
+    std::set<Net*> Gate::get_fan_in_nets() const
     {
-        std::set<std::shared_ptr<Net>> nets;
+        std::set<Net*> nets;
 
         for (const auto& it : m_in_nets)
         {
@@ -360,7 +359,7 @@ namespace hal
         return nets;
     }
 
-    std::shared_ptr<Net> Gate::get_fan_in_net(const std::string& pin_type) const
+    Net* Gate::get_fan_in_net(const std::string& pin_type) const
     {
         auto it = m_in_nets.find(pin_type);
 
@@ -373,9 +372,9 @@ namespace hal
         return it->second;
     }
 
-    std::set<std::shared_ptr<Net>> Gate::get_fan_out_nets() const
+    std::set<Net*> Gate::get_fan_out_nets() const
     {
-        std::set<std::shared_ptr<Net>> nets;
+        std::set<Net*> nets;
 
         for (const auto& it : m_out_nets)
         {
@@ -385,7 +384,7 @@ namespace hal
         return nets;
     }
 
-    std::shared_ptr<Net> Gate::get_fan_out_net(const std::string& pin_type) const
+    Net* Gate::get_fan_out_net(const std::string& pin_type) const
     {
         auto it = m_out_nets.find(pin_type);
 
@@ -398,16 +397,16 @@ namespace hal
         return it->second;
     }
 
-    std::vector<std::shared_ptr<Gate>> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
+    std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
-        std::unordered_set<std::shared_ptr<Gate>> res;
+        std::unordered_set<Gate*> res;
         auto endpoints = this->get_predecessors(filter);
         res.reserve(endpoints.size());
         for (const auto& ep : endpoints)
         {
             res.insert(ep.get_gate());
         }
-        return std::vector<std::shared_ptr<Gate>>(res.begin(), res.end());
+        return std::vector<Gate*>(res.begin(), res.end());
     }
 
     std::vector<Endpoint> Gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
@@ -453,16 +452,16 @@ namespace hal
         return predecessors[0];
     }
 
-    std::vector<std::shared_ptr<Gate>> Gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
+    std::vector<Gate*> Gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
-        std::unordered_set<std::shared_ptr<Gate>> res;
+        std::unordered_set<Gate*> res;
         auto endpoints = this->get_successors(filter);
         res.reserve(endpoints.size());
         for (const auto& ep : endpoints)
         {
             res.insert(ep.get_gate());
         }
-        return std::vector<std::shared_ptr<Gate>>(res.begin(), res.end());
+        return std::vector<Gate*>(res.begin(), res.end());
     }
 
     std::vector<Endpoint> Gate::get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const

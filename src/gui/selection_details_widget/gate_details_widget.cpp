@@ -171,13 +171,13 @@ namespace hal
         delete m_navigation_table;
     }
 
-    void GateDetailsWidget::handle_gate_name_changed(std::shared_ptr<Gate> gate)
+    void GateDetailsWidget::handle_gate_name_changed(Gate* gate)
     {
         if (m_currentId == gate->get_id())
             update(m_currentId);
     }
 
-    void GateDetailsWidget::handle_gate_removed(std::shared_ptr<Gate> gate)
+    void GateDetailsWidget::handle_gate_removed(Gate* gate)
     {
         if (m_currentId == gate->get_id())
         {
@@ -186,7 +186,7 @@ namespace hal
         }
     }
 
-    void GateDetailsWidget::handle_net_name_changed(std::shared_ptr<Net> net)
+    void GateDetailsWidget::handle_net_name_changed(Net* net)
     {
         bool update_needed = false;
 
@@ -217,28 +217,28 @@ namespace hal
             update(m_currentId);
     }
 
-    void GateDetailsWidget::handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id)
+    void GateDetailsWidget::handle_net_source_added(Net* net, const u32 src_gate_id)
     {
         Q_UNUSED(net);
         if (m_currentId == src_gate_id)
             update(m_currentId);
     }
 
-    void GateDetailsWidget::handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id)
+    void GateDetailsWidget::handle_net_source_removed(Net* net, const u32 src_gate_id)
     {
         Q_UNUSED(net);
         if (m_currentId == src_gate_id)
             update(m_currentId);
     }
 
-    void GateDetailsWidget::handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id)
+    void GateDetailsWidget::handle_net_destination_added(Net* net, const u32 dst_gate_id)
     {
         Q_UNUSED(net);
         if (m_currentId == dst_gate_id)
             update(m_currentId);
     }
 
-    void GateDetailsWidget::handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id)
+    void GateDetailsWidget::handle_net_destination_removed(Net* net, const u32 dst_gate_id)
     {
         Q_UNUSED(net);
         if (m_currentId == dst_gate_id)
@@ -297,7 +297,7 @@ namespace hal
             return;
 
         int net_id = item->data(Qt::UserRole).toInt();
-        std::shared_ptr<Net> clicked_net = g_netlist->get_net_by_id(net_id);
+        Net* clicked_net = g_netlist->get_net_by_id(net_id);
 
         if(!clicked_net)
             return;
@@ -440,7 +440,7 @@ namespace hal
     }
 
 
-    void GateDetailsWidget::handle_module_removed(std::shared_ptr<Module> module)
+    void GateDetailsWidget::handle_module_removed(Module* module)
     {
         if (m_currentId == 0)
             return;
@@ -452,7 +452,7 @@ namespace hal
         }
     }
 
-    void GateDetailsWidget::handle_module_name_changed(std::shared_ptr<Module> module)
+    void GateDetailsWidget::handle_module_name_changed(Module* module)
     {
         if (m_currentId == 0)
             return;
@@ -464,7 +464,7 @@ namespace hal
         }
     }
 
-    void GateDetailsWidget::handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data)
+    void GateDetailsWidget::handle_module_gate_assigned(Module* module, u32 associated_data)
     {
         Q_UNUSED(module);
         if (m_currentId == associated_data)
@@ -473,7 +473,7 @@ namespace hal
         }
     }
 
-    void GateDetailsWidget::handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data)
+    void GateDetailsWidget::handle_module_gate_removed(Module* module, u32 associated_data)
     {
         Q_UNUSED(module);
         if (!g_netlist->is_gate_in_netlist(g_netlist->get_gate_by_id(associated_data)))

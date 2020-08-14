@@ -330,12 +330,12 @@ namespace hal
             return true;
         }
 
-        std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(id);
+        Gate* g = g_netlist->get_gate_by_id(id);
 
         if (!g)
             return false;
 
-        std::shared_ptr<Module> m = g->get_module();
+        Module* m = g->get_module();
 
         while (m)
         {

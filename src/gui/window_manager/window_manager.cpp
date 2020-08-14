@@ -116,13 +116,13 @@ namespace hal
 
     void WindowManager::lock_all()
     {
-        for (Window*& window : m_windows)
+        for (Window* window : m_windows)
             window->lock();
     }
 
     void WindowManager::unlock_all()
     {
-        for (Window*& window : m_windows)
+        for (Window* window : m_windows)
             window->unlock();
     }
 
@@ -154,7 +154,7 @@ namespace hal
 
         // UPDATE ICONS IN TOOLBAR
 
-        for (Window*& window : m_windows)
+        for (Window* window : m_windows)
             window->repolish();
     }
 

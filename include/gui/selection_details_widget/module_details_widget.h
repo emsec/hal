@@ -59,27 +59,27 @@ namespace hal
 
     public Q_SLOTS:
 
-        void handle_netlist_marked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_marked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_marked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_unmarked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_unmarked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_unmarked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data);
+        void handle_netlist_marked_global_input(Netlist* netlist, u32 associated_data);
+        void handle_netlist_marked_global_output(Netlist* netlist, u32 associated_data);
+        void handle_netlist_marked_global_inout(Netlist* netlist, u32 associated_data);
+        void handle_netlist_unmarked_global_input(Netlist* netlist, u32 associated_data);
+        void handle_netlist_unmarked_global_output(Netlist* netlist, u32 associated_data);
+        void handle_netlist_unmarked_global_inout(Netlist* netlist, u32 associated_data);
 
-        void handle_module_name_changed(std::shared_ptr<Module> module);
-        void handle_submodule_added(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_submodule_removed(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_input_port_name_changed(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_output_port_name_changed(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_type_changed(std::shared_ptr<Module> module);
+        void handle_module_name_changed(Module* module);
+        void handle_submodule_added(Module* module, u32 associated_data);
+        void handle_submodule_removed(Module* module, u32 associated_data);
+        void handle_module_gate_assigned(Module* module, u32 associated_data);
+        void handle_module_gate_removed(Module* module, u32 associated_data);
+        void handle_module_input_port_name_changed(Module* module, u32 associated_data);
+        void handle_module_output_port_name_changed(Module* module, u32 associated_data);
+        void handle_module_type_changed(Module* module);
 
-        void handle_net_name_changed(std::shared_ptr<Net> net);
-        void handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id);
-        void handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id);
-        void handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id);
-        void handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id);
+        void handle_net_name_changed(Net* net);
+        void handle_net_source_added(Net* net, const u32 src_gate_id);
+        void handle_net_source_removed(Net* net, const u32 src_gate_id);
+        void handle_net_destination_added(Net* net, const u32 dst_gate_id);
+        void handle_net_destination_removed(Net* net, const u32 dst_gate_id);
 
     private:
         GraphNavigationWidget* m_navigation_table;

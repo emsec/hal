@@ -3,6 +3,7 @@
 #include <gui/python/python_context.h>
 
 #include "python/python_context.h"
+#include "python_binding/bindings.h"
 
 #include "core/log.h"
 #include "core/utils.h"
@@ -70,7 +71,7 @@ namespace hal
                  *context,
                  *context);
 
-        (*context)["netlist"] = g_netlist;
+        (*context)["netlist"] = RawPtrWrapper(g_netlist);
 
         if(g_gui_api)
             (*context)["gui"] = g_gui_api;
@@ -283,6 +284,6 @@ namespace hal
 
     void PythonContext::update_netlist()
     {
-        (*m_context)["netlist"] = g_netlist;
+        (*m_context)["netlist"] = RawPtrWrapper(g_netlist);
     }
 }

@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    Module::Module(u32 id, std::shared_ptr<Module> parent, const std::string& name, NetlistInternalManager* internal_manager)
+    Module::Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager)
     {
         m_internal_manager = internal_manager;
         m_id               = id;
@@ -38,7 +38,7 @@ namespace hal
         {
             m_name = name;
 
-            module_event_handler::notify(module_event_handler::event::name_changed, shared_from_this());
+            module_event_handler::notify(module_event_handler::event::name_changed, this);
         }
     }
 
@@ -53,18 +53,18 @@ namespace hal
         {
             m_type = type;
 
-            module_event_handler::notify(module_event_handler::event::type_changed, shared_from_this());
+            module_event_handler::notify(module_event_handler::event::type_changed, this);
         }
     }
 
-    std::shared_ptr<Module> Module::get_parent_module() const
+    Module* Module::get_parent_module() const
     {
         return m_parent;
     }
 
-    bool Module::set_parent_module(const std::shared_ptr<Module>& new_parent)
+    bool Module::set_parent_module(Module* new_parent)
     {
-        if (new_parent == shared_from_this())
+        if (new_parent == this)
         {
             log_error("module", "can not set module as its own parent");
             return false;
@@ -95,24 +95,24 @@ namespace hal
         }
 
         m_parent->m_submodules_map.erase(m_id);
-        m_parent->m_submodules_set.erase(shared_from_this());
+        m_parent->m_submodules_set.erase(this);
 
         module_event_handler::notify(module_event_handler::event::submodule_removed, m_parent, m_id);
 
         m_parent = new_parent;
 
-        m_parent->m_submodules_map[m_id] = shared_from_this();
-        m_parent->m_submodules_set.insert(shared_from_this());
+        m_parent->m_submodules_map[m_id] = this;
+        m_parent->m_submodules_set.insert(this);
 
-        module_event_handler::notify(module_event_handler::event::parent_changed, shared_from_this());
+        module_event_handler::notify(module_event_handler::event::parent_changed, this);
         module_event_handler::notify(module_event_handler::event::submodule_added, m_parent, m_id);
 
         return true;
     }
 
-    std::set<std::shared_ptr<Module>> Module::get_submodules(const std::function<bool(const std::shared_ptr<Module>&)>& filter, bool recursive) const
+    std::set<Module*> Module::get_submodules(const std::function<bool(Module*)>& filter, bool recursive) const
     {
-        std::set<std::shared_ptr<Module>> res;
+        std::set<Module*> res;
         if (!filter)
         {
             res = m_submodules_set;
@@ -139,7 +139,7 @@ namespace hal
         return res;
     }
 
-    bool Module::contains_module(const std::shared_ptr<Module>& other, bool recursive) const
+    bool Module::contains_module(Module* other, bool recursive) const
     {
         if (other == nullptr)
         {
@@ -160,22 +160,22 @@ namespace hal
         return false;
     }
 
-    std::shared_ptr<Netlist> Module::get_netlist() const
+    Netlist* Module::get_netlist() const
     {
         return m_internal_manager->m_netlist->get_shared();
     }
 
-    bool Module::assign_gate(const std::shared_ptr<Gate>& gate)
+    bool Module::assign_gate(Gate* gate)
     {
-        return m_internal_manager->module_assign_gate(shared_from_this(), gate);
+        return m_internal_manager->module_assign_gate(this, gate);
     }
 
-    bool Module::remove_gate(const std::shared_ptr<Gate>& gate)
+    bool Module::remove_gate(Gate* gate)
     {
-        return m_internal_manager->module_remove_gate(shared_from_this(), gate);
+        return m_internal_manager->module_remove_gate(this, gate);
     }
 
-    bool Module::contains_gate(const std::shared_ptr<Gate>& gate, bool recursive) const
+    bool Module::contains_gate(Gate* gate, bool recursive) const
     {
         if (gate == nullptr)
         {
@@ -195,7 +195,7 @@ namespace hal
         return success;
     }
 
-    std::shared_ptr<Gate> Module::get_gate_by_id(const u32 gate_id, bool recursive) const
+    Gate* Module::get_gate_by_id(const u32 gate_id, bool recursive) const
     {
         auto it = m_gates_map.find(gate_id);
         if (it == m_gates_map.end())
@@ -216,9 +216,9 @@ namespace hal
         return it->second;
     }
 
-    std::set<std::shared_ptr<Gate>> Module::get_gates(const std::function<bool(const std::shared_ptr<Gate>&)>& filter, bool recursive) const
+    std::set<Gate*> Module::get_gates(const std::function<bool(Gate*)>& filter, bool recursive) const
     {
-        std::set<std::shared_ptr<Gate>> res;
+        std::set<Gate*> res;
         if (!filter)
         {
             res = m_gates_set;
@@ -247,10 +247,10 @@ namespace hal
         return res;
     }
 
-    std::set<std::shared_ptr<Net>> Module::get_input_nets() const
+    std::set<Net*> Module::get_input_nets() const
     {
         std::unordered_set<u32> seen;
-        std::set<std::shared_ptr<Net>> res;
+        std::set<Net*> res;
         auto gates = get_gates(nullptr, true);
         for (const auto& gate : gates)
         {
@@ -276,10 +276,10 @@ namespace hal
         return res;
     }
 
-    std::set<std::shared_ptr<Net>> Module::get_output_nets() const
+    std::set<Net*> Module::get_output_nets() const
     {
         std::unordered_set<u32> seen;
-        std::set<std::shared_ptr<Net>> res;
+        std::set<Net*> res;
         auto gates = get_gates(nullptr, true);
         for (const auto& gate : gates)
         {
@@ -305,10 +305,10 @@ namespace hal
         return res;
     }
 
-    std::set<std::shared_ptr<Net>> Module::get_internal_nets() const
+    std::set<Net*> Module::get_internal_nets() const
     {
         std::unordered_set<u32> seen;
-        std::set<std::shared_ptr<Net>> res;
+        std::set<Net*> res;
         auto gates = get_gates(nullptr, true);
         for (const auto& gate : gates)
         {
@@ -329,7 +329,7 @@ namespace hal
         return res;
     }
 
-    void Module::set_input_port_name(const std::shared_ptr<Net>& input_net, const std::string& port_name)
+    void Module::set_input_port_name(Net* input_net, const std::string& port_name)
     {
         if (input_net == nullptr)
         {
@@ -349,10 +349,10 @@ namespace hal
         m_named_input_nets.insert(input_net);
         m_input_net_to_port_name.insert_or_assign(input_net, port_name);
 
-        module_event_handler::notify(module_event_handler::event::input_port_name_changed, shared_from_this(), input_net->get_id());
+        module_event_handler::notify(module_event_handler::event::input_port_name_changed, this, input_net->get_id());
     }
 
-    void Module::set_output_port_name(const std::shared_ptr<Net>& output_net, const std::string& port_name)
+    void Module::set_output_port_name(Net* output_net, const std::string& port_name)
     {
         if (output_net == nullptr)
         {
@@ -376,10 +376,10 @@ namespace hal
         m_named_output_nets.insert(output_net);
         m_output_net_to_port_name.insert_or_assign(output_net, port_name);
 
-        module_event_handler::notify(module_event_handler::event::output_port_name_changed, shared_from_this(), output_net->get_id());
+        module_event_handler::notify(module_event_handler::event::output_port_name_changed, this, output_net->get_id());
     }
 
-    std::string Module::get_input_port_name(const std::shared_ptr<Net>& net)
+    std::string Module::get_input_port_name(Net* net)
     {
         if (net == nullptr)
         {
@@ -410,7 +410,7 @@ namespace hal
         return port_name;
     }
 
-    std::string Module::get_output_port_name(const std::shared_ptr<Net>& net)
+    std::string Module::get_output_port_name(Net* net)
     {
         if (net == nullptr)
         {
@@ -440,7 +440,7 @@ namespace hal
         return port_name;
     }
 
-    std::shared_ptr<Net> Module::get_input_port_net(const std::string& port_name)
+    Net* Module::get_input_port_net(const std::string& port_name)
     {
         for (const auto& [net, name] : m_input_net_to_port_name)
         {
@@ -454,7 +454,7 @@ namespace hal
         return nullptr;
     }
 
-    std::shared_ptr<Net> Module::get_output_port_net(const std::string& port_name)
+    Net* Module::get_output_port_net(const std::string& port_name)
     {
         for (const auto& [net, name] : m_output_net_to_port_name)
         {
@@ -468,10 +468,10 @@ namespace hal
         return nullptr;
     }
 
-    const std::map<std::shared_ptr<Net>, std::string>& Module::get_input_port_names()
+    const std::map<Net*, std::string>& Module::get_input_port_names() const
     {
         auto input_nets = get_input_nets();
-        std::set<std::shared_ptr<Net>> diff;
+        std::set<Net*> diff;
 
         // find nets that are still in the port map but no longer an input net
         std::set_difference(m_named_input_nets.begin(), m_named_input_nets.end(), input_nets.begin(), input_nets.end(), std::inserter(diff, diff.begin()));
@@ -494,10 +494,10 @@ namespace hal
         return m_input_net_to_port_name;
     }
 
-    const std::map<std::shared_ptr<Net>, std::string>& Module::get_output_port_names()
+    const std::map<Net*, std::string>& Module::get_output_port_names() const
     {
         auto output_nets = get_output_nets();
-        std::set<std::shared_ptr<Net>> diff;
+        std::set<Net*> diff;
 
         // find nets that are still in the port map but no longer an output net
         std::set_difference(m_named_output_nets.begin(), m_named_output_nets.end(), output_nets.begin(), output_nets.end(), std::inserter(diff, diff.begin()));

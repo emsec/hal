@@ -19,7 +19,7 @@ namespace hal
         s_radius        = 3;
     }
 
-    CircleSeparatedNet::CircleSeparatedNet(const std::shared_ptr<const Net> n) : SeparatedGraphicsNet(n)
+    CircleSeparatedNet::CircleSeparatedNet(Net* n) : SeparatedGraphicsNet(n)
     {
     }
 

@@ -52,22 +52,22 @@ namespace hal
         ~NetlistInternalManager() = default;
 
         // gate functions
-        std::shared_ptr<Gate> create_gate(u32 id, const std::shared_ptr<const GateType>& gt, const std::string& name, float x, float y);
-        bool delete_gate(std::shared_ptr<Gate> gate);
-        bool is_gate_type_invalid(const std::shared_ptr<const GateType>& gt) const;
+        Gate* create_gate(u32 id, const GateType* gt, const std::string& name, float x, float y);
+        bool delete_gate(Gate* gate);
+        bool is_gate_type_invalid(const GateType* gt) const;
 
         // net functions
-        std::shared_ptr<Net> create_net(u32 id, const std::string& name);
-        bool delete_net(const std::shared_ptr<Net>& net);
-        bool net_add_source(const std::shared_ptr<Net>& net, const Endpoint& ep);
-        bool net_remove_source(const std::shared_ptr<Net>& net, const Endpoint& ep);
-        bool net_add_destination(const std::shared_ptr<Net>& net, const Endpoint& ep);
-        bool net_remove_destination(const std::shared_ptr<Net>& net, const Endpoint& ep);
+        Net* create_net(u32 id, const std::string& name);
+        bool delete_net(Net* net);
+        bool net_add_source(Net* net, const Endpoint& ep);
+        bool net_remove_source(Net* net, const Endpoint& ep);
+        bool net_add_destination(Net* net, const Endpoint& ep);
+        bool net_remove_destination(Net* net, const Endpoint& ep);
 
         // module functions
-        std::shared_ptr<Module> create_module(u32 id, const std::shared_ptr<Module>& parent, const std::string& name);
-        bool delete_module(const std::shared_ptr<Module>& module);
-        bool module_assign_gate(const std::shared_ptr<Module>& m, const std::shared_ptr<Gate>& g);
-        bool module_remove_gate(const std::shared_ptr<Module>& m, const std::shared_ptr<Gate>& g);
+        Module* create_module(u32 id, Module* parent, const std::string& name);
+        bool delete_module(Module* module);
+        bool module_assign_gate(Module* m, Gate* g);
+        bool module_remove_gate(Module* m, Gate* g);
     };
 }    // namespace hal

@@ -59,13 +59,13 @@ namespace hal
 
     public Q_SLOTS:
 
-        void handle_net_removed(const std::shared_ptr<Net> n);
-        void handle_net_name_changed(const std::shared_ptr<Net> n);
-        void handle_net_source_added(const std::shared_ptr<Net> n, const u32 src_gate_id);
-        void handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id);
-        void handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id);
-        void handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id);
-        void handle_gate_name_changed(const std::shared_ptr<Gate> g);
+        void handle_net_removed(Net* n);
+        void handle_net_name_changed(Net* n);
+        void handle_net_source_added(Net* n, const u32 src_gate_id);
+        void handle_net_source_removed(Net* n, const u32 src_gate_id);
+        void handle_net_destination_added(Net* n, const u32 dst_gate_id);
+        void handle_net_destination_removed(Net* n, const u32 dst_gate_id);
+        void handle_gate_name_changed(Gate* g);
 
     private:
         //utility objects to encapsulate the sections together to make it scrollable
