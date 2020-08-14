@@ -1,17 +1,17 @@
-#include "selection_details_widget/tree_navigation/tree_module_proxy_model.h"
-#include "selection_details_widget/tree_navigation/tree_module_model.h"
+#include "selection_details_widget/tree_navigation/selection_tree_proxy.h"
+#include "selection_details_widget/tree_navigation/selection_tree_model.h"
 
 #include "gui/gui_globals.h"
 
 namespace hal
 {
-    TreeModuleProxyModel::TreeModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
+    SelectionTreeProxyModel::SelectionTreeProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
     {
         m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager.get("navigation/sort_mechanism").toInt());
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &TreeModuleProxyModel::handle_global_setting_changed);
+        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &SelectionTreeProxyModel::handle_global_setting_changed);
     }
 
-    bool TreeModuleProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+    bool SelectionTreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
         if (!filterRegExp().isEmpty())
         {
@@ -29,7 +29,7 @@ namespace hal
         return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
     }
 
-    bool TreeModuleProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+    bool SelectionTreeProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
     {
         QString name_left = source_left.data().toString();
         QString name_right = source_right.data().toString();
@@ -52,7 +52,7 @@ namespace hal
         return comparison;
     }
 
-    void TreeModuleProxyModel::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void SelectionTreeProxyModel::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
         if (key == "navigation/sort_mechanism")

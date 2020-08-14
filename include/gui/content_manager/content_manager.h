@@ -38,6 +38,7 @@ namespace hal
     class vigation_widget;
     class ContextManagerWidget;
     class NetlistWatcher;
+    class SelectionDetailsWidget;
 
     class ContentManager : public QObject
     {
@@ -53,6 +54,8 @@ namespace hal
         GraphTabWidget* get_graph_tab_widget();
 
         ContextManagerWidget* get_context_manager_widget();
+
+        SelectionDetailsWidget* getSelectionDetailsWidget();
 
         void hack_delete_content();
 
@@ -83,5 +86,7 @@ namespace hal
         GraphTabWidget* m_graph_tab_wid;
 
         ContextManagerWidget* m_context_manager_wid;
+
+        SelectionDetailsWidget* mSelectionDetailsWidget;
     };
 }

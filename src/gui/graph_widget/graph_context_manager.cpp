@@ -4,6 +4,7 @@
 #include "gui/graph_widget/layouters/physical_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 #include "gui/graph_widget/shaders/module_shader.h"
+#include "gui/context_manager_widget/models/context_table_model.h"
 #include "gui/gui_globals.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
@@ -13,8 +14,10 @@
 
 namespace hal
 {
-    GraphContextManager::GraphContextManager()
+    GraphContextManager::GraphContextManager() : m_context_table_model(new ContextTableModel())
     {
+        m_graph_contexts = QVector<GraphContext*>();
+        m_context_table_model->update(&m_graph_contexts);
     }
 
     GraphContext* GraphContextManager::create_new_context(const QString& name)
@@ -22,8 +25,13 @@ namespace hal
         GraphContext* context = new GraphContext(name);
         context->set_layouter(get_default_layouter(context));
         context->set_shader(get_default_shader(context));
+
+        m_context_table_model->begin_insert_context(context);
         m_graph_contexts.append(context);
+        m_context_table_model->end_insert_context();
+
         Q_EMIT context_created(context);
+
         return context;
     }
 
@@ -37,7 +45,11 @@ namespace hal
     void GraphContextManager::delete_graph_context(GraphContext* ctx)
     {
         Q_EMIT deleting_context(ctx);
+
+        m_context_table_model->begin_remove_context(ctx);
         m_graph_contexts.remove(m_graph_contexts.indexOf(ctx));
+        m_context_table_model->end_remove_context();
+        
         delete ctx;
     }
 
@@ -273,5 +285,10 @@ namespace hal
     {
         // USE SETTINGS + FACTORY
         return new ModuleShader(context);
+    }
+
+    ContextTableModel* GraphContextManager::get_context_table_model() const
+    {
+        return m_context_table_model;
     }
 }

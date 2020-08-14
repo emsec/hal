@@ -97,7 +97,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
     if (s_lod < graph_widget_constants::gate_min_lod)
     {
-        painter->fillRect(QRectF(0, 0, m_width, m_height), (option->state & QStyle::State_Selected) ? s_selection_color : m_color);
+        painter->fillRect(QRectF(0, 0, m_width, m_height), penColor(option->state));
         return;
     }
     else
@@ -128,7 +128,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         if (g_selection_relay.m_focus_type == SelectionRelay::item_type::gate)
             if (g_selection_relay.m_focus_id == m_id)
             {
-                s_pen.setColor(s_selection_color);
+                s_pen.setColor(selectionColor());  // TODO : check color
                 painter->setPen(s_pen);
 
                 switch (g_selection_relay.m_subfocus)
@@ -179,7 +179,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
         if (option->state & QStyle::State_Selected)
         {
-            s_pen.setColor(s_selection_color);
+            s_pen.setColor(selectionColor());
             s_pen.setCosmetic(true);
             painter->setPen(s_pen);
             s_pen.setCosmetic(false);

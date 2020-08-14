@@ -67,7 +67,7 @@ namespace hal
 
     void InputDialog::set_input_text(const QString& text)
     {
-        m_input_text_edit->setText(text);
+        m_input_text_edit->setText(text.trimmed());
         m_input_text_edit->selectAll();
     }
 
@@ -121,7 +121,7 @@ namespace hal
 
     void InputDialog::handle_text_changed(const QString& text)
     {
-        if(!m_validator.validate(text))
+        if(!m_validator.validate(text.trimmed()))
             disable_progression();
         else
             enable_progression();

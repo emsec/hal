@@ -31,6 +31,7 @@
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/shaders/graph_shader.h"
 #include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 
 #include <QGraphicsScene>
 #include <QPair>
@@ -96,6 +97,7 @@ namespace hal
         void handle_intern_selection_changed();
         void handle_extern_selection_changed(void* sender);
         void handle_extern_subfocus_changed(void* sender);
+        void handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems);
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
