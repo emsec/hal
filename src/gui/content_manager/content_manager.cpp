@@ -59,6 +59,11 @@ namespace hal
         return m_graph_tab_wid;
     }
 
+    SelectionDetailsWidget* ContentManager::getSelectionDetailsWidget()
+    {
+        return mSelectionDetailsWidget;
+    }
+
     ContextManagerWidget* ContentManager::get_context_manager_widget()
     {
         return m_context_manager_wid;
@@ -81,28 +86,33 @@ namespace hal
 
         QTimer::singleShot(50, [this]() { this->m_context_manager_wid->handle_create_context_clicked(); });
 
-        SelectionDetailsWidget* details = new SelectionDetailsWidget();
-        m_MainWindow->add_content(details, 0, content_anchor::bottom);
+        mSelectionDetailsWidget = new SelectionDetailsWidget();
+        m_MainWindow->add_content(mSelectionDetailsWidget, 0, content_anchor::bottom);
 
         LoggerWidget* logger_widget = new LoggerWidget();
         m_MainWindow->add_content(logger_widget, 1, content_anchor::bottom);
 
-        details->open();
+        mSelectionDetailsWidget->open();
         logger_widget->open();
 
         //m_content.append(code_edit);
         //m_content.append(navigation);
-        m_content.append(details);
+        m_content.append(mSelectionDetailsWidget);
         m_content.append(logger_widget);
 
         //-------------------------Test Buttons---------------------------
 
+        /*
         ContentWidget* blue = new ContentWidget("blue");
+        blue->setObjectName("blue");
         blue->setStyleSheet("* {background-color: #2B3856;}");
         ContentWidget* venomgreen = new ContentWidget("venomgreen");
+        venomgreen->setObjectName("venomgreen");
         venomgreen->setStyleSheet("* {background-color: #728C00;}");
         ContentWidget* jade = new ContentWidget("jade");
+        jade->setObjectName("jade";
         jade->setStyleSheet("* {background-color: #C3FDB8;}");
+*/
 
         //    m_MainWindow->add_content(blue, content_anchor::left);
         //    m_MainWindow->add_content(venomgreen, content_anchor::left);

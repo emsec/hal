@@ -31,8 +31,12 @@ namespace hal
     class Netlist;
 
     /**
+     * @file
+     *
+     * \namespace netlist_serializer
      * @ingroup persistent
      */
+
     namespace netlist_serializer
     {
         /**
