@@ -438,6 +438,22 @@ namespace hal
         g_selection_relay.relay_selection_changed(this);
     }
 
+    void GraphicsScene::handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems)
+    {
+        QSet<u32> highlightSet[SelectionTreeItem::MaxItem];
+        for (const SelectionTreeItem* sti : highlightItems)
+        {
+            if (sti) highlightSet[sti->itemType()].insert(sti->id());
+        }
+
+        for (const module_data& mdata :  m_ModuleItems)
+            mdata.item->setHightlight(highlightSet[SelectionTreeItem::ModuleItem].contains(mdata.id));
+        for (const gate_data& gdata :  m_gate_items)
+            gdata.item->setHightlight(highlightSet[SelectionTreeItem::GateItem].contains(gdata.id));
+        for (const net_data& ndata :  m_net_items)
+            ndata.item->setHightlight(highlightSet[SelectionTreeItem::NetItem].contains(ndata.id));
+    }
+
     void GraphicsScene::handle_extern_selection_changed(void* sender)
     {
         // CLEAR CURRENT SELECTION EITHER MANUALLY OR USING clearSelection()

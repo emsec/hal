@@ -30,22 +30,24 @@
 #include "gui_utils/sort.h"
 
 #include <QAbstractItemModel>
+#include <QModelIndex>
 #include <QFont>
 #include <QIcon>
-#include <QModelIndex>
 #include <QVariant>
 
 namespace hal
 {
-    class TreeModuleItem;
+    class SelectionTreeItem;
+    class SelectionTreeItemModule;
+    class SelectionTreeItemRoot;
 
-    class TreeModuleModel : public QAbstractItemModel
+    class SelectionTreeModel : public QAbstractItemModel
     {
         Q_OBJECT
 
     public:
-        TreeModuleModel(QObject* parent = 0);
-        ~TreeModuleModel();
+        SelectionTreeModel(QObject* parent = 0);
+        ~SelectionTreeModel();
 
         //information access
         QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
@@ -56,33 +58,43 @@ namespace hal
         int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
         int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
-        //this function provides the indexes for the navigation widget to handle a selection_changed for the view
-        QModelIndexList get_corresponding_indexes(const QList<u32>& gate_ids, const QList<u32>& net_ids);
+        void fetchSelection(bool hasEntries);
+        QModelIndex defaultIndex() const;
 
-        void update(u32 module_id);
+        //helper functions to convert between index and item
+        SelectionTreeItem* itemFromIndex(const QModelIndex& index) const;
+        QModelIndex indexFromItem(SelectionTreeItem* item) const;
 
         static const int NAME_COLUMN = 0;
         static const int ID_COLUMN   = 1;
         static const int TYPE_COLUMN = 2;
+        static const int MAX_COLUMN  = 3;
+
 
     private:
-        void setup_model_data();
 
-        //helper functions to convert between index and item
-        TreeModuleItem* get_item(const QModelIndex& index) const;
-        QModelIndex get_modelindex(TreeModuleItem* item);
-        QList<QModelIndex> get_modelindexes_for_row(TreeModuleItem* item);
+        void moduleRecursion(SelectionTreeItemModule* modItem);
+        bool doNotDisturb(const QModelIndex& inx = QModelIndex()) const;
 
-        void insert_item(TreeModuleItem* parent, int position, TreeModuleItem* item);
-        void remove_item(TreeModuleItem* item);
 
-        void load_data_settings();
+        SelectionTreeItemRoot* m_rootItem;
 
-        TreeModuleItem* m_root_item;
-        TreeModuleItem* m_gates_item;
-        TreeModuleItem* m_nets_item;
-
-        QIcon m_design_icon;
-        QFont m_structured_font;
+        /// avoid calls while model is under reconstruction
+        int m_doNotDisturb;
     };
+
+    class SelectionTreeModelDisposer : public QObject
+    {
+        Q_OBJECT
+    public:
+        SelectionTreeModelDisposer(SelectionTreeItemRoot* stim, QObject* parent=nullptr);
+
+    public Q_SLOTS:
+        void dispose();
+
+    private:
+        SelectionTreeItemRoot* m_rootItem;
+    };
+
+
 }

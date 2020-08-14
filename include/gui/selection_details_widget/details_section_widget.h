@@ -23,26 +23,41 @@
 
 #pragma once
 
-#include "gui/gui_utils/sort.h"
-
-#include <QSortFilterProxyModel>
+#include <QPushButton>
+#include <QString>
+#include <QTableWidget>
+#include <QVBoxLayout>
+#include <QWidget>
 
 namespace hal
 {
-    class TreeModuleProxyModel : public QSortFilterProxyModel
+    class DetailsSectionWidget : public QWidget
     {
         Q_OBJECT
     public:
-        TreeModuleProxyModel(QObject* parent = 0);
+        DetailsSectionWidget(QWidget* content, const QString& txt, QWidget* parent = nullptr);
+        DetailsSectionWidget(const QString& txt, QTableWidget* tab, QWidget* parent = nullptr);
+        QTableWidget* table() const;
+        void setRowCount(int rc);
 
-    protected:
-        bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
-        bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+        static void setDefaultTableStyle(QTableWidget* tab);
 
     private Q_SLOTS:
-        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+        void toggleBodyVisible();
+        void handleGlobalSettingsChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
-        gui_utility::sort_mechanism m_sort_mechanism;
+        void hideEmpty();
+        void bodyVisible();
+        void constructor(const QString& txt);
+
+        QVBoxLayout* m_layout;
+        QPushButton* m_header;
+        QWidget* m_body;
+        QTableWidget* m_table;
+        QString m_headerText;
+        int m_rows;
+        bool m_hideEmpty;
+        bool m_bodyVisible;
     };
-}
+}    // namespace hal

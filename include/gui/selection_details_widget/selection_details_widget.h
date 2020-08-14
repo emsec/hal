@@ -24,18 +24,22 @@
 #pragma once
 
 #include "content_widget/content_widget.h"
+#include "selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "def.h"
-#include "selection_details_widget/gate_details_widget.h"
-#include "selection_details_widget/net_details_widget.h"
-#include "selection_details_widget/module_details_widget.h"
 
 class QTableWidget;
 class QStackedWidget;
+class QSplitter;
+class QListWidget;
 class QLabel;
 
 namespace hal
 {
     class Searchbar;
+    class SelectionTreeView;
+    class ModuleDetailsWidget;
+    class GateDetailsWidget;
+    class NetDetailsWidget;
 
     class SelectionDetailsWidget : public ContentWidget
     {
@@ -45,11 +49,22 @@ namespace hal
         SelectionDetailsWidget(QWidget* parent = 0);
         void clear();
 
+    Q_SIGNALS:
+        void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
+
     public Q_SLOTS:
         void handle_selection_update(void* sender);
+        void handleTreeSelection(const SelectionTreeItem* sti);
         QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
     private:
+        void singleSelectionInternal(const SelectionTreeItem* sti);
+
+        QSplitter*           m_splitter;
+        SelectionTreeView*   m_selectionTreeView;
+        QWidget*             m_selectionDetails;
+        unsigned int         m_numberSelectedItems;
+
         QStackedWidget* m_stacked_widget;
 
         QWidget* m_empty_widget;
