@@ -84,12 +84,23 @@ namespace hal
         m_MainWindow->add_content(m_context_manager_wid, 1, content_anchor::left);
         m_context_manager_wid->open();
 
+        //we should probably document somewhere why we need this timer and why we have some sort of racing condition(?) here?
         //QTimer::singleShot(50, [this]() { this->m_context_manager_wid->handle_create_context_clicked(); });
-        GraphContext* new_context = nullptr;
-        new_context = g_graph_context_manager.create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
-        new_context->add({g_netlist->get_top_module()->get_id()}, {});
 
-        m_context_manager_wid->select_view_context(new_context);
+        //executes same code as found in 'create_context_clicked' from the context manager widget but allows to keep its method private
+        QTimer::singleShot(50, [this]() {
+            GraphContext* new_context = nullptr;
+            new_context = g_graph_context_manager.create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
+            new_context->add({g_netlist->get_top_module()->get_id()}, {});
+
+            m_context_manager_wid->select_view_context(new_context);
+        });
+
+        //why does this segfault without a timer?
+        //GraphContext* new_context = nullptr;
+        //new_context = g_graph_context_manager.create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
+        //new_context->add({g_netlist->get_top_module()->get_id()}, {});
+        //m_context_manager_wid->select_view_context(new_context);
 
         mSelectionDetailsWidget = new SelectionDetailsWidget();
         m_MainWindow->add_content(mSelectionDetailsWidget, 0, content_anchor::bottom);
