@@ -84,7 +84,12 @@ namespace hal
         m_MainWindow->add_content(m_context_manager_wid, 1, content_anchor::left);
         m_context_manager_wid->open();
 
-        QTimer::singleShot(50, [this]() { this->m_context_manager_wid->handle_create_context_clicked(); });
+        //QTimer::singleShot(50, [this]() { this->m_context_manager_wid->handle_create_context_clicked(); });
+        GraphContext* new_context = nullptr;
+        new_context = g_graph_context_manager.create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
+        new_context->add({g_netlist->get_top_module()->get_id()}, {});
+
+        m_context_manager_wid->select_view_context(new_context);
 
         mSelectionDetailsWidget = new SelectionDetailsWidget();
         m_MainWindow->add_content(mSelectionDetailsWidget, 0, content_anchor::bottom);

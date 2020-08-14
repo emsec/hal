@@ -4,7 +4,7 @@ namespace hal
 {
     UniqueStringValidator::UniqueStringValidator(const QStringList &unique_strings) : m_unique_strings(unique_strings)
     {
-        set_fail_text("Choosen input is already assigned.");
+        set_fail_text("Chosen input is already assigned.");
     }
 
     bool UniqueStringValidator::validate(const QString &input)
