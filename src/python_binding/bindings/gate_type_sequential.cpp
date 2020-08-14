@@ -52,7 +52,7 @@ namespace hal
         :rtype: set[str]
 )");
 
-        py_gate_type_sequential.def("add_clock_pin", &GateTypeSequential::add_clock_pins, py::arg("pin_name"), R"(
+        py_gate_type_sequential.def("add_clock_pin", &GateTypeSequential::add_clock_pin, py::arg("pin_name"), R"(
         Add an input pin to the collection of input pins that are connected to a clock pin.
         The pin has to be declared as an input pin beforehand.
 
