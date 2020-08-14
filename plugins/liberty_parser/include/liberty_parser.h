@@ -88,6 +88,7 @@ namespace hal
             std::string function;
             std::string x_function;
             std::string z_function;
+            bool clock = false;
         };
 
         struct bus_group

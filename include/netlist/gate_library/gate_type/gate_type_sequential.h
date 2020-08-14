@@ -76,6 +76,14 @@ namespace hal
         void add_inverted_state_output_pin(std::string pin_name);
 
         /**
+         * Add an input pin to the collection of input pins that are connected to a clock pin.
+         * The pin has to be declared as an input pin beforehand.
+         *
+         * @param[in] pin_name - Name of the input pin.
+         */
+        void add_clock_pin(std::string pin_name);
+
+        /**
          * Set the behavior that describes the internal state when both set and reset are active.
          * Each may be one of the following:
          *  - U: not specified for this gate type
@@ -119,6 +127,13 @@ namespace hal
         std::unordered_set<std::string> get_inverted_state_output_pins() const;
 
         /**
+         * Get the input pins that that are connected to a clock signal.
+         *
+         * @returns The set of input pin names.
+         */
+        std::unordered_set<std::string> get_clock_pins() const;
+
+        /**
          * Get the behavior of the internal state and the inverted internal state when both set and reset are active.
          * May be one of the following:
          *  - U: not specified for this gate type
@@ -148,7 +163,9 @@ namespace hal
 
     private:
         // set of pins that use the internal state or inverted internal state respectively as output
-        std::unordered_set<std::string> m_state_pins, m_inverted_state_pins;
+        std::unordered_set<std::string> m_state_pins;
+        std::unordered_set<std::string> m_inverted_state_pins;
+        std::unordered_set<std::string> m_clock_pins;
 
         // behavior when both set and reset are active
         std::pair<SetResetBehavior, SetResetBehavior> m_set_reset_behavior;

@@ -12,7 +12,7 @@ namespace hal
 
     void GateTypeSequential::add_state_output_pin(std::string pin_name)
     {
-        if (const auto& it = std::find(m_input_pins.begin(), m_input_pins.end(), pin_name); it != m_input_pins.end())
+        if (const auto& it = std::find(m_output_pins.begin(), m_output_pins.end(), pin_name); it == m_output_pins.end())
         {
             log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring state output pin assignment", pin_name, m_name);
             return;
@@ -23,13 +23,24 @@ namespace hal
 
     void GateTypeSequential::add_inverted_state_output_pin(std::string pin_name)
     {
-        if (const auto& it = std::find(m_input_pins.begin(), m_input_pins.end(), pin_name); it != m_input_pins.end())
+        if (const auto& it = std::find(m_output_pins.begin(), m_output_pins.end(), pin_name); it == m_output_pins.end())
         {
-            log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring state output pin assignment", pin_name, m_name);
+            log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring inverted state output pin assignment", pin_name, m_name);
             return;
         }
 
         m_inverted_state_pins.insert(pin_name);
+    }
+
+    void GateTypeSequential::add_clock_pin(std::string pin_name)
+    {
+        if (const auto& it = std::find(m_input_pins.begin(), m_input_pins.end(), pin_name); it == m_input_pins.end())
+        {
+            log_warning("gate_type", "pin '{}' of gate type '{}' is not an input pin, ignoring clock input pin assignment", pin_name, m_name);
+            return;
+        }
+
+        m_clock_pins.insert(pin_name);
     }
 
     void GateTypeSequential::set_set_reset_behavior(SetResetBehavior sb1, SetResetBehavior sb2)
@@ -55,6 +66,11 @@ namespace hal
     std::unordered_set<std::string> GateTypeSequential::get_inverted_state_output_pins() const
     {
         return m_inverted_state_pins;
+    }
+
+    std::unordered_set<std::string> GateTypeSequential::get_clock_pins() const
+    {
+        return m_clock_pins;
     }
 
     std::pair<GateTypeSequential::SetResetBehavior, GateTypeSequential::SetResetBehavior> GateTypeSequential::get_set_reset_behavior() const

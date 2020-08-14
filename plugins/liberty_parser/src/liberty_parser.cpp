@@ -450,6 +450,12 @@ namespace hal
                 pin.z_function = pin_str.consume().string;
                 pin_str.consume(";", true);
             }
+            else if (next_token == "clock")
+            {
+                pin_str.consume(":", true);
+                pin.clock = pin_str.consume("true");
+                pin_str.consume(";", true);
+            }
         }
 
         return pin;
@@ -857,6 +863,14 @@ namespace hal
 
                     pin.function = "";
                 }
+
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_clock_pin(pin_name);
+                    }
+                }
             }
 
             for (auto& bus : cell.buses)
@@ -880,6 +894,14 @@ namespace hal
                         }
 
                         pin.function = "";
+                    }
+
+                    if (pin.clock == true)
+                    {
+                        for (const auto& pin_name : pin.pin_names)
+                        {
+                            seq_gt->add_clock_pin(pin_name);
+                        }
                     }
                 }
             }
@@ -932,6 +954,14 @@ namespace hal
 
                     pin.function = "";
                 }
+
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_clock_pin(pin_name);
+                    }
+                }
             }
 
             for (auto& bus : cell.buses)
@@ -955,6 +985,14 @@ namespace hal
                         }
 
                         pin.function = "";
+                    }
+
+                    if (pin.clock == true)
+                    {
+                        for (const auto& pin_name : pin.pin_names)
+                        {
+                            seq_gt->add_clock_pin(pin_name);
+                        }
                     }
                 }
             }

@@ -24,10 +24,11 @@ namespace hal
         :param hal_py.Gate_type.BaseType bt: The base type of the sequential gate type.
 )");
 
-        py_gate_type_sequential.def("add_state_output_pin", &GateTypeSequential::add_state_output_pin, py::arg("output_pin"), R"(
-        Adds an output pin to the collection of output pins that generate their output from the next_state function.
+        py_gate_type_sequential.def("add_state_output_pin", &GateTypeSequential::add_state_output_pin, py::arg("pin_name"), R"(
+        Add an output pin to the collection of output pins that generate their output from the next_state function.
+        The pin has to be declared as an output pin beforehand.
 
-        :param str output_pin_name: Name of the output pin.
+        :param str pin_name: Name of the output pin.
 )");
 
         py_gate_type_sequential.def("get_state_output_pins", &GateTypeSequential::get_state_output_pins, R"(
@@ -37,24 +38,11 @@ namespace hal
         :rtype: set[str]
 )");
 
-        py_gate_type_sequential.def("get_state_output_pins", &GateTypeSequential::get_state_output_pins, R"(
-        Get the output pins that use the next_state function to generate their output.
+        py_gate_type_sequential.def("add_inverted_state_output_pin", &GateTypeSequential::add_inverted_state_output_pin, py::arg("pin_name"), R"(
+        Add an output pin to the collection of output pins that generate their output from the inverted next_state function.
+        The pin has to be declared as an output pin beforehand.
 
-        :returns: The set of output pin names.
-        :rtype: set[str]
-)");
-
-        py_gate_type_sequential.def("get_state_output_pins", &GateTypeSequential::get_state_output_pins, R"(
-        Get the output pins that use the next_state function to generate their output.
-
-        :returns: The set of output pin names.
-        :rtype: set[str]
-)");
-
-        py_gate_type_sequential.def("add_inverted_state_output_pin", &GateTypeSequential::add_inverted_state_output_pin, py::arg("output_pin"), R"(
-        Adds an output pin to the collection of output pins that generate their output from the inverted next_state function.
-
-        :param str output_pin_name: Name of the output pin.
+        :param str pin_name: Name of the output pin.
 )");
 
         py_gate_type_sequential.def("get_inverted_state_output_pins", &GateTypeSequential::get_inverted_state_output_pins, R"(
@@ -64,12 +52,19 @@ namespace hal
         :rtype: set[str]
 )");
 
-        /*py_gate_type_sequential.def_property("SetResetBehavior", &GateTypeSequential::get_set_reset_behavior, &GateTypeSequential::set_set_reset_behavior, R"(
-        Set the behavior that describes the internal state when both set and reset are active.
+        py_gate_type_sequential.def("add_clock_pin", &GateTypeSequential::add_clock_pins, py::arg("pin_name"), R"(
+        Add an input pin to the collection of input pins that are connected to a clock pin.
+        The pin has to be declared as an input pin beforehand.
 
-        :type: tuple(hal_py.SetResetBehavior, hal_py.SetResetBehavior)
-)");*/
+        :param str pin_name: Name of the output pin.
+)");
 
+        py_gate_type_sequential.def("get_clock_pins", &GateTypeSequential::get_clock_pins, R"(
+        Get the input pins that that are connected to a clock signal.
+
+        :returns: The set of input pin names.
+        :rtype: set[str]
+)");
         py_gate_type_sequential.def("set_set_reset_behavior", &GateTypeSequential::set_set_reset_behavior, py::arg("sb1"), py::arg("sb2"), R"(
         Set the behavior that describes the internal state when both set and reset are active.
 
