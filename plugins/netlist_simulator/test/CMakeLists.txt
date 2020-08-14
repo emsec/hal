@@ -35,6 +35,8 @@ if(BUILD_TESTS)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/half_adder/halfaddernetlist_flattened_by_hal.v ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/half_adder/halfaddernetlist_flattened_by_hal.v COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/toycipher/dump.vcd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/toycipher/dump.vcd COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/toycipher/cipher_flat.vhd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd COPYONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/sha256/dump.vcd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/sha256/dump.vcd COPYONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/netlists/sha256/sha256_flat.vhd ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/sha256/sha256_flat.vhd COPYONLY)
 
 
     include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/plugins/netlist_simulator/include)

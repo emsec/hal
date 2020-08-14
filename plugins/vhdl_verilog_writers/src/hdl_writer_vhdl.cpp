@@ -5,13 +5,12 @@
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 
-
 namespace hal
 {
     bool HDLWriterVHDL::write(Netlist* netlist, std::stringstream& stream)
     {
         m_netlist = netlist;
-        m_stream = &stream;
+        m_stream  = &stream;
 
         this->prepare_signal_names();
 
@@ -300,22 +299,23 @@ namespace hal
             nets.emplace_back(name.first, name.second);
         }
 
-        std::sort(nets.begin(), nets.end(), [](const std::tuple<std::string, Net*>& a, const std::tuple<std::string, Net*>& b) -> bool {
-            return std::get<1>(a)->get_id() < std::get<1>(b)->get_id();
-        });
+        std::sort(nets.begin(), nets.end(), [](const std::tuple<std::string, Net*>& a, const std::tuple<std::string, Net*>& b) -> bool { return std::get<1>(a)->get_id() < std::get<1>(b)->get_id(); });
 
         for (auto tup : nets)
         {
             *m_stream << "  signal " << std::get<0>(tup) << " : STD_LOGIC;" << std::endl;
+            m_final_signal_names.insert(std::get<0>(tup));
         }
 
         for (auto name : m_vcc_names_str_to_net)
         {
             *m_stream << "  signal " << name.first << " : STD_LOGIC := '1';" << std::endl;
+            m_final_signal_names.insert(name.first);
         }
         for (auto name : m_gnd_names_str_to_net)
         {
             *m_stream << "  signal " << name.first << " : STD_LOGIC := '0';" << std::endl;
+            m_final_signal_names.insert(name.first);
         }
     }
 
@@ -329,7 +329,12 @@ namespace hal
         {
             if (gate->get_type()->get_name() == "GLOBAL_GND" || gate->get_type()->get_name() == "GLOBAL_VCC")
                 continue;
-            *m_stream << get_gate_name(gate);
+            auto gate_name = get_gate_name(gate);
+            while (m_final_signal_names.find(gate_name) != m_final_signal_names.end())
+            {
+                gate_name += "_inst";
+            }
+            *m_stream << gate_name;
             *m_stream << " : " << gate->get_type()->get_name() << std::endl;
 
             this->print_generic_map_vhdl(gate);
@@ -401,7 +406,7 @@ namespace hal
                     *m_stream << "," << std::endl;
                 }
                 *m_stream << "   " << std::get<1>(d.first) << " => "
-                         << "\"" << content << "\"";
+                          << "\"" << content << "\"";
             }
             else if (type == "bit_value")
             {
@@ -415,7 +420,7 @@ namespace hal
                     *m_stream << "," << std::endl;
                 }
                 *m_stream << "   " << std::get<1>(d.first) << " => "
-                         << "\'" << content << "\'";
+                          << "\'" << content << "\'";
             }
             else if (type == "boolean")
             {

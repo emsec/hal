@@ -10,7 +10,7 @@ namespace hal
         assert(m_base_type == BaseType::ff || m_base_type == BaseType::latch);
     }
 
-    void GateTypeSequential::add_state_output_pin(std::string pin_name)
+    void GateTypeSequential::add_state_output_pin(const std::string& pin_name)
     {
         if (std::find(m_output_pins.begin(), m_output_pins.end(), pin_name) == m_output_pins.end())
         {
@@ -21,7 +21,7 @@ namespace hal
         m_state_pins.insert(pin_name);
     }
 
-    void GateTypeSequential::add_inverted_state_output_pin(std::string pin_name)
+    void GateTypeSequential::add_inverted_state_output_pin(const std::string& pin_name)
     {
         if (std::find(m_output_pins.begin(), m_output_pins.end(), pin_name) == m_output_pins.end())
         {
@@ -32,7 +32,7 @@ namespace hal
         m_inverted_state_pins.insert(pin_name);
     }
 
-    void GateTypeSequential::add_clock_pin(std::string pin_name)
+    void GateTypeSequential::add_clock_pin(const std::string& pin_name)
     {
         if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
         {

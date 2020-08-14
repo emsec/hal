@@ -65,7 +65,7 @@ namespace hal
          *
          * @param[in] pin_name - Name of the output pin.
          */
-        void add_state_output_pin(std::string pin_name);
+        void add_state_output_pin(const std::string& pin_name);
 
         /**
          * Add an output pin to the collection of output pins that generate their output from the inverted next_state function.
@@ -73,7 +73,7 @@ namespace hal
          *
          * @param[in] pin_name - Name of the output pin.
          */
-        void add_inverted_state_output_pin(std::string pin_name);
+        void add_inverted_state_output_pin(const std::string& pin_name);
 
         /**
          * Add an input pin to the collection of input pins that are connected to a clock pin.
@@ -81,7 +81,7 @@ namespace hal
          *
          * @param[in] pin_name - Name of the input pin.
          */
-        void add_clock_pin(std::string pin_name);
+        void add_clock_pin(const std::string& pin_name);
 
         /**
          * Set the behavior that describes the internal state when both set and reset are active.

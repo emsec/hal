@@ -28,6 +28,7 @@
 
 #include <functional>
 #include <map>
+#include <unordered_set>
 
 namespace hal
 {
@@ -102,5 +103,8 @@ namespace hal
         std::map<Net*, std::string> m_vcc_names;
 
         std::map<std::string, Net*> m_vcc_names_str_to_net;
+
+
+        std::unordered_set<std::string> m_final_signal_names;
     };
 }    // namespace hal

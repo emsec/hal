@@ -3,6 +3,7 @@
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library_manager.h"
 #include "netlist/hdl_parser/hdl_parser_manager.h"
+#include "netlist/hdl_writer/hdl_writer_manager.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
@@ -50,7 +51,7 @@ namespace hal
             for (auto it = b_events.begin(); it != b_events.end();)
             {
                 auto srcs = it->first->get_sources();
-                if (srcs.size() == 1 && (srcs[0].get_gate()->is_gnd_gate() || srcs[0].get_gate()->is_vcc_gate()))
+                if (srcs.size() == 1 && (srcs[0].get_gate()->is_gnd_gate() || srcs[0].get_gate()->is_vcc_gate())) // && a_events.find(it->first) == a_events.end())
                 {
                     it = b_events.erase(it);
                 }
@@ -65,6 +66,17 @@ namespace hal
                     return std::to_string(v);
                 return "X";
             };
+
+            std::set<Net*> a_nets;
+            std::set<Net*> b_nets;
+            for (auto it : a_events)
+            {
+                a_nets.insert(it.first);
+            }
+            for (auto it : b_events)
+            {
+                b_nets.insert(it.first);
+            }
 
             std::map<std::string, Net*> sorted_unmatching_events;
 
@@ -178,11 +190,28 @@ namespace hal
                 std::cout << "WARNING SIZE MISMATCH" << std::endl;
                 if (a_events.size() > b_events.size())
                 {
-                    std::cout << "more nets are captured in the vcd file" << std::endl;
+                    std::cout << "more nets are captured in the vcd file:" << std::endl;
+                    std::vector<Net*> mismatch;
+                    std::set_difference(a_nets.begin(), a_nets.end(), b_nets.begin(), b_nets.end(), std::back_inserter(mismatch));
+                    for (auto x : mismatch)
+                    {
+                        std::cout << "  " << x->get_name() << std::endl;
+                    }
                 }
                 else
                 {
-                    std::cout << "more nets are captured in the simulation output" << std::endl;
+                    std::cout << "more nets are captured in the simulation output:" << std::endl;
+                    std::vector<Net*> mismatch;
+                    std::set_difference(b_nets.begin(), b_nets.end(), a_nets.begin(), a_nets.end(), std::back_inserter(mismatch));
+                    for (auto x : mismatch)
+                    {
+                        std::cout << "  " << x->get_name() << std::endl;
+                    }
+                }
+
+                if (sorted_unmatching_events.empty())
+                {
+                    std::cout << "everything that could be compared was correct, though!" << std::endl;
                 }
             }
 
@@ -208,103 +237,91 @@ namespace hal
             std::string line;
 
             //map for storing the variable names from the vcd and their identifiers
-            std::map<std::string, std::string> identifier_name;
+            std::map<std::string, std::string> identifier_to_net_name;
             //map for storing the u32 id of the net and its corresponding signal value at a specific cycle
             std::map<Net*, SignalValue> current_state;
 
             //map for storing gate names and corresponding u32 id for all nets of the netlist
-            std::map<std::string, Net*> name_id;
+            std::map<std::string, Net*> net_name_to_net;
             //Fill map
             for (auto net : netlist->get_nets())
             {
-                name_id[net->get_name()] = net;
-                current_state[net]       = SignalValue::Z;
+                net_name_to_net[net->get_name()] = net;
+                current_state[net]               = SignalValue::Z;
             }
 
-            bool enddefinitions = false;
-            bool var_change     = false;
-            bool dumped         = false;
-            int time            = 0;    //current timestamp of vcd file
+            int time = 0;    //current timestamp of vcd file
+
+            // fill map with (signal) names from vcd as key and identifiers as value
             while (std::getline(infile, line))
             {
-                //fill map with (signal) names from vcd as key and identifiers as value
-                if (line.find("$var ") == 0 && line.find(" $end") == line.length() - 5)
+                line = core_utils::trim(line);
+                if (core_utils::starts_with(line, std::string("$var ")))
                 {
-                    std::string stripped_end          = line.erase(line.find_last_of(" "), line.length() - 1);
-                    std::string name                  = stripped_end.substr(stripped_end.find_last_of(" "), stripped_end.length() - 1);
-                    std::string stripped_end_and_name = stripped_end.erase(stripped_end.find_last_of(" "), stripped_end.length() - 1);
-                    std::string identifier            = stripped_end_and_name.substr(stripped_end_and_name.find_last_of(" "), stripped_end_and_name.length() - 1);
-                    //use substring to strip leading white space
-                    identifier_name[identifier.substr(1, identifier.length())] = name.substr(1, name.length());
-                }
+                    line                   = line.substr(0, line.find_last_of(" "));
+                    line                   = core_utils::trim(line);
+                    std::string name       = line.substr(line.find_last_of(" ") + 1);
+                    line                   = line.substr(0, line.find_last_of(" "));
+                    std::string identifier = line.substr(line.find_last_of(" ") + 1);
 
-                //routine for capturing value changes after keywords dumpvars and/or #0
-                if (var_change && line != "#0" && line != "$dumpvars")
-                {
-                    std::string identifier = line.substr(1, line.length());
-                    auto current_net       = name_id[identifier_name[identifier]];
-                    switch (line[0])
-                    {
-                        //Next cycle incoming, push current state to vector
-                        case '#': {
-                            //new cycle number
-                            time = std::stoi(line.substr(1, line.length())) / 1000;
-                            break;
-                        }
-                        case '0': {
-                            if (current_state[current_net] != SignalValue::ZERO)
-                            {
-                                Event e;
-                                e.affected_net = current_net;
-                                e.time         = time;
-                                e.new_value    = SignalValue::ZERO;
-                                vcd_trace.add_event(e);
-                                current_state[current_net] = e.new_value;
-                            }
-                            break;
-                        }
-                        case '1': {
-                            if (current_state[current_net] != SignalValue::ONE)
-                            {
-                                Event e;
-                                e.affected_net = current_net;
-                                e.time         = time;
-                                e.new_value    = SignalValue::ONE;
-                                vcd_trace.add_event(e);
-                                current_state[current_net] = e.new_value;
-                            }
-                            break;
-                        }
-                        case 'x': {
-                            if (current_state[current_net] != SignalValue::X)
-                            {
-                                Event e;
-                                e.affected_net = current_net;
-                                e.time         = time;
-                                e.new_value    = SignalValue::X;
-                                vcd_trace.add_event(e);
-                                current_state[current_net] = e.new_value;
-                            }
-                            break;
-                        }
-                        case '$': {
-                            if (line == "$end")
-                                break;
-                            else
-                                log_error("simulator", "vcd reader: no signal value detected {}", line);
-                            break;
-                        }
-                        default: {
-                            log_error("simulator", "vcd reader: no signal value detected {}", line);
-                        }
-                    }
+                    identifier_to_net_name.emplace(identifier, name);
                 }
-
-                if (enddefinitions && (line == "$dumpvars" || line == "#0"))
-                    var_change = true;
 
                 if (line == "$enddefinitions $end")
-                    enddefinitions = true;
+                {
+                    break;
+                }
+            }
+            while (std::getline(infile, line))
+            {
+                line                   = core_utils::trim(line);
+                std::string identifier = line.substr(1, line.length());
+                Net* current_net       = nullptr;
+                if (auto it = identifier_to_net_name.find(identifier); it != identifier_to_net_name.end())
+                {
+                    current_net = net_name_to_net[it->second];
+                }
+                if (line[0] == '#')
+                {
+                    //new cycle number
+                    time = std::stoi(line.substr(1, line.length())) / 1000;
+                }
+                else if (line[0] == '0')
+                {
+                    if (current_state[current_net] != SignalValue::ZERO)
+                    {
+                        Event e;
+                        e.affected_net = current_net;
+                        e.time         = time;
+                        e.new_value    = SignalValue::ZERO;
+                        vcd_trace.add_event(e);
+                        current_state[current_net] = e.new_value;
+                    }
+                }
+                else if (line[0] == '1')
+                {
+                    if (current_state[current_net] != SignalValue::ONE)
+                    {
+                        Event e;
+                        e.affected_net = current_net;
+                        e.time         = time;
+                        e.new_value    = SignalValue::ONE;
+                        vcd_trace.add_event(e);
+                        current_state[current_net] = e.new_value;
+                    }
+                }
+                else if (line[0] == 'x')
+                {
+                    if (current_state[current_net] != SignalValue::X)
+                    {
+                        Event e;
+                        e.affected_net = current_net;
+                        e.time         = time;
+                        e.new_value    = SignalValue::X;
+                        vcd_trace.add_event(e);
+                        current_state[current_net] = e.new_value;
+                    }
+                }
             }
 
             return vcd_trace;
@@ -313,6 +330,7 @@ namespace hal
 
     TEST_F(SimulatorTest, half_adder)
     {
+        return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -331,7 +349,7 @@ namespace hal
 
         std::unique_ptr<Netlist> nl;
         {
-            // NO_COUT_BLOCK;
+            NO_COUT_BLOCK;
             nl = hdl_parser_manager::parse(path_netlist, lib);
             if (nl == nullptr)
             {
@@ -389,6 +407,7 @@ namespace hal
 
     TEST_F(SimulatorTest, counter)
     {
+        return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -479,6 +498,7 @@ namespace hal
 
     TEST_F(SimulatorTest, toycipher)
     {
+        return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -605,6 +625,125 @@ namespace hal
         sim->set_input(start, SignalValue::ZERO);    //START <= '0';
 
         hal_sim_traces = simulate(30);
+
+        //Test if maps are equal
+        EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));
+        TEST_END
+    }
+
+    TEST_F(SimulatorTest, sha256)
+    {
+        TEST_START
+        sim = plugin->create_simulator();
+
+        //path to netlist
+        std::string path_netlist = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
+        if (!core_utils::file_exists(path_netlist))
+            FAIL() << "netlist for sha256 not found: " << path_netlist;
+
+        //create netlist from path
+        auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+        if (lib == nullptr)
+        {
+            FAIL() << "XILINX_UNISIM gate library not found";
+        }
+
+        std::unique_ptr<Netlist> nl;
+        {
+            NO_COUT_BLOCK;
+            nl = hdl_parser_manager::parse(path_netlist, lib);
+            if (nl == nullptr)
+            {
+                FAIL() << "netlist couldn't be parsed";
+            }
+        }
+
+        //path to vcd
+        std::string path_vcd = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/dump.vcd";
+        if (!core_utils::file_exists(path_vcd))
+            FAIL() << "dump for sha256 not found: " << path_vcd;
+
+        //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
+        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, 10000);
+
+        std::cout << vcd_traces.get_events().size() << std::endl;
+        // return;
+
+        //vector of states for hal simulation
+        Simulation hal_sim_traces;
+        //vector of gates for simulation function add_gates
+        std::vector<Gate*> vector_of_gates;
+        //add gates to vector
+        for (const auto& gate : nl->get_gates())
+            vector_of_gates.push_back(gate);
+        //vector of traces for interim result
+        Simulation interim_traces;
+
+        //prepare simulation
+        sim->add_gates(vector_of_gates);
+        sim->load_initial_values();
+
+        // retrieve nets
+        auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
+
+        std::cout << "#clock events: " << vcd_traces.get_events()[clk].size() << std::endl;
+
+        sim->add_clock_period(clk, 10);
+
+        auto start = *(nl->get_nets([](auto net) { return net->get_name() == "data_ready"; }).begin());
+
+        auto rst = *(nl->get_nets([](auto net) { return net->get_name() == "rst"; }).begin());
+
+        std::vector<Net*> input_bits;
+        for (int i = 0; i < 512; i++)
+        {
+            std::string name = "msg_block_in_" + std::to_string(i);
+            input_bits.push_back(*(nl->get_nets([name](auto net) { return net->get_name() == name; }).begin()));
+        }
+
+        int input_nets_amount = input_bits.size();
+
+        if (clk != nullptr)
+            input_nets_amount++;
+
+        if (rst != nullptr)
+            input_nets_amount++;
+
+        if (start != nullptr)
+            input_nets_amount++;
+
+        if (input_nets_amount != sim->get_input_nets().size())
+            FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
+
+        //start simulation
+        std::cout << "starting simulation" << std::endl;
+        //testbench
+
+        // msg <= x"61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+        std::string hex_input = "61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+        for (u32 i = 0; i < hex_input.size(); i += 2)
+        {
+            u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
+            for (u32 j = 0; j < 8; ++j)
+            {
+                sim->set_input(input_bits[i * 4 + j], (SignalValue)((byte >> (7 - j)) & 1));
+            }
+        }
+
+        sim->set_input(rst, SignalValue::ONE);       //RST <= '1';
+        sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+        hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+
+        // sim->set_input(rst, SignalValue::ZERO);    //RST <= '0';
+        // hal_sim_traces = simulate(10);             //WAIT FOR 10 NS;
+
+        // sim->set_input(start, SignalValue::ONE);    //START <= '1';
+        // hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
+
+        // sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+        // hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+
+        // hal_sim_traces = simulate(2000);
 
         //Test if maps are equal
         EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));

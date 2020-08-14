@@ -584,9 +584,27 @@ namespace hal
         }
         else
         {
+            auto functions = gate->get_boolean_functions();
             for (auto pin : gate->get_output_pins())
             {
                 auto f = gate->get_boolean_function(pin);
+                while (true)
+                {
+                    auto vars = f.get_variables();
+                    bool exit = true;
+                    for (auto [pin, func] : functions)
+                    {
+                        if (vars.find(pin) != vars.end())
+                        {
+                            f    = f.substitute(pin, func);
+                            exit = false;
+                        }
+                    }
+                    if (exit)
+                    {
+                        break;
+                    }
+                }
 
                 auto result = f.evaluate(input_values);
 
