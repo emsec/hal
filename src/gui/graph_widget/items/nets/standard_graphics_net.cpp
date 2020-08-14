@@ -151,7 +151,7 @@ namespace hal
     {
         Q_UNUSED(widget);
 
-        QColor color = (option->state & QStyle::State_Selected) ? s_selection_color : m_color;
+        QColor color = penColor(option->state);
         s_pen.setColor(color);
         s_pen.setStyle(m_pen_style);
 

@@ -25,6 +25,7 @@
 
 #include "def.h"
 #include "netlist_relay/netlist_relay.h"
+#include "selection_details_widget/details_widget.h"
 
 #include <QWidget>
 
@@ -42,8 +43,10 @@ namespace hal
     /* forward declaration */
     class Net;
     class Gate;
+    class DataFieldsTable;
+    class DetailsSectionWidget;
 
-    class NetDetailsWidget : public QWidget
+    class NetDetailsWidget : public DetailsWidget
     {
         Q_OBJECT
 
@@ -65,11 +68,6 @@ namespace hal
         void handle_gate_name_changed(Gate* g);
 
     private:
-        //general
-        u32 m_current_id;
-        bool m_hide_empty_sections;
-        QFont m_key_font;
-
         //utility objects to encapsulate the sections together to make it scrollable
         QScrollArea* m_scroll_area;
         QWidget* m_top_lvl_container;
@@ -78,8 +76,9 @@ namespace hal
 
         //buttons to fold/unfold the corresponding sections
         QPushButton* m_general_info_button;
-        QPushButton* m_source_pins_button;
-        QPushButton* m_destination_pins_button;
+        DetailsSectionWidget* m_sourcePinsSection;
+        DetailsSectionWidget* m_destinationPinsSection;
+        DetailsSectionWidget* m_dataFieldsSection;
 
         //the sections to unfold
         //(1) general information section
@@ -94,8 +93,10 @@ namespace hal
         //(3) destination_pins section
         QTableWidget* m_destination_pins_table;
 
+        //(4) data-fields section
+        DataFieldsTable* m_dataFieldsTable;
+
         //function section
-        void handle_buttons_clicked();
         void handle_table_item_clicked(QTableWidgetItem* item);
 
         //straightforward context menu handlers
@@ -105,10 +106,5 @@ namespace hal
 
         //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
         QSize calculate_table_size(QTableWidget* table);
-
-        void show_all_sections();
-        void hide_empty_sections();
-        void init_settings();
-        void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
     };
 }    // namespace hal

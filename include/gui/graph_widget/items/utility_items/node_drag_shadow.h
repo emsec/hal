@@ -19,7 +19,7 @@
 //  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//  SOFTWARE
+//  SOFTWARE.
 
 #pragma once
 
@@ -34,9 +34,9 @@ namespace hal
     public:
         enum class drag_cue
         {
-            movable = 0,
+            movable   = 0,
             swappable = 1,
-            rejected = 2
+            rejected  = 2
         };
 
         NodeDragShadow();
@@ -73,4 +73,4 @@ namespace hal
         qreal m_width;
         qreal m_height;
     };
-}
+}    // namespace hal

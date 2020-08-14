@@ -76,8 +76,11 @@
         <file alias="trashcan">icons/trashcan.svg</file>
         <file alias="graph">icons/0189-tree.svg</file>
         <file alias="keyboard">icons/0086-keyboard.svg</file>
-        <file alias="clock">icons/0079-clock.svg</file>
         <file alias="gen-window">icons/generic-window.svg</file>
+        <file alias="open-alt">icons/0383-new-tab.svg</file>
+	    <file alias="sel_module">icons/sel_module.png</file>
+	    <file alias="sel_gate">icons/sel_gate.png</file>
+	    <file alias="sel_net">icons/sel_net.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>

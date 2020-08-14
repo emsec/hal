@@ -130,3 +130,7 @@ tools/__pycache__/
 .envrc
 
 buttons.jsonc
+
+# Documentation
+Doxyfile
+html/
