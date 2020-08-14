@@ -61,8 +61,6 @@ namespace hal
         void reset_labels();
         bool match_labels(const QString& string);
 
-        void trigger_setting_updated();
-        void set_dirty(bool dirty);
         bool dirty() const;
         void prepare(const QVariant& value, const QVariant& default_value);
         void mark_saved();
@@ -83,6 +81,11 @@ namespace hal
         void setting_updated(SettingsWidget* sender, const QString& key, const QVariant& value);
 
     protected:
+        void set_dirty(bool dirty);
+        void trigger_setting_updated();
+        void enterEvent(QEvent* event);
+        void leaveEvent(QEvent* event);
+
         QVBoxLayout* m_layout;
         QBoxLayout* m_container;
         QHBoxLayout* m_top_bar;
