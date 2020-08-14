@@ -10,6 +10,7 @@
 #include "plugin_netlist_simulator/plugin_netlist_simulator.h"
 #include "test_utils/include/test_def.h"
 
+#include <chrono>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -17,6 +18,29 @@
 
 namespace hal
 {
+#define seconds_since(X) ((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - (X)).count() / 1000)
+
+#define measure_block_time(X) measure_block_time_t UNIQUE_NAME(X);
+
+    class measure_block_time_t
+    {
+    public:
+        measure_block_time_t(const std::string& section_name)
+        {
+            m_name       = section_name;
+            m_begin_time = std::chrono::high_resolution_clock::now();
+        }
+
+        ~measure_block_time_t()
+        {
+            log_info("test", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
+        }
+
+    private:
+        std::string m_name;
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
+    };
+
     class SimulatorTest : public ::testing::Test
     {
     protected:
@@ -40,7 +64,7 @@ namespace hal
 
         Simulation simulate(u64 nanoseconds)
         {
-            sim->simulate(nanoseconds);
+            sim->simulate(nanoseconds * 1000);
             return sim->get_current_state();
         }
 
@@ -48,10 +72,13 @@ namespace hal
         {
             auto a_events = vcd_sim.get_events();
             auto b_events = hal_sim.get_events();
+
+            std::cout << "comparing outputs..." << std::endl;
+
             for (auto it = b_events.begin(); it != b_events.end();)
             {
                 auto srcs = it->first->get_sources();
-                if (srcs.size() == 1 && (srcs[0].get_gate()->is_gnd_gate() || srcs[0].get_gate()->is_vcc_gate())) // && a_events.find(it->first) == a_events.end())
+                if (srcs.size() == 1 && (srcs[0].get_gate()->is_gnd_gate() || srcs[0].get_gate()->is_vcc_gate()) && a_events.find(it->first) == a_events.end())
                 {
                     it = b_events.erase(it);
                 }
@@ -78,6 +105,8 @@ namespace hal
                 b_nets.insert(it.first);
             }
 
+            std::cout << "finding mismatches..." << std::endl;
+
             std::map<std::string, Net*> sorted_unmatching_events;
 
             for (auto it : a_events)
@@ -91,6 +120,8 @@ namespace hal
                     sorted_unmatching_events[net->get_name()] = net;
                 }
             }
+
+            std::cout << "printing mismatches..." << std::endl;
 
             u64 earliest_mismatch = -1;
             std::vector<Net*> earliest_mismatch_nets;
@@ -218,8 +249,42 @@ namespace hal
             if (!earliest_mismatch_nets.empty())
             {
                 std::cout << "earliest mismatch at " << earliest_mismatch << "ns" << std::endl;
+                std::vector<Gate*> mismatch_sources;
                 for (auto net : earliest_mismatch_nets)
+                {
                     std::cout << "mismatch at " << net->get_name() << std::endl;
+                    auto srcs = net->get_sources();
+                    std::transform(srcs.begin(), srcs.end(), std::back_inserter(mismatch_sources), [](auto& ep) { return ep.get_gate(); });
+                }
+                std::unordered_set<Gate*> mismatch_sources_set(mismatch_sources.begin(), mismatch_sources.end());
+                for (auto it = mismatch_sources.begin(); it != mismatch_sources.end();)
+                {
+                    auto g       = *it;
+                    auto preds   = g->get_unique_predecessors();
+                    bool removed = false;
+                    for (auto pred : preds)
+                    {
+                        if (pred == g)
+                        {
+                            continue;
+                        }
+                        if (mismatch_sources_set.find(pred) != mismatch_sources_set.end())
+                        {
+                            it      = mismatch_sources.erase(it);
+                            removed = true;
+                            break;
+                        }
+                    }
+                    if (!removed)
+                    {
+                        ++it;
+                    }
+                }
+                std::cout << std::endl;
+                for (auto g : mismatch_sources)
+                {
+                    std::cout << "mismatch source " << g->get_name() << std::endl;
+                }
             }
             if (a_events == b_events)
             {
@@ -230,7 +295,7 @@ namespace hal
             return false;
         }
 
-        Simulation parse_vcd(Netlist* netlist, const std::string vcdfile, const int duration_clk_cycle)
+        Simulation parse_vcd(Netlist* netlist, const std::string vcdfile, bool normalize_to_nanoseconds)
         {
             Simulation vcd_trace;
             std::ifstream infile(vcdfile);
@@ -274,20 +339,39 @@ namespace hal
             }
             while (std::getline(infile, line))
             {
-                line                   = core_utils::trim(line);
+                line = core_utils::trim(line);
+                if (line.empty())
+                    continue;
                 std::string identifier = line.substr(1, line.length());
                 Net* current_net       = nullptr;
                 if (auto it = identifier_to_net_name.find(identifier); it != identifier_to_net_name.end())
                 {
-                    current_net = net_name_to_net[it->second];
+                    if (auto it2 = net_name_to_net.find(it->second); it2 != net_name_to_net.end())
+                    {
+                        current_net = it2->second;
+                    }
+                    else if (auto it2 = net_name_to_net.find(core_utils::to_lower(it->second)); it2 != net_name_to_net.end())
+                    {
+                        current_net = it2->second;
+                    }
                 }
                 if (line[0] == '#')
                 {
                     //new cycle number
-                    time = std::stoi(line.substr(1, line.length())) / 1000;
+                    time = std::stoi(line.substr(1, line.length()));
+                    if (normalize_to_nanoseconds)
+                    {
+                        time /= 1000;
+                        time *= 1000;
+                    }
                 }
                 else if (line[0] == '0')
                 {
+                    if (current_net == nullptr)
+                    {
+                        std::cout << "ERROR: no net found for identifier " << identifier << std::endl;
+                        return Simulation();
+                    }
                     if (current_state[current_net] != SignalValue::ZERO)
                     {
                         Event e;
@@ -300,6 +384,11 @@ namespace hal
                 }
                 else if (line[0] == '1')
                 {
+                    if (current_net == nullptr)
+                    {
+                        std::cout << "ERROR: no net found for identifier " << identifier << std::endl;
+                        return Simulation();
+                    }
                     if (current_state[current_net] != SignalValue::ONE)
                     {
                         Event e;
@@ -312,6 +401,11 @@ namespace hal
                 }
                 else if (line[0] == 'x')
                 {
+                    if (current_net == nullptr)
+                    {
+                        std::cout << "ERROR: no net found for identifier " << identifier << std::endl;
+                        return Simulation();
+                    }
                     if (current_state[current_net] != SignalValue::X)
                     {
                         Event e;
@@ -330,7 +424,7 @@ namespace hal
 
     TEST_F(SimulatorTest, half_adder)
     {
-        return;
+        // return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -364,7 +458,7 @@ namespace hal
             FAIL() << "dump for half_adder-test not found: " << path_vcd;
         }
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, 10000);
+        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
 
         //vector of states for hal simulation
         Simulation hal_sim_traces;
@@ -383,22 +477,25 @@ namespace hal
         auto B = *(nl->get_nets([](auto net) { return net->get_name() == "B"; }).begin());
 
         //start simulation
-        //Testbench
-        sim->set_input(A, SignalValue::ZERO);    //A=0
-        sim->set_input(B, SignalValue::ZERO);    //B=0
-        hal_sim_traces = simulate(10);
+        {
+            measure_block_time("simulation");
+            //Testbench
+            sim->set_input(A, SignalValue::ZERO);    //A=0
+            sim->set_input(B, SignalValue::ZERO);    //B=0
+            hal_sim_traces = simulate(10);
 
-        sim->set_input(A, SignalValue::ZERO);    //A=0
-        sim->set_input(B, SignalValue::ONE);     //B=1
-        hal_sim_traces = simulate(10);
+            sim->set_input(A, SignalValue::ZERO);    //A=0
+            sim->set_input(B, SignalValue::ONE);     //B=1
+            hal_sim_traces = simulate(10);
 
-        sim->set_input(A, SignalValue::ONE);     //A=1
-        sim->set_input(B, SignalValue::ZERO);    //B=0
-        hal_sim_traces = simulate(10);
+            sim->set_input(A, SignalValue::ONE);     //A=1
+            sim->set_input(B, SignalValue::ZERO);    //B=0
+            hal_sim_traces = simulate(10);
 
-        sim->set_input(A, SignalValue::ONE);    //A=1
-        sim->set_input(B, SignalValue::ONE);    //B=1
-        hal_sim_traces = simulate(10);
+            sim->set_input(A, SignalValue::ONE);    //A=1
+            sim->set_input(B, SignalValue::ONE);    //B=1
+            hal_sim_traces = simulate(10);
+        }
 
         //Test if maps are equal
         EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));
@@ -407,7 +504,7 @@ namespace hal
 
     TEST_F(SimulatorTest, counter)
     {
-        return;
+        // return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -439,7 +536,7 @@ namespace hal
             FAIL() << "dump for counter-test not found: " << path_vcd;
 
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, 10000);
+        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
 
         //vector of states for hal simulation
         Simulation hal_sim_traces;
@@ -464,33 +561,35 @@ namespace hal
         auto output_2       = *(nl->get_nets([](auto net) { return net->get_name() == "Output_2"; }).begin());
         auto output_3       = *(nl->get_nets([](auto net) { return net->get_name() == "Output_3"; }).begin());
 
-        sim->add_clock_period(clock, 10);
+        sim->add_clock_period(clock, 10000);
 
         //start simulation
-        //testbench
-        sim->set_input(Clock_enable_B, SignalValue::ONE);    //#Clock_enable_B <= '1';
-        sim->set_input(reset, SignalValue::ZERO);            //#Reset <= '0';
-        hal_sim_traces = simulate(40);                       //#WAIT FOR 40 NS; -> simulate 4 clock cycle  - cycle 0, 1, 2, 3
+        {
+            measure_block_time("simulation");
+            //testbench
+            sim->set_input(Clock_enable_B, SignalValue::ONE);    //#Clock_enable_B <= '1';
+            sim->set_input(reset, SignalValue::ZERO);            //#Reset <= '0';
+            hal_sim_traces = simulate(40);                       //#WAIT FOR 40 NS; -> simulate 4 clock cycle  - cycle 0, 1, 2, 3
 
-        sim->set_input(Clock_enable_B, SignalValue::ZERO);    //#Clock_enable_B <= '0';
-        hal_sim_traces = simulate(110);                       //#WAIT FOR 110 NS; -> simulate 11 clock cycle  - cycle 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+            sim->set_input(Clock_enable_B, SignalValue::ZERO);    //#Clock_enable_B <= '0';
+            hal_sim_traces = simulate(110);                       //#WAIT FOR 110 NS; -> simulate 11 clock cycle  - cycle 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 
-        sim->set_input(reset, SignalValue::ONE);    //#Reset <= '1';
-        hal_sim_traces = simulate(20);              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 15, 16
+            sim->set_input(reset, SignalValue::ONE);    //#Reset <= '1';
+            hal_sim_traces = simulate(20);              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 15, 16
 
-        sim->set_input(reset, SignalValue::ZERO);    //#Reset <= '0';
-        hal_sim_traces = simulate(70);               //#WAIT FOR 70 NS; -> simulate 7 clock cycle  - cycle 17, 18, 19, 20, 21, 22, 23
+            sim->set_input(reset, SignalValue::ZERO);    //#Reset <= '0';
+            hal_sim_traces = simulate(70);               //#WAIT FOR 70 NS; -> simulate 7 clock cycle  - cycle 17, 18, 19, 20, 21, 22, 23
 
-        sim->set_input(Clock_enable_B, SignalValue::ONE);    //#Clock_enable_B <= '1';
-        hal_sim_traces = simulate(23);                       //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 24, 25
+            sim->set_input(Clock_enable_B, SignalValue::ONE);    //#Clock_enable_B <= '1';
+            hal_sim_traces = simulate(23);                       //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 24, 25
 
-        sim->set_input(reset, SignalValue::ONE);    //#Reset <= '1';
-        hal_sim_traces = simulate(20);              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 26, 27
-                                                    //#3 additional traces á 10 NS to get 300 NS simulation time
-        hal_sim_traces = simulate(20);              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 28, 29
-                                                    //#for last "cycle" set clock to 0, in the final state clock stays ZERO and does not switch to 1 anymore
-        hal_sim_traces = simulate(5);               //#WAIT FOR 10 NS; -> simulate 1 clock cycle  - cycle 30
-
+            sim->set_input(reset, SignalValue::ONE);    //#Reset <= '1';
+            hal_sim_traces = simulate(20);              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 26, 27
+                                                        //#3 additional traces á 10 NS to get 300 NS simulation time
+            hal_sim_traces = simulate(20);              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 28, 29
+                                                        //#for last "cycle" set clock to 0, in the final state clock stays ZERO and does not switch to 1 anymore
+            hal_sim_traces = simulate(5);               //#WAIT FOR 10 NS; -> simulate 1 clock cycle  - cycle 30
+        }
         //Test if maps are equal
         EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));
         TEST_END
@@ -498,7 +597,7 @@ namespace hal
 
     TEST_F(SimulatorTest, toycipher)
     {
-        return;
+        // return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -530,7 +629,7 @@ namespace hal
             FAIL() << "dump for toycipher-test not found: " << path_vcd;
 
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, 10000);
+        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
 
         //vector of states for hal simulation
         Simulation hal_sim_traces;
@@ -549,7 +648,7 @@ namespace hal
         // retrieve nets
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
 
-        sim->add_clock_period(clk, 10);
+        sim->add_clock_period(clk, 10000);
 
         std::set<Net*> key_set, plaintext_set;
         auto start = *(nl->get_nets([](auto net) { return net->get_name() == "START"; }).begin());
@@ -578,53 +677,56 @@ namespace hal
             FAIL() << "not all input nets set: actual " << input_nets_amount << " vs. " << sim->get_input_nets().size();
 
         //start simulation
-        //testbench
+        {
+            measure_block_time("simulation");
+            //testbench
 
-        for (const auto& net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
-            sim->set_input(net, SignalValue::ZERO);
+            for (const auto& net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
+                sim->set_input(net, SignalValue::ZERO);
 
-        for (const auto& net : key_set)    //KEY <= (OTHERS => '0');
-            sim->set_input(net, SignalValue::ZERO);
+            for (const auto& net : key_set)    //KEY <= (OTHERS => '0');
+                sim->set_input(net, SignalValue::ZERO);
 
-        sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-        hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
 
-        sim->set_input(start, SignalValue::ONE);    //START <= '1';
-        hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
+            sim->set_input(start, SignalValue::ONE);    //START <= '1';
+            hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
 
-        sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-        hal_sim_traces = simulate(100);              //WAIT FOR 100 NS;
+            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            hal_sim_traces = simulate(100);              //WAIT FOR 100 NS;
 
-        for (const auto& net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
-            sim->set_input(net, SignalValue::ONE);
+            for (const auto& net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
+                sim->set_input(net, SignalValue::ONE);
 
-        for (const auto& net : key_set)    //KEY <= (OTHERS => '1');
-            sim->set_input(net, SignalValue::ONE);
+            for (const auto& net : key_set)    //KEY <= (OTHERS => '1');
+                sim->set_input(net, SignalValue::ONE);
 
-        sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-        hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
 
-        sim->set_input(start, SignalValue::ONE);    //START <= '1';
-        hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
+            sim->set_input(start, SignalValue::ONE);    //START <= '1';
+            hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
 
-        sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-        hal_sim_traces = simulate(100);              //WAIT FOR 100 NS;
+            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            hal_sim_traces = simulate(100);              //WAIT FOR 100 NS;
 
-        for (const auto& net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
-            sim->set_input(net, SignalValue::ZERO);
+            for (const auto& net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
+                sim->set_input(net, SignalValue::ZERO);
 
-        for (const auto& net : key_set)    //KEY <= (OTHERS => '0');
-            sim->set_input(net, SignalValue::ZERO);
+            for (const auto& net : key_set)    //KEY <= (OTHERS => '0');
+                sim->set_input(net, SignalValue::ZERO);
 
-        sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
 
-        hal_sim_traces = simulate(10);
-        sim->set_input(start, SignalValue::ONE);    //START <= '1';
+            hal_sim_traces = simulate(10);
+            sim->set_input(start, SignalValue::ONE);    //START <= '1';
 
-        hal_sim_traces = simulate(10);
-        sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            hal_sim_traces = simulate(10);
+            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
 
-        hal_sim_traces = simulate(30);
+            hal_sim_traces = simulate(30);
+        }
 
         //Test if maps are equal
         EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));
@@ -658,16 +760,15 @@ namespace hal
             }
         }
 
+        // hdl_writer_manager::write(nl.get(), "sha256_flat.vhd");
+
         //path to vcd
         std::string path_vcd = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/dump.vcd";
         if (!core_utils::file_exists(path_vcd))
             FAIL() << "dump for sha256 not found: " << path_vcd;
 
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
-        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, 10000);
-
-        std::cout << vcd_traces.get_events().size() << std::endl;
-        // return;
+        Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
 
         //vector of states for hal simulation
         Simulation hal_sim_traces;
@@ -688,7 +789,7 @@ namespace hal
 
         std::cout << "#clock events: " << vcd_traces.get_events()[clk].size() << std::endl;
 
-        sim->add_clock_period(clk, 10);
+        sim->add_clock_period(clk, 10000);
 
         auto start = *(nl->get_nets([](auto net) { return net->get_name() == "data_ready"; }).begin());
 
@@ -719,33 +820,46 @@ namespace hal
         std::cout << "starting simulation" << std::endl;
         //testbench
 
-        // msg <= x"61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
-        std::string hex_input = "61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
-        for (u32 i = 0; i < hex_input.size(); i += 2)
         {
-            u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
-            for (u32 j = 0; j < 8; ++j)
+            measure_block_time("simulation");
+
+            // msg <= x"61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+            std::string hex_input = "61626380000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000018";
+            for (u32 i = 0; i < hex_input.size(); i += 2)
             {
-                sim->set_input(input_bits[i * 4 + j], (SignalValue)((byte >> (7 - j)) & 1));
+                u8 byte = std::stoul(hex_input.substr(i, 2), nullptr, 16);
+                for (u32 j = 0; j < 8; ++j)
+                {
+                    sim->set_input(input_bits[i * 4 + j], (SignalValue)((byte >> (7 - j)) & 1));
+                }
             }
+
+            sim->set_input(rst, SignalValue::ONE);       //RST <= '1';
+            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+            std::cout << "10ns passed" << std::endl;
+
+            sim->set_input(rst, SignalValue::ZERO);    //RST <= '0';
+            hal_sim_traces = simulate(10);             //WAIT FOR 10 NS;
+            std::cout << "10ns passed" << std::endl;
+
+            sim->set_input(start, SignalValue::ONE);    //START <= '1';
+            hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
+            std::cout << "10ns passed" << std::endl;
+
+            // sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            // hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+            // std::cout << "10ns passed" << std::endl;
+
+            // std::cout << "now waiting for 2000ns" << std::endl;
+
+            // hal_sim_traces = simulate(20);
+
+            // hal_sim_traces = simulate(1980);
         }
 
-        sim->set_input(rst, SignalValue::ONE);       //RST <= '1';
-        sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-        hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+        // Test if maps are equal
 
-        // sim->set_input(rst, SignalValue::ZERO);    //RST <= '0';
-        // hal_sim_traces = simulate(10);             //WAIT FOR 10 NS;
-
-        // sim->set_input(start, SignalValue::ONE);    //START <= '1';
-        // hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
-
-        // sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-        // hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
-
-        // hal_sim_traces = simulate(2000);
-
-        //Test if maps are equal
         EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));
         TEST_END
     }

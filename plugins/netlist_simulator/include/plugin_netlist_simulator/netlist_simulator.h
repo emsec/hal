@@ -26,8 +26,8 @@ namespace hal
 
         /*
         * Add a clock signal.
-        * Specify clock speed in nanosecond period.
-        * A period of 10ns means 5ns high, 5ns low.
+        * Specify clock speed in picoseconds period.
+        * A period of 10 means 5 high, 5 low.
         */
         void add_clock_period(Net* clock_net, u64 period, bool start_at_zero = true);
 
@@ -62,7 +62,7 @@ namespace hal
         * Simulate for a specific period, advancing the internal state.
         * Use 'set_input' to control specific signals.
         */
-        void simulate(u64 nanoseconds);
+        void simulate(u64 picoseconds);
 
         /*
         * Reset the simulator state, i.e., treat all signals as unknown.
@@ -103,7 +103,7 @@ namespace hal
         u64 m_current_time = 0;
         std::vector<Event> m_event_queue;
         Simulation m_simulation;
-        u64 m_timeout_iterations = 100000;
+        u64 m_timeout_iterations = 1000000;
         u64 m_id_counter = 0;
 
         std::unordered_map<Net*, std::vector<Gate*>> m_successors;

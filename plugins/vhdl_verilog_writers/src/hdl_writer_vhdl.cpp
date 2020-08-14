@@ -48,95 +48,41 @@ namespace hal
 
         auto nets = m_netlist->get_nets();
 
-        for (auto e : nets)
-        {
-            std::string name_tmp                          = this->get_net_name(e);
-            m_printable_signal_names[e]                   = name_tmp;
-            m_printable_signal_names_str_to_net[name_tmp] = e;
-        }
-        std::vector<std::string> del_items;
-        for (auto n : m_printable_signal_names_str_to_net)
-        {
-            std::string net_temp = n.first;
-            if (std::all_of(net_temp.begin(), net_temp.end(), ::isdigit))
+        std::unordered_set<std::string> used_names;
+        auto find_alias = [&](Net* n) {
+            if (m_printable_signal_names.find(n) != m_printable_signal_names.end())
             {
-                net_temp   = "NET_" + net_temp;
-                int i      = 10;
-                bool error = false;
-                while (m_printable_signal_names_str_to_net.find(net_temp) != m_printable_signal_names_str_to_net.end())
-                {
-                    if (i <= 0)
-                    {
-                        log_error("hdl_writer", "Could not find unique value for {}! Current solution: {}", n.first, net_temp);
-                        error = true;
-                        break;
-                    }
-                    --i;
-                    net_temp = "COLLISION_" + net_temp;
-                }
-                if (!error)
-                {
-                    m_printable_signal_names[n.second]            = net_temp;
-                    m_printable_signal_names_str_to_net[net_temp] = n.second;
-                    del_items.push_back(n.first);
-                }
+                return;
             }
-        }
-        for (auto str : del_items)
-        {
-            m_printable_signal_names_str_to_net.erase(str);
-        }
-        m_only_wire_names.insert(m_printable_signal_names.begin(), m_printable_signal_names.end());
-        for (auto&& wire_name : m_only_wire_names)
-        {
-            m_only_wire_names_str_to_net[wire_name.second] = wire_name.first;
-        }
-        //input entity
-        std::set<Net*> in_nets = m_netlist->get_global_input_nets();
-        for (auto it : in_nets)
-        {
-            m_in_names[it]                                = this->get_net_name(it);
-            m_in_names_str_to_net[this->get_net_name(it)] = it;
-            m_only_wire_names.erase(it);
-            m_only_wire_names_str_to_net.erase(this->get_net_name(it));
-        }
-        //output entity
-        std::set<Net*> out_nets = m_netlist->get_global_output_nets();
-        for (auto it : out_nets)
-        {
-            m_out_names[it]                                = this->get_net_name(it);
-            m_out_names_str_to_net[this->get_net_name(it)] = it;
-            m_only_wire_names.erase(it);
-            m_only_wire_names_str_to_net.erase(this->get_net_name(it));
-        }
 
-        //vcc gates
-        for (auto n : m_netlist->get_vcc_gates())
-        {
-            std::set<Net*> o_nets = n->get_fan_out_nets();
-            for (auto e : o_nets)
+            auto formatted   = get_net_name(n);
+            std::string name = formatted;
+
+            u32 cnt = 0;
+            while (used_names.find(name) != used_names.end())
             {
-                if (e->get_name() == "'1'")
-                    continue;
-                m_vcc_names[e]                                = this->get_net_name(e);
-                m_vcc_names_str_to_net[this->get_net_name(e)] = e;
-                m_only_wire_names.erase(e);
-                m_only_wire_names_str_to_net.erase(this->get_net_name(e));
+                name = formatted + "_" + std::to_string(cnt);
+                cnt++;
             }
+
+            used_names.insert(name);
+            m_printable_signal_names[n]               = name;
+            m_printable_signal_names_str_to_net[name] = n;
+        };
+
+        for (auto n : m_netlist->get_global_input_nets())
+        {
+            find_alias(n);
+            m_input_net_names.push_back(m_printable_signal_names[n]);
         }
-        //gnd gates
-        for (auto n : m_netlist->get_gnd_gates())
+        for (auto n : m_netlist->get_global_output_nets())
         {
-            std::set<Net*> o_nets = n->get_fan_out_nets();
-            for (auto e : o_nets)
-            {
-                if (e->get_name() == "'0'")
-                    continue;
-                m_gnd_names[e]                                = this->get_net_name(e);
-                m_gnd_names_str_to_net[this->get_net_name(e)] = e;
-                m_only_wire_names.erase(e);
-                m_only_wire_names_str_to_net.erase(this->get_net_name(e));
-            }
+            find_alias(n);
+            m_output_net_names.push_back(m_printable_signal_names[n]);
+        }
+        for (auto n : nets)
+        {
+            find_alias(n);
         }
     }
 
@@ -256,29 +202,29 @@ namespace hal
         *m_stream << "entity " << entity_name << " is" << std::endl;
         *m_stream << "  port (" << std::endl;
         bool begin = true;
-        for (auto in_name : m_in_names_str_to_net)
+        for (auto in_name : m_input_net_names)
         {
             if (begin)
             {
-                *m_stream << in_name.first << " : in STD_LOGIC := 'X'";
+                *m_stream << in_name << " : in STD_LOGIC";
                 begin = false;
             }
             else
             {
-                *m_stream << "; " << std::endl << "  " << in_name.first << " : in STD_LOGIC := 'X'";
+                *m_stream << "; " << std::endl << "  " << in_name << " : in STD_LOGIC";
             }
         }
 
-        for (auto out_name : m_out_names_str_to_net)
+        for (auto out_name : m_output_net_names)
         {
             if (begin)
             {
-                *m_stream << out_name.first << " : out STD_LOGIC";
+                *m_stream << out_name << " : out STD_LOGIC";
                 begin = false;
             }
             else
             {
-                *m_stream << "; " << std::endl << "  " << out_name.first << " : out STD_LOGIC";
+                *m_stream << "; " << std::endl << "  " << out_name << " : out STD_LOGIC";
             }
         }
 
@@ -290,13 +236,18 @@ namespace hal
     void HDLWriterVHDL::print_signal_definition_vhdl()
     {
         //Declare all wires
-
         std::vector<std::tuple<std::string, Net*>> nets;
-        for (auto name : m_only_wire_names_str_to_net)
+        for (auto it : m_printable_signal_names_str_to_net)
         {
-            if (name.second->get_name() == "'1'" || name.second->get_name() == "'0'")
+            if (it.second->get_name() == "'1'" || it.second->get_name() == "'0'")
+            {
                 continue;
-            nets.emplace_back(name.first, name.second);
+            }
+            if (it.second->is_global_input_net() || it.second->is_global_output_net())
+            {
+                continue;
+            }
+            nets.emplace_back(it.first, it.second);
         }
 
         std::sort(nets.begin(), nets.end(), [](const std::tuple<std::string, Net*>& a, const std::tuple<std::string, Net*>& b) -> bool { return std::get<1>(a)->get_id() < std::get<1>(b)->get_id(); });
@@ -304,18 +255,6 @@ namespace hal
         for (auto tup : nets)
         {
             *m_stream << "  signal " << std::get<0>(tup) << " : STD_LOGIC;" << std::endl;
-            m_final_signal_names.insert(std::get<0>(tup));
-        }
-
-        for (auto name : m_vcc_names_str_to_net)
-        {
-            *m_stream << "  signal " << name.first << " : STD_LOGIC := '1';" << std::endl;
-            m_final_signal_names.insert(name.first);
-        }
-        for (auto name : m_gnd_names_str_to_net)
-        {
-            *m_stream << "  signal " << name.first << " : STD_LOGIC := '0';" << std::endl;
-            m_final_signal_names.insert(name.first);
         }
     }
 
@@ -325,12 +264,16 @@ namespace hal
         std::vector<Gate*> gates(unsorted_gates.begin(), unsorted_gates.end());
         std::sort(gates.begin(), gates.end(), [](Gate* a, Gate* b) -> bool { return a->get_id() < b->get_id(); });
 
-        for (auto&& gate : gates)
+        for (auto& gate : gates)
         {
-            if (gate->get_type()->get_name() == "GLOBAL_GND" || gate->get_type()->get_name() == "GLOBAL_VCC")
+            if (gate->is_gnd_gate() || gate->is_vcc_gate())
+            {
                 continue;
-            auto gate_name = get_gate_name(gate);
-            while (m_final_signal_names.find(gate_name) != m_final_signal_names.end())
+            }
+
+            auto formatted = get_gate_name(gate);
+            auto gate_name = formatted;
+            while (m_printable_signal_names_str_to_net.find(gate_name) != m_printable_signal_names_str_to_net.end())
             {
                 gate_name += "_inst";
             }
@@ -458,10 +401,8 @@ namespace hal
 
     bool HDLWriterVHDL::print_gate_signal_list_vhdl(Gate* n, std::vector<std::string> port_types, bool is_first, std::function<Net*(std::string)> get_net_fkt)
     {
-        std::vector<std::string> port_types_sorted;
-        std::copy(port_types.begin(), port_types.end(), std::back_inserter(port_types_sorted));
-        std::sort(port_types_sorted.begin(), port_types_sorted.end());
-        for (auto&& port_type : port_types_sorted)
+        std::sort(port_types.begin(), port_types.end());
+        for (auto& port_type : port_types)
         {
             Net* e = get_net_fkt(port_type);
             if (e == nullptr)
@@ -474,7 +415,19 @@ namespace hal
                 {
                     *m_stream << "," << std::endl;
                 }
-                *m_stream << "   " << port_type << " => " << m_printable_signal_names.find(e)->second;
+                auto srcs = e->get_sources();
+                if (std::any_of(srcs.begin(), srcs.end(), [](auto src) { return src.get_gate()->is_vcc_gate(); }))
+                {
+                    *m_stream << "   " << port_type << " => '1'";
+                }
+                else if (std::any_of(srcs.begin(), srcs.end(), [](auto src) { return src.get_gate()->is_gnd_gate(); }))
+                {
+                    *m_stream << "   " << port_type << " => '0'";
+                }
+                else
+                {
+                    *m_stream << "   " << port_type << " => " << m_printable_signal_names.find(e)->second;
+                }
                 is_first = false;
             }
         }
