@@ -117,20 +117,20 @@ $(function() {
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">class </span>Module;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">class </span>Endpoint;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="../../d5/d57/classhal_1_1Gate.html">   52</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> : <span class="keyword">public</span> <a class="code" href="../../d1/d7d/classhal_1_1DataContainer.html">DataContainer</a>, <span class="keyword">public</span> std::enable_shared_from_this&lt;Gate&gt;</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="../../d5/d57/classhal_1_1Gate.html">   52</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> : <span class="keyword">public</span> <a class="code" href="../../d1/d7d/classhal_1_1DataContainer.html">DataContainer</a></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    {</div>
 <div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="../../d5/d57/classhal_1_1Gate.html#a71851ef81c1a491be6395f4c883218de">   54</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="../../d4/da4/def_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> get_id() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        std::shared_ptr&lt;Netlist&gt; get_netlist() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <a class="code" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a>* get_netlist() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        std::string get_name() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">void</span> set_name(<span class="keyword">const</span> std::string&amp; name);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        std::shared_ptr&lt;const GateType&gt; get_type() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* get_type() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">bool</span> has_location() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
@@ -146,7 +146,7 @@ $(function() {
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        std::pair&lt;float, float&gt; get_location() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        std::shared_ptr&lt;Module&gt; get_module() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>* get_module() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <a class="code" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> get_boolean_function(std::string name = <span class="stringliteral">&quot;&quot;</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
@@ -162,9 +162,9 @@ $(function() {
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordtype">bool</span> unmark_gnd_gate();</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordtype">bool</span> is_vcc_gate() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordtype">bool</span> is_vcc_gate();</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordtype">bool</span> is_gnd_gate() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordtype">bool</span> is_gnd_gate();</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="comment">/*</span></div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="comment">         *      pin specific functions</span></div>
@@ -174,26 +174,26 @@ $(function() {
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        std::vector&lt;std::string&gt; get_output_pins() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        std::set&lt;std::shared_ptr&lt;Net&gt;&gt; get_fan_in_nets() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        std::set&lt;Net*&gt; get_fan_in_nets() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        std::shared_ptr&lt;Net&gt; get_fan_in_net(<span class="keyword">const</span> std::string&amp; pin_type) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        <a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* get_fan_in_net(<span class="keyword">const</span> std::string&amp; pin_type) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160; </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        std::set&lt;std::shared_ptr&lt;Net&gt;&gt; get_fan_out_nets() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        std::set&lt;Net*&gt; get_fan_out_nets() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        std::shared_ptr&lt;Net&gt; get_fan_out_net(<span class="keyword">const</span> std::string&amp; pin_type) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* get_fan_out_net(<span class="keyword">const</span> std::string&amp; pin_type) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        std::vector&lt;std::shared_ptr&lt;Gate&gt;&gt; get_unique_predecessors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> std::string&amp; starting_pin, <span class="keyword">const</span> <a class="code" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a>&amp; ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        std::vector&lt;Gate*&gt; get_unique_predecessors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> std::string&amp; starting_pin, <span class="keyword">const</span> <a class="code" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a>&amp; ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        std::vector&lt;Endpoint&gt; get_predecessors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> std::string&amp; starting_pin, <span class="keyword">const</span> <a class="code" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a>&amp; ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <a class="code" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> get_predecessor(<span class="keyword">const</span> std::string&amp; which_pin) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        std::vector&lt;std::shared_ptr&lt;Gate&gt;&gt; get_unique_successors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> std::string&amp; starting_pin, <span class="keyword">const</span> <a class="code" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a>&amp; ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        std::vector&lt;Gate*&gt; get_unique_successors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> std::string&amp; starting_pin, <span class="keyword">const</span> <a class="code" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a>&amp; ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        std::vector&lt;Endpoint&gt; get_successors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> std::string&amp; starting_pin, <span class="keyword">const</span> <a class="code" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a>&amp; ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>(std::shared_ptr&lt;Netlist&gt; <span class="keyword">const</span> g, <a class="code" href="../../d4/da4/def_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, std::shared_ptr&lt;const GateType&gt; gt, <span class="keyword">const</span> std::string&amp; name, <span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y);</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>(<a class="code" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a>* nl, <a class="code" href="../../d4/da4/def_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* gt, <span class="keyword">const</span> std::string&amp; name, <span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y);</div>
 <div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
 <div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>(<span class="keyword">const</span> <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>&amp;) = <span class="keyword">delete</span>;               <span class="comment">//disable copy-constructor</span></div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>&amp;) = <span class="keyword">delete</span>;    <span class="comment">//disable copy-assignment</span></div>
@@ -201,7 +201,7 @@ $(function() {
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <a class="code" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> get_lut_function(<span class="keyword">const</span> std::string&amp; pin) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="comment">/* pointer to corresponding netlist parent */</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        std::shared_ptr&lt;Netlist&gt; m_netlist;</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <a class="code" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a>* m_netlist;</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="comment">/* id of the gate */</span></div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <a class="code" href="../../d4/da4/def_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_id;</div>
@@ -210,18 +210,18 @@ $(function() {
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        std::string m_name;</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
 <div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="comment">/* type of the gate */</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        std::shared_ptr&lt;const GateType&gt; m_type;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* m_type;</div>
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <span class="comment">/* location */</span></div>
 <div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        <span class="keywordtype">float</span> m_x;</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordtype">float</span> m_y;</div>
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="comment">/* owning module */</span></div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        std::shared_ptr&lt;Module&gt; m_module;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <a class="code" href="../../d1/d10/classhal_1_1Module.html">Module</a>* m_module;</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="comment">/* connected nets */</span></div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        std::map&lt;std::string, std::shared_ptr&lt;Net&gt;&gt; m_in_nets;</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        std::map&lt;std::string, std::shared_ptr&lt;Net&gt;&gt; m_out_nets;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        std::map&lt;std::string, Net*&gt; m_in_nets;</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        std::map&lt;std::string, Net*&gt; m_out_nets;</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160; </div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <span class="comment">/* dedicated functions */</span></div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        std::map&lt;std::string, BooleanFunction&gt; m_functions;</div>
@@ -235,15 +235,19 @@ $(function() {
 <div class="ttc" id="aclasshal_1_1BooleanFunction_html"><div class="ttname"><a href="../../d6/d9d/classhal_1_1BooleanFunction.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> boolean_function.h:42</div></div>
 <div class="ttc" id="aclasshal_1_1NetlistInternalManager_html"><div class="ttname"><a href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">hal::NetlistInternalManager</a></div><div class="ttdef"><b>Definition:</b> netlist_internal_manager.h:41</div></div>
 <div class="ttc" id="agate__type_8h_html"><div class="ttname"><a href="../../db/dd6/gate__type_8h.html">gate_type.h</a></div></div>
+<div class="ttc" id="aclasshal_1_1Module_html"><div class="ttname"><a href="../../d1/d10/classhal_1_1Module.html">hal::Module</a></div><div class="ttdef"><b>Definition:</b> module.h:51</div></div>
 <div class="ttc" id="aboolean__function_8h_html"><div class="ttname"><a href="../../dc/d6d/boolean__function_8h.html">boolean_function.h</a></div></div>
+<div class="ttc" id="aclasshal_1_1GateType_html"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> gate_type.h:38</div></div>
+<div class="ttc" id="aclasshal_1_1Netlist_html"><div class="ttname"><a href="../../dc/d06/classhal_1_1Netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> netlist.h:51</div></div>
 <div class="ttc" id="aclasshal_1_1DataContainer_html"><div class="ttname"><a href="../../d1/d7d/classhal_1_1DataContainer.html">hal::DataContainer</a></div><div class="ttdef"><b>Definition:</b> data_container.h:39</div></div>
 <div class="ttc" id="adata__container_8h_html"><div class="ttname"><a href="../../d1/df3/data__container_8h.html">data_container.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:28</div></div>
 <div class="ttc" id="aendpoint_8h_html"><div class="ttname"><a href="../../d5/d97/endpoint_8h.html">endpoint.h</a></div></div>
+<div class="ttc" id="aclasshal_1_1Net_html"><div class="ttname"><a href="../../de/db0/classhal_1_1Net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> net.h:50</div></div>
 <div class="ttc" id="aclasshal_1_1Endpoint_html"><div class="ttname"><a href="../../d9/df8/classhal_1_1Endpoint.html">hal::Endpoint</a></div><div class="ttdef"><b>Definition:</b> endpoint.h:38</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 14 2020 11:57:49 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 14 2020 15:31:12 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

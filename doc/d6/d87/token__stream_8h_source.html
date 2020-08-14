@@ -200,7 +200,7 @@ $(function() {
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            {</div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                <span class="keywordflow">if</span> (throw_on_error)</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                {</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                    <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; but reached the end of the stream&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                    <span class="keywordflow">throw</span> <a class="code" href="../../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html">TokenStreamException</a>({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; but reached the end of the stream&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                }</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            }</div>
@@ -209,7 +209,7 @@ $(function() {
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            {</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                <span class="keywordflow">if</span> (throw_on_error)</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                {</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                    <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; but got &#39;&quot;</span> + at(m_pos).string + <span class="stringliteral">&quot;&#39;&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                    <span class="keywordflow">throw</span> <a class="code" href="../../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html">TokenStreamException</a>({<span class="stringliteral">&quot;expected Token &#39;&quot;</span> + expected + <span class="stringliteral">&quot;&#39; but got &#39;&quot;</span> + at(m_pos).string + <span class="stringliteral">&quot;&#39;&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                }</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            }</div>
@@ -223,7 +223,7 @@ $(function() {
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keyword">auto</span> found = find_next(match, end, level_aware);</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;            <span class="keywordflow">if</span> (found &gt; size() &amp;&amp; throw_on_error)</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            {</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;match Token &#39;&quot;</span> + match + <span class="stringliteral">&quot;&#39; not found&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="../../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html">TokenStreamException</a>({<span class="stringliteral">&quot;match Token &#39;&quot;</span> + match + <span class="stringliteral">&quot;&#39; not found&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            }</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            m_pos = std::min(size(), found);</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            <span class="keywordflow">return</span> at(m_pos - 1);</div>
@@ -234,7 +234,7 @@ $(function() {
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            <span class="keyword">auto</span> found = find_next(match, end, level_aware);</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            <span class="keywordflow">if</span> (found &gt; size() &amp;&amp; throw_on_error)</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            {</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;match Token &#39;&quot;</span> + match + <span class="stringliteral">&quot;&#39; not found&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="../../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html">TokenStreamException</a>({<span class="stringliteral">&quot;match Token &#39;&quot;</span> + match + <span class="stringliteral">&quot;&#39; not found&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            }</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            <span class="keyword">auto</span> end_pos = std::min(size(), found);</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            <a class="code" href="../../db/d9d/classhal_1_1TokenStream.html">TokenStream</a> res(m_increase_level_tokens, m_decrease_level_tokens);</div>
@@ -249,7 +249,7 @@ $(function() {
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;            <span class="keyword">auto</span> found     = find_next(match, end, level_aware);</div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            <span class="keywordflow">if</span> (found &gt; size() &amp;&amp; throw_on_error)</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            {</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;match Token &#39;&quot;</span> + match + <span class="stringliteral">&quot;&#39; not found&quot;</span>, start_line});</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="../../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html">TokenStreamException</a>({<span class="stringliteral">&quot;match Token &#39;&quot;</span> + match + <span class="stringliteral">&quot;&#39; not found&quot;</span>, start_line});</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            }</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            <span class="keyword">auto</span> end_pos = std::min(size(), found);</div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            T result;</div>
@@ -293,7 +293,7 @@ $(function() {
 <div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        {</div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;            <span class="keywordflow">if</span> (position &gt; m_data.size())</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;            {</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="../../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html">TokenStreamException</a>({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;            }</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;            <span class="keywordflow">return</span> m_data[position];</div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        }</div>
@@ -302,7 +302,7 @@ $(function() {
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;<span class="keyword">        </span>{</div>
 <div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            <span class="keywordflow">if</span> (position &gt; m_data.size())</div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;            {</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;                <span class="keywordflow">throw</span> TokenStreamException({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;                <span class="keywordflow">throw</span> <a class="code" href="../../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html">TokenStreamException</a>({<span class="stringliteral">&quot;reached the end of the stream&quot;</span>, get_current_line_number()});</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            }</div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <span class="keywordflow">return</span> m_data[position];</div>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        }</div>
@@ -416,7 +416,7 @@ $(function() {
 <div class="ttc" id="aclasshal_1_1TokenStream_html_aa392c95edbe32bc27ed99c8cc56339c8"><div class="ttname"><a href="../../db/d9d/classhal_1_1TokenStream.html#aa392c95edbe32bc27ed99c8cc56339c8">hal::TokenStream::TokenStream</a></div><div class="ttdeci">TokenStream(const std::vector&lt; Token&lt; T &gt;&gt; &amp;init, const std::vector&lt; T &gt; &amp;increase_level_tokens={&quot;(&quot;}, const std::vector&lt; T &gt; &amp;decrease_level_tokens={&quot;)&quot;})</div><div class="ttdef"><b>Definition:</b> token_stream.h:156</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 14 2020 11:57:48 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 14 2020 15:31:12 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

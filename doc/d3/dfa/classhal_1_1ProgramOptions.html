@@ -112,9 +112,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a049d4dd001e48c41547104b520132fd7"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a049d4dd001e48c41547104b520132fd7">REQUIRED_PARAM</a> = &quot;__REQUIRED_PARAM__&quot;</td></tr>
-<tr class="memdesc:a049d4dd001e48c41547104b520132fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">constant to specify that a parameter is required and does not have a default value.  <a href="../../d3/dfa/classhal_1_1ProgramOptions.html#a049d4dd001e48c41547104b520132fd7">More...</a><br /></td></tr>
-<tr class="separator:a049d4dd001e48c41547104b520132fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af558ab13189b6d4442edfd7bff2a832d"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#af558ab13189b6d4442edfd7bff2a832d">A_REQUIRED_PARAMETER</a> = &quot;__A_REQUIRED_PARAMETER__&quot;</td></tr>
+<tr class="memdesc:af558ab13189b6d4442edfd7bff2a832d"><td class="mdescLeft">&#160;</td><td class="mdescRight">constant to specify that a parameter is required and does not have a default value.  <a href="../../d3/dfa/classhal_1_1ProgramOptions.html#af558ab13189b6d4442edfd7bff2a832d">More...</a><br /></td></tr>
+<tr class="separator:af558ab13189b6d4442edfd7bff2a832d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad9bbdb5db01e3193bafe40890a1e900a"></a>
@@ -122,9 +122,6 @@ Static Public Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">hal::ProgramOptions::ProgramOptions </td>
@@ -134,11 +131,6 @@ Static Public Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p>Constructor, optionally takes a name for grouping in <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a34dc05683ea51eaa706c5b0d30c94820">get_options_string()</a></p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -211,7 +203,7 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The parsed arguments. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d0/de1/group__core.html#ga2258fcb2d8e5c8f15437e9c4dea3483d">die</a>, <a class="el" href="../../d6/d5e/namespacehal_1_1core__utils.html#a14e98ca721f090b35985fb63070ce4bc">hal::core_utils::join()</a>, <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a049d4dd001e48c41547104b520132fd7">REQUIRED_PARAM</a>, and <a class="el" href="../../d8/d68/classhal_1_1ProgramArguments.html#aac1f1a5341ba9dff148302ae419ffebf">hal::ProgramArguments::set_option()</a>.</p>
+<p class="reference">References <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#af558ab13189b6d4442edfd7bff2a832d">A_REQUIRED_PARAMETER</a>, <a class="el" href="../../d0/de1/group__core.html#ga2258fcb2d8e5c8f15437e9c4dea3483d">die</a>, <a class="el" href="../../d6/d5e/namespacehal_1_1core__utils.html#a14e98ca721f090b35985fb63070ce4bc">hal::core_utils::join()</a>, and <a class="el" href="../../d8/d68/classhal_1_1ProgramArguments.html#af747a0b76c84b11d3d44fa998038df79">hal::ProgramArguments::set_option()</a>.</p>
 
 </div>
 </div>
@@ -297,7 +289,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Adds a new option with a single flag.<br  />
  The size of <code>parameters</code> is the number of parameters this option gets.<br  />
- Use <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a049d4dd001e48c41547104b520132fd7" title="constant to specify that a parameter is required and does not have a default value.">ProgramOptions::REQUIRED_PARAM</a> to set a parameter as required.<br  />
+ Use <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#af558ab13189b6d4442edfd7bff2a832d" title="constant to specify that a parameter is required and does not have a default value.">ProgramOptions::A_REQUIRED_PARAMETER</a> to set a parameter as required.<br  />
  The values in <code>parameters</code> contain default values, which are returned by get_parameter_list() / get_parameter() if the user did not supply parameters himself.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -309,7 +301,7 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d2/db8/namespacehal_1_1HDLWriterDispatcher.html#a1a4f5ec353516612898b00ce507d2362">hal::HDLWriterDispatcher::get_cli_options()</a>, <a class="el" href="../../d2/d8e/namespacehal_1_1HDLParserDispatcher.html#af546300a864d1220b99f1686897b236b">hal::HDLParserDispatcher::get_cli_options()</a>, and <a class="el" href="../../d5/d2e/classhal_1_1LogManager.html#a6a016672969496755f2f19148f9b30d4">hal::LogManager::get_option_descriptions()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d60/namespacehal_1_1hdl__writer__manager.html#afdc1add5b66fad5bc38f2251282ae812">hal::hdl_writer_manager::get_cli_options()</a>, and <a class="el" href="../../d5/d2e/classhal_1_1LogManager.html#a6a016672969496755f2f19148f9b30d4">hal::LogManager::get_option_descriptions()</a>.</p>
 
 </div>
 </div>
@@ -346,7 +338,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Adds a new option with a multiple flags.<br  />
  The size of <code>parameters</code> is the number of parameters this option gets.<br  />
- Use <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a049d4dd001e48c41547104b520132fd7" title="constant to specify that a parameter is required and does not have a default value.">ProgramOptions::REQUIRED_PARAM</a> to set a parameter as required.<br  />
+ Use <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#af558ab13189b6d4442edfd7bff2a832d" title="constant to specify that a parameter is required and does not have a default value.">ProgramOptions::A_REQUIRED_PARAMETER</a> to set a parameter as required.<br  />
  The values in <code>parameters</code> contain default values, which are returned by get_parameter_list() / get_parameter() if the user did not supply parameters himself.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -358,7 +350,7 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a751129e8ad6e0b07d7258279e3c59b85">is_registered()</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a049d4dd001e48c41547104b520132fd7">REQUIRED_PARAM</a>, and <a class="el" href="../../d6/d5e/namespacehal_1_1core__utils.html#aa0956f3c9b4c6f06aed312587b6a870b">hal::core_utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#af558ab13189b6d4442edfd7bff2a832d">A_REQUIRED_PARAMETER</a>, <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a751129e8ad6e0b07d7258279e3c59b85">is_registered()</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, and <a class="el" href="../../d6/d5e/namespacehal_1_1core__utils.html#aa0956f3c9b4c6f06aed312587b6a870b">hal::core_utils::trim()</a>.</p>
 
 </div>
 </div>
@@ -445,8 +437,8 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a049d4dd001e48c41547104b520132fd7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a049d4dd001e48c41547104b520132fd7">&#9670;&nbsp;</a></span>REQUIRED_PARAM</h2>
+<a id="af558ab13189b6d4442edfd7bff2a832d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af558ab13189b6d4442edfd7bff2a832d">&#9670;&nbsp;</a></span>A_REQUIRED_PARAMETER</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -455,7 +447,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::string hal::ProgramOptions::REQUIRED_PARAM = &quot;__REQUIRED_PARAM__&quot;</td>
+          <td class="memname">const std::string hal::ProgramOptions::A_REQUIRED_PARAMETER = &quot;__A_REQUIRED_PARAMETER__&quot;</td>
         </tr>
       </table>
   </td>
@@ -467,7 +459,7 @@ Static Public Attributes</h2></td></tr>
 
 <p>constant to specify that a parameter is required and does not have a default value. </p>
 
-<p class="reference">Referenced by <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a5fe1cdf2ec39e1dd01093c45dbf8c6cb">add()</a>, <a class="el" href="../../d2/d8e/namespacehal_1_1HDLParserDispatcher.html#af546300a864d1220b99f1686897b236b">hal::HDLParserDispatcher::get_cli_options()</a>, <a class="el" href="../../d5/d2e/classhal_1_1LogManager.html#a6a016672969496755f2f19148f9b30d4">hal::LogManager::get_option_descriptions()</a>, and <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a92aa887fce50724339aebea1ab3836ee">parse()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a5fe1cdf2ec39e1dd01093c45dbf8c6cb">add()</a>, <a class="el" href="../../db/d60/namespacehal_1_1hdl__writer__manager.html#afdc1add5b66fad5bc38f2251282ae812">hal::hdl_writer_manager::get_cli_options()</a>, <a class="el" href="../../d5/d2e/classhal_1_1LogManager.html#a6a016672969496755f2f19148f9b30d4">hal::LogManager::get_option_descriptions()</a>, and <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a92aa887fce50724339aebea1ab3836ee">parse()</a>.</p>
 
 </div>
 </div>
@@ -478,7 +470,7 @@ Static Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 14 2020 11:57:49 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 14 2020 15:31:12 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -123,22 +123,24 @@ $(function() {
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordtype">bool</span> is_option_set(<span class="keyword">const</span> std::string&amp; flag) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordtype">void</span> set_option(<span class="keyword">const</span> std::string&amp; flag, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; parameters);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordtype">bool</span> set_option(<span class="keyword">const</span> std::string&amp; flag, <span class="keyword">const</span> std::set&lt;std::string&gt;&amp; equivalent_flags, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; parameters);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        std::string get_parameter(<span class="keyword">const</span> std::string&amp; flag) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        std::vector&lt;std::string&gt; get_parameters(<span class="keyword">const</span> std::string&amp; flag) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordtype">int</span> m_argc;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>** m_argv;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        std::map&lt;std::set&lt;std::string&gt;, std::vector&lt;std::string&gt;&gt; m_set_options;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        std::vector&lt;std::string&gt; m_given_flags;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    };</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordtype">void</span> set_option(<span class="keyword">const</span> std::string&amp; flag, <span class="keyword">const</span> std::string&amp; parameter);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">void</span> set_option(<span class="keyword">const</span> std::string&amp; flag, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; parameters);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">bool</span> set_option(<span class="keyword">const</span> std::string&amp; flag, <span class="keyword">const</span> std::set&lt;std::string&gt;&amp; equivalent_flags, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; parameters);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        std::string get_parameter(<span class="keyword">const</span> std::string&amp; flag) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        std::vector&lt;std::string&gt; get_parameters(<span class="keyword">const</span> std::string&amp; flag) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keywordtype">int</span> m_argc;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>** m_argv;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        std::map&lt;std::set&lt;std::string&gt;, std::vector&lt;std::string&gt;&gt; m_set_options;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        std::vector&lt;std::string&gt; m_given_flags;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    };</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="adef_8h_html"><div class="ttname"><a href="../../d4/da4/def_8h.html">def.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1ProgramArguments_html"><div class="ttname"><a href="../../d8/d68/classhal_1_1ProgramArguments.html">hal::ProgramArguments</a></div><div class="ttdef"><b>Definition:</b> program_arguments.h:41</div></div>
@@ -146,7 +148,7 @@ $(function() {
 <div class="ttc" id="aarch__linux_8h_html_afea66f9a6812c2354b544f31910fd72f"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a></div><div class="ttdeci">#define CORE_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:26</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 14 2020 11:57:48 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 14 2020 15:31:12 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

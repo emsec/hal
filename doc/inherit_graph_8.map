@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d9/df8/classhal_1_1Endpoint.html" title=" " alt="" coords="5,5,112,32"/>
+<area shape="rect" id="node1" href="$d1/d7d/classhal_1_1DataContainer.html" title=" " alt="" coords="5,56,149,83"/>
+<area shape="rect" id="node2" href="$d5/d57/classhal_1_1Gate.html" title=" " alt="" coords="206,5,287,32"/>
+<area shape="rect" id="node3" href="$d1/d10/classhal_1_1Module.html" title=" " alt="" coords="197,56,296,83"/>
+<area shape="rect" id="node4" href="$de/db0/classhal_1_1Net.html" title=" " alt="" coords="210,107,283,133"/>
 </map>

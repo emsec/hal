@@ -134,16 +134,16 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a9bc9e199f4a5100471248f9deb63bc7a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a9bc9e199f4a5100471248f9deb63bc7a">hal::hal_file_manager::serialize</a> (const std::filesystem::path &amp;file, std::shared_ptr&lt; Netlist &gt; netlist, rapidjson::Document &amp;document)</td></tr>
-<tr class="separator:a9bc9e199f4a5100471248f9deb63bc7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add6143551a7265afe50789813121e6fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#add6143551a7265afe50789813121e6fe">hal::hal_file_manager::deserialize</a> (const std::filesystem::path &amp;file, std::shared_ptr&lt; Netlist &gt; netlist, rapidjson::Document &amp;document)</td></tr>
-<tr class="separator:add6143551a7265afe50789813121e6fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa33b74e85dc748c3089b8b99772233bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#aa33b74e85dc748c3089b8b99772233bb">hal::hal_file_manager::register_on_serialize_callback</a> (const std::string &amp;identifier, std::function&lt; bool(const std::filesystem::path &amp;, std::shared_ptr&lt; Netlist &gt;, rapidjson::Document &amp;)&gt; callback)</td></tr>
-<tr class="separator:aa33b74e85dc748c3089b8b99772233bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b47eacaed4789f9b59edfff7653b78c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a9b47eacaed4789f9b59edfff7653b78c">hal::hal_file_manager::serialize</a> (const std::filesystem::path &amp;file, Netlist *netlist, rapidjson::Document &amp;document)</td></tr>
+<tr class="separator:a9b47eacaed4789f9b59edfff7653b78c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e315518469b1dc3a7a28df27fcb03f6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a3e315518469b1dc3a7a28df27fcb03f6">hal::hal_file_manager::deserialize</a> (const std::filesystem::path &amp;file, Netlist *netlist, rapidjson::Document &amp;document)</td></tr>
+<tr class="separator:a3e315518469b1dc3a7a28df27fcb03f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67da85b5fc94a26bd284fc1124644d69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a67da85b5fc94a26bd284fc1124644d69">hal::hal_file_manager::register_on_serialize_callback</a> (const std::string &amp;identifier, std::function&lt; bool(const std::filesystem::path &amp;, Netlist *netlist, rapidjson::Document &amp;)&gt; callback)</td></tr>
+<tr class="separator:a67da85b5fc94a26bd284fc1124644d69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e1225189163b21b43fe1dec9e702a53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a4e1225189163b21b43fe1dec9e702a53">hal::hal_file_manager::unregister_on_serialize_callback</a> (const std::string &amp;identifier)</td></tr>
 <tr class="separator:a4e1225189163b21b43fe1dec9e702a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b514dac263842034a83f5b47a3d2b35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a8b514dac263842034a83f5b47a3d2b35">hal::hal_file_manager::register_on_deserialize_callback</a> (const std::string &amp;identifier, std::function&lt; bool(const std::filesystem::path &amp;, std::shared_ptr&lt; Netlist &gt;, rapidjson::Document &amp;)&gt; callback)</td></tr>
-<tr class="separator:a8b514dac263842034a83f5b47a3d2b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acff9ce1ce2b035e421128ff67c739479"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#acff9ce1ce2b035e421128ff67c739479">hal::hal_file_manager::register_on_deserialize_callback</a> (const std::string &amp;identifier, std::function&lt; bool(const std::filesystem::path &amp;, Netlist *netlist, rapidjson::Document &amp;)&gt; callback)</td></tr>
+<tr class="separator:acff9ce1ce2b035e421128ff67c739479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21e15d2eb9ddbc3e429a5df8bafda532"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a21e15d2eb9ddbc3e429a5df8bafda532">hal::hal_file_manager::unregister_on_deserialize_callback</a> (const std::string &amp;identifier)</td></tr>
 <tr class="separator:a21e15d2eb9ddbc3e429a5df8bafda532"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -165,7 +165,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 14 2020 11:57:49 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 14 2020 15:31:12 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

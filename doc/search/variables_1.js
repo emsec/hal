@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['cli_1166',['cli',['../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd',1,'plugin_interface_base.h']]]
+  ['base_1129',['base',['../d5/df3/plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9',1,'plugin_interface_base.h']]]
 ];

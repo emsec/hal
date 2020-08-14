@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['required_5fparam_1174',['REQUIRED_PARAM',['../d3/dfa/classhal_1_1ProgramOptions.html#a049d4dd001e48c41547104b520132fd7',1,'hal::ProgramOptions']]]
+  ['path_1137',['path',['../d3/d1f/structhal_1_1LogManager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357',1,'hal::LogManager::log_sink']]]
 ];

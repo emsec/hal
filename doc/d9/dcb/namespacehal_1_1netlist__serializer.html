@@ -76,14 +76,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a3e351dcf267c5de9f6758fc8ccf9b6ea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#a3e351dcf267c5de9f6758fc8ccf9b6ea">serialize_to_file</a> (std::shared_ptr&lt; <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &gt; nl, const std::filesystem::path &amp;hal_file)</td></tr>
-<tr class="separator:a3e351dcf267c5de9f6758fc8ccf9b6ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf1907f99adb6289792ad8d986a2cfa3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> std::shared_ptr&lt; <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#abf1907f99adb6289792ad8d986a2cfa3">deserialize_from_file</a> (const std::filesystem::path &amp;hal_file)</td></tr>
-<tr class="separator:abf1907f99adb6289792ad8d986a2cfa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af85c01794d3aaf5f25f970e2465d69b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#af85c01794d3aaf5f25f970e2465d69b9">serialize_to_file</a> (<a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> *nl, const std::filesystem::path &amp;hal_file)</td></tr>
+<tr class="separator:af85c01794d3aaf5f25f970e2465d69b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae74f82d776171fbdf0d63e3f8b918eb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> std::unique_ptr&lt; <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#ae74f82d776171fbdf0d63e3f8b918eb1">deserialize_from_file</a> (const std::filesystem::path &amp;hal_file)</td></tr>
+<tr class="separator:ae74f82d776171fbdf0d63e3f8b918eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a3e351dcf267c5de9f6758fc8ccf9b6ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e351dcf267c5de9f6758fc8ccf9b6ea">&#9670;&nbsp;</a></span>serialize_to_file()</h2>
+<a id="af85c01794d3aaf5f25f970e2465d69b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af85c01794d3aaf5f25f970e2465d69b9">&#9670;&nbsp;</a></span>serialize_to_file()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -91,7 +91,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">bool hal::netlist_serializer::serialize_to_file </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> *&#160;</td>
           <td class="paramname"><em>nl</em>, </td>
         </tr>
         <tr>
@@ -118,18 +118,18 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d4/d84/netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e">DURATION</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a9bc9e199f4a5100471248f9deb63bc7a">hal::hal_file_manager::serialize()</a>.</p>
+<p class="reference">References <a class="el" href="../../d4/d84/netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e">DURATION</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a9b47eacaed4789f9b59edfff7653b78c">hal::hal_file_manager::serialize()</a>.</p>
 
 </div>
 </div>
-<a id="abf1907f99adb6289792ad8d986a2cfa3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf1907f99adb6289792ad8d986a2cfa3">&#9670;&nbsp;</a></span>deserialize_from_file()</h2>
+<a id="ae74f82d776171fbdf0d63e3f8b918eb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae74f82d776171fbdf0d63e3f8b918eb1">&#9670;&nbsp;</a></span>deserialize_from_file()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &gt; hal::netlist_serializer::deserialize_from_file </td>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &gt; hal::netlist_serializer::deserialize_from_file </td>
           <td>(</td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>hal_file</em></td><td>)</td>
@@ -147,16 +147,16 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The deserialized netlist. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#add6143551a7265afe50789813121e6fe">hal::hal_file_manager::deserialize()</a>, <a class="el" href="../../d4/d84/netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e">DURATION</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../d0/de1/group__core.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>.</p>
+<p class="reference">References <a class="el" href="../../d7/d09/namespacehal_1_1hal__file__manager.html#a3e315518469b1dc3a7a28df27fcb03f6">hal::hal_file_manager::deserialize()</a>, <a class="el" href="../../d4/d84/netlist__serializer_8cpp.html#a2abf3f6130ba2e37b47ff418fe01ec3e">DURATION</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../d0/de1/group__core.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../d6/dee/namespacehal_1_1netlist__factory.html#a075da6bcffce665cf41f403a507ec5e6">hal::netlist_factory::load_netlist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d6/dee/namespacehal_1_1netlist__factory.html#a5e7129e68686cddb1b3a5e9fd73ac568">hal::netlist_factory::load_netlist()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 14 2020 11:57:49 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 14 2020 15:31:12 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
