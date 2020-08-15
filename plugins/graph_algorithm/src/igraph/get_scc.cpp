@@ -10,18 +10,18 @@
 
 namespace hal
 {
-    std::set<std::set<std::shared_ptr<Gate>>> plugin_graph_algorithm::get_scc(std::shared_ptr<Netlist> nl)
+    std::set<std::set<Gate*>> plugin_graph_algorithm::get_scc(Netlist* nl)
     {
         if (nl == nullptr)
         {
             log_error(this->get_name(), "{}", "parameter 'nl' is nullptr");
-            return std::set<std::set<std::shared_ptr<Gate>>>();
+            return std::set<std::set<Gate*>>();
         }
 
         // get igraph
-        std::tuple<igraph_t, std::map<int, std::shared_ptr<Gate>>> igraph_tuple = get_igraph_directed(nl);
+        std::tuple<igraph_t, std::map<int, Gate*>> igraph_tuple = get_igraph_directed(nl);
         igraph_t graph                                                          = std::get<0>(igraph_tuple);
-        std::map<int, std::shared_ptr<Gate>> vertex_to_gate                     = std::get<1>(igraph_tuple);
+        std::map<int, Gate*> vertex_to_gate                     = std::get<1>(igraph_tuple);
 
         igraph_vector_t membership, csize;
         igraph_integer_t number_of_clusters;
@@ -32,10 +32,10 @@ namespace hal
         igraph_clusters(&graph, &membership, &csize, &number_of_clusters, IGRAPH_STRONG);
 
         // map back to HAL structures
-        std::map<int, std::set<std::shared_ptr<Gate>>> ssc_membership = get_memberships_for_hal(graph, membership, vertex_to_gate);
+        std::map<int, std::set<Gate*>> ssc_membership = get_memberships_for_hal(graph, membership, vertex_to_gate);
 
         // convert to set
-        std::set<std::set<std::shared_ptr<Gate>>> sccs;
+        std::set<std::set<Gate*>> sccs;
         for (auto scc : ssc_membership)
         {
             sccs.insert(scc.second);

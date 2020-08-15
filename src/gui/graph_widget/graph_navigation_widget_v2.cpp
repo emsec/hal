@@ -46,12 +46,12 @@ namespace hal
             }
             case SelectionRelay::item_type::gate:
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
                 assert(g);
 
                 std::string pin        = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay.m_subfocus_index];
-                std::shared_ptr<Net> n = (direction ? g->get_fan_out_net(pin) : g->get_fan_in_net(pin));
+                Net* n = (direction ? g->get_fan_out_net(pin) : g->get_fan_in_net(pin));
 
                 assert(n);
 
@@ -64,7 +64,7 @@ namespace hal
             }
             case SelectionRelay::item_type::net:
             {
-                std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+                Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
                 assert(n);
                 assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
@@ -78,7 +78,7 @@ namespace hal
             }
             case SelectionRelay::item_type::module:
             {
-                std::shared_ptr<Module> m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+                Module* m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
 
                 assert(m);
 
@@ -106,7 +106,7 @@ namespace hal
         }
     }
 
-    void GraphNavigationWidgetV2::setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction)
+    void GraphNavigationWidgetV2::setup(hal::node origin, Net* via_net, bool direction)
     {
         clear();
         fill_table(direction);
@@ -143,7 +143,7 @@ namespace hal
         // iterate over all sources, respective destinations, of the via net
         for (const Endpoint& e : (direction ? m_via_net->get_destinations() : m_via_net->get_sources()))
         {
-            std::shared_ptr<Gate> g = e.get_gate();
+            Gate* g = e.get_gate();
             if (!g)
             {
                 // skip non-gate endpoints
@@ -154,7 +154,7 @@ namespace hal
             // gate (if we have a module A that contains both the origin and the target
             // gate, then we don't want to offer navigating to that module or any
             // modules further up the hierarchy)
-            std::shared_ptr<Module> common_ancestor;
+            Module* common_ancestor;
             if (m_origin.id == 0)
             {
                 // we're navigating from a net
@@ -171,7 +171,7 @@ namespace hal
                     // this net and use that
                     auto net_sources = m_via_net->get_sources();
                     auto net_destinations = m_via_net->get_destinations();
-                    std::unordered_set<std::shared_ptr<Gate>> net_gates;
+                    std::unordered_set<Gate*> net_gates;
                     for (auto ep : net_sources)
                         net_gates.insert(ep.get_gate());
                     for (auto ep : net_destinations)
@@ -181,13 +181,13 @@ namespace hal
             }
             else if (m_origin.type == hal::node_type::gate)
             {
-                std::shared_ptr<Gate> origin = g_netlist->get_gate_by_id(m_origin.id);
+                Gate* origin = g_netlist->get_gate_by_id(m_origin.id);
                 assert(origin);
                 common_ancestor = gui_utility::first_common_ancestor({}, {origin, g});
             }
             else if (m_origin.type == hal::node_type::module)
             {
-                std::shared_ptr<Module> origin = g_netlist->get_module_by_id(m_origin.id);
+                Module* origin = g_netlist->get_module_by_id(m_origin.id);
                 assert(origin);
                 common_ancestor = gui_utility::first_common_ancestor({origin}, {g});
             }
@@ -213,7 +213,7 @@ namespace hal
             // been created for other gates
             // (if we're navigating from a global in/out net, then common_ancestor
             // is nullptr, so we stop instead when we run out of parents)
-            std::shared_ptr<Module> parent = g->get_module();
+            Module* parent = g->get_module();
             bool reused_item = false;
             while(parent != common_ancestor) {
                 // qDebug() << QString::fromStdString(parent->get_name());

@@ -9,12 +9,12 @@
 
 namespace hal
 {
-    std::set<std::set<std::shared_ptr<Gate>>> plugin_graph_algorithm::get_strongly_connected_components(std::shared_ptr<Netlist> g, std::set<std::shared_ptr<Gate>> gates)
+    std::set<std::set<Gate*>> plugin_graph_algorithm::get_strongly_connected_components(Netlist* g, std::set<Gate*> gates)
     {
         if (g == nullptr)
         {
             log_error(this->get_name(), "{}", "parameter 'g' is nullptr");
-            return std::set<std::set<std::shared_ptr<Gate>>>();
+            return std::set<std::set<Gate*>>();
         }
         /* check validity of gates */
         if (gates.empty())
@@ -26,7 +26,7 @@ namespace hal
             if (current_gate != nullptr)
                 continue;
             log_error(this->get_name(), "{}", "parameter 'gates' contains a nullptr");
-            return std::set<std::set<std::shared_ptr<Gate>>>();
+            return std::set<std::set<Gate*>>();
         }
 
         boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS> boost_graph;
@@ -48,7 +48,7 @@ namespace hal
         }
 
         /* add ordered edges to directed boost graph */
-        std::map<u32, std::shared_ptr<Net>> ordered_nets;
+        std::map<u32, Net*> ordered_nets;
         for (const auto& current_gate : gates)
         {
             for (const auto& net : current_gate->get_fan_out_nets())
@@ -87,10 +87,10 @@ namespace hal
         for (std::vector<int>::size_type i = 0; i != component.size(); ++i)
             component_to_gate_ids[component[i]].insert(vertex_id_to_gate_id[i]);
 
-        std::set<std::set<std::shared_ptr<Gate>>> result;
+        std::set<std::set<Gate*>> result;
         for (auto it_component : component_to_gate_ids)
         {
-            std::set<std::shared_ptr<Gate>> component_set;
+            std::set<Gate*> component_set;
             for (const auto& gate_id : it_component.second)
                 component_set.insert(g->get_gate_by_id(gate_id));
             if (!component_set.empty())

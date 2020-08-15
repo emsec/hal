@@ -40,6 +40,11 @@ namespace hal
         return false;
     }
 
+    void ProgramArguments::set_option(const std::string& flag, const std::string& parameter)
+    {
+        set_option(flag, {}, {parameter});
+    }
+
     void ProgramArguments::set_option(const std::string& flag, const std::vector<std::string>& parameters)
     {
         set_option(flag, {}, parameters);

@@ -49,17 +49,16 @@ namespace hal
          * @param[in] gate_library - The underlying gate library.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> create_netlist(const std::shared_ptr<GateLibrary>& gate_library);
+        NETLIST_API std::unique_ptr<Netlist> create_netlist(const GateLibrary* gate_library);
 
         /**
          * Creates a new netlist for a specific file.
          *
-         * @param[in] hdl_file - Name of the hdl file.
-         * @param[in] language - Programming language used in \p file_name.
-         * @param[in] gate_library_file - Name of hardware gate library file.
+         * @param[in] hdl_file - Path to the HDL file.
+         * @param[in] gate_library_file - Path to the gate library file.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::string& language, const std::filesystem::path& gate_library_file);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file);
 
         /**
          * Creates a new netlist for a specific '.hal' file.
@@ -68,7 +67,7 @@ namespace hal
          * file.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> load_netlist(const std::filesystem::path& hal_file);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hal_file);
 
         /**
          * Creates a new netlist entirely from program options.
@@ -77,6 +76,14 @@ namespace hal
          * @param[in] args - Command line options.
          * @returns The new netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> load_netlist(const ProgramArguments& args);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args);
+
+        /**
+          * Creates a new netlist from an HDL file for each matching pre-loaded gate library.
+          *
+          * @param[in] hdl_file - Path to the HDL file.
+          * @returns A vector of netlists.
+          */
+        NETLIST_API std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& hdl_file);
     }    // namespace netlist_factory
 }    // namespace hal

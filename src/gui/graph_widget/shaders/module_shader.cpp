@@ -44,10 +44,10 @@ namespace hal
         {
             for (const u32& id : m_context->gates())
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(id);
+                Gate* g = g_netlist->get_gate_by_id(id);
                 assert(g);
 
-                std::shared_ptr<Module> m = g->get_module();
+                Module* m = g->get_module();
                 assert(m);
 
                 GraphicsNode::visuals v;

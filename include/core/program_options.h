@@ -44,14 +44,14 @@ namespace hal
     {
     public:
         /// constant to specify that a parameter is required and does not have a default value.
-        static const std::string REQUIRED_PARAM;
+        static const std::string A_REQUIRED_PARAMETER;
 
         /**
          * Constructor, optionally takes a name for grouping in get_options_string()
          *
          * @param[in] name - The name of this group of program options.
          */
-        explicit ProgramOptions(const std::string& name = "");
+        ProgramOptions(const std::string& name = "");
 
         ~ProgramOptions() = default;
 
@@ -84,7 +84,7 @@ namespace hal
         /**
          * Adds a new option with a single flag.<br>
          * The size of \p parameters is the number of parameters this option gets.<br>
-         * Use ProgramOptions::REQUIRED_PARAM to set a parameter as required.<br>
+         * Use ProgramOptions::A_REQUIRED_PARAMETER to set a parameter as required.<br>
          * The values in \p parameters contain default values, which are returned by
          * get_parameter_list() / get_parameter() if the user did not supply parameters himself.
          *
@@ -98,7 +98,7 @@ namespace hal
         /**
          * Adds a new option with a multiple flags.<br>
          * The size of \p parameters is the number of parameters this option gets.<br>
-         * Use ProgramOptions::REQUIRED_PARAM to set a parameter as required.<br>
+         * Use ProgramOptions::A_REQUIRED_PARAMETER to set a parameter as required.<br>
          * The values in \p parameters contain default values, which are returned by
          * get_parameter_list() / get_parameter() if the user did not supply parameters himself.
          *
@@ -136,34 +136,34 @@ namespace hal
         std::vector<std::tuple<std::set<std::string>, std::string>> get_options() const;
 
     private:
-        struct option
+        struct Option
         {
             std::string description;
             std::vector<std::string> parameters;
             std::set<std::string> flags;
         };
 
+        std::string m_name;
+
+        std::vector<Option> m_options;
+
+        std::map<std::string, std::vector<ProgramOptions>> m_suboptions;
+
+        std::vector<std::string> m_unknown_options;
+
         // returns all options, including those of added ProgramOptions objects
-        std::vector<std::shared_ptr<option>> get_all_options() const;
+        std::vector<const Option*> get_all_options() const;
 
         // resets all options, including those of added ProgramOptions objects
         void reset_all_options();
 
         // resets a single option
-        void reset_option(std::shared_ptr<option>);
+        void reset_option(Option*);
 
         // returns the length of the longest formatted string containing the flags
         size_t get_flag_length() const;
 
         // returns the formatted string and starts the always after fill_length characters (space filled)
         std::string get_options_string_internal(size_t fill_length, size_t max_line_width) const;
-
-        std::string m_name;
-
-        std::vector<std::shared_ptr<option>> m_options;
-
-        std::map<std::string, std::vector<ProgramOptions>> m_suboptions;
-
-        std::vector<std::string> m_unknown_options;
     };
 }    // namespace hal

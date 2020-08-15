@@ -48,7 +48,7 @@ namespace hal
      *
      * @ingroup module
      */
-    class NETLIST_API Module : public DataContainer, public std::enable_shared_from_this<Module>
+    class NETLIST_API Module : public DataContainer
     {
         friend class NetlistInternalManager;
         friend class Netlist;
@@ -95,7 +95,7 @@ namespace hal
          *
          * @returns The parent module.
          */
-        std::shared_ptr<Module> get_parent_module() const;
+        Module* get_parent_module() const;
 
         /**
          * Sets a new parent for this module.<br>
@@ -104,7 +104,7 @@ namespace hal
          * @param[in] new_parent - the new parent module
          * @returns True if the parent was changed
          */
-        bool set_parent_module(const std::shared_ptr<Module>& new_parent);
+        bool set_parent_module(Module* new_parent);
 
         /**
          * Get all direct submodules of this module.<br>
@@ -114,7 +114,7 @@ namespace hal
          * @param[in] recursive - Look into submodules as well
          * @returns The set of submodules
          */
-        std::set<std::shared_ptr<Module>> get_submodules(const std::function<bool(const std::shared_ptr<Module>&)>& filter = nullptr, bool recursive = false) const;
+        std::set<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
 
         /**
          * Checks whether another module is a submodule of this module.<br>
@@ -124,14 +124,14 @@ namespace hal
          * @param[in] recursive - Look into submodules as well
          * @returns True if the other module is a submodule
          */
-        bool contains_module(const std::shared_ptr<Module>& other, bool recursive = false) const;
+        bool contains_module(Module* other, bool recursive = false) const;
 
         /**
          * Get the netlist this module is associated with.
          *
          * @returns The netlist.
          */
-        std::shared_ptr<Netlist> get_netlist() const;
+        Netlist* get_netlist() const;
 
         /**
          * Get the input nets to this module.<br>
@@ -139,7 +139,7 @@ namespace hal
          *
          * @returns The set of module input nets.
          */
-        std::set<std::shared_ptr<Net>> get_input_nets() const;
+        std::set<Net*> get_input_nets() const;
 
         /**
          * Get the output nets of this module.<br>
@@ -147,7 +147,7 @@ namespace hal
          *
          * @returns The set of module output nets.
          */
-        std::set<std::shared_ptr<Net>> get_output_nets() const;
+        std::set<Net*> get_output_nets() const;
 
         /**
          * Get the internal nets of this module.<br>
@@ -156,7 +156,7 @@ namespace hal
          *
          * @returns The set of module input nets.
          */
-        std::set<std::shared_ptr<Net>> get_internal_nets() const;
+        std::set<Net*> get_internal_nets() const;
 
         /**
          * Set the name of the port corresponding to the specified input net to the given string.
@@ -164,7 +164,7 @@ namespace hal
          * @param[in] input_net - The input net.
          * @param[in] port_name - The port name.
          */
-        void set_input_port_name(const std::shared_ptr<Net>& input_net, const std::string& port_name);
+        void set_input_port_name(Net* input_net, const std::string& port_name);
 
         /**
          * Set the name of the port corresponding to the specified output net to the given string.
@@ -172,7 +172,7 @@ namespace hal
          * @param[in] output_net - The output net.
          * @param[in] port_name - The port name.
          */
-        void set_output_port_name(const std::shared_ptr<Net>& output_net, const std::string& port_name);
+        void set_output_port_name(Net* output_net, const std::string& port_name);
 
         /**
          * Get the name of the port corresponding to the specified input net.
@@ -180,7 +180,7 @@ namespace hal
          * @param[in] net - The input net.
          * @returns The port name.
          */
-        std::string get_input_port_name(const std::shared_ptr<Net>& net);
+        std::string get_input_port_name(Net* net);
 
         /**
          * Get the name of the port corresponding to the specified output net.
@@ -188,7 +188,7 @@ namespace hal
          * @param[in] net - The output net.
          * @returns The port name.
          */
-        std::string get_output_port_name(const std::shared_ptr<Net>& net);
+        std::string get_output_port_name(Net* net);
 
         /**
          * Get the input net of the port corresponding to the specified port name.
@@ -196,7 +196,7 @@ namespace hal
          * @param[in] port_name - The input port name.
          * @returns The input net.
          */
-        std::shared_ptr<Net> get_input_port_net(const std::string& port_name);
+        Net* get_input_port_net(const std::string& port_name);
 
         /**
          * Get the output net of the port corresponding to the specified port name.
@@ -204,21 +204,21 @@ namespace hal
          * @param[in] port_name - The output port name.
          * @returns The output net.
          */
-        std::shared_ptr<Net> get_output_port_net(const std::string& port_name);
+        Net* get_output_port_net(const std::string& port_name);
 
         /**
          * Get the mapping of all input nets to their corresponding port names.
          *
          * @returns The map from input net to port name.
          */
-        const std::map<std::shared_ptr<Net>, std::string>& get_input_port_names();
+        const std::map<Net*, std::string>& get_input_port_names() const;
 
         /**
          * Get the mapping of all output nets to their corresponding port names.
          *
          * @returns The map from output net to port name.
          */
-        const std::map<std::shared_ptr<Net>, std::string>& get_output_port_names();
+        const std::map<Net*, std::string>& get_output_port_names() const;
 
         /*
          * ################################################################
@@ -233,7 +233,7 @@ namespace hal
          * @param[in] gate - The gate to move.
          * @returns True on success.
          */
-        bool assign_gate(const std::shared_ptr<Gate>& gate);
+        bool assign_gate(Gate* gate);
 
         /**
          * Removes a gate from the module.<br>
@@ -242,7 +242,7 @@ namespace hal
          * @param[in] gate - Pointer to the gate pointer.
          * @returns True on success.
          */
-        bool remove_gate(const std::shared_ptr<Gate>& gate);
+        bool remove_gate(Gate* gate);
 
         /**
          * Checks whether a gate is in the module.<br>
@@ -252,7 +252,7 @@ namespace hal
          * @param[in] recursive - Look into submodules too
          * @returns True if the gate is in module
          */
-        bool contains_gate(const std::shared_ptr<Gate>& gate, bool recursive = false) const;
+        bool contains_gate(Gate* gate, bool recursive = false) const;
 
         /**
          * Get a gate specified by id.<br>
@@ -262,7 +262,7 @@ namespace hal
          * @param[in] recursive - Look into submodules too
          * @returns The gate or a nullptr.
          */
-        std::shared_ptr<Gate> get_gate_by_id(const u32 id, bool recursive = false) const;
+        Gate* get_gate_by_id(const u32 id, bool recursive = false) const;
 
         /**
          * Get all gates of the module. <br>
@@ -273,10 +273,10 @@ namespace hal
          * @param[in] recursive - Look into submodules too
          * @return A set of gates.
          */
-        std::set<std::shared_ptr<Gate>> get_gates(const std::function<bool(const std::shared_ptr<Gate>&)>& filter = nullptr, bool recursive = false) const;
+        std::set<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
 
     private:
-        Module(u32 id, std::shared_ptr<Module> parent, const std::string& name, NetlistInternalManager* internal_manager);
+        Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager);
 
         Module(const Module&) = delete;               //disable copy-constructor
         Module& operator=(const Module&) = delete;    //disable copy-assignment
@@ -287,20 +287,20 @@ namespace hal
         NetlistInternalManager* m_internal_manager;
         u32 m_id;
 
-        std::shared_ptr<Module> m_parent;
-        std::map<u32, std::shared_ptr<Module>> m_submodules_map;
-        std::set<std::shared_ptr<Module>> m_submodules_set;
+        Module* m_parent;
+        std::map<u32, Module*> m_submodules_map;
+        std::set<Module*> m_submodules_set;
 
         /* port names */
-        u32 m_next_input_port_id  = 0;
-        u32 m_next_output_port_id = 0;
-        std::set<std::shared_ptr<Net>> m_named_input_nets;
-        std::set<std::shared_ptr<Net>> m_named_output_nets;
-        std::map<std::shared_ptr<Net>, std::string> m_input_net_to_port_name;
-        std::map<std::shared_ptr<Net>, std::string> m_output_net_to_port_name;
+        mutable u32 m_next_input_port_id  = 0;
+        mutable u32 m_next_output_port_id = 0;
+        mutable std::set<Net*> m_named_input_nets;
+        mutable std::set<Net*> m_named_output_nets;
+        mutable std::map<Net*, std::string> m_input_net_to_port_name;
+        mutable std::map<Net*, std::string> m_output_net_to_port_name;
 
         /* stores gates sorted by id */
-        std::map<u32, std::shared_ptr<Gate>> m_gates_map;
-        std::set<std::shared_ptr<Gate>> m_gates_set;
+        std::map<u32, Gate*> m_gates_map;
+        std::set<Gate*> m_gates_set;
     };
 }    // namespace hal

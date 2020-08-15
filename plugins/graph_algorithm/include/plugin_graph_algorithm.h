@@ -40,7 +40,7 @@ namespace hal
          * @param[in] nl - Netlist (internally transformed to di-graph)
          * @returns A map of community-IDs to sets of gates belonging to the communities
          */
-        std::map<int, std::set<std::shared_ptr<Gate>>> get_communities(std::shared_ptr<Netlist> const nl);
+        std::map<int, std::set<Gate*>> get_communities(Netlist* const nl);
 
         /**
          * Returns map of community-IDs to communities running the spinglass clustering.
@@ -49,7 +49,7 @@ namespace hal
          * @param[in] spin -
          * @returns A map of community-IDs to sets of gates belonging to the communities
          */
-        std::map<int, std::set<std::shared_ptr<Gate>>> get_communities_spinglass(std::shared_ptr<Netlist> const nl, u32 const spins);
+        std::map<int, std::set<Gate*>> get_communities_spinglass(Netlist* const nl, u32 const spins);
 
         /**
          * Returns map of community-IDs to communities running the fast greedy clustering from igraph.
@@ -58,7 +58,7 @@ namespace hal
          * @param[in] spin -
          * @returns A map of community-IDs to sets of gates belonging to the communities
          */
-        std::map<int, std::set<std::shared_ptr<Gate>>> get_communities_fast_greedy(std::shared_ptr<Netlist> const nl);
+        std::map<int, std::set<Gate*>> get_communities_fast_greedy(Netlist* const nl);
 
         /**
          * Returns map of community-IDs to communities running the multilevel clustering from igraph.
@@ -67,7 +67,7 @@ namespace hal
          * @param[in] spin -
          * @returns A map of community-IDs to sets of gates belonging to the communities
          */
-        std::map<int, std::set<std::shared_ptr<Gate>>> get_communities_multilevel(std::shared_ptr<Netlist> nl);
+        std::map<int, std::set<Gate*>> get_communities_multilevel(Netlist* nl);
 
         /**
          *  other graph algorithm
@@ -80,7 +80,7 @@ namespace hal
          * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)
          * @returns A set of strongly connected components where each component is a set of gates.
          */
-        std::set<std::set<std::shared_ptr<Gate>>> get_strongly_connected_components(std::shared_ptr<Netlist> const nl, const std::set<std::shared_ptr<Gate>> gates = {});
+        std::set<std::set<Gate*>> get_strongly_connected_components(Netlist* const nl, const std::set<Gate*> gates = {});
 
         /**
          * Returns the set of strongly connected components.
@@ -89,7 +89,7 @@ namespace hal
          * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)
          * @returns A set of strongly connected components where each component is a set of gates.
          */
-        std::set<std::set<std::shared_ptr<Gate>>> get_scc(std::shared_ptr<Netlist> nl);
+        std::set<std::set<Gate*>> get_scc(Netlist* nl);
 
         /**
          * Returns the shortest path distances for one gate to all other gates.
@@ -97,7 +97,7 @@ namespace hal
          * @param[in] g - Gate (starting vertex for Dijkstra's algorithm)
          * @returns A map of path and distance to the starting gate g for all other gates in the netlist.
          */
-        std::map<std::shared_ptr<Gate>, std::tuple<std::vector<std::shared_ptr<Gate>>, int>> get_dijkstra_shortest_paths(const std::shared_ptr<Gate> g);
+        std::map<Gate*, std::tuple<std::vector<Gate*>, int>> get_dijkstra_shortest_paths(Gate* g);
 
         /**
          * Returns a graph cut for a specific gate and depth.
@@ -108,8 +108,8 @@ namespace hal
          * @param[in] synchronous_gate_type - Marks terminal vertex gate types of graph cut (typically memory gates such as flip-flops)
          * @returns A vector of gate sets where each vector entry refers to the distance to the starting gate g.
          */
-        std::vector<std::set<std::shared_ptr<Gate>>> get_graph_cut(std::shared_ptr<Netlist> const nl,
-                                                                   std::shared_ptr<Gate> const g,
+        std::vector<std::set<Gate*>> get_graph_cut(Netlist* const nl,
+                                                                   Gate* const g,
                                                                    const u32 depth                                = std::numeric_limits<u32>::max(),
                                                                    const std::set<std::string> terminal_gate_type = std::set<std::string>());
 
@@ -125,7 +125,7 @@ namespace hal
          * @param[in] vertex_to_gate - map from vertex ID in igraph to HAL gate
          * @returns map from membership id to set of gates that have the membership.
          */
-        std::map<int, std::set<std::shared_ptr<Gate>>> get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, std::shared_ptr<Gate>> vertex_to_gate);
+        std::map<int, std::set<Gate*>> get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate);
 
         /**
          * Return the igraph object from the provided netlist.
@@ -133,6 +133,6 @@ namespace hal
          * @param[in] nl - Netlist
          * @returns tuple of igraph_t object and map from igraph vertex id to HAL gate ID for further graph analysis.
          */
-        std::tuple<igraph_t, std::map<int, std::shared_ptr<Gate>>> get_igraph_directed(std::shared_ptr<Netlist> const nl);
+        std::tuple<igraph_t, std::map<int, Gate*>> get_igraph_directed(Netlist* const nl);
     };
 }    // namespace hal

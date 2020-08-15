@@ -24,10 +24,12 @@
 #pragma once
 
 #include "def.h"
+#include "netlist/gate_library/gate_library_parser.h"
 
 #include <map>
 #include <memory>
 #include <vector>
+#include <functional>
 
 namespace hal
 {
@@ -38,6 +40,25 @@ namespace hal
      */
     namespace gate_library_manager
     {
+        using ParserFactory = std::function<std::unique_ptr<GateLibraryParser>()>;
+
+        /**
+         * Registers a new gate library parser for a selection of file types.
+         * If parsers for some of the extensions already exist, they are not changed, only the new ones are registered.
+         *
+         * @param[in] name - The name of the parser.
+         * @param[in] parser_factory - A factory function that constructs a new parser instance.
+         * @param[in] supported_file_extensions - The file extensions this parser can process.
+         */
+        NETLIST_API void register_parser(const std::string& name, const ParserFactory& parser_factory, const std::vector<std::string>& supported_file_extensions);
+
+        /**
+         * Unregisters a specific parser.
+         *
+         * @param[in] name - The name of the parser.
+         */
+        NETLIST_API void unregister_parser(const std::string& name);
+
         /**
          * Loads a gate library file.
          *
@@ -45,7 +66,7 @@ namespace hal
          * @param[in] reload_if_existing - If true, reloads all libraries that are already loaded.
          * @returns Pointer to the loaded gate library or nullptr on error.
          */
-        NETLIST_API std::shared_ptr<GateLibrary> load_file(std::filesystem::path path, bool reload_if_existing = false);
+        NETLIST_API GateLibrary* load_file(std::filesystem::path path, bool reload_if_existing = false);
 
         /**
          * Loads all gate libraries which are available.
@@ -60,13 +81,14 @@ namespace hal
          * @param[in] file_name - file name of the gate library.
          * @returns Pointer to the gate library object or nullptr on error.
          */
-        NETLIST_API std::shared_ptr<GateLibrary> get_gate_library(const std::string& file_name);
+        NETLIST_API GateLibrary* get_gate_library(const std::string& file_name);
 
         /**
          * Get all loaded gate libraries.
          *
          * @returns A vector of pointers to the gate library objects.
          */
-        NETLIST_API std::vector<std::shared_ptr<GateLibrary>> get_gate_libraries();
+        NETLIST_API std::vector<GateLibrary*> get_gate_libraries();
+
     }    // namespace gate_library_manager
 }    // namespace hal

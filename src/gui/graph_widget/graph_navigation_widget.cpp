@@ -44,14 +44,14 @@ namespace hal
             }
             case SelectionRelay::item_type::gate:
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
                 assert(g);
 
                 m_origin = hal::node{hal::node_type::gate, g->get_id()};
 
                 std::string pin_type   = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay.m_subfocus_index];
-                std::shared_ptr<Net> n = (direction ? g->get_fan_out_net(pin_type) : g->get_fan_in_net(pin_type));
+                Net* n = (direction ? g->get_fan_out_net(pin_type) : g->get_fan_in_net(pin_type));
 
                 assert(n);
 
@@ -61,7 +61,7 @@ namespace hal
             }
             case SelectionRelay::item_type::net:
             {
-                std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+                Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
                 assert(n);
                 assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
@@ -80,7 +80,7 @@ namespace hal
         }
     }
 
-    void GraphNavigationWidget::setup(hal::node origin, std::shared_ptr<Net> via_net, bool direction)
+    void GraphNavigationWidget::setup(hal::node origin, Net* via_net, bool direction)
     {
         clearContents();
         fill_table(via_net, direction);
@@ -118,7 +118,7 @@ namespace hal
         }
     }
 
-    void GraphNavigationWidget::fill_table(std::shared_ptr<Net> n, bool direction)
+    void GraphNavigationWidget::fill_table(Net* n, bool direction)
     {
         assert(n);
 
@@ -233,7 +233,7 @@ namespace hal
             QSet<u32> gates;
             for (u32 row = 1; row < (u32)rowCount(); ++row)
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(item(row, 0)->text().toLong());
+                Gate* g = g_netlist->get_gate_by_id(item(row, 0)->text().toLong());
                 if (g)
                 {
                     gates.insert(g->get_id());
@@ -243,7 +243,7 @@ namespace hal
             return;
         }
 
-        std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(selectedItems().at(0)->text().toLong());
+        Gate* g = g_netlist->get_gate_by_id(selectedItems().at(0)->text().toLong());
 
         if (!g)
         {

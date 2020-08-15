@@ -30,7 +30,7 @@ namespace hal
     {
         if (parent_button)
         {
-            for (ExpandingListItem*& item : m_items)
+            for (ExpandingListItem* item : m_items)
                 if (parent_button == item->parent_button())
                     item->append_child_button(button);
         }

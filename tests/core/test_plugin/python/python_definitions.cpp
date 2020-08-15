@@ -55,7 +55,7 @@ Get the version of the plugin.
 :rtype: str
 )")
         .def("get_boolean_function", py::overload_cast<const std::vector<bool>&>(&plugin_test_plugin::get_boolean_function))
-        .def("get_boolean_function_str", py::overload_cast<std::shared_ptr<Gate> const, bool>(&plugin_test_plugin::get_boolean_function_str), py::arg("gate"), py::arg("css_beautified") = false)
+        .def("get_boolean_function_str", py::overload_cast<Gate* const, bool>(&plugin_test_plugin::get_boolean_function_str), py::arg("gate"), py::arg("css_beautified") = false)
         ;
 
 #ifndef PYBIND11_MODULE

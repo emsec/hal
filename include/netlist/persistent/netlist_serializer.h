@@ -31,8 +31,12 @@ namespace hal
     class Netlist;
 
     /**
+     * @file
+     *
+     * \namespace netlist_serializer
      * @ingroup persistent
      */
+
     namespace netlist_serializer
     {
         /**
@@ -43,7 +47,7 @@ namespace hal
          * @param[in] hal_file - The file to serialize to.
          * @returns True on success.
          */
-        NETLIST_API bool serialize_to_file(std::shared_ptr<Netlist> nl, const std::filesystem::path& hal_file);
+        NETLIST_API bool serialize_to_file(Netlist* nl, const std::filesystem::path& hal_file);
 
         /**
          * Deserializes a netlist from a .hal file.<br>
@@ -52,6 +56,6 @@ namespace hal
          * @param[in] hal_file - The file to deserialize from.
          * @returns The deserialized netlist.
          */
-        NETLIST_API std::shared_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file);
+        NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file);
     }    // namespace netlist_serializer
 }    // namespace hal

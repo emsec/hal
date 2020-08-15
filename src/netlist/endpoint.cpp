@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    Endpoint::Endpoint(const std::shared_ptr<Gate>& gate, const std::string& pin, bool is_a_destination) : m_gate(gate), m_pin(pin), m_is_a_destination(is_a_destination)
+    Endpoint::Endpoint(Gate* gate, const std::string& pin, bool is_a_destination) : m_gate(gate), m_pin(pin), m_is_a_destination(is_a_destination)
     {
     }
 
@@ -29,7 +29,7 @@ namespace hal
         return !(*this == rhs);
     }
 
-    const std::shared_ptr<Gate>& Endpoint::get_gate() const
+    Gate* Endpoint::get_gate() const
     {
         return m_gate;
     }

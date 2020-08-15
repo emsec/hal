@@ -117,7 +117,7 @@ namespace hal
     void GraphGraphicsView::handle_move_action(QAction* action)
     {
         const u32 mod_id          = action->data().toInt();
-        std::shared_ptr<Module> m = g_netlist->get_module_by_id(mod_id);
+        Module* m = g_netlist->get_module_by_id(mod_id);
         for (const auto& id : g_selection_relay.m_selected_gates)
         {
             m->assign_gate(g_netlist->get_gate_by_id(id));
@@ -135,8 +135,8 @@ namespace hal
 
     void GraphGraphicsView::handle_move_new_action()
     {
-        std::unordered_set<std::shared_ptr<Gate>> gate_objs;
-        std::unordered_set<std::shared_ptr<Module>> module_objs;
+        std::unordered_set<Gate*> gate_objs;
+        std::unordered_set<Module*> module_objs;
         for (const auto& id : g_selection_relay.m_selected_gates)
         {
             gate_objs.insert(g_netlist->get_gate_by_id(id));
@@ -145,13 +145,13 @@ namespace hal
         {
             module_objs.insert(g_netlist->get_module_by_id(id));
         }
-        std::shared_ptr<Module> parent = gui_utility::first_common_ancestor(module_objs, gate_objs);
+        Module* parent = gui_utility::first_common_ancestor(module_objs, gate_objs);
         QString parent_name            = QString::fromStdString(parent->get_name());
         bool ok;
         QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parent_name + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
         if (!ok || name.isEmpty())
             return;
-        std::shared_ptr<Module> m = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), parent);
+        Module* m = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), parent);
 
         for (const auto& id : g_selection_relay.m_selected_gates)
         {
@@ -172,7 +172,7 @@ namespace hal
     {
         if (m_item->item_type() == hal::item_type::gate)
         {
-            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(m_item->id());
+            Gate* g = g_netlist->get_gate_by_id(m_item->id());
             const QString name      = QString::fromStdString(g->get_name());
             bool confirm;
             const QString new_name = QInputDialog::getText(this, "Rename gate", "New name:", QLineEdit::Normal, name, &confirm);
@@ -183,7 +183,7 @@ namespace hal
         }
         else if (m_item->item_type() == hal::item_type::module)
         {
-            std::shared_ptr<Module> m = g_netlist->get_module_by_id(m_item->id());
+            Module* m = g_netlist->get_module_by_id(m_item->id());
             const QString name        = QString::fromStdString(m->get_name());
             bool confirm;
             const QString new_name = QInputDialog::getText(this, "Rename module", "New name:", QLineEdit::Normal, name, &confirm);
@@ -600,8 +600,8 @@ namespace hal
                 action = context_menu.addAction("  Add predecessors to view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_select_inputs);
 
-                std::shared_ptr<Gate> g   = isGate ? g_netlist->get_gate_by_id(m_item->id()) : nullptr;
-                std::shared_ptr<Module> m = isModule ? g_netlist->get_module_by_id(m_item->id()) : nullptr;
+                Gate* g   = isGate ? g_netlist->get_gate_by_id(m_item->id()) : nullptr;
+                Module* m = isModule ? g_netlist->get_module_by_id(m_item->id()) : nullptr;
 
                 // only allow move actions on anything that is not the top module
                 if (!(isModule && m == g_netlist->get_top_module()))

@@ -11,11 +11,11 @@ namespace hal
     {
     }
 
-    void BasePluginInterface::on_load() const
+    void BasePluginInterface::on_load()
     {
     }
 
-    void BasePluginInterface::on_unload() const
+    void BasePluginInterface::on_unload()
     {
     }
 
@@ -24,7 +24,7 @@ namespace hal
         return {};
     }
 
-    void BasePluginInterface::initialize_logging() const
+    void BasePluginInterface::initialize_logging()
     {
         LogManager& l = LogManager::get_instance();
         l.add_channel(get_name(), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");

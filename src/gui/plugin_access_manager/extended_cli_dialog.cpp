@@ -121,7 +121,7 @@ namespace hal
 
     void ExtendedCliDialog::setup(std::string plugin_name)
     {
-        m_plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin_name, false);
+        m_plugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin_name, false);
         if (m_plugin == nullptr)
         {
             return;

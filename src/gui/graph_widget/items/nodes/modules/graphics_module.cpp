@@ -5,12 +5,12 @@
 
 namespace hal
 {
-    GraphicsModule::GraphicsModule(const std::shared_ptr<Module> m) : GraphicsNode(hal::item_type::module, m->get_id(), QString::fromStdString(m->get_name()))
+    GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(hal::item_type::module, m->get_id(), QString::fromStdString(m->get_name()))
     {
-        for (const std::shared_ptr<Net>& n : m->get_input_nets())
+        for (Net* n : m->get_input_nets())
             m_input_pins.append(module_pin{QString::fromStdString(m->get_input_port_name(n)), n->get_id()});
 
-        for (const std::shared_ptr<Net>& n : m->get_output_nets())
+        for (Net* n : m->get_output_nets())
             m_output_pins.append(module_pin{QString::fromStdString(m->get_output_port_name(n)), n->get_id()});
     }
 }

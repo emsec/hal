@@ -168,6 +168,9 @@ if(UNIX)
     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -pthread")
 
+    # SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fsanitize=address")
+    # SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+
     if(USE_LIBCXX)
         enable_cxx_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
         enable_c_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")

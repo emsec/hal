@@ -416,6 +416,14 @@ hal--SettingsWidget #name-label {
     font       : 14px bold "Iosevka";
 }
 
+hal--SettingsWidget QToolButton {
+    color : #D3DCE6;
+}
+
+hal--SettingsWidget QToolButton:disabled {
+    color : #888888;
+}
+
 /* LABEL_BUTTON */
 
 hal--SettingsWidget hal--label_button {
@@ -1371,20 +1379,23 @@ qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
 hal--ContextManagerWidget {
-qproperty-new_view_icon_style: "all->#30AC4F";
+qproperty-new_view_icon_style: "all->#e8e8e8";
 qproperty-new_view_icon_path: ":/icons/plus";
 
-qproperty-rename_icon_style: "all->#3192C5";
+qproperty-rename_icon_style: "all->#e8e8e8";
 qproperty-rename_icon_path: ":/icons/pen";
 
-qproperty-duplicate_icon_style: "all->#30AC4F";
+qproperty-duplicate_icon_style: "all->#e8e8e8";
 qproperty-duplicate_icon_path: ":/icons/content";
 
-qproperty-delete_icon_style: "all->#A61F1F";
+qproperty-delete_icon_style: "all->#e8e8e8";
 qproperty-delete_icon_path: ":/icons/trashcan";
 
-qproperty-timestamp_icon_style: "all->#FFC30B";
-qproperty-timestamp_icon_path: ":/icons/clock";
+qproperty-open_icon_style: "all->#e8e8e8";
+qproperty-open_icon_path: ":/icons/open-alt";
+
+qproperty-search_icon_style: "all->#e8e8e8";
+qproperty-search_icon_path: ":/icons/search";
 }
 
 hal--MainWindow {

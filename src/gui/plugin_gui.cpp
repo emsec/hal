@@ -3,6 +3,7 @@
 #include "core/log.h"
 #include "core/plugin_manager.h"
 #include "core/utils.h"
+#include "netlist/netlist.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
@@ -50,7 +51,8 @@ namespace hal
 
     ContentManager* g_content_manager = nullptr;
 
-    std::shared_ptr<Netlist> g_netlist = nullptr;
+    std::unique_ptr<Netlist> g_netlist_owner;
+    Netlist* g_netlist = nullptr;
 
     NetlistRelay g_netlist_relay;
     PluginRelay g_plugin_relay;
@@ -141,6 +143,7 @@ namespace hal
 
         // LOGGER HERE
 
+        plugin_manager::load_all_plugins();
         gate_library_manager::load_all();
 
         // TEST
@@ -194,7 +197,7 @@ namespace hal
         return std::string("0.1");
     }
 
-    void PluginGui::initialize_logging() const
+    void PluginGui::initialize_logging()
     {
         LogManager& l = LogManager::get_instance();
         l.add_channel("user", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
@@ -202,8 +205,8 @@ namespace hal
         l.add_channel("python", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
 
-    extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
+    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
-        return std::make_shared<PluginGui>();
+        return std::make_unique<PluginGui>();
     }
 }

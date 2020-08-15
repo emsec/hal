@@ -27,10 +27,10 @@
 #include "gui/gui_def.h"
 #include "netlist/endpoint.h"
 #include "netlist_relay/netlist_relay.h"
+#include "selection_details_widget/details_widget.h"
 
 #include <QWidget>
 
-/* forward declaration */
 class QTableWidget;
 class QTableWidgetItem;
 class QVBoxLayout;
@@ -43,8 +43,10 @@ namespace hal
 {
     /*forward declaration*/
     class GraphNavigationWidget;
+    class DataFieldsTable;
+    class DetailsSectionWidget;
 
-    class ModuleDetailsWidget : public QWidget
+    class ModuleDetailsWidget : public DetailsWidget
     {
         Q_OBJECT
     public:
@@ -57,32 +59,29 @@ namespace hal
 
     public Q_SLOTS:
 
-        void handle_netlist_marked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_marked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_marked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_unmarked_global_input(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_unmarked_global_output(std::shared_ptr<Netlist> netlist, u32 associated_data);
-        void handle_netlist_unmarked_global_inout(std::shared_ptr<Netlist> netlist, u32 associated_data);
+        void handle_netlist_marked_global_input(Netlist* netlist, u32 associated_data);
+        void handle_netlist_marked_global_output(Netlist* netlist, u32 associated_data);
+        void handle_netlist_marked_global_inout(Netlist* netlist, u32 associated_data);
+        void handle_netlist_unmarked_global_input(Netlist* netlist, u32 associated_data);
+        void handle_netlist_unmarked_global_output(Netlist* netlist, u32 associated_data);
+        void handle_netlist_unmarked_global_inout(Netlist* netlist, u32 associated_data);
 
-        void handle_module_name_changed(std::shared_ptr<Module> module);
-        void handle_submodule_added(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_submodule_removed(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_gate_assigned(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_gate_removed(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_input_port_name_changed(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_output_port_name_changed(std::shared_ptr<Module> module, u32 associated_data);
-        void handle_module_type_changed(std::shared_ptr<Module> module);
+        void handle_module_name_changed(Module* module);
+        void handle_submodule_added(Module* module, u32 associated_data);
+        void handle_submodule_removed(Module* module, u32 associated_data);
+        void handle_module_gate_assigned(Module* module, u32 associated_data);
+        void handle_module_gate_removed(Module* module, u32 associated_data);
+        void handle_module_input_port_name_changed(Module* module, u32 associated_data);
+        void handle_module_output_port_name_changed(Module* module, u32 associated_data);
+        void handle_module_type_changed(Module* module);
 
-        void handle_net_name_changed(std::shared_ptr<Net> net);
-        void handle_net_source_added(std::shared_ptr<Net> net, const u32 src_gate_id);
-        void handle_net_source_removed(std::shared_ptr<Net> net, const u32 src_gate_id);
-        void handle_net_destination_added(std::shared_ptr<Net> net, const u32 dst_gate_id);
-        void handle_net_destination_removed(std::shared_ptr<Net> net, const u32 dst_gate_id);
+        void handle_net_name_changed(Net* net);
+        void handle_net_source_added(Net* net, const u32 src_gate_id);
+        void handle_net_source_removed(Net* net, const u32 src_gate_id);
+        void handle_net_destination_added(Net* net, const u32 dst_gate_id);
+        void handle_net_destination_removed(Net* net, const u32 dst_gate_id);
 
     private:
-        u32 m_current_id;
-        bool m_hide_empty_sections;
-        QFont m_key_font;
         GraphNavigationWidget* m_navigation_table;
 
         QScrollArea* m_scroll_area;
@@ -91,9 +90,9 @@ namespace hal
         QVBoxLayout* m_content_layout;
 
         QPushButton* m_general_info_button;
-        QPushButton* m_input_ports_button;
-        QPushButton* m_output_ports_button;
-        QPushButton* m_data_fields_button;
+        DetailsSectionWidget* m_inputPortsSection;
+        DetailsSectionWidget* m_outputPortsSection;
+        DetailsSectionWidget* m_dataFieldsSection;
 
         QTableWidget* m_general_table;
 
@@ -108,18 +107,12 @@ namespace hal
 
         QTableWidget* m_output_ports_table;
 
-        QTableWidget* m_data_fields_table;
-
-        //Utility list to show/hide empty sections
-        QList<QPushButton*> m_util_list;
-
-        void handle_buttons_clicked();
+        DataFieldsTable* m_dataFieldsTable;
 
         QSize calculate_table_size(QTableWidget* table);
 
         void add_general_table_static_item(QTableWidgetItem* item);
         void add_general_table_dynamic_item(QTableWidgetItem* item);
-        void style_table(QTableWidget* table);
 
         //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
         void handle_general_table_menu_requested(const QPoint& pos);
@@ -131,10 +124,5 @@ namespace hal
         void handle_input_net_item_clicked(const QTableWidgetItem* item);
         void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
 
-        //settings related functions
-        void show_all_sections();
-        void hide_empty_sections();
-        void init_settings();
-        void handle_global_settings_changed(void* sender, const QString& key, const QVariant& value);
     };
 }    // namespace hal
