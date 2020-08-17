@@ -103,7 +103,6 @@ namespace hal
 
         m_numberSelectedItems = g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() + g_selection_relay.m_selected_nets.size();
         QVector<const SelectionTreeItem*> defaultHighlight;
-        const SelectionTreeModel* treeModel;
 
         switch (m_numberSelectedItems) {
         case 0:
@@ -121,8 +120,7 @@ namespace hal
         default:
             // more than 1 item selected, populate and make visible
             m_selectionTreeView->populate(true);
-            treeModel = static_cast<const SelectionTreeModel*>(m_selectionTreeView->model());
-            defaultHighlight.append(treeModel->itemFromIndex(treeModel->defaultIndex()));
+            defaultHighlight.append(m_selectionTreeView->itemFromIndex());
             break;
         }
 

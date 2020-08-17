@@ -47,6 +47,7 @@ namespace hal
         void setDefaultColumnWidth();
         void clearHide();
         void populate(bool visible);
+        SelectionTreeItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
 
     private:
         SelectionTreeModel* m_selectionTreeModel;

@@ -59,10 +59,8 @@ namespace hal
         int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
         void fetchSelection(bool hasEntries);
-        QModelIndex defaultIndex() const;
 
         //helper functions to convert between index and item
-        SelectionTreeItem* itemFromIndex(const QModelIndex& index) const;
         QModelIndex indexFromItem(SelectionTreeItem* item) const;
 
         static const int NAME_COLUMN = 0;
@@ -75,6 +73,7 @@ namespace hal
 
         void moduleRecursion(SelectionTreeItemModule* modItem);
         bool doNotDisturb(const QModelIndex& inx = QModelIndex()) const;
+        SelectionTreeItem* itemFromIndex(const QModelIndex& index) const;
 
 
         SelectionTreeItemRoot* m_rootItem;

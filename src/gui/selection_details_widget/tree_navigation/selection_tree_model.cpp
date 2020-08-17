@@ -74,6 +74,7 @@ namespace hal
         return QVariant();
     }
 
+ /*
     QModelIndex SelectionTreeModel::defaultIndex() const
     {
         if (doNotDisturb()) return QModelIndex();
@@ -82,6 +83,7 @@ namespace hal
         SelectionTreeItem* sti = m_rootItem->child(0);
         return createIndex(0,0,sti);
     }
+*/
 
     QModelIndex SelectionTreeModel::index(int row, int column, const QModelIndex& parent) const
     {

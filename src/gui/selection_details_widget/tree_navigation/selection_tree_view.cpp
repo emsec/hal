@@ -28,10 +28,24 @@ namespace hal {
         Q_UNUSED(previous);
 
         const SelectionTreeItem* sti = current.isValid()
-                ? static_cast<const SelectionTreeItem*>(m_selectionTreeModel->itemFromIndex(current))
+                ? itemFromIndex(current)
                 : nullptr;
 
         Q_EMIT triggerSelection(sti);
+    }
+
+
+    SelectionTreeItem* SelectionTreeView::itemFromIndex(const QModelIndex& index) const
+    {
+        // topmost element if no valid index given
+        QModelIndex proxyIndex = index.isValid()
+                ? index
+                : m_selectionTreeProxyModel->index(0,0,rootIndex());
+
+        if (!proxyIndex.isValid()) return nullptr;
+
+        QModelIndex modelIndex = m_selectionTreeProxyModel->mapToSource(proxyIndex);
+        return static_cast<SelectionTreeItem*>(modelIndex.internalPointer());
     }
 
     void SelectionTreeView::populate(bool visible)
@@ -43,7 +57,7 @@ namespace hal {
         {
             show();
             setSelectionMode(QAbstractItemView::SingleSelection);
-            QModelIndex defaultSel = m_selectionTreeModel->defaultIndex();
+            QModelIndex defaultSel = m_selectionTreeProxyModel->index(0,0,rootIndex());
             if (defaultSel.isValid())
                 selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         }
