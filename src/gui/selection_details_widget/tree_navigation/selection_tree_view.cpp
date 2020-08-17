@@ -8,7 +8,9 @@ namespace hal {
     {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         m_selectionTreeModel = new SelectionTreeModel(this);
-        setModel(m_selectionTreeModel);
+        m_selectionTreeProxyModel = new SelectionTreeProxyModel(this);
+        m_selectionTreeProxyModel->setSourceModel(m_selectionTreeModel);
+        setModel(m_selectionTreeProxyModel);
         setDefaultColumnWidth();
     }
 

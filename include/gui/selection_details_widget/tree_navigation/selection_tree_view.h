@@ -25,6 +25,7 @@
 
 #include "selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "selection_details_widget/tree_navigation/selection_tree_model.h"
+#include "selection_details_widget/tree_navigation/selection_tree_proxy.h"
 
 #include <QTreeView>
 #include <QWidget>
@@ -49,5 +50,6 @@ namespace hal
 
     private:
         SelectionTreeModel* m_selectionTreeModel;
+        SelectionTreeProxyModel* m_selectionTreeProxyModel;
     };
 }    // namespace hal
