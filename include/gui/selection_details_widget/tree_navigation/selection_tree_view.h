@@ -39,6 +39,9 @@ namespace hal
     Q_SIGNALS:
         void triggerSelection(const SelectionTreeItem* sti);
 
+    public Q_SLOTS:
+        void handle_filter_text_changed(const QString& filter_text);
+ 
     protected:
         virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous) Q_DECL_OVERRIDE;
 

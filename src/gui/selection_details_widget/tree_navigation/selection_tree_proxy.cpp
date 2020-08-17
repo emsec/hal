@@ -8,25 +8,33 @@ namespace hal
     SelectionTreeProxyModel::SelectionTreeProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
     {
         m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager.get("navigation/sort_mechanism").toInt());
+        m_filter_expression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
         connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &SelectionTreeProxyModel::handle_global_setting_changed);
     }
 
     bool SelectionTreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        if (!filterRegExp().isEmpty())
+        //used as parent index if item has children
+        const QModelIndex& item_name_index = sourceModel()->index(source_row, 0, source_parent);
+ 
+        //check all children of the current item and keep it if one child satisfies the match
+        for(int i = 0; i < sourceModel()->rowCount(item_name_index); i++)
         {
-            QModelIndex source_index = sourceModel()->index(source_row, 0, source_parent);
-            if (source_index.isValid())
-            {
-                int child_count = sourceModel()->rowCount(source_index);
-                for (int i = 0; i < child_count; i++)
-                {
-                    if (filterAcceptsRow(i, source_index))
-                        return true;
-                }
-            }
+            if(filterAcceptsRow(i, item_name_index))
+                return true;
         }
-        return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
+        
+        const QModelIndex& item_id_index = sourceModel()->index(source_row, 1, source_parent);
+        const QModelIndex& item_type_index = sourceModel()->index(source_row, 2, source_parent);
+
+        const QString& item_name = item_name_index.data().toString();
+        const QString& item_id = item_id_index.data().toString();
+        const QString& item_type = item_type_index.data().toString();
+
+        if(m_filter_expression.match(item_type).hasMatch() || m_filter_expression.match(item_name).hasMatch() || m_filter_expression.match(item_id).hasMatch())
+            return true;
+        else
+            return false;
     }
 
     bool SelectionTreeProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
@@ -61,5 +69,11 @@ namespace hal
             // force re-sort
             invalidate();
         }
+    }
+
+    void SelectionTreeProxyModel::handle_filter_text_changed(const QString& filter_text)
+    {
+        m_filter_expression.setPattern(filter_text);
+        invalidateFilter();
     }
 }

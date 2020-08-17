@@ -89,6 +89,8 @@ namespace hal
         connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
         m_selectionTreeView->hide();
         set_name("Selection Details");
+
+        connect(m_searchbar, &Searchbar::text_edited, m_selectionTreeView, &SelectionTreeView::handle_filter_text_changed);
     }
 
     void SelectionDetailsWidget::handle_selection_update(void* sender)

@@ -64,4 +64,9 @@ namespace hal {
         else
             hide();
     }
+
+    void SelectionTreeView::handle_filter_text_changed(const QString& filter_text)
+    {
+        m_selectionTreeProxyModel->handle_filter_text_changed(filter_text);
+    }
 }
