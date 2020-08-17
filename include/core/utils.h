@@ -430,6 +430,18 @@ namespace hal
         }
 
         /**
+         * Turns an iterable collection into a std vector.
+         *
+         * @param[in] container - The input collection.
+         * @returns A vector containing all items copied from collection
+         */
+        template<typename T, template<typename, typename...> class Container, typename... Args>
+        CORE_API inline std::vector<T> to_vector(const Container<T, Args...>& container)
+        {
+            return std::vector<T>(container.begin(), container.end());
+        }
+
+        /**
          * Checks whether a file exists.
          *
          * @param[in] filename - The file to check.

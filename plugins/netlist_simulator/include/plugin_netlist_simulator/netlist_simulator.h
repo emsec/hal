@@ -1,8 +1,8 @@
 #pragma once
 
 #include "netlist/gate.h"
+#include "netlist/gate_library/gate_type/gate_type_sequential.h"
 #include "netlist/net.h"
-
 #include "plugin_netlist_simulator/simulation.h"
 
 #include <unordered_set>
@@ -104,12 +104,41 @@ namespace hal
         std::vector<Event> m_event_queue;
         Simulation m_simulation;
         u64 m_timeout_iterations = 1000000;
-        u64 m_id_counter = 0;
+        u64 m_id_counter         = 0;
 
-        std::unordered_map<Net*, std::vector<Gate*>> m_successors;
+        struct SimulationGate
+        {
+            Gate* gate;
+            std::vector<std::string> input_pins;
+            std::vector<Net*> input_nets;
+            bool is_flip_flop;
+        };
 
-        bool simulate(Gate* gate, Event& event, std::map<std::pair<Net*, u64>, SignalValue>& new_events);
-        void simulate_ff(Gate* gate, std::map<std::pair<Net*, u64>, SignalValue>& new_events);
+        struct SimulationGateCombinational : public SimulationGate
+        {
+            std::vector<std::string> output_pins;
+            std::vector<Net*> output_nets;
+            std::unordered_map<Net*, BooleanFunction> functions;
+        };
+
+        struct SimulationGateFF : public SimulationGate
+        {
+            BooleanFunction clock_func;
+            BooleanFunction clear_func;
+            BooleanFunction preset_func;
+            BooleanFunction next_state_func;
+            std::vector<Net*> state_output_nets;
+            std::vector<Net*> state_inverted_output_nets;
+            std::vector<Net*> clock_nets;
+            GateTypeSequential::SetResetBehavior sr_behavior_out;
+            GateTypeSequential::SetResetBehavior sr_behavior_out_inverted;
+        };
+
+        std::unordered_map<Net*, std::vector<SimulationGate*>> m_successors;
+        std::vector<std::unique_ptr<SimulationGate>> m_sim_gates;
+
+        bool simulate(SimulationGate* gate, Event& event, std::map<std::pair<Net*, u64>, SignalValue>& new_events);
+        void simulate_ff(SimulationGateFF* gate, std::map<std::pair<Net*, u64>, SignalValue>& new_events);
         void compute_input_nets();
         void compute_output_nets();
         void initialize();

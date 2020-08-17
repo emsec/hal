@@ -27,6 +27,29 @@ std::string signal_to_string(T v)
 
 namespace hal
 {
+#define seconds_since(X) ((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - (X)).count() / 1000)
+
+#define measure_block_time(X) measure_block_time_t UNIQUE_NAME(X);
+
+    class measure_block_time_t
+    {
+    public:
+        measure_block_time_t(const std::string& section_name)
+        {
+            m_name       = section_name;
+            m_begin_time = std::chrono::high_resolution_clock::now();
+        }
+
+        ~measure_block_time_t()
+        {
+            log_info("test", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
+        }
+
+    private:
+        std::string m_name;
+        std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
+    };
+
     NetlistSimulator::NetlistSimulator()
     {
         reset();
@@ -222,33 +245,127 @@ namespace hal
 
     void NetlistSimulator::initialize()
     {
+        measure_block_time("NetlistSimulator::initialize()");
         m_successors.clear();
+        m_sim_gates.clear();
+
+        std::unordered_map<Gate*, SimulationGate*> sim_gates_map;
+        std::unordered_set<Net*> all_nets;
+
         for (auto gate : m_simulation_set)
         {
-            for (auto net : gate->get_fan_out_nets())
+            std::vector<std::string> input_pins;
+            std::vector<Net*> input_nets;
+
+            for (auto pin : gate->get_input_pins())
             {
-                if (auto it = m_successors.find(net); it != m_successors.end())
-                {
-                    continue;
-                }
-                auto endpoints = net->get_destinations();
-                std::vector<Gate*> dst_gates;
-                std::transform(endpoints.begin(), endpoints.end(), std::back_inserter(dst_gates), [](auto& ep) { return ep.get_gate(); });
-                dst_gates.erase(std::unique(dst_gates.begin(), dst_gates.end()), dst_gates.end());
-                m_successors.emplace(net, dst_gates);
+                input_pins.push_back(pin);
+                input_nets.push_back(gate->get_fan_in_net(pin));
             }
+
+            SimulationGate* sim_gate_base = nullptr;
+
+            if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
+            {
+                auto sim_gate_owner = std::make_unique<SimulationGateFF>();
+                auto sim_gate       = sim_gate_owner.get();
+                sim_gate_base       = sim_gate;
+                m_sim_gates.push_back(std::move(sim_gate_owner));
+                sim_gate->is_flip_flop = true;
+                sim_gate->input_pins   = input_pins;
+                sim_gate->input_nets   = input_nets;
+
+                auto gate_type            = static_cast<const GateTypeSequential*>(gate->get_type());
+                sim_gate->clock_func      = gate->get_boolean_function("clock");
+                sim_gate->preset_func     = gate->get_boolean_function("preset");
+                sim_gate->clear_func      = gate->get_boolean_function("clear");
+                sim_gate->next_state_func = gate->get_boolean_function("next_state");
+                for (auto pin : gate_type->get_state_output_pins())
+                {
+                    sim_gate->state_output_nets.push_back(gate->get_fan_out_net(pin));
+                }
+                for (auto pin : gate_type->get_inverted_state_output_pins())
+                {
+                    sim_gate->state_inverted_output_nets.push_back(gate->get_fan_out_net(pin));
+                }
+                for (auto pin : gate_type->get_clock_pins())
+                {
+                    sim_gate->clock_nets.push_back(gate->get_fan_in_net(pin));
+                }
+                auto behavior                      = gate_type->get_set_reset_behavior();
+                sim_gate->sr_behavior_out          = behavior.first;
+                sim_gate->sr_behavior_out_inverted = behavior.second;
+            }
+            else
+            {
+                auto sim_gate_owner = std::make_unique<SimulationGateCombinational>();
+                auto sim_gate       = sim_gate_owner.get();
+                sim_gate_base       = sim_gate;
+                m_sim_gates.push_back(std::move(sim_gate_owner));
+                sim_gate->is_flip_flop = false;
+                sim_gate->input_pins   = input_pins;
+                sim_gate->input_nets   = input_nets;
+
+                auto all_functions = gate->get_boolean_functions();
+
+                sim_gate->output_pins = gate->get_output_pins();
+
+                for (auto pin : sim_gate->output_pins)
+                {
+                    auto out_net = gate->get_fan_out_net(pin);
+                    sim_gate->output_nets.push_back(out_net);
+
+                    auto func = all_functions.at(pin);
+
+                    while (true)
+                    {
+                        auto vars = func.get_variables();
+                        bool exit = true;
+                        for (auto other_pin : sim_gate->output_pins)
+                        {
+                            if (vars.find(other_pin) != vars.end())
+                            {
+                                func = func.substitute(other_pin, all_functions.at(other_pin));
+                                exit = false;
+                            }
+                        }
+                        if (exit)
+                        {
+                            break;
+                        }
+                    }
+
+                    sim_gate->functions.emplace(out_net, func);
+                }
+            }
+
+            sim_gate_base->gate = gate;
+
+            sim_gates_map.emplace(gate, sim_gate_base);
+
+            auto out_nets = gate->get_fan_out_nets();
+            all_nets.insert(out_nets.begin(), out_nets.end());
         }
-        for (auto net : m_input_nets)
+
+        all_nets.insert(m_input_nets.begin(), m_input_nets.end());
+
+        for (auto net : all_nets)
         {
             if (auto it = m_successors.find(net); it != m_successors.end())
             {
                 continue;
             }
-            auto endpoints = net->get_destinations();
-            std::vector<Gate*> dst_gates;
-            std::transform(endpoints.begin(), endpoints.end(), std::back_inserter(dst_gates), [](auto& ep) { return ep.get_gate(); });
-            dst_gates.erase(std::unique(dst_gates.begin(), dst_gates.end()), dst_gates.end());
-            m_successors.emplace(net, dst_gates);
+            auto endpoints  = net->get_destinations();
+            auto& dst_gates = m_successors[net];
+            for (auto ep : endpoints)
+            {
+                auto gate = ep.get_gate();
+                if (m_simulation_set.find(gate) == m_simulation_set.end())
+                {
+                    continue;
+                }
+                dst_gates.push_back(sim_gates_map.at(gate));
+            }
         }
 
         for (auto g : m_simulation_set)
@@ -307,6 +424,7 @@ namespace hal
 
     void NetlistSimulator::process_events(u64 timeout)
     {
+        measure_block_time("NetlistSimulator::process_events(" + std::to_string(timeout) + ")");
         auto sort_by_time = [](auto& a, auto& b) {
             if (a.time != b.time)
             {
@@ -317,7 +435,7 @@ namespace hal
 
         u64 total_iterations_for_one_timeslot = 0;
 
-        std::vector<Gate*> ffs;
+        std::vector<SimulationGateFF*> ffs;
         bool ffs_processed = false;
 
         while (!m_event_queue.empty() || !ffs.empty())
@@ -392,7 +510,7 @@ namespace hal
                 {
                     if (!simulate(gate, event, new_events))
                     {
-                        ffs.push_back(gate);
+                        ffs.push_back(static_cast<SimulationGateFF*>(gate));
                     }
                 }
             }
@@ -426,7 +544,7 @@ namespace hal
         // log_info("netlist simulator", "");
     }
 
-    bool NetlistSimulator::simulate(Gate* gate, Event& event, std::map<std::pair<Net*, u64>, SignalValue>& new_events)
+    bool NetlistSimulator::simulate(SimulationGate* gate, Event& event, std::map<std::pair<Net*, u64>, SignalValue>& new_events)
     {
         // compute delay
         u64 delay = 0;
@@ -435,9 +553,10 @@ namespace hal
 
         // gather inputs
         std::map<std::string, BooleanFunction::value> input_values;
-        for (auto pin : gate->get_input_pins())
+        for (u32 i = 0; i < gate->input_pins.size(); ++i)
         {
-            auto net          = gate->get_fan_in_net(pin);
+            auto pin          = gate->input_pins[i];
+            auto net          = gate->input_nets[i];
             SignalValue value = SignalValue::X;
             if (auto it = m_simulation.m_events.find(net); it != m_simulation.m_events.end())
             {
@@ -448,82 +567,77 @@ namespace hal
         }
 
         // compute output
-        if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
+        if (gate->is_flip_flop)
         {
-            auto gate_type = dynamic_cast<const GateTypeSequential*>(gate->get_type());
+            auto ff = static_cast<SimulationGateFF*>(gate);
 
-            auto async_set   = gate->get_boolean_function("preset").evaluate(input_values);
-            auto async_reset = gate->get_boolean_function("clear").evaluate(input_values);
+            auto async_set   = ff->preset_func.evaluate(input_values);
+            auto async_reset = ff->clear_func.evaluate(input_values);
 
             SignalValue result     = SignalValue::X;
             SignalValue inv_result = SignalValue::X;
             bool change_state      = false;
 
-            auto output_pins     = gate_type->get_state_output_pins();
-            auto inv_output_pins = gate_type->get_inverted_state_output_pins();
-            auto clock_pins      = gate_type->get_clock_pins();
-
             if (async_set == BooleanFunction::value::ONE && async_reset == BooleanFunction::value::ONE)
             {
                 SignalValue old_output = SignalValue::X;
                 {
-                    auto out_net = gate->get_fan_out_net(*output_pins.begin());
+                    auto out_net = ff->state_output_nets[0];
                     if (auto it = m_simulation.m_events.find(out_net); it != m_simulation.m_events.end())
                     {
                         old_output = it->second.back().new_value;
                     }
                 }
 
-                change_state   = true;
-                auto [q, qnot] = gate_type->get_set_reset_behavior();
-                if (q == GateTypeSequential::SetResetBehavior::U)
+                change_state = true;
+                if (ff->sr_behavior_out == GateTypeSequential::SetResetBehavior::U)
                 {
-                    log_error("netlist simulator", "simultaneous set/reset behavior is undefined for gate {}", gate->get_name());
+                    log_error("netlist simulator", "simultaneous set/reset behavior is undefined for gate {}", ff->gate->get_name());
                     change_state = false;
                 }
-                else if (q == GateTypeSequential::SetResetBehavior::N)
+                else if (ff->sr_behavior_out == GateTypeSequential::SetResetBehavior::N)
                 {
                     result = old_output;
                 }
-                else if (q == GateTypeSequential::SetResetBehavior::X)
+                else if (ff->sr_behavior_out == GateTypeSequential::SetResetBehavior::X)
                 {
                     result = SignalValue::X;
                 }
-                else if (q == GateTypeSequential::SetResetBehavior::L)
+                else if (ff->sr_behavior_out == GateTypeSequential::SetResetBehavior::L)
                 {
                     result = SignalValue::ZERO;
                 }
-                else if (q == GateTypeSequential::SetResetBehavior::H)
+                else if (ff->sr_behavior_out == GateTypeSequential::SetResetBehavior::H)
                 {
                     result = SignalValue::ONE;
                 }
-                else if (q == GateTypeSequential::SetResetBehavior::T)
+                else if (ff->sr_behavior_out == GateTypeSequential::SetResetBehavior::T)
                 {
                     result = toggle(old_output);
                 }
 
-                if (qnot == GateTypeSequential::SetResetBehavior::U)
+                if (ff->sr_behavior_out_inverted == GateTypeSequential::SetResetBehavior::U)
                 {
-                    log_error("netlist simulator", "simultaneous set/reset behavior is undefined for gate {}", gate->get_name());
+                    log_error("netlist simulator", "simultaneous set/reset behavior is undefined for gate {}", ff->gate->get_name());
                     change_state = false;
                 }
-                else if (qnot == GateTypeSequential::SetResetBehavior::N)
+                else if (ff->sr_behavior_out_inverted == GateTypeSequential::SetResetBehavior::N)
                 {
                     inv_result = toggle(old_output);
                 }
-                else if (qnot == GateTypeSequential::SetResetBehavior::X)
+                else if (ff->sr_behavior_out_inverted == GateTypeSequential::SetResetBehavior::X)
                 {
                     inv_result = SignalValue::X;
                 }
-                else if (qnot == GateTypeSequential::SetResetBehavior::L)
+                else if (ff->sr_behavior_out_inverted == GateTypeSequential::SetResetBehavior::L)
                 {
                     inv_result = SignalValue::ZERO;
                 }
-                else if (qnot == GateTypeSequential::SetResetBehavior::H)
+                else if (ff->sr_behavior_out_inverted == GateTypeSequential::SetResetBehavior::H)
                 {
                     inv_result = SignalValue::ONE;
                 }
-                else if (qnot == GateTypeSequential::SetResetBehavior::T)
+                else if (ff->sr_behavior_out_inverted == GateTypeSequential::SetResetBehavior::T)
                 {
                     inv_result = old_output;
                 }
@@ -543,26 +657,23 @@ namespace hal
 
             if (change_state)
             {
-                for (const auto& pin : output_pins)
+                for (auto out_net : ff->state_output_nets)
                 {
-                    auto out_net                                                = gate->get_fan_out_net(pin);
                     new_events[std::make_pair(out_net, m_current_time + delay)] = result;
                     // log_info("netlist simulator", "  Q ->  {}", out_net->get_name());
                 }
 
-                for (const auto& pin : inv_output_pins)
+                for (auto out_net : ff->state_inverted_output_nets)
                 {
-                    auto out_net                                                = gate->get_fan_out_net(pin);
                     new_events[std::make_pair(out_net, m_current_time + delay)] = inv_result;
                     // log_info("netlist simulator", "  !Q -> {}", out_net->get_name());
                 }
             }
 
-            if (std::any_of(clock_pins.begin(), clock_pins.end(), [&event, gate](auto& pin) { return gate->get_fan_in_net(pin) == event.affected_net; }))
+            if (std::any_of(ff->clock_nets.begin(), ff->clock_nets.end(), [&event](auto clock_net) { return clock_net == event.affected_net; }))
             {
-                auto clocked_on_func = gate->get_boolean_function("clock");
                 // log_info("netlist simulator", "  clocked on {}", clocked_on_func.to_string());
-                if (clocked_on_func.evaluate(input_values) != BooleanFunction::ONE)
+                if (ff->clock_func.evaluate(input_values) != BooleanFunction::ONE)
                 {
                     // log_info("netlist simulator", "  clock function not satisfied -> skip");
                     return true;
@@ -576,41 +687,18 @@ namespace hal
         }
         else
         {
-            auto functions = gate->get_boolean_functions();
-            for (auto pin : gate->get_output_pins())
+            auto comb = static_cast<SimulationGateCombinational*>(gate);
+            for (auto out_net : comb->output_nets)
             {
-                auto f = gate->get_boolean_function(pin);
-                while (true)
-                {
-                    auto vars = f.get_variables();
-                    bool exit = true;
-                    for (auto [pin, func] : functions)
-                    {
-                        if (vars.find(pin) != vars.end())
-                        {
-                            f    = f.substitute(pin, func);
-                            exit = false;
-                        }
-                    }
-                    if (exit)
-                    {
-                        break;
-                    }
-                }
-
-                auto result = f.evaluate(input_values);
-
-                auto out_net = gate->get_fan_out_net(pin);
-
-                // log_info("netlist simulator", "  {} = {} = {} -> {}", pin, f.to_string(), result, out_net->get_name());
-
+                auto result                                                 = comb->functions[out_net](input_values);
                 new_events[std::make_pair(out_net, m_current_time + delay)] = static_cast<SignalValue>(result);
             }
+            // log_info("netlist simulator", "  {} = {} = {} -> {}", pin, f.to_string(), result, out_net->get_name());
         }
         return true;
     }
 
-    void NetlistSimulator::simulate_ff(Gate* gate, std::map<std::pair<Net*, u64>, SignalValue>& new_events)
+    void NetlistSimulator::simulate_ff(SimulationGateFF* gate, std::map<std::pair<Net*, u64>, SignalValue>& new_events)
     {
         // compute delay
         u64 delay = 0;
@@ -619,9 +707,10 @@ namespace hal
 
         // gather inputs
         std::map<std::string, BooleanFunction::value> input_values;
-        for (auto pin : gate->get_input_pins())
+        for (u32 i = 0; i < gate->input_pins.size(); ++i)
         {
-            auto net          = gate->get_fan_in_net(pin);
+            auto pin          = gate->input_pins[i];
+            auto net          = gate->input_nets[i];
             SignalValue value = SignalValue::X;
             if (auto it = m_simulation.m_events.find(net); it != m_simulation.m_events.end())
             {
@@ -632,31 +721,20 @@ namespace hal
         }
 
         // compute output
-        if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
+        auto result     = static_cast<SignalValue>(gate->next_state_func.evaluate(input_values));
+        auto inv_result = toggle(result);
+        // log_info("netlist simulator", "  state = {} = {}", f.to_string(), result);
+
+        for (auto out_net : gate->state_output_nets)
         {
-            auto gate_type = dynamic_cast<const GateTypeSequential*>(gate->get_type());
+            new_events[std::make_pair(out_net, m_current_time + delay)] = result;
+            // log_info("netlist simulator", "  Q ->  {}", out_net->get_name());
+        }
 
-            auto output_pins     = gate_type->get_state_output_pins();
-            auto inv_output_pins = gate_type->get_inverted_state_output_pins();
-
-            auto f          = gate->get_boolean_function("next_state");
-            auto result     = static_cast<SignalValue>(f.evaluate(input_values));
-            auto inv_result = toggle(result);
-            // log_info("netlist simulator", "  state = {} = {}", f.to_string(), result);
-
-            for (const auto& pin : output_pins)
-            {
-                auto out_net                                                = gate->get_fan_out_net(pin);
-                new_events[std::make_pair(out_net, m_current_time + delay)] = result;
-                // log_info("netlist simulator", "  Q ->  {}", out_net->get_name());
-            }
-
-            for (const auto& pin : inv_output_pins)
-            {
-                auto out_net                                                = gate->get_fan_out_net(pin);
-                new_events[std::make_pair(out_net, m_current_time + delay)] = inv_result;
-                // log_info("netlist simulator", "  !Q -> {}", out_net->get_name());
-            }
+        for (auto out_net : gate->state_inverted_output_nets)
+        {
+            new_events[std::make_pair(out_net, m_current_time + delay)] = inv_result;
+            // log_info("netlist simulator", "  !Q -> {}", out_net->get_name());
         }
     }
 

@@ -7,6 +7,7 @@
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
+#include "netlist/persistent/netlist_serializer.h"
 #include "plugin_netlist_simulator/plugin_netlist_simulator.h"
 #include "test_utils/include/test_def.h"
 
@@ -424,7 +425,7 @@ namespace hal
 
     TEST_F(SimulatorTest, half_adder)
     {
-        // return;
+        return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -504,7 +505,7 @@ namespace hal
 
     TEST_F(SimulatorTest, counter)
     {
-        // return;
+        return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -743,6 +744,8 @@ namespace hal
         if (!core_utils::file_exists(path_netlist))
             FAIL() << "netlist for sha256 not found: " << path_netlist;
 
+        std::string path_netlist_hal = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.hal";
+
         //create netlist from path
         auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
         if (lib == nullptr)
@@ -752,8 +755,18 @@ namespace hal
 
         std::unique_ptr<Netlist> nl;
         {
-            NO_COUT_BLOCK;
-            nl = hdl_parser_manager::parse(path_netlist, lib);
+            std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
+            if (core_utils::file_exists(path_netlist_hal))
+            {
+                std::cout << ".hal file found for test netlist, loading this one." << std::endl;
+                nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
+            }
+            else
+            {
+                NO_COUT_BLOCK;
+                nl = hdl_parser_manager::parse(path_netlist, lib);
+                netlist_serializer::serialize_to_file(nl.get(), path_netlist_hal);
+            }
             if (nl == nullptr)
             {
                 FAIL() << "netlist couldn't be parsed";
@@ -847,15 +860,13 @@ namespace hal
             hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
             std::cout << "10ns passed" << std::endl;
 
-            // sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-            // hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
-            // std::cout << "10ns passed" << std::endl;
+            sim->set_input(start, SignalValue::ZERO);    //START <= '0';
+            hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+            std::cout << "10ns passed" << std::endl;
 
             // std::cout << "now waiting for 2000ns" << std::endl;
 
-            // hal_sim_traces = simulate(20);
-
-            // hal_sim_traces = simulate(1980);
+            hal_sim_traces = simulate(2000);
         }
 
         // Test if maps are equal
