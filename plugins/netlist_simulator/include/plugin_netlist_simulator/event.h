@@ -16,5 +16,14 @@ namespace hal
         {
             return affected_net == other.affected_net && new_value == other.new_value && time == other.time;
         }
+
+        bool operator<(const Event& other) const
+        {
+            if (time != other.time)
+            {
+                return time < other.time;
+            }
+            return id < other.id;
+        }
     };
 }    // namespace hal

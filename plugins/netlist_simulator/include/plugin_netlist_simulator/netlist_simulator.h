@@ -16,12 +16,18 @@ namespace hal
         /*
         * Add gates to the simulation set.
         * Only elements in the simulation set are considered during simulation.
+        *
+        * @param[in] gates - the gates to add
         */
         void add_gates(const std::vector<Gate*>& gates);
 
         /*
         * Add a clock signal.
         * Specify clock speed in hertz.
+        *
+        * @param[in] clock_net - The net that carries the clock signal
+        * @param[in] hertz - the clock frequency in Hz
+        * @param[in] start_at_zero - If true, the initial clock state is 0 else 1
         */
         void add_clock_hertz(Net* clock_net, u64 hertz, bool start_at_zero = true);
 
@@ -29,39 +35,55 @@ namespace hal
         * Add a clock signal.
         * Specify clock speed in picoseconds period.
         * A period of 10 means 5 high, 5 low.
+        *
+        * @param[in] clock_net - The net that carries the clock signal
+        * @param[in] period - the clock period from rising edge to rising edge in picoseconds
+        * @param[in] start_at_zero - If true, the initial clock state is 0 else 1
         */
         void add_clock_period(Net* clock_net, u64 period, bool start_at_zero = true);
 
         /*
         * Get all gates that are in the simulation set.
+        *
+        * @returns the simulation set
         */
-        std::vector<Gate*> get_gates() const;
+        std::unordered_set<Gate*> get_gates() const;
 
         /*
         * Get all nets that are considered inputs, i.e., not driven by a gate in the simulation set or global inputs
+        *
+        * @returns the input nets
         */
         std::vector<Net*> get_input_nets() const;
 
         /*
         * Get all output nets of gates in the simulation set that have a destination outside of the set or that are global outputs.
+        *
+        * @returns the output nets
         */
         std::vector<Net*> get_output_nets() const;
 
         /*
         * Set the signal for a specific wire.
         * Can be used to control input signals between simulation cycles.
+        *
+        * @param[in] net - the net to set a signal value for
+        * @param[in] value - the value to set
         */
         void set_input(Net* net, SignalValue value);
 
         /*
         * Load the initial values for all sequential elements into the current state.
         * For example, a Flip Flop may be initialized with HIGH output in FPGAs.
+        * This is not done automatically!
         */
         void load_initial_values();
 
         /*
         * Simulate for a specific period, advancing the internal state.
         * Use 'set_input' to control specific signals.
+        *
+        * @param[in] picoseconds - the duration to simulate
         */
         void simulate(u64 picoseconds);
 
@@ -74,13 +96,33 @@ namespace hal
         /*
         * Set the simulator state, i.e., net signals, to a given state.
         * Does not influence gates/nets added to the simulation set.
+        *
+        * @param[in] state - the state to apply
         */
         void set_state(const Simulation& state);
 
         /*
-        * Get the current net signal values.
+        * Get the current simulation state.
+        *
+        * @returns the current simulation state
         */
         Simulation get_current_state() const;
+
+        /*
+        * Set the iteration timeout, i.e., the maximum number of events processed for a single point in time.
+        * Useful to abort in case of infinite loops.
+        * A value of 0 disables the timeout.
+        *
+        * @param[in] iterations - the state to apply
+        */
+        void set_iteration_timeout(u64 iterations);
+
+        /*
+        * Get the current iteration timeout value.
+        *
+        * @returns the iteration timeout
+        */
+        u64 get_simulation_timeout() const;
 
     private:
         friend class NetlistSimulatorPlugin;

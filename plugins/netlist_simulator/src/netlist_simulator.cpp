@@ -72,9 +72,9 @@ namespace hal
         m_clocks.push_back(c);
     }
 
-    std::vector<Gate*> NetlistSimulator::get_gates() const
+    std::unordered_set<Gate*> NetlistSimulator::get_gates() const
     {
-        return std::vector<Gate*>(m_simulation_set.begin(), m_simulation_set.end());
+        return m_simulation_set;
     }
 
     std::vector<Net*> NetlistSimulator::get_input_nets() const
@@ -242,6 +242,16 @@ namespace hal
                 }
             }
         }
+    }
+
+    void NetlistSimulator::set_iteration_timeout(u64 iterations)
+    {
+        m_timeout_iterations = iterations;
+    }
+
+    u64 NetlistSimulator::get_simulation_timeout() const
+    {
+        return m_timeout_iterations;
     }
 
     /*
@@ -447,15 +457,6 @@ namespace hal
     {
         measure_block_time("NetlistSimulator::process_events(" + std::to_string(timeout) + ")");
 
-        // sorting lambda for events
-        auto sort_by_time = [](auto& a, auto& b) {
-            if (a.time != b.time)
-            {
-                return a.time < b.time;
-            }
-            return a.id < b.id;
-        };
-
         // iteration counter to catch infinite loops
         u64 total_iterations_for_one_timeslot = 0;
 
@@ -470,7 +471,7 @@ namespace hal
             std::map<std::pair<Net*, u64>, SignalValue> new_events;
 
             // sort events by time
-            std::sort(m_event_queue.begin(), m_event_queue.end(), sort_by_time);
+            std::sort(m_event_queue.begin(), m_event_queue.end());
 
             // queue empty or all events of the current point in time processed?
             if (m_event_queue.empty() || m_current_time != m_event_queue[0].time)
@@ -490,7 +491,7 @@ namespace hal
                     // no FFs and queue empty -> simulation is done
                     break;
                 }
-                else // no FFs but queue is not empty -> advance point in time
+                else    // no FFs but queue is not empty -> advance point in time
                 {
                     m_current_time                    = m_event_queue[0].time;
                     total_iterations_for_one_timeslot = 0;
@@ -528,12 +529,12 @@ namespace hal
                             it->second.pop_back();
                         }
                     }
-                    else // new event
+                    else    // new event
                     {
                         m_simulation.m_events[event.affected_net].push_back(event);
                     }
                 }
-                else // no value recorded -> new event
+                else    // no value recorded -> new event
                 {
                     m_simulation.m_events[event.affected_net].push_back(event);
                 }
@@ -551,7 +552,7 @@ namespace hal
 
             // check for iteration limit
             total_iterations_for_one_timeslot += processed;
-            if (total_iterations_for_one_timeslot > m_timeout_iterations)
+            if (m_timeout_iterations > 0 && total_iterations_for_one_timeslot > m_timeout_iterations)
             {
                 log_error("netlist simulator", "reached iteration timeout of {} without advancing in time, aborting simulation. Is there a combinational loop?", m_timeout_iterations);
                 return;
