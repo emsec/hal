@@ -289,6 +289,7 @@ namespace hal
                     }
                 }
             }
+            std::sort(m_input_nets.begin(), m_input_nets.end());
             m_input_nets_dirty = false;
         }
         return m_input_nets;
@@ -322,6 +323,7 @@ namespace hal
                     }
                 }
             }
+            std::sort(m_output_nets.begin(), m_output_nets.end());
             m_output_nets_dirty = false;
         }
         return m_output_nets;
@@ -350,6 +352,7 @@ namespace hal
                     }
                 }
             }
+            std::sort(m_internal_nets.begin(), m_internal_nets.end());
             m_internal_nets_dirty = false;
         }
         return m_internal_nets;
@@ -367,8 +370,7 @@ namespace hal
 
         if (auto it = std::find(input_nets.begin(), input_nets.end(), input_net); it == input_nets.end())
         {
-            log_warning(
-                "module", "net '{}' with id {} is not an input net of module '{}' with id {}, ignoring port assignment", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+            log_warning("module", "net '{}' with id {} is not an input net of module '{}' with id {}, ignoring port assignment", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
             return;
         }
 
@@ -497,11 +499,12 @@ namespace hal
     const std::map<Net*, std::string>& Module::get_input_port_names() const
     {
         auto input_nets = get_input_nets();
-        std::set<Net*> diff;
+
+        std::vector<Net*> diff;
 
         // find nets that are still in the port map but no longer an input net
-        std::set_difference(m_named_input_nets.begin(), m_named_input_nets.end(), input_nets.begin(), input_nets.end(), std::inserter(diff, diff.begin()));
-        for (const auto& net : diff)
+        std::set_difference(m_named_input_nets.begin(), m_named_input_nets.end(), input_nets.begin(), input_nets.end(), std::back_inserter(diff));
+        for (auto net : diff)
         {
             m_named_input_nets.erase(net);
             m_input_net_to_port_name.erase(net);
@@ -510,8 +513,8 @@ namespace hal
         diff.clear();
 
         // find nets that are input nets but have not yet been assigned a port name
-        std::set_difference(input_nets.begin(), input_nets.end(), m_named_input_nets.begin(), m_named_input_nets.end(), std::inserter(diff, diff.begin()));
-        for (const auto& net : diff)
+        std::set_difference(input_nets.begin(), input_nets.end(), m_named_input_nets.begin(), m_named_input_nets.end(), std::back_inserter(diff));
+        for (auto net : diff)
         {
             m_named_input_nets.insert(net);
             m_input_net_to_port_name.emplace(net, "I(" + std::to_string(m_next_input_port_id++) + ")");

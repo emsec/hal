@@ -137,7 +137,7 @@ namespace hal
          * Get the input nets to this module.<br>
          * A module input net is either a global input to the netlist or has a source outside of the module.
          *
-         * @returns The set of module input nets.
+         * @returns The sorted set of module input nets.
          */
         std::vector<Net*> get_input_nets() const;
 
@@ -145,7 +145,7 @@ namespace hal
          * Get the output nets of this module.<br>
          * A module output net is either a global output of the netlist or has a destination outside of the module.
          *
-         * @returns The set of module output nets.
+         * @returns The sorted set of module output nets.
          */
         std::vector<Net*> get_output_nets() const;
 
@@ -154,7 +154,7 @@ namespace hal
          * A net is internal if its source and at least one output are inside the module.<br>
          * Therefore it may contain some nets that are also regarded as output nets.
          *
-         * @returns The set of module input nets.
+         * @returns The sorted set of module input nets.
          */
         std::vector<Net*> get_internal_nets() const;
 
