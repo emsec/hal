@@ -5,6 +5,7 @@
 #include "netlist/net.h"
 #include "plugin_netlist_simulator/simulation.h"
 
+#include <map>
 #include <unordered_set>
 
 namespace hal
@@ -103,7 +104,7 @@ namespace hal
         u64 m_current_time = 0;
         std::vector<Event> m_event_queue;
         Simulation m_simulation;
-        u64 m_timeout_iterations = 1000000;
+        u64 m_timeout_iterations = 10000000ul;
         u64 m_id_counter         = 0;
 
         struct SimulationGate
@@ -132,6 +133,8 @@ namespace hal
             std::vector<Net*> clock_nets;
             GateTypeSequential::SetResetBehavior sr_behavior_out;
             GateTypeSequential::SetResetBehavior sr_behavior_out_inverted;
+            SignalValue output;
+            SignalValue inv_output;
         };
 
         std::unordered_map<Net*, std::vector<SimulationGate*>> m_successors;
@@ -144,5 +147,8 @@ namespace hal
         void initialize();
         void prepare_clock_events(u64 nanoseconds);
         void process_events(u64 timeout);
+
+        std::map<std::string, BooleanFunction::value> gather_input_values(SimulationGate* gate);
+        SignalValue process_set_reset_behavior(GateTypeSequential::SetResetBehavior behavior, SignalValue previous_output);
     };
 }    // namespace hal

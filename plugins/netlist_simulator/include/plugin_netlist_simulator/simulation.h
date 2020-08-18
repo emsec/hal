@@ -8,25 +8,28 @@ namespace hal
     class Simulation
     {
     public:
-        SignalValue get_net_value(Net* net, u64 nanoseconds);
+        /*
+         * Get the signal value of a specific net at a specific point in time
+         *
+         * @param[in] net - The net to inspect
+         * @param[in] picoseconds - The point in (simulation) time
+         * @returns the net's signal value
+         */
+        SignalValue get_net_value(Net* net, u64 picoseconds);
 
-        // WARNING: unchecked inputs, use for testing only
+        /*
+         * Adds a custom event to the simulation.
+         *
+         * @param[in] ev - The event to add
+         */
         void add_event(const Event& ev);
 
-        // WARNING: use for testing only
+        /*
+         * Get all events of the simulation.
+         *
+         * @returns a map from net to associated events for that net sorted by time
+         */
         std::unordered_map<Net*, std::vector<Event>> get_events() const;
-
-        /*
-        * Generates vcd
-        * Returns string of vcd that can be written to file
-        */
-        std::string generate_vcd();
-
-        /*
-        * Generates vcd and groups nets with same name and consecutive ending.
-        * Returns string of vcd that can be written to file
-        */
-        std::string generate_vcd_with_bus();
 
     private:
         friend class NetlistSimulator;

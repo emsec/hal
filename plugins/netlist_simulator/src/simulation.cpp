@@ -7,6 +7,7 @@ namespace hal
         auto it = m_events.find(net);
 
         SignalValue result = SignalValue::X;
+
         if (it != m_events.end())
         {
             for (auto& e : it->second)
@@ -29,15 +30,5 @@ namespace hal
     std::unordered_map<Net*, std::vector<Event>> Simulation::get_events() const
     {
         return m_events;
-    }
-
-    std::string Simulation::generate_vcd()
-    {
-        return "";
-    }
-
-    std::string Simulation::generate_vcd_with_bus()
-    {
-        return "";
     }
 }    // namespace hal

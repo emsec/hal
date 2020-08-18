@@ -799,8 +799,6 @@ namespace hal
         // retrieve nets
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
 
-        std::cout << "#clock events: " << vcd_traces.get_events()[clk].size() << std::endl;
-
         sim->add_clock_period(clk, 10000);
 
         auto start = *(nl->get_nets([](auto net) { return net->get_name() == "data_ready"; }).begin());
@@ -849,21 +847,15 @@ namespace hal
             sim->set_input(rst, SignalValue::ONE);       //RST <= '1';
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
             hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
-            std::cout << "10ns passed" << std::endl;
 
             sim->set_input(rst, SignalValue::ZERO);    //RST <= '0';
             hal_sim_traces = simulate(10);             //WAIT FOR 10 NS;
-            std::cout << "10ns passed" << std::endl;
 
             sim->set_input(start, SignalValue::ONE);    //START <= '1';
             hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
-            std::cout << "10ns passed" << std::endl;
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
             hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
-            std::cout << "10ns passed" << std::endl;
-
-            // std::cout << "now waiting for 2000ns" << std::endl;
 
             hal_sim_traces = simulate(2000);
         }
