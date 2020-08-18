@@ -77,6 +77,7 @@ namespace hal
 
         /**
          * Get a gate library object by file name.
+         * If no library with the given name is already loaded this function will attempt to load the file.
          *
          * @param[in] file_name - file name of the gate library.
          * @returns Pointer to the gate library object or nullptr on error.
