@@ -4,13 +4,13 @@ if "__decorated_gui__" not in dir():
     import hal_gui
     from functools import wraps
 
-    # select_gate decorator, possible arguments: [gate-id, list of gate-ids, gate, list of gates,] , bool clear_curr_selec, bool nav_to_selec
-    def select_gate_decorator(message, f):
+    # generic decorator for select_gate, select_net and select_module
+    def generic_select_gate_net_module(message, type, f):
         @wraps(f)
         def decorated(*args, **kwargs):
             result = f(*args, **kwargs)
-            log_string = "Function: " + message + ", Gate-ID(s): {"
-            
+            log_string = "Function: {}, {}-ID(s): {{".format(message, type)
+
             if isinstance(args[1], list):
                 if isinstance(args[1][0], int):
                     sorted_list = sorted(args[1])
@@ -18,7 +18,7 @@ if "__decorated_gui__" not in dir():
                 else:
                     sorted_list = sorted(args[1], key=lambda gate: gate.id)
                     log_string += "".join([str(g.id) + ", " for g in sorted_list])[:-2] + "}"
-            else: 
+            else:
                 if isinstance(args[1], int):
                     log_string += str(args[1]) + "}"
                 else:
@@ -31,7 +31,10 @@ if "__decorated_gui__" not in dir():
         return decorated
 
 
-    hal_gui.GuiApi.select_gate = select_gate_decorator("GuiApi.select_gate", hal_gui.GuiApi.select_gate)
+    # decorate the actual functions
+    hal_gui.GuiApi.select_gate = generic_select_gate_net_module("GuiApi.select_gate", "Gate", hal_gui.GuiApi.select_gate)
+    hal_gui.GuiApi.select_net = generic_select_gate_net_module("GuiApi.select_net", "Net", hal_gui.GuiApi.select_net)
+    hal_gui.GuiApi.select_module = generic_select_gate_net_module("GuiApi.select_module", "Module", hal_gui.GuiApi.select_module)
 
 else:
     hal_py.log_info("Gui slready decorated. Not applying again.")
