@@ -51,9 +51,8 @@ namespace hal
         virtual void SetUp()
         {
             NO_COUT_BLOCK;
-
             plugin_manager::load_all_plugins();
-            gate_library_manager::load_all();
+            gate_library_manager::get_gate_library("XILINX_UNISIM.lib");
             auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
         }
 
