@@ -543,7 +543,7 @@ namespace hal
                 // record all FFs that have to be clocked
                 for (auto gate : m_successors.at(event.affected_net))
                 {
-                    if (!simulate(gate, event, new_events))
+                    if (!simulate_gate(gate, event, new_events))
                     {
                         ffs.push_back(static_cast<SimulationGateFF*>(gate));
                     }
@@ -578,7 +578,7 @@ namespace hal
         m_current_time = timeout;
     }
 
-    bool NetlistSimulator::simulate(SimulationGate* gate, Event& event, std::map<std::pair<Net*, u64>, SignalValue>& new_events)
+    bool NetlistSimulator::simulate_gate(SimulationGate* gate, Event& event, std::map<std::pair<Net*, u64>, SignalValue>& new_events)
     {
         // compute delay, currently just a placeholder
         u64 delay = 0;
