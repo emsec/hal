@@ -139,7 +139,7 @@ namespace hal
          *
          * @returns The set of module input nets.
          */
-        std::set<Net*> get_input_nets() const;
+        std::vector<Net*> get_input_nets() const;
 
         /**
          * Get the output nets of this module.<br>
@@ -147,7 +147,7 @@ namespace hal
          *
          * @returns The set of module output nets.
          */
-        std::set<Net*> get_output_nets() const;
+        std::vector<Net*> get_output_nets() const;
 
         /**
          * Get the internal nets of this module.<br>
@@ -156,7 +156,7 @@ namespace hal
          *
          * @returns The set of module input nets.
          */
-        std::set<Net*> get_internal_nets() const;
+        std::vector<Net*> get_internal_nets() const;
 
         /**
          * Set the name of the port corresponding to the specified input net to the given string.
@@ -302,5 +302,12 @@ namespace hal
         /* stores gates sorted by id */
         std::map<u32, Gate*> m_gates_map;
         std::set<Gate*> m_gates_set;
+
+        mutable bool m_input_nets_dirty;
+        mutable std::vector<Net*> m_input_nets;
+        mutable bool m_output_nets_dirty;
+        mutable std::vector<Net*> m_output_nets;
+        mutable bool m_internal_nets_dirty;
+        mutable std::vector<Net*> m_internal_nets;
     };
 }    // namespace hal

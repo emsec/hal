@@ -97,12 +97,20 @@ namespace hal
         m_parent->m_submodules_map.erase(m_id);
         m_parent->m_submodules_set.erase(this);
 
+        m_parent->m_input_nets_dirty    = true;
+        m_parent->m_output_nets_dirty   = true;
+        m_parent->m_internal_nets_dirty = true;
+
         module_event_handler::notify(module_event_handler::event::submodule_removed, m_parent, m_id);
 
         m_parent = new_parent;
 
         m_parent->m_submodules_map[m_id] = this;
         m_parent->m_submodules_set.insert(this);
+
+        m_parent->m_input_nets_dirty    = true;
+        m_parent->m_output_nets_dirty   = true;
+        m_parent->m_internal_nets_dirty = true;
 
         module_event_handler::notify(module_event_handler::event::parent_changed, this);
         module_event_handler::notify(module_event_handler::event::submodule_added, m_parent, m_id);
@@ -167,11 +175,17 @@ namespace hal
 
     bool Module::assign_gate(Gate* gate)
     {
+        m_input_nets_dirty    = true;
+        m_output_nets_dirty   = true;
+        m_internal_nets_dirty = true;
         return m_internal_manager->module_assign_gate(this, gate);
     }
 
     bool Module::remove_gate(Gate* gate)
     {
+        m_input_nets_dirty    = true;
+        m_output_nets_dirty   = true;
+        m_internal_nets_dirty = true;
         return m_internal_manager->module_remove_gate(this, gate);
     }
 
@@ -247,86 +261,98 @@ namespace hal
         return res;
     }
 
-    std::set<Net*> Module::get_input_nets() const
+    std::vector<Net*> Module::get_input_nets() const
     {
-        std::unordered_set<u32> seen;
-        std::set<Net*> res;
-        auto gates = get_gates(nullptr, true);
-        for (const auto& gate : gates)
+        if (m_input_nets_dirty)
         {
-            for (const auto& net : gate->get_fan_in_nets())
+            std::unordered_set<Net*> seen;
+            m_input_nets.clear();
+            auto gates = get_gates(nullptr, true);
+            for (auto gate : gates)
             {
-                if (seen.find(net->get_id()) != seen.end())
+                for (auto net : gate->get_fan_in_nets())
                 {
-                    continue;
-                }
-                seen.insert(net->get_id());
-                if (m_internal_manager->m_netlist->is_global_input_net(net))
-                {
-                    res.insert(net);
-                    continue;
-                }
-                auto sources = net->get_sources();
-                if (std::any_of(sources.begin(), sources.end(), [&gates](Endpoint src) { return gates.find(src.get_gate()) == gates.end(); }))
-                {
-                    res.insert(net);
+                    if (seen.find(net) != seen.end())
+                    {
+                        continue;
+                    }
+                    seen.insert(net);
+                    if (m_internal_manager->m_netlist->is_global_input_net(net))
+                    {
+                        m_input_nets.push_back(net);
+                        continue;
+                    }
+                    auto sources = net->get_sources();
+                    if (std::any_of(sources.begin(), sources.end(), [&gates](Endpoint src) { return gates.find(src.get_gate()) == gates.end(); }))
+                    {
+                        m_input_nets.push_back(net);
+                    }
                 }
             }
+            m_input_nets_dirty = false;
         }
-        return res;
+        return m_input_nets;
     }
 
-    std::set<Net*> Module::get_output_nets() const
+    std::vector<Net*> Module::get_output_nets() const
     {
-        std::unordered_set<u32> seen;
-        std::set<Net*> res;
-        auto gates = get_gates(nullptr, true);
-        for (const auto& gate : gates)
+        if (m_output_nets_dirty)
         {
-            for (const auto& net : gate->get_fan_out_nets())
+            std::unordered_set<Net*> seen;
+            m_output_nets.clear();
+            auto gates = get_gates(nullptr, true);
+            for (auto gate : gates)
             {
-                if (seen.find(net->get_id()) != seen.end())
+                for (auto net : gate->get_fan_out_nets())
                 {
-                    continue;
-                }
-                seen.insert(net->get_id());
-                if (m_internal_manager->m_netlist->is_global_output_net(net))
-                {
-                    res.insert(net);
-                    continue;
-                }
-                auto destinations = net->get_destinations();
-                if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint dst) { return gates.find(dst.get_gate()) == gates.end(); }))
-                {
-                    res.insert(net);
+                    if (seen.find(net) != seen.end())
+                    {
+                        continue;
+                    }
+                    seen.insert(net);
+                    if (m_internal_manager->m_netlist->is_global_output_net(net))
+                    {
+                        m_output_nets.push_back(net);
+                        continue;
+                    }
+                    auto destinations = net->get_destinations();
+                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint dst) { return gates.find(dst.get_gate()) == gates.end(); }))
+                    {
+                        m_output_nets.push_back(net);
+                    }
                 }
             }
+            m_output_nets_dirty = false;
         }
-        return res;
+        return m_output_nets;
     }
 
-    std::set<Net*> Module::get_internal_nets() const
+    std::vector<Net*> Module::get_internal_nets() const
     {
-        std::unordered_set<u32> seen;
-        std::set<Net*> res;
-        auto gates = get_gates(nullptr, true);
-        for (const auto& gate : gates)
+        if (m_internal_nets_dirty)
         {
-            for (const auto& net : gate->get_fan_out_nets())
+            std::unordered_set<Net*> seen;
+            m_internal_nets.clear();
+            auto gates = get_gates(nullptr, true);
+            for (auto gate : gates)
             {
-                if (seen.find(net->get_id()) != seen.end())
+                for (auto net : gate->get_fan_out_nets())
                 {
-                    continue;
-                }
-                seen.insert(net->get_id());
-                auto destinations = net->get_destinations();
-                if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint dst) { return gates.find(dst.get_gate()) != gates.end(); }))
-                {
-                    res.insert(net);
+                    if (seen.find(net) != seen.end())
+                    {
+                        continue;
+                    }
+                    seen.insert(net);
+                    auto destinations = net->get_destinations();
+                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint dst) { return gates.find(dst.get_gate()) != gates.end(); }))
+                    {
+                        m_internal_nets.push_back(net);
+                    }
                 }
             }
+            m_internal_nets_dirty = false;
         }
-        return res;
+        return m_internal_nets;
     }
 
     void Module::set_input_port_name(Net* input_net, const std::string& port_name)
@@ -339,7 +365,7 @@ namespace hal
 
         auto input_nets = get_input_nets();
 
-        if (auto it = input_nets.find(input_net); it == input_nets.end())
+        if (auto it = std::find(input_nets.begin(), input_nets.end(), input_net); it == input_nets.end())
         {
             log_warning(
                 "module", "net '{}' with id {} is not an input net of module '{}' with id {}, ignoring port assignment", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
@@ -362,7 +388,7 @@ namespace hal
 
         auto output_nets = get_output_nets();
 
-        if (auto it = output_nets.find(output_net); it == output_nets.end())
+        if (auto it = std::find(output_nets.begin(), output_nets.end(), output_net); it == output_nets.end())
         {
             log_warning("module",
                         "net '{}' with id {} is not an output net of module '{}' with id {}, ignoring port assignment",
@@ -389,7 +415,7 @@ namespace hal
 
         auto input_nets = get_input_nets();
 
-        if (auto it = input_nets.find(net); it == input_nets.end())
+        if (auto it = std::find(input_nets.begin(), input_nets.end(), net); it == input_nets.end())
         {
             log_warning("module", "net '{}' with id {} is not an input net of module '{}' with id {}.", net->get_name(), net->get_id(), this->get_name(), this->get_id());
             return "";
@@ -419,7 +445,7 @@ namespace hal
         }
         auto output_nets = get_output_nets();
 
-        if (auto it = output_nets.find(net); it == output_nets.end())
+        if (auto it = std::find(output_nets.begin(), output_nets.end(), net); it == output_nets.end())
         {
             log_warning("module", "net '{}' with id {} is not an output net of module '{}' with id {}.", net->get_name(), net->get_id(), this->get_name(), this->get_id());
             return "";
