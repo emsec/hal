@@ -43,6 +43,7 @@ namespace hal
     class Net;
     class Module;
     class Endpoint;
+    class NetlistInternalManager;
 
     /**
      * Gate class containing information about a gate including its location, functions, and module.
@@ -309,7 +310,7 @@ namespace hal
         std::vector<Endpoint> get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
 
     private:
-        Gate(Netlist* nl, u32 id, const GateType* gt, const std::string& name, float x, float y);
+        Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, float x, float y);
 
         Gate(const Gate&) = delete;               //disable copy-constructor
         Gate& operator=(const Gate&) = delete;    //disable copy-assignment
@@ -317,7 +318,7 @@ namespace hal
         BooleanFunction get_lut_function(const std::string& pin) const;
 
         /* pointer to corresponding netlist parent */
-        Netlist* m_netlist;
+        NetlistInternalManager* m_internal_manager;
 
         /* id of the gate */
         u32 m_id;

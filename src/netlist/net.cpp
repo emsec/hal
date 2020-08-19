@@ -26,7 +26,7 @@ namespace hal
 
     Netlist* Net::get_netlist() const
     {
-        return m_internal_manager->m_netlist->get_shared();
+        return m_internal_manager->m_netlist;
     }
 
     std::string Net::get_name() const

@@ -17,7 +17,7 @@ static T toggle(T v)
 
 namespace hal
 {
-/*
+
 #define seconds_since(X) ((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - (X)).count() / 1000)
 
 #define measure_block_time(X) measure_block_time_t _UNIQUE_NAME_(X);
@@ -33,14 +33,15 @@ namespace hal
 
         ~measure_block_time_t()
         {
+            log_info("netlist simulator", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
         }
 
     private:
         std::string m_name;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
     };
-    */
-#define measure_block_time(X)
+
+// #define measure_block_time(X)
 
     NetlistSimulator::NetlistSimulator()
     {

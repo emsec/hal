@@ -597,7 +597,7 @@ namespace hal
 
     TEST_F(SimulatorTest, toycipher)
     {
-        // return;
+        return;
         TEST_START
         sim = plugin->create_simulator();
 

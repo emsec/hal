@@ -44,7 +44,7 @@ namespace hal
             return nullptr;
         }
 
-        auto new_gate = std::unique_ptr<Gate>(new Gate(m_netlist->get_shared(), id, gt, name, x, y));
+        auto new_gate = std::unique_ptr<Gate>(new Gate(this, id, gt, name, x, y));
 
         auto free_id_it = m_netlist->m_free_gate_ids.find(id);
         if (free_id_it != m_netlist->m_free_gate_ids.end())
@@ -366,7 +366,7 @@ namespace hal
     }
 
     //######################################################################
-    //###                       modules                               ###
+    //###                          modules                               ###
     //######################################################################
 
     Module* NetlistInternalManager::create_module(const u32 id, Module* parent, const std::string& name)
@@ -391,7 +391,7 @@ namespace hal
             log_error("netlist.internal", "netlist::create_module: parent must not be nullptr");
             return nullptr;
         }
-        if (parent != nullptr && m_netlist->get_shared() != parent->get_netlist())
+        if (parent != nullptr && m_netlist != parent->get_netlist())
         {
             log_error("netlist.internal", "netlist::create_module: parent must belong to current netlist");
             return nullptr;
@@ -534,5 +534,14 @@ namespace hal
         module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, g->get_id());
 
         return true;
+    }
+
+    //######################################################################
+    //###                           caches                               ###
+    //######################################################################
+
+    void NetlistInternalManager::clear_caches()
+    {
+        m_lut_function_cache.clear();
     }
 }    // namespace hal

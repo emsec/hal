@@ -25,11 +25,6 @@ namespace hal
         delete m_manager;
     }
 
-    Netlist* Netlist::get_shared()
-    {
-        return this;
-    }
-
     u32 Netlist::get_id() const
     {
         return m_netlist_id;
@@ -90,6 +85,11 @@ namespace hal
     const GateLibrary* Netlist::get_gate_library() const
     {
         return m_gate_library;
+    }
+
+    void Netlist::clear_caches()
+    {
+        m_manager->clear_caches();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////

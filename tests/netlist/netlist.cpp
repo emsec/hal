@@ -29,18 +29,6 @@ namespace hal {
     };
 
     /**
-     * Testing the get_shared function which returns a shared_ptr on itselves
-     *
-     * Functions: get_shared
-     */
-    TEST_F(NetlistTest, check_get_shared) {
-        TEST_START
-            auto nl = test_utils::create_empty_netlist();
-            EXPECT_EQ(nl->get_shared(), nl.get());
-        TEST_END
-    }
-
-    /**
      * Testing the access on the id
      *
      * Functions: get_id, set_id

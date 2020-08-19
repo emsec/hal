@@ -64,13 +64,6 @@ namespace hal
         ~Netlist();
 
         /**
-         * Return shared_ptr for the current netlist object
-         *
-         * @returns The shared ptr to netlist
-         */
-        Netlist* get_shared();
-
-        /**
          * Get the netlist id.<br>
          * If not changed via set_id(), the id is zero.
          *
@@ -133,6 +126,12 @@ namespace hal
          * @returns A pointer to the gate library.
          */
         const GateLibrary* get_gate_library() const;
+
+        /**
+         * Clears internal caches of the netlist.
+         * In a typical application calling this function is not required.
+         */
+        void clear_caches();
 
         /*
          * ################################################################

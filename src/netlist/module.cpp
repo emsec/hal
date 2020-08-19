@@ -170,7 +170,7 @@ namespace hal
 
     Netlist* Module::get_netlist() const
     {
-        return m_internal_manager->m_netlist->get_shared();
+        return m_internal_manager->m_netlist;
     }
 
     bool Module::assign_gate(Gate* gate)
