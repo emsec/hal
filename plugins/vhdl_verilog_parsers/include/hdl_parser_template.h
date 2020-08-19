@@ -326,7 +326,7 @@ namespace hal
                 m_netlist->delete_net(m_one_net);
             }
 
-            for (const auto& net : m_netlist->get_nets())
+            for (auto net : m_netlist->get_nets())
             {
                 const bool no_source      = net->get_num_of_sources() == 0 && !net->is_global_input_net();
                 const bool no_destination = net->get_num_of_destinations() == 0 && !net->is_global_output_net();

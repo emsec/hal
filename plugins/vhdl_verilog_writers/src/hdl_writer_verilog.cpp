@@ -75,8 +75,7 @@ namespace hal
             m_only_wire_names_str_to_net[wire_name.second] = wire_name.first;
         }
         //input entity
-        std::set<Net*> in_nets = m_netlist->get_global_input_nets();
-        for (auto it : in_nets)
+        for (auto it : m_netlist->get_global_input_nets())
         {
             m_in_names[it]                                = this->get_net_name(it);
             m_in_names_str_to_net[this->get_net_name(it)] = it;
@@ -84,8 +83,7 @@ namespace hal
             m_only_wire_names_str_to_net.erase(this->get_net_name(it));
         }
         //output entity
-        std::set<Net*> out_nets = m_netlist->get_global_output_nets();
-        for (auto it : out_nets)
+        for (auto it : m_netlist->get_global_output_nets())
         {
             m_out_names[it]                                = this->get_net_name(it);
             m_out_names_str_to_net[this->get_net_name(it)] = it;

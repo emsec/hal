@@ -155,6 +155,7 @@ namespace hal
         std::vector<Endpoint> get_sources(const std::function<bool(const Endpoint& ep)>& filter = nullptr) const;
 
         /**
+         * DEPRECATED
          * Get the (first) src of the net.
          * If there was no src assigned, the gate element of the returned endpoint is a nullptr.
          * If the net is multi-driven a warning is printed.

@@ -164,7 +164,7 @@ namespace hal
             {
                 gates.insert(g->get_id());
             }
-            for (const auto& sm : m->get_submodules(nullptr, true))
+            for (auto sm : m->get_submodules(nullptr, true))
             {
                 modules.insert(sm->get_id());
             }
@@ -188,7 +188,7 @@ namespace hal
             {
                 gates.insert(g->get_id());
             }
-            for (const auto& sm : m->get_submodules())
+            for (auto sm : m->get_submodules())
             {
                 modules.insert(sm->get_id());
             }
@@ -235,7 +235,7 @@ namespace hal
         {
             gates.insert(g->get_id());
         }
-        for (const auto& sm : m->get_submodules())
+        for (auto sm : m->get_submodules())
         {
             modules.insert(sm->get_id());
         }
@@ -425,12 +425,12 @@ namespace hal
         for (const auto& id : m_gates)
         {
             auto g = g_netlist->get_gate_by_id(id);
-            for (const auto& net : g->get_fan_in_nets())
+            for (auto net : g->get_fan_in_nets())
             {
                 //if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
                     m_nets.insert(net->get_id());
             }
-            for (const auto& net : g->get_fan_out_nets())
+            for (auto net : g->get_fan_out_nets())
             {
                 //if(!net->is_unrouted() || net->is_global_input_net() || net->is_global_output_net())
                     m_nets.insert(net->get_id());
@@ -439,11 +439,11 @@ namespace hal
         for (const auto& id : m_modules)
         {
             auto m = g_netlist->get_module_by_id(id);
-            for (const auto& net : m->get_input_nets())
+            for (auto net : m->get_input_nets())
             {
                 m_nets.insert(net->get_id());
             }
-            for (const auto& net : m->get_output_nets())
+            for (auto net : m->get_output_nets())
             {
                 m_nets.insert(net->get_id());
             }

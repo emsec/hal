@@ -123,6 +123,7 @@ namespace hal
 
     Endpoint Net::get_source() const
     {
+        // log_warning("netlist", "Net::get_source() is deprecated");
         if (m_sources.empty())
         {
             return Endpoint();

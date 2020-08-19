@@ -31,7 +31,7 @@ namespace hal
         if(role == Qt::DisplayRole)
         {
             const u32 gate_id = m_selected_gate_ids.at(index.row());
-            const auto& gate = g_netlist->get_gate_by_id(gate_id);
+            auto gate = g_netlist->get_gate_by_id(gate_id);
 
             if(!gate)
                 return QVariant();
@@ -73,7 +73,7 @@ namespace hal
 
     void gate_table_model::fetch_selection()
     {
-        const auto& gate_selection = g_selection_relay.m_selected_gates;
+        auto gate_selection = g_selection_relay.m_selected_gates;
 
         Q_EMIT layoutAboutToBeChanged();
         QVector<u32> gate_ids;

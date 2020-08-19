@@ -6,7 +6,7 @@
 namespace hal
 {
     std::vector<std::set<Gate*>>
-        plugin_graph_algorithm::get_graph_cut(Netlist* const g, Gate* const current_gate, const u32 depth, const std::set<std::string> terminal_gate_type)
+        plugin_graph_algorithm::get_graph_cut(Netlist* const g, Gate* current_gate, const u32 depth, const std::set<std::string> terminal_gate_type)
     {
         if (g == nullptr)
         {

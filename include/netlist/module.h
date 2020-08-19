@@ -114,7 +114,7 @@ namespace hal
          * @param[in] recursive - Look into submodules as well
          * @returns The set of submodules
          */
-        std::set<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
+        std::vector<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
 
         /**
          * Checks whether another module is a submodule of this module.<br>
@@ -288,14 +288,14 @@ namespace hal
         u32 m_id;
 
         Module* m_parent;
-        std::map<u32, Module*> m_submodules_map;
-        std::set<Module*> m_submodules;
+        std::unordered_map<u32, Module*> m_submodules_map;
+        std::vector<Module*> m_submodules;
 
         /* port names */
         mutable u32 m_next_input_port_id  = 0;
         mutable u32 m_next_output_port_id = 0;
-        mutable std::unordered_set<Net*> m_named_input_nets;
-        mutable std::unordered_set<Net*> m_named_output_nets;
+        mutable std::set<Net*> m_named_input_nets; // ordering necessary, cannot be replaced with unordered_set
+        mutable std::set<Net*> m_named_output_nets; // ordering necessary, cannot be replaced with unordered_set
         mutable std::map<Net*, std::string> m_input_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
         mutable std::map<Net*, std::string> m_output_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
 

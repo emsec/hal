@@ -503,8 +503,8 @@ namespace hal {
                 // Testing the access on submodules (no module_name_filter, not recursive)
                 {
                     // Submodules of TOP_MODULE;
-                    std::set<Module*> exp_result = {m_0, m_1};
-                    EXPECT_EQ(tm->get_submodules(nullptr, false), exp_result);
+                    std::vector<Module*> exp_result = {m_0, m_1};
+                    EXPECT_TRUE(test_utils::vectors_have_same_content(tm->get_submodules(nullptr, false), exp_result));
                     EXPECT_TRUE(tm->contains_module(m_0, false));
                     EXPECT_TRUE(tm->contains_module(m_1, false));
                     EXPECT_FALSE(tm->contains_module(m_2, false));
@@ -512,12 +512,12 @@ namespace hal {
                 }
                 {
                     // Submodules of MODULE_1;
-                    std::set<Module*> exp_result = {m_2, m_3};
-                    EXPECT_EQ(m_1->get_submodules(nullptr, false), exp_result);
+                    std::vector<Module*> exp_result = {m_2, m_3};
+                    EXPECT_TRUE(test_utils::vectors_have_same_content(m_1->get_submodules(nullptr, false), exp_result));
                 }
                 {
                     // Submodules of MODULE_0;
-                    std::set<Module*> exp_result = {};
+                    std::vector<Module*> exp_result = {};
                     EXPECT_EQ(m_0->get_submodules(nullptr, false), exp_result);
                 }
             }
@@ -525,17 +525,17 @@ namespace hal {
                 // Testing the access on submodules (module_name_filter set, not recursive)
                 {
                     // Submodules of TOP_MODULE;
-                    std::set<Module*> exp_result = {m_0};
+                    std::vector<Module*> exp_result = {m_0};
                     EXPECT_EQ(tm->get_submodules(test_utils::module_name_filter("even_module"), false), exp_result);
                 }
                 {
                     // Submodules of MODULE_1;
-                    std::set<Module*> exp_result = {m_2};
+                    std::vector<Module*> exp_result = {m_2};
                     EXPECT_EQ(m_1->get_submodules(test_utils::module_name_filter("even_module"), false), exp_result);
                 }
                 {
                     // Submodules of TOP_MODULE (name does not exists);
-                    std::set<Module*> exp_result = {};
+                    std::vector<Module*> exp_result = {};
                     EXPECT_EQ(tm->get_submodules(test_utils::module_name_filter("non_existing_name"), false),
                               exp_result);
                 }
@@ -544,8 +544,8 @@ namespace hal {
                 // Testing the access on submodules (recursive)
                 {
                     // Submodules of TOP_MODULE;
-                    std::set<Module*> exp_result = {m_0, m_1, m_2, m_3};
-                    EXPECT_EQ(tm->get_submodules(nullptr, true), exp_result);
+                    std::vector<Module*> exp_result = {m_0, m_1, m_2, m_3};
+                    EXPECT_TRUE(test_utils::vectors_have_same_content(tm->get_submodules(nullptr, true), exp_result));
                     EXPECT_TRUE(tm->contains_module(m_0, true));
                     EXPECT_TRUE(tm->contains_module(m_1, true));
                     EXPECT_TRUE(tm->contains_module(m_2, true));
@@ -553,12 +553,12 @@ namespace hal {
                 }
                 {
                     // Submodules of TOP_MODULE (with module_name_filter);
-                    std::set<Module*> exp_result = {m_0, m_2};
-                    EXPECT_EQ(tm->get_submodules(test_utils::module_name_filter("even_module"), true), exp_result);
+                    std::vector<Module*> exp_result = {m_0, m_2};
+                    EXPECT_TRUE(test_utils::vectors_have_same_content(tm->get_submodules(test_utils::module_name_filter("even_module"), true), exp_result));
                 }
                 {
                     // Submodules of MODULE_0
-                    std::set<Module*> exp_result = {};
+                    std::vector<Module*> exp_result = {};
                     EXPECT_EQ(m_0->get_submodules(nullptr, true), exp_result);
                 }
             }
@@ -729,8 +729,7 @@ namespace hal {
                 EXPECT_EQ(m_1->get_output_port_names(), exp_output_port_names);
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
-            Module*
-                m_2 = nl->create_module("mod_2", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 3)});
+            Module* m_2 = nl->create_module("mod_2", nl->get_top_module(), {nl->get_gate_by_id(MIN_GATE_ID + 3)});
             // Add an input and an output port name
             m_2->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
             m_2->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 30), "port_name_net_3_0");

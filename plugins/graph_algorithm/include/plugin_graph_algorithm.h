@@ -109,7 +109,7 @@ namespace hal
          * @returns A vector of gate sets where each vector entry refers to the distance to the starting gate g.
          */
         std::vector<std::set<Gate*>> get_graph_cut(Netlist* const nl,
-                                                                   Gate* const g,
+                                                                   Gate* g,
                                                                    const u32 depth                                = std::numeric_limits<u32>::max(),
                                                                    const std::set<std::string> terminal_gate_type = std::set<std::string>());
 

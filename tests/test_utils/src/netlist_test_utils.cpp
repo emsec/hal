@@ -137,8 +137,8 @@ namespace hal
     {
         if (nl == nullptr)
             return nullptr;
-        std::unordered_set<Net*> nets = nl->get_nets();
-        Net* res                      = nullptr;
+        auto nets = nl->get_nets();
+        Net* res  = nullptr;
         for (auto n : nets)
         {
             std::string n_name = n->get_name();
@@ -590,9 +590,15 @@ namespace hal
         {
             Gate* g_1 = m_1->get_netlist()->get_gate_by_id(g_0->get_id());
             if (!gates_are_equal(g_0, g_1, ignore_id, ignore_name))
+            {
+                std::cout << "gates are unequal" << std::endl;
                 return false;
+            }
             if (!m_1->contains_gate(g_1))
+            {
+                std::cout << "gates are not in both modules" << std::endl;
                 return false;
+            }
         }
 
         // Check that the port names are the same
@@ -607,12 +613,21 @@ namespace hal
         {
             auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
             if (n_1_list.size() != 1)
+            {
+                std::cout << "input port net not found" << std::endl;
                 return false;
+            }
             Net* n_1 = *n_1_list.begin();
             if (m_1_input_port_names.find(n_1) == m_1_input_port_names.end())
+            {
+                std::cout << "input port net not found" << std::endl;
                 return false;
+            }
             if (m_1_input_port_names[n_1] != p_name_0)
+            {
+                std::cout << "input port name is unequal: " << m_1_input_port_names[n_1] << " vs " << p_name_0 << std::endl;
                 return false;
+            }
         }
         // -- output ports
         if (m_0->get_output_port_names().size() != m_0->get_output_port_names().size())
@@ -651,9 +666,13 @@ namespace hal
         for (auto sm_0 : m_0->get_submodules(nullptr, true))
         {
             if (sm_0 == nullptr)
+            {
+                std::cout << "submodule is null" << std::endl;
                 continue;
+            }
             if (m_1->get_netlist()->get_module_by_id(sm_0->get_id()) == nullptr)
             {
+                std::cout << "submodule is null" << std::endl;
                 return false;
             }
         }
@@ -726,7 +745,7 @@ namespace hal
         // -- Check if the modules are the same
         if (nl_0->get_modules().size() != nl_1->get_modules().size())
             return false;
-        std::set<Module*> mods_1 = nl_1->get_modules();
+        auto mods_1 = nl_1->get_modules();
         for (auto m_0 : nl_0->get_modules())
         {
             if (ignore_id)

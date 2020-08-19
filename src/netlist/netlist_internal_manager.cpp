@@ -60,7 +60,7 @@ namespace hal
         auto raw = new_gate.get();
 
         m_netlist->m_gates_map[id] = std::move(new_gate);
-        m_netlist->m_gates_set.insert(raw);
+        m_netlist->m_gates.push_back(raw);
 
         m_netlist->m_top_module->m_gates_map[id] = raw;
         m_netlist->m_top_module->m_gates.push_back(raw);
@@ -121,7 +121,7 @@ namespace hal
         auto it  = m_netlist->m_gates_map.find(gate->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_gates_map.erase(it);
-        m_netlist->m_gates_set.erase(gate);
+        m_netlist->m_gates.erase(std::find(m_netlist->m_gates.begin(),m_netlist->m_gates.end(),gate));
 
         // free ids
         m_netlist->m_free_gate_ids.insert(gate->get_id());
@@ -135,13 +135,7 @@ namespace hal
 
     bool NetlistInternalManager::is_gate_type_invalid(const GateType* gt) const
     {
-        auto gate_types = m_netlist->m_gate_library->get_gate_types();
-        auto it         = gate_types.find(gt->get_name());
-        if (it == gate_types.end())
-        {
-            return true;
-        }
-        return *(it->second) != *gt;
+        return !m_netlist->m_gate_library->contains_gate_type(gt);
     }
 
     //######################################################################
@@ -179,7 +173,7 @@ namespace hal
         // add net to netlist
         auto raw                  = new_net.get();
         m_netlist->m_nets_map[id] = std::move(new_net);
-        m_netlist->m_nets_set.insert(raw);
+        m_netlist->m_nets.push_back(raw);
 
         // notify
         net_event_handler::notify(net_event_handler::event::created, raw);
@@ -220,7 +214,7 @@ namespace hal
         auto it  = m_netlist->m_nets_map.find(net->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_nets_map.erase(it);
-        m_netlist->m_nets_set.erase(net);
+        m_netlist->m_nets.erase(std::find(m_netlist->m_nets.begin(),m_netlist->m_nets.end(),net));
 
         m_netlist->m_free_net_ids.insert(net->get_id());
         m_netlist->m_used_net_ids.erase(net->get_id());
@@ -413,12 +407,13 @@ namespace hal
         m_netlist->m_used_module_ids.insert(id);
 
         auto raw                 = m.get();
-        m_netlist->m_modules[id] = std::move(m);
+        m_netlist->m_modules_map[id] = std::move(m);
+        m_netlist->m_modules.push_back(raw);
 
         if (parent != nullptr)
         {
             parent->m_submodules_map[id] = raw;
-            parent->m_submodules.insert(raw);
+            parent->m_submodules.push_back(raw);
         }
 
         module_event_handler::notify(module_event_handler::event::created, raw);
@@ -445,18 +440,18 @@ namespace hal
 
         // at this point parent is guaranteed to be not null
 
-        // move gates and nets to parent, work on a copy since assign_gate will modify m_gates_set
+        // move gates and nets to parent, work on a copy since assign_gate will modify m_gates
         auto gates_copy = to_remove->m_gates;
-        for (const auto& gate : gates_copy)
+        for (auto gate : gates_copy)
         {
             to_remove->m_parent->assign_gate(gate);
         }
 
         // move all submodules to parent
-        for (const auto& sm : to_remove->m_submodules)
+        for (auto sm : to_remove->m_submodules)
         {
             to_remove->m_parent->m_submodules_map[sm->get_id()] = sm;
-            to_remove->m_parent->m_submodules.insert(sm);
+            to_remove->m_parent->m_submodules.push_back(sm);
 
             module_event_handler::notify(module_event_handler::event::submodule_removed, sm->get_parent_module(), sm->get_id());
 
@@ -468,12 +463,13 @@ namespace hal
 
         // remove module from parent
         to_remove->m_parent->m_submodules_map.erase(to_remove->get_id());
-        to_remove->m_parent->m_submodules.erase(to_remove);
+        to_remove->m_parent->m_submodules.erase(std::find(to_remove->m_parent->m_submodules.begin(), to_remove->m_parent->m_submodules.end(), to_remove));
         module_event_handler::notify(module_event_handler::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
 
-        auto it  = m_netlist->m_modules.find(to_remove->get_id());
+        auto it  = m_netlist->m_modules_map.find(to_remove->get_id());
         auto ptr = std::move(it->second);
-        m_netlist->m_modules.erase(it);
+        m_netlist->m_modules_map.erase(it);
+        m_netlist->m_modules.erase(std::find(m_netlist->m_modules.begin(), m_netlist->m_modules.end(), ptr.get()));
 
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());

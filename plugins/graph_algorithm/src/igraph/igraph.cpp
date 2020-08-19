@@ -16,7 +16,7 @@ namespace hal
 
         // count all edges, remember in HAL one net(edge) has multiple sinks
         u32 edge_counter = 0;
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
             Gate* src_gate = net->get_source().get_gate();
             std::vector<Gate*> dst_gates;
@@ -55,7 +55,7 @@ namespace hal
         u32 dummy_gate_counter   = nl->get_gates().size() - 1;
         u32 edge_vertice_counter = 0;
 
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
             Gate* src_gate = net->get_source().get_gate();
             std::vector<Gate*> dst_gates;

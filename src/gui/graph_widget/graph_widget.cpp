@@ -258,7 +258,7 @@ namespace hal
     {
         // if our name matches that of a module, add the "modified" label and
         // optionally a number if a "modified"-labeled context already exists
-        for (const auto& m : g_netlist->get_modules())
+        for (auto m : g_netlist->get_modules())
         {
             if (m->get_name() == m_context->name().toStdString())
             {
@@ -755,7 +755,7 @@ namespace hal
         {
             gate_ids.insert(g->get_id());
         }
-        for (const auto& sm : m->get_submodules())
+        for (auto sm : m->get_submodules())
         {
             module_ids.insert(sm->get_id());
         }

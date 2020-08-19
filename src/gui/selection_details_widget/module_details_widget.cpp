@@ -205,7 +205,7 @@ namespace hal
         int direct_member_number_of_gates   = m->get_gates(nullptr, false).size();
         int indirect_member_number_of_gates = 0;
 
-        for (const auto& module : m->get_submodules())
+        for (auto module : m->get_submodules())
             indirect_member_number_of_gates += module->get_gates(nullptr, true).size();
 
         QString number_of_gates_text = QString::number(total_number_of_gates);
@@ -227,7 +227,7 @@ namespace hal
         m_input_ports_table->setMinimumHeight(m_input_ports_table->verticalHeader()->length());
 
         int index = 0;
-        for (const auto& net : m->get_input_nets())
+        for (auto net : m->get_input_nets())
         {
             QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_input_port_name(net)));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
@@ -257,7 +257,7 @@ namespace hal
         m_output_ports_table->setMinimumHeight(m_output_ports_table->verticalHeader()->length());
 
         index = 0;
-        for (const auto& net : m->get_output_nets())
+        for (auto net : m->get_output_nets())
         {
             QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_output_port_name(net)));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
@@ -295,7 +295,7 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
@@ -319,7 +319,7 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
@@ -343,7 +343,7 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
@@ -367,7 +367,7 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
@@ -391,7 +391,7 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
@@ -415,7 +415,7 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();

@@ -57,6 +57,7 @@ namespace hal {
         }
 
         virtual void TearDown() {
+            NO_COUT_BLOCK;
             test_utils::remove_sandbox_directory();
             plugin_manager::unload_all_plugins();
         }
@@ -86,22 +87,15 @@ namespace hal {
             nl->get_top_module()->set_type("top_mod_type");
 
             // Create the gates
-            Gate*
-                gate_0 = nl->create_gate(MIN_GATE_ID + 0, m_gl->get_gate_types().at("gate_2_to_1"), "gate_0");
+            Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, m_gl->get_gate_types().at("gate_2_to_1"), "gate_0");
             Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, m_gl->get_gate_types().at("gnd"), "gate_1");
             Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, m_gl->get_gate_types().at("vcc"), "gate_2");
-            Gate*
-                gate_3 = nl->create_gate(MIN_GATE_ID + 3, m_gl->get_gate_types().at("gate_1_to_1"), "gate_3");
-            Gate*
-                gate_4 = nl->create_gate(MIN_GATE_ID + 4, m_gl->get_gate_types().at("gate_1_to_1"), "gate_4");
-            Gate*
-                gate_5 = nl->create_gate(MIN_GATE_ID + 5, m_gl->get_gate_types().at("gate_2_to_1"), "gate_5");
-            Gate*
-                gate_6 = nl->create_gate(MIN_GATE_ID + 6, m_gl->get_gate_types().at("gate_2_to_0"), "gate_6");
-            Gate*
-                gate_7 = nl->create_gate(MIN_GATE_ID + 7, m_gl->get_gate_types().at("gate_2_to_1"), "gate_7");
-            Gate*
-                gate_8 = nl->create_gate(MIN_GATE_ID + 8, m_gl->get_gate_types().at("gate_2_to_1"), "gate_8");
+            Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, m_gl->get_gate_types().at("gate_1_to_1"), "gate_3");
+            Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, m_gl->get_gate_types().at("gate_1_to_1"), "gate_4");
+            Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, m_gl->get_gate_types().at("gate_2_to_1"), "gate_5");
+            Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, m_gl->get_gate_types().at("gate_2_to_0"), "gate_6");
+            Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, m_gl->get_gate_types().at("gate_2_to_1"), "gate_7");
+            Gate* gate_8 = nl->create_gate(MIN_GATE_ID + 8, m_gl->get_gate_types().at("gate_2_to_1"), "gate_8");
 
             // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
             Net* net_1_3 = nl->create_net(MIN_NET_ID + 13, "net_1_3");
@@ -225,7 +219,7 @@ namespace hal {
 
                 // -- Check if the modules are the same
                 EXPECT_EQ(nl->get_modules().size(), des_nl->get_modules().size());
-                std::set<Module*> mods_1 = des_nl->get_modules();
+                auto mods_1 = des_nl->get_modules();
                 for (auto m_0 : nl->get_modules()) {
                     EXPECT_TRUE(test_utils::modules_are_equal(m_0, des_nl->get_module_by_id(m_0->get_id())));
                 }

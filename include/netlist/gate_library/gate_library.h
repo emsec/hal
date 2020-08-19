@@ -72,6 +72,13 @@ namespace hal
         void add_gate_type(std::unique_ptr<const GateType> gt);
 
         /**
+         * Checks whether a gate type is contained in this library.
+         *
+         * @param[in] gt - The gate type
+         */
+        bool contains_gate_type(const GateType* gt) const;
+
+        /**
          * Get all gate types of the library.
          *
          * @returns A map from gate type names to gate type objects.

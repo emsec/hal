@@ -89,13 +89,13 @@ namespace hal
         }
 
         auto children = get_submodules(nullptr, true);
-        if (children.find(new_parent) != children.end())
+        if (std::find(children.begin(), children.end(), new_parent) != children.end())
         {
             new_parent->set_parent_module(m_parent);
         }
 
         m_parent->m_submodules_map.erase(m_id);
-        m_parent->m_submodules.erase(this);
+        m_parent->m_submodules.erase(std::find(m_parent->m_submodules.begin(), m_parent->m_submodules.end(), this));
 
         m_parent->m_input_nets_dirty    = true;
         m_parent->m_output_nets_dirty   = true;
@@ -106,7 +106,7 @@ namespace hal
         m_parent = new_parent;
 
         m_parent->m_submodules_map[m_id] = this;
-        m_parent->m_submodules.insert(this);
+        m_parent->m_submodules.push_back(this);
 
         m_parent->m_input_nets_dirty    = true;
         m_parent->m_output_nets_dirty   = true;
@@ -118,30 +118,31 @@ namespace hal
         return true;
     }
 
-    std::set<Module*> Module::get_submodules(const std::function<bool(Module*)>& filter, bool recursive) const
+    std::vector<Module*> Module::get_submodules(const std::function<bool(Module*)>& filter, bool recursive) const
     {
-        std::set<Module*> res;
+        std::vector<Module*> res;
         if (!filter)
         {
             res = m_submodules;
         }
         else
         {
-            for (const auto& sm : m_submodules)
+            for (auto sm : m_submodules)
             {
                 if (filter(sm))
                 {
-                    res.insert(sm);
+                    res.push_back(sm);
                 }
             }
         }
 
         if (recursive)
         {
-            for (const auto& sm : m_submodules)
+            for (auto sm : m_submodules)
             {
                 auto more = sm->get_submodules(filter, true);
-                res.insert(more.begin(), more.end());
+                res.reserve(res.size() + more.size());
+                res.insert(res.end(), more.begin(), more.end());
             }
         }
         return res;
@@ -153,7 +154,7 @@ namespace hal
         {
             return false;
         }
-        for (const auto& sm : m_submodules)
+        for (auto sm : m_submodules)
         {
             if (sm == other)
             {
@@ -198,7 +199,7 @@ namespace hal
         bool success = std::find(m_gates.begin(), m_gates.end(), gate) != m_gates.end();
         if (!success && recursive)
         {
-            for (const auto& sm : m_submodules)
+            for (auto sm : m_submodules)
             {
                 if (sm->contains_gate(gate, true))
                 {
@@ -216,7 +217,7 @@ namespace hal
         {
             if (recursive)
             {
-                for (const auto& sm : m_submodules)
+                for (auto sm : m_submodules)
                 {
                     auto res = sm->get_gate_by_id(gate_id, true);
                     if (res != nullptr)
@@ -254,6 +255,7 @@ namespace hal
             for (auto sm : m_submodules)
             {
                 auto more = sm->get_gates(filter, true);
+                res.reserve(res.size() + more.size());
                 res.insert(res.end(), more.begin(), more.end());
             }
         }
@@ -379,7 +381,7 @@ namespace hal
         }
 
         m_named_input_nets.insert(input_net);
-        m_input_net_to_port_name.insert_or_assign(input_net, port_name);
+        m_input_net_to_port_name[input_net] = port_name;
 
         module_event_handler::notify(module_event_handler::event::input_port_name_changed, this, input_net->get_id());
     }
@@ -406,7 +408,7 @@ namespace hal
         }
 
         m_named_output_nets.insert(output_net);
-        m_output_net_to_port_name.insert_or_assign(output_net, port_name);
+        m_output_net_to_port_name[output_net] = port_name;
 
         module_event_handler::notify(module_event_handler::event::output_port_name_changed, this, output_net->get_id());
     }
@@ -520,8 +522,9 @@ namespace hal
         std::set_difference(input_nets.begin(), input_nets.end(), m_named_input_nets.begin(), m_named_input_nets.end(), std::back_inserter(diff));
         for (auto net : diff)
         {
+            auto port_name = "I(" + std::to_string(m_next_input_port_id++) + ")";
             m_named_input_nets.insert(net);
-            m_input_net_to_port_name.emplace(net, "I(" + std::to_string(m_next_input_port_id++) + ")");
+            m_input_net_to_port_name.emplace(net, port_name);
         }
 
         return m_input_net_to_port_name;
@@ -534,7 +537,7 @@ namespace hal
 
         // find nets that are still in the port map but no longer an output net
         std::set_difference(m_named_output_nets.begin(), m_named_output_nets.end(), output_nets.begin(), output_nets.end(), std::inserter(diff, diff.begin()));
-        for (const auto& net : diff)
+        for (auto net : diff)
         {
             m_named_output_nets.erase(net);
             m_output_net_to_port_name.erase(net);
@@ -544,10 +547,11 @@ namespace hal
 
         // find nets that are output nets but have not yet been assigned a port name
         std::set_difference(output_nets.begin(), output_nets.end(), m_named_output_nets.begin(), m_named_output_nets.end(), std::inserter(diff, diff.begin()));
-        for (const auto& net : diff)
+        for (auto net : diff)
         {
+            auto port_name = "O(" + std::to_string(m_next_output_port_id++) + ")";
             m_named_output_nets.insert(net);
-            m_output_net_to_port_name.emplace(net, "O(" + std::to_string(m_next_output_port_id++) + ")");
+            m_output_net_to_port_name.emplace(net, port_name);
         }
 
         return m_output_net_to_port_name;

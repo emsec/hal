@@ -40,7 +40,7 @@ namespace hal
         std::map<u32, vertex_t> gate_id_to_vertex;
         std::map<vertex_t, u32> vertex_id_to_gate_id;
         u32 vertex_id_cnt = 0;
-        for (const auto& gate_id : gate_ids)
+        for (auto gate_id : gate_ids)
         {
             auto vertex_descriptor                = boost::add_vertex(boost_graph);
             gate_id_to_vertex[gate_id]            = vertex_descriptor;
@@ -51,7 +51,7 @@ namespace hal
         std::map<u32, Net*> ordered_nets;
         for (const auto& current_gate : gates)
         {
-            for (const auto& net : current_gate->get_fan_out_nets())
+            for (auto net : current_gate->get_fan_out_nets())
                 ordered_nets[net->get_id()] = net;
         }
 
@@ -91,7 +91,7 @@ namespace hal
         for (auto it_component : component_to_gate_ids)
         {
             std::vector<Gate*> component_set;
-            for (const auto& gate_id : it_component.second)
+            for (auto gate_id : it_component.second)
                 component_set.push_back(g->get_gate_by_id(gate_id));
             if (!component_set.empty())
                 result.push_back(component_set);
