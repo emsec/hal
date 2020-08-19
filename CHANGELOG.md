@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * zoom level of graph view can now be controlled by shortcuts
 * state-of-the-art suite of benchmark netlists
 * simulator plugin to simulate parts of the netlist
+* added `get_fan_in_endpoints` and `get_fan_out_endpoints` to `Gate`
+* added `clear_caches` to `Netlist`
 
 ### CHANGED
 
