@@ -40,8 +40,8 @@ namespace hal
             .def("load_initial_values", &NetlistSimulator::load_initial_values)
             .def("simulate", &NetlistSimulator::simulate)
             .def("reset", &NetlistSimulator::reset)
-            .def("set_state", &NetlistSimulator::set_state)
-            .def("get_current_state", &NetlistSimulator::get_current_state)
+            .def("set_simulation_state", &NetlistSimulator::set_simulation_state)
+            .def("get_simulation_state", &NetlistSimulator::get_simulation_state)
             .def("set_iteration_timeout", &NetlistSimulator::set_iteration_timeout)
             .def("get_simulation_timeout", &NetlistSimulator::get_simulation_timeout)
             ;

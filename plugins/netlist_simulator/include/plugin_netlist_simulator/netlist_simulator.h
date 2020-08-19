@@ -99,14 +99,14 @@ namespace hal
         *
         * @param[in] state - the state to apply
         */
-        void set_state(const Simulation& state);
+        void set_simulation_state(const Simulation& state);
 
         /*
         * Get the current simulation state.
         *
         * @returns the current simulation state
         */
-        Simulation get_current_state() const;
+        Simulation get_simulation_state() const;
 
         /*
         * Set the iteration timeout, i.e., the maximum number of events processed for a single point in time.
