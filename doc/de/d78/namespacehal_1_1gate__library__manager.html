@@ -92,6 +92,8 @@ Functions</h2></td></tr>
 <tr class="separator:a4867606adb5e71f94d337face0b0b949"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bea3d7f340d955467aa5b31934b9f6c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a6bea3d7f340d955467aa5b31934b9f6c">get_gate_library</a> (const std::string &amp;file_name)</td></tr>
 <tr class="separator:a6bea3d7f340d955467aa5b31934b9f6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c1b0915537d0f6c835cb3bf5d1445b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a6c1b0915537d0f6c835cb3bf5d1445b8">get_gate_library_by_name</a> (const std::string &amp;lib_name)</td></tr>
+<tr class="separator:a6c1b0915537d0f6c835cb3bf5d1445b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ae6558acfeccd85000402340cd57874"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> std::vector&lt; <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a3ae6558acfeccd85000402340cd57874">get_gate_libraries</a> ()</td></tr>
 <tr class="separator:a3ae6558acfeccd85000402340cd57874"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -266,7 +268,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a gate library object by file name.</p>
+<p>Get a gate library object by file name. If no library with the given name is already loaded this function will attempt to load the file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">file_name</td><td>- file name of the gate library. </td></tr>
@@ -278,6 +280,32 @@ Functions</h2></td></tr>
 <p class="reference">References <a class="el" href="../../d6/d5e/namespacehal_1_1core__utils.html#ac4a8be6e3d8fce77f61484bad5452d3e">hal::core_utils::get_file()</a>, <a class="el" href="../../d6/d5e/namespacehal_1_1core__utils.html#a788fbd87f050a6f29cf5ee24110c90e9">hal::core_utils::get_gate_library_directories()</a>, <a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a73ae5e426dd92db0800fadbb7fff250c">load_file()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d5/d96/namespacehal_1_1hdl__parser__manager.html#ae4dc38bc8200dcdb7f9ba6e6000259de">hal::hdl_parser_manager::parse()</a>.</p>
+
+</div>
+</div>
+<a id="a6c1b0915537d0f6c835cb3bf5d1445b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c1b0915537d0f6c835cb3bf5d1445b8">&#9670;&nbsp;</a></span>get_gate_library_by_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a> * hal::gate_library_manager::get_gate_library_by_name </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>lib_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a gate library object by library name. If no library with the given name is loaded this function returns nullptr.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lib_name</td><td>- name of the gate library. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the gate library object or nullptr on error. </dd></dl>
 
 </div>
 </div>
@@ -303,7 +331,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Aug 19 2020 07:43:26 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Aug 19 2020 10:24:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
