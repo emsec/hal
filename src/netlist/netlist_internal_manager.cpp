@@ -239,6 +239,12 @@ namespace hal
             return false;
         }
 
+        if (net != ep.get_net())
+        {
+            log_error("netlist.internal", "net::add_source: target net '{}' does not match endpoint net '{}'.", net->get_name(), ep.get_net()->get_name());
+            return false;
+        }
+
         auto gate = ep.get_gate();
         if (net->is_a_source(gate, ep.get_pin()))
         {
@@ -314,6 +320,12 @@ namespace hal
         if (net->is_a_destination(gate, ep.get_pin()))
         {
             log_error("netlist.internal", "net::add_destination: dst gate ('{}',  type = {}) is already added to net '{}'.", gate->get_name(), gate->get_type()->get_name(), net->get_name());
+            return false;
+        }
+
+        if (net != ep.get_net())
+        {
+            log_error("netlist.internal", "net::add_destination: target net '{}' does not match endpoint net '{}'.", net->get_name(), ep.get_net()->get_name());
             return false;
         }
 
