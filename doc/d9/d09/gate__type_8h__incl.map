@@ -1,15 +1,14 @@
 <map id="netlist/gate_library/gate_type/gate_type.h" name="netlist/gate_library/gate_type/gate_type.h">
-<area shape="rect" id="node1" title=" " alt="" coords="562,5,734,47"/>
-<area shape="rect" id="node2" href="$dc/d6d/boolean__function_8h.html" title=" " alt="" coords="403,95,594,121"/>
-<area shape="rect" id="node14" title=" " alt="" coords="619,95,677,121"/>
-<area shape="rect" id="node15" title=" " alt="" coords="702,95,826,121"/>
+<area shape="rect" id="node1" title=" " alt="" coords="706,5,878,47"/>
+<area shape="rect" id="node2" href="$dc/d6d/boolean__function_8h.html" title=" " alt="" coords="495,95,686,121"/>
+<area shape="rect" id="node10" title=" " alt="" coords="799,169,923,196"/>
+<area shape="rect" id="node14" title=" " alt="" coords="829,95,888,121"/>
 <area shape="rect" id="node3" href="$d4/da4/def_8h.html" title=" " alt="" coords="191,169,246,196"/>
 <area shape="rect" id="node8" title=" " alt="" coords="271,169,356,196"/>
 <area shape="rect" id="node9" title=" " alt="" coords="380,169,449,196"/>
-<area shape="rect" id="node10" title=" " alt="" coords="473,169,524,196"/>
-<area shape="rect" id="node11" title=" " alt="" coords="549,169,625,196"/>
-<area shape="rect" id="node12" title=" " alt="" coords="649,169,692,196"/>
-<area shape="rect" id="node13" title=" " alt="" coords="717,169,779,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="473,169,588,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="613,169,689,196"/>
+<area shape="rect" id="node13" title=" " alt="" coords="713,169,775,196"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,244,96,271"/>
 <area shape="rect" id="node5" title=" " alt="" coords="121,244,207,271"/>
 <area shape="rect" id="node6" title=" " alt="" coords="231,244,318,271"/>

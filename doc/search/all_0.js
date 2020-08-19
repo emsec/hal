@@ -4,7 +4,7 @@ var searchData=
   ['activate_5fchannel_1',['activate_channel',['../d5/d2e/classhal_1_1LogManager.html#a2141d31e95e066170a1e3658faeca830',1,'hal::LogManager']]],
   ['add_2',['add',['../d3/dfa/classhal_1_1ProgramOptions.html#a9dd3cc27b3d0a9bfaa87999390594fa5',1,'hal::ProgramOptions::add(const std::string &amp;flag, const std::string &amp;description, const std::initializer_list&lt; std::string &gt; &amp;parameters={})'],['../d3/dfa/classhal_1_1ProgramOptions.html#a5fe1cdf2ec39e1dd01093c45dbf8c6cb',1,'hal::ProgramOptions::add(const std::initializer_list&lt; std::string &gt; &amp;flags, const std::string &amp;description, const std::initializer_list&lt; std::string &gt; &amp;parameters={})'],['../d3/dfa/classhal_1_1ProgramOptions.html#a3762e99f97b0b390318ace276dfca04e',1,'hal::ProgramOptions::add(const ProgramOptions &amp;other_options, const std::string &amp;category=&quot;&quot;)']]],
   ['add_5fboolean_5ffunction_3',['add_boolean_function',['../d5/d57/classhal_1_1Gate.html#a86bc448620b92e78da68b4b220f709af',1,'hal::Gate::add_boolean_function()'],['../d1/d05/classhal_1_1GateType.html#a9398391ce181d65a71ea1c1654f01311',1,'hal::GateType::add_boolean_function()']]],
-  ['add_5fboolean_5ffunctions_4',['add_boolean_functions',['../d1/d05/classhal_1_1GateType.html#ac2486dbf6bfab9691acb51b66e063886',1,'hal::GateType']]],
+  ['add_5fboolean_5ffunctions_4',['add_boolean_functions',['../d1/d05/classhal_1_1GateType.html#ac2c99cd64ec542bfb38b17225d5af901',1,'hal::GateType']]],
   ['add_5fcallback_5',['add_callback',['../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45',1,'hal::CallbackHook&lt; R(ArgTypes...)&gt;::add_callback(const std::function&lt; R(ArgTypes...)&gt; &amp;callback, u64 id=0x0)'],['../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a7e2b511bcaa4178194695b83b04898bd',1,'hal::CallbackHook&lt; R(ArgTypes...)&gt;::add_callback(const std::string &amp;name, const std::function&lt; R(ArgTypes...)&gt; &amp;callback)']]],
   ['add_5fchannel_6',['add_channel',['../d5/d2e/classhal_1_1LogManager.html#a1af82acd668588c8a9e31ae61e166ce2',1,'hal::LogManager']]],
   ['add_5fclock_5fpin_7',['add_clock_pin',['../dd/dd1/classhal_1_1GateTypeSequential.html#acf5be1284906e05613f327fa5f893c4c',1,'hal::GateTypeSequential']]],
@@ -26,9 +26,9 @@ var searchData=
   ['arch_5fwin_2eh_23',['arch_win.h',['../dc/de9/arch__win_8h.html',1,'']]],
   ['assert_5favailablility_24',['assert_availablility',['../d4/d84/netlist__serializer_8cpp.html#abfdc4ed5873b08e0d4f07d3e287ca2f5',1,'netlist_serializer.cpp']]],
   ['assign_5fgate_25',['assign_gate',['../d1/d10/classhal_1_1Module.html#a7446c45dc94cefbf49a51261e0299e1d',1,'hal::Module']]],
-  ['assign_5finput_5fpin_5fgroup_26',['assign_input_pin_group',['../d1/d05/classhal_1_1GateType.html#a76b79290e35d96eaf05308e946a2bc80',1,'hal::GateType']]],
-  ['assign_5finput_5fpin_5fgroups_27',['assign_input_pin_groups',['../d1/d05/classhal_1_1GateType.html#ade80aa9dbbc0481a464f8787b69544e5',1,'hal::GateType']]],
-  ['assign_5foutput_5fpin_5fgroup_28',['assign_output_pin_group',['../d1/d05/classhal_1_1GateType.html#a26a56701e8c4332dba03ef20e7aa38f0',1,'hal::GateType']]],
-  ['assign_5foutput_5fpin_5fgroups_29',['assign_output_pin_groups',['../d1/d05/classhal_1_1GateType.html#af790637eeb78f5b5ec655c4c8b942d83',1,'hal::GateType']]],
+  ['assign_5finput_5fpin_5fgroup_26',['assign_input_pin_group',['../d1/d05/classhal_1_1GateType.html#aacd3e100a430b917431da5f48646b489',1,'hal::GateType']]],
+  ['assign_5finput_5fpin_5fgroups_27',['assign_input_pin_groups',['../d1/d05/classhal_1_1GateType.html#a029b2305a24b77e7be37ce1836a587b6',1,'hal::GateType']]],
+  ['assign_5foutput_5fpin_5fgroup_28',['assign_output_pin_group',['../d1/d05/classhal_1_1GateType.html#ad90f0e98be9bb6a312248dad1805c168',1,'hal::GateType']]],
+  ['assign_5foutput_5fpin_5fgroups_29',['assign_output_pin_groups',['../d1/d05/classhal_1_1GateType.html#a303ab54ab4ccaab9eaec933773adce3d',1,'hal::GateType']]],
   ['at_30',['at',['../db/d9d/classhal_1_1TokenStream.html#a41a6a977f6adbbacf250be5ad1b78b83',1,'hal::TokenStream::at(u32 position)'],['../db/d9d/classhal_1_1TokenStream.html#ac8a53a3f0e7d1ae97c22dee7dbaf7a04',1,'hal::TokenStream::at(u32 position) const']]]
 ];
