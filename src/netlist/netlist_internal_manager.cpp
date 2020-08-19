@@ -239,7 +239,6 @@ namespace hal
             return false;
         }
 
-
         if (net != ep.get_net())
         {
             log_error("netlist.internal", "net::add_source: target net '{}' does not match endpoint net '{}'.", net->get_name(), ep.get_net()->get_name());
