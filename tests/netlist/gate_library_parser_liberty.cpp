@@ -45,7 +45,7 @@ namespace hal {
                                         "    }\n"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
 
@@ -56,7 +56,7 @@ namespace hal {
                 ASSERT_EQ(gl->get_gate_types().size(), 1);
                 auto gt_it = gl->get_gate_types().find("TEST_GATE_TYPE");
                 ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-                std::shared_ptr<const GateType> gt = gt_it->second;
+                const GateType* gt = gt_it->second;
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_base_type(), GateType::BaseType::combinatorial);
@@ -119,7 +119,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
 
@@ -127,7 +127,7 @@ namespace hal {
                 ASSERT_EQ(gl->get_gate_types().size(), 1);
                 auto gt_it = gl->get_gate_types().find("TEST_LUT");
                 ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-                std::shared_ptr<const GateType> gt = gt_it->second;
+                const GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::lut);
                 std::shared_ptr<const GateTypeLut> gt_lut = std::dynamic_pointer_cast<const GateTypeLut>(gt);
 
@@ -167,7 +167,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
 
@@ -175,7 +175,7 @@ namespace hal {
                 ASSERT_EQ(gl->get_gate_types().size(), 1);
                 auto gt_it = gl->get_gate_types().find("TEST_LUT");
                 ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-                std::shared_ptr<const GateType> gt = gt_it->second;
+                const GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::lut);
                 std::shared_ptr<const GateTypeLut> gt_lut = std::dynamic_pointer_cast<const GateTypeLut>(gt);
 
@@ -240,7 +240,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
 
@@ -248,7 +248,7 @@ namespace hal {
                 ASSERT_EQ(gl->get_gate_types().size(), 1);
                 auto gt_it = gl->get_gate_types().find("TEST_FF");
                 ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-                std::shared_ptr<const GateType> gt = gt_it->second;
+                const GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::ff);
                 std::shared_ptr<const GateTypeSequential>
                     gt_ff = std::dynamic_pointer_cast<const GateTypeSequential>(gt);
@@ -330,7 +330,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
 
@@ -338,7 +338,7 @@ namespace hal {
                 ASSERT_EQ(gl->get_gate_types().size(), 1);
                 auto gt_it = gl->get_gate_types().find("TEST_LATCH");
                 ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-                std::shared_ptr<const GateType> gt = gt_it->second;
+                const GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::latch);
                 std::shared_ptr<const GateTypeSequential>
                     gt_latch = std::dynamic_pointer_cast<const GateTypeSequential>(gt);
@@ -402,14 +402,14 @@ namespace hal {
                                         "    }\n"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
                 // Check that the Gate type was created
                 ASSERT_EQ(gl->get_gate_types().size(), 1);
                 auto gt_it = gl->get_gate_types().find("TEST_GATE_TYPE");
                 ASSERT_TRUE(gt_it != gl->get_gate_types().end());
-                std::shared_ptr<const GateType> gt = gt_it->second;
+                const GateType* gt = gt_it->second;
 
                 // Check that only the pins outside the comments are created
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I"}));
@@ -430,7 +430,7 @@ namespace hal {
                 NO_COUT_TEST_BLOCK;
                 std::stringstream input("");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr);
             }
@@ -459,7 +459,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr);
             }
@@ -488,7 +488,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr);
             }
@@ -516,7 +516,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr);
             }
@@ -544,7 +544,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr);
             }
@@ -569,7 +569,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr);
             }
@@ -592,7 +592,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr);
             }
@@ -612,7 +612,7 @@ namespace hal {
                                         "    }\n"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr); // NOTE: Ok, only 'I' is not parsed
                 auto g_types = gl->get_gate_types();
@@ -636,7 +636,7 @@ namespace hal {
                                         "    }\n"
                                         "}");
                 GateLibraryParserLiberty liberty_parser(input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr); // NOTE: Ok? BF is parsed anyway with Variable WAMBO
             }*/
@@ -661,7 +661,7 @@ namespace hal {
                                         "    }"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
 
@@ -689,7 +689,7 @@ namespace hal {
                                         "    }\n"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr);
 
@@ -719,7 +719,7 @@ namespace hal {
                                         "    }\n"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 EXPECT_EQ(gl, nullptr);
             }
@@ -742,7 +742,7 @@ namespace hal {
                                         "    }\n"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
 
@@ -768,7 +768,7 @@ namespace hal {
                                         "    }\n"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
 
@@ -795,7 +795,7 @@ namespace hal {
                                         "    }\n"
                                         "}");
                 GateLibraryParserLiberty liberty_parser("imaginary_path", input);
-                std::shared_ptr<GateLibrary> gl = liberty_parser.parse();
+                GateLibrary* gl = liberty_parser.parse();
 
                 ASSERT_NE(gl, nullptr);
 

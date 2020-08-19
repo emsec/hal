@@ -72,7 +72,7 @@ namespace hal
             }
             case item_type::gate:
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(m_focus_id);
 
                 if (!g)
                     return;
@@ -101,7 +101,7 @@ namespace hal
             }
             case item_type::net:
             {
-                std::shared_ptr<Net> n = g_netlist->get_net_by_id(m_focus_id);
+                Net* n = g_netlist->get_net_by_id(m_focus_id);
 
                 if (!n)
                     return;
@@ -120,7 +120,7 @@ namespace hal
             }
             case item_type::module:
             {
-                std::shared_ptr<Module> m = g_netlist->get_module_by_id(m_focus_id);
+                Module* m = g_netlist->get_module_by_id(m_focus_id);
 
                 if (!m)
                     return;
@@ -169,7 +169,7 @@ namespace hal
             }
             case item_type::gate:
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(m_focus_id);
 
                 if (!g)
                     return;
@@ -198,7 +198,7 @@ namespace hal
             }
             case item_type::net:
             {
-                std::shared_ptr<Net> n = g_netlist->get_net_by_id(m_focus_id);
+                Net* n = g_netlist->get_net_by_id(m_focus_id);
 
                 if (!n)
                     return;
@@ -217,7 +217,7 @@ namespace hal
             }
             case item_type::module:
             {
-                std::shared_ptr<Module> m = g_netlist->get_module_by_id(m_focus_id);
+                Module* m = g_netlist->get_module_by_id(m_focus_id);
 
                 if (!m)
                     return;
@@ -265,7 +265,7 @@ namespace hal
             }
             case item_type::gate:
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(m_focus_id);
 
                 if (!g)
                     return;
@@ -287,7 +287,7 @@ namespace hal
             }
             case item_type::net:
             {
-                std::shared_ptr<Net> n = g_netlist->get_net_by_id(m_focus_id);
+                Net* n = g_netlist->get_net_by_id(m_focus_id);
 
                 if (!n)
                     return;
@@ -306,7 +306,7 @@ namespace hal
             }
             case item_type::module:
             {
-                std::shared_ptr<Module> m = g_netlist->get_module_by_id(m_focus_id);
+                Module* m = g_netlist->get_module_by_id(m_focus_id);
 
                 if (!m)
                     return;
@@ -340,7 +340,7 @@ namespace hal
             }
             case item_type::gate:
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(m_focus_id);
 
                 if (!g)
                     return;
@@ -359,7 +359,7 @@ namespace hal
             }
             case item_type::net:
             {
-                std::shared_ptr<Net> n = g_netlist->get_net_by_id(m_focus_id);
+                Net* n = g_netlist->get_net_by_id(m_focus_id);
 
                 if (!n)
                     return;
@@ -379,7 +379,7 @@ namespace hal
             }
             case item_type::module:
             {
-                std::shared_ptr<Module> m = g_netlist->get_module_by_id(m_focus_id);
+                Module* m = g_netlist->get_module_by_id(m_focus_id);
 
                 if (!m)
                     return;
@@ -431,10 +431,10 @@ namespace hal
 
     // GET CORE GUARANTEES
     // UNCERTAIN ABOUT UNROUTED (GLOBAL) NETS, DECIDE
-    void SelectionRelay::follow_gate_input_pin(std::shared_ptr<Gate> g, u32 input_pin_index)
+    void SelectionRelay::follow_gate_input_pin(Gate* g, u32 input_pin_index)
     {
         std::string pin_type = *std::next(g->get_input_pins().begin(), input_pin_index);
-        std::shared_ptr<Net> n = g->get_fan_in_net(pin_type);
+        Net* n = g->get_fan_in_net(pin_type);
 
         if (!n)
             return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
@@ -473,10 +473,10 @@ namespace hal
         Q_EMIT selection_changed(nullptr);
     }
 
-    void SelectionRelay::follow_gate_output_pin(std::shared_ptr<Gate> g, u32 output_pin_index)
+    void SelectionRelay::follow_gate_output_pin(Gate* g, u32 output_pin_index)
     {
         std::string pin_type = *std::next(g->get_output_pins().begin(), output_pin_index);
-        std::shared_ptr<Net> n = g->get_fan_out_net(pin_type);
+        Net* n = g->get_fan_out_net(pin_type);
 
         if (!n)
             return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
@@ -498,21 +498,21 @@ namespace hal
         Q_EMIT selection_changed(nullptr);
     }
 
-    void SelectionRelay::follow_module_input_pin(std::shared_ptr<Module> m, u32 input_pin_index)
+    void SelectionRelay::follow_module_input_pin(Module* m, u32 input_pin_index)
     {
         // TODO implement
     }
 
-    void SelectionRelay::follow_module_output_pin(std::shared_ptr<Module> m, u32 output_pin_index)
+    void SelectionRelay::follow_module_output_pin(Module* m, u32 output_pin_index)
     {
         // TODO implement
     }
 
 
-    void SelectionRelay::follow_net_to_source(std::shared_ptr<Net> n)
+    void SelectionRelay::follow_net_to_source(Net* n)
     {
         Endpoint e              = n->get_source();
-        std::shared_ptr<Gate> g = e.get_gate();
+        Gate* g = e.get_gate();
 
         if (!g)
             return;
@@ -547,10 +547,10 @@ namespace hal
         Q_EMIT selection_changed(nullptr);
     }
 
-    void SelectionRelay::follow_net_to_destination(std::shared_ptr<Net> n, u32 dst_index)
+    void SelectionRelay::follow_net_to_destination(Net* n, u32 dst_index)
     {
         Endpoint e              = n->get_destinations().at(dst_index);
-        std::shared_ptr<Gate> g = e.get_gate();
+        Gate* g = e.get_gate();
 
         if (!g)
             return;

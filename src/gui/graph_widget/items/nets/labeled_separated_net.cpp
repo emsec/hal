@@ -29,7 +29,7 @@ namespace hal
         s_font_ascend = fm.ascent();
     }
 
-    LabeledSeparatedNet::LabeledSeparatedNet(const std::shared_ptr<const Net> n, const QString& text) : SeparatedGraphicsNet(n),
+    LabeledSeparatedNet::LabeledSeparatedNet(Net* n, const QString& text) : SeparatedGraphicsNet(n),
       m_text(text)
     {
         QFontMetricsF fm(s_font);
@@ -43,7 +43,7 @@ namespace hal
         if (s_lod < graph_widget_constants::separated_net_min_lod)
             return;
 
-        QColor color = (option->state & QStyle::State_Selected) ? s_selection_color : m_color;
+        QColor color = penColor(option->state);
         color.setAlphaF(s_alpha);
 
         s_pen.setColor(color);

@@ -81,6 +81,15 @@ namespace hal
         bool is_option_set(const std::string& flag) const;
 
         /**
+         * Programatically set an option via a single flag and supply a parameter.
+         * This is just a shorthand for set_option(flag, {parameter});
+         *
+         * @param[in] flag - A flag of the option.
+         * @param[in] parameter - The parameter for this flag.
+         */
+        void set_option(const std::string& flag, const std::string& parameter);
+
+        /**
          * Programatically set an option via a single flag and supply parameters.
          *
          * @param[in] flag - A flag of the option.

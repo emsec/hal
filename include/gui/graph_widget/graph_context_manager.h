@@ -40,6 +40,8 @@ namespace hal
     class GraphShader;
     class GraphContext;
 
+    class ContextTableModel;
+
     class GraphContextManager : public QObject
     {
         Q_OBJECT
@@ -53,27 +55,27 @@ namespace hal
         QVector<GraphContext*> get_contexts() const;
         bool context_with_name_exists(const QString& name) const;
 
-        //void handle_module_created(const std::shared_ptr<Module> m) const;
-        void handle_module_removed(const std::shared_ptr<Module> m);
-        void handle_module_name_changed(const std::shared_ptr<Module> m) const;
-        void handle_module_color_changed(const std::shared_ptr<Module> m) const;
-        //void handle_module_parent_changed(const std::shared_ptr<Module> m) const;
-        void handle_module_submodule_added(const std::shared_ptr<Module> m, const u32 added_module) const;
-        void handle_module_submodule_removed(const std::shared_ptr<Module> m, const u32 removed_module);
-        void handle_module_gate_assigned(const std::shared_ptr<Module> m, const u32 inserted_gate) const;
-        void handle_module_gate_removed(const std::shared_ptr<Module> m, const u32 removed_gate);
+        //void handle_module_created(Module* m) const;
+        void handle_module_removed(Module* m);
+        void handle_module_name_changed(Module* m) const;
+        void handle_module_color_changed(Module* m) const;
+        //void handle_module_parent_changed(Module* m) const;
+        void handle_module_submodule_added(Module* m, const u32 added_module) const;
+        void handle_module_submodule_removed(Module* m, const u32 removed_module);
+        void handle_module_gate_assigned(Module* m, const u32 inserted_gate) const;
+        void handle_module_gate_removed(Module* m, const u32 removed_gate);
 
-        //void handle_gate_created(const std::shared_ptr<Gate> g) const;
-        //void handle_gate_removed(const std::shared_ptr<Gate> g) const;
-        void handle_gate_name_changed(const std::shared_ptr<Gate> g) const;
+        //void handle_gate_created(Gate* g) const;
+        //void handle_gate_removed(Gate* g) const;
+        void handle_gate_name_changed(Gate* g) const;
 
-        void handle_net_created(const std::shared_ptr<Net> n) const;
-        void handle_net_removed(const std::shared_ptr<Net> n) const;
-        void handle_net_name_changed(const std::shared_ptr<Net> n) const;
-        void handle_net_source_added(const std::shared_ptr<Net> n, const u32 src_gate_id) const;
-        void handle_net_source_removed(const std::shared_ptr<Net> n, const u32 src_gate_id) const;
-        void handle_net_destination_added(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
-        void handle_net_destination_removed(const std::shared_ptr<Net> n, const u32 dst_gate_id) const;
+        void handle_net_created(Net* n) const;
+        void handle_net_removed(Net* n) const;
+        void handle_net_name_changed(Net* n) const;
+        void handle_net_source_added(Net* n, const u32 src_gate_id) const;
+        void handle_net_source_removed(Net* n, const u32 src_gate_id) const;
+        void handle_net_destination_added(Net* n, const u32 dst_gate_id) const;
+        void handle_net_destination_removed(Net* n, const u32 dst_gate_id) const;
         void handle_marked_global_input(u32 net_id);
         void handle_marked_global_output(u32 net_id);
         void handle_unmarked_global_input(u32 net_id);
@@ -82,6 +84,8 @@ namespace hal
         GraphLayouter* get_default_layouter(GraphContext* const context) const;
         GraphShader* get_default_shader(GraphContext* const context) const;
 
+        ContextTableModel* get_context_table_model() const;
+
     Q_SIGNALS:
         void context_created(GraphContext* context);
         void context_renamed(GraphContext* context);
@@ -89,5 +93,7 @@ namespace hal
 
     private:
         QVector<GraphContext*> m_graph_contexts;
+
+        ContextTableModel* m_context_table_model;
     };
 }

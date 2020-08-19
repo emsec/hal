@@ -8,12 +8,12 @@
 
 namespace hal
 {
-    std::map<int, std::set<std::shared_ptr<Gate>>> plugin_graph_algorithm::get_communities(std::shared_ptr<Netlist> nl)
+    std::map<int, std::set<Gate*>> plugin_graph_algorithm::get_communities(Netlist* nl)
     {
         if (nl == nullptr)
         {
             log_error(this->get_name(), "{}", "parameter 'g' is nullptr");
-            return std::map<int, std::set<std::shared_ptr<Gate>>>();
+            return std::map<int, std::set<Gate*>>();
         }
 
         /* delete leaves */
@@ -53,7 +53,7 @@ namespace hal
 
         /* count amount of nets, with all destinations of all nets */
         u32 edge_counter = 0;
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
             if (net->get_source().get_gate() == nullptr)
                 continue;
@@ -69,7 +69,7 @@ namespace hal
         /* transform all nets to igraph_real_t */
         igraph_real_t* edges     = new igraph_real_t[edge_counter];
         u32 edge_vertice_counter = 0;
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
             auto predecessor = net->get_source().get_gate();
             if (predecessor == nullptr)
@@ -109,7 +109,7 @@ namespace hal
         igraph_destroy(&graph);
 
         /* group gates by community membership */
-        std::map<int, std::set<std::shared_ptr<Gate>>> community_sets;
+        std::map<int, std::set<Gate*>> community_sets;
         for (int i = 0; i < igraph_vector_size(&membership); i++)
         {
             community_sets[(int)VECTOR(membership)[i]].insert(nl->get_gate_by_id(igraph_nl_id_match[i]));

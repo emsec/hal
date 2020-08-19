@@ -10,7 +10,7 @@ namespace hal
 {
     ProgramArguments plugin_access_manager::request_arguments(const std::string plugin_name)
     {
-        auto pl = PluginManager::get_plugin_instance<BasePluginInterface>(plugin_name, false);
+        auto pl = plugin_manager::get_plugin_instance<BasePluginInterface>(plugin_name, false);
         if (!pl)
         {
             return ProgramArguments();
@@ -38,7 +38,7 @@ namespace hal
 
         if (selection == PluginInterfaceType::cli)
         {
-            auto plugin = std::dynamic_pointer_cast<CLIPluginInterface>(pl);
+            auto plugin = dynamic_cast<CLIPluginInterface*>(pl);
             plugin->initialize();
             ExtendedCliDialog dialog(QString::fromStdString(plugin_name));
             dialog.exec();
@@ -46,7 +46,7 @@ namespace hal
         }
         else if (selection == PluginInterfaceType::gui)
         {
-            auto plugin = std::dynamic_pointer_cast<GUIPluginInterface>(pl);
+            auto plugin = dynamic_cast<GUIPluginInterface*>(pl);
             plugin->initialize();
 
             // show gui dialog, return results
@@ -64,7 +64,7 @@ namespace hal
             return 0;
         }
 
-        auto plugin = PluginManager::get_plugin_instance<CLIPluginInterface>(plugin_name);
+        auto plugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin_name);
         if (!plugin)
             return 0;
 

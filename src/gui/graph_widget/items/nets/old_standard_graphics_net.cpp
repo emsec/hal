@@ -71,8 +71,8 @@ namespace hal
             s_alpha = 1;
     }
 
-    //StandardGraphicsNet::StandardGraphicsNet(const std::shared_ptr<const Net> n, const lines& l) : GraphicsNet(n),
-    OldStandardGraphicsNet::OldStandardGraphicsNet(const std::shared_ptr<const Net> n, lines& l, const bool complete) : GraphicsNet(n),
+    //StandardGraphicsNet::StandardGraphicsNet(Net* n, const lines& l) : GraphicsNet(n),
+    OldStandardGraphicsNet::OldStandardGraphicsNet(Net* n, lines& l, const bool complete) : GraphicsNet(n),
         m_complete(complete)
     {
         QVector<h_line> collapsed_h;
@@ -281,7 +281,7 @@ namespace hal
     {
         Q_UNUSED(widget);
 
-        QColor color = (option->state & QStyle::State_Selected) ? s_selection_color : m_color;
+        QColor color = penColor(option->state);
         s_pen.setColor(color);
         s_pen.setStyle(m_pen_style);
 

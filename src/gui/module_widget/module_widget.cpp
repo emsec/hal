@@ -123,7 +123,7 @@ namespace hal
 
         if(!(module == g_netlist->get_top_module()))
             context_menu.addAction(&delete_action);
- 
+
         QAction* clicked = context_menu.exec(m_tree_view->viewport()->mapToGlobal(point));
 
         if (!clicked)
@@ -154,7 +154,7 @@ namespace hal
             g_netlist_relay.debug_delete_module(get_ModuleItem_from_index(index)->id());
     }
 
-    void ModuleWidget::handle_module_removed(std::shared_ptr<Module> module, u32 module_id)
+    void ModuleWidget::handle_module_removed(Module* module, u32 module_id)
     {
         UNUSED(module);
         UNUSED(module_id);

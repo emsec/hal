@@ -98,10 +98,13 @@ namespace hal
             }
             hal::error_code ec;
             auto bin_dir = get_binary_directory();
-            auto p       = bin_dir / "hal";
-            if (std::filesystem::exists(p, ec))
+            while (std::filesystem::exists(bin_dir))
             {
-                return bin_dir.parent_path();
+                if (std::filesystem::exists(bin_dir / "hal", ec))
+                {
+                    return bin_dir.parent_path();
+                }
+                bin_dir = bin_dir.parent_path();
             }
             std::filesystem::path which_result = which("hal");
             if (!which_result.empty())

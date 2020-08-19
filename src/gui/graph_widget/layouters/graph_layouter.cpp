@@ -7,6 +7,7 @@
 #include "gui/graph_widget/items/nets/circle_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
+#include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "netlist/gate.h"
@@ -36,6 +37,8 @@ namespace hal
 
     GraphLayouter::GraphLayouter(const GraphContext* const context, QObject* parent) : QObject(parent), m_scene(new GraphicsScene(this)), m_context(context), m_done(false)
     {
+        SelectionDetailsWidget* details = g_content_manager->getSelectionDetailsWidget();
+        if (details) connect(details, &SelectionDetailsWidget::triggerHighlight, m_scene, &GraphicsScene::handleHighlight);
     }
 
     GraphicsScene* GraphLayouter::scene() const
@@ -233,7 +236,7 @@ namespace hal
     {
         for (const u32 id : m_context->nets())
         {
-            std::shared_ptr<Net> n = g_netlist->get_net_by_id(id);
+            Net* n = g_netlist->get_net_by_id(id);
             assert(n);
 
             if (n->is_unrouted())
@@ -718,7 +721,7 @@ namespace hal
         // ROADS AND JUNCTIONS FILLED LEFT TO RIGHT, TOP TO BOTTOM
         for (const u32 id : m_context->nets())
         {
-            std::shared_ptr<Net> n = g_netlist->get_net_by_id(id);
+            Net* n = g_netlist->get_net_by_id(id);
             assert(n);
 
             if (n->is_unrouted())

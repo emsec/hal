@@ -74,7 +74,7 @@ namespace hal
         void set_module_hidden(const u32 id, const bool hidden);
 
     public Q_SLOTS:
-        void handle_module_event(module_event_handler::event ev, std::shared_ptr<Module> object, u32 associated_data);
+        void handle_module_event(module_event_handler::event ev, Module* object, u32 associated_data);
 
     private:
         QMap<u32, ModuleItem*> m_ModuleItems;

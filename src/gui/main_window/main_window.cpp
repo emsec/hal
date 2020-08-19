@@ -3,15 +3,15 @@
 #include "core/log.h"
 #include "def.h"
 #include "graphics_effects/overlay_effect.h"
+#include "gui/action/action.h"
+#include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
-#include "gui/action/action.h"
-#include "gui/content_manager/content_manager.h"
 #include "gui/logger/logger_widget.h"
-#include "gui/plugin_access_manager/plugin_access_manager.h"
 #include "gui/main_window/about_dialog.h"
+#include "gui/plugin_access_manager/plugin_access_manager.h"
 #include "gui/plugin_management/plugin_schedule_manager.h"
 #include "gui/plugin_management/plugin_schedule_widget.h"
 #include "gui/plugin_manager/plugin_manager_widget.h"
@@ -21,7 +21,7 @@
 #include "netlist/event_system/event_controls.h"
 #include "netlist/gate.h"
 #include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/hdl_parser/hdl_parser_dispatcher.h"
+#include "netlist/hdl_parser/hdl_parser_manager.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
@@ -203,7 +203,7 @@ namespace hal
         m_menu_edit->setTitle("Edit");
         m_menu_help->setTitle("Help");
 
-        m_AboutDialog = new AboutDialog(this);
+        m_AboutDialog  = new AboutDialog(this);
         m_plugin_model = new PluginModel(this);
 
         g_python_context = std::make_unique<PythonContext>();
@@ -484,7 +484,8 @@ namespace hal
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(false);
             auto selected_lib = libraries[items.indexOf(selected)];
-            g_netlist         = netlist_factory::create_netlist(selected_lib);
+            g_netlist_owner   = netlist_factory::create_netlist(selected_lib);
+            g_netlist         = g_netlist_owner.get();
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(true);
             Q_EMIT FileManager::get_instance()->file_opened("new netlist");
@@ -643,4 +644,4 @@ namespace hal
     {
         m_layout_area->add_content(widget, index, anchor);
     }
-}
+}    // namespace hal

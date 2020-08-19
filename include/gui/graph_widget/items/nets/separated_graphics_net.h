@@ -32,7 +32,7 @@ namespace hal
     public:
         static void update_alpha();
 
-        SeparatedGraphicsNet(const std::shared_ptr<const Net> n);
+        SeparatedGraphicsNet(Net* n);
 
         virtual void add_input(const QPointF& scene_position) = 0;
         virtual void add_output(const QPointF& scene_position) = 0;

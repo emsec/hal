@@ -35,7 +35,7 @@ namespace hal
     {
         Q_UNUSED(path)
 
-        if (PluginManager::get_plugin_instance<CLIPluginInterface>(name.toStdString(), false) == nullptr)
+        if (plugin_manager::get_plugin_instance<CLIPluginInterface>(name.toStdString(), false) == nullptr)
         {
             return;
         }

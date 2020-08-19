@@ -25,11 +25,13 @@ namespace hal {
      */
     TEST_F(EndpointTest, check_set_get_gate) {
         TEST_START
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
-            std::shared_ptr<Gate> test_gate = nl->create_gate(123, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
-            Endpoint ep(test_gate, "I", true);
+            auto nl = test_utils::create_empty_netlist(0);
+            Gate* test_gate = nl->create_gate(123, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
+            Net* test_net = nl->create_net("test_net");
+            Endpoint ep(test_gate, "I", test_net,true);
             EXPECT_EQ(ep.get_gate(), test_gate);
             EXPECT_EQ(ep.get_pin(), "I");
+            EXPECT_EQ(ep.get_net(), test_net);
             EXPECT_TRUE(ep.is_destination_pin());
             EXPECT_FALSE(ep.is_source_pin());
         TEST_END
@@ -42,13 +44,15 @@ namespace hal {
      */
     TEST_F(EndpointTest, check_copy_operator) {
         TEST_START
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
-            std::shared_ptr<Gate> test_gate = nl->create_gate(123,test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
-            Endpoint ep(test_gate, "I", true);
+            auto nl = test_utils::create_empty_netlist(0);
+            Gate* test_gate = nl->create_gate(123,test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
+            Net* test_net = nl->create_net("test_net");
+            Endpoint ep(test_gate, "I", test_net, true);
 
             Endpoint other_ep = ep;
             EXPECT_EQ(other_ep.get_gate(), test_gate);
             EXPECT_EQ(other_ep.get_pin(), "I");
+            EXPECT_EQ(ep.get_net(), test_net);
             EXPECT_TRUE(other_ep.is_destination_pin());
         TEST_END
     }
@@ -61,9 +65,9 @@ namespace hal {
      */
     TEST_F(EndpointTest, check_comparison_operators) {
         TEST_START
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
-            std::shared_ptr<Gate> test_gate_0 = nl->create_gate(1, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_0");
-            std::shared_ptr<Gate> test_gate_1 = nl->create_gate(2, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_1");
+            auto nl = test_utils::create_empty_netlist(0);
+            Gate* test_gate_0 = nl->create_gate(1, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_0");
+            Gate* test_gate_1 = nl->create_gate(2, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate_1");
 
             // Create some endpoints
             Endpoint ep_0 = test_utils::get_endpoint(test_gate_0, "I");
@@ -99,8 +103,8 @@ namespace hal {
      */
     TEST_F(EndpointTest, check_unequal_operator) {
         TEST_START
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
-            std::shared_ptr<Gate> test_gate = nl->create_gate(123, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
+            auto nl = test_utils::create_empty_netlist(0);
+            Gate* test_gate = nl->create_gate(123, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
 
             Endpoint ep = test_utils::get_endpoint(test_gate, "O");
             Endpoint other_ep = test_utils::get_endpoint(test_gate, "O");

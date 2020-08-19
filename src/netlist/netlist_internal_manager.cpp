@@ -17,11 +17,19 @@ namespace hal
         assert(nl != nullptr);
     }
 
+    template<typename T>
+    static void unordered_vector_erase(std::vector<T>& vec, T element)
+    {
+        auto it = std::find(vec.begin(), vec.end(), element);
+        *it     = vec.back();
+        vec.pop_back();
+    }
+
     //######################################################################
     //###                      gates                                     ###
     //######################################################################
 
-    std::shared_ptr<Gate> NetlistInternalManager::create_gate(const u32 id, const std::shared_ptr<const GateType>& gt, const std::string& name, float x, float y)
+    Gate* NetlistInternalManager::create_gate(const u32 id, const GateType* gt, const std::string& name, float x, float y)
     {
         if (id == 0)
         {
@@ -44,7 +52,7 @@ namespace hal
             return nullptr;
         }
 
-        auto new_gate = std::shared_ptr<Gate>(new Gate(m_netlist->get_shared(), id, gt, name, x, y));
+        auto new_gate = std::unique_ptr<Gate>(new Gate(this, id, gt, name, x, y));
 
         auto free_id_it = m_netlist->m_free_gate_ids.find(id);
         if (free_id_it != m_netlist->m_free_gate_ids.end())
@@ -55,18 +63,24 @@ namespace hal
         m_netlist->m_used_gate_ids.insert(id);
 
         // add gate to top module
-        new_gate->m_module                       = m_netlist->m_top_module;
-        m_netlist->m_top_module->m_gates_map[id] = new_gate;
-        m_netlist->m_top_module->m_gates_set.insert(new_gate);
+        new_gate->m_module = m_netlist->m_top_module;
+
+        auto raw = new_gate.get();
+
+        m_netlist->m_gates_map[id] = std::move(new_gate);
+        m_netlist->m_gates.push_back(raw);
+
+        m_netlist->m_top_module->m_gates_map[id] = raw;
+        m_netlist->m_top_module->m_gates.push_back(raw);
 
         // notify
         module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, id);
-        gate_event_handler::notify(gate_event_handler::event::created, new_gate);
+        gate_event_handler::notify(gate_event_handler::event::created, raw);
 
-        return new_gate;
+        return raw;
     }
 
-    bool NetlistInternalManager::delete_gate(std::shared_ptr<Gate> gate)
+    bool NetlistInternalManager::delete_gate(Gate* gate)
     {
         if (!m_netlist->is_gate_in_netlist(gate))
         {
@@ -110,7 +124,12 @@ namespace hal
 
         // remove gate from modules
         gate->m_module->m_gates_map.erase(gate->m_module->m_gates_map.find(gate->get_id()));
-        gate->m_module->m_gates_set.erase(gate);
+        unordered_vector_erase(gate->m_module->m_gates, gate);
+
+        auto it  = m_netlist->m_gates_map.find(gate->get_id());
+        auto ptr = std::move(it->second);
+        m_netlist->m_gates_map.erase(it);
+        unordered_vector_erase(m_netlist->m_gates, gate);
 
         // free ids
         m_netlist->m_free_gate_ids.insert(gate->get_id());
@@ -122,22 +141,16 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::is_gate_type_invalid(const std::shared_ptr<const GateType>& gt) const
+    bool NetlistInternalManager::is_gate_type_invalid(const GateType* gt) const
     {
-        auto gate_types = m_netlist->m_gate_library->get_gate_types();
-        auto it         = gate_types.find(gt->get_name());
-        if (it == gate_types.end())
-        {
-            return true;
-        }
-        return *(it->second) != *gt;
+        return !m_netlist->m_gate_library->contains_gate_type(gt);
     }
 
     //######################################################################
     //###                       nets                                     ###
     //######################################################################
 
-    std::shared_ptr<Net> NetlistInternalManager::create_net(const u32 id, const std::string& name)
+    Net* NetlistInternalManager::create_net(const u32 id, const std::string& name)
     {
         if (id == 0)
         {
@@ -155,7 +168,7 @@ namespace hal
             return nullptr;
         }
 
-        auto new_net = std::shared_ptr<Net>(new Net(this, id, name));
+        auto new_net = std::unique_ptr<Net>(new Net(this, id, name));
 
         auto free_id_it = m_netlist->m_free_net_ids.find(id);
         if (free_id_it != m_netlist->m_free_net_ids.end())
@@ -166,16 +179,17 @@ namespace hal
         m_netlist->m_used_net_ids.insert(id);
 
         // add net to netlist
-        m_netlist->m_nets_map[id] = new_net;
-        m_netlist->m_nets_set.insert(new_net);
+        auto raw                  = new_net.get();
+        m_netlist->m_nets_map[id] = std::move(new_net);
+        m_netlist->m_nets.push_back(raw);
 
         // notify
-        net_event_handler::notify(net_event_handler::event::created, new_net);
+        net_event_handler::notify(net_event_handler::event::created, raw);
 
-        return new_net;
+        return raw;
     }
 
-    bool NetlistInternalManager::delete_net(const std::shared_ptr<Net>& net)
+    bool NetlistInternalManager::delete_net(Net* net)
     {
         if (!m_netlist->is_net_in_netlist(net))
         {
@@ -205,8 +219,10 @@ namespace hal
         m_netlist->unmark_global_output_net(net);
 
         // remove net from netlist
-        m_netlist->m_nets_map.erase(m_netlist->m_nets_map.find(net->get_id()));
-        m_netlist->m_nets_set.erase(net);
+        auto it  = m_netlist->m_nets_map.find(net->get_id());
+        auto ptr = std::move(it->second);
+        m_netlist->m_nets_map.erase(it);
+        unordered_vector_erase(m_netlist->m_nets, net);
 
         m_netlist->m_free_net_ids.insert(net->get_id());
         m_netlist->m_used_net_ids.erase(net->get_id());
@@ -216,52 +232,55 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::net_add_source(const std::shared_ptr<Net>& net, const Endpoint& ep)
+    bool NetlistInternalManager::net_add_source(Net* net, const Endpoint& ep)
     {
         if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()))
         {
             return false;
         }
 
-        if (net->is_a_source(ep.get_gate(), ep.get_pin()))
+        auto gate = ep.get_gate();
+        if (net->is_a_source(gate, ep.get_pin()))
         {
-            log_error(
-                "netlist.internal", "net::add_source: src gate ('{}',  type = {}) is already added to net '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), net->get_name());
+            log_error("netlist.internal", "net::add_source: src gate ('{}',  type = {}) is already added to net '{}'.", gate->get_name(), gate->get_type()->get_name(), net->get_name());
             return false;
         }
 
         // check whether pin id is valid for this gate
-        auto output_pins = ep.get_gate()->get_type()->get_output_pins();
+        auto output_pins = gate->get_type()->get_output_pins();
 
         if ((std::find(output_pins.begin(), output_pins.end(), ep.get_pin()) == output_pins.end()))
         {
-            log_error("netlist.internal", "net::add_source: src gate ('{}',  type = {}) has no output type '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), ep.get_pin());
+            log_error("netlist.internal", "net::add_source: src gate ('{}',  type = {}) has no output type '{}'.", gate->get_name(), gate->get_type()->get_name(), ep.get_pin());
             return false;
         }
 
         // check whether src has already an assigned net
-        if (ep.get_gate()->get_fan_out_net(ep.get_pin()) != nullptr)
+        if (gate->get_fan_out_net(ep.get_pin()) != nullptr)
         {
             log_error("netlist.internal",
                       "net::add_source: gate '{}' already has an assigned net '{}' for output pin '{}', cannot assign new net '{}'.",
-                      ep.get_gate()->get_name(),
-                      ep.get_gate()->get_fan_out_net(ep.get_pin())->get_name(),
+                      gate->get_name(),
+                      gate->get_fan_out_net(ep.get_pin())->get_name(),
                       ep.get_pin(),
                       net->get_name());
             return false;
         }
 
         net->m_sources.push_back(ep);
-        ep.get_gate()->m_out_nets[ep.get_pin()] = net;
+        gate->m_out_endpoints.push_back(ep);
+        gate->m_out_nets.push_back(net);
 
-        net_event_handler::notify(net_event_handler::event::src_added, net, ep.get_gate()->get_id());
+        net_event_handler::notify(net_event_handler::event::src_added, net, gate->get_id());
 
         return true;
     }
 
-    bool NetlistInternalManager::net_remove_source(const std::shared_ptr<Net>& net, const Endpoint& ep)
+    bool NetlistInternalManager::net_remove_source(Net* net, const Endpoint& ep)
     {
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()) || !net->is_a_source(ep))
+        auto gate = ep.get_gate();
+
+        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_source(ep))
         {
             return false;
         }
@@ -270,67 +289,68 @@ namespace hal
 
         if (it != net->m_sources.end())
         {
-            (*it).get_gate()->m_out_nets.erase((*it).get_pin());
+            unordered_vector_erase(gate->m_out_endpoints, ep);
+            unordered_vector_erase(gate->m_out_nets, net);
             net->m_sources.erase(it);
-            net_event_handler::notify(net_event_handler::event::src_removed, net, ep.get_gate()->get_id());
+            net_event_handler::notify(net_event_handler::event::src_removed, net, gate->get_id());
         }
         else
         {
-            log_warning("nelist.internal", "net::remove_source: net '{}' has no src gate '{}' at pin '{}'", net->get_name(), ep.get_gate()->get_name(), ep.get_pin());
+            log_warning("nelist.internal", "net::remove_source: net '{}' has no src gate '{}' at pin '{}'", net->get_name(), gate->get_name(), ep.get_pin());
         }
 
         return true;
     }
 
-    bool NetlistInternalManager::net_add_destination(const std::shared_ptr<Net>& net, const Endpoint& ep)
+    bool NetlistInternalManager::net_add_destination(Net* net, const Endpoint& ep)
     {
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()))
+        auto gate = ep.get_gate();
+
+        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate))
         {
             return false;
         }
 
-        if (net->is_a_destination(ep.get_gate(), ep.get_pin()))
+        if (net->is_a_destination(gate, ep.get_pin()))
         {
-            log_error("netlist.internal",
-                      "net::add_destination: dst gate ('{}',  type = {}) is already added to net '{}'.",
-                      ep.get_gate()->get_name(),
-                      ep.get_gate()->get_type()->get_name(),
-                      net->get_name());
+            log_error("netlist.internal", "net::add_destination: dst gate ('{}',  type = {}) is already added to net '{}'.", gate->get_name(), gate->get_type()->get_name(), net->get_name());
             return false;
         }
 
         // check whether pin id is valid for this gate
-        auto input_pins = ep.get_gate()->get_type()->get_input_pins();
+        auto input_pins = gate->get_type()->get_input_pins();
 
         if ((std::find(input_pins.begin(), input_pins.end(), ep.get_pin()) == input_pins.end()))
         {
-            log_error("netlist.internal", "net::add_destination: dst gate ('{}',  type = {}) has no input type '{}'.", ep.get_gate()->get_name(), ep.get_gate()->get_type()->get_name(), ep.get_pin());
+            log_error("netlist.internal", "net::add_destination: dst gate ('{}',  type = {}) has no input type '{}'.", gate->get_name(), gate->get_type()->get_name(), ep.get_pin());
             return false;
         }
 
         // check whether dst has already an assigned net
-        if (ep.get_gate()->get_fan_in_net(ep.get_pin()) != nullptr)
+        if (gate->get_fan_in_net(ep.get_pin()) != nullptr)
         {
             log_error("netlist.internal",
                       "net::add_destination: gate '{}' already has an assigned net '{}' for input pin '{}', cannot assign new net '{}'.",
-                      ep.get_gate()->get_name(),
-                      ep.get_gate()->get_fan_in_net(ep.get_pin())->get_name(),
+                      gate->get_name(),
+                      gate->get_fan_in_net(ep.get_pin())->get_name(),
                       ep.get_pin(),
                       net->get_name());
             return false;
         }
 
         net->m_destinations.push_back(ep);
-        ep.get_gate()->m_in_nets[ep.get_pin()] = net;
+        gate->m_in_endpoints.push_back(ep);
+        gate->m_in_nets.push_back(net);
 
-        net_event_handler::notify(net_event_handler::event::dst_added, net, ep.get_gate()->get_id());
+        net_event_handler::notify(net_event_handler::event::dst_added, net, gate->get_id());
 
         return true;
     }
 
-    bool NetlistInternalManager::net_remove_destination(const std::shared_ptr<Net>& net, const Endpoint& ep)
+    bool NetlistInternalManager::net_remove_destination(Net* net, const Endpoint& ep)
     {
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(ep.get_gate()) || !net->is_a_destination(ep))
+        auto gate = ep.get_gate();
+        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_destination(ep))
         {
             return false;
         }
@@ -339,23 +359,24 @@ namespace hal
 
         if (it != net->m_destinations.end())
         {
-            (*it).get_gate()->m_in_nets.erase((*it).get_pin());
+            unordered_vector_erase(gate->m_in_endpoints, ep);
+            unordered_vector_erase(gate->m_in_nets, net);
             net->m_destinations.erase(it);
-            net_event_handler::notify(net_event_handler::event::dst_removed, net, ep.get_gate()->get_id());
+            net_event_handler::notify(net_event_handler::event::dst_removed, net, gate->get_id());
         }
         else
         {
-            log_warning("nelist.internal", "net::remove_destination: net '{}' has no dst gate '{}' at pin '{}'", net->get_name(), ep.get_gate()->get_name(), ep.get_pin());
+            log_warning("nelist.internal", "net::remove_destination: net '{}' has no dst gate '{}' at pin '{}'", net->get_name(), gate->get_name(), ep.get_pin());
         }
 
         return true;
     }
 
     //######################################################################
-    //###                       modules                               ###
+    //###                          modules                               ###
     //######################################################################
 
-    std::shared_ptr<Module> NetlistInternalManager::create_module(const u32 id, const std::shared_ptr<Module>& parent, const std::string& name)
+    Module* NetlistInternalManager::create_module(const u32 id, Module* parent, const std::string& name)
     {
         if (id == 0)
         {
@@ -377,13 +398,13 @@ namespace hal
             log_error("netlist.internal", "netlist::create_module: parent must not be nullptr");
             return nullptr;
         }
-        if (parent != nullptr && m_netlist->get_shared() != parent->get_netlist())
+        if (parent != nullptr && m_netlist != parent->get_netlist())
         {
             log_error("netlist.internal", "netlist::create_module: parent must belong to current netlist");
             return nullptr;
         }
 
-        auto m = std::shared_ptr<Module>(new Module(id, parent, name, this));
+        auto m = std::unique_ptr<Module>(new Module(id, parent, name, this));
 
         auto free_id_it = m_netlist->m_free_module_ids.find(id);
         if (free_id_it != m_netlist->m_free_module_ids.end())
@@ -393,25 +414,27 @@ namespace hal
 
         m_netlist->m_used_module_ids.insert(id);
 
-        m_netlist->m_modules[id] = m;
+        auto raw                     = m.get();
+        m_netlist->m_modules_map[id] = std::move(m);
+        m_netlist->m_modules.push_back(raw);
 
         if (parent != nullptr)
         {
-            parent->m_submodules_map[id] = m;
-            parent->m_submodules_set.insert(m);
+            parent->m_submodules_map[id] = raw;
+            parent->m_submodules.push_back(raw);
         }
 
-        module_event_handler::notify(module_event_handler::event::created, m);
+        module_event_handler::notify(module_event_handler::event::created, raw);
 
         if (parent != nullptr)
         {
             module_event_handler::notify(module_event_handler::event::submodule_added, parent, id);
         }
 
-        return m;
+        return raw;
     }
 
-    bool NetlistInternalManager::delete_module(const std::shared_ptr<Module>& to_remove)
+    bool NetlistInternalManager::delete_module(Module* to_remove)
     {
         if (!m_netlist->is_module_in_netlist(to_remove))
         {
@@ -425,18 +448,18 @@ namespace hal
 
         // at this point parent is guaranteed to be not null
 
-        // move gates and nets to parent, work on a copy since assign_gate will modify m_gates_set
-        auto gates_copy = to_remove->m_gates_set;
-        for (const auto& gate : gates_copy)
+        // move gates and nets to parent, work on a copy since assign_gate will modify m_gates
+        auto gates_copy = to_remove->m_gates;
+        for (auto gate : gates_copy)
         {
             to_remove->m_parent->assign_gate(gate);
         }
 
         // move all submodules to parent
-        for (const auto& sm : to_remove->m_submodules_set)
+        for (auto sm : to_remove->m_submodules)
         {
             to_remove->m_parent->m_submodules_map[sm->get_id()] = sm;
-            to_remove->m_parent->m_submodules_set.insert(sm);
+            to_remove->m_parent->m_submodules.push_back(sm);
 
             module_event_handler::notify(module_event_handler::event::submodule_removed, sm->get_parent_module(), sm->get_id());
 
@@ -448,10 +471,13 @@ namespace hal
 
         // remove module from parent
         to_remove->m_parent->m_submodules_map.erase(to_remove->get_id());
-        to_remove->m_parent->m_submodules_set.erase(to_remove);
+        unordered_vector_erase(to_remove->m_parent->m_submodules, to_remove);
         module_event_handler::notify(module_event_handler::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
 
-        m_netlist->m_modules.erase(to_remove->get_id());
+        auto it  = m_netlist->m_modules_map.find(to_remove->get_id());
+        auto ptr = std::move(it->second);
+        m_netlist->m_modules_map.erase(it);
+        unordered_vector_erase(m_netlist->m_modules, ptr.get());
 
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());
@@ -460,7 +486,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::module_assign_gate(const std::shared_ptr<Module>& m, const std::shared_ptr<Gate>& g)
+    bool NetlistInternalManager::module_assign_gate(Module* m, Gate* g)
     {
         if (g == nullptr)
         {
@@ -473,10 +499,10 @@ namespace hal
         auto prev_module = g->m_module;
 
         prev_module->m_gates_map.erase(prev_module->m_gates_map.find(g->get_id()));
-        prev_module->m_gates_set.erase(g);
+        unordered_vector_erase(prev_module->m_gates, g);
 
         m->m_gates_map[g->get_id()] = g;
-        m->m_gates_set.insert(g);
+        m->m_gates.push_back(g);
 
         g->m_module = m;
 
@@ -485,7 +511,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::module_remove_gate(const std::shared_ptr<Module>& m, const std::shared_ptr<Gate>& g)
+    bool NetlistInternalManager::module_remove_gate(Module* m, Gate* g)
     {
         if (g == nullptr)
         {
@@ -507,15 +533,24 @@ namespace hal
         }
 
         m->m_gates_map.erase(it);
-        m->m_gates_set.erase(g);
+        unordered_vector_erase(m->m_gates, g);
 
         m_netlist->m_top_module->m_gates_map[g->get_id()] = g;
-        m_netlist->m_top_module->m_gates_set.insert(g);
+        m_netlist->m_top_module->m_gates.push_back(g);
         g->m_module = m_netlist->m_top_module;
 
         module_event_handler::notify(module_event_handler::event::gate_removed, m, g->get_id());
         module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, g->get_id());
 
         return true;
+    }
+
+    //######################################################################
+    //###                           caches                               ###
+    //######################################################################
+
+    void NetlistInternalManager::clear_caches()
+    {
+        m_lut_function_cache.clear();
     }
 }    // namespace hal

@@ -47,7 +47,7 @@ namespace hal
      *
      * @ingroup netlist
      */
-    class NETLIST_API Net : public DataContainer, public std::enable_shared_from_this<Net>
+    class NETLIST_API Net : public DataContainer
     {
         friend class NetlistInternalManager;
 
@@ -64,7 +64,7 @@ namespace hal
          *
          * @returns The netlist.
          */
-        std::shared_ptr<Netlist> get_netlist() const;
+        Netlist* get_netlist() const;
 
         /**
          * Get the name of the net.
@@ -91,7 +91,7 @@ namespace hal
          * @param[in] pin - The input pin of the gate.
          * @returns True on success.
          */
-        bool add_source(const std::shared_ptr<Gate>& gate, const std::string& pin);
+        bool add_source(Gate* gate, const std::string& pin);
 
         /**
          * Add a source to this net by endpoint.
@@ -109,7 +109,7 @@ namespace hal
          * @param[in] pin - The input pin of the gate.
          * @returns True on success.
          */
-        bool remove_source(const std::shared_ptr<Gate>& gate, const std::string& pin);
+        bool remove_source(Gate* gate, const std::string& pin);
 
         /**
          * Remove a source from this net by endpoint.
@@ -127,7 +127,7 @@ namespace hal
          * @param[in] pin - The source output pin.
          * @returns True if the gate's pin is a source of this net.
          */
-        bool is_a_source(const std::shared_ptr<Gate>& gate, const std::string& pin) const;
+        bool is_a_source(Gate* gate, const std::string& pin) const;
 
         /**
          * Check whether an endpoint is a source of this net.
@@ -155,6 +155,7 @@ namespace hal
         std::vector<Endpoint> get_sources(const std::function<bool(const Endpoint& ep)>& filter = nullptr) const;
 
         /**
+         * DEPRECATED
          * Get the (first) src of the net.
          * If there was no src assigned, the gate element of the returned endpoint is a nullptr.
          * If the net is multi-driven a warning is printed.
@@ -174,7 +175,7 @@ namespace hal
          * @param[in] pin - The input pin of the gate.
          * @returns True on success.
          */
-        bool add_destination(const std::shared_ptr<Gate>& gate, const std::string& pin);
+        bool add_destination(Gate* gate, const std::string& pin);
 
         /**
          * Add a destination to this net by endpoint.
@@ -192,7 +193,7 @@ namespace hal
          * @param[in] pin - The input pin of the gate.
          * @returns True on success.
          */
-        bool remove_destination(const std::shared_ptr<Gate>& gate, const std::string& pin);
+        bool remove_destination(Gate* gate, const std::string& pin);
 
         /**
          * Remove a destination from this net by endpoint.
@@ -210,7 +211,7 @@ namespace hal
          * @param[in] pin - The destination output pin.
          * @returns True if the gate's pin is a destination of this net.
          */
-        bool is_a_destination(const std::shared_ptr<Gate>& gate, const std::string& pin) const;
+        bool is_a_destination(Gate* gate, const std::string& pin) const;
 
         /**
          * Check whether an endpoint is a destination of this net.
@@ -277,14 +278,14 @@ namespace hal
          *
          * @returns True if the net is a global input net.
          */
-        bool is_global_input_net() const;
+        bool is_global_input_net();
 
         /**
          * Checks whether this net is a global output net.
          *
          * @returns True if the net is a global output net.
          */
-        bool is_global_output_net() const;
+        bool is_global_output_net();
 
     private:
         /**

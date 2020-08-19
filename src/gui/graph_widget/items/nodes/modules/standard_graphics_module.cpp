@@ -73,7 +73,8 @@ namespace hal
         s_pin_font_descent = pin_fm.descent();
         s_pin_font_baseline = 1;
 
-        s_selection_color = QColor(240, 173, 0);
+        s_selectionColor = QColor(240, 173, 0);
+        s_highlightColor = QColor(40, 200, 240);
     }
 
     void StandardGraphicsModule::update_alpha()
@@ -84,7 +85,7 @@ namespace hal
             s_alpha = 0;
     }
 
-    StandardGraphicsModule::StandardGraphicsModule(const std::shared_ptr<Module> m, bool adjust_size_to_grid) : GraphicsModule(m)
+    StandardGraphicsModule::StandardGraphicsModule(Module* m, bool adjust_size_to_grid) : GraphicsModule(m)
     {
         format(adjust_size_to_grid);
     }
@@ -95,7 +96,7 @@ namespace hal
 
         if (s_lod < graph_widget_constants::gate_min_lod)
         {
-            painter->fillRect(QRectF(0, 0, m_width, m_height), (option->state & QStyle::State_Selected) ? s_selection_color : m_color);
+            painter->fillRect(QRectF(0, 0, m_width, m_height), penColor(option->state));
             return;
         }
         else
@@ -126,7 +127,7 @@ namespace hal
             if (g_selection_relay.m_focus_type == SelectionRelay::item_type::module)
                 if (g_selection_relay.m_focus_id == m_id)
                 {
-                    s_pen.setColor(s_selection_color);
+                    s_pen.setColor(selectionColor());
                     painter->setPen(s_pen);
 
                     switch (g_selection_relay.m_subfocus)
@@ -177,7 +178,7 @@ namespace hal
 
             if (option->state & QStyle::State_Selected)
             {
-                s_pen.setColor(s_selection_color);
+                s_pen.setColor(selectionColor());
                 s_pen.setCosmetic(true);
                 painter->setPen(s_pen);
                 s_pen.setCosmetic(false);

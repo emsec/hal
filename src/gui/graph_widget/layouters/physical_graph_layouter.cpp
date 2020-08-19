@@ -39,7 +39,7 @@ namespace hal
 
         for (u32 id : gates)
         {
-            std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(id);
+            Gate* g = g_netlist->get_gate_by_id(id);
             assert(g);
 
             if (g->has_location())

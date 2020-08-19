@@ -140,9 +140,11 @@ if(UNIX)
     enable_cxx_compile_option_if_supported("-pedantic" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-Wshadow" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-Wno-undef" "" "PRIVATE")
+    enable_cxx_compile_option_if_supported("-Werror=return-type" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fcolor-diagnostics" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fdiagnostics-color=always" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fsized-deallocation" "" "PRIVATE")
+
 
     enable_cxx_compile_option_if_supported("-O0" "Debug" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "Debug" "PUBLIC")
@@ -167,6 +169,9 @@ if(UNIX)
 
     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+
+    # SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fsanitize=address")
+    # SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
 
     if(USE_LIBCXX)
         enable_cxx_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
@@ -281,7 +286,8 @@ install(FILES tools/genversion.py
             WORLD_READ
             WORLD_EXECUTE)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/pybind11 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-1.4.2 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-1.5.0 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+
 
 if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
     install(EXPORT hal
