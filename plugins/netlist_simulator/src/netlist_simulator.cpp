@@ -180,12 +180,12 @@ namespace hal
         m_needs_initialization = true;
     }
 
-    void NetlistSimulator::set_state(const Simulation& state)
+    void NetlistSimulator::set_simulation_state(const Simulation& state)
     {
         m_simulation = state;
     }
 
-    Simulation NetlistSimulator::get_current_state() const
+    Simulation NetlistSimulator::get_simulation_state() const
     {
         return m_simulation;
     }

@@ -1,5 +1,7 @@
 #include "plugin_netlist_simulator/simulation.h"
 
+#include "netlist/net.h"
+
 namespace hal
 {
     SignalValue Simulation::get_net_value(Net* net, u64 nanoseconds)

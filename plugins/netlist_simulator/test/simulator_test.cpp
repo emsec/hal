@@ -65,7 +65,7 @@ namespace hal
         Simulation simulate(u64 nanoseconds)
         {
             sim->simulate(nanoseconds * 1000);
-            return sim->get_current_state();
+            return sim->get_simulation_state();
         }
 
         bool cmp_sim_data(const Simulation& vcd_sim, const Simulation& hal_sim)

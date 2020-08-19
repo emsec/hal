@@ -1,10 +1,14 @@
 #pragma once
 
-#include "netlist/net.h"
 #include "plugin_netlist_simulator/event.h"
+
+#include <unordered_map>
+#include <vector>
 
 namespace hal
 {
+    class Net;
+
     class Simulation
     {
     public:
