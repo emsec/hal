@@ -26,20 +26,20 @@ namespace hal
         return os << BooleanFunction::to_string(op);
     }
 
-    std::string BooleanFunction::to_string(const value& v)
+    std::string BooleanFunction::to_string(Value v)
     {
         switch (v)
         {
-            case value::ONE:
+            case Value::ONE:
                 return "1";
-            case value::ZERO:
+            case Value::ZERO:
                 return "0";
             default:
                 return "X";
         }
     }
 
-    std::ostream& operator<<(std::ostream& os, const BooleanFunction::value& v)
+    std::ostream& operator<<(std::ostream& os, BooleanFunction::Value v)
     {
         return os << BooleanFunction::to_string(v);
     }
@@ -55,7 +55,7 @@ namespace hal
         if (operands.empty())
         {
             m_content  = content_type::CONSTANT;
-            m_constant = value::X;
+            m_constant = Value::X;
         }
         else if (operands.size() == 1)
         {
@@ -78,7 +78,7 @@ namespace hal
         assert(!m_variable.empty());
     }
 
-    BooleanFunction::BooleanFunction(value constant) : BooleanFunction()
+    BooleanFunction::BooleanFunction(Value constant) : BooleanFunction()
     {
         m_content  = content_type::CONSTANT;
         m_constant = constant;
@@ -132,9 +132,9 @@ namespace hal
         return result;
     }
 
-    BooleanFunction::value BooleanFunction::evaluate(const std::map<std::string, value>& inputs) const
+    BooleanFunction::Value BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const
     {
-        value result = X;
+        Value result = X;
         if (m_content == content_type::VARIABLE)
         {
             auto it = inputs.find(m_variable);
@@ -164,7 +164,7 @@ namespace hal
                 {
                     if (next == 0 || result == 0)
                     {
-                        result = (value)0;
+                        result = (Value)0;
                     }
                     else if (next == X && result == 1)
                     {
@@ -175,7 +175,7 @@ namespace hal
                 {
                     if (next == 1 || result == 1)
                     {
-                        result = (value)1;
+                        result = (Value)1;
                     }
                     else if (next == X && result == 0)
                     {
@@ -186,7 +186,7 @@ namespace hal
                 {
                     if (next == 1)
                     {
-                        result = (value)(1 - result);
+                        result = (Value)(1 - result);
                     }
                     else if (next == X)
                     {
@@ -200,17 +200,17 @@ namespace hal
         {
             if (result == 1)
             {
-                return (value)0;
+                return (Value)0;
             }
             else if (result == 0)
             {
-                return (value)1;
+                return (Value)1;
             }
         }
         return result;
     }
 
-    BooleanFunction::value BooleanFunction::operator()(const std::map<std::string, BooleanFunction::value>& inputs) const
+    BooleanFunction::Value BooleanFunction::operator()(const std::unordered_map<std::string, BooleanFunction::Value>& inputs) const
     {
         return evaluate(inputs);
     }
@@ -240,7 +240,7 @@ namespace hal
         return m_content == content_type::TERMS && m_operands.empty();
     }
 
-    std::set<std::string> BooleanFunction::get_variables() const
+    std::vector<std::string> BooleanFunction::get_variables() const
     {
         if (m_content == content_type::VARIABLE)
         {
@@ -248,12 +248,14 @@ namespace hal
         }
         else if (m_content == content_type::TERMS)
         {
-            std::set<std::string> result;
+            std::vector<std::string> result;
             for (const auto& f : m_operands)
             {
                 auto tmp = f.get_variables();
-                result.insert(tmp.begin(), tmp.end());
+                result.insert(result.end(), tmp.begin(), tmp.end());
             }
+            std::sort(result.begin(), result.end());
+            result.erase(std::unique(result.begin(), result.end()), result.end());
             return result;
         }
         return {};
@@ -338,13 +340,13 @@ namespace hal
                 level -= 1;
                 if (level < 0)
                 {
-                    return value::X;
+                    return Value::X;
                 }
             }
         }
         if (level != 0)
         {
-            return value::X;
+            return Value::X;
         }
 
         // parse expression
@@ -433,7 +435,7 @@ namespace hal
         operation next_op = operation::AND;
 
         {
-            // multiple terms available -> initialize return value with first term
+            // multiple terms available -> initialize return Value with first term
             u32 i = 0;
             while (terms[i] == "!")
             {
@@ -568,7 +570,7 @@ namespace hal
 
     std::string BooleanFunction::to_string_internal() const
     {
-        std::string result = to_string(value::X);
+        std::string result = to_string(Value::X);
         if (m_content == content_type::VARIABLE)
         {
             result = m_variable;
@@ -756,7 +758,7 @@ namespace hal
                 for (const auto& bf2 : result)
                 {
                     auto combined = (bf2 & bf).optimize_constants();
-                    if (!(combined.m_content == content_type::CONSTANT && combined.m_constant == value::ZERO))
+                    if (!(combined.m_content == content_type::CONSTANT && combined.m_constant == Value::ZERO))
                     {
                         if (combined.m_content == content_type::TERMS)
                         {
@@ -810,7 +812,7 @@ namespace hal
         auto primitives = get_primitives();
         if (primitives.empty())
         {
-            return value::ZERO;
+            return Value::ZERO;
         }
         return BooleanFunction(operation::OR, primitives);
     }
@@ -1095,27 +1097,30 @@ namespace hal
         return result;
     }
 
-    std::vector<BooleanFunction::value> BooleanFunction::get_truth_table(std::vector<std::string> variables, bool remove_unknown_variables) const
+    std::vector<BooleanFunction::Value> BooleanFunction::get_truth_table(std::vector<std::string> variables, bool remove_unknown_variables) const
     {
-        std::vector<value> result;
+        std::vector<Value> result;
 
-        auto unique_vars = get_variables();
-        if (variables.empty())
         {
-            variables.insert(variables.end(), unique_vars.begin(), unique_vars.end());
-        }
-        else if (remove_unknown_variables)
-        {
-            variables.erase(std::remove_if(variables.begin(), variables.end(), [&unique_vars](auto& s) { return unique_vars.find(s) == unique_vars.end(); }), variables.end());
+            auto unique_vars = get_variables();
+            if (variables.empty())
+            {
+                variables = std::move(unique_vars);
+            }
+            else if (remove_unknown_variables)
+            {
+                variables.erase(std::remove_if(variables.begin(), variables.end(), [&unique_vars](auto& s) { return std::find(unique_vars.begin(), unique_vars.end(), s) == unique_vars.end(); }),
+                                variables.end());
+            }
         }
 
-        for (u32 values = 0; values < (u32)(1 << variables.size()); ++values)
+        for (u32 Values = 0; Values < (u32)(1 << variables.size()); ++Values)
         {
-            std::map<std::string, BooleanFunction::value> inputs;
-            u32 tmp = values;
+            std::unordered_map<std::string, Value> inputs;
+            u32 tmp = Values;
             for (const auto& var : variables)
             {
-                inputs[var] = (BooleanFunction::value)(tmp & 1);
+                inputs[var] = (Value)(tmp & 1);
                 tmp >>= 1;
             }
             result.push_back(evaluate(inputs));
@@ -1138,24 +1143,24 @@ namespace hal
         }
 
         // result is a OR-chain of *multiple* AND-chains of *only variables*
-        std::vector<std::vector<value>> terms;
+        std::vector<std::vector<Value>> terms;
         auto vars_set = get_variables();
         std::vector<std::string> vars(vars_set.begin(), vars_set.end());
         for (const auto& or_term : result.m_operands)
         {
-            std::vector<value> term(vars.size(), value::X);
+            std::vector<Value> term(vars.size(), Value::X);
             if (or_term.m_content == content_type::TERMS)
             {
                 for (const auto& and_term : or_term.m_operands)
                 {
                     int index   = std::distance(vars.begin(), std::find(vars.begin(), vars.end(), and_term.m_variable));
-                    term[index] = and_term.m_invert ? value::ZERO : value::ONE;
+                    term[index] = and_term.m_invert ? Value::ZERO : Value::ONE;
                 }
             }
             else
             {
                 int index   = std::distance(vars.begin(), std::find(vars.begin(), vars.end(), or_term.m_variable));
-                term[index] = or_term.m_invert ? value::ZERO : value::ONE;
+                term[index] = or_term.m_invert ? Value::ZERO : Value::ONE;
             }
             terms.emplace_back(term);
         }
@@ -1168,18 +1173,18 @@ namespace hal
             BooleanFunction tmp;
             for (u32 i = 0; i < term.size(); ++i)
             {
-                if (term[i] == value::ONE)
+                if (term[i] == Value::ONE)
                 {
                     tmp &= BooleanFunction(vars[i]);
                 }
-                else if (term[i] == value::ZERO)
+                else if (term[i] == Value::ZERO)
                 {
                     tmp &= !BooleanFunction(vars[i]);
                 }
             }
             if (tmp.is_empty())    // all variables are "dont care"
             {
-                tmp = value::ONE;
+                tmp = Value::ONE;
             }
             result |= tmp;
         }
@@ -1187,16 +1192,16 @@ namespace hal
         return result;
     }
 
-    std::vector<std::vector<BooleanFunction::value>> BooleanFunction::qmc(const std::vector<std::vector<value>>& terms)
+    std::vector<std::vector<BooleanFunction::Value>> BooleanFunction::qmc(const std::vector<std::vector<Value>>& terms)
     {
-        std::vector<std::vector<value>> result;
+        std::vector<std::vector<Value>> result;
 
         if (terms.empty())
         {
             return result;
         }
 
-        std::vector<std::vector<value>> im;
+        std::vector<std::vector<Value>> im;
         std::vector<bool> mark(terms.size(), false);
         u32 term_size = terms[0].size();
 
@@ -1204,7 +1209,7 @@ namespace hal
         {
             for (u32 j = i + 1; j < terms.size(); ++j)
             {
-                std::vector<value> c(term_size, value::X);
+                std::vector<Value> c(term_size, Value::X);
                 u32 cnt = 0;
                 for (u32 k = 0; k < term_size; ++k)
                 {

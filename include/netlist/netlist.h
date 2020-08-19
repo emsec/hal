@@ -64,13 +64,6 @@ namespace hal
         ~Netlist();
 
         /**
-         * Return shared_ptr for the current netlist object
-         *
-         * @returns The shared ptr to netlist
-         */
-        Netlist* get_shared();
-
-        /**
          * Get the netlist id.<br>
          * If not changed via set_id(), the id is zero.
          *
@@ -133,6 +126,12 @@ namespace hal
          * @returns A pointer to the gate library.
          */
         const GateLibrary* get_gate_library() const;
+
+        /**
+         * Clears internal caches of the netlist.
+         * In a typical application calling this function is not required.
+         */
+        void clear_caches();
 
         /*
          * ################################################################
@@ -200,7 +199,7 @@ namespace hal
          *
          * @returns The modules of the netlist.
          */
-        std::set<Module*> get_modules() const;
+        std::vector<Module*> get_modules() const;
 
         /**
          * Checks whether a module is registered in the netlist.
@@ -280,7 +279,7 @@ namespace hal
          * @param[in] filter - Filter for the gates
          * @returns A set of gates.
          */
-        std::set<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr) const;
+        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr) const;
 
         /**
          * Mark a gate as a global vcc gate.
@@ -335,14 +334,14 @@ namespace hal
          *
          * @returns A set of gates.
          */
-        std::set<Gate*> get_vcc_gates() const;
+        std::vector<Gate*> get_vcc_gates() const;
 
         /**
          * Get all global gnd gates.
          *
          * @returns A set of gates.
          */
-        std::set<Gate*> get_gnd_gates() const;
+        std::vector<Gate*> get_gnd_gates() const;
 
         /*
          * ################################################################
@@ -408,7 +407,7 @@ namespace hal
          * @param[in] filter - Filter for the nets
          * @return A set of nets.
          */
-        std::unordered_set<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr) const;
+        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr) const;
 
         /**
          * Mark a net as a global input net.
@@ -463,14 +462,14 @@ namespace hal
          *
          * @returns A set of nets.
          */
-        std::set<Net*> get_global_input_nets() const;
+        std::vector<Net*> get_global_input_nets() const;
 
         /**
          * Get all global output nets.
          *
          * @returns A set of nets.
          */
-        std::set<Net*> get_global_output_nets() const;
+        std::vector<Net*> get_global_output_nets() const;
 
     private:
         /* stores the pointer to the netlist internal manager */
@@ -504,20 +503,21 @@ namespace hal
 
         /* stores the modules */
         Module* m_top_module;
-        std::unordered_map<u32, std::unique_ptr<Module>> m_modules;
+        std::unordered_map<u32, std::unique_ptr<Module>> m_modules_map;
+        std::vector<Module*> m_modules;
 
         /* stores the nets */
         std::unordered_map<u32, std::unique_ptr<Net>> m_nets_map;
-        std::unordered_set<Net*> m_nets_set;
+        std::vector<Net*> m_nets;
 
         /* stores the gates */
         std::unordered_map<u32, std::unique_ptr<Gate>> m_gates_map;
-        std::unordered_set<Gate*> m_gates_set;
+        std::vector<Gate*> m_gates;
 
         /* stores the set of global gates and nets */
-        std::set<Net*> m_global_input_nets;
-        std::set<Net*> m_global_output_nets;
-        std::set<Gate*> m_gnd_gates;
-        std::set<Gate*> m_vcc_gates;
+        std::vector<Net*> m_global_input_nets;
+        std::vector<Net*> m_global_output_nets;
+        std::vector<Gate*> m_gnd_gates;
+        std::vector<Gate*> m_vcc_gates;
     };
 }    // namespace hal

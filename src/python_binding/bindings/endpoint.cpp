@@ -6,7 +6,9 @@ namespace hal
     {
         py::class_<Endpoint, std::shared_ptr<Endpoint>> py_endpoint(m, "Endpoint");
 
-        py_endpoint.def(py::init<Gate*, const std::string&, bool>(), py::arg("gate"), py::arg("pin"), py::arg("is_a_destination"), R"(
+        py_endpoint.def(py::init<>());
+
+        py_endpoint.def(py::init<Gate*, const std::string&, Net*, bool>(), py::arg("gate"), py::arg("pin"), py::arg("net"), py::arg("is_a_destination"), R"(
         Construct a new endpoint.
 )");
 
@@ -55,6 +57,19 @@ namespace hal
 
         :returns: The pin.
         :rtype: str
+)");
+
+        py_endpoint.def_property_readonly("net", &Endpoint::get_net, R"(
+        The net of the endpoint.
+
+        :type: hal_py.Net
+)");
+
+        py_endpoint.def("get_net", &Endpoint::get_net, R"(
+        Returns the net of the endpoint.
+
+        :returns: The net.
+        :rtype: hal_py.Net
 )");
 
         py_endpoint.def_property_readonly("is_source", &Endpoint::is_source_pin, R"(

@@ -9,12 +9,12 @@
 
 namespace hal
 {
-    std::set<std::set<Gate*>> plugin_graph_algorithm::get_strongly_connected_components(Netlist* g, std::set<Gate*> gates)
+    std::vector<std::vector<Gate*>> plugin_graph_algorithm::get_strongly_connected_components(Netlist* g, std::vector<Gate*> gates)
     {
         if (g == nullptr)
         {
             log_error(this->get_name(), "{}", "parameter 'g' is nullptr");
-            return std::set<std::set<Gate*>>();
+            return {};
         }
         /* check validity of gates */
         if (gates.empty())
@@ -26,7 +26,7 @@ namespace hal
             if (current_gate != nullptr)
                 continue;
             log_error(this->get_name(), "{}", "parameter 'gates' contains a nullptr");
-            return std::set<std::set<Gate*>>();
+            return {};
         }
 
         boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS> boost_graph;
@@ -40,7 +40,7 @@ namespace hal
         std::map<u32, vertex_t> gate_id_to_vertex;
         std::map<vertex_t, u32> vertex_id_to_gate_id;
         u32 vertex_id_cnt = 0;
-        for (const auto& gate_id : gate_ids)
+        for (auto gate_id : gate_ids)
         {
             auto vertex_descriptor                = boost::add_vertex(boost_graph);
             gate_id_to_vertex[gate_id]            = vertex_descriptor;
@@ -51,7 +51,7 @@ namespace hal
         std::map<u32, Net*> ordered_nets;
         for (const auto& current_gate : gates)
         {
-            for (const auto& net : current_gate->get_fan_out_nets())
+            for (auto net : current_gate->get_fan_out_nets())
                 ordered_nets[net->get_id()] = net;
         }
 
@@ -87,14 +87,14 @@ namespace hal
         for (std::vector<int>::size_type i = 0; i != component.size(); ++i)
             component_to_gate_ids[component[i]].insert(vertex_id_to_gate_id[i]);
 
-        std::set<std::set<Gate*>> result;
+        std::vector<std::vector<Gate*>> result;
         for (auto it_component : component_to_gate_ids)
         {
-            std::set<Gate*> component_set;
-            for (const auto& gate_id : it_component.second)
-                component_set.insert(g->get_gate_by_id(gate_id));
+            std::vector<Gate*> component_set;
+            for (auto gate_id : it_component.second)
+                component_set.push_back(g->get_gate_by_id(gate_id));
             if (!component_set.empty())
-                result.insert(component_set);
+                result.push_back(component_set);
         }
         log_debug(this->get_name(), "found {} components in graph ", num);
         return result;

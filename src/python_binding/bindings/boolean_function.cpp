@@ -6,11 +6,11 @@ namespace hal
     {
         py::class_<BooleanFunction> py_boolean_function(m, "BooleanFunction", R"(Boolean function class.)");
 
-        py::enum_<BooleanFunction::value>(py_boolean_function, "value", R"(
+        py::enum_<BooleanFunction::Value>(py_boolean_function, "value", R"(
         Represents the logic value that a boolean function operates on. Available are: X, ZERO, and ONE.)")
-            .value("X", BooleanFunction::value::X)
-            .value("ZERO", BooleanFunction::value::ZERO)
-            .value("ONE", BooleanFunction::value::ONE)
+            .value("X", BooleanFunction::X)
+            .value("ZERO", BooleanFunction::ZERO)
+            .value("ONE", BooleanFunction::ONE)
             .export_values();
 
         py_boolean_function.def(py::init<>(), R"(
@@ -23,7 +23,7 @@ namespace hal
         :param str variable_name: Name of the variable.
         )");
 
-        py_boolean_function.def(py::init<BooleanFunction::value>(), R"(
+        py_boolean_function.def(py::init<BooleanFunction::Value>(), R"(
         Constructor for a constant, usable in other functions.
         The constant can be either X, Zero, or ONE.
 
@@ -53,7 +53,7 @@ namespace hal
         :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def("evaluate", &BooleanFunction::evaluate, py::arg("inputs") = std::map<std::string, BooleanFunction::value>(), R"(
+        py_boolean_function.def("evaluate", &BooleanFunction::evaluate, py::arg("inputs") = std::unordered_map<std::string, BooleanFunction::Value>(), R"(
         Evaluates the function on the given inputs and returns the result.
 
         :param dict[str,value] inputs:  A map from variable names to values.
@@ -61,7 +61,7 @@ namespace hal
         :rtype: hal_py.value
         )");
 
-        py_boolean_function.def("__call__", [](const BooleanFunction& f, const std::map<std::string, BooleanFunction::value>& values) { return f(values); });
+        py_boolean_function.def("__call__", [](const BooleanFunction& f, const std::unordered_map<std::string, BooleanFunction::Value>& values) { return f(values); });
 
         py_boolean_function.def("is_constant_one", &BooleanFunction::is_constant_one, R"(
         Checks whether the function constantly outputs ONE.

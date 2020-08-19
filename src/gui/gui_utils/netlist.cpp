@@ -40,7 +40,7 @@ namespace hal
             std::unordered_set<Module*> modules_resolved;
             // resolve all modules to their parent modules (otherwise a module could be returned as
             // its own parent)
-            for (const auto& m : modules)
+            for (auto m : modules)
             {
                 auto p = m->get_parent_module();
                 // this happens m is the top module (which has no parents, thus we can't find

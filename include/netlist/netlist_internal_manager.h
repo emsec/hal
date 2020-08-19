@@ -24,6 +24,8 @@
 #pragma once
 
 #include "def.h"
+#include <map>
+#include <vector>
 
 namespace hal
 {
@@ -34,6 +36,7 @@ namespace hal
     class Net;
     class Module;
     class Endpoint;
+    class BooleanFunction;
 
     /**
      * @ingroup netlist
@@ -41,8 +44,9 @@ namespace hal
     class NETLIST_API NetlistInternalManager
     {
         friend class Netlist;
-        friend class Net;
         friend class Module;
+        friend class Net;
+        friend class Gate;
 
     private:
         Netlist* m_netlist;
@@ -69,5 +73,9 @@ namespace hal
         bool delete_module(Module* module);
         bool module_assign_gate(Module* m, Gate* g);
         bool module_remove_gate(Module* m, Gate* g);
+
+        // caches
+        void clear_caches();
+        mutable std::map<std::pair<std::vector<std::string>, u64>, BooleanFunction> m_lut_function_cache;
     };
 }    // namespace hal

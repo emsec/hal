@@ -17,7 +17,6 @@ static T toggle(T v)
 
 namespace hal
 {
-/*
 #define seconds_since(X) ((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - (X)).count() / 1000)
 
 #define measure_block_time(X) measure_block_time_t _UNIQUE_NAME_(X);
@@ -33,14 +32,15 @@ namespace hal
 
         ~measure_block_time_t()
         {
+            log_info("netlist simulator", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
         }
 
     private:
         std::string m_name;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
     };
-    */
-#define measure_block_time(X)
+
+    // #define measure_block_time(X)
 
     NetlistSimulator::NetlistSimulator()
     {
@@ -290,6 +290,10 @@ namespace hal
                 sim_gate->is_flip_flop = true;
                 sim_gate->input_pins   = input_pins;
                 sim_gate->input_nets   = input_nets;
+                for (auto pin : input_pins)
+                {
+                    sim_gate->input_values[pin] = BooleanFunction::X;
+                }
 
                 auto gate_type            = static_cast<const GateTypeSequential*>(gate->get_type());
                 sim_gate->clock_func      = gate->get_boolean_function("clock");
@@ -321,6 +325,10 @@ namespace hal
                 sim_gate->is_flip_flop = false;
                 sim_gate->input_pins   = input_pins;
                 sim_gate->input_nets   = input_nets;
+                for (auto pin : input_pins)
+                {
+                    sim_gate->input_values[pin] = BooleanFunction::X;
+                }
 
                 auto all_functions = gate->get_boolean_functions();
 
@@ -339,7 +347,7 @@ namespace hal
                         bool exit = true;
                         for (auto other_pin : sim_gate->output_pins)
                         {
-                            if (vars.find(other_pin) != vars.end())
+                            if (std::find(vars.begin(), vars.end(), other_pin) != vars.end())
                             {
                                 func = func.substitute(other_pin, all_functions.at(other_pin));
                                 exit = false;
@@ -381,14 +389,23 @@ namespace hal
             }
             auto endpoints  = net->get_destinations();
             auto& dst_gates = m_successors[net];
-            for (auto ep : endpoints)
+            std::unordered_map<Gate*, std::vector<std::string>> affected_pins;
+            for (auto& ep : endpoints)
             {
                 auto gate = ep.get_gate();
+                affected_pins[gate].push_back(ep.get_pin());
+            }
+
+            for (auto it : affected_pins)
+            {
+                auto gate  = it.first;
+                auto& pins = it.second;
                 if (m_simulation_set.find(gate) == m_simulation_set.end())
                 {
                     continue;
                 }
-                dst_gates.push_back(sim_gates_map.at(gate));
+                auto sim_gate = sim_gates_map.at(gate);
+                dst_gates.push_back(std::make_pair(sim_gate, pins));
             }
         }
 
@@ -541,8 +558,12 @@ namespace hal
 
                 // simulate affected gates
                 // record all FFs that have to be clocked
-                for (auto gate : m_successors.at(event.affected_net))
+                for (auto& [gate, pins] : m_successors.at(event.affected_net))
                 {
+                    for (auto& pin : pins)
+                    {
+                        gate->input_values[pin] = static_cast<BooleanFunction::Value>(event.new_value);
+                    }
                     if (!simulate_gate(gate, event, new_events))
                     {
                         ffs.push_back(static_cast<SimulationGateFF*>(gate));
@@ -583,9 +604,6 @@ namespace hal
         // compute delay, currently just a placeholder
         u64 delay = 0;
 
-        // gather inputs
-        auto input_values = gather_input_values(gate);
-
         // compute output for flip flop
         if (gate->is_flip_flop)
         {
@@ -597,20 +615,20 @@ namespace hal
             {
                 // return true if the event was completely handled
                 // -> true if the gate is NOT clocked at this point
-                return (ff->clock_func.evaluate(input_values) != BooleanFunction::ONE);
+                return (ff->clock_func.evaluate(ff->input_values) != BooleanFunction::ONE);
             }
             else    // not a clock pin -> only check for asynchronous signals
             {
-                auto async_set   = ff->preset_func.evaluate(input_values);
-                auto async_reset = ff->clear_func.evaluate(input_values);
+                auto async_set   = ff->preset_func.evaluate(ff->input_values);
+                auto async_reset = ff->clear_func.evaluate(ff->input_values);
 
                 // check whether an asynchronous set or reset ist triggered
-                if (async_set == BooleanFunction::value::ONE || async_reset == BooleanFunction::value::ONE)
+                if (async_set == BooleanFunction::ONE || async_reset == BooleanFunction::ONE)
                 {
                     SignalValue result     = SignalValue::X;
                     SignalValue inv_result = SignalValue::X;
 
-                    if (async_set == BooleanFunction::value::ONE && async_reset == BooleanFunction::value::ONE)
+                    if (async_set == BooleanFunction::ONE && async_reset == BooleanFunction::ONE)
                     {
                         // both signals set? -> evaluate special behavior
                         SignalValue old_output = SignalValue::X;
@@ -664,7 +682,7 @@ namespace hal
             auto comb = static_cast<SimulationGateCombinational*>(gate);
             for (auto out_net : comb->output_nets)
             {
-                auto result = comb->functions[out_net](input_values);
+                auto result = comb->functions[out_net](comb->input_values);
 
                 new_events[std::make_pair(out_net, m_current_time + delay)] = static_cast<SignalValue>(result);
             }
@@ -677,11 +695,8 @@ namespace hal
         // compute delay, currently just a placeholder
         u64 delay = 0;
 
-        // gather inputs
-        auto input_values = gather_input_values(gate);
-
         // compute output
-        auto result     = static_cast<SignalValue>(gate->next_state_func.evaluate(input_values));
+        auto result     = static_cast<SignalValue>(gate->next_state_func.evaluate(gate->input_values));
         auto inv_result = toggle(result);
 
         // generate events
@@ -693,23 +708,6 @@ namespace hal
         {
             new_events[std::make_pair(out_net, m_current_time + delay)] = inv_result;
         }
-    }
-
-    std::map<std::string, BooleanFunction::value> NetlistSimulator::gather_input_values(SimulationGate* gate)
-    {
-        std::map<std::string, BooleanFunction::value> input_values;
-        for (u32 i = 0; i < gate->input_pins.size(); ++i)
-        {
-            auto pin          = gate->input_pins[i];
-            auto net          = gate->input_nets[i];
-            SignalValue value = SignalValue::X;
-            if (auto it = m_simulation.m_events.find(net); it != m_simulation.m_events.end())
-            {
-                value = it->second.back().new_value;
-            }
-            input_values.emplace(pin, static_cast<BooleanFunction::value>(value));
-        }
-        return input_values;
     }
 
     SignalValue NetlistSimulator::process_set_reset_behavior(GateTypeSequential::SetResetBehavior behavior, SignalValue previous_output)

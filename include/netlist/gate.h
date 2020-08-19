@@ -43,6 +43,7 @@ namespace hal
     class Net;
     class Module;
     class Endpoint;
+    class NetlistInternalManager;
 
     /**
      * Gate class containing information about a gate including its location, functions, and module.
@@ -239,7 +240,14 @@ namespace hal
          *
          * @returns A set of all connected input nets.
          */
-        std::set<Net*> get_fan_in_nets() const;
+        std::vector<Net*> get_fan_in_nets() const;
+
+        /**
+         * Get a all fan-in endpoint of the gate, i.e. all nets that are connected to one of the input pins + the respective pin.
+         *
+         * @returns A set of all connected input endpoints.
+         */
+        std::vector<Endpoint> get_fan_in_endpoints() const;
 
         /**
          * Get the fan-in net which is connected to a specific input pin.
@@ -254,7 +262,14 @@ namespace hal
          *
          * @returns A set of all connected output nets.
          */
-        std::set<Net*> get_fan_out_nets() const;
+        std::vector<Net*> get_fan_out_nets() const;
+
+        /**
+         * Get a all fan-out endpoint of the gate, i.e. all nets that are connected to one of the output pins + the respective pin.
+         *
+         * @returns A set of all connected output endpoints.
+         */
+        std::vector<Endpoint> get_fan_out_endpoints() const;
 
         /**
          * Get the fan-out net which is connected to a specific output pin.
@@ -309,7 +324,7 @@ namespace hal
         std::vector<Endpoint> get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
 
     private:
-        Gate(Netlist* nl, u32 id, const GateType* gt, const std::string& name, float x, float y);
+        Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, float x, float y);
 
         Gate(const Gate&) = delete;               //disable copy-constructor
         Gate& operator=(const Gate&) = delete;    //disable copy-assignment
@@ -317,7 +332,7 @@ namespace hal
         BooleanFunction get_lut_function(const std::string& pin) const;
 
         /* pointer to corresponding netlist parent */
-        Netlist* m_netlist;
+        NetlistInternalManager* m_internal_manager;
 
         /* id of the gate */
         u32 m_id;
@@ -336,8 +351,10 @@ namespace hal
         Module* m_module;
 
         /* connected nets */
-        std::map<std::string, Net*> m_in_nets;
-        std::map<std::string, Net*> m_out_nets;
+        std::vector<Endpoint> m_in_endpoints;
+        std::vector<Endpoint> m_out_endpoints;
+        std::vector<Net*> m_in_nets;
+        std::vector<Net*> m_out_nets;
 
         /* dedicated functions */
         std::map<std::string, BooleanFunction> m_functions;

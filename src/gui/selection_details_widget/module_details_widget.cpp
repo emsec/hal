@@ -1,26 +1,27 @@
 #include "selection_details_widget/module_details_widget.h"
-#include "selection_details_widget/data_fields_table.h"
-#include "selection_details_widget/disputed_big_icon.h"
-#include "selection_details_widget/details_section_widget.h"
+
 #include "graph_widget/graph_navigation_widget.h"
-#include "input_dialog/input_dialog.h"
 #include "gui_globals.h"
+#include "input_dialog/input_dialog.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
+#include "selection_details_widget/data_fields_table.h"
+#include "selection_details_widget/details_section_widget.h"
+#include "selection_details_widget/disputed_big_icon.h"
 
 #include <QApplication>
 #include <QClipboard>
 #include <QHeaderView>
+#include <QLabel>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QPixmap>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QTableWidget>
 #include <QVBoxLayout>
-#include <QLabel>
-#include <QPixmap>
 
 namespace hal
 {
@@ -71,7 +72,6 @@ namespace hal
                                                                     m_number_of_submodules_item = new QTableWidgetItem(),
                                                                     m_number_of_nets_item       = new QTableWidgetItem()};
 
-
         for (const auto& item : tmp_general_table_static_items)
             add_general_table_static_item(item);
 
@@ -90,7 +90,7 @@ namespace hal
         intermediate_layout_gt->addWidget(m_general_table);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_gt->addWidget(img);
-        intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
+        intermediate_layout_gt->setAlignment(img, Qt::AlignTop);
 
         m_top_lvl_layout->addWidget(m_general_info_button);
         m_top_lvl_layout->addLayout(intermediate_layout_gt);
@@ -205,7 +205,7 @@ namespace hal
         int direct_member_number_of_gates   = m->get_gates(nullptr, false).size();
         int indirect_member_number_of_gates = 0;
 
-        for (const auto& module : m->get_submodules())
+        for (auto module : m->get_submodules())
             indirect_member_number_of_gates += module->get_gates(nullptr, true).size();
 
         QString number_of_gates_text = QString::number(total_number_of_gates);
@@ -227,7 +227,7 @@ namespace hal
         m_input_ports_table->setMinimumHeight(m_input_ports_table->verticalHeader()->length());
 
         int index = 0;
-        for (const auto& net : m->get_input_nets())
+        for (auto net : m->get_input_nets())
         {
             QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_input_port_name(net)));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x2b05));
@@ -257,7 +257,7 @@ namespace hal
         m_output_ports_table->setMinimumHeight(m_output_ports_table->verticalHeader()->length());
 
         index = 0;
-        for (const auto& net : m->get_output_nets())
+        for (auto net : m->get_output_nets())
         {
             QTableWidgetItem* port_name  = new QTableWidgetItem(QString::fromStdString(m->get_output_port_name(net)));
             QTableWidgetItem* arrow_item = new QTableWidgetItem(QChar(0x27a1));
@@ -295,12 +295,12 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (std::find(in_nets.begin(), in_nets.end(), net) != in_nets.end() || std::find(out_nets.begin(), out_nets.end(), net) != out_nets.end())
             {
                 update(m_currentId);
                 return;
@@ -319,12 +319,12 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (std::find(in_nets.begin(), in_nets.end(), net) != in_nets.end() || std::find(out_nets.begin(), out_nets.end(), net) != out_nets.end())
             {
                 update(m_currentId);
                 return;
@@ -343,12 +343,12 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (std::find(in_nets.begin(), in_nets.end(), net) != in_nets.end() || std::find(out_nets.begin(), out_nets.end(), net) != out_nets.end())
             {
                 update(m_currentId);
                 return;
@@ -367,12 +367,12 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (std::find(in_nets.begin(), in_nets.end(), net) != in_nets.end() || std::find(out_nets.begin(), out_nets.end(), net) != out_nets.end())
             {
                 update(m_currentId);
                 return;
@@ -391,12 +391,12 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (std::find(in_nets.begin(), in_nets.end(), net) != in_nets.end() || std::find(out_nets.begin(), out_nets.end(), net) != out_nets.end())
             {
                 update(m_currentId);
                 return;
@@ -415,12 +415,12 @@ namespace hal
         auto gates  = module->get_gates(nullptr, true);
         auto net    = g_netlist->get_net_by_id(associated_data);
 
-        for (const auto& gate : gates)
+        for (auto gate : gates)
         {
             auto in_nets  = gate->get_fan_in_nets();
             auto out_nets = gate->get_fan_out_nets();
 
-            if (in_nets.find(net) != in_nets.end() || out_nets.find(net) != out_nets.end())
+            if (std::find(in_nets.begin(), in_nets.end(), net) != in_nets.end() || std::find(out_nets.begin(), out_nets.end(), net) != out_nets.end())
             {
                 update(m_currentId);
                 return;
@@ -517,7 +517,7 @@ namespace hal
         auto input_nets  = module->get_input_nets();
         auto output_nets = module->get_output_nets();
 
-        if (input_nets.find(net) != input_nets.end() || output_nets.find(net) != output_nets.end())
+        if (std::find(input_nets.begin(), input_nets.end(), net) != input_nets.end() || std::find(output_nets.begin(), output_nets.end(), net) != output_nets.end())
             update(m_currentId);
     }
 
@@ -650,11 +650,11 @@ namespace hal
                 break;    //cases 3-5 are currently not in use
         }
 
-        if(curr_item->row() == 0)
+        if (curr_item->row() == 0)
         {
-            menu.addAction("Change name", [this, curr_item](){
+            menu.addAction("Change name", [this, curr_item]() {
                 InputDialog ipd("Change name", "New name", curr_item->text());
-                if(ipd.exec() == QDialog::Accepted)
+                if (ipd.exec() == QDialog::Accepted)
                 {
                     g_netlist->get_module_by_id(m_currentId)->set_name(ipd.text_value().toStdString());
                     update(m_currentId);
@@ -662,11 +662,11 @@ namespace hal
             });
         }
 
-        if(curr_item->row() == 2)
+        if (curr_item->row() == 2)
         {
-            menu.addAction("Change type", [this, curr_item](){
+            menu.addAction("Change type", [this, curr_item]() {
                 InputDialog ipd("Change type", "New type", curr_item->text());
-                if(ipd.exec() == QDialog::Accepted)
+                if (ipd.exec() == QDialog::Accepted)
                 {
                     g_netlist->get_module_by_id(m_currentId)->set_type(ipd.text_value().toStdString());
                     update(m_currentId);
@@ -690,7 +690,7 @@ namespace hal
             return;
 
         QMenu menu;
-        if(curr_item->column() == 2)
+        if (curr_item->column() == 2)
         {
             auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
             if (!g_netlist->is_global_input_net(clicked_net))
@@ -708,12 +708,12 @@ namespace hal
         }
         else
         {
-            menu.addAction("Change input port name", [this, curr_item](){
+            menu.addAction("Change input port name", [this, curr_item]() {
                 InputDialog ipd("Change port name", "New port name", curr_item->text());
-                if(ipd.exec() == QDialog::Accepted)
+                if (ipd.exec() == QDialog::Accepted)
                 {
                     auto corresponding_net = g_netlist->get_net_by_id(m_input_ports_table->item(curr_item->row(), 2)->data(Qt::UserRole).toInt());
-                    if(!corresponding_net)
+                    if (!corresponding_net)
                         return;
                     g_netlist->get_module_by_id(m_currentId)->set_input_port_name(corresponding_net, ipd.text_value().toStdString());
                     update(m_currentId);
@@ -732,7 +732,7 @@ namespace hal
             return;
 
         QMenu menu;
-        if(curr_item->column() == 2)
+        if (curr_item->column() == 2)
         {
             auto clicked_net = g_netlist->get_net_by_id(curr_item->data(Qt::UserRole).toInt());
             if (!g_netlist->is_global_output_net(clicked_net))
@@ -749,12 +749,12 @@ namespace hal
         }
         else
         {
-            menu.addAction("Change output port name", [this, curr_item](){
+            menu.addAction("Change output port name", [this, curr_item]() {
                 InputDialog ipd("Change port name", "New port name", curr_item->text());
-                if(ipd.exec() == QDialog::Accepted)
+                if (ipd.exec() == QDialog::Accepted)
                 {
                     auto corresponding_net = g_netlist->get_net_by_id(m_output_ports_table->item(curr_item->row(), 2)->data(Qt::UserRole).toInt());
-                    if(!corresponding_net)
+                    if (!corresponding_net)
                         return;
                     g_netlist->get_module_by_id(m_currentId)->set_output_port_name(corresponding_net, ipd.text_value().toStdString());
                     update(m_currentId);
@@ -771,7 +771,7 @@ namespace hal
         if (item->column() != 2)
             return;
 
-        int net_id                       = item->data(Qt::UserRole).toInt();
+        int net_id       = item->data(Qt::UserRole).toInt();
         Net* clicked_net = g_netlist->get_net_by_id(net_id);
 
         if (!clicked_net)

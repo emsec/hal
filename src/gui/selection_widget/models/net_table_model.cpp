@@ -31,7 +31,7 @@ namespace hal
         if(role == Qt::DisplayRole)
         {
             const u32 net_id = m_selected_net_ids.at(index.row());
-            const auto& net = g_netlist->get_net_by_id(net_id);
+            auto net = g_netlist->get_net_by_id(net_id);
 
             if(!net)
                 return QVariant();
@@ -71,7 +71,7 @@ namespace hal
 
     void net_table_model::fetch_selection()
     {
-        const auto& net_selection = g_selection_relay.m_selected_nets;
+        auto net_selection = g_selection_relay.m_selected_nets;
 
         Q_EMIT layoutAboutToBeChanged();
         QVector<u32> net_ids;

@@ -114,7 +114,7 @@ namespace hal
          * @param[in] recursive - Look into submodules as well
          * @returns The set of submodules
          */
-        std::set<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
+        std::vector<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
 
         /**
          * Checks whether another module is a submodule of this module.<br>
@@ -137,26 +137,26 @@ namespace hal
          * Get the input nets to this module.<br>
          * A module input net is either a global input to the netlist or has a source outside of the module.
          *
-         * @returns The set of module input nets.
+         * @returns The sorted set of module input nets.
          */
-        std::set<Net*> get_input_nets() const;
+        std::vector<Net*> get_input_nets() const;
 
         /**
          * Get the output nets of this module.<br>
          * A module output net is either a global output of the netlist or has a destination outside of the module.
          *
-         * @returns The set of module output nets.
+         * @returns The sorted set of module output nets.
          */
-        std::set<Net*> get_output_nets() const;
+        std::vector<Net*> get_output_nets() const;
 
         /**
          * Get the internal nets of this module.<br>
          * A net is internal if its source and at least one output are inside the module.<br>
          * Therefore it may contain some nets that are also regarded as output nets.
          *
-         * @returns The set of module input nets.
+         * @returns The sorted set of module input nets.
          */
-        std::set<Net*> get_internal_nets() const;
+        std::vector<Net*> get_internal_nets() const;
 
         /**
          * Set the name of the port corresponding to the specified input net to the given string.
@@ -273,7 +273,7 @@ namespace hal
          * @param[in] recursive - Look into submodules too
          * @return A set of gates.
          */
-        std::set<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
+        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
 
     private:
         Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager);
@@ -288,19 +288,26 @@ namespace hal
         u32 m_id;
 
         Module* m_parent;
-        std::map<u32, Module*> m_submodules_map;
-        std::set<Module*> m_submodules_set;
+        std::unordered_map<u32, Module*> m_submodules_map;
+        std::vector<Module*> m_submodules;
 
         /* port names */
         mutable u32 m_next_input_port_id  = 0;
         mutable u32 m_next_output_port_id = 0;
-        mutable std::set<Net*> m_named_input_nets;
-        mutable std::set<Net*> m_named_output_nets;
-        mutable std::map<Net*, std::string> m_input_net_to_port_name;
-        mutable std::map<Net*, std::string> m_output_net_to_port_name;
+        mutable std::set<Net*> m_named_input_nets; // ordering necessary, cannot be replaced with unordered_set
+        mutable std::set<Net*> m_named_output_nets; // ordering necessary, cannot be replaced with unordered_set
+        mutable std::map<Net*, std::string> m_input_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
+        mutable std::map<Net*, std::string> m_output_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
 
         /* stores gates sorted by id */
-        std::map<u32, Gate*> m_gates_map;
-        std::set<Gate*> m_gates_set;
+        std::unordered_map<u32, Gate*> m_gates_map;
+        std::vector<Gate*> m_gates;
+
+        mutable bool m_input_nets_dirty;
+        mutable std::vector<Net*> m_input_nets;
+        mutable bool m_output_nets_dirty;
+        mutable std::vector<Net*> m_output_nets;
+        mutable bool m_internal_nets_dirty;
+        mutable std::vector<Net*> m_internal_nets;
     };
 }    // namespace hal

@@ -6,21 +6,43 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
+#include "netlist/netlist_internal_manager.h"
 
 #include <assert.h>
 #include <iomanip>
 #include <sstream>
 
+template<typename T, T m, int k>
+static inline T swapbits(T p)
+{
+    T q = ((p >> k) ^ p) & m;
+    return p ^ q ^ (q << k);
+}
+
+static u64 bitreverse(u64 n)
+{
+    static const u64 m0 = 0x5555555555555555LLU;
+    static const u64 m1 = 0x0300c0303030c303LLU;
+    static const u64 m2 = 0x00c0300c03f0003fLLU;
+    static const u64 m3 = 0x00000ffc00003fffLLU;
+    n                   = ((n >> 1) & m0) | (n & m0) << 1;
+    n                   = swapbits<u64, m1, 4>(n);
+    n                   = swapbits<u64, m2, 8>(n);
+    n                   = swapbits<u64, m3, 20>(n);
+    n                   = (n >> 34) | (n << 30);
+    return n;
+}
+
 namespace hal
 {
-    Gate::Gate(Netlist* nl, const u32 id, const GateType* gt, const std::string& name, float x, float y)
+    Gate::Gate(NetlistInternalManager* mgr, const u32 id, const GateType* gt, const std::string& name, float x, float y)
     {
-        m_netlist = nl;
-        m_id      = id;
-        m_type    = gt;
-        m_name    = name;
-        m_x       = x;
-        m_y       = y;
+        m_internal_manager = mgr;
+        m_id               = id;
+        m_type             = gt;
+        m_name             = name;
+        m_x                = x;
+        m_y                = y;
     }
 
     u32 Gate::get_id() const
@@ -30,7 +52,7 @@ namespace hal
 
     Netlist* Gate::get_netlist() const
     {
-        return m_netlist;
+        return m_internal_manager->m_netlist;
     }
 
     std::string Gate::get_name() const
@@ -206,6 +228,22 @@ namespace hal
             log_error("netlist.internal", "{}-gate '{}' (id = {}) has invalid config string: '{}' is not a hex value", get_type()->get_name(), get_name(), get_id(), config_str);
             return BooleanFunction();
         }
+
+        u32 max_config_size = 1 << inputs.size();
+
+        if (is_ascending)
+        {
+            config = bitreverse(config) >> (64 - max_config_size);
+        }
+
+        auto cache_key = std::make_pair(inputs, config);
+        auto& cache    = m_internal_manager->m_lut_function_cache;
+
+        if (auto it = cache.find(cache_key); it != cache.end())
+        {
+            return it->second;
+        }
+
         u32 config_size = 0;
         {
             u64 tmp = config;
@@ -215,8 +253,6 @@ namespace hal
                 tmp >>= 1;
             }
         }
-
-        u32 max_config_size = 1 << inputs.size();
 
         if (config_size > max_config_size)
         {
@@ -233,17 +269,8 @@ namespace hal
 
         for (u32 i = 0; config != 0 && i < max_config_size; i++)
         {
-            u8 bit;
-            if (is_ascending)
-            {
-                bit = (config >> (max_config_size - 1)) & 1;
-                config <<= 1;
-            }
-            else
-            {
-                bit = (config & 1);
-                config >>= 1;
-            }
+            u8 bit = (config & 1);
+            config >>= 1;
             if (bit == 1)
             {
                 BooleanFunction clause;
@@ -264,7 +291,9 @@ namespace hal
             }
         }
 
-        return result.optimize();
+        auto f = result.optimize();
+        cache.emplace(cache_key, f);
+        return f;
     }
 
     void Gate::add_boolean_function(const std::string& name, const BooleanFunction& func)
@@ -309,32 +338,32 @@ namespace hal
 
     bool Gate::mark_vcc_gate()
     {
-        return m_netlist->mark_vcc_gate(this);
+        return m_internal_manager->m_netlist->mark_vcc_gate(this);
     }
 
     bool Gate::mark_gnd_gate()
     {
-        return m_netlist->mark_gnd_gate(this);
+        return m_internal_manager->m_netlist->mark_gnd_gate(this);
     }
 
     bool Gate::unmark_vcc_gate()
     {
-        return m_netlist->unmark_vcc_gate(this);
+        return m_internal_manager->m_netlist->unmark_vcc_gate(this);
     }
 
     bool Gate::unmark_gnd_gate()
     {
-        return m_netlist->unmark_gnd_gate(this);
+        return m_internal_manager->m_netlist->unmark_gnd_gate(this);
     }
 
     bool Gate::is_vcc_gate()
     {
-        return m_netlist->is_vcc_gate(this);
+        return m_internal_manager->m_netlist->is_vcc_gate(this);
     }
 
     bool Gate::is_gnd_gate()
     {
-        return m_netlist->is_gnd_gate(this);
+        return m_internal_manager->m_netlist->is_gnd_gate(this);
     }
 
     std::vector<std::string> Gate::get_input_pins() const
@@ -347,54 +376,50 @@ namespace hal
         return m_type->get_output_pins();
     }
 
-    std::set<Net*> Gate::get_fan_in_nets() const
+    std::vector<Net*> Gate::get_fan_in_nets() const
     {
-        std::set<Net*> nets;
+        return m_in_nets;
+    }
 
-        for (const auto& it : m_in_nets)
-        {
-            nets.insert(it.second);
-        }
-
-        return nets;
+    std::vector<Endpoint> Gate::get_fan_in_endpoints() const
+    {
+        return m_in_endpoints;
     }
 
     Net* Gate::get_fan_in_net(const std::string& pin_type) const
     {
-        auto it = m_in_nets.find(pin_type);
+        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin_type](auto& ep) { return ep.get_pin() == pin_type; });
 
-        if (it == m_in_nets.end())
+        if (it == m_in_endpoints.end())
         {
             log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to input pin '{}'.", get_name(), get_type()->get_name(), pin_type);
             return nullptr;
         }
 
-        return it->second;
+        return it->get_net();
     }
 
-    std::set<Net*> Gate::get_fan_out_nets() const
+    std::vector<Net*> Gate::get_fan_out_nets() const
     {
-        std::set<Net*> nets;
+        return m_out_nets;
+    }
 
-        for (const auto& it : m_out_nets)
-        {
-            nets.insert(it.second);
-        }
-
-        return nets;
+    std::vector<Endpoint> Gate::get_fan_out_endpoints() const
+    {
+        return m_out_endpoints;
     }
 
     Net* Gate::get_fan_out_net(const std::string& pin_type) const
     {
-        auto it = m_out_nets.find(pin_type);
+        auto it = std::find_if(m_out_endpoints.begin(), m_out_endpoints.end(), [&pin_type](auto& ep) { return ep.get_pin() == pin_type; });
 
-        if (it == m_out_nets.end())
+        if (it == m_out_endpoints.end())
         {
             log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to output pin '{}'.", get_name(), get_type()->get_name(), pin_type);
             return nullptr;
         }
 
-        return it->second;
+        return it->get_net();
     }
 
     std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
@@ -412,11 +437,10 @@ namespace hal
     std::vector<Endpoint> Gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
         std::vector<Endpoint> result;
-        for (const auto& it : m_in_nets)
+        for (const auto& ep : m_in_endpoints)
         {
-            auto& pin         = it.first;
-            auto& net         = it.second;
-            auto predecessors = net->get_sources();
+            auto pin          = ep.get_pin();
+            auto predecessors = ep.get_net()->get_sources();
             if (!filter)
             {
                 result.insert(result.end(), predecessors.begin(), predecessors.end());
@@ -441,12 +465,12 @@ namespace hal
         auto predecessors = this->get_predecessors([&which_pin](auto& starting_pin, auto&) -> bool { return starting_pin == which_pin; });
         if (predecessors.size() == 0)
         {
-            return Endpoint(nullptr, "", false);
+            return Endpoint();
         }
         if (predecessors.size() > 1)
         {
             log_error("netlist", "internal error: multiple predecessors for '{}' at pin '{}'.", get_name(), which_pin);
-            return Endpoint(nullptr, "", false);
+            return Endpoint();
         }
 
         return predecessors[0];
@@ -467,11 +491,10 @@ namespace hal
     std::vector<Endpoint> Gate::get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
         std::vector<Endpoint> result;
-        for (const auto& it : m_out_nets)
+        for (const auto& ep : m_out_endpoints)
         {
-            auto& pin       = it.first;
-            auto& net       = it.second;
-            auto successors = net->get_destinations();
+            auto pin        = ep.get_pin();
+            auto successors = ep.get_net()->get_destinations();
             if (!filter)
             {
                 result.insert(result.end(), successors.begin(), successors.end());

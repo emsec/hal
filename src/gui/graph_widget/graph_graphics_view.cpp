@@ -717,7 +717,7 @@ namespace hal
             for (auto sel_id : g_selection_relay.m_selected_gates)
             {
                 auto gate = g_netlist->get_gate_by_id(sel_id);
-                for (const auto& net : gate->get_fan_out_nets())
+                for (auto net : gate->get_fan_out_nets())
                 {
                     for (const auto& suc : net->get_destinations())
                     {
@@ -741,7 +741,7 @@ namespace hal
             for (auto sel_id : g_selection_relay.m_selected_modules)
             {
                 auto module = g_netlist->get_module_by_id(sel_id);
-                for (const auto& net : module->get_output_nets())
+                for (auto net : module->get_output_nets())
                 {
                     for (const auto& suc : net->get_destinations())
                     {
@@ -776,7 +776,7 @@ namespace hal
             for (auto sel_id : g_selection_relay.m_selected_gates)
             {
                 auto gate = g_netlist->get_gate_by_id(sel_id);
-                for (const auto& net : gate->get_fan_in_nets())
+                for (auto net : gate->get_fan_in_nets())
                 {
                     if (net->get_source().get_gate() != nullptr)
                     {
@@ -800,7 +800,7 @@ namespace hal
             for (auto sel_id : g_selection_relay.m_selected_modules)
             {
                 auto module = g_netlist->get_module_by_id(sel_id);
-                for (const auto& net : module->get_input_nets())
+                for (auto net : module->get_input_nets())
                 {
                     if (net->get_source().get_gate() != nullptr)
                     {

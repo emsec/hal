@@ -246,7 +246,7 @@ namespace hal
         endInsertRows();
     }
 
-    void ModuleModel::add_recursively(std::set<Module*> modules)
+    void ModuleModel::add_recursively(const std::vector<Module*>& modules)
     {
         for (auto &m : modules)
         {

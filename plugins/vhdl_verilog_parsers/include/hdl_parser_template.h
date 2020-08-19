@@ -40,6 +40,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <queue>
 #include <set>
 #include <sstream>
@@ -173,7 +174,7 @@ namespace hal
                     {
                         // cache pin types
                         std::vector<T> pins;
-                        std::map<T, std::map<u32, std::string>> pin_groups;
+                        std::unordered_map<T, std::unordered_map<u32, std::string>> pin_groups;
 
                         if constexpr (std::is_same<T, std::string>::value)
                         {
@@ -182,7 +183,7 @@ namespace hal
                             pins.insert(pins.end(), output_pins.begin(), output_pins.end());
 
                             pin_groups                                                = gate_it->second->get_input_pin_groups();
-                            std::map<T, std::map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
+                            std::unordered_map<T, std::unordered_map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
                             pin_groups.insert(output_pin_groups.begin(), output_pin_groups.end());
                         }
                         else
@@ -325,7 +326,7 @@ namespace hal
                 m_netlist->delete_net(m_one_net);
             }
 
-            for (const auto& net : m_netlist->get_nets())
+            for (auto net : m_netlist->get_nets())
             {
                 const bool no_source      = net->get_num_of_sources() == 0 && !net->is_global_input_net();
                 const bool no_destination = net->get_num_of_destinations() == 0 && !net->is_global_output_net();
@@ -1001,7 +1002,7 @@ namespace hal
         std::stringstream* m_fs;
 
         // map of all entities
-        std::map<T, entity> m_entities;
+        std::unordered_map<T, entity> m_entities;
         T m_last_entity;
 
     private:
@@ -1009,20 +1010,20 @@ namespace hal
         Netlist* m_netlist;
 
         // unique alias generation
-        std::map<T, u32> m_signal_name_occurrences;
-        std::map<T, u32> m_instance_name_occurrences;
-        std::map<T, u32> m_current_signal_index;
-        std::map<T, u32> m_current_instance_index;
+        std::unordered_map<T, u32> m_signal_name_occurrences;
+        std::unordered_map<T, u32> m_instance_name_occurrences;
+        std::unordered_map<T, u32> m_current_signal_index;
+        std::unordered_map<T, u32> m_current_instance_index;
 
         // net generation
         Net* m_zero_net;
         Net* m_one_net;
-        std::map<T, Net*> m_net_by_name;
-        std::map<T, std::vector<T>> m_nets_to_merge;
+        std::unordered_map<T, Net*> m_net_by_name;
+        std::unordered_map<T, std::vector<T>> m_nets_to_merge;
 
         // buffer gate types
-        std::map<T, const GateType*> m_tmp_gate_types;
-        std::map<Net*, std::tuple<port_direction, std::string, Module*>> m_module_ports;
+        std::unordered_map<T, const GateType*> m_tmp_gate_types;
+        std::unordered_map<Net*, std::tuple<port_direction, std::string, Module*>> m_module_ports;
 
         bool build_netlist(const T& top_module)
         {
@@ -1030,7 +1031,7 @@ namespace hal
 
             auto& top_entity = m_entities[top_module];
 
-            std::map<T, u32> instantiation_count;
+            std::unordered_map<T, u32> instantiation_count;
 
             // preparations for alias: count the occurences of all names
             std::queue<entity*> q;
@@ -1398,8 +1399,8 @@ namespace hal
                 m_nets_to_merge[b].push_back(a);
             }
 
-            std::map<T, const GateType*> vcc_gate_types;
-            std::map<T, const GateType*> gnd_gate_types;
+            std::unordered_map<T, const GateType*> vcc_gate_types;
+            std::unordered_map<T, const GateType*> gnd_gate_types;
 
             if constexpr (std::is_same<T, std::string>::value)
             {
@@ -1623,7 +1624,7 @@ namespace hal
             return module;
         }
 
-        T get_unique_alias(std::map<T, u32>& name_occurrences, const T& name)
+        T get_unique_alias(std::unordered_map<T, u32>& name_occurrences, const T& name)
         {
             // if the name only appears once, we don't have to suffix it
             if (name_occurrences[name] < 2)

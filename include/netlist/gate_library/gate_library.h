@@ -72,25 +72,32 @@ namespace hal
         void add_gate_type(std::unique_ptr<const GateType> gt);
 
         /**
+         * Checks whether a gate type is contained in this library.
+         *
+         * @param[in] gt - The gate type
+         */
+        bool contains_gate_type(const GateType* gt) const;
+
+        /**
          * Get all gate types of the library.
          *
          * @returns A map from gate type names to gate type objects.
          */
-        std::map<std::string, const GateType*> get_gate_types() const;
+        std::unordered_map<std::string, const GateType*> get_gate_types() const;
 
         /**
          * Get all VCC gate types of the library.
          *
          * @returns A map from VCC gate type names to gate type objects.
          */
-        std::map<std::string, const GateType*> get_vcc_gate_types() const;
+        std::unordered_map<std::string, const GateType*> get_vcc_gate_types() const;
 
         /**
          * Get all GND gate types of the library.
          *
          * @returns A map from GND gate type names to gate type objects.
          */
-        std::map<std::string, const GateType*> get_gnd_gate_types() const;
+        std::unordered_map<std::string, const GateType*> get_gnd_gate_types() const;
 
         /**
          * Add a necessary includes of the gate library, e.g., VHDL libraries.
@@ -111,9 +118,9 @@ namespace hal
         std::filesystem::path m_path;
 
         std::vector<std::unique_ptr<const GateType>> m_gate_types;
-        std::map<std::string, const GateType*> m_gate_type_map;
-        std::map<std::string, const GateType*> m_vcc_gate_types;
-        std::map<std::string, const GateType*> m_gnd_gate_types;
+        std::unordered_map<std::string, const GateType*> m_gate_type_map;
+        std::unordered_map<std::string, const GateType*> m_vcc_gate_types;
+        std::unordered_map<std::string, const GateType*> m_gnd_gate_types;
 
         std::vector<std::string> m_includes;
     };

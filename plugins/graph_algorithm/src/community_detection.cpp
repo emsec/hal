@@ -53,7 +53,7 @@ namespace hal
 
         /* count amount of nets, with all destinations of all nets */
         u32 edge_counter = 0;
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
             if (net->get_source().get_gate() == nullptr)
                 continue;
@@ -69,7 +69,7 @@ namespace hal
         /* transform all nets to igraph_real_t */
         igraph_real_t* edges     = new igraph_real_t[edge_counter];
         u32 edge_vertice_counter = 0;
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
             auto predecessor = net->get_source().get_gate();
             if (predecessor == nullptr)

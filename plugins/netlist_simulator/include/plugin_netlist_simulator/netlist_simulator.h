@@ -154,6 +154,7 @@ namespace hal
             Gate* gate;
             std::vector<std::string> input_pins;
             std::vector<Net*> input_nets;
+            std::unordered_map<std::string, BooleanFunction::Value> input_values;
             bool is_flip_flop;
         };
 
@@ -179,7 +180,7 @@ namespace hal
             SignalValue inv_output;
         };
 
-        std::unordered_map<Net*, std::vector<SimulationGate*>> m_successors;
+        std::unordered_map<Net*, std::vector<std::pair<SimulationGate*, std::vector<std::string>>>> m_successors;
         std::vector<std::unique_ptr<SimulationGate>> m_sim_gates;
 
         bool simulate_gate(SimulationGate* gate, Event& event, std::map<std::pair<Net*, u64>, SignalValue>& new_events);
@@ -190,7 +191,6 @@ namespace hal
         void prepare_clock_events(u64 nanoseconds);
         void process_events(u64 timeout);
 
-        std::map<std::string, BooleanFunction::value> gather_input_values(SimulationGate* gate);
         SignalValue process_set_reset_behavior(GateTypeSequential::SetResetBehavior behavior, SignalValue previous_output);
     };
 }    // namespace hal

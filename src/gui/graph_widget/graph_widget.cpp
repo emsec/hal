@@ -1,9 +1,6 @@
 #include "gui/graph_widget/graph_widget.h"
 
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-
+#include "gui/content_manager/content_manager.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
@@ -16,25 +13,26 @@
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
-#include "gui/content_manager/content_manager.h"
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
-#include "gui/graph_widget/items/nodes/modules/graphics_module.h"
+#include "netlist/gate.h"
+#include "netlist/module.h"
+#include "netlist/net.h"
+#include "core/utils.h"
 
 #include <QDebug>
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
-#include <QTimer>
 
 namespace hal
 {
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
-        : ContentWidget("Graph", parent), m_view(new GraphGraphicsView(this)), m_context(context), m_Overlay(new DialogOverlay(this)),
-          m_navigation_widget_v2(new GraphNavigationWidgetV2(nullptr)),
+        : ContentWidget("Graph", parent), m_view(new GraphGraphicsView(this)), m_context(context), m_Overlay(new DialogOverlay(this)), m_navigation_widget_v2(new GraphNavigationWidgetV2(nullptr)),
           m_spinner_widget(new GraphLayoutSpinnerWidget(this)), m_current_expansion(0)
     {
         connect(m_navigation_widget_v2, &GraphNavigationWidgetV2::navigation_requested, this, &GraphWidget::handle_navigation_jump_requested);
@@ -121,35 +119,29 @@ namespace hal
 
         switch (event->key())
         {
-            case Qt::Key_Left:
-            {
+            case Qt::Key_Left: {
                 handle_navigation_left_request();
                 break;
             }
-            case Qt::Key_Right:
-            {
+            case Qt::Key_Right: {
                 handle_navigation_right_request();
                 break;
             }
-            case Qt::Key_Up:
-            {
+            case Qt::Key_Up: {
                 handle_navigation_up_request();
                 break;
             }
-            case Qt::Key_Down:
-            {
+            case Qt::Key_Down: {
                 handle_navigation_down_request();
                 break;
             }
-            case Qt::Key_Z:
-            {
+            case Qt::Key_Z: {
                 if (event->modifiers() & Qt::ControlModifier)    // modifiers are set as bitmasks
                 {
                 }
                 break;
             }
-            case Qt::Key_Escape:
-            {
+            case Qt::Key_Escape: {
                 g_selection_relay.clear_and_update();
                 break;
             }
@@ -158,13 +150,18 @@ namespace hal
         }
     }
 
-    void GraphWidget::substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& target_gates, QSet<u32>& target_modules, QSet<u32>& remove_gates, QSet<u32>& remove_modules) const
+    void GraphWidget::substitute_by_visible_modules(const QSet<u32>& gates,
+                                                    const QSet<u32>& modules,
+                                                    QSet<u32>& target_gates,
+                                                    QSet<u32>& target_modules,
+                                                    QSet<u32>& remove_gates,
+                                                    QSet<u32>& remove_modules) const
     {
         // EXPAND SELECTION AND CONTEXT UP THE HIERARCHY TREE
 
         for (auto& mid : modules)
         {
-            auto m = g_netlist->get_module_by_id(mid);
+            auto m           = g_netlist->get_module_by_id(mid);
             QSet<u32> common = gui_utility::parent_modules(m) & m_context->modules();
             if (common.empty())
             {
@@ -182,7 +179,7 @@ namespace hal
 
         for (auto& gid : gates)
         {
-            auto g = g_netlist->get_gate_by_id(gid);
+            auto g           = g_netlist->get_gate_by_id(gid);
             QSet<u32> common = gui_utility::parent_modules(g) & m_context->modules();
             if (common.empty())
             {
@@ -211,7 +208,7 @@ namespace hal
             }
         }
         auto it = target_modules.constBegin();
-        while(it != target_modules.constEnd())
+        while (it != target_modules.constEnd())
         {
             auto m = g_netlist->get_module_by_id(*it);
             if (gui_utility::parent_modules(m).intersects(new_module_set))
@@ -236,7 +233,7 @@ namespace hal
             }
         }
         it = target_gates.constBegin();
-        while(it != target_gates.constEnd())
+        while (it != target_gates.constEnd())
         {
             auto g = g_netlist->get_gate_by_id(*it);
             if (gui_utility::parent_modules(g).intersects(new_module_set))
@@ -261,7 +258,7 @@ namespace hal
     {
         // if our name matches that of a module, add the "modified" label and
         // optionally a number if a "modified"-labeled context already exists
-        for (const auto& m : g_netlist->get_modules())
+        for (auto m : g_netlist->get_modules())
         {
             if (m->get_name() == m_context->name().toStdString())
             {
@@ -302,7 +299,8 @@ namespace hal
 
         // ASSERT INPUTS ARE VALID
         auto n = g_netlist->get_net_by_id(via_net);
-        if (!n || (to_gates.empty() && to_modules.empty())) {
+        if (!n || (to_gates.empty() && to_modules.empty()))
+        {
             // prevent stuck navigation widget
             m_Overlay->hide();
             m_view->setFocus();
@@ -317,7 +315,7 @@ namespace hal
 
         // find out which gates and modules we still need to add to the context
         // (this makes the cone view work)
-        QSet<u32> nonvisible_gates = final_gates - m_context->gates();
+        QSet<u32> nonvisible_gates   = final_gates - m_context->gates();
         QSet<u32> nonvisible_modules = final_modules - m_context->modules();
 
         // if we don't have all gates and modules, we need to add them
@@ -330,16 +328,16 @@ namespace hal
             // (so the cone view nicely extends to the right or left)
             // either they're all inputs or all outputs, so just check the first one
 
-            std::set<Net*> in_nets;
+            std::vector<Net*> in_nets;
             if (to_gates.empty())
             {
                 in_nets = g_netlist->get_module_by_id(*to_modules.constBegin())->get_input_nets();
             }
             else
             {
-                in_nets = g_netlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets();
+                in_nets = core_utils::to_vector(g_netlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets());
             }
-            bool netIsInput = in_nets.find(n) != in_nets.cend();
+            bool netIsInput               = std::find(in_nets.begin(), in_nets.end(), n) != in_nets.cend();
             hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
 
             // add all new gates and modules
@@ -364,7 +362,7 @@ namespace hal
 
         // SELECT IN RELAY
         g_selection_relay.clear();
-        g_selection_relay.m_selected_gates = final_gates;
+        g_selection_relay.m_selected_gates   = final_gates;
         g_selection_relay.m_selected_modules = final_modules;
 
         // TODO implement subselections on modules, then add a case for when the
@@ -374,7 +372,7 @@ namespace hal
         {
             // subfocus only possible when just one gate selected
             u32 gid = *final_gates.begin();
-            auto g = g_netlist->get_gate_by_id(gid);
+            auto g  = g_netlist->get_gate_by_id(gid);
 
             g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
             g_selection_relay.m_focus_id   = gid;
@@ -411,7 +409,7 @@ namespace hal
         {
             // subfocus only possible when just one module selected
             u32 mid = *final_modules.begin();
-            auto m = g_netlist->get_module_by_id(mid);
+            auto m  = g_netlist->get_module_by_id(mid);
 
             g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
             g_selection_relay.m_focus_id   = mid;
@@ -477,12 +475,10 @@ namespace hal
     {
         switch (g_selection_relay.m_focus_type)
         {
-            case SelectionRelay::item_type::none:
-            {
+            case SelectionRelay::item_type::none: {
                 return;
             }
-            case SelectionRelay::item_type::gate:
-            {
+            case SelectionRelay::item_type::gate: {
                 Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
                 if (!g)
@@ -490,8 +486,8 @@ namespace hal
 
                 if (g_selection_relay.m_subfocus == SelectionRelay::subfocus::left)
                 {
-                    std::string pin_type   = g->get_input_pins()[g_selection_relay.m_subfocus_index];
-                    Net* n = g->get_fan_in_net(pin_type);
+                    std::string pin_type = g->get_input_pins()[g_selection_relay.m_subfocus_index];
+                    Net* n               = g->get_fan_in_net(pin_type);
 
                     if (!n)
                         return;
@@ -525,8 +521,7 @@ namespace hal
 
                 return;
             }
-            case SelectionRelay::item_type::net:
-            {
+            case SelectionRelay::item_type::net: {
                 Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
                 if (!n)
@@ -548,8 +543,7 @@ namespace hal
 
                 return;
             }
-            case SelectionRelay::item_type::module:
-            {
+            case SelectionRelay::item_type::module: {
                 Module* m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
 
                 if (!m)
@@ -565,7 +559,7 @@ namespace hal
                     // list by traversing m->get_input_nets(), so we just use that order and
                     // hope nobody touches that implementation)
                     auto nets = m->get_input_nets();
-                    auto it = nets.begin();
+                    auto it   = nets.begin();
                     if (g_selection_relay.m_subfocus_index > 0)
                         std::advance(it, g_selection_relay.m_subfocus_index);
                     auto n = *it;
@@ -605,12 +599,10 @@ namespace hal
     {
         switch (g_selection_relay.m_focus_type)
         {
-            case SelectionRelay::item_type::none:
-            {
+            case SelectionRelay::item_type::none: {
                 return;
             }
-            case SelectionRelay::item_type::gate:
-            {
+            case SelectionRelay::item_type::gate: {
                 Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
 
                 if (!g)
@@ -648,8 +640,7 @@ namespace hal
 
                 return;
             }
-            case SelectionRelay::item_type::net:
-            {
+            case SelectionRelay::item_type::net: {
                 Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
 
                 if (!n)
@@ -671,8 +662,7 @@ namespace hal
 
                 return;
             }
-            case SelectionRelay::item_type::module:
-            {
+            case SelectionRelay::item_type::module: {
                 Module* m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
 
                 if (!m)
@@ -688,7 +678,7 @@ namespace hal
                     // list by traversing m->get_input_nets(), so we just use that order and
                     // hope nobody touches that implementation)
                     auto nets = m->get_output_nets();
-                    auto it = nets.begin();
+                    auto it   = nets.begin();
                     if (g_selection_relay.m_subfocus_index > 0)
                         std::advance(it, g_selection_relay.m_subfocus_index);
                     auto n = *it;
@@ -725,21 +715,17 @@ namespace hal
     void GraphWidget::handle_navigation_up_request()
     {
         // FIXME this is ugly
-        if ((g_selection_relay.m_focus_type == SelectionRelay::item_type::gate
-            && m_context->gates().contains(g_selection_relay.m_focus_id))
-            || (g_selection_relay.m_focus_type == SelectionRelay::item_type::module
-            && m_context->modules().contains(g_selection_relay.m_focus_id)))
-                g_selection_relay.navigate_up();
+        if ((g_selection_relay.m_focus_type == SelectionRelay::item_type::gate && m_context->gates().contains(g_selection_relay.m_focus_id))
+            || (g_selection_relay.m_focus_type == SelectionRelay::item_type::module && m_context->modules().contains(g_selection_relay.m_focus_id)))
+            g_selection_relay.navigate_up();
     }
 
     void GraphWidget::handle_navigation_down_request()
     {
         // FIXME this is ugly
-        if ((g_selection_relay.m_focus_type == SelectionRelay::item_type::gate
-            && m_context->gates().contains(g_selection_relay.m_focus_id))
-            || (g_selection_relay.m_focus_type == SelectionRelay::item_type::module
-            && m_context->modules().contains(g_selection_relay.m_focus_id)))
-                g_selection_relay.navigate_down();
+        if ((g_selection_relay.m_focus_type == SelectionRelay::item_type::gate && m_context->gates().contains(g_selection_relay.m_focus_id))
+            || (g_selection_relay.m_focus_type == SelectionRelay::item_type::module && m_context->modules().contains(g_selection_relay.m_focus_id)))
+            g_selection_relay.navigate_down();
     }
 
     void GraphWidget::handle_enter_module_requested(const u32 id)
@@ -769,7 +755,7 @@ namespace hal
         {
             gate_ids.insert(g->get_id());
         }
-        for (const auto& sm : m->get_submodules())
+        for (auto sm : m->get_submodules())
         {
             module_ids.insert(sm->get_id());
         }
@@ -818,12 +804,12 @@ namespace hal
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
         }
 
-        auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
+        auto targetRect = QRectF(min_x, min_y, max_x - min_x, max_y - min_y).marginsAdded(QMarginsF(20, 20, 20, 20));
 
         // FIXME This breaks as soon as the layouter call that preceded the call to this function
         // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
         // and the animation jumps to (0,0) before moving to the correct target.
-        auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect(); // this has incorrect coordinates
+        auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect();    // this has incorrect coordinates
 
         auto centerFix = targetRect.center();
         targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
@@ -848,7 +834,8 @@ namespace hal
         if (m_context->scene_update_in_progress())
             return;
 
-        if(m_context->gates().contains(g_selection_relay.m_selected_gates) == false || m_context->nets().contains(g_selection_relay.m_selected_nets) == false || m_context->modules().contains(g_selection_relay.m_selected_modules) == false)
+        if (m_context->gates().contains(g_selection_relay.m_selected_gates) == false || m_context->nets().contains(g_selection_relay.m_selected_nets) == false
+            || m_context->modules().contains(g_selection_relay.m_selected_modules) == false)
             return;
 
         int min_x = INT_MAX;
@@ -886,12 +873,12 @@ namespace hal
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
         }
 
-        auto targetRect = QRectF(min_x, min_y, max_x-min_x, max_y-min_y).marginsAdded(QMarginsF(20,20,20,20));
+        auto targetRect = QRectF(min_x, min_y, max_x - min_x, max_y - min_y).marginsAdded(QMarginsF(20, 20, 20, 20));
 
         // FIXME This breaks as soon as the layouter call that preceded the call to this function
         // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
         // and the animation jumps to (0,0) before moving to the correct target.
-        auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect(); // this has incorrect coordinates
+        auto currentRect = m_view->mapToScene(m_view->viewport()->geometry()).boundingRect();    // this has incorrect coordinates
 
         auto centerFix = targetRect.center();
         targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
@@ -920,4 +907,4 @@ namespace hal
     {
         return m_view;
     }
-}
+}    // namespace hal

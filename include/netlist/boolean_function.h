@@ -27,9 +27,9 @@
 
 #include <algorithm>
 #include <cassert>
-#include <map>
+#include <unordered_map>
+#include <unordered_set>
 #include <ostream>
-#include <set>
 #include <vector>
 
 namespace hal
@@ -42,7 +42,7 @@ namespace hal
     class BooleanFunction
     {
     public:
-        enum value
+        enum Value
         {
             X    = -1,
             ZERO = 0,
@@ -55,7 +55,7 @@ namespace hal
          * @param[in] v - the value.
          * @returns A string describing the value.
          */
-        static std::string to_string(const value& v);
+        static std::string to_string(Value v);
 
         /**
          * ostream operator that forwards to_string of a value.
@@ -64,7 +64,7 @@ namespace hal
          * @param[in] v - the value.
          * @returns A reference to os.
          */
-        friend std::ostream& operator<<(std::ostream& os, const value& v);
+        friend std::ostream& operator<<(std::ostream& os, Value v);
 
         /**
          * Constructor for an empty function.
@@ -87,7 +87,7 @@ namespace hal
          *
          * @param[in] constant - A constant value.
          */
-        BooleanFunction(value constant);
+        BooleanFunction(Value constant);
 
         /**
          * Substitutes a variable with another variable (i.e., variable renaming).
@@ -117,7 +117,7 @@ namespace hal
          * @param[in] inputs - A map from variable names to values.
          * @returns The value that the function evaluates to.
          */
-        value evaluate(const std::map<std::string, value>& inputs = {}) const;
+        Value evaluate(const std::unordered_map<std::string, Value>& inputs = {}) const;
 
         /**
          * Evaluates the function on the given inputs and returns the result.
@@ -125,7 +125,7 @@ namespace hal
          * @param[in] inputs - A map from variable names to values.
          * @returns The value that the function evaluates to.
          */
-        value operator()(const std::map<std::string, value>& inputs = {}) const;
+        Value operator()(const std::unordered_map<std::string, Value>& inputs = {}) const;
 
         /**
          * Checks whether the function constantly outputs ONE.
@@ -153,7 +153,7 @@ namespace hal
          *
          * @returns A set of all variable names.
          */
-        std::set<std::string> get_variables() const;
+        std::vector<std::string> get_variables() const;
 
         /**
          * Parse a function from a string representation.
@@ -312,7 +312,7 @@ namespace hal
          * @param[in] remove_unknown_variables - If true, all given variables that are not found in the function are removed from the truth table.
          * @returns The vector of output values.
          */
-        std::vector<value> get_truth_table(std::vector<std::string> ordered_variables = {}, bool remove_unknown_variables = false) const;
+        std::vector<Value> get_truth_table(std::vector<std::string> ordered_variables = {}, bool remove_unknown_variables = false) const;
 
     protected:
         enum class operation
@@ -357,7 +357,7 @@ namespace hal
         BooleanFunction flatten() const;
 
         // merges nested expressions of the same operands
-        static std::vector<std::vector<value>> qmc(const std::vector<std::vector<value>>& terms);
+        static std::vector<std::vector<Value>> qmc(const std::vector<std::vector<Value>>& terms);
 
         // helper to allow for substitution with reduced amount of copies
         static void substitute_helper(BooleanFunction& f, const std::string& v, const BooleanFunction& s);
@@ -373,7 +373,7 @@ namespace hal
 
         std::string m_variable;
 
-        value m_constant;
+        Value m_constant;
 
         operation m_op;
         std::vector<BooleanFunction> m_operands;

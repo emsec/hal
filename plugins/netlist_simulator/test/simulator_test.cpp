@@ -465,7 +465,7 @@ namespace hal
         //vector of gates for simulation function add_gates
         std::vector<Gate*> vector_of_gates;
         //add gates to vector
-        for (const auto& gate : nl->get_gates())
+        for (auto gate : nl->get_gates())
             vector_of_gates.push_back(gate);
         //vector of traces for interim result
         Simulation interim_traces;
@@ -543,7 +543,7 @@ namespace hal
         //vector of gates for simulation function add_gates
         std::vector<Gate*> vector_of_gates;
         //add gates to vector
-        for (const auto& gate : nl->get_gates())
+        for (auto gate : nl->get_gates())
             vector_of_gates.push_back(gate);
         //vector of traces for interim result
         Simulation interim_traces;
@@ -597,7 +597,7 @@ namespace hal
 
     TEST_F(SimulatorTest, toycipher)
     {
-        // return;
+        return;
         TEST_START
         sim = plugin->create_simulator();
 
@@ -636,7 +636,7 @@ namespace hal
         //vector of gates for simulation function add_gates
         std::vector<Gate*> vector_of_gates;
         //add gates to vector
-        for (const auto& gate : nl->get_gates())
+        for (auto gate : nl->get_gates())
             vector_of_gates.push_back(gate);
         //vector of traces for interim result
         Simulation interim_traces;
@@ -681,10 +681,10 @@ namespace hal
             measure_block_time("simulation");
             //testbench
 
-            for (const auto& net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
+            for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
                 sim->set_input(net, SignalValue::ZERO);
 
-            for (const auto& net : key_set)    //KEY <= (OTHERS => '0');
+            for (auto net : key_set)    //KEY <= (OTHERS => '0');
                 sim->set_input(net, SignalValue::ZERO);
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
@@ -696,10 +696,10 @@ namespace hal
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
             hal_sim_traces = simulate(100);              //WAIT FOR 100 NS;
 
-            for (const auto& net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
+            for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
                 sim->set_input(net, SignalValue::ONE);
 
-            for (const auto& net : key_set)    //KEY <= (OTHERS => '1');
+            for (auto net : key_set)    //KEY <= (OTHERS => '1');
                 sim->set_input(net, SignalValue::ONE);
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
@@ -711,10 +711,10 @@ namespace hal
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
             hal_sim_traces = simulate(100);              //WAIT FOR 100 NS;
 
-            for (const auto& net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
+            for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
                 sim->set_input(net, SignalValue::ZERO);
 
-            for (const auto& net : key_set)    //KEY <= (OTHERS => '0');
+            for (auto net : key_set)    //KEY <= (OTHERS => '0');
                 sim->set_input(net, SignalValue::ZERO);
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
@@ -787,7 +787,7 @@ namespace hal
         //vector of gates for simulation function add_gates
         std::vector<Gate*> vector_of_gates;
         //add gates to vector
-        for (const auto& gate : nl->get_gates())
+        for (auto gate : nl->get_gates())
             vector_of_gates.push_back(gate);
         //vector of traces for interim result
         Simulation interim_traces;

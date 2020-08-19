@@ -26,7 +26,7 @@ namespace hal
 
     Netlist* Net::get_netlist() const
     {
-        return m_internal_manager->m_netlist->get_shared();
+        return m_internal_manager->m_netlist;
     }
 
     std::string Net::get_name() const
@@ -53,7 +53,7 @@ namespace hal
 
     bool Net::add_source(Gate* gate, const std::string& pin)
     {
-        return add_source(Endpoint(gate, pin, false));
+        return add_source(Endpoint(gate, pin, this, false));
     }
 
     bool Net::add_source(const Endpoint& ep)
@@ -68,7 +68,7 @@ namespace hal
 
     bool Net::remove_source(Gate* gate, const std::string& pin)
     {
-        return remove_source(Endpoint(gate, pin, false));
+        return remove_source(Endpoint(gate, pin, this, false));
     }
 
     bool Net::remove_source(const Endpoint& ep)
@@ -83,7 +83,7 @@ namespace hal
 
     bool Net::is_a_source(Gate* gate, const std::string& pin) const
     {
-        return is_a_source(Endpoint(gate, pin, false));
+        return is_a_source(Endpoint(gate, pin, const_cast<Net*>(this), false));
     }
 
     bool Net::is_a_source(const Endpoint& ep) const
@@ -123,9 +123,10 @@ namespace hal
 
     Endpoint Net::get_source() const
     {
+        // log_warning("netlist", "Net::get_source() is deprecated");
         if (m_sources.empty())
         {
-            return Endpoint(nullptr, "", false);
+            return Endpoint();
         }
         if (m_sources.size() > 1)
         {
@@ -136,7 +137,7 @@ namespace hal
 
     bool Net::add_destination(Gate* gate, const std::string& pin)
     {
-        return add_destination(Endpoint(gate, pin, true));
+        return add_destination(Endpoint(gate, pin, this, true));
     }
 
     bool Net::add_destination(const Endpoint& ep)
@@ -151,7 +152,7 @@ namespace hal
 
     bool Net::remove_destination(Gate* gate, const std::string& pin)
     {
-        return remove_destination(Endpoint(gate, pin, true));
+        return remove_destination(Endpoint(gate, pin, this, true));
     }
 
     bool Net::remove_destination(const Endpoint& ep)
@@ -166,7 +167,7 @@ namespace hal
 
     bool Net::is_a_destination(Gate* gate, const std::string& pin) const
     {
-        return is_a_destination(Endpoint(gate, pin, true));
+        return is_a_destination(Endpoint(gate, pin, const_cast<Net*>(this), true));
     }
 
     bool Net::is_a_destination(const Endpoint& ep) const
