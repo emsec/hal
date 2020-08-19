@@ -12,6 +12,7 @@
 #include "utils/progress_printer.h"
 #include "utils/utils.h"
 
+#include <thread>
 #include <iomanip>
 #include <iostream>
 
@@ -149,7 +150,7 @@ namespace hal
             ctx.phase          = 0;
             ctx.end_reached    = false;
 
-            for (u32 layer = 0; layer <= config.pass_layers; layer++)
+            for (u32 layer = 0; layer < config.pass_layers; layer++)
             {
                 log_info("dataflow", "start processing layer {}", layer);
                 auto begin_time = std::chrono::high_resolution_clock::now();

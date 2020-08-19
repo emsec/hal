@@ -73,7 +73,7 @@ namespace hal
 
                 for (const auto& old_group : groups_to_merge)
                 {
-                    const auto& gates                                      = state->gates_of_group.at(old_group);
+                    auto gates                                      = state->gates_of_group.at(old_group);
                     new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
 
                     new_state->gates_of_group[new_group_id].insert(gates.begin(), gates.end());

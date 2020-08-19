@@ -13,11 +13,10 @@ from utils import *
 parser = argparse.ArgumentParser(description='Call the HAL dataflow plugin.')
 parser.add_argument('design', metavar='design', type=str, help='name of the design')
 parser.add_argument('synthesizer', metavar='synthesizer', type=str, help='name of the synthesizer')
-parser.add_argument('--rebuild', action='store_true', help='if set will remove build folder and rebuild cmake')
-parser.add_argument('--rebuild_debug', action='store_true', help='if set will remove build folder and rebuild cmake with debug and execute with gdb')
+parser.add_argument('--rebuild', action='store_true', help='if set will clear build folder and rebuild cmake')
+parser.add_argument('--rebuild-debug', action='store_true', help='if set will clear build folder and rebuild cmake with debug and execute with gdb')
 parser.add_argument('--debug', action='store_true', help='if set will execute with gdb')
 parser.add_argument('--sizes', metavar='sizes', type=str, help='define allowed sizes')
-parser.add_argument('--layers', metavar='layers', type=str, help='define number of layers')
 parser.add_argument('--hal-file', action='store_true', help='use the .hal file instead of the netlist')
 parser.add_argument('--create-hal-file', action='store_true', help='run hal without the dataflow plugin to create a .hal file for the netlist')
 
@@ -52,9 +51,9 @@ if args.rebuild or args.rebuild_debug:
     os.system('rm -rf ' + path_to_hal_build + "/*")
     os.chdir(path_to_hal_build)
     if args.rebuild:
-        os.system("cmake ../ -GNinja -DBUILD_DOCUMENTATION=OFF -DPL_DATAFLOW=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWITH_GUI=OFF")
+        os.system("cmake ../ -GNinja -DPL_DATAFLOW=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWITH_GUI=OFF")
     else:
-        os.system("cmake ../ -GNinja -DBUILD_DOCUMENTATION=OFF -DPL_DATAFLOW=ON -DCMAKE_BUILD_TYPE=Debug -DWITH_GUI=OFF")
+        os.system("cmake ../ -GNinja -DPL_DATAFLOW=ON -DCMAKE_BUILD_TYPE=Debug -DWITH_GUI=OFF")
 
 expect(os.path.isdir(path_to_hal_build), "path to hal build '{}' does not exist".format(path_to_hal_build))
 
@@ -82,11 +81,10 @@ else:
 
     expect(os.path.isfile(input_design), "could not find design: " + input_design)
 
-    command = "{} -i {} --dataflow --layer 1 --path {} --gate-library {}.lib".format(path_to_hal_bin, input_design, path_dataflow_out, get_gate_library(args.design, args.synthesizer))
-
+    command = "{} -i {} --dataflow --path {} --gate-library {}.lib".format(path_to_hal_bin, input_design, path_dataflow_out, get_gate_library(args.design, args.synthesizer))
 
     if args.sizes != None:
-        command = "{} -i {} --dataflow --layer 1 --path {} --gate-library {}.lib --sizes {}".format(path_to_hal_bin, input_design, path_dataflow_out, get_gate_library(args.design, args.synthesizer), args.sizes)
+        command += " --sizes {}".format(args.sizes)
 
     print(command)
 

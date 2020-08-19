@@ -10,7 +10,7 @@ namespace hal
 {
     namespace dataflow_utils
     {
-        bool UtilsLSI_10K::is_sequential(const std::shared_ptr<Gate>& sg) const
+        bool UtilsLSI_10K::is_sequential(Gate* sg) const
         {
             static std::unordered_set<std::string> supported = {"FD1",   "FD1P",   "FD1S",  "FD1SP", "FD2",    "FD2P",  "FD2S",   "FD2SP", "FD3",   "FD3P",  "FD3S",   "FD3SP", "FD4",
                                                                 "FD4P",  "FD4S",   "FD4SP", "FJK1",  "FJK1P",  "FJK1S", "FJK1SP", "FJK2",  "FJK2P", "FJK2S", "FJK2SP", "FJK3",  "FJK3P",
@@ -28,7 +28,7 @@ namespace hal
             return false;
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_control_input_pin_types(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_control_input_pin_types(Gate* sg) const
         {
             auto data_ports = get_data_ports(sg);
             std::unordered_set<std::string> control_input_pin_types;
@@ -42,7 +42,7 @@ namespace hal
             return control_input_pin_types;
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_clock_ports(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_clock_ports(Gate* sg) const
         {
             if (!is_sequential(sg))
             {
@@ -96,7 +96,7 @@ namespace hal
             return gate_to_clock_ports.at(sg->get_type()->get_name());
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_enable_ports(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_enable_ports(Gate* sg) const
         {
             if (!is_sequential(sg))
             {
@@ -150,7 +150,7 @@ namespace hal
             return gate_to_enable_ports.at(sg->get_type()->get_name());
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_reset_ports(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_reset_ports(Gate* sg) const
         {
             if (!is_sequential(sg))
             {
@@ -204,7 +204,7 @@ namespace hal
             return gate_to_reset_ports.at(sg->get_type()->get_name());
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_data_ports(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_data_ports(Gate* sg) const
         {
             static std::map<std::string, std::unordered_set<std::string>> gate_to_data_ports;
             if (gate_to_data_ports.empty())

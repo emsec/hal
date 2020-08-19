@@ -6,28 +6,11 @@ import getpass
 # ---- CONFIGURATION ----
 username = getpass.getuser()
 
-path_to_core_collection = "/home/" + username + "/hal-benchmarks"
-path_to_hal = "/home/" + username + "/hal"
-path_to_hal_build = path_to_hal + "/build"
-path_to_hal_bin = path_to_hal + "/build/bin/hal"
-path_dataflow_out = "/home/" + username + "/dataflow_out"
-
-# Max' config
-if username == "mh":
-    path_to_core_collection = "/home/" + username + "/git/core-collection"
-    path_to_hal = "/home/" + username + "/git/hal"
-    path_to_hal_build = path_to_hal + "/build"
-    path_to_hal_bin = path_to_hal + "/build/bin/hal"
-    path_dataflow_out = "/home/" + username + "/git/hal/build/dataflow_out"
-
-
-# eve' config
-if username == "eve":
-    path_to_core_collection = "/Users/" + username + "/Uni/Cores/hal-benchmarks"
-    path_to_hal = "/Users/" + username + "/Uni/Projekte/hal"
-    path_to_hal_build = path_to_hal + "/build"
-    path_to_hal_bin = path_to_hal + "/build/bin/hal"
-    path_dataflow_out = "/Users/" + username + "/Uni/Projekte/hal/dataflow_out"
+path_to_core_collection = "/home/" + username + "/git/hal-benchmarks"
+path_to_hal = "/home/" + username + "/git/hal"
+path_to_hal_build = path_to_hal + "/build-release"
+path_to_hal_bin = path_to_hal_build + "/bin/hal"
+path_dataflow_out = path_to_hal_build + "/dataflow_out"
 
 netlists = dict()
 netlists["vivado"] = dict()

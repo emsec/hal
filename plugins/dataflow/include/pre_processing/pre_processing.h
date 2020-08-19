@@ -8,6 +8,6 @@ namespace hal
 
     namespace pre_processing
     {
-        NetlistAbstraction run(std::shared_ptr<Netlist> netlist);
+        NetlistAbstraction run(Netlist* netlist);
     }    // namespace pre_processing
 }    // namespace hal

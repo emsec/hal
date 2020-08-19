@@ -96,7 +96,7 @@ namespace hal
             for (const auto& [group_sg, group_votes] : scores)
             {
                 std::unordered_set<u32> unordered_gates(group_sg.begin(), group_sg.end());
-                const auto& gate_id     = *group_sg.begin();
+                auto gate_id     = *group_sg.begin();
                 const auto& fingerprint = netlist_abstr.gate_to_fingerprint.at(gate_id);
                 sorted_results[fingerprint][group_votes].push_back(unordered_gates);
             }
@@ -105,7 +105,7 @@ namespace hal
             for (const auto& [control_group_id, control_group] : ctx.control_state->gates_of_group)
             {
                 // get the control signals of the current control_group
-                const auto& gate_id     = *control_group.begin();
+                auto gate_id     = *control_group.begin();
                 const auto& fingerprint = netlist_abstr.gate_to_fingerprint.at(gate_id);
 
                 // get all groups from all result states with the same control singals
@@ -130,7 +130,7 @@ namespace hal
                 if (ctx.phase == 0)
                 {
                     // in phase 0 assigne each gate to its own group
-                    for (const auto& gate : control_group)
+                    for (auto gate : control_group)
                     {
                         if (gathered_gates.find(gate) == gathered_gates.end())
                         {
@@ -143,7 +143,7 @@ namespace hal
                     // in phase 1 group the remaining gates in the biggest possible groups,
                     // where each group consists of gates with the same control signals, type and overlapping register stages
                     std::unordered_set<u32> single_gates_group;
-                    for (const auto& gate : control_group)
+                    for (auto gate : control_group)
                     {
                         if (gathered_gates.find(gate) == gathered_gates.end())
                         {
@@ -153,7 +153,7 @@ namespace hal
                     if (!single_gates_group.empty())
                     {
                         std::unordered_set<u32> grouped_gates;
-                        for (const auto& gate : single_gates_group)
+                        for (auto gate : single_gates_group)
                         {
                             if (grouped_gates.find(gate) != grouped_gates.end())
                             {

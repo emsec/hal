@@ -18,19 +18,19 @@ namespace hal
             for (const auto& [group_id, gates] : state->gates_of_group)
             {
                 std::map<std::set<u32>, std::unordered_set<u32>> characteristics_map;
-                for (const auto& gate : gates)
+                for (auto gate : gates)
                 {
                     std::set<u32> characteristics_of_gate;
                     if (successors)
                     {
-                        for (const auto& gate_successors : state->netlist_abstr.gate_to_successors.at(gate))
+                        for (auto gate_successors : state->netlist_abstr.gate_to_successors.at(gate))
                         {
                             characteristics_of_gate.insert(state->parent_group_of_gate.at(gate_successors));
                         }
                     }
                     else
                     {
-                        for (const auto& gate_predecessors : state->netlist_abstr.gate_to_predecessors.at(gate))
+                        for (auto gate_predecessors : state->netlist_abstr.gate_to_predecessors.at(gate))
                         {
                             characteristics_of_gate.insert(state->parent_group_of_gate.at(gate_predecessors));
                         }
@@ -39,7 +39,7 @@ namespace hal
                 }
 
                 /* merge gates */
-                for (const auto& gates_to_merge : characteristics_map)
+                for (auto gates_to_merge : characteristics_map)
                 {
                     u32 new_group_id = ++id_counter;
 

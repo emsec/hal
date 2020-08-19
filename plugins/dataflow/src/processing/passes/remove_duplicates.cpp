@@ -33,7 +33,7 @@ namespace hal
                     {
                         std::unordered_set<u32> new_group;
 
-                        for (const auto& gate_id : state->gates_of_group.at(group_id))
+                        for (auto gate_id : state->gates_of_group.at(group_id))
                         {
                             if (merged_gates.find(gate_id) == merged_gates.end())
                             {
@@ -73,7 +73,7 @@ namespace hal
                     {
                         std::unordered_set<u32> new_group;
 
-                        for (const auto& gate_id : state->gates_of_group.at(group_id))
+                        for (auto gate_id : state->gates_of_group.at(group_id))
                         {
                             if (merged_gates.find(gate_id) == merged_gates.end())
                             {
@@ -98,7 +98,7 @@ namespace hal
                 }
 
                 /* insert missing gates */
-                for (const auto& gate : state->netlist_abstr.all_sequential_gates)
+                for (auto gate : state->netlist_abstr.all_sequential_gates)
                 {
                     u32 gate_id = gate->get_id();
                     if (merged_gates.find(gate_id) == merged_gates.end())

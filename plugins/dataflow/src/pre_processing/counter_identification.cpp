@@ -17,18 +17,18 @@ namespace hal
     {
         namespace
         {
-            std::vector<std::shared_ptr<Gate>> find_chain(NetlistAbstraction& netlist_abstr, const std::shared_ptr<Gate> sg)
+            std::vector<Gate*> find_chain(NetlistAbstraction& netlist_abstr, Gate* sg)
             {
-                std::vector<std::shared_ptr<Gate>> chain;
+                std::vector<Gate*> chain;
                 chain.push_back(sg);
 
-                std::queue<std::shared_ptr<Gate>> gate_queue;
+                std::queue<Gate*> gate_queue;
 
                 // loop to itself? if not return
                 auto successors_of_start_gate = netlist_abstr.gate_to_successors.at(sg->get_id());
                 if (successors_of_start_gate.find(sg->get_id()) == successors_of_start_gate.end())
                 {
-                    return std::vector<std::shared_ptr<Gate>>();
+                    return std::vector<Gate*>();
                 }
 
                 std::set<u32> filtered_successors;
@@ -46,12 +46,12 @@ namespace hal
 
                 if (sg->get_name().find("ISR") == std::string::npos)
                 {
-                    return std::vector<std::shared_ptr<Gate>>();
+                    return std::vector<Gate*>();
                 }
 
                 if (filtered_successors.empty())
                 {
-                    return std::vector<std::shared_ptr<Gate>>();
+                    return std::vector<Gate*>();
                 }
 
                 log_info("dataflow", "processing gate: {}", sg->get_name());
@@ -79,7 +79,7 @@ namespace hal
                 auto total_begin_time = std::chrono::high_resolution_clock::now();
                 auto begin_time       = std::chrono::high_resolution_clock::now();
 
-                std::set<std::vector<std::shared_ptr<Gate>>> candidates;
+                std::set<std::vector<Gate*>> candidates;
 
                 for (const auto& sg : netlist_abstr.all_sequential_gates)
                 {

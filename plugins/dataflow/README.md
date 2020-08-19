@@ -1,14 +1,72 @@
 # Dataflow Analysis (DANA)
 
-This plugin belongs to our publication: (pre-print available online at https://eprint.iacr.org/2020/751)
+This plugin is our implementation of our technique DANA, published in TCHES'20 (https://eprint.iacr.org/2020/751)
 ```
 DANA - Universal Dataflow Analysis for Gate-Level Netlist Reverse Engineering
 Nils Albartus, Max Hoffmann, Sebastian Temme, Leonid Azriel and Christof Paar
 ```
 
-This is a preview of the code. Once all necessary modifications and code cleanups are done `DANA` will be merged into the master branch.
+## WARNING
+The code is currently in the process of being cleaned up.
+It is provided as-is and has received several updates since publication of the paper.
 
-## Overview
+## Build Instructions
+### Adding a new gate library
+For the `XILINX_UNISIM`, `NANGATE` and `LSI_10K` gate library `DANA` should work right away. If the netlist is based on a different gate library you need to create a utility file, with additional information about the sequential gate types. This is necessary since gate-libraries do not provide distinct flags for control and data signals.
+Therefore create the regarding `utils_<gate_lib>.h` in `include/utils` and `utils_<gate_lib>.cpp` in `src/utils` and implement the respective function for each port of the gate. Check the existing utils files for an example. Once this is done  the new gate library has to be registered in `src/common/netlist_abstraction.cpp`. Even though the implementation is straightforward and should not take long, we plan to automatically gather these information from the gate library itself in the future.
+
+### Building the plugin
+To build the plugin you need to enable it by adding the flag `-DPL_DATAFLOW=ON` to the cmake command. You can use the exemplary commands to build `hal` including the GUI and the dataflow plugin.
+
+```
+git clone git@github.com:emsec/hal.git
+cd hal
+mkdir build
+cd build
+cmake .. -DPL_DATAFLOW=ON
+make
+```
+
+## Running the plugin
+Currently there are no pybinds available for this plugin, meaning it can only be called via the CLI or be executed from another plugin written in C++.
+You have to set the following options, when executing the plugin:
+```
+  --dataflow                     executes the plugin dataflow
+  --path arg                     provide path where the result should be stored
+  --layer arg                    (optional) layers per pipeline (default = 1)
+  --sizes arg                    (optional) sizes of registers, which are prioritized in the majority voting
+```
+
+An exemplary call looks as follows:
+
+```
+hal -i hal-benchmarks/crypto/rsa/rsa_lsi_10k_synopsys.v --dataflow --layer 1 --sizes "512,514" --path /home/user/dataflow_out --gate-library lsi_10k.lib
+```
+
+## Recreating the paper results
+All designs that were used as benchmarks are available in the hal-benchmarks git (https://github.com/emsec/hal-benchmarks).
+Clone the repository, adjust the paths at the top of `configuration.py`, and run `control.py` to start the analysis.
+
+
+## Want to create your own pass?
+Todo
+
+
+## Future Plans
+In the long run we plan on integrating the dataflow plugin in a more sophisticated way, especially with the GUI.
+
+* Create pybinds so DANA can be easily used via Python
+* GUI integration
+  * Make DANA accessible directly in the GUI, e.g., right click on a module (or the entire netlist) and execute DANA.
+  * Make DANAs output visible in the GUI, e.g.,  create the register as HAL modules.
+* Gather necessary information from the gate lib directly instead of creating the utils first.
+
+
+## Get in touch
+If you have any questions or are looking to cooperate with us, get in touch: <hal@csp.mpg.de>
+
+
+## Directory Overview
 
 ```
 hal/plugins/dataflow
@@ -94,54 +152,3 @@ hal/plugins/dataflow
         ├── utils_nangate.cpp
         └── utils_xilinx_unisim.cpp
 ```
-
-
-## Building Instructions
-### Adding a new gate library
-For the `XILINX_UNISIM`, `NANGATE` and `LSI_10K` gate library `DANA` should work right away. If the netlist is based on a different gate library you need to create a utility file, with additional information about the sequential gate types. From the gate-library alone `HAL` can't define the port type (e.g. CLK, data, enable, reset). Therefore create the regarding `utils_<gate_lib>.h` in `include/utils` and `utils_<gate_lib>.cpp` in `src/utils` and define the respective function for each port of the gate. Check the existing utils files for an example. Once this is done  the new gate library has to be registered in `src/common/netlist_abstraction.cpp`. Even though the implementation is straightforward and should not take long, we plan to automatically gather these information from the gate library itself in the future.
-
-### Building the plugin
-To build the plugin you need to enable it by adding the flag `-DPL_DATAFLOW=ON` to the cmake command. You can use the exemplary commands to build `hal` including the GUI and the dataflow plugin.
-
-```
-git clone git@github.com:emsec/hal.git
-cd hal
-mkdir build
-cd build
-cmake ../ -GNinja -DBUILD_DOCUMENTATION=OFF -DPL_DATAFLOW=ON -DWITH_GUI=ON
-ninja
-```
-
-## Run the plugin
-Currently there are no pybinds available for this plugin, meaning it can only be called via the CLI or be executed from another plugin written in C++. 
-You have to set the following options, when executing the plugin:
-```
-  --dataflow                     executes the plugin dataflow
-  --path arg                     provide path where the result should be stored
-  --layer arg                    (optional) layers per pipeline (default = 1)
-  --sizes arg                    (optional) sizes of registers, which are prioritized in the majority voting
-```
-
-An exemplary call looks as follows:
-
-```
-hal -i hal-benchmarks/crypto/rsa/rsa_lsi_10k_synopsys.v --dataflow --layer 1 --sizes "512,514" --path /home/user/dataflow_out --gate-library lsi_10k.lib
-```
-
-
-
-## Want to create your own pass?
-Todo
-
-
-## Future Plans
-In the long run we plan on integrating the dataflow plugin in a more sophisticated way, especially with the GUI.
-
-* Create pybinds so DANA can be more easily used and controlled with python
-* Deeper GUI integration
-  * Make DANA accessible directly in the GUI, e.g. right click on a module (or the entire netlist) and execute DANA. DANA will then create the registers, which are shown as a HAL module.
-* Gather necessary information from the gate lib directly instead of creating the utils first.
-    
-
-## Get in touch
-If you have any questions or are looking to cooperate with us, get in touch: <hal@csp.mpg.de>

@@ -20,6 +20,7 @@
 #include "utils/timing_utils.h"
 #include "utils/utils.h"
 
+#include <thread>
 #include <chrono>
 #include <fstream>
 #include <iomanip>
@@ -30,9 +31,9 @@
 
 namespace hal
 {
-    extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
+    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
-        return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<plugin_dataflow>());
+        return std::make_unique<plugin_dataflow>();
     }
 
     std::string plugin_dataflow::get_name() const
@@ -53,18 +54,18 @@ namespace hal
 
         description.add("--path", "provide path where results should be stored", {""});
 
-        description.add("--layer", "(optional) layers per pipeline (default = 1)", {""});
+        description.add("--layer", "(optional) layers per pipeline (default = 2)", {""});
 
         description.add("--sizes", "(optional) sizes which should be prioritized", {""});
 
         return description;
     }
 
-    bool plugin_dataflow::handle_cli_call(std::shared_ptr<Netlist> nl, ProgramArguments& args)
+    bool plugin_dataflow::handle_cli_call(Netlist* nl, ProgramArguments& args)
     {
         UNUSED(args);
         std::string path;
-        u32 layer = 0;
+        u32 layer;
         std::vector<u32> sizes;
 
         if (args.is_option_set("--path"))
@@ -85,7 +86,7 @@ namespace hal
         }
         else
         {
-            layer = 1;
+            layer = 2;
         }
 
         if (args.is_option_set("--sizes"))
@@ -101,7 +102,7 @@ namespace hal
         return execute(nl, path, layer, sizes);
     }
 
-    bool plugin_dataflow::execute(const std::shared_ptr<Netlist>& nl, std::string output_path, const u32 layer, const std::vector<u32> sizes)
+    bool plugin_dataflow::execute(Netlist* nl, std::string output_path, const u32 layer, const std::vector<u32> sizes)
     {
         log("--- starting dataflow analysis ---");
 

@@ -1174,9 +1174,9 @@ namespace hal
                         {
                             slave_net->remove_source(src);
 
-                            if (!master_net->is_a_source(src))
+                            if (!master_net->is_a_source(src.get_gate(), src.get_pin()))
                             {
-                                master_net->add_source(src);
+                                master_net->add_source(src.get_gate(), src.get_pin());
                             }
                         }
 
@@ -1190,9 +1190,9 @@ namespace hal
                         {
                             slave_net->remove_destination(dst);
 
-                            if (!master_net->is_a_destination(dst))
+                            if (!master_net->is_a_destination(dst.get_gate(), dst.get_pin()))
                             {
-                                master_net->add_destination(dst);
+                                master_net->add_destination(dst.get_gate(), dst.get_pin());
                             }
                         }
 

@@ -1,7 +1,3 @@
-#/usr/bin/python3
-from pylatex import Document, Section, Subsection, Subsubsection, Command, Tabular, Table, Package, LongTable, MultiColumn, MultiRow
-from pylatex.utils import italic, NoEscape
-
 from configuration import *
 
 

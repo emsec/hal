@@ -13,14 +13,14 @@ namespace hal
             virtual ~UtilsLSI_10K() = default;
 
             /* library specific functions */
-            bool is_sequential(const std::shared_ptr<Gate>& sg) const override;
+            bool is_sequential(Gate* sg) const override;
 
-            std::unordered_set<std::string> get_control_input_pin_types(const std::shared_ptr<Gate>& sg) const override;
+            std::unordered_set<std::string> get_control_input_pin_types(Gate* sg) const override;
 
-            std::unordered_set<std::string> get_clock_ports(const std::shared_ptr<Gate>&) const override;
-            std::unordered_set<std::string> get_enable_ports(const std::shared_ptr<Gate>&) const override;
-            std::unordered_set<std::string> get_reset_ports(const std::shared_ptr<Gate>&) const override;
-            std::unordered_set<std::string> get_data_ports(const std::shared_ptr<Gate>&) const override;
+            std::unordered_set<std::string> get_clock_ports(Gate*) const override;
+            std::unordered_set<std::string> get_enable_ports(Gate*) const override;
+            std::unordered_set<std::string> get_reset_ports(Gate*) const override;
+            std::unordered_set<std::string> get_data_ports(Gate*) const override;
         };
     }    // namespace dataflow_utils
 }    // namespace hal

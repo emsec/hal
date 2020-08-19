@@ -19,17 +19,17 @@ namespace hal
 
     struct NetlistAbstraction
     {
-        NetlistAbstraction(const std::shared_ptr<Netlist>& nl_arg);
+        NetlistAbstraction(Netlist* nl_arg);
 
         // netlist
-        std::shared_ptr<Netlist> nl;
+        Netlist* nl;
 
         // utils
         std::shared_ptr<dataflow_utils::Utils> utils;
         bool yosys;
 
         // all ffs
-        std::vector<std::shared_ptr<Gate>> all_sequential_gates;
+        std::vector<Gate*> all_sequential_gates;
 
         /* pre_processed_data */
         std::unordered_map<u32, std::vector<u32>> gate_to_fingerprint;

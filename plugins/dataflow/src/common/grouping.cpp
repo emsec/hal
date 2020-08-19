@@ -64,7 +64,7 @@ namespace hal
     {
         std::unordered_set<u32> res;
 
-        for (const auto& gate : gates_of_group.at(id))
+        for (auto gate : gates_of_group.at(id))
         {
             if (auto it = signals.find(gate); it != signals.end())
             {
@@ -78,13 +78,13 @@ namespace hal
     std::set<u32> Grouping::get_register_stage_intersect_of_group(u32 id)
     {
         std::vector<u32> intersect;
-        for (const auto& gate : this->gates_of_group.at(id))
+        for (auto gate : this->gates_of_group.at(id))
         {
             // check if gate has register_stages
             auto it = netlist_abstr.gate_to_register_stages.find(gate);
             if (it != netlist_abstr.gate_to_register_stages.end())
             {
-                const auto& gate_rs = std::set<u32>(it->second.begin(), it->second.end());
+                auto gate_rs = std::set<u32>(it->second.begin(), it->second.end());
                 if (intersect.empty())
                 {
                     intersect.insert(intersect.end(), gate_rs.begin(), gate_rs.end());
@@ -127,9 +127,9 @@ namespace hal
         }
 
         std::unordered_set<u32> successors;
-        for (const auto& gate : gates_of_group.at(id))
+        for (auto gate : gates_of_group.at(id))
         {
-            for (const auto& gate_id : netlist_abstr.gate_to_successors.at(gate))
+            for (auto gate_id : netlist_abstr.gate_to_successors.at(gate))
             {
                 successors.insert(parent_group_of_gate.at(gate_id));
             }
@@ -158,9 +158,9 @@ namespace hal
         }
 
         std::unordered_set<u32> predecessors;
-        for (const auto& gate : gates_of_group.at(id))
+        for (auto gate : gates_of_group.at(id))
         {
-            for (const auto& gate_id : netlist_abstr.gate_to_predecessors.at(gate))
+            for (auto gate_id : netlist_abstr.gate_to_predecessors.at(gate))
             {
                 predecessors.insert(parent_group_of_gate.at(gate_id));
             }

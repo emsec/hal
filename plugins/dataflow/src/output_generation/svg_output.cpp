@@ -18,14 +18,14 @@ namespace hal
         {
             nlohmann::json output_json;
 
-            const auto& netlist_name = state->netlist_abstr.nl->get_design_name();
+            auto netlist_name = state->netlist_abstr.nl->get_design_name();
 
             output_json["creator"]                                    = "HAL";
             output_json["modules"][netlist_name]["attributes"]["top"] = 1;
 
             for (const auto& [group_id, group_gates] : state->gates_of_group)
             {
-                const auto& group_name = std::to_string(group_id);
+                auto group_name = std::to_string(group_id);
 
                 output_json["modules"][netlist_name]["cells"][group_name]["type"]                        = std::to_string(group_gates.size());
                 output_json["modules"][netlist_name]["cells"][group_name]["port_directions"][group_name] = "output";
@@ -33,7 +33,7 @@ namespace hal
 
                 for (const auto& predecessor_id : state->get_predecessor_groups_of_group(group_id))
                 {
-                    const auto& predecessor_group_name = std::to_string(predecessor_id);
+                    auto predecessor_group_name = std::to_string(predecessor_id);
 
                     output_json["modules"][netlist_name]["cells"][group_name]["port_directions"][""] = "input";
                     output_json["modules"][netlist_name]["cells"][group_name]["connections"][""] += predecessor_id;

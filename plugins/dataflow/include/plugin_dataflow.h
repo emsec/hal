@@ -33,8 +33,8 @@ namespace hal
         ProgramOptions get_cli_options() const override;
 
         /** interface implementation: i_cli */
-        bool handle_cli_call(std::shared_ptr<Netlist> nl, ProgramArguments& args) override;
+        bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
 
-        bool execute(const std::shared_ptr<Netlist>& nl, std::string path, const u32 layer, const std::vector<u32> sizes);
+        bool execute(Netlist* nl, std::string path, const u32 layer, const std::vector<u32> sizes);
     };
 }    // namespace hal

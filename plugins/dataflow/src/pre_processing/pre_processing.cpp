@@ -12,7 +12,7 @@
 #include "utils/timing_utils.h"
 #include "utils/utils.h"
 
-#include <algorithm>    // std::set_difference, std::sort
+#include <algorithm>
 #include <chrono>
 #include <deque>
 #include <queue>
@@ -26,7 +26,7 @@ namespace hal
             void remove_buffers(NetlistAbstraction& netlist_abstr)
             {
                 auto buf_gates = netlist_abstr.nl->get_gates(
-                    [](auto& g) { return g->get_type()->get_name().find("BUF") != std::string::npos && g->get_input_pins().size() == 1 && g->get_output_pins().size() == 1; });
+                    [](auto g) { return g->get_type()->get_name().find("BUF") != std::string::npos && g->get_input_pins().size() == 1 && g->get_output_pins().size() == 1; });
                 log_info("dataflow", "removing {} buffers", buf_gates.size());
                 for (const auto& g : buf_gates)
                 {
@@ -36,14 +36,14 @@ namespace hal
                     for (const auto& dst : dsts)
                     {
                         out_net->remove_destination(dst);
-                        in_net->add_destination(dst);
+                        in_net->add_destination(dst.get_gate(), dst.get_pin());
                     }
                     netlist_abstr.nl->delete_net(out_net);
                     netlist_abstr.nl->delete_gate(g);
                 }
             }
 
-            std::tuple<std::vector<std::string>, std::vector<BooleanFunction::value>> compute_merge_characteristic_of_gate(const std::shared_ptr<Gate>& g)
+            std::tuple<std::vector<std::string>, std::vector<BooleanFunction::Value>> compute_merge_characteristic_of_gate(Gate* g)
             {
                 auto f = g->get_boolean_function();
                 std::vector<std::string> variables;
@@ -67,19 +67,20 @@ namespace hal
 
                 auto all_sequential_gates = netlist_abstr.all_sequential_gates;
                 auto all_gates            = netlist_abstr.nl->get_gates();
+                std::sort(all_gates.begin(), all_gates.end());
 
-                std::vector<std::shared_ptr<Gate>> all_combinational_gates;
+                std::vector<Gate*> all_combinational_gates;
                 all_combinational_gates.reserve(all_gates.size() - all_sequential_gates.size());
                 std::set_difference(all_gates.begin(), all_gates.end(), all_sequential_gates.begin(), all_sequential_gates.end(), std::back_inserter(all_combinational_gates));
 
-                std::unordered_map<std::shared_ptr<Gate>, std::tuple<std::vector<std::string>, std::vector<BooleanFunction::value>>> characteristic_of_gate;
+                std::unordered_map<Gate*, std::tuple<std::vector<std::string>, std::vector<BooleanFunction::Value>>> characteristic_of_gate;
 
                 log_info("dataflow", "computing boolean functions...");
                 {
                     measure_block_time("computing boolean functions");
 
                     // allocate values for all the gates so that each thread can access it without changing the container
-                    for (const auto& gate : all_combinational_gates)
+                    for (auto gate : all_combinational_gates)
                     {
                         characteristic_of_gate[gate] = {};
                     }
@@ -96,7 +97,7 @@ namespace hal
                     changes = false;
 
                     // map from gate we will keep (key) to set of gates that have exactly the same function and will be removed
-                    std::map<std::tuple<std::vector<std::string>, std::vector<BooleanFunction::value>>, std::unordered_set<std::shared_ptr<Gate>>> duplicate_gates;
+                    std::map<std::tuple<std::vector<std::string>, std::vector<BooleanFunction::Value>>, std::unordered_set<Gate*>> duplicate_gates;
                     for (auto it : characteristic_of_gate)
                     {
                         duplicate_gates[it.second].insert(it.first);
@@ -113,7 +114,7 @@ namespace hal
                             it++;
                             auto out_pins = gate_1->get_output_pins();
 
-                            std::unordered_set<std::shared_ptr<Gate>> affected_gates;
+                            std::unordered_set<Gate*> affected_gates;
                             for (; it != gate_set.end(); ++it)
                             {
                                 auto gate_2 = *it;
@@ -134,7 +135,7 @@ namespace hal
                                             for (auto dst : remove_net->get_destinations())
                                             {
                                                 remove_net->remove_destination(dst);
-                                                merge_net->add_destination(dst);
+                                                merge_net->add_destination(dst.get_gate(), dst.get_pin());
                                                 affected_gates.insert(dst.get_gate());
                                             }
                                             netlist_abstr.nl->delete_net(remove_net);
@@ -162,9 +163,8 @@ namespace hal
             void identify_all_sequential_gates(NetlistAbstraction& netlist_abstr)
             {
                 log_info("dataflow", "identifying sequential gates");
-                auto seq_gates                     = netlist_abstr.nl->get_gates([&](auto& g) { return netlist_abstr.utils->is_sequential(g); });
-                netlist_abstr.all_sequential_gates = std::vector<std::shared_ptr<Gate>>(seq_gates.begin(), seq_gates.end());
-
+                netlist_abstr.all_sequential_gates = netlist_abstr.nl->get_gates([&](auto g) { return netlist_abstr.utils->is_sequential(g); });
+                std::sort(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end());
                 log_info("dataflow", "  #gates: {}", netlist_abstr.nl->get_gates().size());
                 log_info("dataflow", "  #sequential gates: {}", netlist_abstr.all_sequential_gates.size());
             }
@@ -173,24 +173,25 @@ namespace hal
             {
                 auto begin_time = std::chrono::high_resolution_clock::now();
                 log_info("dataflow", "identifying control signals");
-                for (const auto& sg : netlist_abstr.all_sequential_gates)
+                for (auto sg : netlist_abstr.all_sequential_gates)
                 {
                     std::vector<u32> fingerprint;
                     auto id = sg->get_id();
+                    sg->get_name();
 
-                    for (const auto& net : netlist_abstr.utils->get_clock_signals_of_gate(sg))
+                    for (auto net : netlist_abstr.utils->get_clock_signals_of_gate(sg))
                     {
                         netlist_abstr.gate_to_clock_signals[id].insert(net->get_id());
                         fingerprint.push_back(net->get_id());
                     }
 
-                    for (const auto& net : netlist_abstr.utils->get_enable_signals_of_gate(sg))
+                    for (auto net : netlist_abstr.utils->get_enable_signals_of_gate(sg))
                     {
                         netlist_abstr.gate_to_enable_signals[id].insert(net->get_id());
                         fingerprint.push_back(net->get_id());
                     }
 
-                    for (const auto& net : netlist_abstr.utils->get_reset_signals_of_gate(sg))
+                    for (auto net : netlist_abstr.utils->get_reset_signals_of_gate(sg))
                     {
                         netlist_abstr.gate_to_reset_signals[id].insert(net->get_id());
                         fingerprint.push_back(net->get_id());
@@ -233,15 +234,24 @@ namespace hal
             }
         }    // namespace
 
-        NetlistAbstraction run(std::shared_ptr<Netlist> netlist)
+        NetlistAbstraction run(Netlist* netlist)
         {
             log_info("dataflow", "pre-processing netlist...");
             measure_block_time("pre-processing");
             NetlistAbstraction netlist_abstr(netlist);
             remove_buffers(netlist_abstr);
             identify_all_sequential_gates(netlist_abstr);
+            for (auto g: netlist_abstr.all_sequential_gates){
+                    g->get_name();
+                }
             merge_duplicated_logic_cones(netlist_abstr);
+            for (auto g: netlist_abstr.all_sequential_gates){
+                    g->get_name();
+                }
             identify_all_control_signals(netlist_abstr);
+            for (auto g: netlist_abstr.all_sequential_gates){
+                    g->get_name();
+                }
             identify_all_succesors_predecessors_ffs_of_all_ffs(netlist_abstr);
             identify_counters(netlist_abstr);
             identify_register_stages(netlist_abstr);

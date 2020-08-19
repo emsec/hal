@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    NetlistAbstraction::NetlistAbstraction(const std::shared_ptr<Netlist>& nl_arg) : nl(nl_arg)
+    NetlistAbstraction::NetlistAbstraction(Netlist* nl_arg) : nl(nl_arg)
     {
         std::string library = nl->get_gate_library()->get_name();
 

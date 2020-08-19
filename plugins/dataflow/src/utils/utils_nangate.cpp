@@ -10,7 +10,7 @@ namespace hal
 {
     namespace dataflow_utils
     {
-        bool UtilsNangate::is_sequential(const std::shared_ptr<Gate>& sg) const
+        bool UtilsNangate::is_sequential(Gate* sg) const
         {
             static std::unordered_set<std::string> supported = {"DFFRS_X1",
                                                                 "DFFRS_X2",
@@ -42,7 +42,7 @@ namespace hal
             return false;
         }
 
-        std::unordered_set<std::string> UtilsNangate::get_control_input_pin_types(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsNangate::get_control_input_pin_types(Gate* sg) const
         {
             auto data_ports = get_data_ports(sg);
             std::unordered_set<std::string> control_input_pin_types;
@@ -56,7 +56,7 @@ namespace hal
             return control_input_pin_types;
         }
 
-        std::unordered_set<std::string> UtilsNangate::get_clock_ports(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsNangate::get_clock_ports(Gate* sg) const
         {
             if (!is_sequential(sg))
             {
@@ -88,7 +88,7 @@ namespace hal
             return gate_to_clock_ports.at(sg->get_type()->get_name());
         }
 
-        std::unordered_set<std::string> UtilsNangate::get_enable_ports(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsNangate::get_enable_ports(Gate* sg) const
         {
             if (!is_sequential(sg))
             {
@@ -120,7 +120,7 @@ namespace hal
             return gate_to_enable_ports.at(sg->get_type()->get_name());
         }
 
-        std::unordered_set<std::string> UtilsNangate::get_reset_ports(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsNangate::get_reset_ports(Gate* sg) const
         {
             if (!is_sequential(sg))
             {
@@ -152,7 +152,7 @@ namespace hal
             return gate_to_reset_ports.at(sg->get_type()->get_name());
         }
 
-        std::unordered_set<std::string> UtilsNangate::get_data_ports(const std::shared_ptr<Gate>& sg) const
+        std::unordered_set<std::string> UtilsNangate::get_data_ports(Gate* sg) const
         {
             static std::map<std::string, std::unordered_set<std::string>> gate_to_data_ports;
             if (gate_to_data_ports.empty())

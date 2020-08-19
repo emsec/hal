@@ -20,7 +20,7 @@ namespace hal
             /* initialize state */
             u32 new_id_counter = -1;
 
-            for (const auto& gate : new_state->netlist_abstr.all_sequential_gates)
+            for (auto gate : new_state->netlist_abstr.all_sequential_gates)
             {
                 u32 new_group_id = ++new_id_counter;
 
@@ -34,9 +34,9 @@ namespace hal
         }
 
         /* find all successor/predecessor (forward = true/false) sequential gates of start_gate */
-        std::unordered_set<std::shared_ptr<Gate>> Utils::get_sequential_successors(const std::shared_ptr<Gate>& start_gate)
+        std::unordered_set<Gate*> Utils::get_sequential_successors(Gate* start_gate)
         {
-            std::unordered_set<std::shared_ptr<Gate>> found_ffs;
+            std::unordered_set<Gate*> found_ffs;
             for (const auto& n : start_gate->get_fan_out_nets())
             {
                 auto suc = get_sequential_successors(n);
@@ -51,7 +51,7 @@ namespace hal
             return found_ffs;
         }
 
-        std::unordered_set<std::shared_ptr<Gate>> Utils::get_sequential_successors_internal(const std::shared_ptr<Net>& start_net, std::unordered_set<u32>& seen)
+        std::unordered_set<Gate*> Utils::get_sequential_successors_internal(Net* start_net, std::unordered_set<u32>& seen)
         {
             if (auto it = m_successor_cache.find(start_net->get_id()); it != m_successor_cache.end())
             {
@@ -65,7 +65,7 @@ namespace hal
 
             seen.insert(start_net->get_id());
 
-            std::unordered_set<std::shared_ptr<Gate>> found_ffs;
+            std::unordered_set<Gate*> found_ffs;
 
             for (const auto& dst : start_net->get_destinations())
             {
@@ -96,18 +96,18 @@ namespace hal
             return found_ffs;
         }
 
-        std::unordered_set<std::shared_ptr<Gate>> Utils::get_sequential_successors(const std::shared_ptr<Net>& start_net)
+        std::unordered_set<Gate*> Utils::get_sequential_successors(Net* start_net)
         {
             std::unordered_set<u32> seen;
             return get_sequential_successors_internal(start_net, seen);
         }
 
         /*
-    std::unordered_set<std::shared_ptr<Gate>> Utils::get_sequential_successors(const std::shared_ptr<Net>& start_net)
+    std::unordered_set<Gate*> Utils::get_sequential_successors(Net* start_net)
     {
-        std::unordered_set<std::shared_ptr<Gate>> found_ffs;
-        std::unordered_set<std::shared_ptr<Net>> seen;
-        std::queue<std::shared_ptr<Net>> q;
+        std::unordered_set<Gate*> found_ffs;
+        std::unordered_set<Net*> seen;
+        std::queue<Net*> q;
         q.push(start_net);
 
         while (!q.empty())
@@ -153,9 +153,9 @@ namespace hal
             m_successor_cache.clear();
         }
 
-        std::unordered_set<std::shared_ptr<Net>> Utils::get_clock_signals_of_gate(const std::shared_ptr<Gate>& sg)
+        std::unordered_set<Net*> Utils::get_clock_signals_of_gate(Gate* sg)
         {
-            std::unordered_set<std::shared_ptr<Net>> clk_nets;
+            std::unordered_set<Net*> clk_nets;
 
             for (const auto& pin_type : get_clock_ports(sg))
             {
@@ -167,9 +167,9 @@ namespace hal
             return clk_nets;
         }
 
-        std::unordered_set<std::shared_ptr<Net>> Utils::get_enable_signals_of_gate(const std::shared_ptr<Gate>& sg)
+        std::unordered_set<Net*> Utils::get_enable_signals_of_gate(Gate* sg)
         {
-            std::unordered_set<std::shared_ptr<Net>> enable_nets;
+            std::unordered_set<Net*> enable_nets;
 
             for (const auto& pin_type : get_enable_ports(sg))
             {
@@ -181,9 +181,9 @@ namespace hal
             return enable_nets;
         }
 
-        std::unordered_set<std::shared_ptr<Net>> Utils::get_reset_signals_of_gate(const std::shared_ptr<Gate>& sg)
+        std::unordered_set<Net*> Utils::get_reset_signals_of_gate(Gate* sg)
         {
-            std::unordered_set<std::shared_ptr<Net>> reset_nets;
+            std::unordered_set<Net*> reset_nets;
 
             for (const auto& pin_type : get_reset_ports(sg))
             {
@@ -195,9 +195,9 @@ namespace hal
             return reset_nets;
         }
 
-        std::unordered_set<std::shared_ptr<Net>> Utils::get_data_signals_of_gate(const std::shared_ptr<Gate>& sg)
+        std::unordered_set<Net*> Utils::get_data_signals_of_gate(Gate* sg)
         {
-            std::unordered_set<std::shared_ptr<Net>> data_nets;
+            std::unordered_set<Net*> data_nets;
 
             for (const auto& pin_type : get_data_ports(sg))
             {
