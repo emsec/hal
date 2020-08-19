@@ -17,6 +17,14 @@ namespace hal
         assert(nl != nullptr);
     }
 
+    template<typename T>
+    static void unordered_vector_erase(std::vector<T>& vec, T element)
+    {
+        auto it = std::find(vec.begin(), vec.end(), element);
+        *it     = vec.back();
+        vec.pop_back();
+    }
+
     //######################################################################
     //###                      gates                                     ###
     //######################################################################
@@ -116,12 +124,12 @@ namespace hal
 
         // remove gate from modules
         gate->m_module->m_gates_map.erase(gate->m_module->m_gates_map.find(gate->get_id()));
-        gate->m_module->m_gates.erase(std::find(gate->m_module->m_gates.begin(), gate->m_module->m_gates.end(), gate));
+        unordered_vector_erase(gate->m_module->m_gates, gate);
 
         auto it  = m_netlist->m_gates_map.find(gate->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_gates_map.erase(it);
-        m_netlist->m_gates.erase(std::find(m_netlist->m_gates.begin(),m_netlist->m_gates.end(),gate));
+        unordered_vector_erase(m_netlist->m_gates, gate);
 
         // free ids
         m_netlist->m_free_gate_ids.insert(gate->get_id());
@@ -214,7 +222,7 @@ namespace hal
         auto it  = m_netlist->m_nets_map.find(net->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_nets_map.erase(it);
-        m_netlist->m_nets.erase(std::find(m_netlist->m_nets.begin(),m_netlist->m_nets.end(),net));
+        unordered_vector_erase(m_netlist->m_nets, net);
 
         m_netlist->m_free_net_ids.insert(net->get_id());
         m_netlist->m_used_net_ids.erase(net->get_id());
@@ -281,8 +289,8 @@ namespace hal
 
         if (it != net->m_sources.end())
         {
-            gate->m_out_endpoints.erase(std::find(gate->m_out_endpoints.begin(), gate->m_out_endpoints.end(), ep));
-            gate->m_out_nets.erase(std::find(gate->m_out_nets.begin(), gate->m_out_nets.end(), net));
+            unordered_vector_erase(gate->m_out_endpoints, ep);
+            unordered_vector_erase(gate->m_out_nets, net);
             net->m_sources.erase(it);
             net_event_handler::notify(net_event_handler::event::src_removed, net, gate->get_id());
         }
@@ -351,8 +359,8 @@ namespace hal
 
         if (it != net->m_destinations.end())
         {
-            gate->m_in_endpoints.erase(std::find(gate->m_in_endpoints.begin(), gate->m_in_endpoints.end(), ep));
-            gate->m_in_nets.erase(std::find(gate->m_in_nets.begin(), gate->m_in_nets.end(), net));
+            unordered_vector_erase(gate->m_in_endpoints, ep);
+            unordered_vector_erase(gate->m_in_nets, net);
             net->m_destinations.erase(it);
             net_event_handler::notify(net_event_handler::event::dst_removed, net, gate->get_id());
         }
@@ -406,7 +414,7 @@ namespace hal
 
         m_netlist->m_used_module_ids.insert(id);
 
-        auto raw                 = m.get();
+        auto raw                     = m.get();
         m_netlist->m_modules_map[id] = std::move(m);
         m_netlist->m_modules.push_back(raw);
 
@@ -463,13 +471,13 @@ namespace hal
 
         // remove module from parent
         to_remove->m_parent->m_submodules_map.erase(to_remove->get_id());
-        to_remove->m_parent->m_submodules.erase(std::find(to_remove->m_parent->m_submodules.begin(), to_remove->m_parent->m_submodules.end(), to_remove));
+        unordered_vector_erase(to_remove->m_parent->m_submodules, to_remove);
         module_event_handler::notify(module_event_handler::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
 
         auto it  = m_netlist->m_modules_map.find(to_remove->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_modules_map.erase(it);
-        m_netlist->m_modules.erase(std::find(m_netlist->m_modules.begin(), m_netlist->m_modules.end(), ptr.get()));
+        unordered_vector_erase(m_netlist->m_modules, ptr.get());
 
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());
@@ -491,7 +499,7 @@ namespace hal
         auto prev_module = g->m_module;
 
         prev_module->m_gates_map.erase(prev_module->m_gates_map.find(g->get_id()));
-        prev_module->m_gates.erase(std::find(prev_module->m_gates.begin(), prev_module->m_gates.end(), g));
+        unordered_vector_erase(prev_module->m_gates, g);
 
         m->m_gates_map[g->get_id()] = g;
         m->m_gates.push_back(g);
@@ -525,7 +533,7 @@ namespace hal
         }
 
         m->m_gates_map.erase(it);
-        m->m_gates.erase(std::find(m->m_gates.begin(), m->m_gates.end(), g));
+        unordered_vector_erase(m->m_gates, g);
 
         m_netlist->m_top_module->m_gates_map[g->get_id()] = g;
         m_netlist->m_top_module->m_gates.push_back(g);
