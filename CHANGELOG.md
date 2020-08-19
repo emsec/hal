@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### REMOVED
 
-* list of nets and gates no longer present in module details widget (will be replaced by selection widget in the future)
+* list of nets and gates no longer present in module details widget
 
 ### DEPRECATED
 
