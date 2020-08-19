@@ -339,7 +339,7 @@ namespace hal
                         bool exit = true;
                         for (auto other_pin : sim_gate->output_pins)
                         {
-                            if (vars.find(other_pin) != vars.end())
+                            if (std::find(vars.begin(), vars.end(), other_pin) != vars.end())
                             {
                                 func = func.substitute(other_pin, all_functions.at(other_pin));
                                 exit = false;
@@ -695,9 +695,9 @@ namespace hal
         }
     }
 
-    std::map<std::string, BooleanFunction::Value> NetlistSimulator::gather_input_values(SimulationGate* gate)
+    std::unordered_map<std::string, BooleanFunction::Value> NetlistSimulator::gather_input_values(SimulationGate* gate)
     {
-        std::map<std::string, BooleanFunction::Value> input_values;
+        std::unordered_map<std::string, BooleanFunction::Value> input_values;
         for (u32 i = 0; i < gate->input_pins.size(); ++i)
         {
             auto pin          = gate->input_pins[i];

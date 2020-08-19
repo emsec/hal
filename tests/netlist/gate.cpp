@@ -210,26 +210,26 @@ namespace hal {
             {
                 // All input pins are occupied
                 Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-                std::set<Net*>
+                std::vector<Net*>
                     fan_in_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 30), nl->get_net_by_id(MIN_NET_ID + 20)};
                 EXPECT_EQ(gate_0->get_fan_in_nets(), fan_in_nets_0);
             }
             {
                 // Not all input pins are occupied
                 Gate* gate_5 = nl->get_gate_by_id(MIN_GATE_ID + 5);
-                std::set<Net*> fan_in_nets_5 = {nl->get_net_by_id(MIN_NET_ID + 045)};
+                std::vector<Net*> fan_in_nets_5 = {nl->get_net_by_id(MIN_NET_ID + 045)};
                 EXPECT_EQ(gate_5->get_fan_in_nets(), fan_in_nets_5);
             }
             {
                 // No input pins are occupied
                 Gate* gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
-                std::set<Net*> fan_in_nets_6 = {};
+                std::vector<Net*> fan_in_nets_6 = {};
                 EXPECT_EQ(gate_6->get_fan_in_nets(), fan_in_nets_6);
             }
             {
                 // No input-pins exist
                 Gate* gate_1 = nl->get_gate_by_id(MIN_GATE_ID + 1);
-                std::set<Net*> fan_in_nets_1 = {};
+                std::vector<Net*> fan_in_nets_1 = {};
                 EXPECT_EQ(gate_1->get_fan_in_nets(), fan_in_nets_1);
             }
         TEST_END
@@ -253,25 +253,25 @@ namespace hal {
             {
                 // All output pins are occupied
                 Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-                std::set<Net*> fan_out_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 045)};
+                std::vector<Net*> fan_out_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 045)};
                 EXPECT_EQ(gate_0->get_fan_out_nets(), fan_out_nets_0);
             }
             {
                 // Not all output pins are occupied
                 Gate* gate_7 = nl->get_gate_by_id(MIN_GATE_ID + 7);
-                std::set<Net*> fan_out_nets_7 = {nl->get_net_by_id(MIN_NET_ID + 78)};
+                std::vector<Net*> fan_out_nets_7 = {nl->get_net_by_id(MIN_NET_ID + 78)};
                 EXPECT_EQ(gate_7->get_fan_out_nets(), fan_out_nets_7);
             }
             {
                 // No output pins are occupied
                 Gate* gate_8 = nl->get_gate_by_id(MIN_GATE_ID + 8);
-                std::set<Net*> fan_out_nets_8 = {};
+                std::vector<Net*> fan_out_nets_8 = {};
                 EXPECT_EQ(gate_8->get_fan_out_nets(), fan_out_nets_8);
             }
             {
                 // No output pin exist
                 Gate* gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
-                std::set<Net*> fan_out_nets_6 = {};
+                std::vector<Net*> fan_out_nets_6 = {};
                 EXPECT_EQ(gate_6->get_fan_out_nets(), fan_out_nets_6);
             }
         TEST_END
@@ -571,18 +571,16 @@ namespace hal {
             {
                 // Get the unique predecessors
                 Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
-                std::set<Gate*>
-                    pred = {nl_2->get_gate_by_id(MIN_GATE_ID + 0), nl_2->get_gate_by_id(MIN_GATE_ID + 2)};
+                std::vector<Gate*> pred = {nl_2->get_gate_by_id(MIN_GATE_ID + 0), nl_2->get_gate_by_id(MIN_GATE_ID + 2)};
                 std::vector<Gate*> res = gate_1->get_unique_predecessors();
-                EXPECT_TRUE((std::set<Gate*>(res.begin(), res.end()) == pred));
+                EXPECT_TRUE(test_utils::vectors_have_same_content(res, pred));
             }
             {
                 // Get the unique successors
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::set<Gate*>
-                    succ = {nl_2->get_gate_by_id(MIN_GATE_ID + 1), nl_2->get_gate_by_id(MIN_GATE_ID + 3)};
+                std::vector<Gate*> succ = {nl_2->get_gate_by_id(MIN_GATE_ID + 1), nl_2->get_gate_by_id(MIN_GATE_ID + 3)};
                 std::vector<Gate*> res = gate_0->get_unique_successors();
-                EXPECT_TRUE((std::set<Gate*>(res.begin(), res.end()) == succ));
+                EXPECT_TRUE(test_utils::vectors_have_same_content(res, succ));
             }
         TEST_END
     }
@@ -609,7 +607,7 @@ namespace hal {
             {
                 // Get predecessor for a given (existing) input pin type with no predecessors
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                Endpoint pred = {nullptr, "", false};
+                Endpoint pred;
                 EXPECT_TRUE(gate_0->get_predecessor("I0") == pred);
             }
 

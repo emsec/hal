@@ -4,7 +4,7 @@ namespace hal
 {
     void data_container_init(py::module& m)
     {
-        py::class_<DataContainer, std::shared_ptr<DataContainer>> py_data_container(m, "DataContainer");
+        py::class_<DataContainer> py_data_container(m, "DataContainer");
 
         py_data_container.def(py::init<>(), R"(
         Construct a new data container.

@@ -95,7 +95,7 @@ namespace hal
         }
 
         m_parent->m_submodules_map.erase(m_id);
-        m_parent->m_submodules_set.erase(this);
+        m_parent->m_submodules.erase(this);
 
         m_parent->m_input_nets_dirty    = true;
         m_parent->m_output_nets_dirty   = true;
@@ -106,7 +106,7 @@ namespace hal
         m_parent = new_parent;
 
         m_parent->m_submodules_map[m_id] = this;
-        m_parent->m_submodules_set.insert(this);
+        m_parent->m_submodules.insert(this);
 
         m_parent->m_input_nets_dirty    = true;
         m_parent->m_output_nets_dirty   = true;
@@ -123,11 +123,11 @@ namespace hal
         std::set<Module*> res;
         if (!filter)
         {
-            res = m_submodules_set;
+            res = m_submodules;
         }
         else
         {
-            for (const auto& sm : m_submodules_set)
+            for (const auto& sm : m_submodules)
             {
                 if (filter(sm))
                 {
@@ -138,7 +138,7 @@ namespace hal
 
         if (recursive)
         {
-            for (const auto& sm : m_submodules_set)
+            for (const auto& sm : m_submodules)
             {
                 auto more = sm->get_submodules(filter, true);
                 res.insert(more.begin(), more.end());
@@ -153,7 +153,7 @@ namespace hal
         {
             return false;
         }
-        for (const auto& sm : m_submodules_set)
+        for (const auto& sm : m_submodules)
         {
             if (sm == other)
             {
@@ -195,10 +195,10 @@ namespace hal
         {
             return false;
         }
-        bool success = (m_gates_set.find(gate) != m_gates_set.end());
+        bool success = std::find(m_gates.begin(), m_gates.end(), gate) != m_gates.end();
         if (!success && recursive)
         {
-            for (const auto& sm : m_submodules_set)
+            for (const auto& sm : m_submodules)
             {
                 if (sm->contains_gate(gate, true))
                 {
@@ -216,7 +216,7 @@ namespace hal
         {
             if (recursive)
             {
-                for (const auto& sm : m_submodules_set)
+                for (const auto& sm : m_submodules)
                 {
                     auto res = sm->get_gate_by_id(gate_id, true);
                     if (res != nullptr)
@@ -230,31 +230,31 @@ namespace hal
         return it->second;
     }
 
-    std::set<Gate*> Module::get_gates(const std::function<bool(Gate*)>& filter, bool recursive) const
+    std::vector<Gate*> Module::get_gates(const std::function<bool(Gate*)>& filter, bool recursive) const
     {
-        std::set<Gate*> res;
+        std::vector<Gate*> res;
         if (!filter)
         {
-            res = m_gates_set;
+            res = m_gates;
         }
         else
         {
-            for (const auto& g : m_gates_set)
+            for (auto g : m_gates)
             {
                 if (!filter(g))
                 {
                     continue;
                 }
-                res.insert(g);
+                res.push_back(g);
             }
         }
 
         if (recursive)
         {
-            for (const auto& sm : m_submodules_set)
+            for (auto sm : m_submodules)
             {
                 auto more = sm->get_gates(filter, true);
-                res.insert(more.begin(), more.end());
+                res.insert(res.end(), more.begin(), more.end());
             }
         }
 
@@ -268,6 +268,7 @@ namespace hal
             std::unordered_set<Net*> seen;
             m_input_nets.clear();
             auto gates = get_gates(nullptr, true);
+            std::sort(gates.begin(), gates.end());
             for (auto gate : gates)
             {
                 for (auto net : gate->get_fan_in_nets())
@@ -283,7 +284,7 @@ namespace hal
                         continue;
                     }
                     auto sources = net->get_sources();
-                    if (std::any_of(sources.begin(), sources.end(), [&gates](Endpoint src) { return gates.find(src.get_gate()) == gates.end(); }))
+                    if (std::any_of(sources.begin(), sources.end(), [&gates](Endpoint& src) { return !std::binary_search(gates.begin(), gates.end(), src.get_gate()); }))
                     {
                         m_input_nets.push_back(net);
                     }
@@ -302,6 +303,7 @@ namespace hal
             std::unordered_set<Net*> seen;
             m_output_nets.clear();
             auto gates = get_gates(nullptr, true);
+            std::sort(gates.begin(), gates.end());
             for (auto gate : gates)
             {
                 for (auto net : gate->get_fan_out_nets())
@@ -317,7 +319,7 @@ namespace hal
                         continue;
                     }
                     auto destinations = net->get_destinations();
-                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint dst) { return gates.find(dst.get_gate()) == gates.end(); }))
+                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint& dst) { return !std::binary_search(gates.begin(), gates.end(), dst.get_gate()); }))
                     {
                         m_output_nets.push_back(net);
                     }
@@ -336,6 +338,7 @@ namespace hal
             std::unordered_set<Net*> seen;
             m_internal_nets.clear();
             auto gates = get_gates(nullptr, true);
+            std::sort(gates.begin(), gates.end());
             for (auto gate : gates)
             {
                 for (auto net : gate->get_fan_out_nets())
@@ -346,7 +349,7 @@ namespace hal
                     }
                     seen.insert(net);
                     auto destinations = net->get_destinations();
-                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint dst) { return gates.find(dst.get_gate()) != gates.end(); }))
+                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint& dst) { return std::binary_search(gates.begin(), gates.end(), dst.get_gate()); }))
                     {
                         m_internal_nets.push_back(net);
                     }
@@ -370,7 +373,8 @@ namespace hal
 
         if (auto it = std::find(input_nets.begin(), input_nets.end(), input_net); it == input_nets.end())
         {
-            log_warning("module", "net '{}' with id {} is not an input net of module '{}' with id {}, ignoring port assignment", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
+            log_warning(
+                "module", "net '{}' with id {} is not an input net of module '{}' with id {}, ignoring port assignment", input_net->get_name(), input_net->get_id(), this->get_name(), this->get_id());
             return;
         }
 

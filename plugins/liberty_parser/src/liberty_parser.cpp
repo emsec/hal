@@ -750,8 +750,8 @@ namespace hal
         std::unique_ptr<GateType> gt;
         std::vector<std::string> input_pins;
         std::vector<std::string> output_pins;
-        std::map<std::string, std::map<u32, std::string>> input_pin_groups;
-        std::map<std::string, std::map<u32, std::string>> output_pin_groups;
+        std::unordered_map<std::string, std::unordered_map<u32, std::string>> input_pin_groups;
+        std::unordered_map<std::string, std::unordered_map<u32, std::string>> output_pin_groups;
 
         // get input and output pins from pin groups
         for (const auto& pin : cell.pins)
@@ -1294,9 +1294,9 @@ namespace hal
         return res;
     }
 
-    std::map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
+    std::unordered_map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
     {
-        std::map<std::string, BooleanFunction> res;
+        std::unordered_map<std::string, BooleanFunction> res;
 
         for (const auto& [bus_name, bus] : cell.buses)
         {

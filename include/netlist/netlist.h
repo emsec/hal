@@ -279,7 +279,7 @@ namespace hal
          * @param[in] filter - Filter for the gates
          * @returns A set of gates.
          */
-        std::set<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr) const;
+        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr) const;
 
         /**
          * Mark a gate as a global vcc gate.

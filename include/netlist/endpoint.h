@@ -29,6 +29,7 @@ namespace hal
 {
     /* forward declaration */
     class Gate;
+    class Net;
 
     /**
      *  Endpoint data structure for (gate, pin) tuples
@@ -41,12 +42,13 @@ namespace hal
         /**
          * Construct an endpoint object.
          *
-         * @param[in] gate - A pointer to the gate of the endpoint.
+         * @param[in] gate - The gate of the endpoint.
          * @param[in] pin - The pin of the endpoint.
+         * @param[in] net - The net of the endpoint.
          * @param[in] is_a_destination - True if the endpoint is an output pin, false if it is an input pin.
          */
-        Endpoint(Gate* gate, const std::string& pin, bool is_a_destination);
-
+        Endpoint(Gate* gate, const std::string& pin, Net* net, bool is_a_destination);
+        Endpoint();
         Endpoint(const Endpoint&) = default;
         Endpoint(Endpoint&&)      = default;
         Endpoint& operator=(const Endpoint&) = default;
@@ -93,6 +95,13 @@ namespace hal
         const std::string& get_pin() const;
 
         /**
+         * Returns the net of the endpoint.
+         *
+         * @returns The net.
+         */
+        Net* get_net() const;
+
+        /**
          * Checks whether the pin of the endpoint is a destination pin.
          *
          * @returns True, if the endpoint is an input pin.
@@ -109,6 +118,7 @@ namespace hal
     private:
         Gate* m_gate;
         std::string m_pin;
+        Net* m_net;
         bool m_is_a_destination;
     };
 }    // namespace hal

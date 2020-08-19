@@ -53,7 +53,7 @@ namespace hal
         :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def("evaluate", &BooleanFunction::evaluate, py::arg("inputs") = std::map<std::string, BooleanFunction::Value>(), R"(
+        py_boolean_function.def("evaluate", &BooleanFunction::evaluate, py::arg("inputs") = std::unordered_map<std::string, BooleanFunction::Value>(), R"(
         Evaluates the function on the given inputs and returns the result.
 
         :param dict[str,value] inputs:  A map from variable names to values.
@@ -61,7 +61,7 @@ namespace hal
         :rtype: hal_py.value
         )");
 
-        py_boolean_function.def("__call__", [](const BooleanFunction& f, const std::map<std::string, BooleanFunction::Value>& values) { return f(values); });
+        py_boolean_function.def("__call__", [](const BooleanFunction& f, const std::unordered_map<std::string, BooleanFunction::Value>& values) { return f(values); });
 
         py_boolean_function.def("is_constant_one", &BooleanFunction::is_constant_one, R"(
         Checks whether the function constantly outputs ONE.

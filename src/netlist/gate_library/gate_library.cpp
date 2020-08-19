@@ -44,17 +44,17 @@ namespace hal
         m_gate_types.push_back(std::move(gt));
     }
 
-    std::map<std::string, const GateType*> GateLibrary::get_gate_types() const
+    std::unordered_map<std::string, const GateType*> GateLibrary::get_gate_types() const
     {
         return m_gate_type_map;
     }
 
-    std::map<std::string, const GateType*> GateLibrary::get_vcc_gate_types() const
+    std::unordered_map<std::string, const GateType*> GateLibrary::get_vcc_gate_types() const
     {
         return m_vcc_gate_types;
     }
 
-    std::map<std::string, const GateType*> GateLibrary::get_gnd_gate_types() const
+    std::unordered_map<std::string, const GateType*> GateLibrary::get_gnd_gate_types() const
     {
         return m_gnd_gate_types;
     }

@@ -376,54 +376,50 @@ namespace hal
         return m_type->get_output_pins();
     }
 
-    std::set<Net*> Gate::get_fan_in_nets() const
+    std::vector<Net*> Gate::get_fan_in_nets() const
     {
-        std::set<Net*> nets;
+        return m_in_nets;
+    }
 
-        for (const auto& it : m_in_nets)
-        {
-            nets.insert(it.second);
-        }
-
-        return nets;
+    std::vector<Endpoint> Gate::get_fan_in_endpoints() const
+    {
+        return m_in_endpoints;
     }
 
     Net* Gate::get_fan_in_net(const std::string& pin_type) const
     {
-        auto it = m_in_nets.find(pin_type);
+        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin_type](auto& ep) { return ep.get_pin() == pin_type; });
 
-        if (it == m_in_nets.end())
+        if (it == m_in_endpoints.end())
         {
             log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to input pin '{}'.", get_name(), get_type()->get_name(), pin_type);
             return nullptr;
         }
 
-        return it->second;
+        return it->get_net();
     }
 
-    std::set<Net*> Gate::get_fan_out_nets() const
+    std::vector<Net*> Gate::get_fan_out_nets() const
     {
-        std::set<Net*> nets;
+        return m_out_nets;
+    }
 
-        for (const auto& it : m_out_nets)
-        {
-            nets.insert(it.second);
-        }
-
-        return nets;
+    std::vector<Endpoint> Gate::get_fan_out_endpoints() const
+    {
+        return m_out_endpoints;
     }
 
     Net* Gate::get_fan_out_net(const std::string& pin_type) const
     {
-        auto it = m_out_nets.find(pin_type);
+        auto it = std::find_if(m_out_endpoints.begin(), m_out_endpoints.end(), [&pin_type](auto& ep) { return ep.get_pin() == pin_type; });
 
-        if (it == m_out_nets.end())
+        if (it == m_out_endpoints.end())
         {
             log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to output pin '{}'.", get_name(), get_type()->get_name(), pin_type);
             return nullptr;
         }
 
-        return it->second;
+        return it->get_net();
     }
 
     std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
@@ -441,11 +437,10 @@ namespace hal
     std::vector<Endpoint> Gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
         std::vector<Endpoint> result;
-        for (const auto& it : m_in_nets)
+        for (const auto& ep : m_in_endpoints)
         {
-            auto& pin         = it.first;
-            auto& net         = it.second;
-            auto predecessors = net->get_sources();
+            auto pin          = ep.get_pin();
+            auto predecessors = ep.get_net()->get_sources();
             if (!filter)
             {
                 result.insert(result.end(), predecessors.begin(), predecessors.end());
@@ -470,12 +465,12 @@ namespace hal
         auto predecessors = this->get_predecessors([&which_pin](auto& starting_pin, auto&) -> bool { return starting_pin == which_pin; });
         if (predecessors.size() == 0)
         {
-            return Endpoint(nullptr, "", false);
+            return Endpoint();
         }
         if (predecessors.size() > 1)
         {
             log_error("netlist", "internal error: multiple predecessors for '{}' at pin '{}'.", get_name(), which_pin);
-            return Endpoint(nullptr, "", false);
+            return Endpoint();
         }
 
         return predecessors[0];
@@ -496,11 +491,10 @@ namespace hal
     std::vector<Endpoint> Gate::get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
     {
         std::vector<Endpoint> result;
-        for (const auto& it : m_out_nets)
+        for (const auto& ep : m_out_endpoints)
         {
-            auto& pin       = it.first;
-            auto& net       = it.second;
-            auto successors = net->get_destinations();
+            auto pin        = ep.get_pin();
+            auto successors = ep.get_net()->get_destinations();
             if (!filter)
             {
                 result.insert(result.end(), successors.begin(), successors.end());

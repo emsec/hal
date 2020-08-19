@@ -66,8 +66,8 @@ namespace hal {
          * @param values - the values the variables should be set to
          * @returns a variables to values map, that can be interpreted by the boolean funcitons evaluate function.
          */
-        std::map<std::string, BooleanFunction::Value> create_input_map(std::string variables, std::string values) {
-            std::map<std::string, BooleanFunction::Value> res;
+        std::unordered_map<std::string, BooleanFunction::Value> create_input_map(std::string variables, std::string values) {
+            std::unordered_map<std::string, BooleanFunction::Value> res;
             // Booth strings must be equal in length
             if (variables.size() != values.size()) {
                 return res;
@@ -77,7 +77,7 @@ namespace hal {
                 std::string val = std::string(1, values.at(c));
                 // Can't set the same variable twice
                 if (res.find(var) != res.end()) {
-                    return std::map<std::string, BooleanFunction::Value>();
+                    return {};
                 }
                 if (val == "0") {
                     res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::ZERO));
@@ -88,7 +88,7 @@ namespace hal {
                 }
                     // If the values string contains an illegal character, exit
                 else {
-                    return std::map<std::string, BooleanFunction::Value>();
+                    return {};
                 }
             }
             return res;
@@ -253,7 +253,7 @@ namespace hal {
                 BooleanFunction b("B");
                 BooleanFunction c("C");
                 BooleanFunction a_2("A");
-                EXPECT_EQ((a | b | c | a_2).get_variables(), std::set<std::string>({"A", "B", "C"}));
+                EXPECT_EQ((a | b | c | a_2).get_variables(), std::vector<std::string>({"A", "B", "C"}));
             }
         TEST_END
     }
@@ -366,32 +366,32 @@ namespace hal {
             {
                 // Check default case
                 auto bf = BooleanFunction::from_string(f_str);
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
             }
             {
                 // Declare existing variable
                 auto bf = BooleanFunction::from_string(f_str, {"A"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
             }
             {
                 // Declare custom variable
                 auto bf = BooleanFunction::from_string(f_str, {"A B"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A B", "C", "D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A B", "C", "D"}));
             }
             {
                 // Declare custom variable
                 auto bf = BooleanFunction::from_string(f_str, {"A B C D"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A B C D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A B C D"}));
             }
             {
                 // Declare custom variable
                 auto bf = BooleanFunction::from_string(f_str, {"D(1)"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D(1)"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D(1)"}));
             }
             {
                 // Declare non-existing custom variable
                 auto bf = BooleanFunction::from_string(f_str, {"X"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
             }
 
         TEST_END

@@ -96,8 +96,7 @@ namespace hal
         //vcc gates
         for (auto n : m_netlist->get_vcc_gates())
         {
-            std::set<Net*> o_nets = n->get_fan_out_nets();
-            for (auto e : o_nets)
+            for (auto e : n->get_fan_out_nets())
             {
                 if (e->get_name() == "'1'")
                 {
@@ -112,8 +111,7 @@ namespace hal
         //gnd gates
         for (auto n : m_netlist->get_gnd_gates())
         {
-            std::set<Net*> o_nets = n->get_fan_out_nets();
-            for (auto e : o_nets)
+            for (auto e : n->get_fan_out_nets())
             {
                 if (e->get_name() == "'0'")
                 {
@@ -314,7 +312,7 @@ namespace hal
 
     void HDLWriterVerilog::print_gate_definitions_verilog()
     {
-        std::set<Gate*> gates = m_netlist->get_gates();
+        auto gates = m_netlist->get_gates();
         for (auto&& gate : gates)
         {
             // TODO ugly bad bad bad

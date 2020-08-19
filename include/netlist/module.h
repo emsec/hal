@@ -273,7 +273,7 @@ namespace hal
          * @param[in] recursive - Look into submodules too
          * @return A set of gates.
          */
-        std::set<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
+        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
 
     private:
         Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager);
@@ -289,19 +289,19 @@ namespace hal
 
         Module* m_parent;
         std::map<u32, Module*> m_submodules_map;
-        std::set<Module*> m_submodules_set;
+        std::set<Module*> m_submodules;
 
         /* port names */
         mutable u32 m_next_input_port_id  = 0;
         mutable u32 m_next_output_port_id = 0;
-        mutable std::set<Net*> m_named_input_nets;
-        mutable std::set<Net*> m_named_output_nets;
-        mutable std::map<Net*, std::string> m_input_net_to_port_name;
-        mutable std::map<Net*, std::string> m_output_net_to_port_name;
+        mutable std::unordered_set<Net*> m_named_input_nets;
+        mutable std::unordered_set<Net*> m_named_output_nets;
+        mutable std::map<Net*, std::string> m_input_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
+        mutable std::map<Net*, std::string> m_output_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
 
         /* stores gates sorted by id */
-        std::map<u32, Gate*> m_gates_map;
-        std::set<Gate*> m_gates_set;
+        std::unordered_map<u32, Gate*> m_gates_map;
+        std::vector<Gate*> m_gates;
 
         mutable bool m_input_nets_dirty;
         mutable std::vector<Net*> m_input_nets;

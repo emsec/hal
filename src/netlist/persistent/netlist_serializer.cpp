@@ -35,7 +35,7 @@ namespace hal
         // serializing functions
         namespace
         {
-            const int SERIALIZATION_FORMAT_VERSION = 7;
+            const int SERIALIZATION_FORMAT_VERSION = 8;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
 
@@ -75,12 +75,13 @@ namespace hal
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("gate_id", ep.get_gate()->get_id(), allocator);
                 val.AddMember("pin_type", ep.get_pin(), allocator);
+                val.AddMember("net_id", ep.get_net()->get_id(), allocator);
                 val.AddMember("is_destination", ep.is_destination_pin(), allocator);
                 return val;
             }
             Endpoint deserialize_endpoint(Netlist* nl, const rapidjson::Value& val)
             {
-                return Endpoint(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString(), val["is_destination"].GetBool());
+                return Endpoint(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString(), nl->get_net_by_id(val["net_id"].GetUint()), val["is_destination"].GetBool());
             }
 
             // serialize gate
@@ -287,8 +288,8 @@ namespace hal
             }
             bool deserialize_module(Netlist* nl, const rapidjson::Value& val)
             {
-                auto parent_id             = val["parent"].GetUint();
-                Module* sm = nl->get_top_module();
+                auto parent_id = val["parent"].GetUint();
+                Module* sm     = nl->get_top_module();
                 if (parent_id != 0)
                 {
                     sm = nl->create_module(val["id"].GetUint(), val["name"].GetString(), nl->get_module_by_id(parent_id));

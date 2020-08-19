@@ -2,7 +2,11 @@
 
 namespace hal
 {
-    Endpoint::Endpoint(Gate* gate, const std::string& pin, bool is_a_destination) : m_gate(gate), m_pin(pin), m_is_a_destination(is_a_destination)
+    Endpoint::Endpoint() : m_gate(nullptr), m_pin(""), m_net(nullptr), m_is_a_destination(false)
+    {
+    }
+
+    Endpoint::Endpoint(Gate* gate, const std::string& pin, Net* net, bool is_a_destination) : m_gate(gate), m_pin(pin), m_net(net), m_is_a_destination(is_a_destination)
     {
     }
 
@@ -16,12 +20,16 @@ namespace hal
         {
             return (this->m_pin < rhs.m_pin);
         }
+        if (this->m_net != rhs.m_net)
+        {
+            return (this->m_net < rhs.m_net);
+        }
         return (this->m_is_a_destination < rhs.m_is_a_destination);
     }
 
     bool Endpoint::operator==(const Endpoint& rhs) const
     {
-        return (this->m_gate == rhs.m_gate) && (this->m_pin == rhs.m_pin) && (this->m_is_a_destination == rhs.m_is_a_destination);
+        return (this->m_gate == rhs.m_gate) && (this->m_pin == rhs.m_pin) && (this->m_net == rhs.m_net) && (this->m_is_a_destination == rhs.m_is_a_destination);
     }
 
     bool Endpoint::operator!=(const Endpoint& rhs) const
@@ -39,6 +47,11 @@ namespace hal
         return m_pin;
     }
 
+    Net* Endpoint::get_net() const
+    {
+        return m_net;
+    }
+
     bool Endpoint::is_destination_pin() const
     {
         return m_is_a_destination;
@@ -48,4 +61,4 @@ namespace hal
     {
         return !m_is_a_destination;
     }
-}
+}    // namespace hal

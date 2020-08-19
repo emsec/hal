@@ -190,7 +190,7 @@ namespace hal
         void prepare_clock_events(u64 nanoseconds);
         void process_events(u64 timeout);
 
-        std::map<std::string, BooleanFunction::Value> gather_input_values(SimulationGate* gate);
+        std::unordered_map<std::string, BooleanFunction::Value> gather_input_values(SimulationGate* gate);
         SignalValue process_set_reset_behavior(GateTypeSequential::SetResetBehavior behavior, SignalValue previous_output);
     };
 }    // namespace hal

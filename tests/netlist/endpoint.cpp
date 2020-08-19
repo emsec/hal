@@ -27,9 +27,11 @@ namespace hal {
         TEST_START
             auto nl = test_utils::create_empty_netlist(0);
             Gate* test_gate = nl->create_gate(123, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
-            Endpoint ep(test_gate, "I", true);
+            Net* test_net = nl->create_net("test_net");
+            Endpoint ep(test_gate, "I", test_net,true);
             EXPECT_EQ(ep.get_gate(), test_gate);
             EXPECT_EQ(ep.get_pin(), "I");
+            EXPECT_EQ(ep.get_net(), test_net);
             EXPECT_TRUE(ep.is_destination_pin());
             EXPECT_FALSE(ep.is_source_pin());
         TEST_END
@@ -44,11 +46,13 @@ namespace hal {
         TEST_START
             auto nl = test_utils::create_empty_netlist(0);
             Gate* test_gate = nl->create_gate(123,test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
-            Endpoint ep(test_gate, "I", true);
+            Net* test_net = nl->create_net("test_net");
+            Endpoint ep(test_gate, "I", test_net, true);
 
             Endpoint other_ep = ep;
             EXPECT_EQ(other_ep.get_gate(), test_gate);
             EXPECT_EQ(other_ep.get_pin(), "I");
+            EXPECT_EQ(ep.get_net(), test_net);
             EXPECT_TRUE(other_ep.is_destination_pin());
         TEST_END
     }

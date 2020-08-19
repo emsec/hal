@@ -58,22 +58,22 @@ namespace hal
         m_output_pins.insert(m_output_pins.end(), pin_names.begin(), pin_names.end());
     }
 
-    void GateType::assign_input_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin)
+    void GateType::assign_input_pin_group(const std::string& group_name, const std::unordered_map<u32, std::string>& index_to_pin)
     {
         m_input_pin_groups.emplace(group_name, index_to_pin);
     }
 
-    void GateType::assign_input_pin_groups(const std::map<std::string, std::map<u32, std::string>>& pin_groups)
+    void GateType::assign_input_pin_groups(const std::unordered_map<std::string, std::unordered_map<u32, std::string>>& pin_groups)
     {
         m_input_pin_groups.insert(pin_groups.begin(), pin_groups.end());
     }
 
-    void GateType::assign_output_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin)
+    void GateType::assign_output_pin_group(const std::string& group_name, const std::unordered_map<u32, std::string>& index_to_pin)
     {
         m_output_pin_groups.emplace(group_name, index_to_pin);
     }
 
-    void GateType::assign_output_pin_groups(const std::map<std::string, std::map<u32, std::string>>& pin_groups)
+    void GateType::assign_output_pin_groups(const std::unordered_map<std::string, std::unordered_map<u32, std::string>>& pin_groups)
     {
         m_output_pin_groups.insert(pin_groups.begin(), pin_groups.end());
     }
@@ -83,7 +83,7 @@ namespace hal
         m_functions.emplace(pin_name, bf);
     }
 
-    void GateType::add_boolean_functions(const std::map<std::string, BooleanFunction>& functions)
+    void GateType::add_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& functions)
     {
         m_functions.insert(functions.begin(), functions.end());
     }
@@ -103,7 +103,7 @@ namespace hal
         return m_input_pins;
     }
 
-    std::map<std::string, std::map<u32, std::string>> GateType::get_input_pin_groups() const
+    std::unordered_map<std::string, std::unordered_map<u32, std::string>> GateType::get_input_pin_groups() const
     {
         return m_input_pin_groups;
     }
@@ -113,7 +113,7 @@ namespace hal
         return m_output_pins;
     }
 
-    std::map<std::string, std::map<u32, std::string>> GateType::get_output_pin_groups() const
+    std::unordered_map<std::string, std::unordered_map<u32, std::string>> GateType::get_output_pin_groups() const
     {
         return m_output_pin_groups;
     }

@@ -204,7 +204,7 @@ namespace hal
         return m_top_module->get_gate_by_id(gate_id, true);
     }
 
-    std::set<Gate*> Netlist::get_gates(const std::function<bool(Gate*)>& filter) const
+    std::vector<Gate*> Netlist::get_gates(const std::function<bool(Gate*)>& filter) const
     {
         return m_top_module->get_gates(filter, true);
     }

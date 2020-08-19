@@ -132,7 +132,7 @@ namespace hal
         return result;
     }
 
-    BooleanFunction::Value BooleanFunction::evaluate(const std::map<std::string, Value>& inputs) const
+    BooleanFunction::Value BooleanFunction::evaluate(const std::unordered_map<std::string, Value>& inputs) const
     {
         Value result = X;
         if (m_content == content_type::VARIABLE)
@@ -210,7 +210,7 @@ namespace hal
         return result;
     }
 
-    BooleanFunction::Value BooleanFunction::operator()(const std::map<std::string, BooleanFunction::Value>& inputs) const
+    BooleanFunction::Value BooleanFunction::operator()(const std::unordered_map<std::string, BooleanFunction::Value>& inputs) const
     {
         return evaluate(inputs);
     }
@@ -240,7 +240,7 @@ namespace hal
         return m_content == content_type::TERMS && m_operands.empty();
     }
 
-    std::set<std::string> BooleanFunction::get_variables() const
+    std::vector<std::string> BooleanFunction::get_variables() const
     {
         if (m_content == content_type::VARIABLE)
         {
@@ -248,12 +248,14 @@ namespace hal
         }
         else if (m_content == content_type::TERMS)
         {
-            std::set<std::string> result;
+            std::vector<std::string> result;
             for (const auto& f : m_operands)
             {
                 auto tmp = f.get_variables();
-                result.insert(tmp.begin(), tmp.end());
+                result.insert(result.end(), tmp.begin(), tmp.end());
             }
+            std::sort(result.begin(), result.end());
+            result.erase(std::unique(result.begin(), result.end()), result.end());
             return result;
         }
         return {};
@@ -1099,23 +1101,26 @@ namespace hal
     {
         std::vector<Value> result;
 
-        auto unique_vars = get_variables();
-        if (variables.empty())
         {
-            variables.insert(variables.end(), unique_vars.begin(), unique_vars.end());
-        }
-        else if (remove_unknown_variables)
-        {
-            variables.erase(std::remove_if(variables.begin(), variables.end(), [&unique_vars](auto& s) { return unique_vars.find(s) == unique_vars.end(); }), variables.end());
+            auto unique_vars = get_variables();
+            if (variables.empty())
+            {
+                variables = std::move(unique_vars);
+            }
+            else if (remove_unknown_variables)
+            {
+                variables.erase(std::remove_if(variables.begin(), variables.end(), [&unique_vars](auto& s) { return std::find(unique_vars.begin(), unique_vars.end(), s) == unique_vars.end(); }),
+                                variables.end());
+            }
         }
 
         for (u32 Values = 0; Values < (u32)(1 << variables.size()); ++Values)
         {
-            std::map<std::string, BooleanFunction::Value> inputs;
+            std::unordered_map<std::string, Value> inputs;
             u32 tmp = Values;
             for (const auto& var : variables)
             {
-                inputs[var] = (BooleanFunction::Value)(tmp & 1);
+                inputs[var] = (Value)(tmp & 1);
                 tmp >>= 1;
             }
             result.push_back(evaluate(inputs));

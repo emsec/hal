@@ -386,16 +386,16 @@ namespace hal {
                 Gate* g_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
                 Gate* g_5 = nl->get_gate_by_id(MIN_GATE_ID + 5);
                 EXPECT_EQ(nl->get_gates(test_utils::gate_name_filter("gate_0")),
-                          std::set<Gate*>({g_0}));
+                          std::vector<Gate*>({g_0}));
                 EXPECT_EQ(nl->get_gates(test_utils::gate_name_filter("gate_5")),
-                          std::set<Gate*>({g_5}));
+                          std::vector<Gate*>({g_5}));
             }
             {
                 // Call with an non existing Gate name
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
                 EXPECT_EQ(nl->get_gates(test_utils::gate_name_filter("not_existing_gate")),
-                          std::set<Gate*>());
+                          std::vector<Gate*>());
             }
         TEST_END
     }
@@ -412,22 +412,22 @@ namespace hal {
             {// Get all gates of the example netlist
                 auto nl = test_utils::create_example_netlist();
                 // The expected result
-                std::set<Gate*> ex_gates;
+                std::vector<Gate*> ex_gates;
                 for (int id = 0; id <= 8; id++) {
-                    ex_gates.insert(nl->get_gate_by_id(MIN_GATE_ID + id));
+                    ex_gates.push_back(nl->get_gate_by_id(MIN_GATE_ID + id));
                 }
 
-                EXPECT_EQ(nl->get_gates(), ex_gates);
+                EXPECT_TRUE(test_utils::vectors_have_same_content(nl->get_gates(), ex_gates));
             }
             {
                 // Get all INV gates of the example netlist
                 auto nl = test_utils::create_example_netlist();
                 // The expected result
-                std::set<Gate*>
+                std::vector<Gate*>
                     ex_gates = {nl->get_gate_by_id(MIN_GATE_ID + 3), nl->get_gate_by_id(MIN_GATE_ID + 4)};
 
-                EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates);
-                EXPECT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates);
+                EXPECT_TRUE(test_utils::vectors_have_same_content(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates));
+                EXPECT_TRUE(test_utils::vectors_have_same_content(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")), ex_gates));
             }
         TEST_END
     }

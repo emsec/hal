@@ -26,7 +26,6 @@ namespace hal
 {
     namespace test_utils
     {
-
         /*********************************************************
          *                      Constants                        *
          *********************************************************/
@@ -148,7 +147,9 @@ namespace hal
             std::vector<T> vec_2(vector_2);
 
             if (vec_1.size() != vec_2.size())
+            {
                 return false;
+            }
 
             // Each element of vec_1 must be found in vec_2
             while (vec_1.size() > 0)
@@ -490,9 +491,7 @@ namespace hal
          */
         std::function<bool(const std::string&, const Endpoint&)> adjacent_gate_type_filter(const std::string& type);
 
-    } // namespace test_utils
-} // namespace hal
+    }    // namespace test_utils
+}    // namespace hal
 
 //}
-
-

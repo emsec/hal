@@ -296,9 +296,9 @@ namespace hal {
                 test_module->assign_gate(gate_0);
                 test_module->assign_gate(gate_1);
 
-                std::set<Gate*> expRes = {gate_0, gate_1};
+                std::vector<Gate*> expRes = {gate_0, gate_1};
 
-                EXPECT_EQ(test_module->get_gates(), expRes);
+                EXPECT_TRUE(test_utils::vectors_have_same_content(test_module->get_gates(), expRes));
                 EXPECT_TRUE(test_module->contains_gate(gate_0));
                 EXPECT_TRUE(test_module->contains_gate(gate_1));
                 EXPECT_FALSE(test_module->contains_gate(gate_not_in_m));
@@ -317,7 +317,7 @@ namespace hal {
                 test_module->assign_gate(gate_0);
                 test_module->assign_gate(gate_0);
 
-                std::set<Gate*> expRes = {
+                std::vector<Gate*> expRes = {
                     gate_0,
                 };
 
@@ -341,7 +341,7 @@ namespace hal {
 
                 test_module->assign_gate(gate_0);
 
-                std::set<Gate*> expRes = {
+                std::vector<Gate*> expRes = {
                     gate_0
                 };
 
@@ -646,8 +646,7 @@ namespace hal {
             nl->mark_global_output_net(net_0_g);
 
             // Create the Module
-            Module*
-                test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
+            auto test_module = nl->create_module(MIN_MODULE_ID + 0, "test_module", nl->get_top_module());
             for (auto g : std::set<Gate*>({gate_0, gate_1, gate_2, gate_3})) {
                 test_module->assign_gate(g);
             }
@@ -694,8 +693,7 @@ namespace hal {
             }
             {
                 // Set and get an input port name
-                std::cout << "\n===\n" << m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)) << "\n===\n"
-                          << std::endl;
+                // std::cout << "\n===\n" << m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)) << "\n===\n" << std::endl;
                 m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
                 EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3");
             }
@@ -769,6 +767,7 @@ namespace hal {
             }
             {
                 // Pass a nullptr
+                NO_COUT_TEST_BLOCK;
                 m_0->set_input_port_name(nullptr, "port_name");
                 m_0->set_output_port_name(nullptr, "port_name");
                 EXPECT_EQ(m_0->get_input_port_name(nullptr), "");

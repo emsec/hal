@@ -27,9 +27,9 @@
 
 #include <algorithm>
 #include <cassert>
-#include <map>
+#include <unordered_map>
+#include <unordered_set>
 #include <ostream>
-#include <set>
 #include <vector>
 
 namespace hal
@@ -117,7 +117,7 @@ namespace hal
          * @param[in] inputs - A map from variable names to values.
          * @returns The value that the function evaluates to.
          */
-        Value evaluate(const std::map<std::string, Value>& inputs = {}) const;
+        Value evaluate(const std::unordered_map<std::string, Value>& inputs = {}) const;
 
         /**
          * Evaluates the function on the given inputs and returns the result.
@@ -125,7 +125,7 @@ namespace hal
          * @param[in] inputs - A map from variable names to values.
          * @returns The value that the function evaluates to.
          */
-        Value operator()(const std::map<std::string, Value>& inputs = {}) const;
+        Value operator()(const std::unordered_map<std::string, Value>& inputs = {}) const;
 
         /**
          * Checks whether the function constantly outputs ONE.
@@ -153,7 +153,7 @@ namespace hal
          *
          * @returns A set of all variable names.
          */
-        std::set<std::string> get_variables() const;
+        std::vector<std::string> get_variables() const;
 
         /**
          * Parse a function from a string representation.

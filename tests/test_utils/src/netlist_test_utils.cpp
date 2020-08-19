@@ -46,18 +46,21 @@ namespace hal
     {
         Gate* g = nl->get_gate_by_id(gate_id);
         if (g != nullptr)
-            return Endpoint(g, pin_type, is_destination);
+        {
+            Net* net = is_destination ? g->get_fan_in_net(pin_type) : g->get_fan_out_net(pin_type);
+            return Endpoint(g, pin_type, net, is_destination);
+        }
         else
-            return Endpoint(nullptr, "", is_destination);
+            return Endpoint();
     }
 
     Endpoint test_utils::get_endpoint(Gate* g, const std::string& pin_type)
     {
         if (g == nullptr || pin_type == "")
         {
-            return Endpoint(nullptr, "", false);
+            return Endpoint();
         }
-        auto nl         = g->get_netlist();
+        auto nl             = g->get_netlist();
         int gate_id         = g->get_id();
         auto in_pins        = g->get_type()->get_input_pins();
         bool is_destination = (std::find(in_pins.begin(), in_pins.end(), pin_type) != in_pins.end());
@@ -156,8 +159,8 @@ namespace hal
     {
         if (nl == nullptr)
             return nullptr;
-        std::set<Gate*> gates = nl->get_gates();
-        Gate* res             = nullptr;
+        auto gates = nl->get_gates();
+        Gate* res  = nullptr;
         for (auto g : gates)
         {
             std::string g_name = g->get_name();
@@ -318,8 +321,8 @@ namespace hal
     std::unique_ptr<Netlist> test_utils::create_example_netlist(const int id)
     {
         NO_COUT_BLOCK;
-        GateLibrary* gl             = get_testing_gate_library();
-        auto nl = create_empty_netlist(id);
+        GateLibrary* gl = get_testing_gate_library();
+        auto nl         = create_empty_netlist(id);
         if (id >= 0)
         {
             nl->set_id(id);
@@ -365,7 +368,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl     = create_empty_netlist(id);
+        auto nl         = create_empty_netlist(id);
 
         // Create the gates
         Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_4_to_1"), "gate_0");
@@ -393,7 +396,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl     = create_empty_netlist(id);
+        auto nl         = create_empty_netlist(id);
 
         // Create the Gate
         Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_1_to_1"), "gate_0");
@@ -413,7 +416,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl     = create_empty_netlist(id);
+        auto nl         = create_empty_netlist(id);
 
         // Create the gates
         Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_2_to_1"), "gate_0");
@@ -476,7 +479,7 @@ namespace hal
                 return dst;
             }
         }
-        return {nullptr, "", true};
+        return Endpoint();
     }
 
     bool test_utils::nets_are_equal(Net* n0, Net* n1, const bool ignore_id, const bool ignore_name)
@@ -543,26 +546,46 @@ namespace hal
         if (m_0 == nullptr || m_1 == nullptr)
         {
             if (m_0 == m_1)
+            {
                 return true;
+            }
             else
+            {
+                std::cout << "one module is null while the other isnt" << std::endl;
                 return false;
+            }
         }
         // The ids should be equal
         if (!ignore_id && m_0->get_id() != m_1->get_id())
+        {
+            std::cout << "ids unequal" << std::endl;
             return false;
+        }
         // The names should be equal
         if (!ignore_name && m_0->get_name() != m_1->get_name())
+        {
+            std::cout << "names unequal" << std::endl;
             return false;
+        }
         // The types should be the same
         if (m_0->get_type() != m_1->get_type())
+        {
+            std::cout << "type unequal" << std::endl;
             return false;
+        }
         // The stored data should be equal
         if (m_0->get_data() != m_1->get_data())
+        {
+            std::cout << "data unequal" << std::endl;
             return false;
+        }
 
         // Check if gates and nets are the same
         if (m_0->get_gates().size() != m_1->get_gates().size())
+        {
+            std::cout << "number of gates unequal" << std::endl;
             return false;
+        }
         for (auto g_0 : m_0->get_gates())
         {
             Gate* g_1 = m_1->get_netlist()->get_gate_by_id(g_0->get_id());
@@ -575,7 +598,10 @@ namespace hal
         // Check that the port names are the same
         // -- input ports
         if (m_0->get_input_port_names().size() != m_0->get_input_port_names().size())
+        {
+            std::cout << "number of input port names unequal" << std::endl;
             return false;
+        }
         auto m_1_input_port_names = m_1->get_input_port_names();
         for (auto const& [n_0, p_name_0] : m_0->get_input_port_names())
         {
@@ -590,7 +616,10 @@ namespace hal
         }
         // -- output ports
         if (m_0->get_output_port_names().size() != m_0->get_output_port_names().size())
+        {
+            std::cout << "number of output port names unequal" << std::endl;
             return false;
+        }
         auto m_1_output_port_names = m_1->get_output_port_names();
         for (auto const& [n_0, p_name_0] : m_0->get_output_port_names())
         {
@@ -609,10 +638,16 @@ namespace hal
         if (m_0->get_parent_module() == nullptr || m_1->get_parent_module() == nullptr)
         {
             if (m_0->get_parent_module() != m_1->get_parent_module())
+            {
+                std::cout << "parent unequal" << std::endl;
                 return false;
+            }
         }
         if (m_0->get_submodules(nullptr, true).size() != m_1->get_submodules(nullptr, true).size())
+        {
+            std::cout << "number of submodules unequal" << std::endl;
             return false;
+        }
         for (auto sm_0 : m_0->get_submodules(nullptr, true))
         {
             if (sm_0 == nullptr)
