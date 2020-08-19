@@ -6,9 +6,9 @@ namespace hal
 {
     enum SignalValue
     {
-        ZERO = BooleanFunction::value::ZERO,
-        ONE  = BooleanFunction::value::ONE,
-        X    = BooleanFunction::value::X,
+        ZERO = BooleanFunction::ZERO,
+        ONE  = BooleanFunction::ONE,
+        X    = BooleanFunction::X,
         Z    = 42
     };
 }

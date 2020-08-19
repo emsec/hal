@@ -104,7 +104,7 @@ namespace hal
          * @param tt - the truth table to minimize
          * @returns the minimized truth table
          */
-        std::vector<BooleanFunction::value> minimize_truth_table(const std::vector<BooleanFunction::value> tt);
+        std::vector<BooleanFunction::Value> minimize_truth_table(const std::vector<BooleanFunction::Value> tt);
 
         /**
          * Get a Gate type by its name

@@ -41,13 +41,13 @@ namespace hal {
         }
 
         // UNUSED
-        std::vector<BooleanFunction::value> get_truth_table_from_i(const int i, unsigned bit, bool flipped = false) {
-            std::vector<BooleanFunction::value> res;
+        std::vector<BooleanFunction::Value> get_truth_table_from_i(const int i, unsigned bit, bool flipped = false) {
+            std::vector<BooleanFunction::Value> res;
             for (int b = bit - 1; b >= 0; b--) {
                 if (((1 << b) & i) > 0) {
-                    res.push_back(BooleanFunction::value::ONE);
+                    res.push_back(BooleanFunction::ONE);
                 } else {
-                    res.push_back(BooleanFunction::value::ZERO);
+                    res.push_back(BooleanFunction::ZERO);
                 }
             }
             if (flipped) {
@@ -58,30 +58,30 @@ namespace hal {
 
         // Turns a hex string into a BooleanFunction truth table (e.g: "A9" -> {1,0,1,0,1,0,0,1})
         // If the string is to small/big, the BEGINNING of the table is filled with zero/erased before the flip.
-        std::vector<BooleanFunction::value> get_truth_table_from_hex_string(std::string str,
+        std::vector<BooleanFunction::Value> get_truth_table_from_hex_string(std::string str,
                                                                             unsigned bit,
                                                                             bool flipped = false) {
             std::string char_val = "0123456789ABCDEF";
-            std::vector<BooleanFunction::value> res;
+            std::vector<BooleanFunction::Value> res;
             std::transform(str.begin(), str.end(), str.begin(), ::toupper);
             for (char c : str) {
                 if (std::size_t val = char_val.find(c); val != std::string::npos) {
                     for (int b = 3; b >= 0; b--) {
                         if (((1 << b) & val) > 0) {
-                            res.push_back(BooleanFunction::value::ONE);
+                            res.push_back(BooleanFunction::ONE);
                         } else {
-                            res.push_back(BooleanFunction::value::ZERO);
+                            res.push_back(BooleanFunction::ZERO);
                         }
                     }
                 } else { // input has non-hex characters
-                    return std::vector<BooleanFunction::value>();
+                    return std::vector<BooleanFunction::Value>();
                 }
             }
             int size_diff = res.size() - bit;
             if (size_diff > 0) {
                 res.erase(res.begin(), res.begin() + size_diff);
             } else if (size_diff < 0) {
-                res.insert(res.begin(), -size_diff, BooleanFunction::value::ZERO);
+                res.insert(res.begin(), -size_diff, BooleanFunction::ZERO);
             }
             assert(res.size() == bit);
             if (flipped) {
@@ -91,7 +91,7 @@ namespace hal {
         }
 
         // Get the minimized version of a truth truth table by its hex value, such that unnecessary variables are eliminated
-        std::vector<BooleanFunction::value> get_min_truth_table_from_hex_string(std::string str,
+        std::vector<BooleanFunction::Value> get_min_truth_table_from_hex_string(std::string str,
                                                                                 unsigned bit,
                                                                                 bool flipped = false) {
             return test_utils::minimize_truth_table(get_truth_table_from_hex_string(str, bit, flipped));
@@ -946,7 +946,7 @@ namespace hal {
                                    "bit_vector",
                                    "NOHx");
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins),
-                          std::vector<BooleanFunction::value>(8, BooleanFunction::value::X));
+                          std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
 
             }
             {
@@ -966,7 +966,7 @@ namespace hal {
                                    "bit_vector",
                                    long_hex);
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins),
-                          std::vector<BooleanFunction::value>((1 << input_pins.size()), BooleanFunction::value::X));
+                          std::vector<BooleanFunction::Value>((1 << input_pins.size()), BooleanFunction::X));
             }
         TEST_END
     }

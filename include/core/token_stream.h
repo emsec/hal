@@ -279,6 +279,7 @@ namespace hal
             }
             auto end_pos = std::min(size(), found);
             TokenStream res(m_increase_level_tokens, m_decrease_level_tokens);
+            res.m_data.reserve(res.m_data.size() + (end_pos - m_pos));
             res.m_data.insert(res.m_data.begin(), m_data.begin() + m_pos, m_data.begin() + end_pos);
             m_pos = end_pos;
             return res;

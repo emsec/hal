@@ -17,7 +17,6 @@ static T toggle(T v)
 
 namespace hal
 {
-
 #define seconds_since(X) ((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - (X)).count() / 1000)
 
 #define measure_block_time(X) measure_block_time_t _UNIQUE_NAME_(X);
@@ -41,7 +40,7 @@ namespace hal
         std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
     };
 
-// #define measure_block_time(X)
+    // #define measure_block_time(X)
 
     NetlistSimulator::NetlistSimulator()
     {
@@ -606,12 +605,12 @@ namespace hal
                 auto async_reset = ff->clear_func.evaluate(input_values);
 
                 // check whether an asynchronous set or reset ist triggered
-                if (async_set == BooleanFunction::value::ONE || async_reset == BooleanFunction::value::ONE)
+                if (async_set == BooleanFunction::ONE || async_reset == BooleanFunction::ONE)
                 {
                     SignalValue result     = SignalValue::X;
                     SignalValue inv_result = SignalValue::X;
 
-                    if (async_set == BooleanFunction::value::ONE && async_reset == BooleanFunction::value::ONE)
+                    if (async_set == BooleanFunction::ONE && async_reset == BooleanFunction::ONE)
                     {
                         // both signals set? -> evaluate special behavior
                         SignalValue old_output = SignalValue::X;
@@ -696,9 +695,9 @@ namespace hal
         }
     }
 
-    std::map<std::string, BooleanFunction::value> NetlistSimulator::gather_input_values(SimulationGate* gate)
+    std::map<std::string, BooleanFunction::Value> NetlistSimulator::gather_input_values(SimulationGate* gate)
     {
-        std::map<std::string, BooleanFunction::value> input_values;
+        std::map<std::string, BooleanFunction::Value> input_values;
         for (u32 i = 0; i < gate->input_pins.size(); ++i)
         {
             auto pin          = gate->input_pins[i];
@@ -708,7 +707,7 @@ namespace hal
             {
                 value = it->second.back().new_value;
             }
-            input_values.emplace(pin, static_cast<BooleanFunction::value>(value));
+            input_values.emplace(pin, static_cast<BooleanFunction::Value>(value));
         }
         return input_values;
     }

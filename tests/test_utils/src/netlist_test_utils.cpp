@@ -69,19 +69,19 @@ namespace hal
         return ((ep.get_gate() == nullptr) && (ep.get_pin() == ""));
     }
 
-    std::vector<BooleanFunction::value> test_utils::minimize_truth_table(const std::vector<BooleanFunction::value> tt)
+    std::vector<BooleanFunction::Value> test_utils::minimize_truth_table(const std::vector<BooleanFunction::Value> tt)
     {
         int var_amt = round(log2(tt.size()));
         if ((1 << var_amt) != tt.size())
         {
             std::cerr << "[Test] minimize_truth_table: Tablesize must be a power of two!" << std::endl;
-            return std::vector<BooleanFunction::value>();
+            return std::vector<BooleanFunction::Value>();
         }
         for (int v = 0; v < var_amt; v++)
         {
             int interval = 2 << v;
-            std::vector<BooleanFunction::value> v_eq_0;
-            std::vector<BooleanFunction::value> v_eq_1;
+            std::vector<BooleanFunction::Value> v_eq_0;
+            std::vector<BooleanFunction::Value> v_eq_1;
             for (int i = 0; i < tt.size(); i++)
             {
                 if (i % interval < (interval >> 1))

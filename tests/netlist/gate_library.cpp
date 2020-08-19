@@ -359,12 +359,12 @@ namespace hal {
             std::unique_ptr<GateType> gt_gnd_owner(new GateType("gt_gnd"));
             auto gt_gnd = gt_gnd_owner.get();
             gt_gnd->add_output_pins(std::vector<std::string>({"O"}));
-            gt_gnd->add_boolean_function("O", BooleanFunction(BooleanFunction::value::ZERO));
+            gt_gnd->add_boolean_function("O", BooleanFunction(BooleanFunction::ZERO));
             // -- a VCC Gate
             std::unique_ptr<GateType> gt_vcc_owner(new GateType("gt_vcc"));
             auto gt_vcc = gt_vcc_owner.get();
             gt_vcc->add_output_pins(std::vector<std::string>({"O"}));
-            gt_vcc->add_boolean_function("O", BooleanFunction(BooleanFunction::value::ONE));
+            gt_vcc->add_boolean_function("O", BooleanFunction(BooleanFunction::ONE));
 
             {
                 GateLibrary* gl(new GateLibrary("imaginary_path", "gl_name"));
