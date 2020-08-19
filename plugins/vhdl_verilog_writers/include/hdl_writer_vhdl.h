@@ -28,6 +28,8 @@
 
 #include <functional>
 #include <map>
+#include <unordered_set>
+#include <vector>
 
 namespace hal
 {
@@ -83,24 +85,7 @@ namespace hal
 
         std::map<std::string, Net*> m_printable_signal_names_str_to_net;
 
-        std::map<Net*, std::string> m_only_wire_names;
-
-        std::map<std::string, Net*> m_only_wire_names_str_to_net;
-
-        std::map<Net*, std::string> m_in_names;
-
-        std::map<std::string, Net*> m_in_names_str_to_net;
-
-        std::map<Net*, std::string> m_out_names;
-
-        std::map<std::string, Net*> m_out_names_str_to_net;
-
-        std::map<Net*, std::string> m_gnd_names;
-
-        std::map<std::string, Net*> m_gnd_names_str_to_net;
-
-        std::map<Net*, std::string> m_vcc_names;
-
-        std::map<std::string, Net*> m_vcc_names_str_to_net;
+        std::vector<std::string> m_input_net_names;
+        std::vector<std::string> m_output_net_names;
     };
 }    // namespace hal

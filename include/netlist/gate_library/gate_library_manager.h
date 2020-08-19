@@ -77,11 +77,21 @@ namespace hal
 
         /**
          * Get a gate library object by file name.
+         * If no library with the given name is already loaded this function will attempt to load the file.
          *
          * @param[in] file_name - file name of the gate library.
          * @returns Pointer to the gate library object or nullptr on error.
          */
         NETLIST_API GateLibrary* get_gate_library(const std::string& file_name);
+
+        /**
+         * Get a gate library object by library name.
+         * If no library with the given name is loaded this function returns nullptr.
+         *
+         * @param[in] lib_name - name of the gate library.
+         * @returns Pointer to the gate library object or nullptr on error.
+         */
+        NETLIST_API GateLibrary* get_gate_library_by_name(const std::string& lib_name);
 
         /**
          * Get all loaded gate libraries.

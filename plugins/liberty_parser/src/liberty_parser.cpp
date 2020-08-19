@@ -450,6 +450,12 @@ namespace hal
                 pin.z_function = pin_str.consume().string;
                 pin_str.consume(";", true);
             }
+            else if (next_token == "clock")
+            {
+                pin_str.consume(":", true);
+                pin.clock = pin_str.consume("true");
+                pin_str.consume(";", true);
+            }
         }
 
         return pin;
@@ -808,10 +814,16 @@ namespace hal
         if (cell.type == GateType::BaseType::combinatorial)
         {
             gt = std::make_unique<GateType>(cell.name);
+
+            gt->add_input_pins(input_pins);
+            gt->add_output_pins(output_pins);
         }
         else if (cell.type == GateType::BaseType::ff)
         {
             auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
+
+            seq_gt->add_input_pins(input_pins);
+            seq_gt->add_output_pins(output_pins);
 
             if (!cell.ff.clocked_on.empty())
             {
@@ -857,6 +869,14 @@ namespace hal
 
                     pin.function = "";
                 }
+
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_clock_pin(pin_name);
+                    }
+                }
             }
 
             for (auto& bus : cell.buses)
@@ -881,6 +901,14 @@ namespace hal
 
                         pin.function = "";
                     }
+
+                    if (pin.clock == true)
+                    {
+                        for (const auto& pin_name : pin.pin_names)
+                        {
+                            seq_gt->add_clock_pin(pin_name);
+                        }
+                    }
                 }
             }
 
@@ -889,6 +917,9 @@ namespace hal
         else if (cell.type == GateType::BaseType::latch)
         {
             auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
+
+            seq_gt->add_input_pins(input_pins);
+            seq_gt->add_output_pins(output_pins);
 
             if (!cell.latch.enable.empty())
             {
@@ -932,6 +963,14 @@ namespace hal
 
                     pin.function = "";
                 }
+
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_clock_pin(pin_name);
+                    }
+                }
             }
 
             for (auto& bus : cell.buses)
@@ -956,6 +995,14 @@ namespace hal
 
                         pin.function = "";
                     }
+
+                    if (pin.clock == true)
+                    {
+                        for (const auto& pin_name : pin.pin_names)
+                        {
+                            seq_gt->add_clock_pin(pin_name);
+                        }
+                    }
                 }
             }
 
@@ -964,6 +1011,9 @@ namespace hal
         else if (cell.type == GateType::BaseType::lut)
         {
             auto lut_gt = std::make_unique<GateTypeLut>(cell.name);
+
+            lut_gt->add_input_pins(input_pins);
+            lut_gt->add_output_pins(output_pins);
 
             lut_gt->set_config_data_category(cell.lut.data_category);
             lut_gt->set_config_data_identifier(cell.lut.data_identifier);
@@ -1001,8 +1051,6 @@ namespace hal
             gt = std::move(lut_gt);
         }
 
-        gt->add_input_pins(input_pins);
-        gt->add_output_pins(output_pins);
         gt->assign_input_pin_groups(input_pin_groups);
         gt->assign_output_pin_groups(output_pin_groups);
 
