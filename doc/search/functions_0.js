@@ -18,7 +18,7 @@ var searchData=
   ['add_5foutput_5ffrom_5finit_5fstring_5fpin_770',['add_output_from_init_string_pin',['../d1/d08/classhal_1_1GateTypeLut.html#a2f57c3724a2b78730b42983910e68fa8',1,'hal::GateTypeLut']]],
   ['add_5foutput_5fpin_771',['add_output_pin',['../d1/d05/classhal_1_1GateType.html#af3d7398d9b061bbb7daca0a51d3b0bfe',1,'hal::GateType']]],
   ['add_5foutput_5fpins_772',['add_output_pins',['../d1/d05/classhal_1_1GateType.html#a59461312db7dce2ab9d80b5ba818c73a',1,'hal::GateType']]],
-  ['add_5fsource_773',['add_source',['../de/db0/classhal_1_1Net.html#a34e1c246c78960441677bfa068043b49',1,'hal::Net::add_source(Gate *gate, const std::string &amp;pin)'],['../de/db0/classhal_1_1Net.html#a9240fd148d7e53e833124280d076cc35',1,'hal::Net::add_source(const Endpoint &amp;ep)']]],
+  ['add_5fsource_773',['add_source',['../de/db0/classhal_1_1Net.html#a34e1c246c78960441677bfa068043b49',1,'hal::Net']]],
   ['add_5fstate_5foutput_5fpin_774',['add_state_output_pin',['../dd/dd1/classhal_1_1GateTypeSequential.html#ad2f039a8b13580850604056f4890011d',1,'hal::GateTypeSequential']]],
   ['assign_5fgate_775',['assign_gate',['../d1/d10/classhal_1_1Module.html#a7446c45dc94cefbf49a51261e0299e1d',1,'hal::Module']]],
   ['assign_5finput_5fpin_5fgroup_776',['assign_input_pin_group',['../d1/d05/classhal_1_1GateType.html#aacd3e100a430b917431da5f48646b489',1,'hal::GateType']]],

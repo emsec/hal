@@ -13,7 +13,7 @@ var searchData=
   ['remove_5fdestination_1066',['remove_destination',['../de/db0/classhal_1_1Net.html#a99773ecb7916dc45d7519e8c1463442e',1,'hal::Net::remove_destination(Gate *gate, const std::string &amp;pin)'],['../de/db0/classhal_1_1Net.html#a55751d00f20a245c89663edc27c9e4d0',1,'hal::Net::remove_destination(const Endpoint &amp;ep)']]],
   ['remove_5fgate_1067',['remove_gate',['../d1/d10/classhal_1_1Module.html#a220173f927815a8acc900856bfe6735b',1,'hal::Module']]],
   ['remove_5fmodel_5fchanged_5fcallback_1068',['remove_model_changed_callback',['../da/d5a/namespacehal_1_1plugin__manager.html#ad66fea3d4017a3c7b058436924d3dda3',1,'hal::plugin_manager']]],
-  ['remove_5fsource_1069',['remove_source',['../de/db0/classhal_1_1Net.html#a1a1392ffea2809f992febeb11557af6a',1,'hal::Net::remove_source(Gate *gate, const std::string &amp;pin)'],['../de/db0/classhal_1_1Net.html#acd1ea512963a959c5c979e49afa3c5eb',1,'hal::Net::remove_source(const Endpoint &amp;ep)']]],
+  ['remove_5fsource_1069',['remove_source',['../de/db0/classhal_1_1Net.html#a1a1392ffea2809f992febeb11557af6a',1,'hal::Net']]],
   ['replace_1070',['replace',['../d6/d5e/namespacehal_1_1core__utils.html#aeb70d6eb2a84d18c9f89e71ad1e3b87d',1,'hal::core_utils']]],
   ['rtrim_1071',['rtrim',['../d6/d5e/namespacehal_1_1core__utils.html#acf0b2fd7a3b958a19b8ee5aa871943ef',1,'hal::core_utils']]]
 ];
