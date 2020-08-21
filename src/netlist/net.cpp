@@ -53,32 +53,12 @@ namespace hal
 
     bool Net::add_source(Gate* gate, const std::string& pin)
     {
-        return add_source(Endpoint(gate, pin, this, false));
-    }
-
-    bool Net::add_source(const Endpoint& ep)
-    {
-        if (!ep.is_source_pin())
-        {
-            log_error("netlist", "net::add_source: tried to use a destination-endpoint as a source-endpoint");
-            return false;
-        }
-        return m_internal_manager->net_add_source(this, ep);
+        return m_internal_manager->net_add_source(this, Endpoint(gate, pin, this, false));
     }
 
     bool Net::remove_source(Gate* gate, const std::string& pin)
     {
-        return remove_source(Endpoint(gate, pin, this, false));
-    }
-
-    bool Net::remove_source(const Endpoint& ep)
-    {
-        if (!ep.is_source_pin())
-        {
-            log_error("netlist", "net::remove_source: tried to use a destination-endpoint as a source-endpoint");
-            return false;
-        }
-        return m_internal_manager->net_remove_source(this, ep);
+        return m_internal_manager->net_remove_source(this, Endpoint(gate, pin, this, false));
     }
 
     bool Net::is_a_source(Gate* gate, const std::string& pin) const
