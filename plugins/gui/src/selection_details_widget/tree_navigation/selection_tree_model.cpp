@@ -145,17 +145,17 @@ namespace hal
 
         if (hasEntries)
         {
-            for(u32 id : g_selection_relay.m_selected_modules)
+            for(u32 id : g_selection_relay->m_selected_modules)
             {
                 SelectionTreeItemModule* stim = new SelectionTreeItemModule(id);
                 moduleRecursion(stim);
                 nextRootItem->addChild(stim);
             }
 
-            for(u32 id : g_selection_relay.m_selected_gates)
+            for(u32 id : g_selection_relay->m_selected_gates)
                 nextRootItem->addChild(new SelectionTreeItemGate(id));
 
-            for(u32 id : g_selection_relay.m_selected_nets)
+            for(u32 id : g_selection_relay->m_selected_nets)
                 nextRootItem->addChild(new SelectionTreeItemNet(id));
         }
 

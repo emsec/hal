@@ -125,13 +125,13 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         for (int i = 0; i < m_output_pins.size(); ++i)
             painter->drawText(m_output_pin_positions.at(i), m_output_pins.at(i));
 
-        if (g_selection_relay.m_focus_type == SelectionRelay::item_type::gate)
-            if (g_selection_relay.m_focus_id == m_id)
+        if (g_selection_relay->m_focus_type == SelectionRelay::item_type::gate)
+            if (g_selection_relay->m_focus_id == m_id)
             {
                 s_pen.setColor(selectionColor());  // TODO : check color
                 painter->setPen(s_pen);
 
-                switch (g_selection_relay.m_subfocus)
+                switch (g_selection_relay->m_subfocus)
                 {
                 case SelectionRelay::subfocus::none:
                 {
@@ -156,14 +156,14 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                 }
                 case SelectionRelay::subfocus::left:
                 {
-                    const int index = static_cast<int>(g_selection_relay.m_subfocus_index);
+                    const int index = static_cast<int>(g_selection_relay->m_subfocus_index);
                     const qreal y = s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_ascent + baseline + index * (s_pin_font_height + s_pin_inner_vertical_spacing);
                     painter->drawText(QPointF(s_pin_outer_horizontal_spacing, y), m_input_pins.at(index));
                     break;
                 }
                 case SelectionRelay::subfocus::right:
                 {
-                    const int index = static_cast<int>(g_selection_relay.m_subfocus_index);
+                    const int index = static_cast<int>(g_selection_relay->m_subfocus_index);
                     painter->drawText(m_output_pin_positions.at(index), m_output_pins.at(index));
                     break;
                 }

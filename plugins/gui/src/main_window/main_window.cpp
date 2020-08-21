@@ -184,10 +184,10 @@ namespace hal
         //    m_right_tool_bar->addSeparator();
         m_right_tool_bar->addAction(m_action_settings);
 
-        g_keybind_manager.bind(m_action_new, "keybinds/project_create_file");
-        g_keybind_manager.bind(m_action_open, "keybinds/project_open_file");
-        g_keybind_manager.bind(m_action_save, "keybinds/project_save_file");
-        g_keybind_manager.bind(m_action_run_schedule, "keybinds/schedule_run");
+        g_keybind_manager->bind(m_action_new, "keybinds/project_create_file");
+        g_keybind_manager->bind(m_action_open, "keybinds/project_open_file");
+        g_keybind_manager->bind(m_action_save, "keybinds/project_save_file");
+        g_keybind_manager->bind(m_action_run_schedule, "keybinds/schedule_run");
 
         setWindowTitle("HAL");
         m_action_new->setText("New Netlist");
@@ -559,7 +559,7 @@ namespace hal
             path.replace_extension(".hal");
             netlist_serializer::serialize_to_file(g_netlist, path);
 
-            g_file_status_manager.flush_unsaved_changes();
+            g_file_status_manager->flush_unsaved_changes();
             FileManager::get_instance()->watch_file(QString::fromStdString(path.string()));
 
             Q_EMIT save_triggered();
@@ -578,7 +578,7 @@ namespace hal
     void MainWindow::closeEvent(QCloseEvent* event)
     {
         //check for unsaved changes and show confirmation dialog
-        if (g_file_status_manager.modified_files_existing())
+        if (g_file_status_manager->modified_files_existing())
         {
             QMessageBox msgBox;
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");
@@ -589,7 +589,7 @@ namespace hal
 
             msgBox.setText("There are unsaved modifications.");
             QString detailed_text = "The following modifications have not been saved yet:\n";
-            for (const auto& s : g_file_status_manager.get_unsaved_change_descriptors())
+            for (const auto& s : g_file_status_manager->get_unsaved_change_descriptors())
                 detailed_text.append("   ->  " + s + "\n");
             msgBox.setDetailedText(detailed_text);
 
@@ -623,10 +623,10 @@ namespace hal
 
     void MainWindow::restore_state()
     {
-        QPoint pos = g_settings_manager.get("MainWindow/position", QPoint(0, 0)).toPoint();
+        QPoint pos = g_settings_manager->get("MainWindow/position", QPoint(0, 0)).toPoint();
         move(pos);
         QRect rect = QApplication::desktop()->screenGeometry();
-        QSize size = g_settings_manager.get("MainWindow/size", QSize(rect.width(), rect.height())).toSize();
+        QSize size = g_settings_manager->get("MainWindow/size", QSize(rect.width(), rect.height())).toSize();
         resize(size);
         //restore state of all subwindows
         m_layout_area->init_splitter_size(size);
@@ -634,10 +634,10 @@ namespace hal
 
     void MainWindow::save_state()
     {
-        g_settings_manager.update("MainWindow/position", pos());
-        g_settings_manager.update("MainWindow/size", size());
+        g_settings_manager->update("MainWindow/position", pos());
+        g_settings_manager->update("MainWindow/size", size());
         //save state of all subwindows and everything else that might need to be restored on the next program start
-        g_settings_manager.sync();
+        g_settings_manager->sync();
     }
 
     void MainWindow::add_content(ContentWidget* widget, int index, content_anchor anchor)

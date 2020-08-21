@@ -86,7 +86,7 @@ namespace hal
 
         connect(m_selectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
 
-        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
+        connect(g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
         m_selectionTreeView->hide();
         set_name("Selection Details");
     }
@@ -101,7 +101,7 @@ namespace hal
             return;
         }
 
-        m_numberSelectedItems = g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() + g_selection_relay.m_selected_nets.size();
+        m_numberSelectedItems = g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() + g_selection_relay->m_selected_nets.size();
         QVector<const SelectionTreeItem*> defaultHighlight;
         const SelectionTreeModel* treeModel;
 
@@ -126,19 +126,19 @@ namespace hal
             break;
         }
 
-        if (!g_selection_relay.m_selected_modules.isEmpty())
+        if (!g_selection_relay->m_selected_modules.isEmpty())
         {
-            SelectionTreeItemModule sti(*g_selection_relay.m_selected_modules.begin());
+            SelectionTreeItemModule sti(*g_selection_relay->m_selected_modules.begin());
             singleSelectionInternal(&sti);
         }
-        else if (!g_selection_relay.m_selected_gates.isEmpty())
+        else if (!g_selection_relay->m_selected_gates.isEmpty())
         {
-            SelectionTreeItemGate sti(*g_selection_relay.m_selected_gates.begin());
+            SelectionTreeItemGate sti(*g_selection_relay->m_selected_gates.begin());
             singleSelectionInternal(&sti);
         }
-        else if (!g_selection_relay.m_selected_nets.isEmpty())
+        else if (!g_selection_relay->m_selected_nets.isEmpty())
         {
-            SelectionTreeItemNet sti(*g_selection_relay.m_selected_nets.begin());
+            SelectionTreeItemNet sti(*g_selection_relay->m_selected_nets.begin());
             singleSelectionInternal(&sti);
         }
         Q_EMIT triggerHighlight(defaultHighlight);

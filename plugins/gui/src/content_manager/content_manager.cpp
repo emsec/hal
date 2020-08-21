@@ -90,7 +90,7 @@ namespace hal
         //executes same code as found in 'create_context_clicked' from the context manager widget but allows to keep its method private
         QTimer::singleShot(50, [this]() {
             GraphContext* new_context = nullptr;
-            new_context = g_graph_context_manager.create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
+            new_context = g_graph_context_manager->create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
             new_context->add({g_netlist->get_top_module()->get_id()}, {});
 
             m_context_manager_wid->select_view_context(new_context);
@@ -98,7 +98,7 @@ namespace hal
 
         //why does this segfault without a timer?
         //GraphContext* new_context = nullptr;
-        //new_context = g_graph_context_manager.create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
+        //new_context = g_graph_context_manager->create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
         //new_context->add({g_netlist->get_top_module()->get_id()}, {});
         //m_context_manager_wid->select_view_context(new_context);
 

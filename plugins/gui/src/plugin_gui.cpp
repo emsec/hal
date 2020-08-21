@@ -44,33 +44,21 @@ namespace hal
     QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
     QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
 
-    SettingsManager g_settings_manager;
-    // this relay MUST be initialized before everything else since other components
-    // need to connect() to it when initializing
-    SettingsRelay g_settings_relay;
-
-    KeybindManager g_keybind_manager;
-
-    WindowManager* g_window_manager;
-    NotificationManager* g_notification_manager;
-
-    ContentManager* g_content_manager = nullptr;
-
-    std::unique_ptr<Netlist> g_netlist_owner;
-    Netlist* g_netlist = nullptr;
-
-    NetlistRelay g_netlist_relay;
-    PluginRelay g_plugin_relay;
-    SelectionRelay g_selection_relay;
-
-    FileStatusManager g_file_status_manager;
-
-    ThreadPool* g_thread_pool;
-
-    GraphContextManager g_graph_context_manager;
-
-    GuiApi* g_gui_api;
-
+    SettingsManager* g_settings_manager             = nullptr;    // this relay MUST be initialized before everything else since other components need to connect() to it when initializing
+    SettingsRelay* g_settings_relay                 = nullptr;
+    KeybindManager* g_keybind_manager               = nullptr;
+    WindowManager* g_window_manager                 = nullptr;
+    NotificationManager* g_notification_manager     = nullptr;
+    ContentManager* g_content_manager               = nullptr;
+    std::unique_ptr<Netlist> g_netlist_owner        = nullptr;
+    Netlist* g_netlist                              = nullptr;
+    NetlistRelay* g_netlist_relay                   = nullptr;
+    PluginRelay* g_plugin_relay                     = nullptr;
+    SelectionRelay* g_selection_relay               = nullptr;
+    FileStatusManager* g_file_status_manager        = nullptr;
+    ThreadPool* g_thread_pool                       = nullptr;
+    GraphContextManager* g_graph_context_manager    = nullptr;
+    GuiApi* g_gui_api                               = nullptr;
     std::unique_ptr<PythonContext> g_python_context = nullptr;
 
     // NOTE
@@ -89,6 +77,14 @@ namespace hal
 
     static void cleanup()
     {
+        delete g_settings_manager;
+        delete g_keybind_manager;
+        delete g_file_status_manager;
+        delete g_graph_context_manager;
+        delete g_netlist_relay;
+        delete g_plugin_relay;
+        delete g_selection_relay;
+        delete g_settings_relay;
         delete g_notification_manager;
         //    delete g_window_manager;
     }
@@ -174,6 +170,15 @@ namespace hal
 
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
+        g_settings_manager      = new SettingsManager();
+        g_netlist_relay         = new NetlistRelay();
+        g_plugin_relay          = new PluginRelay();
+        g_selection_relay       = new SelectionRelay();
+        g_settings_relay        = new SettingsRelay();
+        g_keybind_manager       = new KeybindManager();
+        g_file_status_manager   = new FileStatusManager();
+        g_graph_context_manager = new GraphContextManager();
+
         //    g_window_manager       = new WindowManager();
         g_notification_manager = new NotificationManager();
 
@@ -207,7 +212,6 @@ namespace hal
         l.add_channel("gui", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         l.add_channel("python", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
-
 
     ProgramOptions PluginGui::get_cli_options() const
     {

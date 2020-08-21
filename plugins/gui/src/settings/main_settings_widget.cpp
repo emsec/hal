@@ -374,7 +374,7 @@ namespace hal
             // clear the setting and sync the widget to the default value of its
             // connected setting
             QString key          = widget->key();
-            QVariant default_val = g_settings_manager.reset(key);
+            QVariant default_val = g_settings_manager->reset(key);
             widget->prepare(default_val, default_val);
             check_conflict(widget, widget->value());
         }
@@ -422,8 +422,8 @@ namespace hal
             {
                 // sync the widget to the current value of its connected setting
                 QString key          = widget->key();
-                QVariant val         = g_settings_manager.get(key);
-                QVariant default_val = g_settings_manager.get_default(key);
+                QVariant val         = g_settings_manager->get(key);
+                QVariant default_val = g_settings_manager->get_default(key);
                 widget->prepare(val, default_val);
                 // then display
                 widget->show();
@@ -459,7 +459,7 @@ namespace hal
         bool conflicts = check_conflict(sender, value);
         if (!conflicts)
         {
-            g_settings_manager.update(key, value);
+            g_settings_manager->update(key, value);
         }
     #else
         Q_UNUSED(key);
@@ -507,7 +507,7 @@ namespace hal
                 QString key    = widget->key();
                 QVariant value = widget->value();
                 widget->mark_saved();
-                g_settings_manager.update(key, value);
+                g_settings_manager->update(key, value);
             }
         }
         return true;

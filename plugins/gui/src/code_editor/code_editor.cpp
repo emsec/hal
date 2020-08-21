@@ -22,16 +22,16 @@ namespace hal
         connect(this, &CodeEditor::updateRequest, this, &CodeEditor::update_line_number_area);
         connect(this, &CodeEditor::updateRequest, this, &CodeEditor::update_minimap);
 
-        m_line_highlight_enabled = g_settings_manager.get("python/highlight_current_line").toBool();
+        m_line_highlight_enabled = g_settings_manager->get("python/highlight_current_line").toBool();
         if (m_line_highlight_enabled)
         {
             connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlight_current_line);
         }
-        m_line_numbers_enabled = g_settings_manager.get("python/line_numbers").toBool();
-        m_line_wrap_enabled = g_settings_manager.get("python/line_wrap").toBool();
-        m_minimap_enabled = g_settings_manager.get("python/minimap").toBool();
+        m_line_numbers_enabled = g_settings_manager->get("python/line_numbers").toBool();
+        m_line_wrap_enabled = g_settings_manager->get("python/line_wrap").toBool();
+        m_minimap_enabled = g_settings_manager->get("python/minimap").toBool();
 
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &CodeEditor::handle_global_setting_changed);
+        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &CodeEditor::handle_global_setting_changed);
 
         setVerticalScrollBar(m_scrollbar);
         m_scrollbar->set_minimap_scrollbar(m_minimap->scrollbar());

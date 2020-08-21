@@ -36,7 +36,7 @@ namespace hal
     {
         clearContents();
 
-        switch (g_selection_relay.m_focus_type)
+        switch (g_selection_relay->m_focus_type)
         {
             case SelectionRelay::item_type::none:
             {
@@ -44,13 +44,13 @@ namespace hal
             }
             case SelectionRelay::item_type::gate:
             {
-                Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(g_selection_relay->m_focus_id);
 
                 assert(g);
 
                 m_origin = hal::node{hal::node_type::gate, g->get_id()};
 
-                std::string pin_type   = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay.m_subfocus_index];
+                std::string pin_type   = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay->m_subfocus_index];
                 Net* n = (direction ? g->get_fan_out_net(pin_type) : g->get_fan_in_net(pin_type));
 
                 assert(n);
@@ -61,7 +61,7 @@ namespace hal
             }
             case SelectionRelay::item_type::net:
             {
-                Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+                Net* n = g_netlist->get_net_by_id(g_selection_relay->m_focus_id);
 
                 assert(n);
                 assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());

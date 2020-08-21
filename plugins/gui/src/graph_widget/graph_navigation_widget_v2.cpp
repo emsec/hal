@@ -38,7 +38,7 @@ namespace hal
     {
         clear();
 
-        switch (g_selection_relay.m_focus_type)
+        switch (g_selection_relay->m_focus_type)
         {
             case SelectionRelay::item_type::none:
             {
@@ -46,11 +46,11 @@ namespace hal
             }
             case SelectionRelay::item_type::gate:
             {
-                Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(g_selection_relay->m_focus_id);
 
                 assert(g);
 
-                std::string pin        = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay.m_subfocus_index];
+                std::string pin        = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay->m_subfocus_index];
                 Net* n = (direction ? g->get_fan_out_net(pin) : g->get_fan_in_net(pin));
 
                 assert(n);
@@ -64,7 +64,7 @@ namespace hal
             }
             case SelectionRelay::item_type::net:
             {
-                Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+                Net* n = g_netlist->get_net_by_id(g_selection_relay->m_focus_id);
 
                 assert(n);
                 assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
@@ -78,7 +78,7 @@ namespace hal
             }
             case SelectionRelay::item_type::module:
             {
-                Module* m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+                Module* m = g_netlist->get_module_by_id(g_selection_relay->m_focus_id);
 
                 assert(m);
 
@@ -90,8 +90,8 @@ namespace hal
                 // list by traversing m->get_input_nets(), so we just use that order and
                 // hope nobody touches that implementation)
                 auto it = m->get_output_nets().begin();
-                if (g_selection_relay.m_subfocus_index > 0)
-                    std::advance(it, g_selection_relay.m_subfocus_index);
+                if (g_selection_relay->m_subfocus_index > 0)
+                    std::advance(it, g_selection_relay->m_subfocus_index);
                 auto n = *it;
 
                 assert(n);

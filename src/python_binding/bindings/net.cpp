@@ -111,7 +111,7 @@ namespace hal
         :rtype: hal_py.Endpoint
 )");
 
-        py_net.def("add_destination", py::overload_cast<Gate*, const std::string&>(&Net::add_destination), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("add_destination", &Net::add_destination, py::arg("gate"), py::arg("pin"), R"(
         Add a destination to this net.
 
         :param gate: The destination gate.
@@ -121,31 +121,13 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("add_destination", py::overload_cast<const Endpoint&>(&Net::add_destination), py::arg("destination"), R"(
-        Add a destination to this net.
-
-        :param destination: The destination endpoint.
-        :type destination: hal_py.Endpoint
-        :returns: True on succes.
-        :rtype: bool
-)");
-
-        py_net.def("remove_destination", py::overload_cast<Gate*, const std::string&>(&Net::remove_destination), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("remove_destination", &Net::remove_destination, py::arg("gate"), py::arg("pin"), R"(
         Remove a destination from this net.
 
         :param gate: The destination gate.
         :type gate: hal_py.Gate
         :param str pin: The input pin of the gate. Leave empty if the pin does not matter.
         :returns: True on succes
-        :rtype: bool
-)");
-
-        py_net.def("remove_destination", py::overload_cast<const Endpoint&>(&Net::remove_destination), py::arg("destination"), R"(
-        Remove a destination from this net.
-
-        :param destination: The destination endpoint.
-        :type destination: hal_py.Endpoint
-        :returns: True on succes.
         :rtype: bool
 )");
 

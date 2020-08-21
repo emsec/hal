@@ -37,7 +37,7 @@ namespace hal {
         m_rows        = 0;
         m_bodyVisible = true;
         m_headerText  = txt;
-        m_hideEmpty   = g_settings_manager.get("selection_details/hide_empty_sections", false).toBool();
+        m_hideEmpty   = g_settings_manager->get("selection_details/hide_empty_sections", false).toBool();
         m_layout      = new QVBoxLayout(this);
 
         // remove placeholder text from initial view
@@ -46,7 +46,7 @@ namespace hal {
         m_layout->addWidget(m_header);
 
         connect(m_header,&QPushButton::clicked,this,&DetailsSectionWidget::toggleBodyVisible);
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &DetailsSectionWidget::handleGlobalSettingsChanged);
+        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &DetailsSectionWidget::handleGlobalSettingsChanged);
     }
 
     QTableWidget* DetailsSectionWidget::table() const

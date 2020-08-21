@@ -13,7 +13,7 @@ namespace hal
         m_settings(new QSettings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat)),
         m_defaults(new QSettings(QString::fromStdString((core_utils::get_config_directory() / "guidefaults.ini").string()), QSettings::IniFormat))
     {
-        //g_settings_relay.register_sender(this, name());
+        //g_settings_relay->register_sender(this, name());
         if (m_settings->status() != QSettings::NoError) {
             qDebug() << "Failed to load guisettings.ini";
         }
@@ -24,7 +24,7 @@ namespace hal
 
     SettingsManager::~SettingsManager()
     {
-        //g_settings_relay.remove_sender(this);
+        //g_settings_relay->remove_sender(this);
     }
 
     QVariant SettingsManager::get(const QString& key)
@@ -46,7 +46,7 @@ namespace hal
     {
         QVariant value = this->get_default(key);
         m_settings->remove(key);
-        g_settings_relay.relay_setting_changed(this, key, value);
+        g_settings_relay->relay_setting_changed(this, key, value);
         return value;
     }
 
@@ -65,7 +65,7 @@ namespace hal
 
         if (current != value)
         {
-            g_settings_relay.relay_setting_changed(this, key, value);
+            g_settings_relay->relay_setting_changed(this, key, value);
         }
     }
 

@@ -73,7 +73,7 @@ namespace hal
 
     void gate_table_model::fetch_selection()
     {
-        auto gate_selection = g_selection_relay.m_selected_gates;
+        auto gate_selection = g_selection_relay->m_selected_gates;
 
         Q_EMIT layoutAboutToBeChanged();
         QVector<u32> gate_ids;

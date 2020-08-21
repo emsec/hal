@@ -29,7 +29,7 @@ namespace hal
         connect(&mSearchbar, &Searchbar::text_edited, m_gate_table_proxy_model, &gate_table_proxy_model::handle_filter_text_changed);
         connect(&mSearchbar, &Searchbar::text_edited, m_net_table_proxy_model, &net_table_proxy_model::handle_filter_text_changed);
 
-        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &selection_widget::update);
+        connect(g_selection_relay, &SelectionRelay::selection_changed, this, &selection_widget::update);
     }
 
     void selection_widget::handle_selection_update(void* sender)
@@ -61,7 +61,7 @@ namespace hal
 
     QList<QShortcut*> selection_widget::create_shortcuts()
     {
-        QShortcut* search_shortcut = g_keybind_manager.make_shortcut(this, "keybinds/searchbar_toggle");
+        QShortcut* search_shortcut = g_keybind_manager->make_shortcut(this, "keybinds/searchbar_toggle");
         connect(search_shortcut, &QShortcut::activated, this, &selection_widget::toggle_searchbar);
 
         QList<QShortcut*> list;

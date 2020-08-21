@@ -71,7 +71,7 @@ namespace hal
 
     void net_table_model::fetch_selection()
     {
-        auto net_selection = g_selection_relay.m_selected_nets;
+        auto net_selection = g_selection_relay->m_selected_nets;
 
         Q_EMIT layoutAboutToBeChanged();
         QVector<u32> net_ids;

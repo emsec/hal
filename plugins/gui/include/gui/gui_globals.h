@@ -57,18 +57,18 @@ namespace hal
     extern std::unique_ptr<Netlist> g_netlist_owner;
     extern Netlist* g_netlist;
 
-    extern NetlistRelay g_netlist_relay;
-    extern PluginRelay g_plugin_relay;
-    extern SelectionRelay g_selection_relay;
-    extern SettingsRelay g_settings_relay;
+    extern NetlistRelay* g_netlist_relay;
+    extern PluginRelay* g_plugin_relay;
+    extern SelectionRelay* g_selection_relay;
+    extern SettingsRelay* g_settings_relay;
 
-    extern SettingsManager g_settings_manager;
+    extern SettingsManager* g_settings_manager;
 
-    extern KeybindManager g_keybind_manager;
+    extern KeybindManager* g_keybind_manager;
 
-    extern FileStatusManager g_file_status_manager;
+    extern FileStatusManager* g_file_status_manager;
 
-    extern GraphContextManager g_graph_context_manager;
+    extern GraphContextManager* g_graph_context_manager;
 
     extern ThreadPool* g_thread_pool;
 

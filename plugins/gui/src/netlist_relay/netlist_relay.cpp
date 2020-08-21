@@ -1,5 +1,7 @@
 #include "gui/netlist_relay/netlist_relay.h"
 
+#include "core/log.h"
+
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
@@ -23,10 +25,12 @@ namespace hal
     {
         connect(FileManager::get_instance(), &FileManager::file_opened, this, &NetlistRelay::debug_handle_file_opened);    // DEBUG LINE
         register_callbacks();
+        log_info("test", "register callbacks");
     }
 
     NetlistRelay::~NetlistRelay()
     {
+        log_info("test", "unregister callbacks");
         netlist_event_handler::unregister_callback("relay");
         net_event_handler::unregister_callback("relay");
         gate_event_handler::unregister_callback("relay");
@@ -107,7 +111,7 @@ namespace hal
 
         // Since color is our Overlay over the netlist data, no event is
         // automatically fired. We need to take care of that ourselves here.
-        g_graph_context_manager.handle_module_color_changed(m);
+        g_graph_context_manager->handle_module_color_changed(m);
 
         Q_EMIT module_color_changed(m);
     }
@@ -121,7 +125,7 @@ namespace hal
 
         assert(m);
 
-        for (auto sel_id : g_selection_relay.m_selected_gates)
+        for (auto sel_id : g_selection_relay->m_selected_gates)
         {
             Gate* g = g_netlist->get_gate_by_id(sel_id);
 
@@ -225,7 +229,7 @@ namespace hal
             case netlist_event_handler::event::marked_global_input:
             {
                 ///< associated_data = id of net
-                g_graph_context_manager.handle_marked_global_input(associated_data);
+                g_graph_context_manager->handle_marked_global_input(associated_data);
 
                 Q_EMIT netlist_marked_global_input(object, associated_data);
                 break;
@@ -233,7 +237,7 @@ namespace hal
             case netlist_event_handler::event::marked_global_output:
             {
                 ///< associated_data = id of net
-                g_graph_context_manager.handle_marked_global_output(associated_data);
+                g_graph_context_manager->handle_marked_global_output(associated_data);
 
                 Q_EMIT netlist_marked_global_output(object, associated_data);
                 break;
@@ -248,7 +252,7 @@ namespace hal
             case netlist_event_handler::event::unmarked_global_input:
             {
                 ///< associated_data = id of net
-                g_graph_context_manager.handle_unmarked_global_input(associated_data);
+                g_graph_context_manager->handle_unmarked_global_input(associated_data);
 
                 Q_EMIT netlist_unmarked_global_input(object, associated_data);
                 break;
@@ -256,7 +260,7 @@ namespace hal
             case netlist_event_handler::event::unmarked_global_output:
             {
                 ///< associated_data = id of net
-                g_graph_context_manager.handle_unmarked_global_output(associated_data);
+                g_graph_context_manager->handle_unmarked_global_output(associated_data);
 
                 Q_EMIT netlist_unmarked_global_output(object, associated_data);
                 break;
@@ -300,8 +304,8 @@ namespace hal
 
                 m_module_colors.remove(object->get_id());
 
-                g_graph_context_manager.handle_module_removed(object);
-                g_selection_relay.handle_module_removed(object->get_id());
+                g_graph_context_manager->handle_module_removed(object);
+                g_selection_relay->handle_module_removed(object->get_id());
 
                 Q_EMIT module_removed(object);
                 break;
@@ -312,7 +316,7 @@ namespace hal
 
                 m_ModuleModel->update_module(object->get_id());
 
-                g_graph_context_manager.handle_module_name_changed(object);
+                g_graph_context_manager->handle_module_name_changed(object);
 
                 Q_EMIT module_name_changed(object);
                 break;
@@ -330,7 +334,7 @@ namespace hal
 
                 m_ModuleModel->add_module(associated_data, object->get_id());
 
-                g_graph_context_manager.handle_module_submodule_added(object, associated_data);
+                g_graph_context_manager->handle_module_submodule_added(object, associated_data);
 
                 Q_EMIT module_submodule_added(object, associated_data);
                 break;
@@ -341,7 +345,7 @@ namespace hal
 
                 m_ModuleModel->remove_module(associated_data);
 
-                g_graph_context_manager.handle_module_submodule_removed(object, associated_data);
+                g_graph_context_manager->handle_module_submodule_removed(object, associated_data);
 
                 Q_EMIT module_submodule_removed(object, associated_data);
                 break;
@@ -350,7 +354,7 @@ namespace hal
             {
                 //< associated_data = id of inserted gate
 
-                g_graph_context_manager.handle_module_gate_assigned(object, associated_data);
+                g_graph_context_manager->handle_module_gate_assigned(object, associated_data);
 
                 Q_EMIT module_gate_assigned(object, associated_data);
                 break;
@@ -359,7 +363,7 @@ namespace hal
             {
                 //< associated_data = id of removed gate
 
-                g_graph_context_manager.handle_module_gate_removed(object, associated_data);
+                g_graph_context_manager->handle_module_gate_removed(object, associated_data);
 
                 Q_EMIT module_gate_removed(object, associated_data);
                 break;
@@ -410,7 +414,7 @@ namespace hal
             {
                 //< no associated_data
 
-                g_selection_relay.handle_gate_removed(object->get_id());
+                g_selection_relay->handle_gate_removed(object->get_id());
 
                 Q_EMIT gate_removed(object);
                 break;
@@ -419,7 +423,7 @@ namespace hal
             {
                 //< no associated_data
 
-                g_graph_context_manager.handle_gate_name_changed(object);
+                g_graph_context_manager->handle_gate_name_changed(object);
 
                 Q_EMIT gate_name_changed(object);
                 break;
@@ -443,7 +447,7 @@ namespace hal
             {
                 //< no associated_data
 
-                g_graph_context_manager.handle_net_created(object);
+                g_graph_context_manager->handle_net_created(object);
 
                 Q_EMIT net_created(object);
                 break;
@@ -452,8 +456,8 @@ namespace hal
             {
                 //< no associated_data
 
-                g_graph_context_manager.handle_net_removed(object);
-                g_selection_relay.handle_net_removed(object->get_id());
+                g_graph_context_manager->handle_net_removed(object);
+                g_selection_relay->handle_net_removed(object->get_id());
 
                 Q_EMIT net_removed(object);
                 break;
@@ -462,7 +466,7 @@ namespace hal
             {
                 //< no associated_data
 
-                g_graph_context_manager.handle_net_name_changed(object);
+                g_graph_context_manager->handle_net_name_changed(object);
 
                 Q_EMIT net_name_changed(object);
                 break;
@@ -472,7 +476,7 @@ namespace hal
             // {
             //     //< no associated_data
 
-            //     g_graph_context_manager.handle_net_source_changed(object);
+            //     g_graph_context_manager->handle_net_source_changed(object);
 
             //     Q_EMIT net_source_changed(object);
             //     break;
@@ -481,7 +485,7 @@ namespace hal
             {
                 //< associated_data = id of src gate
 
-                g_graph_context_manager.handle_net_source_added(object, associated_data);
+                g_graph_context_manager->handle_net_source_added(object, associated_data);
 
                 Q_EMIT net_source_added(object, associated_data);
                 break;
@@ -490,7 +494,7 @@ namespace hal
             {
                 //< associated_data = id of src gate
 
-                g_graph_context_manager.handle_net_source_removed(object, associated_data);
+                g_graph_context_manager->handle_net_source_removed(object, associated_data);
 
                 Q_EMIT net_source_removed(object, associated_data);
                 break;
@@ -499,7 +503,7 @@ namespace hal
             {
                 //< associated_data = id of dst gate
 
-                g_graph_context_manager.handle_net_destination_added(object, associated_data);
+                g_graph_context_manager->handle_net_destination_added(object, associated_data);
 
                 Q_EMIT net_destination_added(object, associated_data);
                 break;
@@ -508,7 +512,7 @@ namespace hal
             {
                 //< associated_data = id of dst gate
 
-                g_graph_context_manager.handle_net_destination_removed(object, associated_data);
+                g_graph_context_manager->handle_net_destination_removed(object, associated_data);
 
                 Q_EMIT net_destination_removed(object, associated_data);
                 break;

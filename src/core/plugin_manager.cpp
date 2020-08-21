@@ -157,7 +157,7 @@ namespace hal
 
             if (m_loaded_plugins.find(plugin_name) != m_loaded_plugins.end())
             {
-                log_error("core", "plugin '{}' is already loaded", plugin_name);
+                log_debug("core", "plugin '{}' is already loaded", plugin_name);
                 return true;
             }
 
@@ -299,6 +299,27 @@ namespace hal
             }
 
             log_info("core", "unloading plugin '{}'...", plugin_name);
+
+            {
+                auto tmp = m_cli_option_to_cli_plugin_name;
+                for (auto it : tmp)
+                {
+                    if (it.second == plugin_name)
+                    {
+                        m_cli_option_to_cli_plugin_name.erase(it.first);
+                    }
+                }
+            }
+            {
+                auto tmp = m_cli_option_to_ui_plugin_name;
+                for (auto it : tmp)
+                {
+                    if (it.second == plugin_name)
+                    {
+                        m_cli_option_to_ui_plugin_name.erase(it.first);
+                    }
+                }
+            }
 
             /* unload */
             auto library = std::get<0>(it->second);

@@ -62,7 +62,7 @@ namespace hal
         //m_duplicate_action->setEnabled(false);
         //m_delete_action->setEnabled(false);
 
-        m_context_table_model = g_graph_context_manager.get_context_table_model();
+        m_context_table_model = g_graph_context_manager->get_context_table_model();
 
         m_context_table_proxy_model = new ContextTableProxyModel();
         m_context_table_proxy_model->setSourceModel(m_context_table_model);
@@ -105,7 +105,7 @@ namespace hal
     void ContextManagerWidget::handle_create_context_clicked()
     {
         GraphContext* new_context = nullptr;
-        new_context = g_graph_context_manager.create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
+        new_context = g_graph_context_manager->create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
         new_context->add({g_netlist->get_top_module()->get_id()}, {});
     }
 
@@ -120,7 +120,7 @@ namespace hal
         GraphContext* clicked_context = get_current_context();
 
         QStringList used_context_names;
-        for (const auto& context : g_graph_context_manager.get_contexts())
+        for (const auto& context : g_graph_context_manager->get_contexts())
             used_context_names.append(context->name());
 
         UniqueStringValidator unique_validator(used_context_names);
@@ -134,20 +134,20 @@ namespace hal
         ipd.add_validator(&empty_validator);
 
         if (ipd.exec() == QDialog::Accepted)
-            g_graph_context_manager.rename_graph_context(clicked_context, ipd.text_value());
+            g_graph_context_manager->rename_graph_context(clicked_context, ipd.text_value());
     }
 
     void ContextManagerWidget::handle_duplicate_context_clicked()
     {
         GraphContext* clicked_context = get_current_context();
-        GraphContext* new_context     = g_graph_context_manager.create_new_context(clicked_context->name() + " (Copy)");
+        GraphContext* new_context     = g_graph_context_manager->create_new_context(clicked_context->name() + " (Copy)");
         new_context->add(clicked_context->modules(), clicked_context->gates());
     }
 
     void ContextManagerWidget::handle_delete_context_clicked()
     {
         GraphContext* clicked_context = get_current_context();
-        g_graph_context_manager.delete_graph_context(clicked_context);
+        g_graph_context_manager->delete_graph_context(clicked_context);
     }
 
     void ContextManagerWidget::handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected)
@@ -226,7 +226,7 @@ namespace hal
 
     QList<QShortcut*> ContextManagerWidget::create_shortcuts()
     {
-        QShortcut* search_shortcut = g_keybind_manager.make_shortcut(this, "keybinds/searchbar_toggle");
+        QShortcut* search_shortcut = g_keybind_manager->make_shortcut(this, "keybinds/searchbar_toggle");
         connect(search_shortcut, &QShortcut::activated, this, &ContextManagerWidget::toggle_searchbar);
 
         QList<QShortcut*> list;

@@ -47,9 +47,9 @@ namespace hal
         : QGraphicsView(parent), m_graph_widget(parent), m_minimap_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true), m_grid_type(graph_widget_constants::grid_type::Lines),
           m_zoom_modifier(Qt::NoModifier), m_zoom_factor_base(1.0015)
     {
-        connect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphGraphicsView::conditional_update);
+        connect(g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphGraphicsView::conditional_update);
         connect(this, &GraphGraphicsView::customContextMenuRequested, this, &GraphGraphicsView::show_context_menu);
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphGraphicsView::handle_global_setting_changed);
+        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &GraphGraphicsView::handle_global_setting_changed);
 
         initialize_settings();
 
@@ -63,15 +63,15 @@ namespace hal
 
     void GraphGraphicsView::initialize_settings()
     {
-        unsigned int drag_modifier_setting = g_settings_manager.get("graph_view/drag_mode_modifier").toUInt();
+        unsigned int drag_modifier_setting = g_settings_manager->get("graph_view/drag_mode_modifier").toUInt();
         m_drag_modifier                    = Qt::KeyboardModifier(drag_modifier_setting);
-        unsigned int move_modifier_setting = g_settings_manager.get("graph_view/move_modifier").toUInt();
+        unsigned int move_modifier_setting = g_settings_manager->get("graph_view/move_modifier").toUInt();
         m_move_modifier                    = Qt::KeyboardModifier(move_modifier_setting);
 
         // might think about Q_ENUM to avoid separate enum and config file tokens
         const char* gridTypeNames[] = { "lines", "dots", "none", 0};
 
-        QString sGridType = g_settings_manager.get("graph_view/grid_type").toString();
+        QString sGridType = g_settings_manager->get("graph_view/grid_type").toString();
         for (int i=0; gridTypeNames[i]; i++)
             if (sGridType == gridTypeNames[i])
             {
@@ -80,7 +80,7 @@ namespace hal
             }
 
         #ifdef GUI_DEBUG_GRID
-        m_debug_gridpos_enable = g_settings_manager.get("debug/grid").toBool();
+        m_debug_gridpos_enable = g_settings_manager->get("debug/grid").toBool();
         #endif
     }
 
@@ -105,10 +105,10 @@ namespace hal
         {
             ++cnt;
             QString name = "Isolated View " + QString::number(cnt);
-            if (!g_graph_context_manager.context_with_name_exists(name))
+            if (!g_graph_context_manager->context_with_name_exists(name))
             {
-                auto context = g_graph_context_manager.create_new_context(name);
-                context->add(g_selection_relay.m_selected_modules, g_selection_relay.m_selected_gates);
+                auto context = g_graph_context_manager->create_new_context(name);
+                context->add(g_selection_relay->m_selected_modules, g_selection_relay->m_selected_gates);
                 return;
             }
         }
@@ -118,30 +118,30 @@ namespace hal
     {
         const u32 mod_id          = action->data().toInt();
         Module* m = g_netlist->get_module_by_id(mod_id);
-        for (const auto& id : g_selection_relay.m_selected_gates)
+        for (const auto& id : g_selection_relay->m_selected_gates)
         {
             m->assign_gate(g_netlist->get_gate_by_id(id));
         }
-        for (const auto& id : g_selection_relay.m_selected_modules)
+        for (const auto& id : g_selection_relay->m_selected_modules)
         {
             g_netlist->get_module_by_id(id)->set_parent_module(m);
         }
 
-        auto gates   = g_selection_relay.m_selected_gates;
-        auto modules = g_selection_relay.m_selected_modules;
-        g_selection_relay.clear();
-        g_selection_relay.relay_selection_changed(this);
+        auto gates   = g_selection_relay->m_selected_gates;
+        auto modules = g_selection_relay->m_selected_modules;
+        g_selection_relay->clear();
+        g_selection_relay->relay_selection_changed(this);
     }
 
     void GraphGraphicsView::handle_move_new_action()
     {
         std::unordered_set<Gate*> gate_objs;
         std::unordered_set<Module*> module_objs;
-        for (const auto& id : g_selection_relay.m_selected_gates)
+        for (const auto& id : g_selection_relay->m_selected_gates)
         {
             gate_objs.insert(g_netlist->get_gate_by_id(id));
         }
-        for (const auto& id : g_selection_relay.m_selected_modules)
+        for (const auto& id : g_selection_relay->m_selected_modules)
         {
             module_objs.insert(g_netlist->get_module_by_id(id));
         }
@@ -153,19 +153,19 @@ namespace hal
             return;
         Module* m = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), parent);
 
-        for (const auto& id : g_selection_relay.m_selected_gates)
+        for (const auto& id : g_selection_relay->m_selected_gates)
         {
             m->assign_gate(g_netlist->get_gate_by_id(id));
         }
-        for (const auto& id : g_selection_relay.m_selected_modules)
+        for (const auto& id : g_selection_relay->m_selected_modules)
         {
             g_netlist->get_module_by_id(id)->set_parent_module(m);
         }
 
-        auto gates   = g_selection_relay.m_selected_gates;
-        auto modules = g_selection_relay.m_selected_modules;
-        g_selection_relay.clear();
-        g_selection_relay.relay_selection_changed(this);
+        auto gates   = g_selection_relay->m_selected_gates;
+        auto modules = g_selection_relay->m_selected_modules;
+        g_selection_relay->clear();
+        g_selection_relay->relay_selection_changed(this);
     }
 
     void GraphGraphicsView::handle_rename_action()
@@ -348,16 +348,16 @@ namespace hal
             QSizeF size(m_drag_item->width(), m_drag_item->height());
             QPointF mouse = event->posF();
             QPointF snap  = closest_layouter_pos(mapToScene(mouse.x(), mouse.y()))[1];
-            if (g_selection_relay.m_selected_gates.size() > 1)
+            if (g_selection_relay->m_selected_gates.size() > 1)
             {
                 // if we are in multi-select mode, reduce the selection to the
                 // item we are dragging
-                g_selection_relay.clear();
-                g_selection_relay.m_selected_gates.insert(m_drag_item->id());
-                g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
-                g_selection_relay.m_focus_id   = m_drag_item->id();
-                g_selection_relay.m_subfocus   = SelectionRelay::subfocus::none;
-                g_selection_relay.relay_selection_changed(nullptr);
+                g_selection_relay->clear();
+                g_selection_relay->m_selected_gates.insert(m_drag_item->id());
+                g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+                g_selection_relay->m_focus_id   = m_drag_item->id();
+                g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
+                g_selection_relay->relay_selection_changed(nullptr);
             }
             m_drop_allowed = false;
             static_cast<GraphicsScene*>(scene())->start_drag_shadow(snap, size, NodeDragShadow::drag_cue::rejected);
@@ -544,14 +544,14 @@ namespace hal
 
             if (isGate)
             {
-                if (g_selection_relay.m_selected_gates.find(m_item->id()) == g_selection_relay.m_selected_gates.end())
+                if (g_selection_relay->m_selected_gates.find(m_item->id()) == g_selection_relay->m_selected_gates.end())
                 {
-                    g_selection_relay.clear();
-                    g_selection_relay.m_selected_gates.insert(m_item->id());
-                    g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
-                    g_selection_relay.m_focus_id   = m_item->id();
-                    g_selection_relay.m_subfocus   = SelectionRelay::subfocus::none;
-                    g_selection_relay.relay_selection_changed(this);
+                    g_selection_relay->clear();
+                    g_selection_relay->m_selected_gates.insert(m_item->id());
+                    g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+                    g_selection_relay->m_focus_id   = m_item->id();
+                    g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
+                    g_selection_relay->relay_selection_changed(this);
                 }
 
                 context_menu.addAction("This gate:")->setEnabled(false);
@@ -564,14 +564,14 @@ namespace hal
             }
             else if (isModule)
             {
-                if (g_selection_relay.m_selected_modules.find(m_item->id()) == g_selection_relay.m_selected_modules.end())
+                if (g_selection_relay->m_selected_modules.find(m_item->id()) == g_selection_relay->m_selected_modules.end())
                 {
-                    g_selection_relay.clear();
-                    g_selection_relay.m_selected_modules.insert(m_item->id());
-                    g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
-                    g_selection_relay.m_focus_id   = m_item->id();
-                    g_selection_relay.m_subfocus   = SelectionRelay::subfocus::none;
-                    g_selection_relay.relay_selection_changed(this);
+                    g_selection_relay->clear();
+                    g_selection_relay->m_selected_modules.insert(m_item->id());
+                    g_selection_relay->m_focus_type = SelectionRelay::item_type::module;
+                    g_selection_relay->m_focus_id   = m_item->id();
+                    g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
+                    g_selection_relay->relay_selection_changed(this);
                 }
 
                 context_menu.addAction("This module:")->setEnabled(false);
@@ -583,7 +583,7 @@ namespace hal
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_unfold_single_action);
             }
 
-            if (g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() > 1)
+            if (g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() > 1)
             {
                 context_menu.addSeparator();
                 context_menu.addAction("Entire selection:")->setEnabled(false);
@@ -633,9 +633,9 @@ namespace hal
                 }
             }
 
-            if (g_selection_relay.m_selected_gates.size() + g_selection_relay.m_selected_modules.size() > 1)
+            if (g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() > 1)
             {
-                if (!g_selection_relay.m_selected_gates.empty())
+                if (!g_selection_relay->m_selected_gates.empty())
                 {
                     context_menu.addSeparator();
                     context_menu.addAction("All selected gates:")->setEnabled(false);
@@ -643,7 +643,7 @@ namespace hal
                     action = context_menu.addAction("  Fold all parent modules");
                     QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_fold_all_action);
                 }
-                if (!g_selection_relay.m_selected_modules.empty())
+                if (!g_selection_relay->m_selected_modules.empty())
                 {
                     context_menu.addSeparator();
                     context_menu.addAction("All selected modules:")->setEnabled(false);
@@ -714,7 +714,7 @@ namespace hal
         if (sender_action)
         {
             QSet<u32> gates;
-            for (auto sel_id : g_selection_relay.m_selected_gates)
+            for (auto sel_id : g_selection_relay->m_selected_gates)
             {
                 auto gate = g_netlist->get_gate_by_id(sel_id);
                 for (auto net : gate->get_fan_out_nets())
@@ -738,7 +738,7 @@ namespace hal
                     }
                 }
             }
-            for (auto sel_id : g_selection_relay.m_selected_modules)
+            for (auto sel_id : g_selection_relay->m_selected_modules)
             {
                 auto module = g_netlist->get_module_by_id(sel_id);
                 for (auto net : module->get_output_nets())
@@ -773,7 +773,7 @@ namespace hal
         if (sender_action)
         {
             QSet<u32> gates;
-            for (auto sel_id : g_selection_relay.m_selected_gates)
+            for (auto sel_id : g_selection_relay->m_selected_gates)
             {
                 auto gate = g_netlist->get_gate_by_id(sel_id);
                 for (auto net : gate->get_fan_in_nets())
@@ -797,7 +797,7 @@ namespace hal
                     }
                 }
             }
-            for (auto sel_id : g_selection_relay.m_selected_modules)
+            for (auto sel_id : g_selection_relay->m_selected_modules)
             {
                 auto module = g_netlist->get_module_by_id(sel_id);
                 for (auto net : module->get_input_nets())
@@ -874,7 +874,7 @@ namespace hal
         auto context = m_graph_widget->get_context();
 
         context->begin_change();
-        for (u32 id : g_selection_relay.m_selected_gates)
+        for (u32 id : g_selection_relay->m_selected_gates)
         {
             context->fold_module_of_gate(id);
         }
@@ -886,7 +886,7 @@ namespace hal
         auto context = m_graph_widget->get_context();
 
         context->begin_change();
-        for (u32 id : g_selection_relay.m_selected_modules)
+        for (u32 id : g_selection_relay->m_selected_modules)
         {
             context->unfold_module(id);
         }

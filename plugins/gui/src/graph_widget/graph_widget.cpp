@@ -142,7 +142,7 @@ namespace hal
                 break;
             }
             case Qt::Key_Escape: {
-                g_selection_relay.clear_and_update();
+                g_selection_relay->clear_and_update();
                 break;
             }
             default:
@@ -272,7 +272,7 @@ namespace hal
                         new_name += " (" + QString::number(cnt) + ")";
                     }
                     bool found = false;
-                    for (const auto& ctx : g_graph_context_manager.get_contexts())
+                    for (const auto& ctx : g_graph_context_manager->get_contexts())
                     {
                         if (ctx->name() == new_name)
                         {
@@ -282,7 +282,7 @@ namespace hal
                     }
                     if (!found)
                     {
-                        g_graph_context_manager.rename_graph_context(m_context, new_name);
+                        g_graph_context_manager->rename_graph_context(m_context, new_name);
                         break;
                     }
                 }
@@ -361,9 +361,9 @@ namespace hal
         }
 
         // SELECT IN RELAY
-        g_selection_relay.clear();
-        g_selection_relay.m_selected_gates   = final_gates;
-        g_selection_relay.m_selected_modules = final_modules;
+        g_selection_relay->clear();
+        g_selection_relay->m_selected_gates   = final_gates;
+        g_selection_relay->m_selected_modules = final_modules;
 
         // TODO implement subselections on modules, then add a case for when the
         // selection is only one module (instead of one gate)
@@ -374,9 +374,9 @@ namespace hal
             u32 gid = *final_gates.begin();
             auto g  = g_netlist->get_gate_by_id(gid);
 
-            g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
-            g_selection_relay.m_focus_id   = gid;
-            g_selection_relay.m_subfocus   = SelectionRelay::subfocus::none;
+            g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+            g_selection_relay->m_focus_id   = gid;
+            g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
 
             u32 cnt = 0;
             // TODO simplify (we do actually know if we're navigating left or right)
@@ -384,21 +384,21 @@ namespace hal
             {
                 if (g->get_fan_in_net(pin) == n)    // input net
                 {
-                    g_selection_relay.m_subfocus       = SelectionRelay::subfocus::left;
-                    g_selection_relay.m_subfocus_index = cnt;
+                    g_selection_relay->m_subfocus       = SelectionRelay::subfocus::left;
+                    g_selection_relay->m_subfocus_index = cnt;
                     break;
                 }
                 cnt++;
             }
-            if (g_selection_relay.m_subfocus == SelectionRelay::subfocus::none)
+            if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::none)
             {
                 cnt = 0;
                 for (const auto& pin : g->get_output_pins())
                 {
                     if (g->get_fan_out_net(pin) == n)    // input net
                     {
-                        g_selection_relay.m_subfocus       = SelectionRelay::subfocus::right;
-                        g_selection_relay.m_subfocus_index = cnt;
+                        g_selection_relay->m_subfocus       = SelectionRelay::subfocus::right;
+                        g_selection_relay->m_subfocus_index = cnt;
                         break;
                     }
                     cnt++;
@@ -411,9 +411,9 @@ namespace hal
             u32 mid = *final_modules.begin();
             auto m  = g_netlist->get_module_by_id(mid);
 
-            g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
-            g_selection_relay.m_focus_id   = mid;
-            g_selection_relay.m_subfocus   = SelectionRelay::subfocus::none;
+            g_selection_relay->m_focus_type = SelectionRelay::item_type::module;
+            g_selection_relay->m_focus_id   = mid;
+            g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
 
             u32 cnt = 0;
             // FIXME this is super hacky because currently we have no way of
@@ -429,21 +429,21 @@ namespace hal
             {
                 if (inet == n)    // input net
                 {
-                    g_selection_relay.m_subfocus       = SelectionRelay::subfocus::left;
-                    g_selection_relay.m_subfocus_index = cnt;
+                    g_selection_relay->m_subfocus       = SelectionRelay::subfocus::left;
+                    g_selection_relay->m_subfocus_index = cnt;
                     break;
                 }
                 cnt++;
             }
-            if (g_selection_relay.m_subfocus == SelectionRelay::subfocus::none)
+            if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::none)
             {
                 cnt = 0;
                 for (const auto& inet : m->get_output_nets())
                 {
                     if (inet == n)    // input net
                     {
-                        g_selection_relay.m_subfocus       = SelectionRelay::subfocus::right;
-                        g_selection_relay.m_subfocus_index = cnt;
+                        g_selection_relay->m_subfocus       = SelectionRelay::subfocus::right;
+                        g_selection_relay->m_subfocus_index = cnt;
                         break;
                     }
                     cnt++;
@@ -451,7 +451,7 @@ namespace hal
             }
         }
 
-        g_selection_relay.relay_selection_changed(nullptr);
+        g_selection_relay->relay_selection_changed(nullptr);
 
         // FIXME If the scene has been resized during this method, the animation triggered by
         // ensure_gates_visible is broken. Thus, if that is the case, we bail out here and not
@@ -473,20 +473,20 @@ namespace hal
     // ADD SOUND OR ERROR MESSAGE TO FAILED NAVIGATION ATTEMPTS
     void GraphWidget::handle_navigation_left_request()
     {
-        switch (g_selection_relay.m_focus_type)
+        switch (g_selection_relay->m_focus_type)
         {
             case SelectionRelay::item_type::none: {
                 return;
             }
             case SelectionRelay::item_type::gate: {
-                Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(g_selection_relay->m_focus_id);
 
                 if (!g)
                     return;
 
-                if (g_selection_relay.m_subfocus == SelectionRelay::subfocus::left)
+                if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::left)
                 {
-                    std::string pin_type = g->get_input_pins()[g_selection_relay.m_subfocus_index];
+                    std::string pin_type = g->get_input_pins()[g_selection_relay->m_subfocus_index];
                     Net* n               = g->get_fan_in_net(pin_type);
 
                     if (!n)
@@ -494,11 +494,11 @@ namespace hal
 
                     if (n->get_num_of_sources() == 0)
                     {
-                        g_selection_relay.clear();
-                        g_selection_relay.m_selected_nets.insert(n->get_id());
-                        g_selection_relay.m_focus_type = SelectionRelay::item_type::net;
-                        g_selection_relay.m_focus_id   = n->get_id();
-                        g_selection_relay.relay_selection_changed(nullptr);
+                        g_selection_relay->clear();
+                        g_selection_relay->m_selected_nets.insert(n->get_id());
+                        g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                        g_selection_relay->m_focus_id   = n->get_id();
+                        g_selection_relay->relay_selection_changed(nullptr);
                     }
                     else if (n->get_num_of_sources() == 1)
                     {
@@ -513,16 +513,16 @@ namespace hal
                 }
                 else if (g->get_input_pins().size())
                 {
-                    g_selection_relay.m_subfocus       = SelectionRelay::subfocus::left;
-                    g_selection_relay.m_subfocus_index = 0;
+                    g_selection_relay->m_subfocus       = SelectionRelay::subfocus::left;
+                    g_selection_relay->m_subfocus_index = 0;
 
-                    g_selection_relay.relay_subfocus_changed(nullptr);
+                    g_selection_relay->relay_subfocus_changed(nullptr);
                 }
 
                 return;
             }
             case SelectionRelay::item_type::net: {
-                Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+                Net* n = g_netlist->get_net_by_id(g_selection_relay->m_focus_id);
 
                 if (!n)
                     return;
@@ -544,12 +544,12 @@ namespace hal
                 return;
             }
             case SelectionRelay::item_type::module: {
-                Module* m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+                Module* m = g_netlist->get_module_by_id(g_selection_relay->m_focus_id);
 
                 if (!m)
                     return;
 
-                if (g_selection_relay.m_subfocus == SelectionRelay::subfocus::left)
+                if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::left)
                 {
                     // FIXME this is super hacky because currently we have no way of
                     // properly indexing port names on modules (since no order is guaranteed
@@ -560,16 +560,16 @@ namespace hal
                     // hope nobody touches that implementation)
                     auto nets = m->get_input_nets();
                     auto it   = nets.begin();
-                    if (g_selection_relay.m_subfocus_index > 0)
-                        std::advance(it, g_selection_relay.m_subfocus_index);
+                    if (g_selection_relay->m_subfocus_index > 0)
+                        std::advance(it, g_selection_relay->m_subfocus_index);
                     auto n = *it;
                     if (n->get_num_of_sources() == 0)
                     {
-                        g_selection_relay.clear();
-                        g_selection_relay.m_selected_nets.insert(n->get_id());
-                        g_selection_relay.m_focus_type = SelectionRelay::item_type::net;
-                        g_selection_relay.m_focus_id   = n->get_id();
-                        g_selection_relay.relay_selection_changed(nullptr);
+                        g_selection_relay->clear();
+                        g_selection_relay->m_selected_nets.insert(n->get_id());
+                        g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                        g_selection_relay->m_focus_id   = n->get_id();
+                        g_selection_relay->relay_selection_changed(nullptr);
                     }
                     else if (n->get_num_of_sources() == 1)
                     {
@@ -584,10 +584,10 @@ namespace hal
                 }
                 else if (m->get_input_nets().size())
                 {
-                    g_selection_relay.m_subfocus       = SelectionRelay::subfocus::left;
-                    g_selection_relay.m_subfocus_index = 0;
+                    g_selection_relay->m_subfocus       = SelectionRelay::subfocus::left;
+                    g_selection_relay->m_subfocus_index = 0;
 
-                    g_selection_relay.relay_subfocus_changed(nullptr);
+                    g_selection_relay->relay_subfocus_changed(nullptr);
                 }
 
                 return;
@@ -597,27 +597,27 @@ namespace hal
 
     void GraphWidget::handle_navigation_right_request()
     {
-        switch (g_selection_relay.m_focus_type)
+        switch (g_selection_relay->m_focus_type)
         {
             case SelectionRelay::item_type::none: {
                 return;
             }
             case SelectionRelay::item_type::gate: {
-                Gate* g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(g_selection_relay->m_focus_id);
 
                 if (!g)
                     return;
 
-                if (g_selection_relay.m_subfocus == SelectionRelay::subfocus::right)
+                if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::right)
                 {
-                    auto n = g->get_fan_out_net(g->get_output_pins()[g_selection_relay.m_subfocus_index]);
+                    auto n = g->get_fan_out_net(g->get_output_pins()[g_selection_relay->m_subfocus_index]);
                     if (n->get_num_of_destinations() == 0)
                     {
-                        g_selection_relay.clear();
-                        g_selection_relay.m_selected_nets.insert(n->get_id());
-                        g_selection_relay.m_focus_type = SelectionRelay::item_type::net;
-                        g_selection_relay.m_focus_id   = n->get_id();
-                        g_selection_relay.relay_selection_changed(nullptr);
+                        g_selection_relay->clear();
+                        g_selection_relay->m_selected_nets.insert(n->get_id());
+                        g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                        g_selection_relay->m_focus_id   = n->get_id();
+                        g_selection_relay->relay_selection_changed(nullptr);
                     }
                     else if (n->get_num_of_destinations() == 1)
                     {
@@ -632,16 +632,16 @@ namespace hal
                 }
                 else if (g->get_output_pins().size())
                 {
-                    g_selection_relay.m_subfocus       = SelectionRelay::subfocus::right;
-                    g_selection_relay.m_subfocus_index = 0;
+                    g_selection_relay->m_subfocus       = SelectionRelay::subfocus::right;
+                    g_selection_relay->m_subfocus_index = 0;
 
-                    g_selection_relay.relay_subfocus_changed(nullptr);
+                    g_selection_relay->relay_subfocus_changed(nullptr);
                 }
 
                 return;
             }
             case SelectionRelay::item_type::net: {
-                Net* n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+                Net* n = g_netlist->get_net_by_id(g_selection_relay->m_focus_id);
 
                 if (!n)
                     return;
@@ -663,12 +663,12 @@ namespace hal
                 return;
             }
             case SelectionRelay::item_type::module: {
-                Module* m = g_netlist->get_module_by_id(g_selection_relay.m_focus_id);
+                Module* m = g_netlist->get_module_by_id(g_selection_relay->m_focus_id);
 
                 if (!m)
                     return;
 
-                if (g_selection_relay.m_subfocus == SelectionRelay::subfocus::right)
+                if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::right)
                 {
                     // FIXME this is super hacky because currently we have no way of
                     // properly indexing port names on modules (since no order is guaranteed
@@ -679,16 +679,16 @@ namespace hal
                     // hope nobody touches that implementation)
                     auto nets = m->get_output_nets();
                     auto it   = nets.begin();
-                    if (g_selection_relay.m_subfocus_index > 0)
-                        std::advance(it, g_selection_relay.m_subfocus_index);
+                    if (g_selection_relay->m_subfocus_index > 0)
+                        std::advance(it, g_selection_relay->m_subfocus_index);
                     auto n = *it;
                     if (n->get_num_of_destinations() == 0)
                     {
-                        g_selection_relay.clear();
-                        g_selection_relay.m_selected_nets.insert(n->get_id());
-                        g_selection_relay.m_focus_type = SelectionRelay::item_type::net;
-                        g_selection_relay.m_focus_id   = n->get_id();
-                        g_selection_relay.relay_selection_changed(nullptr);
+                        g_selection_relay->clear();
+                        g_selection_relay->m_selected_nets.insert(n->get_id());
+                        g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                        g_selection_relay->m_focus_id   = n->get_id();
+                        g_selection_relay->relay_selection_changed(nullptr);
                     }
                     else if (n->get_num_of_destinations() == 1)
                     {
@@ -703,10 +703,10 @@ namespace hal
                 }
                 else if (m->get_output_nets().size())
                 {
-                    g_selection_relay.m_subfocus       = SelectionRelay::subfocus::right;
-                    g_selection_relay.m_subfocus_index = 0;
+                    g_selection_relay->m_subfocus       = SelectionRelay::subfocus::right;
+                    g_selection_relay->m_subfocus_index = 0;
 
-                    g_selection_relay.relay_subfocus_changed(nullptr);
+                    g_selection_relay->relay_subfocus_changed(nullptr);
                 }
             }
         }
@@ -715,17 +715,17 @@ namespace hal
     void GraphWidget::handle_navigation_up_request()
     {
         // FIXME this is ugly
-        if ((g_selection_relay.m_focus_type == SelectionRelay::item_type::gate && m_context->gates().contains(g_selection_relay.m_focus_id))
-            || (g_selection_relay.m_focus_type == SelectionRelay::item_type::module && m_context->modules().contains(g_selection_relay.m_focus_id)))
-            g_selection_relay.navigate_up();
+        if ((g_selection_relay->m_focus_type == SelectionRelay::item_type::gate && m_context->gates().contains(g_selection_relay->m_focus_id))
+            || (g_selection_relay->m_focus_type == SelectionRelay::item_type::module && m_context->modules().contains(g_selection_relay->m_focus_id)))
+            g_selection_relay->navigate_up();
     }
 
     void GraphWidget::handle_navigation_down_request()
     {
         // FIXME this is ugly
-        if ((g_selection_relay.m_focus_type == SelectionRelay::item_type::gate && m_context->gates().contains(g_selection_relay.m_focus_id))
-            || (g_selection_relay.m_focus_type == SelectionRelay::item_type::module && m_context->modules().contains(g_selection_relay.m_focus_id)))
-            g_selection_relay.navigate_down();
+        if ((g_selection_relay->m_focus_type == SelectionRelay::item_type::gate && m_context->gates().contains(g_selection_relay->m_focus_id))
+            || (g_selection_relay->m_focus_type == SelectionRelay::item_type::module && m_context->modules().contains(g_selection_relay->m_focus_id)))
+            g_selection_relay->navigate_down();
     }
 
     void GraphWidget::handle_enter_module_requested(const u32 id)
@@ -760,7 +760,7 @@ namespace hal
             module_ids.insert(sm->get_id());
         }
 
-        for (const auto& ctx : g_graph_context_manager.get_contexts())
+        for (const auto& ctx : g_graph_context_manager->get_contexts())
         {
             if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({id})) || (ctx->modules() == module_ids && ctx->gates() == gate_ids))
             {
@@ -769,7 +769,7 @@ namespace hal
             }
         }
 
-        auto ctx = g_graph_context_manager.create_new_context(QString::fromStdString(m->get_name()));
+        auto ctx = g_graph_context_manager->create_new_context(QString::fromStdString(m->get_name()));
         ctx->add(module_ids, gate_ids);
     }
 
@@ -834,8 +834,8 @@ namespace hal
         if (m_context->scene_update_in_progress())
             return;
 
-        if (m_context->gates().contains(g_selection_relay.m_selected_gates) == false || m_context->nets().contains(g_selection_relay.m_selected_nets) == false
-            || m_context->modules().contains(g_selection_relay.m_selected_modules) == false)
+        if (m_context->gates().contains(g_selection_relay->m_selected_gates) == false || m_context->nets().contains(g_selection_relay->m_selected_nets) == false
+            || m_context->modules().contains(g_selection_relay->m_selected_modules) == false)
             return;
 
         int min_x = INT_MAX;
@@ -843,7 +843,7 @@ namespace hal
         int max_x = INT_MIN;
         int max_y = INT_MIN;
 
-        for (auto id : g_selection_relay.m_selected_gates)
+        for (auto id : g_selection_relay->m_selected_gates)
         {
             auto rect = m_context->scene()->get_gate_item(id)->sceneBoundingRect();
 
@@ -853,7 +853,7 @@ namespace hal
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
         }
 
-        for (auto id : g_selection_relay.m_selected_nets)
+        for (auto id : g_selection_relay->m_selected_nets)
         {
             auto rect = m_context->scene()->get_net_item(id)->sceneBoundingRect();
 
@@ -863,7 +863,7 @@ namespace hal
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
         }
 
-        for (auto id : g_selection_relay.m_selected_modules)
+        for (auto id : g_selection_relay->m_selected_modules)
         {
             auto rect = m_context->scene()->get_ModuleItem(id)->sceneBoundingRect();
 

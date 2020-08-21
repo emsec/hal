@@ -12,9 +12,9 @@ namespace hal
 
         m_current_item_iterator = m_selection_container.begin();
 
-        g_selection_relay.register_sender(this, "History Navigator");
+        g_selection_relay->register_sender(this, "History Navigator");
 
-        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionHistoryNavigator::handle_selection_changed);
+        connect(g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionHistoryNavigator::handle_selection_changed);
     }
 
     SelectionHistoryNavigator::~SelectionHistoryNavigator()
@@ -26,13 +26,13 @@ namespace hal
         if (sender == this)
             return;
 
-        if (!g_selection_relay.m_selected_gates.isEmpty())
+        if (!g_selection_relay->m_selected_gates.isEmpty())
         {
-            store_selection(*g_selection_relay.m_selected_gates.begin(), SelectionRelay::item_type::gate);
+            store_selection(*g_selection_relay->m_selected_gates.begin(), SelectionRelay::item_type::gate);
         }
-        else if (!g_selection_relay.m_selected_nets.isEmpty())
+        else if (!g_selection_relay->m_selected_nets.isEmpty())
         {
-            store_selection(*g_selection_relay.m_selected_nets.begin(), SelectionRelay::item_type::net);
+            store_selection(*g_selection_relay->m_selected_nets.begin(), SelectionRelay::item_type::net);
         }
     }
 
@@ -58,20 +58,20 @@ namespace hal
 
     void SelectionHistoryNavigator::relay_selection(Selection selection)
     {
-        g_selection_relay.clear();
+        g_selection_relay->clear();
 
         SelectionRelay::item_type type = selection.get_type();
 
         if (type == SelectionRelay::item_type::net)
         {
-            g_selection_relay.m_selected_nets.insert(selection.get_net_id());
+            g_selection_relay->m_selected_nets.insert(selection.get_net_id());
         }
         else if (type == SelectionRelay::item_type::gate)
         {
-            g_selection_relay.m_selected_gates.insert(selection.get_gate_id());
+            g_selection_relay->m_selected_gates.insert(selection.get_gate_id());
         }
 
-        Q_EMIT g_selection_relay.selection_changed(this);
+        Q_EMIT g_selection_relay->selection_changed(this);
     }
 
     void SelectionHistoryNavigator::set_max_history_size(unsigned int max_size)

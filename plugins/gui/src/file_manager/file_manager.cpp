@@ -23,11 +23,11 @@ namespace hal
 {
     FileManager::FileManager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
     {
-        m_autosave_enabled  = g_settings_manager.get("advanced/autosave").toBool();
-        m_autosave_interval = g_settings_manager.get("advanced/autosave_interval").toInt();
+        m_autosave_enabled  = g_settings_manager->get("advanced/autosave").toBool();
+        m_autosave_interval = g_settings_manager->get("advanced/autosave_interval").toInt();
         if (m_autosave_interval < 30)    // failsafe in case somebody sets "0" in the .ini
             m_autosave_interval = 30;
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &FileManager::handle_global_setting_changed);
+        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &FileManager::handle_global_setting_changed);
 
         connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &FileManager::handle_file_changed);
         connect(m_file_watcher, &QFileSystemWatcher::directoryChanged, this, &FileManager::handle_directory_changed);

@@ -114,7 +114,7 @@ namespace hal
         QGraphicsScene::addItem(m_drag_shadow_gate);
 
         #ifdef GUI_DEBUG_GRID
-        m_debug_grid_enable = g_settings_manager.get("debug/grid").toBool();
+        m_debug_grid_enable = g_settings_manager->get("debug/grid").toBool();
         #endif
     }
 
@@ -314,22 +314,22 @@ namespace hal
 
     void GraphicsScene::connect_all()
     {
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
 
         connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
 
-        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
-        connect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
+        connect(g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
+        connect(g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
     }
 
     void GraphicsScene::disconnect_all()
     {
-        disconnect(&g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+        disconnect(g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
 
         disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
 
-        disconnect(&g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
-        disconnect(&g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
+        disconnect(g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
+        disconnect(g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
     }
 
     void GraphicsScene::delete_all_items()
@@ -377,7 +377,7 @@ namespace hal
 
     void GraphicsScene::handle_intern_selection_changed()
     {
-        g_selection_relay.clear();
+        g_selection_relay->clear();
 
         int gates = 0;
         int nets = 0;
@@ -389,19 +389,19 @@ namespace hal
             {
             case hal::item_type::gate:
             {
-                g_selection_relay.m_selected_gates.insert(static_cast<const GraphicsItem*>(item)->id());
+                g_selection_relay->m_selected_gates.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++gates;
                 break;
             }
             case hal::item_type::net:
             {
-                g_selection_relay.m_selected_nets.insert(static_cast<const GraphicsItem*>(item)->id());
+                g_selection_relay->m_selected_nets.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++nets;
                 break;
             }
             case hal::item_type::module:
             {
-                g_selection_relay.m_selected_modules.insert(static_cast<const GraphicsItem*>(item)->id());
+                g_selection_relay->m_selected_modules.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++modules;
                 break;
             }
@@ -414,28 +414,28 @@ namespace hal
         {
             if (gates)
             {
-                g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
-                g_selection_relay.m_focus_id = *g_selection_relay.m_selected_gates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+                g_selection_relay->m_focus_id = *g_selection_relay->m_selected_gates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
             else if (nets)
             {
-                g_selection_relay.m_focus_type = SelectionRelay::item_type::net;
-                g_selection_relay.m_focus_id = *g_selection_relay.m_selected_nets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                g_selection_relay->m_focus_id = *g_selection_relay->m_selected_nets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
             else
             {
-                g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
-                g_selection_relay.m_focus_id = *g_selection_relay.m_selected_modules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                g_selection_relay->m_focus_type = SelectionRelay::item_type::module;
+                g_selection_relay->m_focus_id = *g_selection_relay->m_selected_modules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
         }
         else
         {
-            g_selection_relay.m_focus_type = SelectionRelay::item_type::none;
+            g_selection_relay->m_focus_type = SelectionRelay::item_type::none;
         }
-        g_selection_relay.m_subfocus = SelectionRelay::subfocus::none;
+        g_selection_relay->m_subfocus = SelectionRelay::subfocus::none;
         // END OF TEST CODE
 
-        g_selection_relay.relay_selection_changed(this);
+        g_selection_relay->relay_selection_changed(this);
     }
 
     void GraphicsScene::handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems)
@@ -466,11 +466,11 @@ namespace hal
 
         clearSelection();
 
-        if (!g_selection_relay.m_selected_modules.isEmpty())
+        if (!g_selection_relay->m_selected_modules.isEmpty())
         {
             for (auto& element : m_ModuleItems)
             {
-                if (g_selection_relay.m_selected_modules.find(element.id) != g_selection_relay.m_selected_modules.end())
+                if (g_selection_relay->m_selected_modules.find(element.id) != g_selection_relay->m_selected_modules.end())
                 {
                     element.item->setSelected(true);
                     element.item->update();
@@ -478,11 +478,11 @@ namespace hal
             }
         }
 
-        if (!g_selection_relay.m_selected_gates.isEmpty())
+        if (!g_selection_relay->m_selected_gates.isEmpty())
         {
             for (auto& element : m_gate_items)
             {
-                if (g_selection_relay.m_selected_gates.find(element.id) != g_selection_relay.m_selected_gates.end())
+                if (g_selection_relay->m_selected_gates.find(element.id) != g_selection_relay->m_selected_gates.end())
                 {
                     element.item->setSelected(true);
                     element.item->update();
@@ -490,11 +490,11 @@ namespace hal
             }
         }
 
-        if (!g_selection_relay.m_selected_nets.isEmpty())
+        if (!g_selection_relay->m_selected_nets.isEmpty())
         {
             for (auto& element : m_net_items)
             {
-                if (g_selection_relay.m_selected_nets.find(element.id) != g_selection_relay.m_selected_nets.end())
+                if (g_selection_relay->m_selected_nets.find(element.id) != g_selection_relay->m_selected_nets.end())
                 {
                     element.item->setSelected(true);
                     element.item->update();

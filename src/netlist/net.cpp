@@ -117,32 +117,12 @@ namespace hal
 
     bool Net::add_destination(Gate* gate, const std::string& pin)
     {
-        return add_destination(Endpoint(gate, pin, this, true));
-    }
-
-    bool Net::add_destination(const Endpoint& ep)
-    {
-        if (!ep.is_destination_pin())
-        {
-            log_error("netlist", "net::add_destination: tried to use a source-endpoint as a destination-endpoint");
-            return false;
-        }
-        return m_internal_manager->net_add_destination(this, ep);
+        return m_internal_manager->net_add_destination(this,Endpoint(gate, pin, this, true));
     }
 
     bool Net::remove_destination(Gate* gate, const std::string& pin)
     {
-        return remove_destination(Endpoint(gate, pin, this, true));
-    }
-
-    bool Net::remove_destination(const Endpoint& ep)
-    {
-        if (!ep.is_destination_pin())
-        {
-            log_error("netlist", "net::remove_destination: tried to use a source-endpoint as a destination-endpoint");
-            return false;
-        }
-        return m_internal_manager->net_remove_destination(this, ep);
+        return m_internal_manager->net_remove_destination(this, Endpoint(gate, pin, this, true));
     }
 
     bool Net::is_a_destination(Gate* gate, const std::string& pin) const

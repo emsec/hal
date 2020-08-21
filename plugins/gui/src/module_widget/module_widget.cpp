@@ -28,7 +28,7 @@ namespace hal
 
         m_ModuleProxyModel->setFilterKeyColumn(-1);
         m_ModuleProxyModel->setDynamicSortFilter(true);
-        m_ModuleProxyModel->setSourceModel(g_netlist_relay.get_ModuleModel());
+        m_ModuleProxyModel->setSourceModel(g_netlist_relay->get_ModuleModel());
         //m_ModuleProxyModel->setRecursiveFilteringEnabled(true);
         m_ModuleProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
         m_tree_view->setModel(m_ModuleProxyModel);
@@ -47,13 +47,13 @@ namespace hal
 
         m_ignore_selection_change = false;
 
-        g_selection_relay.register_sender(this, name());
+        g_selection_relay->register_sender(this, name());
 
         connect(&m_searchbar, &Searchbar::text_edited, this, &ModuleWidget::filter);
         connect(m_tree_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleWidget::handle_tree_selection_changed);
         connect(m_tree_view, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handle_item_double_clicked);
-        connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &ModuleWidget::handle_selection_changed);
-        connect(&g_netlist_relay, &NetlistRelay::module_submodule_removed, this, &ModuleWidget::handle_module_removed);
+        connect(g_selection_relay, &SelectionRelay::selection_changed, this, &ModuleWidget::handle_selection_changed);
+        connect(g_netlist_relay, &NetlistRelay::module_submodule_removed, this, &ModuleWidget::handle_module_removed);
     }
 
     void ModuleWidget::setup_toolbar(Toolbar* Toolbar)
@@ -63,7 +63,7 @@ namespace hal
 
     QList<QShortcut*> ModuleWidget::create_shortcuts()
     {
-        QShortcut* search_shortcut = g_keybind_manager.make_shortcut(this, "keybinds/searchbar_toggle");
+        QShortcut* search_shortcut = g_keybind_manager->make_shortcut(this, "keybinds/searchbar_toggle");
         connect(search_shortcut, &QShortcut::activated, this, &ModuleWidget::toggle_searchbar);
 
         QList<QShortcut*> list;
@@ -133,25 +133,25 @@ namespace hal
             open_module_in_view(index);
 
         if (clicked == &add_selection_action)
-            g_netlist_relay.debug_add_selection_to_module(get_ModuleItem_from_index(index)->id());
+            g_netlist_relay->debug_add_selection_to_module(get_ModuleItem_from_index(index)->id());
 
         if (clicked == &add_child_action)
         {
-            g_netlist_relay.debug_add_child_module(get_ModuleItem_from_index(index)->id());
+            g_netlist_relay->debug_add_child_module(get_ModuleItem_from_index(index)->id());
             m_tree_view->setExpanded(index, true);
         }
 
         if (clicked == &change_name_action)
-            g_netlist_relay.debug_change_module_name(get_ModuleItem_from_index(index)->id());
+            g_netlist_relay->debug_change_module_name(get_ModuleItem_from_index(index)->id());
 
         if (clicked == &change_type_action)
-            g_netlist_relay.debug_change_module_type(get_ModuleItem_from_index(index)->id());
+            g_netlist_relay->debug_change_module_type(get_ModuleItem_from_index(index)->id());
 
         if (clicked == &change_color_action)
-            g_netlist_relay.debug_change_module_color(get_ModuleItem_from_index(index)->id());
+            g_netlist_relay->debug_change_module_color(get_ModuleItem_from_index(index)->id());
 
         if (clicked == &delete_action)
-            g_netlist_relay.debug_delete_module(get_ModuleItem_from_index(index)->id());
+            g_netlist_relay->debug_delete_module(get_ModuleItem_from_index(index)->id());
     }
 
     void ModuleWidget::handle_module_removed(Module* module, u32 module_id)
@@ -170,26 +170,26 @@ namespace hal
         Q_UNUSED(selected)
         Q_UNUSED(deselected)
 
-        if (m_ignore_selection_change || g_netlist_relay.get_ModuleModel()->is_modifying())
+        if (m_ignore_selection_change || g_netlist_relay->get_ModuleModel()->is_modifying())
             return;
 
-        g_selection_relay.clear();
+        g_selection_relay->clear();
 
         QModelIndexList current_selection = m_tree_view->selectionModel()->selectedIndexes();
 
         for (const auto& index : current_selection)
         {
             u32 module_id = get_ModuleItem_from_index(index)->id();
-            g_selection_relay.m_selected_modules.insert(module_id);
+            g_selection_relay->m_selected_modules.insert(module_id);
         }
 
         if (current_selection.size() == 1)
         {
-            g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
-            g_selection_relay.m_focus_id   = g_netlist_relay.get_ModuleModel()->get_item(m_ModuleProxyModel->mapToSource(current_selection.first()))->id();
+            g_selection_relay->m_focus_type = SelectionRelay::item_type::module;
+            g_selection_relay->m_focus_id   = g_netlist_relay->get_ModuleModel()->get_item(m_ModuleProxyModel->mapToSource(current_selection.first()))->id();
         }
 
-        g_selection_relay.relay_selection_changed(this);
+        g_selection_relay->relay_selection_changed(this);
     }
 
     void ModuleWidget::handle_item_double_clicked(const QModelIndex& index)
@@ -205,7 +205,7 @@ namespace hal
             return;
 
         GraphContext* new_context = nullptr;
-        new_context                = g_graph_context_manager.create_new_context(QString::fromStdString(module->get_name()));
+        new_context                = g_graph_context_manager->create_new_context(QString::fromStdString(module->get_name()));
         new_context->add({module->get_id()}, {});
     }
 
@@ -218,9 +218,9 @@ namespace hal
 
         QItemSelection module_selection;
 
-        for (auto module_id : g_selection_relay.m_selected_modules)
+        for (auto module_id : g_selection_relay->m_selected_modules)
         {
-            QModelIndex index = m_ModuleProxyModel->mapFromSource(g_netlist_relay.get_ModuleModel()->get_index(g_netlist_relay.get_ModuleModel()->get_item(module_id)));
+            QModelIndex index = m_ModuleProxyModel->mapFromSource(g_netlist_relay->get_ModuleModel()->get_index(g_netlist_relay->get_ModuleModel()->get_item(module_id)));
             module_selection.select(index, index);
         }
 
@@ -231,6 +231,6 @@ namespace hal
 
     ModuleItem* ModuleWidget::get_ModuleItem_from_index(const QModelIndex& index)
     {
-        return g_netlist_relay.get_ModuleModel()->get_item(m_ModuleProxyModel->mapToSource(index));
+        return g_netlist_relay->get_ModuleModel()->get_item(m_ModuleProxyModel->mapToSource(index));
     }
 }

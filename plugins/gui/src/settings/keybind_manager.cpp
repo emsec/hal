@@ -8,7 +8,7 @@ namespace hal
 {
     KeybindManager::KeybindManager(QObject* parent) : QObject(parent)
     {
-        connect(&g_settings_relay, &SettingsRelay::setting_changed, this, &KeybindManager::handle_global_setting_changed);
+        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &KeybindManager::handle_global_setting_changed);
     }
 
     void KeybindManager::bind(Action* action, const QString& key)
@@ -18,7 +18,7 @@ namespace hal
         m_bound_actions.insert(action);
         m_bindings_actions.insert(key, action);
         // set initial key bind
-        QKeySequence seq = g_settings_manager.get(key).toString();
+        QKeySequence seq = g_settings_manager->get(key).toString();
         action->setShortcut(seq);
     }
 
@@ -29,7 +29,7 @@ namespace hal
         m_bound_shortcuts.insert(shortcut);
         m_bindings_shortcuts.insert(key, shortcut);
         // set initial key bind
-        QKeySequence seq = g_settings_manager.get(key).toString();
+        QKeySequence seq = g_settings_manager->get(key).toString();
         shortcut->setKey(seq);
     }
 
@@ -50,7 +50,7 @@ namespace hal
     QShortcut* KeybindManager::make_shortcut(QWidget* parent, const QString& key)
     {
         // initialize shortcut with whatever keybind is configured under that key
-        QKeySequence seq = g_settings_manager.get(key).toString();
+        QKeySequence seq = g_settings_manager->get(key).toString();
         QShortcut* shortcut = new QShortcut(seq, parent);
         // keep track of this shortcut
         m_bound_shortcuts.insert(shortcut);

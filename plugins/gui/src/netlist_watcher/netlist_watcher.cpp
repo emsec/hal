@@ -79,7 +79,7 @@ namespace hal
         if (!m_notified)
         {
             m_notified = true;
-            g_file_status_manager.netlist_changed();
+            g_file_status_manager->netlist_changed();
         }
     }
 }

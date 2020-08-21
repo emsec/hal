@@ -22,17 +22,17 @@ namespace hal
 
         connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &GraphTabWidget::handle_tab_close_requested);
         connect(m_tab_widget, &QTabWidget::currentChanged, this, &GraphTabWidget::handle_tab_changed);
-        connect(&g_graph_context_manager, &GraphContextManager::context_created, this, &GraphTabWidget::handle_context_created);
-        connect(&g_graph_context_manager, &GraphContextManager::context_renamed, this, &GraphTabWidget::handle_context_renamed);
-        connect(&g_graph_context_manager, &GraphContextManager::deleting_context, this, &GraphTabWidget::handle_context_removed);
+        connect(g_graph_context_manager, &GraphContextManager::context_created, this, &GraphTabWidget::handle_context_created);
+        connect(g_graph_context_manager, &GraphContextManager::context_renamed, this, &GraphTabWidget::handle_context_renamed);
+        connect(g_graph_context_manager, &GraphContextManager::deleting_context, this, &GraphTabWidget::handle_context_removed);
     }
 
     QList<QShortcut *> GraphTabWidget::create_shortcuts()
     {
-        QShortcut* zoom_in_sc = g_keybind_manager.make_shortcut(this, "keybinds/graph_view_zoom_in");
+        QShortcut* zoom_in_sc = g_keybind_manager->make_shortcut(this, "keybinds/graph_view_zoom_in");
         connect(zoom_in_sc, &QShortcut::activated, this, &GraphTabWidget::zoom_in_shortcut);
 
-        QShortcut* zoom_out_sc = g_keybind_manager.make_shortcut(this, "keybinds/graph_view_zoom_out");
+        QShortcut* zoom_out_sc = g_keybind_manager->make_shortcut(this, "keybinds/graph_view_zoom_out");
         connect(zoom_out_sc, &QShortcut::activated, this, &GraphTabWidget::zoom_out_shortcut);
 
         QList<QShortcut*> list;
@@ -70,7 +70,7 @@ namespace hal
 
         //right way to do it??
         //GraphWidget* graph_wid = dynamic_cast<GraphWidget*>(m_tab_widget->widget(index));
-        //GraphContext* dyn_con = g_graph_context_manager.get_context_by_name(m_tab_widget->tabText(index));
+        //GraphContext* dyn_con = g_graph_context_manager->get_context_by_name(m_tab_widget->tabText(index));
         //dyn_con->unsubscribe(graph_wid);
     }
 

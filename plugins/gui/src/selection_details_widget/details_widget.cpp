@@ -10,7 +10,7 @@ namespace hal
         m_keyFont.setBold(true);
         m_keyFont.setPixelSize(13);
 
-        m_hideEmptySections = g_settings_manager.get("selection_details/hide_empty_sections", false).toBool();
+        m_hideEmptySections = g_settings_manager->get("selection_details/hide_empty_sections", false).toBool();
     }
 
     QFont DetailsWidget::keyFont() const

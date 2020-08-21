@@ -10,22 +10,22 @@ namespace hal
 {
     GuiApi::GuiApi()
     {
-        g_selection_relay.register_sender(this, "GUI API");
+        g_selection_relay->register_sender(this, "GUI API");
     }
 
     std::vector<u32> GuiApi::get_selected_gate_ids()
     {
-        return std::vector<u32>(g_selection_relay.m_selected_gates.begin(), g_selection_relay.m_selected_gates.end());
+        return std::vector<u32>(g_selection_relay->m_selected_gates.begin(), g_selection_relay->m_selected_gates.end());
     }
 
     std::vector<u32> GuiApi::get_selected_net_ids()
     {
-        return std::vector<u32>(g_selection_relay.m_selected_nets.begin(), g_selection_relay.m_selected_nets.end());
+        return std::vector<u32>(g_selection_relay->m_selected_nets.begin(), g_selection_relay->m_selected_nets.end());
     }
 
     std::vector<u32> GuiApi::get_selected_module_ids()
     {
-        return std::vector<u32>(g_selection_relay.m_selected_modules.begin(), g_selection_relay.m_selected_modules.end());
+        return std::vector<u32>(g_selection_relay->m_selected_modules.begin(), g_selection_relay->m_selected_modules.end());
     }
 
     std::tuple<std::vector<u32>, std::vector<u32>, std::vector<u32>> GuiApi::get_selected_item_ids()
@@ -35,24 +35,24 @@ namespace hal
 
     std::vector<Gate*> GuiApi::get_selected_gates()
     {
-        std::vector<Gate*> gates(g_selection_relay.m_selected_gates.size());
-        std::transform(g_selection_relay.m_selected_gates.begin(), g_selection_relay.m_selected_gates.end(), gates.begin(), [](u32 id){return g_netlist->get_gate_by_id(id);});
+        std::vector<Gate*> gates(g_selection_relay->m_selected_gates.size());
+        std::transform(g_selection_relay->m_selected_gates.begin(), g_selection_relay->m_selected_gates.end(), gates.begin(), [](u32 id){return g_netlist->get_gate_by_id(id);});
 
         return gates;
     }
 
     std::vector<Net*> GuiApi::get_selected_nets()
     {
-        std::vector<Net*> nets(g_selection_relay.m_selected_nets.size());
-        std::transform(g_selection_relay.m_selected_nets.begin(), g_selection_relay.m_selected_nets.end(), nets.begin(), [](u32 id){return g_netlist->get_net_by_id(id);});
+        std::vector<Net*> nets(g_selection_relay->m_selected_nets.size());
+        std::transform(g_selection_relay->m_selected_nets.begin(), g_selection_relay->m_selected_nets.end(), nets.begin(), [](u32 id){return g_netlist->get_net_by_id(id);});
 
         return nets;
     }
 
     std::vector<Module*> GuiApi::get_selected_modules()
     {
-        std::vector<Module*> modules(g_selection_relay.m_selected_modules.size());
-        std::transform(g_selection_relay.m_selected_modules.begin(), g_selection_relay.m_selected_modules.end(), modules.begin(), [](u32 id){return g_netlist->get_module_by_id(id);});
+        std::vector<Module*> modules(g_selection_relay->m_selected_modules.size());
+        std::transform(g_selection_relay->m_selected_modules.begin(), g_selection_relay->m_selected_modules.end(), modules.begin(), [](u32 id){return g_netlist->get_module_by_id(id);});
 
         return modules;
     }
@@ -68,12 +68,12 @@ namespace hal
             return;
 
         if(clear_current_selection)
-            g_selection_relay.clear();
+            g_selection_relay->clear();
 
-        g_selection_relay.m_selected_gates.insert(gate->get_id());
-        g_selection_relay.selection_changed(this);
-        g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
-        g_selection_relay.m_focus_id = gate->get_id();
+        g_selection_relay->m_selected_gates.insert(gate->get_id());
+        g_selection_relay->selection_changed(this);
+        g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+        g_selection_relay->m_focus_id = gate->get_id();
 
         if(navigate_to_selection)
             Q_EMIT navigation_requested();
@@ -97,10 +97,10 @@ namespace hal
         }
 
         if(clear_current_selection)
-            g_selection_relay.clear();
+            g_selection_relay->clear();
 
-        g_selection_relay.m_selected_gates.unite(gate_ids);
-        g_selection_relay.selection_changed(this);
+        g_selection_relay->m_selected_gates.unite(gate_ids);
+        g_selection_relay->selection_changed(this);
 
         if(navigate_to_selection)
             Q_EMIT navigation_requested();
@@ -119,12 +119,12 @@ namespace hal
             return;
 
         if(clear_current_selection)
-            g_selection_relay.clear();
+            g_selection_relay->clear();
 
-        g_selection_relay.m_selected_nets.insert(net->get_id());
-        g_selection_relay.selection_changed(this);
-        g_selection_relay.m_focus_type = SelectionRelay::item_type::net;
-        g_selection_relay.m_focus_id = net->get_id();
+        g_selection_relay->m_selected_nets.insert(net->get_id());
+        g_selection_relay->selection_changed(this);
+        g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+        g_selection_relay->m_focus_id = net->get_id();
 
         if(navigate_to_selection)
             Q_EMIT navigation_requested();
@@ -148,10 +148,10 @@ namespace hal
         }
 
         if(clear_current_selection)
-            g_selection_relay.clear();
+            g_selection_relay->clear();
 
-        g_selection_relay.m_selected_nets.unite(net_ids);
-        g_selection_relay.selection_changed(this);
+        g_selection_relay->m_selected_nets.unite(net_ids);
+        g_selection_relay->selection_changed(this);
 
         if(navigate_to_selection)
             Q_EMIT navigation_requested();
@@ -170,12 +170,12 @@ namespace hal
             return;
 
         if(clear_current_selection)
-            g_selection_relay.clear();
+            g_selection_relay->clear();
 
-        g_selection_relay.m_selected_modules.insert(module->get_id());
-        g_selection_relay.selection_changed(this);
-        g_selection_relay.m_focus_type = SelectionRelay::item_type::module;
-        g_selection_relay.m_focus_id = module->get_id();
+        g_selection_relay->m_selected_modules.insert(module->get_id());
+        g_selection_relay->selection_changed(this);
+        g_selection_relay->m_focus_type = SelectionRelay::item_type::module;
+        g_selection_relay->m_focus_id = module->get_id();
 
         if(navigate_to_selection)
             Q_EMIT navigation_requested();
@@ -199,10 +199,10 @@ namespace hal
         }
 
         if(clear_current_selection)
-            g_selection_relay.clear();
+            g_selection_relay->clear();
 
-        g_selection_relay.m_selected_modules.unite(module_ids);
-        g_selection_relay.selection_changed(this);
+        g_selection_relay->m_selected_modules.unite(module_ids);
+        g_selection_relay->selection_changed(this);
 
         if(navigate_to_selection)
             Q_EMIT navigation_requested();
@@ -246,7 +246,7 @@ namespace hal
     void GuiApi::select(const std::vector<u32>& gate_ids, const std::vector<u32>& net_ids, const std::vector<u32>& module_ids, bool clear_current_selection, bool navigate_to_selection)
     {
         if(clear_current_selection)
-            g_selection_relay.clear();
+            g_selection_relay->clear();
 
         select_gate(gate_ids, false, false);
         select_net(net_ids, false, false);
@@ -259,7 +259,7 @@ namespace hal
     void GuiApi::select(const std::vector<Gate*>& gates, const std::vector<Net*>& nets, const std::vector<Module*>& modules, bool clear_current_selection, bool navigate_to_selection)
     {
         if(clear_current_selection)
-            g_selection_relay.clear();
+            g_selection_relay->clear();
 
         select_gate(gates, false, false);
         select_net(nets, false, false);
@@ -274,8 +274,8 @@ namespace hal
         if(!g_netlist->is_gate_in_netlist(gate))
             return;
 
-        g_selection_relay.m_selected_gates.remove(gate->get_id());
-        g_selection_relay.selection_changed(this);
+        g_selection_relay->m_selected_gates.remove(gate->get_id());
+        g_selection_relay->selection_changed(this);
     }
 
     void GuiApi::deselect_gate(u32 gate_id)
@@ -295,8 +295,8 @@ namespace hal
             gate_ids.insert(gate->get_id());
         }
 
-        g_selection_relay.m_selected_gates.subtract(gate_ids);
-        g_selection_relay.selection_changed(this);
+        g_selection_relay->m_selected_gates.subtract(gate_ids);
+        g_selection_relay->selection_changed(this);
     }
 
     void GuiApi::deselect_gate(const std::vector<u32>& gate_ids)
@@ -311,8 +311,8 @@ namespace hal
         if(!g_netlist->is_net_in_netlist(net))
             return;
 
-        g_selection_relay.m_selected_nets.remove(net->get_id());
-        g_selection_relay.selection_changed(this);
+        g_selection_relay->m_selected_nets.remove(net->get_id());
+        g_selection_relay->selection_changed(this);
     }
 
     void GuiApi::deselect_net(u32 net_id)
@@ -332,8 +332,8 @@ namespace hal
             net_ids.insert(net->get_id());
         }
 
-        g_selection_relay.m_selected_nets.subtract(net_ids);
-        g_selection_relay.selection_changed(this);
+        g_selection_relay->m_selected_nets.subtract(net_ids);
+        g_selection_relay->selection_changed(this);
     }
 
     void GuiApi::deselect_net(const std::vector<u32>& net_ids)
@@ -348,8 +348,8 @@ namespace hal
         if(!g_netlist->is_module_in_netlist(module))
             return;
 
-        g_selection_relay.m_selected_modules.remove(module->get_id());
-        g_selection_relay.selection_changed(this);
+        g_selection_relay->m_selected_modules.remove(module->get_id());
+        g_selection_relay->selection_changed(this);
     }
 
     void GuiApi::deselect_module(u32 module_id)
@@ -369,8 +369,8 @@ namespace hal
             module_ids.insert(module->get_id());
         }
 
-        g_selection_relay.m_selected_modules.subtract(module_ids);
-        g_selection_relay.selection_changed(this);
+        g_selection_relay->m_selected_modules.subtract(module_ids);
+        g_selection_relay->selection_changed(this);
     }
 
     void GuiApi::deselect_module(const std::vector<u32>& module_ids)
@@ -424,6 +424,6 @@ namespace hal
 
     void GuiApi::deselect_all_items()
     {
-        g_selection_relay.clear_and_update();
+        g_selection_relay->clear_and_update();
     }
 }

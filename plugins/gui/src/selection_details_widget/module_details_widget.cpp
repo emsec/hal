@@ -111,27 +111,27 @@ namespace hal
 
         connect(m_navigation_table, &GraphNavigationWidget::navigation_requested, this, &ModuleDetailsWidget::handle_navigation_jump_requested);
 
-        connect(&g_netlist_relay, &NetlistRelay::netlist_marked_global_input, this, &ModuleDetailsWidget::handle_netlist_marked_global_input);
-        connect(&g_netlist_relay, &NetlistRelay::netlist_marked_global_output, this, &ModuleDetailsWidget::handle_netlist_marked_global_output);
-        connect(&g_netlist_relay, &NetlistRelay::netlist_marked_global_inout, this, &ModuleDetailsWidget::handle_netlist_marked_global_inout);
-        connect(&g_netlist_relay, &NetlistRelay::netlist_unmarked_global_input, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_input);
-        connect(&g_netlist_relay, &NetlistRelay::netlist_unmarked_global_output, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_output);
-        connect(&g_netlist_relay, &NetlistRelay::netlist_unmarked_global_inout, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_inout);
+        connect(g_netlist_relay, &NetlistRelay::netlist_marked_global_input, this, &ModuleDetailsWidget::handle_netlist_marked_global_input);
+        connect(g_netlist_relay, &NetlistRelay::netlist_marked_global_output, this, &ModuleDetailsWidget::handle_netlist_marked_global_output);
+        connect(g_netlist_relay, &NetlistRelay::netlist_marked_global_inout, this, &ModuleDetailsWidget::handle_netlist_marked_global_inout);
+        connect(g_netlist_relay, &NetlistRelay::netlist_unmarked_global_input, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_input);
+        connect(g_netlist_relay, &NetlistRelay::netlist_unmarked_global_output, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_output);
+        connect(g_netlist_relay, &NetlistRelay::netlist_unmarked_global_inout, this, &ModuleDetailsWidget::handle_netlist_unmarked_global_inout);
 
-        connect(&g_netlist_relay, &NetlistRelay::module_name_changed, this, &ModuleDetailsWidget::handle_module_name_changed);
-        connect(&g_netlist_relay, &NetlistRelay::module_submodule_added, this, &ModuleDetailsWidget::handle_submodule_added);
-        connect(&g_netlist_relay, &NetlistRelay::module_submodule_removed, this, &ModuleDetailsWidget::handle_submodule_removed);
-        connect(&g_netlist_relay, &NetlistRelay::module_gate_assigned, this, &ModuleDetailsWidget::handle_module_gate_assigned);
-        connect(&g_netlist_relay, &NetlistRelay::module_gate_removed, this, &ModuleDetailsWidget::handle_module_gate_removed);
-        connect(&g_netlist_relay, &NetlistRelay::module_input_port_name_changed, this, &ModuleDetailsWidget::handle_module_input_port_name_changed);
-        connect(&g_netlist_relay, &NetlistRelay::module_output_port_name_changed, this, &ModuleDetailsWidget::handle_module_output_port_name_changed);
-        connect(&g_netlist_relay, &NetlistRelay::module_type_changed, this, &ModuleDetailsWidget::handle_module_type_changed);
+        connect(g_netlist_relay, &NetlistRelay::module_name_changed, this, &ModuleDetailsWidget::handle_module_name_changed);
+        connect(g_netlist_relay, &NetlistRelay::module_submodule_added, this, &ModuleDetailsWidget::handle_submodule_added);
+        connect(g_netlist_relay, &NetlistRelay::module_submodule_removed, this, &ModuleDetailsWidget::handle_submodule_removed);
+        connect(g_netlist_relay, &NetlistRelay::module_gate_assigned, this, &ModuleDetailsWidget::handle_module_gate_assigned);
+        connect(g_netlist_relay, &NetlistRelay::module_gate_removed, this, &ModuleDetailsWidget::handle_module_gate_removed);
+        connect(g_netlist_relay, &NetlistRelay::module_input_port_name_changed, this, &ModuleDetailsWidget::handle_module_input_port_name_changed);
+        connect(g_netlist_relay, &NetlistRelay::module_output_port_name_changed, this, &ModuleDetailsWidget::handle_module_output_port_name_changed);
+        connect(g_netlist_relay, &NetlistRelay::module_type_changed, this, &ModuleDetailsWidget::handle_module_type_changed);
 
-        connect(&g_netlist_relay, &NetlistRelay::net_name_changed, this, &ModuleDetailsWidget::handle_net_name_changed);
-        connect(&g_netlist_relay, &NetlistRelay::net_source_added, this, &ModuleDetailsWidget::handle_net_source_added);
-        connect(&g_netlist_relay, &NetlistRelay::net_source_removed, this, &ModuleDetailsWidget::handle_net_source_removed);
-        connect(&g_netlist_relay, &NetlistRelay::net_destination_added, this, &ModuleDetailsWidget::handle_net_destination_added);
-        connect(&g_netlist_relay, &NetlistRelay::net_destination_removed, this, &ModuleDetailsWidget::handle_net_destination_removed);
+        connect(g_netlist_relay, &NetlistRelay::net_name_changed, this, &ModuleDetailsWidget::handle_net_name_changed);
+        connect(g_netlist_relay, &NetlistRelay::net_source_added, this, &ModuleDetailsWidget::handle_net_source_added);
+        connect(g_netlist_relay, &NetlistRelay::net_source_removed, this, &ModuleDetailsWidget::handle_net_source_removed);
+        connect(g_netlist_relay, &NetlistRelay::net_destination_added, this, &ModuleDetailsWidget::handle_net_destination_added);
+        connect(g_netlist_relay, &NetlistRelay::net_destination_removed, this, &ModuleDetailsWidget::handle_net_destination_removed);
 
         connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_general_table_menu_requested);
         connect(m_input_ports_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_input_ports_table_menu_requested);
@@ -780,25 +780,25 @@ namespace hal
         auto destinations = clicked_net->get_destinations();
         if (destinations.empty() || clicked_net->is_global_output_net())
         {
-            g_selection_relay.clear();
-            g_selection_relay.m_selected_nets.insert(net_id);
-            g_selection_relay.relay_selection_changed(this);
+            g_selection_relay->clear();
+            g_selection_relay->m_selected_nets.insert(net_id);
+            g_selection_relay->relay_selection_changed(this);
         }
         else if (destinations.size() == 1)
         {
             auto ep = *destinations.begin();
-            g_selection_relay.clear();
-            g_selection_relay.m_selected_gates.insert(ep.get_gate()->get_id());
-            g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
-            g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
-            g_selection_relay.m_subfocus   = SelectionRelay::subfocus::left;
+            g_selection_relay->clear();
+            g_selection_relay->m_selected_gates.insert(ep.get_gate()->get_id());
+            g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+            g_selection_relay->m_focus_id   = ep.get_gate()->get_id();
+            g_selection_relay->m_subfocus   = SelectionRelay::subfocus::left;
 
             auto pins                          = ep.get_gate()->get_input_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
-            g_selection_relay.m_subfocus_index = index;
+            g_selection_relay->m_subfocus_index = index;
 
             update(ep.get_gate()->get_id());
-            g_selection_relay.relay_selection_changed(this);
+            g_selection_relay->relay_selection_changed(this);
         }
         else
         {
@@ -823,25 +823,25 @@ namespace hal
 
         if (sources.empty() || net->is_global_input_net())
         {
-            g_selection_relay.clear();
-            g_selection_relay.m_selected_nets.insert(net->get_id());
-            g_selection_relay.relay_selection_changed(this);
+            g_selection_relay->clear();
+            g_selection_relay->m_selected_nets.insert(net->get_id());
+            g_selection_relay->relay_selection_changed(this);
         }
         else if (sources.size() == 1)
         {
             auto ep = *sources.begin();
-            g_selection_relay.clear();
-            g_selection_relay.m_selected_gates.insert(ep.get_gate()->get_id());
-            g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
-            g_selection_relay.m_focus_id   = ep.get_gate()->get_id();
-            g_selection_relay.m_subfocus   = SelectionRelay::subfocus::right;
+            g_selection_relay->clear();
+            g_selection_relay->m_selected_gates.insert(ep.get_gate()->get_id());
+            g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+            g_selection_relay->m_focus_id   = ep.get_gate()->get_id();
+            g_selection_relay->m_subfocus   = SelectionRelay::subfocus::right;
 
             auto pins                          = ep.get_gate()->get_output_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
-            g_selection_relay.m_subfocus_index = index;
+            g_selection_relay->m_subfocus_index = index;
 
             update(ep.get_gate()->get_id());
-            g_selection_relay.relay_selection_changed(this);
+            g_selection_relay->relay_selection_changed(this);
         }
         else
         {
@@ -867,27 +867,27 @@ namespace hal
         }
 
         m_navigation_table->hide();
-        g_selection_relay.clear();
-        g_selection_relay.m_selected_gates = to_gates;
+        g_selection_relay->clear();
+        g_selection_relay->m_selected_gates = to_gates;
         if (to_gates.size() == 1)
         {
-            g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
+            g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
             auto g                         = g_netlist->get_gate_by_id(*to_gates.constBegin());
-            g_selection_relay.m_focus_id   = g->get_id();
-            g_selection_relay.m_subfocus   = SelectionRelay::subfocus::left;
+            g_selection_relay->m_focus_id   = g->get_id();
+            g_selection_relay->m_subfocus   = SelectionRelay::subfocus::left;
 
             u32 index_cnt = 0;
             for (const auto& pin : g->get_input_pins())
             {
                 if (g->get_fan_in_net(pin) == n)
                 {
-                    g_selection_relay.m_subfocus_index = index_cnt;
+                    g_selection_relay->m_subfocus_index = index_cnt;
                     break;
                 }
                 index_cnt++;
             }
 
-            g_selection_relay.relay_selection_changed(this);
+            g_selection_relay->relay_selection_changed(this);
         }
         m_navigation_table->hide();
     }

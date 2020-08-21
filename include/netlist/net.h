@@ -160,14 +160,6 @@ namespace hal
         bool add_destination(Gate* gate, const std::string& pin);
 
         /**
-         * Add a destination to this net by endpoint.
-         *
-         * @param[in] ep - The endpoint.
-         * @returns True on success.
-         */
-        bool add_destination(const Endpoint& ep);
-
-        /**
          * Remove a destination from this net.
          * If the endpoint is a source-endpoint this function aborts.
          *
@@ -176,15 +168,6 @@ namespace hal
          * @returns True on success.
          */
         bool remove_destination(Gate* gate, const std::string& pin);
-
-        /**
-         * Remove a destination from this net by endpoint.
-         * If the endpoint is a source-endpoint this function aborts.
-         *
-         * @param[in] ep - The endoint.
-         * @returns True on success.
-         */
-        bool remove_destination(const Endpoint& ep);
 
         /**
          * Check whether a gate is a destination of this net.

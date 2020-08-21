@@ -119,13 +119,13 @@ namespace hal
         m_source_pins_table->viewport()->installEventFilter(this);
 
         //NetlistRelay connections
-        connect(&g_netlist_relay, &NetlistRelay::net_removed, this, &NetDetailsWidget::handle_net_removed);
-        connect(&g_netlist_relay, &NetlistRelay::net_name_changed, this, &NetDetailsWidget::handle_net_name_changed);
-        connect(&g_netlist_relay, &NetlistRelay::net_source_added, this, &NetDetailsWidget::handle_net_source_added);
-        connect(&g_netlist_relay, &NetlistRelay::net_source_removed, this, &NetDetailsWidget::handle_net_source_removed);
-        connect(&g_netlist_relay, &NetlistRelay::net_destination_added, this, &NetDetailsWidget::handle_net_destination_added);
-        connect(&g_netlist_relay, &NetlistRelay::net_destination_removed, this, &NetDetailsWidget::handle_net_destination_removed);
-        connect(&g_netlist_relay, &NetlistRelay::gate_name_changed, this, &NetDetailsWidget::handle_gate_name_changed);
+        connect(g_netlist_relay, &NetlistRelay::net_removed, this, &NetDetailsWidget::handle_net_removed);
+        connect(g_netlist_relay, &NetlistRelay::net_name_changed, this, &NetDetailsWidget::handle_net_name_changed);
+        connect(g_netlist_relay, &NetlistRelay::net_source_added, this, &NetDetailsWidget::handle_net_source_added);
+        connect(g_netlist_relay, &NetlistRelay::net_source_removed, this, &NetDetailsWidget::handle_net_source_removed);
+        connect(g_netlist_relay, &NetlistRelay::net_destination_added, this, &NetDetailsWidget::handle_net_destination_added);
+        connect(g_netlist_relay, &NetlistRelay::net_destination_removed, this, &NetDetailsWidget::handle_net_destination_removed);
+        connect(g_netlist_relay, &NetlistRelay::gate_name_changed, this, &NetDetailsWidget::handle_gate_name_changed);
     }
 
     NetDetailsWidget::~NetDetailsWidget()
@@ -352,17 +352,17 @@ namespace hal
         if (!clicked_gate)
             return;
 
-        g_selection_relay.clear();
-        g_selection_relay.m_selected_gates.insert(gate_id);
-        g_selection_relay.m_focus_type = SelectionRelay::item_type::gate;
-        g_selection_relay.m_focus_id   = gate_id;
-        g_selection_relay.m_subfocus   = focus;
+        g_selection_relay->clear();
+        g_selection_relay->m_selected_gates.insert(gate_id);
+        g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+        g_selection_relay->m_focus_id   = gate_id;
+        g_selection_relay->m_subfocus   = focus;
 
         auto pins                          = (sender_table == m_source_pins_table) ? clicked_gate->get_output_pins() : clicked_gate->get_input_pins();
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
-        g_selection_relay.m_subfocus_index = index;
+        g_selection_relay->m_subfocus_index = index;
 
-        g_selection_relay.relay_selection_changed(this);
+        g_selection_relay->relay_selection_changed(this);
     }
 
     void NetDetailsWidget::handle_general_table_menu_requeted(const QPoint& pos)

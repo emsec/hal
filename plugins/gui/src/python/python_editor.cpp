@@ -56,11 +56,11 @@ namespace hal
         m_action_toggle_minimap->setIcon(gui_utility::get_styled_svg_icon(m_toggle_minimap_icon_style, m_toggle_minimap_icon_path));
         m_action_new_file->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
 
-        g_keybind_manager.bind(m_action_open_file, "keybinds/python_open_file");
-        g_keybind_manager.bind(m_action_save, "keybinds/python_save_file");
-        g_keybind_manager.bind(m_action_save_as, "keybinds/python_save_file_as");
-        g_keybind_manager.bind(m_action_run, "keybinds/python_run_file");
-        g_keybind_manager.bind(m_action_new_file, "keybinds/python_create_file");
+        g_keybind_manager->bind(m_action_open_file, "keybinds/python_open_file");
+        g_keybind_manager->bind(m_action_save, "keybinds/python_save_file");
+        g_keybind_manager->bind(m_action_save_as, "keybinds/python_save_file_as");
+        g_keybind_manager->bind(m_action_run, "keybinds/python_run_file");
+        g_keybind_manager->bind(m_action_new_file, "keybinds/python_create_file");
 
         m_action_open_file->setText("Open Script");
         m_action_save->setText("Save");
@@ -247,7 +247,7 @@ namespace hal
             QString tab_name = m_tab_widget->tabText(m_tab_widget->indexOf(current_editor));
 
             if (current_editor)
-                g_file_status_manager.file_changed(current_editor->get_uuid(), "Python tab: " + tab_name);
+                g_file_status_manager->file_changed(current_editor->get_uuid(), "Python tab: " + tab_name);
 
             if (!tab_name.endsWith("*"))
                 m_tab_widget->setTabText(m_tab_widget->indexOf(current_editor), tab_name + "*");
@@ -386,7 +386,7 @@ namespace hal
         m_path_editor_map.insert(file_name, tab);
         m_file_watcher->addPath(file_name);
 
-        g_file_status_manager.file_saved(tab->get_uuid());
+        g_file_status_manager->file_saved(tab->get_uuid());
     }
 
     void PythonEditor::save_file(const bool ask_path, int index)
@@ -437,7 +437,7 @@ namespace hal
         out.close();
         current_editor->document()->setModified(false);
 
-        g_file_status_manager.file_saved(current_editor->get_uuid());
+        g_file_status_manager->file_saved(current_editor->get_uuid());
 
         m_path_editor_map.insert(selected_file_name, current_editor);
         m_file_watcher->addPath(selected_file_name);
@@ -457,7 +457,7 @@ namespace hal
         }
         if (editor->document()->isModified())
         {
-            g_file_status_manager.file_saved(editor->get_uuid());
+            g_file_status_manager->file_saved(editor->get_uuid());
         }
         m_tab_widget->removeTab(index);
     }
@@ -514,14 +514,14 @@ namespace hal
 
     void PythonEditor::handle_action_run()
     {
-        for (const auto& ctx : g_graph_context_manager.get_contexts())
+        for (const auto& ctx : g_graph_context_manager->get_contexts())
         {
             ctx->begin_change();
         }
 
         g_python_context->interpret_script(dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget())->toPlainText());
 
-        for (const auto& ctx : g_graph_context_manager.get_contexts())
+        for (const auto& ctx : g_graph_context_manager->get_contexts())
         {
             ctx->end_change();
         }
@@ -641,7 +641,7 @@ namespace hal
         if (!tab_name.endsWith("*"))
             m_tab_widget->setTabText(m_tab_widget->indexOf(editor_with_modified_base_file), tab_name + "*");
 
-        g_file_status_manager.file_changed(editor_with_modified_base_file->get_uuid(), "Python tab: " + tab_name);
+        g_file_status_manager->file_changed(editor_with_modified_base_file->get_uuid(), "Python tab: " + tab_name);
 
         PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget());
 
