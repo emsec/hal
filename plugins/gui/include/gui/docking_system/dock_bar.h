@@ -23,8 +23,8 @@
 
 #pragma once
 
-#include "gui/content_widget/dock_button.h"
-#include "widget/widget.h"
+#include "gui/docking_system/dock_button.h"
+#include "gui/widget/widget.h"
 
 #include <QFrame>
 #include <QList>

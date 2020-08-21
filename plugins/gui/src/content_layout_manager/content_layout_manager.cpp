@@ -1,4 +1,4 @@
-#include "content_layout_manager/content_layout_manager.h"
+#include "gui/content_layout_manager/content_layout_manager.h"
 
 namespace hal
 {

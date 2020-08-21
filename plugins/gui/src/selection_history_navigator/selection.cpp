@@ -1,4 +1,4 @@
-#include "selection_history_navigator/selection.h"
+#include "gui/selection_history_navigator/selection.h"
 
 namespace hal
 {

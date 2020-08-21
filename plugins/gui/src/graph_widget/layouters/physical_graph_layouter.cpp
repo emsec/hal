@@ -1,6 +1,6 @@
 #include "gui/graph_widget/layouters/physical_graph_layouter.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include <limits>
 #include <set>

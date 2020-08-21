@@ -1,4 +1,4 @@
-#include "plugin_management/plugin_relay.h"
+#include "gui/plugin_management/plugin_relay.h"
 
 #include "core/plugin_manager.h"
 
@@ -6,7 +6,12 @@ namespace hal
 {
     PluginRelay::PluginRelay(QObject* parent) : QObject(parent)
     {
-        plugin_manager::add_model_changed_callback(std::bind(&PluginRelay::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        m_callback_id = plugin_manager::add_model_changed_callback(std::bind(&PluginRelay::plugin_manager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    }
+
+    PluginRelay::~PluginRelay()
+    {
+        plugin_manager::remove_model_changed_callback(m_callback_id);
     }
 
     void PluginRelay::plugin_manager_callback(bool is_load, const std::string& plugin_name, const std::string& plugin_path)

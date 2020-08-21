@@ -1,10 +1,10 @@
-#include "plugin_management/plugin_schedule_manager.h"
+#include "gui/plugin_management/plugin_schedule_manager.h"
 
 #include "core/plugin_interface_cli.h"
 #include "core/plugin_manager.h"
 #include "core/program_arguments.h"
-#include "plugin_access_manager/plugin_access_manager.h"
-#include "plugin_management/plugin_arguments_widget.h"
+#include "gui/plugin_access_manager/plugin_access_manager.h"
+#include "gui/plugin_management/plugin_arguments_widget.h"
 
 namespace hal
 {

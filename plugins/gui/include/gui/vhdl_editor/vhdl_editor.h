@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "code_editor/code_editor.h"
+#include "gui/code_editor/code_editor.h"
 #include "gui/content_widget/content_widget.h"
 
 namespace hal

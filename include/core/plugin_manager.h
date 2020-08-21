@@ -60,11 +60,18 @@ namespace hal
         std::set<std::string> get_plugin_names();
 
         /**
-         * Get a mapping of flags pointing to their corresponding plugin.
+         * Get a mapping of flags pointing to their corresponding cli plugin.
          *
          * @returns A map from flag to plugin name.
          */
-        std::unordered_map<std::string, std::string> get_flag_to_plugin_mapping();
+        std::unordered_map<std::string, std::string> get_cli_plugin_flags();
+
+        /**
+         * Get a mapping of flags pointing to their corresponding ui plugin.
+         *
+         * @returns A map from flag to plugin name.
+         */
+        std::unordered_map<std::string, std::string> get_ui_plugin_flags();
 
         /**
          * Returns command line interface options for all plugins

@@ -1,4 +1,4 @@
-#include "file_modified_bar/file_modified_bar.h"
+#include "gui/file_modified_bar/file_modified_bar.h"
 
 #include <QFileInfo>
 

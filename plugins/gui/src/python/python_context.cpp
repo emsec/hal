@@ -1,15 +1,14 @@
-#include <QDir>
-#include <fstream>
-#include <gui/python/python_context.h>
-
-#include "python/python_context.h"
-#include "python_binding/bindings.h"
+#include "gui/python/python_context.h"
 
 #include "core/log.h"
 #include "core/utils.h"
-
+#include "gui/gui_globals.h"
 #include "gui/python/python_context_subscriber.h"
-#include "gui_globals.h"
+#include "python_binding/bindings.h"
+
+#include <QDir>
+#include <fstream>
+#include <gui/python/python_context.h>
 
 // Following is needed for PythonContext::check_complete_statement
 #include <Python.h>
@@ -44,36 +43,39 @@ namespace hal
 
     void PythonContext::initialize_context(py::dict* context)
     {
-        py::exec("import __main__\n"
-                 "import io, sys\n"
-                 "sys.path.append('"
-                     + core_utils::get_library_directory().string()
-                     + "')\n"
-                 "from hal_gui.console import reset\n"
-                 "from hal_gui.console import clear\n"
-                 "class StdOutCatcher(io.TextIOBase):\n"
-                 "    def __init__(self):\n"
-                 "        pass\n"
-                 "    def write(self, stuff):\n"
-                 "        from hal_gui import console\n"
-                 "        console.redirector.write_stdout(stuff)\n"
-                 "class StdErrCatcher(io.TextIOBase):\n"
-                 "    def __init__(self):\n"
-                 "        pass\n"
-                 "    def write(self, stuff):\n"
-                 "        from hal_gui import console\n"
-                 "        console.redirector.write_stderr(stuff)\n"
-                 "sys.stdout = StdOutCatcher()\n"
-                 "sys.__stdout__ = sys.stdout\n"
-                 "sys.stderr = StdErrCatcher()\n"
-                 "sys.__stderr__ = sys.stderr\n"
-                 "import hal_py\n",
-                 *context,
-                 *context);
+        std::string command = "import __main__\n"
+                              "import io, sys\n";
+        for (auto path : core_utils::get_plugin_directories())
+        {
+            command += "sys.path.append('" + path.string() + "')\n";
+        }
+        command += "sys.path.append('" + core_utils::get_library_directory().string()
+                   + "')\n"
+                     "from hal_gui.console import reset\n"
+                     "from hal_gui.console import clear\n"
+                     "class StdOutCatcher(io.TextIOBase):\n"
+                     "    def __init__(self):\n"
+                     "        pass\n"
+                     "    def write(self, stuff):\n"
+                     "        from hal_gui import console\n"
+                     "        console.redirector.write_stdout(stuff)\n"
+                     "class StdErrCatcher(io.TextIOBase):\n"
+                     "    def __init__(self):\n"
+                     "        pass\n"
+                     "    def write(self, stuff):\n"
+                     "        from hal_gui import console\n"
+                     "        console.redirector.write_stderr(stuff)\n"
+                     "sys.stdout = StdOutCatcher()\n"
+                     "sys.__stdout__ = sys.stdout\n"
+                     "sys.stderr = StdErrCatcher()\n"
+                     "sys.__stderr__ = sys.stderr\n"
+                     "import hal_py\n";
+
+        py::exec(command, *context, *context);
 
         (*context)["netlist"] = RawPtrWrapper(g_netlist);
 
-        if(g_gui_api)
+        if (g_gui_api)
             (*context)["gui"] = g_gui_api;
     }
 
@@ -286,4 +288,4 @@ namespace hal
     {
         (*m_context)["netlist"] = RawPtrWrapper(g_netlist);
     }
-}
+}    // namespace hal

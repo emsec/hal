@@ -1,6 +1,6 @@
-#include "settings/dropdown_setting.h"
+#include "gui/settings/dropdown_setting.h"
 
-#include "label_button/label_button.h"
+#include "gui/label_button/label_button.h"
 
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -10,7 +10,7 @@
 #include <QMap>
 #include <QComboBox>
 #include <QStringList>
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {

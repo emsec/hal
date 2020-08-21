@@ -1,6 +1,6 @@
-#include "welcome_screen/get_in_touch_widget.h"
+#include "gui/welcome_screen/get_in_touch_widget.h"
 
-#include "welcome_screen/get_in_touch_item.h"
+#include "gui/welcome_screen/get_in_touch_item.h"
 
 #include <QDesktopServices>
 #include <QLabel>

@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "graph_widget/items/graphics_item.h"
+#include "gui/graph_widget/items/graphics_item.h"
 
 #include <memory>
 

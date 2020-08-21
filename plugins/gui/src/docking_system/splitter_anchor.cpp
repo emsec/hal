@@ -1,9 +1,9 @@
-#include "gui/content_widget/splitter_anchor.h"
+#include "gui/docking_system/splitter_anchor.h"
 #include "gui/content_frame/content_frame.h"
 #include "gui/content_widget/content_widget.h"
-#include "gui/content_widget/content_drag_relay.h"
-#include "gui/content_widget/dock_bar.h"
-#include "splitter/splitter.h"
+#include "gui/docking_system/content_drag_relay.h"
+#include "gui/docking_system/dock_bar.h"
+#include "gui/splitter/splitter.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStyle>

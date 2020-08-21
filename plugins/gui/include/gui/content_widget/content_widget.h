@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "widget/widget.h"
+#include "gui/widget/widget.h"
 
 #include <QIcon>
 #include <QList>

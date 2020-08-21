@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "graph_widget/items/nets/separated_graphics_net.h"
+#include "gui/graph_widget/items/nets/separated_graphics_net.h"
 
 namespace hal
 {

@@ -1,4 +1,4 @@
-#include "graphics/graphics_view.h"
+#include "gui/graphics/graphics_view.h"
 #include <QOpenGLWidget>
 #include <Qt>
 namespace hal

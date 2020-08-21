@@ -1,16 +1,16 @@
-#include "python/python_editor.h"
+#include "gui/python/python_editor.h"
 
-#include "code_editor/syntax_highlighter/python_syntax_highlighter.h"
+#include "gui/code_editor/syntax_highlighter/python_syntax_highlighter.h"
 #include "core/log.h"
-#include "graph_widget/contexts/graph_context.h"
-#include "gui_globals.h"
-#include "gui_utils/graphics.h"
-#include "action/action.h"
-#include "python/python_code_editor.h"
-#include "python/python_editor_code_completion_dialog.h"
-#include "searchbar/searchbar.h"
-#include "splitter/splitter.h"
-#include "toolbar/toolbar.h"
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
+#include "gui/action/action.h"
+#include "gui/python/python_code_editor.h"
+#include "gui/python/python_editor_code_completion_dialog.h"
+#include "gui/searchbar/searchbar.h"
+#include "gui/splitter/splitter.h"
+#include "gui/toolbar/toolbar.h"
 
 #include <QAction>
 #include <QDebug>

@@ -1,8 +1,8 @@
-#include "code_editor/code_editor.h"
+#include "gui/code_editor/code_editor.h"
 
-#include "code_editor/code_editor_scrollbar.h"
-#include "code_editor/line_number_area.h"
-#include "code_editor/minimap_scrollbar.h"
+#include "gui/code_editor/code_editor_scrollbar.h"
+#include "gui/code_editor/line_number_area.h"
+#include "gui/code_editor/minimap_scrollbar.h"
 
 #include "gui/gui_globals.h"
 

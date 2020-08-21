@@ -25,11 +25,11 @@
 
 #include "gui/content_widget/content_widget.h"
 #include "def.h"
-#include "searchbar/searchbar.h"
-#include "selection_widget/models/gate_table_model.h"
-#include "selection_widget/models/gate_table_proxy_model.h"
-#include "selection_widget/models/net_table_model.h"
-#include "selection_widget/models/net_table_proxy_model.h"
+#include "gui/searchbar/searchbar.h"
+#include "gui/selection_widget/models/gate_table_model.h"
+#include "gui/selection_widget/models/gate_table_proxy_model.h"
+#include "gui/selection_widget/models/net_table_model.h"
+#include "gui/selection_widget/models/net_table_proxy_model.h"
 
 #include <QTableView>
 

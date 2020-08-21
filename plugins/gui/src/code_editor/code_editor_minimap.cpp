@@ -1,7 +1,7 @@
-#include "code_editor/code_editor_minimap.h"
+#include "gui/code_editor/code_editor_minimap.h"
 
-#include "code_editor/code_editor.h"
-#include "code_editor/minimap_scrollbar.h"
+#include "gui/code_editor/code_editor.h"
+#include "gui/code_editor/minimap_scrollbar.h"
 
 #include <QPainter>
 #include <QStyleOption>

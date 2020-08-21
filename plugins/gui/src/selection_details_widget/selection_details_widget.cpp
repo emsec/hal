@@ -1,14 +1,14 @@
-#include "selection_details_widget/selection_details_widget.h"
-#include "selection_details_widget/tree_navigation/selection_tree_view.h"
-#include "selection_details_widget/gate_details_widget.h"
-#include "selection_details_widget/net_details_widget.h"
-#include "selection_details_widget/module_details_widget.h"
+#include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/selection_details_widget/gate_details_widget.h"
+#include "gui/selection_details_widget/net_details_widget.h"
+#include "gui/selection_details_widget/module_details_widget.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 #include "netlist/gate.h"
 #include "netlist/net.h"
 #include "netlist/netlist.h"
-#include "searchbar/searchbar.h"
+#include "gui/searchbar/searchbar.h"
 
 #include <QHeaderView>
 #include <QLabel>
@@ -26,7 +26,7 @@ namespace hal
         : ContentWidget("Details", parent), m_numberSelectedItems(0)
     {
         m_splitter = new QSplitter(Qt::Horizontal, this);
-        //m_splitter->setStretchFactor(0,5); /* Doesn't do anything? */ 
+        //m_splitter->setStretchFactor(0,5); /* Doesn't do anything? */
         //m_splitter->setStretchFactor(1,10);
 
         //container for left side of splitter containing a selection tree view and a searchbar
@@ -39,7 +39,7 @@ namespace hal
         m_selectionTreeView  = new SelectionTreeView(treeViewContainer);
         m_searchbar = new Searchbar(treeViewContainer);
         m_searchbar->hide();
-      
+
         containerLayout->addWidget(m_selectionTreeView);
         containerLayout->addWidget(m_searchbar);
         containerLayout->setSpacing(0);

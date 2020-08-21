@@ -1,10 +1,10 @@
-#include "logger/logger_marshall.h"
-#include "logger/filter_item.h"
+#include "gui/logger/logger_marshall.h"
+#include "gui/logger/filter_item.h"
 #include <QTimer>
 #include <algorithm>
 #include <functional>
 #include <map>
-#include "logger/logger_qss_adapter.h"
+#include "gui/logger/logger_qss_adapter.h"
 
 namespace hal
 {
@@ -13,11 +13,6 @@ namespace hal
         m_max_line_count = 1000;
         m_edit->document()->setMaximumBlockCount(m_max_line_count);
         connect(m_edit, &QPlainTextEdit::cursorPositionChanged, this, &LoggerMarshall::highlight_current_line);
-    }
-
-    LoggerMarshall::~LoggerMarshall()
-    {
-        LogManager::get_instance().get_gui_callback().remove_callback("gui");
     }
 
     void LoggerMarshall::append_log(spdlog::level::level_enum t, const QString& msg, FilterItem* filter)

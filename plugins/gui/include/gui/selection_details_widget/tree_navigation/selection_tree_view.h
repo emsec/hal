@@ -23,8 +23,8 @@
 
 #pragma once
 
-#include "selection_details_widget/tree_navigation/selection_tree_item.h"
-#include "selection_details_widget/tree_navigation/selection_tree_model.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
 
 #include <QTreeView>
 #include <QWidget>

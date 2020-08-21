@@ -1,4 +1,4 @@
-#include "gui_utils/geometry.h"
+#include "gui/gui_utils/geometry.h"
 
 #include <QApplication>
 #include <QDesktopWidget>

@@ -1,4 +1,4 @@
-#include "code_editor/minimap_scrollbar.h"
+#include "gui/code_editor/minimap_scrollbar.h"
 
 #include <QFrame>
 #include <QMouseEvent>

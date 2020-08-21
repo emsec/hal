@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "channel_manager/channel_item.h"
+#include "gui/channel_manager/channel_item.h"
 #include "core/log.h"
 #include <QAbstractTableModel>
 #include <QModelIndex>
@@ -44,6 +44,7 @@ namespace hal
 
     public:
         static ChannelModel* get_instance();
+        ~ChannelModel();
 
         QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
         Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
@@ -64,5 +65,7 @@ namespace hal
         explicit ChannelModel(QObject* parent = 0);
         QList<ChannelItem*> m_permanent_items;
         boost::circular_buffer<ChannelItem*> m_temporary_items;
+
+        u64 m_gui_callback_id;
     };
 }

@@ -1,5 +1,5 @@
-#include "overlay/reminder_overlay.h"
-#include "main_window/main_window.h"
+#include "gui/overlay/reminder_overlay.h"
+#include "gui/main_window/main_window.h"
 
 #include <QGraphicsOpacityEffect>
 #include <QLabel>

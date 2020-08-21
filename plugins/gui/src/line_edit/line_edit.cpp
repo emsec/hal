@@ -1,4 +1,4 @@
-#include "line_edit/line_edit.h"
+#include "gui/line_edit/line_edit.h"
 
 #include <QStyle>
 

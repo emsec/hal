@@ -1,6 +1,6 @@
-#include "settings/spinbox_setting.h"
+#include "gui/settings/spinbox_setting.h"
 
-#include "label_button/label_button.h"
+#include "gui/label_button/label_button.h"
 
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -9,7 +9,7 @@
 
 #include <QSpinBox>
 #include <QStringList>
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {

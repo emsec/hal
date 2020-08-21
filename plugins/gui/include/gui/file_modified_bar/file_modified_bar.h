@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "gui_def.h"
+#include "gui/gui_def.h"
 
 #include <QFrame>
 #include <QHBoxLayout>

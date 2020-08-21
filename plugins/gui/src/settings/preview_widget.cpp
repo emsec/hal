@@ -1,4 +1,4 @@
-#include "settings/preview_widget.h"
+#include "gui/settings/preview_widget.h"
 
 #include <QVBoxLayout>
 

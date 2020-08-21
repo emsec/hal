@@ -1,7 +1,7 @@
-#include "file_status_manager/file_status_manager.h"
-#include "file_manager/file_manager.h"
+#include "gui/file_status_manager/file_status_manager.h"
+#include "gui/file_manager/file_manager.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {

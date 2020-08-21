@@ -1,4 +1,4 @@
-#include "log_channel_manager/log_channel_manager.h"
+#include "gui/log_channel_manager/log_channel_manager.h"
 
 namespace hal
 {

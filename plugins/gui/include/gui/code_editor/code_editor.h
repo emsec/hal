@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "code_editor/code_editor_minimap.h"
+#include "gui/code_editor/code_editor_minimap.h"
 
 #include <QPlainTextEdit>
 

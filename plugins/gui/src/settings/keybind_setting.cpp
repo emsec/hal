@@ -1,7 +1,7 @@
-#include "settings/keybind_setting.h"
+#include "gui/settings/keybind_setting.h"
 
-#include "label_button/label_button.h"
-#include "validator/unique_string_validator.h"
+#include "gui/label_button/label_button.h"
+#include "gui/validator/unique_string_validator.h"
 
 #include <QFormLayout>
 #include <QVBoxLayout>
@@ -11,7 +11,7 @@
 #include <QCheckBox>
 #include <QKeySequenceEdit>
 #include <QStringList>
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {

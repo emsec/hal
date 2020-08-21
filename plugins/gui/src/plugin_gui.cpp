@@ -1,4 +1,4 @@
-#include "plugin_gui.h"
+#include "gui/plugin_gui.h"
 
 #include "core/log.h"
 #include "core/plugin_manager.h"
@@ -34,13 +34,13 @@
 #include <gui/focus_logger/focus_logger.h>
 #include <signal.h>
 
-extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
-{
-    return std::make_unique<hal::PluginGui>();
-}
-
 namespace hal
 {
+    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
+    {
+        return std::make_unique<PluginGui>();
+    }
+
     QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
     QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
 
@@ -147,8 +147,6 @@ namespace hal
         QFontDatabase::addApplicationFont(":/fonts/Source Code Pro/SourceCodePro-Black");
 
         // LOGGER HERE
-
-        plugin_manager::load_all_plugins();
         gate_library_manager::load_all();
 
         // TEST
@@ -209,4 +207,15 @@ namespace hal
         l.add_channel("gui", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         l.add_channel("python", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
+
+
+    ProgramOptions PluginGui::get_cli_options() const
+    {
+        ProgramOptions description;
+
+        description.add({"--gui", "-g"}, "start graphical user interface");
+
+        return description;
+    }
+
 }    // namespace hal

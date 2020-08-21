@@ -1,4 +1,4 @@
-#include "style/style.h"
+#include "gui/style/style.h"
 
 #include "core/log.h"
 

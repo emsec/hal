@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "logger/filter_item.h"
+#include "gui/logger/filter_item.h"
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>

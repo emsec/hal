@@ -1,10 +1,10 @@
-#include "gui/content_widget/dock_bar.h"
+#include "gui/docking_system/dock_bar.h"
 #include "gui/content_frame/content_frame.h"
 #include "gui/content_widget/content_widget.h"
-#include "gui/content_widget/content_drag_relay.h"
-#include "gui/content_widget/dock_mime_data.h"
-#include "gui_globals.h"
-#include "content_anchor/content_anchor.h"
+#include "gui/docking_system/content_drag_relay.h"
+#include "gui/docking_system/dock_mime_data.h"
+#include "gui/gui_globals.h"
+#include "gui/content_anchor/content_anchor.h"
 #include <QApplication>
 #include <QDrag>
 #include <QDragEnterEvent>

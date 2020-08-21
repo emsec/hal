@@ -1,4 +1,4 @@
-#include "module_model/module_item.h"
+#include "gui/module_model/module_item.h"
 
 #include "netlist/module.h"
 

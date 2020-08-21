@@ -1,8 +1,8 @@
-#include "welcome_screen/recent_files_widget.h"
+#include "gui/welcome_screen/recent_files_widget.h"
 
-#include "file_manager/file_manager.h"
-#include "gui_globals.h"
-#include "welcome_screen/recent_file_item.h"
+#include "gui/file_manager/file_manager.h"
+#include "gui/gui_globals.h"
+#include "gui/welcome_screen/recent_file_item.h"
 
 #include <QList>
 #include <QSettings>

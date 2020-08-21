@@ -1,4 +1,4 @@
-#include "graphics_effects/shadow_effect.h"
+#include "gui/graphics_effects/shadow_effect.h"
 
 #include <QPainter>
 

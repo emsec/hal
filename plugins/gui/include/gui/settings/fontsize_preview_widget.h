@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "settings/preview_widget.h"
+#include "gui/settings/preview_widget.h"
 
 #include <QLabel>
 #include <QFrame>

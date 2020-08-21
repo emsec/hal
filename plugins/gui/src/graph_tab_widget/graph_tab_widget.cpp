@@ -1,10 +1,10 @@
-#include "graph_tab_widget/graph_tab_widget.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include <QTabWidget>
 #include <QVBoxLayout>

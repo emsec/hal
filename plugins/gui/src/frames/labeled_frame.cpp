@@ -1,4 +1,4 @@
-#include "frames/labeled_frame.h"
+#include "gui/frames/labeled_frame.h"
 
 #include <QHBoxLayout>
 #include <QLabel>

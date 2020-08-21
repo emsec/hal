@@ -1,6 +1,6 @@
-#include "code_editor/syntax_highlighter/python_syntax_highlighter.h"
+#include "gui/code_editor/syntax_highlighter/python_syntax_highlighter.h"
 
-#include "code_editor/syntax_highlighter/python_qss_adapter.h"
+#include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
 namespace hal
 {
     PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)

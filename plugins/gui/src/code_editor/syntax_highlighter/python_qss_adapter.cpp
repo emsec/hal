@@ -1,4 +1,4 @@
-#include "code_editor/syntax_highlighter/python_qss_adapter.h"
+#include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
 
 #include <QDebug>
 #include <QStyle>

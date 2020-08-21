@@ -24,7 +24,7 @@
 #pragma once
 
 #include "def.h"
-#include "selection_details_widget/details_widget.h"
+#include "gui/selection_details_widget/details_widget.h"
 
 #include <QFont>
 #include <QTableWidget>

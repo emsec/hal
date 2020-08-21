@@ -1,6 +1,6 @@
-#include "logger/filter_dialog.h"
-#include "logger/filter_item.h"
-#include "logger/filter_tab_bar.h"
+#include "gui/logger/filter_dialog.h"
+#include "gui/logger/filter_item.h"
+#include "gui/logger/filter_tab_bar.h"
 
 namespace hal
 {

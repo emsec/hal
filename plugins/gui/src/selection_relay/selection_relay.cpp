@@ -1,4 +1,4 @@
-#include "selection_relay/selection_relay.h"
+#include "gui/selection_relay/selection_relay.h"
 
 #include "core/log.h"
 
@@ -6,7 +6,7 @@
 #include "netlist/module.h"
 #include "netlist/net.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include <QDebug>
 namespace hal

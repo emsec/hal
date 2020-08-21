@@ -1,4 +1,4 @@
-#include "file_manager/file_manager.h"
+#include "gui/file_manager/file_manager.h"
 
 #include "core/log.h"
 #include "gui/gui_globals.h"

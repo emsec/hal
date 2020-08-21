@@ -1,6 +1,6 @@
-#include "selection_history_navigator/selection_history_navigator.h"
+#include "gui/selection_history_navigator/selection_history_navigator.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include <QList>
 

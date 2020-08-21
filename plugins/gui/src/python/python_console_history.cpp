@@ -2,7 +2,7 @@
 #include <fstream>
 #include <gui/python/python_console_history.h>
 
-#include "python/python_console_history.h"
+#include "gui/python/python_console_history.h"
 
 namespace hal
 {

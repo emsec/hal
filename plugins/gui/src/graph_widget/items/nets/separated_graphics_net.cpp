@@ -1,8 +1,8 @@
-#include "graph_widget/items/nets/separated_graphics_net.h"
+#include "gui/graph_widget/items/nets/separated_graphics_net.h"
 
 #include "netlist/net.h"
 
-#include "graph_widget/graph_widget_constants.h"
+#include "gui/graph_widget/graph_widget_constants.h"
 
 namespace hal
 {

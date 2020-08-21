@@ -1,4 +1,4 @@
-#include "label_button/label_button.h"
+#include "gui/label_button/label_button.h"
 
 namespace hal
 {

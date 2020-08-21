@@ -1,4 +1,5 @@
-#include "channel_manager/channel_item.h"
+#include "gui/channel_manager/channel_item.h"
+
 namespace hal
 {
     ChannelItem::ChannelItem(QString name)

@@ -1,4 +1,4 @@
-#include "module_widget/module_tree_view.h"
+#include "gui/module_widget/module_tree_view.h"
 #include <QMouseEvent>
 
 namespace hal

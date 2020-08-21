@@ -1,13 +1,13 @@
-#include "plugin_management/plugin_schedule_widget.h"
+#include "gui/plugin_management/plugin_schedule_widget.h"
 
-#include "frames/labeled_frame.h"
-#include "graphics_effects/shadow_effect.h"
-#include "plugin_management/loaded_plugins_widget.h"
-#include "plugin_management/no_scheduled_plugins_widget.h"
-#include "plugin_management/plugin_arguments_widget.h"
-#include "plugin_management/scheduled_plugin_item_area.h"
-#include "plugin_management/scheduled_plugins_widget.h"
-#include "searchbar/searchbar.h"
+#include "gui/frames/labeled_frame.h"
+#include "gui/graphics_effects/shadow_effect.h"
+#include "gui/plugin_management/loaded_plugins_widget.h"
+#include "gui/plugin_management/no_scheduled_plugins_widget.h"
+#include "gui/plugin_management/plugin_arguments_widget.h"
+#include "gui/plugin_management/scheduled_plugin_item_area.h"
+#include "gui/plugin_management/scheduled_plugins_widget.h"
+#include "gui/searchbar/searchbar.h"
 
 #include <QHBoxLayout>
 #include <QShortcut>

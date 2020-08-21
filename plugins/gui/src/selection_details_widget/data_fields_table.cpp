@@ -2,7 +2,7 @@
 #include <QMenu>
 #include <QApplication>
 #include <QClipboard>
-#include "selection_details_widget/data_fields_table.h"
+#include "gui/selection_details_widget/data_fields_table.h"
 #include "netlist/data_container.h"
 
 namespace hal {

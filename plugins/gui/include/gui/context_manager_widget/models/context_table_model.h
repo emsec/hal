@@ -24,7 +24,7 @@
 #pragma once
 
 #include "def.h"
-#include "graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/contexts/graph_context.h"
 
 #include <QAbstractTableModel>
 

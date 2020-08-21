@@ -1,4 +1,4 @@
-#include "splitter/splitter.h"
+#include "gui/splitter/splitter.h"
 
 namespace hal
 {

@@ -1,4 +1,4 @@
-#include "gui/content_widget/dock_mime_data.h"
+#include "gui/docking_system/dock_mime_data.h"
 
 namespace hal
 {

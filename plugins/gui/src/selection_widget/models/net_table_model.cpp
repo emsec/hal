@@ -1,6 +1,6 @@
 #include "gui/selection_widget/models/net_table_model.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {

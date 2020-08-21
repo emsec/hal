@@ -1,4 +1,4 @@
-#include "gui/content_widget/content_drag_relay.h"
+#include "gui/docking_system/content_drag_relay.h"
 
 namespace hal
 {

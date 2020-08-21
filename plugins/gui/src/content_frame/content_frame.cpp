@@ -1,8 +1,8 @@
 #include "gui/content_frame/content_frame.h"
 
 #include "gui/content_widget/content_widget.h"
-#include "gui_utils/graphics.h"
-#include "toolbar/toolbar.h"
+#include "gui/gui_utils/graphics.h"
+#include "gui/toolbar/toolbar.h"
 
 #include <QAction>
 #include <QChildEvent>

@@ -1,4 +1,4 @@
-#include "module_widget/module_widget.h"
+#include "gui/module_widget/module_widget.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"

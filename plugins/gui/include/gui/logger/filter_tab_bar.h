@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "logger/filter_dialog.h"
+#include "gui/logger/filter_dialog.h"
 #include <QList>
 #include <QTabBar>
 #include <QToolButton>

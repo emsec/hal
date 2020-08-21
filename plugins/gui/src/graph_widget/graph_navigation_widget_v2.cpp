@@ -1,12 +1,12 @@
-#include "graph_widget/graph_navigation_widget_v2.h"
+#include "gui/graph_widget/graph_navigation_widget_v2.h"
 
 #include "core/log.h"
 
 #include "netlist/gate.h"
 #include "netlist/module.h"
 
-#include "gui_globals.h"
-#include "gui_utils/netlist.h"
+#include "gui/gui_globals.h"
+#include "gui/gui_utils/netlist.h"
 
 #include <QHeaderView>
 #include <QKeyEvent>

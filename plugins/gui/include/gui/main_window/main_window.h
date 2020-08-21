@@ -23,20 +23,20 @@
 
 #pragma once
 
-#include "content_layout_area/content_layout_area.h"
+#include "gui/content_layout_area/content_layout_area.h"
 #include "core/program_options.h"
-#include "action/action.h"
-#include "plugin_manager/plugin_manager_widget.h"
-#include "plugin_manager/plugin_model.h"
-#include "settings/main_settings_widget.h"
-#include "splitter/splitter.h"
+#include "gui/action/action.h"
+#include "gui/plugin_manager/plugin_manager_widget.h"
+#include "gui/plugin_manager/plugin_model.h"
+#include "gui/settings/main_settings_widget.h"
+#include "gui/splitter/splitter.h"
 #include <QLayout>
 #include <QMenuBar>
 #include <QObject>
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QToolBar>
-#include <core/program_options.h>
+#include "core/program_options.h"
 
 namespace hal
 {

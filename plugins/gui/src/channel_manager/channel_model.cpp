@@ -1,15 +1,21 @@
-#include "channel_manager/channel_model.h"
+#include "gui/channel_manager/channel_model.h"
+
 #include "core/log.h"
 
 #define ALL_CHANNEL "all"
 namespace hal
 {
-
     ChannelModel ChannelModel::s_model;
 
     ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent), m_temporary_items(30)
     {
-        LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&ChannelModel::handle_logmanager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        LogManager::get_instance().get_gui_callback().add_callback("gui",
+                                                                   std::bind(&ChannelModel::handle_logmanager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    }
+
+    ChannelModel::~ChannelModel()
+    {
+        LogManager::get_instance().get_gui_callback().remove_callback("gui");
     }
 
     ChannelModel* ChannelModel::get_instance()
@@ -151,4 +157,4 @@ namespace hal
         Q_EMIT updated(t, ALL_CHANNEL, msg_text);
         Q_EMIT updated(t, channel_name, msg_text);
     }
-}
+}    // namespace hal

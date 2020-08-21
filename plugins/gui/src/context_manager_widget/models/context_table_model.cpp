@@ -1,6 +1,6 @@
 #include "gui/context_manager_widget/models/context_table_model.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {
@@ -80,7 +80,7 @@ namespace hal
 
         return QVariant();
     }
-    
+
     void ContextTableModel::begin_insert_context(GraphContext* context)
     {
         Q_UNUSED(context)

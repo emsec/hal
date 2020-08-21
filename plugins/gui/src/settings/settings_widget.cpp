@@ -1,4 +1,4 @@
-#include "settings/settings_widget.h"
+#include "gui/settings/settings_widget.h"
 
 #include <QBoxLayout>
 #include <QLabel>

@@ -27,8 +27,8 @@
 
 #include "gui/gui_def.h"
 #include "netlist/endpoint.h"
-#include "netlist_relay/netlist_relay.h"
-#include "selection_details_widget/details_widget.h"
+#include "gui/netlist_relay/netlist_relay.h"
+#include "gui/selection_details_widget/details_widget.h"
 
 #include <QWidget>
 

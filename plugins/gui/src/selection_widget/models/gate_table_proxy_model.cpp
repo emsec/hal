@@ -1,4 +1,4 @@
-#include "selection_widget/models/gate_table_proxy_model.h"
+#include "gui/selection_widget/models/gate_table_proxy_model.h"
 
 gate_table_proxy_model::gate_table_proxy_model(QObject* parent) : QSortFilterProxyModel(parent)
 {
@@ -18,7 +18,7 @@ bool gate_table_proxy_model::filterAcceptsRow(int source_row, const QModelIndex&
     if(m_filter_expression.match(gate_type).hasMatch() || m_filter_expression.match(gate_name).hasMatch() || m_filter_expression.match(gate_id).hasMatch())
         return true;
     else
-        return false; 
+        return false;
 }
 
 void gate_table_proxy_model::handle_filter_text_changed(const QString& filter_text)

@@ -14,6 +14,19 @@ namespace hal
         return std::make_unique<PluginPythonShell>();
     }
 
+    ProgramOptions PluginPythonShell::get_cli_options() const
+    {
+        ProgramOptions description;
+
+        description.add("--python",
+                        "start python shell. To run a python script "
+                        "use following syntax: --python <python3 "
+                        "interpreter options> <file to process> "
+                        "<args to pass to python script>");
+
+        return description;
+    }
+
     std::string PluginPythonShell::get_name() const
     {
         return std::string("python shell");

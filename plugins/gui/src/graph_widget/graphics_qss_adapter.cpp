@@ -1,4 +1,4 @@
-#include "graph_widget/graphics_qss_adapter.h"
+#include "gui/graph_widget/graphics_qss_adapter.h"
 
 #include <QStyle>
 

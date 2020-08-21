@@ -1,4 +1,4 @@
-#include "selection_widget/models/net_table_proxy_model.h"
+#include "gui/selection_widget/models/net_table_proxy_model.h"
 
 net_table_proxy_model::net_table_proxy_model(QObject* parent) : QSortFilterProxyModel(parent)
 {
@@ -16,7 +16,7 @@ bool net_table_proxy_model::filterAcceptsRow(int source_row, const QModelIndex& 
     if(m_filter_expression.match(net_name).hasMatch() || m_filter_expression.match(net_id).hasMatch())
         return true;
     else
-        return false; 
+        return false;
 }
 
 void net_table_proxy_model::handle_filter_text_changed(const QString& filter_text)

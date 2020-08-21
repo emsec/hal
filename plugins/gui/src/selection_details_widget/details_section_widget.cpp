@@ -1,5 +1,5 @@
-#include "gui_globals.h"
-#include "selection_details_widget/details_section_widget.h"
+#include "gui/gui_globals.h"
+#include "gui/selection_details_widget/details_section_widget.h"
 #include <QVBoxLayout>
 #include <QHeaderView>
 

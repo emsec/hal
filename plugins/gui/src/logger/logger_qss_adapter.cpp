@@ -1,4 +1,4 @@
-#include "logger/logger_qss_adapter.h"
+#include "gui/logger/logger_qss_adapter.h"
 #include <QStyle>
 
 namespace hal

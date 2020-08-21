@@ -1,10 +1,10 @@
-#include "content_manager/content_manager.h"
+#include "gui/content_manager/content_manager.h"
 
-#include "context_manager_widget/context_manager_widget.h"
-#include "file_manager/file_manager.h"
-#include "graph_tab_widget/graph_tab_widget.h"
-#include "graph_widget/graph_context_manager.h"
-#include "graph_widget/graph_widget.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
+#include "gui/file_manager/file_manager.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/graph_widget/graph_context_manager.h"
+#include "gui/graph_widget/graph_widget.h"
 #include "gui/content_layout_area/content_layout_area.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/docking_system/tab_widget.h"
@@ -17,11 +17,11 @@
 #include "gui/python/python_console_widget.h"
 #include "gui/python/python_editor.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
-#include "gui_globals.h"
-#include "main_window/main_window.h"
+#include "gui/gui_globals.h"
+#include "gui/main_window/main_window.h"
 #include "netlist/netlist.h"
 #include "netlist/persistent/netlist_serializer.h"
-#include "vhdl_editor/vhdl_editor.h"
+#include "gui/vhdl_editor/vhdl_editor.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>

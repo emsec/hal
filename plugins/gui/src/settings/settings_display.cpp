@@ -1,4 +1,4 @@
-#include "settings/settings_display.h"
+#include "gui/settings/settings_display.h"
 
 #include <QFrame>
 #include <QVBoxLayout>

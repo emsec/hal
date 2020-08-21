@@ -23,10 +23,10 @@
 
 #pragma once
 
-#include "gui/content_widget/dock_bar.h"
-#include "content_anchor/content_anchor.h"
-#include "widget/widget.h"
-#include "toolbar/toolbar.h"
+#include "gui/docking_system/dock_bar.h"
+#include "gui/content_anchor/content_anchor.h"
+#include "gui/widget/widget.h"
+#include "gui/toolbar/toolbar.h"
 
 #include <QAction>
 #include <QLayout>

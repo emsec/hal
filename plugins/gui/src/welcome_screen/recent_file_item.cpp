@@ -1,9 +1,9 @@
-#include "welcome_screen/recent_file_item.h"
+#include "gui/welcome_screen/recent_file_item.h"
 
 #include "netlist/event_system/event_controls.h"
 
-#include "file_manager/file_manager.h"
-#include "gui_utils/graphics.h"
+#include "gui/file_manager/file_manager.h"
+#include "gui/gui_utils/graphics.h"
 
 #include <QEvent>
 #include <QFileInfo>

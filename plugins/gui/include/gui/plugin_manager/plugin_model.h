@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "plugin_manager/plugin_item.h"
+#include "gui/plugin_manager/plugin_item.h"
 #include <QAbstractItemModel>
 #include <def.h>
 

@@ -1,6 +1,6 @@
-#include "expanding_list/expanding_list_item.h"
+#include "gui/expanding_list/expanding_list_item.h"
 
-#include "expanding_list/expanding_list_button.h"
+#include "gui/expanding_list/expanding_list_button.h"
 
 #include <QPropertyAnimation>
 #include <QStyle>

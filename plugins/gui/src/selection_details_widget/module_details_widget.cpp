@@ -1,14 +1,14 @@
-#include "selection_details_widget/module_details_widget.h"
+#include "gui/selection_details_widget/module_details_widget.h"
 
-#include "graph_widget/graph_navigation_widget.h"
-#include "gui_globals.h"
-#include "input_dialog/input_dialog.h"
+#include "gui/graph_widget/graph_navigation_widget.h"
+#include "gui/gui_globals.h"
+#include "gui/input_dialog/input_dialog.h"
 #include "netlist/gate.h"
 #include "netlist/module.h"
 #include "netlist/net.h"
-#include "selection_details_widget/data_fields_table.h"
-#include "selection_details_widget/details_section_widget.h"
-#include "selection_details_widget/disputed_big_icon.h"
+#include "gui/selection_details_widget/data_fields_table.h"
+#include "gui/selection_details_widget/details_section_widget.h"
+#include "gui/selection_details_widget/disputed_big_icon.h"
 
 #include <QApplication>
 #include <QClipboard>

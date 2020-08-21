@@ -1,4 +1,4 @@
-#include "svg_icon_engine/svg_icon_engine.h"
+#include "gui/svg_icon_engine/svg_icon_engine.h"
 
 #include <QPainter>
 #include <QtSvg/QSvgRenderer>

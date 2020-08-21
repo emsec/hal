@@ -1,9 +1,9 @@
-#include "content_layout_area/content_layout_area.h"
+#include "gui/content_layout_area/content_layout_area.h"
 
-#include "gui/content_widget/dock_bar.h"
-#include "gui/content_widget/splitter_anchor.h"
-#include "gui/content_widget/tab_widget.h"
-#include "splitter/splitter.h"
+#include "gui/docking_system/dock_bar.h"
+#include "gui/docking_system/splitter_anchor.h"
+#include "gui/docking_system/tab_widget.h"
+#include "gui/splitter/splitter.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>

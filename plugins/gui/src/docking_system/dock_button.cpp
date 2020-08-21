@@ -1,8 +1,8 @@
-#include "gui/content_widget/dock_button.h"
+#include "gui/docking_system/dock_button.h"
 #include "gui/content_widget/content_widget.h"
 #include "core/log.h"
-#include "gui_globals.h"
-#include "gui_utils/graphics.h"
+#include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
 #include <QPainter>
 
 namespace hal

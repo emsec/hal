@@ -24,7 +24,7 @@
 #pragma once
 
 #include <QObject>
-
+#include "def.h"
 #include <string>
 
 namespace hal
@@ -35,11 +35,15 @@ namespace hal
 
     public:
         explicit PluginRelay(QObject* parent = nullptr);
+        ~PluginRelay();
 
         void plugin_manager_callback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
 
     Q_SIGNALS:
         void plugin_loaded(const QString& name, const QString& path);
         void plugin_unloaded(const QString& name, const QString& path);
+
+    private:
+        u64 m_callback_id;
     };
 }

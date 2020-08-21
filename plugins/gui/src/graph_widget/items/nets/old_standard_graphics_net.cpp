@@ -1,6 +1,6 @@
-#include "graph_widget/items/nets/old_standard_graphics_net.h"
+#include "gui/graph_widget/items/nets/old_standard_graphics_net.h"
 
-#include "graph_widget/graph_widget_constants.h"
+#include "gui/graph_widget/graph_widget_constants.h"
 
 #include <QPainter>
 #include <QPen>

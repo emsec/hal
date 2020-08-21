@@ -1,4 +1,4 @@
-#include "window_manager/window_toolbar.h"
+#include "gui/window_manager/window_toolbar.h"
 
 #include <QActionEvent>
 #include <QEvent>

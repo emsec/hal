@@ -1,6 +1,6 @@
-#include "logger/filter_tab_bar.h"
-#include "logger/filter_item.h"
-#include "logger/logger_widget.h"
+#include "gui/logger/filter_tab_bar.h"
+#include "gui/logger/filter_item.h"
+#include "gui/logger/logger_widget.h"
 
 namespace hal
 {

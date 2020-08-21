@@ -27,7 +27,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include "netlist_watcher/netlist_watcher.h"
+#include "gui/netlist_watcher/netlist_watcher.h"
 
 namespace hal
 {

@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "overlay/overlay.h"
+#include "gui/overlay/overlay.h"
 
 class QVBoxLayout;
 

@@ -1,4 +1,4 @@
-#include "python/python_console_qss_adapter.h"
+#include "gui/python/python_console_qss_adapter.h"
 #include <QStyle>
 
 namespace hal

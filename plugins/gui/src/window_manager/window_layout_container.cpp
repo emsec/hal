@@ -1,4 +1,4 @@
-#include "window_manager/window_layout_container.h"
+#include "gui/window_manager/window_layout_container.h"
 
 namespace hal
 {

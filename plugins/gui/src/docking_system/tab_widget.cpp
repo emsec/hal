@@ -1,7 +1,7 @@
-#include "gui/content_widget/tab_widget.h"
+#include "gui/docking_system/tab_widget.h"
 #include "gui/content_frame/content_frame.h"
 #include "gui/content_widget/content_widget.h"
-#include "gui/content_widget/content_drag_relay.h"
+#include "gui/docking_system/content_drag_relay.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>

@@ -1,4 +1,4 @@
-#include "window_manager/dock_widget.h"
+#include "gui/window_manager/dock_widget.h"
 
 #include <QApplication>
 #include <QMouseEvent>

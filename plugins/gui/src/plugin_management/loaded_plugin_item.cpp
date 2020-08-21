@@ -1,6 +1,6 @@
-#include "plugin_management/loaded_plugin_item.h"
+#include "gui/plugin_management/loaded_plugin_item.h"
 
-#include "gui_utils/graphics.h"
+#include "gui/gui_utils/graphics.h"
 
 #include <QApplication>
 #include <QDrag>

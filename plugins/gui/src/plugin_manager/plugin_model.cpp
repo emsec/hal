@@ -1,4 +1,4 @@
-#include "plugin_manager/plugin_model.h"
+#include "gui/plugin_manager/plugin_model.h"
 
 #include "core/plugin_interface_cli.h"
 #include "core/log.h"

@@ -1,9 +1,9 @@
-#include "python/python_code_editor.h"
-#include "python/python_editor_code_completion_dialog.h"
+#include "gui/python/python_code_editor.h"
+#include "gui/python/python_editor_code_completion_dialog.h"
 
-#include "code_editor/syntax_highlighter/python_syntax_highlighter.h"
+#include "gui/code_editor/syntax_highlighter/python_syntax_highlighter.h"
 #include "core/log.h"
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include <QApplication>
 #include <QDesktopWidget>

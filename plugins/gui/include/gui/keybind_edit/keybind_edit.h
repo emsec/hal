@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "validator/stacked_validator.h"
+#include "gui/validator/stacked_validator.h"
 
 #include <QKeySequenceEdit>
 #include <QEvent>

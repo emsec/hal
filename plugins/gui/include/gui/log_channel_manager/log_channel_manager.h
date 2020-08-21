@@ -25,7 +25,7 @@
 
 #include "core/log.h"
 
-#include "log_channel_manager/log_channel_manager_constants.h"
+#include "gui/log_channel_manager/log_channel_manager_constants.h"
 
 #include <QString>
 

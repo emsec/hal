@@ -1,4 +1,4 @@
-#include "validator/stacked_validator.h"
+#include "gui/validator/stacked_validator.h"
 namespace hal
 {
     StackedValidator::StackedValidator() : m_validators(QList<Validator*>())

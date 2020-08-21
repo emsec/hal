@@ -1,4 +1,4 @@
-#include "validator/unique_string_validator.h"
+#include "gui/validator/unique_string_validator.h"
 
 namespace hal
 {

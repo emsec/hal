@@ -1,6 +1,6 @@
 #include "gui/gui_api/gui_api.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include <algorithm>
 

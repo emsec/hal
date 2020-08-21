@@ -24,7 +24,7 @@
 #pragma once
 
 #include "def.h"
-#include "selection_relay/selection_relay.h"
+#include "gui/selection_relay/selection_relay.h"
 
 #include <vector>
 

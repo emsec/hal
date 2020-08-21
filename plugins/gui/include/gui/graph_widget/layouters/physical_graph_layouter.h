@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "graph_widget/layouters/graph_layouter.h"
+#include "gui/graph_widget/layouters/graph_layouter.h"
 
 namespace hal
 {

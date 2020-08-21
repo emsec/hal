@@ -1,6 +1,6 @@
-#include "plugin_management/scheduled_plugins_widget.h"
+#include "gui/plugin_management/scheduled_plugins_widget.h"
 
-#include "plugin_management/scheduled_plugin_item_area.h"
+#include "gui/plugin_management/scheduled_plugin_item_area.h"
 
 namespace hal
 {

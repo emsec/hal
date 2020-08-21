@@ -27,9 +27,9 @@
 
 #include "def.h"
 
-#include "graph_widget/contexts/graph_context.h"
-#include "context_manager_widget/models/context_table_model.h"
-#include "context_manager_widget/models/context_table_proxy_model.h"
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/context_manager_widget/models/context_table_model.h"
+#include "gui/context_manager_widget/models/context_table_proxy_model.h"
 #include "gui/searchbar/searchbar.h"
 
 #include <QListWidget>

@@ -1,4 +1,4 @@
-#include "settings/settings_relay.h"
+#include "gui/settings/settings_relay.h"
 #include <QDebug>
 
 namespace hal

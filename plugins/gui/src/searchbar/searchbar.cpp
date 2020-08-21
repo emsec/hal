@@ -1,7 +1,7 @@
-#include "searchbar/searchbar.h"
+#include "gui/searchbar/searchbar.h"
 
-#include "gui_utils/graphics.h"
-#include "label_button/label_button.h"
+#include "gui/gui_utils/graphics.h"
+#include "gui/label_button/label_button.h"
 
 #include <QHBoxLayout>
 #include <QIcon>

@@ -1,6 +1,6 @@
-#include "gui_utils/graphics.h"
+#include "gui/gui_utils/graphics.h"
 
-#include "svg_icon_engine/svg_icon_engine.h"
+#include "gui/svg_icon_engine/svg_icon_engine.h"
 
 #include <QFile>
 

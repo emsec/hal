@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "validator/validator.h"
+#include "gui/validator/validator.h"
 
 #include <QList>
 

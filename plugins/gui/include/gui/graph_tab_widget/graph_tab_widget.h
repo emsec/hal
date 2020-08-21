@@ -25,8 +25,8 @@
 
 #include "gui/content_widget/content_widget.h"
 
-#include "graph_widget/contexts/graph_context.h"
-#include "graph_widget/graph_widget.h"
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/graph_widget.h"
 
 #include <QMap>
 

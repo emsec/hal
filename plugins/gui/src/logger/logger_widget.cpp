@@ -1,10 +1,10 @@
-#include "logger/logger_widget.h"
-#include "channel_manager/channel_model.h"
-#include "channel_manager/channel_selector.h"
-#include "logger/filter_item.h"
-#include "logger/filter_tab_bar.h"
-#include "logger/logger_marshall.h"
-#include "toolbar/toolbar.h"
+#include "gui/logger/logger_widget.h"
+#include "gui/channel_manager/channel_model.h"
+#include "gui/channel_manager/channel_selector.h"
+#include "gui/logger/filter_item.h"
+#include "gui/logger/filter_tab_bar.h"
+#include "gui/logger/logger_marshall.h"
+#include "gui/toolbar/toolbar.h"
 #include <QHeaderView>
 
 namespace hal

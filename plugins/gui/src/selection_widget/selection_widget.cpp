@@ -1,6 +1,6 @@
-#include "selection_widget/selection_widget.h"
+#include "gui/selection_widget/selection_widget.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 #include "gui/content_widget/content_widget.h"
 
 #include <QVBoxLayout>

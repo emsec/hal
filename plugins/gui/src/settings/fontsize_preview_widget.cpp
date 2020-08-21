@@ -1,4 +1,4 @@
-#include "settings/fontsize_preview_widget.h"
+#include "gui/settings/fontsize_preview_widget.h"
 
 #include <QVBoxLayout>
 #include <QVariant>

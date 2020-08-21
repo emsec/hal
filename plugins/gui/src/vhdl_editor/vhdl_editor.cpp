@@ -1,10 +1,10 @@
-#include "vhdl_editor/vhdl_editor.h"
+#include "gui/vhdl_editor/vhdl_editor.h"
 
 #include "netlist/hdl_writer/hdl_writer_manager.h"
 
-#include "code_editor/syntax_highlighter/vhdl_syntax_highlighter.h"
-#include "gui_globals.h"
-#include "searchbar/searchbar.h"
+#include "gui/code_editor/syntax_highlighter/vhdl_syntax_highlighter.h"
+#include "gui/gui_globals.h"
+#include "gui/searchbar/searchbar.h"
 
 #include <QShortcut>
 #include <QVBoxLayout>

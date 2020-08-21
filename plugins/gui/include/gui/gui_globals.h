@@ -25,7 +25,7 @@
 
 #include "netlist/netlist.h"
 
-#include "file_status_manager/file_status_manager.h"
+#include "gui/file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/netlist_relay/netlist_relay.h"

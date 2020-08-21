@@ -1,8 +1,8 @@
 #include "gui/content_widget/content_widget.h"
 
-#include "gui_utils/graphics.h"
-#include "content_anchor/content_anchor.h"
-#include "toolbar/toolbar.h"
+#include "gui/gui_utils/graphics.h"
+#include "gui/content_anchor/content_anchor.h"
+#include "gui/toolbar/toolbar.h"
 
 #include <QShortcut>
 #include <QStyle>

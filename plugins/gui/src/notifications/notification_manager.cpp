@@ -1,5 +1,5 @@
-#include "notifications/notification_manager.h"
-#include "notifications/notification.h"
+#include "gui/notifications/notification_manager.h"
+#include "gui/notifications/notification.h"
 
 #include "QApplication"
 #include "QDesktopWidget"

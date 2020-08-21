@@ -1,6 +1,6 @@
 #include <QHeaderView>
-#include "selection_details_widget/tree_navigation/selection_tree_view.h"
-#include "selection_details_widget/tree_navigation/selection_tree_model.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
 
 namespace hal {
     SelectionTreeView::SelectionTreeView(QWidget *parent)

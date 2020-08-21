@@ -1,10 +1,10 @@
-#include "welcome_screen/welcome_screen.h"
+#include "gui/welcome_screen/welcome_screen.h"
 
-#include "frames/labeled_frame.h"
-#include "graphics_effects/shadow_effect.h"
-#include "welcome_screen/get_in_touch_widget.h"
-#include "welcome_screen/open_file_widget.h"
-#include "welcome_screen/recent_files_widget.h"
+#include "gui/frames/labeled_frame.h"
+#include "gui/graphics_effects/shadow_effect.h"
+#include "gui/welcome_screen/get_in_touch_widget.h"
+#include "gui/welcome_screen/open_file_widget.h"
+#include "gui/welcome_screen/recent_files_widget.h"
 
 #include <QHBoxLayout>
 #include <QStyle>

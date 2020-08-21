@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "expanding_list/expanding_list_button.h"
+#include "gui/expanding_list/expanding_list_button.h"
 #include <QList>
 #include <QMap>
 #include <QWidget>

@@ -1,21 +1,21 @@
-#include "context_manager_widget/context_manager_widget.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 //#include "gui/graph_widget/graph_widget.h"
 
-#include "input_dialog/input_dialog.h"
-#include "validator/empty_string_validator.h"
-#include "validator/unique_string_validator.h"
+#include "gui/input_dialog/input_dialog.h"
+#include "gui/validator/empty_string_validator.h"
+#include "gui/validator/unique_string_validator.h"
 
 //#include "core/log.h"
-#include "gui_utils/graphics.h"
+#include "gui/gui_utils/graphics.h"
 //#include "netlist/gate.h"
 //#include "netlist/module.h"
 //#include "netlist/netlist.h"
-#include "toolbar/toolbar.h"
+#include "gui/toolbar/toolbar.h"
 #include <QAction>
 #include <QDebug>
 //#include <QListWidgetItem>
@@ -149,11 +149,11 @@ namespace hal
         GraphContext* clicked_context = get_current_context();
         g_graph_context_manager.delete_graph_context(clicked_context);
     }
-    
+
     void ContextManagerWidget::handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected)
-    {   
+    {
         Q_UNUSED(deselected);
-        
+
         if(selected.indexes().isEmpty())
             set_toolbar_buttons_enabled(false);
         else
@@ -191,7 +191,7 @@ namespace hal
     {
         const QModelIndex source_model_index = m_context_table_model->get_index(context);
         const QModelIndex proxy_model_index = m_context_table_proxy_model->mapFromSource(source_model_index);
-        
+
         if(proxy_model_index.isValid())
             m_context_table_view->setCurrentIndex(proxy_model_index);
         else
@@ -203,7 +203,7 @@ namespace hal
         QModelIndex proxy_model_index = m_context_table_view->currentIndex();
         QModelIndex source_model_index = m_context_table_proxy_model->mapToSource(proxy_model_index);
 
-        return m_context_table_model->get_context(source_model_index); 
+        return m_context_table_model->get_context(source_model_index);
     }
 
     void ContextManagerWidget::setup_toolbar(Toolbar* toolbar)
@@ -366,5 +366,5 @@ namespace hal
     void ContextManagerWidget::set_search_icon_style(const QString& style)
     {
         m_search_icon_style = style;
-    }    
+    }
 }

@@ -1,6 +1,6 @@
-#include "graph_widget/items/nets/circle_separated_net.h"
+#include "gui/graph_widget/items/nets/circle_separated_net.h"
 
-#include "graph_widget/graph_widget_constants.h"
+#include "gui/graph_widget/graph_widget_constants.h"
 
 #include <QPainter>
 #include <QPen>

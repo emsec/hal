@@ -1,4 +1,4 @@
-#include "overlay/overlay.h"
+#include "gui/overlay/overlay.h"
 
 #include <QEvent>
 #include <QResizeEvent>

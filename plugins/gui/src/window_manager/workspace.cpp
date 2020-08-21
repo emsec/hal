@@ -1,4 +1,4 @@
-#include "window_manager/workspace.h"
+#include "gui/window_manager/workspace.h"
 
 #include <QStyle>
 

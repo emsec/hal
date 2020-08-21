@@ -1,4 +1,4 @@
-#include "notifications/notification_manager_qss_adapter.h"
+#include "gui/notifications/notification_manager_qss_adapter.h"
 
 #include <QStyle>
 

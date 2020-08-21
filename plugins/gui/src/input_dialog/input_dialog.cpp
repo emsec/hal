@@ -1,6 +1,6 @@
-#include "input_dialog/input_dialog.h"
+#include "gui/input_dialog/input_dialog.h"
 
-#include "validator/stacked_validator.h"
+#include "gui/validator/stacked_validator.h"
 
 #include<QDialogButtonBox>
 

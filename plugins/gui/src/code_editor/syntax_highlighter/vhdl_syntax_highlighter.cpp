@@ -1,6 +1,6 @@
-#include "code_editor/syntax_highlighter/vhdl_syntax_highlighter.h"
+#include "gui/code_editor/syntax_highlighter/vhdl_syntax_highlighter.h"
 
-#include "code_editor/syntax_highlighter/vhdl_qss_adapter.h"
+#include "gui/code_editor/syntax_highlighter/vhdl_qss_adapter.h"
 
 namespace hal
 {

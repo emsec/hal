@@ -12,7 +12,7 @@
 #include "pybind11/stl_bind.h"
 #include "pybind11/functional.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 #include "gui/gui_api/gui_api.h"
 
 #pragma GCC diagnostic pop

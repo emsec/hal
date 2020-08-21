@@ -24,7 +24,7 @@
 #pragma once
 
 #include "gui/content_widget/content_widget.h"
-#include "selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "def.h"
 
 class QTableWidget;

@@ -1,4 +1,4 @@
-#include "styleable_widget/styleable_widget.h"
+#include "gui/styleable_widget/styleable_widget.h"
 
 #include "QPainter"
 #include "QStyleOption"

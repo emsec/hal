@@ -1,10 +1,10 @@
-#include "plugin_access_manager/plugin_access_manager.h"
+#include "gui/plugin_access_manager/plugin_access_manager.h"
 #include "core/plugin_interface_cli.h"
 #include "core/plugin_interface_gui.h"
 #include "core/plugin_manager.h"
 #include "core/program_arguments.h"
-#include "gui_globals.h"
-#include "plugin_access_manager/extended_cli_dialog.h"
+#include "gui/gui_globals.h"
+#include "gui/plugin_access_manager/extended_cli_dialog.h"
 
 namespace hal
 {

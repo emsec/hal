@@ -1,6 +1,6 @@
-#include "context_manager_widget/models/context_table_proxy_model.h"
+#include "gui/context_manager_widget/models/context_table_proxy_model.h"
 
-#include "gui_utils/sort.h"
+#include "gui/gui_utils/sort.h"
 
 #include <QDateTime>
 
@@ -12,7 +12,7 @@ namespace hal
     }
 
     bool ContextTableProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
-    {        
+    {
         const QModelIndex& context_name_index = sourceModel()->index(source_row, 0, source_parent);
         const QModelIndex& context_date_index = sourceModel()->index(source_row, 1, source_parent);
 
@@ -22,7 +22,7 @@ namespace hal
         if(m_filter_expression.match(context_name).hasMatch() || m_filter_expression.match(context_date).hasMatch())
             return true;
         else
-            return false; 
+            return false;
     }
 
     bool ContextTableProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
@@ -33,7 +33,7 @@ namespace hal
         if(leftData.userType() == QMetaType::QDateTime)
             return leftData.toDateTime() > rightData.toDateTime();
         else
-            return !(gui_utility::compare(gui_utility::sort_mechanism::natural, leftData.toString(), rightData.toString()));    
+            return !(gui_utility::compare(gui_utility::sort_mechanism::natural, leftData.toString(), rightData.toString()));
     }
 
     void ContextTableProxyModel::handle_filter_text_changed(const QString& filter_text)

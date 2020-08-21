@@ -1,13 +1,13 @@
-#include "window_manager/window_manager.h"
+#include "gui/window_manager/window_manager.h"
 
-#include "overlay/overlay.h"
-#include "plugin_management/plugin_schedule_widget.h"
-#include "settings/main_settings_widget.h"
-#include "style/style.h"
-#include "style/shared_properties_qss_adapter.h"
-#include "welcome_screen/welcome_screen.h"
-#include "window_manager/window.h"
-#include "window_manager/window_toolbar.h"
+#include "gui/overlay/overlay.h"
+#include "gui/plugin_management/plugin_schedule_widget.h"
+#include "gui/settings/main_settings_widget.h"
+#include "gui/style/style.h"
+#include "gui/style/shared_properties_qss_adapter.h"
+#include "gui/welcome_screen/welcome_screen.h"
+#include "gui/window_manager/window.h"
+#include "gui/window_manager/window_toolbar.h"
 
 #include <QAction>
 #include <QShortcut>

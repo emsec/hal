@@ -24,7 +24,7 @@
 #pragma once
 
 #include "def.h"
-#include "selection_history_navigator/selection.h"
+#include "gui/selection_history_navigator/selection.h"
 
 #include <QObject>
 #include <list>

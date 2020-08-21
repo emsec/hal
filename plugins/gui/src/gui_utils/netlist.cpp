@@ -1,4 +1,4 @@
-#include "gui_utils/netlist.h"
+#include "gui/gui_utils/netlist.h"
 #include "gui/gui_globals.h"
 
 #include "netlist/gate.h"

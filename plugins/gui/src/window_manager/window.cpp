@@ -1,10 +1,10 @@
-#include "window_manager/window.h"
+#include "gui/window_manager/window.h"
 
-#include "gui_globals.h"
-#include "overlay/overlay.h"
-#include "window_manager/window_layout_container.h"
-#include "window_manager/window_toolbar.h"
-#include "window_manager/workspace.h"
+#include "gui/gui_globals.h"
+#include "gui/overlay/overlay.h"
+#include "gui/window_manager/window_layout_container.h"
+#include "gui/window_manager/window_toolbar.h"
+#include "gui/window_manager/workspace.h"
 
 #include <QAction>
 #include <QVBoxLayout>

@@ -1,6 +1,6 @@
-#include "code_editor/code_editor_scrollbar.h"
+#include "gui/code_editor/code_editor_scrollbar.h"
 
-#include "code_editor/minimap_scrollbar.h"
+#include "gui/code_editor/minimap_scrollbar.h"
 namespace hal
 {
     CodeEditorScrollbar::CodeEditorScrollbar(QWidget* parent) : QScrollBar(Qt::Vertical, parent), m_minimap_scrollbar(nullptr)

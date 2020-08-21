@@ -1,8 +1,8 @@
-#include "main_window/main_window.h"
+#include "gui/main_window/main_window.h"
 
 #include "core/log.h"
 #include "def.h"
-#include "graphics_effects/overlay_effect.h"
+#include "gui/graphics_effects/overlay_effect.h"
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
@@ -26,9 +26,9 @@
 #include "netlist/netlist.h"
 #include "netlist/netlist_factory.h"
 #include "netlist/persistent/netlist_serializer.h"
-#include "notifications/notification.h"
-#include "overlay/reminder_overlay.h"
-#include "plugin_manager/plugin_manager_widget.h"
+#include "gui/notifications/notification.h"
+#include "gui/overlay/reminder_overlay.h"
+#include "gui/plugin_manager/plugin_manager_widget.h"
 
 #include <QApplication>
 #include <QCloseEvent>

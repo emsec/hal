@@ -1,4 +1,4 @@
-#include "style/shared_properties_qss_adapter.h"
+#include "gui/style/shared_properties_qss_adapter.h"
 
 #include <QStyle>
 

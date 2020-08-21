@@ -34,11 +34,18 @@ namespace hal
      *
      * @ingroup core
      */
-    class CORE_API InteractiveUIPluginInterface : virtual public BasePluginInterface
+    class CORE_API UIPluginInterface : virtual public BasePluginInterface
     {
     public:
-        InteractiveUIPluginInterface()          = default;
-        virtual ~InteractiveUIPluginInterface() = default;
+        UIPluginInterface()          = default;
+        virtual ~UIPluginInterface() = default;
+
+        /**
+         * Returns command line interface options
+         *
+         * @returns The program options description.
+         */
+        virtual ProgramOptions get_cli_options() const = 0;
 
         /**
          * Generic call to run the interactive UI.

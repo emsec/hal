@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "netlist_relay/netlist_relay.h"
+#include "gui/netlist_relay/netlist_relay.h"
 
 #include <QObject>
 

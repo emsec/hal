@@ -1,4 +1,4 @@
-#include "validator/empty_string_validator.h"
+#include "gui/validator/empty_string_validator.h"
 
 namespace hal
 {

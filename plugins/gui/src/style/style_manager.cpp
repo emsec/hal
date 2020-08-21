@@ -1,13 +1,13 @@
-#include "style/style_manager.h"
+#include "gui/style/style_manager.h"
 
 #include "core/log.h"
 
-#include "graph_widget/graphics_qss_adapter.h"
+#include "gui/graph_widget/graphics_qss_adapter.h"
 #include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"
 #include "gui/code_editor/syntax_highlighter/vhdl_qss_adapter.h"
 #include "gui/notifications/notification_manager_qss_adapter.h"
 #include "gui/style/shared_properties_qss_adapter.h"
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include <QApplication>
 #include <QFile>

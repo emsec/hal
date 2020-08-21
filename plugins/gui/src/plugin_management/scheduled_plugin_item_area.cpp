@@ -1,9 +1,9 @@
-#include "plugin_management/scheduled_plugin_item_area.h"
+#include "gui/plugin_management/scheduled_plugin_item_area.h"
 
-#include "drop_marker/drop_marker.h"
-#include "plugin_management/plugin_arguments_widget.h"
-#include "plugin_management/plugin_schedule_manager.h"
-#include "plugin_management/scheduled_plugin_item.h"
+#include "gui/drop_marker/drop_marker.h"
+#include "gui/plugin_management/plugin_arguments_widget.h"
+#include "gui/plugin_management/plugin_schedule_manager.h"
+#include "gui/plugin_management/scheduled_plugin_item.h"
 
 #include <QDragEnterEvent>
 #include <QMimeData>

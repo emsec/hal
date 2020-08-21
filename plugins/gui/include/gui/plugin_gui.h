@@ -23,16 +23,18 @@
 
 #pragma once
 
-#include "core/plugin_interface_interactive_ui.h"
+#include "core/plugin_interface_ui.h"
 namespace hal
 {
-    class PluginGui : public InteractiveUIPluginInterface
+    class PluginGui : public UIPluginInterface
     {
     public:
         std::string get_name() const override;
         std::string get_version() const override;
 
         void initialize_logging() override;
+
+        ProgramOptions get_cli_options() const override;
 
         bool exec(ProgramArguments& args) override;
     };

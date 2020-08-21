@@ -1,4 +1,4 @@
-#include "main_window/about_dialog.h"
+#include "gui/main_window/about_dialog.h"
 #include <core/utils.h>
 
 namespace hal

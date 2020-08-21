@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "content_anchor/content_anchor.h"
+#include "gui/content_anchor/content_anchor.h"
 
 #include <QList>
 #include <QObject>

@@ -1,6 +1,6 @@
-#include "netlist_watcher/netlist_watcher.h"
+#include "gui/netlist_watcher/netlist_watcher.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {

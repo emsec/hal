@@ -1,4 +1,4 @@
-#include "toolbar/toolbar.h"
+#include "gui/toolbar/toolbar.h"
 
 #include <QStyle>
 

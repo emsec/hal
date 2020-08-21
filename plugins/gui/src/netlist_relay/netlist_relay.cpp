@@ -1,4 +1,4 @@
-#include "netlist_relay/netlist_relay.h"
+#include "gui/netlist_relay/netlist_relay.h"
 
 #include "netlist/gate.h"
 #include "netlist/module.h"

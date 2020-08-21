@@ -1,4 +1,4 @@
-#include "overlay/dialog_overlay.h"
+#include "gui/overlay/dialog_overlay.h"
 
 #include <QVBoxLayout>
 

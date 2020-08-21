@@ -1,6 +1,6 @@
-#include "notifications/notification.h"
-#include "graphics_effects/shadow_effect.h"
-#include "gui_globals.h"
+#include "gui/notifications/notification.h"
+#include "gui/graphics_effects/shadow_effect.h"
+#include "gui/gui_globals.h"
 
 #include <QApplication>
 #include <QGraphicsEffect>

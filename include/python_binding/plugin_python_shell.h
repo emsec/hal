@@ -23,11 +23,11 @@
 
 #pragma once
 
-#include "core/plugin_interface_interactive_ui.h"
+#include "core/plugin_interface_ui.h"
 
 namespace hal
 {
-    class PluginPythonShell : virtual public InteractiveUIPluginInterface
+    class PluginPythonShell : virtual public UIPluginInterface
     {
     public:
         PluginPythonShell() = default;
@@ -51,6 +51,13 @@ namespace hal
          * @returns Plugin version.
          */
         std::string get_version() const override;
+
+        /**
+         * Returns command line interface options
+         *
+         * @returns The program options description.
+         */
+        ProgramOptions get_cli_options() const override;
 
         /**
          * Excutes the plugin with given command line parameters.

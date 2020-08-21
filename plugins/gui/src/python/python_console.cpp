@@ -1,15 +1,15 @@
-#include "python/python_console.h"
+#include "gui/python/python_console.h"
 
 #include "core/log.h"
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 
 #include <QKeyEvent>
 
 #include <QDebug>
 
-#include "python/python_console_history.h"
+#include "gui/python/python_console_history.h"
 
-#include "python/python_console_qss_adapter.h"
+#include "gui/python/python_console_qss_adapter.h"
 
 namespace hal
 {

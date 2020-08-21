@@ -1,9 +1,9 @@
-#include "plugin_management/loaded_plugins_widget.h"
+#include "gui/plugin_management/loaded_plugins_widget.h"
 
 #include "core/plugin_interface_cli.h"
 #include "core/plugin_manager.h"
-#include "gui_globals.h"
-#include "plugin_management/loaded_plugin_item.h"
+#include "gui/gui_globals.h"
+#include "gui/plugin_management/loaded_plugin_item.h"
 
 #include <QFrame>
 #include <QVBoxLayout>

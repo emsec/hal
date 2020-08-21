@@ -1,5 +1,5 @@
-#include "selection_details_widget/disputed_big_icon.h"
-#include "gui_globals.h"
+#include "gui/selection_details_widget/disputed_big_icon.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {

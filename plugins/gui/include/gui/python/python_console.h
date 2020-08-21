@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "python/python_context_subscriber.h"
+#include "gui/python/python_context_subscriber.h"
 
 #include <QTextEdit>
 #include <memory>

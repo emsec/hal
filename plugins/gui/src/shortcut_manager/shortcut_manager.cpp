@@ -1,4 +1,4 @@
-#include "shortcut_manager/shortcut_manager.h"
+#include "gui/shortcut_manager/shortcut_manager.h"
 
 namespace hal
 {

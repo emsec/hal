@@ -1,6 +1,6 @@
-#include "module_relay/module_relay.h"
+#include "gui/module_relay/module_relay.h"
 
-#include "gui_globals.h"
+#include "gui/gui_globals.h"
 #include "netlist/module.h"
 
 namespace hal

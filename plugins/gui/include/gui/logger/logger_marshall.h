@@ -41,8 +41,6 @@ namespace hal
     public:
         explicit LoggerMarshall(QPlainTextEdit* edit, QObject* parent = 0);
 
-        ~LoggerMarshall();
-
     Q_SIGNALS:
 
     public Q_SLOTS:

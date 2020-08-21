@@ -1,6 +1,6 @@
-#include "python/python_console_widget.h"
+#include "gui/python/python_console_widget.h"
 
-#include "python/python_console.h"
+#include "gui/python/python_console.h"
 
 #include <QVBoxLayout>
 

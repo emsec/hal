@@ -23,12 +23,12 @@
 
 #pragma once
 
-#include "code_editor/code_editor.h"
+#include "gui/code_editor/code_editor.h"
 #include "gui/content_widget/content_widget.h"
 #include "core/hal_file_manager.h"
-#include "file_modified_bar/file_modified_bar.h"
-#include "action/action.h"
-#include "python/python_context_subscriber.h"
+#include "gui/file_modified_bar/file_modified_bar.h"
+#include "gui/action/action.h"
+#include "gui/python/python_context_subscriber.h"
 
 #include <QEvent>
 #include <QFileSystemWatcher>

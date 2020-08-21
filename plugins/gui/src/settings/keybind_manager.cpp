@@ -1,4 +1,4 @@
-#include "settings/keybind_manager.h"
+#include "gui/settings/keybind_manager.h"
 
 #include "gui/gui_globals.h"
 

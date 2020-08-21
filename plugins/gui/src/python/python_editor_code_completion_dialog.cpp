@@ -1,4 +1,4 @@
-#include "python/python_editor_code_completion_dialog.h"
+#include "gui/python/python_editor_code_completion_dialog.h"
 
 #include "core/log.h"
 

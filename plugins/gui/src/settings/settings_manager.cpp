@@ -1,4 +1,4 @@
-#include "settings/settings_manager.h"
+#include "gui/settings/settings_manager.h"
 
 #include <QDebug>
 #include "core/utils.h"

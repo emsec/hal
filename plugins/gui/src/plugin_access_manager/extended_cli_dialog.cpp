@@ -1,4 +1,4 @@
-#include "plugin_access_manager/extended_cli_dialog.h"
+#include "gui/plugin_access_manager/extended_cli_dialog.h"
 #include "core/plugin_interface_cli.h"
 #include "core/plugin_interface_gui.h"
 #include "core/plugin_manager.h"

@@ -1,6 +1,6 @@
-#include "module_model/module_model.h"
+#include "gui/module_model/module_model.h"
 
-#include "module_model/module_item.h"
+#include "gui/module_model/module_item.h"
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
