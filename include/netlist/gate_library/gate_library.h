@@ -75,6 +75,7 @@ namespace hal
          * Checks whether a gate type is contained in this library.
          *
          * @param[in] gt - The gate type
+         * @returns True, if the gate type is part of this library
          */
         bool contains_gate_type(const GateType* gt) const;
 
