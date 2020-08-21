@@ -3,9 +3,6 @@ set(SRC main.cpp)
 add_executable(hal ${SRC})
 set_target_properties(hal PROPERTIES OUTPUT_NAME "hal")
 set_target_properties(hal PROPERTIES ENABLE_EXPORTS 1)
-if(WITH_GUI)
-    target_compile_definitions(hal PUBLIC WITH_GUI)
-endif(WITH_GUI)
 target_compile_options(hal
                        PUBLIC ${COMPILE_OPTIONS_PUBLIC}
                        PRIVATE ${COMPILE_OPTIONS_PRIVATE}
