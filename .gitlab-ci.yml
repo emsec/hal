@@ -202,7 +202,7 @@ test:package:ubuntu:
 test:check-core-documentation:
   stage: test
   script:
-    - python3 tools/check_documentation.py include/ -ignore include/gui/
+    - python3 tools/check_documentation.py include/
   cache: {}
 
 deploy-ppa:
