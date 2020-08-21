@@ -35,7 +35,7 @@ namespace hal
                     auto dsts    = out_net->get_destinations();
                     for (const auto& dst : dsts)
                     {
-                        out_net->remove_destination(dst);
+                        out_net->remove_destination(dst.get_gate(), dst.get_pin());
                         in_net->add_destination(dst.get_gate(), dst.get_pin());
                     }
                     netlist_abstr.nl->delete_net(out_net);
@@ -134,7 +134,7 @@ namespace hal
                                         {
                                             for (auto dst : remove_net->get_destinations())
                                             {
-                                                remove_net->remove_destination(dst);
+                                                remove_net->remove_destination(dst.get_gate(), dst.get_pin());
                                                 merge_net->add_destination(dst.get_gate(), dst.get_pin());
                                                 affected_gates.insert(dst.get_gate());
                                             }
