@@ -1,4 +1,4 @@
-#include "python_binding/plugin_python_shell.h"
+#include "python_shell/plugin_python_shell.h"
 
 #include "core/program_arguments.h"
 #include "core/utils.h"
@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    extern std::unique_ptr<BasePluginInterface> get_plugin_instance()
+    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<PluginPythonShell>();
     }
@@ -60,13 +60,14 @@ namespace hal
         PyRun_SimpleString("import sys");
         PyRun_SimpleString(std::string("sys.path.append(\"" + core_utils::get_library_directory().string() + "\")").c_str());
         PyRun_SimpleString("from hal_py import *");
-        //    PyRun_SimpleString(g = hal_py.HDLParserDispatcher().parse('XILINX_ISE_SIMPRIM', 'VHDL', '../test_designs/aes128_fast.vhd'));
         Py_Main(argc_new, argv_new);
         Py_Finalize();
 
         /* cleanup of copied command line interface options */
         for (int j = 0; j < argc_new; ++j)
+        {
             std::free(argv_new[j]);
+        }
         std::free(argv_new);
         return 0;
     }

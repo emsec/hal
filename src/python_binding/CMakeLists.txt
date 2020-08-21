@@ -39,34 +39,33 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     add_sanitizers(py)
 endif()
 
-file(GLOB_RECURSE PYTHON_PLUGIN_LIB_HDR ${CMAKE_SOURCE_DIR}/include/python_binding/*.h)
-file(GLOB_RECURSE PYTHON_PLUGIN_LIB_source ${CMAKE_SOURCE_DIR}/src/python_binding/factory_python_shell.cpp ${CMAKE_SOURCE_DIR}/src/python_binding/plugin_python_shell.cpp)
+# file(GLOB_RECURSE PYTHON_PLUGIN_LIB_HDR ${CMAKE_SOURCE_DIR}/include/python_binding/*.h)
 
-add_library(hal_python SHARED ${PYTHON_PLUGIN_LIB_HDR} ${PYTHON_PLUGIN_LIB_source})
-target_include_directories(hal_python
-                           PUBLIC
-                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-                           $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
-                           $<BUILD_INTERFACE:${PYTHON_INCLUDE_DIRS}>
-                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                           )
-target_compile_options(hal_python
-                       PUBLIC ${COMPILE_OPTIONS_PUBLIC}
-                       PRIVATE ${COMPILE_OPTIONS_PRIVATE}
-                       INTERFACE ${COMPILE_OPTIONS_INTERFACE})
-set_target_properties(hal_python PROPERTIES DEFINE_SYMBOL API_PYTHON_PLUGIN)
-target_link_libraries(hal_python PUBLIC hal::core hal::netlist PRIVATE ${PYTHON_LIBRARIES})
-install(TARGETS hal_python
-        LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}
-        PERMISSIONS
-        OWNER_READ
-        OWNER_WRITE
-        OWNER_EXECUTE
-        GROUP_READ
-        GROUP_EXECUTE
-        WORLD_READ
-        WORLD_EXECUTE
-        INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    add_sanitizers(hal_python)
-endif()
+# add_library(hal_python SHARED ${PYTHON_PLUGIN_LIB_HDR} ${PYTHON_PLUGIN_LIB_source})
+# target_include_directories(hal_python
+#                            PUBLIC
+#                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+#                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+#                            $<BUILD_INTERFACE:${PYTHON_INCLUDE_DIRS}>
+#                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+#                            )
+# target_compile_options(hal_python
+#                        PUBLIC ${COMPILE_OPTIONS_PUBLIC}
+#                        PRIVATE ${COMPILE_OPTIONS_PRIVATE}
+#                        INTERFACE ${COMPILE_OPTIONS_INTERFACE})
+# set_target_properties(hal_python PROPERTIES DEFINE_SYMBOL API_PYTHON_PLUGIN)
+# target_link_libraries(hal_python PUBLIC hal::core hal::netlist PRIVATE ${PYTHON_LIBRARIES})
+# install(TARGETS hal_python
+#         LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}
+#         PERMISSIONS
+#         OWNER_READ
+#         OWNER_WRITE
+#         OWNER_EXECUTE
+#         GROUP_READ
+#         GROUP_EXECUTE
+#         WORLD_READ
+#         WORLD_EXECUTE
+#         INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
+# if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+#     add_sanitizers(hal_python)
+# endif()

@@ -142,7 +142,7 @@ def create_plugin(name):
         f.write(CMAKE_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower).replace("##CLASSNAME##", classname))
 
     os.makedirs(name+"/include/"+lower)
-    with open(name+"/include/"+lower+"plugin_"+lower+".h", "wt") as f:
+    with open(name+"/include/"+lower+"/plugin_"+lower+".h", "wt") as f:
         f.write(PLUGIN_H_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower).replace("##CLASSNAME##", classname))
 
     os.makedirs(name+"/src")

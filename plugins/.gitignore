@@ -15,6 +15,8 @@
 !quine_mccluskey/**/*
 !netlist_simulator*
 !netlist_simulator/**/*
+!python_shell*
+!python_shell/**/*
 !vhdl_verilog_parsers*
 !vhdl_verilog_parsers/**/*
 !vhdl_verilog_writers*
