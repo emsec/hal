@@ -197,7 +197,8 @@ namespace hal
                 {
                     for (const auto& src_node : val["srcs"].GetArray())
                     {
-                        n->add_source(deserialize_endpoint(nl, src_node));
+                        auto ep = deserialize_endpoint(nl, src_node);
+                        n->add_source(ep.get_gate(), ep.get_pin());
                     }
                 }
 
@@ -205,7 +206,8 @@ namespace hal
                 {
                     for (const auto& dst_node : val["dsts"].GetArray())
                     {
-                        n->add_destination(deserialize_endpoint(nl, dst_node));
+                        auto ep = deserialize_endpoint(nl, dst_node);
+                        n->add_destination(ep.get_gate(), ep.get_pin());
                     }
                 }
 

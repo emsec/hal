@@ -94,15 +94,6 @@ namespace hal
         bool add_source(Gate* gate, const std::string& pin);
 
         /**
-         * Add a source to this net by endpoint.
-         * If the endpoint is a destination-endpoint this function aborts.
-         *
-         * @param[in] ep - The endpoint.
-         * @returns True on success.
-         */
-        bool add_source(const Endpoint& ep);
-
-        /**
          * Remove a source from this net.
          *
          * @param[in] gate - The source gate.
@@ -110,15 +101,6 @@ namespace hal
          * @returns True on success.
          */
         bool remove_source(Gate* gate, const std::string& pin);
-
-        /**
-         * Remove a source from this net by endpoint.
-         * If the endpoint is a destination-endpoint this function aborts.
-         *
-         * @param[in] ep - The endoint.
-         * @returns True on success.
-         */
-        bool remove_source(const Endpoint& ep);
 
         /**
          * Check whether a gate is a source of this net.

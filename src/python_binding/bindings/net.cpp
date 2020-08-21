@@ -38,7 +38,7 @@ namespace hal
         :param str name: The new name.
 )");
 
-        py_net.def("add_source", py::overload_cast<Gate*, const std::string&>(&Net::add_source), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("add_source", &Net::add_source, py::arg("gate"), py::arg("pin"), R"(
         Add a source to this net.
 
         :param hal_py.Gate gate: The source gate.
@@ -47,28 +47,11 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("add_source", py::overload_cast<const Endpoint&>(&Net::add_source), py::arg("endpoint"), R"(
-        Add a source to this net by endpoint.
-        If the endpoint is a destination-endpoint this function aborts.
-
-        :param hal_py.Endpoint Endpoint: The endpoint.
-        :returns: True on success.
-        :rtype: bool
-)");
-
-        py_net.def("remove_source", py::overload_cast<Gate*, const std::string&>(&Net::remove_source), py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("remove_source", &Net::remove_source, py::arg("gate"), py::arg("pin"), R"(
         Removes the source of the net.
         :param hal_py.get_gate() gate: The source gate.
         :param str pin: The pin of the source gate.
         :returns: True on succes.
-        :rtype: bool
-)");
-
-        py_net.def("remove_source", py::overload_cast<const Endpoint&>(&Net::remove_source), py::arg("endpoint"), R"(
-        Removes the source of the net.
-
-        :param hal_py.Endpoint Endpoint: The source endpoint.
-        :returns: True on success.
         :rtype: bool
 )");
 

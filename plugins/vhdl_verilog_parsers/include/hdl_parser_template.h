@@ -1172,7 +1172,7 @@ namespace hal
 
                         for (const auto& src : slave_net->get_sources())
                         {
-                            slave_net->remove_source(src);
+                            slave_net->remove_source(src.get_gate(), src.get_pin());
 
                             if (!master_net->is_a_source(src.get_gate(), src.get_pin()))
                             {
@@ -1188,7 +1188,7 @@ namespace hal
 
                         for (const auto& dst : slave_net->get_destinations())
                         {
-                            slave_net->remove_destination(dst);
+                            slave_net->remove_destination(dst.get_gate(), dst.get_pin());
 
                             if (!master_net->is_a_destination(dst.get_gate(), dst.get_pin()))
                             {
