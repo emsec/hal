@@ -7,6 +7,8 @@
 !gate_libraries/**/*
 !graph_algorithm*
 !graph_algorithm/**/*
+!gui*
+!gui/**/*
 !liberty_parser*
 !liberty_parser/**/*
 !quine_mccluskey*

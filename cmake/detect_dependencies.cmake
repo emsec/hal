@@ -170,43 +170,6 @@ elseif(NOT PythonInterp_FOUND)
 endif(PythonInterp_FOUND)
 
 ################################
-#####   Qt
-################################
-
-if(WITH_GUI)
-    # We require qt5 widgets
-    find_package(Qt5Widgets)
-    if(Qt5Widgets_FOUND)
-        message(VERBOSE "Qt5Widgets_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
-        message(VERBOSE "Qt5Widgets_LIBRARIES: ${Qt5Widgets_LIBRARIES}")
-    elseif(NOT Qt5Widgets_FOUND)
-        set(Missing_package "TRUE")
-        if(APPLE AND CMAKE_HOST_APPLE)
-            message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt")
-        endif(APPLE AND CMAKE_HOST_APPLE)
-    endif(Qt5Widgets_FOUND)
-    find_package(Qt5Concurrent)
-    if(Qt5Concurrent_FOUND)
-        message(VERBOSE "Qt5Concurrent_INCLUDE_DIRS: ${Qt5Concurrent_INCLUDE_DIRS}")
-        message(VERBOSE "Qt5Concurrent_LIBRARIES: ${Qt5Concurrent_LIBRARIES}")
-    elseif(NOT Qt5Concurrent_FOUND)
-        set(Missing_package "TRUE")
-        if(APPLE AND CMAKE_HOST_APPLE)
-            message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt5")
-        endif(APPLE AND CMAKE_HOST_APPLE)
-    endif(Qt5Concurrent_FOUND)
-    find_package(Qt5Svg)
-    if(Qt5Svg_FOUND)
-        message(VERBOSE "Qt5Svg_INCLUDE_DIRS: ${Qt5Svg_INCLUDE_DIRS}")
-        message(VERBOSE "Qt5Svg_LIBRARIES: ${Qt5Svg_LIBRARIES}")
-    elseif(NOT Qt5Svg_FOUND)
-        set(Missing_package "TRUE")
-    endif(Qt5Svg_FOUND)
-endif()
-
-################################
 #####   Graphviz
 ################################
 find_package(Graphviz)
