@@ -77,11 +77,11 @@ namespace hal
 
         QStackedWidget* m_stacked_widget;
 
-        QWidget* m_empty_widget;
         GateDetailsWidget* m_gate_details;
         NetDetailsWidget* m_net_details;
         ModuleDetailsWidget* m_module_details;
         QLabel* m_item_deleted_label;
+        QLabel* m_no_selection_label;
 
         Searchbar* m_searchbar;
 

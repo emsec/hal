@@ -59,9 +59,6 @@ namespace hal
 
         m_stacked_widget = new QStackedWidget(m_selectionDetails);
 
-        m_empty_widget = new QWidget(m_selectionDetails);
-        m_stacked_widget->addWidget(m_empty_widget);
-
         m_gate_details = new GateDetailsWidget(m_selectionDetails);
         m_stacked_widget->addWidget(m_gate_details);
 
@@ -77,7 +74,15 @@ namespace hal
         m_item_deleted_label->setAlignment(Qt::AlignmentFlag::AlignTop);
         m_stacked_widget->addWidget(m_item_deleted_label);
 
-        m_stacked_widget->setCurrentWidget(m_empty_widget);
+        m_no_selection_label = new QLabel(m_selectionDetails);
+        m_no_selection_label->setText("No Selection");
+        m_no_selection_label->setWordWrap(true);
+        m_no_selection_label->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        m_stacked_widget->addWidget(m_no_selection_label);
+
+
+
+        m_stacked_widget->setCurrentWidget(m_no_selection_label);
 
         selDetailsLayout->addWidget(m_stacked_widget);
 
@@ -170,7 +175,7 @@ namespace hal
         switch (tp) {
         case SelectionTreeItem::NullItem:
             m_module_details->update(0);
-            m_stacked_widget->setCurrentWidget(m_empty_widget);
+            m_stacked_widget->setCurrentWidget(m_no_selection_label);
 //            set_name("Selection Details");
             break;
         case SelectionTreeItem::ModuleItem:
