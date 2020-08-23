@@ -44,10 +44,20 @@ namespace hal
     class SelectionDetailsWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString search_icon_path READ search_icon_path WRITE set_search_icon_path)
+        Q_PROPERTY(QString search_icon_style READ search_icon_style WRITE set_search_icon_style)
 
     public:
         SelectionDetailsWidget(QWidget* parent = 0);
         void clear();
+
+        virtual void setup_toolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
+
+        QString search_icon_path() const;
+        QString search_icon_style() const;
+
+        void set_search_icon_path(const QString &path);
+        void set_search_icon_style(const QString &style);
 
     Q_SIGNALS:
         void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
@@ -75,6 +85,11 @@ namespace hal
 
         Searchbar* m_searchbar;
 
+        QAction* m_search_action;
+        QString m_search_icon_path;
+        QString m_search_icon_style;
+
         void toggle_searchbar();
+        void handle_filter_text_changed(const QString& filter_text);
     };
 }

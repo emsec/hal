@@ -9,6 +9,8 @@
 #include "netlist/net.h"
 #include "netlist/netlist.h"
 #include "searchbar/searchbar.h"
+#include "toolbar/toolbar.h"
+#include "gui_utils/graphics.h"
 
 #include <QHeaderView>
 #include <QLabel>
@@ -23,8 +25,11 @@
 namespace hal
 {
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
-        : ContentWidget("Details", parent), m_numberSelectedItems(0)
+        : ContentWidget("Selection Details", parent), m_numberSelectedItems(0), m_search_action(new QAction())
     {
+        //needed to load the properties
+        ensurePolished();
+
         m_splitter = new QSplitter(Qt::Horizontal, this);
         //m_splitter->setStretchFactor(0,5); /* Doesn't do anything? */ 
         //m_splitter->setStretchFactor(1,10);
@@ -37,10 +42,13 @@ namespace hal
         QVBoxLayout* containerLayout = new QVBoxLayout(treeViewContainer);
 
         m_selectionTreeView  = new SelectionTreeView(treeViewContainer);
+        m_selectionTreeView->hide();
+
         m_searchbar = new Searchbar(treeViewContainer);
         m_searchbar->hide();
       
         containerLayout->addWidget(m_selectionTreeView);
+        containerLayout->addStretch();
         containerLayout->addWidget(m_searchbar);
         containerLayout->setSpacing(0);
         containerLayout->setContentsMargins(0,0,0,0);
@@ -84,13 +92,14 @@ namespace hal
         //    m_table_widget->horizontalHeader()->setStretchLastSection(true);
         //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
+        m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
+        m_search_action->setToolTip("Search");
+
+        connect(m_search_action, &QAction::triggered, this, &SelectionDetailsWidget::toggle_searchbar);
         connect(m_selectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
-
         connect(&g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
-        m_selectionTreeView->hide();
-        set_name("Selection Details");
-
         connect(m_searchbar, &Searchbar::text_edited, m_selectionTreeView, &SelectionTreeView::handle_filter_text_changed);
+        connect(m_searchbar, &Searchbar::text_edited, this, &SelectionDetailsWidget::handle_filter_text_changed);
     }
 
     void SelectionDetailsWidget::handle_selection_update(void* sender)
@@ -209,4 +218,38 @@ namespace hal
             setFocus();
         }
     }
+
+    void SelectionDetailsWidget::handle_filter_text_changed(const QString& filter_text)
+    {
+        if(filter_text.isEmpty())
+            m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
+        else
+            m_search_action->setIcon(gui_utility::get_styled_svg_icon("all->#30ac4f", m_search_icon_path)); //color test, integrate into stylsheet later
+    }
+
+    void SelectionDetailsWidget::setup_toolbar(Toolbar* toolbar)
+    {
+
+        toolbar->addAction(m_search_action);
+    }
+
+    QString SelectionDetailsWidget::search_icon_path() const
+    {
+        return m_search_icon_path;
+    }
+
+    QString SelectionDetailsWidget::search_icon_style() const
+    {
+        return m_search_icon_style;
+    }
+
+    void SelectionDetailsWidget::set_search_icon_path(const QString& path)
+    {
+        m_search_icon_path = path;
+    }
+
+    void SelectionDetailsWidget::set_search_icon_style(const QString& style)
+    {
+        m_search_icon_style = style;
+    }    
 }
