@@ -1,16 +1,16 @@
 #include "gui/main_window/main_window.h"
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/def.h"
-#include "gui/graphics_effects/overlay_effect.h"
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
 #include "gui/file_manager/file_manager.h"
+#include "gui/graphics_effects/overlay_effect.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/logger/logger_widget.h"
 #include "gui/main_window/about_dialog.h"
+#include "gui/notifications/notification.h"
+#include "gui/overlay/reminder_overlay.h"
 #include "gui/plugin_access_manager/plugin_access_manager.h"
 #include "gui/plugin_management/plugin_schedule_manager.h"
 #include "gui/plugin_management/plugin_schedule_widget.h"
@@ -18,6 +18,8 @@
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/python/python_editor.h"
 #include "gui/welcome_screen/welcome_screen.h"
+
+#include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
@@ -26,9 +28,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
-#include "gui/notifications/notification.h"
-#include "gui/overlay/reminder_overlay.h"
-#include "gui/plugin_manager/plugin_manager_widget.h"
+#include "hal_core/utilities/log.h"
 
 #include <QApplication>
 #include <QCloseEvent>

@@ -25,7 +25,7 @@
 
 #include "gui/content_widget/content_widget.h"
 
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/context_manager_widget/models/context_table_model.h"

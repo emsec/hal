@@ -25,7 +25,7 @@
 
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/special_strings.h"
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"

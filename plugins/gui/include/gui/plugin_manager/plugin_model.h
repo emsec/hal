@@ -25,7 +25,7 @@
 
 #include "gui/plugin_manager/plugin_item.h"
 #include <QAbstractItemModel>
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 
 namespace hal
 {

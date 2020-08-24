@@ -27,7 +27,7 @@
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/utilities/library_loader.h"
 #include "hal_core/utilities/program_options.h"
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 
 #include <functional>
 #include <map>

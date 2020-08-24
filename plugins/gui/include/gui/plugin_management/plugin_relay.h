@@ -24,7 +24,7 @@
 #pragma once
 
 #include <QObject>
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 #include <string>
 
 namespace hal

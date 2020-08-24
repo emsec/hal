@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/utilities/token_stream.h"
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 #include "vhdl_verilog_parsers/hdl_parser_template.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"

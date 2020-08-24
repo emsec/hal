@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 
 namespace hal
 {

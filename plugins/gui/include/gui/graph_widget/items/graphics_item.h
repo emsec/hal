@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 
 #include "gui/gui_def.h"
 

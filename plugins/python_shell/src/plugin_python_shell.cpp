@@ -2,7 +2,7 @@
 
 #include "hal_core/utilities/program_arguments.h"
 #include "hal_core/utilities/utils.h"
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 
 #include <Python.h>
 #include <cstring>

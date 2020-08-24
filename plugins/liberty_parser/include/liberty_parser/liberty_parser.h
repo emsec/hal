@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/utilities/token_stream.h"
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_library_parser.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"

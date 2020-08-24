@@ -4,7 +4,7 @@
 #include "hal_core/plugin_system/plugin_interface_gui.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/utils.h"
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"

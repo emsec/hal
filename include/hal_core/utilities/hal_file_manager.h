@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/utilities/callback_hook.h"
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 
 #define RAPIDJSON_HAS_STDSTRING 1
 #include "rapidjson/document.h"

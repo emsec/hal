@@ -24,7 +24,7 @@
 #pragma once
 
 #include "gui/content_widget/content_widget.h"
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 #include "gui/searchbar/searchbar.h"
 #include "gui/selection_widget/models/gate_table_model.h"
 #include "gui/selection_widget/models/gate_table_proxy_model.h"

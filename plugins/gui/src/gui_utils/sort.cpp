@@ -1,6 +1,6 @@
 #include "gui/gui_utils/sort.h"
 
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 
 #include <assert.h>
 

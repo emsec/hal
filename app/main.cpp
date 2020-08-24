@@ -1,4 +1,4 @@
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"

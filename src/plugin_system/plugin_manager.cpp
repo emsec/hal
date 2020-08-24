@@ -302,21 +302,21 @@ namespace hal
 
             {
                 auto tmp = m_cli_option_to_cli_plugin_name;
-                for (auto it : tmp)
+                for (auto [flag, name] : tmp)
                 {
-                    if (it.second == plugin_name)
+                    if (name == plugin_name)
                     {
-                        m_cli_option_to_cli_plugin_name.erase(it.first);
+                        m_cli_option_to_cli_plugin_name.erase(flag);
                     }
                 }
             }
             {
                 auto tmp = m_cli_option_to_ui_plugin_name;
-                for (auto it : tmp)
+                for (auto [flag, name] : tmp)
                 {
-                    if (it.second == plugin_name)
+                    if (name == plugin_name)
                     {
-                        m_cli_option_to_ui_plugin_name.erase(it.first);
+                        m_cli_option_to_ui_plugin_name.erase(flag);
                     }
                 }
             }

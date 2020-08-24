@@ -13,7 +13,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-#include "qmath.h"
+#include <qmath.h>
 
 namespace hal
 {

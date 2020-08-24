@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "hal_core/def.h"
+#include "hal_core/defines.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"

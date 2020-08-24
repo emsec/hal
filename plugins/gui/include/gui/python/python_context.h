@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include "gui/python/python_console.h"
+
 #include <QString>
 
 #pragma GCC diagnostic push
@@ -34,8 +36,6 @@
 #include "pybind11/stl_bind.h"
 #include "pybind11/functional.h"
 #pragma GCC diagnostic pop
-
-#include "python_console.h"
 
 namespace hal
 {

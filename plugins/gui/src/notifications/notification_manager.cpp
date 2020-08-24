@@ -1,8 +1,8 @@
 #include "gui/notifications/notification_manager.h"
 #include "gui/notifications/notification.h"
 
-#include "QApplication"
-#include "QDesktopWidget"
+#include <QApplication>
+#include <QDesktopWidget>
 
 namespace hal
 {
