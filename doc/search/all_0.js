@@ -8,7 +8,7 @@ var searchData=
   ['add_5fcallback_5',['add_callback',['../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45',1,'hal::CallbackHook&lt; R(ArgTypes...)&gt;::add_callback(const std::function&lt; R(ArgTypes...)&gt; &amp;callback, u64 id=0x0)'],['../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a7e2b511bcaa4178194695b83b04898bd',1,'hal::CallbackHook&lt; R(ArgTypes...)&gt;::add_callback(const std::string &amp;name, const std::function&lt; R(ArgTypes...)&gt; &amp;callback)']]],
   ['add_5fchannel_6',['add_channel',['../d5/d2e/classhal_1_1LogManager.html#a1af82acd668588c8a9e31ae61e166ce2',1,'hal::LogManager']]],
   ['add_5fclock_5fpin_7',['add_clock_pin',['../dd/dd1/classhal_1_1GateTypeSequential.html#acf5be1284906e05613f327fa5f893c4c',1,'hal::GateTypeSequential']]],
-  ['add_5fdestination_8',['add_destination',['../de/db0/classhal_1_1Net.html#a452f0d8d267248cf8b2fef4f601742f3',1,'hal::Net::add_destination(Gate *gate, const std::string &amp;pin)'],['../de/db0/classhal_1_1Net.html#aaed8ee15ee1d85c067eea996ab1de677',1,'hal::Net::add_destination(const Endpoint &amp;ep)']]],
+  ['add_5fdestination_8',['add_destination',['../de/db0/classhal_1_1Net.html#a452f0d8d267248cf8b2fef4f601742f3',1,'hal::Net']]],
   ['add_5fexisting_5foptions_5fdescription_9',['add_existing_options_description',['../da/d5a/namespacehal_1_1plugin__manager.html#a01b664fe781926cb67034f778e5242b1',1,'hal::plugin_manager']]],
   ['add_5fgate_5ftype_10',['add_gate_type',['../d7/daf/classhal_1_1GateLibrary.html#a3b5a37289ae6fa4cafd37089ae09bca5',1,'hal::GateLibrary']]],
   ['add_5finclude_11',['add_include',['../d7/daf/classhal_1_1GateLibrary.html#a8a704f948603b277844a8f8bb20fa6a9',1,'hal::GateLibrary']]],

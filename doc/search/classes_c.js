@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['token_649',['Token',['../d7/d7a/structhal_1_1Token.html',1,'hal']]],
-  ['tokenstream_650',['TokenStream',['../db/d9d/classhal_1_1TokenStream.html',1,'hal']]],
-  ['tokenstreamexception_651',['TokenStreamException',['../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html',1,'hal::TokenStream']]]
+  ['uiplugininterface_647',['UIPluginInterface',['../dd/d86/classhal_1_1UIPluginInterface.html',1,'hal']]]
 ];

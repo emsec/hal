@@ -82,7 +82,7 @@ Collaboration diagram for hal::Net:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d7/d18/classhal_1_1Net__coll__graph.png" border="0" usemap="#hal_1_1Net_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1Net_coll__map" id="hal_1_1Net_coll__map">
-<area shape="rect" title=" " alt="" coords="5,219,227,663"/>
+<area shape="rect" title=" " alt="" coords="5,219,227,633"/>
 <area shape="rect" href="../../d1/d7d/classhal_1_1DataContainer.html" title=" " alt="" coords="37,5,195,171"/>
 </map>
 </div>
@@ -113,12 +113,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab0016f259ab4c535fff11c61d91d974f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a452f0d8d267248cf8b2fef4f601742f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#a452f0d8d267248cf8b2fef4f601742f3">add_destination</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate, const std::string &amp;pin)</td></tr>
 <tr class="separator:a452f0d8d267248cf8b2fef4f601742f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaed8ee15ee1d85c067eea996ab1de677"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#aaed8ee15ee1d85c067eea996ab1de677">add_destination</a> (const <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> &amp;ep)</td></tr>
-<tr class="separator:aaed8ee15ee1d85c067eea996ab1de677"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99773ecb7916dc45d7519e8c1463442e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#a99773ecb7916dc45d7519e8c1463442e">remove_destination</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate, const std::string &amp;pin)</td></tr>
 <tr class="separator:a99773ecb7916dc45d7519e8c1463442e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55751d00f20a245c89663edc27c9e4d0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#a55751d00f20a245c89663edc27c9e4d0">remove_destination</a> (const <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> &amp;ep)</td></tr>
-<tr class="separator:a55751d00f20a245c89663edc27c9e4d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab84f1e1b2afe51dbbb84303e3b9ce036"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#ab84f1e1b2afe51dbbb84303e3b9ce036">is_a_destination</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate, const std::string &amp;pin) const</td></tr>
 <tr class="separator:ab84f1e1b2afe51dbbb84303e3b9ce036"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bebde08f58c22bcad20fc1e6bcb1cc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#a4bebde08f58c22bcad20fc1e6bcb1cc2">is_a_destination</a> (const <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> &amp;ep) const</td></tr>
@@ -474,7 +470,7 @@ Friends</h2></td></tr>
 </div>
 </div>
 <a id="a452f0d8d267248cf8b2fef4f601742f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a452f0d8d267248cf8b2fef4f601742f3">&#9670;&nbsp;</a></span>add_destination() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a452f0d8d267248cf8b2fef4f601742f3">&#9670;&nbsp;</a></span>add_destination()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -512,36 +508,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="aaed8ee15ee1d85c067eea996ab1de677"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaed8ee15ee1d85c067eea996ab1de677">&#9670;&nbsp;</a></span>add_destination() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool hal::Net::add_destination </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> &amp;&#160;</td>
-          <td class="paramname"><em>ep</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Add a destination to this net by endpoint.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ep</td><td>- The endpoint. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
-
-<p class="reference">References <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">hal::Endpoint::is_destination_pin()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
-
-</div>
-</div>
 <a id="a99773ecb7916dc45d7519e8c1463442e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99773ecb7916dc45d7519e8c1463442e">&#9670;&nbsp;</a></span>remove_destination() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a99773ecb7916dc45d7519e8c1463442e">&#9670;&nbsp;</a></span>remove_destination()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -576,34 +544,6 @@ Friends</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
-
-</div>
-</div>
-<a id="a55751d00f20a245c89663edc27c9e4d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55751d00f20a245c89663edc27c9e4d0">&#9670;&nbsp;</a></span>remove_destination() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool hal::Net::remove_destination </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> &amp;&#160;</td>
-          <td class="paramname"><em>ep</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Remove a destination from this net by endpoint. If the endpoint is a source-endpoint this function aborts.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ep</td><td>- The endoint. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
-
-<p class="reference">References <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">hal::Endpoint::is_destination_pin()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
 
 </div>
 </div>
@@ -915,7 +855,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 21 2020 09:05:34 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 24 2020 09:44:46 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

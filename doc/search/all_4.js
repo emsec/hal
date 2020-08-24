@@ -17,7 +17,7 @@ var searchData=
   ['event_5fcontrols_2eh_108',['event_controls.h',['../d4/d8c/event__controls_8h.html',1,'']]],
   ['event_5flog_2ecpp_109',['event_log.cpp',['../dd/dac/event__log_8cpp.html',1,'']]],
   ['event_5flog_2eh_110',['event_log.h',['../dd/d36/event__log_8h.html',1,'']]],
-  ['exec_111',['exec',['../d6/d19/classhal_1_1GUIPluginInterface.html#a750a4ec3e132c65d7cdcd9d021c3ea45',1,'hal::GUIPluginInterface::exec()'],['../dc/ddd/classhal_1_1InteractiveUIPluginInterface.html#a4287eda1dc49433b8885e60b399f0e1b',1,'hal::InteractiveUIPluginInterface::exec()'],['../df/d85/classhal_1_1PluginPythonShell.html#a88ffacd0fbe6cf0268a23b30eb249fbb',1,'hal::PluginPythonShell::exec()']]],
+  ['exec_111',['exec',['../d6/d19/classhal_1_1GUIPluginInterface.html#a750a4ec3e132c65d7cdcd9d021c3ea45',1,'hal::GUIPluginInterface::exec()'],['../dd/d86/classhal_1_1UIPluginInterface.html#a45c1916c2006b814eaf24adf43f61190',1,'hal::UIPluginInterface::exec()']]],
   ['exported_112',['EXPORTED',['../d4/da4/def_8h.html#af63d15eb9e745985585db45cb98ccf23',1,'def.h']]],
   ['extract_5funtil_113',['extract_until',['../db/d9d/classhal_1_1TokenStream.html#ac5b6b47cf6bbfdd2898aacbd6c54a13e',1,'hal::TokenStream']]],
   ['event_20handler_114',['Event Handler',['../d7/d82/group__handler.html',1,'']]]
