@@ -23,9 +23,9 @@
 
 #pragma once
 
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/module.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/module.h"
 
 
 #include <vector>

@@ -2,9 +2,9 @@
 #include "test_def.h"
 
 #include "gtest/gtest.h"
-#include <core/plugin_interface_cli.h>
-#include <core/log.h>
-#include <core/plugin_manager.h>
+#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 #include <iostream>
 
 
@@ -36,7 +36,7 @@ namespace hal
         {
         }
 
-        // Searches in all plugin_directorys (give by core_utils::get_plugin_directories()) to find a plugin named plugin_name.
+        // Searches in all plugin_directorys (give by utils::get_plugin_directories()) to find a plugin named plugin_name.
         // But: The function only looks for the first existence, but not if the plugin file can be loaded
         std::filesystem::path get_plugin_path(std::string plugin_name)
         {
@@ -50,7 +50,7 @@ namespace hal
                 }
             }
             // Search in all plugin directories for the plugin
-            for (auto directory : core_utils::get_plugin_directories())
+            for (auto directory : utils::get_plugin_directories())
             {
                 if (std::filesystem::exists((directory / (plugin_name + ".so")).string()))
                 {
@@ -123,8 +123,8 @@ namespace hal
             }
             {
                 // Load all plugins without directory hints by passing them the plugin folders given
-                // by core_utils::get_plugin_directories
-                auto dirs = core_utils::get_plugin_directories();
+                // by utils::get_plugin_directories
+                auto dirs = utils::get_plugin_directories();
                 plugin_manager::load_all_plugins(dirs);
 
                 int plugin_amount = plugin_manager::get_plugin_names().size();
@@ -159,7 +159,7 @@ namespace hal
             EXPECT_TRUE(plugin_manager::get_plugin_names().empty());
 
             // Load all plugins with directory hints
-            plugin_manager::load_all_plugins(core_utils::get_plugin_directories());
+            plugin_manager::load_all_plugins(utils::get_plugin_directories());
             NO_COUT(plugin_manager::unload_all_plugins());
 
             EXPECT_TRUE(plugin_manager::get_plugin_names().empty());

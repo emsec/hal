@@ -25,7 +25,7 @@
 
 #include "gui/channel_manager/channel_item.h"
 #include "gui/content_widget/content_widget.h"
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 #include "gui/gui_utils/graphics.h"
 #include <QLabel>
 #include <QMenu>

@@ -1,8 +1,8 @@
 #include "gui/graph_widget/graphics_scene.h"
 
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_factory.h"

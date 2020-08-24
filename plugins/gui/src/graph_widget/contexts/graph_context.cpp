@@ -1,6 +1,6 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 
-#include "netlist/module.h"
+#include "hal_core/netlist/module.h"
 
 #include "gui/graph_widget/contexts/graph_context_subscriber.h"
 #include "gui/graph_widget/graphics_scene.h"

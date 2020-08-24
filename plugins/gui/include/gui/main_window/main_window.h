@@ -24,7 +24,7 @@
 #pragma once
 
 #include "gui/content_layout_area/content_layout_area.h"
-#include "core/program_options.h"
+#include "hal_core/utilities/program_options.h"
 #include "gui/action/action.h"
 #include "gui/plugin_manager/plugin_manager_widget.h"
 #include "gui/plugin_manager/plugin_model.h"
@@ -36,7 +36,7 @@
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QToolBar>
-#include "core/program_options.h"
+#include "hal_core/utilities/program_options.h"
 
 namespace hal
 {

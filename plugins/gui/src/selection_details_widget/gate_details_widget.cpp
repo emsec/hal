@@ -3,14 +3,14 @@
 #include "gui/selection_details_widget/disputed_big_icon.h"
 #include "gui/selection_details_widget/details_section_widget.h"
 
-#include "netlist/gate.h"
-#include "netlist/net.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/geometry.h"
 
 #include "gui/graph_widget/graph_navigation_widget.h"
-#include "netlist/module.h"
+#include "hal_core/netlist/module.h"
 
 #include <QApplication>
 #include <QCursor>

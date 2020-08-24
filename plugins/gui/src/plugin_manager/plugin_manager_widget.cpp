@@ -1,6 +1,6 @@
 #include "gui/plugin_manager/plugin_manager_widget.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/toolbar/toolbar.h"
 #include <QDir>

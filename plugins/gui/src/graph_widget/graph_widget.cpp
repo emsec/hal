@@ -15,10 +15,10 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/toolbar/toolbar.h"
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-#include "core/utils.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/utilities/utils.h"
 
 #include <QDebug>
 #include <QInputDialog>
@@ -335,7 +335,7 @@ namespace hal
             }
             else
             {
-                in_nets = core_utils::to_vector(g_netlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets());
+                in_nets = utils::to_vector(g_netlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets());
             }
             bool netIsInput               = std::find(in_nets.begin(), in_nets.end(), n) != in_nets.cend();
             hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;

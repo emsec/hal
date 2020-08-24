@@ -23,9 +23,9 @@
 
 #pragma once
 
-#include "def.h"
+#include "hal_core/defines.h"
 #include "gui/gui_utils/sort.h"
-#include "netlist/module.h"
+#include "hal_core/netlist/module.h"
 
 #include <QAbstractItemModel>
 #include <QModelIndex>

@@ -1,6 +1,6 @@
-#include "netlist/event_system/module_event_handler.h"
+#include "hal_core/netlist/event_system/module_event_handler.h"
 
-#include "netlist/module.h"
+#include "hal_core/netlist/module.h"
 
 namespace hal
 {

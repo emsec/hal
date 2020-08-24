@@ -5,9 +5,9 @@
 #include "gui/selection_details_widget/module_details_widget.h"
 
 #include "gui/gui_globals.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 #include "gui/searchbar/searchbar.h"
 
 #include <QHeaderView>

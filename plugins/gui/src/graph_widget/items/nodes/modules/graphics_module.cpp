@@ -1,7 +1,7 @@
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 
-#include "netlist/module.h"
-#include "netlist/net.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
 
 namespace hal
 {

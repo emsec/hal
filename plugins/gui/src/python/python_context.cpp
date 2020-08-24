@@ -1,10 +1,10 @@
 #include "gui/python/python_context.h"
 
-#include "core/log.h"
-#include "core/utils.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 #include "gui/gui_globals.h"
 #include "gui/python/python_context_subscriber.h"
-#include "python_binding/bindings.h"
+#include "hal_core/python_bindings/python_bindings.h"
 
 #include <QDir>
 #include <fstream>
@@ -45,11 +45,11 @@ namespace hal
     {
         std::string command = "import __main__\n"
                               "import io, sys\n";
-        for (auto path : core_utils::get_plugin_directories())
+        for (auto path : utils::get_plugin_directories())
         {
             command += "sys.path.append('" + path.string() + "')\n";
         }
-        command += "sys.path.append('" + core_utils::get_library_directory().string()
+        command += "sys.path.append('" + utils::get_library_directory().string()
                    + "')\n"
                      "from hal_gui.console import reset\n"
                      "from hal_gui.console import clear\n"
@@ -186,7 +186,7 @@ namespace hal
     {
         if (output != "\n")
         {
-            log_info("python", "{}", core_utils::rtrim(output.toStdString(), "\r\n"));
+            log_info("python", "{}", utils::rtrim(output.toStdString(), "\r\n"));
         }
         if (m_console)
         {

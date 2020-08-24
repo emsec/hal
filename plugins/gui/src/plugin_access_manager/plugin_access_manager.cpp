@@ -1,8 +1,8 @@
 #include "gui/plugin_access_manager/plugin_access_manager.h"
-#include "core/plugin_interface_cli.h"
-#include "core/plugin_interface_gui.h"
-#include "core/plugin_manager.h"
-#include "core/program_arguments.h"
+#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_interface_gui.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/program_arguments.h"
 #include "gui/gui_globals.h"
 #include "gui/plugin_access_manager/extended_cli_dialog.h"
 

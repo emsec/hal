@@ -1,20 +1,20 @@
-#include "core/log.h"
-#include "core/plugin_interface_base.h"
-#include "core/plugin_interface_cli.h"
-#include "core/plugin_interface_ui.h"
-#include "core/plugin_manager.h"
-#include "core/program_arguments.h"
-#include "core/program_options.h"
-#include "core/utils.h"
-#include "def.h"
+#include "hal_core/defines.h"
+#include "hal_core/netlist/event_system/event_log.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
+#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_interface_ui.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/program_arguments.h"
+#include "hal_core/utilities/program_options.h"
+#include "hal_core/utilities/utils.h"
 #include "hal_version.h"
-#include "netlist/event_system/event_log.h"
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/hdl_parser/hdl_parser_manager.h"
-#include "netlist/hdl_writer/hdl_writer_manager.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
-#include "netlist/persistent/netlist_serializer.h"
 
 #include <fstream>
 #include <iostream>
@@ -135,7 +135,7 @@ int main(int argc, const char* argv[])
 
     if (args.is_option_set("--licenses"))
     {
-        std::cout << core_utils::get_open_source_licenses() << std::endl;
+        std::cout << utils::get_open_source_licenses() << std::endl;
         return cleanup();
     }
 
@@ -157,7 +157,7 @@ int main(int argc, const char* argv[])
 
         if (plugins_to_execute.size() > 1)
         {
-            log_error("core", "passed options for multiple ui plugins: {}", core_utils::join(", ", plugins_to_execute));
+            log_error("core", "passed options for multiple ui plugins: {}", utils::join(", ", plugins_to_execute));
             return cleanup(ERROR);
         }
         else if (plugins_to_execute.size() == 1)
@@ -184,7 +184,7 @@ int main(int argc, const char* argv[])
             log_info("core", "executing '{}' with", plugin_name);
             for (const auto& option : plugin_args.get_set_options())
             {
-                log_info("core", "  '{}': {}", option, core_utils::join(",", plugin_args.get_parameters(option)));
+                log_info("core", "  '{}': {}", option, utils::join(",", plugin_args.get_parameters(option)));
             }
 
             /* add timestamp to log output */
@@ -306,7 +306,7 @@ int main(int argc, const char* argv[])
         log_info("core", "executing '{}' with", plugin_name);
         for (const auto& option : plugin_args.get_set_options())
         {
-            log_info("core", "  '{}': {}", option, core_utils::join(",", plugin_args.get_parameters(option)));
+            log_info("core", "  '{}': {}", option, utils::join(",", plugin_args.get_parameters(option)));
         }
 
         if (!plugin->handle_cli_call(netlist.get(), plugin_args))

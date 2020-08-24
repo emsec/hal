@@ -1,12 +1,12 @@
-#include "netlist/gate.h"
+#include "hal_core/netlist/gate.h"
 
-#include "core/log.h"
-#include "netlist/event_system/gate_event_handler.h"
-#include "netlist/gate_library/gate_type/gate_type_lut.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_internal_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/event_system/gate_event_handler.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_internal_manager.h"
 
 #include <assert.h>
 #include <iomanip>
@@ -62,7 +62,7 @@ namespace hal
 
     void Gate::set_name(const std::string& name)
     {
-        if (core_utils::trim(name).empty())
+        if (utils::trim(name).empty())
         {
             log_error("netlist.internal", "gate::set_name: empty name is not allowed");
             return;

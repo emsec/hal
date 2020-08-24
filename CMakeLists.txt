@@ -161,7 +161,6 @@ if(UNIX)
 
     enable_cxx_compile_option_if_supported("-O1" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "Perf" "PUBLIC")
-    enable_cxx_compile_option_if_supported("-pg" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-fno-inline-functions" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-fno-inline-functions-called-once" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-fno-optimize-sibling-calls" "Perf" "PUBLIC")

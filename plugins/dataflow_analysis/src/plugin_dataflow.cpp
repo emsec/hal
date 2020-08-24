@@ -1,24 +1,24 @@
-#include "plugin_dataflow.h"
+#include "dataflow_analysis/plugin_dataflow.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
-#include "core/plugin_manager.h"
-#include "evaluation/configuration.h"
-#include "evaluation/context.h"
-#include "evaluation/evaluation.h"
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
-#include "output_generation/dot_graph.h"
-#include "output_generation/json.hpp"
-#include "output_generation/json_output.h"
-#include "output_generation/svg_output.h"
-#include "output_generation/textual_output.h"
-#include "pre_processing/pre_processing.h"
-#include "processing/passes/group_by_control_signals.h"
-#include "processing/processing.h"
-#include "utils/timing_utils.h"
-#include "utils/utils.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "dataflow_analysis/evaluation/configuration.h"
+#include "dataflow_analysis/evaluation/context.h"
+#include "dataflow_analysis/evaluation/evaluation.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "dataflow_analysis/output_generation/dot_graph.h"
+#include "dataflow_analysis/output_generation/json.hpp"
+#include "dataflow_analysis/output_generation/json_output.h"
+#include "dataflow_analysis/output_generation/svg_output.h"
+#include "dataflow_analysis/output_generation/textual_output.h"
+#include "dataflow_analysis/pre_processing/pre_processing.h"
+#include "dataflow_analysis/processing/passes/group_by_control_signals.h"
+#include "dataflow_analysis/processing/processing.h"
+#include "dataflow_analysis/utils/timing_utils.h"
+#include "dataflow_analysis/utils/utils.h"
 
 #include <thread>
 #include <chrono>
@@ -187,7 +187,7 @@ namespace hal
 
         if (!eval_config.prioritized_sizes.empty())
         {
-            log_info("dataflow", "will prioritize sizes {}", core_utils::join(", ", sizes));
+            log_info("dataflow", "will prioritize sizes {}", utils::join(", ", sizes));
             log_info("dataflow", "");
         }
 

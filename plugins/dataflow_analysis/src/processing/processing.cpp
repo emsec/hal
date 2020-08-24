@@ -1,16 +1,16 @@
-#include "processing/processing.h"
+#include "dataflow_analysis/processing/processing.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
-#include "processing/configuration.h"
-#include "processing/context.h"
-#include "processing/pass_collection.h"
-#include "processing/result.h"
-#include "utils/progress_printer.h"
-#include "utils/utils.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "dataflow_analysis/processing/configuration.h"
+#include "dataflow_analysis/processing/context.h"
+#include "dataflow_analysis/processing/pass_collection.h"
+#include "dataflow_analysis/processing/result.h"
+#include "dataflow_analysis/utils/progress_printer.h"
+#include "dataflow_analysis/utils/utils.h"
 
 #include <thread>
 #include <iomanip>

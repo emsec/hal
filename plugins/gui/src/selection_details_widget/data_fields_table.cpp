@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include "gui/selection_details_widget/data_fields_table.h"
-#include "netlist/data_container.h"
+#include "hal_core/netlist/data_container.h"
 
 namespace hal {
 

@@ -1,4 +1,4 @@
-#include "netlist/endpoint.h"
+#include "hal_core/netlist/endpoint.h"
 
 namespace hal
 {

@@ -1,11 +1,11 @@
-#include "processing/pass_collection.h"
+#include "dataflow_analysis/processing/pass_collection.h"
 
-#include "processing/passes/group_by_control_signals.h"
-#include "processing/passes/group_by_input_output_size.h"
-#include "processing/passes/group_by_successors_predecessors.h"
-#include "processing/passes/group_by_successors_predecessors_iteratively.h"
-#include "processing/passes/merge_successor_predecessor_groupings.h"
-#include "processing/passes/split_by_successors_predecessors.h"
+#include "dataflow_analysis/processing/passes/group_by_control_signals.h"
+#include "dataflow_analysis/processing/passes/group_by_input_output_size.h"
+#include "dataflow_analysis/processing/passes/group_by_successors_predecessors.h"
+#include "dataflow_analysis/processing/passes/group_by_successors_predecessors_iteratively.h"
+#include "dataflow_analysis/processing/passes/merge_successor_predecessor_groupings.h"
+#include "dataflow_analysis/processing/passes/split_by_successors_predecessors.h"
 
 #include <algorithm>
 

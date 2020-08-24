@@ -1,6 +1,6 @@
 #include "gui/python/python_console.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 #include "gui/gui_globals.h"
 
 #include <QKeyEvent>

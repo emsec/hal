@@ -1,7 +1,7 @@
-#include "plugin_liberty_parser.h"
+#include "liberty_parser/plugin_liberty_parser.h"
 
-#include "liberty_parser.h"
-#include "netlist/gate_library/gate_library_manager.h"
+#include "liberty_parser/liberty_parser.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 
 namespace hal
 {

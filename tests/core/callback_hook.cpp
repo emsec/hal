@@ -1,7 +1,7 @@
 #include "test_def.h"
 #include "gtest/gtest.h"
-#include <core/callback_hook.h>
-#include <core/log.h>
+#include "hal_core/utilities/callback_hook.h"
+#include "hal_core/utilities/log.h"
 #include <iostream>
 #include "netlist_test_utils.h"
 

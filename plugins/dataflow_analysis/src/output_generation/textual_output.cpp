@@ -1,11 +1,11 @@
-#include "output_generation/textual_output.h"
+#include "dataflow_analysis/output_generation/textual_output.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <fstream>
 #include <iomanip>
@@ -26,16 +26,16 @@ namespace hal
             {
                 result_out << "ID:" << group_id << ", ";
                 result_out << "Size:" << gates.size() << ", ";
-                result_out << "RS: {" << core_utils::join(", ", state->get_register_stage_intersect_of_group(group_id)) << "}, ";
-                result_out << "CLK: {" << core_utils::join(", ", state->get_clock_signals_of_group(group_id)) << "}, ";
-                result_out << "CS: {" << core_utils::join(", ", state->get_control_signals_of_group(group_id)) << "}, ";
-                result_out << "R: {" << core_utils::join(", ", state->get_reset_signals_of_group(group_id)) << "}" << std::endl;
+                result_out << "RS: {" << utils::join(", ", state->get_register_stage_intersect_of_group(group_id)) << "}, ";
+                result_out << "CLK: {" << utils::join(", ", state->get_clock_signals_of_group(group_id)) << "}, ";
+                result_out << "CS: {" << utils::join(", ", state->get_control_signals_of_group(group_id)) << "}, ";
+                result_out << "R: {" << utils::join(", ", state->get_reset_signals_of_group(group_id)) << "}" << std::endl;
 
                 auto unsorted_successors = state->get_successor_groups_of_group(group_id);
-                result_out << "  Successors:   {" + core_utils::join(", ", std::set<u32>(unsorted_successors.begin(), unsorted_successors.end())) << "}" << std::endl;
+                result_out << "  Successors:   {" + utils::join(", ", std::set<u32>(unsorted_successors.begin(), unsorted_successors.end())) << "}" << std::endl;
 
                 auto unsorted_predecessors = state->get_predecessor_groups_of_group(group_id);
-                result_out << "  Predecessors: {" + core_utils::join(", ", std::set<u32>(unsorted_predecessors.begin(), unsorted_predecessors.end())) << "}" << std::endl;
+                result_out << "  Predecessors: {" + utils::join(", ", std::set<u32>(unsorted_predecessors.begin(), unsorted_predecessors.end())) << "}" << std::endl;
 
                 std::unordered_map<u32, std::vector<std::string>> texts;
                 std::unordered_map<u32, u32> text_max_lengths;
@@ -57,7 +57,7 @@ namespace hal
                     std::string stages = "RS: ";
                     if (auto it = state->netlist_abstr.gate_to_register_stages.find(single_ff); it != state->netlist_abstr.gate_to_register_stages.end())
                     {
-                        stages += "{" + core_utils::join(", ", std::set<u32>(it->second.begin(), it->second.end())) + "}";
+                        stages += "{" + utils::join(", ", std::set<u32>(it->second.begin(), it->second.end())) + "}";
                     }
 
                     std::vector<std::string> data = {name, type, id, stages};

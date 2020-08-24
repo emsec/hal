@@ -1,8 +1,8 @@
 #include "gui/settings/settings_manager.h"
 
 #include <QDebug>
-#include "core/utils.h"
-#include "def.h"
+#include "hal_core/utilities/utils.h"
+#include "hal_core/defines.h"
 #include "gui/gui_globals.h"
 
 #include <QSettings>
@@ -10,8 +10,8 @@
 namespace hal
 {
     SettingsManager::SettingsManager(QObject* parent) : QObject(parent),
-        m_settings(new QSettings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat)),
-        m_defaults(new QSettings(QString::fromStdString((core_utils::get_config_directory() / "guidefaults.ini").string()), QSettings::IniFormat))
+        m_settings(new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat)),
+        m_defaults(new QSettings(QString::fromStdString((utils::get_config_directory() / "guidefaults.ini").string()), QSettings::IniFormat))
     {
         //g_settings_relay->register_sender(this, name());
         if (m_settings->status() != QSettings::NoError) {

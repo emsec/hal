@@ -1,6 +1,6 @@
-#include "plugin_netlist_simulator/simulation.h"
+#include "netlist_simulator/simulation.h"
 
-#include "netlist/net.h"
+#include "hal_core/netlist/net.h"
 
 namespace hal
 {

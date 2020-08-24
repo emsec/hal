@@ -1,9 +1,9 @@
-#include "hdl_writer_verilog.h"
+#include "vhdl_verilog_writers/hdl_writer_verilog.h"
 
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 
 
 namespace hal
@@ -219,7 +219,7 @@ namespace hal
     {
         std::string pin_temp = pin;
         std::size_t found;
-        bool marked = core_utils::starts_with(pin_temp, std::string("\\"));
+        bool marked = utils::starts_with(pin_temp, std::string("\\"));
         while ((found = pin_temp.find("(")) != std::string::npos)
         {
             pin_temp.replace(found, 1, "[");

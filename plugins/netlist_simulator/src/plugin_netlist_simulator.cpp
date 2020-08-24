@@ -1,4 +1,4 @@
-#include "plugin_netlist_simulator/plugin_netlist_simulator.h"
+#include "netlist_simulator/plugin_netlist_simulator.h"
 
 namespace hal
 {

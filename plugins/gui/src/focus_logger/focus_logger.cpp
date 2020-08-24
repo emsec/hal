@@ -3,7 +3,7 @@
 //
 
 #include "gui/focus_logger/focus_logger.h"
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 #include <QWidget>
 
 namespace hal

@@ -19,8 +19,8 @@
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/main_window/main_window.h"
-#include "netlist/netlist.h"
-#include "netlist/persistent/netlist_serializer.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "gui/vhdl_editor/vhdl_editor.h"
 
 #include <QGraphicsScene>

@@ -1,9 +1,10 @@
-#include "output_generation/dot_graph.h"
+#include "dataflow_analysis/output_generation/dot_graph.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
-#include "utils/timing_utils.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/utils/timing_utils.h"
+
+#include "hal_core/utilities/log.h"
 
 #include <cstdlib>
 #include <fstream>

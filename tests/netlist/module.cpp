@@ -1,14 +1,14 @@
-#include "netlist/module.h"
-#include "netlist/event_system/gate_event_handler.h"
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/event_system/gate_event_handler.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
-#include <core/log.h>
+#include "hal_core/utilities/log.h"
 #include <iostream>
-#include <netlist/gate.h>
-#include <netlist/net.h>
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 
 namespace hal {
 

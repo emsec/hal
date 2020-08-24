@@ -1,6 +1,6 @@
-#include "plugin_graph_algorithm.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {

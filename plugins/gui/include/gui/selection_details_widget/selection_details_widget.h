@@ -25,7 +25,7 @@
 
 #include "gui/content_widget/content_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
-#include "def.h"
+#include "hal_core/defines.h"
 
 class QTableWidget;
 class QStackedWidget;

@@ -1,11 +1,11 @@
-#include "netlist/module.h"
+#include "hal_core/netlist/module.h"
 
-#include "core/log.h"
-#include "netlist/event_system/module_event_handler.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_internal_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/event_system/module_event_handler.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_internal_manager.h"
 
 namespace hal
 {
@@ -29,7 +29,7 @@ namespace hal
 
     void Module::set_name(const std::string& name)
     {
-        if (core_utils::trim(name).empty())
+        if (utils::trim(name).empty())
         {
             log_error("module", "empty name is not allowed");
             return;

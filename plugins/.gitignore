@@ -1,6 +1,6 @@
 *
-!dataflow*
-!dataflow/**/*
+!dataflow_analysis*
+!dataflow_analysis/**/*
 !example_gate_library*
 !example_gate_library/**/*
 !gate_libraries*

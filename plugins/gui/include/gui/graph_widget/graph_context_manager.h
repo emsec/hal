@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "def.h"
+#include "hal_core/defines.h"
 
 #include <QObject>
 #include <QStringList>

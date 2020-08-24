@@ -1,6 +1,6 @@
 #include "gui/style/style.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/nets/graphics_net.h"

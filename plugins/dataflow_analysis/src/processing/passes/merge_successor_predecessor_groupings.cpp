@@ -1,8 +1,8 @@
-#include "processing/passes/merge_successor_predecessor_groupings.h"
+#include "dataflow_analysis/processing/passes/merge_successor_predecessor_groupings.h"
 
-#include "common/netlist_abstraction.h"
-#include "processing/passes/group_by_successors_predecessors.h"
-#include "processing/passes/merge_states.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/processing/passes/group_by_successors_predecessors.h"
+#include "dataflow_analysis/processing/passes/merge_states.h"
 
 namespace hal
 {

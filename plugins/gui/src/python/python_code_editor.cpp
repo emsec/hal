@@ -2,7 +2,7 @@
 #include "gui/python/python_editor_code_completion_dialog.h"
 
 #include "gui/code_editor/syntax_highlighter/python_syntax_highlighter.h"
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 #include "gui/gui_globals.h"
 
 #include <QApplication>

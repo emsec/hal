@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "QtGlobal"
+#include <QtGlobal>
 
 namespace hal
 {

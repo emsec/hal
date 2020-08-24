@@ -1,10 +1,10 @@
-#include "netlist/net.h"
+#include "hal_core/netlist/net.h"
 
-#include "core/log.h"
-#include "netlist/event_system/net_event_handler.h"
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_internal_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/event_system/net_event_handler.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_internal_manager.h"
 
 #include <assert.h>
 #include <memory>
@@ -36,7 +36,7 @@ namespace hal
 
     void Net::set_name(const std::string& name)
     {
-        if (core_utils::trim(name).empty())
+        if (utils::trim(name).empty())
         {
             log_error("netlist.internal", "net::set_name: empty name is not allowed");
             return;

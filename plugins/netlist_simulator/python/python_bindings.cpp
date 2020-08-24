@@ -3,8 +3,8 @@
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
 
-#include "plugin_netlist_simulator/plugin_netlist_simulator.h"
-#include "plugin_netlist_simulator/netlist_simulator.h"
+#include "netlist_simulator/plugin_netlist_simulator.h"
+#include "netlist_simulator/netlist_simulator.h"
 
 namespace py = pybind11;
 

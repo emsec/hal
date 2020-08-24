@@ -6,9 +6,9 @@
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/context_manager_widget/models/context_table_model.h"
 #include "gui/gui_globals.h"
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/netlist.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <QDateTime>
 
@@ -49,7 +49,7 @@ namespace hal
         m_context_table_model->begin_remove_context(ctx);
         m_graph_contexts.remove(m_graph_contexts.indexOf(ctx));
         m_context_table_model->end_remove_context();
-        
+
         delete ctx;
     }
 

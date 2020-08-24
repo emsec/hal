@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "settings_widget.h"
+#include "gui/settings/settings_widget.h"
 #include <QSpinBox>
 
 namespace hal

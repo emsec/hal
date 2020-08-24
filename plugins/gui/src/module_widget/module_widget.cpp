@@ -4,9 +4,9 @@
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_relay/module_relay.h"
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
 
 #include <QHeaderView>
 #include <QItemSelectionModel>
@@ -18,7 +18,7 @@
 #include <QShortcut>
 #include <QTreeView>
 #include <QVBoxLayout>
-#include <core/log.h>
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {

@@ -1,7 +1,7 @@
 #include "test_def.h"
 #include "gtest/gtest.h"
-#include <core/log.h>
-#include <core/program_arguments.h>
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/program_arguments.h"
 #include <iostream>
 #include "netlist_test_utils.h"
 

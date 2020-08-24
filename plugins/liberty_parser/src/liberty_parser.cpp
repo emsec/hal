@@ -1,9 +1,9 @@
-#include "liberty_parser.h"
+#include "liberty_parser/liberty_parser.h"
 
-#include "core/log.h"
-#include "netlist/boolean_function.h"
-#include "netlist/gate_library/gate_type/gate_type_lut.h"
-#include "netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
 
 namespace hal
 {

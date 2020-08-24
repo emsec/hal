@@ -1,6 +1,6 @@
 #include "gui/channel_manager/channel_model.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 #define ALL_CHANNEL "all"
 namespace hal

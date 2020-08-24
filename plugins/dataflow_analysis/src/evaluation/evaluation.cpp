@@ -1,15 +1,15 @@
-#include "evaluation/evaluation.h"
+#include "dataflow_analysis/evaluation/evaluation.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
-#include "output_generation/textual_output.h"
-#include "processing/passes/group_by_control_signals.h"
-#include "utils/parallel_for_each.h"
-#include "utils/progress_printer.h"
-#include "utils/timing_utils.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "dataflow_analysis/output_generation/textual_output.h"
+#include "dataflow_analysis/processing/passes/group_by_control_signals.h"
+#include "dataflow_analysis/utils/parallel_for_each.h"
+#include "dataflow_analysis/utils/progress_printer.h"
+#include "dataflow_analysis/utils/timing_utils.h"
 
 #include <algorithm>
 #include <limits>

@@ -1,7 +1,7 @@
 #include "gui/module_relay/module_relay.h"
 
 #include "gui/gui_globals.h"
-#include "netlist/module.h"
+#include "hal_core/netlist/module.h"
 
 namespace hal
 {

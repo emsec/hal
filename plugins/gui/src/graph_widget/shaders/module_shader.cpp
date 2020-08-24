@@ -1,6 +1,6 @@
 #include "gui/graph_widget/shaders/module_shader.h"
 
-#include "netlist/module.h"
+#include "hal_core/netlist/module.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"

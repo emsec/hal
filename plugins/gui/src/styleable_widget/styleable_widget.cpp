@@ -1,7 +1,7 @@
 #include "gui/styleable_widget/styleable_widget.h"
 
-#include "QPainter"
-#include "QStyleOption"
+#include <QPainter>
+#include <QStyleOption>
 
 namespace hal
 {

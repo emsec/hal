@@ -23,9 +23,9 @@
 
 #pragma once
 
-#include "def.h"
+#include "hal_core/defines.h"
 #include "gui/gui_def.h"
-#include "netlist/endpoint.h"
+#include "hal_core/netlist/endpoint.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/selection_details_widget/details_widget.h"
 

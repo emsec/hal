@@ -1,4 +1,4 @@
-#include "netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
 
 namespace hal
 {

@@ -24,7 +24,7 @@
 #pragma once
 
 #include "gui/channel_manager/channel_item.h"
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 #include <QAbstractTableModel>
 #include <QModelIndex>
 #include <QVariant>

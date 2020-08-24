@@ -1,6 +1,6 @@
 #include "gui/python/python_editor_code_completion_dialog.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 #include <QAbstractItemView>
 #include <QDebug>
@@ -9,7 +9,7 @@
 #include <QString>
 #include <QStringList>
 #include <QTableWidgetItem>
-#include <core/log.h>
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {

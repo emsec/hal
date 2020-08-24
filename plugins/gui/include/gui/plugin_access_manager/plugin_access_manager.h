@@ -23,8 +23,8 @@
 
 #pragma once
 
-#include "core/program_options.h"
-#include <core/program_options.h>
+#include "hal_core/utilities/program_options.h"
+#include "hal_core/utilities/program_options.h"
 #include <memory>
 #include <string>
 

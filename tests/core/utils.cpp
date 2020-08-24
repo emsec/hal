@@ -2,15 +2,15 @@
 #include "test_def.h"
 
 #include "gtest/gtest.h"
-#include <core/log.h>
-#include <core/utils.h>
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 #include <cstdio>
 #include <experimental/filesystem>
 #include <fstream>
 #include <iostream>
 
 namespace hal {
-    using namespace core_utils;
+    using namespace utils;
 
     class UtilsTest : public ::testing::Test {
     protected:

@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "QFrame"
+#include <QFrame>
 
 class QLabel;
 class QVBoxLayout;

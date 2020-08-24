@@ -1,6 +1,6 @@
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
-#include <netlist/boolean_function.h>
+#include "hal_core/netlist/boolean_function.h"
 #include <iostream>
 
 namespace hal {
@@ -53,7 +53,7 @@ namespace hal {
 
         // Remove the spaces from a string
         std::string no_space(std::string s) {
-            return core_utils::replace<std::string>(s, " ", "");
+            return utils::replace<std::string>(s, " ", "");
         }
 
         /**

@@ -1,6 +1,6 @@
 #include "gui/plugin_management/plugin_relay.h"
 
-#include "core/plugin_manager.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 namespace hal
 {
