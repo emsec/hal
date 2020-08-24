@@ -1,11 +1,11 @@
-<map id="netlist/data_container.h" name="netlist/data_container.h">
-<area shape="rect" id="node1" title=" " alt="" coords="247,5,422,32"/>
-<area shape="rect" id="node2" href="$d4/da4/def_8h.html" title=" " alt="" coords="191,80,246,107"/>
-<area shape="rect" id="node7" title=" " alt="" coords="271,80,321,107"/>
-<area shape="rect" id="node8" title=" " alt="" coords="346,80,401,107"/>
-<area shape="rect" id="node9" title=" " alt="" coords="425,80,487,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,155,96,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,155,207,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,155,318,181"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,155,413,181"/>
+<map id="hal_core/netlist/data_container.h" name="hal_core/netlist/data_container.h">
+<area shape="rect" id="node1" title=" " alt="" coords="300,5,455,47"/>
+<area shape="rect" id="node2" href="$d8/db0/defines_8h.html" title=" " alt="" coords="149,95,289,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="313,95,364,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="389,95,443,121"/>
+<area shape="rect" id="node9" title=" " alt="" coords="467,95,530,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,96,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,169,207,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,169,318,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,169,413,196"/>
 </map>

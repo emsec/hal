@@ -9,5 +9,5 @@ var searchData=
   ['delete_5fnet_806',['delete_net',['../dc/d06/classhal_1_1Netlist.html#ac2b7022c1921f351d012ca86dfd1f3f2',1,'hal::Netlist']]],
   ['deserialize_807',['deserialize',['../d7/d09/namespacehal_1_1hal__file__manager.html#a3e315518469b1dc3a7a28df27fcb03f6',1,'hal::hal_file_manager']]],
   ['deserialize_5ffrom_5ffile_808',['deserialize_from_file',['../d9/dcb/namespacehal_1_1netlist__serializer.html#ae74f82d776171fbdf0d63e3f8b918eb1',1,'hal::netlist_serializer']]],
-  ['directoryrange_809',['DirectoryRange',['../d5/dfc/classhal_1_1core__utils_1_1DirectoryRange.html#a1881fa5646e4fa4dc95fef700eda1955',1,'hal::core_utils::DirectoryRange']]]
+  ['directoryrange_809',['DirectoryRange',['../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac43df8231050de5bed11513bd0980b2a',1,'hal::utils::DirectoryRange']]]
 ];

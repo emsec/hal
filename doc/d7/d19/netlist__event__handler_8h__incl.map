@@ -1,13 +1,13 @@
-<map id="netlist/event_system/netlist_event_handler.h" name="netlist/event_system/netlist_event_handler.h">
-<area shape="rect" id="node1" title=" " alt="" coords="317,5,496,47"/>
-<area shape="rect" id="node2" href="$d8/db4/callback__hook_8h.html" title=" " alt="" coords="327,95,486,121"/>
-<area shape="rect" id="node3" href="$d4/da4/def_8h.html" title=" " alt="" coords="191,169,246,196"/>
-<area shape="rect" id="node8" title=" " alt="" coords="270,169,357,196"/>
-<area shape="rect" id="node9" title=" " alt="" coords="381,169,432,196"/>
-<area shape="rect" id="node10" title=" " alt="" coords="456,169,499,196"/>
-<area shape="rect" id="node11" title=" " alt="" coords="523,169,581,196"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,244,96,271"/>
-<area shape="rect" id="node5" title=" " alt="" coords="121,244,207,271"/>
-<area shape="rect" id="node6" title=" " alt="" coords="231,244,318,271"/>
-<area shape="rect" id="node7" title=" " alt="" coords="342,244,413,271"/>
+<map id="hal_core/netlist/event_system/netlist_event_handler.h" name="hal_core/netlist/event_system/netlist_event_handler.h">
+<area shape="rect" id="node1" title=" " alt="" coords="366,5,533,61"/>
+<area shape="rect" id="node2" href="$d8/db4/callback__hook_8h.html" title=" " alt="" coords="384,109,515,151"/>
+<area shape="rect" id="node3" href="$d8/db0/defines_8h.html" title=" " alt="" coords="149,199,289,225"/>
+<area shape="rect" id="node8" title=" " alt="" coords="313,199,399,225"/>
+<area shape="rect" id="node9" title=" " alt="" coords="424,199,475,225"/>
+<area shape="rect" id="node10" title=" " alt="" coords="499,199,541,225"/>
+<area shape="rect" id="node11" title=" " alt="" coords="565,199,624,225"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,273,96,300"/>
+<area shape="rect" id="node5" title=" " alt="" coords="121,273,207,300"/>
+<area shape="rect" id="node6" title=" " alt="" coords="231,273,318,300"/>
+<area shape="rect" id="node7" title=" " alt="" coords="342,273,413,300"/>
 </map>

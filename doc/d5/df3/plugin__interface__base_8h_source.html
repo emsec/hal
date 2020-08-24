@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>hal: core/plugin_interface_base.h Source File</title>
+<title>hal: hal_core/plugin_system/plugin_interface_base.h Source File</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_3d69f64eaf81436fe2b22361382717e5.html">core</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="../../dir_6df68e7c4858c229578de4afea200fae.html">plugin_system</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -96,8 +96,8 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/d7f/log_8h.html">core/log.h</a>&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d4/da4/def_8h.html">def.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/d7f/log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d8/db0/defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
@@ -154,14 +154,14 @@ $(function() {
 <div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="../../d0/d7f/namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">  132</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="../../d0/d7f/namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">instantiate_plugin_function</a> = std::unique_ptr&lt;BasePluginInterface&gt; (*)();</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="adef_8h_html"><div class="ttname"><a href="../../d4/da4/def_8h.html">def.h</a></div></div>
 <div class="ttc" id="aplugin__interface__base_8h_html_a10e7df18d8a816af76f947453883ff42"><div class="ttname"><a href="../../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a></div><div class="ttdeci">interactive_ui</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:55</div></div>
 <div class="ttc" id="anamespacehal_1_1event__log_html_af323996a0be7df9b6bf64ca4292fce55"><div class="ttname"><a href="../../dd/d38/namespacehal_1_1event__log.html#af323996a0be7df9b6bf64ca4292fce55">hal::event_log::initialize</a></div><div class="ttdeci">NETLIST_API void initialize()</div><div class="ttdef"><b>Definition:</b> event_log.cpp:218</div></div>
 <div class="ttc" id="aclasshal_1_1BasePluginInterface_html"><div class="ttname"><a href="../../d5/ddc/classhal_1_1BasePluginInterface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:62</div></div>
 <div class="ttc" id="anamespacehal_html_af1388a5c4377a81f3215cac5d274fd60"><div class="ttname"><a href="../../d0/d7f/namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">hal::instantiate_plugin_function</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt;(*)() instantiate_plugin_function</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:132</div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> callback_hook.h:35</div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
 <div class="ttc" id="aclasshal_1_1BasePluginInterface_html_a05a8364dad5101585d352f97c98ff527"><div class="ttname"><a href="../../d5/ddc/classhal_1_1BasePluginInterface.html#a05a8364dad5101585d352f97c98ff527">hal::BasePluginInterface::log</a></div><div class="ttdeci">void log(const Args &amp;... args) const</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:103</div></div>
 <div class="ttc" id="aplugin__interface__base_8h_html_a9280bc62af1b57e6460d0b1c251908bd"><div class="ttname"><a href="../../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a></div><div class="ttdeci">cli</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:54</div></div>
+<div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_afea66f9a6812c2354b544f31910fd72f"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a></div><div class="ttdeci">#define CORE_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:26</div></div>
 <div class="ttc" id="agroup__core_html_ga5a10e8bbe0ebf932e114b116b32d7ed2"><div class="ttname"><a href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a></div><div class="ttdeci">#define log_info(channel,...)</div><div class="ttdef"><b>Definition:</b> log.h:67</div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="../../d7/d7f/log_8h.html">log.h</a></div></div>
@@ -170,7 +170,7 @@ $(function() {
 <div class="ttc" id="anamespacehal_html_a5f5dd456d7ad61e7cc14445fbb1c17e1"><div class="ttname"><a href="../../d0/d7f/namespacehal.html#a5f5dd456d7ad61e7cc14445fbb1c17e1">hal::create_plugin_instance</a></div><div class="ttdeci">PLUGIN_API std::unique_ptr&lt; BasePluginInterface &gt; create_plugin_instance()</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Aug 24 2020 09:44:45 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 24 2020 14:16:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

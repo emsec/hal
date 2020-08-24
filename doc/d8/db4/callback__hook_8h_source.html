@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>hal: core/callback_hook.h Source File</title>
+<title>hal: hal_core/utilities/callback_hook.h Source File</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_3d69f64eaf81436fe2b22361382717e5.html">core</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="../../dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -96,7 +96,7 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d4/da4/def_8h.html">def.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d8/db0/defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
@@ -105,7 +105,7 @@ $(function() {
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="../../d8/db4/callback__hook_8h.html#a4730cad3781b97741910fb7abc398b12">   33</a></span>&#160;<span class="preprocessor">#define CALLBACK_HOOK_INVALID_IDX 0x0</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="../../d0/d7f/namespacehal.html">   35</a></span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;{</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span>&gt;</div>
 <div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="../../d3/d2c/classhal_1_1CallbackHook.html">   38</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d3/d2c/classhal_1_1CallbackHook.html">CallbackHook</a>;</div>
@@ -114,7 +114,7 @@ $(function() {
 <div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html">   44</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d3/d2c/classhal_1_1CallbackHook.html">CallbackHook</a>&lt;R(ArgTypes...)&gt;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    {</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45">   55</a></span>&#160;        <a class="code" href="../../d4/da4/def_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45">add_callback</a>(<span class="keyword">const</span> std::function&lt;R(ArgTypes...)&gt;&amp; callback, <a class="code" href="../../d4/da4/def_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span> = <a class="code" href="../../d8/db4/callback__hook_8h.html#a4730cad3781b97741910fb7abc398b12">CALLBACK_HOOK_INVALID_IDX</a>)</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45">   55</a></span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45">add_callback</a>(<span class="keyword">const</span> std::function&lt;R(ArgTypes...)&gt;&amp; callback, <a class="code" href="../../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span> = <a class="code" href="../../d8/db4/callback__hook_8h.html#a4730cad3781b97741910fb7abc398b12">CALLBACK_HOOK_INVALID_IDX</a>)</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        {</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == <a class="code" href="../../d8/db4/callback__hook_8h.html#a4730cad3781b97741910fb7abc398b12">CALLBACK_HOOK_INVALID_IDX</a>)</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            {</div>
@@ -138,7 +138,7 @@ $(function() {
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            m_name_to_id_map[name] = add_callback(callback);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        }</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a8cb65341eec42a8ba1a99e8c96ade910">   91</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a8cb65341eec42a8ba1a99e8c96ade910">remove_callback</a>(<span class="keyword">const</span> <a class="code" href="../../d4/da4/def_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a8cb65341eec42a8ba1a99e8c96ade910">   91</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a8cb65341eec42a8ba1a99e8c96ade910">remove_callback</a>(<span class="keyword">const</span> <a class="code" href="../../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span>)</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        {</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keyword">auto</span> it = m_callbacks.find(<span class="keywordtype">id</span>);</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keywordflow">if</span> (it != m_callbacks.end())</div>
@@ -176,7 +176,7 @@ $(function() {
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            }</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        }</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#af935dde610707dc0de52d6b814943ae0">  147</a></span>&#160;        R <span class="keyword">inline</span> <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#af935dde610707dc0de52d6b814943ae0">call</a>(<span class="keyword">const</span> <a class="code" href="../../d4/da4/def_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> idx, ArgTypes... args)</div>
+<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#af935dde610707dc0de52d6b814943ae0">  147</a></span>&#160;        R <span class="keyword">inline</span> <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#af935dde610707dc0de52d6b814943ae0">call</a>(<span class="keyword">const</span> <a class="code" href="../../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> idx, ArgTypes... args)</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        {</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            <span class="keyword">auto</span> it = m_callbacks.find(idx);</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            <span class="keywordflow">if</span> (it == m_callbacks.end())</div>
@@ -196,7 +196,7 @@ $(function() {
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keywordflow">return</span> call((*it).second, args...);</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        }</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00181"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a433d1819100f1fdd3df6303e6192edb0">  181</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a433d1819100f1fdd3df6303e6192edb0">is_callback_registered</a>(<span class="keyword">const</span> <a class="code" href="../../d4/da4/def_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l00181"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a433d1819100f1fdd3df6303e6192edb0">  181</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a433d1819100f1fdd3df6303e6192edb0">is_callback_registered</a>(<span class="keyword">const</span> <a class="code" href="../../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span>)</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        {</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordflow">return</span> m_callbacks.find(<span class="keywordtype">id</span>) != m_callbacks.end();</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        }</div>
@@ -221,7 +221,7 @@ $(function() {
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;            <span class="keywordflow">return</span> res;</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        }</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
-<div class="line"><a name="l00228"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#aad16735f930b339f0515510a2d170741">  228</a></span>&#160;        std::string <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#aad16735f930b339f0515510a2d170741">get_name</a>(<a class="code" href="../../d4/da4/def_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l00228"></a><span class="lineno"><a class="line" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#aad16735f930b339f0515510a2d170741">  228</a></span>&#160;        std::string <a class="code" href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#aad16735f930b339f0515510a2d170741">get_name</a>(<a class="code" href="../../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <span class="keywordtype">id</span>)</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        {</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it : m_name_to_id_map)</div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            {</div>
@@ -234,20 +234,19 @@ $(function() {
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        }</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        std::map&lt;<a class="code" href="../../d4/da4/def_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>, std::function&lt;R(ArgTypes...)&gt;&gt; m_callbacks;</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        std::map&lt;<a class="code" href="../../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>, std::function&lt;R(ArgTypes...)&gt;&gt; m_callbacks;</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        std::map&lt;std::string, u64&gt; m_name_to_id_map;</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    };</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_aad16735f930b339f0515510a2d170741"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#aad16735f930b339f0515510a2d170741">hal::CallbackHook&lt; R(ArgTypes...)&gt;::get_name</a></div><div class="ttdeci">std::string get_name(u64 id)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:228</div></div>
-<div class="ttc" id="adef_8h_html_a1af9f95651e921615e75917a6dd1b574"><div class="ttname"><a href="../../d4/da4/def_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a></div><div class="ttdeci">uint64_t u64</div><div class="ttdef"><b>Definition:</b> def.h:44</div></div>
-<div class="ttc" id="adef_8h_html"><div class="ttname"><a href="../../d4/da4/def_8h.html">def.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_aabdc555bb9113cdb5e44db70927ce59a"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#aabdc555bb9113cdb5e44db70927ce59a">hal::CallbackHook&lt; R(ArgTypes...)&gt;::size</a></div><div class="ttdeci">size_t size()</div><div class="ttdef"><b>Definition:</b> callback_hook.h:202</div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_a8cb65341eec42a8ba1a99e8c96ade910"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a8cb65341eec42a8ba1a99e8c96ade910">hal::CallbackHook&lt; R(ArgTypes...)&gt;::remove_callback</a></div><div class="ttdeci">void remove_callback(const u64 id)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:91</div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> callback_hook.h:35</div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_aecfd704d440ca0ea5227eeb3d06eb43e"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#aecfd704d440ca0ea5227eeb3d06eb43e">hal::CallbackHook&lt; R(ArgTypes...)&gt;::call</a></div><div class="ttdeci">R call(const std::string &amp;idx, ArgTypes... args)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:165</div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_a433d1819100f1fdd3df6303e6192edb0"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a433d1819100f1fdd3df6303e6192edb0">hal::CallbackHook&lt; R(ArgTypes...)&gt;::is_callback_registered</a></div><div class="ttdeci">bool is_callback_registered(const u64 id)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:181</div></div>
+<div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_a7e2b511bcaa4178194695b83b04898bd"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a7e2b511bcaa4178194695b83b04898bd">hal::CallbackHook&lt; R(ArgTypes...)&gt;::add_callback</a></div><div class="ttdeci">void add_callback(const std::string &amp;name, const std::function&lt; R(ArgTypes...)&gt; &amp;callback)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:76</div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_ae342c845680bffcd4169a7810be1bff2"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#ae342c845680bffcd4169a7810be1bff2">hal::CallbackHook&lt; R(ArgTypes...)&gt;::is_callback_registered</a></div><div class="ttdeci">bool is_callback_registered(const std::string &amp;name)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:192</div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_html"><div class="ttname"><a href="../../d3/d2c/classhal_1_1CallbackHook.html">hal::CallbackHook</a></div><div class="ttdef"><b>Definition:</b> callback_hook.h:38</div></div>
@@ -255,11 +254,12 @@ $(function() {
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_af935dde610707dc0de52d6b814943ae0"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#af935dde610707dc0de52d6b814943ae0">hal::CallbackHook&lt; R(ArgTypes...)&gt;::call</a></div><div class="ttdeci">R call(const u64 idx, ArgTypes... args)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:147</div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_ad25b213d27b6ff208e1e2e1563f3fc45"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45">hal::CallbackHook&lt; R(ArgTypes...)&gt;::add_callback</a></div><div class="ttdeci">u64 add_callback(const std::function&lt; R(ArgTypes...)&gt; &amp;callback, u64 id=0x0)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:55</div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_a981a7696efe6e386e8876edc08184755"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a981a7696efe6e386e8876edc08184755">hal::CallbackHook&lt; R(ArgTypes...)&gt;::operator()</a></div><div class="ttdeci">void operator()(ArgTypes... args)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:127</div></div>
+<div class="ttc" id="adefines_8h_html_a1af9f95651e921615e75917a6dd1b574"><div class="ttname"><a href="../../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a></div><div class="ttdeci">uint64_t u64</div><div class="ttdef"><b>Definition:</b> defines.h:44</div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_a94985b90b19bab6f33cf8f4e37f29963"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a94985b90b19bab6f33cf8f4e37f29963">hal::CallbackHook&lt; R(ArgTypes...)&gt;::remove_callback</a></div><div class="ttdeci">void remove_callback(const std::string &amp;id)</div><div class="ttdef"><b>Definition:</b> callback_hook.h:113</div></div>
 <div class="ttc" id="aclasshal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4_html_a8eb9eb26c2d0274a2497495e48cbab45"><div class="ttname"><a href="../../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#a8eb9eb26c2d0274a2497495e48cbab45">hal::CallbackHook&lt; R(ArgTypes...)&gt;::get_ids</a></div><div class="ttdeci">std::set&lt; u64 &gt; get_ids()</div><div class="ttdef"><b>Definition:</b> callback_hook.h:212</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Aug 24 2020 09:44:45 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 24 2020 14:16:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

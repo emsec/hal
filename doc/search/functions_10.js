@@ -2,7 +2,7 @@ var searchData=
 [
   ['serialize_1065',['serialize',['../d7/d09/namespacehal_1_1hal__file__manager.html#a9b47eacaed4789f9b59edfff7653b78c',1,'hal::hal_file_manager']]],
   ['serialize_5fto_5ffile_1066',['serialize_to_file',['../d9/dcb/namespacehal_1_1netlist__serializer.html#af85c01794d3aaf5f25f970e2465d69b9',1,'hal::netlist_serializer']]],
-  ['set_5fbit_1067',['set_bit',['../d6/d5e/namespacehal_1_1core__utils.html#a5145711eac3242eb3a75ed919b0d5a09',1,'hal::core_utils']]],
+  ['set_5fbit_1067',['set_bit',['../d4/dd6/namespacehal_1_1utils.html#a34ef9fc77538514e7bb5a9fe55275550',1,'hal::utils']]],
   ['set_5fconfig_5fdata_5fascending_5forder_1068',['set_config_data_ascending_order',['../d1/d08/classhal_1_1GateTypeLut.html#a5de53da602a95e193b59b2b1c9fbb498',1,'hal::GateTypeLut']]],
   ['set_5fconfig_5fdata_5fcategory_1069',['set_config_data_category',['../d1/d08/classhal_1_1GateTypeLut.html#ac1a3679f3d788807c214ed09b6108ff8',1,'hal::GateTypeLut']]],
   ['set_5fconfig_5fdata_5fidentifier_1070',['set_config_data_identifier',['../d1/d08/classhal_1_1GateTypeLut.html#ab7f7105b0a51e8420568bdb1b8206f8b',1,'hal::GateTypeLut']]],
@@ -28,7 +28,7 @@ var searchData=
   ['set_5fset_5freset_5fbehavior_1090',['set_set_reset_behavior',['../dd/dd1/classhal_1_1GateTypeSequential.html#ac587ac9cee7e7d9c914379ce4f6d55b9',1,'hal::GateTypeSequential']]],
   ['set_5ftype_1091',['set_type',['../d1/d10/classhal_1_1Module.html#a9bcc555241bfad8b6abccaecb2f021ce',1,'hal::Module']]],
   ['size_1092',['size',['../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#aabdc555bb9113cdb5e44db70927ce59a',1,'hal::CallbackHook&lt; R(ArgTypes...)&gt;::size()'],['../db/d9d/classhal_1_1TokenStream.html#af64360cce9f13a282476c397f247f525',1,'hal::TokenStream::size()']]],
-  ['split_1093',['split',['../d6/d5e/namespacehal_1_1core__utils.html#aaee77c3fd8fe454b90b3a770e1de671b',1,'hal::core_utils']]],
-  ['starts_5fwith_1094',['starts_with',['../d6/d5e/namespacehal_1_1core__utils.html#a4d24dbda0e7bf9d28fe665b94d7986d4',1,'hal::core_utils']]],
+  ['split_1093',['split',['../d4/dd6/namespacehal_1_1utils.html#a43bf1ffd1c76cf2b5809c2346dd561c4',1,'hal::utils']]],
+  ['starts_5fwith_1094',['starts_with',['../d4/dd6/namespacehal_1_1utils.html#a2ca8da557f49866efbd3d79be8bf5815',1,'hal::utils']]],
   ['substitute_1095',['substitute',['../d6/d9d/classhal_1_1BooleanFunction.html#ae9242e7d969fc9b6eb402fc5c2386153',1,'hal::BooleanFunction::substitute(const std::string &amp;old_variable_name, const std::string &amp;new_variable_name) const'],['../d6/d9d/classhal_1_1BooleanFunction.html#aed752c7999a9aa9abd7f573a1eb1e670',1,'hal::BooleanFunction::substitute(const std::string &amp;variable_name, const BooleanFunction &amp;function) const']]]
 ];

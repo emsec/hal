@@ -1,4 +1,4 @@
-<map id="core/special_strings.h" name="core/special_strings.h">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,168,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="57,80,116,107"/>
+<map id="hal_core/utilities/special_strings.h" name="hal_core/utilities/special_strings.h">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,140,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="43,95,102,121"/>
 </map>

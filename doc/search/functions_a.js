@@ -11,5 +11,5 @@ var searchData=
   ['log_1003',['log',['../d5/ddc/classhal_1_1BasePluginInterface.html#a05a8364dad5101585d352f97c98ff527',1,'hal::BasePluginInterface']]],
   ['log_5fgui_5fsink_1004',['log_gui_sink',['../d6/db4/classhal_1_1log__gui__sink.html#a11fe35a5215333c9d2ba070bfc09a523',1,'hal::log_gui_sink']]],
   ['lt_1005',['lt',['../df/def/structhal_1_1core__strings_1_1CaseInsensitiveCharTraits.html#abf533f62d1c0d31884fd2ad01026b227',1,'hal::core_strings::CaseInsensitiveCharTraits']]],
-  ['ltrim_1006',['ltrim',['../d6/d5e/namespacehal_1_1core__utils.html#a435b9c113942e72fba382d919c39f895',1,'hal::core_utils']]]
+  ['ltrim_1006',['ltrim',['../d4/dd6/namespacehal_1_1utils.html#a25f9f24b47512daf25a4a192486c26c4',1,'hal::utils']]]
 ];

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['call_779',['call',['../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#af935dde610707dc0de52d6b814943ae0',1,'hal::CallbackHook&lt; R(ArgTypes...)&gt;::call(const u64 idx, ArgTypes... args)'],['../d8/d33/classhal_1_1CallbackHook_3_01R_07ArgTypes_8_8_8_08_4.html#aecfd704d440ca0ea5227eeb3d06eb43e',1,'hal::CallbackHook&lt; R(ArgTypes...)&gt;::call(const std::string &amp;idx, ArgTypes... args)']]],
-  ['clear_5fbit_780',['clear_bit',['../d6/d5e/namespacehal_1_1core__utils.html#a6e976a168b2ef4c21efcb207a8b3936d',1,'hal::core_utils']]],
+  ['clear_5fbit_780',['clear_bit',['../d4/dd6/namespacehal_1_1utils.html#a99df1ac028bf7f9696ea4c631ff0ff38',1,'hal::utils']]],
   ['clear_5fcaches_781',['clear_caches',['../dc/d06/classhal_1_1Netlist.html#a9abaa35a57cf4aae1e39c48b2bc47cb3',1,'hal::Netlist']]],
   ['cliplugininterface_782',['CLIPluginInterface',['../d1/d82/classhal_1_1CLIPluginInterface.html#a1784bd703e0d7adf21c053f2694339d2',1,'hal::CLIPluginInterface']]],
   ['compare_783',['compare',['../df/def/structhal_1_1core__strings_1_1CaseInsensitiveCharTraits.html#a0a2d016644e01f43d60895e8e04246e0',1,'hal::core_strings::CaseInsensitiveCharTraits']]],
