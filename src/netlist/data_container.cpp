@@ -1,6 +1,6 @@
-#include "netlist/data_container.h"
+#include "hal_core/netlist/data_container.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {

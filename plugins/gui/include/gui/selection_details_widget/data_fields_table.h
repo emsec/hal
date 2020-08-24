@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "def.h"
+#include "hal_core/def.h"
 #include "gui/selection_details_widget/details_widget.h"
 
 #include <QFont>

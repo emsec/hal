@@ -1,6 +1,6 @@
 #include "gui/module_model/module_item.h"
 
-#include "netlist/module.h"
+#include "hal_core/netlist/module.h"
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"

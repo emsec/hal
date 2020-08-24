@@ -23,9 +23,9 @@
 
 #pragma once
 
-#include "def.h"
+#include "hal_core/def.h"
 
-#include "netlist/net.h"
+#include "hal_core/netlist/net.h"
 
 #include "gui/gui_def.h"
 

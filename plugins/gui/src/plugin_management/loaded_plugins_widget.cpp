@@ -1,7 +1,7 @@
 #include "gui/plugin_management/loaded_plugins_widget.h"
 
-#include "core/plugin_interface_cli.h"
-#include "core/plugin_manager.h"
+#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 #include "gui/gui_globals.h"
 #include "gui/plugin_management/loaded_plugin_item.h"
 

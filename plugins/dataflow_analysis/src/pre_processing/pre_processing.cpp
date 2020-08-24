@@ -1,16 +1,16 @@
-#include "pre_processing/pre_processing.h"
+#include "dataflow_analysis/pre_processing/pre_processing.h"
 
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "pre_processing/counter_identification.h"
-#include "pre_processing/register_stage_identification.h"
-#include "utils/parallel_for_each.h"
-#include "utils/progress_printer.h"
-#include "utils/timing_utils.h"
-#include "utils/utils.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "dataflow_analysis/pre_processing/counter_identification.h"
+#include "dataflow_analysis/pre_processing/register_stage_identification.h"
+#include "dataflow_analysis/utils/parallel_for_each.h"
+#include "dataflow_analysis/utils/progress_printer.h"
+#include "dataflow_analysis/utils/timing_utils.h"
+#include "dataflow_analysis/utils/utils.h"
 
 #include <algorithm>
 #include <chrono>

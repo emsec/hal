@@ -1,6 +1,6 @@
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 
-#include "netlist/gate.h"
+#include "hal_core/netlist/gate.h"
 
 namespace hal
 {

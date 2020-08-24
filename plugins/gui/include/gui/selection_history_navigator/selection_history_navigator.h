@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "def.h"
+#include "hal_core/def.h"
 #include "gui/selection_history_navigator/selection.h"
 
 #include <QObject>

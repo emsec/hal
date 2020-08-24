@@ -1,6 +1,6 @@
-#include "netlist/boolean_function.h"
+#include "hal_core/netlist/boolean_function.h"
 
-#include "core/utils.h"
+#include "hal_core/utilities/utils.h"
 
 #include <algorithm>
 
@@ -74,7 +74,7 @@ namespace hal
     BooleanFunction::BooleanFunction(const std::string& variable_name) : BooleanFunction()
     {
         m_content  = content_type::VARIABLE;
-        m_variable = core_utils::trim(variable_name);
+        m_variable = utils::trim(variable_name);
         assert(!m_variable.empty());
     }
 
@@ -281,7 +281,7 @@ namespace hal
 
     BooleanFunction BooleanFunction::from_string_internal(std::string expression, const std::vector<std::string>& variable_names)
     {
-        expression = core_utils::trim(expression);
+        expression = utils::trim(expression);
 
         if (expression.empty())
         {
@@ -317,7 +317,7 @@ namespace hal
             }
             if (!is_term)
             {
-                if (core_utils::starts_with(expression, std::string("__v_")))
+                if (utils::starts_with(expression, std::string("__v_")))
                 {
                     u32 idx    = std::stoul(expression.substr(4));
                     expression = variable_names[idx];
@@ -361,7 +361,7 @@ namespace hal
                     // if this is a top-level term, store everything before the bracket
                     if (bracket_level == 0)
                     {
-                        current_term = core_utils::trim(current_term);
+                        current_term = utils::trim(current_term);
                         if (!current_term.empty())
                         {
                             terms.push_back(current_term);
@@ -375,7 +375,7 @@ namespace hal
                 if (bracket_level == 0 && delimiters.find(expression[i]) != std::string::npos)
                 {
                     // not in brackets and there was a delimiter -> save term and operation
-                    current_term = core_utils::trim(current_term);
+                    current_term = utils::trim(current_term);
                     if (!current_term.empty())
                     {
                         terms.push_back(current_term);
@@ -399,7 +399,7 @@ namespace hal
                     if (bracket_level == 0)
                     {
                         // if we are back at top-level, store everything that was in the brackets
-                        current_term = core_utils::trim(current_term);
+                        current_term = utils::trim(current_term);
                         if (!current_term.empty())
                         {
                             terms.push_back(current_term);
@@ -408,7 +408,7 @@ namespace hal
                     }
                 }
             }
-            current_term = core_utils::trim(current_term);
+            current_term = utils::trim(current_term);
             if (!current_term.empty())
             {
                 terms.push_back(current_term);
@@ -589,7 +589,7 @@ namespace hal
                 terms.push_back(f.to_string_internal());
             }
 
-            result = "(" + core_utils::join(op_str, terms) + ")";
+            result = "(" + utils::join(op_str, terms) + ")";
         }
 
         if (m_invert)

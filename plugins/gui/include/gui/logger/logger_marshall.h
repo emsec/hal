@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 #include <QMutex>
 #include <QObject>
 #include <QPlainTextEdit>

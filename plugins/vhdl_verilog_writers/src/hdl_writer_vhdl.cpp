@@ -1,9 +1,9 @@
-#include "hdl_writer_vhdl.h"
+#include "vhdl_verilog_writers/hdl_writer_vhdl.h"
 
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 
 namespace hal
 {

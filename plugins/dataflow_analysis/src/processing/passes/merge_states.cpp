@@ -1,8 +1,8 @@
-#include "processing/passes/merge_states.h"
+#include "dataflow_analysis/processing/passes/merge_states.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
-#include "processing/passes/remove_duplicates.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/processing/passes/remove_duplicates.h"
 
 namespace hal
 {

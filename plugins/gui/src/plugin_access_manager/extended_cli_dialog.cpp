@@ -1,7 +1,7 @@
 #include "gui/plugin_access_manager/extended_cli_dialog.h"
-#include "core/plugin_interface_cli.h"
-#include "core/plugin_interface_gui.h"
-#include "core/plugin_manager.h"
+#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_interface_gui.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 #include <QChar>
 #include <iostream>
 

@@ -1,7 +1,7 @@
 #ifndef HAL_TEST_DEF_H_
 #define HAL_TEST_DEF_H_
 
-#include "def.h"
+#include "hal_core/def.h"
 #include "gtest/gtest.h"
 #include <sstream>
 

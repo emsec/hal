@@ -1,7 +1,7 @@
-#include "plugin_netlist_simulator/netlist_simulator.h"
+#include "netlist_simulator/netlist_simulator.h"
 
-#include "core/log.h"
-#include "netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
 
 #include <algorithm>
 

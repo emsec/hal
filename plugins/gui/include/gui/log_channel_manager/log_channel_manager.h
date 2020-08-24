@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 #include "gui/log_channel_manager/log_channel_manager_constants.h"
 

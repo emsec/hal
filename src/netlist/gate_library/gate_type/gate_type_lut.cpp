@@ -1,6 +1,6 @@
-#include "netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {

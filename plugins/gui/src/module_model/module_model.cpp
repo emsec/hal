@@ -6,8 +6,8 @@
 #include "gui/gui_utils/graphics.h"
 //#include "gui/ModuleModel/ModuleItem.h"
 
-#include "netlist/gate.h"
-#include "netlist/net.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 
 namespace hal
 {

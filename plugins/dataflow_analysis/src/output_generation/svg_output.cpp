@@ -1,11 +1,11 @@
-#include "output_generation/svg_output.h"
+#include "dataflow_analysis/output_generation/svg_output.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <fstream>
 #include <iomanip>

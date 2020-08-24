@@ -1,8 +1,8 @@
-#include "processing/passes/remove_duplicates.h"
+#include "dataflow_analysis/processing/passes/remove_duplicates.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
-#include "netlist/gate.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/netlist/gate.h"
 
 #include <list>
 #include <map>

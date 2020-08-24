@@ -1,8 +1,8 @@
 #include "gui/plugin_manager/plugin_model.h"
 
-#include "core/plugin_interface_cli.h"
-#include "core/log.h"
-#include "core/plugin_manager.h"
+#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 #include <QDataStream>
 #include <QIODevice>
 #include <QMimeData>

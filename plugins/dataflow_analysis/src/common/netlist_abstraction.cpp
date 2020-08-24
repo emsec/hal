@@ -1,11 +1,11 @@
-#include "common/netlist_abstraction.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
 
-#include "core/log.h"
-#include "netlist/netlist.h"
-#include "utils/utils.h"
-#include "utils/utils_lsi_10k.h"
-#include "utils/utils_nangate.h"
-#include "utils/utils_xilinx_unisim.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/netlist.h"
+#include "dataflow_analysis/utils/utils.h"
+#include "dataflow_analysis/utils/utils_lsi_10k.h"
+#include "dataflow_analysis/utils/utils_nangate.h"
+#include "dataflow_analysis/utils/utils_xilinx_unisim.h"
 
 namespace hal
 {

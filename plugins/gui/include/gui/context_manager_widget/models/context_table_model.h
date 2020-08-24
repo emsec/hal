@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "def.h"
+#include "hal_core/def.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 
 #include <QAbstractTableModel>

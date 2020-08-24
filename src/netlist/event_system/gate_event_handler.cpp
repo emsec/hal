@@ -1,6 +1,6 @@
-#include "netlist/event_system/gate_event_handler.h"
+#include "hal_core/netlist/event_system/gate_event_handler.h"
 
-#include "netlist/gate.h"
+#include "hal_core/netlist/gate.h"
 
 namespace hal
 {

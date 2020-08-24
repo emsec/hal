@@ -1,10 +1,10 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_widget.h"

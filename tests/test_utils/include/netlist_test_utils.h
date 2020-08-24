@@ -1,17 +1,17 @@
 #pragma once
 
-#include "core/log.h"
-#include "netlist/boolean_function.h"
-#include "netlist/endpoint.h"
-#include "netlist/gate.h"
-#include "netlist/gate_library/gate_library.h"
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/endpoint.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 #include "test_def.h"
 
-#include <core/utils.h>
+#include "hal_core/utilities/utils.h"
 #include <fstream>
 #include <math.h>
 

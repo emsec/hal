@@ -1,6 +1,6 @@
 #include "gui/style/style_manager.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 #include "gui/graph_widget/graphics_qss_adapter.h"
 #include "gui/code_editor/syntax_highlighter/python_qss_adapter.h"

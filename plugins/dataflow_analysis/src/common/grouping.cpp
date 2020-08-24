@@ -1,9 +1,9 @@
-#include "common/grouping.h"
+#include "dataflow_analysis/common/grouping.h"
 
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
 
 namespace hal
 {

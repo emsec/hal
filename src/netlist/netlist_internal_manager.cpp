@@ -1,14 +1,14 @@
-#include "netlist/netlist_internal_manager.h"
+#include "hal_core/netlist/netlist_internal_manager.h"
 
-#include "core/log.h"
-#include "netlist/event_system/gate_event_handler.h"
-#include "netlist/event_system/module_event_handler.h"
-#include "netlist/event_system/net_event_handler.h"
-#include "netlist/gate.h"
-#include "netlist/gate_library/gate_type/gate_type.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/event_system/gate_event_handler.h"
+#include "hal_core/netlist/event_system/module_event_handler.h"
+#include "hal_core/netlist/event_system/net_event_handler.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 
 namespace hal
 {
@@ -46,7 +46,7 @@ namespace hal
             log_error("netlist.internal", "netlist::create_gate: gate type '{}' is invalid.", gt->get_name());
             return nullptr;
         }
-        if (core_utils::trim(name).empty())
+        if (utils::trim(name).empty())
         {
             log_error("netlist.internal", "netlist::create_gate: empty name is not allowed");
             return nullptr;
@@ -162,7 +162,7 @@ namespace hal
             log_error("netlist.internal", "netlist::create_net: net id {:08x} is already taken.", id);
             return nullptr;
         }
-        if (core_utils::trim(name).empty())
+        if (utils::trim(name).empty())
         {
             log_error("netlist.internal", "netlist::create_net: empty name is not allowed");
             return nullptr;
@@ -400,7 +400,7 @@ namespace hal
             log_error("netlist.internal", "netlist::create_module: module id {:08x} is already taken.", id);
             return nullptr;
         }
-        if (core_utils::trim(name).empty())
+        if (utils::trim(name).empty())
         {
             log_error("netlist.internal", "netlist::create_module: empty name is not allowed");
             return nullptr;

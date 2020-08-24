@@ -10,9 +10,9 @@
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/implementations/qpoint_extension.h"
-#include "netlist/gate.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
 #include "qmath.h"
 
 namespace hal

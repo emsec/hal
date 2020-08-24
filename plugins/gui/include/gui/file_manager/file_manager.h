@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "core/program_arguments.h"
+#include "hal_core/utilities/program_arguments.h"
 
 #include <QObject>
 #include <QTimer>

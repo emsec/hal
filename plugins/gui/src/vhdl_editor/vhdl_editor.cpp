@@ -1,6 +1,6 @@
 #include "gui/vhdl_editor/vhdl_editor.h"
 
-#include "netlist/hdl_writer/hdl_writer_manager.h"
+#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 
 #include "gui/code_editor/syntax_highlighter/vhdl_syntax_highlighter.h"
 #include "gui/gui_globals.h"

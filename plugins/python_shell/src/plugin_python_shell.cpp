@@ -1,8 +1,8 @@
 #include "python_shell/plugin_python_shell.h"
 
-#include "core/program_arguments.h"
-#include "core/utils.h"
-#include "def.h"
+#include "hal_core/utilities/program_arguments.h"
+#include "hal_core/utilities/utils.h"
+#include "hal_core/def.h"
 
 #include <Python.h>
 #include <cstring>
@@ -58,7 +58,7 @@ namespace hal
         // initiliaze python shell
         Py_Initialize();
         PyRun_SimpleString("import sys");
-        PyRun_SimpleString(std::string("sys.path.append(\"" + core_utils::get_library_directory().string() + "\")").c_str());
+        PyRun_SimpleString(std::string("sys.path.append(\"" + utils::get_library_directory().string() + "\")").c_str());
         PyRun_SimpleString("from hal_py import *");
         Py_Main(argc_new, argv_new);
         Py_Finalize();

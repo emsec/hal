@@ -1,7 +1,7 @@
-#include "utils/utils_nangate.h"
+#include "dataflow_analysis/utils/utils_nangate.h"
 
-#include "core/log.h"
-#include "netlist/gate.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
 
 #include <string>
 #include <unordered_set>

@@ -1,15 +1,15 @@
 #include "gtest/gtest.h"
 #include "netlist_test_utils.h"
-#include <core/log.h>
-#include <core/utils.h>
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 #include <iostream>
 #include <netlist/gate.h>
 #include <netlist/net.h>
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/netlist_factory.h"
-#include "netlist/netlist.h"
-#include "netlist/hdl_parser/hdl_parser_verilog.h"
-#include "netlist/hdl_writer/hdl_writer_verilog.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_verilog.h"
+#include "hal_core/netlist/hdl_writer/hdl_writer_verilog.h"
 
 namespace hal {
 
@@ -24,7 +24,7 @@ namespace hal {
 
         virtual void SetUp() {
             NO_COUT_BLOCK;
-            m_pseudo_simprim_lib_path = core_utils::get_gate_library_directories()[0] / "pseudo_simprim_lib.json";
+            m_pseudo_simprim_lib_path = utils::get_gate_library_directories()[0] / "pseudo_simprim_lib.json";
             m_gl = test_utils::get_testing_gate_library();
         }
 

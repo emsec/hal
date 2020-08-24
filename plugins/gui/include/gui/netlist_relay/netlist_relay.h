@@ -23,10 +23,10 @@
 
 #pragma once
 
-#include "netlist/event_system/gate_event_handler.h"
-#include "netlist/event_system/net_event_handler.h"
-#include "netlist/event_system/netlist_event_handler.h"
-#include "netlist/event_system/module_event_handler.h"
+#include "hal_core/netlist/event_system/gate_event_handler.h"
+#include "hal_core/netlist/event_system/net_event_handler.h"
+#include "hal_core/netlist/event_system/netlist_event_handler.h"
+#include "hal_core/netlist/event_system/module_event_handler.h"
 
 #include <QMap>
 #include <QObject>

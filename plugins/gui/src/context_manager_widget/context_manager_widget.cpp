@@ -10,11 +10,11 @@
 #include "gui/validator/empty_string_validator.h"
 #include "gui/validator/unique_string_validator.h"
 
-//#include "core/log.h"
+//#include "hal_core/utilities/log.h"
 #include "gui/gui_utils/graphics.h"
-//#include "netlist/gate.h"
-//#include "netlist/module.h"
-//#include "netlist/netlist.h"
+//#include "hal_core/netlist/gate.h"
+//#include "hal_core/netlist/module.h"
+//#include "hal_core/netlist/netlist.h"
 #include "gui/toolbar/toolbar.h"
 #include <QAction>
 #include <QDebug>

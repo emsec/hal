@@ -1,6 +1,6 @@
 #include "gui/docking_system/dock_button.h"
 #include "gui/content_widget/content_widget.h"
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 #include <QPainter>

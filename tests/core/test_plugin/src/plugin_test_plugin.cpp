@@ -1,5 +1,5 @@
 #include "plugin_test_plugin.h"
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 using namespace hal;
 

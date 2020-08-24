@@ -1,8 +1,8 @@
 #include "gui/plugin_gui.h"
 
-#include "core/log.h"
-#include "core/plugin_manager.h"
-#include "core/utils.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/utils.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_status_manager/file_status_manager.h"
@@ -20,8 +20,8 @@
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/netlist.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <QApplication>
 #include <QFile>
@@ -41,8 +41,8 @@ namespace hal
         return std::make_unique<PluginGui>();
     }
 
-    QSettings g_settings(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
-    QSettings g_gui_state(QString::fromStdString((core_utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
+    QSettings g_settings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
+    QSettings g_gui_state(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
 
     SettingsManager* g_settings_manager             = nullptr;    // this relay MUST be initialized before everything else since other components need to connect() to it when initializing
     SettingsRelay* g_settings_relay                 = nullptr;
@@ -152,7 +152,7 @@ namespace hal
 
         //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
         //this settingsobject is currently neccessary to read from the settings from here, because the g_settings are not yet initialized(?)
-        QSettings tempsettings_to_read_from(QString::fromStdString((core_utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
+        QSettings tempsettings_to_read_from(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
         QString stylesheet_to_open = ":/style/darcula";    //default style
 
         if (tempsettings_to_read_from.value("main_style/theme", "") == "" || tempsettings_to_read_from.value("main_style/theme", "") == "darcula")

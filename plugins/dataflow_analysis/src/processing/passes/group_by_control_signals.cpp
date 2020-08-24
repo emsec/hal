@@ -1,8 +1,8 @@
-#include "processing/passes/group_by_control_signals.h"
+#include "dataflow_analysis/processing/passes/group_by_control_signals.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/utilities/log.h"
 
 #include <list>
 

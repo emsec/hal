@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "core/plugin_interface_ui.h"
+#include "hal_core/plugin_system/plugin_interface_ui.h"
 namespace hal
 {
     class PluginGui : public UIPluginInterface

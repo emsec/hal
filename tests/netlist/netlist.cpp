@@ -1,15 +1,15 @@
-#include "netlist/netlist.h"
+#include "hal_core/netlist/netlist.h"
 
-#include "core/plugin_manager.h"
-#include "netlist/gate.h"
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-#include "netlist/netlist_factory.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
 
 #include "gtest/gtest.h"
-#include <core/log.h>
+#include "hal_core/utilities/log.h"
 #include <iostream>
 
 namespace hal {

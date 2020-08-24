@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "netlist/netlist.h"
+#include "hal_core/netlist/netlist.h"
 
 #include "gui/file_status_manager/file_status_manager.h"
 #include "gui/graph_widget/graph_context_manager.h"

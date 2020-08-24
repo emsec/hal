@@ -1,7 +1,7 @@
-#include "processing/passes/split_by_successors_predecessors.h"
+#include "dataflow_analysis/processing/passes/split_by_successors_predecessors.h"
 
-#include "common/grouping.h"
-#include "common/netlist_abstraction.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
 
 #include <map>
 #include <set>

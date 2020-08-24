@@ -1,14 +1,15 @@
-#include "core/log.h"
-#include "core/plugin_manager.h"
-#include "netlist/gate.h"
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/hdl_parser/hdl_parser_manager.h"
-#include "netlist/hdl_writer/hdl_writer_manager.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
-#include "netlist/persistent/netlist_serializer.h"
-#include "plugin_netlist_simulator/plugin_netlist_simulator.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
+#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/persistent/netlist_serializer.h"
+
+#include "netlist_simulator/plugin_netlist_simulator.h"
 #include "test_utils/include/test_def.h"
 
 #include <chrono>
@@ -320,11 +321,11 @@ namespace hal
             // fill map with (signal) names from vcd as key and identifiers as value
             while (std::getline(infile, line))
             {
-                line = core_utils::trim(line);
-                if (core_utils::starts_with(line, std::string("$var ")))
+                line = utils::trim(line);
+                if (utils::starts_with(line, std::string("$var ")))
                 {
                     line                   = line.substr(0, line.find_last_of(" "));
-                    line                   = core_utils::trim(line);
+                    line                   = utils::trim(line);
                     std::string name       = line.substr(line.find_last_of(" ") + 1);
                     line                   = line.substr(0, line.find_last_of(" "));
                     std::string identifier = line.substr(line.find_last_of(" ") + 1);
@@ -339,7 +340,7 @@ namespace hal
             }
             while (std::getline(infile, line))
             {
-                line = core_utils::trim(line);
+                line = utils::trim(line);
                 if (line.empty())
                     continue;
                 std::string identifier = line.substr(1, line.length());
@@ -350,7 +351,7 @@ namespace hal
                     {
                         current_net = it2->second;
                     }
-                    else if (auto it2 = net_name_to_net.find(core_utils::to_lower(it->second)); it2 != net_name_to_net.end())
+                    else if (auto it2 = net_name_to_net.find(utils::to_lower(it->second)); it2 != net_name_to_net.end())
                     {
                         current_net = it2->second;
                     }
@@ -428,8 +429,8 @@ namespace hal
         TEST_START
         sim = plugin->create_simulator();
 
-        std::string path_netlist = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/halfaddernetlist_flattened_by_hal.v";
-        if (!core_utils::file_exists(path_netlist))
+        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/halfaddernetlist_flattened_by_hal.v";
+        if (!utils::file_exists(path_netlist))
         {
             FAIL() << "netlis for counter-test not found: " << path_netlist;
         }
@@ -452,8 +453,8 @@ namespace hal
         }
 
         //path to vcd
-        std::string path_vcd = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/dump.vcd";
-        if (!core_utils::file_exists(path_vcd))
+        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/dump.vcd";
+        if (!utils::file_exists(path_vcd))
         {
             FAIL() << "dump for half_adder-test not found: " << path_vcd;
         }
@@ -509,8 +510,8 @@ namespace hal
         sim = plugin->create_simulator();
 
         //path to netlist
-        std::string path_netlist = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd";
-        if (!core_utils::file_exists(path_netlist))
+        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd";
+        if (!utils::file_exists(path_netlist))
             FAIL() << "netlist for counter-test not found: " << path_netlist;
 
         //create netlist from path
@@ -531,8 +532,8 @@ namespace hal
         }
 
         //path to vcd
-        std::string path_vcd = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/dump.vcd";
-        if (!core_utils::file_exists(path_vcd))
+        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/dump.vcd";
+        if (!utils::file_exists(path_vcd))
             FAIL() << "dump for counter-test not found: " << path_vcd;
 
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
@@ -602,8 +603,8 @@ namespace hal
         sim = plugin->create_simulator();
 
         //path to netlist
-        std::string path_netlist = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd";
-        if (!core_utils::file_exists(path_netlist))
+        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd";
+        if (!utils::file_exists(path_netlist))
             FAIL() << "netlist for toycipher-test not found: " << path_netlist;
 
         //create netlist from path
@@ -624,8 +625,8 @@ namespace hal
         }
 
         //path to vcd
-        std::string path_vcd = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/dump.vcd";
-        if (!core_utils::file_exists(path_vcd))
+        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/dump.vcd";
+        if (!utils::file_exists(path_vcd))
             FAIL() << "dump for toycipher-test not found: " << path_vcd;
 
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
@@ -739,11 +740,11 @@ namespace hal
         sim = plugin->create_simulator();
 
         //path to netlist
-        std::string path_netlist = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
-        if (!core_utils::file_exists(path_netlist))
+        std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
+        if (!utils::file_exists(path_netlist))
             FAIL() << "netlist for sha256 not found: " << path_netlist;
 
-        std::string path_netlist_hal = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.hal";
+        std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.hal";
 
         //create netlist from path
         auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
@@ -755,7 +756,7 @@ namespace hal
         std::unique_ptr<Netlist> nl;
         {
             std::cout << "loading netlist: " << path_netlist << "..." << std::endl;
-            if (core_utils::file_exists(path_netlist_hal))
+            if (utils::file_exists(path_netlist_hal))
             {
                 std::cout << ".hal file found for test netlist, loading this one." << std::endl;
                 nl = netlist_serializer::deserialize_from_file(path_netlist_hal);
@@ -775,8 +776,8 @@ namespace hal
         // hdl_writer_manager::write(nl.get(), "sha256_flat.vhd");
 
         //path to vcd
-        std::string path_vcd = core_utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/dump.vcd";
-        if (!core_utils::file_exists(path_vcd))
+        std::string path_vcd = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/dump.vcd";
+        if (!utils::file_exists(path_vcd))
             FAIL() << "dump for sha256 not found: " << path_vcd;
 
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns

@@ -1,7 +1,7 @@
 
 #include "netlist_test_utils.h"
 
-#include <core/utils.h>
+#include "hal_core/utilities/utils.h"
 #include <math.h>
 
 //using namespace hal;
@@ -179,19 +179,19 @@ namespace hal
 
     std::filesystem::path test_utils::create_sandbox_directory()
     {
-        std::filesystem::path sb_path = core_utils::get_base_directory() / sandbox_directory_path;
+        std::filesystem::path sb_path = utils::get_base_directory() / sandbox_directory_path;
         std::filesystem::create_directory(sb_path);
         return sb_path;
     }
 
     void test_utils::remove_sandbox_directory()
     {
-        std::filesystem::remove_all((core_utils::get_base_directory() / sandbox_directory_path));
+        std::filesystem::remove_all((utils::get_base_directory() / sandbox_directory_path));
     }
 
     std::filesystem::path test_utils::create_sandbox_path(const std::string file_name)
     {
-        std::filesystem::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
+        std::filesystem::path sb_path = (utils::get_base_directory() / sandbox_directory_path);
         if (!std::filesystem::exists(sb_path))
         {
             std::cerr << "[netlist_test_utils] create_sandbox_path: sandbox is not created yet. "
@@ -203,7 +203,7 @@ namespace hal
 
     std::filesystem::path test_utils::create_sandbox_file(std::string file_name, std::string content)
     {
-        std::filesystem::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
+        std::filesystem::path sb_path = (utils::get_base_directory() / sandbox_directory_path);
         if (!std::filesystem::exists(sb_path))
         {
             std::cerr << "[netlist_test_utils] create_sandbox_file: sandbox is not created yet. "

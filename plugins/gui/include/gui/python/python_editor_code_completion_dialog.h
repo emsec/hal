@@ -23,8 +23,8 @@
 
 #pragma once
 
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
 #include <QDialog>
 #include <QKeyEvent>
 #include <QListWidget>

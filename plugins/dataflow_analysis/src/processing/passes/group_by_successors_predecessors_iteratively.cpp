@@ -1,7 +1,7 @@
-#include "processing/passes/group_by_successors_predecessors_iteratively.h"
+#include "dataflow_analysis/processing/passes/group_by_successors_predecessors_iteratively.h"
 
-#include "common/grouping.h"
-#include "processing/passes/group_by_successors_predecessors.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/processing/passes/group_by_successors_predecessors.h"
 
 namespace hal
 {

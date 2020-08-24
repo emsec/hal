@@ -1,10 +1,10 @@
-#include "utils/utils.h"
+#include "dataflow_analysis/utils/utils.h"
 
-#include "common/netlist_abstraction.h"
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <queue>
 

@@ -1,9 +1,9 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "gui/gui_globals.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/module.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/module.h"
 #include "gui/gui_utils/graphics.h"
 #include <QTimer>
 
