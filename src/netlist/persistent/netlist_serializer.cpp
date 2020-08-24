@@ -35,7 +35,7 @@ namespace hal
         // serializing functions
         namespace
         {
-            const int SERIALIZATION_FORMAT_VERSION = 8;
+            const int SERIALIZATION_FORMAT_VERSION = 9;
 
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
 
@@ -75,13 +75,15 @@ namespace hal
                 rapidjson::Value val(rapidjson::kObjectType);
                 val.AddMember("gate_id", ep.get_gate()->get_id(), allocator);
                 val.AddMember("pin_type", ep.get_pin(), allocator);
-                val.AddMember("net_id", ep.get_net()->get_id(), allocator);
-                val.AddMember("is_destination", ep.is_destination_pin(), allocator);
                 return val;
             }
-            Endpoint deserialize_endpoint(Netlist* nl, const rapidjson::Value& val)
+            bool deserialize_destination(Netlist* nl, Net* net, const rapidjson::Value& val)
             {
-                return Endpoint(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString(), nl->get_net_by_id(val["net_id"].GetUint()), val["is_destination"].GetBool());
+                return net->add_destination(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString());
+            }
+            bool deserialize_source(Netlist* nl, Net* net, const rapidjson::Value& val)
+            {
+                return net->add_source(nl->get_gate_by_id(val["gate_id"].GetUint()), val["pin_type"].GetString());
             }
 
             // serialize gate
@@ -197,8 +199,10 @@ namespace hal
                 {
                     for (const auto& src_node : val["srcs"].GetArray())
                     {
-                        auto ep = deserialize_endpoint(nl, src_node);
-                        n->add_source(ep.get_gate(), ep.get_pin());
+                        if (!deserialize_source(nl, n, src_node))
+                        {
+                            return false;
+                        }
                     }
                 }
 
@@ -206,8 +210,10 @@ namespace hal
                 {
                     for (const auto& dst_node : val["dsts"].GetArray())
                     {
-                        auto ep = deserialize_endpoint(nl, dst_node);
-                        n->add_destination(ep.get_gate(), ep.get_pin());
+                        if (!deserialize_destination(nl, n, dst_node))
+                        {
+                            return false;
+                        }
                     }
                 }
 

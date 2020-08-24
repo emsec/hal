@@ -7,12 +7,16 @@
 !gate_libraries/**/*
 !graph_algorithm*
 !graph_algorithm/**/*
+!gui*
+!gui/**/*
 !liberty_parser*
 !liberty_parser/**/*
 !quine_mccluskey*
 !quine_mccluskey/**/*
 !netlist_simulator*
 !netlist_simulator/**/*
+!python_shell*
+!python_shell/**/*
 !vhdl_verilog_parsers*
 !vhdl_verilog_parsers/**/*
 !vhdl_verilog_writers*

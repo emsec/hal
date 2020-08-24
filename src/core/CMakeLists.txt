@@ -13,7 +13,7 @@ set(CORE_LIB_HDR
     ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_base.h
     ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_cli.h
     ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_gui.h
-    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_interactive_ui.h
+    ${CMAKE_SOURCE_DIR}/include/core/plugin_interface_ui.h
     ${CMAKE_SOURCE_DIR}/include/core/plugin_manager.h
     ${CMAKE_SOURCE_DIR}/include/core/program_arguments.h
     ${CMAKE_SOURCE_DIR}/include/core/program_options.h

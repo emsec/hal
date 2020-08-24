@@ -40,7 +40,6 @@ option(HAL_VERSION_MAJOR "Pass major version via cmake options" "")
 option(HAL_VERSION_MINOR "Pass minor version via cmake options" "")
 option(HAL_VERSION_PATCH "Pass patch version via cmake options" "")
 option(USE_LIBCXX "Force the use of LIBCXX for e.g. gcc" FALSE)
-option(WITH_GUI "Enable GUI build" ON)
 option(BUILD_ALL_PLUGINS "Build all available plugins" OFF)
 option(BUILD_TESTS "Enable test builds" OFF)
 option(BUILD_COVERAGE "Enable code coverage build" OFF)
@@ -215,8 +214,6 @@ if(BUILD_TESTS)
             '${CMAKE_SOURCE_DIR}/deps/*'
             '${CMAKE_BINARY_DIR}/*'
             '${CMAKE_CURRENT_BINARY_DIR}/*'
-            '${CMAKE_SOURCE_DIR}/include/gui/*'
-            '${CMAKE_SOURCE_DIR}/src/gui/*'
             )
 
         message(VERBOSE "COVERAGE_EXCLUDES: ${COVERAGE_EXCLUDES}")
@@ -252,7 +249,6 @@ set(HAL_CMAKECONFIG_INSTALL_DIR "share/cmake/${PROJECT_NAME}" CACHE STRING "inst
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.json")
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.lib")
-configure_file("defaults/guidefaults.ini" ${CMAKE_BINARY_DIR}/share/hal/defaults/guidefaults.ini @ONLY)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/defaults DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.ini")
 install(FILES ${CMAKE_BINARY_DIR}/hal.pc DESTINATION "${PKGCONFIG_INSTALL_DIRECTORY}")
 message(VERBOSE "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")

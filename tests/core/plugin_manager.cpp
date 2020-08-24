@@ -259,8 +259,8 @@ namespace hal
     }
 
     /**
-     * Testing the get_flag_to_plugin_mapping function
-     * Functions: get_flag_to_plugin_mapping
+     * Testing the get_cli_plugin_flags function
+     * Functions: get_cli_plugin_flags
      *
      */
     TEST_F(PluginManagerTest, check_cli_options)
@@ -274,7 +274,7 @@ namespace hal
             // Load the test_plugin
             if (load_reference_plugin())
             {
-                auto cli_opts = plugin_manager::get_flag_to_plugin_mapping();
+                auto cli_opts = plugin_manager::get_cli_plugin_flags();
                 for (auto ref_flag_and_desc : m_reference_lib_options)
                 {
                     EXPECT_NE(cli_opts.find(ref_flag_and_desc.first), cli_opts.end());

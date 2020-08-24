@@ -2,7 +2,7 @@
 
 #include "core/plugin_interface_cli.h"
 #include "core/plugin_interface_gui.h"
-#include "core/plugin_interface_interactive_ui.h"
+#include "core/plugin_interface_ui.h"
 #include "core/log.h"
 
 namespace hal
@@ -32,7 +32,7 @@ namespace hal
 
     bool BasePluginInterface::has_type(PluginInterfaceType t) const
     {
-        return (t == PluginInterfaceType::base) || (t == PluginInterfaceType::cli && dynamic_cast<const CLIPluginInterface*>(this)) || (t == PluginInterfaceType::interactive_ui && dynamic_cast<const InteractiveUIPluginInterface*>(this))
+        return (t == PluginInterfaceType::base) || (t == PluginInterfaceType::cli && dynamic_cast<const CLIPluginInterface*>(this)) || (t == PluginInterfaceType::interactive_ui && dynamic_cast<const UIPluginInterface*>(this))
                || (t == PluginInterfaceType::gui && dynamic_cast<const GUIPluginInterface*>(this));
         return false;
     }

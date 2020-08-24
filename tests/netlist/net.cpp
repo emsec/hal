@@ -326,16 +326,6 @@ namespace hal {
 
             // NEGATIVE
             {
-                // The Endpoint is a source, not a destination
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                bool suc = test_net->add_destination(test_utils::get_endpoint(t_gate, "O"));
-                EXPECT_FALSE(suc);
-            }
-            {
                 // The Gate is a nullptr
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
