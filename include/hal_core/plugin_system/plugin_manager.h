@@ -25,7 +25,6 @@
 
 #include "hal_core/utilities/callback_hook.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/utilities/library_loader.h"
 #include "hal_core/utilities/program_options.h"
 #include "hal_core/defines.h"
 

@@ -1,8 +1,9 @@
 #include "hal_core/plugin_system/plugin_manager.h"
 
-#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/library_loader.h"
 #include "hal_core/plugin_system/plugin_interface_cli.h"
 #include "hal_core/plugin_system/plugin_interface_ui.h"
+#include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
 #include <vector>

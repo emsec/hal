@@ -17,6 +17,8 @@ target_compile_options(plugin_system
 set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
 target_link_libraries(plugin_system
                       PUBLIC
+                        hal::utilities
+                        hal::netlist
                         std::filesystem
                         spdlog::spdlog
                         ${CMAKE_DL_LIBS}

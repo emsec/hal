@@ -1,7 +1,6 @@
-file(GLOB_RECURSE PYTHON_BINDING_LIB_source ${CMAKE_SOURCE_DIR}/src/python_bindings/*.cpp)
-# file(GLOB_RECURSE PYTHON_BINDING_LIB_bind_files ${CMAKE_SOURCE_DIR}/src/python_binding/bindings/*.cpp)
+file(GLOB_RECURSE PYTHON_BINDING_LIB_SRC ${CMAKE_SOURCE_DIR}/src/python_bindings/*.cpp)
 
-add_library(py SHARED ${PYTHON_BINDING_LIB_source} ${PYTHON_BINDING_LIB_bind_files})
+add_library(py SHARED ${PYTHON_BINDING_LIB_SRC})
 set_target_properties(py PROPERTIES OUTPUT_NAME "hal_py")
 add_library(hal::py ALIAS py)
 target_include_directories(py
@@ -11,7 +10,7 @@ target_include_directories(py
                            $<BUILD_INTERFACE:${PYTHON_INCLUDE_DIRS}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            PRIVATE
-                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/python_binding/bindings>
+                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/python_bindings/bindings>
                            )
 target_compile_options(py
                        PUBLIC ${COMPILE_OPTIONS_PUBLIC}
@@ -22,7 +21,7 @@ set_target_properties(py PROPERTIES PREFIX "")
 if(APPLE AND CMAKE_HOST_APPLE)
     set_target_properties(py PROPERTIES SUFFIX ".so")
 endif(APPLE AND CMAKE_HOST_APPLE)
-target_link_libraries(py PUBLIC PRIVATE ${PYTHON_LIBRARIES} pybind11::module)
+target_link_libraries(py PUBLIC PRIVATE ${PYTHON_LIBRARIES} pybind11::module hal::netlist hal::utilities hal::plugin_system)
 install(TARGETS py
         EXPORT hal
         LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}

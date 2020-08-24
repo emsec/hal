@@ -1,4 +1,4 @@
-#include "hal_core/utilities/library_loader.h"
+#include "hal_core/plugin_system/library_loader.h"
 
 #include "hal_core/utilities/log.h"
 
