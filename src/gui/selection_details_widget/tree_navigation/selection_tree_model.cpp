@@ -161,7 +161,7 @@ namespace hal
                 nextRootItem->addChild(new SelectionTreeItemNet(id));
         }
 
-        Q_EMIT layoutAboutToBeChanged();
+        beginResetModel();
 
         ++m_doNotDisturb;
         // delay disposal of old entries
@@ -171,7 +171,7 @@ namespace hal
         QTimer::singleShot(50,disposer,&SelectionTreeModelDisposer::dispose);
         --m_doNotDisturb;
 
-        Q_EMIT layoutChanged();
+        endResetModel();
     }
 
     void SelectionTreeModel::moduleRecursion(SelectionTreeItemModule* modItem)
