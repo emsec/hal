@@ -271,37 +271,40 @@ $(function() {
 <div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;        <span class="comment">/* stores the modules */</span></div>
 <div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;        Module* m_top_module;</div>
 <div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        std::unordered_map&lt;u32, std::unique_ptr&lt;Module&gt;&gt; m_modules_map;</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;        std::vector&lt;Module*&gt; m_modules;</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160; </div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;        <span class="comment">/* stores the nets */</span></div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;        std::unordered_map&lt;u32, std::unique_ptr&lt;Net&gt;&gt; m_nets_map;</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;        std::vector&lt;Net*&gt; m_nets;</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160; </div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;        <span class="comment">/* stores the gates */</span></div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;        std::unordered_map&lt;u32, std::unique_ptr&lt;Gate&gt;&gt; m_gates_map;</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;        std::vector&lt;Gate*&gt; m_gates;</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160; </div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;        <span class="comment">/* stores the set of global gates and nets */</span></div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        std::vector&lt;Net*&gt; m_global_input_nets;</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;        std::vector&lt;Net*&gt; m_global_output_nets;</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;        std::vector&lt;Gate*&gt; m_gnd_gates;</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;        std::vector&lt;Gate*&gt; m_vcc_gates;</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;    };</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;        std::unordered_set&lt;Module*&gt; m_modules_set;</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;        std::vector&lt;Module*&gt; m_modules;</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160; </div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;        <span class="comment">/* stores the nets */</span></div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;        std::unordered_map&lt;u32, std::unique_ptr&lt;Net&gt;&gt; m_nets_map;</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;        std::unordered_set&lt;Net*&gt; m_nets_set;</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;        std::vector&lt;Net*&gt; m_nets;</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;        <span class="comment">/* stores the gates */</span></div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;        std::unordered_map&lt;u32, std::unique_ptr&lt;Gate&gt;&gt; m_gates_map;</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;        std::unordered_set&lt;Gate*&gt; m_gates_set;</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        std::vector&lt;Gate*&gt; m_gates;</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160; </div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;        <span class="comment">/* stores the set of global gates and nets */</span></div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;        std::vector&lt;Net*&gt; m_global_input_nets;</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        std::vector&lt;Net*&gt; m_global_output_nets;</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;        std::vector&lt;Gate*&gt; m_gnd_gates;</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;        std::vector&lt;Gate*&gt; m_vcc_gates;</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;    };</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> defines.h:43</div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1NetlistInternalManager_html"><div class="ttname"><a href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">hal::NetlistInternalManager</a></div><div class="ttdef"><b>Definition:</b> netlist_internal_manager.h:44</div></div>
+<div class="ttc" id="aclasshal_1_1NetlistInternalManager_html"><div class="ttname"><a href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">hal::NetlistInternalManager</a></div><div class="ttdef"><b>Definition:</b> netlist_internal_manager.h:45</div></div>
 <div class="ttc" id="aclasshal_1_1Module_html"><div class="ttname"><a href="../../d1/d10/classhal_1_1Module.html">hal::Module</a></div><div class="ttdef"><b>Definition:</b> module.h:51</div></div>
 <div class="ttc" id="aclasshal_1_1Netlist_html"><div class="ttname"><a href="../../dc/d06/classhal_1_1Netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> netlist.h:51</div></div>
 <div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:28</div></div>
 <div class="ttc" id="agate__library_8h_html"><div class="ttname"><a href="../../de/d88/gate__library_8h.html">gate_library.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1GateLibrary_html"><div class="ttname"><a href="../../d7/daf/classhal_1_1GateLibrary.html">hal::GateLibrary</a></div><div class="ttdef"><b>Definition:</b> gate_library.h:41</div></div>
-<div class="ttc" id="anamespacehal_1_1gate__library__manager_html_a6bea3d7f340d955467aa5b31934b9f6c"><div class="ttname"><a href="../../de/d78/namespacehal_1_1gate__library__manager.html#a6bea3d7f340d955467aa5b31934b9f6c">hal::gate_library_manager::get_gate_library</a></div><div class="ttdeci">NETLIST_API GateLibrary * get_gate_library(const std::string &amp;file_name)</div><div class="ttdef"><b>Definition:</b> gate_library_manager.cpp:232</div></div>
+<div class="ttc" id="anamespacehal_1_1gate__library__manager_html_a6bea3d7f340d955467aa5b31934b9f6c"><div class="ttname"><a href="../../de/d78/namespacehal_1_1gate__library__manager.html#a6bea3d7f340d955467aa5b31934b9f6c">hal::gate_library_manager::get_gate_library</a></div><div class="ttdeci">NETLIST_API GateLibrary * get_gate_library(const std::string &amp;file_name)</div><div class="ttdef"><b>Definition:</b> gate_library_manager.cpp:231</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Aug 24 2020 14:16:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Aug 25 2020 15:54:40 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
