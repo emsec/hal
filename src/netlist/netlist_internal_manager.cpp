@@ -22,7 +22,11 @@ namespace hal
     static void unordered_vector_erase(std::vector<T>& vec, T element)
     {
         auto it = std::find(vec.begin(), vec.end(), element);
-        *it     = vec.back();
+        if (it == vec.end())
+        {
+            log_critical("netlist.internal", "element that is guaranteed to be there is not there!");
+        }
+        *it = vec.back();
         vec.pop_back();
     }
 
@@ -69,6 +73,7 @@ namespace hal
         auto raw = new_gate.get();
 
         m_netlist->m_gates_map[id] = std::move(new_gate);
+        m_netlist->m_gates_set.insert(raw);
         m_netlist->m_gates.push_back(raw);
 
         m_netlist->m_top_module->m_gates_map[id] = raw;
@@ -115,6 +120,7 @@ namespace hal
         auto it  = m_netlist->m_gates_map.find(gate->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_gates_map.erase(it);
+        m_netlist->m_gates_set.erase(gate);
         unordered_vector_erase(m_netlist->m_gates, gate);
 
         // free ids
@@ -167,6 +173,7 @@ namespace hal
         // add net to netlist
         auto raw                  = new_net.get();
         m_netlist->m_nets_map[id] = std::move(new_net);
+        m_netlist->m_nets_set.insert(raw);
         m_netlist->m_nets.push_back(raw);
 
         // notify
@@ -185,16 +192,16 @@ namespace hal
         auto dsts = net->m_destinations_raw;
         for (auto dst : dsts)
         {
-            if (net->is_a_destination(dst) && !this->net_remove_destination(net, dst))
+            if (!this->net_remove_destination(net, dst))
             {
                 return false;
             }
         }
 
-        auto srcs = net->m_destinations_raw;
+        auto srcs = net->m_sources_raw;
         for (auto src : srcs)
         {
-            if (net->is_a_source(src) && !this->net_remove_source(net, src))
+            if (!this->net_remove_source(net, src))
             {
                 return false;
             }
@@ -208,6 +215,7 @@ namespace hal
         auto it  = m_netlist->m_nets_map.find(net->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_nets_map.erase(it);
+        m_netlist->m_nets_set.erase(net);
         unordered_vector_erase(m_netlist->m_nets, net);
 
         m_netlist->m_free_net_ids.insert(net->get_id());
@@ -421,6 +429,7 @@ namespace hal
 
         auto raw                     = m.get();
         m_netlist->m_modules_map[id] = std::move(m);
+        m_netlist->m_modules_set.insert(raw);
         m_netlist->m_modules.push_back(raw);
 
         if (parent != nullptr)
@@ -482,7 +491,8 @@ namespace hal
         auto it  = m_netlist->m_modules_map.find(to_remove->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_modules_map.erase(it);
-        unordered_vector_erase(m_netlist->m_modules, ptr.get());
+        m_netlist->m_modules_set.erase(to_remove);
+        unordered_vector_erase(m_netlist->m_modules, to_remove);
 
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());

@@ -11,4 +11,8 @@ if(PL_NETLIST_SIMULATOR OR BUILD_ALL_PLUGINS)
                    )
 
     add_subdirectory(test)
+
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+        add_sanitizers(netlist_simulator)
+    endif()
 endif()

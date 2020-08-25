@@ -1,7 +1,8 @@
 #include "netlist_simulator/netlist_simulator.h"
 
-#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/log.h"
 
 #include <algorithm>
 
@@ -17,30 +18,30 @@ static T toggle(T v)
 
 namespace hal
 {
-#define seconds_since(X) ((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - (X)).count() / 1000)
+    // #define seconds_since(X) ((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - (X)).count() / 1000)
 
-#define measure_block_time(X) measure_block_time_t _UNIQUE_NAME_(X);
+    // #define measure_block_time(X) measure_block_time_t _UNIQUE_NAME_(X);
 
-    class measure_block_time_t
-    {
-    public:
-        measure_block_time_t(const std::string& section_name)
-        {
-            m_name       = section_name;
-            m_begin_time = std::chrono::high_resolution_clock::now();
-        }
+    //     class measure_block_time_t
+    //     {
+    //     public:
+    //         measure_block_time_t(const std::string& section_name)
+    //         {
+    //             m_name       = section_name;
+    //             m_begin_time = std::chrono::high_resolution_clock::now();
+    //         }
 
-        ~measure_block_time_t()
-        {
-            log_info("netlist simulator", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
-        }
+    //         ~measure_block_time_t()
+    //         {
+    //             log_info("netlist simulator", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
+    //         }
 
-    private:
-        std::string m_name;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
-    };
+    //     private:
+    //         std::string m_name;
+    //         std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
+    //     };
 
-    // #define measure_block_time(X)
+#define measure_block_time(X)
 
     NetlistSimulator::NetlistSimulator()
     {
@@ -387,10 +388,9 @@ namespace hal
             {
                 continue;
             }
-            auto endpoints  = net->get_destinations();
-            auto& dst_gates = m_successors[net];
+            auto endpoints = net->get_destinations();
             std::unordered_map<Gate*, std::vector<std::string>> affected_pins;
-            for (auto& ep : endpoints)
+            for (auto ep : endpoints)
             {
                 auto gate = ep->get_gate();
                 affected_pins[gate].push_back(ep->get_pin());
@@ -405,7 +405,7 @@ namespace hal
                     continue;
                 }
                 auto sim_gate = sim_gates_map.at(gate);
-                dst_gates.push_back(std::make_pair(sim_gate, pins));
+                m_successors[net].emplace_back(sim_gate, pins);
             }
         }
 
@@ -558,15 +558,18 @@ namespace hal
 
                 // simulate affected gates
                 // record all FFs that have to be clocked
-                for (auto& [gate, pins] : m_successors.at(event.affected_net))
+                if (auto suc_it = m_successors.find(event.affected_net); suc_it != m_successors.end())
                 {
-                    for (auto& pin : pins)
+                    for (auto& [gate, pins] : suc_it->second)
                     {
-                        gate->input_values[pin] = static_cast<BooleanFunction::Value>(event.new_value);
-                    }
-                    if (!simulate_gate(gate, event, new_events))
-                    {
-                        ffs.push_back(static_cast<SimulationGateFF*>(gate));
+                        for (auto& pin : pins)
+                        {
+                            gate->input_values[pin] = static_cast<BooleanFunction::Value>(event.new_value);
+                        }
+                        if (!simulate_gate(gate, event, new_events))
+                        {
+                            ffs.push_back(static_cast<SimulationGateFF*>(gate));
+                        }
                     }
                 }
             }

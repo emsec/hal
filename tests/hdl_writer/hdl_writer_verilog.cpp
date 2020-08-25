@@ -765,7 +765,7 @@ namespace hal {
                  * create_temp_gate_lib();
                 // Testing the usage of a pin vector using the temp Gate library
                 GateLibrary* gl = gate_library_manager::get_gate_library(temp_lib_name);
-                Netlist* nl(new Netlist(gl));
+                Netlist* nl(new Netlist(gl)); <-- dont do this!
 
                 Gate* gnd_gate = nl->create_gate(MIN_GATE_ID + 0, "GND", "gnd_gate");
                 Gate* vcc_gate = nl->create_gate(MIN_GATE_ID + 1, "VCC", "vcc_gate");
@@ -841,7 +841,7 @@ namespace hal {
                 /*
                             // Testing the usage of nets connected to a X_ZERO Gate
                             GateLibrary* gl = gate_library_manager::get_gate_library(m_pseudo_simprim_lib_name);
-                            Netlist* nl(new Netlist(gl));
+                            Netlist* nl(new Netlist(gl)); <-- dont do this!
 
                             Gate* x_zero_gate_0 = nl->create_gate("X_ZERO", "x_zero_gate_0");
                             Gate* x_zero_gate_1 = nl->create_gate("X_ZERO", "x_zero_gate_1");

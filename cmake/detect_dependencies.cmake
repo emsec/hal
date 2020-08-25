@@ -20,7 +20,7 @@ endif(PkgConfig_FOUND)
 #####   Sanitizers
 ################################
 
-find_package(Sanitizers)
+find_package(Sanitizers REQUIRED)
 
 ################################
 #####   OpenMP

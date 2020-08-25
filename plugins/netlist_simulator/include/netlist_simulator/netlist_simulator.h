@@ -156,6 +156,8 @@ namespace hal
             std::vector<Net*> input_nets;
             std::unordered_map<std::string, BooleanFunction::Value> input_values;
             bool is_flip_flop;
+
+            virtual ~SimulationGate() = default;
         };
 
         struct SimulationGateCombinational : public SimulationGate

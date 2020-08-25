@@ -253,7 +253,6 @@ namespace hal {
                 auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 bool suc = nl->delete_gate(g_0);
                 EXPECT_TRUE(suc);
-                EXPECT_FALSE(nl->is_gate_in_netlist(g_0));
             }
             {
                 // Delete a Gate, which is connected to some in and output nets.
@@ -262,12 +261,10 @@ namespace hal {
                 Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
                 bool suc = nl->delete_gate(gate_0);
                 EXPECT_TRUE(suc);
-                NO_COUT_TEST_BLOCK;
-                EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID + 30)
-                                 ->is_a_destination(test_utils::get_endpoint(gate_0, "I0")));
-                EXPECT_FALSE(nl->get_net_by_id(MIN_NET_ID + 20)
-                                 ->is_a_destination(test_utils::get_endpoint(gate_0, "I1")));
-                EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID + 045)->get_source(), test_utils::get_endpoint(nullptr, ""));
+                EXPECT_FALSE(nl->is_gate_in_netlist(gate_0));
+                EXPECT_TRUE(nl->get_net_by_id(MIN_NET_ID + 30)->get_destinations([gate_0](auto ep){return ep->get_gate() == gate_0;}).empty());
+                EXPECT_TRUE(nl->get_net_by_id(MIN_NET_ID + 20)->get_destinations([gate_0](auto ep){return ep->get_gate() == gate_0;}).empty());
+                EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID + 045)->get_source(), nullptr);
             }
             {
                 // Add and delete global_gnd Gate

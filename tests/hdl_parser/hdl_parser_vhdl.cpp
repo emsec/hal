@@ -134,7 +134,7 @@ namespace hal {
 
             ASSERT_NE(net_global_in, nullptr);
             EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-            EXPECT_EQ(net_global_in->get_source(), test_utils::get_endpoint(nullptr, ""));
+            EXPECT_EQ(net_global_in->get_source(), nullptr);
             EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
                                                               std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
                                                                                                               "I"),
@@ -237,7 +237,7 @@ namespace hal {
 
                 ASSERT_NE(net_global_in, nullptr);
                 EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-                EXPECT_EQ(net_global_in->get_source(), test_utils::get_endpoint(nullptr, ""));
+                EXPECT_EQ(net_global_in->get_source(), nullptr);
                 EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
                                                                   std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
                                                                                                                   "I"),

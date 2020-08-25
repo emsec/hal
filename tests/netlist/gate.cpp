@@ -750,7 +750,8 @@ namespace hal {
             BooleanFunction bf_i = BooleanFunction::from_string("I", std::vector<std::string>({"I"}));
             BooleanFunction bf_i_invert = BooleanFunction::from_string("!I", std::vector<std::string>({"I"}));
 
-            GateLibrary* inv_gl(new GateLibrary("imaginary_path", "TEST_LIB"));
+            auto inv_gl_owner = std::make_unique<GateLibrary>("imaginary_path", "TEST_LIB");
+            auto inv_gl = inv_gl_owner.get();
             auto inv_gate_type_owner = std::make_unique<GateType>("gate_1_to_1_inv");
             auto inv_gate_type = inv_gate_type_owner.get();
             inv_gate_type->add_input_pin("I");
@@ -806,7 +807,7 @@ namespace hal {
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
                 GateLibrary gl("imaginary_path", "TEST_LIB");
-                std::unique_ptr<GateType> empty_gate_type_owner(new GateType("EMPTY_GATE"));
+                auto empty_gate_type_owner = std::make_unique<GateType>("EMPTY_GATE");
                 auto empty_gate_type = empty_gate_type_owner.get();
                 gl.add_gate_type(std::move(empty_gate_type_owner));
 
@@ -817,7 +818,7 @@ namespace hal {
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
                 GateLibrary gl("imaginary_path", "TEST_LIB");
-                std::unique_ptr<GateType> empty_gate_type_owner(new GateType("EMPTY_GATE"));
+                auto empty_gate_type_owner = std::make_unique<GateType>("EMPTY_GATE");
                 auto empty_gate_type = empty_gate_type_owner.get();
                 empty_gate_type->add_output_pin("");
                 gl.add_gate_type(std::move(empty_gate_type_owner));

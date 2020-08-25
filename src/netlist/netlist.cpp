@@ -1,11 +1,11 @@
 #include "hal_core/netlist/netlist.h"
 
-#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/event_system/netlist_event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
@@ -153,7 +153,7 @@ namespace hal
 
     bool Netlist::is_module_in_netlist(Module* module) const
     {
-        return (module != nullptr) && (m_modules_map.find(module->get_id()) != m_modules_map.end());
+        return (module != nullptr) && (m_modules_set.find(module) != m_modules_set.end());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +191,7 @@ namespace hal
 
     bool Netlist::is_gate_in_netlist(Gate* gate) const
     {
-        return gate != nullptr && m_gates_map.find(gate->get_id()) != m_gates_map.end();
+        return gate != nullptr && m_gates_set.find(gate) != m_gates_set.end();
     }
 
     Gate* Netlist::get_gate_by_id(const u32 gate_id) const
@@ -325,7 +325,7 @@ namespace hal
 
     bool Netlist::is_net_in_netlist(Net* n) const
     {
-        return n != nullptr && m_nets_map.find(n->get_id()) != m_nets_map.end();
+        return n != nullptr && m_nets_set.find(n) != m_nets_set.end();
     }
 
     Net* Netlist::get_net_by_id(u32 net_id) const

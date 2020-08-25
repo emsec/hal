@@ -41,6 +41,7 @@ install(TARGETS core
             WORLD_READ
             WORLD_EXECUTE
         )
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    add_sanitizers(core)
-endif()
+# core has no own sources so no sanitizers needed
+# if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+#     add_sanitizers(core)
+# endif()
