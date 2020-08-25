@@ -1,5 +1,6 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 
 #include "gui/gui_globals.h"
 
@@ -14,27 +15,11 @@ namespace hal
 
     bool SelectionTreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        //used as parent index if item has children
-        const QModelIndex& item_name_index = sourceModel()->index(source_row, 0, source_parent);
+        //index to element in source mdoel
+        const QModelIndex& itemIndex = sourceModel()->index(source_row, 0, source_parent);
  
-        //check all children of the current item and keep it if one child satisfies the match
-        for(int i = 0; i < sourceModel()->rowCount(item_name_index); i++)
-        {
-            if(filterAcceptsRow(i, item_name_index))
-                return true;
-        }
-        
-        const QModelIndex& item_id_index = sourceModel()->index(source_row, 1, source_parent);
-        const QModelIndex& item_type_index = sourceModel()->index(source_row, 2, source_parent);
-
-        const QString& item_name = item_name_index.data().toString();
-        const QString& item_id = item_id_index.data().toString();
-        const QString& item_type = item_type_index.data().toString();
-
-        if(m_filter_expression.match(item_type).hasMatch() || m_filter_expression.match(item_name).hasMatch() || m_filter_expression.match(item_id).hasMatch())
-            return true;
-        else
-            return false;
+        const SelectionTreeItem* sti = static_cast<SelectionTreeItem*>(itemIndex.internalPointer());
+        return sti->match(m_filter_expression);
     }
 
     bool SelectionTreeProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
@@ -75,5 +60,11 @@ namespace hal
     {
         m_filter_expression.setPattern(filter_text);
         invalidateFilter();
+
+        QList<u32> modIds;
+        QList<u32> gatIds;
+        QList<u32> netIds;
+        static_cast<const SelectionTreeModel*>(sourceModel())->suppressedByFilter(modIds, gatIds, netIds, m_filter_expression);
+        g_selection_relay->suppressedByFilter(modIds, gatIds, netIds);
     }
 }

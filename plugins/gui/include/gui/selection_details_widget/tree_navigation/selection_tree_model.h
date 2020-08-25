@@ -63,6 +63,9 @@ namespace hal
         //helper functions to convert between index and item
         QModelIndex indexFromItem(SelectionTreeItem* item) const;
 
+        void suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+                                const QRegularExpression& regex) const;
+
         static const int NAME_COLUMN = 0;
         static const int ID_COLUMN   = 1;
         static const int TYPE_COLUMN = 2;

@@ -28,6 +28,8 @@
 #include <QVariant>
 #include <QList>
 #include <QIcon>
+#include <QSet>
+#include <QRegularExpression>
 
 namespace hal
 {
@@ -53,7 +55,10 @@ namespace hal
         virtual QVariant name() const = 0; // implemented in subclass
         virtual QVariant gateType() const;
         virtual QIcon    icon() const = 0;
+        virtual bool     match(const QRegularExpression& regex) const;
 
+        virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+                                                 const QRegularExpression& regex) const = 0;
     protected:
         itemType_t mItemType;
         u32 mId;
@@ -69,6 +74,9 @@ namespace hal
         virtual SelectionTreeItem* child(int row) const;
         virtual QVariant name() const;
         virtual QIcon    icon() const;
+        virtual bool     match(const QRegularExpression& regex) const;
+        virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+                                                 const QRegularExpression& regex) const;
         void addChild(SelectionTreeItem* cld);
         bool isRoot() const;
     protected:
@@ -89,6 +97,8 @@ namespace hal
         virtual QVariant name() const;
         virtual QIcon    icon() const;
         virtual QVariant gateType() const;
+        virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+                                                 const QRegularExpression& regex) const;
     };
 
     class SelectionTreeItemNet : public SelectionTreeItem
@@ -97,6 +107,8 @@ namespace hal
         SelectionTreeItemNet(u32 id_);
         virtual QVariant name() const;
         virtual QIcon    icon() const;
+        virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+                                                 const QRegularExpression& regex) const;
     };
 
 }

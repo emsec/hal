@@ -470,7 +470,7 @@ namespace hal
         {
             for (auto& element : m_ModuleItems)
             {
-                if (g_selection_relay->m_selected_modules.find(element.id) != g_selection_relay->m_selected_modules.end())
+                if (g_selection_relay->isModuleSelected(element.id))
                 {
                     element.item->setSelected(true);
                     element.item->update();
@@ -482,7 +482,7 @@ namespace hal
         {
             for (auto& element : m_gate_items)
             {
-                if (g_selection_relay->m_selected_gates.find(element.id) != g_selection_relay->m_selected_gates.end())
+                if (g_selection_relay->isGateSelected(element.id))
                 {
                     element.item->setSelected(true);
                     element.item->update();
@@ -494,7 +494,7 @@ namespace hal
         {
             for (auto& element : m_net_items)
             {
-                if (g_selection_relay->m_selected_nets.find(element.id) != g_selection_relay->m_selected_nets.end())
+                if (g_selection_relay->isNetSelected(element.id))
                 {
                     element.item->setSelected(true);
                     element.item->update();

@@ -221,7 +221,12 @@ namespace hal
         return QModelIndex();
     }
 
-
+    void SelectionTreeModel::suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+                                                const QRegularExpression& regex) const
+    {
+        if (!m_rootItem) return;
+        m_rootItem->suppressedByFilterRecursion(modIds, gatIds, netIds, regex);
+    }
 
     SelectionTreeModelDisposer::SelectionTreeModelDisposer(SelectionTreeItemRoot *stim, QObject* parent)
         : QObject(parent), m_rootItem(stim)

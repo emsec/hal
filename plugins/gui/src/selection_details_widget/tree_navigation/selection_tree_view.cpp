@@ -68,5 +68,8 @@ namespace hal {
     void SelectionTreeView::handle_filter_text_changed(const QString& filter_text)
     {
         m_selectionTreeProxyModel->handle_filter_text_changed(filter_text);
+        QModelIndex defaultSel = m_selectionTreeProxyModel->index(0,0,rootIndex());
+        if (defaultSel.isValid())
+            selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     }
 }
