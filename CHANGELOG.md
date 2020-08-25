@@ -29,8 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Python GUI API to control the graph view
   * zoom level of graph view can now be controlled by shortcuts
 * state-of-the-art suite of benchmark netlists
-* simulator plugin to simulate parts of the netlist
-* added `get_fan_in_endpoints` and `get_fan_out_endpoints` to `Gate`
+* new simulator plugin
+* added `get_fan_in_endpoint`, `get_fan_out_endpoint`, `get_fan_in_endpoints` and `get_fan_out_endpoints` to class `Gate`
 * added `clear_caches` to `Netlist`
 
 ### CHANGED
@@ -51,6 +51,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * massively expanded testing coverage
 * the project is now affiliated with the Max Planck Institute for Security and Privacy
 * reworked core ownership model
+  * no more `shared_ptr`
+  * clear ownership management via `unique_ptr` at necessary locations
+  * instances passed via non-owning raw pointers
+* Endpoints are now managed classes as well, owned by the respective nets and passed via pointers
 
 ### FIXED
 
@@ -58,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * module widget selection is now more consistent with graph view
 * inconsistencies with case insensitivity of the VHDL parser fixed
 * delete option no longer shown for top module in right-click context menu
+* some minor memory leaks in plugin management
 
 ### REMOVED
 
