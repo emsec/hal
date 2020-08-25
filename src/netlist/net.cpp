@@ -1,10 +1,10 @@
-#include "netlist/net.h"
+#include "hal_core/netlist/net.h"
 
-#include "core/log.h"
-#include "netlist/event_system/net_event_handler.h"
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_internal_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/event_system/net_event_handler.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_internal_manager.h"
 
 #include <assert.h>
 #include <memory>
@@ -26,7 +26,7 @@ namespace hal
 
     Netlist* Net::get_netlist() const
     {
-        return m_internal_manager->m_netlist->get_shared();
+        return m_internal_manager->m_netlist;
     }
 
     std::string Net::get_name() const
@@ -36,7 +36,7 @@ namespace hal
 
     void Net::set_name(const std::string& name)
     {
-        if (core_utils::trim(name).empty())
+        if (utils::trim(name).empty())
         {
             log_error("netlist.internal", "net::set_name: empty name is not allowed");
             return;
@@ -53,37 +53,17 @@ namespace hal
 
     bool Net::add_source(Gate* gate, const std::string& pin)
     {
-        return add_source(Endpoint(gate, pin, false));
-    }
-
-    bool Net::add_source(const Endpoint& ep)
-    {
-        if (!ep.is_source_pin())
-        {
-            log_error("netlist", "net::add_source: tried to use a destination-endpoint as a source-endpoint");
-            return false;
-        }
-        return m_internal_manager->net_add_source(this, ep);
+        return m_internal_manager->net_add_source(this, Endpoint(gate, pin, this, false));
     }
 
     bool Net::remove_source(Gate* gate, const std::string& pin)
     {
-        return remove_source(Endpoint(gate, pin, false));
-    }
-
-    bool Net::remove_source(const Endpoint& ep)
-    {
-        if (!ep.is_source_pin())
-        {
-            log_error("netlist", "net::remove_source: tried to use a destination-endpoint as a source-endpoint");
-            return false;
-        }
-        return m_internal_manager->net_remove_source(this, ep);
+        return m_internal_manager->net_remove_source(this, Endpoint(gate, pin, this, false));
     }
 
     bool Net::is_a_source(Gate* gate, const std::string& pin) const
     {
-        return is_a_source(Endpoint(gate, pin, false));
+        return is_a_source(Endpoint(gate, pin, const_cast<Net*>(this), false));
     }
 
     bool Net::is_a_source(const Endpoint& ep) const
@@ -123,9 +103,10 @@ namespace hal
 
     Endpoint Net::get_source() const
     {
+        // log_warning("netlist", "Net::get_source() is deprecated");
         if (m_sources.empty())
         {
-            return Endpoint(nullptr, "", false);
+            return Endpoint();
         }
         if (m_sources.size() > 1)
         {
@@ -136,37 +117,17 @@ namespace hal
 
     bool Net::add_destination(Gate* gate, const std::string& pin)
     {
-        return add_destination(Endpoint(gate, pin, true));
-    }
-
-    bool Net::add_destination(const Endpoint& ep)
-    {
-        if (!ep.is_destination_pin())
-        {
-            log_error("netlist", "net::add_destination: tried to use a source-endpoint as a destination-endpoint");
-            return false;
-        }
-        return m_internal_manager->net_add_destination(this, ep);
+        return m_internal_manager->net_add_destination(this,Endpoint(gate, pin, this, true));
     }
 
     bool Net::remove_destination(Gate* gate, const std::string& pin)
     {
-        return remove_destination(Endpoint(gate, pin, true));
-    }
-
-    bool Net::remove_destination(const Endpoint& ep)
-    {
-        if (!ep.is_destination_pin())
-        {
-            log_error("netlist", "net::remove_destination: tried to use a source-endpoint as a destination-endpoint");
-            return false;
-        }
-        return m_internal_manager->net_remove_destination(this, ep);
+        return m_internal_manager->net_remove_destination(this, Endpoint(gate, pin, this, true));
     }
 
     bool Net::is_a_destination(Gate* gate, const std::string& pin) const
     {
-        return is_a_destination(Endpoint(gate, pin, true));
+        return is_a_destination(Endpoint(gate, pin, const_cast<Net*>(this), true));
     }
 
     bool Net::is_a_destination(const Endpoint& ep) const

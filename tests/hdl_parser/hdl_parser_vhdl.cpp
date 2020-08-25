@@ -1,8 +1,8 @@
-#include "netlist/hdl_parser/hdl_parser_vhdl.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_vhdl.h"
 
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
 
 #include "gtest/gtest.h"
@@ -915,9 +915,9 @@ namespace hal {
 
                 EXPECT_EQ(top_child_one->get_name(), "child_one_mod");
 
-                EXPECT_TRUE(core_utils::starts_with(top_child_two->get_name(), "child_two_mod" + module_suffix));
-                EXPECT_TRUE(core_utils::starts_with(one_child_0->get_name(), "gate_0_ent_two" + module_suffix));
-                EXPECT_TRUE(core_utils::starts_with(one_child_1->get_name(), "gate_1_ent_two" + module_suffix));
+                EXPECT_TRUE(utils::starts_with(top_child_two->get_name(), "child_two_mod" + module_suffix));
+                EXPECT_TRUE(utils::starts_with(one_child_0->get_name(), "gate_0_ent_two" + module_suffix));
+                EXPECT_TRUE(utils::starts_with(one_child_1->get_name(), "gate_1_ent_two" + module_suffix));
                 // All 3 names should be unique
                 EXPECT_EQ(std::set<std::string>({top_child_two->get_name(), one_child_0->get_name(),
                                                  one_child_1->get_name()}).size(), 3);
@@ -938,9 +938,9 @@ namespace hal {
                 Gate* gate_child_two_1 = *one_child_0->get_gates().begin();
                 Gate* gate_child_two_2 = *one_child_1->get_gates().begin();
 
-                EXPECT_TRUE(core_utils::starts_with(gate_child_two_0->get_name(), "gate_child_two" + gate_suffix));
-                EXPECT_TRUE(core_utils::starts_with(gate_child_two_1->get_name(), "gate_child_two" + gate_suffix));
-                EXPECT_TRUE(core_utils::starts_with(gate_child_two_2->get_name(), "gate_child_two" + gate_suffix));
+                EXPECT_TRUE(utils::starts_with(gate_child_two_0->get_name(), "gate_child_two" + gate_suffix));
+                EXPECT_TRUE(utils::starts_with(gate_child_two_1->get_name(), "gate_child_two" + gate_suffix));
+                EXPECT_TRUE(utils::starts_with(gate_child_two_2->get_name(), "gate_child_two" + gate_suffix));
                 // All 3 names should be unique
                 EXPECT_EQ(std::set<std::string>({gate_child_two_0->get_name(), gate_child_two_1->get_name(),
                                                  gate_child_two_2->get_name()}).size(), 3);

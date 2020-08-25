@@ -1,10 +1,10 @@
-#include "netlist/hdl_parser/hdl_parser_manager.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 
-#include "core/log.h"
-#include "netlist/gate_library/gate_library.h"
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/hdl_parser/hdl_parser.h"
-#include "netlist/netlist.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <fstream>
 
@@ -19,7 +19,7 @@ namespace hal
 
             ParserFactory get_parser_factory_for_file(const std::filesystem::path& file_name)
             {
-                std::string extension = core_utils::to_lower(file_name.extension().string());
+                std::string extension = utils::to_lower(file_name.extension().string());
                 if (!extension.empty() && extension[0] != '.')
                 {
                     extension = "." + extension;
@@ -143,7 +143,7 @@ namespace hal
         {
             for (auto ext : supported_file_extensions)
             {
-                ext = core_utils::trim(core_utils::to_lower(ext));
+                ext = utils::trim(utils::to_lower(ext));
                 if (!ext.empty() && ext[0] != '.')
                 {
                     ext = "." + ext;

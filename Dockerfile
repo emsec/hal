@@ -12,5 +12,5 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates gnu
     python3-paramiko rapidjson-dev libspdlog-dev libigraph0-dev python3-dateutil \
       && apt-get clean \
       && rm -rf /var/lib/apt/lists/*
-CMD cmake -G Ninja /home/src -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DPL_GRAPH_ALGORITHM=ON -DPL_GATE_DECORATOR_SYSTEM=ON -DBUILD_TESTS=ON -DWITH_GUI=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DCPACK_OUTPUT_FILE_PREFIX=/home/build-output/ && \
+CMD cmake -G Ninja /home/src -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DPL_GRAPH_ALGORITHM=ON -DPL_GATE_DECORATOR_SYSTEM=ON -DBUILD_TESTS=ON -PL_GUI=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DCPACK_OUTPUT_FILE_PREFIX=/home/build-output/ && \
     cmake --build /home/build --target package --clean-first -- -j4

@@ -47,7 +47,7 @@ compile:package:ubuntu:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=ON -DENABLE_PPA=ON -DPACKAGE_DEB=ON
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=ON -DENABLE_PPA=ON -DPACKAGE_DEB=ON
     - export CCACHE_DIR=$(pwd)/../ccache
     - ninja debuild_$(lsb_release -c -s)
     - cd Debian/$(lsb_release -c -s)/
@@ -78,7 +78,7 @@ compile:test:ubuntu:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
     - export CCACHE_DIR=$(pwd)/../ccache
     - cmake --build . --target all --clean-first -- -j4
   cache:
@@ -96,7 +96,7 @@ compile:test:ubuntu:
 #    - mkdir -p build
 #    - cd build
 #    - export HAL_BASE_PATH=$(pwd)
-#    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
+#    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=OFF -DBUILD_TESTS=OFF -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/ -DPACKAGE_MACOS=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
 #    - cmake --build . --target all --clean-first -- -j4
 #    - du -h .
 #  cache:
@@ -120,7 +120,7 @@ compile:doc:doxygen:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
     - cmake --build . --target doc --clean-first -- -j4
   artifacts:
     paths:
@@ -139,7 +139,7 @@ compile:doc:python:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
     - cmake --build . --target pydoc --clean-first -- -j4
   artifacts:
     paths:
@@ -158,7 +158,7 @@ test:ubuntu:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
+    - cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=/usr/
     - export CCACHE_DIR=$(pwd)/../ccache
     - cmake --build . --target all --clean-first -- -j4
     - ninja hal_coverage
@@ -202,7 +202,7 @@ test:package:ubuntu:
 test:check-core-documentation:
   stage: test
   script:
-    - python3 tools/check_documentation.py include/ -ignore include/gui/
+    - python3 tools/check_documentation.py include/
   cache: {}
 
 deploy-ppa:
@@ -225,7 +225,7 @@ deploy-ppa:
     - mkdir -p build
     - cd build
     - export HAL_BASE_PATH=$(pwd)
-    - cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=OFF -DENABLE_PPA=ON -DUPLOAD_PPA=ON -DPACKAGE_DEB=ON -DSIMULATE_DPUT=OFF -DPPA_GPG_PASSPHRASE_FILE=$PW_FILE_NAME -DPPA_GPG_KEY_ID="C61868710D13DD90"
+    - cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=OFF -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DNO_SIGN_PPA=OFF -DENABLE_PPA=ON -DUPLOAD_PPA=ON -DPACKAGE_DEB=ON -DSIMULATE_DPUT=OFF -DPPA_GPG_PASSPHRASE_FILE=$PW_FILE_NAME -DPPA_GPG_KEY_ID="C61868710D13DD90"
     - make dput_$(lsb_release -c -s)
     - rm $PW_FILE_NAME
 

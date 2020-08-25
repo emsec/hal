@@ -1,17 +1,17 @@
 #pragma once
 
-#include "core/log.h"
-#include "netlist/boolean_function.h"
-#include "netlist/endpoint.h"
-#include "netlist/gate.h"
-#include "netlist/gate_library/gate_library.h"
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/module.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/endpoint.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 #include "test_def.h"
 
-#include <core/utils.h>
+#include "hal_core/utilities/utils.h"
 #include <fstream>
 #include <math.h>
 
@@ -26,7 +26,6 @@ namespace hal
 {
     namespace test_utils
     {
-
         /*********************************************************
          *                      Constants                        *
          *********************************************************/
@@ -104,7 +103,7 @@ namespace hal
          * @param tt - the truth table to minimize
          * @returns the minimized truth table
          */
-        std::vector<BooleanFunction::value> minimize_truth_table(const std::vector<BooleanFunction::value> tt);
+        std::vector<BooleanFunction::Value> minimize_truth_table(const std::vector<BooleanFunction::Value> tt);
 
         /**
          * Get a Gate type by its name
@@ -148,7 +147,9 @@ namespace hal
             std::vector<T> vec_2(vector_2);
 
             if (vec_1.size() != vec_2.size())
+            {
                 return false;
+            }
 
             // Each element of vec_1 must be found in vec_2
             while (vec_1.size() > 0)
@@ -490,9 +491,7 @@ namespace hal
          */
         std::function<bool(const std::string&, const Endpoint&)> adjacent_gate_type_filter(const std::string& type);
 
-    } // namespace test_utils
-} // namespace hal
+    }    // namespace test_utils
+}    // namespace hal
 
 //}
-
-

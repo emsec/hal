@@ -1,9 +1,9 @@
-#include "netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 
-#include "core/log.h"
-#include "core/utils.h"
-#include "netlist/gate_library/gate_library.h"
-#include "netlist/gate_library/gate_library_parser.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_library_parser.h"
 
 #include <fstream>
 #include <iostream>
@@ -23,7 +23,7 @@ namespace hal
 
             ParserFactory get_parser_factory_for_file(const std::filesystem::path& file_name)
             {
-                auto extension = core_utils::to_lower(file_name.extension().string());
+                auto extension = utils::to_lower(file_name.extension().string());
                 if (!extension.empty() && extension[0] != '.')
                 {
                     extension = "." + extension;
@@ -62,7 +62,7 @@ namespace hal
                 }
 
                 auto parser = factory();
-                auto lib = parser->parse(path, stream);
+                auto lib    = parser->parse(path, stream);
 
                 if (lib == nullptr)
                 {
@@ -122,7 +122,7 @@ namespace hal
         {
             for (auto ext : supported_file_extensions)
             {
-                ext = core_utils::trim(core_utils::to_lower(ext));
+                ext = utils::trim(utils::to_lower(ext));
                 if (!ext.empty() && ext[0] != '.')
                 {
                     ext = "." + ext;
@@ -180,7 +180,7 @@ namespace hal
 
             std::unique_ptr<GateLibrary> lib;
             auto begin_time = std::chrono::high_resolution_clock::now();
-            if (core_utils::ends_with(path.string(), std::string(".lib")))
+            if (utils::ends_with(path.string(), std::string(".lib")))
             {
                 log_info("gate_library_manager", "loading file '{}'...", path.string());
                 lib = dispatch_parse(path);
@@ -204,14 +204,14 @@ namespace hal
 
             log_info("gate_library_manager", "loaded gate library '{}' in {:2.2f} seconds.", lib->get_name(), elapsed);
 
-            auto res = lib.get();
+            auto res                        = lib.get();
             m_gate_libraries[path.string()] = std::move(lib);
             return res;
         }
 
         void load_all(bool reload_if_existing)
         {
-            std::vector<std::filesystem::path> lib_dirs = core_utils::get_gate_library_directories();
+            std::vector<std::filesystem::path> lib_dirs = utils::get_gate_library_directories();
 
             for (const auto& lib_dir : lib_dirs)
             {
@@ -222,7 +222,7 @@ namespace hal
 
                 log_info("gate_library_manager", "Reading all definitions from {}.", lib_dir.string());
 
-                for (const auto& lib_path : core_utils::RecursiveDirectoryRange(lib_dir))
+                for (const auto& lib_path : utils::RecursiveDirectoryRange(lib_dir))
                 {
                     load_file(lib_path.path(), reload_if_existing);
                 }
@@ -243,7 +243,7 @@ namespace hal
                 // if a non existing file is queried, search for it in the standard directories
                 auto stripped_name = std::filesystem::path(file_name).filename();
                 log_info("gate_library_manager", "'{}' does not exist, searching for '{}' in standard directories...", file_name, stripped_name.string());
-                auto lib_path = core_utils::get_file(stripped_name, core_utils::get_gate_library_directories());
+                auto lib_path = utils::get_file(stripped_name, utils::get_gate_library_directories());
                 if (lib_path.empty())
                 {
                     log_info("gate_library_manager", "could not find any gate library file named '{}'.", stripped_name.string());
@@ -260,6 +260,18 @@ namespace hal
 
             // not already loaded -> load
             return load_file(absolute_path);
+        }
+
+        GateLibrary* get_gate_library_by_name(const std::string& lib_name)
+        {
+            for (const auto& it : m_gate_libraries)
+            {
+                if (it.second->get_name() == lib_name)
+                {
+                    return it.second.get();
+                }
+            }
+            return nullptr;
         }
 
         std::vector<GateLibrary*> get_gate_libraries()

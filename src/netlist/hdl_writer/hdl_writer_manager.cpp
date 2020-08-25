@@ -1,9 +1,9 @@
-#include "netlist/hdl_writer/hdl_writer_manager.h"
+#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 
-#include "core/log.h"
-#include "netlist/hdl_writer/hdl_writer.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/hdl_writer/hdl_writer.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
 
 #include <chrono>
 #include <fstream>
@@ -19,7 +19,7 @@ namespace hal
 
             WriterFactory get_writer_factory_for_file(const std::filesystem::path& file_name)
             {
-                auto extension = core_utils::to_lower(file_name.extension().string());
+                auto extension = utils::to_lower(file_name.extension().string());
                 if (!extension.empty() && extension[0] != '.')
                 {
                     extension = "." + extension;
@@ -47,7 +47,7 @@ namespace hal
         {
             for (auto ext : supported_file_extensions)
             {
-                ext = core_utils::trim(core_utils::to_lower(ext));
+                ext = utils::trim(utils::to_lower(ext));
                 if (!ext.empty() && ext[0] != '.')
                 {
                     ext = "." + ext;

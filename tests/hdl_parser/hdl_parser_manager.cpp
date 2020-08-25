@@ -1,11 +1,11 @@
-#include "netlist/hdl_parser/hdl_parser_manager.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 
-#include "netlist/netlist.h"
+#include "hal_core/netlist/netlist.h"
 #include "netlist_test_utils.h"
-#include "core/plugin_manager.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include "gtest/gtest.h"
-#include "core/program_arguments.h"
+#include "hal_core/utilities/program_arguments.h"
 // #include <experimental/filesystem>
 #include <sstream>
 

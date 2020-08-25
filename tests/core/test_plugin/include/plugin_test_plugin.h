@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/plugin_interface_base.h"
-#include "core/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/plugin_interface_cli.h"
 
 namespace hal
 {

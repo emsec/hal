@@ -3,11 +3,11 @@
 #include <iostream>
 #include <netlist/gate.h>
 #include <netlist/net.h>
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/netlist_factory.h"
-#include "netlist/netlist.h"
-#include "netlist/hdl_parser/hdl_parser_vhdl.h"
-#include "netlist/hdl_writer/hdl_writer_vhdl.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_vhdl.h"
+#include "hal_core/netlist/hdl_writer/hdl_writer_vhdl.h"
 
 namespace hal {
     using test_utils::MIN_GATE_ID;

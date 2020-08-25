@@ -1,10 +1,10 @@
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/netlist.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist.h"
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <iostream>
-#include <netlist/gate.h>
-#include <netlist/net.h>
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 
 namespace hal {
     using test_utils::MIN_GATE_ID;
@@ -86,15 +86,6 @@ namespace hal {
                 EXPECT_TRUE(suc);
                 EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O"));
             }
-            {
-                // Add a source of the Net (passing an Endpoint)
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                Gate* t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                bool suc = test_net->add_source(test_utils::get_endpoint(t_gate, "O"));
-                EXPECT_TRUE(suc);
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O"));
-            }
             // Negative
             {
                 // Set the source of the Net (Gate is nullptr)
@@ -112,16 +103,6 @@ namespace hal {
                 Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 auto t_gate_0 = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_source(t_gate_0, "I0");    // <- input pin
-                EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
-            }
-            {
-                // Pin is an input pin (not an output/inout pin) (passing an Endpoint)
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate_0 = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                bool suc = test_net->add_source(test_utils::get_endpoint(t_gate_0, "I0"));    // <- input pin
                 EXPECT_FALSE(suc);
                 EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
             }
@@ -233,27 +214,7 @@ namespace hal {
                 EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
                 EXPECT_TRUE(suc);
             }
-            {
-                // Remove an existing source (passing an Endpoint)
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_source(t_gate, "O");
-                bool suc = test_net->remove_source(test_utils::get_endpoint(t_gate, "O"));
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
-                EXPECT_TRUE(suc);
-            }
             // NEGATIVE
-            {
-                // Remove the source if the passed Endpoint is a destination not a source
-                //NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_destination(t_gate, "I0");
-                bool suc = test_net->remove_source(test_utils::get_endpoint(t_gate, "I0"));
-                EXPECT_FALSE(suc);
-            }
             {
                 // Remove the source if the passed parameters do not define any source
                 NO_COUT_TEST_BLOCK;
@@ -302,18 +263,6 @@ namespace hal {
                 EXPECT_EQ(test_net->get_num_of_destinations(), 0);
             }
             // NEGATIVE
-            {
-                // The Endpoint is a source
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                test_net->add_source(test_utils::get_endpoint(t_gate, "O"));
-
-                bool suc = test_net->remove_destination(test_utils::get_endpoint(t_gate, "O"));
-
-                EXPECT_FALSE(suc);
-            }
             {
                 // The Gate is a nullptr
                 NO_COUT_TEST_BLOCK;
@@ -376,16 +325,6 @@ namespace hal {
             }
 
             // NEGATIVE
-            {
-                // The Endpoint is a source, not a destination
-                NO_COUT_TEST_BLOCK;
-                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-
-                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
-                bool suc = test_net->add_destination(test_utils::get_endpoint(t_gate, "O"));
-                EXPECT_FALSE(suc);
-            }
             {
                 // The Gate is a nullptr
                 NO_COUT_TEST_BLOCK;
