@@ -698,11 +698,11 @@ namespace hal
                 menu.addAction("Jump to source gate", [this, curr_item]() { handle_input_net_item_clicked(curr_item); });
             }
 
-            menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [this, curr_item]() {
+            menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [curr_item]() {
                 QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
             });
 
-            menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)", [this, curr_item]() {
+            menu.addAction(QIcon(":/icons/python"), "Extract sources as python code (copy to clipboard)", [curr_item]() {
                 QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_sources()");
             });
         }
@@ -739,11 +739,11 @@ namespace hal
             {
                 menu.addAction("Jump to destination gate", [this, curr_item]() { handle_output_net_item_clicked(curr_item); });
             }
-            menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [this, curr_item]() {
+            menu.addAction(QIcon(":/icons/python"), "Extract net as python code (copy to clipboard)", [curr_item]() {
                 QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ")");
             });
 
-            menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)", [this, curr_item]() {
+            menu.addAction(QIcon(":/icons/python"), "Extract destinations as python code (copy to clipboard)", [curr_item]() {
                 QApplication::clipboard()->setText("netlist.get_net_by_id(" + curr_item->data(Qt::UserRole).toString() + ").get_destinations()");
             });
         }
