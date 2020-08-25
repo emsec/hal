@@ -147,6 +147,6 @@ namespace hal
 
         GraphContext* get_current_context();
 
-        QList<QShortcut*> create_shortcuts();
+        QList<QShortcut*> create_shortcuts() override;
     };
 }

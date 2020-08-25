@@ -253,9 +253,9 @@ namespace hal
 
         for(auto pin : src_pins)
         {
-            if(pin.get_gate() != nullptr)
+            if(pin->get_gate() != nullptr)
             {
-                if(m_gates.contains(pin.get_gate()->get_id()))
+                if(m_gates.contains(pin->get_gate()->get_id()))
                     return true;
             }
         }
@@ -270,9 +270,9 @@ namespace hal
 
         for(auto pin : dst_pins)
         {
-            if(pin.get_gate() != nullptr)
+            if(pin->get_gate() != nullptr)
             {
-                if(m_gates.contains(pin.get_gate()->get_id()))
+                if(m_gates.contains(pin->get_gate()->get_id()))
                     return true;
             }
         }

@@ -155,7 +155,7 @@ namespace hal {
                 test_net->add_source(t_gate, "O0");
                 test_net->add_source(t_gate, "O1");
                 test_net->add_source(t_gate, "O3");
-                EXPECT_EQ(test_net->get_sources(), std::vector<Endpoint>({test_utils::get_endpoint(t_gate, "O0"),
+                EXPECT_EQ(test_net->get_sources(), std::vector<Endpoint*>({test_utils::get_endpoint(t_gate, "O0"),
                                                                           test_utils::get_endpoint(t_gate, "O1"),
                                                                           test_utils::get_endpoint(t_gate, "O3")}));
             }
@@ -172,7 +172,7 @@ namespace hal {
                 test_net->add_source(t_gate_1, "O1");
                 test_net->add_source(t_gate_1, "O2");
                 EXPECT_EQ(test_net->get_sources(test_utils::endpoint_gate_name_filter("test_gate_0")),
-                          std::vector<Endpoint>({test_utils::get_endpoint(t_gate_0, "O0"),
+                          std::vector<Endpoint*>({test_utils::get_endpoint(t_gate_0, "O0"),
                                                  test_utils::get_endpoint(t_gate_0, "O1")}));
             }
             {
@@ -304,7 +304,7 @@ namespace hal {
 
                 auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_destination(t_gate, "I0");
-                std::vector<Endpoint> dsts = {test_utils::get_endpoint(t_gate, "I0")};
+                std::vector<Endpoint*> dsts = {test_utils::get_endpoint(t_gate, "I0")};
                 EXPECT_EQ(test_net->get_destinations(), dsts);
                 EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 1);
                 EXPECT_TRUE(suc);
@@ -318,7 +318,7 @@ namespace hal {
                 auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_destination(t_gate, "I0");
                 bool suc = test_net->add_destination(t_gate, "I0");
-                std::vector<Endpoint> dsts = {test_utils::get_endpoint(t_gate, "I0")};
+                std::vector<Endpoint*> dsts = {test_utils::get_endpoint(t_gate, "I0")};
                 EXPECT_EQ(test_net->get_destinations(), dsts);
                 EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 1);
                 EXPECT_FALSE(suc);
@@ -395,6 +395,7 @@ namespace hal {
                 EXPECT_FALSE(test_net->is_a_source(t_gate, "I2"));
                 // Pass the Endpoint
                 EXPECT_TRUE(test_net->is_a_destination(test_utils::get_endpoint(t_gate, "I2")));
+                NO_COUT_TEST_BLOCK;
                 EXPECT_FALSE(test_net->is_a_source(test_utils::get_endpoint(t_gate, "I2")));
             }
             {
@@ -408,6 +409,7 @@ namespace hal {
                 EXPECT_FALSE(test_net->is_a_destination(t_gate, "O"));
                 // Pass the Endpoint
                 EXPECT_TRUE(test_net->is_a_source(test_utils::get_endpoint(t_gate, "O")));
+                NO_COUT_TEST_BLOCK;
                 EXPECT_FALSE(test_net->is_a_destination(test_utils::get_endpoint(t_gate, "O")));
             }
             {
@@ -459,14 +461,14 @@ namespace hal {
 
             {
                 // Get the destinations
-                std::vector<Endpoint>
+                std::vector<Endpoint*>
                     dsts = {test_utils::get_endpoint(mult_gate, "I0"), test_utils::get_endpoint(inv_gate, "I")};
 
                 EXPECT_TRUE(test_utils::vectors_have_same_content(test_net->get_destinations(), dsts));
             }
             {
                 // Get the destinations by passing a Gate type
-                std::vector<Endpoint> dsts = {test_utils::get_endpoint(inv_gate, "I")};
+                std::vector<Endpoint*> dsts = {test_utils::get_endpoint(inv_gate, "I")};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(test_net
                                                                       ->get_destinations(test_utils::endpoint_gate_type_filter(
                                                                           "gate_1_to_1")),

@@ -244,12 +244,12 @@ namespace hal
 
             used_paths used;
 
-            for (const Endpoint& src : n->get_sources())
+            for (Endpoint* src : n->get_sources())
             {
                 // FIND SRC BOX
                 hal::node node;
 
-                if (!m_context->node_for_gate(node, src.get_gate()->get_id()))
+                if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
                     continue;
 
                 node_box* src_box = nullptr;
@@ -264,10 +264,10 @@ namespace hal
                 assert(src_box);
 
                 // FOR EVERY DST
-                for (const Endpoint& dst : n->get_destinations())
+                for (Endpoint* dst : n->get_destinations())
                 {
                     // FIND DST BOX
-                    if (!m_context->node_for_gate(node, dst.get_gate()->get_id()))
+                    if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                         continue;
 
                     node_box* dst_box = nullptr;
@@ -729,40 +729,40 @@ namespace hal
                 // HANDLE GLOBAL NETS
                 ArrowSeparatedNet* net_item = new ArrowSeparatedNet(n);
 
-                for (const Endpoint& src : n->get_sources())
+                for (Endpoint* src : n->get_sources())
                 {
-                    if (src.get_gate())
+                    if (src->get_gate())
                     {
                         hal::node node;
 
-                        if (!m_context->node_for_gate(node, src.get_gate()->get_id()))
+                        if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
                             continue;
 
                         for (const node_box& box : m_boxes)
                         {
                             if (box.node == node)
                             {
-                                net_item->add_output(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(src.get_pin())));
+                                net_item->add_output(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(src->get_pin())));
                                 break;
                             }
                         }
                     }
                 }
 
-                for (const Endpoint& dst : n->get_destinations())
+                for (Endpoint* dst : n->get_destinations())
                 {
-                    if (dst.get_gate())
+                    if (dst->get_gate())
                     {
                         hal::node node;
 
-                        if (!m_context->node_for_gate(node, dst.get_gate()->get_id()))
+                        if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                             continue;
 
                         for (const node_box& box : m_boxes)
                         {
                             if (box.node == node)
                             {
-                                net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst.get_pin())));
+                                net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst->get_pin())));
                                 break;
                             }
                         }
@@ -776,9 +776,9 @@ namespace hal
 
             bool use_label = false;
 
-            for (const Endpoint& src : n->get_sources())
+            for (Endpoint* src : n->get_sources())
             {
-                if (src.get_gate()->is_gnd_gate() || src.get_gate()->is_vcc_gate())
+                if (src->get_gate()->is_gnd_gate() || src->get_gate()->is_vcc_gate())
                 {
                     use_label = true;
                     break;
@@ -789,35 +789,35 @@ namespace hal
             {
                 LabeledSeparatedNet* net_item = new LabeledSeparatedNet(n, QString::fromStdString(n->get_name()));
 
-                for (const Endpoint& src : n->get_sources())
+                for (Endpoint* src : n->get_sources())
                 {
                     hal::node node;
 
-                    if (m_context->node_for_gate(node, src.get_gate()->get_id()))
+                    if (m_context->node_for_gate(node, src->get_gate()->get_id()))
                     {
                         for (const node_box& box : m_boxes)
                         {
                             if (box.node == node)
                             {
-                                net_item->add_output(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(src.get_pin())));
+                                net_item->add_output(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(src->get_pin())));
                                 break;
                             }
                         }
                     }
                 }
 
-                for (const Endpoint& dst : n->get_destinations())
+                for (Endpoint* dst : n->get_destinations())
                 {
                     hal::node node;
 
-                    if (!m_context->node_for_gate(node, dst.get_gate()->get_id()))
+                    if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                         continue;
 
                     for (const node_box& box : m_boxes)
                     {
                         if (box.node == node)
                         {
-                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst.get_pin())));
+                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst->get_pin())));
                             break;
                         }
                     }
@@ -833,21 +833,21 @@ namespace hal
             bool src_found      = false;
             bool dst_found      = false;
 
-            for (const Endpoint& src : n->get_sources())
+            for (Endpoint* src : n->get_sources())
             {
                 hal::node node;
 
-                if (m_context->node_for_gate(node, src.get_gate()->get_id()))
+                if (m_context->node_for_gate(node, src->get_gate()->get_id()))
                     src_found = true;
                 else
                     incomplete_net = true;
             }
 
-            for (const Endpoint& dst : n->get_destinations())
+            for (Endpoint* dst : n->get_destinations())
             {
                 hal::node node;
 
-                if (m_context->node_for_gate(node, dst.get_gate()->get_id()))
+                if (m_context->node_for_gate(node, dst->get_gate()->get_id()))
                     dst_found = true;
                 else
                     incomplete_net = true;
@@ -857,18 +857,18 @@ namespace hal
             {
                 ArrowSeparatedNet* net_item = new ArrowSeparatedNet(n);
 
-                for (const Endpoint& src : n->get_sources())
+                for (Endpoint* src : n->get_sources())
                 {
                     hal::node node;
 
-                    if (!m_context->node_for_gate(node, src.get_gate()->get_id()))
+                    if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
                         continue;
 
                     for (const node_box& box : m_boxes)
                     {
                         if (box.node == node)
                         {
-                            net_item->add_output(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(src.get_pin())));
+                            net_item->add_output(box.item->get_output_scene_position(n->get_id(), QString::fromStdString(src->get_pin())));
                             break;
                         }
                     }
@@ -884,18 +884,18 @@ namespace hal
             {
                 ArrowSeparatedNet* net_item = new ArrowSeparatedNet(n);
 
-                for (const Endpoint& dst : n->get_destinations())
+                for (Endpoint* dst : n->get_destinations())
                 {
                     hal::node node;
 
-                    if (!m_context->node_for_gate(node, dst.get_gate()->get_id()))
+                    if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                         continue;
 
                     for (const node_box& box : m_boxes)
                     {
                         if (box.node == node)
                         {
-                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst.get_pin())));
+                            net_item->add_input(box.item->get_input_scene_position(n->get_id(), QString::fromStdString(dst->get_pin())));
                             break;
                         }
                     }
@@ -912,14 +912,14 @@ namespace hal
             StandardGraphicsNet::lines lines;
 
             // FOR EVERY SRC
-            for (const Endpoint& src : n->get_sources())
+            for (Endpoint* src : n->get_sources())
             {
                 // FIND SRC BOX
                 node_box* src_box = nullptr;
                 {
                     hal::node node;
 
-                    if (!m_context->node_for_gate(node, src.get_gate()->get_id()))
+                    if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
                         continue;
 
                     for (node_box& box : m_boxes)
@@ -931,17 +931,17 @@ namespace hal
                 }
                 assert(src_box);
 
-                const QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(src.get_pin()));
+                const QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(src->get_pin()));
 
                 // FOR EVERY DST
-                for (const Endpoint& dst : n->get_destinations())
+                for (Endpoint* dst : n->get_destinations())
                 {
                     // FIND DST BOX
                     node_box* dst_box = nullptr;
 
                     hal::node node;
 
-                    if (!m_context->node_for_gate(node, dst.get_gate()->get_id()))
+                    if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                         continue;
 
                     for (node_box& box : m_boxes)
@@ -959,7 +959,7 @@ namespace hal
                     if (src_box == dst_box && src_box->node.type == hal::node_type::module)
                         continue;
 
-                    QPointF dst_pin_position = dst_box->item->get_input_scene_position(n->get_id(), QString::fromStdString(dst.get_pin()));
+                    QPointF dst_pin_position = dst_box->item->get_input_scene_position(n->get_id(), QString::fromStdString(dst->get_pin()));
 
                     // ROAD BASED DISTANCE (x_distance - 1)
                     const int x_distance = dst_box->x - src_box->x - 1;

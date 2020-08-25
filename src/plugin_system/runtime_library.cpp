@@ -1,15 +1,15 @@
-#include "hal_core/plugin_system/library_loader.h"
+#include "hal_core/plugin_system/runtime_library.h"
 
 #include "hal_core/utilities/log.h"
 
 namespace hal
 {
-    LibraryLoader::LibraryLoader()
+    RuntimeLibrary::RuntimeLibrary()
     {
         m_handle = NULL;
     }
 
-    LibraryLoader::~LibraryLoader()
+    RuntimeLibrary::~RuntimeLibrary()
     {
         if (m_handle != NULL)
         {
@@ -18,12 +18,12 @@ namespace hal
         m_file_name.clear();
     }
 
-    std::string LibraryLoader::get_file_name() const
+    std::string RuntimeLibrary::get_file_name() const
     {
         return m_file_name;
     }
 
-    bool LibraryLoader::load_library(const std::string& file_name)
+    bool RuntimeLibrary::load_library(const std::string& file_name)
     {
 #ifdef _WIN32
         m_handle = LoadLibrary(file_name.c_str());
@@ -48,7 +48,7 @@ namespace hal
         return false;
     }
 
-    bool LibraryLoader::unload_library()
+    bool RuntimeLibrary::unload_library()
     {
         if (m_handle == NULL)
         {
@@ -75,7 +75,7 @@ namespace hal
         return false;
     }
 
-    lib_fn_ptr_t LibraryLoader::get_function(const std::string& function_name)
+    lib_fn_ptr_t RuntimeLibrary::get_function(const std::string& function_name)
     {
         lib_fn_ptr_t fptr = NULL;
 #ifdef _WIN32

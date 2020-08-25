@@ -1,10 +1,11 @@
 #include "hal_core/netlist/net.h"
 
-#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_system/net_event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
+#include "hal_core/utilities/log.h"
 
 #include <assert.h>
 #include <memory>
@@ -51,46 +52,59 @@ namespace hal
         }
     }
 
-    bool Net::add_source(Gate* gate, const std::string& pin)
+    Endpoint* Net::add_source(Gate* gate, const std::string& pin)
     {
-        return m_internal_manager->net_add_source(this, Endpoint(gate, pin, this, false));
+        return m_internal_manager->net_add_source(this, gate, pin);
     }
 
     bool Net::remove_source(Gate* gate, const std::string& pin)
     {
-        return m_internal_manager->net_remove_source(this, Endpoint(gate, pin, this, false));
+        if (auto it = std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; }); it != m_sources_raw.end())
+        {
+            return m_internal_manager->net_remove_source(this, *it);
+        }
+        return false;
+    }
+
+    bool Net::remove_source(Endpoint* ep)
+    {
+        return m_internal_manager->net_remove_source(this, ep);
     }
 
     bool Net::is_a_source(Gate* gate, const std::string& pin) const
     {
-        return is_a_source(Endpoint(gate, pin, const_cast<Net*>(this), false));
+        return std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; }) != m_sources_raw.end();
     }
 
-    bool Net::is_a_source(const Endpoint& ep) const
+    bool Net::is_a_source(Endpoint* ep) const
     {
-        if (!ep.is_source_pin())
+        if (ep == nullptr)
+        {
+            return false;
+        }
+        if (!ep->is_source_pin())
         {
             log_error("netlist", "net::is_a_source: tried to use a destination-endpoint as a source-endpoint");
             return false;
         }
 
-        return std::find(m_sources.begin(), m_sources.end(), ep) != m_sources.end();
+        return std::find(m_sources_raw.begin(), m_sources_raw.end(), ep) != m_sources_raw.end();
     }
 
     u32 Net::get_num_of_sources() const
     {
-        return (u32)m_sources.size();
+        return (u32)m_sources_raw.size();
     }
 
-    std::vector<Endpoint> Net::get_sources(const std::function<bool(const Endpoint& ep)>& filter) const
+    std::vector<Endpoint*> Net::get_sources(const std::function<bool(Endpoint* ep)>& filter) const
     {
         if (!filter)
         {
-            return m_sources;
+            return m_sources_raw;
         }
 
-        std::vector<Endpoint> srcs;
-        for (const auto& src : m_sources)
+        std::vector<Endpoint*> srcs;
+        for (auto src : m_sources_raw)
         {
             if (!filter(src))
             {
@@ -101,60 +115,74 @@ namespace hal
         return srcs;
     }
 
-    Endpoint Net::get_source() const
+    Endpoint* Net::get_source() const
     {
         // log_warning("netlist", "Net::get_source() is deprecated");
-        if (m_sources.empty())
+        if (m_sources_raw.empty())
         {
-            return Endpoint();
+            return nullptr;
         }
-        if (m_sources.size() > 1)
+        if (m_sources_raw.size() > 1)
         {
             log_warning("netlist", "queried only the first source of multi driven net '{}' (id {})", m_name, m_id);
         }
-        return m_sources.at(0);
+        return m_sources_raw.at(0);
     }
 
-    bool Net::add_destination(Gate* gate, const std::string& pin)
+    Endpoint* Net::add_destination(Gate* gate, const std::string& pin)
     {
-        return m_internal_manager->net_add_destination(this,Endpoint(gate, pin, this, true));
+        return m_internal_manager->net_add_destination(this, gate, pin);
     }
 
     bool Net::remove_destination(Gate* gate, const std::string& pin)
     {
-        return m_internal_manager->net_remove_destination(this, Endpoint(gate, pin, this, true));
+        if (auto it = std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; });
+            it != m_destinations_raw.end())
+        {
+            return m_internal_manager->net_remove_destination(this, *it);
+        }
+        return false;
+    }
+
+    bool Net::remove_destination(Endpoint* ep)
+    {
+        return m_internal_manager->net_remove_destination(this, ep);
     }
 
     bool Net::is_a_destination(Gate* gate, const std::string& pin) const
     {
-        return is_a_destination(Endpoint(gate, pin, const_cast<Net*>(this), true));
+        return std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate, &pin](auto ep) { return ep->get_gate() == gate && ep->get_pin() == pin; }) != m_destinations_raw.end();
     }
 
-    bool Net::is_a_destination(const Endpoint& ep) const
+    bool Net::is_a_destination(Endpoint* ep) const
     {
-        if (!ep.is_destination_pin())
+        if (ep == nullptr)
+        {
+            return false;
+        }
+        if (!ep->is_destination_pin())
         {
             log_error("netlist", "net::is_a_destination: tried to use a source-endpoint as a destination-endpoint");
             return false;
         }
 
-        return std::find(m_destinations.begin(), m_destinations.end(), ep) != m_destinations.end();
+        return std::find(m_destinations_raw.begin(), m_destinations_raw.end(), ep) != m_destinations_raw.end();
     }
 
     u32 Net::get_num_of_destinations() const
     {
-        return (u32)m_destinations.size();
+        return (u32)m_destinations_raw.size();
     }
 
-    std::vector<Endpoint> Net::get_destinations(const std::function<bool(const Endpoint& ep)>& filter) const
+    std::vector<Endpoint*> Net::get_destinations(const std::function<bool(Endpoint* ep)>& filter) const
     {
         if (!filter)
         {
-            return m_destinations;
+            return m_destinations_raw;
         }
 
-        std::vector<Endpoint> dsts;
-        for (const auto& dst : m_destinations)
+        std::vector<Endpoint*> dsts;
+        for (auto dst : m_destinations_raw)
         {
             if (!filter(dst))
             {

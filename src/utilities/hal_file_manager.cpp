@@ -26,7 +26,7 @@ namespace hal
 
         bool serialize(const std::filesystem::path& file, Netlist* netlist, rapidjson::Document& document)
         {
-            for (const auto& id : m_on_serialize_hook.get_ids())
+            for (auto id : m_on_serialize_hook.get_ids())
             {
                 if (!m_on_serialize_hook.call(id, file, netlist, document))
                 {
@@ -39,7 +39,7 @@ namespace hal
 
         bool deserialize(const std::filesystem::path& file, Netlist* netlist, rapidjson::Document& document)
         {
-            for (const auto& id : m_on_deserialize_hook.get_ids())
+            for (auto id : m_on_deserialize_hook.get_ids())
             {
                 if (!m_on_deserialize_hook.call(id, file, netlist, document))
                 {

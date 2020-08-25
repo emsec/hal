@@ -1,5 +1,3 @@
-#include "hal_core/utilities/log.h"
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
@@ -8,7 +6,8 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
-
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
 #include "netlist_simulator/plugin_netlist_simulator.h"
 #include "test_utils/include/test_def.h"
 
@@ -35,7 +34,7 @@ namespace hal
 
         ~measure_block_time_t()
         {
-            log_info("test", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
+            std::cout << m_name << " took " << std::setprecision(2) << seconds_since(m_begin_time) << "s" << std::endl;
         }
 
     private:
@@ -46,27 +45,17 @@ namespace hal
     class SimulatorTest : public ::testing::Test
     {
     protected:
-        NetlistSimulatorPlugin* plugin;
-        std::unique_ptr<NetlistSimulator> sim;
-
         virtual void SetUp()
         {
             NO_COUT_BLOCK;
             plugin_manager::load_all_plugins();
             gate_library_manager::get_gate_library("XILINX_UNISIM.lib");
-            auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
         }
 
         virtual void TearDown()
         {
             NO_COUT_BLOCK;
             plugin_manager::unload_all_plugins();
-        }
-
-        Simulation simulate(u64 nanoseconds)
-        {
-            sim->simulate(nanoseconds * 1000);
-            return sim->get_simulation_state();
         }
 
         bool cmp_sim_data(const Simulation& vcd_sim, const Simulation& hal_sim)
@@ -79,7 +68,7 @@ namespace hal
             for (auto it = b_events.begin(); it != b_events.end();)
             {
                 auto srcs = it->first->get_sources();
-                if (srcs.size() == 1 && (srcs[0].get_gate()->is_gnd_gate() || srcs[0].get_gate()->is_vcc_gate()) && a_events.find(it->first) == a_events.end())
+                if (srcs.size() == 1 && (srcs[0]->get_gate()->is_gnd_gate() || srcs[0]->get_gate()->is_vcc_gate()) && a_events.find(it->first) == a_events.end())
                 {
                     it = b_events.erase(it);
                 }
@@ -255,7 +244,7 @@ namespace hal
                 {
                     std::cout << "mismatch at " << net->get_name() << std::endl;
                     auto srcs = net->get_sources();
-                    std::transform(srcs.begin(), srcs.end(), std::back_inserter(mismatch_sources), [](auto& ep) { return ep.get_gate(); });
+                    std::transform(srcs.begin(), srcs.end(), std::back_inserter(mismatch_sources), [](auto& ep) { return ep->get_gate(); });
                 }
                 std::unordered_set<Gate*> mismatch_sources_set(mismatch_sources.begin(), mismatch_sources.end());
                 for (auto it = mismatch_sources.begin(); it != mismatch_sources.end();)
@@ -425,9 +414,10 @@ namespace hal
 
     TEST_F(SimulatorTest, half_adder)
     {
-        return;
+        // return;
         TEST_START
-        sim = plugin->create_simulator();
+        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
+        auto sim    = plugin->create_simulator();
 
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/half_adder/halfaddernetlist_flattened_by_hal.v";
         if (!utils::file_exists(path_netlist))
@@ -461,18 +451,8 @@ namespace hal
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
         Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
 
-        //vector of states for hal simulation
-        Simulation hal_sim_traces;
-        //vector of gates for simulation function add_gates
-        std::vector<Gate*> vector_of_gates;
-        //add gates to vector
-        for (auto gate : nl->get_gates())
-            vector_of_gates.push_back(gate);
-        //vector of traces for interim result
-        Simulation interim_traces;
-
         //prepare simulation
-        sim->add_gates(vector_of_gates);
+        sim->add_gates(nl->get_gates());
         sim->load_initial_values();
         auto A = *(nl->get_nets([](auto net) { return net->get_name() == "A"; }).begin());
         auto B = *(nl->get_nets([](auto net) { return net->get_name() == "B"; }).begin());
@@ -483,31 +463,33 @@ namespace hal
             //Testbench
             sim->set_input(A, SignalValue::ZERO);    //A=0
             sim->set_input(B, SignalValue::ZERO);    //B=0
-            hal_sim_traces = simulate(10);
-
+            sim->simulate(10 * 1000);
+            
             sim->set_input(A, SignalValue::ZERO);    //A=0
             sim->set_input(B, SignalValue::ONE);     //B=1
-            hal_sim_traces = simulate(10);
+            sim->simulate(10 * 1000);
 
             sim->set_input(A, SignalValue::ONE);     //A=1
             sim->set_input(B, SignalValue::ZERO);    //B=0
-            hal_sim_traces = simulate(10);
+            sim->simulate(10 * 1000);
 
             sim->set_input(A, SignalValue::ONE);    //A=1
             sim->set_input(B, SignalValue::ONE);    //B=1
-            hal_sim_traces = simulate(10);
+            sim->simulate(10 * 1000);
         }
 
         //Test if maps are equal
-        EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));
+        EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
         TEST_END
     }
 
     TEST_F(SimulatorTest, counter)
     {
-        return;
+        // return;
         TEST_START
-        sim = plugin->create_simulator();
+
+        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
+        auto sim    = plugin->create_simulator();
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/counter/counternetlist_flattened_by_hal.vhd";
@@ -539,18 +521,8 @@ namespace hal
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
         Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
 
-        //vector of states for hal simulation
-        Simulation hal_sim_traces;
-        //vector of gates for simulation function add_gates
-        std::vector<Gate*> vector_of_gates;
-        //add gates to vector
-        for (auto gate : nl->get_gates())
-            vector_of_gates.push_back(gate);
-        //vector of traces for interim result
-        Simulation interim_traces;
-
         //prepare simulation
-        sim->add_gates(vector_of_gates);
+        sim->add_gates(nl->get_gates());
         sim->load_initial_values();
 
         // retrieve nets
@@ -570,37 +542,39 @@ namespace hal
             //testbench
             sim->set_input(Clock_enable_B, SignalValue::ONE);    //#Clock_enable_B <= '1';
             sim->set_input(reset, SignalValue::ZERO);            //#Reset <= '0';
-            hal_sim_traces = simulate(40);                       //#WAIT FOR 40 NS; -> simulate 4 clock cycle  - cycle 0, 1, 2, 3
+            sim->simulate(40 * 1000);                            //#WAIT FOR 40 NS; -> simulate 4 clock cycle  - cycle 0, 1, 2, 3
 
             sim->set_input(Clock_enable_B, SignalValue::ZERO);    //#Clock_enable_B <= '0';
-            hal_sim_traces = simulate(110);                       //#WAIT FOR 110 NS; -> simulate 11 clock cycle  - cycle 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+            sim->simulate(110 * 1000);                            //#WAIT FOR 110 NS; -> simulate 11 clock cycle  - cycle 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 
             sim->set_input(reset, SignalValue::ONE);    //#Reset <= '1';
-            hal_sim_traces = simulate(20);              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 15, 16
+            sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 15, 16
 
             sim->set_input(reset, SignalValue::ZERO);    //#Reset <= '0';
-            hal_sim_traces = simulate(70);               //#WAIT FOR 70 NS; -> simulate 7 clock cycle  - cycle 17, 18, 19, 20, 21, 22, 23
+            sim->simulate(70 * 1000);                    //#WAIT FOR 70 NS; -> simulate 7 clock cycle  - cycle 17, 18, 19, 20, 21, 22, 23
 
             sim->set_input(Clock_enable_B, SignalValue::ONE);    //#Clock_enable_B <= '1';
-            hal_sim_traces = simulate(23);                       //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 24, 25
+            sim->simulate(23 * 1000);                            //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 24, 25
 
             sim->set_input(reset, SignalValue::ONE);    //#Reset <= '1';
-            hal_sim_traces = simulate(20);              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 26, 27
+            sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 26, 27
                                                         //#3 additional traces á 10 NS to get 300 NS simulation time
-            hal_sim_traces = simulate(20);              //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 28, 29
+            sim->simulate(20 * 1000);                   //#WAIT FOR 20 NS; -> simulate 2 clock cycle  - cycle 28, 29
                                                         //#for last "cycle" set clock to 0, in the final state clock stays ZERO and does not switch to 1 anymore
-            hal_sim_traces = simulate(5);               //#WAIT FOR 10 NS; -> simulate 1 clock cycle  - cycle 30
+            sim->simulate(5 * 1000);                    //#WAIT FOR 10 NS; -> simulate 1 clock cycle  - cycle 30
         }
         //Test if maps are equal
-        EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));
+        EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
         TEST_END
     }
 
     TEST_F(SimulatorTest, toycipher)
     {
-        return;
+        // return;
         TEST_START
-        sim = plugin->create_simulator();
+
+        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
+        auto sim    = plugin->create_simulator();
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/toycipher/cipher_flat.vhd";
@@ -632,18 +606,8 @@ namespace hal
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
         Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
 
-        //vector of states for hal simulation
-        Simulation hal_sim_traces;
-        //vector of gates for simulation function add_gates
-        std::vector<Gate*> vector_of_gates;
-        //add gates to vector
-        for (auto gate : nl->get_gates())
-            vector_of_gates.push_back(gate);
-        //vector of traces for interim result
-        Simulation interim_traces;
-
         //prepare simulation
-        sim->add_gates(vector_of_gates);
+        sim->add_gates(nl->get_gates());
         sim->load_initial_values();
 
         // retrieve nets
@@ -689,13 +653,13 @@ namespace hal
                 sim->set_input(net, SignalValue::ZERO);
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-            hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+            sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
 
             sim->set_input(start, SignalValue::ONE);    //START <= '1';
-            hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
+            sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-            hal_sim_traces = simulate(100);              //WAIT FOR 100 NS;
+            sim->simulate(100 * 1000);                   //WAIT FOR 100 NS;
 
             for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '1');
                 sim->set_input(net, SignalValue::ONE);
@@ -704,13 +668,13 @@ namespace hal
                 sim->set_input(net, SignalValue::ONE);
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-            hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+            sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
 
             sim->set_input(start, SignalValue::ONE);    //START <= '1';
-            hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
+            sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-            hal_sim_traces = simulate(100);              //WAIT FOR 100 NS;
+            sim->simulate(100 * 1000);                   //WAIT FOR 100 NS;
 
             for (auto net : plaintext_set)    //PLAINTEXT <= (OTHERS => '0');
                 sim->set_input(net, SignalValue::ZERO);
@@ -720,24 +684,27 @@ namespace hal
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
 
-            hal_sim_traces = simulate(10);
+            sim->simulate(10 * 1000);
             sim->set_input(start, SignalValue::ONE);    //START <= '1';
 
-            hal_sim_traces = simulate(10);
+            sim->simulate(10 * 1000);
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
 
-            hal_sim_traces = simulate(30);
+            sim->simulate(30 * 1000);
         }
 
         //Test if maps are equal
-        EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));
+        EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
         TEST_END
     }
 
     TEST_F(SimulatorTest, sha256)
     {
+        // return;
         TEST_START
-        sim = plugin->create_simulator();
+
+        auto plugin = plugin_manager::get_plugin_instance<NetlistSimulatorPlugin>("libnetlist_simulator");
+        auto sim    = plugin->create_simulator();
 
         //path to netlist
         std::string path_netlist = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.vhd";
@@ -783,18 +750,8 @@ namespace hal
         //read vcd and transform to vector of states, clock = 10000 ps = 10 ns
         Simulation vcd_traces = parse_vcd(nl.get(), path_vcd, true);
 
-        //vector of states for hal simulation
-        Simulation hal_sim_traces;
-        //vector of gates for simulation function add_gates
-        std::vector<Gate*> vector_of_gates;
-        //add gates to vector
-        for (auto gate : nl->get_gates())
-            vector_of_gates.push_back(gate);
-        //vector of traces for interim result
-        Simulation interim_traces;
-
         //prepare simulation
-        sim->add_gates(vector_of_gates);
+        sim->add_gates(nl->get_gates());
         sim->load_initial_values();
 
         // retrieve nets
@@ -847,23 +804,23 @@ namespace hal
 
             sim->set_input(rst, SignalValue::ONE);       //RST <= '1';
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-            hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+            sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
 
             sim->set_input(rst, SignalValue::ZERO);    //RST <= '0';
-            hal_sim_traces = simulate(10);             //WAIT FOR 10 NS;
+            sim->simulate(10 * 1000);                  //WAIT FOR 10 NS;
 
             sim->set_input(start, SignalValue::ONE);    //START <= '1';
-            hal_sim_traces = simulate(10);              //WAIT FOR 10 NS;
+            sim->simulate(10 * 1000);                   //WAIT FOR 10 NS;
 
             sim->set_input(start, SignalValue::ZERO);    //START <= '0';
-            hal_sim_traces = simulate(10);               //WAIT FOR 10 NS;
+            sim->simulate(10 * 1000);                    //WAIT FOR 10 NS;
 
-            hal_sim_traces = simulate(2000);
+            sim->simulate(2000 * 1000);
         }
 
         // Test if maps are equal
 
-        EXPECT_TRUE(cmp_sim_data(vcd_traces, hal_sim_traces));
+        EXPECT_TRUE(cmp_sim_data(vcd_traces, sim->get_simulation_state()));
         TEST_END
     }
 }    // namespace hal

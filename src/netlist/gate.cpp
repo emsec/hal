@@ -1,12 +1,13 @@
 #include "hal_core/netlist/gate.h"
 
-#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_system/gate_event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
+#include "hal_core/utilities/log.h"
 
 #include <assert.h>
 #include <iomanip>
@@ -381,22 +382,32 @@ namespace hal
         return m_in_nets;
     }
 
-    std::vector<Endpoint> Gate::get_fan_in_endpoints() const
+    std::vector<Endpoint*> Gate::get_fan_in_endpoints() const
     {
         return m_in_endpoints;
     }
 
-    Net* Gate::get_fan_in_net(const std::string& pin_type) const
+    Net* Gate::get_fan_in_net(const std::string& pin) const
     {
-        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin_type](auto& ep) { return ep.get_pin() == pin_type; });
+        auto ep = get_fan_in_endpoint(pin);
+        if (ep == nullptr)
+        {
+            return nullptr;
+        }
+        return ep->get_net();
+    }
+
+    Endpoint* Gate::get_fan_in_endpoint(const std::string& pin) const
+    {
+        auto it = std::find_if(m_in_endpoints.begin(), m_in_endpoints.end(), [&pin](auto& ep) { return ep->get_pin() == pin; });
 
         if (it == m_in_endpoints.end())
         {
-            log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to input pin '{}'.", get_name(), get_type()->get_name(), pin_type);
+            log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to input pin '{}'.", get_name(), get_type()->get_name(), pin);
             return nullptr;
         }
 
-        return it->get_net();
+        return *it;
     }
 
     std::vector<Net*> Gate::get_fan_out_nets() const
@@ -404,50 +415,60 @@ namespace hal
         return m_out_nets;
     }
 
-    std::vector<Endpoint> Gate::get_fan_out_endpoints() const
+    std::vector<Endpoint*> Gate::get_fan_out_endpoints() const
     {
         return m_out_endpoints;
     }
 
-    Net* Gate::get_fan_out_net(const std::string& pin_type) const
+    Net* Gate::get_fan_out_net(const std::string& pin) const
     {
-        auto it = std::find_if(m_out_endpoints.begin(), m_out_endpoints.end(), [&pin_type](auto& ep) { return ep.get_pin() == pin_type; });
+        auto ep = get_fan_out_endpoint(pin);
+        if (ep == nullptr)
+        {
+            return nullptr;
+        }
+        return ep->get_net();
+    }
+
+    Endpoint* Gate::get_fan_out_endpoint(const std::string& pin) const
+    {
+        auto it = std::find_if(m_out_endpoints.begin(), m_out_endpoints.end(), [&pin](auto& ep) { return ep->get_pin() == pin; });
 
         if (it == m_out_endpoints.end())
         {
-            log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to output pin '{}'.", get_name(), get_type()->get_name(), pin_type);
+            log_debug("netlist.internal", "gate ('{}',  type = {}) has no net connected to output pin '{}'.", get_name(), get_type()->get_name(), pin);
             return nullptr;
         }
 
-        return it->get_net();
+        return *it;
     }
 
-    std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
+    std::vector<Gate*> Gate::get_unique_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
     {
         std::unordered_set<Gate*> res;
         auto endpoints = this->get_predecessors(filter);
         res.reserve(endpoints.size());
-        for (const auto& ep : endpoints)
+        for (auto ep : endpoints)
         {
-            res.insert(ep.get_gate());
+            res.insert(ep->get_gate());
         }
         return std::vector<Gate*>(res.begin(), res.end());
     }
 
-    std::vector<Endpoint> Gate::get_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
+    std::vector<Endpoint*> Gate::get_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
     {
-        std::vector<Endpoint> result;
-        for (const auto& ep : m_in_endpoints)
+        std::vector<Endpoint*> result;
+        for (auto ep : m_in_endpoints)
         {
-            auto pin          = ep.get_pin();
-            auto predecessors = ep.get_net()->get_sources();
+            auto pin          = ep->get_pin();
+            auto predecessors = ep->get_net()->get_sources();
             if (!filter)
             {
                 result.insert(result.end(), predecessors.begin(), predecessors.end());
             }
             else
             {
-                for (const auto& pre : predecessors)
+                for (auto pre : predecessors)
                 {
                     if (!filter(pin, pre))
                     {
@@ -460,48 +481,48 @@ namespace hal
         return result;
     }
 
-    Endpoint Gate::get_predecessor(const std::string& which_pin) const
+    Endpoint* Gate::get_predecessor(const std::string& which_pin) const
     {
-        auto predecessors = this->get_predecessors([&which_pin](auto& starting_pin, auto&) -> bool { return starting_pin == which_pin; });
+        auto predecessors = this->get_predecessors([&which_pin](auto& starting_pin, auto) -> bool { return starting_pin == which_pin; });
         if (predecessors.size() == 0)
         {
-            return Endpoint();
+            return nullptr;
         }
         if (predecessors.size() > 1)
         {
             log_error("netlist", "internal error: multiple predecessors for '{}' at pin '{}'.", get_name(), which_pin);
-            return Endpoint();
+            return nullptr;
         }
 
         return predecessors[0];
     }
 
-    std::vector<Gate*> Gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
+    std::vector<Gate*> Gate::get_unique_successors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
     {
         std::unordered_set<Gate*> res;
         auto endpoints = this->get_successors(filter);
         res.reserve(endpoints.size());
-        for (const auto& ep : endpoints)
+        for (auto ep : endpoints)
         {
-            res.insert(ep.get_gate());
+            res.insert(ep->get_gate());
         }
         return std::vector<Gate*>(res.begin(), res.end());
     }
 
-    std::vector<Endpoint> Gate::get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint&)>& filter) const
+    std::vector<Endpoint*> Gate::get_successors(const std::function<bool(const std::string& starting_pin, Endpoint*)>& filter) const
     {
-        std::vector<Endpoint> result;
-        for (const auto& ep : m_out_endpoints)
+        std::vector<Endpoint*> result;
+        for (auto ep : m_out_endpoints)
         {
-            auto pin        = ep.get_pin();
-            auto successors = ep.get_net()->get_destinations();
+            auto pin        = ep->get_pin();
+            auto successors = ep->get_net()->get_destinations();
             if (!filter)
             {
                 result.insert(result.end(), successors.begin(), successors.end());
             }
             else
             {
-                for (const auto& suc : successors)
+                for (auto suc : successors)
                 {
                     if (!filter(pin, suc))
                     {
@@ -512,5 +533,21 @@ namespace hal
             }
         }
         return result;
+    }
+
+    Endpoint* Gate::get_successor(const std::string& which_pin) const
+    {
+        auto successors = this->get_successors([&which_pin](auto& starting_pin, auto) -> bool { return starting_pin == which_pin; });
+        if (successors.size() == 0)
+        {
+            return nullptr;
+        }
+        if (successors.size() > 1)
+        {
+            log_error("netlist", "internal error: multiple successors for '{}' at pin '{}'.", get_name(), which_pin);
+            return nullptr;
+        }
+
+        return successors[0];
     }
 }    // namespace hal

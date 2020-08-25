@@ -416,11 +416,11 @@ namespace hal
                     *m_stream << "," << std::endl;
                 }
                 auto srcs = e->get_sources();
-                if (std::any_of(srcs.begin(), srcs.end(), [](auto src) { return src.get_gate()->is_vcc_gate(); }))
+                if (std::any_of(srcs.begin(), srcs.end(), [](auto src) { return src->get_gate()->is_vcc_gate(); }))
                 {
                     *m_stream << "   " << port_type << " => '1'";
                 }
-                else if (std::any_of(srcs.begin(), srcs.end(), [](auto src) { return src.get_gate()->is_gnd_gate(); }))
+                else if (std::any_of(srcs.begin(), srcs.end(), [](auto src) { return src->get_gate()->is_gnd_gate(); }))
                 {
                     *m_stream << "   " << port_type << " => '0'";
                 }

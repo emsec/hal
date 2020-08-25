@@ -40,47 +40,6 @@ namespace hal
     {
     public:
         /**
-         * Construct an endpoint object.
-         *
-         * @param[in] gate - The gate of the endpoint.
-         * @param[in] pin - The pin of the endpoint.
-         * @param[in] net - The net of the endpoint.
-         * @param[in] is_a_destination - True if the endpoint is an output pin, false if it is an input pin.
-         */
-        Endpoint(Gate* gate, const std::string& pin, Net* net, bool is_a_destination);
-        Endpoint();
-        Endpoint(const Endpoint&) = default;
-        Endpoint(Endpoint&&)      = default;
-        Endpoint& operator=(const Endpoint&) = default;
-        Endpoint& operator=(Endpoint&&) = default;
-
-        /**
-         * Standard "less than". <br>
-         * Required for searching through sets.
-         *
-         * @param[in] rhs - Compare target.
-         * @returns True if this is less than rhs.
-         */
-        bool operator<(const Endpoint& rhs) const;
-
-        /**
-         * Standard "equals". <br>
-         * Required for searching through sets.
-         *
-         * @param[in] rhs - Compare target.
-         * @returns True if this is equal to rhs.
-         */
-        bool operator==(const Endpoint& rhs) const;
-
-        /**
-         * Standard "unequal".
-         *
-         * @param[in] rhs - Compare target.
-         * @returns True if this is unequal to rhs.
-         */
-        bool operator!=(const Endpoint& rhs) const;
-
-        /**
          * Returns the gate of the endpoint.
          *
          * @returns The gate.
@@ -92,7 +51,7 @@ namespace hal
          *
          * @returns The pin.
          */
-        const std::string& get_pin() const;
+        std::string get_pin() const;
 
         /**
          * Returns the net of the endpoint.
@@ -116,6 +75,14 @@ namespace hal
         bool is_source_pin() const;
 
     private:
+        friend class NetlistInternalManager;
+        Endpoint(Gate* gate, const std::string& pin, Net* net, bool is_a_destination);
+
+        Endpoint(const Endpoint&) = delete;
+        Endpoint(Endpoint&&)      = delete;
+        Endpoint& operator=(const Endpoint&) = delete;
+        Endpoint& operator=(Endpoint&&) = delete;
+
         Gate* m_gate;
         std::string m_pin;
         Net* m_net;

@@ -6,33 +6,6 @@ namespace hal
     {
         py::class_<Endpoint, std::shared_ptr<Endpoint>> py_endpoint(m, "Endpoint");
 
-        py_endpoint.def(py::init<>());
-
-        py_endpoint.def(py::init<Gate*, const std::string&, Net*, bool>(), py::arg("gate"), py::arg("pin"), py::arg("net"), py::arg("is_a_destination"), R"(
-        Construct a new endpoint.
-)");
-
-        py_endpoint.def(py::self < py::self, R"(
-        Standard "less than". Required for searching through sets.
-
-        :returns: True if endpoint is less than compare target.
-        :rtype: bool
-)");
-
-        py_endpoint.def(py::self == py::self, R"(
-        Standard "equals". Required for searching through sets.
-
-        :returns: True if endpoint is equal to compare target.
-        :rtype: bool
-)");
-
-        py_endpoint.def(py::self != py::self, R"(
-        Standard "unequal".
-
-        :returns: True if endpoint is unequal to compare target.
-        :rtype: bool
-)");
-
         py_endpoint.def_property_readonly("gate", &Endpoint::get_gate, R"(
         The gate of the endpoint.
 

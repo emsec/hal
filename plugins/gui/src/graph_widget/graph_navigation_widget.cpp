@@ -142,31 +142,31 @@ namespace hal
 
         int row = 1;
 
-        for (const Endpoint& e : (direction ? n->get_destinations() : n->get_sources()))
+        for (Endpoint* e : (direction ? n->get_destinations() : n->get_sources()))
         {
-            if (!e.get_gate())
+            if (!e->get_gate())
             {
                 continue;
             }
 
-            QTableWidgetItem* item = new QTableWidgetItem(QString::number(e.get_gate()->get_id()));
+            QTableWidgetItem* item = new QTableWidgetItem(QString::number(e->get_gate()->get_id()));
             item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             setItem(row, 0, item);
 
-            item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_name()));
+            item = new QTableWidgetItem(QString::fromStdString(e->get_gate()->get_name()));
             item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             setItem(row, 1, item);
 
-            item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_type()->get_name()));
+            item = new QTableWidgetItem(QString::fromStdString(e->get_gate()->get_type()->get_name()));
             item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             setItem(row, 2, item);
 
-            item = new QTableWidgetItem(QString::fromStdString(e.get_pin()));
+            item = new QTableWidgetItem(QString::fromStdString(e->get_pin()));
             item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             setItem(row, 3, item);
 
             // ADD SPECIAL SUBMODULE ITEM HERE
-            item = new QTableWidgetItem(QString::fromStdString(e.get_gate()->get_module()->get_name()));
+            item = new QTableWidgetItem(QString::fromStdString(e->get_gate()->get_module()->get_name()));
             item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             setItem(row, 4, item);
 
