@@ -6,7 +6,6 @@
 #include <boost/predef.h>
 #include <dirent.h>
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>

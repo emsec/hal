@@ -381,7 +381,7 @@ namespace hal {
             {
                 // Get predecessors for a Gate with multiple predecessors (some of them are the same Gate)
                 Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 2, "O", false)};
@@ -396,7 +396,7 @@ namespace hal {
             {
                 // Get predecessors for a given (existing) output pin type
                 Gate* gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_3
                                                                       ->get_predecessors(test_utils::adjacent_pin_filter(
                                                                           "O")), pred));
@@ -410,7 +410,7 @@ namespace hal {
             {
                 // Get predecessors for a given (existing) input pin type
                 Gate* gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_3
                                                                       ->get_predecessors(test_utils::starting_pin_filter(
                                                                           "I0")), pred));
@@ -418,7 +418,7 @@ namespace hal {
             {
                 // Get predecessors for a given (existing) unconnected input pin type
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> pred = {};
+                std::vector<Endpoint*> pred = {};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0
                                                                       ->get_predecessors(test_utils::starting_pin_filter(
                                                                           "I0")), pred));
@@ -432,7 +432,7 @@ namespace hal {
             {
                 // Get predecessors for a given (existing) Gate type
                 Gate* gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 3, "O", false)};
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 3, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter(
                     "gate_1_to_1")), pred));
                 EXPECT_EQ(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t) 1);
@@ -479,7 +479,7 @@ namespace hal {
             {
                 // Get successors for a Gate with multiple successors (some of them are the same Gate)
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I1", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I2", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 3, "I0", true)};
@@ -494,7 +494,7 @@ namespace hal {
             {
                 // Get successors for a given (existing) input pin type
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 3, "I0", true)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0
                                                                       ->get_successors(test_utils::adjacent_pin_filter(
@@ -510,7 +510,7 @@ namespace hal {
             {
                 // Get successors for a given (existing) output pin type
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I1", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I2", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 3, "I0", true)};
@@ -532,7 +532,7 @@ namespace hal {
             {
                 // Get successors for a given (existing) Gate type
                 Gate* gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 4, "I", true)};
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 4, "I", true)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_successors(test_utils::adjacent_gate_type_filter(
                     "gate_1_to_1")), succ));
                 EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t) 1);
@@ -600,15 +600,14 @@ namespace hal {
             // ########################
             {
                 // Get predecessor for a given (existing) input pin type
-                Gate* gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
-                Endpoint pred = test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false);
+                auto gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
+                auto pred = test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false);
                 EXPECT_TRUE(gate_3->get_predecessor("I0") == pred);
             }
             {
                 // Get predecessor for a given (existing) input pin type with no predecessors
-                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                Endpoint pred;
-                EXPECT_TRUE(gate_0->get_predecessor("I0") == pred);
+                auto gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                EXPECT_TRUE(gate_0->get_predecessor("I0") == nullptr);
             }
 
         TEST_END

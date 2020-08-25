@@ -1170,13 +1170,13 @@ namespace hal
                             master_net->mark_global_input_net();
                         }
 
-                        for (const auto& src : slave_net->get_sources())
+                        for (auto src : slave_net->get_sources())
                         {
-                            slave_net->remove_source(src.get_gate(), src.get_pin());
+                            slave_net->remove_source(src);
 
-                            if (!master_net->is_a_source(src.get_gate(), src.get_pin()))
+                            if (!master_net->is_a_source(src->get_gate(), src->get_pin()))
                             {
-                                master_net->add_source(src.get_gate(), src.get_pin());
+                                master_net->add_source(src->get_gate(), src->get_pin());
                             }
                         }
 
@@ -1186,13 +1186,13 @@ namespace hal
                             master_net->mark_global_output_net();
                         }
 
-                        for (const auto& dst : slave_net->get_destinations())
+                        for (auto dst : slave_net->get_destinations())
                         {
-                            slave_net->remove_destination(dst.get_gate(), dst.get_pin());
+                            slave_net->remove_destination(dst);
 
-                            if (!master_net->is_a_destination(dst.get_gate(), dst.get_pin()))
+                            if (!master_net->is_a_destination(dst->get_gate(), dst->get_pin()))
                             {
-                                master_net->add_destination(dst.get_gate(), dst.get_pin());
+                                master_net->add_destination(dst->get_gate(), dst->get_pin());
                             }
                         }
 

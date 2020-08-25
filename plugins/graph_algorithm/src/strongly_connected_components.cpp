@@ -58,15 +58,15 @@ namespace hal
         for (auto it_net : ordered_nets)
         {
             auto src = it_net.second->get_source();
-            if (src.get_gate() == nullptr)
+            if (src->get_gate() == nullptr)
                 continue;
 
             std::set<u32> dst_ids;
             for (auto dst : it_net.second->get_destinations())
-                dst_ids.insert(dst.get_gate()->get_id());
+                dst_ids.insert(dst->get_gate()->get_id());
 
             for (const auto& dst_id : dst_ids)
-                boost::add_edge(gate_id_to_vertex[src.get_gate()->get_id()], gate_id_to_vertex[dst_id], boost_graph);
+                boost::add_edge(gate_id_to_vertex[src->get_gate()->get_id()], gate_id_to_vertex[dst_id], boost_graph);
         }
 
         /* initialize parameters for strong_components() */

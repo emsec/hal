@@ -206,7 +206,7 @@ namespace hal
                 {
                     for (auto src : net->get_sources())
                     {
-                        if (m_simulation_set.find(src.get_gate()) == m_simulation_set.end())
+                        if (m_simulation_set.find(src->get_gate()) == m_simulation_set.end())
                         {
                             m_input_nets.push_back(net);
                             break;
@@ -233,7 +233,7 @@ namespace hal
                 {
                     for (auto dst : net->get_destinations())
                     {
-                        if (m_simulation_set.find(dst.get_gate()) == m_simulation_set.end())
+                        if (m_simulation_set.find(dst->get_gate()) == m_simulation_set.end())
                         {
                             m_output_nets.push_back(net);
                             break;
@@ -392,8 +392,8 @@ namespace hal
             std::unordered_map<Gate*, std::vector<std::string>> affected_pins;
             for (auto& ep : endpoints)
             {
-                auto gate = ep.get_gate();
-                affected_pins[gate].push_back(ep.get_pin());
+                auto gate = ep->get_gate();
+                affected_pins[gate].push_back(ep->get_pin());
             }
 
             for (auto it : affected_pins)

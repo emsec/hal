@@ -788,16 +788,16 @@ namespace hal
         {
             auto ep = *destinations.begin();
             g_selection_relay->clear();
-            g_selection_relay->m_selected_gates.insert(ep.get_gate()->get_id());
+            g_selection_relay->m_selected_gates.insert(ep->get_gate()->get_id());
             g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
-            g_selection_relay->m_focus_id   = ep.get_gate()->get_id();
+            g_selection_relay->m_focus_id   = ep->get_gate()->get_id();
             g_selection_relay->m_subfocus   = SelectionRelay::subfocus::left;
 
-            auto pins                          = ep.get_gate()->get_input_pins();
-            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
+            auto pins                          = ep->get_gate()->get_input_pins();
+            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
             g_selection_relay->m_subfocus_index = index;
 
-            update(ep.get_gate()->get_id());
+            update(ep->get_gate()->get_id());
             g_selection_relay->relay_selection_changed(this);
         }
         else
@@ -831,16 +831,16 @@ namespace hal
         {
             auto ep = *sources.begin();
             g_selection_relay->clear();
-            g_selection_relay->m_selected_gates.insert(ep.get_gate()->get_id());
+            g_selection_relay->m_selected_gates.insert(ep->get_gate()->get_id());
             g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
-            g_selection_relay->m_focus_id   = ep.get_gate()->get_id();
+            g_selection_relay->m_focus_id   = ep->get_gate()->get_id();
             g_selection_relay->m_subfocus   = SelectionRelay::subfocus::right;
 
-            auto pins                          = ep.get_gate()->get_output_pins();
-            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep.get_pin()));
+            auto pins                          = ep->get_gate()->get_output_pins();
+            auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
             g_selection_relay->m_subfocus_index = index;
 
-            update(ep.get_gate()->get_id());
+            update(ep->get_gate()->get_id());
             g_selection_relay->relay_selection_changed(this);
         }
         else

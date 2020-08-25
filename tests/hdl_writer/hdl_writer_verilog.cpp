@@ -689,10 +689,10 @@ namespace hal {
                 // Check if a Net name is correctly translated
                 ASSERT_EQ(parsed_nl->get_nets("1'b0").size(), 1);
                 Net* gnd_net_translated = *parsed_nl->get_nets("1'b0").begin();
-                ASSERT_NE(gnd_net_translated->get_source().get_gate(), nullptr);
-                EXPECT_EQ(gnd_net_translated->get_source().get_gate()->get_type()->get_name(), "GND");
+                ASSERT_NE(gnd_net_translated->get_source()->get_gate(), nullptr);
+                EXPECT_EQ(gnd_net_translated->get_source()->get_gate()->get_type()->get_name(), "GND");
                 ASSERT_EQ(gnd_net_translated->get_destinations().size(), 1);
-                EXPECT_EQ((*gnd_net_translated->get_destinations().begin()).get_gate()->get_name(), "test_gate" + m_gate_suffix);
+                EXPECT_EQ((*gnd_net_translated->get_destinations().begin())->get_gate()->get_name(), "test_gate" + m_gate_suffix);
             }
             {
                 // Testing the Net name translation of a '0' Net
@@ -734,10 +734,10 @@ namespace hal {
                 // Check if a Net name is correctly translated
                 ASSERT_EQ(parsed_nl->get_nets("1'b1").size(), 1);
                 Net* vcc_net_translated = *parsed_nl->get_nets("1'b1").begin();
-                ASSERT_NE(vcc_net_translated->get_source().get_gate(), nullptr);
-                EXPECT_EQ(vcc_net_translated->get_source().get_gate()->get_type()->get_name(), "VCC");
+                ASSERT_NE(vcc_net_translated->get_source()->get_gate(), nullptr);
+                EXPECT_EQ(vcc_net_translated->get_source()->get_gate()->get_type()->get_name(), "VCC");
                 ASSERT_EQ(vcc_net_translated->get_destinations().size(), 1);
-                EXPECT_EQ((*vcc_net_translated->get_destinations().begin()).get_gate()->get_name(), "test_gate" + m_gate_suffix);
+                EXPECT_EQ((*vcc_net_translated->get_destinations().begin())->get_gate()->get_name(), "test_gate" + m_gate_suffix);
             }*/
         TEST_END
     }

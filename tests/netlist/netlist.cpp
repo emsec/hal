@@ -191,18 +191,15 @@ namespace hal {
         TEST_START
             {// Add a Gate the normal way
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 EXPECT_TRUE(nl->is_gate_in_netlist(g_0));
             }
             {
                 // Add a Gate, remove it afterwards and add it again (used to test the free_ids logic)
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 nl->delete_gate(g_0);
-                Gate*
-                    g_new = nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_new = nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 EXPECT_TRUE(nl->is_gate_in_netlist(g_new));
             }
             // NEGATIVE
@@ -210,10 +207,8 @@ namespace hal {
                 // Try to add the same Gate twice
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
-                Gate*
-                    g_1 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_1 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 EXPECT_NE(g_0, nullptr);
                 EXPECT_EQ(g_1, nullptr);
             }
@@ -221,8 +216,7 @@ namespace hal {
                 // Try to add two gates with the same id
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 Gate* g_0_other =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0_other");
                 EXPECT_EQ(g_0_other, nullptr);
@@ -240,8 +234,7 @@ namespace hal {
                 // Try to add a Gate with an invalid name (empty string)
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "");
                 EXPECT_EQ(g_0, nullptr);
             }
         TEST_END
@@ -257,8 +250,7 @@ namespace hal {
             // POSITIVE
             {// Add and delete an unconnected Gate in a normal way
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 bool suc = nl->delete_gate(g_0);
                 EXPECT_TRUE(suc);
                 EXPECT_FALSE(nl->is_gate_in_netlist(g_0));
@@ -280,8 +272,7 @@ namespace hal {
             {
                 // Add and delete global_gnd Gate
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gnd"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gnd"), "gate_0");
                 nl->mark_gnd_gate(g_0);
                 bool suc = nl->delete_gate(g_0);
                 EXPECT_TRUE(suc);
@@ -291,8 +282,7 @@ namespace hal {
             {
                 // Add and delete global_vcc Gate
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("vcc"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("vcc"), "gate_0");
                 nl->mark_vcc_gate(g_0);
                 bool suc = nl->delete_gate(g_0);
                 EXPECT_TRUE(suc);
@@ -311,8 +301,7 @@ namespace hal {
                 // Try to delete a Gate which is not part of the netlist
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 bool suc = nl->delete_gate(g_0);
                 EXPECT_TRUE(suc);
             }
@@ -329,15 +318,13 @@ namespace hal {
         TEST_START
             {// Gate is part of the netlist
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 EXPECT_TRUE(nl->is_gate_in_netlist(g_0));
             }
             {
                 // Gate is not part of the netlist
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 nl->delete_gate(g_0);
                 // Gate isn't added
                 EXPECT_FALSE(nl->is_gate_in_netlist(g_0));
@@ -360,8 +347,7 @@ namespace hal {
         TEST_START
             {// Get (existing) Gate with id 3
                 auto nl = test_utils::create_empty_netlist();
-                Gate*
-                    g_0 = nl->create_gate(MIN_GATE_ID + 3, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 3, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 EXPECT_EQ(nl->get_gate_by_id(MIN_GATE_ID + 3), g_0);
             }
             {
@@ -445,8 +431,7 @@ namespace hal {
             {// Add a global vcc Gate which wasn't added to the netlist before and unmark it after
                 auto nl = test_utils::create_empty_netlist();
 
-                Gate*
-                    vcc_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("vcc"), "gate_vcc");
+                auto vcc_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("vcc"), "gate_vcc");
                 bool suc_mark = nl->mark_vcc_gate(vcc_gate);
                 EXPECT_TRUE(suc_mark);
                 EXPECT_TRUE(nl->is_vcc_gate(vcc_gate));
@@ -461,8 +446,7 @@ namespace hal {
                 // Add a global gnd Gate which which wasn't added to the netlist before and unmark it after
                 auto nl = test_utils::create_empty_netlist();
 
-                Gate*
-                    gnd_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gnd"), "gate_gnd");
+                auto gnd_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gnd"), "gate_gnd");
                 bool suc_mark = nl->mark_gnd_gate(gnd_gate);
                 EXPECT_TRUE(suc_mark);
                 EXPECT_TRUE(nl->is_gnd_gate(gnd_gate));
@@ -476,8 +460,7 @@ namespace hal {
                 // Add the same global vcc Gate twice
                 auto nl = test_utils::create_empty_netlist();
 
-                Gate*
-                    vcc_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("vcc"), "gate_vcc");
+                auto vcc_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("vcc"), "gate_vcc");
                 nl->mark_vcc_gate(vcc_gate);
                 bool suc = nl->mark_vcc_gate(vcc_gate);
                 EXPECT_TRUE(suc);
@@ -488,8 +471,7 @@ namespace hal {
                 // Add the same global gnd Gate twice
                 auto nl = test_utils::create_empty_netlist();
 
-                Gate*
-                    gnd_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gnd"), "gate_gnd");
+                auto gnd_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gnd"), "gate_gnd");
                 nl->mark_gnd_gate(gnd_gate);
                 bool suc = nl->mark_gnd_gate(gnd_gate);
                 EXPECT_TRUE(suc);
@@ -1195,8 +1177,7 @@ namespace hal {
                 Module* child = nl->create_module(MIN_MODULE_ID + 2, "module_2", test_module);
 
                 // Add a Net and a Gate to the test_module
-                Gate*
-                    gate_0 = nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                auto gate_0 = nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
                 Net* net_0 = nl->create_net("net_0");
                 test_module->assign_gate(gate_0);
                 //test_module->assign_net(net_0);

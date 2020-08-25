@@ -25,7 +25,6 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/data_container.h"
-#include "hal_core/netlist/endpoint.h"
 
 #include <functional>
 #include <map>
@@ -41,6 +40,7 @@ namespace hal
     class Netlist;
     class Gate;
     class NetlistInternalManager;
+    class Endpoint;
 
     /**
      * Net class containing information about a net including its source and destination.
@@ -49,8 +49,6 @@ namespace hal
      */
     class NETLIST_API Net : public DataContainer
     {
-        friend class NetlistInternalManager;
-
     public:
         /**
          * Gets the unique id of the net.
@@ -89,9 +87,9 @@ namespace hal
          *
          * @param[in] gate - The source gate.
          * @param[in] pin - The input pin of the gate.
-         * @returns True on success.
+         * @returns The new endpoint or nullptr on error.
          */
-        bool add_source(Gate* gate, const std::string& pin);
+        Endpoint* add_source(Gate* gate, const std::string& pin);
 
         /**
          * Remove a source from this net.
@@ -101,6 +99,15 @@ namespace hal
          * @returns True on success.
          */
         bool remove_source(Gate* gate, const std::string& pin);
+
+        /**
+         * Remove a source endpoint from this net.
+         * If the endpoint is a destination-endpoint this function aborts.
+         *
+         * @param[in] ep - The source endpoint.
+         * @returns True on success.
+         */
+        bool remove_source(Endpoint* ep);
 
         /**
          * Check whether a gate is a source of this net.
@@ -118,7 +125,7 @@ namespace hal
          * @param[in] ep - The endpoint.
          * @returns True if the endpoint is a source of this net.
          */
-        bool is_a_source(const Endpoint& ep) const;
+        bool is_a_source(Endpoint* ep) const;
 
         /**
          * Get the number of sources.<br>
@@ -134,7 +141,7 @@ namespace hal
          * @param[in] filter - a filter for endpoints.
          * @returns A vector of source endpoints.
          */
-        std::vector<Endpoint> get_sources(const std::function<bool(const Endpoint& ep)>& filter = nullptr) const;
+        std::vector<Endpoint*> get_sources(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * DEPRECATED
@@ -144,7 +151,7 @@ namespace hal
          *
          * @returns The (first) source endpoint.
          */
-        Endpoint get_source() const;
+        Endpoint* get_source() const;
 
         /*
          *      dst specific functions
@@ -155,19 +162,27 @@ namespace hal
          *
          * @param[in] gate - The destination gate.
          * @param[in] pin - The input pin of the gate.
-         * @returns True on success.
+         * @returns The new endpoint or nullptr on error.
          */
-        bool add_destination(Gate* gate, const std::string& pin);
+        Endpoint* add_destination(Gate* gate, const std::string& pin);
 
         /**
          * Remove a destination from this net.
-         * If the endpoint is a source-endpoint this function aborts.
          *
          * @param[in] gate - The destination gate.
          * @param[in] pin - The input pin of the gate.
          * @returns True on success.
          */
         bool remove_destination(Gate* gate, const std::string& pin);
+
+        /**
+         * Remove a destination endpoint from this net.
+         * If the endpoint is a source-endpoint this function aborts.
+         *
+         * @param[in] ep - The destination endpoint.
+         * @returns True on success.
+         */
+        bool remove_destination(Endpoint* ep);
 
         /**
          * Check whether a gate is a destination of this net.
@@ -185,7 +200,7 @@ namespace hal
          * @param[in] ep - The endpoint.
          * @returns True if the endpoint is a destination of this net.
          */
-        bool is_a_destination(const Endpoint& ep) const;
+        bool is_a_destination(Endpoint* ep) const;
 
         /**
          * Get the number of destinations.<br>
@@ -201,7 +216,7 @@ namespace hal
          * @param[in] filter - a filter for endpoints.
          * @returns A vector of destination endpoints.
          */
-        std::vector<Endpoint> get_destinations(const std::function<bool(const Endpoint& ep)>& filter = nullptr) const;
+        std::vector<Endpoint*> get_destinations(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * Check whether the net is routed, i.e. it has no source or the no destinations.
@@ -253,18 +268,13 @@ namespace hal
         bool is_global_output_net();
 
     private:
-        /**
-         * Constructs a new net and initializes it with the parameter fields.<br>
-         * The net is not automatically added to the netlist.
-         *
-         * @param[in] g - The parent netlist.
-         * @param[in] id - A unique id.
-         * @param[in] name - A name for the net.
-         */
+        friend class NetlistInternalManager;
         explicit Net(NetlistInternalManager* internal_manager, const u32 id, const std::string& name = "");
 
-        Net(const Net&) = delete;               //disable copy-constructor
-        Net& operator=(const Net&) = delete;    //disable copy-assignment
+        Net(const Net&) = delete;
+        Net(Net&&)      = delete;
+        Net& operator=(const Net&) = delete;
+        Net& operator=(Net&&) = delete;
 
         NetlistInternalManager* m_internal_manager;
 
@@ -275,7 +285,9 @@ namespace hal
         std::string m_name;
 
         /* stores the dst gate and pin id of the dst gate */
-        std::vector<Endpoint> m_destinations;
-        std::vector<Endpoint> m_sources;
+        std::vector<std::unique_ptr<Endpoint>> m_destinations;
+        std::vector<std::unique_ptr<Endpoint>> m_sources;
+        std::vector<Endpoint*> m_destinations_raw;
+        std::vector<Endpoint*> m_sources_raw;
     };
 }    // namespace hal

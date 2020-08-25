@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+
 #include <map>
 #include <vector>
 
@@ -63,10 +64,10 @@ namespace hal
         // net functions
         Net* create_net(u32 id, const std::string& name);
         bool delete_net(Net* net);
-        bool net_add_source(Net* net, const Endpoint& ep);
-        bool net_remove_source(Net* net, const Endpoint& ep);
-        bool net_add_destination(Net* net, const Endpoint& ep);
-        bool net_remove_destination(Net* net, const Endpoint& ep);
+        Endpoint* net_add_source(Net* net, Gate* gate, const std::string& pin);
+        bool net_remove_source(Net* net, Endpoint* ep);
+        Endpoint* net_add_destination(Net* net, Gate* gate, const std::string& pin);
+        bool net_remove_destination(Net* net, Endpoint* ep);
 
         // module functions
         Module* create_module(u32 id, Module* parent, const std::string& name);

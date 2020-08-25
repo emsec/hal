@@ -6,7 +6,6 @@
 #include "hal_core/netlist/gate_library/gate_library_parser.h"
 
 #include <fstream>
-#include <iostream>
 #include <regex>
 #include <sstream>
 

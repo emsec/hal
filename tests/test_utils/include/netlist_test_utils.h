@@ -74,7 +74,7 @@ namespace hal
          * @param[in] is_destination - direction of Endpoint
          * @returns the Endpoint object
          */
-        Endpoint get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination);
+        Endpoint* get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination);
 
         /**
          * Creating an Endpoint object by passing the Gate and the pin_type. The is_destination flag is taken from the
@@ -84,7 +84,7 @@ namespace hal
          * @param[in] pin_type - pin type
          * @returns the Endpoint object
          */
-        Endpoint get_endpoint(Gate* g, const std::string& pin_type);
+        Endpoint* get_endpoint(Gate* g, const std::string& pin_type);
 
         /**
          * Checks if an Endpoint is empty (i.e. (nullptr, ""))
@@ -92,7 +92,7 @@ namespace hal
          * @param[in] ep - Endpoint
          * @return true, if the Endpoint is the empty Endpoint
          */
-        bool is_empty(const Endpoint& ep);
+        bool is_empty(Endpoint* ep);
 
         /**
          * Minimizes a truth table of a boolean function such that variables that do not matter are eliminated.
@@ -121,7 +121,7 @@ namespace hal
          * @param[in] pin_type - pin type
          * @returns the first Endpoint of a certain pin type. (nullptr, "") if no Endpoint matches.
          */
-        Endpoint get_destination_by_pin_type(const std::vector<Endpoint> dsts, const std::string pin_type);
+        Endpoint* get_endpoint_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type);
 
         // NOTE: Using create_test_gate is messy. It should not exist. Will be removed someday...
         /**
@@ -449,7 +449,7 @@ namespace hal
          * @param gate_type - the type of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const Endpoint&)> endpoint_gate_type_filter(const std::string& gate_type);
+        std::function<bool(Endpoint*)> endpoint_gate_type_filter(const std::string& gate_type);
 
         /**
          * Filter returns true, if the type of the Gate, the Endpoint is connected to, has the name 'name'
@@ -457,7 +457,7 @@ namespace hal
          * @param type - the name of the gates the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const Endpoint&)> endpoint_gate_name_filter(const std::string& name);
+        std::function<bool(Endpoint*)> endpoint_gate_name_filter(const std::string& name);
 
         /**
          * Filter returns true for endpoints of type 'pin_type'
@@ -465,7 +465,7 @@ namespace hal
          * @param pin_type - the pin type (i.e. "I1" or "O")
          * @return the std::function object of the filter function
          */
-        std::function<bool(const Endpoint&)> endpoint_pin_type_filter(const std::string& pin_type);
+        std::function<bool(Endpoint*)> endpoint_pin_type_filter(const std::string& pin_type);
 
         /**
          * Filter returns true, for all connected Endpoints (of adjacent gates) of type 'pin'
@@ -473,7 +473,7 @@ namespace hal
          * @param type - the type of the endpoints the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::string&, const Endpoint&)> adjacent_pin_filter(const std::string& pin);
+        std::function<bool(const std::string&, Endpoint*)> adjacent_pin_filter(const std::string& pin);
 
         /**
          * Filter returns true for all endpoints, that are connected to the pin of pintype 'pin' of the calling Gate
@@ -481,7 +481,7 @@ namespace hal
          * @param pin - the pin of the Gate, calling the get_predecessors/sucesseors function
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::string&, const Endpoint&)> starting_pin_filter(const std::string& pin);
+        std::function<bool(const std::string&, Endpoint*)> starting_pin_filter(const std::string& pin);
 
         /**
          * Filter returns true for all endpoints of adjacent gates of Gate type 'type'
@@ -489,7 +489,7 @@ namespace hal
          * @param type - the type of adjacent gates, the filter is searching for
          * @return the std::function object of the filter function
          */
-        std::function<bool(const std::string&, const Endpoint&)> adjacent_gate_type_filter(const std::string& type);
+        std::function<bool(const std::string&, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
 
     }    // namespace test_utils
 }    // namespace hal

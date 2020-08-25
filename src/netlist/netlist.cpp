@@ -113,7 +113,7 @@ namespace hal
     Module* Netlist::create_module(const u32 id, const std::string& name, Module* parent, const std::vector<Gate*>& gates)
     {
         auto m = m_manager->create_module(id, parent, name);
-        for (const auto& g : gates)
+        for (auto g : gates)
         {
             m->assign_gate(g);
         }

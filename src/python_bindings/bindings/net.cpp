@@ -47,11 +47,20 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("remove_source", &Net::remove_source, py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("remove_source", py::overload_cast<Gate*, const std::string&>(&Net::remove_source), py::arg("gate"), py::arg("pin"), R"(
         Removes the source of the net.
         :param hal_py.get_gate() gate: The source gate.
         :param str pin: The pin of the source gate.
         :returns: True on succes.
+        :rtype: bool
+)");
+
+        py_net.def("remove_source", py::overload_cast<Endpoint*>(&Net::remove_source), py::arg("endpoint"), R"(
+        Remove a source endpoint from this net.
+
+        :param endpoint: The source endpoint.
+        :type endpoint: hal_py.Endpoint
+        :returns: True on succes
         :rtype: bool
 )");
 
@@ -65,7 +74,7 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("is_a_source", py::overload_cast<const Endpoint&>(&Net::is_a_source, py::const_), py::arg("endpoint"), R"(
+        py_net.def("is_a_source", py::overload_cast<Endpoint*>(&Net::is_a_source, py::const_), py::arg("endpoint"), R"(
         Check whether a gate's input pin is a source of this net.
 
         :param Endpoint: The input endpoint.
@@ -121,12 +130,21 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("remove_destination", &Net::remove_destination, py::arg("gate"), py::arg("pin"), R"(
+        py_net.def("remove_destination", py::overload_cast<Gate*, const std::string&>(&Net::remove_destination), py::arg("gate"), py::arg("pin"), R"(
         Remove a destination from this net.
 
         :param gate: The destination gate.
         :type gate: hal_py.Gate
         :param str pin: The input pin of the gate. Leave empty if the pin does not matter.
+        :returns: True on succes
+        :rtype: bool
+)");
+
+        py_net.def("remove_destination", py::overload_cast<Endpoint*>(&Net::remove_destination), py::arg("endpoint"), R"(
+        Remove a destination endpoint from this net.
+
+        :param endpoint: The destination endpoint.
+        :type endpoint: hal_py.Endpoint
         :returns: True on succes
         :rtype: bool
 )");
@@ -141,7 +159,7 @@ namespace hal
         :rtype: bool
 )");
 
-        py_net.def("is_a_destination", py::overload_cast<const Endpoint&>(&Net::is_a_destination, py::const_), py::arg("endpoint"), R"(
+        py_net.def("is_a_destination", py::overload_cast<Endpoint*>(&Net::is_a_destination, py::const_), py::arg("endpoint"), R"(
         Check whether a gate's input pin is a destination of this net.
 
         :param Endpoint: The input endpoint.

@@ -9,7 +9,6 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 
 #include <fstream>
-#include <iostream>
 #include <unistd.h>
 
 namespace hal

@@ -254,12 +254,27 @@ namespace hal
         :rtype: set[hal_py.Net]
 )");
 
-        py_gate.def("get_fan_in_net", &Gate::get_fan_in_net, py::arg("pin_type"), R"(
+        py_gate.def("get_fan_out_endpoints", &Gate::get_fan_out_endpoints, R"(
+        Get a set of all fan-out endpoints of the gate, i.e. all endpoints that are connected to one of the output pins.
+
+        :returns: A set of all connected output endpoints.
+        :rtype: set[hal_py.Endpoint]
+)");
+
+        py_gate.def("get_fan_in_net", &Gate::get_fan_in_net, py::arg("pin"), R"(
         Get the fan-in net which is connected to a specific input pin.
 
-        :param str pin_type: The input pin type.
+        :param str pin: The input pin type.
         :returns: The connected input net.
         :rtype: hal_py.Net
+)");
+
+        py_gate.def("get_fan_in_net", &Gate::get_fan_in_net, py::arg("pin"), R"(
+        Get the fan-in endpoint which is connected to a specific output pin.
+
+        :param str pin: The output pin type.
+        :returns: The connected output net.
+        :rtype: hal_py.Endpoint
 )");
 
         py_gate.def_property_readonly("fan_out_nets", &Gate::get_fan_out_nets, R"(
@@ -276,12 +291,27 @@ namespace hal
         :rtype: set[hal_py.Net]
 )");
 
-        py_gate.def("get_fan_out_net", &Gate::get_fan_out_net, py::arg("pin_type"), R"(
+        py_gate.def("get_fan_in_endpoints", &Gate::get_fan_in_endpoints, R"(
+        Get a set of all fan-in endpoints of the gate, i.e. all endpoints that are connected to one of the input pins.
+
+        :returns: A set of all connected input endpoints.
+        :rtype: set[hal_py.Endpoint]
+)");
+
+        py_gate.def("get_fan_out_net", &Gate::get_fan_out_net, py::arg("pin"), R"(
         Get the fan-out net which is connected to a specific output pin.
 
-        :param str pin_type: The output pin type.
+        :param str pin: The output pin type.
         :returns: The connected output net.
         :rtype: hal_py.Net
+)");
+
+        py_gate.def("get_fan_out_endpoint", &Gate::get_fan_out_endpoint, py::arg("pin"), R"(
+        Get the fan-out endpoint which is connected to a specific output pin.
+
+        :param str pin: The output pin type.
+        :returns: The connected output net.
+        :rtype: hal_py.Endpoint
 )");
 
         py_gate.def_property_readonly(
@@ -315,7 +345,7 @@ namespace hal
 )");
 
         py_gate.def("get_predecessor", &Gate::get_predecessor, py::arg("which_pin"), R"(
-        Get the direct predecessor endpoint of the gate connected to a specific input pin and filterable by a specific gate type.
+        Get the direct predecessor endpoint of the gate connected to a specific input pin.
 
         :param str which_pin: The input pin type of the this gate. Leave empty for no filtering.
         :returns: The predecessor endpoint.
@@ -350,6 +380,14 @@ namespace hal
         :param lambda filter: The function used for filtering. Leave empty for no filtering.
         :returns: A list of successor endpoints.
         :rtype: list[hal_py.Endpoint]
+)");
+
+        py_gate.def("get_successor", &Gate::get_successor, py::arg("which_pin"), R"(
+        Get the direct successor endpoint of the gate connected to a specific input pin.
+
+        :param str which_pin: The input pin type of the this gate. Leave empty for no filtering.
+        :returns: The successor endpoint.
+        :rtype: hal_py.Endpoint
 )");
     }
 }    // namespace hal

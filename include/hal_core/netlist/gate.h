@@ -52,8 +52,6 @@ namespace hal
      */
     class NETLIST_API Gate : public DataContainer
     {
-        friend class NetlistInternalManager;
-
     public:
         /**
          * Gets the unique id of the gate.
@@ -247,15 +245,23 @@ namespace hal
          *
          * @returns A set of all connected input endpoints.
          */
-        std::vector<Endpoint> get_fan_in_endpoints() const;
+        std::vector<Endpoint*> get_fan_in_endpoints() const;
 
         /**
          * Get the fan-in net which is connected to a specific input pin.
          *
-         * @param[in] pin_type - The input pin type.
+         * @param[in] pin - The input pin type.
          * @returns The connected input net.
          */
-        Net* get_fan_in_net(const std::string& pin_type) const;
+        Net* get_fan_in_net(const std::string& pin) const;
+
+        /**
+         * Get the fan-in endpoint which is connected to a specific input pin.
+         *
+         * @param[in] pin - The input pin type.
+         * @returns The endpoint.
+         */
+        Endpoint* get_fan_in_endpoint(const std::string& pin) const;
 
         /**
          * Get a set of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
@@ -269,15 +275,23 @@ namespace hal
          *
          * @returns A set of all connected output endpoints.
          */
-        std::vector<Endpoint> get_fan_out_endpoints() const;
+        std::vector<Endpoint*> get_fan_out_endpoints() const;
 
         /**
          * Get the fan-out net which is connected to a specific output pin.
          *
-         * @param[in] pin_type - The output pin type.
+         * @param[in] pin - The output pin type.
          * @returns The connected output net.
          */
-        Net* get_fan_out_net(const std::string& pin_type) const;
+        Net* get_fan_out_net(const std::string& pin) const;
+
+        /**
+         * Get the fan-out endpoint which is connected to a specific output pin.
+         *
+         * @param[in] pin - The output pin type.
+         * @returns The endpoint.
+         */
+        Endpoint* get_fan_out_endpoint(const std::string& pin) const;
 
         /**
          * Get a set of all unique predecessor gates of the gate.
@@ -286,7 +300,7 @@ namespace hal
          * @param[in] filter - a function to filter the output. Leave empty for no filtering.
          * @returns A vector of unique predecessor gates.
          */
-        std::vector<Gate*> get_unique_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
+        std::vector<Gate*> get_unique_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * Get a vector of all direct predecessor endpoints of the gate.
@@ -295,7 +309,7 @@ namespace hal
          * @param[in] filter - a function to filter the output. Leave empty for no filtering.
          * @returns A vector of predecessor endpoints.
          */
-        std::vector<Endpoint> get_predecessors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
+        std::vector<Endpoint*> get_predecessors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * Get the direct predecessor endpoint of the gate connected to a specific input pin.
@@ -303,7 +317,7 @@ namespace hal
          * @param[in] which_pin - the pin of this gate to get the predecessor from.
          * @returns The predecessor endpoint.
          */
-        Endpoint get_predecessor(const std::string& which_pin) const;
+        Endpoint* get_predecessor(const std::string& which_pin) const;
 
         /**
          * Get a set of all unique successor gates of the gate.
@@ -312,7 +326,7 @@ namespace hal
          * @param[in] filter - a function to filter the output. Leave empty for no filtering.
          * @returns A vector of unique successor gates.
          */
-        std::vector<Gate*> get_unique_successors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
+        std::vector<Gate*> get_unique_successors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * Get a vector of all direct successor endpoints of the gate.
@@ -321,13 +335,24 @@ namespace hal
          * @param[in] filter - a function to filter the output. Leave empty for no filtering.
          * @returns A vector of successor endpoints.
          */
-        std::vector<Endpoint> get_successors(const std::function<bool(const std::string& starting_pin, const Endpoint& ep)>& filter = nullptr) const;
+        std::vector<Endpoint*> get_successors(const std::function<bool(const std::string& starting_pin, Endpoint* ep)>& filter = nullptr) const;
+
+        /**
+         * Get the direct successor endpoint of the gate connected to a specific input pin.
+         *
+         * @param[in] which_pin - the pin of this gate to get the successor from.
+         * @returns The successor endpoint.
+         */
+        Endpoint* get_successor(const std::string& which_pin) const;
 
     private:
+        friend class NetlistInternalManager;
         Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, float x, float y);
 
-        Gate(const Gate&) = delete;               //disable copy-constructor
-        Gate& operator=(const Gate&) = delete;    //disable copy-assignment
+        Gate(const Gate&) = delete;
+        Gate(Gate&&)      = delete;
+        Gate& operator=(const Gate&) = delete;
+        Gate& operator=(Gate&&) = delete;
 
         BooleanFunction get_lut_function(const std::string& pin) const;
 
@@ -351,8 +376,8 @@ namespace hal
         Module* m_module;
 
         /* connected nets */
-        std::vector<Endpoint> m_in_endpoints;
-        std::vector<Endpoint> m_out_endpoints;
+        std::vector<Endpoint*> m_in_endpoints;
+        std::vector<Endpoint*> m_out_endpoints;
         std::vector<Net*> m_in_nets;
         std::vector<Net*> m_out_nets;
 

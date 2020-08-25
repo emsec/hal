@@ -2,6 +2,7 @@
 #include "netlist_test_utils.h"
 
 #include "hal_core/utilities/utils.h"
+
 #include <math.h>
 
 //using namespace hal;
@@ -42,23 +43,22 @@ namespace hal
         }
     }
 
-    Endpoint test_utils::get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination)
+    Endpoint* test_utils::get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination)
     {
         Gate* g = nl->get_gate_by_id(gate_id);
         if (g != nullptr)
         {
-            Net* net = is_destination ? g->get_fan_in_net(pin_type) : g->get_fan_out_net(pin_type);
-            return Endpoint(g, pin_type, net, is_destination);
+            return is_destination ? g->get_fan_in_endpoint(pin_type) : g->get_fan_out_endpoint(pin_type);
         }
         else
-            return Endpoint();
+            return nullptr;
     }
 
-    Endpoint test_utils::get_endpoint(Gate* g, const std::string& pin_type)
+    Endpoint* test_utils::get_endpoint(Gate* g, const std::string& pin_type)
     {
         if (g == nullptr || pin_type == "")
         {
-            return Endpoint();
+            return nullptr;
         }
         auto nl             = g->get_netlist();
         int gate_id         = g->get_id();
@@ -67,9 +67,9 @@ namespace hal
         return get_endpoint(nl, gate_id, pin_type, is_destination);
     }
 
-    bool test_utils::is_empty(const Endpoint& ep)
+    bool test_utils::is_empty(Endpoint* ep)
     {
-        return ((ep.get_gate() == nullptr) && (ep.get_pin() == ""));
+        return ep == nullptr;
     }
 
     std::vector<BooleanFunction::Value> test_utils::minimize_truth_table(const std::vector<BooleanFunction::Value> tt)
@@ -470,16 +470,16 @@ namespace hal
         return res_gate;
     }
 
-    Endpoint test_utils::get_destination_by_pin_type(const std::vector<Endpoint> dsts, const std::string pin_type)
+    Endpoint* test_utils::get_endpoint_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type)
     {
         for (auto dst : dsts)
         {
-            if (dst.get_pin() == pin_type)
+            if (dst->get_pin() == pin_type)
             {
                 return dst;
             }
         }
-        return Endpoint();
+        return nullptr;
     }
 
     bool test_utils::nets_are_equal(Net* n0, Net* n1, const bool ignore_id, const bool ignore_name)
@@ -495,13 +495,16 @@ namespace hal
             return false;
         if (!ignore_name && n0->get_name() != n1->get_name())
             return false;
-        if (n0->get_source().get_pin() != n1->get_source().get_pin())
-            return false;
-        if (!gates_are_equal(n0->get_source().get_gate(), n1->get_source().get_gate(), ignore_id, ignore_name))
-            return false;
+        for (auto n0_source : n0->get_sources())
+        {
+            if (!gates_are_equal(n0_source->get_gate(), get_endpoint_by_pin_type(n1->get_sources(), n0_source->get_pin())->get_gate(), ignore_id, ignore_name))
+            {
+                return false;
+            }
+        }
         for (auto n0_destination : n0->get_destinations())
         {
-            if (!gates_are_equal(n0_destination.get_gate(), get_destination_by_pin_type(n1->get_destinations(), n0_destination.get_pin()).get_gate(), ignore_id, ignore_name))
+            if (!gates_are_equal(n0_destination->get_gate(), get_endpoint_by_pin_type(n1->get_destinations(), n0_destination->get_pin())->get_gate(), ignore_id, ignore_name))
             {
                 return false;
             }
@@ -794,32 +797,32 @@ namespace hal
         return [name](auto n) { return n->get_name() == name; };
     }
 
-    std::function<bool(const Endpoint&)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
+    std::function<bool(Endpoint*)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
     {
-        return [gate_type](auto& ep) { return ep.get_gate()->get_type()->get_name() == gate_type; };
+        return [gate_type](auto ep) { return ep->get_gate()->get_type()->get_name() == gate_type; };
     }
 
-    std::function<bool(const Endpoint&)> test_utils::endpoint_gate_name_filter(const std::string& name)
+    std::function<bool(Endpoint*)> test_utils::endpoint_gate_name_filter(const std::string& name)
     {
-        return [name](auto& ep) { return ep.get_gate()->get_name() == name; };
+        return [name](auto ep) { return ep->get_gate()->get_name() == name; };
     }
 
-    std::function<bool(const Endpoint&)> test_utils::endpoint_pin_type_filter(const std::string& pin_type)
+    std::function<bool(Endpoint*)> test_utils::endpoint_pin_type_filter(const std::string& pin_type)
     {
-        return [pin_type](auto& ep) { return ep.get_pin() == pin_type; };
+        return [pin_type](auto ep) { return ep->get_pin() == pin_type; };
     }
 
-    std::function<bool(const std::string&, const Endpoint&)> test_utils::adjacent_pin_filter(const std::string& pin)
+    std::function<bool(const std::string&, Endpoint*)> test_utils::adjacent_pin_filter(const std::string& pin)
     {
-        return [pin](auto&, auto& ep) { return ep.get_pin() == pin; };
+        return [pin](auto&, auto ep) { return ep->get_pin() == pin; };
     }
-    std::function<bool(const std::string&, const Endpoint&)> test_utils::starting_pin_filter(const std::string& pin)
+    std::function<bool(const std::string&, Endpoint*)> test_utils::starting_pin_filter(const std::string& pin)
     {
-        return [pin](auto& starting_pin, auto&) { return starting_pin == pin; };
+        return [pin](auto& starting_pin, auto) { return starting_pin == pin; };
     }
 
-    std::function<bool(const std::string&, const Endpoint&)> test_utils::adjacent_gate_type_filter(const std::string& type)
+    std::function<bool(const std::string&, Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
     {
-        return [type](auto&, auto& ep) { return ep.get_gate()->get_type()->get_name() == type; };
+        return [type](auto&, auto ep) { return ep->get_gate()->get_type()->get_name() == type; };
     }
 }    // namespace hal

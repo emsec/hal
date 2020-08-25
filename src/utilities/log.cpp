@@ -1,6 +1,5 @@
 #include "hal_core/utilities/log.h"
 
-#include <iostream>
 #include <spdlog/common.h>
 #include <spdlog/fmt/fmt.h>
 #include <spdlog/sinks/ansicolor_sink.h>

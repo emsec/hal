@@ -79,7 +79,7 @@ namespace hal
             for (auto it = b_events.begin(); it != b_events.end();)
             {
                 auto srcs = it->first->get_sources();
-                if (srcs.size() == 1 && (srcs[0].get_gate()->is_gnd_gate() || srcs[0].get_gate()->is_vcc_gate()) && a_events.find(it->first) == a_events.end())
+                if (srcs.size() == 1 && (srcs[0]->get_gate()->is_gnd_gate() || srcs[0]->get_gate()->is_vcc_gate()) && a_events.find(it->first) == a_events.end())
                 {
                     it = b_events.erase(it);
                 }
@@ -255,7 +255,7 @@ namespace hal
                 {
                     std::cout << "mismatch at " << net->get_name() << std::endl;
                     auto srcs = net->get_sources();
-                    std::transform(srcs.begin(), srcs.end(), std::back_inserter(mismatch_sources), [](auto& ep) { return ep.get_gate(); });
+                    std::transform(srcs.begin(), srcs.end(), std::back_inserter(mismatch_sources), [](auto& ep) { return ep->get_gate(); });
                 }
                 std::unordered_set<Gate*> mismatch_sources_set(mismatch_sources.begin(), mismatch_sources.end());
                 for (auto it = mismatch_sources.begin(); it != mismatch_sources.end();)
