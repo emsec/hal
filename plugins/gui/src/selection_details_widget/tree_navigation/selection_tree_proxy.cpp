@@ -6,7 +6,8 @@
 
 namespace hal
 {
-    SelectionTreeProxyModel::SelectionTreeProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
+    SelectionTreeProxyModel::SelectionTreeProxyModel(QObject* parent)
+        : QSortFilterProxyModel(parent), mGraphicsBusy(0)
     {
         m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager->get("navigation/sort_mechanism").toInt());
         m_filter_expression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
@@ -56,15 +57,22 @@ namespace hal
         }
     }
 
-    void SelectionTreeProxyModel::handle_filter_text_changed(const QString& filter_text)
+    void SelectionTreeProxyModel::applyFilterOnGraphics()
     {
-        m_filter_expression.setPattern(filter_text);
-        invalidateFilter();
-
+        if (isGraphicsBusy()) return;
+        ++ mGraphicsBusy;
         QList<u32> modIds;
         QList<u32> gatIds;
         QList<u32> netIds;
         static_cast<const SelectionTreeModel*>(sourceModel())->suppressedByFilter(modIds, gatIds, netIds, m_filter_expression);
         g_selection_relay->suppressedByFilter(modIds, gatIds, netIds);
+        -- mGraphicsBusy;
+    }
+
+    void SelectionTreeProxyModel::handle_filter_text_changed(const QString& filter_text)
+    {
+        m_filter_expression.setPattern(filter_text);
+        invalidateFilter();
+        applyFilterOnGraphics();
     }
 }

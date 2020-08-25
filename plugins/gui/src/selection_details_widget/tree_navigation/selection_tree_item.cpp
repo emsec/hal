@@ -58,6 +58,7 @@ namespace hal
 
     bool SelectionTreeItem::match(const QRegularExpression& regex) const
     {
+        if (!regex.isValid()) return true;
         return  regex.match(name().toString()).hasMatch() ||
                 regex.match(QString::number(mId)).hasMatch() ||
                 regex.match(gateType().toString()).hasMatch();

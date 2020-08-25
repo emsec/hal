@@ -50,6 +50,7 @@ namespace hal {
 
     void SelectionTreeView::populate(bool visible)
     {
+        if (m_selectionTreeProxyModel->isGraphicsBusy()) return;
         setSelectionMode(QAbstractItemView::NoSelection);
         selectionModel()->clear();
         m_selectionTreeModel->fetchSelection(visible);

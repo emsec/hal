@@ -8,7 +8,6 @@
 
 #include "gui/gui_globals.h"
 
-#include <QDebug>
 namespace hal
 {
     // SET VIA SETTINGS OR TOOLBUTTON
@@ -21,6 +20,9 @@ namespace hal
 
     void SelectionRelay::clear()
     {
+        mModulesSuppressedByFilter.clear();
+        mGatesSuppressedByFilter.clear();
+        mNetsSuppressedByFilter.clear();
         m_selected_gates.clear();
         m_selected_nets.clear();
         m_selected_modules.clear();

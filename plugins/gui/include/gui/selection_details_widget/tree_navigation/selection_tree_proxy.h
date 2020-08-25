@@ -34,6 +34,8 @@ namespace hal
         Q_OBJECT
     public:
         SelectionTreeProxyModel(QObject* parent = 0);
+        void applyFilterOnGraphics();
+        bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 
     protected:
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
@@ -48,5 +50,6 @@ namespace hal
     private:
         gui_utility::sort_mechanism m_sort_mechanism;
         QRegularExpression m_filter_expression;
+        int mGraphicsBusy;
     };
 }

@@ -1,5 +1,6 @@
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
 #include "gui/selection_details_widget/gate_details_widget.h"
 #include "gui/selection_details_widget/net_details_widget.h"
 #include "gui/selection_details_widget/module_details_widget.h"
@@ -116,6 +117,12 @@ namespace hal
         {
             return;
         }
+
+        SelectionTreeProxyModel* proxy = static_cast<SelectionTreeProxyModel*>(m_selectionTreeView->model());
+        if (proxy->isGraphicsBusy()) return;
+
+        m_searchbar->clear();
+        proxy->handle_filter_text_changed(QString());
 
         m_numberSelectedItems = g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() + g_selection_relay->m_selected_nets.size();
         QVector<const SelectionTreeItem*> defaultHighlight;
