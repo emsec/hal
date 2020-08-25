@@ -324,15 +324,16 @@ namespace hal
 
             auto rt_library = std::move(std::get<1>(it->second));
             auto plugin_inst = std::move(std::get<0>(it->second));
-
+            m_loaded_plugins.erase(it);
 
             auto file_name = rt_library->get_file_name();
             plugin_inst->on_unload();
 
-            /* remove plugin */
+            // actual unloading
+            // order of unloading is important, so we do it manually here:
+            // first destroy the plugin instance, then destroy the runtime library
             plugin_inst.release();
             rt_library.release();
-            m_loaded_plugins.erase(it);
 
             /* notify callback that a plugin was unloaded */
             m_hook(false, plugin_name, file_name);
