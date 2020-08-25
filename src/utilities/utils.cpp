@@ -2,8 +2,6 @@
 
 #include "hal_core/utilities/log.h"
 
-#include <boost/algorithm/string/predicate.hpp>
-#include <boost/predef.h>
 #include <dirent.h>
 #include <fstream>
 #include <sstream>

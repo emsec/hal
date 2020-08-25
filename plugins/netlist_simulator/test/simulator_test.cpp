@@ -464,7 +464,7 @@ namespace hal
             sim->set_input(A, SignalValue::ZERO);    //A=0
             sim->set_input(B, SignalValue::ZERO);    //B=0
             sim->simulate(10 * 1000);
-
+            
             sim->set_input(A, SignalValue::ZERO);    //A=0
             sim->set_input(B, SignalValue::ONE);     //B=1
             sim->simulate(10 * 1000);

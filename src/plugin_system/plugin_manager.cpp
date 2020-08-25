@@ -322,12 +322,16 @@ namespace hal
                 }
             }
 
-            auto file_name = std::get<1>(it->second)->get_file_name();
+            auto rt_library = std::move(std::get<1>(it->second));
+            auto plugin_inst = std::move(std::get<0>(it->second));
 
-            /* unload plugin instance */
-            std::get<0>(it->second)->on_unload();
+
+            auto file_name = rt_library->get_file_name();
+            plugin_inst->on_unload();
 
             /* remove plugin */
+            plugin_inst.release();
+            rt_library.release();
             m_loaded_plugins.erase(it);
 
             /* notify callback that a plugin was unloaded */
