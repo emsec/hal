@@ -176,7 +176,7 @@ If you use HAL in an academic context, please cite the framework using the refer
 }
 ```
 
-Feel free to also include the original [paper](http://eprint.iacr.org/2017/783), however we note that HAL has massively changed since its original prototype that was described in the paper.
+Feel free to also include the original [paper](http://eprint.iacr.org/2017/783), however, we note that HAL has massively changed since its original prototype that was described in the paper.
 Hence, we prefer citing the above entry.
 ```latex
 @article{2018:Fyrbiak:HAL,
@@ -199,6 +199,8 @@ Hence, we prefer citing the above entry.
 ```
 
 To get an overview on the challenges we set out to solve with HAL, feel free to watch our [talk](https://media.ccc.de/v/36c3-10879-hal_-_the_open-source_hardware_analyzer) at 36C3.
+
+<iframe width="1024" height="576" src="https://media.ccc.de/v/36c3-10879-hal_-_the_open-source_hardware_analyzer/oembed" frameborder="0" allowfullscreen></iframe>
 
 # Contact and Support
 For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de).
