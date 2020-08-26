@@ -51,13 +51,13 @@ This repository contains a selection of curated plugins:
 The C++ documentation is available [here](https://emsec.github.io/hal/doc/).
 The Python documentation can be found [here](https://emsec.github.io/hal/pydoc/).
 
-## Install Instructions <a name="install-instructions"></a>
+# Install Instructions <a name="install-instructions"></a>
 
-### Ubuntu
+## Ubuntu
 
 HAL releases are available via it's own ppa. You can find it here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
 
-### macOS
+## macOS
 
 Use the following commands to install hal via [homebrew](https://brew.sh/index_de).
 
@@ -66,7 +66,7 @@ brew tap emsec/hal
 brew install hal
 ```
 
-## Build Instructions <a name="build-instructions"></a>
+# Build Instructions <a name="build-instructions"></a>
 
 If you want to build HAL locally on your machine, run the following commands:
 
@@ -77,7 +77,7 @@ If you want to build HAL locally on your machine, run the following commands:
 5. `make`
 6. `make install` (optionally)
 
-### CMake Options
+## CMake Options
 Using the CMake build system, your HAL build can be configured quite easily (by adding `-D<OPTION>=1` to the cmake command).
 Here is a selection of the most important options:
 - `BUILD_TESTS`: builds all available tests which can be executed by running `ctest` in the build directory.
@@ -89,7 +89,7 @@ This also builds all tests of plugins that are built.
 
 The default `CMAKE_BUILD_TYPE` if you do not specify any option is set to `Release`.
 
-### Notes for building on macOS
+## Notes for building on macOS
 
 Please make sure to use a compiler that supports OpenMP. You can install one from e.g. Homebrew via: `brew install llvm`.
 
@@ -98,7 +98,7 @@ To let cmake know of the custom compiler use following command.
 `cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
 
 
-## Quickstart Guide <a name="quickstart"></a>
+# Quickstart Guide <a name="quickstart"></a>
 
 Install HAL or build HAL and start the GUI via `hal -g`. You can list all available options via `hal [--help|-h]`.
 We included some example netlists in `examples` together with the implementation of the respective example gate library in `plugins/example_gate_library`.
@@ -145,13 +145,13 @@ OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)
   O: (I0 & !I1) | (!I0 & I1)
 ```
 
-## Contributing
+# Contributing
 
 You are welcome to contribute to the development of HAL. Feel free to submit a new pull request via github.
 Please consider running the static checks + `clang format` before that.
 You can also install these checks as git hooks before any commit.
 
-### Run static checks and clang format locally
+## Run static checks and clang format locally
 To install clang-format hook install [git-hooks](https://github.com/icefox/git-hooks) and run:
 
 `git hooks --install`
@@ -159,11 +159,11 @@ To install clang-format hook install [git-hooks](https://github.com/icefox/git-h
 Start Docker build via:
 `docker-compose run --rm hal-build`
 
-### Generate Changelog
+## Generate Changelog
 
 `git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges`
 
-## Academic Context <a name="academic-context"></a>
+# Academic Context <a name="academic-context"></a>
 
 If you use HAL in an academic context, please cite the framework using the reference below:
 ```latex
@@ -200,13 +200,13 @@ Hence, we prefer citing the above entry.
 
 To get an overview on the challenges we set out to solve with HAL, feel free to watch our [talk](https://media.ccc.de/v/36c3-10879-hal_-_the_open-source_hardware_analyzer) at 36C3.
 
-## Contact and Support
+# Contact and Support
 For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de).
 
-## Licensing
+# Licensing
 HAL is licensed under MIT License to encourage collaboration with other research groups and contributions from the industry. Please refer to the license file for further information.
 
-## Disclaimer
+# Disclaimer
 HAL is at most alpha-quality software.
 Use at your own risk.
 We do not encourage any malicious use of our toolkit.
