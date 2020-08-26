@@ -16,11 +16,13 @@ namespace hal {
 
     void SelectionTreeView::setDefaultColumnWidth()
     {
+        setColumnWidth(SelectionTreeModel::NAME_COLUMN, 160);
         setColumnWidth(SelectionTreeModel::ID_COLUMN, 40);
         setColumnWidth(SelectionTreeModel::TYPE_COLUMN, 80);
-        header()->setSectionResizeMode(SelectionTreeModel::NAME_COLUMN, QHeaderView::Stretch);
-        header()->setSectionResizeMode(SelectionTreeModel::ID_COLUMN, QHeaderView::Interactive);
-        header()->setSectionResizeMode(SelectionTreeModel::TYPE_COLUMN, QHeaderView::Interactive);
+        header()->setStretchLastSection(true);
+//        header()->setSectionResizeMode(SelectionTreeModel::NAME_COLUMN, QHeaderView::Interactive);
+//        header()->setSectionResizeMode(SelectionTreeModel::ID_COLUMN, QHeaderView::Interactive);
+//        header()->setSectionResizeMode(SelectionTreeModel::TYPE_COLUMN, QHeaderView::Interactive);
     }
 
     void SelectionTreeView::currentChanged(const QModelIndex& current, const QModelIndex& previous)

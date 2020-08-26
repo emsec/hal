@@ -24,41 +24,25 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "gui/selection_history_navigator/selection.h"
+#include "gui/selection_history_navigator/selection_history_entry.h"
 
-#include <QObject>
 #include <list>
 
 namespace hal
 {
-    class SelectionHistoryNavigator : public QObject
+    class SelectionHistoryNavigator
     {
-        Q_OBJECT
 
     public:
-        SelectionHistoryNavigator(unsigned int max_history_size, QObject* parent = 0);
-        ~SelectionHistoryNavigator();
+        SelectionHistoryNavigator(unsigned int hsize);
 
-        void navigate_to_prev_item();
-        void navigate_to_next_item();
-
-        void set_max_history_size(unsigned int max_size);
-        u32 get_max_history_size() const;
-
-    Q_SIGNALS:
-
-    public Q_SLOTS:
-        void handle_selection_changed(void* sender);
+        void storeCurrentSelection();
+        void restorePreviousEntry();
+        bool hasPreviousEntry() const;
 
     private:
-        unsigned int m_max_history_size;
-
-        std::list<Selection> m_selection_container;
-
-        std::list<Selection>::iterator m_current_item_iterator;
-
-        void relay_selection(Selection selection);
-
-        void store_selection(u32 id, SelectionRelay::item_type type);
+        int mCount;
+        int mHistorySize;
+        QList<SelectionHistoryEntry> mSelectionContainer;
     };
 }

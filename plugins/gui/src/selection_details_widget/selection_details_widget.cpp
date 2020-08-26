@@ -4,6 +4,7 @@
 #include "gui/selection_details_widget/gate_details_widget.h"
 #include "gui/selection_details_widget/net_details_widget.h"
 #include "gui/selection_details_widget/module_details_widget.h"
+#include "gui/selection_history_navigator/selection_history_navigator.h"
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
@@ -26,7 +27,10 @@
 namespace hal
 {
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
-        : ContentWidget("Selection Details", parent), m_numberSelectedItems(0), m_search_action(new QAction())
+        : ContentWidget("Selection Details", parent), m_numberSelectedItems(0),
+          m_restoreLastSelection(new QAction),
+          m_search_action(new QAction),
+          m_history(new SelectionHistoryNavigator(5))
     {
         //needed to load the properties
         ensurePolished();
@@ -38,18 +42,19 @@ namespace hal
         //container for left side of splitter containing a selection tree view and a searchbar
         QWidget* treeViewContainer = new QWidget(m_splitter);
         //treeViewContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); /*Does not work, but should?*/
-        treeViewContainer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding); /*Kinda works? Does not give as much space as previous implementation without container.*/
+        treeViewContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); /*Kinda works? Does not give as much space as previous implementation without container.*/
 
         QVBoxLayout* containerLayout = new QVBoxLayout(treeViewContainer);
 
         m_selectionTreeView  = new SelectionTreeView(treeViewContainer);
+        m_selectionTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        m_selectionTreeView->setMinimumWidth(280);
         m_selectionTreeView->hide();
 
         m_searchbar = new Searchbar(treeViewContainer);
         m_searchbar->hide();
 
         containerLayout->addWidget(m_selectionTreeView);
-        containerLayout->addStretch();
         containerLayout->addWidget(m_searchbar);
         containerLayout->setSpacing(0);
         containerLayout->setContentsMargins(0,0,0,0);
@@ -98,14 +103,39 @@ namespace hal
         //    m_table_widget->horizontalHeader()->setStretchLastSection(true);
         //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
+        m_restoreLastSelection->setToolTip("Restore last selection");
+        canRestoreSelection();
+
         m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
         m_search_action->setToolTip("Search");
 
+        connect(m_restoreLastSelection, &QAction::triggered, this, &SelectionDetailsWidget::restoreLastSelection);
         connect(m_search_action, &QAction::triggered, this, &SelectionDetailsWidget::toggle_searchbar);
         connect(m_selectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
         connect(m_searchbar, &Searchbar::text_edited, m_selectionTreeView, &SelectionTreeView::handle_filter_text_changed);
         connect(m_searchbar, &Searchbar::text_edited, this, &SelectionDetailsWidget::handle_filter_text_changed);
+    }
+
+    void SelectionDetailsWidget::restoreLastSelection()
+    {
+        g_selection_relay->clear();
+        m_history->restorePreviousEntry();
+        g_selection_relay->relay_selection_changed(nullptr);
+        canRestoreSelection();
+    }
+
+    void SelectionDetailsWidget::canRestoreSelection()
+    {
+        bool enable = m_history->hasPreviousEntry();
+
+        QString iconStyle = enable
+                ? m_search_icon_style
+                : QString("all->#515050");
+        QString iconName(":/icons/undo2");
+
+        m_restoreLastSelection->setIcon( gui_utility::get_styled_svg_icon(iconStyle,iconName));
+        m_restoreLastSelection->setEnabled(enable);
     }
 
     void SelectionDetailsWidget::handle_selection_update(void* sender)
@@ -123,29 +153,29 @@ namespace hal
 
         m_searchbar->clear();
         proxy->handle_filter_text_changed(QString());
+        handle_filter_text_changed(QString());
 
         m_numberSelectedItems = g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() + g_selection_relay->m_selected_nets.size();
         QVector<const SelectionTreeItem*> defaultHighlight;
 
-        switch (m_numberSelectedItems) {
-        case 0:
+        if (m_numberSelectedItems)
         {
-            singleSelectionInternal(nullptr);
-            // clear and hide tree
-            m_selectionTreeView->populate(false);
-//            set_name("Selection Details (nothing selected)");
-            return;
-        }
-// executive decision: treat single selected item the same way as multiple
-//        case 1:
-//            m_selectionTreeView->populate(false);
-//            break;
-        default:
             // more than 1 item selected, populate and make visible
             m_selectionTreeView->populate(true);
             defaultHighlight.append(m_selectionTreeView->itemFromIndex());
-            break;
+
+            m_history->storeCurrentSelection();
+            canRestoreSelection();
         }
+        else
+        {
+            // nothing selected
+            singleSelectionInternal(nullptr);
+            // clear and hide tree
+            m_selectionTreeView->populate(false);
+            return;
+        }
+
 
         if (!g_selection_relay->m_selected_modules.isEmpty())
         {
@@ -241,7 +271,7 @@ namespace hal
 
     void SelectionDetailsWidget::setup_toolbar(Toolbar* toolbar)
     {
-
+        toolbar->addAction(m_restoreLastSelection);
         toolbar->addAction(m_search_action);
     }
 

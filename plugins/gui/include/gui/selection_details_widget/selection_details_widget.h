@@ -40,6 +40,7 @@ namespace hal
     class ModuleDetailsWidget;
     class GateDetailsWidget;
     class NetDetailsWidget;
+    class SelectionHistoryNavigator;
 
     class SelectionDetailsWidget : public ContentWidget
     {
@@ -67,6 +68,11 @@ namespace hal
         void handleTreeSelection(const SelectionTreeItem* sti);
         QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
 
+
+    private Q_SLOTS:
+        void restoreLastSelection();
+        void toggle_searchbar();
+
     private:
         void singleSelectionInternal(const SelectionTreeItem* sti);
 
@@ -85,11 +91,14 @@ namespace hal
 
         Searchbar* m_searchbar;
 
+        QAction* m_restoreLastSelection;
         QAction* m_search_action;
         QString m_search_icon_path;
         QString m_search_icon_style;
 
-        void toggle_searchbar();
+        SelectionHistoryNavigator* m_history;
+
         void handle_filter_text_changed(const QString& filter_text);
+        void canRestoreSelection();
     };
 }
