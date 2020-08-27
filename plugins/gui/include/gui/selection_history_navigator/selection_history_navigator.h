@@ -36,6 +36,7 @@ namespace hal
     public:
         SelectionHistoryNavigator(unsigned int hsize);
 
+        void emptySelection();
         void storeCurrentSelection();
         void restorePreviousEntry();
         bool hasPreviousEntry() const;

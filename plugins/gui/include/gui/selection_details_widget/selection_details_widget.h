@@ -100,5 +100,8 @@ namespace hal
 
         void handle_filter_text_changed(const QString& filter_text);
         void canRestoreSelection();
+        void enableSearchbar(bool enable);
+
+        static const QString disableIconStyle;
     };
 }

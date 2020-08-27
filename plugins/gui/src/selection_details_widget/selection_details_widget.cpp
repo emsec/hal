@@ -26,6 +26,9 @@
 
 namespace hal
 {
+    const QString SelectionDetailsWidget::disableIconStyle = QString("all->#515050");
+
+
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), m_numberSelectedItems(0),
           m_restoreLastSelection(new QAction),
@@ -106,8 +109,8 @@ namespace hal
         m_restoreLastSelection->setToolTip("Restore last selection");
         canRestoreSelection();
 
-        m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
         m_search_action->setToolTip("Search");
+        enableSearchbar(false);  // enable upon first non-zero selection
 
         connect(m_restoreLastSelection, &QAction::triggered, this, &SelectionDetailsWidget::restoreLastSelection);
         connect(m_search_action, &QAction::triggered, this, &SelectionDetailsWidget::toggle_searchbar);
@@ -125,13 +128,27 @@ namespace hal
         canRestoreSelection();
     }
 
+    void SelectionDetailsWidget::enableSearchbar(bool enable)
+    {
+        QString iconStyle = enable
+                ? m_search_icon_style
+                : disableIconStyle;
+        m_search_action->setIcon(gui_utility::get_styled_svg_icon(iconStyle, m_search_icon_path));
+        if (!enable && m_searchbar->isVisible())
+        {
+            m_searchbar->hide();
+            setFocus();
+        }
+        m_search_action->setEnabled(enable);
+    }
+
     void SelectionDetailsWidget::canRestoreSelection()
     {
         bool enable = m_history->hasPreviousEntry();
 
         QString iconStyle = enable
                 ? m_search_icon_style
-                : QString("all->#515050");
+                : disableIconStyle;
         QString iconName(":/icons/undo2");
 
         m_restoreLastSelection->setIcon( gui_utility::get_styled_svg_icon(iconStyle,iconName));
@@ -166,6 +183,7 @@ namespace hal
 
             m_history->storeCurrentSelection();
             canRestoreSelection();
+            enableSearchbar(true);
         }
         else
         {
@@ -173,6 +191,8 @@ namespace hal
             singleSelectionInternal(nullptr);
             // clear and hide tree
             m_selectionTreeView->populate(false);
+            m_history->emptySelection();
+            enableSearchbar(false);
             return;
         }
 
@@ -221,14 +241,12 @@ namespace hal
 //            if (m_numberSelectedItems==1) set_name("Module Details");
             break;
         case SelectionTreeItem::GateItem:
-//            m_searchbar->hide();
             m_module_details->update(0);
             m_gate_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_gate_details);
 //            if (m_numberSelectedItems==1) set_name("Gate Details");
             break;
         case SelectionTreeItem::NetItem:
-//            m_searchbar->hide();
             m_module_details->update(0);
             m_net_details->update(sti->id());
             m_stacked_widget->setCurrentWidget(m_net_details);

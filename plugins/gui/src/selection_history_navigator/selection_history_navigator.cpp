@@ -25,6 +25,11 @@ namespace hal
         mSelectionContainer.append(she);
     }
 
+    void SelectionHistoryNavigator::emptySelection()
+    {
+        ++mCount;
+    }
+
     void SelectionHistoryNavigator::restorePreviousEntry()
     {
         if (mSelectionContainer.isEmpty()) return;
