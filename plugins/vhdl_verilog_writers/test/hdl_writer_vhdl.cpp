@@ -1,13 +1,13 @@
 #include "gtest/gtest.h"
 #include "netlist_test_utils.h"
 #include <iostream>
-#include <netlist/gate.h>
-#include <netlist/net.h>
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist.h"
-#include "hal_core/netlist/hdl_parser/hdl_parser_vhdl.h"
-#include "hal_core/netlist/hdl_writer/hdl_writer_vhdl.h"
+#include "vhdl_verilog_parsers/hdl_parser_vhdl.h"
+#include "vhdl_verilog_writers/hdl_writer_vhdl.h"
 
 namespace hal {
     using test_utils::MIN_GATE_ID;
@@ -43,7 +43,7 @@ namespace hal {
         TEST_START
             { //NOTE: Fails because of an issue in the parser (empty 'port map' can't be parsed)
                 // Write and parse the example netlist (with some additions) and compare the result with the original netlist
-                Netlist* nl = test_utils::create_example_parse_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_example_parse_netlist(0);
 
                 // Mark the global gates as such
                 nl->mark_gnd_gate(nl->get_gate_by_id(MIN_GATE_ID + 1));
@@ -52,20 +52,20 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
 
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
 
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -79,24 +79,24 @@ namespace hal {
                 // -- Check if gates and nets are the same
                 EXPECT_EQ(nl->get_gates().size(), parsed_nl->get_gates().size());
                 for(auto g_0 : nl->get_gates()){
-                    EXPECT_TRUE(test_utils::gates_are_equal(g_0, test_utils::get_gate_by_subname(parsed_nl, g_0->get_name()),true, true));
+                    EXPECT_TRUE(test_utils::gates_are_equal(g_0, test_utils::get_gate_by_subname(parsed_nl.get(), g_0->get_name()),true, true));
                 }
 
                 EXPECT_EQ(nl->get_nets().size(), parsed_nl->get_nets().size());
 
                 for(auto n_0 : nl->get_nets()){
-                    EXPECT_TRUE(test_utils::nets_are_equal(n_0, test_utils::get_net_by_subname(parsed_nl, n_0->get_name()), true, true));
+                    EXPECT_TRUE(test_utils::nets_are_equal(n_0, test_utils::get_net_by_subname(parsed_nl.get(), n_0->get_name()), true, true));
                 }
 
                 // -- Check if global gates are the same
                 EXPECT_EQ(nl->get_gnd_gates().size(), parsed_nl->get_gnd_gates().size());
                 for(auto gl_gnd_0 : nl->get_gnd_gates()){
-                    EXPECT_TRUE(parsed_nl->is_gnd_gate(test_utils::get_gate_by_subname(parsed_nl, gl_gnd_0->get_name())));
+                    EXPECT_TRUE(parsed_nl->is_gnd_gate(test_utils::get_gate_by_subname(parsed_nl.get(), gl_gnd_0->get_name())));
                 }
 
                 EXPECT_EQ(nl->get_vcc_gates().size(), parsed_nl->get_vcc_gates().size());
                 for(auto gl_vcc_0 : nl->get_vcc_gates()){
-                    EXPECT_TRUE(parsed_nl->is_vcc_gate(test_utils::get_gate_by_subname(parsed_nl, gl_vcc_0->get_name())));
+                    EXPECT_TRUE(parsed_nl->is_vcc_gate(test_utils::get_gate_by_subname(parsed_nl.get(), gl_vcc_0->get_name())));
                 }//
             }
         TEST_END
@@ -114,7 +114,7 @@ namespace hal {
         TEST_START
             {
                 // Add 2 global input nets to an empty netlist
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* global_in_0 = nl->create_net(MIN_NET_ID + 0, "0_global_in");
                 Net* global_in_1 = nl->create_net(MIN_NET_ID + 1, "1_global_in");
@@ -125,18 +125,18 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -145,18 +145,18 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the nets are written/parsed correctly
-                Net* p_global_in_0 = test_utils::get_net_by_subname(parsed_nl, "0_global_in");
+                Net* p_global_in_0 = test_utils::get_net_by_subname(parsed_nl.get(), "0_global_in");
                 ASSERT_NE(p_global_in_0, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_input_net(p_global_in_0));
 
-                Net* p_global_in_1 = test_utils::get_net_by_subname(parsed_nl, "1_global_in");
+                Net* p_global_in_1 = test_utils::get_net_by_subname(parsed_nl.get(), "1_global_in");
                 ASSERT_NE(p_global_in_1, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_input_net(p_global_in_1));
 
             }
             {
                 // Add 2 global output nets to an empty netlist
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* global_out_0 = nl->create_net(MIN_NET_ID + 0, "0_global_out");
                 Net* global_out_1 = nl->create_net(MIN_NET_ID + 1, "1_global_out");
@@ -167,18 +167,18 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -187,11 +187,11 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the nets are written/parsed correctly
-                Net* p_global_out_0 = test_utils::get_net_by_subname(parsed_nl, "0_global_out");
+                Net* p_global_out_0 = test_utils::get_net_by_subname(parsed_nl.get(), "0_global_out");
                 ASSERT_NE(p_global_out_0, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_output_net(p_global_out_0));
 
-                Net* p_global_out_1 = test_utils::get_net_by_subname(parsed_nl, "1_global_out");
+                Net* p_global_out_1 = test_utils::get_net_by_subname(parsed_nl.get(), "1_global_out");
                 ASSERT_NE(p_global_out_1, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_output_net(p_global_out_1));
 
@@ -211,7 +211,7 @@ namespace hal {
         TEST_START
             { //NOTE: Need to assure that the nl is valid. by passing output nets
                 // Add a Gate to the netlist and store some data
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* global_in = nl->create_net(MIN_NET_ID + 0, "global_in");
                 nl->mark_global_input_net(global_in);
@@ -273,19 +273,19 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
 
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -294,33 +294,33 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the data is written/parsed correctly
-                Gate* p_test_gate_0 = test_utils::get_gate_by_subname(parsed_nl, "test_gate_0");
+                Gate* p_test_gate_0 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_0");
                 ASSERT_NE(p_test_gate_0, nullptr);
                 // EXPECT_EQ(p_test_gate_0->get_data(), test_gate_0->get_data()); //ISSUE: generic, time can't be used
 
-                Gate* p_test_gate_1 = test_utils::get_gate_by_subname(parsed_nl, "test_gate_1");
+                Gate* p_test_gate_1 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_1");
                 ASSERT_NE(p_test_gate_1, nullptr);
                 EXPECT_EQ(p_test_gate_1->get_data(), test_gate_1->get_data());
 
-                Gate* p_test_gate_2 = test_utils::get_gate_by_subname(parsed_nl, "test_gate_2");
+                Gate* p_test_gate_2 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_2");
                 ASSERT_NE(p_test_gate_2, nullptr);
                 EXPECT_EQ(p_test_gate_2->get_data(), test_gate_2->get_data());
 
-                Gate* p_test_gate_3 = test_utils::get_gate_by_subname(parsed_nl, "test_gate_3");
+                Gate* p_test_gate_3 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_3");
                 ASSERT_NE(p_test_gate_3, nullptr);
                 EXPECT_EQ(p_test_gate_3->get_data(), test_gate_3->get_data());
 
-                Gate* p_test_gate_4 = test_utils::get_gate_by_subname(parsed_nl, "test_gate_4");
+                Gate* p_test_gate_4 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_4");
                 ASSERT_NE(p_test_gate_4, nullptr);
                 // EXPECT_EQ(p_test_gate_4->get_data(), test_gate_4->get_data()); //ISSUE: generic, time can't be used
 
-                Gate* p_test_gate_5 = test_utils::get_gate_by_subname(parsed_nl, "test_gate_5");
+                Gate* p_test_gate_5 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_5");
                 ASSERT_NE(p_test_gate_5, nullptr);
                 auto test_gate_5_data_without_invalid = test_gate_5->get_data();
                 test_gate_5_data_without_invalid.erase(std::make_tuple("generic", "0_key_invalid"));
                 EXPECT_EQ(p_test_gate_5->get_data(), test_gate_5_data_without_invalid);
 
-                //Gate* p_test_gate_6 = test_utils::get_gate_by_subname(parsed_nl, "test_gate_6");
+                //Gate* p_test_gate_6 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_6");
                 //ASSERT_NE(p_test_gate_6, nullptr);
                 //EXPECT_EQ(p_test_gate_6->get_data(), test_gate_6->get_data());
             }
@@ -339,7 +339,7 @@ namespace hal {
         TEST_START
             {
                 // Add a Gate to the netlist and store some data
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* global_in = nl->create_net(MIN_NET_ID + 0, "123");
                 nl->mark_global_input_net(global_in);
@@ -347,19 +347,19 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
 
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -388,7 +388,7 @@ namespace hal {
         TEST_START
             {
                 // Two nets with individual names connect a test_gate with a gnd/vcc Gate
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 // Add the gates
                 Gate* gnd_gate = nl->create_gate( MIN_GATE_ID+0, test_utils::get_gate_type_by_name("gnd"), "gnd_gate");
@@ -408,18 +408,18 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -428,17 +428,17 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the GND/VCC gates and nets are written/parsed correctly
-                Gate* p_vcc_gate = test_utils::get_gate_by_subname(parsed_nl,  "vcc_gate");
-                Gate* p_gnd_gate = test_utils::get_gate_by_subname(parsed_nl,  "gnd_gate");
-                Gate* p_test_gate = test_utils::get_gate_by_subname(parsed_nl,  "test_gate");
+                Gate* p_vcc_gate = test_utils::get_gate_by_subname(parsed_nl.get(),  "vcc_gate");
+                Gate* p_gnd_gate = test_utils::get_gate_by_subname(parsed_nl.get(),  "gnd_gate");
+                Gate* p_test_gate = test_utils::get_gate_by_subname(parsed_nl.get(),  "test_gate");
 
                 ASSERT_NE(vcc_gate, nullptr);
                 ASSERT_NE(gnd_gate, nullptr);
                 ASSERT_NE(test_gate, nullptr);
 
                 ASSERT_EQ(parsed_nl->get_nets().size(), (size_t)2);
-                Net* p_zero_net = test_utils::get_net_by_subname(parsed_nl,  "zero_net");
-                Net* p_one_net = test_utils::get_net_by_subname(parsed_nl,  "one_net");
+                Net* p_zero_net = test_utils::get_net_by_subname(parsed_nl.get(),  "zero_net");
+                Net* p_one_net = test_utils::get_net_by_subname(parsed_nl.get(),  "one_net");
                 ASSERT_NE(zero_net, nullptr);
                 ASSERT_NE(one_net, nullptr);
 
@@ -452,7 +452,7 @@ namespace hal {
             {
                 // Two nets ('0'/'1')  are connected with a test_gate. For these net names, a global_gnd/global_vcc gate
                 // should be created.
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 // Add the gate
                 Gate* test_gate = nl->create_gate( MIN_GATE_ID+2, test_utils::get_gate_type_by_name("gate_2_to_1"), "test_gate");
@@ -469,19 +469,19 @@ namespace hal {
 
                 // Write and parse the netlist now
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 ASSERT_NE(parsed_nl, nullptr);
-                Gate* global_gnd = test_utils::get_gate_by_subname(parsed_nl, "global_gnd");
-                Gate* global_vcc = test_utils::get_gate_by_subname(parsed_nl, "global_vcc");
+                Gate* global_gnd = test_utils::get_gate_by_subname(parsed_nl.get(), "global_gnd");
+                Gate* global_vcc = test_utils::get_gate_by_subname(parsed_nl.get(), "global_vcc");
                 ASSERT_NE(global_gnd, nullptr);
                 ASSERT_NE(global_vcc, nullptr);
                 ASSERT_NE(global_gnd->get_fan_out_net("O"), nullptr);
@@ -508,7 +508,7 @@ namespace hal {
         TEST_START
             {
                 // Testing the handling of special Net names
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* bracket_net = nl->create_net(MIN_NET_ID + 0, "net(0)");
                 Net* comma_net = nl->create_net(MIN_NET_ID + 1, "net,1");
@@ -529,7 +529,7 @@ namespace hal {
                 Gate* dummy_gate_r_1 = nl->create_gate(MIN_GATE_ID+3, test_utils::get_gate_type_by_name("gate_8_to_8"), "r_1");
 
                 std::vector<Net*> all_nets = {bracket_net,comma_net,comma_space_net,slash_net,backslash_net,curly_bracket_net,curly_bracket_net,
-                                                              angle_bracket_net,double_underscore_net,edges_underscore_net,digit_only_net};
+                                              angle_bracket_net,double_underscore_net,edges_underscore_net,digit_only_net};
                 std::vector<Gate*> dummy_gates_l = {dummy_gate_l_0,dummy_gate_l_1};
                 std::vector<Gate*> dummy_gates_r = {dummy_gate_r_0,dummy_gate_r_1};
                 // Connect the nets in a loop
@@ -540,15 +540,15 @@ namespace hal {
 
                 // Write and parse the netlist now
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -570,7 +570,7 @@ namespace hal {
             }
             {
                 // Testing the handling of special Gate names
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 // Create various gates with special Gate name characters
                 Gate*
@@ -592,8 +592,8 @@ namespace hal {
                 Gate*
                     edges_underscore_gate = nl->create_gate(MIN_GATE_ID + 8, test_utils::get_gate_type_by_name("gate_1_to_1"), "_gate_8_");
                 Gate* digit_only_gate = nl->create_gate(MIN_GATE_ID + 9,
-                                                                        test_utils::get_gate_type_by_name("gate_1_to_1"),
-                                                                        "9"); // should be converted to GATE_9
+                                                        test_utils::get_gate_type_by_name("gate_1_to_1"),
+                                                        "9"); // should be converted to GATE_9
 
                 // Create output nets for all gates to create a valid netlist
                 unsigned int idx = 0;
@@ -606,18 +606,18 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -652,7 +652,7 @@ namespace hal {
         TEST_START
             {
                 // Testing the handling of two gates with the same name
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* test_net = nl->create_net(MIN_NET_ID + 0, "gate_net_name");
                 Gate*
@@ -663,19 +663,19 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVHDL vhdl_writer(parser_input);
+                HDLWriterVHDL vhdl_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = vhdl_writer.write(nl);
+                bool writer_suc = vhdl_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVHDL vhdl_parser(parser_input);
+                HDLParserVHDL vhdl_parser;
 
                 // Parse the .vhdl file
-                Netlist* parsed_nl = vhdl_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = vhdl_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -684,8 +684,8 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the Gate name was added a "_inst"
-                EXPECT_NE(test_utils::get_net_by_subname(parsed_nl, "gate_net_name"), nullptr);
-                EXPECT_NE(test_utils::get_gate_by_subname(parsed_nl, "gate_net_name"), nullptr);
+                EXPECT_NE(test_utils::get_net_by_subname(parsed_nl.get(), "gate_net_name"), nullptr);
+                EXPECT_NE(test_utils::get_gate_by_subname(parsed_nl.get(), "gate_net_name"), nullptr);
 
             }
         TEST_END

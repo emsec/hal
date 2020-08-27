@@ -8,4 +8,6 @@ if(PL_VHDL_VERILOG_WRITERS OR BUILD_ALL_PLUGINS)
                    HEADER ${VHDL_VERILOG_WRITERS_INC}
                    SOURCES ${VHDL_VERILOG_WRITERS_SRC}
                    )
+
+    add_subdirectory(test)
 endif()

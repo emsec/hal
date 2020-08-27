@@ -3,13 +3,13 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 #include <iostream>
-#include <netlist/gate.h>
-#include <netlist/net.h>
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist.h"
-#include "hal_core/netlist/hdl_parser/hdl_parser_verilog.h"
-#include "hal_core/netlist/hdl_writer/hdl_writer_verilog.h"
+#include "vhdl_verilog_parsers/hdl_parser_verilog.h"
+#include "vhdl_verilog_writers/hdl_writer_verilog.h"
 
 namespace hal {
 
@@ -73,7 +73,7 @@ namespace hal {
         TEST_START
             {
                 // Write and parse the example netlist (with some additions) and compare the result with the original netlist
-                Netlist* nl = test_utils::create_example_parse_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_example_parse_netlist(0);
 
                 // Mark the global gates as such
                 nl->mark_gnd_gate(nl->get_gate_by_id(test_utils::MIN_GATE_ID + 1));
@@ -82,20 +82,20 @@ namespace hal {
                 // Write and parse the netlist now
                 //test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
 
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
 
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -141,6 +141,7 @@ namespace hal {
         TEST_END
     }
 
+
     /**
      * Testing the writing of global input/output/inout nets
      *
@@ -153,7 +154,7 @@ namespace hal {
         TEST_START
             {
                 // Add 2 global input nets to an empty netlist
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* global_in_0 = nl->create_net(test_utils::MIN_NET_ID + 0, "0_global_in");
                 Net* global_in_1 = nl->create_net(test_utils::MIN_NET_ID + 1, "1_global_in");
@@ -164,18 +165,18 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -184,18 +185,18 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the nets are written/parsed correctly
-                Net* p_global_in_0 = test_utils::get_net_by_subname(parsed_nl, "0_global_in");
+                Net* p_global_in_0 = test_utils::get_net_by_subname(parsed_nl.get(), "0_global_in");
                 ASSERT_NE(p_global_in_0, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_input_net(p_global_in_0));
 
-                Net* p_global_in_1 = test_utils::get_net_by_subname(parsed_nl, "1_global_in");
+                Net* p_global_in_1 = test_utils::get_net_by_subname(parsed_nl.get(), "1_global_in");
                 ASSERT_NE(p_global_in_1, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_input_net(p_global_in_1));
 
             }
             {
                 // Add 2 global output nets to an empty netlist
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* global_out_0 = nl->create_net(test_utils::MIN_NET_ID + 0, "0_global_out");
                 Net* global_out_1 = nl->create_net(test_utils::MIN_NET_ID + 1, "1_global_out");
@@ -206,18 +207,18 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -226,18 +227,18 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the nets are written/parsed correctly
-                Net* p_global_out_0 = test_utils::get_net_by_subname(parsed_nl, "0_global_out");
+                Net* p_global_out_0 = test_utils::get_net_by_subname(parsed_nl.get(), "0_global_out");
                 ASSERT_NE(p_global_out_0, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_output_net(p_global_out_0));
 
-                Net* p_global_out_1 = test_utils::get_net_by_subname(parsed_nl, "1_global_out");
+                Net* p_global_out_1 = test_utils::get_net_by_subname(parsed_nl.get(), "1_global_out");
                 ASSERT_NE(p_global_out_1, nullptr);
                 EXPECT_TRUE(parsed_nl->is_global_output_net(p_global_out_1));
 
             }
             /*{ // NOTE: Inout nets are not handled by the parser currently
                 // Add 2 global inout nets to an empty netlist
-                Netlist* nl = create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = create_empty_netlist(0);
 
                 Net* global_inout_0 = nl->create_net( test_utils::MIN_NET_ID+0, "0_global_inout");
                 Net* global_inout_1 = nl->create_net( test_utils::MIN_NET_ID+1, "1_global_inout");
@@ -248,18 +249,18 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -292,7 +293,7 @@ namespace hal {
         TEST_START
             /*{ //NOTE: generic data isn't handled correctly in this version (parser issue)
                 // Add a Gate to the netlist and store some data
-                Netlist* nl = create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = create_empty_netlist(0);
 
                 Net* global_in = nl->create_net( MIN_NET_ID+0, "global_in");
                 nl->mark_global_input_net(global_in);
@@ -347,20 +348,20 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
                 std::cout << parser_input.str() << std::endl;
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
 
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -414,7 +415,7 @@ namespace hal {
         TEST_START
             {
                 // Add a Gate to the netlist and store some data
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* global_in = nl->create_net(test_utils::MIN_NET_ID + 0, "123");
                 nl->mark_global_input_net(global_in);
@@ -422,19 +423,19 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
 
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -465,7 +466,7 @@ namespace hal {
         TEST_START
             {
                 // Testing the handling of special Net names
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* bracket_net = nl->create_net(test_utils::MIN_NET_ID + 0, "Net(0)");
                 Net* comma_net = nl->create_net(test_utils::MIN_NET_ID + 1, "Net,1");
@@ -482,18 +483,18 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -517,7 +518,7 @@ namespace hal {
             }
             {
                 // Testing the handling of special Gate names
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
                 GateLibrary* gl = m_gl;
 
                 // Create various gates with special Gate name characters
@@ -540,8 +541,8 @@ namespace hal {
                 Gate* edges_underscore_gate =
                     nl->create_gate(test_utils::MIN_GATE_ID + 8, gl->get_gate_types().at("gate_1_to_1"), "_gate_8_");
                 Gate* digit_only_gate = nl->create_gate(test_utils::MIN_GATE_ID + 9,
-                                                                        gl->get_gate_types().at("gate_1_to_1"),
-                                                                        "9"); // should be converted to GATE_9
+                                                        gl->get_gate_types().at("gate_1_to_1"),
+                                                        "9"); // should be converted to GATE_9
 
                 // Create output nets for all gates to create a valid netlist
                 unsigned int idx = 0;
@@ -554,18 +555,18 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -600,7 +601,7 @@ namespace hal {
         TEST_START
             {
                 // Testing the handling of two gates with the same name
-                Netlist* nl = test_utils::create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
 
                 Net* test_net = nl->create_net(test_utils::MIN_NET_ID + 0, "gate_net_name");
                 Gate*
@@ -611,19 +612,19 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
 
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -632,8 +633,8 @@ namespace hal {
                 test_def::get_captured_stdout();
 
                 // Check if the Gate name was added a "_inst"
-                EXPECT_NE(test_utils::get_net_by_subname(parsed_nl, "gate_net_name"), nullptr);
-                EXPECT_NE(test_utils::get_gate_by_subname(parsed_nl, "gate_net_name_inst"), nullptr);
+                EXPECT_NE(test_utils::get_net_by_subname(parsed_nl.get(), "gate_net_name"), nullptr);
+                EXPECT_NE(test_utils::get_gate_by_subname(parsed_nl.get(), "gate_net_name_inst"), nullptr);
 
             }
         TEST_END
@@ -651,7 +652,7 @@ namespace hal {
         TEST_START
             /*{ FIXME, NOTE: GND/VCC gates are replaced (but not deleted) by global_gnd/global_vcc
                 // Testing the Net name translation of a '0' Net
-                Netlist* nl = create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = create_empty_netlist(0);
 
                 Gate* gnd_gate = nl->create_gate(test_utils::MIN_GATE_ID+0, test_utils::get_gate_type_by_name("GND"), "gnd_gate");
                 Net* global_out = nl->create_net(test_utils::MIN_NET_ID+0, "global_out");
@@ -666,19 +667,19 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
 
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -696,7 +697,7 @@ namespace hal {
             }
             {
                 // Testing the Net name translation of a '0' Net
-                Netlist* nl = create_empty_netlist(0);
+                std::unique_ptr<Netlist> nl = create_empty_netlist(0);
 
                 Gate* vcc_gate = nl->create_gate(test_utils::MIN_GATE_ID+0, test_utils::get_gate_type_by_name("vcc"), "vcc_gate");
                 Net* global_out = nl->create_net(test_utils::MIN_NET_ID+0, "global_out");
@@ -711,19 +712,19 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
 
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -765,7 +766,7 @@ namespace hal {
                  * create_temp_gate_lib();
                 // Testing the usage of a pin vector using the temp Gate library
                 GateLibrary* gl = gate_library_manager::get_gate_library(temp_lib_name);
-                Netlist* nl(new Netlist(gl)); <-- dont do this!
+                std::unique_ptr<Netlist> nl(new Netlist(gl)); <-- dont do this!
 
                 Gate* gnd_gate = nl->create_gate(MIN_GATE_ID + 0, "GND", "gnd_gate");
                 Gate* vcc_gate = nl->create_gate(MIN_GATE_ID + 1, "VCC", "vcc_gate");
@@ -788,19 +789,19 @@ namespace hal {
                 // Write and parse the netlist now
                 test_def::capture_stdout();
                 std::stringstream parser_input;
-                HDLWriterVerilog verilog_writer(parser_input);
+                HDLWriterVerilog verilog_writer;
 
                 // Writes the netlist in the sstream
-                bool writer_suc = verilog_writer.write(nl);
+                bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                 if (!writer_suc) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
                 }
                 ASSERT_TRUE(writer_suc);
 
-                HDLParserVerilog verilog_parser(parser_input);
+                HDLParserVerilog verilog_parser;
 
                 // Parse the .verilog file
-                Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_gl);
+                std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(parser_input, m_gl);
 
                 if (parsed_nl == nullptr) {
                     std::cout << test_def::get_captured_stdout() << std::endl;
@@ -841,7 +842,7 @@ namespace hal {
                 /*
                             // Testing the usage of nets connected to a X_ZERO Gate
                             GateLibrary* gl = gate_library_manager::get_gate_library(m_pseudo_simprim_lib_name);
-                            Netlist* nl(new Netlist(gl)); <-- dont do this!
+                            std::unique_ptr<Netlist> nl(new Netlist(gl)); <-- dont do this!
 
                             Gate* x_zero_gate_0 = nl->create_gate("X_ZERO", "x_zero_gate_0");
                             Gate* x_zero_gate_1 = nl->create_gate("X_ZERO", "x_zero_gate_1");
@@ -863,19 +864,19 @@ namespace hal {
                             // Write and parse the netlist now
                             //test_def::capture_stdout();
                             std::stringstream parser_input;
-                            HDLWriterVerilog verilog_writer(parser_input);
+                            HDLWriterVerilog verilog_writer;
 
                             // Writes the netlist in the sstream
-                            bool writer_suc = verilog_writer.write(nl);
+                            bool writer_suc = verilog_writer.write(nl.get(), parser_input);
                             if (!writer_suc) {
                                 //std::cout << test_def::get_captured_stdout() << std::endl;
                             }
                             ASSERT_TRUE(writer_suc);
 a
-                            HDLParserVerilog verilog_parser(parser_input);
+                            HDLParserVerilog verilog_parser;
 
                             // Parse the .verilog file
-                            Netlist* parsed_nl = verilog_parser.parse_and_instantiate(m_pseudo_simprim_lib_name);
+                            std::unique_ptr<Netlist> parsed_nl = verilog_parser.parse_and_instantiate(m_pseudo_simprim_lib_name);
 
                             if (parsed_nl == nullptr) {
                                 //std::cout << test_def::get_captured_stdout() << std::endl;
