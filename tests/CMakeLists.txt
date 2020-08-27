@@ -28,7 +28,6 @@ endif()
 # Now simply link your own targets against gtest, gmock,
 # etc. as appropriate
 
-#add_subdirectory(basic_tests)
 add_subdirectory(test_utils)
 add_subdirectory(core)
 add_subdirectory(netlist)
