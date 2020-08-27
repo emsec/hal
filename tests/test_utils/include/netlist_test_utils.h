@@ -10,8 +10,8 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "test_def.h"
-
 #include "hal_core/utilities/utils.h"
+
 #include <fstream>
 #include <math.h>
 
@@ -26,6 +26,7 @@ namespace hal
 {
     namespace test_utils
     {
+
         /*********************************************************
          *                      Constants                        *
          *********************************************************/
@@ -58,39 +59,40 @@ namespace hal
          * @param[in] id - Id of the netlist
          * @returns An empty netlist
          */
-        std::unique_ptr<hal::Netlist> create_empty_netlist(const int id = -1);
+        std::unique_ptr<Netlist> create_empty_netlist(const int id = -1);
+
         /**
          * Initializes all log channels used by hal.
          */
         void init_log_channels();
 
         /**
-         * Creating an Endpoint object by passing the netlist, the id of the Gate and the pin type.
+         * Creating an Endpoint* object by passing the netlist, the id of the Gate and the pin type.
          * if there is no Gate with the passed id, it returns (nullptr, "")
          *
          * @param[in] nl - netlist
          * @param[in] gate_id - id of the Gate
          * @param[in] pin_type - pin type
          * @param[in] is_destination - direction of Endpoint
-         * @returns the Endpoint object
+         * @returns the Endpoint* object
          */
         Endpoint* get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination);
 
         /**
-         * Creating an Endpoint object by passing the Gate and the pin_type. The is_destination flag is taken from the
+         * Creating an Endpoint* object by passing the Gate and the pin_type. The is_destination flag is taken from the
          * Gate library of the Gate and the netlist by the Gate.
          *
          * @param[in] gate_id - id of the Gate
          * @param[in] pin_type - pin type
-         * @returns the Endpoint object
+         * @returns the Endpoint* object
          */
         Endpoint* get_endpoint(Gate* g, const std::string& pin_type);
 
         /**
-         * Checks if an Endpoint is empty (i.e. (nullptr, ""))
+         * Checks if an Endpoint* is empty (i.e. (nullptr, ""))
          *
          * @param[in] ep - Endpoint
-         * @return true, if the Endpoint is the empty Endpoint
+         * @return true, if the Endpoint* is the empty Endpoint
          */
         bool is_empty(Endpoint* ep);
 
@@ -109,19 +111,28 @@ namespace hal
          * Get a Gate type by its name
          *
          * @param name - the name of the GateType
-         * @param gate_library_name - the name of the Gate library, the GateType can be found in. If empty, the example Gate library (g_lib_name) is taken.
+         * @param gate_library - The Gate library, the GateType can be found in. If empty, the example Gate library (g_lib_name) is taken.
          * @return the GateType pointer if found. If no Gate type matches, return nullptr
          */
-        const GateType* get_gate_type_by_name(std::string name, GateLibrary* GateLibrary = nullptr);
+        const GateType* get_gate_type_by_name(std::string name, GateLibrary* gate_library = nullptr);
 
         /**
-         * Given a vector of endpoints. Returns the first Endpoint that has a certain pin type
+         * Given a vector of endpoints. Returns the first Endpoint* that has a certain pin type
          *
-         * @param[in] dsts - vector of endpoints
+         * @param[in] dsts - vector of destination endpoints
          * @param[in] pin_type - pin type
-         * @returns the first Endpoint of a certain pin type. (nullptr, "") if no Endpoint matches.
+         * @returns the first Endpoint* of a certain pin type. (nullptr, "") if no Endpoint* matches.
          */
-        Endpoint* get_endpoint_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type);
+        Endpoint* get_destination_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type);
+
+        /**
+         * Given a vector of endpoints. Returns the firstEndpoint* that has a certain pin type
+         *
+         * @param[in] dsts - vector of source endpoints
+         * @param[in] pin_type - pin type
+         * @returns the first Endpoint* of a certain pin type. (nullptr, "") if no Endpoint* matches.
+         */
+        Endpoint* get_source_by_pin_type(const std::vector<Endpoint*> srcs, const std::string pin_type);
 
         // NOTE: Using create_test_gate is messy. It should not exist. Will be removed someday...
         /**
@@ -147,9 +158,7 @@ namespace hal
             std::vector<T> vec_2(vector_2);
 
             if (vec_1.size() != vec_2.size())
-            {
                 return false;
-            }
 
             // Each element of vec_1 must be found in vec_2
             while (vec_1.size() > 0)
@@ -441,10 +450,10 @@ namespace hal
          */
         std::function<bool(Net*)> net_name_filter(const std::string& name);
 
-        // +++ Endpoint Filter +++
+        // +++ Endpoint* Filter +++
 
         /**
-         * Filter returns true, if the type of the Gate, the Endpoint is connected to, is of type 'gate_type'
+         * Filter returns true, if the type of the Gate, the Endpoint* is connected to, is of type 'gate_type'
          *
          * @param gate_type - the type of the gates the filter is searching for
          * @return the std::function object of the filter function
@@ -452,7 +461,7 @@ namespace hal
         std::function<bool(Endpoint*)> endpoint_gate_type_filter(const std::string& gate_type);
 
         /**
-         * Filter returns true, if the type of the Gate, the Endpoint is connected to, has the name 'name'
+         * Filter returns true, if the type of the Gate, the Endpoint* is connected to, has the name 'name'
          *
          * @param type - the name of the gates the filter is searching for
          * @return the std::function object of the filter function
@@ -491,7 +500,7 @@ namespace hal
          */
         std::function<bool(const std::string&, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
 
-    }    // namespace test_utils
-}    // namespace hal
+    } // namespace test_utils
+} // namespace hal
 
 //}
