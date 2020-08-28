@@ -120,6 +120,15 @@ namespace hal
         bool add(const ProgramOptions& other_options, const std::string& category = "");
 
         /**
+         * Removes a single flag.<br>
+         * If multiple flags for an option exist, the others will still remain available.
+         *
+         * @param[in] flag - The flag activating the option.
+         * @returns True if the option was found.
+         */
+        bool remove(const std::string& flag);
+
+        /**
          * Returns a nicely formatted string of all options and description.<br>
          * Includes categorys of added ProgramOptions for grouping.<br>
          * Useful for "usage" messages.

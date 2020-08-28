@@ -1,8 +1,5 @@
 #include "gui/plugin_gui.h"
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/plugin_system/plugin_manager.h"
-#include "hal_core/utilities/utils.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_status_manager/file_status_manager.h"
@@ -22,6 +19,9 @@
 #include "gui/window_manager/window_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 
 #include <QApplication>
 #include <QFile>
@@ -41,10 +41,9 @@ namespace hal
         return std::make_unique<PluginGui>();
     }
 
-    QSettings g_settings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
-    QSettings g_gui_state(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
-
     SettingsManager* g_settings_manager             = nullptr;    // this relay MUST be initialized before everything else since other components need to connect() to it when initializing
+    QSettings* g_settings                           = nullptr;
+    QSettings* g_gui_state                          = nullptr;
     SettingsRelay* g_settings_relay                 = nullptr;
     KeybindManager* g_keybind_manager               = nullptr;
     WindowManager* g_window_manager                 = nullptr;
@@ -78,6 +77,8 @@ namespace hal
     static void cleanup()
     {
         delete g_settings_manager;
+        delete g_settings;
+        delete g_gui_state;
         delete g_keybind_manager;
         delete g_file_status_manager;
         delete g_graph_context_manager;
@@ -146,8 +147,8 @@ namespace hal
         gate_library_manager::load_all();
 
         // TEST
-        //    g_settings.setValue("stylesheet/base", ":/style/test base");
-        //    g_settings.setValue("stylesheet/definitions", ":/style/test definitions2");
+        //    g_settings->setValue("stylesheet/base", ":/style/test base");
+        //    g_settings->setValue("stylesheet/definitions", ":/style/test definitions2");
         //    a.setStyleSheet(style::get_stylesheet());
 
         //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
@@ -171,6 +172,8 @@ namespace hal
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
         g_settings_manager      = new SettingsManager();
+        g_settings              = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
+        g_gui_state             = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
         g_netlist_relay         = new NetlistRelay();
         g_plugin_relay          = new PluginRelay();
         g_selection_relay       = new SelectionRelay();
