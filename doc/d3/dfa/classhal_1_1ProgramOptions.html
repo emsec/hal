@@ -83,7 +83,7 @@ Collaboration diagram for hal::ProgramOptions:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d7/de4/classhal_1_1ProgramOptions__coll__graph.png" border="0" usemap="#hal_1_1ProgramOptions_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1ProgramOptions_coll__map" id="hal_1_1ProgramOptions_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,216,215"/>
+<area shape="rect" title=" " alt="" coords="5,5,216,229"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -105,6 +105,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5fe1cdf2ec39e1dd01093c45dbf8c6cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3762e99f97b0b390318ace276dfca04e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a3762e99f97b0b390318ace276dfca04e">add</a> (const <a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html">ProgramOptions</a> &amp;other_options, const std::string &amp;category=&quot;&quot;)</td></tr>
 <tr class="separator:a3762e99f97b0b390318ace276dfca04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7946b5dc6662a17e747bdcc65537459b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a7946b5dc6662a17e747bdcc65537459b">remove</a> (const std::string &amp;flag)</td></tr>
+<tr class="separator:a7946b5dc6662a17e747bdcc65537459b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34dc05683ea51eaa706c5b0d30c94820"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a34dc05683ea51eaa706c5b0d30c94820">get_options_string</a> () const</td></tr>
 <tr class="separator:a34dc05683ea51eaa706c5b0d30c94820"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90f4f3a1d46824e398c29044f47e6b6a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::tuple&lt; std::set&lt; std::string &gt;, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/dfa/classhal_1_1ProgramOptions.html#a90f4f3a1d46824e398c29044f47e6b6a">get_options</a> () const</td></tr>
@@ -394,6 +396,33 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7946b5dc6662a17e747bdcc65537459b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7946b5dc6662a17e747bdcc65537459b">&#9670;&nbsp;</a></span>remove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::ProgramOptions::remove </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>flag</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Removes a single flag.<br  />
+ If multiple flags for an option exist, the others will still remain available.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">flag</td><td>- The flag activating the option. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the option was found. </dd></dl>
+
+</div>
+</div>
 <a id="a34dc05683ea51eaa706c5b0d30c94820"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a34dc05683ea51eaa706c5b0d30c94820">&#9670;&nbsp;</a></span>get_options_string()</h2>
 
@@ -470,7 +499,7 @@ Static Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 28 2020 06:50:38 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 28 2020 09:42:28 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
