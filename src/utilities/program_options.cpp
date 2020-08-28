@@ -234,6 +234,34 @@ namespace hal
         return true;
     }
 
+    bool ProgramOptions::remove(const std::string& flag)
+    {
+        for (auto it = m_options.begin(); it != m_options.end(); ++it)
+        {
+            if (it->flags.find(flag) != it->flags.end())
+            {
+                it->flags.erase(flag);
+                if (it->flags.empty())
+                {
+                    m_options.erase(it);
+                }
+                return true;
+            }
+        }
+        for (auto& sub : m_suboptions)
+        {
+            for (auto& opt : sub.second)
+            {
+                auto success = opt.remove(flag);
+                if (success)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     std::string ProgramOptions::get_options_string() const
     {
         size_t line_width = 80;    // default magic number

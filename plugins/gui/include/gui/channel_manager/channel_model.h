@@ -60,8 +60,6 @@ namespace hal
         void updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
 
     private:
-        static ChannelModel s_model;
-
         explicit ChannelModel(QObject* parent = 0);
         QList<ChannelItem*> m_permanent_items;
         boost::circular_buffer<ChannelItem*> m_temporary_items;
