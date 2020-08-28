@@ -9,10 +9,7 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "netlist_test_utils.h"
 
-#include "gtest/gtest.h"
 #include <experimental/filesystem>
-#include <fstream>
-#include <iostream>
 
 /*
  * In this file aren't the tests for the various parsers, however it uses the vhdl parser as an example. If there occure

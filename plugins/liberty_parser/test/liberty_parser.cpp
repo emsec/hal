@@ -1,10 +1,6 @@
 #include "netlist_test_utils.h"
 #include "liberty_parser/liberty_parser.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
-#include "gtest/gtest.h"
-#include <iostream>
 #include <experimental/filesystem>
 
 namespace hal {

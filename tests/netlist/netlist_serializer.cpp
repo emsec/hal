@@ -7,16 +7,9 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/plugin_system/plugin_manager.h"
-#include "hal_core/utilities/log.h"
-#include "hal_core/utilities/utils.h"
 #include "netlist_test_utils.h"
 
-#include "gtest/gtest.h"
 #include <experimental/filesystem>
-#include <fstream>
-#include <iostream>
-#include <streambuf>
-#include <string>
 
 namespace hal
 {

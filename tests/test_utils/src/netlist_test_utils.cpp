@@ -1,9 +1,6 @@
 
 #include "netlist_test_utils.h"
 
-#include "hal_core/utilities/utils.h"
-#include <math.h>
-
 //using namespace hal;
 //namespace test_utils = hal;
 namespace hal
