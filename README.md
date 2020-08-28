@@ -55,7 +55,7 @@ The Python documentation can be found [here](https://emsec.github.io/hal/pydoc/)
 
 ## Ubuntu
 
-HAL releases are available via it's own ppa. You can find it here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
+HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
 
 ## macOS
 
@@ -91,7 +91,7 @@ The default `CMAKE_BUILD_TYPE` if you do not specify any option is set to `Relea
 
 ## Notes for building on macOS
 
-Please make sure to use a compiler that supports OpenMP. You can install one from e.g. Homebrew via: `brew install llvm`.
+Please make sure to use a compiler that supports OpenMP. You can install one using, e.g., Homebrew via: `brew install llvm`.
 
 To let cmake know of the custom compiler use following command.
 
