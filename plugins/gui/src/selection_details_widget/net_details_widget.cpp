@@ -171,7 +171,7 @@ namespace hal
         m_id_item->setText(QString::number(m_currentId));
 
         //get net type
-        QString n_type = "Standard";
+        QString n_type = "Internal";
 
         if (g_netlist->is_global_input_net(n))
             n_type = "Input";

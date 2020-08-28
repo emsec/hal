@@ -44,7 +44,9 @@
 
 namespace hal
 {
-    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), m_schedule_widget(new PluginScheduleWidget()), m_action_schedule(new Action(this)), m_action_content(new Action(this))
+    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), m_schedule_widget(new PluginScheduleWidget()),
+        m_action_schedule(new Action(this))
+        // , m_action_content(new Action(this))
     {
         ensurePolished();    // ADD REPOLISH METHOD
         connect(FileManager::get_instance(), &FileManager::file_opened, this, &MainWindow::handle_file_opened);
@@ -125,7 +127,6 @@ namespace hal
         //m_action_content      = new Action(this);
         m_action_settings = new Action(this);
         m_action_close    = new Action(this);
-        m_action_content  = new Action(this);
 
         //    //m_open_icon_style = "all->#fcfcb0";
         //    //m_open_icon_style = "all->#f2e4a4";
@@ -157,7 +158,7 @@ namespace hal
         m_action_save->setIcon(gui_utility::get_styled_svg_icon(m_save_icon_style, m_save_icon_path));
         m_action_schedule->setIcon(gui_utility::get_styled_svg_icon(m_schedule_icon_style, m_schedule_icon_path));
         m_action_run_schedule->setIcon(gui_utility::get_styled_svg_icon(m_run_icon_style, m_run_icon_path));
-        m_action_content->setIcon(gui_utility::get_styled_svg_icon(m_content_icon_style, m_content_icon_path));
+//        m_action_content->setIcon(gui_utility::get_styled_svg_icon(m_content_icon_style, m_content_icon_path));
         m_action_settings->setIcon(gui_utility::get_styled_svg_icon(m_settings_icon_style, m_settings_icon_path));
 
         m_menu_file = new QMenu(m_menu_bar);
@@ -179,7 +180,7 @@ namespace hal
         //    m_left_tool_bar->addSeparator();
         m_left_tool_bar->addAction(m_action_schedule);
         m_left_tool_bar->addAction(m_action_run_schedule);
-        m_left_tool_bar->addAction(m_action_content);
+//        m_left_tool_bar->addAction(m_action_content);
         //    m_left_tool_bar->addSeparator();
         //    m_right_tool_bar->addSeparator();
         m_right_tool_bar->addAction(m_action_settings);
@@ -196,7 +197,7 @@ namespace hal
         m_action_about->setText("About");
         m_action_schedule->setText("Edit Schedule");
         m_action_run_schedule->setText("Run Schedule");
-        m_action_content->setText("Content (Disabled)");
+//        m_action_content->setText("Content (Disabled)");
         m_action_settings->setText("Settings");
         m_action_close->setText("Close Document");
         m_menu_file->setTitle("File");
