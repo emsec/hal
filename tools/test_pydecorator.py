@@ -147,5 +147,5 @@ log_info("#############################################\n")
 endpoint = test_gate.get_successors()[0]
 
 log_info("Calling function get_gate")
-endpoint.get_gate()
+endpoint->get_gate()
 log_info("--------------------------------------------")

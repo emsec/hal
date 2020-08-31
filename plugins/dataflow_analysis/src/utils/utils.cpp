@@ -69,13 +69,13 @@ namespace hal
 
             for (const auto& dst : start_net->get_destinations())
             {
-                auto next_gate = dst.get_gate();
+                auto next_gate = dst->get_gate();
 
                 /* skip if entry to clk */
                 if (is_sequential(next_gate))
                 {
                     auto clock_ports = get_clock_ports(next_gate);
-                    if (clock_ports.find(dst.get_pin()) != clock_ports.end())
+                    if (clock_ports.find(dst->get_pin()) != clock_ports.end())
                     {
                         continue;
                     }
@@ -123,12 +123,12 @@ namespace hal
 
             for (const auto& dst : current_net->get_destinations())
             {
-                auto& next_gate = dst.get_gate();
+                auto& next_gate = dst->get_gate();
 
                 if (is_sequential(next_gate))
                 {
                     auto clock_ports = get_clock_ports(next_gate);
-                    if (clock_ports.find(dst.get_pin()) != clock_ports.end())
+                    if (clock_ports.find(dst->get_pin()) != clock_ports.end())
                     {
                         continue;
                     }

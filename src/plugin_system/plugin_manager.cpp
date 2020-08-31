@@ -1,8 +1,8 @@
 #include "hal_core/plugin_system/plugin_manager.h"
 
-#include "hal_core/plugin_system/library_loader.h"
 #include "hal_core/plugin_system/plugin_interface_cli.h"
 #include "hal_core/plugin_system/plugin_interface_ui.h"
+#include "hal_core/plugin_system/runtime_library.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
@@ -23,7 +23,7 @@ namespace hal
         namespace
         {
             // stores library and factory identified by plugin name)
-            std::unordered_map<std::string, std::tuple<LibraryLoader*, std::unique_ptr<BasePluginInterface>>> m_loaded_plugins;
+            std::unordered_map<std::string, std::tuple<std::unique_ptr<BasePluginInterface>, std::unique_ptr<RuntimeLibrary>>> m_loaded_plugins;
 
             // stores the CLI parser option for CLI plugins
             std::unordered_map<std::string, std::string> m_cli_option_to_cli_plugin_name;
@@ -163,7 +163,7 @@ namespace hal
             }
 
             /* load library */
-            LibraryLoader* lib = new LibraryLoader();
+            auto lib = std::make_unique<RuntimeLibrary>();
             if (!lib->load_library(file_name.string()))
             {
                 return false;
@@ -262,7 +262,7 @@ namespace hal
 
             instance->on_load();
 
-            m_loaded_plugins[plugin_name] = std::make_tuple(lib, std::move(instance));
+            m_loaded_plugins[plugin_name] = std::make_tuple(std::move(instance), std::move(lib));
 
             /* notify callback that a plugin was loaded*/
             m_hook(true, plugin_name, file_name.string());
@@ -322,20 +322,18 @@ namespace hal
                 }
             }
 
-            /* unload */
-            auto library = std::get<0>(it->second);
-            std::get<1>(it->second)->on_unload();
-
-            /* remove plugin */
+            auto rt_library = std::move(std::get<1>(it->second));
+            auto plugin_inst = std::move(std::get<0>(it->second));
             m_loaded_plugins.erase(it);
 
-            /* unload and delete library */
-            auto file_name = library->get_file_name();
-            if (!library->unload_library())
-            {
-                return false;
-            }
-            delete library;
+            auto file_name = rt_library->get_file_name();
+            plugin_inst->on_unload();
+
+            // actual unloading
+            // order of unloading is important, so we do it manually here:
+            // first destroy the plugin instance, then destroy the runtime library
+            plugin_inst.release();
+            rt_library.release();
 
             /* notify callback that a plugin was unloaded */
             m_hook(false, plugin_name, file_name);
@@ -353,7 +351,7 @@ namespace hal
                 return nullptr;
             }
 
-            auto instance = std::get<1>(it->second).get();
+            auto instance = std::get<0>(it->second).get();
             if (instance != nullptr && initialize)
             {
                 instance->initialize();

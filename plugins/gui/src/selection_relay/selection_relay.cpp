@@ -1,12 +1,10 @@
 #include "gui/selection_relay/selection_relay.h"
 
-#include "hal_core/utilities/log.h"
-
+#include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-
-#include "gui/gui_globals.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
@@ -26,9 +24,9 @@ namespace hal
         m_selected_gates.clear();
         m_selected_nets.clear();
         m_selected_modules.clear();
-        m_subfocus                   = subfocus::none;
-        m_subfocus_index             = 0;
-        m_focus_id                   = 0;
+        m_subfocus       = subfocus::none;
+        m_subfocus_index = 0;
+        m_focus_id       = 0;
     }
 
     void SelectionRelay::clear_and_update()
@@ -68,12 +66,10 @@ namespace hal
 
         switch (m_focus_type)
         {
-            case item_type::none:
-            {
+            case item_type::none: {
                 return;
             }
-            case item_type::gate:
-            {
+            case item_type::gate: {
                 Gate* g = g_netlist->get_gate_by_id(m_focus_id);
 
                 if (!g)
@@ -101,8 +97,7 @@ namespace hal
 
                 return;
             }
-            case item_type::net:
-            {
+            case item_type::net: {
                 Net* n = g_netlist->get_net_by_id(m_focus_id);
 
                 if (!n)
@@ -120,8 +115,7 @@ namespace hal
 
                 return;
             }
-            case item_type::module:
-            {
+            case item_type::module: {
                 Module* m = g_netlist->get_module_by_id(m_focus_id);
 
                 if (!m)
@@ -165,12 +159,10 @@ namespace hal
 
         switch (m_focus_type)
         {
-            case item_type::none:
-            {
+            case item_type::none: {
                 return;
             }
-            case item_type::gate:
-            {
+            case item_type::gate: {
                 Gate* g = g_netlist->get_gate_by_id(m_focus_id);
 
                 if (!g)
@@ -198,8 +190,7 @@ namespace hal
 
                 return;
             }
-            case item_type::net:
-            {
+            case item_type::net: {
                 Net* n = g_netlist->get_net_by_id(m_focus_id);
 
                 if (!n)
@@ -217,8 +208,7 @@ namespace hal
 
                 return;
             }
-            case item_type::module:
-            {
+            case item_type::module: {
                 Module* m = g_netlist->get_module_by_id(m_focus_id);
 
                 if (!m)
@@ -261,12 +251,10 @@ namespace hal
     {
         switch (m_focus_type)
         {
-            case item_type::none:
-            {
+            case item_type::none: {
                 return;
             }
-            case item_type::gate:
-            {
+            case item_type::gate: {
                 Gate* g = g_netlist->get_gate_by_id(m_focus_id);
 
                 if (!g)
@@ -287,8 +275,7 @@ namespace hal
 
                 return;
             }
-            case item_type::net:
-            {
+            case item_type::net: {
                 Net* n = g_netlist->get_net_by_id(m_focus_id);
 
                 if (!n)
@@ -306,8 +293,7 @@ namespace hal
 
                 return;
             }
-            case item_type::module:
-            {
+            case item_type::module: {
                 Module* m = g_netlist->get_module_by_id(m_focus_id);
 
                 if (!m)
@@ -336,12 +322,10 @@ namespace hal
     {
         switch (m_focus_type)
         {
-            case item_type::none:
-            {
+            case item_type::none: {
                 return;
             }
-            case item_type::gate:
-            {
+            case item_type::gate: {
                 Gate* g = g_netlist->get_gate_by_id(m_focus_id);
 
                 if (!g)
@@ -359,8 +343,7 @@ namespace hal
 
                 return;
             }
-            case item_type::net:
-            {
+            case item_type::net: {
                 Net* n = g_netlist->get_net_by_id(m_focus_id);
 
                 if (!n)
@@ -379,8 +362,7 @@ namespace hal
 
                 return;
             }
-            case item_type::module:
-            {
+            case item_type::module: {
                 Module* m = g_netlist->get_module_by_id(m_focus_id);
 
                 if (!m)
@@ -459,7 +441,7 @@ namespace hal
     void SelectionRelay::follow_gate_input_pin(Gate* g, u32 input_pin_index)
     {
         std::string pin_type = *std::next(g->get_input_pins().begin(), input_pin_index);
-        Net* n = g->get_fan_in_net(pin_type);
+        Net* n               = g->get_fan_in_net(pin_type);
 
         if (!n)
             return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
@@ -483,9 +465,9 @@ namespace hal
         else
         {
             int i = 0;
-            for (Endpoint& e : n->get_destinations())
+            for (auto e : n->get_destinations())
             {
-                if (e.get_gate() == g && e.get_pin() == pin_type)
+                if (e->get_gate() == g && e->get_pin() == pin_type)
                     break;
 
                 ++i;
@@ -501,7 +483,7 @@ namespace hal
     void SelectionRelay::follow_gate_output_pin(Gate* g, u32 output_pin_index)
     {
         std::string pin_type = *std::next(g->get_output_pins().begin(), output_pin_index);
-        Net* n = g->get_fan_out_net(pin_type);
+        auto n               = g->get_fan_out_net(pin_type);
 
         if (!n)
             return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
@@ -533,11 +515,10 @@ namespace hal
         // TODO implement
     }
 
-
     void SelectionRelay::follow_net_to_source(Net* n)
     {
-        Endpoint e              = n->get_source();
-        Gate* g = e.get_gate();
+        auto e = n->get_source();
+        auto g = e->get_gate();
 
         if (!g)
             return;
@@ -557,9 +538,9 @@ namespace hal
         else
         {
             int i = 0;
-            for (const std::string& pin_type: g->get_output_pins())
+            for (const std::string& pin_type : g->get_output_pins())
             {
-                if (pin_type == e.get_pin())
+                if (pin_type == e->get_pin())
                     break;
 
                 ++i;
@@ -574,8 +555,8 @@ namespace hal
 
     void SelectionRelay::follow_net_to_destination(Net* n, u32 dst_index)
     {
-        Endpoint e              = n->get_destinations().at(dst_index);
-        Gate* g = e.get_gate();
+        auto e  = n->get_destinations().at(dst_index);
+        Gate* g = e->get_gate();
 
         if (!g)
             return;
@@ -595,9 +576,9 @@ namespace hal
         else
         {
             int i = 0;
-            for (const std::string& pin_type: g->get_input_pins())
+            for (const std::string& pin_type : g->get_input_pins())
             {
-                if (pin_type == e.get_pin())
+                if (pin_type == e->get_pin())
                     break;
 
                 ++i;
@@ -633,4 +614,4 @@ namespace hal
 
         Q_EMIT subfocus_changed(nullptr);
     }
-}
+}    // namespace hal

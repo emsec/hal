@@ -20,10 +20,10 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
-#pragma GCC diagnostic ignored "-Wself-assign-overloaded"
 #ifdef COMPILER_CLANG
 #pragma clang diagnostic ignored "-Wnested-anon-types"
 #pragma clang diagnostic ignored "-Wshadow-field-in-constructor-modified"
+#pragma clang diagnostic ignored "-Wself-assign-overloaded"
 #endif
 
 #include "pybind11/functional.h"

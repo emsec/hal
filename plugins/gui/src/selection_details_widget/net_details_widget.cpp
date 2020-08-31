@@ -192,15 +192,15 @@ namespace hal
         {
             for (const auto& ep_source : n->get_sources())
             {
-                QTableWidgetItem* pin_name       = new QTableWidgetItem(QString::fromStdString(ep_source.get_pin()));
+                QTableWidgetItem* pin_name       = new QTableWidgetItem(QString::fromStdString(ep_source->get_pin()));
                 QTableWidgetItem* arrow_item     = new QTableWidgetItem(QChar(0x2b05));
-                QTableWidgetItem* gate_name_item = new QTableWidgetItem(QString::fromStdString(ep_source.get_gate()->get_name()));
+                QTableWidgetItem* gate_name_item = new QTableWidgetItem(QString::fromStdString(ep_source->get_gate()->get_name()));
                 arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
                 pin_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
                 arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
                 //arrow_item->setFlags((Qt::ItemFlag)(~Qt::ItemIsSelectable));
                 gate_name_item->setFlags(Qt::ItemIsEnabled);
-                gate_name_item->setData(Qt::UserRole, ep_source.get_gate()->get_id());
+                gate_name_item->setData(Qt::UserRole, ep_source->get_gate()->get_id());
 
                 m_source_pins_table->setItem(index, 0, pin_name);
                 m_source_pins_table->setItem(index, 1, arrow_item);
@@ -222,15 +222,15 @@ namespace hal
         {
             for (const auto& ep_destination : n->get_destinations())
             {
-                QTableWidgetItem* pin_name       = new QTableWidgetItem(QString::fromStdString(ep_destination.get_pin()));
+                QTableWidgetItem* pin_name       = new QTableWidgetItem(QString::fromStdString(ep_destination->get_pin()));
                 QTableWidgetItem* arrow_item     = new QTableWidgetItem(QChar(0x27a1));
-                QTableWidgetItem* gate_name_item = new QTableWidgetItem(QString::fromStdString(ep_destination.get_gate()->get_name()));
+                QTableWidgetItem* gate_name_item = new QTableWidgetItem(QString::fromStdString(ep_destination->get_gate()->get_name()));
                 arrow_item->setForeground(QBrush(QColor(114, 140, 0), Qt::SolidPattern));
                 pin_name->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
                 arrow_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
                 //arrow_item->setFlags((Qt::ItemFlag)(~Qt::ItemIsSelectable));
                 gate_name_item->setFlags(Qt::ItemIsEnabled);
-                gate_name_item->setData(Qt::UserRole, ep_destination.get_gate()->get_id());
+                gate_name_item->setData(Qt::UserRole, ep_destination->get_gate()->get_id());
 
                 m_destination_pins_table->setItem(index, 0, pin_name);
                 m_destination_pins_table->setItem(index, 1, arrow_item);
@@ -313,7 +313,7 @@ namespace hal
         //check if renamed gate is a src of the currently shown net
         for (auto e : n->get_sources())
         {
-            if (e.get_gate()->get_id() == m_currentId)
+            if (e->get_gate()->get_id() == m_currentId)
             {
                 update_needed = true;
                 break;
@@ -325,7 +325,7 @@ namespace hal
         {
             for (auto e : n->get_destinations())
             {
-                if (e.get_gate()->get_id() == m_currentId)
+                if (e->get_gate()->get_id() == m_currentId)
                 {
                     update_needed = true;
                     break;

@@ -90,8 +90,8 @@ namespace hal
                 // list by traversing m->get_input_nets(), so we just use that order and
                 // hope nobody touches that implementation)
 
-                std::vector<Net*> outputNets = m->get_output_nets();
-                auto it = outputNets.begin();
+                std::vector<Net*> nets = m->get_output_nets();
+                auto it = nets.begin();
                 if (g_selection_relay->m_subfocus_index > 0)
                     std::advance(it, g_selection_relay->m_subfocus_index);
                 auto n = *it;
@@ -143,9 +143,9 @@ namespace hal
         QMap<u32, QTreeWidgetItem*> created_parents;
 
         // iterate over all sources, respective destinations, of the via net
-        for (const Endpoint& e : (direction ? m_via_net->get_destinations() : m_via_net->get_sources()))
+        for (Endpoint* e : (direction ? m_via_net->get_destinations() : m_via_net->get_sources()))
         {
-            Gate* g = e.get_gate();
+            Gate* g = e->get_gate();
             if (!g)
             {
                 // skip non-gate endpoints
@@ -175,9 +175,9 @@ namespace hal
                     auto net_destinations = m_via_net->get_destinations();
                     std::unordered_set<Gate*> net_gates;
                     for (auto ep : net_sources)
-                        net_gates.insert(ep.get_gate());
+                        net_gates.insert(ep->get_gate());
                     for (auto ep : net_destinations)
-                        net_gates.insert(ep.get_gate());
+                        net_gates.insert(ep->get_gate());
                     common_ancestor = gui_utility::first_common_ancestor({}, net_gates);
                 }
             }
@@ -204,7 +204,7 @@ namespace hal
                 QString::fromStdString(g->get_name()),
                 QString::number(g->get_id()),
                 QString::fromStdString(g->get_type()->get_name()),
-                QString::fromStdString(e.get_pin()),
+                QString::fromStdString(e->get_pin()),
                 QString::fromStdString(g->get_module()->get_name())
             });
             // TODO is there a better way?

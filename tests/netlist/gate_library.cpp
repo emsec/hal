@@ -350,24 +350,25 @@ namespace hal {
         TEST_START
             // Create some Gate types beforehand
             // -- a simple AND Gate
-            std::unique_ptr<GateType> gt_and_owner(new GateType("gt_and"));
+            auto gt_and_owner = std::make_unique<GateType>("gt_and");
             auto gt_and = gt_and_owner.get();
             gt_and->add_input_pins(std::vector<std::string>({"I0", "I1"}));
             gt_and->add_output_pins(std::vector<std::string>({"O"}));
             gt_and->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
             // -- a GND Gate
-            std::unique_ptr<GateType> gt_gnd_owner(new GateType("gt_gnd"));
+            auto gt_gnd_owner = std::make_unique<GateType>("gt_gnd");
             auto gt_gnd = gt_gnd_owner.get();
             gt_gnd->add_output_pins(std::vector<std::string>({"O"}));
             gt_gnd->add_boolean_function("O", BooleanFunction(BooleanFunction::ZERO));
             // -- a VCC Gate
-            std::unique_ptr<GateType> gt_vcc_owner(new GateType("gt_vcc"));
+            auto gt_vcc_owner = std::make_unique<GateType>("gt_vcc");
             auto gt_vcc = gt_vcc_owner.get();
             gt_vcc->add_output_pins(std::vector<std::string>({"O"}));
             gt_vcc->add_boolean_function("O", BooleanFunction(BooleanFunction::ONE));
 
             {
-                GateLibrary* gl(new GateLibrary("imaginary_path", "gl_name"));
+                auto gl_owner = std::make_unique<GateLibrary>("imaginary_path", "gl_name");
+                auto gl = gl_owner.get();
                 // Check the name
                 EXPECT_EQ(gl->get_name(), "gl_name");
 

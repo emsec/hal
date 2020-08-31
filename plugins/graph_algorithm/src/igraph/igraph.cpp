@@ -18,14 +18,14 @@ namespace hal
         u32 edge_counter = 0;
         for (auto net : nl->get_nets())
         {
-            Gate* src_gate = net->get_source().get_gate();
+            Gate* src_gate = net->get_source()->get_gate();
             std::vector<Gate*> dst_gates;
 
             auto dst_gates_endpoints = net->get_destinations();
 
             for (const auto& dst_gate_endpoint : dst_gates_endpoints)
             {
-                dst_gates.push_back(dst_gate_endpoint.get_gate());
+                dst_gates.push_back(dst_gate_endpoint->get_gate());
             }
 
             // if gate has no src --> add exactly one dummy node
@@ -57,14 +57,14 @@ namespace hal
 
         for (auto net : nl->get_nets())
         {
-            Gate* src_gate = net->get_source().get_gate();
+            Gate* src_gate = net->get_source()->get_gate();
             std::vector<Gate*> dst_gates;
 
             auto dst_gates_endpoints = net->get_destinations();
 
             for (const auto& dst_gate_endpoint : dst_gates_endpoints)
             {
-                dst_gates.push_back(dst_gate_endpoint.get_gate());
+                dst_gates.push_back(dst_gate_endpoint->get_gate());
             }
 
             // if gate has no src --> add exactly one dummy node

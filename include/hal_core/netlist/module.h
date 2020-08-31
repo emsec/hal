@@ -50,9 +50,6 @@ namespace hal
      */
     class NETLIST_API Module : public DataContainer
     {
-        friend class NetlistInternalManager;
-        friend class Netlist;
-
     public:
         /**
          * Get the module's id.
@@ -276,6 +273,7 @@ namespace hal
         std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
 
     private:
+        friend class NetlistInternalManager;
         Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager);
 
         Module(const Module&) = delete;               //disable copy-constructor

@@ -504,14 +504,17 @@ namespace hal
         /* stores the modules */
         Module* m_top_module;
         std::unordered_map<u32, std::unique_ptr<Module>> m_modules_map;
+        std::unordered_set<Module*> m_modules_set;
         std::vector<Module*> m_modules;
 
         /* stores the nets */
         std::unordered_map<u32, std::unique_ptr<Net>> m_nets_map;
+        std::unordered_set<Net*> m_nets_set;
         std::vector<Net*> m_nets;
 
         /* stores the gates */
         std::unordered_map<u32, std::unique_ptr<Gate>> m_gates_map;
+        std::unordered_set<Gate*> m_gates_set;
         std::vector<Gate*> m_gates;
 
         /* stores the set of global gates and nets */

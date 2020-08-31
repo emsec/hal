@@ -2,11 +2,8 @@
 
 #include "hal_core/utilities/log.h"
 
-#include <boost/algorithm/string/predicate.hpp>
-#include <boost/predef.h>
 #include <dirent.h>
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -84,7 +81,7 @@ namespace hal
             ssize_t size = readlink("/proc/self/exe", buf, sizeof(buf));
             std::string path(buf, size);
             hal::error_code ec;
-            std::filesystem::path p(std::filesystem::canonical(path, ec));
+            auto p = std::filesystem::canonical(path, ec);
             return p.make_preferred().parent_path();
 #endif
         }

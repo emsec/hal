@@ -70,11 +70,11 @@ namespace hal
             }
 
             // serialize endpoint
-            rapidjson::Value serialize(const Endpoint& ep, rapidjson::Document::AllocatorType& allocator)
+            rapidjson::Value serialize(Endpoint* ep, rapidjson::Document::AllocatorType& allocator)
             {
                 rapidjson::Value val(rapidjson::kObjectType);
-                val.AddMember("gate_id", ep.get_gate()->get_id(), allocator);
-                val.AddMember("pin_type", ep.get_pin(), allocator);
+                val.AddMember("gate_id", ep->get_gate()->get_id(), allocator);
+                val.AddMember("pin_type", ep->get_pin(), allocator);
                 return val;
             }
             bool deserialize_destination(Netlist* nl, Net* net, const rapidjson::Value& val)
@@ -155,8 +155,8 @@ namespace hal
                 {
                     rapidjson::Value srcs(rapidjson::kArrayType);
                     auto sorted = n->get_sources();
-                    std::sort(sorted.begin(), sorted.end(), [](const Endpoint& lhs, const Endpoint& rhs) { return lhs.get_gate()->get_id() < rhs.get_gate()->get_id(); });
-                    for (const auto& src : sorted)
+                    std::sort(sorted.begin(), sorted.end(), [](Endpoint* lhs, Endpoint* rhs) { return lhs->get_gate()->get_id() < rhs->get_gate()->get_id(); });
+                    for (auto src : sorted)
                     {
                         srcs.PushBack(serialize(src, allocator), allocator);
                     }
@@ -169,8 +169,8 @@ namespace hal
                 {
                     rapidjson::Value dsts(rapidjson::kArrayType);
                     auto sorted = n->get_destinations();
-                    std::sort(sorted.begin(), sorted.end(), [](const Endpoint& lhs, const Endpoint& rhs) { return lhs.get_gate()->get_id() < rhs.get_gate()->get_id(); });
-                    for (const auto& dst : sorted)
+                    std::sort(sorted.begin(), sorted.end(), [](Endpoint* lhs, Endpoint* rhs) { return lhs->get_gate()->get_id() < rhs->get_gate()->get_id(); });
+                    for (auto dst : sorted)
                     {
                         dsts.PushBack(serialize(dst, allocator), allocator);
                     }

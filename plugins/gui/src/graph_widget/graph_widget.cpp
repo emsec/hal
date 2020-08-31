@@ -502,7 +502,7 @@ namespace hal
                     }
                     else if (n->get_num_of_sources() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source().get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source()->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -532,7 +532,7 @@ namespace hal
 
                 if (n->get_num_of_sources() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_sources()[0].get_gate()->get_id()}, {});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -573,7 +573,7 @@ namespace hal
                     }
                     else if (n->get_num_of_sources() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_sources()[0].get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -621,7 +621,7 @@ namespace hal
                     }
                     else if (n->get_num_of_destinations() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -651,7 +651,7 @@ namespace hal
 
                 if (n->get_num_of_destinations() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -692,7 +692,7 @@ namespace hal
                     }
                     else if (n->get_num_of_destinations() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {

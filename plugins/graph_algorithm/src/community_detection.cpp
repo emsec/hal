@@ -32,7 +32,7 @@ namespace hal
                 /* delete leaves connected to a single gate as successor and predecessor */
                 else if ((counter == 2) && (test_gate->get_predecessors().size() == 1) && (test_gate->get_successors().size() == 1))
                 {
-                    if (test_gate->get_predecessors()[0].get_gate() == test_gate->get_successors()[0].get_gate())
+                    if (test_gate->get_predecessors()[0]->get_gate() == test_gate->get_successors()[0]->get_gate())
                     {
                         nl->delete_gate(test_gate);
                         deleted_leave = true;
@@ -55,12 +55,12 @@ namespace hal
         u32 edge_counter = 0;
         for (auto net : nl->get_nets())
         {
-            if (net->get_source().get_gate() == nullptr)
+            if (net->get_source()->get_gate() == nullptr)
                 continue;
 
             for (const auto& successor : net->get_destinations())
             {
-                if (successor.get_gate() == nullptr)
+                if (successor->get_gate() == nullptr)
                     continue;
                 edge_counter += 2;
             }
@@ -71,16 +71,16 @@ namespace hal
         u32 edge_vertice_counter = 0;
         for (auto net : nl->get_nets())
         {
-            auto predecessor = net->get_source().get_gate();
+            auto predecessor = net->get_source()->get_gate();
             if (predecessor == nullptr)
                 continue;
             auto predecessor_id = nl_igraph_id_match[predecessor->get_id()];
 
             for (const auto& successor : net->get_destinations())
             {
-                if (successor.get_gate() == nullptr)
+                if (successor->get_gate() == nullptr)
                     continue;
-                auto successor_id             = nl_igraph_id_match[successor.get_gate()->get_id()];
+                auto successor_id             = nl_igraph_id_match[successor->get_gate()->get_id()];
                 edges[edge_vertice_counter++] = (igraph_real_t)predecessor_id;
                 edges[edge_vertice_counter++] = (igraph_real_t)successor_id;
             }

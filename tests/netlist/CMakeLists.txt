@@ -1,31 +1,18 @@
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests)
 
-add_executable(runTest-netlist
-        netlist.cpp)
-add_executable(runTest-gate
-        gate.cpp)
-add_executable(runTest-net
-        net.cpp)
-add_executable(runTest-data_container
-        data_container.cpp)
-add_executable(runTest-endpoint
-        endpoint.cpp)
-#add_executable(runTest-netlist_internal_manager
-#        netlist_internal_manager.cpp)
-add_executable(runTest-module
-        module.cpp)
-add_executable(runTest-netlist_factory
-        netlist_factory.cpp)
-add_executable(runTest-gate_library_manager
-        gate_library_manager.cpp)
-add_executable(runTest-netlist_serializer
-        netlist_serializer.cpp)
-add_executable(runTest-boolean_function
-        boolean_function.cpp)
-add_executable(runTest-gate_library
-        gate_library.cpp)
-# add_executable(runTest-gate_library_parser_liberty
-#         gate_library_parser_liberty.cpp)
+add_executable(runTest-netlist netlist.cpp)
+add_executable(runTest-gate gate.cpp)
+add_executable(runTest-net net.cpp)
+add_executable(runTest-data_container data_container.cpp)
+add_executable(runTest-endpoint endpoint.cpp)
+#add_executable(runTest-netlist_internal_manager netlist_internal_manager.cpp)
+add_executable(runTest-module module.cpp)
+add_executable(runTest-netlist_factory netlist_factory.cpp)
+add_executable(runTest-gate_library_manager gate_library_manager.cpp)
+add_executable(runTest-netlist_serializer netlist_serializer.cpp)
+add_executable(runTest-boolean_function boolean_function.cpp)
+add_executable(runTest-gate_library gate_library.cpp)
+#add_executable(runTest-gate_library_parser_liberty gate_library_parser_liberty.cpp)
 
 
 target_link_libraries(runTest-netlist    pthread gtest gtest_main hal::core hal::netlist  test_utils)
@@ -56,3 +43,19 @@ add_test(runTest-boolean_function ${CMAKE_BINARY_DIR}/bin/runTest-boolean_functi
 add_test(runTest-gate_library ${CMAKE_BINARY_DIR}/bin/runTest-gate_library --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 # add_test(runTest-gate_library_parser_liberty ${CMAKE_BINARY_DIR}/bin/runTest-gate_library_parser_liberty --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 
+
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+add_sanitizers(runTest-netlist)
+add_sanitizers(runTest-gate)
+add_sanitizers(runTest-net)
+add_sanitizers(runTest-data_container)
+add_sanitizers(runTest-endpoint)
+#add_sanitizers(runTest-netlist_internal_manager)
+add_sanitizers(runTest-module)
+add_sanitizers(runTest-netlist_factory)
+add_sanitizers(runTest-gate_library_manager)
+add_sanitizers(runTest-netlist_serializer)
+add_sanitizers(runTest-boolean_function)
+add_sanitizers(runTest-gate_library)
+#add_sanitizers(runTest-gate_library_parser_liberty)
+endif()

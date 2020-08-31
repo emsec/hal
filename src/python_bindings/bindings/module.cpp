@@ -107,13 +107,13 @@ namespace hal
         :rtype: bool
 )");
 
-        py_module.def_property_readonly("netlist", [](Module* m){return RawPtrWrapper(m->get_netlist());}, R"(
+        py_module.def_property_readonly("netlist", [](Module* module){return RawPtrWrapper(module->get_netlist());}, R"(
         The netlist this module is associated with.
 
         :type: hal_py.Netlist
 )");
 
-        py_module.def("get_netlist", [](Module* m){return RawPtrWrapper(m->get_netlist());}, R"(
+        py_module.def("get_netlist", [](Module* module){return RawPtrWrapper(module->get_netlist());}, R"(
         Get the netlist this module is associated with.
 
         :returns: The netlist.

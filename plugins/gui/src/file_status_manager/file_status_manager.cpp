@@ -7,6 +7,7 @@ namespace hal
 {
     FileStatusManager::FileStatusManager(QObject* parent) : QObject(parent), m_modified_files_uuid(QSet<QUuid>()), m_modified_files_descriptors(QMap<QUuid, QString>())
     {
+        m_netlist_modified = false;
     }
 
     FileStatusManager::~FileStatusManager()
@@ -55,7 +56,9 @@ namespace hal
         QList<QString> unsaved_changes_descriptors;
 
         if(m_netlist_modified)
+        {
             unsaved_changes_descriptors.append("Netlist modifications");
+        }
 
         for(QUuid uuid : m_modified_files_uuid)
         {

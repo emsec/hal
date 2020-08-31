@@ -286,7 +286,7 @@ namespace hal
                         continue;
                     }
                     auto sources = net->get_sources();
-                    if (std::any_of(sources.begin(), sources.end(), [&gates](Endpoint& src) { return !std::binary_search(gates.begin(), gates.end(), src.get_gate()); }))
+                    if (std::any_of(sources.begin(), sources.end(), [&gates](auto src) { return !std::binary_search(gates.begin(), gates.end(), src->get_gate()); }))
                     {
                         m_input_nets.push_back(net);
                     }
@@ -321,7 +321,7 @@ namespace hal
                         continue;
                     }
                     auto destinations = net->get_destinations();
-                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint& dst) { return !std::binary_search(gates.begin(), gates.end(), dst.get_gate()); }))
+                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](auto dst) { return !std::binary_search(gates.begin(), gates.end(), dst->get_gate()); }))
                     {
                         m_output_nets.push_back(net);
                     }
@@ -351,7 +351,7 @@ namespace hal
                     }
                     seen.insert(net);
                     auto destinations = net->get_destinations();
-                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](Endpoint& dst) { return std::binary_search(gates.begin(), gates.end(), dst.get_gate()); }))
+                    if (std::any_of(destinations.begin(), destinations.end(), [&gates](auto dst) { return std::binary_search(gates.begin(), gates.end(), dst->get_gate()); }))
                     {
                         m_internal_nets.push_back(net);
                     }

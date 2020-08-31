@@ -2,6 +2,7 @@
 #include "gtest/gtest.h"
 #include "hal_core/netlist/boolean_function.h"
 #include <iostream>
+#include <type_traits>
 
 namespace hal {
 
@@ -96,7 +97,20 @@ namespace hal {
 
     };
 
+    /**
+     * Testing move and copy constructors
+     */
+    TEST_F(BooleanFunctionTest, check_constructor_types) {
+        TEST_START
+            {
+                EXPECT_EQ( std::is_copy_constructible<BooleanFunction>::value, true);
+                EXPECT_EQ( std::is_copy_assignable<BooleanFunction>::value, true);
+                EXPECT_EQ( std::is_move_constructible<BooleanFunction>::value, true);
+                EXPECT_EQ( std::is_move_assignable<BooleanFunction>::value, true);
+            }
 
+        TEST_END
+    }
 
     /**
      * Testing the different constructors and the main functionality, by implement the following boolean function:
