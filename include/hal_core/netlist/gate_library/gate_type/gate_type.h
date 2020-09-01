@@ -231,7 +231,7 @@ namespace hal
         std::unordered_map<std::string, BooleanFunction> m_functions;
 
     private:
-        GateType(const GateType&) = delete;               // disable copy-constructor
+   //     GateType(const GateType&) = delete;               // disable copy-constructor
         GateType& operator=(const GateType&) = delete;    // disable copy-assignment
     };
 }    // namespace hal

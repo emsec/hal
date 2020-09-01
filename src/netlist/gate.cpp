@@ -83,6 +83,11 @@ namespace hal
         return m_type;
     }
 
+    const GateType* Gate::get_type_py() const
+    {
+        return new GateType(*m_type);
+    }
+
     float Gate::get_location_x() const
     {
         return m_x;
