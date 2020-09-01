@@ -40,7 +40,7 @@ namespace hal
 
     void plugin_interfaces_init(py::module& m)
     {
-        py::class_<BasePluginInterface, std::shared_ptr<BasePluginInterface>, Pyi_base> py_i_base(m, "i_base");
+        py::class_<BasePluginInterface, RawPtrWrapper<BasePluginInterface>, Pyi_base> py_i_base(m, "i_base");
 
         py_i_base.def_property_readonly("name", &BasePluginInterface::get_name, R"(
         The name of the plugin.
@@ -68,7 +68,7 @@ namespace hal
         :rtype: str
 )");
 
-        py::class_<GUIPluginInterface, std::shared_ptr<GUIPluginInterface>, Pyi_gui> py_i_gui(m, "GUIPluginInterface");
+        py::class_<GUIPluginInterface, RawPtrWrapper<GUIPluginInterface>, Pyi_gui> py_i_gui(m, "GUIPluginInterface");
 
         py_i_gui.def("exec", &GUIPluginInterface::exec, py::arg("netlist"), R"(
         Generic call to run the GUI.

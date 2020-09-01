@@ -89,14 +89,6 @@ namespace hal
         const GateType* get_type() const;
 
         /**
-         * Gets the type of the gate.
-         *
-         * @returns The gate's type as new instance.
-         *          Caller (python) takes ownership and will eventually delete object
-         */
-        const GateType* get_type_py() const;
-
-        /**
          * Checks whether the gate's location in the layout is available.
          *
          * @returns True if valid location data is available, false otherwise.

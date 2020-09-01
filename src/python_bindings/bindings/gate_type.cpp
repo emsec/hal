@@ -4,7 +4,7 @@ namespace hal
 {
     void gate_type_init(py::module& m)
     {
-        py::class_<GateType, std::shared_ptr<GateType>> py_gate_type(m, "GateType", R"(
+        py::class_<GateType, RawPtrWrapper<GateType>> py_gate_type(m, "GateType", R"(
         Gate type class containing information about the internals of a specific gate type.
 )");
 

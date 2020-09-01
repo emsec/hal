@@ -51,13 +51,13 @@ namespace hal
         :param str name: The new name.
 )");
 
-        py_gate.def_property_readonly("type", &Gate::get_type_py, R"(
+        py_gate.def_property_readonly("type", &Gate::get_type, R"(
         The type of the gate
 
         :type: hal_py.Gate_type
 )");
 
-        py_gate.def("get_type", &Gate::get_type_py, R"(
+        py_gate.def("get_type", &Gate::get_type, R"(
         Gets the type of the gate.
 
         :returns: The gate's type.
