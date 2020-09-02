@@ -74,6 +74,7 @@ namespace hal
         return QVariant();
     }
 
+ /*
     QModelIndex SelectionTreeModel::defaultIndex() const
     {
         if (doNotDisturb()) return QModelIndex();
@@ -82,6 +83,7 @@ namespace hal
         SelectionTreeItem* sti = m_rootItem->child(0);
         return createIndex(0,0,sti);
     }
+*/
 
     QModelIndex SelectionTreeModel::index(int row, int column, const QModelIndex& parent) const
     {
@@ -159,7 +161,7 @@ namespace hal
                 nextRootItem->addChild(new SelectionTreeItemNet(id));
         }
 
-        Q_EMIT layoutAboutToBeChanged();
+        beginResetModel();
 
         ++m_doNotDisturb;
         // delay disposal of old entries
@@ -169,7 +171,7 @@ namespace hal
         QTimer::singleShot(50,disposer,&SelectionTreeModelDisposer::dispose);
         --m_doNotDisturb;
 
-        Q_EMIT layoutChanged();
+        endResetModel();
     }
 
     void SelectionTreeModel::moduleRecursion(SelectionTreeItemModule* modItem)
@@ -219,7 +221,12 @@ namespace hal
         return QModelIndex();
     }
 
-
+    void SelectionTreeModel::suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+                                                const QRegularExpression& regex) const
+    {
+        if (!m_rootItem) return;
+        m_rootItem->suppressedByFilterRecursion(modIds, gatIds, netIds, regex);
+    }
 
     SelectionTreeModelDisposer::SelectionTreeModelDisposer(SelectionTreeItemRoot *stim, QObject* parent)
         : QObject(parent), m_rootItem(stim)

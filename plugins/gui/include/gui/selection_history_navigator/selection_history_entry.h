@@ -26,28 +26,24 @@
 #include "hal_core/defines.h"
 #include "gui/selection_relay/selection_relay.h"
 
-#include <vector>
+#include <QList>
 
 namespace hal
 {
-    class Selection
+    class SelectionHistoryEntry
     {
 
     public:
-        Selection(u32 id, SelectionRelay::item_type type);
-        ~Selection();
+        SelectionHistoryEntry(const QSet<u32>& modIds, const QSet<u32>& gatIds, const QSet<u32>& netIds, int cnt);
+        bool isEmpty() const;
 
-        SelectionRelay::item_type get_type() const;
+        QSet<u32> m_module_ids;
+        QSet<u32> m_gate_ids;
+        QSet<u32> m_net_ids;
 
-        u32 get_net_id() const;
-        u32 get_gate_id() const;
+        int count() const { return mCount; }
 
     private:
-        SelectionRelay::item_type m_type;
-
-        std::vector<u32> m_net_ids;
-        std::vector<u32> m_gate_ids;
-        std::vector<u32> m_module_ids;
-
+        int mCount;
     };
 }

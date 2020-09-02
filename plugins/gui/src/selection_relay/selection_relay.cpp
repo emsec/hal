@@ -6,7 +6,6 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
 
-#include <QDebug>
 namespace hal
 {
     // SET VIA SETTINGS OR TOOLBUTTON
@@ -19,6 +18,9 @@ namespace hal
 
     void SelectionRelay::clear()
     {
+        mModulesSuppressedByFilter.clear();
+        mGatesSuppressedByFilter.clear();
+        mNetsSuppressedByFilter.clear();
         m_selected_gates.clear();
         m_selected_nets.clear();
         m_selected_modules.clear();
@@ -379,6 +381,29 @@ namespace hal
                 return;
             }
         }
+    }
+
+    void SelectionRelay::suppressedByFilter(const QList<u32>& modIds, const QList<u32>& gatIds, const QList<u32>& netIds)
+    {
+        mModulesSuppressedByFilter = modIds.toSet();
+        mGatesSuppressedByFilter   = gatIds.toSet();
+        mNetsSuppressedByFilter    = netIds.toSet();
+        Q_EMIT selection_changed(nullptr);
+    }
+
+    bool SelectionRelay::isModuleSelected(u32 id) const
+    {
+        return m_selected_modules.contains(id) && !mModulesSuppressedByFilter.contains(id);
+    }
+
+    bool SelectionRelay::isGateSelected(u32 id) const
+    {
+        return m_selected_gates.contains(id) && !mGatesSuppressedByFilter.contains(id);
+    }
+
+    bool SelectionRelay::isNetSelected(u32 id) const
+    {
+        return m_selected_nets.contains(id) && !mNetsSuppressedByFilter.contains(id);
     }
 
     void SelectionRelay::handle_module_removed(const u32 id)
