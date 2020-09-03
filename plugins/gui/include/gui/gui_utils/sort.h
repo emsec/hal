@@ -24,19 +24,31 @@
 #pragma once
 
 #include <QString>
+#include <QList>
 
 namespace hal
 {
     namespace gui_utility
     {
+        class NumeratedString : public QString
+        {
+        public:
+            QString remainder;
+            QList<int> numList;
+            NumeratedString(const QString& s);
+        };
+
         enum sort_mechanism
         {
             lexical = 0,
-            natural = 1
+            natural = 1,
+            numerated = 2
         };
 
         bool natural_order_compare(const QString& a, const QString& b);
         bool lexical_order_compare(const QString& a, const QString& b);
+        bool numerated_order_compare(const QString& a, const QString& b);
+
         int numeric_string_compare(QString a_num, QString b_num);
 
         // convenience method to select an algoritm

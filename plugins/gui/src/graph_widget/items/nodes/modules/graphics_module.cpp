@@ -12,5 +12,11 @@ namespace hal
 
         for (Net* n : m->get_output_nets())
             m_output_pins.append(module_pin{QString::fromStdString(m->get_output_port_name(n)), n->get_id()});
+
+        if (m_input_pins.size() > 1)
+            std::sort(m_input_pins.begin(), m_input_pins.end());
+
+        if (m_output_pins.size() > 1)
+            std::sort(m_output_pins.begin(), m_output_pins.end());
     }
 }

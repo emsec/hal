@@ -26,6 +26,7 @@
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <memory>
+#include "gui/gui_utils/sort.h"
 
 namespace hal
 {
@@ -45,6 +46,11 @@ namespace hal
             bool operator==(const module_pin& rhs) const
             {
                 return this->name == rhs.name && this->net_id == rhs.net_id;
+            }
+
+            bool operator<(const module_pin& rhs) const
+            {
+                return gui_utility::numerated_order_compare(this->name, rhs.name);
             }
         };
 

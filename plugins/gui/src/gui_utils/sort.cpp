@@ -8,6 +8,34 @@ namespace hal
 {
     namespace gui_utility
     {
+        NumeratedString::NumeratedString(const QString& s)
+        {
+            bool wasNumerical = false;
+            int currentNumber = 0;
+            for (const QChar& cc : s)
+            {
+                if (cc.isDigit())
+                {
+                    int digit = cc.unicode() - '0';
+                    if (wasNumerical)
+                        currentNumber = currentNumber * 10 + digit;
+                    else
+                        currentNumber = digit;
+                    wasNumerical = true;
+                }
+                else
+                {
+                    if (wasNumerical)
+                    {
+                        numList.append(currentNumber);
+                        currentNumber = 0;
+                        wasNumerical = false;
+                    }
+                    remainder += cc;
+                }
+            }
+            if (wasNumerical) numList.append(currentNumber);
+        }
 
         bool natural_order_compare(const QString& a, const QString& b)
         {
@@ -73,6 +101,32 @@ namespace hal
             return a_it->isNull(); // is a shorter than b?
         }
 
+        bool numerated_order_compare(const QString& a, const QString& b)
+        {
+            NumeratedString ans(a);
+            NumeratedString bns(b);
+
+            // check lexical part different
+            if (ans.remainder < bns.remainder) return true;
+            if (ans.remainder > bns.remainder) return false;
+            int na = ans.numList.size();
+            int nb = bns.numList.size();
+            int n = na < nb ? na : nb;
+
+            // check whether numbers are different
+            for (int i=0; i<n; i++)
+            {
+                if (ans.numList.at(i) < bns.numList.at(i)) return true;
+                if (ans.numList.at(i) > bns.numList.at(i)) return false;
+            }
+
+            // check whether there are additional numbers
+            if (na < nb) return true;
+            if (nb > na) return false;
+
+            return false;  // all equal
+        }
+
         bool lexical_order_compare(const QString& a, const QString& b)
         {
             return a < b;
@@ -104,6 +158,8 @@ namespace hal
                 return lexical_order_compare(a, b);
             case natural:
                 return natural_order_compare(a, b);
+            case numerated:
+                return numerated_order_compare(a, b);
             default:
                 assert(false);
             }
