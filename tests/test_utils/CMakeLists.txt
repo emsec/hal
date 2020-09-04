@@ -6,11 +6,12 @@ add_library(
         include/netlist_test_utils.h
         src/test_def.cpp
         src/netlist_test_utils.cpp
+        src/test_main.cpp
 )
 
 target_include_directories(test_utils PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-target_link_libraries(test_utils  pthread gtest gtest_main hal::core hal::netlist)
+target_link_libraries(test_utils  pthread gtest hal::core hal::netlist)
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 add_sanitizers(test_utils)

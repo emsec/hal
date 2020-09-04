@@ -5,6 +5,20 @@
 //namespace test_utils = hal;
 namespace hal
 {
+    bool run_known_issue_tests = false;
+
+    bool test_utils::known_issue_tests_active(){
+        return run_known_issue_tests;
+    }
+
+    void test_utils::activate_known_issue_tests(){
+        run_known_issue_tests = true;
+    }
+
+    void test_utils::deactivate_known_issue_tests(){
+        run_known_issue_tests = false;
+    }
+
     std::unique_ptr<Netlist> test_utils::create_empty_netlist(const int id)
     {
         NO_COUT_BLOCK;
@@ -573,6 +587,12 @@ namespace hal
         }
         if (g0->is_vcc_gate() != g1->is_vcc_gate()) {
             log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: One gate is a vcc gate, the other one isn't.");
+            return false;
+        }
+        std::unordered_map<std::string, BooleanFunction> g0_bf = g0->get_boolean_functions(true);
+        std::unordered_map<std::string, BooleanFunction> g1_bf = g1->get_boolean_functions(true);
+        if(std::map<std::string, BooleanFunction>(g0_bf.begin(), g0_bf.end()) != std::map<std::string, BooleanFunction>(g1_bf.begin(), g1_bf.end())){
+            log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: The stored boolean functions are different.");
             return false;
         }
         return true;

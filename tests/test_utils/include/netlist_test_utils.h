@@ -53,6 +53,28 @@ namespace hal
         /*********************************************************
          *                      Functions                        *
          *********************************************************/
+
+        /**
+         * Checks if the tests that contain issues are activated. Used to mark those tests using something like:
+         * if(test_utils::known_issue_tests_active()) { // Testcase with Issues ... }
+         *
+         * Remark: Those tests are deactivated by default. They can be also activated by using "--run_known_issue_tests"
+         *         as a command line argument.
+         *
+         * @returns the flag set by de/activate_known_issue_tests()
+         */
+        bool known_issue_tests_active();
+
+        /**
+         * Activates the tests that are known for containing issues and that are most likely to fail.
+         */
+        void activate_known_issue_tests();
+
+        /**
+         * Deactivates the tests that are known for containing issues and that are most likely to fail.
+         */
+        [[maybe_unused]] void deactivate_known_issue_tests();
+
         /**
          * Creates an empty netlist.
          *
