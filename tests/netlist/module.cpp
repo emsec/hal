@@ -161,15 +161,15 @@ namespace hal {
                 EXPECT_EQ(m_2->get_parent_module(), m_0);
             }
             // NEGATIVE
-            /*{ // FAILS: new_parent == m_parent wrong! => new_parent == this
+            {
                 // Hang a Module to itself
                 NO_COUT_TEST_BLOCK;
-                auto nl = create_empty_netlist();
+                auto nl = test_utils::create_empty_netlist();
                 Module* m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
 
                 m_0->set_parent_module(m_0);
                 EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
-            }*/
+            }
             {
                 // Try to change the parent of the top_module
                 NO_COUT_TEST_BLOCK;
@@ -181,28 +181,28 @@ namespace hal {
                 EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
                 EXPECT_EQ(nl->get_top_module()->get_parent_module(), nullptr);
             }
-            /*{ // FAILS with SIGSEGV
+            {
                 // new_parent is a nullptr
                 NO_COUT_TEST_BLOCK;
-                auto nl = create_empty_netlist();
+                auto nl = test_utils::create_empty_netlist();
                 Module* m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
 
                 m_0->set_parent_module(nullptr);
                 nl->get_top_module()->set_parent_module(m_0);
                 EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
-            }*/
-            /*{ // FAILS (necessary?)
+            }
+            {
                 // new_parent not part of the netlist (anymore)
                 NO_COUT_TEST_BLOCK;
-                auto nl = create_empty_netlist();
-                auto nl_other = create_empty_netlist();
+                auto nl = test_utils::create_empty_netlist();
+                auto nl_other = test_utils::create_empty_netlist();
                 Module* m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
                 Module* m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", nl->get_top_module());
                 nl->delete_module(m_0); // m_0 is removed from the netlist
 
                 m_1->set_parent_module(m_0);
                 EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
-            }*/
+            }
         TEST_END
     }
 
@@ -268,7 +268,7 @@ namespace hal {
      * Testing the addition of gates to the Module. Verify the addition by call the
      * get_gates function and the contains_gate function
      *
-     * Functions: assign_gate
+     * Functions: assign_gate, contains_gate
      */
     TEST_F(ModuleTest, check_assign_gate) {
         TEST_START
@@ -346,13 +346,21 @@ namespace hal {
 
             // NEGATIVE
             {
-                // Gate is a nullptr
+                // Assigned Gate is a nullptr
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
                 Module*
                     test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
                 test_module->assign_gate(nullptr);
                 EXPECT_TRUE(test_module->get_gates().empty());
+            }
+            {
+                // Call contains_gate with a nullptr
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Module*
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                EXPECT_FALSE(test_module->contains_gate(nullptr));
             }
         TEST_END
     }
@@ -668,7 +676,7 @@ namespace hal {
      * Testing the usage of port names
      *
      * Functions: get_input_port_name, set_input_port_name, get_output_port_name, set_output_port_name,
-     *            get_input_port_names, get_output_port_names
+     *            get_input_port_names, get_output_port_names, get_input_port_net, get_output_port_net
      */
     TEST_F(ModuleTest, check_port_names) {
         TEST_START
@@ -688,14 +696,15 @@ namespace hal {
             }
             {
                 // Set and get an input port name
-                // std::cout << "\n===\n" << m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)) << "\n===\n" << std::endl;
                 m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
                 EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3");
+                EXPECT_EQ(m_0->get_input_port_net("port_name_net_1_3"), nl->get_net_by_id(MIN_NET_ID + 13));
             }
             {
                 // Set and get an output port name
                 m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5");
                 EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045)), "port_name_net_0_4_5");
+                EXPECT_EQ(m_0->get_output_port_net("port_name_net_0_4_5"), nl->get_net_by_id(MIN_NET_ID + 045));
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
             Module* m_1 = nl->create_module("mod_1",
@@ -748,16 +757,18 @@ namespace hal {
 
             // NEGATIVE
             {
-                // Set the input port name of a Net, that is no input Net of the Module
+                // Set the input port name of a Net that is no input Net of the Module
                 NO_COUT_TEST_BLOCK;
                 m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name");
                 EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 78)), "");
+                EXPECT_EQ(m_0->get_input_port_net("port_name"), nullptr);
             }
             {
                 // Set the output port name of a Net, that is no input Net of the Module
                 NO_COUT_TEST_BLOCK;
                 m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name");
                 EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 78)), "");
+                EXPECT_EQ(m_0->get_output_port_net("port_name"), nullptr);
             }
             {
                 // Pass a nullptr
@@ -766,6 +777,12 @@ namespace hal {
                 m_0->set_output_port_name(nullptr, "port_name");
                 EXPECT_EQ(m_0->get_input_port_name(nullptr), "");
                 EXPECT_EQ(m_0->get_output_port_name(nullptr), "");
+            }
+            {
+                // Pass an empty string to get_input_port_net/get_output_port_net
+                NO_COUT_TEST_BLOCK;
+                EXPECT_EQ(m_0->get_input_port_net(""), nullptr);
+                EXPECT_EQ(m_0->get_output_port_net(""), nullptr);
             }
         TEST_END
     }

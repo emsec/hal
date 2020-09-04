@@ -13,7 +13,7 @@
 
 /*
  * In this file aren't the tests for the various parsers, however it uses the vhdl parser as an example. If there occure
- * any errors, it can be an issue of the vhdl parser as well...
+ * any errors, it can be an issu_e of the vhdl parser as well...
  */
 
 

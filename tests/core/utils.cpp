@@ -23,24 +23,44 @@ namespace hal {
     };
 
     /**
+     * Testing the file_exists function
+     *
+     * Functions: get_bit
+     */
+    TEST_F(UtilsTest, check_file_exists) {
+        TEST_START
+            {
+                // Call file_exists for an existing file
+                test_utils::create_sandbox_directory();
+                std::filesystem::path existing_file_path =
+                    test_utils::create_sandbox_file("exising_file",
+                        "<THIS IS A TEMPORARY FILE AND SHOULD BE ALREADY REMOVED!>");
+                EXPECT_TRUE(file_exists(existing_file_path.string()));
+                test_utils::remove_sandbox_directory();
+            }
+            {
+                // Call file_exists for a non-existing file
+                EXPECT_FALSE(file_exists("this/file/does/not/exist"));
+            }
+        TEST_END
+    }
+
+    /**
      * Testing get_bit definition of utils
      *
      * Functions: get_bit
      */
     TEST_F(UtilsTest, check_get_bit) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-            {// Get some bits of the given int
+            {
+            // Get some bits of the given int
                 int i = 0b1101;
                 EXPECT_EQ(get_bit(i, 0), 1);
                 EXPECT_EQ(get_bit(i, 1), 0);
                 EXPECT_EQ(get_bit(i, 2), 1);
                 EXPECT_EQ(get_bit(i, 3), 1);
                 EXPECT_EQ(get_bit(i, 4), 0);
-            }    // namespace hal
-
+            }
         TEST_END
     }
 
@@ -51,9 +71,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_set_bit) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
             {
                 // Set the bit if the bit is 0
                 EXPECT_EQ(set_bit(0b1001, 1), 0b1011);
@@ -72,9 +89,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_clear_bit) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
             {
                 // Clear the bit if the bit is 1
                 EXPECT_EQ(clear_bit(0b1001, 0), 0b1000);
@@ -93,9 +107,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_toggle_bit) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
             {
                 // Clear the bit if the bit is 1
                 EXPECT_EQ(toggle_bit(0b1001, 0), 0b1000);
@@ -114,10 +125,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_ends_with) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some combinations which should result in true
             EXPECT_TRUE(ends_with<std::string>("string", "ing"));
             EXPECT_TRUE(ends_with<std::string>("string", "g"));
@@ -145,10 +152,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_starts_with) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some combinations which should result in true
             EXPECT_TRUE(starts_with<std::string>("string", "str"));
             EXPECT_TRUE(starts_with<std::string>("string", "s"));
@@ -175,11 +178,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_is_integer) {
         TEST_START
-
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some strings which should result in true
             EXPECT_TRUE(is_integer<std::string>("12"));
             EXPECT_TRUE(is_integer<std::string>("-42"));
@@ -207,10 +205,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_is_floating_point) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some strings which should result in true
             EXPECT_TRUE(is_floating_point<std::string>("1.2345"));
             EXPECT_TRUE(is_floating_point<std::string>("-0.005"));
@@ -239,11 +233,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_split) {
         TEST_START
-
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some calls without the obey_brackets-flag
             EXPECT_EQ(split<std::string>("string", ',', false), std::vector<std::string>({"string"}));
             EXPECT_EQ(split<std::string>("str,ing", ',', false), std::vector<std::string>({"str", "ing"}));
@@ -257,10 +246,7 @@ namespace hal {
             EXPECT_EQ(split<std::string>("s(tr(i),(ng))", ',', true), std::vector<std::string>({"s(tr(i),(ng))"}));
             EXPECT_EQ(split<std::string>("(s))tr,(in,g)", ',', true), std::vector<std::string>({"(s))tr", "(in,g)"}));
 
-            // ########################
             // NEGATIVE TESTS
-            // ########################
-
             EXPECT_EQ(split<std::string>("", ',', true), std::vector<std::string>({}));
             EXPECT_EQ(split<std::string>("", ',', false), std::vector<std::string>({}));
         TEST_END
@@ -273,10 +259,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_trim) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some 'normal' cases
             EXPECT_EQ(trim<std::string>("  string  "), "string");
             EXPECT_EQ(trim<std::string>("string  "), "string");
@@ -303,10 +285,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_ltrim) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some 'normal' cases
             EXPECT_EQ(ltrim<std::string>("  string  "), "string  ");
             EXPECT_EQ(ltrim<std::string>("string  "), "string  ");
@@ -332,10 +310,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_rtrim) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some 'normal' cases
             EXPECT_EQ(rtrim<std::string>("  string  "), "  string");
             EXPECT_EQ(rtrim<std::string>("string  "), "string");
@@ -361,17 +335,9 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_replace) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             EXPECT_EQ(replace<std::string>("This is a string", "is", "XX"), "ThXX XX a string");
             EXPECT_EQ(replace<std::string>("This is a string", "is", ""), "Th  a string");
             EXPECT_EQ(replace<std::string>("This is a string", "unknown_string", ""), "This is a string");
-
-            // ########################
-            // NEGATIVE TESTS
-            // ########################
 
             EXPECT_EQ(replace<std::string>("This is a string", "", "XX"), "This is a string");
             EXPECT_EQ(replace<std::string>("", "XX", "YY"), "");
@@ -385,9 +351,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_join) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
             // Join of vectors
             EXPECT_EQ(join(",", std::vector<std::string>({"A", "B", "C"})), "A,B,C");
             EXPECT_EQ(join(",", std::vector<std::string>({"A,", "B,", "C"})), "A,,B,,C");
@@ -396,10 +359,6 @@ namespace hal {
 
             // Join of sets
             EXPECT_EQ(join(",", std::set<std::string>({"A", "B", "C"})), "A,B,C");
-
-            // ########################
-            // NEGATIVE TESTS
-            // ########################
 
             EXPECT_EQ(join(",", std::vector<std::string>({})), "");
             EXPECT_EQ(join(",", std::set<std::string>({})), "");
@@ -413,10 +372,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_to_upper) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some 'normal' cases
             EXPECT_EQ(to_upper<std::string>("string"), "STRING");
             EXPECT_EQ(to_upper<std::string>("StRinG"), "STRING");
@@ -434,10 +389,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_to_lower) {
         TEST_START
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // Some 'normal' cases
             EXPECT_EQ(to_lower<std::string>("STRING"), "string");
             EXPECT_EQ(to_lower<std::string>("StRinG"), "string");
@@ -459,10 +410,6 @@ namespace hal {
             std::filesystem::path tmp_dir_path = get_binary_directory().string() + "/tmp_test";
 
             std::filesystem::create_directory(tmp_dir_path);
-
-            // ########################
-            // POSITIVE TESTS
-            // ########################
 
             // The directory exists and is accessible
             EXPECT_TRUE(folder_exists_and_is_accessible(tmp_dir_path));
@@ -490,16 +437,12 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_to_directory_functions) {
         TEST_START
-
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             EXPECT_TRUE(std::filesystem::is_directory(get_binary_directory()));
             EXPECT_TRUE(std::filesystem::is_directory(get_base_directory()));
             EXPECT_TRUE(std::filesystem::is_directory(get_library_directory()));
             EXPECT_TRUE(std::filesystem::is_directory(get_share_directory()));
             EXPECT_TRUE(std::filesystem::is_directory(get_user_share_directory()));
+            EXPECT_TRUE(std::filesystem::is_directory(get_config_directory()));
             EXPECT_TRUE(std::filesystem::is_directory(get_user_config_directory()));
             EXPECT_TRUE(std::filesystem::is_directory(get_default_log_directory()));
 
@@ -522,9 +465,6 @@ namespace hal {
             std::filesystem::path non_existing_path_1(base_path.string() + "/bin/bam/bum");
             std::filesystem::path non_existing_path_2("not_existing_path");
 
-            // ########################
-            // POSITIVE TESTS
-            // ########################
             {
                 // One existing dir
                 std::vector<std::filesystem::path> path_set({base_path, non_existing_path_1, non_existing_path_2});
@@ -546,15 +486,12 @@ namespace hal {
                 EXPECT_EQ(get_first_directory_exists(path_set).string(), std::filesystem::path("").string());
             }
 
-            // ########################
             // NEGATIVE TESTS
-            // ########################
             {
                 // Empty list of paths
                 std::vector<std::filesystem::path> path_set_empty({});
                 EXPECT_EQ(get_first_directory_exists(path_set_empty).string(), "");
             }
-
         TEST_END
     }
 
@@ -585,10 +522,6 @@ namespace hal {
             std::filesystem::path dir_empty_1_path(tmp_dir_path.string() + "/dir_empty_1");
             std::filesystem::path dir_empty_2_path(tmp_dir_path.string() + "/dir_empty_2");
 
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             {
                 // Only one directory contains the file with the given name
                 std::vector<std::filesystem::path> dirs_to_search({dir_1_path, dir_empty_1_path, dir_empty_2_path});
@@ -609,10 +542,7 @@ namespace hal {
                 std::vector<std::filesystem::path> dirs_to_search({dir_empty_1_path, dir_empty_2_path});
                 EXPECT_EQ(get_file("tmp.txt", dirs_to_search).string(), std::filesystem::path(""));
             }
-
-            // ########################
             // NEGATIVE TESTS
-            // ########################
             {
                 // path hints are empty -> wrong documentation?
                 std::vector<std::filesystem::path> dirs_to_search({});
@@ -657,10 +587,6 @@ namespace hal {
             std::filesystem::path dir_txt_path(tmp_dir_path.string() + "/dir_txt");
             std::filesystem::path dir_empty_path(tmp_dir_path.string() + "/dir_empty");
 
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             // This test are only valid if an executable hal exists within the bin folder
             if (std::filesystem::exists(get_binary_directory().string() + "/hal")) {
                 {
@@ -684,11 +610,7 @@ namespace hal {
                 std::filesystem::path res = which("tmp.txt", "/this/directory/does/not/exist");
                 EXPECT_EQ(res.string(), "");
             }
-
-            // ########################
             // NEGATIVE TESTS
-            // ########################
-
             {
                 // File name is the empty string "" -> FAILS
                 std::filesystem::path res = which("", tmp_dir_path.string() + "/dir_empty");
@@ -715,11 +637,6 @@ namespace hal {
      */
     TEST_F(UtilsTest, check_get_open_source_license) {
         TEST_START
-
-            // ########################
-            // POSITIVE TESTS
-            // ########################
-
             std::string lic_str = get_open_source_licenses();
             EXPECT_TRUE(lic_str.length() > 0);
 
