@@ -26,6 +26,7 @@
 #include "gui/gui_utils/sort.h"
 
 #include <QSortFilterProxyModel>
+#include <QRegularExpression>
 
 namespace hal
 {
