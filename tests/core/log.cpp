@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include <core/log.h>
+#include "hal_core/utilities/log.h"
 #include <iostream>
 #include <test_def.h>
 

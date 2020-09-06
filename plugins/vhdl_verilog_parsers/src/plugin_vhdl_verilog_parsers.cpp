@@ -1,9 +1,9 @@
-#include "plugin_vhdl_verilog_parsers.h"
+#include "vhdl_verilog_parsers/plugin_vhdl_verilog_parsers.h"
 
-#include "hdl_parser_verilog.h"
-#include "hdl_parser_vhdl.h"
+#include "vhdl_verilog_parsers/hdl_parser_verilog.h"
+#include "vhdl_verilog_parsers/hdl_parser_vhdl.h"
 
-#include "netlist/hdl_parser/hdl_parser_manager.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 
 namespace hal
 {

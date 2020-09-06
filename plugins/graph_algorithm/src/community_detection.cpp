@@ -1,8 +1,8 @@
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "plugin_graph_algorithm.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
 #include <igraph/igraph.h>
 
@@ -32,7 +32,7 @@ namespace hal
                 /* delete leaves connected to a single gate as successor and predecessor */
                 else if ((counter == 2) && (test_gate->get_predecessors().size() == 1) && (test_gate->get_successors().size() == 1))
                 {
-                    if (test_gate->get_predecessors()[0].get_gate() == test_gate->get_successors()[0].get_gate())
+                    if (test_gate->get_predecessors()[0]->get_gate() == test_gate->get_successors()[0]->get_gate())
                     {
                         nl->delete_gate(test_gate);
                         deleted_leave = true;
@@ -53,14 +53,14 @@ namespace hal
 
         /* count amount of nets, with all destinations of all nets */
         u32 edge_counter = 0;
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
-            if (net->get_source().get_gate() == nullptr)
+            if (net->get_source()->get_gate() == nullptr)
                 continue;
 
             for (const auto& successor : net->get_destinations())
             {
-                if (successor.get_gate() == nullptr)
+                if (successor->get_gate() == nullptr)
                     continue;
                 edge_counter += 2;
             }
@@ -69,18 +69,18 @@ namespace hal
         /* transform all nets to igraph_real_t */
         igraph_real_t* edges     = new igraph_real_t[edge_counter];
         u32 edge_vertice_counter = 0;
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
-            auto predecessor = net->get_source().get_gate();
+            auto predecessor = net->get_source()->get_gate();
             if (predecessor == nullptr)
                 continue;
             auto predecessor_id = nl_igraph_id_match[predecessor->get_id()];
 
             for (const auto& successor : net->get_destinations())
             {
-                if (successor.get_gate() == nullptr)
+                if (successor->get_gate() == nullptr)
                     continue;
-                auto successor_id             = nl_igraph_id_match[successor.get_gate()->get_id()];
+                auto successor_id             = nl_igraph_id_match[successor->get_gate()->get_id()];
                 edges[edge_vertice_counter++] = (igraph_real_t)predecessor_id;
                 edges[edge_vertice_counter++] = (igraph_real_t)successor_id;
             }

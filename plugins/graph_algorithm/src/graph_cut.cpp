@@ -1,12 +1,12 @@
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
-#include "plugin_graph_algorithm.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
 namespace hal
 {
     std::vector<std::set<Gate*>>
-        plugin_graph_algorithm::get_graph_cut(Netlist* const g, Gate* const current_gate, const u32 depth, const std::set<std::string> terminal_gate_type)
+        plugin_graph_algorithm::get_graph_cut(Netlist* const g, Gate* current_gate, const u32 depth, const std::set<std::string> terminal_gate_type)
     {
         if (g == nullptr)
         {
@@ -39,9 +39,9 @@ namespace hal
             {
                 for (const auto& predecessor : it->get_predecessors())
                 {
-                    if (terminal_gate_type.find(predecessor.get_gate()->get_type()->get_name()) == terminal_gate_type.end())
+                    if (terminal_gate_type.find(predecessor->get_gate()->get_type()->get_name()) == terminal_gate_type.end())
                     {
-                        next_state.insert(predecessor.get_gate());
+                        next_state.insert(predecessor->get_gate());
                     }
                 }
             }

@@ -1,9 +1,9 @@
-#include "core/log.h"
-#include "core/plugin_manager.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "plugin_graph_algorithm.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
 #include <igraph/igraph.h>
 #include <tuple>
@@ -16,16 +16,16 @@ namespace hal
 
         // count all edges, remember in HAL one net(edge) has multiple sinks
         u32 edge_counter = 0;
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
-            Gate* src_gate = net->get_source().get_gate();
+            Gate* src_gate = net->get_source()->get_gate();
             std::vector<Gate*> dst_gates;
 
             auto dst_gates_endpoints = net->get_destinations();
 
             for (const auto& dst_gate_endpoint : dst_gates_endpoints)
             {
-                dst_gates.push_back(dst_gate_endpoint.get_gate());
+                dst_gates.push_back(dst_gate_endpoint->get_gate());
             }
 
             // if gate has no src --> add exactly one dummy node
@@ -55,16 +55,16 @@ namespace hal
         u32 dummy_gate_counter   = nl->get_gates().size() - 1;
         u32 edge_vertice_counter = 0;
 
-        for (const auto& net : nl->get_nets())
+        for (auto net : nl->get_nets())
         {
-            Gate* src_gate = net->get_source().get_gate();
+            Gate* src_gate = net->get_source()->get_gate();
             std::vector<Gate*> dst_gates;
 
             auto dst_gates_endpoints = net->get_destinations();
 
             for (const auto& dst_gate_endpoint : dst_gates_endpoints)
             {
-                dst_gates.push_back(dst_gate_endpoint.get_gate());
+                dst_gates.push_back(dst_gate_endpoint->get_gate());
             }
 
             // if gate has no src --> add exactly one dummy node

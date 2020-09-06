@@ -1,15 +1,15 @@
 #include "gtest/gtest.h"
 #include "netlist_test_utils.h"
-#include <core/log.h>
-#include <core/utils.h>
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 #include <iostream>
 #include <netlist/gate.h>
 #include <netlist/net.h>
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/netlist_factory.h"
-#include "netlist/netlist.h"
-#include "netlist/hdl_parser/hdl_parser_verilog.h"
-#include "netlist/hdl_writer/hdl_writer_verilog.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_verilog.h"
+#include "hal_core/netlist/hdl_writer/hdl_writer_verilog.h"
 
 namespace hal {
 
@@ -24,7 +24,7 @@ namespace hal {
 
         virtual void SetUp() {
             NO_COUT_BLOCK;
-            m_pseudo_simprim_lib_path = core_utils::get_gate_library_directories()[0] / "pseudo_simprim_lib.json";
+            m_pseudo_simprim_lib_path = utils::get_gate_library_directories()[0] / "pseudo_simprim_lib.json";
             m_gl = test_utils::get_testing_gate_library();
         }
 
@@ -689,10 +689,10 @@ namespace hal {
                 // Check if a Net name is correctly translated
                 ASSERT_EQ(parsed_nl->get_nets("1'b0").size(), 1);
                 Net* gnd_net_translated = *parsed_nl->get_nets("1'b0").begin();
-                ASSERT_NE(gnd_net_translated->get_source().get_gate(), nullptr);
-                EXPECT_EQ(gnd_net_translated->get_source().get_gate()->get_type()->get_name(), "GND");
+                ASSERT_NE(gnd_net_translated->get_source()->get_gate(), nullptr);
+                EXPECT_EQ(gnd_net_translated->get_source()->get_gate()->get_type()->get_name(), "GND");
                 ASSERT_EQ(gnd_net_translated->get_destinations().size(), 1);
-                EXPECT_EQ((*gnd_net_translated->get_destinations().begin()).get_gate()->get_name(), "test_gate" + m_gate_suffix);
+                EXPECT_EQ((*gnd_net_translated->get_destinations().begin())->get_gate()->get_name(), "test_gate" + m_gate_suffix);
             }
             {
                 // Testing the Net name translation of a '0' Net
@@ -734,10 +734,10 @@ namespace hal {
                 // Check if a Net name is correctly translated
                 ASSERT_EQ(parsed_nl->get_nets("1'b1").size(), 1);
                 Net* vcc_net_translated = *parsed_nl->get_nets("1'b1").begin();
-                ASSERT_NE(vcc_net_translated->get_source().get_gate(), nullptr);
-                EXPECT_EQ(vcc_net_translated->get_source().get_gate()->get_type()->get_name(), "VCC");
+                ASSERT_NE(vcc_net_translated->get_source()->get_gate(), nullptr);
+                EXPECT_EQ(vcc_net_translated->get_source()->get_gate()->get_type()->get_name(), "VCC");
                 ASSERT_EQ(vcc_net_translated->get_destinations().size(), 1);
-                EXPECT_EQ((*vcc_net_translated->get_destinations().begin()).get_gate()->get_name(), "test_gate" + m_gate_suffix);
+                EXPECT_EQ((*vcc_net_translated->get_destinations().begin())->get_gate()->get_name(), "test_gate" + m_gate_suffix);
             }*/
         TEST_END
     }
@@ -765,7 +765,7 @@ namespace hal {
                  * create_temp_gate_lib();
                 // Testing the usage of a pin vector using the temp Gate library
                 GateLibrary* gl = gate_library_manager::get_gate_library(temp_lib_name);
-                Netlist* nl(new Netlist(gl));
+                Netlist* nl(new Netlist(gl)); <-- dont do this!
 
                 Gate* gnd_gate = nl->create_gate(MIN_GATE_ID + 0, "GND", "gnd_gate");
                 Gate* vcc_gate = nl->create_gate(MIN_GATE_ID + 1, "VCC", "vcc_gate");
@@ -841,7 +841,7 @@ namespace hal {
                 /*
                             // Testing the usage of nets connected to a X_ZERO Gate
                             GateLibrary* gl = gate_library_manager::get_gate_library(m_pseudo_simprim_lib_name);
-                            Netlist* nl(new Netlist(gl));
+                            Netlist* nl(new Netlist(gl)); <-- dont do this!
 
                             Gate* x_zero_gate_0 = nl->create_gate("X_ZERO", "x_zero_gate_0");
                             Gate* x_zero_gate_1 = nl->create_gate("X_ZERO", "x_zero_gate_1");

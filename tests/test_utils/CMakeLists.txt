@@ -12,3 +12,7 @@ target_include_directories(test_utils PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/includ
 
 #target_link_libraries(test_utils  pthread  gtest gtest_main ${LINK_LIBS})
 target_link_libraries(test_utils  pthread gtest gtest_main hal::core hal::netlist)
+
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+add_sanitizers(test_utils)
+endif()

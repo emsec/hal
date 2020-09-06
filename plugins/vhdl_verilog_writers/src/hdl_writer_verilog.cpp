@@ -1,9 +1,9 @@
-#include "hdl_writer_verilog.h"
+#include "vhdl_verilog_writers/hdl_writer_verilog.h"
 
-#include "core/log.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 
 
 namespace hal
@@ -75,8 +75,7 @@ namespace hal
             m_only_wire_names_str_to_net[wire_name.second] = wire_name.first;
         }
         //input entity
-        std::set<Net*> in_nets = m_netlist->get_global_input_nets();
-        for (auto it : in_nets)
+        for (auto it : m_netlist->get_global_input_nets())
         {
             m_in_names[it]                                = this->get_net_name(it);
             m_in_names_str_to_net[this->get_net_name(it)] = it;
@@ -84,8 +83,7 @@ namespace hal
             m_only_wire_names_str_to_net.erase(this->get_net_name(it));
         }
         //output entity
-        std::set<Net*> out_nets = m_netlist->get_global_output_nets();
-        for (auto it : out_nets)
+        for (auto it : m_netlist->get_global_output_nets())
         {
             m_out_names[it]                                = this->get_net_name(it);
             m_out_names_str_to_net[this->get_net_name(it)] = it;
@@ -96,8 +94,7 @@ namespace hal
         //vcc gates
         for (auto n : m_netlist->get_vcc_gates())
         {
-            std::set<Net*> o_nets = n->get_fan_out_nets();
-            for (auto e : o_nets)
+            for (auto e : n->get_fan_out_nets())
             {
                 if (e->get_name() == "'1'")
                 {
@@ -112,8 +109,7 @@ namespace hal
         //gnd gates
         for (auto n : m_netlist->get_gnd_gates())
         {
-            std::set<Net*> o_nets = n->get_fan_out_nets();
-            for (auto e : o_nets)
+            for (auto e : n->get_fan_out_nets())
             {
                 if (e->get_name() == "'0'")
                 {
@@ -223,7 +219,7 @@ namespace hal
     {
         std::string pin_temp = pin;
         std::size_t found;
-        bool marked = core_utils::starts_with(pin_temp, std::string("\\"));
+        bool marked = utils::starts_with(pin_temp, std::string("\\"));
         while ((found = pin_temp.find("(")) != std::string::npos)
         {
             pin_temp.replace(found, 1, "[");
@@ -314,7 +310,7 @@ namespace hal
 
     void HDLWriterVerilog::print_gate_definitions_verilog()
     {
-        std::set<Gate*> gates = m_netlist->get_gates();
+        auto gates = m_netlist->get_gates();
         for (auto&& gate : gates)
         {
             // TODO ugly bad bad bad

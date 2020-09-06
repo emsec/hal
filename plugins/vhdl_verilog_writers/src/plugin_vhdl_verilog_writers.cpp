@@ -1,8 +1,8 @@
-#include "plugin_vhdl_verilog_writers.h"
+#include "vhdl_verilog_writers/plugin_vhdl_verilog_writers.h"
 
-#include "hdl_writer_verilog.h"
-#include "hdl_writer_vhdl.h"
-#include "netlist/hdl_writer/hdl_writer_manager.h"
+#include "vhdl_verilog_writers/hdl_writer_verilog.h"
+#include "vhdl_verilog_writers/hdl_writer_vhdl.h"
+#include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 
 namespace hal
 {

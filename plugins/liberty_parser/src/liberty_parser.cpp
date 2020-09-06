@@ -1,9 +1,9 @@
-#include "liberty_parser.h"
+#include "liberty_parser/liberty_parser.h"
 
-#include "core/log.h"
-#include "netlist/boolean_function.h"
-#include "netlist/gate_library/gate_type/gate_type_lut.h"
-#include "netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
 
 namespace hal
 {
@@ -450,6 +450,12 @@ namespace hal
                 pin.z_function = pin_str.consume().string;
                 pin_str.consume(";", true);
             }
+            else if (next_token == "clock")
+            {
+                pin_str.consume(":", true);
+                pin.clock = pin_str.consume("true");
+                pin_str.consume(";", true);
+            }
         }
 
         return pin;
@@ -744,8 +750,8 @@ namespace hal
         std::unique_ptr<GateType> gt;
         std::vector<std::string> input_pins;
         std::vector<std::string> output_pins;
-        std::map<std::string, std::map<u32, std::string>> input_pin_groups;
-        std::map<std::string, std::map<u32, std::string>> output_pin_groups;
+        std::unordered_map<std::string, std::unordered_map<u32, std::string>> input_pin_groups;
+        std::unordered_map<std::string, std::unordered_map<u32, std::string>> output_pin_groups;
 
         // get input and output pins from pin groups
         for (const auto& pin : cell.pins)
@@ -808,10 +814,16 @@ namespace hal
         if (cell.type == GateType::BaseType::combinatorial)
         {
             gt = std::make_unique<GateType>(cell.name);
+
+            gt->add_input_pins(input_pins);
+            gt->add_output_pins(output_pins);
         }
         else if (cell.type == GateType::BaseType::ff)
         {
             auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
+
+            seq_gt->add_input_pins(input_pins);
+            seq_gt->add_output_pins(output_pins);
 
             if (!cell.ff.clocked_on.empty())
             {
@@ -857,6 +869,14 @@ namespace hal
 
                     pin.function = "";
                 }
+
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_clock_pin(pin_name);
+                    }
+                }
             }
 
             for (auto& bus : cell.buses)
@@ -881,6 +901,14 @@ namespace hal
 
                         pin.function = "";
                     }
+
+                    if (pin.clock == true)
+                    {
+                        for (const auto& pin_name : pin.pin_names)
+                        {
+                            seq_gt->add_clock_pin(pin_name);
+                        }
+                    }
                 }
             }
 
@@ -889,6 +917,9 @@ namespace hal
         else if (cell.type == GateType::BaseType::latch)
         {
             auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
+
+            seq_gt->add_input_pins(input_pins);
+            seq_gt->add_output_pins(output_pins);
 
             if (!cell.latch.enable.empty())
             {
@@ -932,6 +963,14 @@ namespace hal
 
                     pin.function = "";
                 }
+
+                if (pin.clock == true)
+                {
+                    for (const auto& pin_name : pin.pin_names)
+                    {
+                        seq_gt->add_clock_pin(pin_name);
+                    }
+                }
             }
 
             for (auto& bus : cell.buses)
@@ -956,6 +995,14 @@ namespace hal
 
                         pin.function = "";
                     }
+
+                    if (pin.clock == true)
+                    {
+                        for (const auto& pin_name : pin.pin_names)
+                        {
+                            seq_gt->add_clock_pin(pin_name);
+                        }
+                    }
                 }
             }
 
@@ -964,6 +1011,9 @@ namespace hal
         else if (cell.type == GateType::BaseType::lut)
         {
             auto lut_gt = std::make_unique<GateTypeLut>(cell.name);
+
+            lut_gt->add_input_pins(input_pins);
+            lut_gt->add_output_pins(output_pins);
 
             lut_gt->set_config_data_category(cell.lut.data_category);
             lut_gt->set_config_data_identifier(cell.lut.data_identifier);
@@ -1001,8 +1051,6 @@ namespace hal
             gt = std::move(lut_gt);
         }
 
-        gt->add_input_pins(input_pins);
-        gt->add_output_pins(output_pins);
         gt->assign_input_pin_groups(input_pin_groups);
         gt->assign_output_pin_groups(output_pin_groups);
 
@@ -1246,9 +1294,9 @@ namespace hal
         return res;
     }
 
-    std::map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
+    std::unordered_map<std::string, BooleanFunction> LibertyParser::construct_bus_functions(const cell_group& cell, const std::vector<std::string>& all_pins)
     {
-        std::map<std::string, BooleanFunction> res;
+        std::unordered_map<std::string, BooleanFunction> res;
 
         for (const auto& [bus_name, bus] : cell.buses)
         {

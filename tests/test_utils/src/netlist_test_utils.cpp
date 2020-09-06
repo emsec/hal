@@ -1,7 +1,8 @@
 
 #include "netlist_test_utils.h"
 
-#include <core/utils.h>
+#include "hal_core/utilities/utils.h"
+
 #include <math.h>
 
 //using namespace hal;
@@ -42,46 +43,48 @@ namespace hal
         }
     }
 
-    Endpoint test_utils::get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination)
+    Endpoint* test_utils::get_endpoint(Netlist* nl, const int gate_id, const std::string& pin_type, bool is_destination)
     {
         Gate* g = nl->get_gate_by_id(gate_id);
         if (g != nullptr)
-            return Endpoint(g, pin_type, is_destination);
+        {
+            return is_destination ? g->get_fan_in_endpoint(pin_type) : g->get_fan_out_endpoint(pin_type);
+        }
         else
-            return Endpoint(nullptr, "", is_destination);
+            return nullptr;
     }
 
-    Endpoint test_utils::get_endpoint(Gate* g, const std::string& pin_type)
+    Endpoint* test_utils::get_endpoint(Gate* g, const std::string& pin_type)
     {
         if (g == nullptr || pin_type == "")
         {
-            return Endpoint(nullptr, "", false);
+            return nullptr;
         }
-        auto nl         = g->get_netlist();
+        auto nl             = g->get_netlist();
         int gate_id         = g->get_id();
         auto in_pins        = g->get_type()->get_input_pins();
         bool is_destination = (std::find(in_pins.begin(), in_pins.end(), pin_type) != in_pins.end());
         return get_endpoint(nl, gate_id, pin_type, is_destination);
     }
 
-    bool test_utils::is_empty(const Endpoint& ep)
+    bool test_utils::is_empty(Endpoint* ep)
     {
-        return ((ep.get_gate() == nullptr) && (ep.get_pin() == ""));
+        return ep == nullptr;
     }
 
-    std::vector<BooleanFunction::value> test_utils::minimize_truth_table(const std::vector<BooleanFunction::value> tt)
+    std::vector<BooleanFunction::Value> test_utils::minimize_truth_table(const std::vector<BooleanFunction::Value> tt)
     {
         int var_amt = round(log2(tt.size()));
         if ((1 << var_amt) != tt.size())
         {
             std::cerr << "[Test] minimize_truth_table: Tablesize must be a power of two!" << std::endl;
-            return std::vector<BooleanFunction::value>();
+            return std::vector<BooleanFunction::Value>();
         }
         for (int v = 0; v < var_amt; v++)
         {
             int interval = 2 << v;
-            std::vector<BooleanFunction::value> v_eq_0;
-            std::vector<BooleanFunction::value> v_eq_1;
+            std::vector<BooleanFunction::Value> v_eq_0;
+            std::vector<BooleanFunction::Value> v_eq_1;
             for (int i = 0; i < tt.size(); i++)
             {
                 if (i % interval < (interval >> 1))
@@ -134,8 +137,8 @@ namespace hal
     {
         if (nl == nullptr)
             return nullptr;
-        std::unordered_set<Net*> nets = nl->get_nets();
-        Net* res                      = nullptr;
+        auto nets = nl->get_nets();
+        Net* res  = nullptr;
         for (auto n : nets)
         {
             std::string n_name = n->get_name();
@@ -156,8 +159,8 @@ namespace hal
     {
         if (nl == nullptr)
             return nullptr;
-        std::set<Gate*> gates = nl->get_gates();
-        Gate* res             = nullptr;
+        auto gates = nl->get_gates();
+        Gate* res  = nullptr;
         for (auto g : gates)
         {
             std::string g_name = g->get_name();
@@ -176,19 +179,19 @@ namespace hal
 
     std::filesystem::path test_utils::create_sandbox_directory()
     {
-        std::filesystem::path sb_path = core_utils::get_base_directory() / sandbox_directory_path;
+        std::filesystem::path sb_path = utils::get_base_directory() / sandbox_directory_path;
         std::filesystem::create_directory(sb_path);
         return sb_path;
     }
 
     void test_utils::remove_sandbox_directory()
     {
-        std::filesystem::remove_all((core_utils::get_base_directory() / sandbox_directory_path));
+        std::filesystem::remove_all((utils::get_base_directory() / sandbox_directory_path));
     }
 
     std::filesystem::path test_utils::create_sandbox_path(const std::string file_name)
     {
-        std::filesystem::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
+        std::filesystem::path sb_path = (utils::get_base_directory() / sandbox_directory_path);
         if (!std::filesystem::exists(sb_path))
         {
             std::cerr << "[netlist_test_utils] create_sandbox_path: sandbox is not created yet. "
@@ -200,7 +203,7 @@ namespace hal
 
     std::filesystem::path test_utils::create_sandbox_file(std::string file_name, std::string content)
     {
-        std::filesystem::path sb_path = (core_utils::get_base_directory() / sandbox_directory_path);
+        std::filesystem::path sb_path = (utils::get_base_directory() / sandbox_directory_path);
         if (!std::filesystem::exists(sb_path))
         {
             std::cerr << "[netlist_test_utils] create_sandbox_file: sandbox is not created yet. "
@@ -318,8 +321,8 @@ namespace hal
     std::unique_ptr<Netlist> test_utils::create_example_netlist(const int id)
     {
         NO_COUT_BLOCK;
-        GateLibrary* gl             = get_testing_gate_library();
-        auto nl = create_empty_netlist(id);
+        GateLibrary* gl = get_testing_gate_library();
+        auto nl         = create_empty_netlist(id);
         if (id >= 0)
         {
             nl->set_id(id);
@@ -365,7 +368,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl     = create_empty_netlist(id);
+        auto nl         = create_empty_netlist(id);
 
         // Create the gates
         Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_4_to_1"), "gate_0");
@@ -393,7 +396,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl     = create_empty_netlist(id);
+        auto nl         = create_empty_netlist(id);
 
         // Create the Gate
         Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_1_to_1"), "gate_0");
@@ -413,7 +416,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl     = create_empty_netlist(id);
+        auto nl         = create_empty_netlist(id);
 
         // Create the gates
         Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_2_to_1"), "gate_0");
@@ -467,16 +470,16 @@ namespace hal
         return res_gate;
     }
 
-    Endpoint test_utils::get_destination_by_pin_type(const std::vector<Endpoint> dsts, const std::string pin_type)
+    Endpoint* test_utils::get_endpoint_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type)
     {
         for (auto dst : dsts)
         {
-            if (dst.get_pin() == pin_type)
+            if (dst->get_pin() == pin_type)
             {
                 return dst;
             }
         }
-        return {nullptr, "", true};
+        return nullptr;
     }
 
     bool test_utils::nets_are_equal(Net* n0, Net* n1, const bool ignore_id, const bool ignore_name)
@@ -492,13 +495,16 @@ namespace hal
             return false;
         if (!ignore_name && n0->get_name() != n1->get_name())
             return false;
-        if (n0->get_source().get_pin() != n1->get_source().get_pin())
-            return false;
-        if (!gates_are_equal(n0->get_source().get_gate(), n1->get_source().get_gate(), ignore_id, ignore_name))
-            return false;
+        for (auto n0_source : n0->get_sources())
+        {
+            if (!gates_are_equal(n0_source->get_gate(), get_endpoint_by_pin_type(n1->get_sources(), n0_source->get_pin())->get_gate(), ignore_id, ignore_name))
+            {
+                return false;
+            }
+        }
         for (auto n0_destination : n0->get_destinations())
         {
-            if (!gates_are_equal(n0_destination.get_gate(), get_destination_by_pin_type(n1->get_destinations(), n0_destination.get_pin()).get_gate(), ignore_id, ignore_name))
+            if (!gates_are_equal(n0_destination->get_gate(), get_endpoint_by_pin_type(n1->get_destinations(), n0_destination->get_pin())->get_gate(), ignore_id, ignore_name))
             {
                 return false;
             }
@@ -543,54 +549,95 @@ namespace hal
         if (m_0 == nullptr || m_1 == nullptr)
         {
             if (m_0 == m_1)
+            {
                 return true;
+            }
             else
+            {
+                std::cout << "one module is null while the other isnt" << std::endl;
                 return false;
+            }
         }
         // The ids should be equal
         if (!ignore_id && m_0->get_id() != m_1->get_id())
+        {
+            std::cout << "ids unequal" << std::endl;
             return false;
+        }
         // The names should be equal
         if (!ignore_name && m_0->get_name() != m_1->get_name())
+        {
+            std::cout << "names unequal" << std::endl;
             return false;
+        }
         // The types should be the same
         if (m_0->get_type() != m_1->get_type())
+        {
+            std::cout << "type unequal" << std::endl;
             return false;
+        }
         // The stored data should be equal
         if (m_0->get_data() != m_1->get_data())
+        {
+            std::cout << "data unequal" << std::endl;
             return false;
+        }
 
         // Check if gates and nets are the same
         if (m_0->get_gates().size() != m_1->get_gates().size())
+        {
+            std::cout << "number of gates unequal" << std::endl;
             return false;
+        }
         for (auto g_0 : m_0->get_gates())
         {
             Gate* g_1 = m_1->get_netlist()->get_gate_by_id(g_0->get_id());
             if (!gates_are_equal(g_0, g_1, ignore_id, ignore_name))
+            {
+                std::cout << "gates are unequal" << std::endl;
                 return false;
+            }
             if (!m_1->contains_gate(g_1))
+            {
+                std::cout << "gates are not in both modules" << std::endl;
                 return false;
+            }
         }
 
         // Check that the port names are the same
         // -- input ports
         if (m_0->get_input_port_names().size() != m_0->get_input_port_names().size())
+        {
+            std::cout << "number of input port names unequal" << std::endl;
             return false;
+        }
         auto m_1_input_port_names = m_1->get_input_port_names();
         for (auto const& [n_0, p_name_0] : m_0->get_input_port_names())
         {
             auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
             if (n_1_list.size() != 1)
+            {
+                std::cout << "input port net not found" << std::endl;
                 return false;
+            }
             Net* n_1 = *n_1_list.begin();
             if (m_1_input_port_names.find(n_1) == m_1_input_port_names.end())
+            {
+                std::cout << "input port net not found" << std::endl;
                 return false;
+            }
             if (m_1_input_port_names[n_1] != p_name_0)
+            {
+                std::cout << "input port name is unequal: " << m_1_input_port_names[n_1] << " vs " << p_name_0 << std::endl;
                 return false;
+            }
         }
         // -- output ports
         if (m_0->get_output_port_names().size() != m_0->get_output_port_names().size())
+        {
+            std::cout << "number of output port names unequal" << std::endl;
             return false;
+        }
         auto m_1_output_port_names = m_1->get_output_port_names();
         for (auto const& [n_0, p_name_0] : m_0->get_output_port_names())
         {
@@ -609,16 +656,26 @@ namespace hal
         if (m_0->get_parent_module() == nullptr || m_1->get_parent_module() == nullptr)
         {
             if (m_0->get_parent_module() != m_1->get_parent_module())
+            {
+                std::cout << "parent unequal" << std::endl;
                 return false;
+            }
         }
         if (m_0->get_submodules(nullptr, true).size() != m_1->get_submodules(nullptr, true).size())
+        {
+            std::cout << "number of submodules unequal" << std::endl;
             return false;
+        }
         for (auto sm_0 : m_0->get_submodules(nullptr, true))
         {
             if (sm_0 == nullptr)
+            {
+                std::cout << "submodule is null" << std::endl;
                 continue;
+            }
             if (m_1->get_netlist()->get_module_by_id(sm_0->get_id()) == nullptr)
             {
+                std::cout << "submodule is null" << std::endl;
                 return false;
             }
         }
@@ -691,7 +748,7 @@ namespace hal
         // -- Check if the modules are the same
         if (nl_0->get_modules().size() != nl_1->get_modules().size())
             return false;
-        std::set<Module*> mods_1 = nl_1->get_modules();
+        auto mods_1 = nl_1->get_modules();
         for (auto m_0 : nl_0->get_modules())
         {
             if (ignore_id)
@@ -740,32 +797,32 @@ namespace hal
         return [name](auto n) { return n->get_name() == name; };
     }
 
-    std::function<bool(const Endpoint&)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
+    std::function<bool(Endpoint*)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
     {
-        return [gate_type](auto& ep) { return ep.get_gate()->get_type()->get_name() == gate_type; };
+        return [gate_type](auto ep) { return ep->get_gate()->get_type()->get_name() == gate_type; };
     }
 
-    std::function<bool(const Endpoint&)> test_utils::endpoint_gate_name_filter(const std::string& name)
+    std::function<bool(Endpoint*)> test_utils::endpoint_gate_name_filter(const std::string& name)
     {
-        return [name](auto& ep) { return ep.get_gate()->get_name() == name; };
+        return [name](auto ep) { return ep->get_gate()->get_name() == name; };
     }
 
-    std::function<bool(const Endpoint&)> test_utils::endpoint_pin_type_filter(const std::string& pin_type)
+    std::function<bool(Endpoint*)> test_utils::endpoint_pin_type_filter(const std::string& pin_type)
     {
-        return [pin_type](auto& ep) { return ep.get_pin() == pin_type; };
+        return [pin_type](auto ep) { return ep->get_pin() == pin_type; };
     }
 
-    std::function<bool(const std::string&, const Endpoint&)> test_utils::adjacent_pin_filter(const std::string& pin)
+    std::function<bool(const std::string&, Endpoint*)> test_utils::adjacent_pin_filter(const std::string& pin)
     {
-        return [pin](auto&, auto& ep) { return ep.get_pin() == pin; };
+        return [pin](auto&, auto ep) { return ep->get_pin() == pin; };
     }
-    std::function<bool(const std::string&, const Endpoint&)> test_utils::starting_pin_filter(const std::string& pin)
+    std::function<bool(const std::string&, Endpoint*)> test_utils::starting_pin_filter(const std::string& pin)
     {
-        return [pin](auto& starting_pin, auto&) { return starting_pin == pin; };
+        return [pin](auto& starting_pin, auto) { return starting_pin == pin; };
     }
 
-    std::function<bool(const std::string&, const Endpoint&)> test_utils::adjacent_gate_type_filter(const std::string& type)
+    std::function<bool(const std::string&, Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
     {
-        return [type](auto&, auto& ep) { return ep.get_gate()->get_type()->get_name() == type; };
+        return [type](auto&, auto ep) { return ep->get_gate()->get_type()->get_name() == type; };
     }
 }    // namespace hal

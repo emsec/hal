@@ -1,10 +1,10 @@
-#include "plugin_graph_algorithm.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
@@ -42,14 +42,14 @@ std::map<Gate*, std::tuple<std::vector<Gate*>, int>> plugin_graph_algorithm::get
     // vertices in boost graph are ordered from 0, 1, ...
     auto nl = g->get_netlist();
     std::set<u32> gate_ids;
-    for (const auto& gate : nl->get_gates())
+    for (auto gate : nl->get_gates())
         gate_ids.insert(gate->get_id());
 
     std::map<u32, vertex_t> gate_id_to_vertex;
     std::map<vertex_t, u32> vertex_id_to_gate_id;
 
     u32 vertex_id_cnt = 0;
-    for (const auto& gate_id : gate_ids)
+    for (auto gate_id : gate_ids)
     {
         auto vd                               = boost::add_vertex(boost_graph);
         gate_id_to_vertex[gate_id]            = vd;
@@ -58,20 +58,20 @@ std::map<Gate*, std::tuple<std::vector<Gate*>, int>> plugin_graph_algorithm::get
 
     // add ordered weigthened edges (weight = 1) to directed boost graph
     std::map<u32, Net*> ordered_nets;
-    for (const auto& net : nl->get_nets())
+    for (auto net : nl->get_nets())
         ordered_nets[net->get_id()] = net;
 
     for (const auto& it : ordered_nets)
     {
-        if (it.second->get_source().get_gate() == nullptr)
+        if (it.second->get_source()->get_gate() == nullptr)
             continue;
 
         std::set<u32> dst_ids;
         for (auto dst : it.second->get_destinations())
-            dst_ids.insert(dst.get_gate()->get_id());
+            dst_ids.insert(dst->get_gate()->get_id());
 
         for (const auto& dst_id : dst_ids)
-            boost::add_edge(gate_id_to_vertex[it.second->get_source().get_gate()->get_id()], gate_id_to_vertex[dst_id], 1, boost_graph);
+            boost::add_edge(gate_id_to_vertex[it.second->get_source()->get_gate()->get_id()], gate_id_to_vertex[dst_id], 1, boost_graph);
     }
 
     // initialize parameters for dijkstra_shortest_paths()

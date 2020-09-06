@@ -1,13 +1,13 @@
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <iostream>
-#include <netlist/gate.h>
-#include <netlist/net.h>
-#include <netlist/module.h>
-#include <netlist/gate_library/gate_type/gate_type_lut.h>
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include <iomanip>
 #include <algorithm>
 #include <cassert>
@@ -41,13 +41,13 @@ namespace hal {
         }
 
         // UNUSED
-        std::vector<BooleanFunction::value> get_truth_table_from_i(const int i, unsigned bit, bool flipped = false) {
-            std::vector<BooleanFunction::value> res;
+        std::vector<BooleanFunction::Value> get_truth_table_from_i(const int i, unsigned bit, bool flipped = false) {
+            std::vector<BooleanFunction::Value> res;
             for (int b = bit - 1; b >= 0; b--) {
                 if (((1 << b) & i) > 0) {
-                    res.push_back(BooleanFunction::value::ONE);
+                    res.push_back(BooleanFunction::ONE);
                 } else {
-                    res.push_back(BooleanFunction::value::ZERO);
+                    res.push_back(BooleanFunction::ZERO);
                 }
             }
             if (flipped) {
@@ -58,30 +58,30 @@ namespace hal {
 
         // Turns a hex string into a BooleanFunction truth table (e.g: "A9" -> {1,0,1,0,1,0,0,1})
         // If the string is to small/big, the BEGINNING of the table is filled with zero/erased before the flip.
-        std::vector<BooleanFunction::value> get_truth_table_from_hex_string(std::string str,
+        std::vector<BooleanFunction::Value> get_truth_table_from_hex_string(std::string str,
                                                                             unsigned bit,
                                                                             bool flipped = false) {
             std::string char_val = "0123456789ABCDEF";
-            std::vector<BooleanFunction::value> res;
+            std::vector<BooleanFunction::Value> res;
             std::transform(str.begin(), str.end(), str.begin(), ::toupper);
             for (char c : str) {
                 if (std::size_t val = char_val.find(c); val != std::string::npos) {
                     for (int b = 3; b >= 0; b--) {
                         if (((1 << b) & val) > 0) {
-                            res.push_back(BooleanFunction::value::ONE);
+                            res.push_back(BooleanFunction::ONE);
                         } else {
-                            res.push_back(BooleanFunction::value::ZERO);
+                            res.push_back(BooleanFunction::ZERO);
                         }
                     }
                 } else { // input has non-hex characters
-                    return std::vector<BooleanFunction::value>();
+                    return std::vector<BooleanFunction::Value>();
                 }
             }
             int size_diff = res.size() - bit;
             if (size_diff > 0) {
                 res.erase(res.begin(), res.begin() + size_diff);
             } else if (size_diff < 0) {
-                res.insert(res.begin(), -size_diff, BooleanFunction::value::ZERO);
+                res.insert(res.begin(), -size_diff, BooleanFunction::ZERO);
             }
             assert(res.size() == bit);
             if (flipped) {
@@ -91,7 +91,7 @@ namespace hal {
         }
 
         // Get the minimized version of a truth truth table by its hex value, such that unnecessary variables are eliminated
-        std::vector<BooleanFunction::value> get_min_truth_table_from_hex_string(std::string str,
+        std::vector<BooleanFunction::Value> get_min_truth_table_from_hex_string(std::string str,
                                                                                 unsigned bit,
                                                                                 bool flipped = false) {
             return test_utils::minimize_truth_table(get_truth_table_from_hex_string(str, bit, flipped));
@@ -210,26 +210,26 @@ namespace hal {
             {
                 // All input pins are occupied
                 Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-                std::set<Net*>
+                std::vector<Net*>
                     fan_in_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 30), nl->get_net_by_id(MIN_NET_ID + 20)};
                 EXPECT_EQ(gate_0->get_fan_in_nets(), fan_in_nets_0);
             }
             {
                 // Not all input pins are occupied
                 Gate* gate_5 = nl->get_gate_by_id(MIN_GATE_ID + 5);
-                std::set<Net*> fan_in_nets_5 = {nl->get_net_by_id(MIN_NET_ID + 045)};
+                std::vector<Net*> fan_in_nets_5 = {nl->get_net_by_id(MIN_NET_ID + 045)};
                 EXPECT_EQ(gate_5->get_fan_in_nets(), fan_in_nets_5);
             }
             {
                 // No input pins are occupied
                 Gate* gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
-                std::set<Net*> fan_in_nets_6 = {};
+                std::vector<Net*> fan_in_nets_6 = {};
                 EXPECT_EQ(gate_6->get_fan_in_nets(), fan_in_nets_6);
             }
             {
                 // No input-pins exist
                 Gate* gate_1 = nl->get_gate_by_id(MIN_GATE_ID + 1);
-                std::set<Net*> fan_in_nets_1 = {};
+                std::vector<Net*> fan_in_nets_1 = {};
                 EXPECT_EQ(gate_1->get_fan_in_nets(), fan_in_nets_1);
             }
         TEST_END
@@ -253,25 +253,25 @@ namespace hal {
             {
                 // All output pins are occupied
                 Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-                std::set<Net*> fan_out_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 045)};
+                std::vector<Net*> fan_out_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 045)};
                 EXPECT_EQ(gate_0->get_fan_out_nets(), fan_out_nets_0);
             }
             {
                 // Not all output pins are occupied
                 Gate* gate_7 = nl->get_gate_by_id(MIN_GATE_ID + 7);
-                std::set<Net*> fan_out_nets_7 = {nl->get_net_by_id(MIN_NET_ID + 78)};
+                std::vector<Net*> fan_out_nets_7 = {nl->get_net_by_id(MIN_NET_ID + 78)};
                 EXPECT_EQ(gate_7->get_fan_out_nets(), fan_out_nets_7);
             }
             {
                 // No output pins are occupied
                 Gate* gate_8 = nl->get_gate_by_id(MIN_GATE_ID + 8);
-                std::set<Net*> fan_out_nets_8 = {};
+                std::vector<Net*> fan_out_nets_8 = {};
                 EXPECT_EQ(gate_8->get_fan_out_nets(), fan_out_nets_8);
             }
             {
                 // No output pin exist
                 Gate* gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
-                std::set<Net*> fan_out_nets_6 = {};
+                std::vector<Net*> fan_out_nets_6 = {};
                 EXPECT_EQ(gate_6->get_fan_out_nets(), fan_out_nets_6);
             }
         TEST_END
@@ -381,7 +381,7 @@ namespace hal {
             {
                 // Get predecessors for a Gate with multiple predecessors (some of them are the same Gate)
                 Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 2, "O", false)};
@@ -396,7 +396,7 @@ namespace hal {
             {
                 // Get predecessors for a given (existing) output pin type
                 Gate* gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_3
                                                                       ->get_predecessors(test_utils::adjacent_pin_filter(
                                                                           "O")), pred));
@@ -410,7 +410,7 @@ namespace hal {
             {
                 // Get predecessors for a given (existing) input pin type
                 Gate* gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_3
                                                                       ->get_predecessors(test_utils::starting_pin_filter(
                                                                           "I0")), pred));
@@ -418,7 +418,7 @@ namespace hal {
             {
                 // Get predecessors for a given (existing) unconnected input pin type
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> pred = {};
+                std::vector<Endpoint*> pred = {};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0
                                                                       ->get_predecessors(test_utils::starting_pin_filter(
                                                                           "I0")), pred));
@@ -432,7 +432,7 @@ namespace hal {
             {
                 // Get predecessors for a given (existing) Gate type
                 Gate* gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 3, "O", false)};
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 3, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter(
                     "gate_1_to_1")), pred));
                 EXPECT_EQ(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t) 1);
@@ -479,7 +479,7 @@ namespace hal {
             {
                 // Get successors for a Gate with multiple successors (some of them are the same Gate)
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I1", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I2", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 3, "I0", true)};
@@ -494,7 +494,7 @@ namespace hal {
             {
                 // Get successors for a given (existing) input pin type
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 3, "I0", true)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0
                                                                       ->get_successors(test_utils::adjacent_pin_filter(
@@ -510,7 +510,7 @@ namespace hal {
             {
                 // Get successors for a given (existing) output pin type
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I1", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I2", true),
                                               test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 3, "I0", true)};
@@ -532,7 +532,7 @@ namespace hal {
             {
                 // Get successors for a given (existing) Gate type
                 Gate* gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 4, "I", true)};
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 4, "I", true)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_successors(test_utils::adjacent_gate_type_filter(
                     "gate_1_to_1")), succ));
                 EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t) 1);
@@ -571,18 +571,16 @@ namespace hal {
             {
                 // Get the unique predecessors
                 Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
-                std::set<Gate*>
-                    pred = {nl_2->get_gate_by_id(MIN_GATE_ID + 0), nl_2->get_gate_by_id(MIN_GATE_ID + 2)};
+                std::vector<Gate*> pred = {nl_2->get_gate_by_id(MIN_GATE_ID + 0), nl_2->get_gate_by_id(MIN_GATE_ID + 2)};
                 std::vector<Gate*> res = gate_1->get_unique_predecessors();
-                EXPECT_TRUE((std::set<Gate*>(res.begin(), res.end()) == pred));
+                EXPECT_TRUE(test_utils::vectors_have_same_content(res, pred));
             }
             {
                 // Get the unique successors
                 Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::set<Gate*>
-                    succ = {nl_2->get_gate_by_id(MIN_GATE_ID + 1), nl_2->get_gate_by_id(MIN_GATE_ID + 3)};
+                std::vector<Gate*> succ = {nl_2->get_gate_by_id(MIN_GATE_ID + 1), nl_2->get_gate_by_id(MIN_GATE_ID + 3)};
                 std::vector<Gate*> res = gate_0->get_unique_successors();
-                EXPECT_TRUE((std::set<Gate*>(res.begin(), res.end()) == succ));
+                EXPECT_TRUE(test_utils::vectors_have_same_content(res, succ));
             }
         TEST_END
     }
@@ -602,15 +600,14 @@ namespace hal {
             // ########################
             {
                 // Get predecessor for a given (existing) input pin type
-                Gate* gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
-                Endpoint pred = test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false);
+                auto gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
+                auto pred = test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false);
                 EXPECT_TRUE(gate_3->get_predecessor("I0") == pred);
             }
             {
                 // Get predecessor for a given (existing) input pin type with no predecessors
-                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                Endpoint pred = {nullptr, "", false};
-                EXPECT_TRUE(gate_0->get_predecessor("I0") == pred);
+                auto gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                EXPECT_TRUE(gate_0->get_predecessor("I0") == nullptr);
             }
 
         TEST_END
@@ -753,7 +750,8 @@ namespace hal {
             BooleanFunction bf_i = BooleanFunction::from_string("I", std::vector<std::string>({"I"}));
             BooleanFunction bf_i_invert = BooleanFunction::from_string("!I", std::vector<std::string>({"I"}));
 
-            GateLibrary* inv_gl(new GateLibrary("imaginary_path", "TEST_LIB"));
+            auto inv_gl_owner = std::make_unique<GateLibrary>("imaginary_path", "TEST_LIB");
+            auto inv_gl = inv_gl_owner.get();
             auto inv_gate_type_owner = std::make_unique<GateType>("gate_1_to_1_inv");
             auto inv_gate_type = inv_gate_type_owner.get();
             inv_gate_type->add_input_pin("I");
@@ -809,7 +807,7 @@ namespace hal {
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
                 GateLibrary gl("imaginary_path", "TEST_LIB");
-                std::unique_ptr<GateType> empty_gate_type_owner(new GateType("EMPTY_GATE"));
+                auto empty_gate_type_owner = std::make_unique<GateType>("EMPTY_GATE");
                 auto empty_gate_type = empty_gate_type_owner.get();
                 gl.add_gate_type(std::move(empty_gate_type_owner));
 
@@ -820,7 +818,7 @@ namespace hal {
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
                 GateLibrary gl("imaginary_path", "TEST_LIB");
-                std::unique_ptr<GateType> empty_gate_type_owner(new GateType("EMPTY_GATE"));
+                auto empty_gate_type_owner = std::make_unique<GateType>("EMPTY_GATE");
                 auto empty_gate_type = empty_gate_type_owner.get();
                 empty_gate_type->add_output_pin("");
                 gl.add_gate_type(std::move(empty_gate_type_owner));
@@ -946,7 +944,7 @@ namespace hal {
                                    "bit_vector",
                                    "NOHx");
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins),
-                          std::vector<BooleanFunction::value>(8, BooleanFunction::value::X));
+                          std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
 
             }
             {
@@ -966,7 +964,7 @@ namespace hal {
                                    "bit_vector",
                                    long_hex);
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins),
-                          std::vector<BooleanFunction::value>((1 << input_pins.size()), BooleanFunction::value::X));
+                          std::vector<BooleanFunction::Value>((1 << input_pins.size()), BooleanFunction::X));
             }
         TEST_END
     }

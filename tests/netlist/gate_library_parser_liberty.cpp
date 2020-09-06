@@ -1,8 +1,8 @@
 #include "netlist_test_utils.h"
-#include "netlist/gate_library/gate_library_parser/gate_library_parser_liberty.h"
-#include "netlist/gate_library/gate_type/gate_type.h"
-#include "netlist/gate_library/gate_type/gate_type_sequential.h"
-#include "netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_liberty.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include "gtest/gtest.h"
 #include <iostream>
 #include <experimental/filesystem>

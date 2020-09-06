@@ -1,11 +1,11 @@
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
-#include <core/log.h>
+#include "hal_core/utilities/log.h"
 #include <iostream>
-#include "netlist/gate_library/gate_library.h"
-#include "netlist/gate_library/gate_type/gate_type.h"
-#include "netlist/gate_library/gate_type/gate_type_lut.h"
-#include "netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
 
 namespace hal {
     /*
@@ -91,10 +91,10 @@ namespace hal {
             {
                 // Add input pin groups
                 GateType gt("gt_name");
-                std::map<u32, std::string> pin_group_a =
+                std::unordered_map<u32, std::string> pin_group_a =
                     {{0, "pin_group_a(0)"}, {1, "pin_group_a(1)"}, {2, "pin_group_a(2)"}, {3, "pin_group_a(3)"}};
-                std::map<u32, std::string> pin_group_b = {{0, "pin_group_b(0)"}, {1, "pin_group_b(1)"}};
-                std::map<std::string, std::map<u32, std::string>>
+                std::unordered_map<u32, std::string> pin_group_b = {{0, "pin_group_b(0)"}, {1, "pin_group_b(1)"}};
+                std::unordered_map<std::string, std::unordered_map<u32, std::string>>
                     pin_groups = {{"pin_group_a", pin_group_a}, {"pin_group_b", pin_group_b}};
 
                 gt.add_input_pins({"pin_group_a(0)", "pin_group_a(1)", "pin_group_a(2)", "pin_group_a(3)",
@@ -109,10 +109,10 @@ namespace hal {
             {
                 // Add output pin groups
                 GateType gt("gt_name");
-                std::map<u32, std::string> pin_group_a =
+                std::unordered_map<u32, std::string> pin_group_a =
                     {{0, "pin_group_a(0)"}, {1, "pin_group_a(1)"}, {2, "pin_group_a(2)"}, {3, "pin_group_a(3)"}};
-                std::map<u32, std::string> pin_group_b = {{0, "pin_group_b(0)"}, {1, "pin_group_b(1)"}};
-                std::map<std::string, std::map<u32, std::string>>
+                std::unordered_map<u32, std::string> pin_group_b = {{0, "pin_group_b(0)"}, {1, "pin_group_b(1)"}};
+                std::unordered_map<std::string, std::unordered_map<u32, std::string>>
                     pin_groups = {{"pin_group_a", pin_group_a}, {"pin_group_b", pin_group_b}};
 
                 gt.add_output_pins({"pin_group_a(0)", "pin_group_a(1)", "pin_group_a(2)", "pin_group_a(3)",
@@ -130,8 +130,8 @@ namespace hal {
                 GateType gt("gt_name");
 
                 // Output Pin Group
-                std::map<u32, std::string> out_pin_group = {{0, "out_pin_group(0)"}, {1, "out_pin_group(1)"}};
-                std::map<std::string, std::map<u32, std::string>> out_pin_groups = {{"out_pin_group", out_pin_group}};
+                std::unordered_map<u32, std::string> out_pin_group = {{0, "out_pin_group(0)"}, {1, "out_pin_group(1)"}};
+                std::unordered_map<std::string, std::unordered_map<u32, std::string>> out_pin_groups = {{"out_pin_group", out_pin_group}};
 
                 gt.add_output_pins({"out_pin_group(0)", "out_pin_group(1)"});
                 gt.assign_output_pin_group("out_pin_group", out_pin_group);
@@ -141,8 +141,8 @@ namespace hal {
                 EXPECT_EQ(gt.get_output_pins(), std::vector<std::string>({"out_pin_group(0)", "out_pin_group(1)"}));
 
                 // Input Pin Group
-                std::map<u32, std::string> in_pin_group = {{0, "in_pin_group(0)"}, {1, "in_pin_group(1)"}};
-                std::map<std::string, std::map<u32, std::string>> in_pin_groups = {{"in_pin_group", in_pin_group}};
+                std::unordered_map<u32, std::string> in_pin_group = {{0, "in_pin_group(0)"}, {1, "in_pin_group(1)"}};
+                std::unordered_map<std::string, std::unordered_map<u32, std::string>> in_pin_groups = {{"in_pin_group", in_pin_group}};
 
                 gt.add_input_pins({"in_pin_group(0)", "in_pin_group(1)"});
                 gt.assign_input_pin_group("in_pin_group", in_pin_group);
@@ -154,8 +154,8 @@ namespace hal {
             {
                 // Add a pin group that contain previously unregistered pins
                 GateType gt("gt_name");
-                std::map<u32, std::string> pin_group = {{0, "pin_group(0)"}, {1, "pin_group(1)"}};
-                std::map<std::string, std::map<u32, std::string>> empty_pin_groups;
+                std::unordered_map<u32, std::string> pin_group = {{0, "pin_group(0)"}, {1, "pin_group(1)"}};
+                std::unordered_map<std::string, std::unordered_map<u32, std::string>> empty_pin_groups;
                 gt.assign_output_pin_group("out_pin", pin_group);
                 gt.assign_input_pin_group("in_pin", pin_group);
                 EXPECT_EQ(gt.get_output_pins(), std::vector<std::string>());
@@ -350,24 +350,25 @@ namespace hal {
         TEST_START
             // Create some Gate types beforehand
             // -- a simple AND Gate
-            std::unique_ptr<GateType> gt_and_owner(new GateType("gt_and"));
+            auto gt_and_owner = std::make_unique<GateType>("gt_and");
             auto gt_and = gt_and_owner.get();
             gt_and->add_input_pins(std::vector<std::string>({"I0", "I1"}));
             gt_and->add_output_pins(std::vector<std::string>({"O"}));
             gt_and->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
             // -- a GND Gate
-            std::unique_ptr<GateType> gt_gnd_owner(new GateType("gt_gnd"));
+            auto gt_gnd_owner = std::make_unique<GateType>("gt_gnd");
             auto gt_gnd = gt_gnd_owner.get();
             gt_gnd->add_output_pins(std::vector<std::string>({"O"}));
-            gt_gnd->add_boolean_function("O", BooleanFunction(BooleanFunction::value::ZERO));
+            gt_gnd->add_boolean_function("O", BooleanFunction(BooleanFunction::ZERO));
             // -- a VCC Gate
-            std::unique_ptr<GateType> gt_vcc_owner(new GateType("gt_vcc"));
+            auto gt_vcc_owner = std::make_unique<GateType>("gt_vcc");
             auto gt_vcc = gt_vcc_owner.get();
             gt_vcc->add_output_pins(std::vector<std::string>({"O"}));
-            gt_vcc->add_boolean_function("O", BooleanFunction(BooleanFunction::value::ONE));
+            gt_vcc->add_boolean_function("O", BooleanFunction(BooleanFunction::ONE));
 
             {
-                GateLibrary* gl(new GateLibrary("imaginary_path", "gl_name"));
+                auto gl_owner = std::make_unique<GateLibrary>("imaginary_path", "gl_name");
+                auto gl = gl_owner.get();
                 // Check the name
                 EXPECT_EQ(gl->get_name(), "gl_name");
 
@@ -378,13 +379,13 @@ namespace hal {
                 gl->add_gate_type(std::move(gt_vcc_owner));
                 // -- get the Gate types
                 EXPECT_EQ(gl->get_gate_types(),
-                          (std::map<std::string, const GateType*>({{"gt_and", gt_and},
+                          (std::unordered_map<std::string, const GateType*>({{"gt_and", gt_and},
                                                                                    {"gt_gnd", gt_gnd},
                                                                                    {"gt_vcc", gt_vcc}})));
                 EXPECT_EQ(gl->get_vcc_gate_types(),
-                          (std::map<std::string, const GateType*>({{"gt_vcc", gt_vcc}})));
+                          (std::unordered_map<std::string, const GateType*>({{"gt_vcc", gt_vcc}})));
                 EXPECT_EQ(gl->get_gnd_gate_types(),
-                          (std::map<std::string, const GateType*>({{"gt_gnd", gt_gnd}})));
+                          (std::unordered_map<std::string, const GateType*>({{"gt_gnd", gt_gnd}})));
 
                 // Check the addition of includes
                 gl->add_include("in.clu.de");

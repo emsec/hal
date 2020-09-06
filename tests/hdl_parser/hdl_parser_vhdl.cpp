@@ -1,8 +1,8 @@
-#include "netlist/hdl_parser/hdl_parser_vhdl.h"
+#include "hal_core/netlist/hdl_parser/hdl_parser_vhdl.h"
 
-#include "netlist/gate.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
 
 #include "gtest/gtest.h"
@@ -120,23 +120,23 @@ namespace hal {
             ASSERT_NE(net_0, nullptr);
             EXPECT_EQ(net_0->get_name(), "net_0");
             EXPECT_EQ(net_0->get_source(), test_utils::get_endpoint(gate_0, "O"));
-            std::vector<Endpoint> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
+            std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
             EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(),
-                                                              std::vector<Endpoint>({test_utils::get_endpoint(gate_2,
+                                                              std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
                                                                                                               "I0")})));
 
             ASSERT_NE(net_1, nullptr);
             EXPECT_EQ(net_1->get_name(), "net_1");
             EXPECT_EQ(net_1->get_source(), test_utils::get_endpoint(gate_1, "O"));
             EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(),
-                                                              std::vector<Endpoint>({test_utils::get_endpoint(gate_2,
+                                                              std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
                                                                                                               "I1")})));
 
             ASSERT_NE(net_global_in, nullptr);
             EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-            EXPECT_EQ(net_global_in->get_source(), test_utils::get_endpoint(nullptr, ""));
+            EXPECT_EQ(net_global_in->get_source(), nullptr);
             EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
-                                                              std::vector<Endpoint>({test_utils::get_endpoint(gate_0,
+                                                              std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
                                                                                                               "I"),
                                                                                      test_utils::get_endpoint(gate_1,
                                                                                                               "I0"),
@@ -223,23 +223,23 @@ namespace hal {
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "net_0");
                 EXPECT_EQ(net_0->get_source(), test_utils::get_endpoint(gate_0, "O"));
-                std::vector<Endpoint> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
+                std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(),
-                                                                  std::vector<Endpoint>({test_utils::get_endpoint(gate_2,
+                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
                                                                                                                   "I0")})));
 
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "net_1");
                 EXPECT_EQ(net_1->get_source(), test_utils::get_endpoint(gate_1, "O"));
                 EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(),
-                                                                  std::vector<Endpoint>({test_utils::get_endpoint(gate_2,
+                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
                                                                                                                   "I1")})));
 
                 ASSERT_NE(net_global_in, nullptr);
                 EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-                EXPECT_EQ(net_global_in->get_source(), test_utils::get_endpoint(nullptr, ""));
+                EXPECT_EQ(net_global_in->get_source(), nullptr);
                 EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
-                                                                  std::vector<Endpoint>({test_utils::get_endpoint(gate_0,
+                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
                                                                                                                   "I"),
                                                                                          test_utils::get_endpoint(gate_1,
                                                                                                                   "I0"),
@@ -410,10 +410,10 @@ namespace hal {
                         n_vec_1_i = *nl->get_nets(test_utils::net_name_filter("n_vec_1(" + i_str + ")")).begin();
                     Net*
                         n_vec_2_i = *nl->get_nets(test_utils::net_name_filter("n_vec_2(" + i_str + ")")).begin();
-                    EXPECT_EQ(n_vec_1_i->get_source().get_pin(), "O" + i_str);
-                    EXPECT_EQ((*n_vec_1_i->get_destinations().begin()).get_pin(), "I" + i_str);
-                    EXPECT_EQ(n_vec_2_i->get_source().get_pin(), "O" + i_str);
-                    EXPECT_EQ((*n_vec_2_i->get_destinations().begin()).get_pin(), "I" + i_str);
+                    EXPECT_EQ(n_vec_1_i->get_source()->get_pin(), "O" + i_str);
+                    EXPECT_EQ((*n_vec_1_i->get_destinations().begin())->get_pin(), "I" + i_str);
+                    EXPECT_EQ(n_vec_2_i->get_source()->get_pin(), "O" + i_str);
+                    EXPECT_EQ((*n_vec_2_i->get_destinations().begin())->get_pin(), "I" + i_str);
                 }
             }
             {
@@ -462,8 +462,8 @@ namespace hal {
                 for (auto n : std::vector<std::string>({"n_vec(0)(2)", "n_vec(0)(3)", "n_vec(1)(2)", "n_vec(1)(3)"})) {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter(n)).empty());
                     Net* n_vec_i_j = *nl->get_nets(test_utils::net_name_filter(n)).begin();
-                    EXPECT_EQ(n_vec_i_j->get_source().get_pin(), "O" + std::to_string(pin));
-                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin()).get_pin(), "I" + std::to_string(pin));
+                    EXPECT_EQ(n_vec_i_j->get_source()->get_pin(), "O" + std::to_string(pin));
+                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(pin));
                     pin++;
                 }
             }
@@ -523,8 +523,8 @@ namespace hal {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).empty());
                     Net*
                         n_vec_i_j = *nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).begin();
-                    EXPECT_EQ(n_vec_i_j->get_source().get_pin(), "O" + std::to_string(idx));
-                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin()).get_pin(), "I" + std::to_string(idx));
+                    EXPECT_EQ(n_vec_i_j->get_source()->get_pin(), "O" + std::to_string(idx));
+                    EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(idx));
                 }
             }
         TEST_END
@@ -655,10 +655,10 @@ namespace hal {
                 EXPECT_EQ(net_vcc->get_name(), "\'1\'");
 
                 // Test that the nets '0' and '1' are connected to a created global gnd/vcc Gate
-                ASSERT_NE(net_gnd->get_source().get_gate(), nullptr);
-                ASSERT_NE(net_vcc->get_source().get_gate(), nullptr);
-                EXPECT_TRUE(net_gnd->get_source().get_gate()->is_gnd_gate());
-                EXPECT_TRUE(net_vcc->get_source().get_gate()->is_vcc_gate());
+                ASSERT_NE(net_gnd->get_source()->get_gate(), nullptr);
+                ASSERT_NE(net_vcc->get_source()->get_gate(), nullptr);
+                EXPECT_TRUE(net_gnd->get_source()->get_gate()->is_gnd_gate());
+                EXPECT_TRUE(net_vcc->get_source()->get_gate()->is_vcc_gate());
             }
         TEST_END
     }
@@ -915,9 +915,9 @@ namespace hal {
 
                 EXPECT_EQ(top_child_one->get_name(), "child_one_mod");
 
-                EXPECT_TRUE(core_utils::starts_with(top_child_two->get_name(), "child_two_mod" + module_suffix));
-                EXPECT_TRUE(core_utils::starts_with(one_child_0->get_name(), "gate_0_ent_two" + module_suffix));
-                EXPECT_TRUE(core_utils::starts_with(one_child_1->get_name(), "gate_1_ent_two" + module_suffix));
+                EXPECT_TRUE(utils::starts_with(top_child_two->get_name(), "child_two_mod" + module_suffix));
+                EXPECT_TRUE(utils::starts_with(one_child_0->get_name(), "gate_0_ent_two" + module_suffix));
+                EXPECT_TRUE(utils::starts_with(one_child_1->get_name(), "gate_1_ent_two" + module_suffix));
                 // All 3 names should be unique
                 EXPECT_EQ(std::set<std::string>({top_child_two->get_name(), one_child_0->get_name(),
                                                  one_child_1->get_name()}).size(), 3);
@@ -938,9 +938,9 @@ namespace hal {
                 Gate* gate_child_two_1 = *one_child_0->get_gates().begin();
                 Gate* gate_child_two_2 = *one_child_1->get_gates().begin();
 
-                EXPECT_TRUE(core_utils::starts_with(gate_child_two_0->get_name(), "gate_child_two" + gate_suffix));
-                EXPECT_TRUE(core_utils::starts_with(gate_child_two_1->get_name(), "gate_child_two" + gate_suffix));
-                EXPECT_TRUE(core_utils::starts_with(gate_child_two_2->get_name(), "gate_child_two" + gate_suffix));
+                EXPECT_TRUE(utils::starts_with(gate_child_two_0->get_name(), "gate_child_two" + gate_suffix));
+                EXPECT_TRUE(utils::starts_with(gate_child_two_1->get_name(), "gate_child_two" + gate_suffix));
+                EXPECT_TRUE(utils::starts_with(gate_child_two_2->get_name(), "gate_child_two" + gate_suffix));
                 // All 3 names should be unique
                 EXPECT_EQ(std::set<std::string>({gate_child_two_0->get_name(), gate_child_two_1->get_name(),
                                                  gate_child_two_2->get_name()}).size(), 3);
@@ -1030,7 +1030,7 @@ namespace hal {
                 EXPECT_EQ(*mod->get_output_nets().begin(), mod_out);
 
                 EXPECT_TRUE(test_utils::vectors_have_same_content(mod_out->get_destinations(),
-                                                                  std::vector<Endpoint>({test_utils::get_endpoint(gate_b,
+                                                                  std::vector<Endpoint*>({test_utils::get_endpoint(gate_b,
                                                                                                                   "I"),
                                                                                          test_utils::get_endpoint(
                                                                                              gate_top,

@@ -9,7 +9,7 @@ def print_usage():
     print("")
     print("Sets up the directory structure and respective files in the current directory:")
     print("<name>/")
-    print(" |- include/")
+    print(" |- include/plugin_<name>/")
     print(" | |- plugin_<name>.h")
     print(" |- python/")
     print(" | |- python_bindings.cpp")
@@ -61,7 +61,7 @@ namespace hal
 #################################################################
 #################################################################
 
-PLUGIN_CPP_TEMPLATE = """#include "plugin_##LOWER##.h"
+PLUGIN_CPP_TEMPLATE = """#include "##LOWER##/plugin_##LOWER##.h"
 
 namespace hal
 {
@@ -96,7 +96,7 @@ PYTHON_CPP_TEMPLATE = """#include "pybind11/operators.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
 
-#include "plugin_##LOWER##.h"
+#include "##LOWER##/plugin_##LOWER##.h"
 
 namespace py = pybind11;
 
@@ -113,7 +113,7 @@ namespace hal
         py::module m("##LOWER##", "hal ##CLASSNAME##Plugin python bindings");
     #endif    // ifdef PYBIND11_MODULE
 
-        py::class_<##LOWER##, ##CLASSNAME##Plugin*, BasePluginInterface>(m, "##LOWER##")
+        py::class_<##CLASSNAME##Plugin, BasePluginInterface>(m, "##LOWER##")
             .def_property_readonly("name", &##CLASSNAME##Plugin::get_name)
             .def("get_name", &##CLASSNAME##Plugin::get_name)
             .def_property_readonly("version", &##CLASSNAME##Plugin::get_version)
@@ -141,8 +141,8 @@ def create_plugin(name):
     with open(name+"/CMakeLists.txt", "wt") as f:
         f.write(CMAKE_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower).replace("##CLASSNAME##", classname))
 
-    os.makedirs(name+"/include")
-    with open(name+"/include/plugin_"+lower+".h", "wt") as f:
+    os.makedirs(name+"/include/"+lower)
+    with open(name+"/include/"+lower+"/plugin_"+lower+".h", "wt") as f:
         f.write(PLUGIN_H_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower).replace("##CLASSNAME##", classname))
 
     os.makedirs(name+"/src")

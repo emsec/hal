@@ -1,7 +1,7 @@
-#include "hdl_parser_vhdl.h"
+#include "vhdl_verilog_parsers/hdl_parser_vhdl.h"
 
-#include "core/log.h"
-#include "core/utils.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 
 #include <algorithm>
 #include <iomanip>
@@ -68,7 +68,7 @@ namespace hal
             {
                 line = line.substr(0, line.find("--"));
             }
-            for (char c : core_utils::trim(line))
+            for (char c : utils::trim(line))
             {
                 if (c == '\\')
                 {
@@ -184,7 +184,7 @@ namespace hal
             m_token_stream.consume(";", true);
 
             // remove specific import like ".all" but keep the "."
-            lib = core_utils::trim(lib.substr(0, lib.rfind(".") + 1));
+            lib = utils::trim(lib.substr(0, lib.rfind(".") + 1));
             m_libraries.insert(lib);
         }
         else
@@ -602,7 +602,7 @@ namespace hal
             // find longest matching library prefix
             for (const auto& lib : m_libraries)
             {
-                if (lib.size() > prefix.size() && core_utils::starts_with(instance_type, lib))
+                if (lib.size() > prefix.size() && utils::starts_with(instance_type, lib))
                 {
                     prefix = lib;
                 }
@@ -696,18 +696,18 @@ namespace hal
                 value     = rhs;
                 data_type = "boolean";
             }
-            else if (core_utils::is_integer(rhs.string))
+            else if (utils::is_integer(rhs.string))
             {
                 value     = rhs;
                 data_type = "integer";
             }
-            else if (core_utils::is_floating_point(rhs.string))
+            else if (utils::is_floating_point(rhs.string))
             {
                 value     = rhs;
                 data_type = "floating_point";
             }
-            else if (core_utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("s")) || core_utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("sec"))
-                     || core_utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("min")) || core_utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("hr")))
+            else if (utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("s")) || utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("sec"))
+                     || utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("min")) || utils::ends_with(rhs.string, core_strings::CaseInsensitiveString("hr")))
             {
                 value     = rhs;
                 data_type = "time";
@@ -942,8 +942,8 @@ namespace hal
             bool is_bound_known = true;
 
             // (2) NUMBER
-            if (core_utils::starts_with(signal_name, core_strings::CaseInsensitiveString("\"")) || core_utils::starts_with(signal_name, core_strings::CaseInsensitiveString("b\""))
-                || core_utils::starts_with(signal_name, core_strings::CaseInsensitiveString("o\"")) || core_utils::starts_with(signal_name, core_strings::CaseInsensitiveString("x\"")))
+            if (utils::starts_with(signal_name, core_strings::CaseInsensitiveString("\"")) || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("b\""))
+                || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("o\"")) || utils::starts_with(signal_name, core_strings::CaseInsensitiveString("x\"")))
             {
                 if (is_left_half)
                 {
@@ -1048,7 +1048,7 @@ namespace hal
     core_strings::CaseInsensitiveString HDLParserVHDL::get_bin_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
     {
         const auto line_number = value_token.number;
-        const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
+        const auto value       = utils::to_lower(utils::replace(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
 
         char prefix;
         core_strings::CaseInsensitiveString number;
@@ -1153,7 +1153,7 @@ namespace hal
     core_strings::CaseInsensitiveString HDLParserVHDL::get_hex_from_literal(const Token<core_strings::CaseInsensitiveString>& value_token)
     {
         const auto line_number = value_token.number;
-        const auto value       = core_utils::to_lower(core_utils::replace(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
+        const auto value       = utils::to_lower(utils::replace(value_token.string, core_strings::CaseInsensitiveString("_"), core_strings::CaseInsensitiveString("")));
 
         char prefix;
         core_strings::CaseInsensitiveString number;
