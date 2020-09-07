@@ -3,6 +3,7 @@
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/graph_widget/layouters/position_generator.h"
 #include "gui/graph_widget/layouters/wait_to_be_seated.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {
@@ -71,8 +72,11 @@ namespace hal
     {
         Q_UNUSED(nets)
 
-        add_waitToBeSeated(modules, gates, nets);
-        return;
+        if (g_settings_manager->get("graph_view/layout_algorithm").toBool())
+        {
+            add_waitToBeSeated(modules, gates, nets);
+            return;
+        }
 
         QList<node> nodeList;
 

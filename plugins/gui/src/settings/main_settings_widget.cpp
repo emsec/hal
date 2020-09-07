@@ -160,6 +160,9 @@ namespace hal
         register_widget("graphview-item", graph_movescene_settings);
         assign_exclusive_group("kbdmodifiers", graph_movescene_settings);
 
+        CheckboxSetting* graph_layout_algorithm = new CheckboxSetting("graph_view/layout_algorithm", "Try to optimize layout", "enabled", "<--- fast random placement if disabled", this);
+        register_widget("graphview-item", graph_layout_algorithm);
+
         make_section("Navigation", "navigation-item", ":/icons/graph");
 
         DropdownSetting* nav_sort_mechanism_settings = new DropdownSetting("navigation/sort_mechanism", "Sort Mechanism for the Details View", standard_sort_mechanisms, "", this);

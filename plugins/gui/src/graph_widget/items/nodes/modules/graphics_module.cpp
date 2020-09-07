@@ -7,6 +7,14 @@ namespace hal
 {
     GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(hal::item_type::module, m->get_id(), QString::fromStdString(m->get_name()))
     {
+        /*
+        for (auto np : m->get_input_port_names())
+            m_input_pins.append(module_pin{QString::fromStdString(np.second), np.first->get_id()});
+
+        for (auto np : m->get_output_port_names())
+            m_output_pins.append(module_pin{QString::fromStdString(np.second), np.first->get_id()});
+        */
+
         for (Net* n : m->get_input_nets())
             m_input_pins.append(module_pin{QString::fromStdString(m->get_input_port_name(n)), n->get_id()});
 
