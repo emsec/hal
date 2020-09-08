@@ -396,12 +396,12 @@ namespace hal
 
     void MainSettingsWidget::handle_button_selected(ExpandingListButton* button)
     {
-        //we don't want to trigger the 'handle_text_edited' method here because its main purpose is to filter the settings elements
-        //clearing the searchbar by clicking a button isnt't considered the same behavior as clearing it by hand
-        //meaning we need to ignore the case if the searchbar is deleted by button click thus the disconnect and reconnect  
-        disconnect(m_searchbar, &Searchbar::text_edited, this, &MainSettingsWidget::handle_text_edited);
+        //if a settings category button gets selected while the settings are filtered the filter resets
+        //a filter reset is accompanied by the first category beeing autopicked as default because there are no more filtered results and one category need to be active (see handle_text_changed)
+        //we dont want this to happen if the target is not the default (in this method) but only in a category clicked by the user
+        m_reset_to_first_element = false;
         m_searchbar->clear();
-        connect(m_searchbar, &Searchbar::text_edited, this, &MainSettingsWidget::handle_text_edited);
+        m_reset_to_first_element = true;
 
         hide_all_settings();
         remove_all_highlights();
@@ -444,7 +444,13 @@ namespace hal
         if (simplified.isEmpty())
         {
             remove_all_highlights();
-            m_expanding_list_widget->select_item(0);
+
+            //checks if we need to default select the first settings category
+            //true if searchbar got cleared by hand by user
+            //false if searchbar got cleared because a settings category has been clicked
+            if(m_reset_to_first_element)
+                m_expanding_list_widget->select_item(0);
+
             return;
         }
 
