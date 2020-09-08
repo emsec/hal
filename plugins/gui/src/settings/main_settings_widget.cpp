@@ -397,8 +397,8 @@ namespace hal
     void MainSettingsWidget::handle_button_selected(ExpandingListButton* button)
     {
         //if a settings category button gets selected while the settings are filtered the filter resets
-        //a filter reset is accompanied by the first category beeing autopicked as default because there are no more filtered results and one category need to be active (see handle_text_changed)
-        //we dont want this to happen if the target is not the default (in this method) but only in a category clicked by the user
+        //a filter reset is accompanied by the first category beeing autopicked as default because there are no more filtered results and one category needs to be active (see 'handle_text_edited')
+        //this method resets the filter, but we want the clicked button and not the default as active thus disabeling it before clearing the filter
         m_reset_to_first_element = false;
         m_searchbar->clear();
         m_reset_to_first_element = true;
