@@ -396,7 +396,13 @@ namespace hal
 
     void MainSettingsWidget::handle_button_selected(ExpandingListButton* button)
     {
+        //we don't want to trigger the 'handle_text_edited' method here because its main purpose is to filter the settings elements
+        //clearing the searchbar by clicking a button isnt't considered the same behavior as clearing it by hand
+        //meaning we need to ignore the case if the searchbar is deleted by button click thus the disconnect and reconnect  
+        disconnect(m_searchbar, &Searchbar::text_edited, this, &MainSettingsWidget::handle_text_edited);
         m_searchbar->clear();
+        connect(m_searchbar, &Searchbar::text_edited, this, &MainSettingsWidget::handle_text_edited);
+
         hide_all_settings();
         remove_all_highlights();
 
