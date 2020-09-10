@@ -22,7 +22,7 @@ namespace hal {
     class NetlistFactoryTest : public ::testing::Test {
     protected:
         std::filesystem::path m_g_lib_path;
-        const std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY) {\n"
+        const std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY_FOR_NETLIST_FACTORY_TESTS) {\n"
                                              "    define(cell);\n"
                                              "    cell(gate_1_to_1) {\n"
                                              "        pin(I) { direction: input; }\n"
@@ -37,7 +37,7 @@ namespace hal {
             test_utils::init_log_channels();
             plugin_manager::load_all_plugins();
             test_utils::create_sandbox_directory();
-            m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
+            m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib_for_netlist_factory_tests.lib", m_min_gl_content);
         }
 
         virtual void TearDown() {
@@ -118,7 +118,7 @@ namespace hal {
                 auto nl = netlist_factory::load_netlist(tmp_hdl_file_path, m_g_lib_path);
 
                 ASSERT_NE(nl, nullptr);
-                EXPECT_EQ(nl->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY");
+                EXPECT_EQ(nl->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY_FOR_NETLIST_FACTORY_TESTS");
             }
             {
                 // Try to create a netlist by a non-accessible (non-existing) file
@@ -229,7 +229,7 @@ namespace hal {
                 ProgramArguments p_args;
                 p_args.set_option("--input-file", std::vector<std::string>({tmp_hdl_file_path}));
                 p_args.set_option("--language", std::vector<std::string>({"vhdl"}));
-                p_args.set_option("--Gate-library", std::vector<std::string>({m_g_lib_path}));
+                p_args.set_option("--gate-library", std::vector<std::string>({m_g_lib_path}));
 
                 // NO_COUT_TEST_BLOCK;
                 auto nl = netlist_factory::load_netlist(p_args);

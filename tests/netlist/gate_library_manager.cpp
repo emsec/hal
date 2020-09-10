@@ -29,7 +29,7 @@ namespace hal
             test_utils::init_log_channels();
             plugin_manager::load_all_plugins();
             m_lib_file_name = "test_lib";
-            m_test_lib_name = "TEST_GATE_LIBRARY";
+            m_test_lib_name = "TEST_GATE_LIBRARY_FOR_GATE_LIBRARY_MANAGER_TESTS";
             m_test_lib_path = (utils::get_gate_library_directories()[0]) / (m_lib_file_name + ".lib");
         }
 
@@ -123,7 +123,7 @@ namespace hal
      * Functions: get_gate_library, get_gate_libraries
      * TODO: Crashes in my environment. Requires further investigation.
      */
-    TEST_F(GateLibraryManagerTest, DISABLED_check_load_all)
+    TEST_F(GateLibraryManagerTest, check_load_all)
     {
         TEST_START
         // Check that load_all also loads the test Gate library

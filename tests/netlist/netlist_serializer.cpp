@@ -21,7 +21,7 @@ namespace hal {
         std::filesystem::path m_g_lib_path;
         GateLibrary *m_gl;
 
-        std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY) {\n"
+        std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY_FOR_NETLIST_SERIALIZER_TESTS) {\n"
                                        "    define(cell);\n"
                                        "    cell(gate_1_to_1) {\n"
                                        "        pin(I) { direction: input; }\n"
@@ -44,8 +44,8 @@ namespace hal {
             test_utils::init_log_channels();
             plugin_manager::load_all_plugins();
             test_utils::create_sandbox_directory();
-            m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
-            m_gl = gate_library_manager::load_file(m_g_lib_path);
+            m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib_for_netlist_serializer_tests.lib", m_min_gl_content);
+            m_gl = gate_library_manager::load_file(m_g_lib_path, true);
         }
 
         virtual void TearDown() {
@@ -79,15 +79,16 @@ namespace hal {
             nl->get_top_module()->set_type("top_mod_type");
 
             // Create the gates
-            Gate *gate_0 = nl->create_gate(MIN_GATE_ID + 0, m_gl->get_gate_types().at("gate_2_to_1"), "gate_0");
-            Gate *gate_1 = nl->create_gate(MIN_GATE_ID + 1, m_gl->get_gate_types().at("gnd"), "gate_1");
-            Gate *gate_2 = nl->create_gate(MIN_GATE_ID + 2, m_gl->get_gate_types().at("vcc"), "gate_2");
-            Gate *gate_3 = nl->create_gate(MIN_GATE_ID + 3, m_gl->get_gate_types().at("gate_1_to_1"), "gate_3");
-            Gate *gate_4 = nl->create_gate(MIN_GATE_ID + 4, m_gl->get_gate_types().at("gate_1_to_1"), "gate_4");
-            Gate *gate_5 = nl->create_gate(MIN_GATE_ID + 5, m_gl->get_gate_types().at("gate_2_to_1"), "gate_5");
-            Gate *gate_6 = nl->create_gate(MIN_GATE_ID + 6, m_gl->get_gate_types().at("gate_2_to_0"), "gate_6");
-            Gate *gate_7 = nl->create_gate(MIN_GATE_ID + 7, m_gl->get_gate_types().at("gate_2_to_1"), "gate_7");
-            Gate *gate_8 = nl->create_gate(MIN_GATE_ID + 8, m_gl->get_gate_types().at("gate_2_to_1"), "gate_8");
+
+            Gate *gate_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_0");
+            Gate *gate_1 = nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gnd", m_gl), "gate_1");
+            Gate *gate_2 = nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("vcc", m_gl), "gate_2");
+            Gate *gate_3 = nl->create_gate(MIN_GATE_ID + 3, test_utils::get_gate_type_by_name("gate_1_to_1", m_gl), "gate_3");
+            Gate *gate_4 = nl->create_gate(MIN_GATE_ID + 4, test_utils::get_gate_type_by_name("gate_1_to_1", m_gl), "gate_4");
+            Gate *gate_5 = nl->create_gate(MIN_GATE_ID + 5, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_5");
+            Gate *gate_6 = nl->create_gate(MIN_GATE_ID + 6, test_utils::get_gate_type_by_name("gate_2_to_0", m_gl), "gate_6");
+            Gate *gate_7 = nl->create_gate(MIN_GATE_ID + 7, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_7");
+            Gate *gate_8 = nl->create_gate(MIN_GATE_ID + 8, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_8");
 
             // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
             Net *net_1_3 = nl->create_net(MIN_NET_ID + 13, "net_1_3");
@@ -178,7 +179,7 @@ namespace hal {
 
                 // -- Check the netlists as a whole
                 EXPECT_TRUE(test_utils::netlists_are_equal(nl.get(), des_nl.get()));
-            }    // namespace hal
+            }
             {
                 // Test the example netlist against its deserialized version, but flip the module ids
                 auto nl = create_example_serializer_netlist();
@@ -229,6 +230,8 @@ namespace hal {
                 EXPECT_TRUE(suc);
                 EXPECT_TRUE(test_utils::netlists_are_equal(nl.get(), des_nl.get()));
             }
+
+
         TEST_END
     }
 
