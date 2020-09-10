@@ -4,7 +4,7 @@
 #include "gtest/gtest.h"
 #include "netlist_test_utils.h"
 
-// Processes the command line arguments, not used by GoogleTest
+// Processes custom command line arguments
 void handle_command_line_arguments(int argc, char **argv)
 {
     for (int i = 1; i < argc; i++){
