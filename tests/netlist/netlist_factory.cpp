@@ -27,6 +27,9 @@ namespace hal {
                                              "    cell(gate_1_to_1) {\n"
                                              "        pin(I) { direction: input; }\n"
                                              "        pin(O) { direction: output; } }\n"
+                                             "    cell(shared_gate_type) {\n"
+                                             "        pin(I) { direction: input; }\n"
+                                             "        pin(O) { direction: output; } }\n"
                                              "    cell(gnd) {\n"
                                              "        pin(O) { direction: output; function: \"0\"; } }\n"
                                              "    cell(vcc) {\n"
@@ -265,6 +268,58 @@ namespace hal {
                 auto nl = netlist_factory::load_netlist(p_args);
 
                 EXPECT_EQ(nl, nullptr);
+            }
+        TEST_END
+    }
+
+    /**
+    * Testing the creation of multiple netlists from a single HDL file by using multiple valid gate libraries
+    *
+    * Functions: load_netlists(hdl_file, ...)
+    */
+    TEST_F(NetlistFactoryTest, check_load_netlists) {
+        TEST_START
+            // Create a second gate library with an additional gate type
+            std::string other_gl_name = "OTHER_TEST_GATE_LIBRARY";
+            std::string other_gl_content = "library ("+other_gl_name+") {\n"
+                                                                     "    define(cell);\n"
+                                                                     "    cell(shared_gate_type) {\n"
+                                                                     "        pin(I) { direction: input; }\n"
+                                                                     "        pin(O) { direction: output; } }\n"
+                                                                     "    cell(gnd) {\n"
+                                                                     "        pin(O) { direction: output; function: \"0\"; } }\n"
+                                                                     "    cell(vcc) {\n"
+                                                                     "        pin(O) { direction: output; function: \"1\"; } }\n"
+                                                                     "}";
+            std::filesystem::path other_g_lib_path = test_utils::create_sandbox_file("other_test_gate_lib.lib", other_gl_content);
+            // Load both gate libraries
+            gate_library_manager::load_file(m_g_lib_path);
+            gate_library_manager::load_file(other_g_lib_path);
+            if(test_utils::known_issue_tests_active())
+            { // ISSUE: gate_type in second netlist is invalid
+                // Get the netlist for a file, that can be parsed with both gate libraries (passing the parser name)
+                std::filesystem::path tmp_hdl_file_path = test_utils::create_sandbox_file("nl_factory_test_file.vhdl",
+                                                                                          "-- Device\t: device_name\n"
+                                                                                          "entity TEST_Comp is\n"
+                                                                                          "  port (\n"
+                                                                                          "    net_global_in : in STD_LOGIC := 'X';\n"
+                                                                                          "    net_global_out : out STD_LOGIC := 'X';\n"
+                                                                                          "  );\n"
+                                                                                          "end TEST_Comp;\n"
+                                                                                          "architecture STRUCTURE of TEST_Comp is\n"
+                                                                                          "begin\n"
+                                                                                          "  gate_0 : shared_gate_type\n"
+                                                                                          "    port map (\n"
+                                                                                          "      I => net_global_in,\n"
+                                                                                          "      O => net_global_out\n"
+                                                                                          "    );\n"
+                                                                                          "end STRUCTURE;");
+                std::vector<std::unique_ptr<Netlist>> nl_vec = netlist_factory::load_netlists(tmp_hdl_file_path);
+                ASSERT_EQ(nl_vec.size(), 2);
+                ASSERT_NE(nl_vec[0], nullptr);
+                ASSERT_NE(nl_vec[1], nullptr);
+                EXPECT_EQ(nl_vec[0]->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY");
+                EXPECT_EQ(nl_vec[1]->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY_FOR_NETLIST_FACTORY_TESTS");
             }
         TEST_END
     }
