@@ -670,14 +670,14 @@ namespace hal {
 
         TEST_START
             {
-                // Create a new entity with an attribute that is used once by the main entity
-                /*                               ---------------------------------------------.
-              *                              | child_mod                                   |
-              *                              |                                             |
-              *  global_in ---=| gate_0 |=---=---=| gate_0_child |=---=| gate_1_child |=---=---=| gate_1 |=--- global_out
-              *                              |                                             |
-              *                              '---------------------------------------------'
-              */
+                 // Create a new entity with an attribute that is used once by the main entity
+                 /*                               ---------------------------------------------.
+                  *                              | child_mod                                   |
+                  *                              |                                             |
+                  *  global_in ---=| gate_0 |=---=---=| gate_0_child |=---=| gate_1_child |=---=---=| gate_1 |=--- global_out
+                  *                              |                                             |
+                  *                              '---------------------------------------------'
+                  */
 
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity ENT_CHILD is "
@@ -794,19 +794,19 @@ namespace hal {
             {
                 // Create a netlist with the following MODULE hierarchy (assigned gates in '()'):
                 /*
-                         *                               .---- CHILD_TWO --- (gate_child_two)
-                         *                               |
-                         *              .----- CHILD_ONE-+
-                         *              |                |
-                         *  TOP_MODULE -+                +---- CHILD_TWO --- (gate_child_two)
-                         *              |                |
-                         *              |                '---- (gate_child_one)
-                         *              |
-                         *              +----- CHILD_TWO --- (gate_child_two)
-                         *              |
-                         *              '---- (gate_top)
-                         *
-                         */
+                 *                               .---- CHILD_TWO --- (gate_child_two)
+                 *                               |
+                 *              .----- CHILD_ONE-+
+                 *              |                |
+                 *  TOP_MODULE -+                +---- CHILD_TWO --- (gate_child_two)
+                 *              |                |
+                 *              |                '---- (gate_child_one)
+                 *              |
+                 *              +----- CHILD_TWO --- (gate_child_two)
+                 *              |
+                 *              '---- (gate_top)
+                 *
+                 */
                 // Testing the correct build of the Module hierarchy. Moreover the correct substitution of Gate and Net names,
                 // which would be added twice (because an entity can be used multiple times) is tested as well.
 
@@ -945,15 +945,15 @@ namespace hal {
             {
                 // Create a netlist as follows and test its creation (due to request):
                 /*                     - - - - - - - - - - - - - - - - - - - - - - .
-                         *                    ' mod                                        '
-                         *                    '                       mod_inner/mod_out    '
-                         *                    '                     .------------------.   '
-                         *                    'mod_in               |                  |   'net_0
-                         *  net_global_in ----=------=| gate_a |=---+---=| gate_b |=   '---=----=| gate_top |=---- net_global_out
-                         *                    '                                            '
-                         *                    '                                            '
-                         *                    '- - - - - - - - - - - - - - - - - - - - - - '
-                        */
+                 *                    ' mod                                        '
+                 *                    '                       mod_inner/mod_out    '
+                 *                    '                     .------------------.   '
+                 *                    'mod_in               |                  |   'net_0
+                 *  net_global_in ----=------=| gate_a |=---+---=| gate_b |=   '---=----=| gate_top |=---- net_global_out
+                 *                    '                                            '
+                 *                    '                                            '
+                 *                    '- - - - - - - - - - - - - - - - - - - - - - '
+                */
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity ENT_MODULE is "
                                         "  port ( "
@@ -1167,8 +1167,11 @@ namespace hal {
                 EXPECT_EQ(net_master->get_data_by_key("attribute", "slave_2_attr"),
                           std::make_tuple("string", "slave_2_attr"));
             }
+
+            if(test_utils::known_issue_tests_active())
             {
                 //Testing the assignment of logic vectors
+                // ISSUE: Broken assignment? (<=)
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
@@ -1233,6 +1236,7 @@ namespace hal {
     TEST_F(HDLParserVHDLTest, check_pin_group_port_assignment) {
 
         TEST_START
+            if(test_utils::known_issue_tests_active())
             {
                 // Connect an entire output pin group with global input nets by using a binary string (B"10101010")
                 std::stringstream input("-- Device\t: device_name\n"
@@ -1261,8 +1265,7 @@ namespace hal {
                 Gate*
                     gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
-                EXPECT_EQ(gate_0->get_fan_in_nets().size(), 2);
-
+                // ISSUE: Wrong order or expected behaviour?
                 Net* net_0 = gate_0->get_fan_in_net("I(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "'0'");
@@ -1279,6 +1282,7 @@ namespace hal {
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "'1'");
             }
+            if(test_utils::known_issue_tests_active())
             {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(4) with l_vec(4))
                 std::stringstream input("-- Device\t: device_name\n"
@@ -1310,6 +1314,7 @@ namespace hal {
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
 
+                // ISSUE: Wrong order or expected behaviour?
                 Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
@@ -1780,25 +1785,26 @@ namespace hal {
 
                 EXPECT_EQ(nl, nullptr);
             }
-            /*{
-                    // Use non-numeric ranges (invalid) (ISSUE: stoi failure l.1233)
+            if(test_utils::known_issue_tests_active())
+            {
+                    // Use non-numeric ranges (invalid) (ISSUE: stoi failure l.827)
                     std::stringstream input("-- Device\t: device_name\n"
                                             "entity TEST_Comp is\n"
                                             "  port (\n"
                                             "  );\n"
                                             "end TEST_Comp;\n"
                                             "architecture STRUCTURE of TEST_Comp is\n"
-                                            "  signal l_vec : STD_LOGIC_VECTOR ( 4 downto 0 );\n" // <- fails booth independently (l.1229 for 'to', l.1233 for 'downto')
+                                            "  signal l_vec : STD_LOGIC_VECTOR ( 4 downto 0 );\n"
                                             "begin\n"
                                             "  gate_0 : pin_group_gate_4_to_4\n"
                                             "    port map (\n"
-                                            "      O(p downto q) => l_vec(p downto q)\n" // <- fails booth independently (l.1336)
+                                            "      O(p downto q) => l_vec(p downto q)\n" // <- fails booth independently (l.827)
                                             "    );\n"
                                             "end STRUCTURE;");
                     HDLParserVHDL vhdl_parser;
-                    std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(temp_lib_name);
+                    std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
                     EXPECT_EQ(nl, nullptr);
-                }*/
+            }
             // ------ VHDL specific tests ------
             {
                 // The entity contains unknown direction keywords (neither 'in', 'out' nor 'inout')
@@ -1964,7 +1970,7 @@ namespace hal {
                     EXPECT_EQ(nl->get_nets().size(), 1);
                 }
             }
-            /*{ // TODO: FIXME
+            {
                 // The ranges of the pin vectors do not match in size
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
@@ -1992,13 +1998,16 @@ namespace hal {
                 }
 
                 ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
-
-                EXPECT_EQ(gate_0->get_fan_out_nets().size(), 0);
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                EXPECT_EQ(gate_0->get_fan_out_nets().size(), 3);
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O(0)")->get_net()->get_name(), "l_vec(0)");
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O(1)")->get_net()->get_name(), "l_vec(1)");
+                EXPECT_EQ(gate_0->get_fan_out_endpoint("O(2)")->get_net()->get_name(), "l_vec(2)");
             }
             {
                 // The right side of a pin assignment does no match any vector format
+                NO_COUT_TEST_BLOCK;
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
@@ -2023,12 +2032,8 @@ namespace hal {
                     test_def::get_captured_stdout();
                 }
 
-                ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate* gate_0 = *(nl->get_gates(gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
-
-                EXPECT_EQ(gate_0->get_fan_in_nets().size(), 0);
-            }*/
+                ASSERT_EQ(nl, nullptr);
+            }
         TEST_END
     }
 } //namespace hal

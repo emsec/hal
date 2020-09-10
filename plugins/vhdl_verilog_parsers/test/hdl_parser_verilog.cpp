@@ -853,6 +853,7 @@ namespace hal {
                 EXPECT_EQ(top_child_one->get_data_by_key("generic", "child_one_mod_key"),
                           std::make_tuple("integer", "1234"));
             }
+            if(test_utils::known_issue_tests_active())
             {
                 // Create a netlist as follows and test its creation (due to request):
                 /*                     - - - - - - - - - - - - - - - - - - - - - - .
@@ -901,7 +902,7 @@ namespace hal {
                                         " ) ; "
                                         "endmodule");
                 // ISSUE: mod_out/mod_inner is not connected to gate_top (assign statement is not applied)
-                /*HDLParserVerilog verilog_parser;
+                HDLParserVerilog verilog_parser;
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
 
                 // Test if all modules are created and assigned correctly
@@ -931,7 +932,7 @@ namespace hal {
                                                                                           test_utils::get_endpoint(
                                                                                               gate_top,
                                                                                               "I")})));
-                */
+
             }
         TEST_END
     }
@@ -952,6 +953,7 @@ namespace hal {
     TEST_F(HDLParserVerilogTest, check_direct_assignment) {
 
         TEST_START
+            if(test_utils::known_issue_tests_active())
             {
                 // Build up a master-slave hierarchy as follows: (NOTE: Whats up with global inputs?)
                 /*                                  .--- net_slave_1 (is global input)
@@ -983,7 +985,7 @@ namespace hal {
                                         " .O (net_global_out )\n"
                                         ") ;\n"
                                         "endmodule");
-                /*
+
                 // ISSUE: The port assignment of the slave nets is ignored. Only the connection with the reference 'master_net'
                 // is created
                 HDLParserVerilog verilog_parser;
@@ -1008,10 +1010,11 @@ namespace hal {
 
                 // Check that net_master becomes also a global input
                 EXPECT_TRUE(net_master->is_global_input_net());
-                */
+
             }
             // -- Verilog Specific Tests
-            /*{ // ISSUE: Broken 'assign'-statement
+            if(test_utils::known_issue_tests_active())
+            { // ISSUE: Broken 'assign'-statement
                 // Verilog specific: Testing assignments with logic vectors (assign wires 0 and 1 of each dimension)
                 // for example (for dim 2): wire [0:1][0:1] slave_vector; wire [0:3] master_vector; assign slave_vector = master_vector;
 
@@ -1103,7 +1106,7 @@ namespace hal {
                         EXPECT_EQ(out_gate_i->get_fan_in_net("I"), net_i);
                     }
                 }
-            }*/
+            }
             {
                 // Verilog specific: Assign constants ('b0 and 'b1)
                 std::stringstream input("module top ("
@@ -1132,8 +1135,7 @@ namespace hal {
                 ASSERT_EQ(nl->get_gates(test_utils::gate_name_filter("test_gate")).size(), 1);
                 Gate* test_gate = *nl->get_gates(test_utils::gate_name_filter("test_gate")).begin();
             }
-
-            /*{ // ISSUE: Broken assign
+            if(test_utils::known_issue_tests_active()) { // ISSUE: Broken assign
                 // Verilog specific: Assign a set of wires to a single vector
                 std::stringstream input("module top ("
                                         "  global_out_0,"
@@ -1184,7 +1186,7 @@ namespace hal {
                 }
 
                 ASSERT_NE(nl, nullptr);
-                std::vector<Net*> net_master_vector(12);
+                std::vector<Net *> net_master_vector(12);
                 for (int i = 0; i < 12; i++) {
                     ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_vector_master(" + std::to_string(i) + ")"))
                                   .size(), 1);
@@ -1194,12 +1196,14 @@ namespace hal {
                 }
                 for (int i = 0; i < 12; i++) {
                     ASSERT_EQ(net_master_vector[i]->get_destinations().size(), 1);
-                    Endpoint* ep = *net_master_vector[i]->get_destinations().begin();
+                    Endpoint *ep = *net_master_vector[i]->get_destinations().begin();
                     EXPECT_EQ(ep->get_gate()->get_name(), "test_gate_" + std::to_string(i / 4));
                     EXPECT_EQ(ep->get_pin(), "I" + std::to_string(i % 4));
                 }
-            }*/
-            /*{ // ISSUE: Broken assign
+            }
+
+            if(test_utils::known_issue_tests_active())
+            { // ISSUE: Broken assign
                 // Verilog specific: Assign a 2 bit vector to a set of 1 bit vectors
 
                 std::stringstream input("module top ("
@@ -1238,7 +1242,7 @@ namespace hal {
                 ASSERT_EQ(net_vector_master_1->get_destinations().size(), 1);
                 EXPECT_EQ((*net_vector_master_0->get_destinations().begin())->get_pin(), "I0");
                 EXPECT_EQ((*net_vector_master_1->get_destinations().begin())->get_pin(), "I1");
-            }*/
+            }
             {
                 // Verilog specific: Testing assignments, where escaped identifiers are used (e.g.\Net[1:3][2:3] stands for a Net, literally named "Net[1:3][2:3]")
 
@@ -1280,6 +1284,7 @@ namespace hal {
     TEST_F(HDLParserVerilogTest, check_pin_group_port_assignment) {
 
         TEST_START
+            if(test_utils::known_issue_tests_active())
             {
                 // Connect an entire output pin group with global input nets by using a binary string ('b10101010)
                 std::stringstream input("module top (\n"
@@ -1303,7 +1308,7 @@ namespace hal {
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
                 Gate*
                     gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
-                /* ISSUE (?): wrong order, or correct verilog behaviour?
+                //ISSUE (?): wrong order, or correct verilog behaviour?
                 Net* net_0 = gate_0->get_fan_in_net("I(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "'0'");
@@ -1319,8 +1324,9 @@ namespace hal {
                 Net* net_3 = gate_0->get_fan_in_net("I(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "'1'");
-                */
+
             }
+            if(test_utils::known_issue_tests_active())
             {
                 // Connect a vector of output pins with a list of nets using '{ net_0, net_1, ... }'
                 std::stringstream input("module top (\n"
@@ -1341,7 +1347,7 @@ namespace hal {
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
 
-                /* ISSUE (?): wrong order, or correct verilog behaviour?
+                // ISSUE (?): wrong order, or correct verilog behaviour?
                 Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "net_0");
@@ -1357,8 +1363,9 @@ namespace hal {
                 Net* net_3 = gate_0->get_fan_out_net("O(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "l_vec(1)");
-                 */
+
             }
+            if(test_utils::known_issue_tests_active())
             {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(4) with l_vec(4))
                 std::stringstream input("module top (\n"
@@ -1378,7 +1385,7 @@ namespace hal {
                     gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
-                /* ISSUE (?): wrong order, or correct verilog behaviour?
+                // ISSUE (?): wrong order, or correct verilog behaviour?
                 Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
@@ -1394,8 +1401,9 @@ namespace hal {
                 Net* net_3 = gate_0->get_fan_out_net("O(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "l_vec(3)");
-                 */
+
             }
+            if(test_utils::known_issue_tests_active())
             {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(3) with l_vec(3))
                 // but the vector has a smaller size
@@ -1415,7 +1423,7 @@ namespace hal {
                 Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 3);
-                /* ISSUE (?): wrong order, or correct verilog behaviour?
+                // ISSUE (?): wrong order, or correct verilog behaviour?
                 Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
@@ -1429,7 +1437,7 @@ namespace hal {
                 EXPECT_EQ(net_2->get_name(), "l_vec(2)");
 
                 EXPECT_EQ(gate_0->get_fan_out_net("O(3)"), nullptr);
-                */
+
             }
         TEST_END
     }
@@ -1677,7 +1685,8 @@ namespace hal {
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
                 EXPECT_EQ(nl, nullptr);
             }
-            /*{
+            if(test_utils::known_issue_tests_active())
+            {
                     // Use non-numeric ranges (invalid) ISSUE: stoi Failure
                     NO_COUT_TEST_BLOCK;
                     std::stringstream input("module top ("
@@ -1697,7 +1706,7 @@ namespace hal {
                     HDLParserVerilog verilog_parser;
                     std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
                     EXPECT_EQ(nl, nullptr);
-            }*/
+            }
             // ------ Verilog specific tests ------
             {
                 // The Module has no identifier
@@ -1717,7 +1726,8 @@ namespace hal {
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
                 EXPECT_EQ(nl, nullptr);
             }
-            /*{
+            if(test_utils::known_issue_tests_active())
+            {
                 // one side of the direct assignment is empty (ISSUE: SIGSEGV l.1206)
                 NO_COUT_TEST_BLOCK;
                 std::stringstream input("module top ("
@@ -1732,7 +1742,7 @@ namespace hal {
                 HDLParserVerilog verilog_parser;
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
                 EXPECT_EQ(nl, nullptr);
-            }*/
+            }
             {
                 // The two sides of assignment do not have the same width
                 NO_COUT_TEST_BLOCK;
@@ -1783,6 +1793,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
                 EXPECT_EQ(nl, nullptr);
             }
+            if(test_utils::known_issue_tests_active())
             {
                 // Port map gets multiple nets
                 NO_COUT_TEST_BLOCK;
@@ -1807,8 +1818,9 @@ namespace hal {
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
                 ASSERT_NE(gate_0, nullptr);
                 // ISSUE (?): net_0 or global_net should be assigned?
-                // EXPECT_EQ(gate_0->get_fan_in_net("I")->get_name(), "net_0");
+                EXPECT_EQ(gate_0->get_fan_in_net("I")->get_name(), "net_0");
             }
+            if(test_utils::known_issue_tests_active())
             {
                 // Connect a vector of output pins with a list of nets using '{ net_0, net_1, ... }' that is wider than
                 // the input port size (only the last elements of the list should be assigned)
@@ -1824,7 +1836,7 @@ namespace hal {
                 HDLParserVerilog verilog_parser;
                 std::shared_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
                 ASSERT_NE(nl, nullptr);
-                /* ISSUE (?):  Wrong order, or correct verilog?
+                // ISSUE (?):  Wrong order, or correct verilog?
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
                 Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
@@ -1840,7 +1852,7 @@ namespace hal {
                 Net* net_3 = gate_0->get_fan_out_net("O(3)");
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "l_vec(5)");
-                */
+
             }
             {
                 // Store an unknown data type
@@ -1917,28 +1929,25 @@ namespace hal {
                 EXPECT_TRUE(nl == nullptr || nl->get_nets(test_utils::net_name_filter("net_0")).size() == 1);
             }
             {
-                    // Assign unknown signals
-                    NO_COUT_TEST_BLOCK;
-                    std::stringstream input;
-                    input << "module top ("
-                             "  global_in,"
-                             "  global_out"
-                             " ) ;"
-                             "  input global_in ;"
-                             "  output global_out ;"
-                             "  wire [0:4] signal_vec ;"
-                             "  assign signal_unknown[0:4] = signal_vec[0:4];"
-                             "gate_1_to_1 gate_0 ("
-                             "  .I (global_in ),"
-                             "  .O (global_out )"
-                             " ) ;"
-                             "endmodule";
-                    HDLParserVerilog verilog_parser;
-                    std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
-                    EXPECT_EQ(nl, nullptr);
-                }
-            {
-                // MAYBE SOME MORE TESTS HERE LATER...
+                // Assign unknown signals
+                NO_COUT_TEST_BLOCK;
+                std::stringstream input;
+                input << "module top ("
+                         "  global_in,"
+                         "  global_out"
+                         " ) ;"
+                         "  input global_in ;"
+                         "  output global_out ;"
+                         "  wire [0:4] signal_vec ;"
+                         "  assign signal_unknown[0:4] = signal_vec[0:4];"
+                         "gate_1_to_1 gate_0 ("
+                         "  .I (global_in ),"
+                         "  .O (global_out )"
+                         " ) ;"
+                         "endmodule";
+                HDLParserVerilog verilog_parser;
+                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
+                EXPECT_EQ(nl, nullptr);
             }
         TEST_END
     }
