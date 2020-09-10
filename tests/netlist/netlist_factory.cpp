@@ -85,10 +85,7 @@ namespace hal {
                 // Try to create a netlist by passing a nullptr
                 NO_COUT_TEST_BLOCK;
                 auto nl = netlist_factory::create_netlist(nullptr);
-                // ISSUE: should be nullptr
-                //EXPECT_EQ(nl, nullptr);
-                // ISSUE: if nl != nullptr, the following expression leads to a segfault:
-                //nl->create_gate( 815, get_testing_gate_library()->get_gate_types().begin()->second, "dont_crush");
+                EXPECT_EQ(nl, nullptr);
             }
         TEST_END
     }
