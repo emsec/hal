@@ -87,7 +87,7 @@ namespace hal
         int var_amt = round(log2(tt.size()));
         if ((1 << var_amt) != tt.size())
         {
-            std::cerr << "[Test] minimize_truth_table: Tablesize must be a power of two!" << std::endl;
+            log_error("test_utils", "minimize_truth_table: Tablesize must be a power of two!");
             return std::vector<BooleanFunction::Value>();
         }
         for (int v = 0; v < var_amt; v++)
@@ -129,7 +129,7 @@ namespace hal
         // If the Gate type isn't found in the Gate library
         if (names_to_type.find(name) == names_to_type.end())
         {
-            std::cerr << "Gate type: \'" << name << "\' can't be found in the Gate library \'" << gl->get_name() << "\'" << std::endl;
+            log_error("test_utils", "get_gate_type_by_name: Gate type '{}' can't be found in gate library '{}' ", name, gate_lib->get_name());
             return nullptr;
         }
         else
@@ -156,7 +156,7 @@ namespace hal
             {
                 if (res != nullptr)
                 {
-                    std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
+                    log_error("test_utils", "get_net_by_subname: Multiple nets contain the substring '{}'! This should not happen...", subname);
                     return nullptr;
                 }
                 res = n;
@@ -178,7 +178,7 @@ namespace hal
             {
                 if (res != nullptr)
                 {
-                    std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
+                    log_error("test_utils", "get_gate_by_subname: Multiple gates contain the substring '{}'! This should not happen...", subname);
                     return nullptr;
                 }
                 res = g;
@@ -204,8 +204,8 @@ namespace hal
         std::filesystem::path sb_path = (utils::get_base_directory() / sandbox_directory_path);
         if (!std::filesystem::exists(sb_path))
         {
-            std::cerr << "[netlist_test_utils] create_sandbox_path: sandbox is not created yet. "
-                      << "Please use \'create_sandbox_directory()\' to create it beforehand.";
+            log_error("test_utils", "create_sandbox_path: sandbox is not created yet. "
+                                    "Please use \'create_sandbox_directory()\' to create it beforehand.");
             return std::filesystem::path();
         }
         return sb_path / file_name;
@@ -216,8 +216,8 @@ namespace hal
         std::filesystem::path sb_path = (utils::get_base_directory() / sandbox_directory_path);
         if (!std::filesystem::exists(sb_path))
         {
-            std::cerr << "[netlist_test_utils] create_sandbox_file: sandbox is not created yet. "
-                      << "Please use \'create_sandbox_directory()\' to create it beforehand.";
+            log_error("test_utils", "[netlist_test_utils] create_sandbox_path: sandbox is not created yet. "
+                                    "Please use \'create_sandbox_directory()\' to create it beforehand.");
             return std::filesystem::path();
         }
         std::filesystem::path f_path = sb_path / file_name;
