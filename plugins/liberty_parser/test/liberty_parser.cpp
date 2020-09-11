@@ -417,7 +417,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, check_invalid_input) {
+    TEST_F(LibertyParserTest, DISABLED_check_invalid_input) {
         TEST_START
             {
                 // Pass an empty input stream
