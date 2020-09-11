@@ -747,7 +747,7 @@ namespace hal {
 
             }
             {
-                // Test the usage of compex attributes
+                // Test the usage of complex attributes
                 std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
                                         "    define(cell);\n"
                                         "    cell(TEST_GATE_TYPE) {\n"
@@ -772,6 +772,7 @@ namespace hal {
                 EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1);
 
             }
+            if(test_utils::known_issue_tests_active())
             { // ISSUE: Interprets backslash as character of attribute name ("direction\")
                 // Test usage of a backslash (\) to continue a statement over multiple lines
                 std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
@@ -796,7 +797,7 @@ namespace hal {
                 ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
                 EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(),
                           GateType::BaseType::combinatorial);
-                //EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1); // ISSUE: fails
+                EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1); // ISSUE: fails
 
 
             }
