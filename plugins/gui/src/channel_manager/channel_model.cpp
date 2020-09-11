@@ -5,7 +5,7 @@
 #define ALL_CHANNEL "all"
 namespace hal
 {
-    ChannelModel ChannelModel::s_model;
+
 
     ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent), m_temporary_items(30)
     {
@@ -20,6 +20,7 @@ namespace hal
 
     ChannelModel* ChannelModel::get_instance()
     {
+        static ChannelModel s_model;
         return &s_model;
     }
 

@@ -26,6 +26,7 @@
 #include "gui/gui_utils/sort.h"
 
 #include <QSortFilterProxyModel>
+#include <QRegularExpression>
 
 namespace hal
 {
@@ -34,15 +35,22 @@ namespace hal
         Q_OBJECT
     public:
         SelectionTreeProxyModel(QObject* parent = 0);
+        void applyFilterOnGraphics();
+        bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 
     protected:
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+
+    public Q_SLOTS:
+        void handle_filter_text_changed(const QString& filter_text);
 
     private Q_SLOTS:
         void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
     private:
         gui_utility::sort_mechanism m_sort_mechanism;
+        QRegularExpression m_filter_expression;
+        int mGraphicsBusy;
     };
 }

@@ -6,81 +6,54 @@
 
 namespace hal
 {
-    SelectionHistoryNavigator::SelectionHistoryNavigator(unsigned int max_history_size, QObject* parent) : QObject(parent)
+    SelectionHistoryNavigator::SelectionHistoryNavigator(unsigned int hsize)
+        : mCount(0), mHistorySize(hsize)
+    {;}
+
+    void SelectionHistoryNavigator::storeCurrentSelection()
     {
-        set_max_history_size(max_history_size);
+        SelectionHistoryEntry she(g_selection_relay->m_selected_modules,
+                                  g_selection_relay->m_selected_gates,
+                                  g_selection_relay->m_selected_nets,
+                                  ++mCount);
+        if (she.isEmpty()) return;
 
-        m_current_item_iterator = m_selection_container.begin();
+        // do not store more than mHistorySize entries
+        while (mSelectionContainer.size() >= mHistorySize)
+            mSelectionContainer.removeFirst();
 
-        g_selection_relay->register_sender(this, "History Navigator");
-
-        connect(g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionHistoryNavigator::handle_selection_changed);
+        mSelectionContainer.append(she);
     }
 
-    SelectionHistoryNavigator::~SelectionHistoryNavigator()
+    void SelectionHistoryNavigator::emptySelection()
     {
+        ++mCount;
     }
 
-    void SelectionHistoryNavigator::handle_selection_changed(void* sender)
+    void SelectionHistoryNavigator::restorePreviousEntry()
     {
-        if (sender == this)
-            return;
-
-        if (!g_selection_relay->m_selected_gates.isEmpty())
+        if (mSelectionContainer.isEmpty()) return;
+        SelectionHistoryEntry she = mSelectionContainer.takeLast();
+        if (she.count() == mCount)
         {
-            store_selection(*g_selection_relay->m_selected_gates.begin(), SelectionRelay::item_type::gate);
+            if (mSelectionContainer.isEmpty()) return;
+            she = mSelectionContainer.takeLast();
         }
-        else if (!g_selection_relay->m_selected_nets.isEmpty())
-        {
-            store_selection(*g_selection_relay->m_selected_nets.begin(), SelectionRelay::item_type::net);
-        }
+        g_selection_relay->m_selected_modules = she.m_module_ids;
+        g_selection_relay->m_selected_gates   = she.m_gate_ids;
+        g_selection_relay->m_selected_nets    = she.m_net_ids;
+        mCount = she.count();
     }
 
-    void SelectionHistoryNavigator::store_selection(u32 id, SelectionRelay::item_type type)
+    bool SelectionHistoryNavigator::hasPreviousEntry() const
     {
-        m_current_item_iterator = m_selection_container.insert(m_current_item_iterator, Selection(id, type));
+        if (mSelectionContainer.isEmpty()) return false;
 
-        if (m_selection_container.size() > m_max_history_size)
-            m_selection_container.pop_back();
+        // check whether element on top of the history is current selection ...
+        if (mSelectionContainer.last().count() != mCount) return true;
+
+        // ... if yes there must be more than one element in history
+        return (mSelectionContainer.size() > 1);
     }
 
-    void SelectionHistoryNavigator::navigate_to_prev_item()
-    {
-        if (!(m_current_item_iterator == --m_selection_container.end()))
-            relay_selection(*++m_current_item_iterator);
-    }
-
-    void SelectionHistoryNavigator::navigate_to_next_item()
-    {
-        if (!(m_current_item_iterator == m_selection_container.begin()))
-            relay_selection(*--m_current_item_iterator);
-    }
-
-    void SelectionHistoryNavigator::relay_selection(Selection selection)
-    {
-        g_selection_relay->clear();
-
-        SelectionRelay::item_type type = selection.get_type();
-
-        if (type == SelectionRelay::item_type::net)
-        {
-            g_selection_relay->m_selected_nets.insert(selection.get_net_id());
-        }
-        else if (type == SelectionRelay::item_type::gate)
-        {
-            g_selection_relay->m_selected_gates.insert(selection.get_gate_id());
-        }
-
-        Q_EMIT g_selection_relay->selection_changed(this);
-    }
-
-    void SelectionHistoryNavigator::set_max_history_size(unsigned int max_size)
-    {
-        m_max_history_size = max_size;
-    }
-
-    unsigned int SelectionHistoryNavigator::get_max_history_size() const
-    {
-        return m_max_history_size;
-    }
 }

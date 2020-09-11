@@ -24,25 +24,26 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "gui/selection_relay/selection_relay.h"
 
-#include <QAbstractTableModel>
+#include <QList>
 
 namespace hal
 {
-    class gate_table_model : public QAbstractTableModel
+    class SelectionHistoryEntry
     {
-        Q_OBJECT
 
     public:
-        gate_table_model(QObject* parent = 0);
-        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-        int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-        QVariant data(const QModelIndex& inddex, int role = Qt::DisplayRole) const override;
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+        SelectionHistoryEntry(const QSet<u32>& modIds, const QSet<u32>& gatIds, const QSet<u32>& netIds, int cnt);
+        bool isEmpty() const;
 
-        void fetch_selection();
+        QSet<u32> m_module_ids;
+        QSet<u32> m_gate_ids;
+        QSet<u32> m_net_ids;
+
+        int count() const { return mCount; }
 
     private:
-        QVector<u32> m_selected_gate_ids;
+        int mCount;
     };
-}    // namespace hal
+}

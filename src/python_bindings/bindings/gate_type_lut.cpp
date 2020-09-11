@@ -4,7 +4,7 @@ namespace hal
 {
     void gate_type_lut_init(py::module& m)
     {
-        py::class_<GateTypeLut, GateType, std::shared_ptr<GateTypeLut>> py_gate_type_lut(m, "GateTypeLut", R"(
+        py::class_<GateTypeLut, GateType, RawPtrWrapper<GateTypeLut>> py_gate_type_lut(m, "GateTypeLut", R"(
         LUT gate type class containing information about the internals of a specific LUT gate type.
 )");
 

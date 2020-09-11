@@ -104,7 +104,7 @@ namespace hal
             painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
             painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
 
-            s_pen.setColor(s_text_color);
+            s_pen.setColor(penColor(option->state));
             painter->setPen(s_pen);
 
             painter->setFont(s_name_font);
@@ -112,6 +112,9 @@ namespace hal
             painter->setFont(s_type_font);
             painter->drawText(m_type_position, "Module");
             painter->setFont(s_pin_font);
+
+            s_pen.setColor(s_text_color);
+            painter->setPen(s_pen);
 
             QPointF text_pos(s_pin_outer_horizontal_spacing, s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_ascent + baseline);
 

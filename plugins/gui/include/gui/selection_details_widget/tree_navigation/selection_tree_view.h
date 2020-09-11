@@ -25,6 +25,7 @@
 
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
 
 #include <QTreeView>
 #include <QWidget>
@@ -38,6 +39,9 @@ namespace hal
     Q_SIGNALS:
         void triggerSelection(const SelectionTreeItem* sti);
 
+    public Q_SLOTS:
+        void handle_filter_text_changed(const QString& filter_text);
+ 
     protected:
         virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous) Q_DECL_OVERRIDE;
 
@@ -46,8 +50,10 @@ namespace hal
         void setDefaultColumnWidth();
         void clearHide();
         void populate(bool visible);
+        SelectionTreeItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
 
     private:
         SelectionTreeModel* m_selectionTreeModel;
+        SelectionTreeProxyModel* m_selectionTreeProxyModel;
     };
 }    // namespace hal

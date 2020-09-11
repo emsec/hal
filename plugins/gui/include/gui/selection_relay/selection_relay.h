@@ -88,6 +88,14 @@ namespace hal
         void handle_gate_removed(const u32 id);
         void handle_net_removed(const u32 id);
 
+        bool isModuleSelected(u32 id) const;
+        bool isGateSelected(u32 id) const;
+        bool isNetSelected(u32 id) const;
+
+        void suppressedByFilter(const QList<u32>& modIds = QList<u32>(),
+                                const QList<u32>& gatIds = QList<u32>(),
+                                const QList<u32>& netIds = QList<u32>());
+
     Q_SIGNALS:
         // TEST SIGNAL
         // ADD ADDITIONAL INFORMATION (LIKE PREVIOUS FOCUS) OR LEAVE THAT TO SUBSCRIBERS ???
@@ -113,6 +121,10 @@ namespace hal
         u32 m_subfocus_index;    // HANDLE VIA INT OR STRING ?? INDEX HAS TO BE KNOWN ANYWAY TO FIND NEXT / PREVIOUS BOTH OPTIONS KIND OF BAD
 
     private:
+        QSet<u32> mModulesSuppressedByFilter;
+        QSet<u32> mGatesSuppressedByFilter;
+        QSet<u32> mNetsSuppressedByFilter;
+
         static bool s_navigation_skips_enabled;    // DOES THIS HAVE ANY USE ???
 
         // RENAME THESE METHODS ???

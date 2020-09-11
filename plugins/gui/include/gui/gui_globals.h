@@ -46,34 +46,24 @@ namespace hal
 {
     class Netlist;
 
-    //extern QSettings g_settings;
-    extern QSettings g_gui_state;
 
+
+    extern QSettings* g_gui_state;
     extern WindowManager* g_window_manager;
     extern NotificationManager* g_notification_manager;
-
     extern ContentManager* g_content_manager;
-
     extern std::unique_ptr<Netlist> g_netlist_owner;
     extern Netlist* g_netlist;
-
     extern NetlistRelay* g_netlist_relay;
     extern PluginRelay* g_plugin_relay;
     extern SelectionRelay* g_selection_relay;
     extern SettingsRelay* g_settings_relay;
-
     extern SettingsManager* g_settings_manager;
-
     extern KeybindManager* g_keybind_manager;
-
     extern FileStatusManager* g_file_status_manager;
-
     extern GraphContextManager* g_graph_context_manager;
-
     extern ThreadPool* g_thread_pool;
-
     extern std::unique_ptr<PythonContext> g_python_context;
-
     extern GuiApi* g_gui_api;
 
     // Comment this out to not compile the debug code for the graph grid.

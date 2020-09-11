@@ -308,6 +308,7 @@ namespace hal
                     if (name == plugin_name)
                     {
                         m_cli_option_to_cli_plugin_name.erase(flag);
+                        m_plugin_options.remove(flag);
                     }
                 }
             }
@@ -318,11 +319,12 @@ namespace hal
                     if (name == plugin_name)
                     {
                         m_cli_option_to_ui_plugin_name.erase(flag);
+                        m_plugin_options.remove(flag);
                     }
                 }
             }
 
-            auto rt_library = std::move(std::get<1>(it->second));
+            auto rt_library  = std::move(std::get<1>(it->second));
             auto plugin_inst = std::move(std::get<0>(it->second));
             m_loaded_plugins.erase(it);
 
@@ -332,8 +334,8 @@ namespace hal
             // actual unloading
             // order of unloading is important, so we do it manually here:
             // first destroy the plugin instance, then destroy the runtime library
-            plugin_inst.release();
-            rt_library.release();
+            plugin_inst.reset();
+            rt_library.reset();
 
             /* notify callback that a plugin was unloaded */
             m_hook(false, plugin_name, file_name);

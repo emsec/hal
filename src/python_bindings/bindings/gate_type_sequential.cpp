@@ -4,7 +4,7 @@ namespace hal
 {
     void gate_type_sequential_init(py::module& m)
     {
-        py::class_<GateTypeSequential, GateType, std::shared_ptr<GateTypeSequential>> py_gate_type_sequential(
+        py::class_<GateTypeSequential, GateType, RawPtrWrapper<GateTypeSequential>> py_gate_type_sequential(
             m, "GateTypeSequential", R"(Sequential gate type class containing information about the internals of a specific sequential gate type.)");
 
         py::enum_<GateTypeSequential::SetResetBehavior>(py_gate_type_sequential, "SetResetBehavior", R"(

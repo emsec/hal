@@ -4,7 +4,7 @@ namespace hal
 {
     void endpoint_init(py::module& m)
     {
-        py::class_<Endpoint, std::shared_ptr<Endpoint>> py_endpoint(m, "Endpoint");
+        py::class_<Endpoint, RawPtrWrapper<Endpoint>> py_endpoint(m, "Endpoint");
 
         py_endpoint.def_property_readonly("gate", &Endpoint::get_gate, R"(
         The gate of the endpoint.

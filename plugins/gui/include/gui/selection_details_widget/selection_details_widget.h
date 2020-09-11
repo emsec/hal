@@ -40,14 +40,25 @@ namespace hal
     class ModuleDetailsWidget;
     class GateDetailsWidget;
     class NetDetailsWidget;
+    class SelectionHistoryNavigator;
 
     class SelectionDetailsWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString search_icon_path READ search_icon_path WRITE set_search_icon_path)
+        Q_PROPERTY(QString search_icon_style READ search_icon_style WRITE set_search_icon_style)
 
     public:
         SelectionDetailsWidget(QWidget* parent = 0);
         void clear();
+
+        virtual void setup_toolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
+
+        QString search_icon_path() const;
+        QString search_icon_style() const;
+
+        void set_search_icon_path(const QString &path);
+        void set_search_icon_style(const QString &style);
 
     Q_SIGNALS:
         void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
@@ -56,6 +67,11 @@ namespace hal
         void handle_selection_update(void* sender);
         void handleTreeSelection(const SelectionTreeItem* sti);
         QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+
+
+    private Q_SLOTS:
+        void restoreLastSelection();
+        void toggle_searchbar();
 
     private:
         void singleSelectionInternal(const SelectionTreeItem* sti);
@@ -67,14 +83,25 @@ namespace hal
 
         QStackedWidget* m_stacked_widget;
 
-        QWidget* m_empty_widget;
         GateDetailsWidget* m_gate_details;
         NetDetailsWidget* m_net_details;
         ModuleDetailsWidget* m_module_details;
         QLabel* m_item_deleted_label;
+        QLabel* m_no_selection_label;
 
         Searchbar* m_searchbar;
 
-        void toggle_searchbar();
+        QAction* m_restoreLastSelection;
+        QAction* m_search_action;
+        QString m_search_icon_path;
+        QString m_search_icon_style;
+
+        SelectionHistoryNavigator* m_history;
+
+        void handle_filter_text_changed(const QString& filter_text);
+        void canRestoreSelection();
+        void enableSearchbar(bool enable);
+
+        static const QString disableIconStyle;
     };
 }

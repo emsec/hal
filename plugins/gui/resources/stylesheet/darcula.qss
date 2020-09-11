@@ -1398,6 +1398,11 @@ qproperty-search_icon_style: "all->#e8e8e8";
 qproperty-search_icon_path: ":/icons/search";
 }
 
+hal--SelectionDetailsWidget {
+qproperty-search_icon_style: "all->#e8e8e8";
+qproperty-search_icon_path: ":/icons/search";
+}
+
 hal--MainWindow {
 qproperty-hal_icon_style: "";
 qproperty-hal_icon_path: ":/icons/hal";

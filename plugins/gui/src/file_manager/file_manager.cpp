@@ -346,18 +346,18 @@ namespace hal
     {
         QStringList list;
 
-        g_gui_state.beginReadArray("recent_files");
+        g_gui_state->beginReadArray("recent_files");
         for (int i = 0; i < 14; ++i)
         {
-            g_gui_state.setArrayIndex(i);
-            QString state_file = g_gui_state.value("file").toString();
+            g_gui_state->setArrayIndex(i);
+            QString state_file = g_gui_state->value("file").toString();
 
             if (state_file.isEmpty())
                 continue;
 
-            list.append(g_gui_state.value("file").toString());
+            list.append(g_gui_state->value("file").toString());
         }
-        g_gui_state.endArray();
+        g_gui_state->endArray();
 
         int index = list.indexOf(file);
         if (index == -1)
@@ -365,11 +365,11 @@ namespace hal
         else
             list.move(index, 0);
 
-        g_gui_state.beginGroup("recent_files");
-        g_gui_state.remove("");
-        g_gui_state.endGroup();
+        g_gui_state->beginGroup("recent_files");
+        g_gui_state->remove("");
+        g_gui_state->endGroup();
 
-        g_gui_state.beginWriteArray("recent_files");
+        g_gui_state->beginWriteArray("recent_files");
         int i = 0;
         std::vector<std::filesystem::path> files;
         for (QString& string : list)
@@ -386,14 +386,14 @@ namespace hal
             }
             if (!skip)
             {
-                g_gui_state.setArrayIndex(i);
-                g_gui_state.setValue("file", string);
+                g_gui_state->setArrayIndex(i);
+                g_gui_state->setValue("file", string);
                 ++i;
                 if (i == 14)
                     break;
             }
         }
-        g_gui_state.endArray();
+        g_gui_state->endArray();
     }
 
     void FileManager::display_error_message(QString error_message)

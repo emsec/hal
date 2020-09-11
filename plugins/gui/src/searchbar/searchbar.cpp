@@ -114,6 +114,8 @@ namespace hal
     {
         m_LineEdit->clear();
         repolish();
+
+        Q_EMIT text_edited(m_LineEdit->text());
     }
 
     QString Searchbar::get_current_text()
