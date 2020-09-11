@@ -76,7 +76,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, check_lut) {
+    TEST_F(LibertyParserTest, DISABLED_check_lut) {
         TEST_START
             {
                 // Create a LUT Gate type with two input pins and four output pins
@@ -188,7 +188,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, check_flip_flop) {
+    TEST_F(LibertyParserTest, DISABLED_check_flip_flop) {
         TEST_START
             {
                 // Create a flip-flop Gate type with two input pins and four output pins
@@ -283,7 +283,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, check_latch) {
+    TEST_F(LibertyParserTest, DISABLED_check_latch) {
         TEST_START
             {
                 // Create a flip-flop Gate type with two input pins and four output pins
@@ -375,7 +375,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, check_multiline_comment) {
+    TEST_F(LibertyParserTest, DISABLED_check_multiline_comment) {
         TEST_START
             {
                 // The output pins O0, O1, O2, O3 should be created, C0, C1, C2, C3 shouldn't
