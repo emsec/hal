@@ -517,7 +517,10 @@ namespace hal
 
     void SelectionRelay::follow_net_to_source(Net* n)
     {
-        auto e = n->get_source();
+        if(n->get_sources().empty())
+            return;
+
+        auto e = n->get_sources().at(0);
         auto g = e->get_gate();
 
         if (!g)
