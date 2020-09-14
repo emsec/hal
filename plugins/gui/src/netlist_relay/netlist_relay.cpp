@@ -149,7 +149,7 @@ namespace hal
         if (!m)
             return;
 
-        Module* s = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), m);
+        //Module* s = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), m);
     }
 
     void NetlistRelay::debug_delete_module(const u32 id)
