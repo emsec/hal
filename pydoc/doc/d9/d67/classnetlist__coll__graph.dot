@@ -1,8 +1,0 @@
-digraph "netlist"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node0 [label="{netlist\n||+ netlist()\l+ ~netlist()\l+ get_shared()\l+ get_id()\l+ set_id()\l+ get_input_filename()\l+ set_input_filename()\l+ get_design_name()\l+ set_design_name()\l+ get_device_name()\l+ set_device_name()\l+ get_gate_library()\l+ get_unique_module_id()\l+ create_module()\l+ create_module()\l+ delete_module()\l+ get_top_module()\l+ get_module_by_id()\l+ get_modules()\l+ is_module_in_netlist()\l+ get_unique_gate_id()\l+ create_gate()\l+ create_gate()\l+ delete_gate()\l+ is_gate_in_netlist()\l+ get_gate_by_id()\l+ get_gates()\l+ mark_vcc_gate()\l+ mark_gnd_gate()\l+ unmark_vcc_gate()\l+ unmark_gnd_gate()\l+ is_vcc_gate()\l+ is_gnd_gate()\l+ get_vcc_gates()\l+ get_gnd_gates()\l+ get_unique_net_id()\l+ create_net()\l+ create_net()\l+ delete_net()\l+ is_net_in_netlist()\l+ get_net_by_id()\l+ get_nets()\l+ mark_global_input_net()\l+ mark_global_output_net()\l+ unmark_global_input_net()\l+ unmark_global_output_net()\l+ is_global_input_net()\l+ is_global_output_net()\l+ get_global_input_nets()\l+ get_global_output_nets()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node1 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
-  Node1 [label="{std::enable_shared\l_from_this\< netlist \>\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
-}

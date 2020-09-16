@@ -1,8 +1,0 @@
-digraph "i_gui"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node0 [label="{i_gui\n||+ i_gui()\l+ ~i_gui()\l+ exec()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node1 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
-  Node1 [label="{i_base\n||+ i_base()\l+ ~i_base()\l+ initialize()\l+ get_name()\l+ get_version()\l+ has_type()\l+ log()\l+ get_dependencies()\l+ on_load()\l+ on_unload()\l+ initialize_logging()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d5/d32/classi__base.html"];
-}

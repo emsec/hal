@@ -1,3 +1,0 @@
-<map id="gate_type_sequential" name="gate_type_sequential">
-<area shape="rect" id="node2" href="$d0/d31/classgate__type.html" title="{gate_type\n||+ gate_type()\l+ ~gate_type()\l+ to_string()\l+ operator==()\l+ operator!=()\l+ get_name()\l+ get_base_type()\l+ add_input_pin()\l+ add_input_pins()\l+ get_input_pins()\l+ add_output_pin()\l+ add_output_pins()\l+ get_output_pins()\l+ add_boolean_function()\l+ get_boolean_functions()\l}" alt="" coords="8,5,180,288"/>
-</map>

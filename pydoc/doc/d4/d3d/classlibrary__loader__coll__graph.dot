@@ -1,6 +1,0 @@
-digraph "library_loader"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node0 [label="{library_loader\n||+ library_loader()\l+ ~library_loader()\l+ load_library()\l+ get_file_name()\l+ unload_library()\l+ get_function()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-}

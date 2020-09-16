@@ -1,6 +1,0 @@
-digraph "program_options"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node0 [label="{program_options\n|+ REQUIRED_PARAM\l|+ program_options()\l+ ~program_options()\l+ parse()\l+ get_unknown_arguments()\l+ is_registered()\l+ add()\l+ add()\l+ add()\l+ get_options_string()\l+ get_options()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-}

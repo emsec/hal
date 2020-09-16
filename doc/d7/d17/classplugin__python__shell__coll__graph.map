@@ -1,4 +1,0 @@
-<map id="plugin_python_shell" name="plugin_python_shell">
-<area shape="rect" id="node2" href="$d0/dc1/classi__interactive__ui.html" title="{i_interactive_ui\n||+ i_interactive_ui()\l+ ~i_interactive_ui()\l+ exec()\l}" alt="" coords="19,277,156,384"/>
-<area shape="rect" id="node3" href="$d5/d32/classi__base.html" title="{i_base\n||+ i_base()\l+ ~i_base()\l+ initialize()\l+ get_name()\l+ get_version()\l+ has_type()\l+ log()\l+ get_dependencies()\l+ on_load()\l+ on_unload()\l+ initialize_logging()\l}" alt="" coords="14,5,161,229"/>
-</map>

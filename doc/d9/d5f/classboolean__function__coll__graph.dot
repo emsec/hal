@@ -1,6 +1,0 @@
-digraph "boolean_function"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node0 [label="{boolean_function\n||+ boolean_function()\l+ boolean_function()\l+ boolean_function()\l+ substitute()\l+ substitute()\l+ evaluate()\l+ operator()()\l+ is_constant_one()\l+ is_constant_zero()\l+ is_empty()\l+ get_variables()\l+ to_string()\l+ operator &()\l+ operator\|()\l+ operator^()\l+ operator &=()\l+ operator\|=()\l+ operator^=()\l+ operator!()\l+ operator==()\l+ operator!=()\l+ is_dnf()\l+ to_dnf()\l+ get_dnf_clauses()\l+ optimize()\l+ get_truth_table()\l+ to_string()\l+ from_string()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-}

@@ -1,9 +1,0 @@
-digraph "HDL Writers"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir=LR;
-  Node0 [label="HDL Writers",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node1 [label="HDL Interfaces",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d9/d5d/group__hdl__interfaces.html"];
-  Node1->Node0 [shape=plaintext, dir="back", style="solid"];
-}
