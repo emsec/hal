@@ -4,7 +4,7 @@ namespace hal
 {
     void gate_init(py::module& m)
     {
-        py::class_<Gate, RawPtrWrapper<Gate>> py_gate(m, "Gate", R"(Gate class containing information about a gate including its location, functions, and module.)");
+        py::class_<Gate, DataContainer, RawPtrWrapper<Gate>> py_gate(m, "Gate", R"(Gate class containing information about a gate including its location, functions, and module.)");
 
         py_gate.def_property_readonly("id", &Gate::get_id, R"(
         The unique ID of the gate.
