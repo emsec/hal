@@ -106,5 +106,7 @@ namespace hal
         QList<QString> m_exclusive_groups;
         QMap<SettingsWidget*, QString> m_exclusive_w2g;
         QMap<QString, QList<SettingsWidget*>*> m_exclusive_g2w;
+
+        bool m_reset_to_first_element;
     };
 }

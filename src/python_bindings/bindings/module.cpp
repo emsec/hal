@@ -4,7 +4,7 @@ namespace hal
 {
     void module_init(py::module& m)
     {
-        py::class_<Module, RawPtrWrapper<Module>> py_module(m, "Module", R"(Module class containing information about a module including its gates, submodules, and parent module.)");
+        py::class_<Module, DataContainer, RawPtrWrapper<Module>> py_module(m, "Module", R"(Module class containing information about a module including its gates, submodules, and parent module.)");
 
         py_module.def_property_readonly("id", &Module::get_id, R"(
         The unique ID of the module object.
