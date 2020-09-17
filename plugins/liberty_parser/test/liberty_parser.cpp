@@ -20,7 +20,7 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, DISABLED_check_combinatorial) {
+    TEST_F(LibertyParserTest, check_combinatorial) {
         TEST_START
             {
                 std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
