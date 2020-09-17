@@ -121,7 +121,6 @@ namespace hal
      * utils::get_gate_library_directories().
      *
      * Functions: get_gate_library, get_gate_libraries
-     * TODO: Crashes in my environment. Requires further investigation.
      */
     TEST_F(GateLibraryManagerTest, check_load_all)
     {

@@ -211,15 +211,16 @@ namespace hal
             bool suc = plugin_manager::load(m_reference_library_name, std::filesystem::path(""));
             EXPECT_FALSE(suc);
         }
-        /*{ // ISSUE: Fails
-                    // Load an already loaded plugin (should return true)
-                    NO_COUT_TEST_BLOCK;
-                    plugin_manager::unload_all_plugins();
-                    bool suc_first = plugin_manager::load(reference_library_name, test_plugin_path);
-                    bool suc       = plugin_manager::load(reference_library_name, test_plugin_path);
-                    EXPECT_TRUE(suc);
-                    EXPECT_TRUE(suc_first);
-                }*/
+        if(test_utils::known_issue_tests_active())
+        { // ISSUE: Fails
+            // Load an already loaded plugin (should return true)
+            //NO_COUT_TEST_BLOCK;
+            plugin_manager::unload_all_plugins();
+            bool suc_first = plugin_manager::load(m_reference_library_name, test_plugin_path);
+            bool suc       = plugin_manager::load(m_reference_library_name, test_plugin_path);
+            EXPECT_TRUE(suc);
+            EXPECT_TRUE(suc_first);
+        }
         NO_COUT(plugin_manager::unload_all_plugins());
         TEST_END
     }
