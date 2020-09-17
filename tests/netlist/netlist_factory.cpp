@@ -295,7 +295,7 @@ namespace hal {
             // Load both gate libraries
             gate_library_manager::load_file(m_g_lib_path);
             gate_library_manager::load_file(other_g_lib_path);
-            //if(test_utils::known_issue_tests_active())
+            if(test_utils::known_issue_tests_active())
             { // ISSUE: gate_type in second netlist is invalid
                 // Get the netlist for a file, that can be parsed with both gate libraries (passing the parser name)
                 std::filesystem::path tmp_hdl_file_path = test_utils::create_sandbox_file("nl_factory_test_file.vhdl",
