@@ -22,6 +22,10 @@ namespace hal {
      */
     TEST_F(LibertyParserTest, check_combinatorial) {
         TEST_START
+            if(!test_utils::known_issue_tests_active()){
+                SUCCEED();
+                return;
+            }
             {
                 std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
                                         "    date : \"April 3, 2020\"\n" // <- will be ignored
@@ -76,8 +80,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, DISABLED_check_lut) {
+    TEST_F(LibertyParserTest, check_lut) {
         TEST_START
+            if(!test_utils::known_issue_tests_active()){
+                SUCCEED();
+                return;
+            }
             {
                 // Create a LUT Gate type with two input pins and four output pins
                 // O0 and O2 generate their output by an initializer string.
@@ -188,8 +196,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, DISABLED_check_flip_flop) {
+    TEST_F(LibertyParserTest, check_flip_flop) {
         TEST_START
+            if(!test_utils::known_issue_tests_active()){
+                SUCCEED();
+                return;
+            }
             {
                 // Create a flip-flop Gate type with two input pins and four output pins
                 std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
@@ -283,8 +295,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, DISABLED_check_latch) {
+    TEST_F(LibertyParserTest, check_latch) {
         TEST_START
+            if(!test_utils::known_issue_tests_active()){
+                SUCCEED();
+                return;
+            }
             {
                 // Create a flip-flop Gate type with two input pins and four output pins
                 std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
@@ -375,8 +391,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, DISABLED_check_multiline_comment) {
+    TEST_F(LibertyParserTest, check_multiline_comment) {
         TEST_START
+            if(!test_utils::known_issue_tests_active()){
+                SUCCEED();
+                return;
+            }
             {
                 // The output pins O0, O1, O2, O3 should be created, C0, C1, C2, C3 shouldn't
                 std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
@@ -417,8 +437,12 @@ namespace hal {
      *
      * Functions: parse
      */
-    TEST_F(LibertyParserTest, DISABLED_check_invalid_input) {
+    TEST_F(LibertyParserTest, check_invalid_input) {
         TEST_START
+            if(!test_utils::known_issue_tests_active()){
+                SUCCEED();
+                return;
+            }
             {
                 // Pass an empty input stream
                 NO_COUT_TEST_BLOCK;
