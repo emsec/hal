@@ -295,8 +295,7 @@ namespace hal {
             // Load both gate libraries
             gate_library_manager::load_file(m_g_lib_path);
             gate_library_manager::load_file(other_g_lib_path);
-            if(test_utils::known_issue_tests_active())
-            { // ISSUE: gate_type in second netlist is invalid
+            {
                 // Get the netlist for a file, that can be parsed with both gate libraries (passing the parser name)
                 std::filesystem::path tmp_hdl_file_path = test_utils::create_sandbox_file("nl_factory_test_file.vhdl",
                                                                                           "-- Device\t: device_name\n"
@@ -318,8 +317,8 @@ namespace hal {
                 ASSERT_EQ(nl_vec.size(), 2);
                 ASSERT_NE(nl_vec[0], nullptr);
                 ASSERT_NE(nl_vec[1], nullptr);
-                EXPECT_EQ(nl_vec[0]->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY");
-                EXPECT_EQ(nl_vec[1]->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY_FOR_NETLIST_FACTORY_TESTS");
+                EXPECT_EQ(nl_vec[0]->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY_FOR_NETLIST_FACTORY_TESTS");
+                EXPECT_EQ(nl_vec[1]->get_gate_library()->get_name(), other_gl_name);
             }
         TEST_END
     }

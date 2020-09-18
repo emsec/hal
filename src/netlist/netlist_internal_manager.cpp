@@ -46,6 +46,10 @@ namespace hal
             log_error("netlist.internal", "netlist::create_gate: gate id {:08x} is already taken.", id);
             return nullptr;
         }
+        if (gt == nullptr) {
+            log_error("netlist.internal", "netlist::create_gate: nullptr given for gate type.", id);
+            return nullptr;
+        }
         if (this->is_gate_type_invalid(gt))
         {
             log_error("netlist.internal", "netlist::create_gate: gate type '{}' is invalid.", gt->get_name());
@@ -53,7 +57,7 @@ namespace hal
         }
         if (utils::trim(name).empty())
         {
-            log_error("netlist.internal", "netlist::create_gate: empty name is not allowed");
+            log_error("netlist.internal", "netlist::create_gate: empty name is not allowed.");
             return nullptr;
         }
 

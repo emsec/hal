@@ -228,10 +228,8 @@ namespace hal {
                 auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "");
                 EXPECT_EQ(g_0, nullptr);
             }
-            if(test_utils::known_issue_tests_active())
             {
                 // Try to add a Gate with a nullptr gate type
-                // ISSUE: SIGSEGV in netlist.cpp:51
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
                 auto g_0 = nl->create_gate(MIN_GATE_ID + 0, nullptr, "");
                 EXPECT_EQ(g_0, nullptr);

@@ -4,7 +4,7 @@ namespace hal
 {
     void net_init(py::module& m)
     {
-        py::class_<Net, RawPtrWrapper<Net>> py_net(m, "Net", R"(Net class containing information about a net including its source and destination.)");
+        py::class_<Net, DataContainer, RawPtrWrapper<Net>> py_net(m, "Net", R"(Net class containing information about a net including its source and destination.)");
 
         py_net.def_property_readonly("id", &Net::get_id, R"(
         The unique id of the net.
