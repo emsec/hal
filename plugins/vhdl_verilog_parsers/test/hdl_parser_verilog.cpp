@@ -934,6 +934,108 @@ namespace hal {
                                                                                               "I")})));
 
             }
+            {
+                // Testing the correct naming of gates and nets that occur in multiple modules by
+                // creating the following netlist:
+
+                /*                        MODULE_B
+                 *                       . -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  .
+                 *                       '     .-----------------.  shared_net_name  .--------------.     '
+                 *                       '    |                  |=----------------=|               |     '
+                 *      net_global_in ---=---=| shared_gate_name |=----------------=| other_gate_B  |=----=-- ...
+                 *                       '    '------------------'       net_b      '---------------'     '
+                 *                       ' -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  '
+                 *
+                 *                       MODULE_A
+                 *                       . -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  .
+                 *                       '     .-----------------.  shared_net_name  .--------------.     '
+                 *                       '    |                  |=----------------=|               |     '
+                 *               ...  ---=---=| shared_gate_name |=----------------=| other_gate_A  |=----=-- ...
+                 *                       '    '------------------'       net_a      '---------------'     '
+                 *                       ' -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  '
+                 *
+                 *                        MODULE_B
+                 *                       . -  -  .
+                 *               ... --- =  ...  =---=| gate_top |=--- net_global_out
+                 *                       ' -  -  '
+                 */
+                std::stringstream input("module MODULE_A (\n"
+                                        "  I_A,\n"
+                                        "  O_A\n"
+                                        " ) ;\n"
+                                        "  input I_A ;\n"
+                                        "  output O_A ;\n"
+                                        "  wire shared_net_name ;\n"
+                                        "  wire net_a ; \n"
+                                        "gate_1_to_2 shared_gate_name (\n"
+                                        "  .\\I (I_A ),\n"
+                                        "  .\\O0 (shared_net_name ),\n"
+                                        "  .\\O1 (net_a )\n"
+                                        " ) ;\n"
+                                        "gate_2_to_1 other_gate_A (\n"
+                                        "  .\\I0 (shared_net_name ),\n"
+                                        "  .\\I1 (net_a ),\n"
+                                        "  .\\O (O_A )\n"
+                                        " ) ;\n"
+                                        "endmodule\n"
+                                        "\n"
+                                        "module MODULE_B (\n"
+                                        "  I_B,\n"
+                                        "  O_B\n"
+                                        " ) ;\n"
+                                        "  input I_B ;\n"
+                                        "  output O_B ;\n"
+                                        "  wire shared_net_name ;\n"
+                                        "  wire net_b ;\n"
+                                        "gate_1_to_2 shared_gate_name (\n"
+                                        "  .\\I (I_B ),\n"
+                                        "  .\\O0 (shared_net_name ),\n"
+                                        "  .\\O1 (net_b )\n"
+                                        " ) ;\n"
+                                        "gate_2_to_1 other_gate_B (\n"
+                                        "  .\\I0 (shared_net_name ),\n"
+                                        "  .\\I1 (net_b ),\n"
+                                        "  .\\O (O_B )\n"
+                                        " ) ;\n"
+                                        "endmodule\n"
+                                        "\n"
+                                        "module ENT_TOP (\n"
+                                        "  net_global_in,\n"
+                                        "  net_global_out\n"
+                                        " ) ;\n"
+                                        "  input net_global_in ;\n"
+                                        "  output net_global_out ;\n"
+                                        "  wire net_0 ;\n"
+                                        "  wire net_1;\n"
+                                        "  wire net_2;\n"
+                                        "MODULE_B mod_b_0 (\n"
+                                        "  .\\I_B (net_global_in ),\n"
+                                        "  .\\O_B (net_0 )\n"
+                                        " ) ;\n"
+                                        "MODULE_A mod_a_0 (\n"
+                                        "  .\\I_A (net_0 ),\n"
+                                        "  .\\O_A (net_1 )\n"
+                                        " ) ;\n"
+                                        "MODULE_B mod_b_1 (\n"
+                                        "  .\\I_B (net_1 ),\n"
+                                        "  .\\O_B (net_2 )\n"
+                                        " ) ;\n"
+                                        "gate_1_to_1 gate_top (\n"
+                                        "  .\\I (net_2 ),\n"
+                                        "  .\\O (net_global_out )\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                HDLParserVerilog verilog_parser;
+                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
+
+                // Test if all modules are created and assigned correctly
+                ASSERT_NE(nl, nullptr);
+
+                // ISSUE: Seems not to be correct. For example net_b occurs two times, but is named net_b__[3]__ and net_b__[4]__
+                //  or shared_net_name occurs 3 times and is labeled with 4,5,6
+                // TODO: Checks (Requirements?)
+
+            }
         TEST_END
     }
 
