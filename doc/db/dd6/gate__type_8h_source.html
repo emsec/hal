@@ -99,98 +99,99 @@ $(function() {
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dc/d6d/boolean__function_8h.html">hal_core/netlist/boolean_function.h</a>&quot;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="../../d1/d05/classhal_1_1GateType.html">   38</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">   41</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">BaseType</a></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            combinatorial,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            lut,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            ff,</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            latch</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        };</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>(<span class="keyword">const</span> std::string&amp; name);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> get_id() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        std::string to_string() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keyword">friend</span> std::ostream&amp; <a class="code" href="../../d0/d7f/namespacehal.html#aef8d4a8f510965ea04184d31d5714c79">operator&lt;&lt;</a>(std::ostream&amp; os, <span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp; gt);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp; other) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp; other) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        std::string get_name() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        BaseType get_base_type() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordtype">void</span> add_input_pin(std::string pin_name);</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordtype">void</span> add_input_pins(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; pin_names);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        std::vector&lt;std::string&gt; get_input_pins() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordtype">void</span> add_output_pin(std::string pin_name);</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordtype">void</span> add_output_pins(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; pin_names);</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        std::vector&lt;std::string&gt; get_output_pins() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">void</span> assign_input_pin_group(<span class="keyword">const</span> std::string&amp; group_name, <span class="keyword">const</span> std::unordered_map&lt;u32, std::string&gt;&amp; index_to_pin);</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordtype">void</span> assign_input_pin_groups(<span class="keyword">const</span> std::unordered_map&lt;std::string, std::unordered_map&lt;u32, std::string&gt;&gt;&amp; pin_groups);</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        std::unordered_map&lt;std::string, std::unordered_map&lt;u32, std::string&gt;&gt; get_input_pin_groups() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordtype">void</span> assign_output_pin_group(<span class="keyword">const</span> std::string&amp; group_name, <span class="keyword">const</span> std::unordered_map&lt;u32, std::string&gt;&amp; index_to_pin);</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keywordtype">void</span> assign_output_pin_groups(<span class="keyword">const</span> std::unordered_map&lt;std::string, std::unordered_map&lt;u32, std::string&gt;&gt;&amp; pin_groups);</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        std::unordered_map&lt;std::string, std::unordered_map&lt;u32, std::string&gt;&gt; get_output_pin_groups() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keywordtype">void</span> add_boolean_function(std::string name, <a class="code" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> bf);</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160; </div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordtype">void</span> add_boolean_functions(<span class="keyword">const</span> std::unordered_map&lt;std::string, BooleanFunction&gt;&amp; functions);</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        std::unordered_map&lt;std::string, BooleanFunction&gt; get_boolean_functions() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_id;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        std::string m_name;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        BaseType m_base_type;</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        std::vector&lt;std::string&gt; m_input_pins;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        std::vector&lt;std::string&gt; m_output_pins;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        std::unordered_map&lt;std::string, std::unordered_map&lt;u32, std::string&gt;&gt; m_input_pin_groups;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        std::unordered_map&lt;std::string, std::unordered_map&lt;u32, std::string&gt;&gt; m_output_pin_groups;</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        std::unordered_map&lt;std::string, BooleanFunction&gt; m_functions;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>(<span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp;) = <span class="keyword">delete</span>;               <span class="comment">// disable copy-constructor</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp;) = <span class="keyword">delete</span>;    <span class="comment">// disable copy-assignment</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    };</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="../../d1/d05/classhal_1_1GateType.html">   39</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">   42</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">BaseType</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            combinatorial,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            lut,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            ff,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            latch</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        };</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>(<span class="keyword">const</span> std::string&amp; name);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> get_id() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        std::string to_string() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keyword">friend</span> std::ostream&amp; <a class="code" href="../../d0/d7f/namespacehal.html#aef8d4a8f510965ea04184d31d5714c79">operator&lt;&lt;</a>(std::ostream&amp; os, <span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp; gt);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp; other) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp; other) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        std::string get_name() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        BaseType get_base_type() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordtype">void</span> add_input_pin(std::string pin_name);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordtype">void</span> add_input_pins(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; pin_names);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        std::vector&lt;std::string&gt; get_input_pins() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <span class="keywordtype">void</span> add_output_pin(std::string pin_name);</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordtype">void</span> add_output_pins(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; pin_names);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        std::vector&lt;std::string&gt; get_output_pins() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <span class="keywordtype">void</span> assign_input_pin_group(<span class="keyword">const</span> std::string&amp; group_name, <span class="keyword">const</span> std::map&lt;u32, std::string&gt;&amp; index_to_pin);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordtype">void</span> assign_input_pin_groups(<span class="keyword">const</span> std::unordered_map&lt;std::string, std::map&lt;u32, std::string&gt;&gt;&amp; pin_groups);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        std::unordered_map&lt;std::string, std::map&lt;u32, std::string&gt;&gt; get_input_pin_groups() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <span class="keywordtype">void</span> assign_output_pin_group(<span class="keyword">const</span> std::string&amp; group_name, <span class="keyword">const</span> std::map&lt;u32, std::string&gt;&amp; index_to_pin);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordtype">void</span> assign_output_pin_groups(<span class="keyword">const</span> std::unordered_map&lt;std::string, std::map&lt;u32, std::string&gt;&gt;&amp; pin_groups);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        std::unordered_map&lt;std::string, std::map&lt;u32, std::string&gt;&gt; get_output_pin_groups() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordtype">void</span> add_boolean_function(std::string name, <a class="code" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> bf);</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keywordtype">void</span> add_boolean_functions(<span class="keyword">const</span> std::unordered_map&lt;std::string, BooleanFunction&gt;&amp; functions);</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        std::unordered_map&lt;std::string, BooleanFunction&gt; get_boolean_functions() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_id;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        std::string m_name;</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        BaseType m_base_type;</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        std::vector&lt;std::string&gt; m_input_pins;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        std::vector&lt;std::string&gt; m_output_pins;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        std::unordered_map&lt;std::string, std::map&lt;u32, std::string&gt;&gt; m_input_pin_groups;</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        std::unordered_map&lt;std::string, std::map&lt;u32, std::string&gt;&gt; m_output_pin_groups;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        std::unordered_map&lt;std::string, BooleanFunction&gt; m_functions;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>(<span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp;) = <span class="keyword">delete</span>;               <span class="comment">// disable copy-constructor</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>&amp;) = <span class="keyword">delete</span>;    <span class="comment">// disable copy-assignment</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    };</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> defines.h:43</div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
 <div class="ttc" id="anamespacehal_html_aef8d4a8f510965ea04184d31d5714c79"><div class="ttname"><a href="../../d0/d7f/namespacehal.html#aef8d4a8f510965ea04184d31d5714c79">hal::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const BooleanFunction::operation &amp;op)</div><div class="ttdef"><b>Definition:</b> boolean_function.cpp:24</div></div>
 <div class="ttc" id="aclasshal_1_1BooleanFunction_html"><div class="ttname"><a href="../../d6/d9d/classhal_1_1BooleanFunction.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> boolean_function.h:42</div></div>
-<div class="ttc" id="aclasshal_1_1GateType_html_a9aee0f1be5eb3241a7e2d5e5a99fff36"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">hal::GateType::BaseType</a></div><div class="ttdeci">BaseType</div><div class="ttdef"><b>Definition:</b> gate_type.h:41</div></div>
+<div class="ttc" id="aclasshal_1_1GateType_html_a9aee0f1be5eb3241a7e2d5e5a99fff36"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">hal::GateType::BaseType</a></div><div class="ttdeci">BaseType</div><div class="ttdef"><b>Definition:</b> gate_type.h:42</div></div>
 <div class="ttc" id="aboolean__function_8h_html"><div class="ttname"><a href="../../dc/d6d/boolean__function_8h.html">boolean_function.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1GateType_html"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> gate_type.h:38</div></div>
+<div class="ttc" id="aclasshal_1_1GateType_html"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> gate_type.h:39</div></div>
 <div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:28</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Sep 18 2020 06:24:36 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Sep 18 2020 10:32:46 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

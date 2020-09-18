@@ -1,8 +1,9 @@
 <map id="hal_core/netlist/gate_library/gate_type/gate_type.h" name="hal_core/netlist/gate_library/gate_type/gate_type.h">
-<area shape="rect" id="node1" title=" " alt="" coords="745,5,919,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="779,5,952,61"/>
 <area shape="rect" id="node2" href="$dc/d6d/boolean__function_8h.html" title=" " alt="" coords="544,109,723,151"/>
 <area shape="rect" id="node10" title=" " alt="" coords="842,199,966,225"/>
 <area shape="rect" id="node14" title=" " alt="" coords="869,117,928,143"/>
+<area shape="rect" id="node15" title=" " alt="" coords="952,117,1003,143"/>
 <area shape="rect" id="node3" href="$d8/db0/defines_8h.html" title=" " alt="" coords="149,199,289,225"/>
 <area shape="rect" id="node8" title=" " alt="" coords="313,199,399,225"/>
 <area shape="rect" id="node9" title=" " alt="" coords="423,199,492,225"/>
