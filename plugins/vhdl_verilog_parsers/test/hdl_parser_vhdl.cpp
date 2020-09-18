@@ -940,8 +940,6 @@ namespace hal {
                 EXPECT_EQ(std::set<std::string>({gate_child_two_0->get_name(), gate_child_two_1->get_name(),
                                                  gate_child_two_2->get_name()}).size(), 3);
             }
-
-            if(test_utils::known_issue_tests_active())
             {
                 // Create a netlist as follows and test its creation (due to request):
                 /*                     - - - - - - - - - - - - - - - - - - - - - - .
@@ -996,7 +994,6 @@ namespace hal {
                                         "      O => net_global_out "
                                         "    ); "
                                         "end STRUCTURE_TOP;");
-                // ISSUE: net_0(mod_inner/mod_out) is only connected to gate_a and gate_b
                 test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
@@ -1081,7 +1078,6 @@ namespace hal {
      */
     TEST_F(HDLParserVHDLTest, check_direct_assignment) {
         TEST_START
-            if(test_utils::known_issue_tests_active())
             {
                 // Build up a master-slave hierarchy as follows:
                 /*                                  .--- net_slave_1 (is global input)
@@ -1090,7 +1086,6 @@ namespace hal {
                  */
                 // Testing the correct creation of the master Net by considering the inheritance of the attributes and connections
                 // of its slaves (vhdl specific)
-                // ISSUE: connections from the slave nets are not applied to the master net
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
@@ -1167,11 +1162,8 @@ namespace hal {
                 EXPECT_EQ(net_master->get_data_by_key("attribute", "slave_2_attr"),
                           std::make_tuple("string", "slave_2_attr"));
             }
-
-            if(test_utils::known_issue_tests_active())
             {
                 //Testing the assignment of logic vectors
-                // ISSUE: Broken assignment? (<=)
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
@@ -1236,9 +1228,8 @@ namespace hal {
     TEST_F(HDLParserVHDLTest, check_pin_group_port_assignment) {
 
         TEST_START
-            if(test_utils::known_issue_tests_active())
             {
-                // Connect an entire output pin group with global input nets by using a binary string (B"10101010")
+                // Connect an entire output pin group with global input nets by using a binary string (B"0101")
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is\n"
                                         "  port (\n"
@@ -1262,10 +1253,8 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate*
-                    gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
-                // ISSUE: Wrong order or expected behaviour?
                 Net* net_0 = gate_0->get_fan_in_net("I(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "'0'");
@@ -1282,7 +1271,6 @@ namespace hal {
                 ASSERT_NE(net_3, nullptr);
                 EXPECT_EQ(net_3->get_name(), "'1'");
             }
-            if(test_utils::known_issue_tests_active())
             {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(4) with l_vec(4))
                 std::stringstream input("-- Device\t: device_name\n"
@@ -1309,12 +1297,10 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate*
-                    gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
 
-                // ISSUE: Wrong order or expected behaviour?
                 Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
@@ -1358,8 +1344,7 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate*
-                    gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
@@ -1397,8 +1382,7 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate*
-                    gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 2);
 
