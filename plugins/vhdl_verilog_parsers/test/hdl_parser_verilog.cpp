@@ -953,7 +953,6 @@ namespace hal {
     TEST_F(HDLParserVerilogTest, check_direct_assignment) {
 
         TEST_START
-            if(test_utils::known_issue_tests_active())
             {
                 // Build up a master-slave hierarchy as follows: (NOTE: Whats up with global inputs?)
                 /*                                  .--- net_slave_1 (is global input)
@@ -986,8 +985,6 @@ namespace hal {
                                         ") ;\n"
                                         "endmodule");
 
-                // ISSUE: The port assignment of the slave nets is ignored. Only the connection with the reference 'master_net'
-                // is created
                 HDLParserVerilog verilog_parser;
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
 
@@ -1013,8 +1010,7 @@ namespace hal {
 
             }
             // -- Verilog Specific Tests
-            if(test_utils::known_issue_tests_active())
-            { // ISSUE: Broken 'assign'-statement
+            {
                 // Verilog specific: Testing assignments with logic vectors (assign wires 0 and 1 of each dimension)
                 // for example (for dim 2): wire [0:1][0:1] slave_vector; wire [0:3] master_vector; assign slave_vector = master_vector;
 
@@ -1135,7 +1131,7 @@ namespace hal {
                 ASSERT_EQ(nl->get_gates(test_utils::gate_name_filter("test_gate")).size(), 1);
                 Gate* test_gate = *nl->get_gates(test_utils::gate_name_filter("test_gate")).begin();
             }
-            if(test_utils::known_issue_tests_active()) { // ISSUE: Broken assign
+            {
                 // Verilog specific: Assign a set of wires to a single vector
                 std::stringstream input("module top ("
                                         "  global_out_0,"
@@ -1201,9 +1197,7 @@ namespace hal {
                     EXPECT_EQ(ep->get_pin(), "I" + std::to_string(i % 4));
                 }
             }
-
-            if(test_utils::known_issue_tests_active())
-            { // ISSUE: Broken assign
+            {
                 // Verilog specific: Assign a 2 bit vector to a set of 1 bit vectors
 
                 std::stringstream input("module top ("
@@ -1284,9 +1278,8 @@ namespace hal {
     TEST_F(HDLParserVerilogTest, check_pin_group_port_assignment) {
 
         TEST_START
-            if(test_utils::known_issue_tests_active())
             {
-                // Connect an entire output pin group with global input nets by using a binary string ('b10101010)
+                // Connect an entire output pin group with global input nets by using a binary string ('b0101)
                 std::stringstream input("module top (\n"
                                         " ) ;\n"
                                         "  wire [0:3] l_vec;\n"
@@ -1306,9 +1299,7 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate*
-                    gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
-                //ISSUE (?): wrong order, or correct verilog behaviour?
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
                 Net* net_0 = gate_0->get_fan_in_net("I(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "'0'");
@@ -1326,7 +1317,6 @@ namespace hal {
                 EXPECT_EQ(net_3->get_name(), "'1'");
 
             }
-            if(test_utils::known_issue_tests_active())
             {
                 // Connect a vector of output pins with a list of nets using '{ net_0, net_1, ... }'
                 std::stringstream input("module top (\n"
@@ -1347,7 +1337,6 @@ namespace hal {
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
 
-                // ISSUE (?): wrong order, or correct verilog behaviour?
                 Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "net_0");
@@ -1365,7 +1354,6 @@ namespace hal {
                 EXPECT_EQ(net_3->get_name(), "l_vec(1)");
 
             }
-            if(test_utils::known_issue_tests_active())
             {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(4) with l_vec(4))
                 std::stringstream input("module top (\n"
@@ -1381,11 +1369,9 @@ namespace hal {
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
-                Gate*
-                    gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+                Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 4);
-                // ISSUE (?): wrong order, or correct verilog behaviour?
                 Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
@@ -1403,7 +1389,6 @@ namespace hal {
                 EXPECT_EQ(net_3->get_name(), "l_vec(3)");
 
             }
-            if(test_utils::known_issue_tests_active())
             {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(3) with l_vec(3))
                 // but the vector has a smaller size
@@ -1423,7 +1408,6 @@ namespace hal {
                 Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
 
                 EXPECT_EQ(gate_0->get_fan_out_nets().size(), 3);
-                // ISSUE (?): wrong order, or correct verilog behaviour?
                 Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "l_vec(0)");
