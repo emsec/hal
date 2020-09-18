@@ -1,19 +1,29 @@
 
 #include "netlist_test_utils.h"
 
-#include "hal_core/utilities/utils.h"
-
-#include <math.h>
-
 //using namespace hal;
 //namespace test_utils = hal;
 namespace hal
 {
+    bool run_known_issue_tests = false;
+
+    bool test_utils::known_issue_tests_active(){
+        return run_known_issue_tests;
+    }
+
+    void test_utils::activate_known_issue_tests(){
+        run_known_issue_tests = true;
+    }
+
+    void test_utils::deactivate_known_issue_tests(){
+        run_known_issue_tests = false;
+    }
+
     std::unique_ptr<Netlist> test_utils::create_empty_netlist(const int id)
     {
         NO_COUT_BLOCK;
         // GateLibrary* gl = gate_library_manager::get_gate_library(g_lib_name);
-        auto nl = std::make_unique<Netlist>(get_testing_gate_library());
+        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(get_testing_gate_library());
 
         if (id >= 0)
         {
@@ -32,7 +42,7 @@ namespace hal
         if (!already_init)
         {
             std::vector<std::string> channel_ids = {
-                "core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "hdl_writer", "python_context"};
+                "core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "hdl_writer", "python_context", "test_utils"};
 
             LogManager& lm = LogManager::get_instance();
             for (std::string ch_id : channel_ids)
@@ -77,7 +87,7 @@ namespace hal
         int var_amt = round(log2(tt.size()));
         if ((1 << var_amt) != tt.size())
         {
-            std::cerr << "[Test] minimize_truth_table: Tablesize must be a power of two!" << std::endl;
+            log_error("test_utils", "minimize_truth_table: Tablesize must be a power of two!");
             return std::vector<BooleanFunction::Value>();
         }
         for (int v = 0; v < var_amt; v++)
@@ -119,7 +129,7 @@ namespace hal
         // If the Gate type isn't found in the Gate library
         if (names_to_type.find(name) == names_to_type.end())
         {
-            std::cerr << "Gate type: \'" << name << "\' can't be found in the Gate library \'" << gl->get_name() << "\'" << std::endl;
+            log_error("test_utils", "get_gate_type_by_name: Gate type '{}' can't be found in gate library '{}' ", name, gate_lib->get_name());
             return nullptr;
         }
         else
@@ -146,7 +156,7 @@ namespace hal
             {
                 if (res != nullptr)
                 {
-                    std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
+                    log_error("test_utils", "get_net_by_subname: Multiple nets contain the substring '{}'! This should not happen...", subname);
                     return nullptr;
                 }
                 res = n;
@@ -168,7 +178,7 @@ namespace hal
             {
                 if (res != nullptr)
                 {
-                    std::cerr << "Multiple gates contains the subtring '" << subname << "'! This should not happen..." << std::endl;
+                    log_error("test_utils", "get_gate_by_subname: Multiple gates contain the substring '{}'! This should not happen...", subname);
                     return nullptr;
                 }
                 res = g;
@@ -194,8 +204,8 @@ namespace hal
         std::filesystem::path sb_path = (utils::get_base_directory() / sandbox_directory_path);
         if (!std::filesystem::exists(sb_path))
         {
-            std::cerr << "[netlist_test_utils] create_sandbox_path: sandbox is not created yet. "
-                      << "Please use \'create_sandbox_directory()\' to create it beforehand.";
+            log_error("test_utils", "create_sandbox_path: sandbox is not created yet. "
+                                    "Please use \'create_sandbox_directory()\' to create it beforehand.");
             return std::filesystem::path();
         }
         return sb_path / file_name;
@@ -206,8 +216,8 @@ namespace hal
         std::filesystem::path sb_path = (utils::get_base_directory() / sandbox_directory_path);
         if (!std::filesystem::exists(sb_path))
         {
-            std::cerr << "[netlist_test_utils] create_sandbox_file: sandbox is not created yet. "
-                      << "Please use \'create_sandbox_directory()\' to create it beforehand.";
+            log_error("test_utils", "[netlist_test_utils] create_sandbox_path: sandbox is not created yet. "
+                                    "Please use \'create_sandbox_directory()\' to create it beforehand.");
             return std::filesystem::path();
         }
         std::filesystem::path f_path = sb_path / file_name;
@@ -219,7 +229,6 @@ namespace hal
 
     GateLibrary* test_utils::get_testing_gate_library()
     {
-        //GateLibrary* gl = std::make_unique<GateLibrary>("Testing Library");
         static std::unique_ptr<GateLibrary> gl = nullptr;
         if (gl != nullptr)
         {
@@ -322,7 +331,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl         = create_empty_netlist(id);
+        std::unique_ptr<Netlist> nl     = create_empty_netlist(id);
         if (id >= 0)
         {
             nl->set_id(id);
@@ -368,7 +377,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl         = create_empty_netlist(id);
+        std::unique_ptr<Netlist> nl     = create_empty_netlist(id);
 
         // Create the gates
         Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_4_to_1"), "gate_0");
@@ -396,7 +405,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl         = create_empty_netlist(id);
+        std::unique_ptr<Netlist> nl     = create_empty_netlist(id);
 
         // Create the Gate
         Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_1_to_1"), "gate_0");
@@ -416,7 +425,7 @@ namespace hal
     {
         NO_COUT_BLOCK;
         GateLibrary* gl = get_testing_gate_library();
-        auto nl         = create_empty_netlist(id);
+        std::unique_ptr<Netlist> nl     = create_empty_netlist(id);
 
         // Create the gates
         Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gate_2_to_1"), "gate_0");
@@ -470,7 +479,7 @@ namespace hal
         return res_gate;
     }
 
-    Endpoint* test_utils::get_endpoint_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type)
+    Endpoint* test_utils::get_destination_by_pin_type(const std::vector<Endpoint*> dsts, const std::string pin_type)
     {
         for (auto dst : dsts)
         {
@@ -482,39 +491,65 @@ namespace hal
         return nullptr;
     }
 
+    Endpoint* test_utils::get_source_by_pin_type(const std::vector<Endpoint*> srcs, const std::string pin_type)
+    {
+        for (auto src : srcs)
+        {
+            if (src->get_pin() == pin_type)
+            {
+                return src;
+            }
+        }
+        return nullptr;
+    }
+
     bool test_utils::nets_are_equal(Net* n0, Net* n1, const bool ignore_id, const bool ignore_name)
     {
         if (n0 == nullptr || n1 == nullptr)
         {
             if (n0 == n1)
                 return true;
-            else
+            else {
+                log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: One net is a nullptr.");
                 return false;
+            }
         }
-        if (!ignore_id && n0->get_id() != n1->get_id())
+        if (!ignore_id && n0->get_id() != n1->get_id()) {
+            log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: IDs are different (\"{}\" vs \"{}\")", n0->get_id(), n1->get_id());
             return false;
-        if (!ignore_name && n0->get_name() != n1->get_name())
+        }
+        if (!ignore_name && n0->get_name() != n1->get_name()) {
+            log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: Names are different (\"{}\" vs \"{}\")", n0->get_name(),n1->get_name());
             return false;
+        }
         for (auto n0_source : n0->get_sources())
         {
-            if (!gates_are_equal(n0_source->get_gate(), get_endpoint_by_pin_type(n1->get_sources(), n0_source->get_pin())->get_gate(), ignore_id, ignore_name))
+            if (!gates_are_equal(n0_source->get_gate(), get_source_by_pin_type(n1->get_sources(), n0_source->get_pin())->get_gate(), ignore_id, ignore_name))
             {
+                log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: Connected gates at source pin \"{}\" are different.", n0_source->get_pin());
                 return false;
             }
         }
         for (auto n0_destination : n0->get_destinations())
         {
-            if (!gates_are_equal(n0_destination->get_gate(), get_endpoint_by_pin_type(n1->get_destinations(), n0_destination->get_pin())->get_gate(), ignore_id, ignore_name))
+            if (!gates_are_equal(n0_destination->get_gate(), get_destination_by_pin_type(n1->get_destinations(), n0_destination->get_pin())->get_gate(), ignore_id, ignore_name))
             {
+                log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: Connected gates at destination pin \"{}\" are different.", n0_destination->get_pin());
                 return false;
             }
         }
-        if (n0->get_data() != n1->get_data())
+        if (n0->get_data() != n1->get_data()) {
+            log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: The stored data is different.");
             return false;
-        if (n0->is_global_input_net() != n1->is_global_input_net())
+        }
+        if (n0->is_global_input_net() != n1->is_global_input_net()) {
+            log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: One net is a global input net, the other one isn't.");
             return false;
-        if (n0->is_global_output_net() != n1->is_global_output_net())
+        }
+        if (n0->is_global_output_net() != n1->is_global_output_net()) {
+            log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: One net is a global output net, the other one isn't.");
             return false;
+        }
 
         return true;
     }
@@ -525,21 +560,41 @@ namespace hal
         {
             if (g0 == g1)
                 return true;
-            else
+            else {
+                log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: One gate is a nullptr.");
                 return false;
+            }
         }
-        if (!ignore_id && g0->get_id() != g1->get_id())
+        if (!ignore_id && g0->get_id() != g1->get_id()) {
+            log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: IDs are different (\"{}\" vs \"{}\")", g0->get_id(),g1->get_id());
             return false;
-        if (!ignore_name && g0->get_name() != g1->get_name())
+        }
+        if (!ignore_name && g0->get_name() != g1->get_name()) {
+            log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: Names are different (\"{}\" vs \"{}\")", g0->get_name(),g1->get_name());
             return false;
-        if (g0->get_type() != g1->get_type())
+        }
+        if (g0->get_type() != g1->get_type()) {
+            log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: Gates types are different (\"{}\" vs \"{}\")", g0->get_type()->get_name(),g1->get_type()->get_name());
             return false;
-        if (g0->get_data() != g1->get_data())
+        }
+        if (g0->get_data() != g1->get_data()) {
+            log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: The stored data is different.");
             return false;
-        if (g0->is_gnd_gate() != g1->is_gnd_gate())
+        }
+        if (g0->is_gnd_gate() != g1->is_gnd_gate()) {
+            log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: One gate is a gnd gate, the other one isn't.");
             return false;
-        if (g0->is_vcc_gate() != g1->is_vcc_gate())
+        }
+        if (g0->is_vcc_gate() != g1->is_vcc_gate()) {
+            log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: One gate is a vcc gate, the other one isn't.");
             return false;
+        }
+        std::unordered_map<std::string, BooleanFunction> g0_bf = g0->get_boolean_functions(true);
+        std::unordered_map<std::string, BooleanFunction> g1_bf = g1->get_boolean_functions(true);
+        if(std::map<std::string, BooleanFunction>(g0_bf.begin(), g0_bf.end()) != std::map<std::string, BooleanFunction>(g1_bf.begin(), g1_bf.end())){
+            log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: The stored boolean functions are different.");
+            return false;
+        }
         return true;
     }
 
@@ -549,134 +604,165 @@ namespace hal
         if (m_0 == nullptr || m_1 == nullptr)
         {
             if (m_0 == m_1)
-            {
                 return true;
-            }
-            else
-            {
-                std::cout << "one module is null while the other isnt" << std::endl;
+            else {
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: One netlist is a nullptr.");
                 return false;
             }
         }
         // The ids should be equal
-        if (!ignore_id && m_0->get_id() != m_1->get_id())
-        {
-            std::cout << "ids unequal" << std::endl;
+        if (!ignore_id && m_0->get_id() != m_1->get_id()) {
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: IDs are different (\"{}\" vs \"{}\")", m_0->get_id(),m_1->get_id());
             return false;
         }
         // The names should be equal
-        if (!ignore_name && m_0->get_name() != m_1->get_name())
-        {
-            std::cout << "names unequal" << std::endl;
+        if (!ignore_name && m_0->get_name() != m_1->get_name()) {
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Names are different (\"{}\" vs \"{}\")", m_0->get_name(),m_1->get_name());
             return false;
         }
         // The types should be the same
-        if (m_0->get_type() != m_1->get_type())
-        {
-            std::cout << "type unequal" << std::endl;
+        if (m_0->get_type() != m_1->get_type()) {
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Types are different (\"{}\" vs \"{}\")", m_0->get_type(),m_1->get_type());
             return false;
         }
         // The stored data should be equal
-        if (m_0->get_data() != m_1->get_data())
-        {
-            std::cout << "data unequal" << std::endl;
+        if (m_0->get_data() != m_1->get_data()) {
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The stored data is different.");
             return false;
         }
 
-        // Check if gates and nets are the same
-        if (m_0->get_gates().size() != m_1->get_gates().size())
-        {
-            std::cout << "number of gates unequal" << std::endl;
+        // Check if gates are the same
+        if (m_0->get_gates().size() != m_1->get_gates().size()) {
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The number of gates is different ({} vs {})", m_0->get_gates().size(),m_1->get_gates().size());
             return false;
         }
         for (auto g_0 : m_0->get_gates())
         {
-            Gate* g_1 = m_1->get_netlist()->get_gate_by_id(g_0->get_id());
-            if (!gates_are_equal(g_0, g_1, ignore_id, ignore_name))
+            if (ignore_id)
             {
-                std::cout << "gates are unequal" << std::endl;
-                return false;
+                auto g_1_list = m_1->get_gates(gate_name_filter(g_0->get_name()));
+                if (g_1_list.size() > 1) {
+                    log_info("test_utils", "modules_are_equal: Modules can't be compared! Reason: Multiple gates with name \"{}\" are found in the second module.", g_0->get_name());
+                    return false;
+                }
+                if (g_1_list.size() < 1) {
+                    log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Cannot find a gate with name \"{}\" in second module.", g_0->get_name());
+                    return false;
+                }
+                if (!gates_are_equal(g_0, *g_1_list.begin(), ignore_id)) {
+                    log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Gates with name \"{}\" are not equal.", g_0->get_name());
+                    return false;
+                }
             }
-            if (!m_1->contains_gate(g_1))
-            {
-                std::cout << "gates are not in both modules" << std::endl;
-                return false;
+            else {
+                Gate* g_1 = m_1->get_netlist()->get_gate_by_id(g_0->get_id());
+                if (!gates_are_equal(g_0, g_1, ignore_id, ignore_name)) {
+                    log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Gates with name \"{}\" are not equal.", g_0->get_name());
+                    return false;
+                }
+                if (!m_1->contains_gate(g_1)) {
+                    log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Second module does not contain a gate with name \"{}\".", g_1->get_name());
+                    return false;
+                }
             }
         }
 
         // Check that the port names are the same
         // -- input ports
-        if (m_0->get_input_port_names().size() != m_0->get_input_port_names().size())
-        {
-            std::cout << "number of input port names unequal" << std::endl;
+        if (m_0->get_input_port_names().size() != m_0->get_input_port_names().size()) {
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The number of input port names are different ({} vs {})", m_0->get_input_port_names().size(), m_1->get_input_port_names().size());
             return false;
         }
         auto m_1_input_port_names = m_1->get_input_port_names();
         for (auto const& [n_0, p_name_0] : m_0->get_input_port_names())
         {
             auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
-            if (n_1_list.size() != 1)
-            {
-                std::cout << "input port net not found" << std::endl;
+            if (n_1_list.size() > 1) {
+                log_info("test_utils", "modules_are_equal: Modules can't be compared! Reason: Multiple nets with name \"{}\" are found in the second netlist.", n_0->get_name());
+                return false;
+            }
+            if (n_1_list.size() < 1) {
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Cannot find a net with name \"{}\" in second netlist.", n_0->get_name());
                 return false;
             }
             Net* n_1 = *n_1_list.begin();
-            if (m_1_input_port_names.find(n_1) == m_1_input_port_names.end())
-            {
-                std::cout << "input port net not found" << std::endl;
+            if (m_1_input_port_names.find(n_1) == m_1_input_port_names.end()) {
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Cannot find an input port name for net \"{}\" in second netlist.", n_1->get_name());
                 return false;
             }
-            if (m_1_input_port_names[n_1] != p_name_0)
-            {
-                std::cout << "input port name is unequal: " << m_1_input_port_names[n_1] << " vs " << p_name_0 << std::endl;
+            if (m_1_input_port_names[n_1] != p_name_0) {
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two input port names are different (\"{}\" vs \"{}\")", p_name_0, m_1_input_port_names[n_1]);
                 return false;
             }
         }
         // -- output ports
-        if (m_0->get_output_port_names().size() != m_0->get_output_port_names().size())
-        {
-            std::cout << "number of output port names unequal" << std::endl;
+        if (m_0->get_output_port_names().size() != m_0->get_output_port_names().size()) {
             return false;
         }
         auto m_1_output_port_names = m_1->get_output_port_names();
         for (auto const& [n_0, p_name_0] : m_0->get_output_port_names())
         {
             auto n_1_list = m_1->get_netlist()->get_nets(net_name_filter(n_0->get_name()));
-            if (n_1_list.size() != 1)
+            if (n_1_list.size() > 1) {
+                log_info("test_utils", "modules_are_equal: Modules can't be compared! Reason: Multiple nets with name \"{}\" are found in the second netlist.", n_0->get_name());
                 return false;
+            }
+            if (n_1_list.size() < 1) {
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Cannot find a net with name \"{}\" in second netlist.", n_0->get_name());
+                return false;
+            }
             Net* n_1 = *n_1_list.begin();
-            if (m_1_output_port_names.find(n_1) == m_1_output_port_names.end())
+            if (m_1_output_port_names.find(n_1) == m_1_output_port_names.end()) {
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Cannot find an output port name for net \"{}\" in second netlist.", n_1->get_name());
                 return false;
-            if (m_1_output_port_names[n_1] != p_name_0)
+            }
+            if (m_1_output_port_names[n_1] != p_name_0) {
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two output port names are different (\"{}\" vs \"{}\")", p_name_0, m_1_output_port_names[n_1]);
                 return false;
+            }
         }
 
         // The parents and submodules should be equal as well (to test this we only check their id, since
         // their equality will be tested as well)
         if (m_0->get_parent_module() == nullptr || m_1->get_parent_module() == nullptr)
         {
-            if (m_0->get_parent_module() != m_1->get_parent_module())
-            {
-                std::cout << "parent unequal" << std::endl;
+            if (m_0->get_parent_module() != m_1->get_parent_module()) {
+                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: One module is a top module, the other one isn't.");
                 return false;
             }
         }
-        if (m_0->get_submodules(nullptr, true).size() != m_1->get_submodules(nullptr, true).size())
-        {
-            std::cout << "number of submodules unequal" << std::endl;
+        if (m_0->get_submodules(nullptr, true).size() != m_1->get_submodules(nullptr, true).size()) {
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The number of submodules are different ({} vs {})", m_0->get_submodules(nullptr, true).size(), m_1->get_submodules(nullptr, true).size());
             return false;
         }
         for (auto sm_0 : m_0->get_submodules(nullptr, true))
         {
             if (sm_0 == nullptr)
-            {
-                std::cout << "submodule is null" << std::endl;
                 continue;
-            }
-            if (m_1->get_netlist()->get_module_by_id(sm_0->get_id()) == nullptr)
+            if (ignore_id)
             {
-                std::cout << "submodule is null" << std::endl;
-                return false;
+                auto sm_1_list = m_1->get_submodules(module_name_filter(sm_0->get_name()));
+                if (sm_1_list.size() > 1) {
+                    log_info("test_utils", "modules_are_equal: Modules can't be compared! Reason: Multiple submodules with name \"{}\" are found in the second module.", sm_0->get_name());
+                    return false;
+                }
+                if (sm_1_list.size() < 1) {
+                    log_info("test_utils", "modulesare_equal: Modules are not equal! Reason: Cannot find a submodule with name \"{}\" in second module.", sm_0->get_name());
+                    return false;
+                }
+                if (!modules_are_equal(sm_0, *sm_1_list.begin(), ignore_id)) {
+                    log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Submodules with name \"{}\" are not equal.", sm_0->get_name());
+                    return false;
+                }
+            }
+            else {
+                if (!modules_are_equal(sm_0, m_1->get_netlist()->get_module_by_id(sm_0->get_id()), ignore_id)) {
+                    log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Submodules with name \"{}\" are not equal.", sm_0->get_name());
+                    return false;
+                }
+                /*if (m_1->get_netlist()->get_module_by_id(sm_0->get_id()) == nullptr) {
+                    return false;
+                }*/
             }
         }
 
@@ -687,83 +773,129 @@ namespace hal
     {
         if (nl_0 == nullptr || nl_1 == nullptr)
         {
-            if (nl_0 == nl_1)
+            if (nl_0 == nl_1){
                 return true;
-            else
+            }
+            else {
+                log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: One netlist is a nullptr.");
                 return false;
+            }
         }
         // Check if the ids are the same
-        if (!ignore_id && nl_0->get_id() != nl_1->get_id())
+        if (!ignore_id && nl_0->get_id() != nl_1->get_id()) {
+            log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: IDs are different (\"{}\" vs \"{}\")", nl_0->get_id(),nl_1->get_id());
             return false;
+        }
         // Check that the Gate libraries are the same
         auto t_1 = nl_0->get_gate_library()->get_name();
         auto t_2 = nl_1->get_gate_library()->get_name();
-        if (nl_0->get_gate_library()->get_name() != nl_1->get_gate_library()->get_name())
+        if (nl_0->get_gate_library()->get_name() != nl_1->get_gate_library()->get_name()) {
+            log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Gate libraries are different (\"{}\" vs \"{}\")", nl_0->get_gate_library()->get_name(),nl_1->get_gate_library()->get_name());
             return false;
+        }
         // Check that the design/device names are the same
-        if (nl_0->get_design_name() != nl_1->get_design_name())
+        if (nl_0->get_design_name() != nl_1->get_design_name()) {
+            log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Design names are different (\"{}\" vs \"{}\")", nl_0->get_design_name(),nl_1->get_design_name());
             return false;
-        if (nl_0->get_device_name() != nl_1->get_device_name())
+        }
+        if (nl_0->get_device_name() != nl_1->get_device_name()) {
+            log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Device names are different (\"{}\" vs \"{}\")", nl_0->get_device_name(),nl_1->get_device_name());
             return false;
+        }
 
         // Check if gates and nets are the same
-        if (nl_0->get_gates().size() != nl_1->get_gates().size())
+        if (nl_0->get_gates().size() != nl_1->get_gates().size()) {
+            log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: The number of gates is different ({} vs {})", nl_0->get_gates().size(),nl_1->get_gates().size());
             return false;
+        }
         for (auto g_0 : nl_0->get_gates())
         {
             if (ignore_id)
             {
                 auto g_1_list = nl_1->get_gates(gate_name_filter(g_0->get_name()));
-                if (g_1_list.size() != 1)
+                if (g_1_list.size() > 1) {
+                    log_info("test_utils", "netlists_are_equal: Netlists can't be compared! Reason: Multiple gates with name \"{}\" are found in the second netlist.", g_0->get_name());
                     return false;
-                if (!gates_are_equal(g_0, *g_1_list.begin(), ignore_id))
+                }
+                if (g_1_list.size() < 1) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Cannot find a gate with name \"{}\" in second netlist.", g_0->get_name());
                     return false;
+                }
+                if (!gates_are_equal(g_0, *g_1_list.begin(), ignore_id)) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Gates with name \"{}\" are not equal.", g_0->get_name());
+                    return false;
+                }
             }
             else
             {
-                if (!gates_are_equal(g_0, nl_1->get_gate_by_id(g_0->get_id()), ignore_id))
+                if (!gates_are_equal(g_0, nl_1->get_gate_by_id(g_0->get_id()), ignore_id)) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Gates with name \"{}\" are not equal.", g_0->get_name());
                     return false;
+                }
             }
         }
 
-        if (nl_0->get_nets().size() != nl_1->get_nets().size())
+        if (nl_0->get_nets().size() != nl_1->get_nets().size()) {
+            log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: The number of nets is different ({} vs {})", nl_0->get_nets().size(),nl_1->get_nets().size());
             return false;
+        }
         for (auto n_0 : nl_0->get_nets())
         {
             if (ignore_id)
             {
                 auto n_1_list = nl_1->get_nets(net_name_filter(n_0->get_name()));
-                if (n_1_list.size() != 1)
+                if (n_1_list.size() > 1) {
+                    log_info("test_utils", "netlists_are_equal: Netlists can't be compared! Reason: Multiple nets with name \"{}\" are found in the second netlist.", n_0->get_name());
                     return false;
-                if (!nets_are_equal(n_0, *n_1_list.begin(), ignore_id))
+                }
+                if (n_1_list.size() < 1) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Cannot find a net with name \"{}\" in second netlist.", n_0->get_name());
                     return false;
+                }
+                if (!nets_are_equal(n_0, *n_1_list.begin(), ignore_id)) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Nets with name \"{}\" are not equal.", n_0->get_name());
+                    return false;
+                }
             }
             else
             {
-                if (!nets_are_equal(n_0, nl_1->get_net_by_id(n_0->get_id()), ignore_id))
+                if (!nets_are_equal(n_0, nl_1->get_net_by_id(n_0->get_id()), ignore_id)) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Nets with name \"{}\" are not equal.", n_0->get_name());
                     return false;
+                }
             }
         }
 
         // -- Check if the modules are the same
-        if (nl_0->get_modules().size() != nl_1->get_modules().size())
+        if (nl_0->get_modules().size() != nl_1->get_modules().size()) {
+            log_info("test_utils",
+                     "netlists_are_equal: Netlists are not equal! Reason: The number of modules is different ({} vs {})",
+                     nl_0->get_modules().size(),
+                     nl_1->get_modules().size());
             return false;
-        auto mods_1 = nl_1->get_modules();
+        }
+        std::vector<Module*> mods_1 = nl_1->get_modules();
         for (auto m_0 : nl_0->get_modules())
         {
             if (ignore_id)
             {
                 auto m_1_all = nl_1->get_modules();
                 auto m_1     = std::find_if(m_1_all.begin(), m_1_all.end(), [m_0](Module* m) { return m->get_name() == m_0->get_name(); });
-                if (m_1 == m_1_all.end())
+                if (m_1 == m_1_all.end()) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Cannot find a module with name \"{}\" in second netlist.", m_0->get_name());
                     return false;
-                if (!modules_are_equal(m_0, *m_1, ignore_id))
+                }
+                if (!modules_are_equal(m_0, *m_1, ignore_id)) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Modules with name \"{}\" are not equal.", m_0->get_name());
                     return false;
+                }
             }
             else
             {
-                if (!modules_are_equal(m_0, nl_1->get_module_by_id(m_0->get_id()), ignore_id))
+                if (!modules_are_equal(m_0, nl_1->get_module_by_id(m_0->get_id()), ignore_id)) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Modules with name \"{}\" are not equal.", m_0->get_name());
                     return false;
+                }
             }
         }
 
@@ -814,15 +946,15 @@ namespace hal
 
     std::function<bool(const std::string&, Endpoint*)> test_utils::adjacent_pin_filter(const std::string& pin)
     {
-        return [pin](auto&, auto ep) { return ep->get_pin() == pin; };
+        return [pin](auto, auto ep) { return ep->get_pin() == pin; };
     }
     std::function<bool(const std::string&, Endpoint*)> test_utils::starting_pin_filter(const std::string& pin)
     {
-        return [pin](auto& starting_pin, auto) { return starting_pin == pin; };
+        return [pin](auto starting_pin, auto) { return starting_pin == pin; };
     }
 
     std::function<bool(const std::string&, Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
     {
-        return [type](auto&, auto ep) { return ep->get_gate()->get_type()->get_name() == type; };
+        return [type](auto, auto ep) { return ep->get_gate()->get_type()->get_name() == type; };
     }
-}    // namespace hal
+}

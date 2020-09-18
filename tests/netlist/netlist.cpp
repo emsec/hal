@@ -1,16 +1,7 @@
-#include "hal_core/netlist/netlist.h"
-
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
-
-#include "gtest/gtest.h"
-#include "hal_core/utilities/log.h"
-#include <iostream>
 
 namespace hal {
     using test_utils::MIN_NETLIST_ID;
@@ -187,7 +178,7 @@ namespace hal {
      *
      * Functions: create_gate
      */
-    TEST_F(NetlistTest, check_add_gate) {
+    TEST_F(NetlistTest, check_create_gate) {
         TEST_START
             {// Add a Gate the normal way
                 auto nl = test_utils::create_empty_netlist();
@@ -235,6 +226,26 @@ namespace hal {
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
                 auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "");
+                EXPECT_EQ(g_0, nullptr);
+            }
+            if(test_utils::known_issue_tests_active())
+            {
+                // Try to add a Gate with a nullptr gate type
+                // ISSUE: SIGSEGV in netlist.cpp:51
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, nullptr, "");
+                EXPECT_EQ(g_0, nullptr);
+            }
+            {
+                // Try to add a Gate with an invalid gate type
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                // Create a GateType of another gate library
+                std::unique_ptr<GateLibrary> gl = std::make_unique<GateLibrary>("imaginary_path", "OtherLibrary");
+                std::unique_ptr<GateType> not_in_gl_gate_type = std::make_unique<GateType>("not_in_gl_gate");
+                not_in_gl_gate_type->add_output_pins({"O"});
+                gl->add_gate_type(std::move(not_in_gl_gate_type));
+
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types()["not_in_gl_gate"], "");
                 EXPECT_EQ(g_0, nullptr);
             }
         TEST_END
@@ -1057,7 +1068,6 @@ namespace hal {
                 nl->delete_module(m_0);
                 Module*
                     m_0_other = nl->create_module(MIN_MODULE_ID + 0, "module_0_other", nl->get_top_module());
-                //EXPECT_FALSE(nl->is_module_in_netlist(m_0)); //ISSUE: should be  true
                 EXPECT_TRUE(nl->is_module_in_netlist(m_0_other));
             }
 
@@ -1102,14 +1112,14 @@ namespace hal {
                 Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "module_0", nullptr);
                 EXPECT_EQ(m_0, nullptr);
             }
-            /*{
-                        // Create a module where the parrent module is part of ANOTHER netlist ISSUE: fails
-                        NO_COUT_TEST_BLOCK;
-                        auto nl = create_empty_netlist();
-                        auto nl_other = create_empty_netlist();
-                        Module* m_0 = nl->create_module(MIN_MODULE_ID+0,"module_0", nl_other->get_top_module());
-                        EXPECT_EQ(m_0, nullptr);
-                    }*/
+            {
+                // Create a module where the parrent module is part of ANOTHER netlist
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                auto nl_other = test_utils::create_empty_netlist();
+                Module* m_0 = nl->create_module(MIN_MODULE_ID+0,"module_0", nl_other->get_top_module());
+                EXPECT_EQ(m_0, nullptr);
+            }
 
         TEST_END
     }
@@ -1209,27 +1219,26 @@ namespace hal {
     TEST_F(NetlistTest, check_is_module_in_netlist) {
         TEST_START
             // Positive
-            {// Add a module and check if it is in the netlist
+            {
+                // Add a module and check if it is in the netlist
                 auto nl = test_utils::create_empty_netlist();
                 Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "module_0", nl->get_top_module());
                 EXPECT_TRUE(nl->is_module_in_netlist(m_0));
             }
-            /*{
-                        // Create a module, delete it and create a new module with the same id and check if the !old_one! is in the netlist
-                        // ISSUE: fails
-                        auto nl = create_empty_netlist();
-                        Module* m_0_old = nl->create_module(MIN_MODULE_ID+0, "module_0_old", nl->get_top_module());
-                        nl->delete_module(m_0_old);
-                        Module* m_0_other = nl->create_module(MIN_MODULE_ID+0, "module_0_other", nl->get_top_module());
-                        EXPECT_FALSE(nl->is_module_in_netlist(m_0_old));
-                    }
-                    // Negative
-                    {
-                        // Pass a nullptr
-                        // ISSUE: fails (SIGSEGV)
-                        auto nl = create_empty_netlist();
-                        EXPECT_TRUE(nl->is_module_in_netlist(nullptr));
-                    }*/
+            {
+                // Create a module, delete it and create a new module with the same id and check if the !old_one! is in the netlist
+                auto nl = test_utils::create_empty_netlist();
+                Module* m_0_old = nl->create_module(MIN_MODULE_ID+0, "module_0_old", nl->get_top_module());
+                nl->delete_module(m_0_old); // Adress of m_0_old is now freed
+                Module* m_0_other = nl->create_module(MIN_MODULE_ID+0, "module_0_other", nl->get_top_module());
+                EXPECT_TRUE(m_0_old == m_0_other || !nl->is_module_in_netlist(m_0_old));
+            }
+            // Negative
+            {
+                // Pass a nullptr
+                auto nl = test_utils::create_empty_netlist();
+                EXPECT_FALSE(nl->is_module_in_netlist(nullptr));
+            }
         TEST_END
     }
 

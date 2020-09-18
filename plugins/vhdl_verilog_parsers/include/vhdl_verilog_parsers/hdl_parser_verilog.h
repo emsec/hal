@@ -42,7 +42,7 @@ namespace hal
     class HDL_PARSER_API HDLParserVerilog : public HDLParserTemplate<std::string>
     {
     public:
-        HDLParserVerilog()  = default;
+        HDLParserVerilog() = default;
         ~HDLParserVerilog() = default;
 
         /**
