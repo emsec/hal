@@ -174,7 +174,7 @@ namespace hal
                     {
                         // cache pin types
                         std::vector<T> pins;
-                        std::unordered_map<T, std::unordered_map<u32, std::string>> pin_groups;
+                        std::unordered_map<T, std::map<u32, std::string>> pin_groups;
 
                         if constexpr (std::is_same<T, std::string>::value)
                         {
@@ -183,7 +183,7 @@ namespace hal
                             pins.insert(pins.end(), output_pins.begin(), output_pins.end());
 
                             pin_groups                                                = gate_it->second->get_input_pin_groups();
-                            std::unordered_map<T, std::unordered_map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
+                            std::unordered_map<T, std::map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
                             pin_groups.insert(output_pin_groups.begin(), output_pin_groups.end());
                         }
                         else
