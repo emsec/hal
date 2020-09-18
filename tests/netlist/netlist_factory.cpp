@@ -318,8 +318,8 @@ namespace hal {
                 ASSERT_EQ(nl_vec.size(), 2);
                 ASSERT_NE(nl_vec[0], nullptr);
                 ASSERT_NE(nl_vec[1], nullptr);
-                EXPECT_EQ(nl_vec[0]->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY");
-                EXPECT_EQ(nl_vec[1]->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY_FOR_NETLIST_FACTORY_TESTS");
+                EXPECT_EQ(nl_vec[0]->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY_FOR_NETLIST_FACTORY_TESTS");
+                EXPECT_EQ(nl_vec[1]->get_gate_library()->get_name(), other_gl_name);
             }
         TEST_END
     }

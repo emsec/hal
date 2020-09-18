@@ -105,6 +105,13 @@ namespace hal
                 return nullptr;
             }
 
+            m_signal_name_occurrences.clear();
+            m_instance_name_occurrences.clear();
+            m_net_by_name.clear();
+            m_nets_to_merge.clear();
+            m_tmp_gate_types.clear();
+            m_module_ports.clear();
+
             // retrieve available gate types
             if constexpr (std::is_same<T, std::string>::value)
             {
@@ -1012,8 +1019,6 @@ namespace hal
         // unique alias generation
         std::unordered_map<T, u32> m_signal_name_occurrences;
         std::unordered_map<T, u32> m_instance_name_occurrences;
-        std::unordered_map<T, u32> m_current_signal_index;
-        std::unordered_map<T, u32> m_current_instance_index;
 
         // net generation
         Net* m_zero_net;
@@ -1038,7 +1043,7 @@ namespace hal
             q.push(&top_entity);
 
             // top entity instance will be named after its entity, so take into account for aliases
-            m_instance_name_occurrences["top_entity"]++;
+            m_instance_name_occurrences["top_module"]++;
 
             // signals will be named after ports, so take into account for aliases
             for (const auto& port : top_entity.get_ports())
