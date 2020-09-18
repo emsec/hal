@@ -299,6 +299,28 @@ namespace hal {
                 // Get the netlist for a file, that can be parsed with both gate libraries (passing the parser name)
                 std::filesystem::path tmp_hdl_file_path = test_utils::create_sandbox_file("nl_factory_test_file.vhdl",
                                                                                           "-- Device\t: device_name\n"
+
+                                                                                          "entity MODULE_A is "
+                                                                                          "  port ( "
+                                                                                          "    I_A : in STD_LOGIC := 'X'; "
+                                                                                          "    O_A : out STD_LOGIC := 'X'; "
+                                                                                          "  ); "
+                                                                                          "end MODULE_A; "
+                                                                                          "architecture STRUCTURE_MODULE_A of MODULE_A is "
+                                                                                          "  signal net_a : STD_LOGIC; "
+                                                                                          "begin "
+                                                                                          "  gate_a_0 : shared_gate_type "
+                                                                                          "    port map ( "
+                                                                                          "      I => I_A, "
+                                                                                          "      O => net_a "
+                                                                                          "    ); "
+                                                                                          "  gate_a_1 : shared_gate_type "
+                                                                                          "    port map ( "
+                                                                                          "      I => net_a, "
+                                                                                          "      O => O_A "
+                                                                                          "    ); "
+                                                                                          "end STRUCTURE_MODULE_A; "
+
                                                                                           "entity TEST_Comp is\n"
                                                                                           "  port (\n"
                                                                                           "    net_global_in : in STD_LOGIC := 'X';\n"
@@ -307,10 +329,10 @@ namespace hal {
                                                                                           "end TEST_Comp;\n"
                                                                                           "architecture STRUCTURE of TEST_Comp is\n"
                                                                                           "begin\n"
-                                                                                          "  gate_0 : shared_gate_type\n"
+                                                                                          "  mod_0 : MODULE_A\n"
                                                                                           "    port map (\n"
-                                                                                          "      I => net_global_in,\n"
-                                                                                          "      O => net_global_out\n"
+                                                                                          "      I_A => net_global_in,\n"
+                                                                                          "      O_A => net_global_out\n"
                                                                                           "    );\n"
                                                                                           "end STRUCTURE;");
                 std::vector<std::unique_ptr<Netlist>> nl_vec = netlist_factory::load_netlists(tmp_hdl_file_path);
@@ -319,6 +341,8 @@ namespace hal {
                 ASSERT_NE(nl_vec[1], nullptr);
                 EXPECT_EQ(nl_vec[0]->get_gate_library()->get_name(), "MIN_TEST_GATE_LIBRARY_FOR_NETLIST_FACTORY_TESTS");
                 EXPECT_EQ(nl_vec[1]->get_gate_library()->get_name(), other_gl_name);
+                // TODO: Name Checks
+
             }
         TEST_END
     }
