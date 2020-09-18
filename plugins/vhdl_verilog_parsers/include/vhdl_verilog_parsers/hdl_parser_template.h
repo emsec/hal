@@ -1172,11 +1172,14 @@ namespace hal
 
                         for (auto src : slave_net->get_sources())
                         {
+                            Gate* src_gate = src->get_gate();
+                            std::string src_pin = src->get_pin();
+
                             slave_net->remove_source(src);
 
-                            if (!master_net->is_a_source(src->get_gate(), src->get_pin()))
+                            if (!master_net->is_a_source(src_gate, src_pin))
                             {
-                                master_net->add_source(src->get_gate(), src->get_pin());
+                                master_net->add_source(src_gate, src_pin);
                             }
                         }
 
@@ -1188,11 +1191,14 @@ namespace hal
 
                         for (auto dst : slave_net->get_destinations())
                         {
+                            Gate* dst_gate = dst->get_gate();
+                            std::string dst_pin = dst->get_pin();
+
                             slave_net->remove_destination(dst);
 
-                            if (!master_net->is_a_destination(dst->get_gate(), dst->get_pin()))
+                            if (!master_net->is_a_destination(dst_gate, dst_pin))
                             {
-                                master_net->add_destination(dst->get_gate(), dst->get_pin());
+                                master_net->add_destination(dst_gate, dst_pin);
                             }
                         }
 
@@ -1378,7 +1384,7 @@ namespace hal
                 {
                     a = alias_it->second;
                 }
-                else if (a != "'0'" && a != "'1'" && a != "'Z'")
+                else //if (a != "'0'" && a != "'1'" && a != "'Z'")
                 {
                     log_warning("hdl_parser", "no alias for net '{}'", a);
                 }
