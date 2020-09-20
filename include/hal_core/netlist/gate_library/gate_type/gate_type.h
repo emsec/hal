@@ -26,6 +26,7 @@
 #include "hal_core/netlist/boolean_function.h"
 
 #include <string>
+#include <map>
 #include <unordered_map>
 
 namespace hal
@@ -157,21 +158,21 @@ namespace hal
          * @param[in] group_name - The name of the input pin group.
          * @param[in] index_to_pin - Map from index to input pin name.
          */
-        void assign_input_pin_group(const std::string& group_name, const std::unordered_map<u32, std::string>& index_to_pin);
+        void assign_input_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin);
 
         /**
          * Assign existing input pins to multiple input pin groups.
          *
          * @param[in] pin_groups - A map from group names to a map from indices to pin names.
          */
-        void assign_input_pin_groups(const std::unordered_map<std::string, std::unordered_map<u32, std::string>>& pin_groups);
+        void assign_input_pin_groups(const std::unordered_map<std::string, std::map<u32, std::string>>& pin_groups);
 
         /**
          * Get all input pin groups of the gate type.
          *
          * @returns A map from group names to a map from indices to pin names.
          */
-        std::unordered_map<std::string, std::unordered_map<u32, std::string>> get_input_pin_groups() const;
+        std::unordered_map<std::string, std::map<u32, std::string>> get_input_pin_groups() const;
 
         /**
          * Assign existing output pins to a output pin group.
@@ -179,21 +180,21 @@ namespace hal
          * @param[in] group_name - The name of the output pin group.
          * @param[in] index_to_pin - Map from index to output pin name.
          */
-        void assign_output_pin_group(const std::string& group_name, const std::unordered_map<u32, std::string>& index_to_pin);
+        void assign_output_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin);
 
         /**
          * Assign existing output pins to multiple output pin groups.
          *
          * @param[in] pin_groups - A map from group names to a map from indices to pin names.
          */
-        void assign_output_pin_groups(const std::unordered_map<std::string, std::unordered_map<u32, std::string>>& pin_groups);
+        void assign_output_pin_groups(const std::unordered_map<std::string, std::map<u32, std::string>>& pin_groups);
 
         /**
          * Get all output pin groups of the gate type.
          *
          * @returns A map from group names to a map from indices to pin names.
          */
-        std::unordered_map<std::string, std::unordered_map<u32, std::string>> get_output_pin_groups() const;
+        std::unordered_map<std::string, std::map<u32, std::string>> get_output_pin_groups() const;
 
         /**
          * Add a boolean function with the specified name to the gate type.
@@ -225,8 +226,8 @@ namespace hal
         std::vector<std::string> m_input_pins;
         std::vector<std::string> m_output_pins;
 
-        std::unordered_map<std::string, std::unordered_map<u32, std::string>> m_input_pin_groups;
-        std::unordered_map<std::string, std::unordered_map<u32, std::string>> m_output_pin_groups;
+        std::unordered_map<std::string, std::map<u32, std::string>> m_input_pin_groups;
+        std::unordered_map<std::string, std::map<u32, std::string>> m_output_pin_groups;
 
         std::unordered_map<std::string, BooleanFunction> m_functions;
 
