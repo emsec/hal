@@ -63,21 +63,6 @@ namespace hal {
                 gt.add_output_pins(std::vector<std::string>({"OUT_1", "OUT_2"})); // Multiple
                 EXPECT_EQ(gt.get_output_pins(), std::vector<std::string>({"OUT_0", "OUT_1", "OUT_2"}));
             }
-            // TODO remove
-            // // NEGATIVE TESTS
-            // {
-            //     // Try to add the same input/ouput pin twice (should not work)
-            //     NO_COUT_TEST_BLOCK;
-            //     GateType gt("gt_name");
-
-            //     gt.add_input_pin("IN_PIN");
-            //     gt.add_input_pin("IN_PIN");
-            //     EXPECT_EQ(gt.get_input_pins().size(), 1);
-
-            //     gt.add_output_pin("OUT_PIN");
-            //     gt.add_output_pin("OUT_PIN");
-            //     EXPECT_EQ(gt.get_output_pins().size(), 1);
-            // }
         TEST_END
     }
 
@@ -86,7 +71,7 @@ namespace hal {
      *
      * Functions: add_input_pin_group, get_input_pin_groups, add_output_pin_groups, get_output_pin_groups
      */
-    TEST_F(GateLibraryTest, DISABLED_check_pin_groups) {
+    TEST_F(GateLibraryTest, check_pin_groups) {
         TEST_START
             {
                 // Add input pin groups
@@ -151,8 +136,10 @@ namespace hal {
                 EXPECT_EQ(gt.get_input_pin_groups(), in_pin_groups);
                 EXPECT_EQ(gt.get_input_pins(), std::vector<std::string>({"in_pin_group(0)", "in_pin_group(1)"}));
             }
+            if(test_utils::known_issue_tests_active())
             {
-                // Add a pin group that contain previously unregistered pins
+                // ISSUE: Is possible though the pins are not added...
+                // Add a pin group that contains previously unregistered pins
                 GateType gt("gt_name");
                 std::unordered_map<u32, std::string> pin_group = {{0, "pin_group(0)"}, {1, "pin_group(1)"}};
                 std::unordered_map<std::string, std::unordered_map<u32, std::string>> empty_pin_groups;

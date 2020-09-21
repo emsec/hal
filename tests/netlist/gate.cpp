@@ -801,7 +801,7 @@ namespace hal {
                                                                                                     inv_gl),
                                                                   "test_gate");
 
-                // EXPECT_EQ(test_gate->get_boolean_function("unknown_name"), BooleanFunction()); // ISSUE (BooleanFunction): empty != empty
+                EXPECT_EQ(test_gate->get_boolean_function("unknown_name"), BooleanFunction());
                 EXPECT_TRUE(test_gate->get_boolean_function("unknown_name").is_empty());
             }
             {

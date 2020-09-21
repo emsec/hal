@@ -10,14 +10,14 @@ namespace hal
     class Gate;
     class Net;
 
-    class PLUGIN_API plugin_test_plugin : virtual public CLIPluginInterface    //CLIPluginInterface
+    class PLUGIN_API PluginTestPlugin : public CLIPluginInterface    //CLIPluginInterface
     {
     public:
         /** constructor (= default) */
-        plugin_test_plugin() = default;
+        PluginTestPlugin() = default;
 
         /** destructor (= default) */
-        ~plugin_test_plugin() = default;
+        ~PluginTestPlugin() = default;
 
         /*
      *      interface implementations

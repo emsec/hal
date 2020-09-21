@@ -8,4 +8,6 @@ if(PL_LIBERTY_PARSER OR BUILD_ALL_PLUGINS)
                    HEADER ${LIBERTY_PARSER_INC}
                    SOURCES ${LIBERTY_PARSER_SRC}
                    )
+
+    add_subdirectory(test)
 endif()
