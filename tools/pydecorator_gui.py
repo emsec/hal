@@ -78,16 +78,12 @@ if "__decorated_gui__" not in dir():
 
             log_string = "Function: " + message
 
-            #reduce code by remove redundancy as well as integrate checks into earlier checks (e.g. "nets", "modules"..)
-            gates_found = False
-            nets_found = False
-            modules_found = False
-
+            # first 3 different structures where only a gate, net or module is passed to the function
             tmp_param_value = kwargs.get("gate")
             if kwargs.get("gate") is None and len(args) >= 2: # the length check (for the position) is neccessary
                 if isinstance(args[1], hal_py.Gate):
                     log_string += ", Gate-Id: {" + str(args[1].id) + "}"
-            elif kwargs.get("gate") is not None:
+            elif tmp_param_value is not None:
                 log_string += ", Gate-Id: {" + str(kwargs.get("gate").id) + "}"
 
             tmp_param_value = kwargs.get("net")
@@ -104,8 +100,9 @@ if "__decorated_gui__" not in dir():
             elif tmp_param_value is not None:
                 log_string += ", Module-Id: {" + str(tmp_param_value.id) + "}"
 
-            # integrate the other the other position into this check so another check for gates, nets and modules
-            # is not necessary anymore (another len(args) to isinstance(args[2], list): if len(args[2]) > 0 and isinstance(args[2], net):..
+            # next evaluate the lists of gates, nets and modules and the different position they can occur, depending
+            # on which parameter-signatur is passed to the function, e.g. the param-name "gates" can only occur on pos 1,
+            # "nets" on pos 1 and 2 and "modules" on pos 1 and 3
             tmp_param_value = kwargs.get("gates")
             if tmp_param_value is None and len(args) >= 2:
                 if isinstance(args[1], list):
@@ -117,26 +114,35 @@ if "__decorated_gui__" not in dir():
                 log_string += ", Gate-Id(s): {" + "".join([str(g.id) + ", " for g in sorted_gate_ids])[:-2] + "}"
 
             tmp_param_value = kwargs.get("nets")
-            if tmp_param_value is None and len(args) >= 2:
-                if isinstance(args[1], list):
+            if tmp_param_value is None:
+                if len(args) >= 2 and isinstance(args[1], list):
                     if len(args[1]) > 0 and isinstance(args[1][0], hal_py.Net): #python does not check second statement if first is false
                         sorted_net_ids = sorted(args[1], key=lambda net: net.id)
+                        log_string += ", Net-Id(s): {" + "".join([str(n.id) + ", " for n in sorted_net_ids])[:-2] + "}"
+                if len(args) >= 3 and isinstance(args[2], list):
+                    if len(args[2]) > 0 and isinstance(args[2][0], hal_py.Net):
+                        sorted_net_ids = sorted(args[2], key=lambda net: net.id)
                         log_string += ", Net-Id(s): {" + "".join([str(n.id) + ", " for n in sorted_net_ids])[:-2] + "}"
             elif tmp_param_value is not None:
                 sorted_net_ids = sorted(tmp_param_value, key=lambda net: net.id)
                 log_string += ", Net-Id(s): {" + "".join([str(n.id) + ", " for n in sorted_net_ids])[:-2] + "}"
 
             tmp_param_value = kwargs.get("modules")
-            if tmp_param_value is None and len(args) >= 2:
-                if isinstance(args[1], list):
+            if tmp_param_value is None:
+                if len(args) >=2 and isinstance(args[1], list):
                     if len(args[1]) > 0 and isinstance(args[1][0], hal_py.Module): #python does not check second statement if first is false
                         sorted_module_ids = sorted(args[1], key=lambda module: module.id)
+                        log_string += ", Module-Id(s): {" + "".join([str(m.id) + ", " for m in sorted_module_ids])[:-2] + "}"
+                if len(args) >= 4 and isinstance(args[3], list):
+                    if len(args[3]) > 0 and isinstance(args[3][0], hal_py.Module):
+                        sorted_module_ids = sorted(args[3], key=lambda module: module.id)
                         log_string += ", Module-Id(s): {" + "".join([str(m.id) + ", " for m in sorted_module_ids])[:-2] + "}"
             elif tmp_param_value is not None:
                 sorted_module_ids = sorted(tmp_param_value, key=lambda module: module.id)
                 log_string += ", Module-Id(s): {" + "".join([str(m.id) + ", " for m in sorted_module_ids])[:-2] + "}"
 
-            ####################### Check for the 3 list with ints
+            # check for the case when 3 integer lists are passed, on pos 1 are the gate ids, on pos 2 the net ids and
+            # on pos 3 the module ids
             tmp_param_value = kwargs.get("gate_ids")
             if tmp_param_value is None and len(args) >= 2:
                 if isinstance(args[1], list):
@@ -167,34 +173,6 @@ if "__decorated_gui__" not in dir():
                 sorted_module_ids = sorted(tmp_param_value)
                 log_string += ", Module-Id(s): {" + "".join([str(n) + ", " for n in sorted_module_ids])[:-2] + "}"
 
-            #already found variable is neccessary to not print double (and wrong)
-            #this parameter is already be handled by the first check since 2 "options" overlap in regards to position:
-            # (list<gate>, bool, bool) and (list<gate>, list<net>, list<module>, bool, bool)
-            #tmp_param_value = kwargs.get("gates")
-            #if tmp_param_value is None and len(args) >= 2:
-            #    if isinstance(args[1], list):
-            #        if len(args[1]) > 0 and isinstance(args[1][0], hal_py.Gate): #python does not check second statement if first is false
-            #            sorted_gate_ids = sorted(args[1], key=lambda gate: gate.id)
-            #            log_string += ", Gate-Id(s): {" + "".join([str(g.id) + ", " for g in sorted_gate_ids])[:-2] + "}"
-            #elif tmp_param_value is not None and not gates_found:
-            #    sorted_gate_ids = sorted(tmp_param_value, key=lambda gate: gate.id)
-            #    log_string += ", Gate-Id(s): {" + "".join([str(n) + ", " for n in sorted_gate_ids])[:-2] + "}"
-
-            tmp_param_value = kwargs.get("nets")
-            if tmp_param_value is None and len(args) >= 3:
-                if isinstance(args[2], list):
-                    if len(args[2]) > 0 and isinstance(args[2][0], hal_py.Net): #python does not check second statement if first is false
-                        sorted_net_ids = sorted(args[2], key=lambda net: net.id)
-                        log_string += ", Net-Id(s): {" + "".join([str(g.id) + ", " for g in sorted_net_ids])[:-2] + "}"
-
-            tmp_param_value = kwargs.get("modules")
-            if tmp_param_value is None and len(args) >= 4:
-                if isinstance(args[3], list):
-                    if len(args[3]) > 0 and isinstance(args[3][0], hal_py.Module): #python does not check second statement if first is false
-                        sorted_module_ids = sorted(args[3], key=lambda module: module.id)
-                        log_string += ", Module-Id(s): {" + "".join([str(g.id) + ", " for g in sorted_module_ids])[:-2] + "}"
-
-
             print(log_string)
             return result
         return decorated
@@ -206,7 +184,7 @@ if "__decorated_gui__" not in dir():
 
     hal_gui.GuiApi.deselect_gate = generic_select_gate_net_module("GuiApi.delect_gate", "Gate", hal_gui.GuiApi.deselect_gate)
     hal_gui.GuiApi.deselect_net = generic_select_gate_net_module("GuiApi.delect_net", "Net", hal_gui.GuiApi.deselect_net)
-    hal_gui.GuiApi.deselect_Module = generic_select_gate_net_module("GuiApi.delect_module", "Module", hal_gui.GuiApi.deselect_module)
+    hal_gui.GuiApi.deselect_module = generic_select_gate_net_module("GuiApi.delect_module", "Module", hal_gui.GuiApi.deselect_module)
 
     hal_gui.GuiApi.get_selected_gate_ids = generic_get_selected_ids_decorator("GuiApi.get_selected_gate_ids", "Gate", hal_gui.GuiApi.get_selected_gate_ids)
     hal_gui.GuiApi.get_selected_net_ids = generic_get_selected_ids_decorator("GuiApi.get_selected_net_ids", "Net", hal_gui.GuiApi.get_selected_net_ids)
@@ -225,4 +203,5 @@ if "__decorated_gui__" not in dir():
 
 else:
     hal_py.log_info("Gui slready decorated. Not applying again.")
+
 
