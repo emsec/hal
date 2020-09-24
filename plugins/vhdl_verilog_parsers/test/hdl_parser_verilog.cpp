@@ -934,6 +934,7 @@ namespace hal {
                                                                                               "I")})));
 
             }
+            if(test_utils::known_issue_tests_active())
             {
                 // Testing the correct naming of gates and nets that occur in multiple modules by
                 // creating the following netlist:
@@ -941,89 +942,89 @@ namespace hal {
                 /*                        MODULE_B
                  *                       . -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  .
                  *                       '     .-----------------.  shared_net_name  .--------------.     '
-                 *                       '    |                  |=----------------=|               |     '
-                 *      net_global_in ---=---=| shared_gate_name |=----------------=| other_gate_B  |=----=-- ...
+                 *                       '    |                  |=----------------=|               |     ' net_0
+                 *      net_global_in ---=---=| shared_gate_name |=----------------=|    gate_b     |=----=-- ...
                  *                       '    '------------------'       net_b      '---------------'     '
                  *                       ' -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  '
                  *
                  *                       MODULE_A
                  *                       . -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  .
                  *                       '     .-----------------.  shared_net_name  .--------------.     '
-                 *                       '    |                  |=----------------=|               |     '
-                 *               ...  ---=---=| shared_gate_name |=----------------=| other_gate_A  |=----=-- ...
+                 *                net_0  '    |                  |=----------------=|               |     ' net_1
+                 *               ...  ---=---=| shared_gate_name |=----------------=|    gate_a     |=----=-- ...
                  *                       '    '------------------'       net_a      '---------------'     '
                  *                       ' -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  '
                  *
                  *                        MODULE_B
-                 *                       . -  -  .
-                 *               ... --- =  ...  =---=| gate_top |=--- net_global_out
+                 *                net_1  . -  -  . net_2
+                 *               ... --- =  ...  =-------=| gate_top |=--- net_global_out
                  *                       ' -  -  '
                  */
-                std::stringstream input("module MODULE_A (\n"
-                                        "  I_A,\n"
-                                        "  O_A\n"
-                                        " ) ;\n"
-                                        "  input I_A ;\n"
-                                        "  output O_A ;\n"
-                                        "  wire shared_net_name ;\n"
-                                        "  wire net_a ; \n"
-                                        "gate_1_to_2 shared_gate_name (\n"
-                                        "  .\\I (I_A ),\n"
-                                        "  .\\O0 (shared_net_name ),\n"
-                                        "  .\\O1 (net_a )\n"
-                                        " ) ;\n"
-                                        "gate_2_to_1 other_gate_A (\n"
-                                        "  .\\I0 (shared_net_name ),\n"
-                                        "  .\\I1 (net_a ),\n"
-                                        "  .\\O (O_A )\n"
-                                        " ) ;\n"
-                                        "endmodule\n"
-                                        "\n"
-                                        "module MODULE_B (\n"
-                                        "  I_B,\n"
-                                        "  O_B\n"
-                                        " ) ;\n"
-                                        "  input I_B ;\n"
-                                        "  output O_B ;\n"
-                                        "  wire shared_net_name ;\n"
-                                        "  wire net_b ;\n"
-                                        "gate_1_to_2 shared_gate_name (\n"
-                                        "  .\\I (I_B ),\n"
-                                        "  .\\O0 (shared_net_name ),\n"
-                                        "  .\\O1 (net_b )\n"
-                                        " ) ;\n"
-                                        "gate_2_to_1 other_gate_B (\n"
-                                        "  .\\I0 (shared_net_name ),\n"
-                                        "  .\\I1 (net_b ),\n"
-                                        "  .\\O (O_B )\n"
-                                        " ) ;\n"
-                                        "endmodule\n"
-                                        "\n"
-                                        "module ENT_TOP (\n"
-                                        "  net_global_in,\n"
-                                        "  net_global_out\n"
-                                        " ) ;\n"
-                                        "  input net_global_in ;\n"
-                                        "  output net_global_out ;\n"
-                                        "  wire net_0 ;\n"
-                                        "  wire net_1;\n"
-                                        "  wire net_2;\n"
-                                        "MODULE_B mod_b_0 (\n"
-                                        "  .\\I_B (net_global_in ),\n"
-                                        "  .\\O_B (net_0 )\n"
-                                        " ) ;\n"
-                                        "MODULE_A mod_a_0 (\n"
-                                        "  .\\I_A (net_0 ),\n"
-                                        "  .\\O_A (net_1 )\n"
-                                        " ) ;\n"
-                                        "MODULE_B mod_b_1 (\n"
-                                        "  .\\I_B (net_1 ),\n"
-                                        "  .\\O_B (net_2 )\n"
-                                        " ) ;\n"
-                                        "gate_1_to_1 gate_top (\n"
-                                        "  .\\I (net_2 ),\n"
-                                        "  .\\O (net_global_out )\n"
-                                        " ) ;\n"
+                std::stringstream input("module MODULE_A ( "
+                                        "  I_A, "
+                                        "  O_A "
+                                        " ) ; "
+                                        "  input I_A ; "
+                                        "  output O_A ; "
+                                        "  wire shared_net_name ; "
+                                        "  wire net_a ;  "
+                                        "gate_1_to_2 shared_gate_name ( "
+                                        "  .\\I (I_A ), "
+                                        "  .\\O0 (shared_net_name ), "
+                                        "  .\\O1 (net_a ) "
+                                        " ) ; "
+                                        "gate_2_to_1 gate_a ( "
+                                        "  .\\I0 (shared_net_name ), "
+                                        "  .\\I1 (net_a ), "
+                                        "  .\\O (O_A ) "
+                                        " ) ; "
+                                        "endmodule "
+                                        " "
+                                        "module MODULE_B ( "
+                                        "  I_B, "
+                                        "  O_B "
+                                        " ) ; "
+                                        "  input I_B ; "
+                                        "  output O_B ; "
+                                        "  wire shared_net_name ; "
+                                        "  wire net_b ; "
+                                        "gate_1_to_2 shared_gate_name ( "
+                                        "  .\\I (I_B ), "
+                                        "  .\\O0 (shared_net_name ), "
+                                        "  .\\O1 (net_b ) "
+                                        " ) ; "
+                                        "gate_2_to_1 gate_b ( "
+                                        "  .\\I0 (shared_net_name ), "
+                                        "  .\\I1 (net_b ), "
+                                        "  .\\O (O_B ) "
+                                        " ) ; "
+                                        "endmodule "
+                                        " "
+                                        "module ENT_TOP ( "
+                                        "  net_global_in, "
+                                        "  net_global_out "
+                                        " ) ; "
+                                        "  input net_global_in ; "
+                                        "  output net_global_out ; "
+                                        "  wire net_0 ; "
+                                        "  wire net_1; "
+                                        "  wire net_2; "
+                                        "MODULE_B mod_b_0 ( "
+                                        "  .\\I_B (net_global_in ), "
+                                        "  .\\O_B (net_0 ) "
+                                        " ) ; "
+                                        "MODULE_A mod_a_0 ( "
+                                        "  .\\I_A (net_0 ), "
+                                        "  .\\O_A (net_1 ) "
+                                        " ) ; "
+                                        "MODULE_B mod_b_1 ( "
+                                        "  .\\I_B (net_1 ), "
+                                        "  .\\O_B (net_2 ) "
+                                        " ) ; "
+                                        "gate_1_to_1 gate_top ( "
+                                        "  .\\I (net_2 ), "
+                                        "  .\\O (net_global_out ) "
+                                        " ) ; "
                                         "endmodule");
                 HDLParserVerilog verilog_parser;
                 std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
@@ -1033,7 +1034,47 @@ namespace hal {
 
                 // ISSUE: Seems not to be correct. For example net_b occurs two times, but is named net_b__[3]__ and net_b__[4]__
                 //  or shared_net_name occurs 3 times and is labeled with 4,5,6
-                // TODO: Checks (Requirements?)
+
+                Net* glob_in = *nl->get_global_input_nets().begin();
+                ASSERT_NE(glob_in, nullptr);
+                ASSERT_EQ(glob_in->get_destinations().size(), 1);
+
+                Gate* shared_gate_0 = (*glob_in->get_destinations().begin())->get_gate();
+                ASSERT_NE(shared_gate_0, nullptr);
+
+                // Get all gates from left to right
+                std::vector<Gate*> nl_gates = {shared_gate_0};
+                std::vector<std::string> suc_pin = {"O0","O","O0","O","O0","O"};
+                for(size_t idx = 0; idx < suc_pin.size(); idx++){
+                    ASSERT_NE(nl_gates[idx]->get_successor(suc_pin[idx]), nullptr);
+                    Gate* next_gate = nl_gates[idx]->get_successor(suc_pin[idx])->get_gate();
+                    ASSERT_NE(next_gate, nullptr);
+                    nl_gates.push_back(next_gate);
+                }
+
+                // Get all nets from left to right (and from top to bottom)
+                std::vector<Net*> nl_nets = {glob_in};
+                std::vector<std::pair<Gate*, std::string>> net_out_gate_and_pin = {{nl_gates[0], "O0"}, {nl_gates[0], "O1"}, {nl_gates[1], "O"}, {nl_gates[2], "O0"},
+                       {nl_gates[2], "O1"}, {nl_gates[3], "O"}, {nl_gates[4], "O0"}, {nl_gates[4], "O1"}, {nl_gates[5], "O"}, {nl_gates[6], "O"}};
+                for(size_t idx = 0; idx < net_out_gate_and_pin.size(); idx++){
+                    Net* next_net = (net_out_gate_and_pin[idx].first)->get_fan_out_net(net_out_gate_and_pin[idx].second);
+                    ASSERT_NE(next_net, nullptr);
+                    nl_nets.push_back(next_net);
+                }
+
+                // Check that the gate names are correct
+                std::vector<std::string> nl_gate_names;
+                for(Gate* g : nl_gates) nl_gate_names.push_back(g->get_name());
+                std::vector<std::string> expected_gate_names = {"shared_gate_name__[0]__", "gate_b__[0]__",
+                        "shared_gate_name__[1]__", "gate_a", "shared_gate_name__[2]__", "gate_b__[1]__", "gate_top"};
+                EXPECT_EQ(nl_gate_names, expected_gate_names);
+
+                // Check that the net names are correct
+                std::vector<std::string> nl_net_names;
+                for(Net* n : nl_nets) nl_net_names.push_back(n->get_name());
+                std::vector<std::string> expected_net_names = {"net_global_in", "shared_net_name__[0]__", "net_b__[0]__", "net_0", "shared_net_name__[1]__", "net_a",
+                           "net_1", "shared_net_name__[2]__", "net_b__[1]__", "net_2", "net_global_out"};
+                EXPECT_EQ(nl_net_names, expected_net_names);
 
             }
         TEST_END
@@ -1102,10 +1143,10 @@ namespace hal {
                 Gate* g_1 = *nl->get_gates(test_utils::gate_filter("gate_3_to_1", "gate_1")).begin();
 
                 // Check the connections
-                EXPECT_EQ(g_0->get_fan_out_net("O"), net_master); // ISSUE: Fails
+                EXPECT_EQ(g_0->get_fan_out_net("O"), net_master);
                 EXPECT_EQ(g_1->get_fan_in_net("I0"), net_master);
-                EXPECT_EQ(g_1->get_fan_in_net("I1"), net_master); // ISSUE: Fails
-                EXPECT_EQ(g_1->get_fan_in_net("I2"), net_master); // ISSUE: Fails
+                EXPECT_EQ(g_1->get_fan_in_net("I1"), net_master);
+                EXPECT_EQ(g_1->get_fan_in_net("I2"), net_master);
 
                 // Check that net_master becomes also a global input
                 EXPECT_TRUE(net_master->is_global_input_net());

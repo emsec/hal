@@ -1032,36 +1032,164 @@ namespace hal {
                                                                                               "I")})));
 
             }
-            /*{ // ISSUE currently does not work
-                // Use the 'entity'-keyword in the context of a Gate type (should be ignored) (vhdl specific)
+            if(test_utils::known_issue_tests_active())
+            {
+                // Testing the correct naming of gates and nets that occur in multiple modules by
+                // creating the following netlist:
+
+                /*                        MODULE_B
+                 *                       . -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  .
+                 *                       '     .-----------------.  shared_net_name  .--------------.     '
+                 *                       '    |                  |=----------------=|               |     ' net_0
+                 *      net_global_in ---=---=| shared_gate_name |=----------------=|    gate_b     |=----=-- ...
+                 *                       '    '------------------'       net_b      '---------------'     '
+                 *                       ' -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  '
+                 *
+                 *                       MODULE_A
+                 *                       . -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  .
+                 *                       '     .-----------------.  shared_net_name  .--------------.     '
+                 *                net_0  '    |                  |=----------------=|               |     ' net_1
+                 *               ...  ---=---=| shared_gate_name |=----------------=|    gate_a     |=----=-- ...
+                 *                       '    '------------------'       net_a      '---------------'     '
+                 *                       ' -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  '
+                 *
+                 *                        MODULE_B
+                 *                net_1  . -  -  . net_2
+                 *               ... --- =  ...  =-------=| gate_top |=--- net_global_out
+                 *                       ' -  -  '
+                 */
                 std::stringstream input("-- Device\t: device_name\n"
-                                        "entity TEST_Comp is\n"
+                                        "entity MODULE_A is\n"
                                         "  port (\n"
-                                        "    net_global_input : in STD_LOGIC := 'X';\n"
+                                        "    I_A : in STD_LOGIC := 'X';\n"
+                                        "    O_A : out STD_LOGIC := 'X';\n"
                                         "  );\n"
-                                        "end TEST_Comp;\n"
-                                        "architecture STRUCTURE of TEST_Comp is\n"
+                                        "end MODULE_A;\n"
+                                        "architecture STRUCT_MODULE_A of MODULE_A is\n"
+                                        "  signal shared_net_name : STD_LOGIC;\n"
+                                        "  signal net_a : STD_LOGIC;\n"
                                         "begin\n"
-                                        "  gate_0 : entity gate_1_to_1\n"    // <- usage of the 'entity' keyword
+                                        "  shared_gate_name : gate_1_to_2\n"
                                         "    port map (\n"
-                                        "      O => net_global_input\n"
+                                        "      I => I_A,\n"
+                                        "      O0 => shared_net_name,\n"
+                                        "      O1 => net_a\n"
                                         "    );\n"
-                                        "end STRUCTURE;");
-                test_def::capture_stdout();
+                                        "  gate_a : gate_2_to_1\n"
+                                        "    port map (\n"
+                                        "      I0 => shared_net_name,\n"
+                                        "      I1 => net_a,\n"
+                                        "      O => O_A\n"
+                                        "    );\n"
+                                        "end STRUCT_MODULE_A;\n"
+                                        "-----\n"
+                                        "entity MODULE_B is\n"
+                                        "  port (\n"
+                                        "    I_B : in STD_LOGIC := 'X';\n"
+                                        "    O_B : out STD_LOGIC := 'X';\n"
+                                        "  );\n"
+                                        "end MODULE_B;\n"
+                                        "architecture STRUCT_MODULE_B of MODULE_B is\n"
+                                        "  signal shared_net_name : STD_LOGIC;\n"
+                                        "  signal net_b : STD_LOGIC;\n"
+                                        "begin\n"
+                                        "  shared_gate_name : gate_1_to_2\n"
+                                        "    port map (\n"
+                                        "      I => I_B,\n"
+                                        "      O0 => shared_net_name,\n"
+                                        "      O1 => net_b\n"
+                                        "    );\n"
+                                        "  gate_b : gate_2_to_1\n"
+                                        "    port map (\n"
+                                        "      I0 => shared_net_name,\n"
+                                        "      I1 => net_b,\n"
+                                        "      O => O_B\n"
+                                        "    );\n"
+                                        "end STRUCT_MODULE_B;\n"
+                                        "-----\n"
+                                        "entity ENT_TOP is\n"
+                                        "  port (\n"
+                                        "    net_global_in : in STD_LOGIC := 'X';\n"
+                                        "    net_global_out : out STD_LOGIC := 'X';\n"
+                                        "  );\n"
+                                        "end ENT_TOP;\n"
+                                        "architecture STRUCTURE_TOP of ENT_TOP is\n"
+                                        "  signal net_0 : STD_LOGIC;\n"
+                                        "  signal net_1 : STD_LOGIC;\n"
+                                        "  signal net_2 : STD_LOGIC;\n"
+                                        "begin\n"
+                                        "  mod_b_0 : MODULE_B\n"
+                                        "    port map (\n"
+                                        "      I_B => net_global_in,\n"
+                                        "      O_B => net_0\n"
+                                        "    );\n"
+                                        "  mod_a_0 : MODULE_A\n"
+                                        "    port map (\n"
+                                        "      I_A => net_0,\n"
+                                        "      O_A => net_1\n"
+                                        "    );\n"
+                                        "  mod_b_1 : MODULE_B\n"
+                                        "    port map (\n"
+                                        "      I_B => net_1,\n"
+                                        "      O_B => net_2\n"
+                                        "    );\n"
+                                        "  gate_top : gate_1_to_1\n"
+                                        "    port map (\n"
+                                        "      I => net_2,\n"
+                                        "      O => net_global_out\n"
+                                        "    );\n"
+                                        "end STRUCTURE_TOP;");
                 HDLParserVHDL vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr)
-                {
-                    std::cout << test_def::get_captured_stdout();
-                }
-                else
-                {
-                    test_def::get_captured_stdout();
+
+                // Test if all modules are created and assigned correctly
+                ASSERT_NE(nl, nullptr);
+
+                // ISSUE: Seems not to be correct. For example net_b occurs two times, but is named net_b__[3]__ and net_b__[4]__
+                //  or shared_net_name occurs 3 times and is labeled with 4,5,6
+
+                Net* glob_in = *nl->get_global_input_nets().begin();
+                ASSERT_NE(glob_in, nullptr);
+                ASSERT_EQ(glob_in->get_destinations().size(), 1);
+
+                Gate* shared_gate_0 = (*glob_in->get_destinations().begin())->get_gate();
+                ASSERT_NE(shared_gate_0, nullptr);
+
+                // Get all gates from left to right
+                std::vector<Gate*> nl_gates = {shared_gate_0};
+                std::vector<std::string> suc_pin = {"O0","O","O0","O","O0","O"};
+                for(size_t idx = 0; idx < suc_pin.size(); idx++){
+                    ASSERT_NE(nl_gates[idx]->get_successor(suc_pin[idx]), nullptr);
+                    Gate* next_gate = nl_gates[idx]->get_successor(suc_pin[idx])->get_gate();
+                    ASSERT_NE(next_gate, nullptr);
+                    nl_gates.push_back(next_gate);
                 }
 
-                ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(gate_filter("gate_1_to_1", "gate_0")).empty());
-            }*/
+                // Get all nets from left to right (and from top to bottom)
+                std::vector<Net*> nl_nets = {glob_in};
+                std::vector<std::pair<Gate*, std::string>> net_out_gate_and_pin = {{nl_gates[0], "O0"}, {nl_gates[0], "O1"}, {nl_gates[1], "O"}, {nl_gates[2], "O0"},
+                                                                                   {nl_gates[2], "O1"}, {nl_gates[3], "O"}, {nl_gates[4], "O0"}, {nl_gates[4], "O1"}, {nl_gates[5], "O"}, {nl_gates[6], "O"}};
+                for(size_t idx = 0; idx < net_out_gate_and_pin.size(); idx++){
+                    Net* next_net = (net_out_gate_and_pin[idx].first)->get_fan_out_net(net_out_gate_and_pin[idx].second);
+                    ASSERT_NE(next_net, nullptr);
+                    nl_nets.push_back(next_net);
+                }
+
+                // Check that the gate names are correct
+                std::vector<std::string> nl_gate_names;
+                for(Gate* g : nl_gates) nl_gate_names.push_back(g->get_name());
+                std::vector<std::string> expected_gate_names = {"shared_gate_name__[0]__", "gate_b__[0]__",
+                                                                "shared_gate_name__[1]__", "gate_a", "shared_gate_name__[2]__", "gate_b__[1]__", "gate_top"};
+                EXPECT_EQ(nl_gate_names, expected_gate_names);
+
+                // Check that the net names are correct
+                std::vector<std::string> nl_net_names;
+                for(Net* n : nl_nets) nl_net_names.push_back(n->get_name());
+                std::vector<std::string> expected_net_names = {"net_global_in", "shared_net_name__[0]__", "net_b__[0]__", "net_0", "shared_net_name__[1]__", "net_a",
+                                                               "net_1", "shared_net_name__[2]__", "net_b__[1]__", "net_2", "net_global_out"};
+                EXPECT_EQ(nl_net_names, expected_net_names);
+
+            }
 
         TEST_END
     }
