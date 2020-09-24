@@ -156,7 +156,7 @@ namespace hal
             // gate (if we have a module A that contains both the origin and the target
             // gate, then we don't want to offer navigating to that module or any
             // modules further up the hierarchy)
-            Module* common_ancestor;
+            Module* common_ancestor = nullptr; //fixes uninit warning
             if (m_origin.id == 0)
             {
                 // we're navigating from a net

@@ -502,7 +502,7 @@ namespace hal
                     }
                     else if (n->get_num_of_sources() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_source()->get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_sources().at(0)->get_gate()->get_id()}, {});
                     }
                     else
                     {

@@ -778,13 +778,13 @@ namespace hal
                 auto gate = g_netlist->get_gate_by_id(sel_id);
                 for (auto net : gate->get_fan_in_nets())
                 {
-                    if (net->get_source()->get_gate() != nullptr)
+                    if (!net->get_sources().empty() && net->get_sources().at(0)->get_gate() != nullptr)
                     {
                         bool found = false;
                         for (const auto& id : context->modules())
                         {
                             auto m = g_netlist->get_module_by_id(id);
-                            if (m->contains_gate(net->get_source()->get_gate(), true))
+                            if (m->contains_gate(net->get_sources().at(0)->get_gate(), true))
                             {
                                 found = true;
                                 break;
@@ -792,7 +792,7 @@ namespace hal
                         }
                         if (!found)
                         {
-                            gates.insert(net->get_source()->get_gate()->get_id());
+                            gates.insert(net->get_sources().at(0)->get_gate()->get_id());
                         }
                     }
                 }
@@ -802,13 +802,13 @@ namespace hal
                 auto module = g_netlist->get_module_by_id(sel_id);
                 for (auto net : module->get_input_nets())
                 {
-                    if (net->get_source()->get_gate() != nullptr)
+                    if (!net->get_sources().empty() && net->get_sources().at(0)->get_gate() != nullptr)
                     {
                         bool found = false;
                         for (const auto& id : context->modules())
                         {
                             auto m = g_netlist->get_module_by_id(id);
-                            if (m->contains_gate(net->get_source()->get_gate(), true))
+                            if (m->contains_gate(net->get_sources().at(0)->get_gate(), true))
                             {
                                 found = true;
                                 break;
@@ -816,7 +816,7 @@ namespace hal
                         }
                         if (!found)
                         {
-                            gates.insert(net->get_source()->get_gate()->get_id());
+                            gates.insert(net->get_sources().at(0)->get_gate()->get_id());
                         }
                     }
                 }
