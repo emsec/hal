@@ -365,7 +365,7 @@ namespace hal {
                     ASSERT_NE(net_global_out, nullptr);
 
                     // Get the module
-                    ASSERT_NE(nl_vec[nl_idx]->get_top_module()->get_submodules().size(), 1);
+                    ASSERT_EQ(nl_vec[nl_idx]->get_top_module()->get_submodules().size(), 1);
                     Module* mod_0 = *nl_vec[nl_idx]->get_top_module()->get_submodules().begin();
                     ASSERT_NE(mod_0, nullptr);
 
