@@ -269,7 +269,7 @@ namespace hal {
 
         TEST_START
             {
-                // Store an instance of all possible data types in one Gate
+                // Store an instance of all possible data types in one Gate + some special cases
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
@@ -287,10 +287,14 @@ namespace hal {
                                         "      key_bit_vector_dec => D\"2748\","
                                         "      key_bit_vector_oct => O\"5274\","
                                         "      key_bit_vector_bin => B\"1010_1011_1100\","
+                                        // special characters in '"'
+                                        "      key_negative_comma_string => \"test,1,2,3\","
+                                        "      key_negative_float_string => \"1.234\","
                                         // -- VHDL specific Data Types:
                                         "      key_boolean => true,"
                                         "      key_time => 1.234sec,"
                                         "      key_bit_value => '1'"
+
                                         "    )"
                                         "    port map ( "
                                         "      I => net_global_input "
@@ -323,6 +327,11 @@ namespace hal {
                           std::make_tuple("bit_vector", "abc"));
                 EXPECT_EQ(gate_0->get_data_by_key("generic", "key_bit_vector_bin"),
                           std::make_tuple("bit_vector", "abc"));
+                // Special Characters
+                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_negative_comma_string"),
+                          std::make_tuple("string", "test,1,2,3"));
+                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_negative_float_string"),
+                          std::make_tuple("string", "1.234"));
                 // -- VHDL specific Data Types:
                 EXPECT_EQ(gate_0->get_data_by_key("generic", "key_boolean"), std::make_tuple("boolean", "true"));
                 EXPECT_EQ(gate_0->get_data_by_key("generic", "key_time"), std::make_tuple("time", "1.234sec"));
@@ -1630,14 +1639,8 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
@@ -1670,14 +1673,8 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -1685,6 +1682,50 @@ namespace hal {
                 EXPECT_NE(attri_net, nullptr);
                 EXPECT_EQ(attri_net->get_data_by_key("attribute", "attri_name"),
                           std::make_tuple("attri_type", "attri_value"));
+            }
+            {
+                // Use atrribute strings with special characters (',','.')
+                std::stringstream input("-- Device\t: device_name\n"
+                                        "entity TEST_Comp is\n"
+                                        "  port (\n"
+                                        "    net_global_in : in STD_LOGIC := 'X';\n"
+                                        "    net_global_out : out STD_LOGIC := 'X';\n"
+                                        "  );\n"
+                                        "end TEST_Comp;\n"
+                                        "architecture STRUCTURE of TEST_Comp is\n"
+                                        "  signal net_0 : STD_LOGIC;\n"
+                                        "  attribute attri_comma_string : attri_type_0;\n"
+                                        "  attribute attri_comma_string of net_0 : signal is \"test, 1, 2, 3\";\n"
+                                        "  attribute attri_float_string : attri_type_1;\n"
+                                        "  attribute attri_float_string of gate_0 : label is \"1.234\";\n"
+                                        "begin\n"
+                                        "  gate_0 : gate_1_to_1\n"
+                                        "    port map (\n"
+                                        "      I => net_global_in,\n"
+                                        "      O => net_0\n"
+                                        "    );\n"
+                                        "  gate_1 : gate_1_to_1\n"
+                                        "    port map (\n"
+                                        "      I => net_0,\n"
+                                        "      O => net_global_out\n"
+                                        "    );\n"
+                                        "end STRUCTURE;");
+                HDLParserVHDL vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+
+                ASSERT_NE(nl, nullptr);
+                ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
+                Net* attri_net = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
+                EXPECT_NE(attri_net, nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_name_filter("gate_0")).size(), 1);
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
+
+                // Check the attributes
+                EXPECT_EQ(attri_net->get_data_by_key("attribute", "attri_comma_string"),
+                          std::make_tuple("attri_type_0", "test, 1, 2, 3"));
+                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "attri_float_string"),
+                          std::make_tuple("attri_type_1", "1.234"));
             }
         TEST_END
     }

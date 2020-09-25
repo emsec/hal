@@ -250,7 +250,7 @@ namespace hal {
 
         TEST_START
             {
-                // Store an instance of all possible data types in one Gate
+                // Store an instance of all possible data types in one Gate + some special cases
                 std::stringstream input("module top ("
                                         "  global_in,"
                                         "  global_out"
@@ -264,7 +264,10 @@ namespace hal {
                                         ".key_bit_vector_hex('habc),"    // All values are 'ABC' in hex
                                         ".key_bit_vector_dec('d2748),"
                                         ".key_bit_vector_oct('o5274),"
-                                        ".key_bit_vector_bin('b1010_1011_1100)) "
+                                        ".key_bit_vector_bin('b1010_1011_1100),"
+                                        // special characters in '"'
+                                        ".key_negative_comma_string(\"test,1,2,3\"),"
+                                        ".key_negative_float_string(\"1.234\")) "
                                         "gate_0 ("
                                         "  .I (global_in ),"
                                         "  .O (global_out )"
@@ -297,6 +300,11 @@ namespace hal {
                           std::make_tuple("bit_vector", "abc"));
                 EXPECT_EQ(gate_0->get_data_by_key("generic", "key_bit_vector_bin"),
                           std::make_tuple("bit_vector", "abc"));
+                // Special Characters
+                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_negative_comma_string"),
+                          std::make_tuple("string", "test,1,2,3"));
+                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_negative_float_string"),
+                          std::make_tuple("string", "1.234"));
             }
 
         TEST_END
@@ -1659,21 +1667,65 @@ namespace hal {
     }
 
     /**
-     * Testing the usage of user-defined attributes within the architecture and the entity header.
+     * Testing the usage of attributes for gates nets and modules
      *
      * Functions: parse
      */
     TEST_F(HDLParserVerilogTest, check_attributes) {
         TEST_START
             {
-                // Add a custom attribute for a Gate
+                // Add attributes for a  module, a gate and a net.
+                std::stringstream input("(* ATTRIBUTE_MODULE=attri_module, FLAG_MODULE *)\n"
+                                        "module top (\n"
+                                        "  net_global_in,\n"
+                                        "  net_global_out\n"
+                                        " ) ;\n"
+                                        "(* ATTRIBUTE_NET=attri_net, FLAG_NET *)\n"
+                                        "  input net_global_in ;\n"
+                                        "  output net_global_out ;\n"
+                                        "(* ATTRIBUTE_GATE=attri_gate, FLAG_GATE *)\n"
+                                        "gate_1_to_1 gate_0 (\n"
+                                        "  .\\I (net_global_in ),\n"
+                                        "  .\\O (net_global_out )\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                HDLParserVerilog verilog_parser;
+                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
+
+                ASSERT_NE(nl, nullptr);
+
+                // Access the Elements with attributes
+                Module* attri_module = nl->get_top_module();
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
+
+                ASSERT_EQ(nl->get_global_input_nets().size(), 1);
+                Net* attri_net = *nl->get_global_input_nets().begin();
+
+                // Check their attributes
+                // -- Module
+                EXPECT_EQ(attri_module->get_data_by_key("attribute", "ATTRIBUTE_MODULE"),
+                          std::make_tuple("unknown", "attri_module"));
+                EXPECT_EQ(attri_module->get_data_by_key("attribute", "FLAG_MODULE"), std::make_tuple("unknown", ""));
+                // -- Gate
+                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "ATTRIBUTE_GATE"),
+                          std::make_tuple("unknown", "attri_gate"));
+                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "FLAG_GATE"), std::make_tuple("unknown", ""));
+                // -- Net
+                EXPECT_EQ(attri_net->get_data_by_key("attribute", "ATTRIBUTE_NET"),
+                          std::make_tuple("unknown", "attri_net"));
+                EXPECT_EQ(attri_net->get_data_by_key("attribute", "FLAG_NET"), std::make_tuple("unknown", ""));
+            }
+            {
+                // Use atrribute strings with special characters (',','.')
                 std::stringstream input("module top (\n"
                                         "  net_global_in,\n"
                                         "  net_global_out\n"
                                         " ) ;\n"
                                         "  input net_global_in ;\n"
                                         "  output net_global_out ;\n"
-                                        "  (* MEMBERS=\"a, b, c\"  *)\n"
+                                        "  (* ATTRI_COMMA_STRING=\"test, 1, 2, 3\", ATTRI_FLOAT_STRING=\"1.234\" *)\n"
                                         "gate_1_to_1 gate_0 (\n"
                                         "  .\\I (net_global_in ),\n"
                                         "  .\\O (net_global_out )\n"
@@ -1685,50 +1737,11 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
                 Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
-                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "attri_name"),
-                          std::make_tuple("attri_type", "attri_value"));
+                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "ATTRI_COMMA_STRING"),
+                          std::make_tuple("unknown", "test, 1, 2, 3"));
+                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "ATTRI_FLOAT_STRING"),
+                          std::make_tuple("unknown", "1.234"));
             }
-            /*{
-                // Add a custom attribute for a Net
-                std::stringstream input("-- Device\t: device_name\n"
-                                        "entity TEST_Comp is\n"
-                                        "  port (\n"
-                                        "    net_global_in : in STD_LOGIC := 'X';\n"
-                                        "    net_global_out : out STD_LOGIC := 'X';\n"
-                                        "  );\n"
-                                        "end TEST_Comp;\n"
-                                        "architecture STRUCTURE of TEST_Comp is\n"
-                                        "  signal net_0 : STD_LOGIC;\n"
-                                        "  attribute attri_name : attri_type;\n"
-                                        "  attribute attri_name of net_0 : signal is \"attri_value\";\n"
-                                        "begin\n"
-                                        "  gate_0 : gate_1_to_1\n"
-                                        "    port map (\n"
-                                        "      I => net_global_in,\n"
-                                        "      O => net_0\n"
-                                        "    );\n"
-                                        "  gate_1 : gate_1_to_1\n"
-                                        "    port map (\n"
-                                        "      I => net_0,\n"
-                                        "      O => net_global_out\n"
-                                        "    );\n"
-                                        "end STRUCTURE;");
-                test_def::capture_stdout();
-                HDLParserVerilog verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
-                ASSERT_NE(nl, nullptr);
-                ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
-                Net* attri_net = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
-                EXPECT_NE(attri_net, nullptr);
-                EXPECT_EQ(attri_net->get_data_by_key("attribute", "attri_name"),
-                          std::make_tuple("attri_type", "attri_value"));
-            }*/
         TEST_END
     }
 
