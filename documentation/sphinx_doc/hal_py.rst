@@ -18,8 +18,8 @@ hal_py Documentation
    module
    path
    i_base
-   i_gui
+   gui_plugin_interface
    plugin_manager
    netlist_factory
-   hdl_writer_dispatcher
+   hdl_writer_manager
    graph_algorithm

@@ -101,6 +101,10 @@ namespace hal
                 {
                     return bin_dir.parent_path();
                 }
+                if (!bin_dir.has_relative_path())
+                {
+                    break;
+                }
                 bin_dir = bin_dir.parent_path();
             }
             std::filesystem::path which_result = which("hal");

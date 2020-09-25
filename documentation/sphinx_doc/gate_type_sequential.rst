@@ -1,7 +1,7 @@
 Gate Type Sequential
 ==========================
 
-.. autoclass:: hal_py.gate_type_sequential
+.. autoclass:: hal_py.GateTypeSequential
    :members:
    :inherited-members:
    :show-inheritance:

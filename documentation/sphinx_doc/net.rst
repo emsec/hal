@@ -1,7 +1,7 @@
 Net
 ==========================
 
-.. autoclass:: hal_py.net
+.. autoclass:: hal_py.Net
    :members:
    :inherited-members:
    :show-inheritance:
