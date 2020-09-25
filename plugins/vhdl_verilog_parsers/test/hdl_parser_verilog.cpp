@@ -1659,6 +1659,80 @@ namespace hal {
     }
 
     /**
+     * Testing the usage of user-defined attributes within the architecture and the entity header.
+     *
+     * Functions: parse
+     */
+    TEST_F(HDLParserVerilogTest, check_attributes) {
+        TEST_START
+            {
+                // Add a custom attribute for a Gate
+                std::stringstream input("module top (\n"
+                                        "  net_global_in,\n"
+                                        "  net_global_out\n"
+                                        " ) ;\n"
+                                        "  input net_global_in ;\n"
+                                        "  output net_global_out ;\n"
+                                        "  (* MEMBERS=\"a, b, c\"  *)\n"
+                                        "gate_1_to_1 gate_0 (\n"
+                                        "  .\\I (net_global_in ),\n"
+                                        "  .\\O (net_global_out )\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                HDLParserVerilog verilog_parser;
+                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
+
+                ASSERT_NE(nl, nullptr);
+                ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
+                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "attri_name"),
+                          std::make_tuple("attri_type", "attri_value"));
+            }
+            /*{
+                // Add a custom attribute for a Net
+                std::stringstream input("-- Device\t: device_name\n"
+                                        "entity TEST_Comp is\n"
+                                        "  port (\n"
+                                        "    net_global_in : in STD_LOGIC := 'X';\n"
+                                        "    net_global_out : out STD_LOGIC := 'X';\n"
+                                        "  );\n"
+                                        "end TEST_Comp;\n"
+                                        "architecture STRUCTURE of TEST_Comp is\n"
+                                        "  signal net_0 : STD_LOGIC;\n"
+                                        "  attribute attri_name : attri_type;\n"
+                                        "  attribute attri_name of net_0 : signal is \"attri_value\";\n"
+                                        "begin\n"
+                                        "  gate_0 : gate_1_to_1\n"
+                                        "    port map (\n"
+                                        "      I => net_global_in,\n"
+                                        "      O => net_0\n"
+                                        "    );\n"
+                                        "  gate_1 : gate_1_to_1\n"
+                                        "    port map (\n"
+                                        "      I => net_0,\n"
+                                        "      O => net_global_out\n"
+                                        "    );\n"
+                                        "end STRUCTURE;");
+                test_def::capture_stdout();
+                HDLParserVerilog verilog_parser;
+                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
+                if (nl == nullptr) {
+                    std::cout << test_def::get_captured_stdout();
+                } else {
+                    test_def::get_captured_stdout();
+                }
+
+                ASSERT_NE(nl, nullptr);
+                ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
+                Net* attri_net = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
+                EXPECT_NE(attri_net, nullptr);
+                EXPECT_EQ(attri_net->get_data_by_key("attribute", "attri_name"),
+                          std::make_tuple("attri_type", "attri_value"));
+            }*/
+        TEST_END
+    }
+
+    /**
      * Testing the declaration of multiple wire vectors within one single line.
      *
      * Functions: parse
