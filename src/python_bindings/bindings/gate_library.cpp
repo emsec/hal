@@ -35,40 +35,40 @@ namespace hal
         py_gate_library.def_property_readonly("gate_types", &GateLibrary::get_gate_types, R"(
         A dict from gate type names to gate type objects containing all gate types of the gate library.
 
-        :type: dict[str,hal_py.Gate_type]
+        :type: dict[str,hal_py.GateType]
 )");
 
         py_gate_library.def("get_gate_types", &GateLibrary::get_gate_types, R"(
         Get dict from gate type names to gate type objects containing all gate types of the gate library.
 
         :returns: A dict from gate type names to gate type objects.
-        :rtype: dict[str,hal_py.Gate_type]
+        :rtype: dict[str,hal_py.GateType]
 )");
 
         py_gate_library.def_property_readonly("vcc_gate_types", &GateLibrary::get_vcc_gate_types, R"(
         A dict from gate type names to gate type objects containing all VCC gate types of the gate library.
 
-        :type: dict[str,hal_py.Gate_type]
+        :type: dict[str,hal_py.GateType]
 )");
 
         py_gate_library.def("get_vcc_gate_types", &GateLibrary::get_vcc_gate_types, R"(
         Get dict from gate type names to gate type objects containing all VCC gate types of the gate library.
 
         :returns: A dict from VCC gate type names to gate type objects.
-        :rtype: dict[str,hal_py.Gate_type]
+        :rtype: dict[str,hal_py.GateType]
 )");
 
         py_gate_library.def_property_readonly("gnd_gate_types", &GateLibrary::get_vcc_gate_types, R"(
         A dict from gate type names to gate type objects containing all GND gate types of the gate library.
 
-        :type: dict[str,hal_py.Gate_type]
+        :type: dict[str,hal_py.GateType]
 )");
 
         py_gate_library.def("get_gnd_gate_types", &GateLibrary::get_gnd_gate_types, R"(
         Get dict from gate type names to gate type objects containing all GND gate types of the gate library.
 
         :returns: A dictp from GND gate type names to gate type objects.
-        :rtype: dict[str,hal_py.Gate_type]
+        :rtype: dict[str,hal_py.GateType]
 )");
 
         py_gate_library.def("add_include", &GateLibrary::add_include, py::arg("include"), R"(

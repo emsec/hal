@@ -21,7 +21,7 @@ namespace hal
         Construct a new sequential gate type.
 
         :param str name: The name of the sequential gate type.
-        :param hal_py.Gate_type.BaseType bt: The base type of the sequential gate type.
+        :param hal_py.GateType.BaseType bt: The base type of the sequential gate type.
 )");
 
         py_gate_type_sequential.def("add_state_output_pin", &GateTypeSequential::add_state_output_pin, py::arg("pin_name"), R"(
