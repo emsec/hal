@@ -37,7 +37,7 @@ namespace hal
                 :param list[hal_py.Gate] gates: The gates to add.
             )")
 
-            .def("add_clock_hertz", &NetlistSimulator::add_clock_hertz, py::arg("clock_net"), py::arg("frequency"), py::arg("start_at_zero"), R"(
+            .def("add_clock_hertz", &NetlistSimulator::add_clock_frequency, py::arg("clock_net"), py::arg("frequency"), py::arg("start_at_zero"), R"(
                 Specify a net that carries the clock signal and set the clock frequency in hertz.
 
                 :param hal_py.Net clock_net: The net that carries the clock signal.

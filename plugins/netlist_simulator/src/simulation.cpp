@@ -26,7 +26,7 @@ namespace hal
 
     void Simulation::add_event(const Event& event)
     {
-        m_events[ev.affected_net].push_back(event);
+        m_events[event.affected_net].push_back(event);
     }
 
     std::unordered_map<Net*, std::vector<Event>> Simulation::get_events() const
