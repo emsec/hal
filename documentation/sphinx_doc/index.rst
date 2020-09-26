@@ -7,7 +7,7 @@ Contents:
    :maxdepth: 1
 
    hal_py
-   hal_gui
+   plugins
 
 
 Indices and tables
