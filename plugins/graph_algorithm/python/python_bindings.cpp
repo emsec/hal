@@ -26,15 +26,15 @@ namespace py = pybind11;
 namespace hal
 {
 
-#ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(libgraph_algorithm, m)
-    {
-        m.doc() = "hal libgraph_algorithm python bindings";
-#else
-    PYBIND11_PLUGIN(libgraph_algorithm)
-    {
-        py::module m("libgraph_algorithm", "hal graph_algorithm python bindings");
-#endif    // ifdef PYBIND11_MODULE
+// #ifdef PYBIND11_MODULE
+//     PYBIND11_MODULE(graph_algorithm, m)
+//     {
+//         m.doc() = "hal graph_algorithm python bindings";
+// #else
+//     PYBIND11_PLUGIN(graph_algorithm)
+//     {
+//         py::module m("graph_algorithm", "hal graph_algorithm python bindings");
+// #endif    // ifdef PYBIND11_MODULE
 
         // py::class_<plugin_graph_algorithm, std::shared_ptr<plugin_graph_algorithm>>(m, "graph_algorithm")
         //     .def_property_readonly("name", &plugin_graph_algorithm::get_name, R"(
@@ -134,8 +134,8 @@ namespace hal
         //         :rtype: list[set[hal_py.get_gate()]]
         //         )");
 
-#ifndef PYBIND11_MODULE
-        return m.ptr();
-#endif    // PYBIND11_MODULE
-    }
+// #ifndef PYBIND11_MODULE
+//         return m.ptr();
+// #endif    // PYBIND11_MODULE
+//     }
 }    // namespace hal
