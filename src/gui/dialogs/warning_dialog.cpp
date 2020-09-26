@@ -78,21 +78,36 @@ namespace hal
 
         QPen pen;
         pen.setCosmetic(true);
-        pen.setColor(QColor(255, 230, 0));
+        //pen.setColor(QColor(204, 184, 0));
         //pen.setColor(QColor(100, 100, 100));
+        pen.setColor(QColor(50, 50, 50));
         painter.setPen(pen);
 
         painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 
-        painter.fillRect(QRect(1, 1, width() - 2, 69), QBrush(QColor(9, 11, 13)));
+        //painter.fillRect(QRect(1, 1, width() - 2, 69), QBrush(QColor(9, 11, 13), Qt::Dense5Pattern));
+        painter.fillRect(QRect(1, 1, width() - 2, 69), QBrush(QColor(77, 77, 0), Qt::Dense3Pattern));
+        //painter.fillRect(QRect(1, 1, width() - 2, 69), QBrush(QColor(204, 184, 0)));
         painter.fillRect(QRect(1, 70, width() - 2, height() -71), QBrush(QColor(14, 16, 18)));
+
+        pen.setColor(QColor(204, 184, 0));
+        painter.setPen(pen);
+        painter.drawRect(QRect(1, 1, width() - 2, 69));
 
         painter.setClipRect(QRect(0, 0, width(), height()));
         painter.setRenderHint(QPainter::Antialiasing, true);
 
-        //painter.drawText(QRectF(10, 40, 50, 50), QString::number(m_line_offset));
+        QFont font;
+        font.setPixelSize(24);
+        painter.setFont(font);
 
-        painter.translate(0, 70);
+        //pen.setColor("#A9B7C6");
+        pen.setColor("#FFFFFF");
+        //pen.setColor(QColor(9, 11, 13));
+        painter.setPen(pen);
+        painter.drawText(QRectF(1, 1, width() - 1, 69), Qt::AlignCenter, "Warning: Something requires your attention");
+
+        painter.translate(0, 75);
 
         const int stride = m_line_width + m_line_spacing;
 
