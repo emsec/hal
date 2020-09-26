@@ -6,28 +6,29 @@
 #include "netlist_simulator/plugin_netlist_simulator.h"
 #include "netlist_simulator/netlist_simulator.h"
 
+#include "hal_core/python_bindings/python_bindings.h"
+
 namespace py = pybind11;
 
 namespace hal
 {
 
-    #ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(netlist_simulator, m)
+#ifdef PYBIND11_MODULE
+    PYBIND11_MODULE(libnetlist_simulator, m)
     {
-        m.doc() = "hal NetlistSimulatorPlugin python bindings";
-    #else
-    PYBIND11_PLUGIN(netlist_simulator)
+        m.doc() = "hal libnetlist_simulator python bindings";
+#else
+    PYBIND11_PLUGIN(libnetlist_simulator)
     {
-        py::module m("netlist_simulator", "hal NetlistSimulatorPlugin python bindings");
-    #endif    // ifdef PYBIND11_MODULE
+        py::module m("netlist_simulator", "hal libnetlist_simulator python bindings");
+#endif    // ifdef PYBIND11_MODULE
 
-        py::class_<NetlistSimulatorPlugin, BasePluginInterface>(m, "NetlistSimulatorPlugin")
+        py::class_<NetlistSimulatorPlugin, BasePluginInterface, RawPtrWrapper<NetlistSimulatorPlugin>>(m, "NetlistSimulatorPlugin")
             .def_property_readonly("name", &NetlistSimulatorPlugin::get_name)
             .def("get_name", &NetlistSimulatorPlugin::get_name)
             .def_property_readonly("version", &NetlistSimulatorPlugin::get_version)
             .def("get_version", &NetlistSimulatorPlugin::get_version)
-            .def("create_simulator", &NetlistSimulatorPlugin::create_simulator)
-            ;
+            .def("create_simulator", &NetlistSimulatorPlugin::create_simulator);
 
         py::class_<NetlistSimulator>(m, "NetlistSimulator")
             .def("add_gates", &NetlistSimulator::add_gates, py::arg("gates"), R"(
@@ -37,7 +38,7 @@ namespace hal
                 :param list[hal_py.Gate] gates: The gates to add.
             )")
 
-            .def("add_clock_hertz", &NetlistSimulator::add_clock_frequency, py::arg("clock_net"), py::arg("frequency"), py::arg("start_at_zero"), R"(
+            .def("add_clock_frequency", &NetlistSimulator::add_clock_frequency, py::arg("clock_net"), py::arg("frequency"), py::arg("start_at_zero"), R"(
                 Specify a net that carries the clock signal and set the clock frequency in hertz.
 
                 :param hal_py.Net clock_net: The net that carries the clock signal.
@@ -64,14 +65,14 @@ namespace hal
                 Get all nets that are considered inputs, i.e., not driven by a gate in the simulation set or global inputs.
 
                 :returns: The input nets.
-                :rtype: vector[hal_py.Net]
+                :rtype: list[hal_py.Net]
             )")
 
             .def("get_output_nets", &NetlistSimulator::get_output_nets, R"(
                 Get all output nets of gates in the simulation set that have a destination outside of the set or that are global outputs.
 
                 :returns: The output nets.
-                :rtype: vector[hal_py.Net]
+                :rtype: list[hal_py.Net]
             )")
 
             .def("set_input", &NetlistSimulator::set_input, py::arg("net"), py::arg("value"), R"(

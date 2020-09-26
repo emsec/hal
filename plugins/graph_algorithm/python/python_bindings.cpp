@@ -21,9 +21,10 @@
 
 #pragma GCC diagnostic pop
 
+namespace py = pybind11;
+
 namespace hal
 {
-    namespace py = pybind11;
 
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(libgraph_algorithm, m)

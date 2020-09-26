@@ -23,3 +23,4 @@ hal_py Documentation
    netlist_factory
    hdl_writer_manager
    graph_algorithm
+   netlist_simulator
