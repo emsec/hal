@@ -14,13 +14,13 @@ namespace hal
 {
 
 #ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(libnetlist_simulator, m)
+    PYBIND11_MODULE(netlist_simulator, m)
     {
-        m.doc() = "hal libnetlist_simulator python bindings";
+        m.doc() = "hal netlist_simulator python bindings";
 #else
-    PYBIND11_PLUGIN(libnetlist_simulator)
+    PYBIND11_PLUGIN(netlist_simulator)
     {
-        py::module m("netlist_simulator", "hal libnetlist_simulator python bindings");
+        py::module m("netlist_simulator", "hal netlist_simulator python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<NetlistSimulatorPlugin, BasePluginInterface, RawPtrWrapper<NetlistSimulatorPlugin>>(m, "NetlistSimulatorPlugin")
@@ -79,7 +79,7 @@ namespace hal
                 Set the signal for a specific wire to control input signals between simulation cycles.
             
                 :param hal_py.Net net: The net to set a signal value for.
-                :param hal_py.SignalValue value: The value to set.
+                :param netlist_simulator.SignalValue value: The value to set.
             )")
 
             .def("load_initial_values", &NetlistSimulator::load_initial_values, R"(
@@ -104,14 +104,14 @@ namespace hal
                 Set the simulator state, i.e., net signals, to a given state.
                 Does not influence gates/nets added to the simulation set.
         
-                :param hal_py.Simulation state: The state to apply.
+                :param netlist_simulator.Simulation state: The state to apply.
             )")
 
             .def("get_simulation_state", &NetlistSimulator::get_simulation_state, R"(
                 Get the current simulation state.
         
                 :returns: The current simulation state.
-                :rtype: hal_py.Simulation
+                :rtype: libnetlist_simulator.Simulation
             )")
 
             .def("set_iteration_timeout", &NetlistSimulator::set_iteration_timeout, py::arg("iterations"), R"(
@@ -138,13 +138,13 @@ namespace hal
                 :param hal_py.Net net: The net to inspect.
                 :param int time: The time in picoseconds.
                 :returns: The net's signal value.
-                :rtype: hal_py.SignalValue
+                :rtype: netlist_simulator.SignalValue
             )")
 
             .def("add_event", &Simulation::add_event, py::arg("event"), R"(
                 Adds a custom event to the simulation.
          
-                :param hal_py.Event event: The event to add.
+                :param netlist_simulator.Event event: The event to add.
             )")
 
             .def("get_events", &Simulation::get_events, R"(
