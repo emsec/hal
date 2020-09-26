@@ -27,6 +27,8 @@ function(hal_add_plugin target_name)
 
     add_library(${target_name} ${lib_type} ${exclude_from_all} ${ARG_HEADER} ${ARG_SOURCES} ${ARG_PY_SOURCES})
 
+    set_target_properties(${target_name} PROPERTIES PREFIX "")
+
     target_include_directories(${target_name}
                                PUBLIC
                                $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>

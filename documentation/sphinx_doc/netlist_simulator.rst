@@ -1,18 +1,18 @@
 Netlist Simulator
 ==========================
 
-.. autoclass:: libnetlist_simulator.NetlistSimulatorPlugin
+.. autoclass:: netlist_simulator.NetlistSimulatorPlugin
    :members:
 
-.. autoclass:: libnetlist_simulator.NetlistSimulator
+.. autoclass:: netlist_simulator.NetlistSimulator
    :members:
 
-.. autoclass:: libnetlist_simulator.Simulation
+.. autoclass:: netlist_simulator.Simulation
    :members:
 
    .. automethod:: __init__
 
-.. autoclass:: libnetlist_simulator.Event
+.. autoclass:: netlist_simulator.Event
    :members:
 
    .. automethod:: __init__
