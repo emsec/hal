@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v2.0.0-605-g5597256af documentation</title>
+  <title>Module &mdash; hal_py v2.0.0-606-g1eeca2fbc documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-605-g5597256af
+                v2.0.0-606-g1eeca2fbc
               </div>
             
           
@@ -99,11 +99,11 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_base.html">Interface Base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_gui.html">Interface GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i_base.html">Base Plugin Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hdl_writer_dispatcher.html">HDL Writer Dispatcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdl_writer_manager.html">HDL Writer Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithm</a></li>
 </ul>
 </li>
@@ -176,6 +176,728 @@
             
   <div class="section" id="module">
 <h1>Module<a class="headerlink" href="#module" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="hal_py.Module">
+<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">Module</code><a class="headerlink" href="#hal_py.Module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="data_container.html#hal_py.DataContainer" title="hal_py.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">hal_py.DataContainer</span></code></a></p>
+<p>Module class containing information about a module including its gates, submodules, and parent module.</p>
+<dl class="method">
+<dt id="hal_py.Module.assign_gate">
+<code class="descname">assign_gate</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.assign_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves a gate into this module. The gate is removed from its previous module in the process.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to add.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.contains_gate">
+<code class="descname">contains_gate</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>gate: hal_py.Gate</em>, <em>recusive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.contains_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a gate is in the module. If p recursive is true, all submodules are searched as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to search for.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Look into submodules too</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the gate is in the object.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.contains_module">
+<code class="descname">contains_module</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>other: hal_py.Module</em>, <em>recusive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.contains_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether another module is a submodule of this module. If p recursive is true, all indirect submodules are also included.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – Other module to check</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Look into submodules too</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the module is a submodule</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.data">
+<code class="descname">data</code><a class="headerlink" href="#hal_py.Module.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dict from ((1) category, (2) key) to ((1) type, (2) value) containing the stored data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>),<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>)]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.data_keys">
+<code class="descname">data_keys</code><a class="headerlink" href="#hal_py.Module.data_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of tuples ((1) category, (2) key) containing all the data keys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>)]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.delete_data">
+<code class="descname">delete_data</code><span class="sig-paren">(</span><em>self: hal_py.DataContainer</em>, <em>category: str</em>, <em>key: str</em>, <em>log_with_info_level: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.delete_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes custom data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Category of key</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data key</li>
+<li><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level info to trace GUI events (default = false)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.gates">
+<code class="descname">gates</code><a class="headerlink" href="#hal_py.Module.gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set of all gates belonging to the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_data_by_key">
+<code class="descname">get_data_by_key</code><span class="sig-paren">(</span><em>self: hal_py.DataContainer</em>, <em>category: str</em>, <em>key: str</em><span class="sig-paren">)</span> &#x2192; Tuple[str, str]<a class="headerlink" href="#hal_py.Module.get_data_by_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets data specified by key and category</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Category of key</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data key</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The tuple ((1) type, (2) value)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_gate_by_id">
+<code class="descname">get_gate_by_id</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>id: int</em>, <em>recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; hal_py.Gate<a class="headerlink" href="#hal_py.Module.get_gate_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a gate specified by id. If recursive parameter is true, all submodule are searched aswell.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The gate’s id.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Look into submodules too.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The gate or None.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_gates">
+<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Gate], bool] = None, recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#hal_py.Module.get_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all associated gates. You can filter with the optional parameters. If the parameter recursive is true, all submodules are searched aswell.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filter</strong> (<em>lambda</em>) – Filter for the gates.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Look into submodules too.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A set of gates.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Module.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the unique ID of the module object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The unique id.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_input_nets">
+<code class="descname">get_input_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Net]<a class="headerlink" href="#hal_py.Module.get_input_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input nets to this module.
+A module input net is either a global input to the netlist or has a source outside of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of module input nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_input_port_name">
+<code class="descname">get_input_port_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>input_net: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.Module.get_input_port_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the port corresponding to the specified input net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The input net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The port name.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_input_port_names">
+<code class="descname">get_input_port_names</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; Dict[hal_py.Net, str]<a class="headerlink" href="#hal_py.Module.get_input_port_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the mapping of all input nets to their corresponding port names.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The map from input net to port name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_internal_nets">
+<code class="descname">get_internal_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Net]<a class="headerlink" href="#hal_py.Module.get_internal_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the internal nets to this module. A net is internal if its source and at least one output are inside the module.
+Therefore it may contain some nets that are also regarded as output nets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The set of internal nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.Module.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the module’s name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_netlist">
+<code class="descname">get_netlist</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#hal_py.Module.get_netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the netlist this module is associated with.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The netlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_output_nets">
+<code class="descname">get_output_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Net]<a class="headerlink" href="#hal_py.Module.get_output_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output nets to this module.
+A module output net is either a global output of the netlist or has a destination outside of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The set of module output nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_output_port_name">
+<code class="descname">get_output_port_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>output_net: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.Module.get_output_port_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the port corresponding to the specified output net.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The output net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The port name.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_output_port_names">
+<code class="descname">get_output_port_names</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; Dict[hal_py.Net, str]<a class="headerlink" href="#hal_py.Module.get_output_port_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the mapping of all output nets to their corresponding port names.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The map from output net to port name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_parent_module">
+<code class="descname">get_parent_module</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; hal_py.Module<a class="headerlink" href="#hal_py.Module.get_parent_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the parent of this module.
+This returns None for the top module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The parent module.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_submodules">
+<code class="descname">get_submodules</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Module], bool] = None, recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Module]<a class="headerlink" href="#hal_py.Module.get_submodules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all direct submodules of this module.
+If recursive parameter is true, all indirect submodules are also included.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filter</strong> (<em>lambda</em>) – Filter for the modules.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Look into submodules aswell.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The set of submodules:</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.get_type">
+<code class="descname">get_type</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.Module.get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the module’s type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.id">
+<code class="descname">id</code><a class="headerlink" href="#hal_py.Module.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique ID of the module object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.input_nets">
+<code class="descname">input_nets</code><a class="headerlink" href="#hal_py.Module.input_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>The input nets to this module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.input_port_names">
+<code class="descname">input_port_names</code><a class="headerlink" href="#hal_py.Module.input_port_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the mapping of all input nets to their corresponding port names.</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">dict[hal_py.Net,str]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.internal_nets">
+<code class="descname">internal_nets</code><a class="headerlink" href="#hal_py.Module.internal_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>The internal nets to this module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.Module.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.netlist">
+<code class="descname">netlist</code><a class="headerlink" href="#hal_py.Module.netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>The netlist this module is associated with.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.output_nets">
+<code class="descname">output_nets</code><a class="headerlink" href="#hal_py.Module.output_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output nets to this module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.output_port_names">
+<code class="descname">output_port_names</code><a class="headerlink" href="#hal_py.Module.output_port_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the mapping of all output nets to their corresponding port names.</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">dict[hal_py.Net,str]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.parent_module">
+<code class="descname">parent_module</code><a class="headerlink" href="#hal_py.Module.parent_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parent module of this module. Set to None for the top module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.remove_gate">
+<code class="descname">remove_gate</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.remove_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a gate from the module object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_data">
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>self: hal_py.DataContainer</em>, <em>category: str</em>, <em>key: str</em>, <em>value_data_type: str</em>, <em>value: str</em>, <em>log_with_info_level: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a custom data entry
+If it does not exist yet, it is added.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Key category</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data key</li>
+<li><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data type of value</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Data value</li>
+<li><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level info to trace GUI events (default = false)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_input_port_name">
+<code class="descname">set_input_port_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>input_net: hal_py.Net</em>, <em>port_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Module.set_input_port_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name of the port corresponding to the specified input net to the given string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The input net.</li>
+<li><strong>port_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The port name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_name">
+<code class="descname">set_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Module.set_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the module’s name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The new name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_output_port_name">
+<code class="descname">set_output_port_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>output_net: hal_py.Net</em>, <em>port_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Module.set_output_port_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name of the port corresponding to the specified output net to the given string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>output_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The output net.</li>
+<li><strong>port_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The port name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_parent_module">
+<code class="descname">set_parent_module</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>new_parent: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_parent_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parent of this module.
+If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the parent was changed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.set_type">
+<code class="descname">set_type</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>type: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Module.set_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the module’s type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The new type.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.submodules">
+<code class="descname">submodules</code><a class="headerlink" href="#hal_py.Module.submodules" title="Permalink to this definition">¶</a></dt>
+<dd><p>A set of all direct submodules of this module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>[<a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.type">
+<code class="descname">type</code><a class="headerlink" href="#hal_py.Module.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Interface GUI &mdash; hal_py v2.0.0-605-g5597256af documentation</title>
+  <title>GUI Plugin Interface &mdash; hal_py v2.0.0-606-g1eeca2fbc documentation</title>
   
 
   
@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Plugin Manager" href="plugin_manager.html" />
-    <link rel="prev" title="Interface Base" href="i_base.html" /> 
+    <link rel="prev" title="Base Plugin Interface" href="i_base.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-605-g5597256af
+                v2.0.0-606-g1eeca2fbc
               </div>
             
           
@@ -99,11 +99,11 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_base.html">Interface Base</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Interface GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i_base.html">Base Plugin Interface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hdl_writer_dispatcher.html">HDL Writer Dispatcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdl_writer_manager.html">HDL Writer Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithm</a></li>
 </ul>
 </li>
@@ -155,13 +155,13 @@
         
           <li><a href="hal_py.html">hal_py Documentation</a> &raquo;</li>
         
-      <li>Interface GUI</li>
+      <li>GUI Plugin Interface</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/i_gui.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/gui_plugin_interface.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -174,8 +174,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="interface-gui">
-<h1>Interface GUI<a class="headerlink" href="#interface-gui" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="gui-plugin-interface">
+<h1>GUI Plugin Interface<a class="headerlink" href="#gui-plugin-interface" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="hal_py.GUIPluginInterface">
+<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">GUIPluginInterface</code><a class="headerlink" href="#hal_py.GUIPluginInterface" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="hal_py.GUIPluginInterface.exec">
+<code class="descname">exec</code><span class="sig-paren">(</span><em>self: hal_py.GUIPluginInterface</em>, <em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GUIPluginInterface.exec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic call to run the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist object for the GUI.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -189,7 +212,7 @@
         <a href="plugin_manager.html" class="btn btn-neutral float-right" title="Plugin Manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="i_base.html" class="btn btn-neutral float-left" title="Interface Base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="i_base.html" class="btn btn-neutral float-left" title="Base Plugin Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

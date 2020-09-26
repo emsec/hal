@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>HDL Writer Dispatcher &mdash; hal_py v2.0.0-605-g5597256af documentation</title>
+  <title>HDL Writer Manager &mdash; hal_py v2.0.0-606-g1eeca2fbc documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-605-g5597256af
+                v2.0.0-606-g1eeca2fbc
               </div>
             
           
@@ -99,11 +99,11 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_base.html">Interface Base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_gui.html">Interface GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i_base.html">Base Plugin Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">HDL Writer Dispatcher</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">HDL Writer Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithm</a></li>
 </ul>
 </li>
@@ -155,13 +155,13 @@
         
           <li><a href="hal_py.html">hal_py Documentation</a> &raquo;</li>
         
-      <li>HDL Writer Dispatcher</li>
+      <li>HDL Writer Manager</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/hdl_writer_dispatcher.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/hdl_writer_manager.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -174,8 +174,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="hdl-writer-dispatcher">
-<h1>HDL Writer Dispatcher<a class="headerlink" href="#hdl-writer-dispatcher" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-hal_py.hdl_writer_manager">
+<span id="hdl-writer-manager"></span><h1>HDL Writer Manager<a class="headerlink" href="#module-hal_py.hdl_writer_manager" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="hal_py.hdl_writer_manager.get_cli_options">
+<code class="descclassname">hal_py.hdl_writer_manager.</code><code class="descname">get_cli_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; hal::ProgramOptions<a class="headerlink" href="#hal_py.hdl_writer_manager.get_cli_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the command line interface options of the hdl writer dispatcher.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The options.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>), <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)">set</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>)))</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.hdl_writer_manager.write">
+<code class="descclassname">hal_py.hdl_writer_manager.</code><code class="descname">write</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em>, <em>file_name: hal_py.HalPath</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.hdl_writer_manager.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the netlist into a file with a defined format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist.</li>
+<li><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The target format of the file, e.g. vhdl, verilog…</li>
+<li><strong>file_name</strong> (<em>hal_py.hal_path</em>) – The input file.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 

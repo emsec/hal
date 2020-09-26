@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>HAL Path &mdash; hal_py v2.0.0-605-g5597256af documentation</title>
+  <title>HAL Path &mdash; hal_py v2.0.0-606-g1eeca2fbc documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Interface Base" href="i_base.html" />
+    <link rel="next" title="Base Plugin Interface" href="i_base.html" />
     <link rel="prev" title="Module" href="module.html" /> 
 </head>
 
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-605-g5597256af
+                v2.0.0-606-g1eeca2fbc
               </div>
             
           
@@ -99,11 +99,11 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">HAL Path</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_base.html">Interface Base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_gui.html">Interface GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i_base.html">Base Plugin Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hdl_writer_dispatcher.html">HDL Writer Dispatcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdl_writer_manager.html">HDL Writer Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithm</a></li>
 </ul>
 </li>
@@ -176,6 +176,27 @@
             
   <div class="section" id="hal-path">
 <h1>HAL Path<a class="headerlink" href="#hal-path" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="hal_py.HalPath">
+<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">HalPath</code><a class="headerlink" href="#hal_py.HalPath" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="hal_py.HalPath.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.HalPath.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li>__init__(self: hal_py.HalPath) -&gt; None</li>
+<li>__init__(self: hal_py.HalPath, arg0: hal_py.HalPath) -&gt; None</li>
+<li>__init__(self: hal_py.HalPath, arg0: str) -&gt; None</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.HalPath.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><em>self: hal_py.HalPath</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.HalPath.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -186,7 +207,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="i_base.html" class="btn btn-neutral float-right" title="Interface Base" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="i_base.html" class="btn btn-neutral float-right" title="Base Plugin Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="module.html" class="btn btn-neutral float-left" title="Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

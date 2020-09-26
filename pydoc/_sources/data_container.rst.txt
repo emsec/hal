@@ -1,5 +1,5 @@
 Data Container
 ==========================
 
-.. autoclass:: hal_py.data_container
+.. autoclass:: hal_py.DataContainer
    :members:

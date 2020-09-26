@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Factory &mdash; hal_py v2.0.0-605-g5597256af documentation</title>
+  <title>Netlist Factory &mdash; hal_py v2.0.0-606-g1eeca2fbc documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="HDL Writer Dispatcher" href="hdl_writer_dispatcher.html" />
+    <link rel="next" title="HDL Writer Manager" href="hdl_writer_manager.html" />
     <link rel="prev" title="Plugin Manager" href="plugin_manager.html" /> 
 </head>
 
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-605-g5597256af
+                v2.0.0-606-g1eeca2fbc
               </div>
             
           
@@ -99,11 +99,11 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_base.html">Interface Base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_gui.html">Interface GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i_base.html">Base Plugin Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist Factory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hdl_writer_dispatcher.html">HDL Writer Dispatcher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdl_writer_manager.html">HDL Writer Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithm</a></li>
 </ul>
 </li>
@@ -174,8 +174,96 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="netlist-factory">
-<h1>Netlist Factory<a class="headerlink" href="#netlist-factory" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-hal_py.NetlistFactory">
+<span id="netlist-factory"></span><h1>Netlist Factory<a class="headerlink" href="#module-hal_py.NetlistFactory" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="hal_py.NetlistFactory.create_netlist">
+<code class="descclassname">hal_py.NetlistFactory.</code><code class="descname">create_netlist</code><span class="sig-paren">(</span><em>gate_library: hal_py.GateLibrary</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#hal_py.NetlistFactory.create_netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new netlist for a specific gate library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate_library</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The underlying gate library.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The new netlist.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistFactory.load_netlist">
+<code class="descclassname">hal_py.NetlistFactory.</code><code class="descname">load_netlist</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistFactory.load_netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">load_netlist(hdl_file: hal_py.HalPath, gate_library_file: hal_py.HalPath) -&gt; hal_py.Netlist</p>
+<blockquote>
+<div><p>Creates a new netlist for a specific file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param hdl_file:</th><td class="field-body">Path to the HDL file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type hdl_file:</th><td class="field-body">hal_py.hal_path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param gate_library_file:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Path to the gate library file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">type gate_library_file:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">hal_py.hal_path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The new netlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Netlist</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">load_netlist(hal_file: hal_py.HalPath) -&gt; hal_py.Netlist</p>
+<blockquote>
+<div><p>Creates a new netlist for a specific ‘.hal’ file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param hal_file:</th><td class="field-body">Name of the ‘.hal’ file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type hal_file:</th><td class="field-body">hal_py.hal_path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The new netlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.Netlist</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistFactory.load_netlists">
+<code class="descclassname">hal_py.NetlistFactory.</code><code class="descname">load_netlists</code><span class="sig-paren">(</span><em>hdl_file: hal_py.HalPath</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Netlist]<a class="headerlink" href="#hal_py.NetlistFactory.load_netlists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new netlist from an HDL file for each matching pre-loaded gate library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hdl_file</strong> (<em>hal_py.hal_path</em>) – Path to the HDL file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A vector of netlists.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -186,7 +274,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="hdl_writer_dispatcher.html" class="btn btn-neutral float-right" title="HDL Writer Dispatcher" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="hdl_writer_manager.html" class="btn btn-neutral float-right" title="HDL Writer Manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="plugin_manager.html" class="btn btn-neutral float-left" title="Plugin Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

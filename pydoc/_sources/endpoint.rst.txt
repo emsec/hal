@@ -1,7 +1,7 @@
 Endpoint
 ==========================
 
-.. autoclass:: hal_py.endpoint
+.. autoclass:: hal_py.Endpoint
    :members:
    :undoc-members:
 

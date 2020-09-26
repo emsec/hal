@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>GUI &mdash; hal_py v2.0.0-605-g5597256af documentation</title>
+  <title>GUI API &mdash; hal_py v2.0.0-606-g1eeca2fbc documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v2.0.0-605-g5597256af
+                v2.0.0-606-g1eeca2fbc
               </div>
             
           
@@ -86,7 +86,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="hal_py.html">hal_py Documentation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="hal_gui.html">hal_gui Documentation</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">GUI</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">GUI API</a></li>
 </ul>
 </li>
 </ul>
@@ -136,7 +136,7 @@
         
           <li><a href="hal_gui.html">hal_gui Documentation</a> &raquo;</li>
         
-      <li>GUI</li>
+      <li>GUI API</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -155,8 +155,956 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="gui">
-<h1>GUI<a class="headerlink" href="#gui" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="gui-api">
+<h1>GUI API<a class="headerlink" href="#gui-api" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="hal_gui.GuiApi">
+<em class="property">class </em><code class="descclassname">hal_gui.</code><code class="descname">GuiApi</code><a class="headerlink" href="#hal_gui.GuiApi" title="Permalink to this definition">¶</a></dt>
+<dd><p>GUI API</p>
+<dl class="method">
+<dt id="hal_gui.GuiApi.deselect">
+<code class="descname">deselect</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_gui.GuiApi.deselect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">deselect(self: hal_gui.GuiApi, gate: hal_py.Gate) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the gate in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect(self: hal_gui.GuiApi, net: hal_py.Net) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the net in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net Net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect(self: hal_gui.GuiApi, module: hal_py.Module) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the module in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.module module:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The module to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect(self: hal_gui.GuiApi, gates: List[hal_py.Gate]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the gates in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gates to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect(self: hal_gui.GuiApi, nets: List[hal_py.Net]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the nets in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Net] nets:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The nets to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect(self: hal_gui.GuiApi, modules: List[hal_py.Module]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the modules in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.module] modules:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The modules to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect(self: hal_gui.GuiApi, gate_ids: List[int], net_ids: List[int], module_ids: List[int]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the gates, nets and modules with the passed ids in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The ids of the gates to be deselected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[hal_py.Net] nets:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The ids of the nets to be deselected.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.module] modules:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The ids of the modules to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect(self: hal_gui.GuiApi, gates: List[hal_py.Gate], nets: List[hal_py.Net], modules: List[hal_py.Module]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the gates, nets and modules in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gates to be deselected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[hal_py.Net] nets:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The nets to be deselected.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.module] modules:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The modules to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.deselect_all_items">
+<code class="descname">deselect_all_items</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_gui.GuiApi.deselect_all_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deselect all gates, nets and modules in the graph view of the GUI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.deselect_gate">
+<code class="descname">deselect_gate</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_gui.GuiApi.deselect_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">deselect_gate(self: hal_gui.GuiApi, gate_id: int) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the gate with id ‘gate_id’ in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param int gate_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate id of the gate to be selected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect_gate(self: hal_gui.GuiApi, gate: hal_py.Gate) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the gate in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect_gate(self: hal_gui.GuiApi, gate_ids: List[int]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the gates with the ids in list ‘gate_ids’ in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] gate_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">List of gate ids of the gates to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect_gate(self: hal_gui.GuiApi, gates: List[hal_py.Gate]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the gates in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gates to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.deselect_module">
+<code class="descname">deselect_module</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_gui.GuiApi.deselect_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">deselect_module(self: hal_gui.GuiApi, module_id: int) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the module with id ‘module_id’ in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param int module_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The module id of the module to be selected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect_module(self: hal_gui.GuiApi, module: hal_py.Module) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the module in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.module module:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The module to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect_module(self: hal_gui.GuiApi, module_ids: List[int]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the modules with the ids in list ‘module_ids’ in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] module_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">List of module ids of the modules to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect_module(self: hal_gui.GuiApi, modules: List[hal_py.Module]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the modules in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.module] modules:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The modules to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.deselect_net">
+<code class="descname">deselect_net</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_gui.GuiApi.deselect_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">deselect_net(self: hal_gui.GuiApi, net_id: int) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the net with id ‘net_id’ in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param int net_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net id of the net to be selected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect_net(self: hal_gui.GuiApi, net: hal_py.Net) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the net in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net Net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect_net(self: hal_gui.GuiApi, net_ids: List[int]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the nets with the ids in list ‘net_ids’ in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] net_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">List of net ids of the nets to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">deselect_net(self: hal_gui.GuiApi, nets: List[hal_py.Net]) -&gt; None</p>
+<blockquote>
+<div><p>Deselect the nets in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Net] nets:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The nets to be deselected.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.get_selected_gate_ids">
+<code class="descname">get_selected_gate_ids</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi</em><span class="sig-paren">)</span> &#x2192; List[int]<a class="headerlink" href="#hal_gui.GuiApi.get_selected_gate_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the gate ids of currently selected gates in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of the ids of the currently selected gates.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.get_selected_gates">
+<code class="descname">get_selected_gates</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#hal_gui.GuiApi.get_selected_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the gates which are currently selected in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of currently selected gates.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.get_selected_item_ids">
+<code class="descname">get_selected_item_ids</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi</em><span class="sig-paren">)</span> &#x2192; Tuple[List[int], List[int], List[int]]<a class="headerlink" href="#hal_gui.GuiApi.get_selected_item_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all item ids of the currently selected items in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple of lists of the currently selected items.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.get_selected_items">
+<code class="descname">get_selected_items</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi</em><span class="sig-paren">)</span> &#x2192; Tuple[List[hal_py.Gate], List[hal_py.Net], List[hal_py.Module]]<a class="headerlink" href="#hal_gui.GuiApi.get_selected_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all selected items which are currently selected in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple of currently selected items.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a>(<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>, <a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>, hal_py.module)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.get_selected_module_ids">
+<code class="descname">get_selected_module_ids</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi</em><span class="sig-paren">)</span> &#x2192; List[int]<a class="headerlink" href="#hal_gui.GuiApi.get_selected_module_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the module ids of currently selected modules in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of the ids of the currently selected modules.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.get_selected_modules">
+<code class="descname">get_selected_modules</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Module]<a class="headerlink" href="#hal_gui.GuiApi.get_selected_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the modules which are currently selected in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of currently selected modules.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[hal_py.module]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.get_selected_net_ids">
+<code class="descname">get_selected_net_ids</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi</em><span class="sig-paren">)</span> &#x2192; List[int]<a class="headerlink" href="#hal_gui.GuiApi.get_selected_net_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the net ids of currently selected nets in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of the ids of the currently selected nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.get_selected_nets">
+<code class="descname">get_selected_nets</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Net]<a class="headerlink" href="#hal_gui.GuiApi.get_selected_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the nets which are currently selected in the graph view of the GUI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of currently selected nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.select">
+<code class="descname">select</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_gui.GuiApi.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">select(self: hal_gui.GuiApi, gate: hal_py.Gate, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the gate in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the gate will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the gate.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select(self: hal_gui.GuiApi, net: hal_py.Net, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the net in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the net will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the net.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select(self: hal_gui.GuiApi, module: hal_py.Module, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the module in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the module will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.module module:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The module to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the module.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select(self: hal_gui.GuiApi, gates: List[hal_py.Gate], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the gates in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the gates will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gates to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the gates.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select(self: hal_gui.GuiApi, nets: List[hal_py.Net], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the nets in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the nets will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Net] nets:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The nets to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the nets.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select(self: hal_gui.GuiApi, modules: List[hal_py.Module], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the modules in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the modules will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.module] modules:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The modules to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the modules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select(self: hal_gui.GuiApi, gate_ids: List[int], net_ids: List[int], module_ids: List[int], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the gates, nets and modules with the passed ids in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the gates, nets and modules will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The ids of the gates to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[hal_py.Net] nets:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The ids of the nets to be selected.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.module] modules:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The ids of the modules to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the modules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select(self: hal_gui.GuiApi, gates: List[hal_py.Gate], nets: List[hal_py.Net], modules: List[hal_py.Module], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the gates, nets and modules in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the gates, nets and modules will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gates to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[hal_py.Net] nets:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The nets to be selected.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.module] modules:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The modules to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the modules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.select_gate">
+<code class="descname">select_gate</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_gui.GuiApi.select_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">select_gate(self: hal_gui.GuiApi, gate_id: int, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the gate with id ‘gate_id’ in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the gate with the id ‘gate_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param int gate_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate id of the gate to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the gate.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select_gate(self: hal_gui.GuiApi, gate: hal_py.Gate, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the gate in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the gate will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the gate.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select_gate(self: hal_gui.GuiApi, gate_ids: List[int], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the gates with the ids in list ‘gate_ids’ in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the gate with the id ‘gate_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] gate_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">List of gate ids of the gates to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the gates.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select_gate(self: hal_gui.GuiApi, gates: List[hal_py.Gate], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the gates in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the gates will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gates to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the gates.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.select_module">
+<code class="descname">select_module</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_gui.GuiApi.select_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">select_module(self: hal_gui.GuiApi, module_id: int, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the module with id ‘module_id’ in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the module with the id ‘module_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param int module_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The module id of the module to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the module.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select_module(self: hal_gui.GuiApi, module: hal_py.Module, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the module in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the module will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.module module:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The module to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the module.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select_module(self: hal_gui.GuiApi, module_ids: List[int], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the modules with the ids in list ‘module_ids’ in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the module with the id ‘module_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] module_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">List of module ids of the modules to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the modules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select_module(self: hal_gui.GuiApi, modules: List[hal_py.Module], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the modules in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the modules will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.module] modules:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The modules to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the modules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.select_net">
+<code class="descname">select_net</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_gui.GuiApi.select_net" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">select_net(self: hal_gui.GuiApi, net_id: int, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the net with id ‘net_id’ in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the net with the id ‘net_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param int net_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net id of the net to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the net.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select_net(self: hal_gui.GuiApi, net: hal_py.Net, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the net in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the net will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the net.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select_net(self: hal_gui.GuiApi, net_ids: List[int], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the nets with the ids in list ‘net_ids’ in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the net with the id ‘net_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] net_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">List of net ids of the nets to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the nets.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">select_net(self: hal_gui.GuiApi, nets: List[hal_py.Net], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
+<blockquote>
+<div><p>Select the nets in the graph view of the GUI.
+If ‘clear_current_selection’ is false, the nets will be added to the currently existing selection.
+If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Net] nets:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The nets to be selected.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool clear_current_selection:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Determines if the previous selection gets cleared before the selection of the nets.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool navigate_to_selection:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Determines if the graph view scrolls and zooms to show all selected items.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
