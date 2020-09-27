@@ -25,9 +25,11 @@ namespace hal
         void set_x_offset(const int offset);
         void set_y_offset(const int offset);
 
+        //void add_accept_button(const QString& text);
+        //void add_reject_button(const QString& text);
+
     Q_SIGNALS:
         void offset_changed();
-
 
     protected:
         virtual void fade_in_started();

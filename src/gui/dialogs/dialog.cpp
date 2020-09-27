@@ -19,17 +19,17 @@ namespace hal
         m_effect->setOpacity(0);
         setGraphicsEffect(m_effect);
 
-        m_x_animation->setDuration(300);
+        m_x_animation->setDuration(200);
         m_x_animation->setStartValue(0);
         m_x_animation->setEndValue(0);
         m_x_animation->setEasingCurve(QEasingCurve::OutQuad);
 
-        m_y_animation->setDuration(300);
+        m_y_animation->setDuration(200);
         m_y_animation->setStartValue(-30);
         m_y_animation->setEndValue(0);
         m_y_animation->setEasingCurve(QEasingCurve::OutQuad);
 
-        m_opacity_animation->setDuration(400);
+        m_opacity_animation->setDuration(300);
         m_opacity_animation->setStartValue(0);
         m_opacity_animation->setEndValue(1);
         m_opacity_animation->setEasingCurve(QEasingCurve::InQuad);
@@ -43,7 +43,6 @@ namespace hal
 
     void Dialog::fade_in()
     {
-        //setWindowOpacity(0);
         show();
         m_animation_group->start();
 
