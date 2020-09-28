@@ -1,8 +1,7 @@
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
-#include <core/log.h>
 #include <iostream>
-#include <netlist/data_container.h>
+#include "hal_core/netlist/data_container.h"
 
 namespace hal {
     /*

@@ -1,5 +1,5 @@
 Netlist Factory
 =====================
 
-.. automodule:: hal_py.netlist_factory
+.. automodule:: hal_py.NetlistFactory
    :members:

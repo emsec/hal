@@ -1,10 +1,4 @@
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/netlist.h"
 #include "netlist_test_utils.h"
-#include "gtest/gtest.h"
-#include <iostream>
-#include <netlist/gate.h>
-#include <netlist/net.h>
 
 namespace hal {
     using test_utils::MIN_GATE_ID;
@@ -31,8 +25,8 @@ namespace hal {
     TEST_F(NetTest, check_constructor) {
         TEST_START
             // Create a Net (id = 100) and append it to its netlist
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 100, "test_net");
+            auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+            Net* test_net = nl->create_net(MIN_NET_ID + 100, "test_net");
 
             EXPECT_EQ(test_net->get_id(), (u32) (MIN_NET_ID + 100));
             EXPECT_EQ(test_net->get_name(), "test_net");
@@ -49,8 +43,8 @@ namespace hal {
     TEST_F(NetTest, check_set_and_get_name) {
         TEST_START
             // Create a Net and append it to its netlist
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+            auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+            Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
             EXPECT_EQ(test_net->get_name(), "test_net");
 
@@ -79,19 +73,10 @@ namespace hal {
         TEST_START
             {
                 // Add a source of the Net (using a valid Gate and pin_type)
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                std::shared_ptr<Gate> t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                Gate* t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_source(t_gate, "O");
-                EXPECT_TRUE(suc);
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O"));
-            }
-            {
-                // Add a source of the Net (passing an Endpoint)
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                std::shared_ptr<Gate> t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
-                bool suc = test_net->add_source(test_utils::get_endpoint(t_gate, "O"));
                 EXPECT_TRUE(suc);
                 EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O"));
             }
@@ -99,8 +84,8 @@ namespace hal {
             {
                 // Set the source of the Net (Gate is nullptr)
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->add_source(nullptr, "O");
                 EXPECT_FALSE(suc);
                 EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
@@ -108,37 +93,27 @@ namespace hal {
             {
                 // Pin is an input pin (not an output/inout pin)
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate_0 = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate_0 = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_source(t_gate_0, "I0");    // <- input pin
-                EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
-            }
-            {
-                // Pin is an input pin (not an output/inout pin) (passing an Endpoint)
-                NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate_0 = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
-                bool suc = test_net->add_source(test_utils::get_endpoint(t_gate_0, "I0"));    // <- input pin
                 EXPECT_FALSE(suc);
                 EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
             }
             {
                 // Pin is already occupied (example netlist is used)
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_example_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_example_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->add_source(nl->get_gate_by_id(MIN_NET_ID + 1), "O");
                 EXPECT_FALSE(suc);
                 EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
             }
             {
                 // Set the source of the Net (invalid pin type)
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 testing::internal::CaptureStdout();
                 bool suc = test_net->add_source(t_gate, "NEx_PIN");
                 testing::internal::GetCapturedStdout();
@@ -158,8 +133,8 @@ namespace hal {
         TEST_START
             {
                 // Get a single source
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 auto t_gate =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
                 test_net->add_source(t_gate, "O0");
@@ -167,21 +142,21 @@ namespace hal {
             }
             {
                 // Get all sources (no filter)
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 auto t_gate =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
                 test_net->add_source(t_gate, "O0");
                 test_net->add_source(t_gate, "O1");
                 test_net->add_source(t_gate, "O3");
-                EXPECT_EQ(test_net->get_sources(), std::vector<Endpoint>({test_utils::get_endpoint(t_gate, "O0"),
+                EXPECT_EQ(test_net->get_sources(), std::vector<Endpoint*>({test_utils::get_endpoint(t_gate, "O0"),
                                                                           test_utils::get_endpoint(t_gate, "O1"),
                                                                           test_utils::get_endpoint(t_gate, "O3")}));
             }
             {
                 // Get all sources by using a filter
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 auto t_gate_0 =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate_0");
                 auto t_gate_1 =
@@ -191,13 +166,13 @@ namespace hal {
                 test_net->add_source(t_gate_1, "O1");
                 test_net->add_source(t_gate_1, "O2");
                 EXPECT_EQ(test_net->get_sources(test_utils::endpoint_gate_name_filter("test_gate_0")),
-                          std::vector<Endpoint>({test_utils::get_endpoint(t_gate_0, "O0"),
+                          std::vector<Endpoint*>({test_utils::get_endpoint(t_gate_0, "O0"),
                                                  test_utils::get_endpoint(t_gate_0, "O1")}));
             }
             {
                 // Get the source(s) if the Gate has no source
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
                 EXPECT_TRUE(test_net->get_sources().empty());
             }
@@ -205,8 +180,8 @@ namespace hal {
             {
                 // Get source, if there are multiple sources (only the first one is returned)
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 auto t_gate =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
                 test_net->add_source(t_gate, "O0");
@@ -225,40 +200,20 @@ namespace hal {
         TEST_START
             {
                 // Remove an existing source (passing a Gate and a pin type)
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_source(t_gate, "O");
                 bool suc = test_net->remove_source(t_gate, "O");
                 EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
                 EXPECT_TRUE(suc);
             }
-            {
-                // Remove an existing source (passing an Endpoint)
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
-                test_net->add_source(t_gate, "O");
-                bool suc = test_net->remove_source(test_utils::get_endpoint(t_gate, "O"));
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
-                EXPECT_TRUE(suc);
-            }
             // NEGATIVE
-            {
-                // Remove the source if the passed Endpoint is a destination not a source
-                //NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
-                test_net->add_destination(t_gate, "I0");
-                bool suc = test_net->remove_source(test_utils::get_endpoint(t_gate, "I0"));
-                EXPECT_FALSE(suc);
-            }
             {
                 // Remove the source if the passed parameters do not define any source
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->remove_source(nullptr, "");
                 EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
                 EXPECT_FALSE(suc);
@@ -275,9 +230,9 @@ namespace hal {
         TEST_START
             {
                 // Remove a destination in the normal way
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_destination(t_gate, "I0");
 
                 bool suc = test_net->remove_destination(t_gate, "I0");
@@ -288,9 +243,9 @@ namespace hal {
             }
             {
                 // Remove the same destination twice
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_destination(t_gate, "I0");
 
                 test_net->remove_destination(t_gate, "I0");
@@ -303,22 +258,10 @@ namespace hal {
             }
             // NEGATIVE
             {
-                // The Endpoint is a source
-                NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
-                test_net->add_source(test_utils::get_endpoint(t_gate, "O"));
-
-                bool suc = test_net->remove_destination(test_utils::get_endpoint(t_gate, "O"));
-
-                EXPECT_FALSE(suc);
-            }
-            {
                 // The Gate is a nullptr
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
                 bool suc = test_net->remove_destination(nullptr, "I0");
 
@@ -327,9 +270,9 @@ namespace hal {
             {
                 // The Gate wasn't added to the netlist
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                std::shared_ptr<Gate>
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                Gate*
                     t_gate =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "t_gate");
 
@@ -350,12 +293,12 @@ namespace hal {
         TEST_START
             {
                 // Add a destination in the normal way
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_destination(t_gate, "I0");
-                std::vector<Endpoint> dsts = {test_utils::get_endpoint(t_gate, "I0")};
+                std::vector<Endpoint*> dsts = {test_utils::get_endpoint(t_gate, "I0")};
                 EXPECT_EQ(test_net->get_destinations(), dsts);
                 EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 1);
                 EXPECT_TRUE(suc);
@@ -363,13 +306,13 @@ namespace hal {
             {
                 // Add the same destination twice
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_destination(t_gate, "I0");
                 bool suc = test_net->add_destination(t_gate, "I0");
-                std::vector<Endpoint> dsts = {test_utils::get_endpoint(t_gate, "I0")};
+                std::vector<Endpoint*> dsts = {test_utils::get_endpoint(t_gate, "I0")};
                 EXPECT_EQ(test_net->get_destinations(), dsts);
                 EXPECT_EQ(test_net->get_num_of_destinations(), (size_t) 1);
                 EXPECT_FALSE(suc);
@@ -377,20 +320,10 @@ namespace hal {
 
             // NEGATIVE
             {
-                // The Endpoint is a source, not a destination
-                NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
-                bool suc = test_net->add_destination(test_utils::get_endpoint(t_gate, "O"));
-                EXPECT_FALSE(suc);
-            }
-            {
                 // The Gate is a nullptr
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->add_destination(nullptr, "I0");
 
                 EXPECT_FALSE(suc);
@@ -400,9 +333,9 @@ namespace hal {
             {
                 // The Gate isn't part of the netlist
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                std::shared_ptr<Gate>
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                Gate*
                     t_gate =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "t_gate");
                 // Gate isn't added
@@ -415,9 +348,9 @@ namespace hal {
             {
                 // The pin to connect is weather an input pin nor an inout pin (but an output pin)
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_destination(t_gate, "O");
 
                 EXPECT_FALSE(suc);
@@ -427,8 +360,8 @@ namespace hal {
             {
                 // The pin is already occupied (example netlist is used)
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_example_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_example_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->add_destination(nl->get_gate_by_id(MIN_GATE_ID + 0), "I1");
 
                 EXPECT_FALSE(suc);
@@ -447,44 +380,46 @@ namespace hal {
         TEST_START
             {
                 // Gate is a destination
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_destination(t_gate, "I2");
                 // Pass the Gate and the pin type
                 EXPECT_TRUE(test_net->is_a_destination(t_gate, "I2"));
                 EXPECT_FALSE(test_net->is_a_source(t_gate, "I2"));
                 // Pass the Endpoint
                 EXPECT_TRUE(test_net->is_a_destination(test_utils::get_endpoint(t_gate, "I2")));
+                NO_COUT_TEST_BLOCK;
                 EXPECT_FALSE(test_net->is_a_source(test_utils::get_endpoint(t_gate, "I2")));
             }
             {
                 // Gate is a source
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_source(t_gate, "O");
                 // Pass the Gate and the pin type
                 EXPECT_TRUE(test_net->is_a_source(t_gate, "O"));
                 EXPECT_FALSE(test_net->is_a_destination(t_gate, "O"));
                 // Pass the Endpoint
                 EXPECT_TRUE(test_net->is_a_source(test_utils::get_endpoint(t_gate, "O")));
+                NO_COUT_TEST_BLOCK;
                 EXPECT_FALSE(test_net->is_a_destination(test_utils::get_endpoint(t_gate, "O")));
             }
             {
                 // Gate is a destination but the pin type doesn't match
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_destination(t_gate, "I2");
                 EXPECT_TRUE(test_net->is_a_destination(t_gate, "I2"));
                 EXPECT_FALSE(test_net->is_a_destination(t_gate, "I1"));
             }
             {
                 // Gate is a destination but the pin type doesn't exist
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                auto t_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_destination(t_gate, "I2");
                 EXPECT_TRUE(test_net->is_a_destination(t_gate, "I2"));
                 EXPECT_FALSE(test_net->is_a_destination(t_gate, "NEx_PIN"));
@@ -493,8 +428,8 @@ namespace hal {
             {
                 // Gate is a nullptr
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
                 EXPECT_FALSE(test_net->is_a_destination(nullptr, ""));
                 EXPECT_FALSE(test_net->is_a_source(nullptr, ""));
@@ -510,24 +445,24 @@ namespace hal {
     TEST_F(NetTest, check_get_destinations) {
         TEST_START
             // Create a Net with two different destinations (AND3 and INV Gate)
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-            std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-            auto mult_gate = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
-            std::shared_ptr<Gate>
+            auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+            Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+            auto mult_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
+            Gate*
                 inv_gate = nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_1");
             test_net->add_destination(mult_gate, "I0");
             test_net->add_destination(inv_gate, "I");
 
             {
                 // Get the destinations
-                std::vector<Endpoint>
+                std::vector<Endpoint*>
                     dsts = {test_utils::get_endpoint(mult_gate, "I0"), test_utils::get_endpoint(inv_gate, "I")};
 
                 EXPECT_TRUE(test_utils::vectors_have_same_content(test_net->get_destinations(), dsts));
             }
             {
                 // Get the destinations by passing a Gate type
-                std::vector<Endpoint> dsts = {test_utils::get_endpoint(inv_gate, "I")};
+                std::vector<Endpoint*> dsts = {test_utils::get_endpoint(inv_gate, "I")};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(test_net
                                                                       ->get_destinations(test_utils::endpoint_gate_type_filter(
                                                                           "gate_1_to_1")),
@@ -545,11 +480,11 @@ namespace hal {
         TEST_START
             {
                 // Net has a source and a destination
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
-                auto t_gate_src = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
-                auto t_gate_dst = test_utils::create_test_gate(nl, MIN_GATE_ID + 2);
+                auto t_gate_src = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
+                auto t_gate_dst = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 2);
                 test_net->add_source(t_gate_src, "O");
                 test_net->add_destination(t_gate_dst, "I0");
 
@@ -557,20 +492,20 @@ namespace hal {
             }
             {
                 // Net has no destination
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
-                auto t_gate_src = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto t_gate_src = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_source(t_gate_src, "O");
 
                 EXPECT_TRUE(test_net->is_unrouted());
             }
             {
                 // Net has no source
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
-                auto t_gate_dst = test_utils::create_test_gate(nl, MIN_GATE_ID + 1);
+                auto t_gate_dst = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_destination(t_gate_dst, "I0");
 
                 EXPECT_TRUE(test_net->is_unrouted());
@@ -590,8 +525,8 @@ namespace hal {
         TEST_START
             {
                 // mark and unmark a global input Net
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
                 test_net->mark_global_input_net();
                 EXPECT_TRUE(test_net->is_global_input_net());
@@ -603,8 +538,8 @@ namespace hal {
             }
             {
                 // mark and unmark a global output Net
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
-                std::shared_ptr<Net> test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
+                auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
+                Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
 
                 test_net->mark_global_output_net();
                 EXPECT_TRUE(test_net->is_global_output_net());

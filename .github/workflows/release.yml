@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
 
     runs-on: ${{ matrix.runs-on }}
-    
+
     steps:
       - uses: actions/checkout@v2
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
@@ -83,7 +83,7 @@ jobs:
           cd build
           cp $GITHUB_WORKSPACE/documentation/index.html doc/
           $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
-          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DWITH_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/ -DPYBIND11_PYTHON_VERSION=3.6
+          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/ -DPYBIND11_PYTHON_VERSION=3.6
         env:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true

@@ -1,0 +1,90 @@
+<RCC>
+    <qresource prefix="/fonts">
+        <file alias="iosevka-bold">fonts/iosevka-bold.ttf</file>
+        <file alias="iosevka-bolditalic">fonts/iosevka-bolditalic.ttf</file>
+        <file alias="iosevka-italic">fonts/iosevka-italic.ttf</file>
+        <file alias="iosevka-oblique">fonts/iosevka-oblique.ttf</file>
+        <file alias="iosevka-regular">fonts/iosevka-regular.ttf</file>
+        <file alias="Hack-Bold">fonts/Hack-Bold.ttf</file>
+        <file alias="Hack-BoldItalic">fonts/Hack-BoldItalic.ttf</file>
+        <file alias="Hack-Regular">fonts/Hack-Regular.ttf</file>
+        <file alias="Hack-Italic">fonts/Hack-Italic.ttf</file>
+        <file alias="Montserrat-Black">fonts/Montserrat/Montserrat-Black.ttf</file>
+        <file alias="SourceCodePro-Black">fonts/Source Code Pro/SourceCodePro-Black.ttf</file>
+        <file alias="DroidSansMono">fonts/Droid Sans Mono/DroidSansMono.ttf</file>
+    </qresource>
+    <qresource prefix="/style">
+        <file>stylesheet/gui.css</file>
+        <file>stylesheet/gui.qss</file>
+        <file alias="default_style">stylesheet/default.qss</file>
+        <file alias="midnight">stylesheet/midnight.qss</file>
+        <file alias="rainy">stylesheet/rainy.qss</file>
+        <file alias="darcula">stylesheet/darcula.qss</file>
+        <file alias="vibrant dark">stylesheet/vibrant dark.qss</file>
+        <file alias="hal">stylesheet/hal.qss</file>
+        <file alias="test base">stylesheet/test_base.qss</file>
+        <file alias="test definitions">stylesheet/test_definitions</file>
+        <file alias="test definitions2">stylesheet/test_definitions2</file>
+        <file alias="sunny">stylesheet/sunny.qss</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="start-doc">icons/0042-file-play.svg</file>
+        <file alias="quit">icons/0277-exit.svg</file>
+        <file alias="start">icons/0285-play3.svg</file>
+        <file alias="preferences">icons/0149-cog.svg</file>
+        <file alias="plugin-manager">icons/0153-aid-kit.svg</file>
+        <file alias="open">icons/0049-folder-open.svg</file>
+        <file alias="search">icons/0135-search.svg</file>
+        <file alias="switch">icons/0183-switch.svg</file>
+        <file alias="arrow-up">icons/0307-arrow-up.svg</file>
+        <file alias="arrow-down">icons/0311-arrow-down.svg</file>
+        <file alias="hal">icons/HAL9000.svg</file>
+        <file alias="fire">icons/0170-fire.svg</file>
+        <file alias="settings">icons/0190-menu.svg</file>
+        <file alias="cross">icons/0272-cross.svg</file>
+        <file alias="plugin">icons/0184-power-cord.svg</file>
+        <file alias="eye">icons/0207-eye.svg</file>
+        <file alias="content">icons/0047-stack.svg</file>
+        <file alias="numbered-list">icons/0186-list-numbered.svg</file>
+        <file alias="list">icons/0188-list2.svg</file>
+        <file alias="folder">icons/0048-folder.svg</file>
+        <file alias="floppy">icons/0099-floppy-disk.svg</file>
+        <file alias="database">icons/0101-database.svg</file>
+        <file alias="drive">icons/0100-drive.svg</file>
+        <file alias="folder-down">icons/0052-folder-download.svg</file>
+        <file alias="save">icons/save.svg</file>
+        <file alias="save-as">icons/save-as.svg</file>
+        <file alias="run">icons/run.svg</file>
+        <file alias="bell">icons/0082-bell.svg</file>
+        <file alias="drop">icons/0097-download.svg</file>
+        <file alias="terminal">icons/0386-terminal.svg</file>
+        <file alias="detach">icons/0382-share.svg</file>
+        <file alias="python">icons/Python-logo-notext.svg</file>
+        <file alias="gitlab">icons/gitlab logo.svg</file>
+        <file alias="info">icons/0269-info.svg</file>
+        <file alias="tree-arrow-down">icons/arrow-down.svg</file>
+        <file alias="tree-arrow-right">icons/arrow-right.svg</file>
+        <file alias="placeholder">icons/0154-bug.svg</file>
+        <file alias="bug">icons/0154-bug.svg</file>
+        <file alias="circle">icons/circle.svg</file>
+        <file alias="filled-circle">icons/filled circle.svg</file>
+        <file alias="github4">icons/0437-github4.svg</file>
+        <file alias="github">icons/0434-github.svg</file>
+        <file alias="new-file">icons/new-file.svg</file>
+        <file alias="pen">icons/pen.svg</file>
+        <file alias="plus">icons/plus.svg</file>
+        <file alias="trashcan">icons/trashcan.svg</file>
+        <file alias="graph">icons/0189-tree.svg</file>
+        <file alias="keyboard">icons/0086-keyboard.svg</file>
+        <file alias="gen-window">icons/generic-window.svg</file>
+        <file alias="open-alt">icons/0383-new-tab.svg</file>
+        <file alias="sel_module">icons/sel_module.png</file>
+        <file alias="sel_gate">icons/sel_gate.png</file>
+        <file alias="sel_net">icons/sel_net.png</file>
+	<file alias="undo2">icons/0104-undo2.svg</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>
+        <file alias="spinner">images/oval.svg</file>
+    </qresource>
+</RCC>

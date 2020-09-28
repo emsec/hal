@@ -40,7 +40,6 @@ option(HAL_VERSION_MAJOR "Pass major version via cmake options" "")
 option(HAL_VERSION_MINOR "Pass minor version via cmake options" "")
 option(HAL_VERSION_PATCH "Pass patch version via cmake options" "")
 option(USE_LIBCXX "Force the use of LIBCXX for e.g. gcc" FALSE)
-option(WITH_GUI "Enable GUI build" ON)
 option(BUILD_ALL_PLUGINS "Build all available plugins" OFF)
 option(BUILD_TESTS "Enable test builds" OFF)
 option(BUILD_COVERAGE "Enable code coverage build" OFF)
@@ -140,9 +139,11 @@ if(UNIX)
     enable_cxx_compile_option_if_supported("-pedantic" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-Wshadow" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-Wno-undef" "" "PRIVATE")
+    enable_cxx_compile_option_if_supported("-Werror=return-type" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fcolor-diagnostics" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fdiagnostics-color=always" "" "PRIVATE")
     enable_cxx_compile_option_if_supported("-fsized-deallocation" "" "PRIVATE")
+
 
     enable_cxx_compile_option_if_supported("-O0" "Debug" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "Debug" "PUBLIC")
@@ -160,13 +161,15 @@ if(UNIX)
 
     enable_cxx_compile_option_if_supported("-O1" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-g" "Perf" "PUBLIC")
-    enable_cxx_compile_option_if_supported("-pg" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-fno-inline-functions" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-fno-inline-functions-called-once" "Perf" "PUBLIC")
     enable_cxx_compile_option_if_supported("-fno-optimize-sibling-calls" "Perf" "PUBLIC")
 
     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+
+    # SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fsanitize=address")
+    # SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
 
     if(USE_LIBCXX)
         enable_cxx_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
@@ -210,8 +213,6 @@ if(BUILD_TESTS)
             '${CMAKE_SOURCE_DIR}/deps/*'
             '${CMAKE_BINARY_DIR}/*'
             '${CMAKE_CURRENT_BINARY_DIR}/*'
-            '${CMAKE_SOURCE_DIR}/include/gui/*'
-            '${CMAKE_SOURCE_DIR}/src/gui/*'
             )
 
         message(VERBOSE "COVERAGE_EXCLUDES: ${COVERAGE_EXCLUDES}")
@@ -247,7 +248,6 @@ set(HAL_CMAKECONFIG_INSTALL_DIR "share/cmake/${PROJECT_NAME}" CACHE STRING "inst
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.json")
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.lib")
-configure_file("defaults/guidefaults.ini" ${CMAKE_BINARY_DIR}/share/hal/defaults/guidefaults.ini @ONLY)
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/defaults DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.ini")
 install(FILES ${CMAKE_BINARY_DIR}/hal.pc DESTINATION "${PKGCONFIG_INSTALL_DIRECTORY}")
 message(VERBOSE "PKGCONFIG_INSTALL_DIRECTORY ${PKGCONFIG_INSTALL_DIRECTORY}")
@@ -281,7 +281,8 @@ install(FILES tools/genversion.py
             WORLD_READ
             WORLD_EXECUTE)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/pybind11 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-1.4.2 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-1.5.0 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+
 
 if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
     install(EXPORT hal

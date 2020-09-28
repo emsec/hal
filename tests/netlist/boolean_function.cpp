@@ -1,16 +1,17 @@
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
-#include <netlist/boolean_function.h>
+#include "hal_core/netlist/boolean_function.h"
 #include <iostream>
+#include <type_traits>
 
 namespace hal {
 
     class BooleanFunctionTest : public ::testing::Test {
     protected:
 
-        const BooleanFunction::value X = BooleanFunction::value::X;
-        const BooleanFunction::value ZERO = BooleanFunction::value::ZERO;
-        const BooleanFunction::value ONE = BooleanFunction::value::ONE;
+        const BooleanFunction::Value X = BooleanFunction::X;
+        const BooleanFunction::Value ZERO = BooleanFunction::ZERO;
+        const BooleanFunction::Value ONE = BooleanFunction::ONE;
 
         virtual void SetUp() {
             test_utils::init_log_channels();
@@ -30,7 +31,7 @@ namespace hal {
                 std::cout << i;
             }
             std::cout << "|O" << std::endl;
-            std::vector<BooleanFunction::value> t_table = bf.get_truth_table(vars);
+            std::vector<BooleanFunction::Value> t_table = bf.get_truth_table(vars);
             for (unsigned int i = 0; i < vars.size() + 2; i++) std::cout << "-";
             std::cout << std::endl;
             for (unsigned int i = 0; i < t_table.size(); i++) {
@@ -39,9 +40,9 @@ namespace hal {
                 }
                 std::cout << "|";
                 switch (t_table[i]) {
-                    case BooleanFunction::value::ONE:std::cout << "1";
+                    case BooleanFunction::ONE:std::cout << "1";
                         break;
-                    case BooleanFunction::value::ZERO:std::cout << "0";
+                    case BooleanFunction::ZERO:std::cout << "0";
                         break;
                     default:std::cout << "X";
                         break;
@@ -53,7 +54,7 @@ namespace hal {
 
         // Remove the spaces from a string
         std::string no_space(std::string s) {
-            return core_utils::replace<std::string>(s, " ", "");
+            return utils::replace<std::string>(s, " ", "");
         }
 
         /**
@@ -66,8 +67,8 @@ namespace hal {
          * @param values - the values the variables should be set to
          * @returns a variables to values map, that can be interpreted by the boolean funcitons evaluate function.
          */
-        std::map<std::string, BooleanFunction::value> create_input_map(std::string variables, std::string values) {
-            std::map<std::string, BooleanFunction::value> res;
+        std::unordered_map<std::string, BooleanFunction::Value> create_input_map(std::string variables, std::string values) {
+            std::unordered_map<std::string, BooleanFunction::Value> res;
             // Booth strings must be equal in length
             if (variables.size() != values.size()) {
                 return res;
@@ -77,18 +78,18 @@ namespace hal {
                 std::string val = std::string(1, values.at(c));
                 // Can't set the same variable twice
                 if (res.find(var) != res.end()) {
-                    return std::map<std::string, BooleanFunction::value>();
+                    return {};
                 }
                 if (val == "0") {
-                    res.insert(std::pair<std::string, BooleanFunction::value>(var, BooleanFunction::value::ZERO));
+                    res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::ZERO));
                 } else if (val == "1") {
-                    res.insert(std::pair<std::string, BooleanFunction::value>(var, BooleanFunction::value::ONE));
+                    res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::ONE));
                 } else if (val == "x" || val == "X") {
-                    res.insert(std::pair<std::string, BooleanFunction::value>(var, BooleanFunction::value::X));
+                    res.insert(std::pair<std::string, BooleanFunction::Value>(var, BooleanFunction::X));
                 }
                     // If the values string contains an illegal character, exit
                 else {
-                    return std::map<std::string, BooleanFunction::value>();
+                    return {};
                 }
             }
             return res;
@@ -96,7 +97,20 @@ namespace hal {
 
     };
 
+    /**
+     * Testing move and copy constructors
+     */
+    TEST_F(BooleanFunctionTest, check_constructor_types) {
+        TEST_START
+            {
+                EXPECT_EQ( std::is_copy_constructible<BooleanFunction>::value, true);
+                EXPECT_EQ( std::is_copy_assignable<BooleanFunction>::value, true);
+                EXPECT_EQ( std::is_move_constructible<BooleanFunction>::value, true);
+                EXPECT_EQ( std::is_move_assignable<BooleanFunction>::value, true);
+            }
 
+        TEST_END
+    }
 
     /**
      * Testing the different constructors and the main functionality, by implement the following boolean function:
@@ -128,11 +142,11 @@ namespace hal {
                 EXPECT_EQ(r(create_input_map("ABC", "110")), ZERO);
                 EXPECT_EQ(r(create_input_map("ABC", "111")), ZERO);
 
-                std::vector<BooleanFunction::value>
+                std::vector<BooleanFunction::Value>
                     truth_table = r.get_truth_table(std::vector<std::string>({"C", "B", "A"}));
 
                 EXPECT_EQ(truth_table,
-                          std::vector<BooleanFunction::value>({ONE, ZERO, ONE, ZERO, ONE, ZERO, ZERO, ZERO}));
+                          std::vector<BooleanFunction::Value>({ONE, ZERO, ONE, ZERO, ONE, ZERO, ZERO, ZERO}));
             }
 
         TEST_END
@@ -253,7 +267,7 @@ namespace hal {
                 BooleanFunction b("B");
                 BooleanFunction c("C");
                 BooleanFunction a_2("A");
-                EXPECT_EQ((a | b | c | a_2).get_variables(), std::set<std::string>({"A", "B", "C"}));
+                EXPECT_EQ((a | b | c | a_2).get_variables(), std::vector<std::string>({"A", "B", "C"}));
             }
         TEST_END
     }
@@ -366,32 +380,32 @@ namespace hal {
             {
                 // Check default case
                 auto bf = BooleanFunction::from_string(f_str);
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
             }
             {
                 // Declare existing variable
                 auto bf = BooleanFunction::from_string(f_str, {"A"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
             }
             {
                 // Declare custom variable
                 auto bf = BooleanFunction::from_string(f_str, {"A B"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A B", "C", "D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A B", "C", "D"}));
             }
             {
                 // Declare custom variable
                 auto bf = BooleanFunction::from_string(f_str, {"A B C D"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A B C D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A B C D"}));
             }
             {
                 // Declare custom variable
                 auto bf = BooleanFunction::from_string(f_str, {"D(1)"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D(1)"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D(1)"}));
             }
             {
                 // Declare non-existing custom variable
                 auto bf = BooleanFunction::from_string(f_str, {"X"});
-                EXPECT_EQ(bf.get_variables(), std::set<std::string>({"A", "B", "C", "D"}));
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
             }
 
         TEST_END

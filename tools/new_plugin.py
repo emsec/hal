@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import os
+import re
 
 def print_usage():
     print("HAL plugin template generator")
@@ -8,7 +9,7 @@ def print_usage():
     print("")
     print("Sets up the directory structure and respective files in the current directory:")
     print("<name>/")
-    print(" |- include/")
+    print(" |- include/plugin_<name>/")
     print(" | |- plugin_<name>.h")
     print(" |- python/")
     print(" | |- python_bindings.cpp")
@@ -43,40 +44,47 @@ PLUGIN_H_TEMPLATE = """#pragma once
 
 #include "core/plugin_interface_base.h"
 
-class PLUGIN_API plugin_##LOWER## : virtual public i_base
+namespace hal
 {
-public:
+    class PLUGIN_API ##CLASSNAME##Plugin : public BasePluginInterface
+    {
+    public:
 
-    std::string get_name() const override;
-    std::string get_version() const override;
+        std::string get_name() const override;
+        std::string get_version() const override;
 
-    void initialize() override;
-};
+        void initialize() override;
+    };
+}
 """
 
 #################################################################
 #################################################################
 
-PLUGIN_CPP_TEMPLATE = """#include "plugin_##LOWER##.h"
+PLUGIN_CPP_TEMPLATE = """#include "##LOWER##/plugin_##LOWER##.h"
 
-extern std::shared_ptr<i_base> get_plugin_instance()
-{
-    return std::make_shared<plugin_##LOWER##>();
-}
-
-std::string plugin_##LOWER##::get_name() const
-{
-    return std::string("##LOWER##");
-}
-
-std::string plugin_##LOWER##::get_version() const
-{
-    return std::string("0.1");
-}
-
-void plugin_##LOWER##::initialize()
+namespace hal
 {
 
+    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
+    {
+        return std::make_unique<##CLASSNAME##Plugin>();
+    }
+
+    std::string ##CLASSNAME##Plugin::get_name() const
+    {
+        return std::string("##LOWER##");
+    }
+
+    std::string ##CLASSNAME##Plugin::get_version() const
+    {
+        return std::string("0.1");
+    }
+
+    void ##CLASSNAME##Plugin::initialize()
+    {
+
+    }
 }
 """
 
@@ -88,30 +96,34 @@ PYTHON_CPP_TEMPLATE = """#include "pybind11/operators.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
 
-#include "plugin_##LOWER##.h"
+#include "##LOWER##/plugin_##LOWER##.h"
 
 namespace py = pybind11;
 
-#ifdef PYBIND11_MODULE
-PYBIND11_MODULE(##LOWER##, m)
+namespace hal
 {
-    m.doc() = "hal ##LOWER## python bindings";
-#else
-PYBIND11_PLUGIN(##LOWER##)
-{
-    py::module m("##LOWER##", "hal ##LOWER## python bindings");
-#endif    // ifdef PYBIND11_MODULE
 
-    py::class_<plugin_##LOWER##, std::shared_ptr<plugin_##LOWER##>, i_base>(m, "##LOWER##")
-        .def_property_readonly("name", &plugin_##LOWER##::get_name)
-        .def("get_name", &plugin_##LOWER##::get_name)
-        .def_property_readonly("version", &plugin_##LOWER##::get_version)
-        .def("get_version", &plugin_##LOWER##::get_version)
-        ;
+    #ifdef PYBIND11_MODULE
+    PYBIND11_MODULE(##LOWER##, m)
+    {
+        m.doc() = "hal ##CLASSNAME##Plugin python bindings";
+    #else
+    PYBIND11_PLUGIN(##LOWER##)
+    {
+        py::module m("##LOWER##", "hal ##CLASSNAME##Plugin python bindings");
+    #endif    // ifdef PYBIND11_MODULE
 
-#ifndef PYBIND11_MODULE
-    return m.ptr();
-#endif    // PYBIND11_MODULE
+        py::class_<##CLASSNAME##Plugin, BasePluginInterface>(m, "##LOWER##")
+            .def_property_readonly("name", &##CLASSNAME##Plugin::get_name)
+            .def("get_name", &##CLASSNAME##Plugin::get_name)
+            .def_property_readonly("version", &##CLASSNAME##Plugin::get_version)
+            .def("get_version", &##CLASSNAME##Plugin::get_version)
+            ;
+
+    #ifndef PYBIND11_MODULE
+        return m.ptr();
+    #endif    // PYBIND11_MODULE
+    }
 }
 """
 
@@ -123,22 +135,23 @@ PYBIND11_PLUGIN(##LOWER##)
 def create_plugin(name):
     lower = name.lower()
     upper = name.upper()
+    classname = "".join(x[0].upper()+x[1:] for x in name.split("_"))
 
     os.makedirs(name)
     with open(name+"/CMakeLists.txt", "wt") as f:
-        f.write(CMAKE_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower))
+        f.write(CMAKE_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower).replace("##CLASSNAME##", classname))
 
-    os.makedirs(name+"/include")
-    with open(name+"/include/plugin_"+lower+".h", "wt") as f:
-        f.write(PLUGIN_H_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower))
+    os.makedirs(name+"/include/"+lower)
+    with open(name+"/include/"+lower+"/plugin_"+lower+".h", "wt") as f:
+        f.write(PLUGIN_H_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower).replace("##CLASSNAME##", classname))
 
     os.makedirs(name+"/src")
     with open(name+"/src/plugin_"+lower+".cpp", "wt") as f:
-        f.write(PLUGIN_CPP_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower))
+        f.write(PLUGIN_CPP_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower).replace("##CLASSNAME##", classname))
 
     os.makedirs(name+"/python")
     with open(name+"/python/python_bindings.cpp", "wt") as f:
-        f.write(PYTHON_CPP_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower))
+        f.write(PYTHON_CPP_TEMPLATE.replace("##UPPER##", upper).replace("##LOWER##", lower).replace("##CLASSNAME##", classname))
 
 if len(sys.argv) != 2:
     print_usage()

@@ -1,13 +1,13 @@
-#include "core/log.h"
-#include "core/utils.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
-#include "def.h"
+#include "hal_core/defines.h"
 #include "plugin_test_plugin.h"
 
 namespace py = pybind11;
@@ -55,7 +55,7 @@ Get the version of the plugin.
 :rtype: str
 )")
         .def("get_boolean_function", py::overload_cast<const std::vector<bool>&>(&plugin_test_plugin::get_boolean_function))
-        .def("get_boolean_function_str", py::overload_cast<std::shared_ptr<Gate> const, bool>(&plugin_test_plugin::get_boolean_function_str), py::arg("gate"), py::arg("css_beautified") = false)
+        .def("get_boolean_function_str", py::overload_cast<Gate* const, bool>(&plugin_test_plugin::get_boolean_function_str), py::arg("gate"), py::arg("css_beautified") = false)
         ;
 
 #ifndef PYBIND11_MODULE

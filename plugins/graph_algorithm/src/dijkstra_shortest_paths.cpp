@@ -1,17 +1,17 @@
-#include "plugin_graph_algorithm.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/graph_traits.hpp>
 
 namespace hal {
-std::map<std::shared_ptr<Gate>, std::tuple<std::vector<std::shared_ptr<Gate>>, int>> plugin_graph_algorithm::get_dijkstra_shortest_paths(const std::shared_ptr<Gate> g)
+std::map<Gate*, std::tuple<std::vector<Gate*>, int>> plugin_graph_algorithm::get_dijkstra_shortest_paths(Gate* g)
 {
     if (g == nullptr)
     {
@@ -42,14 +42,14 @@ std::map<std::shared_ptr<Gate>, std::tuple<std::vector<std::shared_ptr<Gate>>, i
     // vertices in boost graph are ordered from 0, 1, ...
     auto nl = g->get_netlist();
     std::set<u32> gate_ids;
-    for (const auto& gate : nl->get_gates())
+    for (auto gate : nl->get_gates())
         gate_ids.insert(gate->get_id());
 
     std::map<u32, vertex_t> gate_id_to_vertex;
     std::map<vertex_t, u32> vertex_id_to_gate_id;
 
     u32 vertex_id_cnt = 0;
-    for (const auto& gate_id : gate_ids)
+    for (auto gate_id : gate_ids)
     {
         auto vd                               = boost::add_vertex(boost_graph);
         gate_id_to_vertex[gate_id]            = vd;
@@ -57,21 +57,21 @@ std::map<std::shared_ptr<Gate>, std::tuple<std::vector<std::shared_ptr<Gate>>, i
     }
 
     // add ordered weigthened edges (weight = 1) to directed boost graph
-    std::map<u32, std::shared_ptr<Net>> ordered_nets;
-    for (const auto& net : nl->get_nets())
+    std::map<u32, Net*> ordered_nets;
+    for (auto net : nl->get_nets())
         ordered_nets[net->get_id()] = net;
 
     for (const auto& it : ordered_nets)
     {
-        if (it.second->get_source().get_gate() == nullptr)
+        if (it.second->get_source()->get_gate() == nullptr)
             continue;
 
         std::set<u32> dst_ids;
         for (auto dst : it.second->get_destinations())
-            dst_ids.insert(dst.get_gate()->get_id());
+            dst_ids.insert(dst->get_gate()->get_id());
 
         for (const auto& dst_id : dst_ids)
-            boost::add_edge(gate_id_to_vertex[it.second->get_source().get_gate()->get_id()], gate_id_to_vertex[dst_id], 1, boost_graph);
+            boost::add_edge(gate_id_to_vertex[it.second->get_source()->get_gate()->get_id()], gate_id_to_vertex[dst_id], 1, boost_graph);
     }
 
     // initialize parameters for dijkstra_shortest_paths()
@@ -84,19 +84,19 @@ std::map<std::shared_ptr<Gate>, std::tuple<std::vector<std::shared_ptr<Gate>>, i
                                 .distance_map(boost::make_iterator_property_map(distance.begin(), get(boost::vertex_index, boost_graph))));
 
     // postprocess boost result
-    std::map<std::shared_ptr<Gate>, std::tuple<std::vector<std::shared_ptr<Gate>>, int>> result;
+    std::map<Gate*, std::tuple<std::vector<Gate*>, int>> result;
     boost::graph_traits<boost_graph_t>::vertex_iterator vi, vend;
     for (boost::tie(vi, vend) = boost::vertices(boost_graph); vi != vend; ++vi)
     {
         if (distance[*vi] == ((i64)1 << 31) - 1)
         {
             // no path from g to gate
-            result[nl->get_gate_by_id(vertex_id_to_gate_id[*vi])] = std::make_tuple(std::vector<std::shared_ptr<Gate>>(), -1);
+            result[nl->get_gate_by_id(vertex_id_to_gate_id[*vi])] = std::make_tuple(std::vector<Gate*>(), -1);
         }
         else
         {
             // path from src to gate, so assemble path
-            std::vector<std::shared_ptr<Gate>> path;
+            std::vector<Gate*> path;
             auto tmp = *vi;
             while (vertex_id_to_gate_id[tmp] != g->get_id())
             {

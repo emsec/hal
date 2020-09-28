@@ -496,7 +496,7 @@ class TestNetlist(unittest.TestCase):
         ep_i = self.get_endpoint(gate_0, "I")
         ep_o = self.get_endpoint(gate_0, "O")
         # Tests
-        self.assertEqual(ep_i.get_gate(), gate_0)
+        self.assertEqual(ep_i->get_gate(), gate_0)
         self.assertEqual(ep_i.get_pin_type(), "I")
         ep.set_gate(gate_0)
         ep.set_pin_type("I")

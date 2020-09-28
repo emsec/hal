@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/plugin_interface_base.h"
-#include "core/plugin_interface_cli.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/plugin_interface_cli.h"
 
 namespace hal
 {
@@ -10,14 +10,14 @@ namespace hal
     class Gate;
     class Net;
 
-    class PLUGIN_API plugin_test_plugin : virtual public CLIPluginInterface    //CLIPluginInterface
+    class PLUGIN_API PluginTestPlugin : public CLIPluginInterface    //CLIPluginInterface
     {
     public:
         /** constructor (= default) */
-        plugin_test_plugin() = default;
+        PluginTestPlugin() = default;
 
         /** destructor (= default) */
-        ~plugin_test_plugin() = default;
+        ~PluginTestPlugin() = default;
 
         /*
      *      interface implementations
@@ -33,7 +33,7 @@ namespace hal
         ProgramOptions get_cli_options() const override;
 
         /** interface implementation: CLIPluginInterface */
-        bool handle_cli_call(std::shared_ptr<Netlist> nl, ProgramArguments& args) override;
+        bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
     };
 
 }    // namespace hal

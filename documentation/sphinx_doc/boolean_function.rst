@@ -1,7 +1,7 @@
 Boolean Function
 ==========================
 
-.. autoclass:: hal_py.boolean_function
+.. autoclass:: hal_py.BooleanFunction
    :members:
 
    .. automethod:: __init__

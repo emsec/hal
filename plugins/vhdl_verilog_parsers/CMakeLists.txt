@@ -1,0 +1,12 @@
+option(PL_VHDL_VERILOG_PARSERS "PL_VHDL_VERILOG_PARSERS" ON)
+if(PL_VHDL_VERILOG_PARSERS OR BUILD_ALL_PLUGINS)
+    file(GLOB_RECURSE VHDL_VERILOG_PARSERS_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
+    file(GLOB_RECURSE VHDL_VERILOG_PARSERS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+
+    hal_add_plugin(vhdl_verilog_parsers
+                   SHARED
+                   HEADER ${VHDL_VERILOG_PARSERS_INC}
+                   SOURCES ${VHDL_VERILOG_PARSERS_SRC}
+                   )
+    add_subdirectory(test)
+endif()

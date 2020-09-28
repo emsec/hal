@@ -1,12 +1,12 @@
-#include "plugin_graph_algorithm.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
-#include "core/log.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
-    extern std::shared_ptr<BasePluginInterface> get_plugin_instance()
+    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
-        return std::dynamic_pointer_cast<BasePluginInterface>(std::make_shared<plugin_graph_algorithm>());
+        return std::make_unique<plugin_graph_algorithm>();
     }
 
     std::string plugin_graph_algorithm::get_name() const

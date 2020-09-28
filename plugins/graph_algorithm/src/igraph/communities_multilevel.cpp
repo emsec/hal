@@ -1,26 +1,26 @@
-#include "core/log.h"
-#include "core/plugin_manager.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "plugin_graph_algorithm.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
 #include <igraph/igraph.h>
 #include <tuple>
 
 namespace hal
 {
-    std::map<int, std::set<std::shared_ptr<Gate>>> plugin_graph_algorithm::get_communities_multilevel(std::shared_ptr<Netlist> nl)
+    std::map<int, std::set<Gate*>> plugin_graph_algorithm::get_communities_multilevel(Netlist* nl)
     {
         if (nl == nullptr)
         {
             log_error(this->get_name(), "{}", "parameter 'nl' is nullptr");
-            return std::map<int, std::set<std::shared_ptr<Gate>>>();
+            return std::map<int, std::set<Gate*>>();
         }
 
-        std::tuple<igraph_t, std::map<int, std::shared_ptr<Gate>>> igraph_tuple = get_igraph_directed(nl);
+        std::tuple<igraph_t, std::map<int, Gate*>> igraph_tuple = get_igraph_directed(nl);
         igraph_t graph                                                          = std::get<0>(igraph_tuple);
-        std::map<int, std::shared_ptr<Gate>> vertex_to_gate                     = std::get<1>(igraph_tuple);
+        std::map<int, Gate*> vertex_to_gate                     = std::get<1>(igraph_tuple);
 
         // convert to undirected
         igraph_to_undirected(&graph, IGRAPH_TO_UNDIRECTED_MUTUAL, 0);
@@ -39,7 +39,7 @@ namespace hal
                                     &modularity);
 
         // map back to HAL structures
-        std::map<int, std::set<std::shared_ptr<Gate>>> community_sets;
+        std::map<int, std::set<Gate*>> community_sets;
         for (int i = 0; i < igraph_vector_size(&membership_vec); i++)
         {
             community_sets[(int)VECTOR(membership_vec)[i]].insert(vertex_to_gate[i]);

@@ -1,42 +1,24 @@
-#include "netlist/endpoint.h"
+#include "hal_core/netlist/endpoint.h"
 
 namespace hal
 {
-    Endpoint::Endpoint(const std::shared_ptr<Gate>& gate, const std::string& pin, bool is_a_destination) : m_gate(gate), m_pin(pin), m_is_a_destination(is_a_destination)
+    Endpoint::Endpoint(Gate* gate, const std::string& pin, Net* net, bool is_a_destination) : m_gate(gate), m_pin(pin), m_net(net), m_is_a_destination(is_a_destination)
     {
     }
 
-    bool Endpoint::operator<(const Endpoint& rhs) const
-    {
-        if (this->m_gate != rhs.m_gate)
-        {
-            return (this->m_gate < rhs.m_gate);
-        }
-        if (this->m_pin != rhs.m_pin)
-        {
-            return (this->m_pin < rhs.m_pin);
-        }
-        return (this->m_is_a_destination < rhs.m_is_a_destination);
-    }
-
-    bool Endpoint::operator==(const Endpoint& rhs) const
-    {
-        return (this->m_gate == rhs.m_gate) && (this->m_pin == rhs.m_pin) && (this->m_is_a_destination == rhs.m_is_a_destination);
-    }
-
-    bool Endpoint::operator!=(const Endpoint& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    const std::shared_ptr<Gate>& Endpoint::get_gate() const
+    Gate* Endpoint::get_gate() const
     {
         return m_gate;
     }
 
-    const std::string& Endpoint::get_pin() const
+    std::string Endpoint::get_pin() const
     {
         return m_pin;
+    }
+
+    Net* Endpoint::get_net() const
+    {
+        return m_net;
     }
 
     bool Endpoint::is_destination_pin() const
@@ -48,4 +30,4 @@ namespace hal
     {
         return !m_is_a_destination;
     }
-}
+}    // namespace hal

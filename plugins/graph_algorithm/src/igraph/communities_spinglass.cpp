@@ -1,29 +1,29 @@
-#include "core/log.h"
-#include "core/plugin_manager.h"
-#include "netlist/gate.h"
-#include "netlist/net.h"
-#include "netlist/netlist.h"
-#include "plugin_graph_algorithm.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
 #include <igraph/igraph.h>
 #include <tuple>
 
 namespace hal
 {
-    std::map<int, std::set<std::shared_ptr<Gate>>> plugin_graph_algorithm::get_communities_spinglass(std::shared_ptr<Netlist> const nl, u32 const spins)
+    std::map<int, std::set<Gate*>> plugin_graph_algorithm::get_communities_spinglass(Netlist* const nl, u32 const spins)
     {
         if (nl == nullptr)
         {
             log_error(this->get_name(), "{}", "parameter 'nl' is nullptr");
-            return std::map<int, std::set<std::shared_ptr<Gate>>>();
+            return std::map<int, std::set<Gate*>>();
         }
 
         log_info("graph_algorithm", "netlist has {} gates and {} nets", nl->get_gates().size(), nl->get_nets().size());
 
-        std::tuple<igraph_t, std::map<int, std::shared_ptr<Gate>>> igraph_tuple = get_igraph_directed(nl);
+        std::tuple<igraph_t, std::map<int, Gate*>> igraph_tuple = get_igraph_directed(nl);
 
         igraph_t graph                                      = std::get<0>(igraph_tuple);
-        std::map<int, std::shared_ptr<Gate>> vertex_to_gate = std::get<1>(igraph_tuple);
+        std::map<int, Gate*> vertex_to_gate = std::get<1>(igraph_tuple);
 
         igraph_real_t modularity, temperature;
         igraph_vector_t membership, csize;

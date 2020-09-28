@@ -1,6 +1,6 @@
-#include "netlist/event_system/net_event_handler.h"
+#include "hal_core/netlist/event_system/net_event_handler.h"
 
-#include "netlist/net.h"
+#include "hal_core/netlist/net.h"
 
 namespace hal
 {
@@ -8,7 +8,7 @@ namespace hal
     {
         namespace
         {
-            CallbackHook<void(event, std::shared_ptr<Net>, u32)> m_callback;
+            CallbackHook<void(event, Net*, u32)> m_callback;
             bool enabled = true;
         }    // namespace
 
@@ -17,7 +17,7 @@ namespace hal
             enabled = flag;
         }
 
-        void notify(event c, std::shared_ptr<Net> net, u32 associated_data)
+        void notify(event c, Net* net, u32 associated_data)
         {
             if (enabled)
             {
@@ -25,7 +25,7 @@ namespace hal
             }
         }
 
-        void register_callback(const std::string& name, std::function<void(event, std::shared_ptr<Net>, u32)> function)
+        void register_callback(const std::string& name, std::function<void(event, Net*, u32)> function)
         {
             m_callback.add_callback(name, function);
         }

@@ -20,7 +20,7 @@ endif(PkgConfig_FOUND)
 #####   Sanitizers
 ################################
 
-find_package(Sanitizers)
+find_package(Sanitizers REQUIRED)
 
 ################################
 #####   OpenMP
@@ -138,16 +138,15 @@ endif()
 #####   spdlog
 ################################
 
-find_package(spdlog 1.4.2 EXACT CONFIG)
+find_package(spdlog 1.5.0 CONFIG)
 if(${spdlog_FOUND})
-    message(VERBOSE "Found spdlog >= 1.4.2")
+    message(VERBOSE "Found spdlog >= 1.5.0")
 else()
-    message(STATUS "spdlog >= 1.4.2 not found")
-    #    include_directories(${include_directories} "${CMAKE_CURRENT_SOURCE_DIR}/deps/spdlog-1.4.2/include")
-    set(spdlog_VERSION 1.4.2)
+    message(STATUS "spdlog >= 1.5.0 not found")
+    set(spdlog_VERSION 1.5.0)
     add_library(spdlog::spdlog INTERFACE IMPORTED)
     set_target_properties(spdlog::spdlog PROPERTIES
-                          INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.4.2/include"
+                          INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.5.0/include"
                           )
 endif()
 
@@ -169,43 +168,6 @@ elseif(NOT PythonInterp_FOUND)
         message(STATUS "    brew install python3")
     endif(APPLE AND CMAKE_HOST_APPLE)
 endif(PythonInterp_FOUND)
-
-################################
-#####   Qt
-################################
-
-if(WITH_GUI)
-    # We require qt5 widgets
-    find_package(Qt5Widgets)
-    if(Qt5Widgets_FOUND)
-        message(VERBOSE "Qt5Widgets_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
-        message(VERBOSE "Qt5Widgets_LIBRARIES: ${Qt5Widgets_LIBRARIES}")
-    elseif(NOT Qt5Widgets_FOUND)
-        set(Missing_package "TRUE")
-        if(APPLE AND CMAKE_HOST_APPLE)
-            message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt")
-        endif(APPLE AND CMAKE_HOST_APPLE)
-    endif(Qt5Widgets_FOUND)
-    find_package(Qt5Concurrent)
-    if(Qt5Concurrent_FOUND)
-        message(VERBOSE "Qt5Concurrent_INCLUDE_DIRS: ${Qt5Concurrent_INCLUDE_DIRS}")
-        message(VERBOSE "Qt5Concurrent_LIBRARIES: ${Qt5Concurrent_LIBRARIES}")
-    elseif(NOT Qt5Concurrent_FOUND)
-        set(Missing_package "TRUE")
-        if(APPLE AND CMAKE_HOST_APPLE)
-            message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt5")
-        endif(APPLE AND CMAKE_HOST_APPLE)
-    endif(Qt5Concurrent_FOUND)
-    find_package(Qt5Svg)
-    if(Qt5Svg_FOUND)
-        message(VERBOSE "Qt5Svg_INCLUDE_DIRS: ${Qt5Svg_INCLUDE_DIRS}")
-        message(VERBOSE "Qt5Svg_LIBRARIES: ${Qt5Svg_LIBRARIES}")
-    elseif(NOT Qt5Svg_FOUND)
-        set(Missing_package "TRUE")
-    endif(Qt5Svg_FOUND)
-endif()
 
 ################################
 #####   Graphviz

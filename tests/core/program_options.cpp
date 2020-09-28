@@ -1,14 +1,14 @@
 #include "test_def.h"
 #include "gtest/gtest.h"
-#include <core/log.h>
-#include <core/program_options.h>
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/program_options.h"
 #include <iostream>
 #include "netlist_test_utils.h"
 
 namespace hal {
     class ProgramOptionsTest : public ::testing::Test {
     protected:
-        const std::string REQUIRED_PARAM = ProgramOptions::REQUIRED_PARAM;
+        const std::string A_REQUIRED_PARAMETER = ProgramOptions::A_REQUIRED_PARAMETER;
         virtual void SetUp() {
             test_utils::init_log_channels();
         }
@@ -67,11 +67,11 @@ namespace hal {
             {
                 // Add options with required parameters (required parameters after non-required)
                 ProgramOptions p_opts("group_0");
-                bool suc_0 = p_opts.add({"flag_0"}, "flag_desc_0", {REQUIRED_PARAM});
-                bool suc_1 = p_opts.add({"flag_1"}, "flag_desc_1", {REQUIRED_PARAM, REQUIRED_PARAM});
-                bool suc_2 = p_opts.add({"flag_2"}, "flag_desc_2", {REQUIRED_PARAM, REQUIRED_PARAM, "param_3"});
+                bool suc_0 = p_opts.add({"flag_0"}, "flag_desc_0", {A_REQUIRED_PARAMETER});
+                bool suc_1 = p_opts.add({"flag_1"}, "flag_desc_1", {A_REQUIRED_PARAMETER, A_REQUIRED_PARAMETER});
+                bool suc_2 = p_opts.add({"flag_2"}, "flag_desc_2", {A_REQUIRED_PARAMETER, A_REQUIRED_PARAMETER, "param_3"});
                 bool suc_3 = p_opts
-                    .add({"flag_3"}, "flag_desc_3", {REQUIRED_PARAM, REQUIRED_PARAM, "param_3", "param_4", "param_5"});
+                    .add({"flag_3"}, "flag_desc_3", {A_REQUIRED_PARAMETER, A_REQUIRED_PARAMETER, "param_3", "param_4", "param_5"});
 
                 EXPECT_TRUE(suc_0);
                 EXPECT_TRUE(suc_1);
@@ -144,9 +144,9 @@ namespace hal {
                 // Add options with required parameters (required parameters after non-required)
                 NO_COUT_TEST_BLOCK;
                 ProgramOptions p_opts;
-                bool suc_0 = p_opts.add({"flag_0"}, "flag_desc_0", {"param_0", REQUIRED_PARAM});
-                bool suc_1 = p_opts.add({"flag_1"}, "flag_desc_1", {REQUIRED_PARAM, "param_1", REQUIRED_PARAM});
-                bool suc_2 = p_opts.add({"flag_2"}, "flag_desc_2", {"param_0", REQUIRED_PARAM, "param_2"});
+                bool suc_0 = p_opts.add({"flag_0"}, "flag_desc_0", {"param_0", A_REQUIRED_PARAMETER});
+                bool suc_1 = p_opts.add({"flag_1"}, "flag_desc_1", {A_REQUIRED_PARAMETER, "param_1", A_REQUIRED_PARAMETER});
+                bool suc_2 = p_opts.add({"flag_2"}, "flag_desc_2", {"param_0", A_REQUIRED_PARAMETER, "param_2"});
 
                 EXPECT_FALSE(suc_0);
                 EXPECT_FALSE(suc_1);
@@ -262,7 +262,7 @@ namespace hal {
 
     /**
      * Testing the parsing of command line arguments and the creation of correct ProgramArguments.
-     * The behaviour in case of missing parameters with and without the REQUIRED_PARAM is tested as well
+     * The behaviour in case of missing parameters with and without the A_REQUIRED_PARAMETER is tested as well
      *
      * Functions: parse, get_unknown_arguments
      */
@@ -323,9 +323,9 @@ namespace hal {
             {
                 // Parse multiple flags with required parameters (intended usage)
                 ProgramOptions p_opts;
-                p_opts.add({"flag_0"}, "flag_desc_0", {REQUIRED_PARAM});
-                p_opts.add({"flag_1"}, "flag_desc_1", {REQUIRED_PARAM, "default_param_1_1"});
-                p_opts.add({"flag_2"}, "flag_desc_2", {REQUIRED_PARAM, REQUIRED_PARAM});
+                p_opts.add({"flag_0"}, "flag_desc_0", {A_REQUIRED_PARAMETER});
+                p_opts.add({"flag_1"}, "flag_desc_1", {A_REQUIRED_PARAMETER, "default_param_1_1"});
+                p_opts.add({"flag_2"}, "flag_desc_2", {A_REQUIRED_PARAMETER, A_REQUIRED_PARAMETER});
 
                 const char *args[] =
                     {"program_name", "flag_0", "param_0_0", "flag_1", "param_1_0", "flag_2", "param_2_0", "param_2_1"};
@@ -393,7 +393,7 @@ namespace hal {
                 // Parse multiple flags with required parameters (wrong usage)
                 NO_COUT_TEST_BLOCK;
                 ProgramOptions p_opts;
-                p_opts.add({"flag_0"}, "flag_desc_0", {REQUIRED_PARAM});
+                p_opts.add({"flag_0"}, "flag_desc_0", {A_REQUIRED_PARAMETER});
                 p_opts.add({"flag_1"}, "flag_desc_1", {"default_param_0"});
 
                 const char *args[] = {"program_name", "flag_0", "flag_1"};
@@ -403,7 +403,7 @@ namespace hal {
             {
                 //        // Parse multiple flags with required parameters (wrong usage)
                 //        ProgramOptions p_opts;
-                //        p_opts.add({"flag_0"}, "flag_desc_0", {REQUIRED_PARAM, REQUIRED_PARAM});
+                //        p_opts.add({"flag_0"}, "flag_desc_0", {A_REQUIRED_PARAMETER, A_REQUIRED_PARAMETER});
                 //        p_opts.add({"flag_1"}, "flag_desc_1", {"default_param_0"});
                 //
                 //        const char* args[] = {"program_name",

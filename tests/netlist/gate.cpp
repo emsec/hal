@@ -1,13 +1,13 @@
-#include "netlist/gate_library/gate_library_manager.h"
-#include "netlist/netlist.h"
-#include "netlist/netlist_factory.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
 #include <iostream>
-#include <netlist/gate.h>
-#include <netlist/net.h>
-#include <netlist/module.h>
-#include <netlist/gate_library/gate_type/gate_type_lut.h>
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include <iomanip>
 #include <algorithm>
 #include <cassert>
@@ -41,13 +41,13 @@ namespace hal {
         }
 
         // UNUSED
-        std::vector<BooleanFunction::value> get_truth_table_from_i(const int i, unsigned bit, bool flipped = false) {
-            std::vector<BooleanFunction::value> res;
+        std::vector<BooleanFunction::Value> get_truth_table_from_i(const int i, unsigned bit, bool flipped = false) {
+            std::vector<BooleanFunction::Value> res;
             for (int b = bit - 1; b >= 0; b--) {
                 if (((1 << b) & i) > 0) {
-                    res.push_back(BooleanFunction::value::ONE);
+                    res.push_back(BooleanFunction::ONE);
                 } else {
-                    res.push_back(BooleanFunction::value::ZERO);
+                    res.push_back(BooleanFunction::ZERO);
                 }
             }
             if (flipped) {
@@ -58,30 +58,30 @@ namespace hal {
 
         // Turns a hex string into a BooleanFunction truth table (e.g: "A9" -> {1,0,1,0,1,0,0,1})
         // If the string is to small/big, the BEGINNING of the table is filled with zero/erased before the flip.
-        std::vector<BooleanFunction::value> get_truth_table_from_hex_string(std::string str,
+        std::vector<BooleanFunction::Value> get_truth_table_from_hex_string(std::string str,
                                                                             unsigned bit,
                                                                             bool flipped = false) {
             std::string char_val = "0123456789ABCDEF";
-            std::vector<BooleanFunction::value> res;
+            std::vector<BooleanFunction::Value> res;
             std::transform(str.begin(), str.end(), str.begin(), ::toupper);
             for (char c : str) {
                 if (std::size_t val = char_val.find(c); val != std::string::npos) {
                     for (int b = 3; b >= 0; b--) {
                         if (((1 << b) & val) > 0) {
-                            res.push_back(BooleanFunction::value::ONE);
+                            res.push_back(BooleanFunction::ONE);
                         } else {
-                            res.push_back(BooleanFunction::value::ZERO);
+                            res.push_back(BooleanFunction::ZERO);
                         }
                     }
                 } else { // input has non-hex characters
-                    return std::vector<BooleanFunction::value>();
+                    return std::vector<BooleanFunction::Value>();
                 }
             }
             int size_diff = res.size() - bit;
             if (size_diff > 0) {
                 res.erase(res.begin(), res.begin() + size_diff);
             } else if (size_diff < 0) {
-                res.insert(res.begin(), -size_diff, BooleanFunction::value::ZERO);
+                res.insert(res.begin(), -size_diff, BooleanFunction::ZERO);
             }
             assert(res.size() == bit);
             if (flipped) {
@@ -91,7 +91,7 @@ namespace hal {
         }
 
         // Get the minimized version of a truth truth table by its hex value, such that unnecessary variables are eliminated
-        std::vector<BooleanFunction::value> get_min_truth_table_from_hex_string(std::string str,
+        std::vector<BooleanFunction::Value> get_min_truth_table_from_hex_string(std::string str,
                                                                                 unsigned bit,
                                                                                 bool flipped = false) {
             return test_utils::minimize_truth_table(get_truth_table_from_hex_string(str, bit, flipped));
@@ -107,15 +107,14 @@ namespace hal {
     TEST_F(GateTest, check_constructor) {
         TEST_START
             // Create a Gate (id = 100) and append it to its netlist
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
-            std::shared_ptr<Gate> test_gate =
-                nl->create_gate(MIN_GATE_ID + 100, test_utils::get_gate_type_by_name("gate_2_to_1"), "gate_name");
+            auto nl = test_utils::create_empty_netlist();
+            auto test_gate = nl->create_gate(MIN_GATE_ID + 100, test_utils::get_gate_type_by_name("gate_2_to_1"), "gate_name");
 
             ASSERT_NE(test_gate, nullptr);
             EXPECT_EQ(test_gate->get_id(), (u32) (MIN_GATE_ID + 100));
             EXPECT_EQ(test_gate->get_type()->get_name(), "gate_2_to_1");
             EXPECT_EQ(test_gate->get_name(), "gate_name");
-            EXPECT_EQ(test_gate->get_netlist(), nl);
+            EXPECT_EQ(test_gate->get_netlist(), nl.get());
 
         TEST_END
     }
@@ -131,8 +130,8 @@ namespace hal {
             // POSITIVE TESTS
             // ########################
             // Create a Gate and append it to its netlist
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
-            std::shared_ptr<Gate> test_gate =
+            auto nl = test_utils::create_empty_netlist();
+            Gate* test_gate =
                 nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_2_to_1"), "gate_name");
 
             EXPECT_EQ(test_gate->get_name(), "gate_name");
@@ -166,8 +165,8 @@ namespace hal {
     TEST_F(GateTest, check_pin_types) {
         TEST_START
             // Create a Gate and append it to its netlist
-            std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
-            std::shared_ptr<Gate> test_gate =
+            auto nl = test_utils::create_empty_netlist();
+            Gate* test_gate =
                 nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_2_to_1"), "gate_name");
 
             EXPECT_EQ(test_gate->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
@@ -203,34 +202,34 @@ namespace hal {
         TEST_START
 
             // Create the example
-            std::shared_ptr<Netlist> nl = test_utils::create_example_netlist();
+            auto nl = test_utils::create_example_netlist();
 
             // ########################
             // POSITIVE TESTS
             // ########################
             {
                 // All input pins are occupied
-                std::shared_ptr<Gate> gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-                std::set<std::shared_ptr<Net>>
+                Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
+                std::vector<Net*>
                     fan_in_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 30), nl->get_net_by_id(MIN_NET_ID + 20)};
                 EXPECT_EQ(gate_0->get_fan_in_nets(), fan_in_nets_0);
             }
             {
                 // Not all input pins are occupied
-                std::shared_ptr<Gate> gate_5 = nl->get_gate_by_id(MIN_GATE_ID + 5);
-                std::set<std::shared_ptr<Net>> fan_in_nets_5 = {nl->get_net_by_id(MIN_NET_ID + 045)};
+                Gate* gate_5 = nl->get_gate_by_id(MIN_GATE_ID + 5);
+                std::vector<Net*> fan_in_nets_5 = {nl->get_net_by_id(MIN_NET_ID + 045)};
                 EXPECT_EQ(gate_5->get_fan_in_nets(), fan_in_nets_5);
             }
             {
                 // No input pins are occupied
-                std::shared_ptr<Gate> gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
-                std::set<std::shared_ptr<Net>> fan_in_nets_6 = {};
+                Gate* gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
+                std::vector<Net*> fan_in_nets_6 = {};
                 EXPECT_EQ(gate_6->get_fan_in_nets(), fan_in_nets_6);
             }
             {
                 // No input-pins exist
-                std::shared_ptr<Gate> gate_1 = nl->get_gate_by_id(MIN_GATE_ID + 1);
-                std::set<std::shared_ptr<Net>> fan_in_nets_1 = {};
+                Gate* gate_1 = nl->get_gate_by_id(MIN_GATE_ID + 1);
+                std::vector<Net*> fan_in_nets_1 = {};
                 EXPECT_EQ(gate_1->get_fan_in_nets(), fan_in_nets_1);
             }
         TEST_END
@@ -246,33 +245,33 @@ namespace hal {
         TEST_START
 
             // Create the example
-            std::shared_ptr<Netlist> nl = test_utils::create_example_netlist(0);
+            auto nl = test_utils::create_example_netlist(0);
 
             // ########################
             // POSITIVE TESTS
             // ########################
             {
                 // All output pins are occupied
-                std::shared_ptr<Gate> gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-                std::set<std::shared_ptr<Net>> fan_out_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 045)};
+                Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
+                std::vector<Net*> fan_out_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 045)};
                 EXPECT_EQ(gate_0->get_fan_out_nets(), fan_out_nets_0);
             }
             {
                 // Not all output pins are occupied
-                std::shared_ptr<Gate> gate_7 = nl->get_gate_by_id(MIN_GATE_ID + 7);
-                std::set<std::shared_ptr<Net>> fan_out_nets_7 = {nl->get_net_by_id(MIN_NET_ID + 78)};
+                Gate* gate_7 = nl->get_gate_by_id(MIN_GATE_ID + 7);
+                std::vector<Net*> fan_out_nets_7 = {nl->get_net_by_id(MIN_NET_ID + 78)};
                 EXPECT_EQ(gate_7->get_fan_out_nets(), fan_out_nets_7);
             }
             {
                 // No output pins are occupied
-                std::shared_ptr<Gate> gate_8 = nl->get_gate_by_id(MIN_GATE_ID + 8);
-                std::set<std::shared_ptr<Net>> fan_out_nets_8 = {};
+                Gate* gate_8 = nl->get_gate_by_id(MIN_GATE_ID + 8);
+                std::vector<Net*> fan_out_nets_8 = {};
                 EXPECT_EQ(gate_8->get_fan_out_nets(), fan_out_nets_8);
             }
             {
                 // No output pin exist
-                std::shared_ptr<Gate> gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
-                std::set<std::shared_ptr<Net>> fan_out_nets_6 = {};
+                Gate* gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
+                std::vector<Net*> fan_out_nets_6 = {};
                 EXPECT_EQ(gate_6->get_fan_out_nets(), fan_out_nets_6);
             }
         TEST_END
@@ -288,35 +287,35 @@ namespace hal {
         TEST_START
 
             // Create the example
-            std::shared_ptr<Netlist> nl = test_utils::create_example_netlist();
+            auto nl = test_utils::create_example_netlist();
 
             // ########################
             // POSITIVE TESTS
             // ########################
             {
                 // Get an existing Net at an existing pin-type
-                std::shared_ptr<Gate> gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_EQ(gate_0->get_fan_in_net("I0"), nl->get_net_by_id(MIN_NET_ID + 30));
                 EXPECT_EQ(gate_0->get_fan_in_net("I1"), nl->get_net_by_id(MIN_NET_ID + 20));
             }
             {
                 // Get the Net of a pin where no Net is connected
-                std::shared_ptr<Gate> gate_5 = nl->get_gate_by_id(MIN_GATE_ID + 5);
+                Gate* gate_5 = nl->get_gate_by_id(MIN_GATE_ID + 5);
                 EXPECT_EQ(gate_5->get_fan_in_net("I1"), nullptr);
             }
             {
                 // Get the Net of a non existing pin
-                std::shared_ptr<Gate> gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_EQ(gate_0->get_fan_in_net("NEx_PIN"), nullptr);
             }
             {
                 // Get the Net of a non existing pin-type of a Gate where no input pin exist
-                std::shared_ptr<Gate> gate_1 = nl->get_gate_by_id(MIN_GATE_ID + 1);
+                Gate* gate_1 = nl->get_gate_by_id(MIN_GATE_ID + 1);
                 EXPECT_EQ(gate_1->get_fan_in_net("NEx_PIN"), nullptr);
             }
             {
                 // Pass an empty string
-                std::shared_ptr<Gate> gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_EQ(gate_0->get_fan_in_net(""), nullptr);
             }
         TEST_END
@@ -332,34 +331,34 @@ namespace hal {
         TEST_START
 
             // Create the example
-            std::shared_ptr<Netlist> nl = test_utils::create_example_netlist();
+            auto nl = test_utils::create_example_netlist();
 
             // ########################
             // POSITIVE TESTS
             // ########################
             {
                 // Get an existing Net at an existing pin-type
-                std::shared_ptr<Gate> gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_EQ(gate_0->get_fan_out_net("O"), nl->get_net_by_id(MIN_NET_ID + 045));
             }
             {
                 // Get the Net of a pin where no Net is connected
-                std::shared_ptr<Gate> gate_4 = nl->get_gate_by_id(MIN_GATE_ID + 4);
+                Gate* gate_4 = nl->get_gate_by_id(MIN_GATE_ID + 4);
                 EXPECT_EQ(gate_4->get_fan_out_net("O"), nullptr);
             }
             {
                 // Get the Net of a non existing pin
-                std::shared_ptr<Gate> gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_EQ(gate_0->get_fan_out_net("NEx_PIN"), nullptr);
             }
             {
                 // Get the Net of a non existing pin-type of a Gate where no output pin exist
-                std::shared_ptr<Gate> gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
+                Gate* gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
                 EXPECT_EQ(gate_6->get_fan_out_net("NEx_PIN"), nullptr);
             }
             {
                 // Pass an empty string
-                std::shared_ptr<Gate> gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_EQ(gate_0->get_fan_out_net(""), nullptr);
             }
         TEST_END
@@ -373,90 +372,90 @@ namespace hal {
     TEST_F(GateTest, check_get_predecessors) {
         TEST_START
             // Create the examples
-            std::shared_ptr<Netlist> nl_1 = test_utils::create_example_netlist();
-            std::shared_ptr<Netlist> nl_2 = test_utils::create_example_netlist_2();
+            auto nl_1 = test_utils::create_example_netlist();
+            auto nl_2 = test_utils::create_example_netlist_2();
 
             // ########################
             // POSITIVE TESTS
             // ########################
             {
                 // Get predecessors for a Gate with multiple predecessors (some of them are the same Gate)
-                std::shared_ptr<Gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2, MIN_GATE_ID + 0, "O", false),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 0, "O", false),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 0, "O", false),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 2, "O", false)};
+                Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 2, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_1->get_predecessors(), pred));
                 EXPECT_EQ(gate_1->get_predecessors().size(), (size_t) 4);
             }
             {
                 // Get predecessors for a Gate with no predecessors
-                std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_TRUE(gate_0->get_predecessors().empty());
             }
             {
                 // Get predecessors for a given (existing) output pin type
-                std::shared_ptr<Gate> gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2, MIN_GATE_ID + 0, "O", false)};
+                Gate* gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_3
                                                                       ->get_predecessors(test_utils::adjacent_pin_filter(
                                                                           "O")), pred));
             }
             {
                 // Get predecessors for a given (non-existing) output pin type
-                std::shared_ptr<Gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
+                Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
                 EXPECT_TRUE(gate_1->get_predecessors(test_utils::adjacent_pin_filter("NEx_PIN")).empty());
                 EXPECT_EQ(gate_1->get_predecessors(test_utils::adjacent_pin_filter("NEx_PIN")).size(), (size_t) 0);
             }
             {
                 // Get predecessors for a given (existing) input pin type
-                std::shared_ptr<Gate> gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_2, MIN_GATE_ID + 0, "O", false)};
+                Gate* gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_3
                                                                       ->get_predecessors(test_utils::starting_pin_filter(
                                                                           "I0")), pred));
             }
             {
                 // Get predecessors for a given (existing) unconnected input pin type
-                std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> pred = {};
+                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                std::vector<Endpoint*> pred = {};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0
                                                                       ->get_predecessors(test_utils::starting_pin_filter(
                                                                           "I0")), pred));
             }
             {
                 // Get predecessors for a given (non-existing) input pin type
-                std::shared_ptr<Gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
+                Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
                 EXPECT_TRUE(gate_1->get_predecessors(test_utils::starting_pin_filter("NEx_PIN")).empty());
                 EXPECT_EQ(gate_1->get_predecessors(test_utils::starting_pin_filter("NEx_PIN")).size(), (size_t) 0);
             }
             {
                 // Get predecessors for a given (existing) Gate type
-                std::shared_ptr<Gate> gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> pred = {test_utils::get_endpoint(nl_1, MIN_GATE_ID + 3, "O", false)};
+                Gate* gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
+                std::vector<Endpoint*> pred = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 3, "O", false)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter(
                     "gate_1_to_1")), pred));
                 EXPECT_EQ(gate_0->get_predecessors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t) 1);
             }
             {
                 // Get predecessors for a given (non-existing) Gate type
-                std::shared_ptr<Gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
+                Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
                 EXPECT_TRUE(gate_1->get_predecessors(test_utils::adjacent_gate_type_filter("NEx_GATE")).empty());
                 EXPECT_EQ(gate_1->get_predecessors(test_utils::adjacent_gate_type_filter("NEx_GATE")).size(), (size_t) 0);
             }
             // ########################
             // NEGATIVE TESTS
             // ########################
-            std::shared_ptr<Netlist> nl_neg = test_utils::create_example_netlist_negative();
+            auto nl_neg = test_utils::create_example_netlist_negative();
             {
                 // Get predecessors for a Gate with unconnected nets
-                std::shared_ptr<Gate> gate_0 = nl_neg->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl_neg->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_TRUE(gate_0->get_predecessors().empty());
                 EXPECT_EQ(gate_0->get_predecessors().size(), (size_t) 0);
             }
             {
                 // Get predecessors for a Gate with unconnected nets and a set input pin type
-                std::shared_ptr<Gate> gate_0 = nl_neg->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl_neg->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_TRUE(gate_0->get_predecessors(test_utils::starting_pin_filter("I")).empty());
                 EXPECT_EQ(gate_0->get_predecessors(test_utils::starting_pin_filter("I")).size(), (size_t) 0);
             }
@@ -471,32 +470,32 @@ namespace hal {
     TEST_F(GateTest, check_get_successors) {
         TEST_START
             // Create the examples
-            std::shared_ptr<Netlist> nl_1 = test_utils::create_example_netlist();
-            std::shared_ptr<Netlist> nl_2 = test_utils::create_example_netlist_2();
+            auto nl_1 = test_utils::create_example_netlist();
+            auto nl_2 = test_utils::create_example_netlist_2();
 
             // ########################
             // POSITIVE TESTS
             // ########################
             {
                 // Get successors for a Gate with multiple successors (some of them are the same Gate)
-                std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2, MIN_GATE_ID + 1, "I0", true),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 1, "I1", true),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 1, "I2", true),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 3, "I0", true)};
+                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I1", true),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I2", true),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 3, "I0", true)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_successors(), succ));
                 EXPECT_EQ(gate_0->get_successors().size(), (size_t) 4);
             }
             {
                 // Get successors for a Gate no successors
-                std::shared_ptr<Gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
+                Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
                 EXPECT_TRUE(gate_1->get_successors().empty());
             }
             {
                 // Get successors for a given (existing) input pin type
-                std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2, MIN_GATE_ID + 1, "I0", true),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 3, "I0", true)};
+                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 3, "I0", true)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0
                                                                       ->get_successors(test_utils::adjacent_pin_filter(
                                                                           "I0")), succ));
@@ -504,17 +503,17 @@ namespace hal {
             }
             {
                 // Get successors for a given (non-existing) intput pin type
-                std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_TRUE(gate_0->get_successors(test_utils::adjacent_pin_filter("NEx_PIN")).empty());
                 EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_pin_filter("NEx_PIN")).size(), (size_t) 0);
             }
             {
                 // Get successors for a given (existing) output pin type
-                std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_2, MIN_GATE_ID + 1, "I0", true),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 1, "I1", true),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 1, "I2", true),
-                                              test_utils::get_endpoint(nl_2, MIN_GATE_ID + 3, "I0", true)};
+                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I0", true),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I1", true),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 1, "I2", true),
+                                              test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 3, "I0", true)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0
                                                                       ->get_successors(test_utils::starting_pin_filter(
                                                                           "O")), succ));
@@ -522,35 +521,35 @@ namespace hal {
             }
             {
                 // Get successors for a given (non-existing) output pin type
-                std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_TRUE(gate_0->get_successors(test_utils::starting_pin_filter("NEx_PIN")).empty());
             }
             {
                 // Get successors for a given (existing) output pin type with no successors
-                std::shared_ptr<Gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
+                Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
                 EXPECT_TRUE(gate_1->get_successors(test_utils::starting_pin_filter("O")).empty());
             }
             {
                 // Get successors for a given (existing) Gate type
-                std::shared_ptr<Gate> gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
-                std::vector<Endpoint> succ = {test_utils::get_endpoint(nl_1, MIN_GATE_ID + 4, "I", true)};
+                Gate* gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
+                std::vector<Endpoint*> succ = {test_utils::get_endpoint(nl_1.get(), MIN_GATE_ID + 4, "I", true)};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(gate_0->get_successors(test_utils::adjacent_gate_type_filter(
                     "gate_1_to_1")), succ));
                 EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_gate_type_filter("gate_1_to_1")).size(), (size_t) 1);
             }
             {
                 // Get successors for a given (non-existing) Gate type
-                std::shared_ptr<Gate> gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl_1->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_TRUE(gate_0->get_successors(test_utils::adjacent_gate_type_filter("NEx_GATE")).empty());
                 EXPECT_EQ(gate_0->get_successors(test_utils::adjacent_gate_type_filter("NEx_GATE")).size(), (size_t) 0);
             }
             // ########################
             // NEGATIVE TESTS
             // ########################
-            std::shared_ptr<Netlist> nl_neg = test_utils::create_example_netlist_negative();
+            auto nl_neg = test_utils::create_example_netlist_negative();
             {
                 // Get successors for a Gate with unconnected nets
-                std::shared_ptr<Gate> gate_0 = nl_neg->get_gate_by_id(MIN_GATE_ID + 0);
+                Gate* gate_0 = nl_neg->get_gate_by_id(MIN_GATE_ID + 0);
                 EXPECT_TRUE(gate_0->get_successors().empty());
             }
         TEST_END
@@ -564,26 +563,24 @@ namespace hal {
     TEST_F(GateTest, check_get_unique_predecessors_and_successors) {
         TEST_START
             // Create the examples
-            std::shared_ptr<Netlist> nl_2 = test_utils::create_example_netlist_2();
+            auto nl_2 = test_utils::create_example_netlist_2();
 
             // ########################
             // POSITIVE TESTS
             // ########################
             {
                 // Get the unique predecessors
-                std::shared_ptr<Gate> gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
-                std::set<std::shared_ptr<Gate>>
-                    pred = {nl_2->get_gate_by_id(MIN_GATE_ID + 0), nl_2->get_gate_by_id(MIN_GATE_ID + 2)};
-                std::vector<std::shared_ptr<Gate>> res = gate_1->get_unique_predecessors();
-                EXPECT_TRUE((std::set<std::shared_ptr<Gate>>(res.begin(), res.end()) == pred));
+                Gate* gate_1 = nl_2->get_gate_by_id(MIN_GATE_ID + 1);
+                std::vector<Gate*> pred = {nl_2->get_gate_by_id(MIN_GATE_ID + 0), nl_2->get_gate_by_id(MIN_GATE_ID + 2)};
+                std::vector<Gate*> res = gate_1->get_unique_predecessors();
+                EXPECT_TRUE(test_utils::vectors_have_same_content(res, pred));
             }
             {
                 // Get the unique successors
-                std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                std::set<std::shared_ptr<Gate>>
-                    succ = {nl_2->get_gate_by_id(MIN_GATE_ID + 1), nl_2->get_gate_by_id(MIN_GATE_ID + 3)};
-                std::vector<std::shared_ptr<Gate>> res = gate_0->get_unique_successors();
-                EXPECT_TRUE((std::set<std::shared_ptr<Gate>>(res.begin(), res.end()) == succ));
+                Gate* gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                std::vector<Gate*> succ = {nl_2->get_gate_by_id(MIN_GATE_ID + 1), nl_2->get_gate_by_id(MIN_GATE_ID + 3)};
+                std::vector<Gate*> res = gate_0->get_unique_successors();
+                EXPECT_TRUE(test_utils::vectors_have_same_content(res, succ));
             }
         TEST_END
     }
@@ -596,22 +593,21 @@ namespace hal {
     TEST_F(GateTest, check_get_predecessor) {
         TEST_START
             // Create the examples
-            std::shared_ptr<Netlist> nl_2 = test_utils::create_example_netlist_2();
+            auto nl_2 = test_utils::create_example_netlist_2();
 
             // ########################
             // POSITIVE TESTS
             // ########################
             {
                 // Get predecessor for a given (existing) input pin type
-                std::shared_ptr<Gate> gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
-                Endpoint pred = test_utils::get_endpoint(nl_2, MIN_GATE_ID + 0, "O", false);
+                auto gate_3 = nl_2->get_gate_by_id(MIN_GATE_ID + 3);
+                auto pred = test_utils::get_endpoint(nl_2.get(), MIN_GATE_ID + 0, "O", false);
                 EXPECT_TRUE(gate_3->get_predecessor("I0") == pred);
             }
             {
                 // Get predecessor for a given (existing) input pin type with no predecessors
-                std::shared_ptr<Gate> gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
-                Endpoint pred = {nullptr, "", false};
-                EXPECT_TRUE(gate_0->get_predecessor("I0") == pred);
+                auto gate_0 = nl_2->get_gate_by_id(MIN_GATE_ID + 0);
+                EXPECT_TRUE(gate_0->get_predecessor("I0") == nullptr);
             }
 
         TEST_END
@@ -628,8 +624,8 @@ namespace hal {
         TEST_START
             {
                 // Mark and unmark a global vcc Gate
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
-                std::shared_ptr<Gate>
+                auto nl = test_utils::create_empty_netlist();
+                Gate*
                     vcc_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("vcc"), "vcc_gate");
 
                 vcc_gate->mark_vcc_gate();
@@ -642,8 +638,8 @@ namespace hal {
             }
             {
                 // Mark and unmark a global gnd Gate
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
-                std::shared_ptr<Gate>
+                auto nl = test_utils::create_empty_netlist();
+                Gate*
                     gnd_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gnd"), "gnd_gate");
 
                 gnd_gate->mark_gnd_gate();
@@ -667,14 +663,14 @@ namespace hal {
             {
                 // get the Module of a Gate (the top_module), then add it to another Module and check again
                 // -- create the Gate at the top_module
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
-                std::shared_ptr<Gate> test_gate =
+                auto nl = test_utils::create_empty_netlist();
+                Gate* test_gate =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
 
                 EXPECT_EQ(test_gate->get_module(), nl->get_top_module());
 
                 // -- move the Gate in the test_module
-                std::shared_ptr<Module> test_module = nl->create_module("test_module", nl->get_top_module());
+                Module* test_module = nl->create_module("test_module", nl->get_top_module());
                 test_module->assign_gate(test_gate);
 
                 EXPECT_EQ(test_gate->get_module(), test_module);
@@ -696,8 +692,8 @@ namespace hal {
         TEST_START
             {
                 // Create a Gate with a location and change it afterwards
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
-                std::shared_ptr<Gate> test_gate = nl->create_gate(MIN_GATE_ID + 0,
+                auto nl = test_utils::create_empty_netlist();
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 0,
                                                                   test_utils::get_gate_type_by_name("gate_1_to_1"),
                                                                   "test_gate",
                                                                   1.11f,
@@ -720,8 +716,8 @@ namespace hal {
             }
             {
                 // Test the has_location function
-                std::shared_ptr<Netlist> nl = test_utils::create_empty_netlist();
-                std::shared_ptr<Gate> test_gate = nl->create_gate(MIN_GATE_ID + 0,
+                auto nl = test_utils::create_empty_netlist();
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 0,
                                                                   test_utils::get_gate_type_by_name("gate_1_to_1"),
                                                                   "test_gate",
                                                                   1.11f,
@@ -754,17 +750,19 @@ namespace hal {
             BooleanFunction bf_i = BooleanFunction::from_string("I", std::vector<std::string>({"I"}));
             BooleanFunction bf_i_invert = BooleanFunction::from_string("!I", std::vector<std::string>({"I"}));
 
-            std::shared_ptr<GateLibrary> inv_gl(new GateLibrary("imaginary_path", "TEST_LIB"));
-            std::shared_ptr<GateType> inv_gate_type(new GateType("gate_1_to_1_inv"));
+            auto inv_gl_owner = std::make_unique<GateLibrary>("imaginary_path", "TEST_LIB");
+            auto inv_gl = inv_gl_owner.get();
+            auto inv_gate_type_owner = std::make_unique<GateType>("gate_1_to_1_inv");
+            auto inv_gate_type = inv_gate_type_owner.get();
             inv_gate_type->add_input_pin("I");
             inv_gate_type->add_output_pin("O");
             inv_gate_type->add_boolean_function("O", bf_i_invert);
-            inv_gl->add_gate_type(inv_gate_type);
+            inv_gl->add_gate_type(std::move(inv_gate_type_owner));
 
             {
                 // Access the boolean function of a gate_type
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(inv_gl);
-                std::shared_ptr<Gate> test_gate = nl->create_gate(MIN_GATE_ID + 0,
+                auto nl = std::make_unique<Netlist>(inv_gl);
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 0,
                                                                   test_utils::get_gate_type_by_name("gate_1_to_1_inv",
                                                                                                     inv_gl),
                                                                   "test_gate");
@@ -773,8 +771,8 @@ namespace hal {
             }
             {
                 // Add a custom boolean function
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(inv_gl);
-                std::shared_ptr<Gate> test_gate = nl->create_gate(MIN_GATE_ID + 0, inv_gate_type, "test_gate");
+                auto nl = std::make_unique<Netlist>(inv_gl);
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 0, inv_gate_type, "test_gate");
                 test_gate->add_boolean_function("new_bf", bf_i);
 
                 // -- get all boolean functions
@@ -797,35 +795,37 @@ namespace hal {
             // NEGATIVE
             {
                 // Get a boolean function for a name that is unknown.
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(inv_gl);
-                std::shared_ptr<Gate> test_gate = nl->create_gate(MIN_GATE_ID + 0,
+                auto nl = std::make_unique<Netlist>(inv_gl);
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 0,
                                                                   test_utils::get_gate_type_by_name("gate_1_to_1_inv",
                                                                                                     inv_gl),
                                                                   "test_gate");
 
-                // EXPECT_EQ(test_gate->get_boolean_function("unknown_name"), BooleanFunction()); // ISSUE (BooleanFunction): empty != empty
+                EXPECT_EQ(test_gate->get_boolean_function("unknown_name"), BooleanFunction());
                 EXPECT_TRUE(test_gate->get_boolean_function("unknown_name").is_empty());
             }
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
-                std::shared_ptr<GateLibrary> gl(new GateLibrary("imaginary_path", "TEST_LIB"));
-                std::shared_ptr<GateType> empty_gate_type(new GateType("EMPTY_GATE"));
-                gl->add_gate_type(empty_gate_type);
+                GateLibrary gl("imaginary_path", "TEST_LIB");
+                auto empty_gate_type_owner = std::make_unique<GateType>("EMPTY_GATE");
+                auto empty_gate_type = empty_gate_type_owner.get();
+                gl.add_gate_type(std::move(empty_gate_type_owner));
 
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(gl);
-                std::shared_ptr<Gate> empty_gate = nl->create_gate(MIN_GATE_ID + 0, empty_gate_type, "empty_gate");
+                Netlist nl(&gl);
+                auto empty_gate = nl.create_gate(MIN_GATE_ID + 0, empty_gate_type, "empty_gate");
                 EXPECT_TRUE(empty_gate->get_boolean_function().is_empty());
             }
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
-                std::shared_ptr<GateLibrary> gl(new GateLibrary("imaginary_path", "TEST_LIB"));
-                std::shared_ptr<GateType> empty_gate_type(new GateType("EMPTY_GATE"));
+                GateLibrary gl("imaginary_path", "TEST_LIB");
+                auto empty_gate_type_owner = std::make_unique<GateType>("EMPTY_GATE");
+                auto empty_gate_type = empty_gate_type_owner.get();
                 empty_gate_type->add_output_pin("");
-                gl->add_gate_type(empty_gate_type);
+                gl.add_gate_type(std::move(empty_gate_type_owner));
 
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(gl);
-                std::shared_ptr<Gate> empty_gate = nl->create_gate(MIN_GATE_ID + 0, empty_gate_type, "empty_gate");
-                //EXPECT_TRUE(empty_gate->get_boolean_function().is_empty()); // ISSUE: infinite recursion
+                Netlist nl(&gl);
+                auto empty_gate = nl.create_gate(MIN_GATE_ID + 0, empty_gate_type, "empty_gate");
+                EXPECT_TRUE(empty_gate->get_boolean_function().is_empty());
             }
             {
 
@@ -842,8 +842,10 @@ namespace hal {
     TEST_F(GateTest, check_lut_function) {
         TEST_START
             // Create a custom GateLibrary which contains custom lut gates
-            std::shared_ptr<GateLibrary> gl(new GateLibrary("imaginary_path", "TEST_LIB"));
-            std::shared_ptr<GateTypeLut> lut(new GateTypeLut("LUT_GATE"));
+            GateLibrary lib("imaginary_path", "TEST_LIB");
+            auto gl = &lib;
+            auto lut_owner = std::make_unique<GateTypeLut>("LUT_GATE");
+            auto lut = lut_owner.get();
 
             std::vector<std::string> input_pins({"I0", "I1", "I2"});
             std::vector<std::string> output_pins({"O_LUT", "O_normal", "O_LUT_other"});
@@ -855,12 +857,12 @@ namespace hal {
             lut->set_config_data_ascending_order(true);
             lut->set_config_data_identifier("data_identifier");
             lut->set_config_data_category("data_category");
-            gl->add_gate_type(lut);
+            gl->add_gate_type(std::move(lut_owner));
             {
                 // Get the boolean function of the lut in different ways
                 // is not taken into account!
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(gl);
-                std::shared_ptr<Gate> lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
+                auto nl = std::make_unique<Netlist>(gl);
+                Gate* lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
 
                 int i = 1;
                 lut_gate->set_data(lut->get_config_data_category(),
@@ -884,8 +886,8 @@ namespace hal {
             }
             {
                 // Access the boolean function of a lut, that is stored in ascending order
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(gl);
-                std::shared_ptr<Gate> lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
+                auto nl = std::make_unique<Netlist>(gl);
+                Gate* lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
                 for (int i = 0x0; i <= 0xff; i++) {
                     lut_gate->set_data(lut->get_config_data_category(),
                                        lut->get_config_data_identifier(),
@@ -899,8 +901,8 @@ namespace hal {
             {
                 // Access the boolean function of a lut, that is stored in descending order
                 lut->set_config_data_ascending_order(false);
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(gl);
-                std::shared_ptr<Gate> lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
+                auto nl = std::make_unique<Netlist>(gl);
+                Gate* lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
                 for (int i = 0x0; i <= 0xff; i++) {
                     lut_gate->set_data(lut->get_config_data_category(),
                                        lut->get_config_data_identifier(),
@@ -914,8 +916,8 @@ namespace hal {
             }
             {
                 // Add a boolean function to a lut pin
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(gl);
-                std::shared_ptr<Gate> lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
+                auto nl = std::make_unique<Netlist>(gl);
+                Gate* lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
 
                 BooleanFunction lut_bf = BooleanFunction::from_string("I0 | I1 | I2", input_pins);
                 lut_gate->add_boolean_function("O_LUT", lut_bf);
@@ -924,8 +926,8 @@ namespace hal {
             // NEGATIVE
             {
                 // There is no hex string at the config data path (0 truth table)
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(gl);
-                std::shared_ptr<Gate> lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
+                auto nl = std::make_unique<Netlist>(gl);
+                Gate* lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
                 lut_gate
                     ->set_data(lut->get_config_data_category(), lut->get_config_data_identifier(), "bit_vector", "");
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins),
@@ -934,15 +936,15 @@ namespace hal {
             {
                 // There is no hex string at the config data path
                 NO_COUT_TEST_BLOCK;
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(gl);
-                std::shared_ptr<Gate> lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
+                auto nl = std::make_unique<Netlist>(gl);
+                Gate* lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
 
                 lut_gate->set_data(lut->get_config_data_category(),
                                    lut->get_config_data_identifier(),
                                    "bit_vector",
                                    "NOHx");
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins),
-                          std::vector<BooleanFunction::value>(8, BooleanFunction::value::X));
+                          std::vector<BooleanFunction::Value>(8, BooleanFunction::X));
 
             }
             {
@@ -952,8 +954,8 @@ namespace hal {
                 lut->add_input_pins(new_input_pins);
                 input_pins.insert(input_pins.begin(), new_input_pins.begin(), new_input_pins.end());
 
-                std::shared_ptr<Netlist> nl = std::make_shared<Netlist>(gl);
-                std::shared_ptr<Gate> lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
+                auto nl = std::make_unique<Netlist>(gl);
+                Gate* lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
 
                 std::string long_hex = "DEADBEEFC001D00DDEADC0DEDEADDA7A";
 
@@ -962,7 +964,7 @@ namespace hal {
                                    "bit_vector",
                                    long_hex);
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins),
-                          std::vector<BooleanFunction::value>((1 << input_pins.size()), BooleanFunction::value::X));
+                          std::vector<BooleanFunction::Value>((1 << input_pins.size()), BooleanFunction::X));
             }
         TEST_END
     }
