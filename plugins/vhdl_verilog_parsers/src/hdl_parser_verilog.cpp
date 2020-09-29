@@ -44,6 +44,11 @@ namespace hal
         return true;
     }
 
+    static bool is_digits(const std::string& str)
+    {
+        return std::all_of(str.begin(), str.end(), ::isdigit);
+    }
+
     bool HDLParserVerilog::tokenize()
     {
         const std::string delimiters = ",()[]{}\\#*: ;=.";
@@ -51,6 +56,7 @@ namespace hal
         u32 line_number = 0;
 
         std::string line;
+        bool in_string = false;
         bool escaped            = false;
         bool multi_line_comment = false;
 
@@ -72,16 +78,34 @@ namespace hal
                     escaped = false;
                     continue;
                 }
+                else if (!escaped && c == '"')
+                {
+                    in_string = !in_string;
+                }
 
-                if ((!std::isspace(c) && delimiters.find(c) == std::string::npos) || escaped)
+                if ((!std::isspace(c) && delimiters.find(c) == std::string::npos) || escaped || in_string)
                 {
                     current_token += c;
                 }
                 else
                 {
+                    // if (!current_token.empty())
+                    // {
+                    //     parsed_tokens.emplace_back(line_number, current_token);
+                    //     current_token.clear();
+                    // }
+
                     if (!current_token.empty())
                     {
-                        parsed_tokens.emplace_back(line_number, current_token);
+                        if (parsed_tokens.size() > 1 && is_digits(parsed_tokens.at(parsed_tokens.size() - 2).string) && parsed_tokens.at(parsed_tokens.size() - 1) == "." && is_digits(current_token))
+                        {
+                            parsed_tokens.pop_back();
+                            parsed_tokens.back() += "." + current_token;
+                        }
+                        else
+                        {
+                            parsed_tokens.emplace_back(line_number, current_token);
+                        }
                         current_token.clear();
                     }
 

@@ -20,8 +20,10 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('@CMAKE_CURRENT_BINARY_DIR@/lib'))
 sys.path.insert(0, os.path.abspath('@CMAKE_BINARY_DIR@/lib'))
+sys.path.insert(0, os.path.abspath('@CMAKE_BINARY_DIR@/lib/hal_plugins'))
+
+os.environ['HAL_BASE_PATH'] = '@CMAKE_BINARY_DIR@'
 
 # -- General configuration ------------------------------------------------
 

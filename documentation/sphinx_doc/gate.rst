@@ -1,7 +1,7 @@
 Gate
 ==========================
 
-.. autoclass:: hal_py.gate
+.. autoclass:: hal_py.Gate
    :members:
    :inherited-members:
    :show-inheritance:

@@ -151,6 +151,7 @@ namespace hal
          *
          * @returns The (first) source endpoint.
          */
+        [[deprecated("Use get_sources() instead.")]]
         Endpoint* get_source() const;
 
         /*
