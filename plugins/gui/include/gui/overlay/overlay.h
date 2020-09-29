@@ -38,9 +38,9 @@ namespace hal
         void clicked();
 
     protected:
-        bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
-        bool event(QEvent* event) Q_DECL_OVERRIDE;
-        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        bool eventFilter(QObject* watched, QEvent* event) override;
+        bool event(QEvent* event) override;
+        void mousePressEvent(QMouseEvent* event) override;
 
     private:
         void handle_parent_changed();
