@@ -586,15 +586,15 @@ namespace hal
                     {
                         m_navigation_widget_v2->setup(false);
                         m_navigation_widget_v2->setFocus();
-                        m_Overlay->show();
+                        m_overlay->show();
                     }
                 }
                 else if (m->get_input_nets().size())
                 {
-                    g_selection_relay.m_subfocus       = SelectionRelay::subfocus::left;
-                    g_selection_relay.m_subfocus_index = 0;
+                    g_selection_relay->m_subfocus       = SelectionRelay::subfocus::left;
+                    g_selection_relay->m_subfocus_index = 0;
 
-                    g_selection_relay.relay_subfocus_changed(nullptr);
+                    g_selection_relay->relay_subfocus_changed(nullptr);
                 }
 
                 return;
@@ -604,7 +604,7 @@ namespace hal
 
     void GraphWidget::handle_navigation_right_request()
     {
-        switch (g_selection_relay.m_focus_type)
+        switch (g_selection_relay->m_focus_type)
         {
             case SelectionRelay::item_type::none:
             {
@@ -612,46 +612,46 @@ namespace hal
             }
             case SelectionRelay::item_type::gate:
             {
-                std::shared_ptr<Gate> g = g_netlist->get_gate_by_id(g_selection_relay.m_focus_id);
+                Gate* g = g_netlist->get_gate_by_id(g_selection_relay->m_focus_id);
 
                 if (!g)
                     return;
 
-                if (g_selection_relay.m_subfocus == SelectionRelay::subfocus::right)
+                if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::right)
                 {
-                    auto n = g->get_fan_out_net(g->get_output_pins()[g_selection_relay.m_subfocus_index]);
+                    auto n = g->get_fan_out_net(g->get_output_pins()[g_selection_relay->m_subfocus_index]);
                     if (n->get_num_of_destinations() == 0)
                     {
-                        g_selection_relay.clear();
-                        g_selection_relay.m_selected_nets.insert(n->get_id());
-                        g_selection_relay.m_focus_type = SelectionRelay::item_type::net;
-                        g_selection_relay.m_focus_id   = n->get_id();
-                        g_selection_relay.relay_selection_changed(nullptr);
+                        g_selection_relay->clear();
+                        g_selection_relay->m_selected_nets.insert(n->get_id());
+                        g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                        g_selection_relay->m_focus_id   = n->get_id();
+                        g_selection_relay->relay_selection_changed(nullptr);
                     }
                     else if (n->get_num_of_destinations() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {
                         m_navigation_widget_v2->setup(true);
                         m_navigation_widget_v2->setFocus();
-                        m_Overlay->show();
+                        m_overlay->show();
                     }
                 }
                 else if (g->get_output_pins().size())
                 {
-                    g_selection_relay.m_subfocus       = SelectionRelay::subfocus::right;
-                    g_selection_relay.m_subfocus_index = 0;
+                    g_selection_relay->m_subfocus       = SelectionRelay::subfocus::right;
+                    g_selection_relay->m_subfocus_index = 0;
 
-                    g_selection_relay.relay_subfocus_changed(nullptr);
+                    g_selection_relay->relay_subfocus_changed(nullptr);
                 }
 
                 return;
             }
             case SelectionRelay::item_type::net:
             {
-                std::shared_ptr<Net> n = g_netlist->get_net_by_id(g_selection_relay.m_focus_id);
+                Net* n = g_netlist->get_net_by_id(g_selection_relay->m_focus_id);
 
                 if (!n)
                     return;
@@ -661,13 +661,13 @@ namespace hal
 
                 if (n->get_num_of_destinations() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0].get_gate()->get_id()}, {});
+                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
                     m_navigation_widget_v2->setup(true);
                     m_navigation_widget_v2->setFocus();
-                    m_Overlay->show();
+                    m_overlay->show();
                 }
 
                 return;

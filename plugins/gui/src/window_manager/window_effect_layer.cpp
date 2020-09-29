@@ -1,4 +1,4 @@
-#include "window_manager/window_effect_layer.h"
+#include "gui/window_manager/window_effect_layer.h"
 
 namespace hal
 {
