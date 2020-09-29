@@ -85,11 +85,11 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                            PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
     target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
-    target_link_libraries(gui PUBLIC hal::core hal::netlist Boost::system PRIVATE ${PYTHON_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg)
+    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${PYTHON_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg)
 
     install(TARGETS gui
             EXPORT hal
-            LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY}
+            LIBRARY DESTINATION ${PLUGIN_LIBRARY_INSTALL_DIRECTORY}
             PERMISSIONS
             OWNER_READ
             OWNER_WRITE
@@ -98,7 +98,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
             GROUP_EXECUTE
             WORLD_READ
             WORLD_EXECUTE
-            INCLUDES DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
+            INCLUDES DESTINATION ${PLUGIN_INCLUDE_INSTALL_DIRECTORY})
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         add_sanitizers(gui)
