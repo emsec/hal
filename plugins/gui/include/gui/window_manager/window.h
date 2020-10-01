@@ -30,46 +30,43 @@ class QVBoxLayout;
 
 namespace hal
 {
-    class WindowLayoutContainer;
+    class WindowEffectLayer;
     class WindowToolbar;
     class Overlay;
-    class Workspace; // TEMP NAME ?
+    class Workspace;
 
-    class Window : public QFrame
+    class Window final : public QFrame
     {
         Q_OBJECT
 
     public:
         explicit Window(QWidget* parent = nullptr);
 
-        void lock();
-        void unlock();
+        void show_toolbar(WindowToolbar* toolbar);
 
-        void standard_view();
-        void special_view(QWidget* widget);
+        void hide_toolbar_extension();
+        void show_toolbar_extension();
+
+        void show_workspace();
+        void show_special_screen(QWidget* widget);
+
+        void lock(Overlay* overlay);
+        void unlock();
 
         void repolish();
 
-        WindowToolbar* get_toolbar();
-        Overlay* get_Overlay();
-
     protected:
-        //void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-        //bool event(QEvent* event) Q_DECL_OVERRIDE;
-        void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
-    //    void changeEvent(QEvent* event) Q_DECL_OVERRIDE;
-    //    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        void closeEvent(QCloseEvent* event) override;
 
     private:
-        //void rearrange();
-
-        QVBoxLayout* m_outer_layout;
-        WindowLayoutContainer* m_layout_container;
-        QVBoxLayout* m_inner_layout;
+        QVBoxLayout* m_window_layout;
+        WindowEffectLayer* m_effect_layer;
+        QVBoxLayout* m_effect_layer_layout;
         WindowToolbar* m_toolbar;
+        QFrame* m_toolbar_extension;
         Workspace* m_workspace;
 
-        Overlay* m_Overlay;
+        Overlay* m_overlay;
         QGraphicsEffect* m_effect;
     };
 }

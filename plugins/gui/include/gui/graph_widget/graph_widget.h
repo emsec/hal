@@ -34,7 +34,7 @@
 
 namespace hal
 {
-    class DialogOverlay;
+    class WidgetOverlay;
     class GraphContext;
     class GraphGraphicsView;
     class GraphLayoutSpinnerWidget;
@@ -86,7 +86,7 @@ namespace hal
         GraphGraphicsView* m_view;
         GraphContext* m_context;
 
-        DialogOverlay* m_Overlay;
+        WidgetOverlay* m_overlay;
         GraphNavigationWidgetV2* m_navigation_widget_v2;
         GraphLayoutSpinnerWidget* m_spinner_widget;
 
