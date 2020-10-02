@@ -377,9 +377,9 @@ namespace hal
             }
 
             e.add_port(direction, p.second);
-
-            attributes.clear();
         }
+
+        attributes.clear();
 
         return true;
     }
