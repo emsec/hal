@@ -6,9 +6,74 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+* new selections details widget
+  * hierarchical view of all items within the current selection
+    * a single item can be selected within that view
+    * selected item will be highlighted in a different color than the rest of the graph view selection
+  * details section
+    * shows additional details for the item selected in the hierarchical view
+    * sections can be collapsed and expanded
+    * right-click context menu allows to copy strings or Python code to the clipboard and change module name, type, and port names
+    * added number of gates, nets, and submodules to module details widget  
+* new view manager widget
+  * now presented in a table view additionally containing information about the time of creation of the view
+  * views can be sorted by name and date
+* new gate library features
+  * support for gate types with multi-bit pins
+  * clear identification of clock pins
+* new netlist features
+  * module types and named module ports (parsed from netlist or set by user)
+  * support for multi-driven nets (i.e., nets with more than one source)
+* new graph view features
+  * Python GUI API to control the graph view
+  * zoom level of graph view can now be controlled by shortcuts
+* state-of-the-art suite of benchmark netlists
+* new simulator plugin
+* added `get_fan_in_endpoint`, `get_fan_out_endpoint`, `get_fan_in_endpoints` and `get_fan_out_endpoints` to class `Gate`
+* added `clear_caches` to `Netlist`
+
+### CHANGED
+
+* double-clicking module in module widget will open it in new view
+* gate library manager now operates on file paths instead of library names
+* liberty gate library parser now supports inout ports, clock statements and bus groups
+* netlist parsers
+  * VHDL and Verilog parser now use common intermediate structure for parsing
+  * attribute parsing for Verilog parser
+  * support for inout ports
+* all parsers and writers have been moved into plugins
+* code refactoring
+  * "hal" namespace
+  * TitleCase for classes
+  * moved to std::filesystem internally
+  * split Python API into multiple files
+* massively expanded testing coverage
+* the project is now affiliated with the Max Planck Institute for Security and Privacy
+* reworked core ownership model
+  * no more `shared_ptr`
+  * clear ownership management via `unique_ptr` at necessary locations
+  * instances passed via non-owning raw pointers
+* Endpoints are now managed classes as well, owned by the respective nets and passed via pointers
+
+### FIXED
+
+* cone-view now works correctly for modules
+* module widget selection is now more consistent with graph view
+* inconsistencies with case insensitivity of the VHDL parser fixed
+* delete option no longer shown for top module in right-click context menu
+* some minor memory leaks in plugin management
+
+### REMOVED
+
+* list of nets and gates no longer present in module details widget
+
+### DEPRECATED
+
+* accessing the single source of a net is superseeded by accessing its source list to support multi-driven nets
+
 ## [2.0.0] - 2019-12-19 22:00:00+02:00 (urgency: medium)
 Note: This is an API breaking release.
-
 
 * Heavily improved VHDL and Verilog parsers
 * Updated CMake build system to use target-based configurations
@@ -110,7 +175,7 @@ Note: This is an API breaking release.
 ## [1.1.2] - 2019-06-27 14:21:03+02:00 (urgency: medium)
 
 * Add hint to gate_libraries to README.md
-* Changes to the global state can be handled via hal_content_manager
+* Changes to the global state can be handled via ContentManager
 
 ## [1.1.1] - 2019-06-27 14:21:03+02:00 (urgency: medium)
 

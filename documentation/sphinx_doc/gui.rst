@@ -1,5 +1,5 @@
-GUI
-===
+GUI API
+=======
 
-.. automodule:: hal_gui.gui
+.. autoclass:: hal_gui.GuiApi
    :members:

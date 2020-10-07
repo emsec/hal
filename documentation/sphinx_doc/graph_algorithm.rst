@@ -1,5 +1,5 @@
 Graph Algorithm
 ==========================
 
-.. autoclass:: hal_plugins.libgraph_algorithm.graph_algorithm
+.. autoclass:: libgraph_algorithm.graph_algorithm
    :members:

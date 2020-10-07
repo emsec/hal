@@ -88,8 +88,12 @@ def analyze_scope(scope):
             last_fragment_was_function = False
 
             if "(" in blinded_code and ")" in blinded_code and not blinded_code.endswith("= default") and not ":" in blinded_code.replace("::","#"):
-                candidates.append((code, last_comment_block))
-                last_fragment_was_function = True
+
+                if len(blinded_code[:blinded_code.find("(")].strip().split()) >= 2: # this helps to ignore macro calls
+
+                    candidates.append((code, last_comment_block))
+                    last_fragment_was_function = True
+
             scope = scope[next_index:]
             last_comment_block = None
 

@@ -1,5 +1,5 @@
 Netlist
 ==========================
 
-.. autoclass:: hal_py.netlist
+.. autoclass:: hal_py.Netlist
    :members:

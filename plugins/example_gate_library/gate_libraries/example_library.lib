@@ -10,6 +10,20 @@ library (EXAMPLE_GATE_LIBRARY) {
         }
     }
 
+    cell(TBUF) {
+        pin(I, T) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "IO";
+        }
+        pin(IO) {
+            direction: inout;
+            function: "";
+        }
+    }
+
     cell(INV) {
         pin(I) {
             direction: input;

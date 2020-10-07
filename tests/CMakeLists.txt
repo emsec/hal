@@ -28,9 +28,8 @@ endif()
 # Now simply link your own targets against gtest, gmock,
 # etc. as appropriate
 
-#add_subdirectory(basic_tests)
 add_subdirectory(test_utils)
 add_subdirectory(core)
 add_subdirectory(netlist)
-add_subdirectory(hdl_parser)
+#add_subdirectory(hdl_parser) # TODO: reactivate / move hdl_parser_manager up in hierarchy
 add_subdirectory(hdl_writer)
