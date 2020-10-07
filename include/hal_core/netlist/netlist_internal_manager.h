@@ -37,6 +37,7 @@ namespace hal
     class Net;
     class Module;
     class Endpoint;
+    class Grouping;
     class BooleanFunction;
 
     /**
@@ -48,6 +49,7 @@ namespace hal
         friend class Module;
         friend class Net;
         friend class Gate;
+        friend class Grouping;
 
     private:
         Netlist* m_netlist;
@@ -74,6 +76,10 @@ namespace hal
         bool delete_module(Module* module);
         bool module_assign_gate(Module* m, Gate* g);
         bool module_remove_gate(Module* m, Gate* g);
+
+        // grouping functions
+        Grouping* create_grouping(u32 id, const std::string name);
+        bool delete_grouping(Grouping* grouping);
 
         // caches
         void clear_caches();

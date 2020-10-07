@@ -41,6 +41,7 @@ namespace hal
     class Net;
     class Gate;
     class Module;
+    class Grouping;
     class Endpoint;
 
     /**
@@ -471,6 +472,72 @@ namespace hal
          */
         std::vector<Net*> get_global_output_nets() const;
 
+        /*
+         * ################################################################
+         *      grouping functions
+         * ################################################################
+         */
+
+        /**
+         * Gets an unoccupied grouping id. <br>
+         * The value 0 is reserved and represents an invalid id.
+         *
+         * @returns An unoccupied unique id.
+         */
+        u32 get_unique_grouping_id();
+
+        /**
+         * Creates and adds a new grouping to the netlist.<br>
+         * It is identifiable via its unique ID.
+         *
+         * @param[in] id - The unique ID != 0 for the new grouping.
+         * @param[in] name - A name for the grouping.
+         * @returns The new grouping on success, nullptr on error.
+         */
+        Grouping* create_grouping(const u32 id, const std::string& name = "");
+
+        /**
+         * Creates and adds a new grouping to the netlist.<br>
+         * It is identifiable via its unique ID which is automatically set to the next free ID.
+         *
+         * @param[in] name - A name for the grouping.
+         * @returns The new grouping on success, nullptr on error.
+         */
+        Grouping* create_grouping(const std::string& name = "");
+
+        /**
+         * Removes a grouping from the netlist.
+         *
+         * @param[in] g - Pointer to the grouping pointer.
+         * @returns True on success.
+         */
+        bool delete_grouping(Grouping* g);
+
+        /**
+         * Checks whether a grouping is registered in the netlist.
+         *
+         * @param[in] g - The grouping to check.
+         * @returns True if the grouping is in netlist
+         */
+        bool is_grouping_in_netlist(Grouping* g) const;
+
+        /**
+         * Get a grouping specified by id.
+         *
+         * @param[in] id - The grouping's id.
+         * @returns The grouping or a nullptr.
+         */
+        Grouping* get_grouping_by_id(u32 id) const;
+
+        /**
+         * Get all groupings of the netlist. <br>
+         * You can filter the set before output with the optional parameter.
+         *
+         * @param[in] filter - Filter for the groupings
+         * @return A set of groupings.
+         */
+        std::vector<Grouping*> get_groupings(const std::function<bool(Grouping*)>& filter = nullptr) const;
+
     private:
         /* stores the pointer to the netlist internal manager */
         NetlistInternalManager* m_manager;
@@ -500,6 +567,9 @@ namespace hal
         u32 m_next_module_id;
         std::set<u32> m_used_module_ids;
         std::set<u32> m_free_module_ids;
+        u32 m_next_grouping_id;
+        std::set<u32> m_used_grouping_ids;
+        std::set<u32> m_free_grouping_ids;
 
         /* stores the modules */
         Module* m_top_module;
@@ -516,6 +586,11 @@ namespace hal
         std::unordered_map<u32, std::unique_ptr<Gate>> m_gates_map;
         std::unordered_set<Gate*> m_gates_set;
         std::vector<Gate*> m_gates;
+
+        /* stores the groupings */
+        std::unordered_map<u32, std::unique_ptr<Grouping>> m_groupings_map;
+        std::unordered_set<Grouping*> m_groupings_set;
+        std::vector<Grouping*> m_groupings;
 
         /* stores the set of global gates and nets */
         std::vector<Net*> m_global_input_nets;
