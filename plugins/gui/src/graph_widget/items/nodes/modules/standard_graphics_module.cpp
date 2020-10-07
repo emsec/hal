@@ -207,14 +207,7 @@ namespace hal
 
         assert(index < m_input_pins.size());
 
-        qreal y = s_color_bar_height + s_pin_upper_vertical_spacing;
-
-        if (index > 0)
-            y += index * (s_pin_font_height + s_pin_inner_vertical_spacing);
-
-        y += s_pin_font_height / 2;
-
-        return mapToScene(QPointF(0, y));
+        return endpointPositionByIndex(index,true);
     }
 
     QPointF StandardGraphicsModule::get_output_scene_position(const u32 net_id, const QString& pin_type) const
@@ -229,14 +222,23 @@ namespace hal
 
         assert(index < m_output_pins.size());
 
-        qreal y = s_color_bar_height + s_pin_upper_vertical_spacing;
+        return endpointPositionByIndex(index,false);
+    }
 
-        if (index > 0)
-            y += index * (s_pin_font_height + s_pin_inner_vertical_spacing);
+    float StandardGraphicsModule::yEndpointDistance() const
+    {
+        return (s_pin_font_height + s_pin_inner_vertical_spacing);
+    }
 
-        y += s_pin_font_height / 2;
+    float StandardGraphicsModule::yTopPinDistance() const
+    {
+        return (s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_height / 2);
+    }
 
-        return mapToScene(QPointF(m_width, y));
+    QPointF StandardGraphicsModule::endpointPositionByIndex(int index, bool isInput) const
+    {
+        qreal y = yTopPinDistance() + index * yEndpointDistance();
+        return mapToScene(QPointF(isInput ? 0 : m_width, y));
     }
 
     void StandardGraphicsModule::format(const bool& adjust_size_to_grid)

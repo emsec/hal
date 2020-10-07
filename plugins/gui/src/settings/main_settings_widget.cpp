@@ -160,8 +160,11 @@ namespace hal
         register_widget("graphview-item", graph_movescene_settings);
         assign_exclusive_group("kbdmodifiers", graph_movescene_settings);
 
-        CheckboxSetting* graph_layout_algorithm = new CheckboxSetting("graph_view/layout_algorithm", "Try to optimize layout", "enabled", "<--- fast random placement if disabled", this);
-        register_widget("graphview-item", graph_layout_algorithm);
+        CheckboxSetting* graph_layout_boxes = new CheckboxSetting("graph_view/layout_boxes", "Optimize box layout", "enabled", "<--- fast random placement if disabled", this);
+        register_widget("graphview-item", graph_layout_boxes);
+
+        CheckboxSetting* graph_layout_nets = new CheckboxSetting("graph_view/layout_nets", "Optimize net layout", "enabled", "<--- net optimization not fully tested", this);
+        register_widget("graphview-item", graph_layout_nets);
 
         make_section("Navigation", "navigation-item", ":/icons/graph");
 

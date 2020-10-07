@@ -162,6 +162,17 @@ namespace hal
        {
             return doPlacement(pos,mStartpoint.takeFirst());
        }
+
+       if (mWaiting.isEmpty() && !placementDone())
+       {
+           for (WaitToBeSeatedEntry* wtse : *this)
+               if (!mPlaced.contains(wtse))
+               {
+                   mWaiting.insert(wtse,mPlacementRound);
+                   break;
+               }
+       }
+
        if (!mWaiting.isEmpty())
        {
            double minDistance = 0;

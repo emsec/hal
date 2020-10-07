@@ -72,7 +72,7 @@ namespace hal
     {
         Q_UNUSED(nets)
 
-        if (g_settings_manager->get("graph_view/layout_algorithm").toBool())
+        if (g_settings_manager->get("graph_view/layout_boxes").toBool())
         {
             add_waitToBeSeated(modules, gates, nets);
             return;

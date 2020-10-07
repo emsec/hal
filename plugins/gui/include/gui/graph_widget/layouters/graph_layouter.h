@@ -31,11 +31,14 @@
 #include "gui/gui_def.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
+#include "gui/graph_widget/layouters/net_layout_point.h"
+#include "gui/graph_widget/layouters/net_layout_junction.h"
 #include "gui/netlist_relay/netlist_relay.h"
 
 #include <QObject>
 #include <QPoint>
 #include <QSet>
+#include <QMap>
 #include <QVector>
 
 namespace hal
@@ -49,9 +52,81 @@ namespace hal
     class SeparatedGraphicsNet;
     class StandardGraphicsNet;
 
+    class NetLayoutJunctionHash;
+    class NetLayoutJunctionEntries;
+
     class GraphLayouter : public QObject
     {
         Q_OBJECT
+
+        class SceneCoordinate
+        {
+            int minLane;
+            int maxLane;
+            float mOffset;
+            float mPadding;
+        public:
+            SceneCoordinate() : minLane(0), maxLane(0), mOffset(0), mPadding(0) {;}
+            void testMinMax(int ilane);
+            void setOffset(float off) { mOffset = off; }
+            void setOffsetYje(const SceneCoordinate& previous, float minimumJunction);
+            void setOffsetYej(const SceneCoordinate& previous, float maximumBlock, float minimumJunction);
+            void setOffsetX(const SceneCoordinate& previous, float maximumBlock, float sepOut, float sepInp);
+            float lanePosition(int ilane) const;
+            int preLanes() const { return -minLane; }
+            float junctionEntry() const { return lanePosition(minLane); }
+            float junctionExit() const { return lanePosition(maxLane-1); }
+            float xBoxOffset() const;
+        };
+
+        class EndpointCoordinate
+        {
+            float mYoffset;
+            float mXoutput;
+            float mXinput;
+            float mPinDistance;
+            float mTopPin;
+            int   mNumberPins;
+            QHash<u32,int> mInputHash;
+            QHash<u32,int> mOutputHash;
+        public:
+            EndpointCoordinate();
+            void setInputPosition(QPointF p0pos);
+            void setOutputPosition(QPointF p0pos);
+            float lanePosition(int ilane, bool absolute) const;
+            float xInput() const { return mXinput; }
+            float xOutput() const { return mXoutput; }
+            void setInputPins(const QList<u32>& pinList, float p0dist, float pdist);
+            void setOutputPins(const QList<u32>& pinList, float p0dist, float pdist);
+            int numberPins() const;
+            int inputPinIndex(u32 id) const;
+            int outputPinIndex(u32 id) const;
+        };
+
+        class EndpointList : public QList<NetLayoutPoint>
+        {
+        public:
+            enum hasEndpoint_t { NoEndpoint = 0, OnlySource = 1, OnlyDestination = 2, SourceAndDestination = 3, ConstantLevel = 4 };
+            EndpointList() : mHasEndpoint(NoEndpoint) {;}
+            void addSource(const NetLayoutPoint& pnt);
+            void addDestination(const NetLayoutPoint& pnt);
+            void setConstantLevel();
+            hasEndpoint_t hasEndpoint() const { return mHasEndpoint; }
+            bool isInput(int index) const {return mPointIsInput.at(index); }
+        private:
+            hasEndpoint_t mHasEndpoint;
+            QList<bool> mPointIsInput;
+        };
+
+        class SeparatedNetWidth
+        {
+        public:
+            float mInputSpace;
+            float mOutputSpace;
+            SeparatedNetWidth() : mInputSpace(0), mOutputSpace(0) {;}
+            void requireInputSpace(float spc);
+            void requireOutputSpace(float spc);
+        };
 
         struct node_level
         {
@@ -84,8 +159,6 @@ namespace hal
 
             unsigned int lanes = 0;
 
-            qreal vertical_width() const;
-            qreal horizontal_height() const;
         };
 
         struct junction
@@ -121,8 +194,6 @@ namespace hal
             unsigned int far_top_lane_changes = 0;
             unsigned int far_bottom_lane_changes = 0;
 
-            qreal width() const;
-            qreal height() const;
         };
 
         struct used_paths
@@ -154,6 +225,7 @@ namespace hal
         virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
 
         void layout();
+        void alternateLayout();
 
         GraphicsScene* scene() const;
 
@@ -190,13 +262,22 @@ namespace hal
         void clear_layout_data();
         void create_boxes();
         void calculate_nets();
+        void getWireHash();
         void find_max_box_dimensions();
+        void findMaxChannelLanes();
         void find_max_channel_lanes();
         void calculate_max_channel_dimensions();
+        void calculateJunctionMinDistance();
+        void calculateGateOffsets();
         void calculate_gate_offsets();
+        void placeGates();
         void place_gates();
         void reset_roads_and_junctions();
         void draw_nets();
+        void drawNets();
+        void drawNetsJunction(StandardGraphicsNet::lines &lines, u32 id);
+        void drawNetsEndpoint(StandardGraphicsNet::lines &lines, u32 id);
+        void drawNetsIsolated(u32 id, Net *n, const EndpointList& epl);
         void update_scene_rect();
 
         node_box create_box(const hal::node& node, const int x, const int y) const;
@@ -244,15 +325,15 @@ namespace hal
         qreal scene_y_for_far_bottom_lane_change(const junction* const j) const;
 
         void commit_used_paths(const used_paths& used);
-
-        void append_non_zero_h_line(StandardGraphicsNet::lines& lines, const qreal small_x, const qreal big_x, const qreal y);
-        void append_non_zero_v_line(StandardGraphicsNet::lines& lines, const qreal x, const qreal small_y, const qreal big_y);
+        static bool isConstNet(const Net* n);
 
         QVector<node_box> m_boxes;
+        QHash<QPoint,int> m_boxPosition;
+        QHash<node,int>  m_boxNode;
 
-        QVector<road*> m_h_roads;
-        QVector<road*> m_v_roads;
-        QVector<junction*> m_junctions;
+        QHash<QPoint,road*> m_h_roads;
+        QHash<QPoint,road*> m_v_roads;
+        QHash<QPoint,junction*> m_junctions;
 
         QMap<int, qreal> m_max_node_width_for_x;
         QMap<int, qreal> m_max_node_height_for_y;
@@ -296,5 +377,20 @@ namespace hal
         qreal m_max_node_height;
 
         bool m_done;
+
+        NetLayoutConnectionMetric mConnectionMetric;
+        QHash<NetLayoutWire,QList<u32>> mWireHash;
+        QHash<NetLayoutPoint,NetLayoutJunctionEntries> mJunctionEntries;
+        QHash<NetLayoutPoint,EndpointCoordinate> mEndpointHash;
+        QHash<NetLayoutPoint,SeparatedNetWidth> mSeparatedWidth;
+        QHash<NetLayoutPoint,float> mSpaceSeparatedOutputs;
+        NetLayoutJunctionHash mJunctionHash;
+        QMap<int,SceneCoordinate> mCoordX;
+        QMap<int,SceneCoordinate> mCoordY;
+        QMap<int,float> mJunctionMinDistanceY;
+        QHash<u32,EndpointList> mWireEndpoint;
     };
+
+    uint qHash(const hal::node& n);
 }
+

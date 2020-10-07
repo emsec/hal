@@ -54,6 +54,14 @@ namespace hal
 
         virtual QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const = 0;
         virtual QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const = 0;
+        virtual QPointF endpointPositionByIndex(int index, bool isInput) const = 0;
+        virtual float   yEndpointDistance() const = 0;
+        virtual float   yTopPinDistance() const = 0;
+
+        int inputByNet(u32 netId) const;
+        int outputByNet(u32 netId) const;
+        QList<u32> inputNets() const;
+        QList<u32> outputNets() const;
 
     //    virtual std::string get_input_pin_type_at_position(const size_t pos) const = 0;
     //    virtual std::string get_output_pin_type_at_position(const size_t pos) const = 0;
@@ -76,7 +84,9 @@ namespace hal
         qreal m_width;
         qreal m_height;
 
-    //    qreal m_x_offset;
-    //    qreal m_y_offset;
+        // pin by net number
+        // (multiple) pins not assigned to network are stored with id=0
+        QMultiHash<u32,int> mInputByNet;
+        QMultiHash<u32,int> mOutputByNet;
     };
 }
