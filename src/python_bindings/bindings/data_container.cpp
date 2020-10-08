@@ -41,7 +41,7 @@ namespace hal
             :type: dict[tuple(str,str),tuple(str,str)]
         )");
 
-        py_data_container, def("get_data", &DataContainer::get_data, R"(
+        py_data_container.def("get_data", &DataContainer::get_data, R"(
             Get a dict from ((1) category, (2) key) to ((1) type, (2) value) containing all stored data entries.
 
             :returns: The stored data as a dict.
