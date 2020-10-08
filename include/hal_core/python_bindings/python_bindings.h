@@ -1,9 +1,5 @@
 #pragma once
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/plugin_system/plugin_interface_gui.h"
-#include "hal_core/plugin_system/plugin_manager.h"
-#include "hal_core/utilities/utils.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
@@ -11,12 +7,17 @@
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/plugin_system/plugin_interface_gui.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
@@ -153,6 +154,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void module_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL grouping in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void grouping_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL netlist factory in a python module.

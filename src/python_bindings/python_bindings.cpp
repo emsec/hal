@@ -12,7 +12,8 @@ namespace hal
         py::module m("hal_py", "hal python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
-        m.def( "log_info", [](std::string& message) { log_info("PythonContext", message); }, R"( some documentation info)");
+        m.def(
+            "log_info", [](std::string& message) { log_info("PythonContext", message); }, R"( some documentation info)");
 
         path_init(m);
 
@@ -37,6 +38,8 @@ namespace hal
         net_init(m);
 
         module_init(m);
+
+        grouping_init(m);
 
         netlist_factory_init(m);
 

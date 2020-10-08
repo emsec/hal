@@ -57,6 +57,13 @@ namespace hal
         :param str name: The new type.
 )");
 
+        py_module.def("get_grouping", &Module::get_grouping, R"(
+        Gets the grouping in which this module is contained.
+
+        :returns: The grouping.
+        :rtype: hal_py.Grouping
+)");
+
         py_module.def_property("parent_module", &Module::get_parent_module, &Module::set_parent_module, R"(
         The parent module of this module. Set to None for the top module.
 
@@ -107,13 +114,15 @@ namespace hal
         :rtype: bool
 )");
 
-        py_module.def_property_readonly("netlist", [](Module* module){return RawPtrWrapper(module->get_netlist());}, R"(
+        py_module.def_property_readonly(
+            "netlist", [](Module* module) { return RawPtrWrapper(module->get_netlist()); }, R"(
         The netlist this module is associated with.
 
         :type: hal_py.Netlist
 )");
 
-        py_module.def("get_netlist", [](Module* module){return RawPtrWrapper(module->get_netlist());}, R"(
+        py_module.def(
+            "get_netlist", [](Module* module) { return RawPtrWrapper(module->get_netlist()); }, R"(
         Get the netlist this module is associated with.
 
         :returns: The netlist.
