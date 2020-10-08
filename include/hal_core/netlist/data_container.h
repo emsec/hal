@@ -32,61 +32,63 @@
 namespace hal
 {
     /**
-     *  Data structure for custom data associations.
+     * Container to hold data that is associated with an entity.
      *
      * @ingroup netlist
      */
     class NETLIST_API DataContainer
     {
     public:
-        /** constructor (= default) */
+        /** 
+         * Construct a new data container.
+         */
         DataContainer() = default;
-        /** destructor (= default)  Needs to be virtual to access interface in subclasses via python. */
+
         virtual ~DataContainer() = default;
 
         /**
-        * Sets a custom data entry.<br>
-        * If it does not exist yet, it is added.
+        * Add a data entry.<br>
+        * May overwrite an existing entry.
         *
-        * @param[in] category - Key category
-        * @param[in] key - Data key
-        * @param[in] data_type - Data type of value
-        * @param[in] value - Data value
-        * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
-        * @returns True on success.
+        * @param[in] category - The data key category.
+        * @param[in] key - The data key.
+        * @param[in] data_type - The data type.
+        * @param[in] value - The data value.
+        * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level 'info' to trace GUI events.
+        * @returns True on success, false otherwise.
         */
         bool set_data(const std::string& category, const std::string& key, const std::string& data_type, const std::string& value, const bool log_with_info_level = false);
 
         /**
-         * Deletes custom data.
+         * Delete a data entry.
          *
-         * @param[in] category - Category of key
-         * @param[in] key - Data key
-         * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level info to trace GUI events (default = false)
-         * @returns True on success.
+         * @param[in] category - The data key category.
+         * @param[in] key - The data key.
+         * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level 'info' to trace GUI events.
+         * @returns True on success, false otherwise.
          */
         bool delete_data(const std::string& category, const std::string& key, const bool log_with_info_level = false);
 
         /**
-         * Gets all stored data.
+         * Get a map from ((1) category, (2) key) to ((1) type, (2) value) containing all stored data entries.
          *
-         * @returns A map from ((1) category, (2) key) to ((1) type, (2) value)
+         * @returns The stored data as a map.
          */
         std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> get_data() const;
 
         /**
-         * Gets data specified by key and category.
+         * Get the data entry specified by the given category and key.
          *
-         * @param[in] category - Category of key
-         * @param[in] key - Data key
-         * @returns The tuple ((1) type, (2) value)
+         * @param[in] category - The data key category.
+         * @param[in] key - The data key.
+         * @returns The tuple ((1) type, (2) value).
          */
         std::tuple<std::string, std::string> get_data_by_key(const std::string& category, const std::string& key) const;
 
         /**
-         * Returns all data keys
+         * Return all data keys as a vector of tuples ((1) category, (2) key).
          *
-         * @returns A vector of tuples ((1) category, (2) key)
+         * @returns The data keys.
          */
         std::vector<std::tuple<std::string, std::string>> get_data_keys() const;
 
