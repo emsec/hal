@@ -1806,6 +1806,76 @@ namespace hal {
     }
 
     /**
+     * Testing alternative ways of port declarations
+     *
+     * Functions: parse
+     */
+    TEST_F(HDLParserVerilogTest, check_alternative_port_dekl) {
+
+        TEST_START
+            {
+                // Testing multiple specal cases:
+                // (1) multiple inputs/outputs/wires after one keyword
+                // (2) line ended with a comma ',' instead of a semicolon ';'
+                // (3) wire vector with descending range ([3:2] instead of [2:3])
+                std::stringstream input("module top ( \n"
+                                        "  global_in_0, global_in_1, global_in_2, global_in_3, \n"
+                                        "  global_out_0, global_out_1, global_out_2, global_out_3  \n"
+                                        " ) ; \n"
+                                        "  input global_in_0, global_in_1, global_in_2, global_in_3, \n"
+                                        "  wire net_0, net_1; \n"
+                                        "  output global_out_0, global_out_1, global_out_2, global_out_3;  \n"
+                                        "  wire [3:2] net_vec ; \n"
+                                        "gate_4_to_4 gate_0 ( \n"
+                                        "  .I0 (global_in_0 ), \n"
+                                        "  .I1 (global_in_1 ), \n"
+                                        "  .I2 (global_in_2 ), \n"
+                                        "  .I3 (global_in_3 ), \n"
+                                        "  .O0 (net_0 ), \n"
+                                        "  .O1 (net_1 ), \n"
+                                        "  .O2 (net_vec[2] ), \n"
+                                        "  .O3 (net_vec[3] ) \n"
+                                        " ) ; \n"
+                                        "gate_4_to_4 gate_1 ( \n"
+                                        "  .I0 (net_0 ), \n"
+                                        "  .I1 (net_1 ), \n"
+                                        "  .I2 (net_vec[2] ), \n"
+                                        "  .I3 (net_vec[3] ), \n"
+                                        "  .O0 (global_out_0 ), \n"
+                                        "  .O1 (global_out_1 ), \n"
+                                        "  .O2 (global_out_2 ), \n"
+                                        "  .O3 (global_out_3 ) \n"
+                                        ") ; \n"
+                                        "endmodule \n");
+                HDLParserVerilog verilog_parser;
+                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
+
+                ASSERT_NE(nl, nullptr);
+
+                // Check all input nets
+                std::set<std::string> input_net_names;
+                for(Net* n : nl->get_global_input_nets())
+                    input_net_names.insert(n->get_name());
+                EXPECT_EQ(input_net_names, std::set<std::string>({"global_in_0", "global_in_1","global_in_2","global_in_3"}));
+
+                // Check all output nets
+                std::set<std::string> output_net_names;
+                for(Net* n : nl->get_global_output_nets())
+                    output_net_names.insert(n->get_name());
+                EXPECT_EQ(output_net_names, std::set<std::string>({"global_out_0", "global_out_1","global_out_2","global_out_3"}));
+
+                // Check all wires
+                EXPECT_EQ(nl->get_gates(test_utils::gate_name_filter("gate_0")).size(), 1);
+                Gate* gate_0 = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
+                std::map<std::string, std::string> pin_to_net_name({{"O0","net_0"},{"O1","net_1"},{"O2","net_vec(2)"},{"O3","net_vec(3)"}});
+                for(auto const& [pin, net_name] : pin_to_net_name){
+                    ASSERT_NE(gate_0->get_fan_out_net(pin), nullptr);
+                    EXPECT_EQ(gate_0->get_fan_out_net(pin)->get_name(), net_name);
+                }
+            }
+        TEST_END
+    }
+    /**
      * Testing the correct handling of invalid input
      *
      * Functions: parse
