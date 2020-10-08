@@ -522,6 +522,54 @@ namespace hal
          */
         std::function<bool(const std::string&, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
 
+
+        // TODO: Add documentation
+        template <class R, class... P> // R: callback return type, P: parameters
+        class EventListener
+        {
+        private:
+            u32 m_trigger_count;
+
+            void trigger_event(){
+                m_trigger_count++;
+            }
+
+            void trigger_event_conditional(std::function<bool(P ...)> cond, P ... params){
+                if(cond(params ...))
+                    m_trigger_count++;
+            }
+        public:
+            EventListener()
+            {
+                m_trigger_count = 0;
+            }
+
+            bool is_triggered(){
+                return m_trigger_count > 0;
+            }
+
+            u32 get_trigger_count(){
+                return m_trigger_count;
+            }
+
+            void reset_trigger(){
+                m_trigger_count = 0;
+            }
+
+            std::function<R(P ...)> get_callback()
+            {
+                return std::bind(&EventListener::trigger_event, this);
+            }
+
+            std::function<R(P ...)> get_conditional_callback(std::function<bool(P ...)> cond)
+            {
+                std::function<R(P ...)> f = [=](P ... params) {
+                    this->trigger_event_conditional(cond, params ...);
+                };
+                return f;
+            }
+        };
+
     } // namespace test_utils
 } // namespace hal
 

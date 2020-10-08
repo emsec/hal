@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <cassert>
 
+#include "hal_core/netlist/event_system/gate_event_handler.h"
+
 namespace hal {
 
     using test_utils::MIN_GATE_ID;
@@ -966,6 +968,27 @@ namespace hal {
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins),
                           std::vector<BooleanFunction::Value>((1 << input_pins.size()), BooleanFunction::X));
             }
+        TEST_END
+    }
+
+    /**
+     * Testing the triggering of events.
+     */
+
+    TEST_F(GateTest, check_events) {
+        TEST_START
+            {
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                test_utils::EventListener<void, gate_event_handler::event, Gate*, u32> listener;
+                std::function<void(gate_event_handler::event, Gate*, u32)> cb = listener.get_conditional_callback(
+                    [=](gate_event_handler::event ev, Gate* g, u32 id){return ev == gate_event_handler::event::created;}
+                );
+                gate_event_handler::register_callback("test_cb", cb);
+                EXPECT_EQ(listener.is_triggered(), false);
+                auto test_gate = nl->create_gate(MIN_GATE_ID + 100, test_utils::get_gate_type_by_name("gate_2_to_1"), "gate_name");
+                EXPECT_EQ(listener.is_triggered(), true);
+            }
+            // TODO: Append me
         TEST_END
     }
 } // namespace hal
