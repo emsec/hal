@@ -24,23 +24,23 @@ namespace hal
     {
     public:
         /**
-         * Get the grouping's id.
+         * Get the unique ID of the grouping.
          *
-         * @returns The module's id.
+         * @returns The unique id.
          */
         u32 get_id();
 
         /**
-         * Set the grouping's name.
+         * Set the name of the grouping.
          *
          * @params[in] name - The new name.
          */
         void set_name(std::string name);
 
         /**
-         * Get the grouping's name.
+         * Get the name of the grouping.
          *
-         * @returns The grouping's name.
+         * @returns The name.
          */
         std::string get_name();
 
