@@ -1,11 +1,12 @@
 #include "hal_core/netlist/module.h"
 
-#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/event_system/module_event_handler.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
@@ -55,6 +56,11 @@ namespace hal
 
             module_event_handler::notify(module_event_handler::event::type_changed, this);
         }
+    }
+
+    Grouping* Module::get_grouping() const
+    {
+        return m_grouping;
     }
 
     Module* Module::get_parent_module() const

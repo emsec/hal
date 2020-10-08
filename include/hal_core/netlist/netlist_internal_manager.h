@@ -80,6 +80,12 @@ namespace hal
         // grouping functions
         Grouping* create_grouping(u32 id, const std::string name);
         bool delete_grouping(Grouping* grouping);
+        bool grouping_assign_gate(Grouping* grouping, Gate* gate);
+        bool grouping_remove_gate(Grouping* grouping, Gate* gate);
+        bool grouping_assign_net(Grouping* grouping, Net* net);
+        bool grouping_remove_net(Grouping* grouping, Net* net);
+        bool grouping_assign_module(Grouping* grouping, Module* module);
+        bool grouping_remove_module(Grouping* grouping, Module* module);
 
         // caches
         void clear_caches();

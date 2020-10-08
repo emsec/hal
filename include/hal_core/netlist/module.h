@@ -41,6 +41,7 @@ namespace hal
     class Netlist;
     class NetlistInternalManager;
     class Net;
+    class Grouping;
     class Gate;
 
     /**
@@ -85,6 +86,13 @@ namespace hal
          * @params[in] type - The new type.
          */
         void set_type(const std::string& type);
+
+        /**
+         * Gets the grouping in which this module is contained.
+         *
+         * @returns The grouping.
+         */
+        Grouping* get_grouping() const;
 
         /**
          * Get the parent of this module.<br>
@@ -285,6 +293,9 @@ namespace hal
         NetlistInternalManager* m_internal_manager;
         u32 m_id;
 
+        /* grouping */
+        Grouping* m_grouping = nullptr;
+
         Module* m_parent;
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
@@ -292,10 +303,10 @@ namespace hal
         /* port names */
         mutable u32 m_next_input_port_id  = 0;
         mutable u32 m_next_output_port_id = 0;
-        mutable std::set<Net*> m_named_input_nets; // ordering necessary, cannot be replaced with unordered_set
-        mutable std::set<Net*> m_named_output_nets; // ordering necessary, cannot be replaced with unordered_set
-        mutable std::map<Net*, std::string> m_input_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
-        mutable std::map<Net*, std::string> m_output_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
+        mutable std::set<Net*> m_named_input_nets;                        // ordering necessary, cannot be replaced with unordered_set
+        mutable std::set<Net*> m_named_output_nets;                       // ordering necessary, cannot be replaced with unordered_set
+        mutable std::map<Net*, std::string> m_input_net_to_port_name;     // ordering necessary, cannot be replaced with unordered_map
+        mutable std::map<Net*, std::string> m_output_net_to_port_name;    // ordering necessary, cannot be replaced with unordered_map
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;

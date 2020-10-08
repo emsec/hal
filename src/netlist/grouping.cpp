@@ -31,22 +31,14 @@ namespace hal
         return m_name;
     }
 
+    Netlist* Grouping::get_netlist() const
+    {
+        return m_internal_manager->m_netlist;
+    }
+
     bool Grouping::assign_gate(Gate* gate)
     {
-        u32 gate_id = gate->get_id();
-
-        if (m_gates_map.find(gate_id) != m_gates_map.end())
-        {
-            log_error("grouping", "cannot assign gate with ID {:08x} as gate is already part of grouping with ID {:08x}.", gate_id, m_id);
-            return false;
-        }
-
-        m_gates.push_back(gate);
-        m_gates_map.emplace(gate_id, gate);
-
-        grouping_event_handler::notify(grouping_event_handler::event::gate_assigned, this, gate_id);
-
-        return true;
+        return m_internal_manager->grouping_assign_gate(this, gate);
     }
 
     bool Grouping::assign_gate_by_id(const u32 gate_id)
@@ -60,16 +52,34 @@ namespace hal
         return assign_gate(gate);
     }
 
-    std::vector<Gate*> Grouping::get_gates()
+    std::vector<Gate*> Grouping::get_gates(const std::function<bool(Gate*)>& filter)
     {
-        return m_gates;
+        std::vector<Gate*> res;
+
+        if (!filter)
+        {
+            res = m_gates;
+        }
+        else
+        {
+            for (Gate* gate : m_gates)
+            {
+                if (!filter(gate))
+                {
+                    continue;
+                }
+                res.push_back(gate);
+            }
+        }
+
+        return res;
     }
 
-    std::vector<u32> Grouping::get_gate_ids()
+    std::vector<u32> Grouping::get_gate_ids(const std::function<bool(Gate*)>& filter)
     {
-        std::vector<u32> gate_ids(m_gates.size());
+        std::vector<u32> gate_ids;
 
-        for (const Gate* const gate : m_gates)
+        for (const Gate* const gate : get_gates(filter))
         {
             gate_ids.push_back(gate->get_id());
         }
@@ -79,25 +89,7 @@ namespace hal
 
     bool Grouping::remove_gate(Gate* gate)
     {
-        u32 gate_id = gate->get_id();
-
-        if (auto map_it = m_gates_map.find(gate_id); map_it != m_gates_map.end())
-        {
-            log_error("grouping", "cannot remove gate with ID {:08x} as gate is not part of grouping with ID {:08x}.", gate_id, m_id);
-            return false;
-        }
-        else
-        {
-            auto vec_it = std::find(m_gates.begin(), m_gates.end(), gate);
-
-            *vec_it = m_gates.back();
-            m_gates.pop_back();
-            m_gates_map.erase(gate_id);
-        }
-
-        grouping_event_handler::notify(grouping_event_handler::event::gate_removed, this, gate_id);
-
-        return true;
+        return m_internal_manager->grouping_remove_gate(this, gate);
     }
 
     bool Grouping::remove_gate_by_id(const u32 gate_id)
@@ -123,20 +115,7 @@ namespace hal
 
     bool Grouping::assign_net(Net* net)
     {
-        u32 net_id = net->get_id();
-
-        if (m_nets_map.find(net_id) != m_nets_map.end())
-        {
-            log_error("grouping", "cannot assign net with ID {:08x} as net is already part of grouping with ID {:08x}.", net_id, m_id);
-            return false;
-        }
-
-        m_nets.push_back(net);
-        m_nets_map.emplace(net_id, net);
-
-        grouping_event_handler::notify(grouping_event_handler::event::net_assigned, this, net_id);
-
-        return true;
+        return m_internal_manager->grouping_assign_net(this, net);
     }
 
     bool Grouping::assign_net_by_id(const u32 net_id)
@@ -150,16 +129,34 @@ namespace hal
         return assign_net(net);
     }
 
-    std::vector<Net*> Grouping::get_nets()
+    std::vector<Net*> Grouping::get_nets(const std::function<bool(Net*)>& filter)
     {
-        return m_nets;
+        std::vector<Net*> res;
+
+        if (!filter)
+        {
+            res = m_nets;
+        }
+        else
+        {
+            for (Net* net : m_nets)
+            {
+                if (!filter(net))
+                {
+                    continue;
+                }
+                res.push_back(net);
+            }
+        }
+
+        return res;
     }
 
-    std::vector<u32> Grouping::get_net_ids()
+    std::vector<u32> Grouping::get_net_ids(const std::function<bool(Net*)>& filter)
     {
-        std::vector<u32> net_ids(m_nets.size());
+        std::vector<u32> net_ids;
 
-        for (const Net* const net : m_nets)
+        for (const Net* const net : get_nets(filter))
         {
             net_ids.push_back(net->get_id());
         }
@@ -169,25 +166,7 @@ namespace hal
 
     bool Grouping::remove_net(Net* net)
     {
-        u32 net_id = net->get_id();
-
-        if (auto map_it = m_nets_map.find(net_id); map_it != m_nets_map.end())
-        {
-            log_error("grouping", "cannot remove net with ID {:08x} as net is not part of grouping with ID {:08x}.", net_id, m_id);
-            return false;
-        }
-        else
-        {
-            auto vec_it = std::find(m_nets.begin(), m_nets.end(), net);
-
-            *vec_it = m_nets.back();
-            m_nets.pop_back();
-            m_nets_map.erase(net_id);
-        }
-
-        grouping_event_handler::notify(grouping_event_handler::event::net_removed, this, net_id);
-
-        return true;
+        return m_internal_manager->grouping_remove_net(this, net);
     }
 
     bool Grouping::remove_net_by_id(const u32 net_id)
@@ -213,20 +192,7 @@ namespace hal
 
     bool Grouping::assign_module(Module* module)
     {
-        u32 module_id = module->get_id();
-
-        if (m_modules_map.find(module_id) != m_modules_map.end())
-        {
-            log_error("grouping", "cannot assign module with ID {:08x} as module is already part of grouping with ID {:08x}.", module_id, m_id);
-            return false;
-        }
-
-        m_modules.push_back(module);
-        m_modules_map.emplace(module_id, module);
-
-        grouping_event_handler::notify(grouping_event_handler::event::module_assigned, this, module_id);
-
-        return true;
+        return m_internal_manager->grouping_assign_module(this, module);
     }
 
     bool Grouping::assign_module_by_id(const u32 module_id)
@@ -240,16 +206,34 @@ namespace hal
         return assign_module(module);
     }
 
-    std::vector<Module*> Grouping::get_modules()
+    std::vector<Module*> Grouping::get_modules(const std::function<bool(Module*)>& filter)
     {
-        return m_modules;
+        std::vector<Module*> res;
+
+        if (!filter)
+        {
+            res = m_modules;
+        }
+        else
+        {
+            for (Module* module : m_modules)
+            {
+                if (!filter(module))
+                {
+                    continue;
+                }
+                res.push_back(module);
+            }
+        }
+
+        return res;
     }
 
-    std::vector<u32> Grouping::get_module_ids()
+    std::vector<u32> Grouping::get_module_ids(const std::function<bool(Module*)>& filter)
     {
-        std::vector<u32> module_ids(m_modules.size());
+        std::vector<u32> module_ids;
 
-        for (const Module* const module : m_modules)
+        for (const Module* const module : get_modules(filter))
         {
             module_ids.push_back(module->get_id());
         }
@@ -259,25 +243,7 @@ namespace hal
 
     bool Grouping::remove_module(Module* module)
     {
-        u32 module_id = module->get_id();
-
-        if (auto map_it = m_modules_map.find(module_id); map_it != m_modules_map.end())
-        {
-            log_error("grouping", "cannot remove module with ID {:08x} as module is not part of grouping with ID {:08x}.", module_id, m_id);
-            return false;
-        }
-        else
-        {
-            auto vec_it = std::find(m_modules.begin(), m_modules.end(), module);
-
-            *vec_it = m_modules.back();
-            m_modules.pop_back();
-            m_modules_map.erase(module_id);
-        }
-
-        grouping_event_handler::notify(grouping_event_handler::event::module_removed, this, module_id);
-
-        return true;
+        return m_internal_manager->grouping_remove_module(this, module);
     }
 
     bool Grouping::remove_module_by_id(const u32 module_id)
