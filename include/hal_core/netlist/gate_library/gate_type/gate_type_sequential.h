@@ -35,7 +35,7 @@ namespace hal
     /**
      * Sequential gate type class containing information about the internals of a specific sequential gate type.
      *
-     * @ingroup netlist
+     * @ingroup gate_lib
      */
     class GateTypeSequential : public GateType
     {

@@ -23,10 +23,10 @@
 
 #pragma once
 
-#include "hal_core/utilities/callback_hook.h"
-#include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/utilities/program_options.h"
 #include "hal_core/defines.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/utilities/callback_hook.h"
+#include "hal_core/utilities/program_options.h"
 
 #include <functional>
 #include <map>
@@ -39,7 +39,7 @@ namespace hal
     /**
      * Plugin manager to load and unload plugins
      *
-     * @ingroup core
+     * @ingroup plugins
      */
     namespace plugin_manager
     {

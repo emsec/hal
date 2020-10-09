@@ -18,7 +18,7 @@ namespace hal
      * In contrast to a module, it does not allow for hierarchization.<br>
      * Each gate, net, or module within the netlist may only be assigned to a single grouping.
      *
-     * @ingroup grouping
+     * @ingroup netlist
      */
     class NETLIST_API Grouping
     {

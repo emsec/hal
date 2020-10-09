@@ -23,8 +23,8 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/defines.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 
 namespace hal
 {
@@ -32,7 +32,7 @@ namespace hal
     class Netlist;
 
     /**
-     * @ingroup core
+     * @ingroup plugins
      */
     class CORE_API GUIPluginInterface : virtual public BasePluginInterface
     {
