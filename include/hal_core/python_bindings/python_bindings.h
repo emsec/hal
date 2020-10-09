@@ -36,27 +36,44 @@
 #pragma GCC diagnostic pop
 
 /**
- * Wrapper class so that PyBind can work with classes that are managed by HAL.
+ * Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL.
  *
- * @param[in] m - the python module
+ * @ingroup pybind
  */
 template<class T>
 class RawPtrWrapper
 {
 public:
+    /**
+     * Construct an empty wrapper.
+     */
     RawPtrWrapper() : m_ptr(nullptr)
     {
     }
+
+    /**
+     * Construct a wrapper from a raw pointer.
+     * 
+     * @param[in] ptr - The raw pointer.
+     */
     RawPtrWrapper(T* ptr) : m_ptr(ptr)
     {
     }
+
+    /**
+     * Construct a wrapper from another one (i.e., copy constructor).
+     * 
+     * @param[in] other - The other wrapper to copy.
+     */
     RawPtrWrapper(const RawPtrWrapper& other) : m_ptr(other.m_ptr)
     {
     }
-    /*
-         *  Pybind needs a get() method that returns the raw ptr.
-         * @returns the raw pointer.
-         */
+
+    /**
+     * Get the raw pointer from the wrapper.
+     * 
+     * @returns The raw pointer.
+     */
     T* get() const
     {
         return m_ptr;
@@ -70,6 +87,12 @@ PYBIND11_DECLARE_HOLDER_TYPE(T, RawPtrWrapper<T>, true)
 namespace hal
 {
     namespace py = pybind11;
+    /**
+     * TODO move into own namespace
+     * 
+     * @ingroup pybind
+     * @{
+     */
 
     /**
      * Initializes Python bindings for the HAL path in a python module.
@@ -196,4 +219,8 @@ namespace hal
      * @param[in] m - the python module
      */
     void boolean_function_init(py::module& m);
+
+    /**
+     * @}
+     */
 }    // namespace hal

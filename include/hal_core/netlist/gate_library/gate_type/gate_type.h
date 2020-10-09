@@ -25,8 +25,8 @@
 
 #include "hal_core/netlist/boolean_function.h"
 
-#include <string>
 #include <map>
+#include <string>
 #include <unordered_map>
 
 namespace hal
@@ -34,7 +34,7 @@ namespace hal
     /**
      * Gate type class containing information about the internals of a specific gate type.
      *
-     * @ingroup netlist
+     * @ingroup gate_lib
      */
     class NETLIST_API GateType
     {

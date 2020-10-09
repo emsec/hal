@@ -18,7 +18,7 @@ namespace hal
      * In contrast to a module, it does not allow for hierarchization.<br>
      * Each gate, net, or module within the netlist may only be assigned to a single grouping.
      *
-     * @ingroup grouping
+     * @ingroup netlist
      */
     class NETLIST_API Grouping
     {
@@ -58,7 +58,7 @@ namespace hal
          */
 
         /**
-         * Assigns a gate to the grouping.<br>
+         * Assign a gate to the grouping.<br>
          * Fails if the gate is already contained within another grouping.
          *
          * @param[in] gate - The gate to assign.
@@ -67,7 +67,7 @@ namespace hal
         bool assign_gate(Gate* gate);
 
         /**
-         * Assigns a gate to the grouping by ID.<br>
+         * Assign a gate to the grouping by ID.<br>
          * Fails if the gate is already contained within another grouping.
          *
          * @param[in] gate_id - The ID of the gate to assign.
@@ -94,7 +94,7 @@ namespace hal
         std::vector<u32> get_gate_ids(const std::function<bool(Gate*)>& filter = nullptr);
 
         /**
-         * Removes a gate from the grouping.<br>
+         * Remove a gate from the grouping.<br>
          * Fails if the gate is not contained within the grouping.
          *
          * @param[in] gate - The gate to remove.
@@ -103,7 +103,7 @@ namespace hal
         bool remove_gate(Gate* gate);
 
         /**
-         * Removes a gate from the grouping by ID.<br>
+         * Remove a gate from the grouping by ID.<br>
          * Fails if the gate is not contained within the grouping.
          *
          * @param[in] gate_id - The ID of the gate to remove.
@@ -112,7 +112,7 @@ namespace hal
         bool remove_gate_by_id(const u32 gate_id);
 
         /**
-         * Checks whether a gate is in the grouping.<br>
+         * Check whether a gate is in the grouping.
          *
          * @param[in] gate - The gate to check for.
          * @returns True on success, false otherwise.
@@ -120,7 +120,7 @@ namespace hal
         bool contains_gate(Gate* gate);
 
         /**
-         * Checks whether a gate is in the grouping by ID.<br>
+         * Check whether a gate is in the grouping by ID.
          *
          * @param[in] gate_id - The ID of the gate to check for.
          * @returns True on success, false otherwise.
@@ -134,7 +134,7 @@ namespace hal
          */
 
         /**
-         * Assigns a net to the grouping.<br>
+         * Assign a net to the grouping.<br>
          * Fails if the net is already contained within another grouping.
          *
          * @param[in] net - The net to assign.
@@ -143,7 +143,7 @@ namespace hal
         bool assign_net(Net* net);
 
         /**
-         * Assigns a net to the grouping by ID.<br>
+         * Assign a net to the grouping by ID.<br>
          * Fails if the net is already contained within another grouping.
          *
          * @param[in] net_id - The ID of the net to assign.
@@ -170,7 +170,7 @@ namespace hal
         std::vector<u32> get_net_ids(const std::function<bool(Net*)>& filter = nullptr);
 
         /**
-         * Removes a net from the grouping.<br>
+         * Remove a net from the grouping.<br>
          * Fails if the net is not contained within the grouping.
          *
          * @param[in] net - The net to remove.
@@ -179,7 +179,7 @@ namespace hal
         bool remove_net(Net* net);
 
         /**
-         * Removes a net from the grouping by ID.<br>
+         * Remove a net from the grouping by ID.<br>
          * Fails if the net is not contained within the grouping.
          *
          * @param[in] net_id - The ID of the net to remove.
@@ -188,7 +188,7 @@ namespace hal
         bool remove_net_by_id(const u32 net_id);
 
         /**
-         * Checks whether a net is in the grouping.<br>
+         * Check whether a net is in the grouping.<br>
          *
          * @param[in] net - The net to check for.
          * @returns True on success, false otherwise.
@@ -196,7 +196,7 @@ namespace hal
         bool contains_net(Net* net);
 
         /**
-         * Checks whether a net is in the grouping by ID.<br>
+         * Check whether a net is in the grouping by ID.<br>
          *
          * @param[in] net_id - The ID of the net to check for.
          * @returns True on success, false otherwise.
@@ -210,7 +210,7 @@ namespace hal
          */
 
         /**
-         * Assigns a module to the grouping.<br>
+         * Assign a module to the grouping.<br>
          * Fails if the module is already contained within another grouping.
          *
          * @param[in] module - The module to assign.
@@ -219,7 +219,7 @@ namespace hal
         bool assign_module(Module* module);
 
         /**
-         * Assigns a module to the grouping by ID.<br>
+         * Assign a module to the grouping by ID.<br>
          * Fails if the module is already contained within another grouping.
          *
          * @param[in] module_id - The ID of the module to assign.
@@ -246,7 +246,7 @@ namespace hal
         std::vector<u32> get_module_ids(const std::function<bool(Module*)>& filter = nullptr);
 
         /**
-         * Removes a module from the grouping.<br>
+         * Remove a module from the grouping.<br>
          * Fails if the module is not contained within the grouping.
          *
          * @param[in] module - The module to remove.
@@ -255,7 +255,7 @@ namespace hal
         bool remove_module(Module* module);
 
         /**
-         * Removes a module from the grouping by ID.<br>
+         * Remove a module from the grouping by ID.<br>
          * Fails if the module is not contained within the grouping.
          *
          * @param[in] module_id - The ID of the module to remove.
@@ -264,7 +264,7 @@ namespace hal
         bool remove_module_by_id(const u32 module_id);
 
         /**
-         * Checks whether a module is in the grouping.<br>
+         * Check whether a module is in the grouping.<br>
          *
          * @param[in] module - The module to check for.
          * @returns True on success, false otherwise.
@@ -272,7 +272,7 @@ namespace hal
         bool contains_module(Module* module);
 
         /**
-         * Checks whether a module is in the grouping by ID.<br>
+         * Check whether a module is in the grouping by ID.<br>
          *
          * @param[in] module_id - The ID of the module to check for.
          * @returns True on success, false otherwise.
