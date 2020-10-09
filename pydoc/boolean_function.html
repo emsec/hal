@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v2.0.0-649-g01b485b43 documentation</title>
+  <title>Boolean Function &mdash; hal_py v2.0.0-653-g7f68e9854 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-649-g01b485b43
+                v2.0.0-653-g7f68e9854
               </div>
             
           
@@ -204,7 +204,7 @@
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">__init__(self: hal_py.BooleanFunction, arg0: hal_py.BooleanFunction.value) -&gt; None</p>
+<li><p class="first">__init__(self: hal_py.BooleanFunction, arg0: hal_py.BooleanFunction.Value) -&gt; None</p>
 <blockquote>
 <div><p>Constructor for a constant, usable in other functions.
 The constant can be either X, Zero, or ONE.</p>
@@ -222,15 +222,34 @@ The constant can be either X, Zero, or ONE.</p>
 </ol>
 </dd></dl>
 
+<dl class="class">
+<dt id="hal_py.BooleanFunction.Value">
+<em class="property">class </em><code class="descname">Value</code><a class="headerlink" href="#hal_py.BooleanFunction.Value" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Represents the logic value that a boolean function operates on. Available are: X, ZERO, and ONE.</div></blockquote>
+<p>Members:</p>
+<blockquote>
+<div><p>X</p>
+<p>ZERO</p>
+<p>ONE</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="hal_py.BooleanFunction.Value.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.BooleanFunction.Value.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: handle) -&gt; str</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="method">
 <dt id="hal_py.BooleanFunction.evaluate">
-<code class="descname">evaluate</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>inputs: Dict[str</em>, <em>hal_py.BooleanFunction.value] = {}</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction.value<a class="headerlink" href="#hal_py.BooleanFunction.evaluate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>inputs: Dict[str</em>, <em>hal_py.BooleanFunction.Value] = {}</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction.Value<a class="headerlink" href="#hal_py.BooleanFunction.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates the function on the given inputs and returns the result.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference internal" href="#hal_py.BooleanFunction.value" title="hal_py.BooleanFunction.value"><em>value</em></a><em>]</em>) – A map from variable names to values.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>value</em><em>]</em>) – A map from variable names to values.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The value that the function evaluates to.</td>
 </tr>
@@ -271,7 +290,7 @@ If there is an error during bracket matching, X is returned for that part.</p>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.get_truth_table">
-<code class="descname">get_truth_table</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>ordered_variables: List[str] = []</em>, <em>remove_unknown_variables: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.BooleanFunction.value]<a class="headerlink" href="#hal_py.BooleanFunction.get_truth_table" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_truth_table</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>ordered_variables: List[str] = []</em>, <em>remove_unknown_variables: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.BooleanFunction.Value]<a class="headerlink" href="#hal_py.BooleanFunction.get_truth_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the truth table outputs of the function.
 WARNING: Exponential runtime in the number of variables!</p>
 <p>Output is the vector of output values when walking the truth table in ascending order.</p>
@@ -289,7 +308,7 @@ WARNING: Exponential runtime in the number of variables!</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The vector of output values.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference internal" href="#hal_py.BooleanFunction.value" title="hal_py.BooleanFunction.value">value</a>]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[value]</p>
 </td>
 </tr>
 </tbody>
@@ -459,25 +478,6 @@ Applies to all instances of the variable in the function.</p>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="class">
-<dt id="hal_py.BooleanFunction.value">
-<em class="property">class </em><code class="descname">value</code><a class="headerlink" href="#hal_py.BooleanFunction.value" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Represents the logic value that a boolean function operates on. Available are: X, ZERO, and ONE.</div></blockquote>
-<p>Members:</p>
-<blockquote>
-<div><p>X</p>
-<p>ZERO</p>
-<p>ONE</p>
-</div></blockquote>
-<dl class="attribute">
-<dt id="hal_py.BooleanFunction.value.name">
-<code class="descname">name</code><a class="headerlink" href="#hal_py.BooleanFunction.value.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: handle) -&gt; str</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="attribute">
