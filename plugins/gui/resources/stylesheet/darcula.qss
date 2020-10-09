@@ -1378,6 +1378,17 @@ qproperty-new_file_icon_style: "";
 qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
+hal--GroupingManagerWidget {
+qproperty-new_grouping_icon_style: "all->#e8e8e8";
+qproperty-new_grouping_icon_path: ":/icons/plus";
+
+qproperty-rename_grouping_icon_style: "all->#e8e8e8";
+qproperty-rename_grouping_icon_path: ":/icons/pen";
+
+qproperty-delete_icon_style: "all->#e8e8e8";
+qproperty-delete_icon_path: ":/icons/trashcan";
+}
+
 hal--ContextManagerWidget {
 qproperty-new_view_icon_style: "all->#e8e8e8";
 qproperty-new_view_icon_path: ":/icons/plus";

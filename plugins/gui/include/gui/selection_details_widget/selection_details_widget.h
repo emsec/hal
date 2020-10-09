@@ -35,6 +35,7 @@ class QLabel;
 
 namespace hal
 {
+    class Grouping;
     class Searchbar;
     class SelectionTreeView;
     class ModuleDetailsWidget;
@@ -71,9 +72,13 @@ namespace hal
 
     private Q_SLOTS:
         void restoreLastSelection();
+        void selectionToGrouping();
         void toggle_searchbar();
+        void selectionToNewGrouping();
+        void selectionToExistingGrouping();
 
     private:
+        void selectionToGroupingInternal(Grouping* grp);
         void singleSelectionInternal(const SelectionTreeItem* sti);
 
         QSplitter*           m_splitter;
@@ -92,6 +97,7 @@ namespace hal
         Searchbar* m_searchbar;
 
         QAction* m_restoreLastSelection;
+        QAction* m_selectionToGrouping;
         QAction* m_search_action;
         QString m_search_icon_path;
         QString m_search_icon_style;
