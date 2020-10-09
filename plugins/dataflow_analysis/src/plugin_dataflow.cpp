@@ -10,6 +10,7 @@
 #include "dataflow_analysis/output_generation/json_output.h"
 #include "dataflow_analysis/output_generation/svg_output.h"
 #include "dataflow_analysis/output_generation/textual_output.h"
+#include "dataflow_analysis/output_generation/state_to_module.h"
 #include "dataflow_analysis/pre_processing/pre_processing.h"
 #include "dataflow_analysis/processing/passes/group_by_control_signals.h"
 #include "dataflow_analysis/processing/processing.h"
