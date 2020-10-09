@@ -1,14 +1,14 @@
-#include "hal_core/utilities/log.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-#include "graph_algorithm/plugin_graph_algorithm.h"
+#include "hal_core/utilities/log.h"
 
 #include <igraph/igraph.h>
 
 namespace hal
 {
-    std::map<int, std::set<Gate*>> plugin_graph_algorithm::get_communities(Netlist* nl)
+    std::map<int, std::set<Gate*>> GraphAlgorithmPlugin::get_communities(Netlist* nl)
     {
         if (nl == nullptr)
         {
