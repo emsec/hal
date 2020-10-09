@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <cassert>
 
+#include "hal_core/netlist/event_system/gate_event_handler.h"
+
 namespace hal {
 
     using test_utils::MIN_GATE_ID;
@@ -965,6 +967,115 @@ namespace hal {
                                    long_hex);
                 EXPECT_EQ(lut_gate->get_boolean_function("O_LUT").get_truth_table(input_pins),
                           std::vector<BooleanFunction::Value>((1 << input_pins.size()), BooleanFunction::X));
+            }
+        TEST_END
+    }
+
+    /*************************************
+     * Event System
+     *************************************/
+
+    /**
+     * Testing the triggering of events.
+     */
+    TEST_F(GateTest, check_events) {
+        TEST_START
+            const u32 NO_DATA = 0xFFFFFFFF;
+            {
+                // Check the 'gate created' event handling
+                // -- create the listener
+                test_utils::EventListener<void, gate_event_handler::event, Gate*, u32> gate_created_listener;
+                std::function<void(gate_event_handler::event, Gate*, u32)> cb = gate_created_listener.get_conditional_callback(
+                    [=](gate_event_handler::event ev, Gate* g, u32 id){return ev == gate_event_handler::event::created;}
+                );
+                // -- register the callback hook
+                gate_event_handler::register_callback("gate_created_cb", cb);
+
+                // -- check if the event is triggered
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_name");
+                EXPECT_EQ(gate_created_listener.get_event_count(), 1);
+                EXPECT_EQ(gate_created_listener.get_last_parameters(), std::make_tuple(gate_event_handler::event::created, test_gate, NO_DATA));
+
+                // -- remove the callback hook
+                gate_event_handler::unregister_callback("gate_created_cb");
+            }
+            {
+                // Check the 'gate removed' event handling
+                // -- create the listener
+                test_utils::EventListener<void, gate_event_handler::event, Gate*, u32> gate_removed_listener;
+                std::function<void(gate_event_handler::event, Gate*, u32)> cb = gate_removed_listener.get_conditional_callback(
+                    [=](gate_event_handler::event ev, Gate* g, u32 id){return ev == gate_event_handler::event::removed;}
+                );
+                // -- register the callback hook
+                gate_event_handler::register_callback("gate_removed_cb", cb);
+
+                // -- check if the event is triggered
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_name");
+                EXPECT_EQ(gate_removed_listener.get_event_count(), 0);
+                nl->delete_gate(test_gate);
+                EXPECT_EQ(gate_removed_listener.get_event_count(), 1);
+                EXPECT_EQ(gate_removed_listener.get_last_parameters(), std::make_tuple(gate_event_handler::event::removed, test_gate, NO_DATA));
+
+                // -- remove the callback hook
+                gate_event_handler::unregister_callback("gate_removed_cb");
+            }
+            {
+                // Check the 'name changed' event handling
+                // -- create the listener
+                test_utils::EventListener<void, gate_event_handler::event, Gate*, u32> gate_name_changed_listener;
+                std::function<void(gate_event_handler::event, Gate*, u32)> cb = gate_name_changed_listener.get_conditional_callback(
+                    [=](gate_event_handler::event ev, Gate* g, u32 id){return ev == gate_event_handler::event::name_changed;}
+                );
+                // -- register the callback hook
+                gate_event_handler::register_callback("gate_name_changed_cb", cb);
+
+                // -- check if the event is triggered
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_name");
+                test_gate->set_name("gate_name"); // if the old name equals the new one, the event should not be triggered
+                EXPECT_EQ(gate_name_changed_listener.get_event_count(), 0);
+                gate_name_changed_listener.reset_events();
+                test_gate->set_name("new_name");
+                EXPECT_EQ(gate_name_changed_listener.get_event_count(), 1);
+                EXPECT_EQ(gate_name_changed_listener.get_last_parameters(), std::make_tuple(gate_event_handler::event::name_changed, test_gate, NO_DATA));
+
+                // -- remove the callback hook
+                gate_event_handler::unregister_callback("gate_name_changed_cb");
+            }
+            {
+                // Check the 'gate location changed' event handling
+                // -- create the listener
+                test_utils::EventListener<void, gate_event_handler::event, Gate*, u32> gate_location_changed_listener;
+                std::function<void(gate_event_handler::event, Gate*, u32)> cb = gate_location_changed_listener.get_conditional_callback(
+                    [=](gate_event_handler::event ev, Gate* g, u32 id){return ev == gate_event_handler::event::location_changed;}
+                );
+                // -- register the callback hook
+                gate_event_handler::register_callback("gate_location_changed_cb", cb);
+
+                // -- check if the event is triggered
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_name");
+                test_gate->set_location_x(1.23f);
+                EXPECT_EQ(gate_location_changed_listener.get_event_count(), 1);
+                EXPECT_EQ(gate_location_changed_listener.get_last_parameters(), std::make_tuple(gate_event_handler::event::location_changed, test_gate, NO_DATA));
+                gate_location_changed_listener.reset_events();
+
+                test_gate->set_location_y(4.56f);
+                EXPECT_EQ(gate_location_changed_listener.get_event_count(), 1);
+                EXPECT_EQ(gate_location_changed_listener.get_last_parameters(), std::make_tuple(gate_event_handler::event::location_changed, test_gate, NO_DATA));
+                gate_location_changed_listener.reset_events();
+
+                test_gate->set_location(std::make_pair(7.89f, 10.11));
+                if(test_utils::known_issue_tests_active())
+                    EXPECT_EQ(gate_location_changed_listener.get_event_count(), 1); // ISSUE: (?) Only one notification should be done
+                EXPECT_EQ(gate_location_changed_listener.get_last_parameters(), std::make_tuple(gate_event_handler::event::location_changed, test_gate, NO_DATA));
+                gate_location_changed_listener.reset_events();
+
+                // -- remove the callback hook
+                gate_event_handler::unregister_callback("gate_location_changed_cb");
             }
         TEST_END
     }

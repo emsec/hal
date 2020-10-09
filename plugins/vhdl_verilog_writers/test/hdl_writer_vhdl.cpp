@@ -588,8 +588,10 @@ namespace hal {
                 ASSERT_NE(zero_net, nullptr);
                 ASSERT_NE(one_net, nullptr);
 
-                EXPECT_EQ(p_zero_net->get_source(), test_utils::get_endpoint(p_gnd_gate, "O"));
-                EXPECT_EQ(p_one_net->get_source(), test_utils::get_endpoint(p_vcc_gate, "O"));
+                ASSERT_EQ(p_zero_net->get_sources().size(), 1);
+                EXPECT_EQ(p_zero_net->get_sources()[0], test_utils::get_endpoint(p_gnd_gate, "O"));
+                ASSERT_EQ(p_one_net->get_sources().size(), 1);
+                EXPECT_EQ(p_one_net->get_sources()[0], test_utils::get_endpoint(p_vcc_gate, "O"));
 
                 EXPECT_TRUE(p_zero_net->is_a_destination(test_utils::get_endpoint(p_test_gate, "I0")));
                 EXPECT_TRUE(p_one_net->is_a_destination(test_utils::get_endpoint(p_test_gate, "I1")));
