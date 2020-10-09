@@ -11,14 +11,14 @@ namespace hal
     class Gate;
     class Net;
 
-    class PLUGIN_API plugin_graph_algorithm : public BasePluginInterface
+    class PLUGIN_API GraphAlgorithmPlugin : public BasePluginInterface
     {
     public:
         /** constructor (= default) */
-        plugin_graph_algorithm() = default;
+        GraphAlgorithmPlugin() = default;
 
         /** destructor (= default) */
-        ~plugin_graph_algorithm() = default;
+        ~GraphAlgorithmPlugin() = default;
 
         /*
         *      interface implementations

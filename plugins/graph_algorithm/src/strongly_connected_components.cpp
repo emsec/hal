@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    std::vector<std::vector<Gate*>> plugin_graph_algorithm::get_strongly_connected_components(Netlist* g, std::vector<Gate*> gates)
+    std::vector<std::vector<Gate*>> GraphAlgorithmPlugin::get_strongly_connected_components(Netlist* g, std::vector<Gate*> gates)
     {
         if (g == nullptr)
         {
