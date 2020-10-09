@@ -23,8 +23,7 @@ namespace hal
             .def("get_version", &plugin_dataflow::get_version)
             // .def("get_cli_options", &plugin_dataflow::get_cli_options)
             // .def("handle_cli_call", &plugin_dataflow::handle_cli_call)
-            //.def("execute", &plugin_dataflow::execute)
-            .def("execute_and_update", &plugin_dataflow::execute_and_update)
+            .def("execute", &plugin_dataflow::execute)
             ;
 #ifndef PYBIND11_MODULE
         return m.ptr();
