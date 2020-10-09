@@ -29,6 +29,9 @@ namespace hal
 {
     namespace py = pybind11;
 
+    // the name in PYBIND11_MODULE/PYBIND11_PLUGIN *MUST* match the filename of the output library (without extension),
+    // otherwise you will get "ImportError: dynamic module does not define module export function" when importing the module
+
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(libgraph_algorithm, m)
     {
