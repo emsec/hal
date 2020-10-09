@@ -2,6 +2,8 @@
 
 #include "gui/dialogs/dialog.h"
 
+#include <QPainterPath>
+
 namespace hal
 {
     class WarningDialog : public Dialog
