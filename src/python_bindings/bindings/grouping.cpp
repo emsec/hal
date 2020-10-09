@@ -59,7 +59,7 @@ namespace hal
         )");
 
         py_grouping.def("assign_gate", &Grouping::assign_gate, py::arg("gate"), R"(
-            Assigns a gate to the grouping.
+            Assign a gate to the grouping.
             Fails if the gate is already contained within another grouping.
 
             :param hal_py.Gate gate: The gate to assign.
@@ -68,7 +68,7 @@ namespace hal
         )");
 
         py_grouping.def("assign_gate_by_id", &Grouping::assign_gate_by_id, py::arg("gate_id"), R"(
-            Assigns a gate to the grouping by ID.
+            Assign a gate to the grouping by ID.
             Fails if the gate is already contained within another grouping.
 
             :param int gate_id: The ID of the gate to assign.
@@ -109,7 +109,7 @@ namespace hal
         )");
 
         py_grouping.def("remove_gate", &Grouping::remove_gate, py::arg("gate"), R"(
-            Removes a gate from the grouping.
+            Remove a gate from the grouping.
             Fails if the gate is not contained within the grouping.
 
             :param hal_py.Gate gate: The gate to remove.
@@ -118,7 +118,7 @@ namespace hal
         )");
 
         py_grouping.def("remove_gate_by_id", &Grouping::remove_gate_by_id, py::arg("gate_id"), R"(
-            Removes a gate from the grouping by ID.
+            Remove a gate from the grouping by ID.
             Fails if the gate is not contained within the grouping.
 
             :param int gate_id: The ID of the gate to remove.
@@ -127,7 +127,7 @@ namespace hal
         )");
 
         py_grouping.def("contains_gate", &Grouping::contains_gate, py::arg("gate"), R"(
-            Checks whether a gate is in the grouping.
+            Check whether a gate is in the grouping.
 
             :param hal_py.Gate gate: The gate to check for.
             :returns: True on success, false otherwise.
@@ -135,7 +135,7 @@ namespace hal
         )");
 
         py_grouping.def("contains_gate_by_id", &Grouping::contains_gate_by_id, py::arg("gate_id"), R"(
-            Checks whether a gate is in the grouping by ID.
+            Check whether a gate is in the grouping by ID.
 
             :param int gate_id: The ID of the gate to check for.
             :returns: True on success, false otherwise.
@@ -143,7 +143,7 @@ namespace hal
         )");
 
         py_grouping.def("assign_net", &Grouping::assign_net, py::arg("net"), R"(
-            Assigns a net to the grouping.
+            Assign a net to the grouping.
             Fails if the net is already contained within another grouping.
 
             :param hal_py.Net net: The net to assign.
@@ -152,7 +152,7 @@ namespace hal
         )");
 
         py_grouping.def("assign_net_by_id", &Grouping::assign_net_by_id, py::arg("net_id"), R"(
-            Assigns a net to the grouping by ID.
+            Assign a net to the grouping by ID.
             Fails if the net is already contained within another grouping.
 
             :param int net_id: The ID of the net to assign.
@@ -193,7 +193,7 @@ namespace hal
         )");
 
         py_grouping.def("remove_net", &Grouping::remove_net, py::arg("net"), R"(
-            Removes a net from the grouping.
+            Remove a net from the grouping.
             Fails if the net is not contained within the grouping.
 
             :param hal_py.Net net: The net to remove.
@@ -202,7 +202,7 @@ namespace hal
         )");
 
         py_grouping.def("remove_net_by_id", &Grouping::remove_net_by_id, py::arg("net_id"), R"(
-            Removes a net from the grouping by ID.
+            Remove a net from the grouping by ID.
             Fails if the net is not contained within the grouping.
 
             :param int net_id: The ID of the net to remove.
@@ -211,7 +211,7 @@ namespace hal
         )");
 
         py_grouping.def("contains_net", &Grouping::contains_net, py::arg("net"), R"(
-            Checks whether a net is in the grouping.
+            Check whether a net is in the grouping.
 
             :param hal_py.Net net: The net to check for.
             :returns: True on success, false otherwise.
@@ -219,7 +219,7 @@ namespace hal
         )");
 
         py_grouping.def("contains_net_by_id", &Grouping::contains_net_by_id, py::arg("net_id"), R"(
-            Checks whether a net is in the grouping by ID.
+            Check whether a net is in the grouping by ID.
 
             :param int net_id: The ID of the net to check for.
             :returns: True on success, false otherwise.
@@ -227,7 +227,7 @@ namespace hal
         )");
 
         py_grouping.def("assign_module", &Grouping::assign_module, py::arg("module"), R"(
-            Assigns a module to the grouping.
+            Assign a module to the grouping.
             Fails if the module is already contained within another grouping.
 
             :param hal_py.Gate module: The module to assign.
@@ -236,7 +236,7 @@ namespace hal
         )");
 
         py_grouping.def("assign_module_by_id", &Grouping::assign_module_by_id, py::arg("module_id"), R"(
-            Assigns a module to the grouping by ID.
+            Assign a module to the grouping by ID.
             Fails if the module is already contained within another grouping.
 
             :param int module_id: The ID of the module to assign.
@@ -276,7 +276,7 @@ namespace hal
         )");
 
         py_grouping.def("remove_module", &Grouping::remove_module, py::arg("module"), R"(
-            Removes a module from the grouping.
+            Remove a module from the grouping.
             Fails if the module is not contained within the grouping.
 
             :param hal_py.Gate module: The module to remove.
@@ -285,7 +285,7 @@ namespace hal
         )");
 
         py_grouping.def("remove_module_by_id", &Grouping::remove_gate_by_id, py::arg("module_id"), R"(
-            Removes a module from the grouping by ID.
+            Remove a module from the grouping by ID.
             Fails if the module is not contained within the grouping.
 
             :param int module_id: The ID of the module to remove.
@@ -294,7 +294,7 @@ namespace hal
         )");
 
         py_grouping.def("contains_module", &Grouping::contains_module, py::arg("module"), R"(
-            Checks whether a module is in the grouping.
+            Check whether a module is in the grouping.
 
             :param hal_py.Gate module: The module to check for.
             :returns: True on success, false otherwise.
@@ -302,7 +302,7 @@ namespace hal
         )");
 
         py_grouping.def("contains_module_by_id", &Grouping::contains_module_by_id, py::arg("module_id"), R"(
-            Checks whether a module is in the grouping by ID.
+            Check whether a module is in the grouping by ID.
 
             :param int module_id: The ID of the module to check for.
             :returns: True on success, false otherwise.
