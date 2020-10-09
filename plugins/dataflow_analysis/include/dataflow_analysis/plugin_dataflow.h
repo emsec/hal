@@ -37,7 +37,5 @@ namespace hal
 
         bool execute(Netlist* nl, std::string path, const u32 layer, const std::vector<u32> sizes);
 
-        bool execute_and_update(Netlist* nl, std::string output_path, const u32 layer, const std::vector<u32> sizes);
-
     };
 }    // namespace hal
