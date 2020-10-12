@@ -58,20 +58,24 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
-        py_grouping.def("assign_gate", &Grouping::assign_gate, py::arg("gate"), R"(
+        py_grouping.def("assign_gate", &Grouping::assign_gate, py::arg("gate"), py::arg("force") = false, R"(
             Assign a gate to the grouping.
             Fails if the gate is already contained within another grouping.
+            If force is set and the gate is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
 
             :param hal_py.Gate gate: The gate to assign.
+            :param bool force: Overwrite previous assignment.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
 
-        py_grouping.def("assign_gate_by_id", &Grouping::assign_gate_by_id, py::arg("gate_id"), R"(
+        py_grouping.def("assign_gate_by_id", &Grouping::assign_gate_by_id, py::arg("gate_id"), py::arg("force") = false, R"(
             Assign a gate to the grouping by ID.
             Fails if the gate is already contained within another grouping.
+            If force is set and the gate is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
 
             :param int gate_id: The ID of the gate to assign.
+            :param bool force: Overwrite previous assignment.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
@@ -142,20 +146,24 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def("assign_net", &Grouping::assign_net, py::arg("net"), R"(
+        py_grouping.def("assign_net", &Grouping::assign_net, py::arg("net"), py::arg("force") = false, R"(
             Assign a net to the grouping.
             Fails if the net is already contained within another grouping.
+            If force is set and the net is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
 
             :param hal_py.Net net: The net to assign.
+            :param bool force: Overwrite previous assignment.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
 
-        py_grouping.def("assign_net_by_id", &Grouping::assign_net_by_id, py::arg("net_id"), R"(
+        py_grouping.def("assign_net_by_id", &Grouping::assign_net_by_id, py::arg("net_id"), py::arg("force") = false, R"(
             Assign a net to the grouping by ID.
             Fails if the net is already contained within another grouping.
+            If force is set and the net is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
 
             :param int net_id: The ID of the net to assign.
+            :param bool force: Overwrite previous assignment.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
@@ -226,20 +234,24 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def("assign_module", &Grouping::assign_module, py::arg("module"), R"(
+        py_grouping.def("assign_module", &Grouping::assign_module, py::arg("module"), py::arg("force") = false, R"(
             Assign a module to the grouping.
             Fails if the module is already contained within another grouping.
+            If force is set and the module is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
 
             :param hal_py.Gate module: The module to assign.
+            :param bool force: Overwrite previous assignment.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");
 
-        py_grouping.def("assign_module_by_id", &Grouping::assign_module_by_id, py::arg("module_id"), R"(
+        py_grouping.def("assign_module_by_id", &Grouping::assign_module_by_id, py::arg("module_id"), py::arg("force") = false, R"(
             Assign a module to the grouping by ID.
             Fails if the module is already contained within another grouping.
+            If force is set and the module is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
 
             :param int module_id: The ID of the module to assign.
+            :param bool force: Overwrite previous assignment.
             :returns: True on success, false otherwise.
             :rtype: bool
         )");

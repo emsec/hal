@@ -23,7 +23,17 @@ namespace hal
 
     void Grouping::set_name(std::string name)
     {
-        m_name = name;
+        if (utils::trim(name).empty())
+        {
+            log_error("grouping", "empty name is not allowed.");
+            return;
+        }
+        if (name != m_name)
+        {
+            m_name = name;
+
+            grouping_event_handler::notify(grouping_event_handler::event::name_changed, this);
+        }
     }
 
     std::string Grouping::get_name()
@@ -36,12 +46,12 @@ namespace hal
         return m_internal_manager->m_netlist;
     }
 
-    bool Grouping::assign_gate(Gate* gate)
+    bool Grouping::assign_gate(Gate* gate, bool force)
     {
-        return m_internal_manager->grouping_assign_gate(this, gate);
+        return m_internal_manager->grouping_assign_gate(this, gate, force);
     }
 
-    bool Grouping::assign_gate_by_id(const u32 gate_id)
+    bool Grouping::assign_gate_by_id(const u32 gate_id, bool force)
     {
         Gate* gate = m_internal_manager->m_netlist->get_gate_by_id(gate_id);
         if (gate == nullptr)
@@ -49,7 +59,7 @@ namespace hal
             return false;
         }
 
-        return assign_gate(gate);
+        return assign_gate(gate, force);
     }
 
     std::vector<Gate*> Grouping::get_gates(const std::function<bool(Gate*)>& filter)
@@ -105,6 +115,11 @@ namespace hal
 
     bool Grouping::contains_gate(Gate* gate)
     {
+        if(gate == nullptr) 
+        {
+            return false;
+        }
+
         return contains_gate_by_id(gate->get_id());
     }
 
@@ -113,12 +128,12 @@ namespace hal
         return m_gates_map.find(gate_id) != m_gates_map.end();
     }
 
-    bool Grouping::assign_net(Net* net)
+    bool Grouping::assign_net(Net* net, bool force)
     {
-        return m_internal_manager->grouping_assign_net(this, net);
+        return m_internal_manager->grouping_assign_net(this, net, force);
     }
 
-    bool Grouping::assign_net_by_id(const u32 net_id)
+    bool Grouping::assign_net_by_id(const u32 net_id, bool force)
     {
         Net* net = m_internal_manager->m_netlist->get_net_by_id(net_id);
         if (net == nullptr)
@@ -126,7 +141,7 @@ namespace hal
             return false;
         }
 
-        return assign_net(net);
+        return assign_net(net, force);
     }
 
     std::vector<Net*> Grouping::get_nets(const std::function<bool(Net*)>& filter)
@@ -182,6 +197,11 @@ namespace hal
 
     bool Grouping::contains_net(Net* net)
     {
+        if(net == nullptr) 
+        {
+            return false;
+        }
+
         return contains_net_by_id(net->get_id());
     }
 
@@ -190,12 +210,12 @@ namespace hal
         return m_nets_map.find(net_id) != m_nets_map.end();
     }
 
-    bool Grouping::assign_module(Module* module)
+    bool Grouping::assign_module(Module* module, bool force)
     {
-        return m_internal_manager->grouping_assign_module(this, module);
+        return m_internal_manager->grouping_assign_module(this, module, force);
     }
 
-    bool Grouping::assign_module_by_id(const u32 module_id)
+    bool Grouping::assign_module_by_id(const u32 module_id, bool force)
     {
         Module* module = m_internal_manager->m_netlist->get_module_by_id(module_id);
         if (module == nullptr)
@@ -203,7 +223,7 @@ namespace hal
             return false;
         }
 
-        return assign_module(module);
+        return assign_module(module, force);
     }
 
     std::vector<Module*> Grouping::get_modules(const std::function<bool(Module*)>& filter)
@@ -259,6 +279,11 @@ namespace hal
 
     bool Grouping::contains_module(Module* module)
     {
+        if(module == nullptr) 
+        {
+            return false;
+        }
+
         return contains_module_by_id(module->get_id());
     }
 

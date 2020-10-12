@@ -32,7 +32,7 @@ namespace hal
     {
         if (utils::trim(name).empty())
         {
-            log_error("module", "empty name is not allowed");
+            log_error("module", "empty name is not allowed.");
             return;
         }
         if (name != m_name)
