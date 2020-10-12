@@ -6,6 +6,7 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/module.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
@@ -410,6 +411,20 @@ namespace hal
         bool modules_are_equal(Module* m_0, Module* m_1, const bool ignore_id = false, const bool ignore_name = false);
 
         /**
+         * Checks if two groupings are equal regardless if they are in the same netlist (they doesn't share a pointer).
+         * Two groupings are considered equal iff:
+         * id is equal AND name is equal AND
+         * their gates, nets, and modules are equal according the function 'gates_are_equal', 'nets_are_equal', and 'modules_are_equal'
+         *
+         * @param g_0[in] - grouping
+         * @param g_1[in] - other grouping
+         * @param ignore_id - if the ids should be ignored in comparison
+         * @param ignore_name - if the names should be ignored in comparison
+         * @returns TRUE if g_0 and g_1 are equal under the considered conditions. FALSE otherwise.
+         */
+        bool groupings_are_equal(Grouping* g_0, Grouping* g_1, const bool ignore_id = false, const bool ignore_name = false);
+
+        /**
          * Checks if two netlist are equal regardless if they are the same object.
          * Two netlists are considered equal iff:
          * id is equal AND Gate library is equal AND their gates are equal according the function 'gates_are_equal' AND
@@ -436,6 +451,16 @@ namespace hal
          * @return the std::function object of the filter function
          */
         std::function<bool(Module*)> module_name_filter(const std::string& name);
+
+        // +++ Grouping Filter +++
+
+        /**
+         * Filter returns true for groupings with the name 'name'
+         *
+         * @param name - the name of the grouping the filter is searching for
+         * @return the std::function object of the filter function
+         */
+        std::function<bool(Grouping*)> grouping_name_filter(const std::string& name);
 
         // +++ Gate Filter +++
 
