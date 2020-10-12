@@ -59,21 +59,25 @@ namespace hal
 
         /**
          * Assign a gate to the grouping.<br>
-         * Fails if the gate is already contained within another grouping.
+         * Fails if the gate is already contained within another grouping.<br>
+         * If \p force is set and the gate is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
          *
          * @param[in] gate - The gate to assign.
+         * @param[in] force - Overwrite previous assignment.
          * @returns True on success, false otherwise.
          */
-        bool assign_gate(Gate* gate);
+        bool assign_gate(Gate* gate, bool force = false);
 
         /**
          * Assign a gate to the grouping by ID.<br>
-         * Fails if the gate is already contained within another grouping.
+         * Fails if the gate is already contained within another grouping.<br>
+         * If \p force is set and the gate is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
          *
          * @param[in] gate_id - The ID of the gate to assign.
+         * @param[in] force - Overwrite previous assignment.
          * @returns True on success, false otherwise.
          */
-        bool assign_gate_by_id(const u32 gate_id);
+        bool assign_gate_by_id(const u32 gate_id, bool force = false);
 
         /**
          * Get all gates contained within the grouping. <br>
@@ -135,21 +139,25 @@ namespace hal
 
         /**
          * Assign a net to the grouping.<br>
-         * Fails if the net is already contained within another grouping.
+         * Fails if the net is already contained within another grouping.<br>
+         * If \p force is set and the net is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
          *
          * @param[in] net - The net to assign.
+         * @param[in] force - Overwrite previous assignment.
          * @returns True on success, false otherwise.
          */
-        bool assign_net(Net* net);
+        bool assign_net(Net* net, bool force = false);
 
         /**
          * Assign a net to the grouping by ID.<br>
-         * Fails if the net is already contained within another grouping.
+         * Fails if the net is already contained within another grouping.<br>
+         * If \p force is set and the net is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
          *
          * @param[in] net_id - The ID of the net to assign.
+         * @param[in] force - Overwrite previous assignment.
          * @returns True on success, false otherwise.
          */
-        bool assign_net_by_id(const u32 net_id);
+        bool assign_net_by_id(const u32 net_id, bool force = false);
 
         /**
          * Get all nets contained within the grouping. <br>
@@ -211,21 +219,25 @@ namespace hal
 
         /**
          * Assign a module to the grouping.<br>
-         * Fails if the module is already contained within another grouping.
+         * Fails if the module is already contained within another grouping.<br>
+         * If \p force is set and the module is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
          *
          * @param[in] module - The module to assign.
+         * @param[in] force - Overwrite previous assignment.
          * @returns True on success, false otherwise.
          */
-        bool assign_module(Module* module);
+        bool assign_module(Module* module, bool force = false);
 
         /**
          * Assign a module to the grouping by ID.<br>
-         * Fails if the module is already contained within another grouping.
+         * Fails if the module is already contained within another grouping.<br>
+         * If \p force is set and the module is contained in another grouping, it is removed from the previous grouping to be assigned to this one.
          *
          * @param[in] module_id - The ID of the module to assign.
+         * @param[in] force - Overwrite previous assignment.
          * @returns True on success, false otherwise.
          */
-        bool assign_module_by_id(const u32 module_id);
+        bool assign_module_by_id(const u32 module_id, bool force = false);
 
         /**
          * Get all modules contained within the grouping. <br>

@@ -14,6 +14,7 @@
 
 #include <fstream>
 #include <math.h>
+#include <stack>
 
 /*
 namespace hal
@@ -521,6 +522,113 @@ namespace hal
          * @return the std::function object of the filter function
          */
         std::function<bool(const std::string&, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
+
+
+
+        /**
+         * Used to test the event system. It can create callback hooks (via get_callback/get_conditional_callback) and
+         * observes if/how often they are triggered (via is_triggered/get_trigger_count)
+         *
+         * @tparam R - the return type of the callback function
+         * @tparam P - all parameter types of the callback function
+         */
+        template <class R, class... P> // R: callback return type, P: parameters
+        class EventListener
+        {
+        private:
+            std::stack<std::tuple<P ...>> m_call_parameters;
+
+            /**
+             * Triggers a conditional event. Trigger count is only increased, if the condition specified by cond with
+             * the given parameters (params) is fulfilled. This function is used to create conditional callback hooks.
+             *
+             * @param cond - a filter function that represents the conditions for given parameters
+             * @param params - the actual parameters the cond is check for
+             */
+            void trigger_event_conditional(std::function<bool(P ...)> cond, P ... params){
+                if(cond(params ...)){
+                    m_call_parameters.push(std::tuple<P ...>(params ...));
+                }
+            }
+        public:
+            EventListener() = default;
+            ~EventListener() = default;
+
+            /**
+             * Get the parameter of the last event that was triggered. Note, that parameters of conditional events
+             * are not stored, if the condition is not met.
+             *
+             * @returns a tuple of the parameters of the last triggered event
+             */
+            std::tuple<P ...> get_last_parameters()
+            {
+                if(m_call_parameters.size() == 0){
+                    return std::tuple<P ...>();
+                }
+                return m_call_parameters.top();
+            }
+
+            /**
+             * Returns if a registered callback was called since the last reset.
+             *
+             * @returns true, iff at least one time, an event was triggered
+             */
+            bool is_triggered(){
+                return !m_call_parameters.empty();
+            }
+
+            /**
+             * Returns the amount of time, a callback triggered an event since the last reset
+             *
+             * @returns the event count
+             */
+            u32 get_event_count(){
+                return m_call_parameters.size();
+            }
+
+            /**
+             * Resets the event history.
+             */
+            void reset_events(){
+                m_call_parameters = std::stack<std::tuple<P ...>>();
+            }
+
+            /**
+             * Removes the last event from the history
+             */
+            void pop_event(){
+                if(!m_call_parameters.empty())
+                    m_call_parameters.pop();
+            }
+
+            /**
+             * Returns an unconditional callback hook, that only triggers an event, if the passed condition is fulfilled
+             * by the parameters, the callback is called with.
+             *
+             * @param cond - a function that represents the condition, that must be fulfilled by the parameters.
+             * @returns the conditional callback hook
+             */
+            std::function<R(P ...)> get_conditional_callback(std::function<bool(P ...)> cond)
+            {
+                std::function<R(P ...)> f = [=](P ... params) {
+                    this->trigger_event_conditional(cond, params ...);
+                };
+                return f;
+            }
+
+            /**
+             * Returns an unconditional callback hook, that triggers an event every time it is called (independent of the
+             * passed parameters).
+             *
+             * @return the unconditional callback hook
+             */
+            std::function<R(P ...)> get_callback()
+            {
+                return get_conditional_callback(
+                    [=](P ...) { return true; }
+                );
+            }
+        };
 
     } // namespace test_utils
 } // namespace hal

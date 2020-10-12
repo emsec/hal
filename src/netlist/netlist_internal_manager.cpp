@@ -634,14 +634,26 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::grouping_assign_gate(Grouping* grouping, Gate* gate)
+    bool NetlistInternalManager::grouping_assign_gate(Grouping* grouping, Gate* gate, bool force)
     {
+        if (gate == nullptr || gate->get_grouping() == grouping) 
+        {
+            return false;
+        }
+
         u32 gate_id = gate->get_id();
 
         if (Grouping* other = gate->get_grouping(); other != nullptr)
         {
-            log_error("netlist.internal", "netlist::grouping_assign_gate: gate with ID {:08x} is already part of a grouping with ID {:08x}.", gate_id, other->get_id());
-            return false;
+            if(force) 
+            {
+                other->remove_gate(gate);
+            } 
+            else 
+            {
+                log_error("netlist.internal", "netlist::grouping_assign_gate: gate with ID {:08x} is already part of a grouping with ID {:08x}.", gate_id, other->get_id());
+                return false;
+            }
         }
 
         grouping->m_gates.push_back(gate);
@@ -655,6 +667,11 @@ namespace hal
 
     bool NetlistInternalManager::grouping_remove_gate(Grouping* grouping, Gate* gate)
     {
+        if (gate == nullptr) 
+        {
+            return false;
+        }
+
         u32 gate_id = gate->get_id();
 
         if (!grouping->contains_gate(gate))
@@ -675,14 +692,26 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::grouping_assign_net(Grouping* grouping, Net* net)
+    bool NetlistInternalManager::grouping_assign_net(Grouping* grouping, Net* net, bool force)
     {
+        if (net == nullptr || net->get_grouping() == grouping) 
+        {
+            return false;
+        }
+
         u32 net_id = net->get_id();
 
         if (Grouping* other = net->get_grouping(); other != nullptr)
         {
-            log_error("netlist.internal", "netlist::grouping_assign_net: net with ID {:08x} is already part of grouping with ID {:08x}.", net_id, other->get_id());
-            return false;
+            if(force) 
+            {
+                other->remove_net(net);
+            } 
+            else 
+            {
+                log_error("netlist.internal", "netlist::grouping_assign_net: net with ID {:08x} is already part of grouping with ID {:08x}.", net_id, other->get_id());
+                return false;
+            }
         }
 
         grouping->m_nets.push_back(net);
@@ -696,6 +725,11 @@ namespace hal
 
     bool NetlistInternalManager::grouping_remove_net(Grouping* grouping, Net* net)
     {
+        if (net == nullptr) 
+        {
+            return false;
+        }
+
         u32 net_id = net->get_id();
 
         if (!grouping->contains_net(net))
@@ -716,14 +750,26 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::grouping_assign_module(Grouping* grouping, Module* module)
+    bool NetlistInternalManager::grouping_assign_module(Grouping* grouping, Module* module, bool force)
     {
+        if (module == nullptr || module->get_grouping() == grouping) 
+        {
+            return false;
+        }
+
         u32 module_id = module->get_id();
 
         if (Grouping* other = module->get_grouping(); other != nullptr)
         {
-            log_error("netlist.internal", "netlist::grouping_assign_module: module with ID {:08x} is already part of grouping with ID {:08x}.", module_id, other->get_id());
-            return false;
+            if(force) 
+            {
+                other->remove_module(module);
+            } 
+            else 
+            {
+                log_error("netlist.internal", "netlist::grouping_assign_module: module with ID {:08x} is already part of grouping with ID {:08x}.", module_id, other->get_id());
+                return false;
+            }
         }
 
         grouping->m_modules.push_back(module);
@@ -737,6 +783,11 @@ namespace hal
 
     bool NetlistInternalManager::grouping_remove_module(Grouping* grouping, Module* module)
     {
+        if (module == nullptr) 
+        {
+            return false;
+        }
+
         u32 module_id = module->get_id();
 
         if (!grouping->contains_module(module))

@@ -1,16 +1,16 @@
-#include "hal_core/utilities/log.h"
-#include "hal_core/plugin_system/plugin_manager.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-#include "graph_algorithm/plugin_graph_algorithm.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
 
 #include <igraph/igraph.h>
 #include <stdio.h>
 
 namespace hal
 {
-    std::set<std::set<Gate*>> plugin_graph_algorithm::get_scc(Netlist* nl)
+    std::set<std::set<Gate*>> GraphAlgorithmPlugin::get_scc(Netlist* nl)
     {
         if (nl == nullptr)
         {
@@ -20,7 +20,7 @@ namespace hal
 
         // get igraph
         std::tuple<igraph_t, std::map<int, Gate*>> igraph_tuple = get_igraph_directed(nl);
-        igraph_t graph                                                          = std::get<0>(igraph_tuple);
+        igraph_t graph                                          = std::get<0>(igraph_tuple);
         std::map<int, Gate*> vertex_to_gate                     = std::get<1>(igraph_tuple);
 
         igraph_vector_t membership, csize;
