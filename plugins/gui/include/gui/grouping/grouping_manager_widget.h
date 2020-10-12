@@ -79,14 +79,8 @@ namespace hal
 
         GroupingTableModel* getModel() const { return mGroupingTableModel; }
 
-    public Q_SLOTS:
-        //void handle_context_created(GraphContext* context);
-        //void handle_context_renamed(GraphContext* context);
-        //void handle_context_removed(GraphContext* context);
-
     private:
         GraphTabWidget* m_tab_view;
-
         QTableView* mGroupingTableView;
         GroupingTableModel* mGroupingTableModel;
 

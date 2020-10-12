@@ -3,6 +3,7 @@
 #include "gui/gui_globals.h"
 
 #include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/grouping/grouping_color_delegate.h"
 #include "gui/input_dialog/input_dialog.h"
 
 //#include "gui/graph_widget/graph_widget.h"
@@ -61,6 +62,7 @@ namespace hal
         mGroupingTableView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         mGroupingTableView->verticalHeader()->hide();
         mGroupingTableView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        mGroupingTableView->setItemDelegateForColumn(2,new GroupingColorDelegate(mGroupingTableView));
 
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
@@ -76,7 +78,6 @@ namespace hal
 
         connect(mGroupingTableView, &QTableView::customContextMenuRequested, this, &GroupingManagerWidget::handle_context_menu_request);
         connect(mGroupingTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &GroupingManagerWidget::handle_selection_changed);
-
     }
 
     void GroupingManagerWidget::handleCreateGroupingClicked()
@@ -112,7 +113,7 @@ namespace hal
         ipd.add_validator(mGroupingTableModel);
 
         if (ipd.exec() == QDialog::Accepted)
-            mGroupingTableModel->setData(modelIndex,ipd.text_value(),Qt::EditRole);
+            mGroupingTableModel->renameGrouping(modelIndex.row(),ipd.text_value());
         mGroupingTableModel->setAboutToRename(QString());
     }
 
