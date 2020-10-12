@@ -32,6 +32,15 @@ namespace hal {
         mGrouping->set_name(n.toStdString());
     }
 
+
+    GroupingTableModel::GroupingTableModel(QObject* parent)
+        : QAbstractTableModel(parent), mDisableEvents(false)
+    {
+        connect(g_netlist_relay, &NetlistRelay::grouping_created, this, &GroupingTableModel::createGroupingEvent);
+        connect(g_netlist_relay, &NetlistRelay::grouping_removed, this, &GroupingTableModel::deleteGroupingEvent);
+        connect(g_netlist_relay, &NetlistRelay::grouping_nameChanged, this, &GroupingTableModel::groupingNameChangedEvent);
+    }
+
     int GroupingTableModel::columnCount(const QModelIndex &parent) const
     {
         Q_UNUSED(parent)
@@ -96,6 +105,7 @@ namespace hal {
             return true;
         case 2:
             mGroupings[index.row()].setColor(value.value<QColor>());
+            Q_EMIT groupingColorChanged(mGroupings.at(index.row()).grouping());
             return true;
         }
         return false;
@@ -106,10 +116,20 @@ namespace hal {
         Q_UNUSED(parent);
         Q_UNUSED(count);
 
+        mDisableEvents = true;
         if (row >= mGroupings.size()) return false;
+        Grouping* grp = mGroupings.at(row).grouping();
+        for (Module* m : grp->get_modules())
+            grp->remove_module(m);
+        for (Gate* g : grp->get_gates())
+            grp->remove_gate(g);
+        for (Net* n : grp->get_nets())
+            grp->remove_net(n);
+        g_netlist->delete_grouping(grp);
         Q_EMIT layoutAboutToBeChanged();
         mGroupings.removeAt(row);
         Q_EMIT layoutChanged();
+        mDisableEvents = false;
         return true;
     }
 
@@ -125,7 +145,7 @@ namespace hal {
         return true;
     }
 
-    Grouping *GroupingTableModel::addDefaultEntry()
+    Grouping* GroupingTableModel::addDefaultEntry()
     {
         QSet<QString> existingNames;
         u32 maxId = 0;
@@ -134,14 +154,70 @@ namespace hal {
             if (gte.id()>maxId) maxId = gte.id();
             existingNames.insert(gte.name());
         }
-        Q_EMIT layoutAboutToBeChanged();
 
-        int baseCol = mGroupings.size() * 37;
+        mDisableEvents = true;
+        Q_EMIT layoutAboutToBeChanged();
         GroupingTableEntry gte(generateUniqueName(QString("grouping%1").arg(maxId+1),existingNames),
-                               QColor::fromHsv(baseCol%255,200,std::max(250-baseCol/255*50,50)));
+                               nextColor());
         mGroupings.append(gte);
         Q_EMIT layoutChanged();
+        mDisableEvents = false;
+
         return gte.grouping();
+    }
+
+    QColor GroupingTableModel::nextColor() const
+    {
+        int baseCol = mGroupings.size() * 37;
+        return QColor::fromHsv(baseCol%255,200,std::max(250-baseCol/255*50,50));
+    }
+
+    void GroupingTableModel::deleteGroupingEvent(Grouping* grp)
+    {
+        if (mDisableEvents) return;
+        for (auto it = mGroupings.begin(); it!=mGroupings.end(); ++it)
+            if (it->grouping() == grp)
+            {
+                Q_EMIT layoutAboutToBeChanged();
+                mGroupings.erase(it);
+                Q_EMIT layoutChanged();
+                return;
+            }
+    }
+
+    void GroupingTableModel::createGroupingEvent(Grouping *grp)
+    {
+        if (mDisableEvents) return;
+        Q_EMIT layoutAboutToBeChanged();
+        mGroupings.append(GroupingTableEntry(grp,nextColor()));
+        Q_EMIT layoutChanged();
+    }
+
+    void GroupingTableModel::groupingNameChangedEvent(Grouping *grp)
+    {
+        if (mDisableEvents) return;
+        int irow = 0;
+        for (auto it = mGroupings.begin(); it!=mGroupings.end(); ++it)
+        {
+            if (it->grouping() == grp)
+            {
+                it->setName(QString::fromStdString(grp->get_name()));
+                QModelIndex inx = index(irow,0);
+                Q_EMIT dataChanged(inx,inx);
+            }
+            ++irow;
+        }
+    }
+
+    void GroupingTableModel::renameGrouping(int irow, const QString& groupingName)
+    {
+        mDisableEvents = true;
+        Grouping* grp = mGroupings.at(irow).grouping();
+        grp->set_name(groupingName.toStdString());
+        mGroupings[irow].setName(groupingName);
+        QModelIndex inx = index(irow,0);
+        Q_EMIT dataChanged(inx,inx);
+        mDisableEvents = false;
     }
 
     QString GroupingTableModel::generateUniqueName(const QString& suggestion, const QSet<QString>& existingNames)

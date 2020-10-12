@@ -18,6 +18,8 @@ namespace hal {
     public:
         GroupingTableEntry(const QString& n, const QColor& c); // constructor for new grouping
         GroupingTableEntry(u32 existingId, const QColor& c);  // entry wraps existing group object
+        GroupingTableEntry(Grouping* grp, const QColor&c)
+            : mGrouping(grp), mColor(c) {;}
         u32 id() const;
         QString name() const;
         QColor color() const { return mColor; }
@@ -29,11 +31,15 @@ namespace hal {
 
     class GroupingTableModel : public QAbstractTableModel, public Validator
     {
+        Q_OBJECT
+
+        bool mDisableEvents;
         QList<GroupingTableEntry> mGroupings;
         QString mAboutToRename;
 
         static QString generateUniqueName(const QString& suggestion, const QSet<QString>& existingNames);
     public:
+        GroupingTableModel(QObject* parent=nullptr);
         int columnCount(const QModelIndex &parent=QModelIndex()) const override;
         int rowCount(const QModelIndex &parent=QModelIndex()) const override;
         QVariant data(const QModelIndex &index, int role) const override;
@@ -46,6 +52,18 @@ namespace hal {
         Grouping* addDefaultEntry();
         Grouping* groupingByName(const QString& name) const;
         QColor colorForItem(item_type itemType, u32 itemId) const;
+        void renameGrouping(int irow, const QString& groupingName);
         QStringList groupingNames() const;
+
+    public Q_SLOTS:
+        void deleteGroupingEvent(Grouping* grp);
+        void createGroupingEvent(Grouping *grp);
+        void groupingNameChangedEvent(Grouping *grp);
+
+    Q_SIGNALS:
+        void groupingColorChanged(Grouping* grp);
+
+    private:
+        QColor nextColor() const;
     };
 }

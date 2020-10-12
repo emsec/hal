@@ -207,6 +207,9 @@ namespace hal
                 grp->assign_net(n);
             }
         }
+        g_selection_relay->clear();
+        g_selection_relay->relay_selection_changed(nullptr);
+        canRestoreSelection();
     }
 
     void SelectionDetailsWidget::enableSearchbar(bool enable)
