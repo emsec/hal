@@ -337,7 +337,7 @@ namespace hal
 
         if (pin_names_str.size() == 0)
         {
-            log_error("liberty_parser", "no pin name given near line {}", pin_names_str.peek().number);
+            log_error("liberty_parser", "no pin name given near line {}", pin.line_number);
             return std::nullopt;
         }
 
