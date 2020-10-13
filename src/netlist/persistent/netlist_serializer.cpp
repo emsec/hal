@@ -612,12 +612,14 @@ namespace hal
                     }
                 }
 
-                assert_availablility("groupings");
-                for (auto& grouping_node : root["groupings"].GetArray())
+                if (root.HasMember("groupings")) 
                 {
-                    if (!deserialize_grouping(nl.get(), grouping_node))
+                    for (auto& grouping_node : root["groupings"].GetArray())
                     {
-                        return nullptr;
+                        if (!deserialize_grouping(nl.get(), grouping_node))
+                        {
+                            return nullptr;
+                        }
                     }
                 }
 
