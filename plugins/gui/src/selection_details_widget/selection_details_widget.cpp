@@ -38,6 +38,7 @@ namespace hal
         : ContentWidget("Selection Details", parent), m_numberSelectedItems(0),
           m_restoreLastSelection(new QAction),
           m_selectionToGrouping(new QAction),
+          m_selectionToModule(new QAction),
           m_search_action(new QAction),
           m_history(new SelectionHistoryNavigator(5))
     {
@@ -111,15 +112,18 @@ namespace hal
         //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
         m_restoreLastSelection->setToolTip("Restore last selection");
-        m_selectionToGrouping->setToolTip("Grouping: add selected items");
+        m_selectionToGrouping->setToolTip("Assign to grouping");
+        m_selectionToModule->setToolTip("Assign to module");
         canRestoreSelection();
 
         m_search_action->setToolTip("Search");
         enableSearchbar(false);  // enable upon first non-zero selection
         m_selectionToGrouping->setDisabled(true);
+        m_selectionToModule->setDisabled(true);
 
         connect(m_restoreLastSelection, &QAction::triggered, this, &SelectionDetailsWidget::restoreLastSelection);
         connect(m_selectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
+        connect(m_selectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModule);
         connect(m_search_action, &QAction::triggered, this, &SelectionDetailsWidget::toggle_searchbar);
         connect(m_selectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
@@ -133,6 +137,11 @@ namespace hal
         m_history->restorePreviousEntry();
         g_selection_relay->relay_selection_changed(nullptr);
         canRestoreSelection();
+    }
+
+    void SelectionDetailsWidget::selectionToModule()
+    {
+
     }
 
     void SelectionDetailsWidget::selectionToGrouping()
@@ -237,6 +246,7 @@ namespace hal
 
         m_restoreLastSelection->setIcon( gui_utility::get_styled_svg_icon(iconStyle,iconName));
         m_selectionToGrouping->setIcon(QIcon(":/icons/to_grouping"));
+        m_selectionToModule->setIcon(QIcon(":/icons/to_module"));
         m_restoreLastSelection->setEnabled(enable);
     }
 
@@ -270,6 +280,7 @@ namespace hal
             canRestoreSelection();
             enableSearchbar(true);
             m_selectionToGrouping->setEnabled(true);
+            m_selectionToModule->setEnabled(true);
         }
         else
         {
@@ -280,6 +291,7 @@ namespace hal
             m_history->emptySelection();
             enableSearchbar(false);
             m_selectionToGrouping->setDisabled(true);
+            m_selectionToModule->setDisabled(true);
             return;
         }
 
@@ -378,6 +390,7 @@ namespace hal
     {
         toolbar->addAction(m_restoreLastSelection);
         toolbar->addAction(m_selectionToGrouping);
+        toolbar->addAction(m_selectionToModule);
         toolbar->addAction(m_search_action);
     }
 

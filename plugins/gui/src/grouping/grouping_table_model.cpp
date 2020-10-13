@@ -56,14 +56,6 @@ namespace hal {
 
     QVariant GroupingTableModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
-        if(role == Qt::FontRole)
-        {
-            QFont font = qApp->activeWindow()->font();
-            font.setBold(true);
-            font.setPixelSize(14);
-            return font;
-        }
-
         if(role != Qt::DisplayRole)
             return QVariant();
 

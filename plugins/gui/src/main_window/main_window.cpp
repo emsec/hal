@@ -44,9 +44,9 @@
 
 namespace hal
 {
-    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), m_schedule_widget(new PluginScheduleWidget()),
-        m_action_schedule(new Action(this))
-        // , m_action_content(new Action(this))
+    MainWindow::MainWindow(QWidget* parent) : QWidget(parent), m_schedule_widget(new PluginScheduleWidget())
+      // , m_action_schedule(new Action(this))
+      // , m_action_content(new Action(this))
     {
         ensurePolished();    // ADD REPOLISH METHOD
         connect(FileManager::get_instance(), &FileManager::file_opened, this, &MainWindow::handle_file_opened);
@@ -123,7 +123,7 @@ namespace hal
         m_action_open         = new Action(this);
         m_action_save         = new Action(this);
         m_action_about        = new Action(this);
-        m_action_run_schedule = new Action(this);
+        //m_action_run_schedule = new Action(this);
         //m_action_content      = new Action(this);
         m_action_settings = new Action(this);
         m_action_close    = new Action(this);
@@ -156,8 +156,8 @@ namespace hal
         m_action_new->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
         m_action_open->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
         m_action_save->setIcon(gui_utility::get_styled_svg_icon(m_save_icon_style, m_save_icon_path));
-        m_action_schedule->setIcon(gui_utility::get_styled_svg_icon(m_schedule_icon_style, m_schedule_icon_path));
-        m_action_run_schedule->setIcon(gui_utility::get_styled_svg_icon(m_run_icon_style, m_run_icon_path));
+//        m_action_schedule->setIcon(gui_utility::get_styled_svg_icon(m_schedule_icon_style, m_schedule_icon_path));
+//        m_action_run_schedule->setIcon(gui_utility::get_styled_svg_icon(m_run_icon_style, m_run_icon_path));
 //        m_action_content->setIcon(gui_utility::get_styled_svg_icon(m_content_icon_style, m_content_icon_path));
         m_action_settings->setIcon(gui_utility::get_styled_svg_icon(m_settings_icon_style, m_settings_icon_path));
 
@@ -178,8 +178,8 @@ namespace hal
         m_left_tool_bar->addAction(m_action_open);
         m_left_tool_bar->addAction(m_action_save);
         //    m_left_tool_bar->addSeparator();
-        m_left_tool_bar->addAction(m_action_schedule);
-        m_left_tool_bar->addAction(m_action_run_schedule);
+//        m_left_tool_bar->addAction(m_action_schedule);
+//        m_left_tool_bar->addAction(m_action_run_schedule);
 //        m_left_tool_bar->addAction(m_action_content);
         //    m_left_tool_bar->addSeparator();
         //    m_right_tool_bar->addSeparator();
@@ -188,15 +188,15 @@ namespace hal
         g_keybind_manager->bind(m_action_new, "keybinds/project_create_file");
         g_keybind_manager->bind(m_action_open, "keybinds/project_open_file");
         g_keybind_manager->bind(m_action_save, "keybinds/project_save_file");
-        g_keybind_manager->bind(m_action_run_schedule, "keybinds/schedule_run");
+ //       g_keybind_manager->bind(m_action_run_schedule, "keybinds/schedule_run");
 
         setWindowTitle("HAL");
         m_action_new->setText("New Netlist");
         m_action_open->setText("Open");
         m_action_save->setText("Save");
         m_action_about->setText("About");
-        m_action_schedule->setText("Edit Schedule");
-        m_action_run_schedule->setText("Run Schedule");
+//        m_action_schedule->setText("Edit Schedule");
+//        m_action_run_schedule->setText("Run Schedule");
 //        m_action_content->setText("Content (Disabled)");
         m_action_settings->setText("Settings");
         m_action_close->setText("Close Document");
@@ -214,14 +214,14 @@ namespace hal
         connect(m_action_new, &Action::triggered, this, &MainWindow::handle_action_new);
         connect(m_action_open, &Action::triggered, this, &MainWindow::handle_action_open);
         connect(m_action_about, &Action::triggered, m_AboutDialog, &AboutDialog::exec);
-        connect(m_action_schedule, &Action::triggered, this, &MainWindow::toggle_schedule);
+//        connect(m_action_schedule, &Action::triggered, this, &MainWindow::toggle_schedule);
         connect(m_action_settings, &Action::triggered, this, &MainWindow::toggle_settings);
         connect(m_settings, &MainSettingsWidget::close, this, &MainWindow::close_settings);
         connect(m_action_save, &Action::triggered, this, &MainWindow::handle_save_triggered);
         //debug
         connect(m_action_close, &Action::triggered, this, &MainWindow::handle_action_closed);
 
-        connect(m_action_run_schedule, &Action::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::run_schedule);
+//        connect(m_action_run_schedule, &Action::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::run_schedule);
 
         connect(this, &MainWindow::save_triggered, g_content_manager, &ContentManager::handle_save_triggered);
 

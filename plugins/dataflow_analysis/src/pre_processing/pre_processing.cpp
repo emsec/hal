@@ -241,13 +241,13 @@ namespace hal
                 log_info("dataflow", "pre-processing netlist...");
                 measure_block_time("pre-processing");
                 NetlistAbstraction netlist_abstr(netlist);
-	    //            remove_buffers(netlist_abstr);
+	               remove_buffers(netlist_abstr);
                 identify_all_sequential_gates(netlist_abstr);
                 for (auto g : netlist_abstr.all_sequential_gates)
                 {
                     g->get_name();
                 }
-            //    merge_duplicated_logic_cones(netlist_abstr);
+                merge_duplicated_logic_cones(netlist_abstr);
                 for (auto g : netlist_abstr.all_sequential_gates)
                 {
                     g->get_name();

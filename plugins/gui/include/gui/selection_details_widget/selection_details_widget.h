@@ -73,6 +73,7 @@ namespace hal
     private Q_SLOTS:
         void restoreLastSelection();
         void selectionToGrouping();
+        void selectionToModule();
         void toggle_searchbar();
         void selectionToNewGrouping();
         void selectionToExistingGrouping();
@@ -98,6 +99,7 @@ namespace hal
 
         QAction* m_restoreLastSelection;
         QAction* m_selectionToGrouping;
+        QAction* m_selectionToModule;
         QAction* m_search_action;
         QString m_search_icon_path;
         QString m_search_icon_style;
