@@ -1,5 +1,6 @@
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
+#include <QApplication>
 
 namespace hal {
     GroupingTableEntry::GroupingTableEntry(const QString& n, const QColor &c)
@@ -55,6 +56,14 @@ namespace hal {
 
     QVariant GroupingTableModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
+        if(role == Qt::FontRole)
+        {
+            QFont font = qApp->activeWindow()->font();
+            font.setBold(true);
+            font.setPixelSize(14);
+            return font;
+        }
+
         if(role != Qt::DisplayRole)
             return QVariant();
 
@@ -63,7 +72,7 @@ namespace hal {
             switch(section)
             {
                 case 0: return "Grouping Name";
-                case 1: return "Id";
+                case 1: return "ID";
                 case 2: return "Color";
                 default: break;
             }

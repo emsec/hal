@@ -67,8 +67,10 @@ namespace hal
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
-
-
+        mGroupingTableView->horizontalHeader()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
+        QFont font = mGroupingTableView->horizontalHeader()->font();
+        font.setBold(true);
+        mGroupingTableView->horizontalHeader()->setFont(font);
         m_content_layout->addWidget(mGroupingTableView);
 
         connect(m_new_grouping_action, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);
