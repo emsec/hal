@@ -5,28 +5,37 @@ if "__decorated_gui__" not in dir():
     import hal_py
     from functools import wraps
 
-    # generic decorator for select_gate, select_net and select_module
+    # generic decorator for select_gate, select_net and select_module as well as the deselect counterparts
     def generic_select_gate_net_module(message, type, f):
         @wraps(f)
         def decorated(*args, **kwargs):
             result = f(*args, **kwargs)
             log_string = "Function: {}, {}-ID(s): {{".format(message, type)
 
-            if isinstance(args[1], list):
-                if isinstance(args[1][0], int):
-                    sorted_list = sorted(args[1])
+            possible_arg_names = ["gate", "net", "module", "gates", "nets", "modules", "gate_id", "net_id", "module_id", "gate_ids", "net_ids", "module_ids"]
+            item_to_select = None
+
+            for arg_name in possible_arg_names:
+                if kwargs.get(arg_name) is not None:
+                    item_to_select = kwargs.get(arg_name)
+                    break;
+
+            if item_to_select is None:
+                item_to_select = args[1]
+
+            if isinstance(item_to_select, list):
+                if len(item_to_select) > 0 and isinstance(item_to_select[0], int):
+                    sorted_list = sorted(item_to_select)
                     log_string += "".join([str(id) + ", " for id in sorted_list])[:-2] + "}"
                 else:
-                    sorted_list = sorted(args[1], key=lambda gate: gate.id)
+                    sorted_list = sorted(item_to_select, key=lambda gate: gate.id)
                     log_string += "".join([str(g.id) + ", " for g in sorted_list])[:-2] + "}"
             else:
-                if isinstance(args[1], int):
-                    log_string += str(args[1]) + "}"
+                if isinstance(item_to_select, int):
+                    log_string += str(item_to_select) + "}"
                 else:
-                    log_string += str(args[1].id) + "}"
+                    log_string += str(item_to_select.id) + "}"
 
-            if len(kwargs) > 0:
-                log_string += "(keyword-arguments found, these are not supported yet!"
             print(log_string)
             return result
         return decorated
