@@ -787,4 +787,31 @@ namespace hal {
         TEST_END
     }
 
+    /**
+     * Testing the get_grouping function
+     *
+     * Functions: get_grouping
+     */
+    TEST_F(ModuleTest, check_get_grouping) {
+        TEST_START
+            {
+                // get the grouping of a module (nullptr), then add it to another grouping and check again
+                auto nl = test_utils::create_empty_netlist();
+                Module* test_module = nl->create_module("test_module", nl->get_top_module());
+
+                EXPECT_EQ(test_module->get_grouping(), nullptr);
+
+                // -- move the module in the test_grouping
+                Grouping* test_grouping = nl->create_grouping("test_grouping");
+                test_grouping->assign_module(test_module);
+
+                EXPECT_EQ(test_module->get_grouping(), test_grouping);
+
+                // -- delete the test_grouping, so the module should be nullptr again
+                nl->delete_grouping(test_grouping);
+                EXPECT_EQ(test_module->get_grouping(), nullptr);
+            }
+        TEST_END
+    }
+
 } //namespace hal

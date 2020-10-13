@@ -23,8 +23,6 @@
 
 #pragma once
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/utilities/special_strings.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
@@ -34,18 +32,20 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/special_strings.h"
 
 #include <cctype>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <unordered_map>
 #include <queue>
 #include <set>
 #include <sstream>
 #include <string>
 #include <type_traits>
+#include <unordered_map>
 #include <vector>
 
 namespace hal
@@ -189,7 +189,7 @@ namespace hal
                             std::vector<T> output_pins = gate_it->second->get_output_pins();
                             pins.insert(pins.end(), output_pins.begin(), output_pins.end());
 
-                            pin_groups                                                = gate_it->second->get_input_pin_groups();
+                            pin_groups                                                          = gate_it->second->get_input_pin_groups();
                             std::unordered_map<T, std::map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
                             pin_groups.insert(output_pin_groups.begin(), output_pin_groups.end());
                         }
@@ -1177,7 +1177,7 @@ namespace hal
 
                         for (auto src : slave_net->get_sources())
                         {
-                            Gate* src_gate = src->get_gate();
+                            Gate* src_gate      = src->get_gate();
                             std::string src_pin = src->get_pin();
 
                             slave_net->remove_source(src);
@@ -1196,7 +1196,7 @@ namespace hal
 
                         for (auto dst : slave_net->get_destinations())
                         {
-                            Gate* dst_gate = dst->get_gate();
+                            Gate* dst_gate      = dst->get_gate();
                             std::string dst_pin = dst->get_pin();
 
                             slave_net->remove_destination(dst);
@@ -1389,7 +1389,7 @@ namespace hal
                 {
                     a = alias_it->second;
                 }
-                else //if (a != "'0'" && a != "'1'" && a != "'Z'")
+                else    //if (a != "'0'" && a != "'1'" && a != "'Z'")
                 {
                     log_warning("hdl_parser", "no alias for net '{}'", a);
                 }
@@ -1449,25 +1449,45 @@ namespace hal
                 for (const auto& [port, assignments] : inst.get_port_assignments())
                 {
                     const std::vector<T> expanded_port = expand_signal(port);
-                    std::move(expanded_port.begin(), expanded_port.end(), std::back_inserter(expanded_ports));
 
+                    std::vector<T> expanded_assignment;
                     for (const auto& s : assignments)
                     {
-                        std::vector<T> expanded_assignment;
                         if (s.is_binary())
                         {
-                            expanded_assignment = expand_binary_signal(s);
+                            for (const T& expanded_signal : expand_binary_signal(s))
+                            {
+                                expanded_assignment.push_back(expanded_signal);
+                            }
                         }
                         else
                         {
-                            expanded_assignment = expand_signal(s);
+                            for (const T& expanded_signal : expand_signal(s))
+                            {
+                                expanded_assignment.push_back(expanded_signal);
+                            }
                         }
-                        std::move(expanded_assignment.begin(), expanded_assignment.end(), std::back_inserter(expanded_assignments));
+                    }
+
+                    if (expanded_assignment.size() <= expanded_port.size())
+                    {
+                        for (u32 i = 0; i < expanded_assignment.size(); i++)
+                        {
+                            expanded_ports.push_back(expanded_port.at(i));
+                            expanded_assignments.push_back(expanded_assignment.at(i));
+                        }
+                    }
+                    else
+                    {
+                        for (u32 i = 0; i < expanded_port.size(); i++)
+                        {
+                            expanded_ports.push_back(expanded_port.at(i));
+                            expanded_assignments.push_back(expanded_assignment.at(i));
+                        }
                     }
                 }
 
-                unsigned int limit = (expanded_assignments.size() < expanded_ports.size()) ? expanded_assignments.size() : expanded_ports.size();
-                for (unsigned int i = 0; i < limit; i++)
+                for (unsigned int i = 0; i < expanded_assignments.size(); i++)
                 {
                     if (const auto it = parent_module_assignments.find(expanded_assignments[i]); it != parent_module_assignments.end())
                     {

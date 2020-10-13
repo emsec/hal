@@ -618,6 +618,21 @@ namespace hal
             return false;
         }
 
+        for (Gate* gate : grouping->get_gates()) 
+        {
+            gate->m_grouping = nullptr;
+        }
+
+        for (Net* net : grouping->get_nets()) 
+        {
+            net->m_grouping = nullptr;
+        }
+
+        for (Module* module : grouping->get_modules()) 
+        {
+            module->m_grouping = nullptr;
+        }
+        
         auto it  = m_netlist->m_groupings_map.find(grouping->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_groupings_map.erase(it);

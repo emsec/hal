@@ -4,12 +4,15 @@
 
 namespace hal
 {
-    /* forward declaration */
-    struct Grouping;
-
-    namespace group_by_successors_predecessors_iteratively
+    namespace dataflow
     {
-        std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool successors);
+        /* forward declaration */
+        struct Grouping;
 
-    }    // namespace group_by_successors_predecessors_iteratively
-}    // namespace hal
+        namespace group_by_successors_predecessors_iteratively
+        {
+            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool successors);
+
+        }    // namespace group_by_successors_predecessors_iteratively
+    }        // namespace dataflow
+}

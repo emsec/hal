@@ -1586,6 +1586,45 @@ namespace hal {
                 EXPECT_EQ(gate_0->get_fan_out_net("O(3)"), nullptr);
 
             }
+            {
+                // Test assigning 2-bit input and 3-bit output wires to 4-bit ports
+                std::stringstream input("module top (in, out) ;\n"
+                                        "  input [0:1] in;\n"
+                                        "  output [0:2] out;\n"
+                                        "pin_group_gate_4_to_4 gate_0 (\n"
+                                        "  .I (in),\n"
+                                        "  .O (out)\n"
+                                        " ) ;\n"
+                                        "endmodule");
+                HDLParserVerilog verilog_parser;
+                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
+
+                Net* net;
+                Gate* gate;
+
+                ASSERT_NE(nl, nullptr);
+                ASSERT_FALSE(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).empty());
+                gate = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
+
+                EXPECT_EQ(gate->get_fan_in_nets().size(), 2);
+                net = gate->get_fan_in_net("I(0)");
+                ASSERT_NE(net, nullptr);
+                EXPECT_EQ(net->get_name(), "in(0)");
+                net = gate->get_fan_in_net("I(1)");
+                ASSERT_NE(net, nullptr);
+                EXPECT_EQ(net->get_name(), "in(1)");
+
+                EXPECT_EQ(gate->get_fan_out_nets().size(), 3);
+                net = gate->get_fan_out_net("O(0)");
+                ASSERT_NE(net, nullptr);
+                EXPECT_EQ(net->get_name(), "out(0)");
+                net = gate->get_fan_out_net("O(1)");
+                ASSERT_NE(net, nullptr);
+                EXPECT_EQ(net->get_name(), "out(1)");
+                net = gate->get_fan_out_net("O(2)");
+                ASSERT_NE(net, nullptr);
+                EXPECT_EQ(net->get_name(), "out(2)");
+            }
         TEST_END
     }
 

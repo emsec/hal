@@ -6,17 +6,20 @@
 
 namespace hal
 {
-    namespace merge_successor_predecessor_groupings
+    namespace dataflow
     {
-        std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool delete_from_smaller)
+        namespace merge_successor_predecessor_groupings
         {
-            auto new_state1 = group_by_successors_predecessors::process(state, true);
-            auto new_state2 = group_by_successors_predecessors::process(state, false);
+            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool delete_from_smaller)
+            {
+                auto new_state1 = group_by_successors_predecessors::process(state, true);
+                auto new_state2 = group_by_successors_predecessors::process(state, false);
 
-            auto merged_state = merge_states::process(new_state1, new_state2, delete_from_smaller);
+                auto merged_state = merge_states::process(new_state1, new_state2, delete_from_smaller);
 
-            return merged_state;
-        }
+                return merged_state;
+            }
 
-    }    // namespace merge_successor_predecessor_groupings
-}    // namespace hal
+        }    // namespace merge_successor_predecessor_groupings
+    }        // namespace dataflow
+}
