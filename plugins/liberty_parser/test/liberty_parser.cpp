@@ -822,8 +822,24 @@ namespace hal {
                 EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(),
                           GateType::BaseType::combinatorial);
                 EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1); // ISSUE: fails
+            }
+            {
+                // Test empty pin names
+                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
+                                        "    define(cell);\n"
+                                        "    cell(TEST_GATE_TYPE) {\n"
+                                        "        pin(I) {\n"
+                                        "            direction: input;\n"
+                                        "        }\n"
+                                        "        pin() {\n"
+                                        "            direction: output;\n"
+                                        "        }\n"
+                                        "    }\n"
+                                        "}");
+                LibertyParser liberty_parser;
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
 
-
+                ASSERT_EQ(gl, nullptr);
             }
         TEST_END
     }
