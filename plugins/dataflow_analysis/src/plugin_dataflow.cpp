@@ -2,25 +2,25 @@
 
 #include "dataflow_analysis/common/grouping.h"
 #include "dataflow_analysis/common/netlist_abstraction.h"
-#include "hal_core/utilities/log.h"
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "dataflow_analysis/evaluation/configuration.h"
 #include "dataflow_analysis/evaluation/context.h"
 #include "dataflow_analysis/evaluation/evaluation.h"
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/netlist.h"
 #include "dataflow_analysis/output_generation/dot_graph.h"
 #include "dataflow_analysis/output_generation/json.hpp"
 #include "dataflow_analysis/output_generation/json_output.h"
 #include "dataflow_analysis/output_generation/svg_output.h"
 #include "dataflow_analysis/output_generation/textual_output.h"
+#include "dataflow_analysis/output_generation/state_to_module.h"
 #include "dataflow_analysis/pre_processing/pre_processing.h"
 #include "dataflow_analysis/processing/passes/group_by_control_signals.h"
 #include "dataflow_analysis/processing/processing.h"
 #include "dataflow_analysis/utils/timing_utils.h"
 #include "dataflow_analysis/utils/utils.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
 
-#include <thread>
 #include <chrono>
 #include <fstream>
 #include <iomanip>
@@ -28,6 +28,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <thread>
 
 namespace hal
 {
@@ -250,6 +251,8 @@ namespace hal
         // dot_graph::create_graph(final_grouping, output_path + "result_", {"pdf"});
 
         log("dataflow processing finished in {:3.2f}s", total_time);
+
+        state_to_module::create_modules(nl, final_grouping);
 
         return true;
     }

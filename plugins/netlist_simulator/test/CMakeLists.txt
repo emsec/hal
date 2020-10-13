@@ -45,7 +45,7 @@ if(BUILD_TESTS)
 
     target_link_libraries(runTest-netlist_simulator netlist_simulator test_utils gtest gtest_main ${LINK_LIBS})
 
-    add_test(runSimulatorTest_test ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-netlist_simulator --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runTest-netlist_simulator.xml)
+    add_test(runTest-netlist_simulator ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-netlist_simulator --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runTest-netlist_simulator.xml)
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         add_sanitizers(runTest-netlist_simulator)

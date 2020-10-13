@@ -56,7 +56,7 @@ namespace hal
         u32 line_number = 0;
 
         std::string line;
-        bool in_string = false;
+        bool in_string          = false;
         bool escaped            = false;
         bool multi_line_comment = false;
 
@@ -89,12 +89,6 @@ namespace hal
                 }
                 else
                 {
-                    // if (!current_token.empty())
-                    // {
-                    //     parsed_tokens.emplace_back(line_number, current_token);
-                    //     current_token.clear();
-                    // }
-
                     if (!current_token.empty())
                     {
                         if (parsed_tokens.size() > 1 && is_digits(parsed_tokens.at(parsed_tokens.size() - 2).string) && parsed_tokens.at(parsed_tokens.size() - 1) == "." && is_digits(current_token))
@@ -195,7 +189,10 @@ namespace hal
             m_token_stream.consume(")", true);
         }
 
-        parse_port_list(port_names);
+        if (!parse_port_list(e, port_names))
+        {
+            return false;
+        }
 
         m_token_stream.consume(";", true);
 
@@ -264,7 +261,7 @@ namespace hal
         return true;
     }
 
-    void HDLParserVerilog::parse_port_list(std::set<std::string>& port_names)
+    bool HDLParserVerilog::parse_port_list(entity& e, std::set<std::string>& port_names)
     {
         m_token_stream.consume("(", true);
         auto ports_str = m_token_stream.extract_until(")");
@@ -272,9 +269,65 @@ namespace hal
 
         while (ports_str.remaining() > 0)
         {
-            port_names.insert(ports_str.consume().string);
-            ports_str.consume(",", ports_str.remaining() > 0);
+            auto next_token = ports_str.consume();
+
+            // ANSI-style port list
+            if (next_token == "input" || next_token == "output" || next_token == "inout")
+            {
+                while (ports_str.remaining() > 0)
+                {
+                    port_direction direction;
+                    std::vector<std::vector<u32>> ranges;
+
+                    if (next_token == "input")
+                    {
+                        direction = port_direction::IN;
+                    }
+                    else if (next_token == "output")
+                    {
+                        direction = port_direction::OUT;
+                    }
+                    else if (next_token == "inout")
+                    {
+                        direction = port_direction::INOUT;
+                    }
+                    else
+                    {
+                        log_error("hdl_parser", "invalid direction '{}' for port declaration in line {}", next_token.string, next_token.number);
+                        return false;
+                    }
+
+                    while (ports_str.consume("["))
+                    {
+                        const auto range = parse_range(ports_str);
+                        ports_str.consume("]", true);
+
+                        ranges.emplace_back(range);
+                    }
+
+                    do
+                    {
+                        next_token = ports_str.consume();
+
+                        if (next_token == "input" || next_token == "output" || next_token == "inout")
+                        {
+                            break;
+                        }
+
+                        signal p(next_token.number, next_token.string, ranges);
+                        e.add_port(direction, p);
+                    } while (ports_str.consume(",", ports_str.remaining() > 0));
+                }
+            }
+            // regular port list
+            else
+            {
+                port_names.insert(next_token.string);
+                ports_str.consume(",", ports_str.remaining() > 0);
+            }
         }
+
+        return true;
     }
 
     bool HDLParserVerilog::parse_port_definition(entity& e, const std::set<std::string>& port_names, std::map<std::string, std::string>& attributes)

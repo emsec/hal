@@ -1,16 +1,16 @@
-#include "hal_core/utilities/log.h"
-#include "hal_core/plugin_system/plugin_manager.h"
+#include "graph_algorithm/plugin_graph_algorithm.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-#include "graph_algorithm/plugin_graph_algorithm.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
 
 #include <igraph/igraph.h>
 #include <tuple>
 
 namespace hal
 {
-    std::tuple<igraph_t, std::map<int, Gate*>> plugin_graph_algorithm::get_igraph_directed(Netlist* const nl)
+    std::tuple<igraph_t, std::map<int, Gate*>> GraphAlgorithmPlugin::get_igraph_directed(Netlist* const nl)
     {
         igraph_t graph;
 
@@ -112,7 +112,7 @@ namespace hal
         return std::make_tuple(graph, vertice_to_gate);
     }
 
-    std::map<int, std::set<Gate*>> plugin_graph_algorithm::get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate)
+    std::map<int, std::set<Gate*>> GraphAlgorithmPlugin::get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate)
     {
         // map back to HAL structures
         int vertices_num = (int)igraph_vcount(&graph);

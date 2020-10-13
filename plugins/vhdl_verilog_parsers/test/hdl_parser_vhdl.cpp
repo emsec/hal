@@ -114,7 +114,8 @@ namespace hal {
 
             ASSERT_NE(net_0, nullptr);
             EXPECT_EQ(net_0->get_name(), "net_0");
-            EXPECT_EQ(net_0->get_source(), test_utils::get_endpoint(gate_0, "O"));
+            ASSERT_EQ(net_0->get_sources().size(), 1);
+            EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
             std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
             EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(),
                                                               std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
@@ -122,14 +123,15 @@ namespace hal {
 
             ASSERT_NE(net_1, nullptr);
             EXPECT_EQ(net_1->get_name(), "net_1");
-            EXPECT_EQ(net_1->get_source(), test_utils::get_endpoint(gate_1, "O"));
+            ASSERT_EQ(net_1->get_sources().size(), 1);
+            EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
             EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(),
                                                               std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
                                                                                                                "I1")})));
 
             ASSERT_NE(net_global_in, nullptr);
             EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-            EXPECT_EQ(net_global_in->get_source(), nullptr);
+            EXPECT_EQ(net_global_in->get_sources().size(), 0);
             EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
                                                               std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
                                                                                                                "I"),
@@ -141,7 +143,8 @@ namespace hal {
 
             ASSERT_NE(net_global_out, nullptr);
             EXPECT_EQ(net_global_out->get_name(), "net_global_out");
-            EXPECT_EQ(net_global_out->get_source(), test_utils::get_endpoint(gate_2, "O"));
+            ASSERT_EQ(net_global_out->get_sources().size(), 1);
+            EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
             EXPECT_TRUE(net_global_out->get_destinations().empty());
             EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
@@ -217,7 +220,8 @@ namespace hal {
 
                 ASSERT_NE(net_0, nullptr);
                 EXPECT_EQ(net_0->get_name(), "net_0");
-                EXPECT_EQ(net_0->get_source(), test_utils::get_endpoint(gate_0, "O"));
+                ASSERT_EQ(net_0->get_sources().size(), 1);
+                EXPECT_EQ(net_0->get_sources()[0], test_utils::get_endpoint(gate_0, "O"));
                 std::vector<Endpoint*> exp_net_0_dsts = {test_utils::get_endpoint(gate_2, "I0")};
                 EXPECT_TRUE(test_utils::vectors_have_same_content(net_0->get_destinations(),
                                                                   std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
@@ -225,14 +229,15 @@ namespace hal {
 
                 ASSERT_NE(net_1, nullptr);
                 EXPECT_EQ(net_1->get_name(), "net_1");
-                EXPECT_EQ(net_1->get_source(), test_utils::get_endpoint(gate_1, "O"));
+                ASSERT_EQ(net_1->get_sources().size(), 1);
+                EXPECT_EQ(net_1->get_sources()[0], test_utils::get_endpoint(gate_1, "O"));
                 EXPECT_TRUE(test_utils::vectors_have_same_content(net_1->get_destinations(),
                                                                   std::vector<Endpoint*>({test_utils::get_endpoint(gate_2,
                                                                                                                    "I1")})));
 
                 ASSERT_NE(net_global_in, nullptr);
                 EXPECT_EQ(net_global_in->get_name(), "net_global_in");
-                EXPECT_EQ(net_global_in->get_source(), nullptr);
+                EXPECT_EQ(net_global_in->get_sources().size(), 0);
                 EXPECT_TRUE(test_utils::vectors_have_same_content(net_global_in->get_destinations(),
                                                                   std::vector<Endpoint*>({test_utils::get_endpoint(gate_0,
                                                                                                                    "I"),
@@ -244,7 +249,8 @@ namespace hal {
 
                 ASSERT_NE(net_global_out, nullptr);
                 EXPECT_EQ(net_global_out->get_name(), "net_global_out");
-                EXPECT_EQ(net_global_out->get_source(), test_utils::get_endpoint(gate_2, "O"));
+                ASSERT_EQ(net_global_out->get_sources().size(), 1);
+                EXPECT_EQ(net_global_out->get_sources()[0], test_utils::get_endpoint(gate_2, "O"));
                 EXPECT_TRUE(net_global_out->get_destinations().empty());
                 EXPECT_TRUE(nl->is_global_output_net(net_global_out));
 
@@ -263,7 +269,7 @@ namespace hal {
 
         TEST_START
             {
-                // Store an instance of all possible data types in one Gate
+                // Store an instance of all possible data types in one Gate + some special cases
                 std::stringstream input("-- Device\t: device_name\n"
                                         "entity TEST_Comp is "
                                         "  port ( "
@@ -281,10 +287,14 @@ namespace hal {
                                         "      key_bit_vector_dec => D\"2748\","
                                         "      key_bit_vector_oct => O\"5274\","
                                         "      key_bit_vector_bin => B\"1010_1011_1100\","
+                                        // special characters in '"'
+                                        "      key_negative_comma_string => \"test,1,2,3\","
+                                        "      key_negative_float_string => \"1.234\","
                                         // -- VHDL specific Data Types:
                                         "      key_boolean => true,"
                                         "      key_time => 1.234sec,"
                                         "      key_bit_value => '1'"
+
                                         "    )"
                                         "    port map ( "
                                         "      I => net_global_input "
@@ -317,6 +327,11 @@ namespace hal {
                           std::make_tuple("bit_vector", "abc"));
                 EXPECT_EQ(gate_0->get_data_by_key("generic", "key_bit_vector_bin"),
                           std::make_tuple("bit_vector", "abc"));
+                // Special Characters
+                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_negative_comma_string"),
+                          std::make_tuple("string", "test,1,2,3"));
+                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_negative_float_string"),
+                          std::make_tuple("string", "1.234"));
                 // -- VHDL specific Data Types:
                 EXPECT_EQ(gate_0->get_data_by_key("generic", "key_boolean"), std::make_tuple("boolean", "true"));
                 EXPECT_EQ(gate_0->get_data_by_key("generic", "key_time"), std::make_tuple("time", "1.234sec"));
@@ -405,9 +420,11 @@ namespace hal {
                         n_vec_1_i = *nl->get_nets(test_utils::net_name_filter("n_vec_1(" + i_str + ")")).begin();
                     Net*
                         n_vec_2_i = *nl->get_nets(test_utils::net_name_filter("n_vec_2(" + i_str + ")")).begin();
-                    EXPECT_EQ(n_vec_1_i->get_source()->get_pin(), "O" + i_str);
+                    ASSERT_EQ(n_vec_1_i->get_sources().size(), 1);
+                    EXPECT_EQ(n_vec_1_i->get_sources()[0]->get_pin(), "O" + i_str);
                     EXPECT_EQ((*n_vec_1_i->get_destinations().begin())->get_pin(), "I" + i_str);
-                    EXPECT_EQ(n_vec_2_i->get_source()->get_pin(), "O" + i_str);
+                    ASSERT_EQ(n_vec_2_i->get_sources().size(), 1);
+                    EXPECT_EQ(n_vec_2_i->get_sources()[0]->get_pin(), "O" + i_str);
                     EXPECT_EQ((*n_vec_2_i->get_destinations().begin())->get_pin(), "I" + i_str);
                 }
             }
@@ -457,7 +474,8 @@ namespace hal {
                 for (auto n : std::vector<std::string>({"n_vec(0)(2)", "n_vec(0)(3)", "n_vec(1)(2)", "n_vec(1)(3)"})) {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter(n)).empty());
                     Net* n_vec_i_j = *nl->get_nets(test_utils::net_name_filter(n)).begin();
-                    EXPECT_EQ(n_vec_i_j->get_source()->get_pin(), "O" + std::to_string(pin));
+                    ASSERT_EQ(n_vec_i_j->get_sources().size(), 1);
+                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin(), "O" + std::to_string(pin));
                     EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(pin));
                     pin++;
                 }
@@ -518,7 +536,8 @@ namespace hal {
                     ASSERT_FALSE(nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).empty());
                     Net*
                         n_vec_i_j = *nl->get_nets(test_utils::net_name_filter("n_vec" + net_idx[idx])).begin();
-                    EXPECT_EQ(n_vec_i_j->get_source()->get_pin(), "O" + std::to_string(idx));
+                    ASSERT_EQ(n_vec_i_j->get_sources().size(), 1);
+                    EXPECT_EQ(n_vec_i_j->get_sources()[0]->get_pin(), "O" + std::to_string(idx));
                     EXPECT_EQ((*n_vec_i_j->get_destinations().begin())->get_pin(), "I" + std::to_string(idx));
                 }
             }
@@ -650,10 +669,12 @@ namespace hal {
                 EXPECT_EQ(net_vcc->get_name(), "\'1\'");
 
                 // Test that the nets '0' and '1' are connected to a created global gnd/vcc Gate
-                ASSERT_NE(net_gnd->get_source()->get_gate(), nullptr);
-                ASSERT_NE(net_vcc->get_source()->get_gate(), nullptr);
-                EXPECT_TRUE(net_gnd->get_source()->get_gate()->is_gnd_gate());
-                EXPECT_TRUE(net_vcc->get_source()->get_gate()->is_vcc_gate());
+                ASSERT_EQ(net_gnd->get_sources().size(), 1);
+                ASSERT_NE(net_gnd->get_sources()[0]->get_gate(), nullptr);
+                ASSERT_EQ(net_vcc->get_sources().size(), 1);
+                ASSERT_NE(net_vcc->get_sources()[0]->get_gate(), nullptr);
+                EXPECT_TRUE(net_gnd->get_sources()[0]->get_gate()->is_gnd_gate());
+                EXPECT_TRUE(net_vcc->get_sources()[0]->get_gate()->is_vcc_gate());
             }
         TEST_END
     }
@@ -1032,36 +1053,164 @@ namespace hal {
                                                                                               "I")})));
 
             }
-            /*{ // ISSUE currently does not work
-                // Use the 'entity'-keyword in the context of a Gate type (should be ignored) (vhdl specific)
+            if(test_utils::known_issue_tests_active())
+            {
+                // Testing the correct naming of gates and nets that occur in multiple modules by
+                // creating the following netlist:
+
+                /*                        MODULE_B
+                 *                       . -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  .
+                 *                       '     .-----------------.  shared_net_name  .--------------.     '
+                 *                       '    |                  |=----------------=|               |     ' net_0
+                 *      net_global_in ---=---=| shared_gate_name |=----------------=|    gate_b     |=----=-- ...
+                 *                       '    '------------------'       net_b      '---------------'     '
+                 *                       ' -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  '
+                 *
+                 *                       MODULE_A
+                 *                       . -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  .
+                 *                       '     .-----------------.  shared_net_name  .--------------.     '
+                 *                net_0  '    |                  |=----------------=|               |     ' net_1
+                 *               ...  ---=---=| shared_gate_name |=----------------=|    gate_a     |=----=-- ...
+                 *                       '    '------------------'       net_a      '---------------'     '
+                 *                       ' -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  '
+                 *
+                 *                        MODULE_B
+                 *                net_1  . -  -  . net_2
+                 *               ... --- =  ...  =-------=| gate_top |=--- net_global_out
+                 *                       ' -  -  '
+                 */
                 std::stringstream input("-- Device\t: device_name\n"
-                                        "entity TEST_Comp is\n"
+                                        "entity MODULE_A is\n"
                                         "  port (\n"
-                                        "    net_global_input : in STD_LOGIC := 'X';\n"
+                                        "    I_A : in STD_LOGIC := 'X';\n"
+                                        "    O_A : out STD_LOGIC := 'X';\n"
                                         "  );\n"
-                                        "end TEST_Comp;\n"
-                                        "architecture STRUCTURE of TEST_Comp is\n"
+                                        "end MODULE_A;\n"
+                                        "architecture STRUCT_MODULE_A of MODULE_A is\n"
+                                        "  signal shared_net_name : STD_LOGIC;\n"
+                                        "  signal net_a : STD_LOGIC;\n"
                                         "begin\n"
-                                        "  gate_0 : entity gate_1_to_1\n"    // <- usage of the 'entity' keyword
+                                        "  shared_gate_name : gate_1_to_2\n"
                                         "    port map (\n"
-                                        "      O => net_global_input\n"
+                                        "      I => I_A,\n"
+                                        "      O0 => shared_net_name,\n"
+                                        "      O1 => net_a\n"
                                         "    );\n"
-                                        "end STRUCTURE;");
-                test_def::capture_stdout();
+                                        "  gate_a : gate_2_to_1\n"
+                                        "    port map (\n"
+                                        "      I0 => shared_net_name,\n"
+                                        "      I1 => net_a,\n"
+                                        "      O => O_A\n"
+                                        "    );\n"
+                                        "end STRUCT_MODULE_A;\n"
+                                        "-----\n"
+                                        "entity MODULE_B is\n"
+                                        "  port (\n"
+                                        "    I_B : in STD_LOGIC := 'X';\n"
+                                        "    O_B : out STD_LOGIC := 'X';\n"
+                                        "  );\n"
+                                        "end MODULE_B;\n"
+                                        "architecture STRUCT_MODULE_B of MODULE_B is\n"
+                                        "  signal shared_net_name : STD_LOGIC;\n"
+                                        "  signal net_b : STD_LOGIC;\n"
+                                        "begin\n"
+                                        "  shared_gate_name : gate_1_to_2\n"
+                                        "    port map (\n"
+                                        "      I => I_B,\n"
+                                        "      O0 => shared_net_name,\n"
+                                        "      O1 => net_b\n"
+                                        "    );\n"
+                                        "  gate_b : gate_2_to_1\n"
+                                        "    port map (\n"
+                                        "      I0 => shared_net_name,\n"
+                                        "      I1 => net_b,\n"
+                                        "      O => O_B\n"
+                                        "    );\n"
+                                        "end STRUCT_MODULE_B;\n"
+                                        "-----\n"
+                                        "entity ENT_TOP is\n"
+                                        "  port (\n"
+                                        "    net_global_in : in STD_LOGIC := 'X';\n"
+                                        "    net_global_out : out STD_LOGIC := 'X';\n"
+                                        "  );\n"
+                                        "end ENT_TOP;\n"
+                                        "architecture STRUCTURE_TOP of ENT_TOP is\n"
+                                        "  signal net_0 : STD_LOGIC;\n"
+                                        "  signal net_1 : STD_LOGIC;\n"
+                                        "  signal net_2 : STD_LOGIC;\n"
+                                        "begin\n"
+                                        "  mod_b_0 : MODULE_B\n"
+                                        "    port map (\n"
+                                        "      I_B => net_global_in,\n"
+                                        "      O_B => net_0\n"
+                                        "    );\n"
+                                        "  mod_a_0 : MODULE_A\n"
+                                        "    port map (\n"
+                                        "      I_A => net_0,\n"
+                                        "      O_A => net_1\n"
+                                        "    );\n"
+                                        "  mod_b_1 : MODULE_B\n"
+                                        "    port map (\n"
+                                        "      I_B => net_1,\n"
+                                        "      O_B => net_2\n"
+                                        "    );\n"
+                                        "  gate_top : gate_1_to_1\n"
+                                        "    port map (\n"
+                                        "      I => net_2,\n"
+                                        "      O => net_global_out\n"
+                                        "    );\n"
+                                        "end STRUCTURE_TOP;");
                 HDLParserVHDL vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr)
-                {
-                    std::cout << test_def::get_captured_stdout();
-                }
-                else
-                {
-                    test_def::get_captured_stdout();
+
+                // Test if all modules are created and assigned correctly
+                ASSERT_NE(nl, nullptr);
+
+                // ISSUE: Seems not to be correct. For example net_b occurs two times, but is named net_b__[3]__ and net_b__[4]__
+                //  or shared_net_name occurs 3 times and is labeled with 4,5,6
+
+                Net* glob_in = *nl->get_global_input_nets().begin();
+                ASSERT_NE(glob_in, nullptr);
+                ASSERT_EQ(glob_in->get_destinations().size(), 1);
+
+                Gate* shared_gate_0 = (*glob_in->get_destinations().begin())->get_gate();
+                ASSERT_NE(shared_gate_0, nullptr);
+
+                // Get all gates from left to right
+                std::vector<Gate*> nl_gates = {shared_gate_0};
+                std::vector<std::string> suc_pin = {"O0","O","O0","O","O0","O"};
+                for(size_t idx = 0; idx < suc_pin.size(); idx++){
+                    ASSERT_NE(nl_gates[idx]->get_successor(suc_pin[idx]), nullptr);
+                    Gate* next_gate = nl_gates[idx]->get_successor(suc_pin[idx])->get_gate();
+                    ASSERT_NE(next_gate, nullptr);
+                    nl_gates.push_back(next_gate);
                 }
 
-                ASSERT_NE(nl, nullptr);
-                ASSERT_FALSE(nl->get_gates(gate_filter("gate_1_to_1", "gate_0")).empty());
-            }*/
+                // Get all nets from left to right (and from top to bottom)
+                std::vector<Net*> nl_nets = {glob_in};
+                std::vector<std::pair<Gate*, std::string>> net_out_gate_and_pin = {{nl_gates[0], "O0"}, {nl_gates[0], "O1"}, {nl_gates[1], "O"}, {nl_gates[2], "O0"},
+                                                                                   {nl_gates[2], "O1"}, {nl_gates[3], "O"}, {nl_gates[4], "O0"}, {nl_gates[4], "O1"}, {nl_gates[5], "O"}, {nl_gates[6], "O"}};
+                for(size_t idx = 0; idx < net_out_gate_and_pin.size(); idx++){
+                    Net* next_net = (net_out_gate_and_pin[idx].first)->get_fan_out_net(net_out_gate_and_pin[idx].second);
+                    ASSERT_NE(next_net, nullptr);
+                    nl_nets.push_back(next_net);
+                }
+
+                // Check that the gate names are correct
+                std::vector<std::string> nl_gate_names;
+                for(Gate* g : nl_gates) nl_gate_names.push_back(g->get_name());
+                std::vector<std::string> expected_gate_names = {"shared_gate_name__[0]__", "gate_b__[0]__",
+                                                                "shared_gate_name__[1]__", "gate_a", "shared_gate_name__[2]__", "gate_b__[1]__", "gate_top"};
+                EXPECT_EQ(nl_gate_names, expected_gate_names);
+
+                // Check that the net names are correct
+                std::vector<std::string> nl_net_names;
+                for(Net* n : nl_nets) nl_net_names.push_back(n->get_name());
+                std::vector<std::string> expected_net_names = {"net_global_in", "shared_net_name__[0]__", "net_b__[0]__", "net_0", "shared_net_name__[1]__", "net_a",
+                                                               "net_1", "shared_net_name__[2]__", "net_b__[1]__", "net_2", "net_global_out"};
+                EXPECT_EQ(nl_net_names, expected_net_names);
+
+            }
 
         TEST_END
     }
@@ -1490,14 +1639,8 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
@@ -1530,14 +1673,8 @@ namespace hal {
                                         "      O => net_global_out\n"
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
 
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
@@ -1545,6 +1682,50 @@ namespace hal {
                 EXPECT_NE(attri_net, nullptr);
                 EXPECT_EQ(attri_net->get_data_by_key("attribute", "attri_name"),
                           std::make_tuple("attri_type", "attri_value"));
+            }
+            {
+                // Use atrribute strings with special characters (',','.')
+                std::stringstream input("-- Device\t: device_name\n"
+                                        "entity TEST_Comp is\n"
+                                        "  port (\n"
+                                        "    net_global_in : in STD_LOGIC := 'X';\n"
+                                        "    net_global_out : out STD_LOGIC := 'X';\n"
+                                        "  );\n"
+                                        "end TEST_Comp;\n"
+                                        "architecture STRUCTURE of TEST_Comp is\n"
+                                        "  signal net_0 : STD_LOGIC;\n"
+                                        "  attribute attri_comma_string : attri_type_0;\n"
+                                        "  attribute attri_comma_string of net_0 : signal is \"test, 1, 2, 3\";\n"
+                                        "  attribute attri_float_string : attri_type_1;\n"
+                                        "  attribute attri_float_string of gate_0 : label is \"1.234\";\n"
+                                        "begin\n"
+                                        "  gate_0 : gate_1_to_1\n"
+                                        "    port map (\n"
+                                        "      I => net_global_in,\n"
+                                        "      O => net_0\n"
+                                        "    );\n"
+                                        "  gate_1 : gate_1_to_1\n"
+                                        "    port map (\n"
+                                        "      I => net_0,\n"
+                                        "      O => net_global_out\n"
+                                        "    );\n"
+                                        "end STRUCTURE;");
+                HDLParserVHDL vhdl_parser;
+                std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
+
+                ASSERT_NE(nl, nullptr);
+                ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
+                Net* attri_net = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
+                EXPECT_NE(attri_net, nullptr);
+
+                ASSERT_EQ(nl->get_gates(test_utils::gate_name_filter("gate_0")).size(), 1);
+                Gate* attri_gate = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
+
+                // Check the attributes
+                EXPECT_EQ(attri_net->get_data_by_key("attribute", "attri_comma_string"),
+                          std::make_tuple("attri_type_0", "test, 1, 2, 3"));
+                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "attri_float_string"),
+                          std::make_tuple("attri_type_1", "1.234"));
             }
         TEST_END
     }
@@ -2004,17 +2185,8 @@ namespace hal {
                                         "      I(1 to 3) => Unkn0wn_Format\n"    // <- unknown format
                                         "    );\n"
                                         "end STRUCTURE;");
-                test_def::capture_stdout();
                 HDLParserVHDL vhdl_parser;
                 std::unique_ptr<Netlist> nl = vhdl_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr)
-                {
-                    std::cout << test_def::get_captured_stdout();
-                }
-                else
-                {
-                    test_def::get_captured_stdout();
-                }
 
                 ASSERT_EQ(nl, nullptr);
             }

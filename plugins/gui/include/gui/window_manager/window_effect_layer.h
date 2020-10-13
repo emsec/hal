@@ -29,12 +29,12 @@ class QKeyEvent;
 
 namespace hal
 {
-    class WindowLayoutContainer : public QFrame
+    class WindowEffectLayer : public QFrame
     {
         Q_OBJECT
 
     public:
-        explicit WindowLayoutContainer(QWidget* parent = nullptr);
+        explicit WindowEffectLayer(QWidget* parent = nullptr);
 
     protected:
         void keyPressEvent(QKeyEvent* event);

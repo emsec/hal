@@ -30,7 +30,7 @@ class QHBoxLayout;
 
 namespace hal
 {
-    class WindowToolbar : public QFrame
+    class WindowToolbar final : public QFrame
     {
         Q_OBJECT
 
@@ -44,7 +44,7 @@ namespace hal
         void repolish();
 
     protected:
-        void actionEvent(QActionEvent* event) Q_DECL_OVERRIDE;
+        void actionEvent(QActionEvent* event) override;
 
     private:
         QHBoxLayout* m_layout;
