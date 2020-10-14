@@ -88,99 +88,52 @@ if "__decorated_gui__" not in dir():
             log_string = "Function: " + message
 
             # first 3 different structures where only a gate, net or module is passed to the function
-            tmp_param_value = kwargs.get("gate")
-            if kwargs.get("gate") is None and len(args) >= 2: # the length check (for the position) is neccessary
-                if isinstance(args[1], hal_py.Gate):
-                    log_string += ", Gate-Id: {" + str(args[1].id) + "}"
-            elif tmp_param_value is not None:
-                log_string += ", Gate-Id: {" + str(kwargs.get("gate").id) + "}"
-
-            tmp_param_value = kwargs.get("net")
-            if tmp_param_value is None and len(args) >= 2:
-                if isinstance(args[1], hal_py.Net):
-                    log_string += ", Net-Id: {" + str(args[1].id) + "}"
-            elif tmp_param_value is not None:
-                log_string += ", Net-Id: {" + str(tmp_param_value.id) + "}"
-
-            tmp_param_value = kwargs.get("module")
-            if tmp_param_value is None and len(args) >= 2:
-                if isinstance(args[1], hal_py.Module):
-                    log_string += ", Module-Id: {" + str(args[1].id) + "}"
-            elif tmp_param_value is not None:
-                log_string += ", Module-Id: {" + str(tmp_param_value.id) + "}"
+            # these are handled in the same manner
+            possible_args_type1 = [("gate", hal_py.Gate), ("net", hal_py.Net), ("module", hal_py.Module)]
+            tmp_param_value = None
+            for arg_tup in possible_args_type1:
+                tmp_param_value = kwargs.get(arg_tup[0])
+                if tmp_param_value is None and len(args) >= 2:
+                    if isinstance(args[1], arg_tup[1]):
+                        log_string += ", {}-Id: {{".format(str(arg_tup[0]).capitalize()) + str(args[1].id) + "}"
+                elif tmp_param_value is not None:
+                    log_string += ", {}-Id: {{".format(str(arg_tup[0]).capitalize()) + str(tmp_param_value.id) + "}"
 
             # next evaluate the lists of gates, nets and modules and the different position they can occur, depending
             # on which parameter-signatur is passed to the function, e.g. the param-name "gates" can only occur on pos 1,
             # "nets" on pos 1 and 2 and "modules" on pos 1 and 3
-            tmp_param_value = kwargs.get("gates")
-            if tmp_param_value is None and len(args) >= 2:
-                if isinstance(args[1], list):
-                    if len(args[1]) > 0 and isinstance(args[1][0], hal_py.Gate): #python does not check second statement if first is false
-                        sorted_gate_ids = sorted(args[1], key=lambda gate: gate.id)
-                        log_string += ", Gate-Id(s): {" + "".join([str(g.id) + ", " for g in sorted_gate_ids])[:-2] + "}"
-            elif tmp_param_value is not None:
-                sorted_gate_ids = sorted(tmp_param_value, key=lambda gate: gate.id)
-                log_string += ", Gate-Id(s): {" + "".join([str(g.id) + ", " for g in sorted_gate_ids])[:-2] + "}"
 
-            tmp_param_value = kwargs.get("nets")
-            if tmp_param_value is None:
-                if len(args) >= 2 and isinstance(args[1], list):
-                    if len(args[1]) > 0 and isinstance(args[1][0], hal_py.Net): #python does not check second statement if first is false
-                        sorted_net_ids = sorted(args[1], key=lambda net: net.id)
-                        log_string += ", Net-Id(s): {" + "".join([str(n.id) + ", " for n in sorted_net_ids])[:-2] + "}"
-                if len(args) >= 3 and isinstance(args[2], list):
-                    if len(args[2]) > 0 and isinstance(args[2][0], hal_py.Net):
-                        sorted_net_ids = sorted(args[2], key=lambda net: net.id)
-                        log_string += ", Net-Id(s): {" + "".join([str(n.id) + ", " for n in sorted_net_ids])[:-2] + "}"
-            elif tmp_param_value is not None:
-                sorted_net_ids = sorted(tmp_param_value, key=lambda net: net.id)
-                log_string += ", Net-Id(s): {" + "".join([str(n.id) + ", " for n in sorted_net_ids])[:-2] + "}"
+            # the name, the first and the second possible position and the desired object type within the list
+            # (the "gates" parameter is a bit hacky because it has only 1 possible position (so just use a very
+            # big number so the second check for arg-length always returns false (could also check if the
+            # first condition was already visited (with a boolean)
+            possible_args_type2 = [("gates", 1, 10000, hal_py.Gate), ("nets", 1, 2, hal_py.Net), ("modules", 1, 3, hal_py.Module)]
+            tmp_param_value = None
+            for arg_tup in possible_args_type2:
+                tmp_param_value = kwargs.get(arg_tup[0])
+                if tmp_param_value is None:
+                    if len(args) >= arg_tup[1]+1 and isinstance(args[arg_tup[1]], list):
+                        if len(args[arg_tup[1]]) > 0 and isinstance(args[arg_tup[1]][0], arg_tup[3]):
+                            sorted_item_ids = sorted(args[arg_tup[1]], key = lambda  item: item.id)
+                            log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {" + "".join([str(i.id) + ", " for i in sorted_item_ids])[:-2] + "}"
+                    if len(args) >= arg_tup[2]+1 and isinstance(args[arg_tup[2]], list):
+                        if len(args[arg_tup[2]]) > 0 and isinstance(args[arg_tup[2]][0], arg_tup[3]):
+                            sorted_item_ids = sorted(args[arg_tup[2]], key = lambda  item: item.id)
+                            log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {" + "".join([str(i.id) + ", " for i in sorted_item_ids])[:-2] + "}"
+                elif tmp_param_value is not None:
+                    sorted_item_ids = sorted(tmp_param_value, key=lambda item: item.id)
+                    log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {" + "".join([str(i.id) + ", " for i in sorted_item_ids])[:-2] + "}"
 
-            tmp_param_value = kwargs.get("modules")
-            if tmp_param_value is None:
-                if len(args) >=2 and isinstance(args[1], list):
-                    if len(args[1]) > 0 and isinstance(args[1][0], hal_py.Module): #python does not check second statement if first is false
-                        sorted_module_ids = sorted(args[1], key=lambda module: module.id)
-                        log_string += ", Module-Id(s): {" + "".join([str(m.id) + ", " for m in sorted_module_ids])[:-2] + "}"
-                if len(args) >= 4 and isinstance(args[3], list):
-                    if len(args[3]) > 0 and isinstance(args[3][0], hal_py.Module):
-                        sorted_module_ids = sorted(args[3], key=lambda module: module.id)
-                        log_string += ", Module-Id(s): {" + "".join([str(m.id) + ", " for m in sorted_module_ids])[:-2] + "}"
-            elif tmp_param_value is not None:
-                sorted_module_ids = sorted(tmp_param_value, key=lambda module: module.id)
-                log_string += ", Module-Id(s): {" + "".join([str(m.id) + ", " for m in sorted_module_ids])[:-2] + "}"
-
-            # check for the case when 3 integer lists are passed, on pos 1 are the gate ids, on pos 2 the net ids and
-            # on pos 3 the module ids
-            tmp_param_value = kwargs.get("gate_ids")
-            if tmp_param_value is None and len(args) >= 2:
-                if isinstance(args[1], list):
-                    if len(args[1]) > 0 and isinstance(args[1][0], int): #python does not check second statement if first is false
-                        sorted_gate_ids = sorted(args[1])
-                        log_string += ", Gate-Id(s): {" + "".join([str(g) + ", " for g in sorted_gate_ids])[:-2] + "}"
-            elif tmp_param_value is not None:
-                sorted_gate_ids = sorted(tmp_param_value)
-                log_string += ", Gate-Id(s): {" + "".join([str(g) + ", " for g in sorted_gate_ids])[:-2] + "}"
-
-            tmp_param_value = kwargs.get("net_ids")
-            if tmp_param_value is None and len(args) >= 3:
-                if isinstance(args[2], list):
-                    if len(args[2]) > 0 and isinstance(args[2][0], int): #python does not check second statement if first is false
-                        sorted_net_ids = sorted(args[2])
-                        log_string += ", Net-Id(s): {" + "".join([str(g) + ", " for g in sorted_net_ids])[:-2] + "}"
-            elif tmp_param_value is not None:
-                sorted_net_ids = sorted(tmp_param_value)
-                log_string += ", Net-Id(s): {" + "".join([str(n) + ", " for n in sorted_net_ids])[:-2] + "}"
-
-            tmp_param_value = kwargs.get("module_ids")
-            if tmp_param_value is None and len(args) >= 4:
-                if isinstance(args[3], list):
-                    if len(args[3]) > 0 and isinstance(args[3][0], int): #python does not check second statement if first is false
-                        sorted_module_ids = sorted(args[3])
-                        log_string += ", Module-Id(s): {" + "".join([str(g) + ", " for g in sorted_module_ids])[:-2] + "}"
-            elif tmp_param_value is not None:
-                sorted_module_ids = sorted(tmp_param_value)
-                log_string += ", Module-Id(s): {" + "".join([str(n) + ", " for n in sorted_module_ids])[:-2] + "}"
+            possible_args_type3 = [("gate_ids", 1), ("net_ids", 2), ("module_ids", 3)]
+            tmp_param_value = None
+            for arg_tup in possible_args_type3:
+                tmp_param_value = kwargs.get(arg_tup[0])
+                if tmp_param_value is None and len(args) >= arg_tup[1]+1 and isinstance(args[arg_tup[1]], list) and len(args[arg_tup[1]]) > 0 and isinstance(args[arg_tup[1]][0], int):
+                    sorted_item_ids = sorted(args[arg_tup[1]])
+                    log_string += ", {}-Id(s): {{".format(arg_tup[0].capitalize()[:-4]) + "".join([str(i) + ", " for i in sorted_item_ids])[:-2] + "}"
+                elif tmp_param_value is not None:
+                    sorted_item_ids = sorted(tmp_param_value)
+                    log_string += ", {}-Id(s): {{".format(arg_tup[0].capitalize()[:-4]) + "".join([str(i) + ", " for i in sorted_item_ids])[:-2] + "}"
 
             print(log_string)
             return result
