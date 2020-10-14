@@ -47,9 +47,8 @@ This repository contains a selection of curated plugins:
 - **Gate Libraries:** Adds support for the XILINX Unisim and Simprim gate libraries
 
 
-## API Documentation
-The C++ documentation is available [here](https://emsec.github.io/hal/doc/).
-The Python documentation can be found [here](https://emsec.github.io/hal/pydoc/).
+## Documentation
+A textual documentation of HAL from a user perspective is provided in our [Wiki](https://github.com/emsec/hal/wiki). In addition, we provide a full [C++ API](https://emsec.github.io/hal/doc/) and [Python API](https://emsec.github.io/hal/pydoc/) documentation.
 
 # Install Instructions <a name="install-instructions"></a>
 
