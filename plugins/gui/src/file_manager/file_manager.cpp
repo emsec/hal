@@ -236,6 +236,30 @@ namespace hal
             return;
         }
 
+        QString lib_file_name = file_name.left(file_name.lastIndexOf('.')) + ".lib";
+        if (QFileInfo::exists(lib_file_name) && QFileInfo(lib_file_name).isFile())
+        {
+            log_info("gui", "Trying to use gate library {}.", lib_file_name.toStdString());
+
+            event_controls::enable_all(false);
+            auto netlist = netlist_factory::load_netlist(file_name.toStdString(), lib_file_name.toStdString());
+            event_controls::enable_all(true);
+
+            if (netlist)
+            {
+                g_netlist_owner = std::move(netlist);
+                g_netlist       = g_netlist_owner.get();
+                file_successfully_loaded(logical_file_name);
+                return;
+            }
+            else
+            {
+                log_error("gui", "Failed using gate library {}.", lib_file_name.toStdString());
+            }
+        }
+
+        log_info("gui", "Searching for (other) compatible netlists.");
+
         event_controls::enable_all(false);
         std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(file_name.toStdString());
         event_controls::enable_all(true);
