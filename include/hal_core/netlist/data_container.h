@@ -50,7 +50,7 @@ namespace hal
         * Add a data entry.<br>
         * May overwrite an existing entry.
         *
-        * @param[in] category - The data key category.
+        * @param[in] category - The data category.
         * @param[in] key - The data key.
         * @param[in] data_type - The data type.
         * @param[in] value - The data value.
@@ -62,7 +62,7 @@ namespace hal
         /**
          * Delete a data entry.
          *
-         * @param[in] category - The data key category.
+         * @param[in] category - The data category.
          * @param[in] key - The data key.
          * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level 'info' to trace GUI events.
          * @returns True on success, false otherwise.
@@ -79,7 +79,7 @@ namespace hal
         /**
          * Get the data entry specified by the given category and key.
          *
-         * @param[in] category - The data key category.
+         * @param[in] category - The data category.
          * @param[in] key - The data key.
          * @returns The tuple ((1) type, (2) value).
          */

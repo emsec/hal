@@ -10,28 +10,25 @@
 namespace py = pybind11;
 namespace hal
 {
-    namespace dataflow
-    {
 #ifdef PYBIND11_MODULE
-        PYBIND11_MODULE(libdataflow, m)
-        {
-            m.doc() = "hal DataflowPlugin python bindings";
+    PYBIND11_MODULE(libdataflow, m)
+    {
+        m.doc() = "hal DataflowPlugin python bindings";
 #else
-        PYBIND11_PLUGIN(libdataflow)
-        {
-            py::module m("dataflow", "hal Dataflow python bindings");
+    PYBIND11_PLUGIN(libdataflow)
+    {
+        py::module m("dataflow", "hal Dataflow python bindings");
 #endif    // ifdef PYBIND11_MODULE
-            py::class_<plugin_dataflow, RawPtrWrapper<plugin_dataflow>, BasePluginInterface>(m, "plugin_dataflow")
-                .def_property_readonly("name", &plugin_dataflow::get_name)
-                .def("get_name", &plugin_dataflow::get_name)
-                .def_property_readonly("version", &plugin_dataflow::get_version)
-                .def("get_version", &plugin_dataflow::get_version)
-                // .def("get_cli_options", &plugin_dataflow::get_cli_options)
-                // .def("handle_cli_call", &plugin_dataflow::handle_cli_call)
-                .def("execute", &plugin_dataflow::execute);
+        py::class_<plugin_dataflow, RawPtrWrapper<plugin_dataflow>, BasePluginInterface>(m, "plugin_dataflow")
+            .def_property_readonly("name", &plugin_dataflow::get_name)
+            .def("get_name", &plugin_dataflow::get_name)
+            .def_property_readonly("version", &plugin_dataflow::get_version)
+            .def("get_version", &plugin_dataflow::get_version)
+            // .def("get_cli_options", &plugin_dataflow::get_cli_options)
+            // .def("handle_cli_call", &plugin_dataflow::handle_cli_call)
+            .def("execute", &plugin_dataflow::execute);
 #ifndef PYBIND11_MODULE
-            return m.ptr();
+        return m.ptr();
 #endif    // PYBIND11_MODULE
-        }
-    }    // namespace dataflow
+    }
 }    // namespace hal
