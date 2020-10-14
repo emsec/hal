@@ -32,6 +32,7 @@
 #include <QWidget>
 
 class QTableWidget;
+class QTableView;
 class QTableWidgetItem;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -45,6 +46,7 @@ namespace hal
     class GraphNavigationWidget;
     class DataFieldsTable;
     class DetailsSectionWidget;
+    class DetailsGeneralModel;
 
     class ModuleDetailsWidget : public DetailsWidget
     {
@@ -94,8 +96,10 @@ namespace hal
         DetailsSectionWidget* m_outputPortsSection;
         DetailsSectionWidget* m_dataFieldsSection;
 
-        QTableWidget* m_general_table;
+//        QTableWidget* m_general_table;
 
+        QTableView* mGeneralView;
+        DetailsGeneralModel* mGeneralModel;
         QTableWidgetItem* m_name_item;
         QTableWidgetItem* m_id_item;
         QTableWidgetItem* m_type_item;
@@ -110,6 +114,7 @@ namespace hal
         DataFieldsTable* m_dataFieldsTable;
 
         QSize calculate_table_size(QTableWidget* table);
+        QSize calculateTableSize(QTableView* table, int nrows, int ncols);
 
         void add_general_table_static_item(QTableWidgetItem* item);
         void add_general_table_dynamic_item(QTableWidgetItem* item);

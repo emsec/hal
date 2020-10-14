@@ -98,7 +98,7 @@ namespace hal {
             m_body->hide();
     }
 
-    void DetailsSectionWidget::setDefaultTableStyle(QTableWidget* tab)
+    void DetailsSectionWidget::setDefaultTableStyle(QTableView* tab)
     {
         //tab->horizontalHeader()->setStretchLastSection(true);
         tab->horizontalHeader()->hide();

@@ -9,6 +9,7 @@
 #include "gui/selection_details_widget/data_fields_table.h"
 #include "gui/selection_details_widget/details_section_widget.h"
 #include "gui/selection_details_widget/disputed_big_icon.h"
+#include "gui/selection_details_widget/details_general_model.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -47,7 +48,11 @@ namespace hal
         m_general_info_button = new QPushButton("Module Information", this);
         m_general_info_button->setEnabled(false);
 
-        m_general_table      = new QTableWidget(6, 2);
+//        m_general_table      = new QTableWidget(6, 2);
+        mGeneralView         = new QTableView(this);
+        mGeneralModel        = new DetailsGeneralModel(mGeneralView);
+        mGeneralModel->setDummyContent<Module>();
+        mGeneralView->setModel(mGeneralModel);
         m_input_ports_table  = new QTableWidget(0, 3);
         m_output_ports_table = new QTableWidget(0, 3);
         m_dataFieldsTable    = new DataFieldsTable(this);
@@ -56,7 +61,8 @@ namespace hal
         m_outputPortsSection = new DetailsSectionWidget("Output Ports (%1)", m_output_ports_table, this);
         m_dataFieldsSection  = new DetailsSectionWidget("Data Fields (%1)", m_dataFieldsTable, this);
 
-        DetailsSectionWidget::setDefaultTableStyle(m_general_table);
+//        DetailsSectionWidget::setDefaultTableStyle(m_general_table);
+        DetailsSectionWidget::setDefaultTableStyle(mGeneralView);
 
         QList<QTableWidgetItem*> tmp_general_table_static_items = {new QTableWidgetItem("Name:"),
                                                                    new QTableWidgetItem("Id:"),
@@ -87,7 +93,8 @@ namespace hal
         // place module icon
         QLabel* img = new DisputedBigIcon("sel_module", this);
 
-        intermediate_layout_gt->addWidget(m_general_table);
+//        intermediate_layout_gt->addWidget(m_general_table);
+        intermediate_layout_gt->addWidget(mGeneralView);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->setAlignment(img, Qt::AlignTop);
@@ -133,12 +140,14 @@ namespace hal
         connect(g_netlist_relay, &NetlistRelay::net_destination_added, this, &ModuleDetailsWidget::handle_net_destination_added);
         connect(g_netlist_relay, &NetlistRelay::net_destination_removed, this, &ModuleDetailsWidget::handle_net_destination_removed);
 
-        connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_general_table_menu_requested);
+//        connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_general_table_menu_requested);
+        connect(mGeneralView, &QTableView::customContextMenuRequested, mGeneralModel, &DetailsGeneralModel::contextMenuRequested);
         connect(m_input_ports_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_input_ports_table_menu_requested);
         connect(m_output_ports_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_output_ports_table_menu_requested);
         connect(m_input_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_input_net_item_clicked);
         connect(m_output_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_output_net_item_clicked);
 
+        connect(mGeneralModel, &DetailsGeneralModel::requireUpdate, this, &ModuleDetailsWidget::update);
         //eventfilters
         m_input_ports_table->viewport()->setMouseTracking(true);
         m_input_ports_table->viewport()->installEventFilter(this);
@@ -188,6 +197,8 @@ namespace hal
         if (!m)
             return;
 
+        mGeneralModel->setContent<Module>(m);
+
         //update table with general information
         m_name_item->setText(QString::fromStdString(m->get_name()));
         m_id_item->setText(QString::number(m_currentId));
@@ -215,9 +226,12 @@ namespace hal
 
         m_number_of_gates_item->setText(number_of_gates_text);
 
-        m_general_table->resizeColumnsToContents();
-        m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
-        m_general_table->update();
+        mGeneralView->resizeColumnsToContents();
+        mGeneralView->setFixedSize(calculateTableSize(mGeneralView,mGeneralModel->rowCount(),mGeneralModel->columnCount()));
+        mGeneralView->update();
+//        m_general_table->resizeColumnsToContents();
+//        m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
+//        m_general_table->update();
 
         //update table with input ports
         m_input_ports_table->clearContents();
@@ -579,6 +593,8 @@ namespace hal
 
     void ModuleDetailsWidget::add_general_table_static_item(QTableWidgetItem* item)
     {
+        Q_UNUSED(item);
+        /*
         static int row_index = 0;
 
         item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
@@ -586,40 +602,52 @@ namespace hal
         m_general_table->setItem(row_index, 0, item);
 
         row_index++;
+        */
     }
 
     void ModuleDetailsWidget::add_general_table_dynamic_item(QTableWidgetItem* item)
     {
+        Q_UNUSED(item);
+        /*
         static int row_index = 0;
 
         item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
         m_general_table->setItem(row_index, 1, item);
 
         row_index++;
+        */
     }
 
-    QSize ModuleDetailsWidget::calculate_table_size(QTableWidget* table)
+    QSize ModuleDetailsWidget::calculateTableSize(QTableView* table, int nrows, int ncols)
     {
         //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
         //is the tables width far too big, so just return 0 as the size
-        if (!table->rowCount())
+        if (!nrows)
             return QSize(0, 0);
 
         int w = table->verticalHeader()->width() + 4;    // +4 seems to be needed
 
-        for (int i = 0; i < table->columnCount(); i++)
+        for (int i = 0; i < ncols; i++)
             w += table->columnWidth(i);    // seems to include gridline
 
         int h = table->horizontalHeader()->height() + 4;
 
-        for (int i = 0; i < table->rowCount(); i++)
+        for (int i = 0; i < nrows; i++)
             h += table->rowHeight(i);
 
         return QSize(w + 5, h);
+
+    }
+
+    QSize ModuleDetailsWidget::calculate_table_size(QTableWidget *table)
+    {
+        return calculateTableSize(table, table->rowCount(), table->columnCount());
     }
 
     void ModuleDetailsWidget::handle_general_table_menu_requested(const QPoint& pos)
     {
+        Q_UNUSED(pos);
+        /*
         auto curr_item = m_general_table->itemAt(pos);
 
         if (!curr_item || curr_item->column() != 1 || curr_item->row() >= 3)
@@ -680,6 +708,8 @@ namespace hal
 
         menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
         menu.exec();
+        */
+         update(m_currentId);
     }
 
     void ModuleDetailsWidget::handle_input_ports_table_menu_requested(const QPoint& pos)
