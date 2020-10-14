@@ -179,21 +179,12 @@ Feel free to also include the original [paper](http://eprint.iacr.org/2017/783).
 Hence, we prefer citing the above entry.
 ```latex
 @article{2018:Fyrbiak:HAL,
-      author    = {Marc Fyrbiak and
-                   Sebastian Wallat and
-                   Pawel Swierczynski and
-                   Max Hoffmann and
-                   Sebastian Hoppach and
-                   Matthias Wilhelm and
-                   Tobias Weidlich and
-                   Russell Tessier and
-                   Christof Paar},
-  title     	= {{HAL-} The Missing Piece of the Puzzle for Hardware Reverse Engineering,
-               	  Trojan Detection and Insertion},
-  journal	= {IEEE Transactions on Dependable and Secure Computing},
-  year		= {2018},
-  publisher	= {IEEE},
-  howpublished 	= {\url{https://github.com/emsec/hal}}
+    author = {Marc Fyrbiak and Sebastian Wallat and Pawel Swierczynski and Max Hoffmann and Sebastian Hoppach and Matthias Wilhelm and Tobias Weidlich and Russell Tessier and Christof Paar},
+    title = {{HAL-} The Missing Piece of the Puzzle for Hardware Reverse Engineering, Trojan Detection and Insertion},
+    journal = {IEEE Transactions on Dependable and Secure Computing},
+    year = {2018},
+    publisher = {IEEE},
+    howpublished = {\url{https://github.com/emsec/hal}}
 }
 ```
 
