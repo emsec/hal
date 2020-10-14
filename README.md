@@ -48,7 +48,7 @@ This repository contains a selection of curated plugins:
 
 
 ## Documentation
-A textual documentation of HAL from a user perspective is provided in our [Wiki](https://github.com/emsec/hal/wiki). In addition, we provide a full [C++ API](https://emsec.github.io/hal/doc/) and [Python API](https://emsec.github.io/hal/pydoc/) documentation.
+A comprehensive documentation of HAL's features from a user perspective is available in our [Wiki](https://github.com/emsec/hal/wiki). In addition, we provide a full [C++ API](https://emsec.github.io/hal/doc/) and [Python API](https://emsec.github.io/hal/pydoc/) documentation.
 
 # Install Instructions <a name="install-instructions"></a>
 
@@ -175,7 +175,7 @@ If you use HAL in an academic context, please cite the framework using the refer
 }
 ```
 
-Feel free to also include the original [paper](http://eprint.iacr.org/2017/783), however, we note that HAL has massively changed since its original prototype that was described in the paper.
+Feel free to also include the original [paper](http://eprint.iacr.org/2017/783). However, we note that HAL has massively changed since its original prototype that was described in the paper.
 Hence, we prefer citing the above entry.
 ```latex
 @article{2018:Fyrbiak:HAL,
