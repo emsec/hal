@@ -230,12 +230,14 @@ namespace hal {
             }
             {
                 // Try to add a Gate with a nullptr gate type
+                NO_COUT_TEST_BLOCK;
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
                 auto g_0 = nl->create_gate(MIN_GATE_ID + 0, nullptr, "");
                 EXPECT_EQ(g_0, nullptr);
             }
             {
                 // Try to add a Gate with an invalid gate type
+                NO_COUT_TEST_BLOCK;
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
                 // Create a GateType of another gate library
                 std::unique_ptr<GateLibrary> gl = std::make_unique<GateLibrary>("imaginary_path", "OtherLibrary");
@@ -273,7 +275,7 @@ namespace hal {
                 EXPECT_FALSE(nl->is_gate_in_netlist(gate_0));
                 EXPECT_TRUE(nl->get_net_by_id(MIN_NET_ID + 30)->get_destinations([gate_0](auto ep){return ep->get_gate() == gate_0;}).empty());
                 EXPECT_TRUE(nl->get_net_by_id(MIN_NET_ID + 20)->get_destinations([gate_0](auto ep){return ep->get_gate() == gate_0;}).empty());
-                EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID + 045)->get_source(), nullptr);
+                EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID + 045)->get_sources().size(), 0);
             }
             {
                 // Add and delete global_gnd Gate

@@ -23,37 +23,26 @@
 
 #pragma once
 
-#include <QFrame>
+#include "gui/overlay/overlay.h"
+
+class QVBoxLayout;
 
 namespace hal
 {
-    class DockWidget : public QFrame
+    class WidgetOverlay : public Overlay
     {
         Q_OBJECT
 
-        struct drag_state
-        {
-                QPoint pressPos;
-                bool dragging;
-                //QLayoutItem *widgetItem;
-                bool ownWidgetItem;
-                bool nca;
-                bool ctrlDrag;
-        };
-
     public:
-        explicit DockWidget(QWidget* parent = nullptr);
+        WidgetOverlay(QWidget* parent = nullptr);
 
-    protected:
-        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-        void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-        void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void set_widget(QWidget* widget);
+
+    //protected:
+    //    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
     private:
-        void init_drag(const QPoint& pos, bool nca);
-        void start_drag(bool group);
-        void end_drag(bool abort);
-
-        drag_state* m_drag_state;
+        QVBoxLayout* m_layout;
+        QWidget* m_widget;
     };
 }

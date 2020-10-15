@@ -78,7 +78,8 @@ namespace hal {
                 Gate* t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_source(t_gate, "O");
                 EXPECT_TRUE(suc);
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O"));
+                ASSERT_EQ(test_net->get_sources().size(), 1);
+                EXPECT_EQ(test_net->get_sources()[0], test_utils::get_endpoint(t_gate, "O"));
             }
             // Negative
             {
@@ -88,7 +89,7 @@ namespace hal {
                 Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->add_source(nullptr, "O");
                 EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
             }
             {
                 // Pin is an input pin (not an output/inout pin)
@@ -98,7 +99,7 @@ namespace hal {
                 auto t_gate_0 = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_source(t_gate_0, "I0");    // <- input pin
                 EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
             }
             {
                 // Pin is already occupied (example netlist is used)
@@ -107,7 +108,7 @@ namespace hal {
                 Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->add_source(nl->get_gate_by_id(MIN_NET_ID + 1), "O");
                 EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
             }
             {
                 // Set the source of the Net (invalid pin type)
@@ -118,7 +119,7 @@ namespace hal {
                 bool suc = test_net->add_source(t_gate, "NEx_PIN");
                 testing::internal::GetCapturedStdout();
                 EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
             }
 
         TEST_END
@@ -129,6 +130,9 @@ namespace hal {
      *
      * Functions: get_sources, get_source
      */
+    // disable get_source() deprecated warning for this test (because get_source() is also tested)
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    #pragma warning(disable:1478)
     TEST_F(NetTest, check_get_sources) {
         TEST_START
             {
@@ -138,7 +142,7 @@ namespace hal {
                 auto t_gate =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
                 test_net->add_source(t_gate, "O0");
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0"));
+                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0")); // (compiler warning intended)
             }
             {
                 // Get all sources (no filter)
@@ -173,7 +177,7 @@ namespace hal {
                 // Get the source(s) if the Gate has no source
                 auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
                 Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_TRUE(test_utils::is_empty(test_net->get_source())); // (compiler warning intended)
                 EXPECT_TRUE(test_net->get_sources().empty());
             }
             // NEGATIVE
@@ -186,10 +190,13 @@ namespace hal {
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
                 test_net->add_source(t_gate, "O0");
                 test_net->add_source(t_gate, "O1");
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0"));
+                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0")); // (compiler warning intended)
             }
         TEST_END
     }
+    // enable get_source() deprecated warning
+    #pragma GCC diagnostic warning "-Wdeprecated-declarations"
+    #pragma warning(enable:1478) // enable get_source() deprecated warning
 
     /**
      * Testing the function remove_src
@@ -205,7 +212,7 @@ namespace hal {
                 auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_source(t_gate, "O");
                 bool suc = test_net->remove_source(t_gate, "O");
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
                 EXPECT_TRUE(suc);
             }
             // NEGATIVE
@@ -215,7 +222,7 @@ namespace hal {
                 auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
                 Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->remove_source(nullptr, "");
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
                 EXPECT_FALSE(suc);
             }
         TEST_END

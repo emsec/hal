@@ -96,15 +96,10 @@ find_package(Filesystem REQUIRED Final Experimental)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED TRUE)
-find_package(Boost 1.58.0 REQUIRED COMPONENTS system)
+find_package(Boost 1.58.0 REQUIRED)
 message(VERBOSE "Boost version: ${Boost_VERSION}")
-
-if(NOT TARGET Boost::system)
-    add_library(Boost::system IMPORTED INTERFACE)
-    set_property(TARGET Boost::system PROPERTY
-                 INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-    set_property(TARGET Boost::system PROPERTY
-                 INTERFACE_LINK_LIBRARIES ${Boost_LIBRARIES})
+if(Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
 ################################

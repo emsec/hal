@@ -3,6 +3,8 @@
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
 
+#include "hal_core/python_bindings/python_bindings.h"
+
 #include "netlist_simulator/plugin_netlist_simulator.h"
 #include "netlist_simulator/netlist_simulator.h"
 
@@ -13,17 +15,20 @@ namespace py = pybind11;
 namespace hal
 {
 
-#ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(netlist_simulator, m)
+// the name in PYBIND11_MODULE/PYBIND11_PLUGIN *MUST* match the filename of the output library (without extension),
+    // otherwise you will get "ImportError: dynamic module does not define module export function" when importing the module
+
+    #ifdef PYBIND11_MODULE
+    PYBIND11_MODULE(libnetlist_simulator, m)
     {
         m.doc() = "hal netlist_simulator python bindings";
 #else
-    PYBIND11_PLUGIN(netlist_simulator)
+    PYBIND11_PLUGIN(libnetlist_simulator)
     {
         py::module m("netlist_simulator", "hal netlist_simulator python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
-        py::class_<NetlistSimulatorPlugin, BasePluginInterface, RawPtrWrapper<NetlistSimulatorPlugin>>(m, "NetlistSimulatorPlugin")
+        py::class_<NetlistSimulatorPlugin, RawPtrWrapper<NetlistSimulatorPlugin>, BasePluginInterface, RawPtrWrapper<NetlistSimulatorPlugin>>(m, "NetlistSimulatorPlugin")
             .def_property_readonly("name", &NetlistSimulatorPlugin::get_name)
             .def("get_name", &NetlistSimulatorPlugin::get_name)
             .def_property_readonly("version", &NetlistSimulatorPlugin::get_version)
@@ -41,10 +46,22 @@ namespace hal
             .def("add_clock_frequency", &NetlistSimulator::add_clock_frequency, py::arg("clock_net"), py::arg("frequency"), py::arg("start_at_zero"), R"(
                 Specify a net that carries the clock signal and set the clock frequency in hertz.
 
-                :param hal_py.Net clock_net: The net that carries the clock signal.
-                :param int frequency: The clock frequency in hertz.
-                :param bool start_at_zero: Initial clock state is 0 if true, 1 otherwise.
-            )")
+        py::class_<NetlistSimulator>(m, "NetlistSimulator")
+            .def("add_gates", &NetlistSimulator::add_gates)
+            .def("add_clock_hertz", &NetlistSimulator::add_clock_hertz)
+            .def("add_clock_period", &NetlistSimulator::add_clock_period)
+            .def("get_gates", &NetlistSimulator::get_gates)
+            .def("get_input_nets", &NetlistSimulator::get_input_nets)
+            .def("get_output_nets", &NetlistSimulator::get_output_nets)
+            .def("set_input", &NetlistSimulator::set_input)
+            .def("load_initial_values", &NetlistSimulator::load_initial_values)
+            .def("simulate", &NetlistSimulator::simulate)
+            .def("reset", &NetlistSimulator::reset)
+            .def("set_simulation_state", &NetlistSimulator::set_simulation_state)
+            .def("get_simulation_state", &NetlistSimulator::get_simulation_state)
+            .def("set_iteration_timeout", &NetlistSimulator::set_iteration_timeout)
+            .def("get_simulation_timeout", &NetlistSimulator::get_simulation_timeout)
+            ;
 
             .def("add_clock_period", &NetlistSimulator::add_clock_period, py::arg("clock_net"), py::arg("period"), py::arg("start_at_zero"), R"(
                 Specify a net that carries the clock signal and set the clock period in picoseconds.

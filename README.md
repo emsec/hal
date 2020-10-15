@@ -47,9 +47,8 @@ This repository contains a selection of curated plugins:
 - **Gate Libraries:** Adds support for the XILINX Unisim and Simprim gate libraries
 
 
-## API Documentation
-The C++ documentation is available [here](https://emsec.github.io/hal/doc/).
-The Python documentation can be found [here](https://emsec.github.io/hal/pydoc/).
+## Documentation
+A comprehensive documentation of HAL's features from a user perspective is available in our [Wiki](https://github.com/emsec/hal/wiki). In addition, we provide a full [C++ API](https://emsec.github.io/hal/doc/) and [Python API](https://emsec.github.io/hal/pydoc/) documentation.
 
 # Install Instructions <a name="install-instructions"></a>
 
@@ -176,25 +175,16 @@ If you use HAL in an academic context, please cite the framework using the refer
 }
 ```
 
-Feel free to also include the original [paper](http://eprint.iacr.org/2017/783), however, we note that HAL has massively changed since its original prototype that was described in the paper.
+Feel free to also include the original [paper](http://eprint.iacr.org/2017/783). However, we note that HAL has massively changed since its original prototype that was described in the paper.
 Hence, we prefer citing the above entry.
 ```latex
 @article{2018:Fyrbiak:HAL,
-      author    = {Marc Fyrbiak and
-                   Sebastian Wallat and
-                   Pawel Swierczynski and
-                   Max Hoffmann and
-                   Sebastian Hoppach and
-                   Matthias Wilhelm and
-                   Tobias Weidlich and
-                   Russell Tessier and
-                   Christof Paar},
-  title     	= {{HAL-} The Missing Piece of the Puzzle for Hardware Reverse Engineering,
-               	  Trojan Detection and Insertion},
-  journal	= {IEEE Transactions on Dependable and Secure Computing},
-  year		= {2018},
-  publisher	= {IEEE},
-  howpublished 	= {\url{https://github.com/emsec/hal}}
+    author = {Marc Fyrbiak and Sebastian Wallat and Pawel Swierczynski and Max Hoffmann and Sebastian Hoppach and Matthias Wilhelm and Tobias Weidlich and Russell Tessier and Christof Paar},
+    title = {{HAL-} The Missing Piece of the Puzzle for Hardware Reverse Engineering, Trojan Detection and Insertion},
+    journal = {IEEE Transactions on Dependable and Secure Computing},
+    year = {2018},
+    publisher = {IEEE},
+    howpublished = {\url{https://github.com/emsec/hal}}
 }
 ```
 
