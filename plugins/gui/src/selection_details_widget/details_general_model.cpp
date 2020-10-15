@@ -35,8 +35,13 @@ namespace hal {
     }
 
     DetailsGeneralModel::DetailsGeneralModel(QObject* parent)
-        : QAbstractTableModel(parent), mContextIndex(-1)
-    {;}
+        : QAbstractTableModel(parent), mContextIndex(-1), mId(0), mGetParentModule(nullptr)
+    {
+        QTableView* parentView = static_cast<QTableView*>(parent);
+        if (!parentView) return;
+        connect(parentView, &QTableView::customContextMenuRequested, this, &DetailsGeneralModel::contextMenuRequested);
+        connect(parentView, &QAbstractItemView::doubleClicked, this, &DetailsGeneralModel::handleDoubleClick);
+    }
 
     void DetailsGeneralModel::additionalInformation(Module* m)
     {
@@ -62,6 +67,7 @@ namespace hal {
         // mContent :  Name=0, Type=1, Id=2, Grouping=3, Parent=4, Gates=5, Submodules=6, Nets=7
         mContent[0].assignSetter(std::bind(&Module::set_name,m,std::placeholders::_1));
         mContent[1].assignSetter(std::bind(&Module::set_type,m,std::placeholders::_1));
+        mGetParentModule = std::bind(&Module::get_parent_module,m);
     }
 
     void DetailsGeneralModel::additionalInformation(Gate* g)
@@ -76,6 +82,7 @@ namespace hal {
             }
         }
         mContent.append(DetailsGeneralModelEntry("Module", moduleNameId(parentMod), "get_module"));
+        mGetParentModule = std::bind(&Gate::get_module,g);
     }
 
     void DetailsGeneralModel::additionalInformation(Net* n)
@@ -134,6 +141,22 @@ namespace hal {
             Q_EMIT requireUpdate(mId);
         }
     }
+
+    void DetailsGeneralModel::handleDoubleClick(const QModelIndex &inx)
+    {
+        if (!inx.isValid()) return;
+        if (mContent.at(inx.row()).lcLabel().endsWith("module"))
+        {
+            // request: navigate to parent module
+            if (!mGetParentModule) return;
+            Module* parMod = mGetParentModule();
+            if (!parMod) return;
+            g_selection_relay->clear();
+            g_selection_relay->m_selected_modules.insert(parMod->get_id());
+            g_selection_relay->relay_selection_changed(this);
+        }
+    }
+
 
     void DetailsGeneralModel::contextMenuRequested(const QPoint& pos)
     {

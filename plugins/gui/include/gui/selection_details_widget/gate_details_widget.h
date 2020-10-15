@@ -111,10 +111,6 @@ namespace hal
         //(1) general-information section ("static" information)
         QTableView*       mGeneralView;
         DetailsGeneralModel* mGeneralModel;
-        QTableWidgetItem* m_name_item;
-        QTableWidgetItem* m_type_item;
-        QTableWidgetItem* m_id_item;
-        QTableWidgetItem* m_ModuleItem;
 
         //(2) input-pins section
         QTableWidget* m_input_pins_table;
@@ -134,16 +130,10 @@ namespace hal
 
         void handle_input_pin_item_clicked(const QTableWidgetItem* item);
         void handle_output_pin_item_clicked(const QTableWidgetItem* item);
-        void handle_general_table_item_clicked(const QTableWidgetItem* item);
 
         //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
-        void handle_general_table_menu_requested(const QPoint &pos);
         void handle_input_pin_table_menu_requested(const QPoint &pos);
         void handle_output_pin_table_menu_requested(const QPoint &pos);
         void handle_data_table_menu_requested(const QPoint &pos);
-
-        //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
-        QSize calculateTableSize(QTableView* table, int nrows, int ncols);
-        QSize calculate_table_size(QTableWidget* table);
     };
 }

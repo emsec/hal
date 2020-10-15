@@ -115,6 +115,7 @@ namespace hal {
         int mContextIndex;
         u32 mId;
         QString mPythonBase;
+        std::function<Module*(void)> mGetParentModule;
 
         void additionalInformation(Module* m);
         void additionalInformation(Gate* g);
@@ -125,6 +126,7 @@ namespace hal {
 
     public Q_SLOTS:
         void contextMenuRequested(const QPoint& pos);
+        void handleDoubleClick(const QModelIndex &inx);
         void editValueTriggered();
         void extractRawTriggered() const;
         void extractPythonTriggered() const;

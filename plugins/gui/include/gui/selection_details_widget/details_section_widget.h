@@ -40,8 +40,6 @@ namespace hal
         QTableWidget* table() const;
         void setRowCount(int rc);
 
-        static void setDefaultTableStyle(QTableView *tab);
-
     private Q_SLOTS:
         void toggleBodyVisible();
         void handleGlobalSettingsChanged(void* sender, const QString& key, const QVariant& value);

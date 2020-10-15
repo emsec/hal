@@ -1,5 +1,6 @@
 #include "gui/gui_globals.h"
 #include "gui/selection_details_widget/details_section_widget.h"
+#include "gui/selection_details_widget/details_table_utilities.h"
 #include <QVBoxLayout>
 #include <QHeaderView>
 
@@ -27,7 +28,7 @@ namespace hal {
         m_layout->addLayout(hlayout);
         m_layout->addSpacerItem(new QSpacerItem(0,7, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
-        setDefaultTableStyle(m_table);
+        DetailsTableUtilities::setDefaultTableStyle(m_table);
     }
 
     void DetailsSectionWidget::constructor(const QString &txt)
@@ -96,23 +97,6 @@ namespace hal {
             m_body->show();
         else
             m_body->hide();
-    }
-
-    void DetailsSectionWidget::setDefaultTableStyle(QTableView* tab)
-    {
-        //tab->horizontalHeader()->setStretchLastSection(true);
-        tab->horizontalHeader()->hide();
-        tab->verticalHeader()->hide();
-        tab->verticalHeader()->setDefaultSectionSize(16);
-        tab->resizeColumnToContents(0);
-        tab->setShowGrid(false);
-        tab->setFocusPolicy(Qt::NoFocus);
-        tab->setFrameStyle(QFrame::NoFrame);
-        tab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        tab->setMaximumHeight(tab->verticalHeader()->length());
-        tab->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        tab->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        tab->setContextMenuPolicy(Qt::CustomContextMenu);
     }
 
 }

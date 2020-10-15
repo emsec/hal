@@ -98,12 +98,6 @@ namespace hal
 
         QTableView* mGeneralView;
         DetailsGeneralModel* mGeneralModel;
-        QTableWidgetItem* m_name_item;
-        QTableWidgetItem* m_id_item;
-        QTableWidgetItem* m_type_item;
-        QTableWidgetItem* m_number_of_gates_item;
-        QTableWidgetItem* m_number_of_submodules_item;
-        QTableWidgetItem* m_number_of_nets_item;
 
         QTableWidget* m_input_ports_table;
 
@@ -111,14 +105,7 @@ namespace hal
 
         DataFieldsTable* m_dataFieldsTable;
 
-        QSize calculate_table_size(QTableWidget* table);
-        QSize calculateTableSize(QTableView* table, int nrows, int ncols);
-
-        void add_general_table_static_item(QTableWidgetItem* item);
-        void add_general_table_dynamic_item(QTableWidgetItem* item);
-
         //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
-        void handle_general_table_menu_requested(const QPoint& pos);
         void handle_input_ports_table_menu_requested(const QPoint& pos);
         void handle_output_ports_table_menu_requested(const QPoint& pos);
 

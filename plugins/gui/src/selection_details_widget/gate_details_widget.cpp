@@ -3,6 +3,7 @@
 #include "gui/selection_details_widget/disputed_big_icon.h"
 #include "gui/selection_details_widget/details_section_widget.h"
 #include "gui/selection_details_widget/details_general_model.h"
+#include "gui/selection_details_widget/details_table_utilities.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -76,36 +77,9 @@ namespace hal
         m_dataFieldsSection = new DetailsSectionWidget("Data Fields (%1)", m_dataFieldsTable, this);
 
         //shared stlye options (every option is applied to each table)
-        DetailsSectionWidget::setDefaultTableStyle(mGeneralView);
-
-        //customize general section by adding the fixed iitems
-        QList<QTableWidgetItem*> tmp_general_info_list = {new QTableWidgetItem("Name:"), new QTableWidgetItem("Type:"),
-                                                          new QTableWidgetItem("ID:"), new QTableWidgetItem("Module:")};
-        for(int i = 0; i < tmp_general_info_list.size(); i++)
-        {
-            auto item = tmp_general_info_list.at(i);
-            item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-            item->setFont(m_keyFont);
-//            m_general_table->setItem(i, 0, item);
-        }
-
-        //create dynamic items that change when gate is changed
-        m_name_item = new QTableWidgetItem();
-        m_name_item->setFlags(Qt::ItemIsEnabled);
-  //      m_general_table->setItem(0, 1, m_name_item);
-
-        m_type_item = new QTableWidgetItem();
-        m_type_item->setFlags(Qt::ItemIsEnabled);
-    //    m_general_table->setItem(1, 1, m_type_item);
-
-        m_id_item = new QTableWidgetItem();
-        m_id_item->setFlags(Qt::ItemIsEnabled);
-      //  m_general_table->setItem(2, 1, m_id_item);
-
-        m_ModuleItem = new QTableWidgetItem();
-        m_ModuleItem->setFlags(Qt::ItemIsEnabled);
- //       m_general_table->setItem(3, 1, m_ModuleItem);
-
+        DetailsTableUtilities::setDefaultTableStyle(mGeneralView);
+        mGeneralView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        mGeneralView->setSelectionMode(QAbstractItemView::SingleSelection);
 
         //(5) Boolean Function section
         m_boolean_functions_container = new QWidget(this);
@@ -147,19 +121,14 @@ namespace hal
 
         connect(m_input_pins_table, &QTableWidget::itemDoubleClicked, this, &GateDetailsWidget::handle_input_pin_item_clicked);
         connect(m_output_pins_table, &QTableWidget::itemDoubleClicked, this, &GateDetailsWidget::handle_output_pin_item_clicked);
-//        connect(m_general_table, &QTableWidget::itemDoubleClicked, this, &GateDetailsWidget::handle_general_table_item_clicked);
         connect(mGeneralModel, &DetailsGeneralModel::requireUpdate, this, &GateDetailsWidget::update);
 
 
         //context menu connects
-        connect(mGeneralView, &QTableView::customContextMenuRequested, mGeneralModel, &DetailsGeneralModel::contextMenuRequested);
-//        connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_general_table_menu_requested);
         connect(m_input_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_input_pin_table_menu_requested);
         connect(m_output_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_output_pin_table_menu_requested);
 
         //install eventfilers
-//        m_general_table->viewport()->setMouseTracking(true);
-//        m_general_table->viewport()->installEventFilter(this);
         m_input_pins_table->viewport()->setMouseTracking(true);
         m_input_pins_table->viewport()->installEventFilter(this);
         m_output_pins_table->viewport()->setMouseTracking(true);
@@ -395,64 +364,6 @@ namespace hal
         menu.exec();
     }
 
-    void GateDetailsWidget::handle_general_table_menu_requested(const QPoint &pos)
-    {
-        /*
-        if(!m_general_table->itemAt(pos) || m_general_table->itemAt(pos)->column() != 1)
-            return;
-
-        QMenu menu;
-        QString description;
-        QString python_command = "netlist.get_gate_by_id(" + QString::number(m_currentId) + ").";
-        QString raw_string = "", raw_desc = "";
-        switch(m_general_table->itemAt(pos)->row())
-        {
-            case 0: python_command += "get_name()"; description = "Extract name as python code (copy to clipboard)";
-                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw name (copy to clipboard)"; break;
-            case 1: python_command += "get_type()"; description = "Extract type as python code (copy to clipboard)";
-                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extraxt raw type(copy to clipboard)";break;
-            case 2: python_command += "get_id()"; description = "Extract id as python code (copy to clipboard)";
-                    raw_string = m_general_table->itemAt(pos)->text(); raw_desc = "Extract raw id as string (copy to clipboard)";break;
-            case 3: python_command += "get_module()"; description = "Extract module as python code (copy to clipboard)"; break;
-        }
-
-        if(!raw_desc.isEmpty())
-        {
-            menu.addAction(raw_desc,[raw_string](){
-                QApplication::clipboard()->setText(raw_string);
-            });
-        }
-        menu.addAction(QIcon(":/icons/python"), description, [python_command](){
-            QApplication::clipboard()->setText(python_command);
-        });
-
-        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
-        menu.exec();
-        */
-    }
-
-    QSize GateDetailsWidget::calculate_table_size(QTableWidget *table)
-    {
-        return calculateTableSize(table,table->rowCount(),table->columnCount());
-    }
-
-    QSize GateDetailsWidget::calculateTableSize(QTableView* table, int nrows, int ncols)
-    {
-        //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
-        //is the tables width far too big, so just return 0 as the size
-        if(!nrows)
-            return QSize(0,0);
-
-        int w = table->verticalHeader()->width() + 4; // +4 seems to be needed
-        for (int i = 0; i < ncols; i++)
-           w += table->columnWidth(i); // seems to include gridline
-        int h = table->horizontalHeader()->height() + 4;
-        for (int i = 0; i < nrows; i++)
-           h += table->rowHeight(i);
-        return QSize(w+5, h);
-    }
-
-
     void GateDetailsWidget::handle_module_removed(Module* module)
     {
         if (m_currentId == 0)
@@ -550,23 +461,8 @@ namespace hal
 
         mGeneralModel->setContent<Gate>(g);
 
-        //update (1)general info section
-        m_name_item->setText(QString::fromStdString(g->get_name()));
-        m_type_item->setText(QString::fromStdString(g->get_type()->get_name()));
-        m_id_item->setText(QString::number(m_currentId));
-
-        QString module_text = "";
-        for (const auto sub : g_netlist->get_modules())
-        {
-            if (sub->contains_gate(g))
-            {
-                module_text = QString::fromStdString(sub->get_name()) + "[" + QString::number(sub->get_id()) + "]";
-                m_ModuleItem->setData(Qt::UserRole, sub->get_id());
-            }
-        }
-        m_ModuleItem->setText(module_text);
         mGeneralView->resizeColumnsToContents();
-        mGeneralView->setFixedSize(calculateTableSize(mGeneralView,
+        mGeneralView->setFixedSize(DetailsTableUtilities::tableViewSize(mGeneralView,
                                     mGeneralModel->rowCount(),
                                     mGeneralModel->columnCount()));
 
@@ -603,7 +499,7 @@ namespace hal
             index++;
         }
         m_input_pins_table->resizeColumnsToContents();
-        m_input_pins_table->setFixedWidth(calculate_table_size(m_input_pins_table).width());
+        m_input_pins_table->setFixedWidth(DetailsTableUtilities::tableWidgetSize(m_input_pins_table).width());
 
         //update(3) output pins section
         m_output_pins_table->clearContents();
@@ -638,7 +534,7 @@ namespace hal
             index++;
         }
         m_output_pins_table->resizeColumnsToContents();
-        m_output_pins_table->setFixedWidth(calculate_table_size(m_output_pins_table).width());
+        m_output_pins_table->setFixedWidth(DetailsTableUtilities::tableWidgetSize(m_output_pins_table).width());
 
         //update(4) data fields section
         m_dataFieldsSection->setRowCount(g->get_data().size());
@@ -676,7 +572,10 @@ namespace hal
         }
 
         //to prevent any updating(render) errors that can occur, manually tell the tables to update
+        mGeneralView->resizeColumnsToContents();
+        mGeneralView->setFixedSize(DetailsTableUtilities::tableViewSize(mGeneralView,mGeneralModel->rowCount(),mGeneralModel->columnCount()));
         mGeneralView->update();
+
         m_input_pins_table->update();
         m_output_pins_table->update();
         m_dataFieldsTable->update();
@@ -723,7 +622,7 @@ namespace hal
 
         // TODO ensure gates visible in graph
     }
-
+/*
     void GateDetailsWidget::handle_general_table_item_clicked(const QTableWidgetItem *item)
     {
         //cant get the item from the index (static_cast<QTableWidgetItem*>(index.internalPointer()) fails),
@@ -735,4 +634,5 @@ namespace hal
             g_selection_relay->relay_selection_changed(this);
         }
     }
+    */
 }
