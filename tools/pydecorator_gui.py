@@ -36,7 +36,7 @@ if "__decorated_gui__" not in dir():
                 else:
                     log_string += str(item_to_select.id) + "}"
 
-            print(log_string)
+            hal_py.log_info(log_string)
             return result
         return decorated
 
@@ -54,7 +54,7 @@ if "__decorated_gui__" not in dir():
                 else:
                     id_list = [item.id for item in result]
                     log_string += "".join([str(id) + ", " for id in sorted(id_list)])[:-2] + "}"
-            print(log_string)
+            hal_py.log_info(log_string)
             return result
         return decorated
 
@@ -75,7 +75,7 @@ if "__decorated_gui__" not in dir():
                         end_result_list.append(sorted([item.id for item in list]))
             log_string += ", Gate-ID(s): " + str(end_result_list[0]) + ", Net-ID(s): " + str(end_result_list[1]) + ", Module-ID(s): " + str(end_result_list[2])
             log_string = log_string.replace("[", "{").replace("]", "}")
-            print(log_string)
+            hal_py.log_info(log_string)
             return result
         return decorated
 
@@ -135,7 +135,7 @@ if "__decorated_gui__" not in dir():
                     sorted_item_ids = sorted(tmp_param_value)
                     log_string += ", {}-Id(s): {{".format(arg_tup[0].capitalize()[:-4]) + "".join([str(i) + ", " for i in sorted_item_ids])[:-2] + "}"
 
-            print(log_string)
+            hal_py.log_info(log_string)
             return result
         return decorated
 
@@ -165,5 +165,4 @@ if "__decorated_gui__" not in dir():
 
 else:
     hal_py.log_info("Gui slready decorated. Not applying again.")
-
 
