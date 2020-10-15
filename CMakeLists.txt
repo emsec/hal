@@ -192,6 +192,8 @@ endif(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
 #####   Setup main target to hold all build definitions and options
 ####################################################################
 
+# Sphinx-doc build dir
+set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx-build")
 
 ################################
 #####   Enable Testing
