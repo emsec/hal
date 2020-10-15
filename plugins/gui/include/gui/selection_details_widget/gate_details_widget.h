@@ -33,6 +33,7 @@
 #include <QWidget>
 
 class QTableWidget;
+class QTableView;
 class QTableWidgetItem;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -46,6 +47,7 @@ namespace hal
     class GraphNavigationWidget;
     class DataFieldsTable;
     class DetailsSectionWidget;
+    class DetailsGeneralModel;
 
     class GateDetailsWidget : public DetailsWidget
     {
@@ -107,7 +109,8 @@ namespace hal
         // widgets / sections to be unfold (not all structures are sections in itself, it may be a container necessary)
 
         //(1) general-information section ("static" information)
-        QTableWidget* m_general_table;
+        QTableView*       mGeneralView;
+        DetailsGeneralModel* mGeneralModel;
         QTableWidgetItem* m_name_item;
         QTableWidgetItem* m_type_item;
         QTableWidgetItem* m_id_item;
@@ -140,6 +143,7 @@ namespace hal
         void handle_data_table_menu_requested(const QPoint &pos);
 
         //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
+        QSize calculateTableSize(QTableView* table, int nrows, int ncols);
         QSize calculate_table_size(QTableWidget* table);
     };
 }

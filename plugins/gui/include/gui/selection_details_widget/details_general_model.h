@@ -13,7 +13,6 @@ namespace hal {
 
     class DetailsGeneralModelEntry
     {
-        DataContainer* mItem;
         QString mLabel;
         QVariant mValue;
         QString mPythonGetter;
@@ -21,32 +20,28 @@ namespace hal {
 
     public:
         DetailsGeneralModelEntry()
-            : mItem(nullptr), mSetter(nullptr) {;}
-        DetailsGeneralModelEntry(DataContainer* item_,
-                                 const QString& label_,
+            : mSetter(nullptr) {;}
+        DetailsGeneralModelEntry(const QString& label_,
                                  const QVariant& value_,
                                  const QString& python_ = QString())
-            : mItem(item_), mLabel(label_), mValue(value_), mPythonGetter(python_), mSetter(nullptr) {;}
-        QString pythonGetter() const { return mPythonGetter; };
-        void assignSetter(const std::function<void(const std::string&)>& setter_) { mSetter = setter_; }
+            : mLabel(label_), mValue(value_), mPythonGetter(python_), mSetter(nullptr)
+        {;}
         QVariant data(int iColumn) const;
         bool hasSetter() const { return mSetter != nullptr; }
         void setValue(const QString& v) const;
+        void assignSetter(const std::function<void(const std::string&)>& setter_) { mSetter = setter_; }
         QString lcLabel() const { return mLabel.toLower(); }
         QString textValue() const { return mValue.toString(); }
+        QString pythonGetter() const { return mPythonGetter; }
     };
 
     template <typename T> class DetailsGeneralCommonInfo
     {
-    public:
-        enum itemType_t {TypeUndefined, TypeModule, TypeGate, TypeNet};
     private:
-        itemType_t mItemType;
         QString mItemName;
         QString mTypeName;
         u32 mId;
         Grouping* mGrouping;
-        QString mPythonBase;
 
         void setTypeName(Module* m)
         {
@@ -68,22 +63,22 @@ namespace hal {
                 mTypeName = "Output";
         }
 
-        void setPythonBase(Module* m)
-        {
-            mPythonBase = QString("netlist.get_module_by_id(%1).").arg(m->get_id());
-        }
-
-        void setPythonBase(Gate* g)
-        {
-            mPythonBase = QString("netlist.get_gate_by_id(%1).").arg(g->get_id());
-        }
-
-        void setPythonBase(Net* n)
-        {
-            mPythonBase = QString("netlist.get_net_by_id(%1).").arg(n->get_id());
-        }
-
     public:
+        QString getPythonBase(Module* m)
+        {
+            return QString("netlist.get_module_by_id(%1).").arg(m->get_id());
+        }
+
+        QString getPythonBase(Gate* g)
+        {
+            return QString("netlist.get_gate_by_id(%1).").arg(g->get_id());
+        }
+
+        QString getPythonBase(Net* n)
+        {
+            return QString("netlist.get_net_by_id(%1).").arg(n->get_id());
+        }
+
         QString name() const
         {
             if (mItemName.isEmpty()) return "None";
@@ -104,19 +99,12 @@ namespace hal {
 
         u32 id() const { return mId; }
 
-        QString py(const QString& pyGetter) const
-        {
-            if (pyGetter.isEmpty()) return QString();
-            return mPythonBase + pyGetter;
-        }
-
         DetailsGeneralCommonInfo(T* item)
         {
             mItemName =  QString::fromStdString(item->get_name());
             mId       =  item->get_id();
             mGrouping =  item->get_grouping();
             setTypeName(item);
-            setPythonBase(item);
         }
     };
 
@@ -126,16 +114,20 @@ namespace hal {
         QList<DetailsGeneralModelEntry> mContent;
         int mContextIndex;
         u32 mId;
+        QString mPythonBase;
 
         void additionalInformation(Module* m);
         void additionalInformation(Gate* g);
         void additionalInformation(Net* n);
 
+        QString pythonCommand(const QString& pyGetter) const;
         static QString moduleNameId(const Module* m);
 
     public Q_SLOTS:
         void contextMenuRequested(const QPoint& pos);
         void editValueTriggered();
+        void extractRawTriggered() const;
+        void extractPythonTriggered() const;
 
     Q_SIGNALS:
         void requireUpdate(u32 id);
@@ -145,16 +137,15 @@ namespace hal {
         {
             mContent.clear();
             DetailsGeneralCommonInfo<T> dgi(item);
-            mId = dgi.id();
-            DetailsGeneralModelEntry dgmeName(item,"Name",     dgi.name(), dgi.py("get_name"));
-            if (typeid(T) != typeid(Gate))
-                dgmeName.assignSetter(std::bind(&T::set_name,item,std::placeholders::_1));
-            mContent.append(dgmeName);
-            mContent.append(DetailsGeneralModelEntry(item,"Type",     dgi.typeName(), dgi.py("get_type")));
-            mContent.append(DetailsGeneralModelEntry(item,"ID",       dgi.id(), dgi.py("get_id")));
-            mContent.append(DetailsGeneralModelEntry(item,"Grouping", dgi.grouping(), dgi.py("get_grouping")));
+            mId         = dgi.id();
+            mPythonBase = dgi.getPythonBase(item);
+            mContent.append(DetailsGeneralModelEntry("Name",     dgi.name(),     "get_name"));
+            mContent.append(DetailsGeneralModelEntry("Type",     dgi.typeName(), "get_type"));
+            mContent.append(DetailsGeneralModelEntry("ID",       mId,            "get_id"));
+            mContent.append(DetailsGeneralModelEntry("Grouping", dgi.grouping(), "get_grouping"));
 
             additionalInformation(item);
+
             int n = columnCount() - 1;
             QModelIndex inx0 = index(0,0);
             QModelIndex inx1 = index(n,1);
@@ -169,11 +160,11 @@ namespace hal {
             mContent.clear();
             int n = 0;
             if (typeid(T) == typeid(Module))
-                n = 7;
+                n = 8;
             else if (typeid(T) == typeid(Gate))
-                n = 4;
+                n = 5;
             else if (typeid(T) == typeid(Net))
-                n = 3;
+                n = 4;
             for (int i=0; i<n; i++)
                 mContent.append(DetailsGeneralModelEntry());
         }

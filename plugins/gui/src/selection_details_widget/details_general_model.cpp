@@ -1,6 +1,8 @@
 #include "gui/selection_details_widget/details_general_model.h"
 #include "gui/input_dialog/input_dialog.h"
 #include <QTableView>
+#include <QApplication>
+#include <QClipboard>
 #include <QMenu>
 
 namespace hal {
@@ -38,8 +40,7 @@ namespace hal {
 
     void DetailsGeneralModel::additionalInformation(Module* m)
     {
-        mContent.append(DetailsGeneralModelEntry(m,"Parent module:",
-                                                 moduleNameId(m->get_parent_module())));
+        mContent.append(DetailsGeneralModelEntry("Parent module", moduleNameId(m->get_parent_module()), "get_parent_module"));
 
         int nGatesSumAll           = m->get_gates(nullptr, true).size();
         int nGatesDirectChild      = m->get_gates(nullptr, false).size();
@@ -52,11 +53,15 @@ namespace hal {
 
         if (nGatesGrandChild > 0)
             numberGatesText += " in total, " + QString::number(nGatesDirectChild) + " as direct members and " + QString::number(nGatesGrandChild) + " in submodules";
-        mContent.append(DetailsGeneralModelEntry(m,"Gates:", numberGatesText));
+        mContent.append(DetailsGeneralModelEntry("Gates", numberGatesText));
         uint nSubmodules = m->get_submodules(nullptr, true).size();
-        mContent.append(DetailsGeneralModelEntry(m,"Submodules:", nSubmodules));
+        mContent.append(DetailsGeneralModelEntry("Submodules", nSubmodules));
         uint nNets = m->get_internal_nets().size();
-        mContent.append(DetailsGeneralModelEntry(m,"Nets:", nNets));
+        mContent.append(DetailsGeneralModelEntry("Nets", nNets));
+
+        // mContent :  Name=0, Type=1, Id=2, Grouping=3, Parent=4, Gates=5, Submodules=6, Nets=7
+        mContent[0].assignSetter(std::bind(&Module::set_name,m,std::placeholders::_1));
+        mContent[1].assignSetter(std::bind(&Module::set_type,m,std::placeholders::_1));
     }
 
     void DetailsGeneralModel::additionalInformation(Gate* g)
@@ -70,12 +75,12 @@ namespace hal {
                 break;
             }
         }
-        mContent.append(DetailsGeneralModelEntry(g,"Module:", moduleNameId(parentMod)));
+        mContent.append(DetailsGeneralModelEntry("Module", moduleNameId(parentMod), "get_module"));
     }
 
     void DetailsGeneralModel::additionalInformation(Net* n)
     {
-        Q_UNUSED(n);
+        mContent[0].assignSetter(std::bind(&Net::set_name,n,std::placeholders::_1));
     }
 
 
@@ -98,6 +103,26 @@ namespace hal {
         return mContent.size();
     }
 
+    QString DetailsGeneralModel::pythonCommand(const QString& pyGetter) const
+    {
+        if (pyGetter.isEmpty()) return QString();
+        return mPythonBase + pyGetter + "()";
+    }
+
+    void DetailsGeneralModel::extractRawTriggered() const
+    {
+        if (mContextIndex < 0 || mContextIndex >= mContent.size()) return;
+        const DetailsGeneralModelEntry& dgme = mContent.at(mContextIndex);
+        QApplication::clipboard()->setText(dgme.textValue());
+    }
+
+    void DetailsGeneralModel::extractPythonTriggered() const
+    {
+        if (mContextIndex < 0 || mContextIndex >= mContent.size()) return;
+        const DetailsGeneralModelEntry& dgme = mContent.at(mContextIndex);
+        QApplication::clipboard()->setText(pythonCommand(dgme.pythonGetter()));
+    }
+
     void DetailsGeneralModel::editValueTriggered()
     {
         if (mContextIndex < 0 || mContextIndex >= mContent.size()) return;
@@ -117,16 +142,22 @@ namespace hal {
         QModelIndex inx = tv->indexAt(pos);
         if (!inx.isValid()) return;
         mContextIndex = inx.row();
-        QMenu* contextMenu = new QMenu(tv);
         const DetailsGeneralModelEntry& dgme = mContent.at(mContextIndex);
+        if (!dgme.hasSetter() && dgme.pythonGetter().isEmpty()) return;
+        QMenu* contextMenu = new QMenu(tv);
+        QAction* action;
         if (dgme.hasSetter())
         {
-            QAction* actionSetValue = contextMenu->addAction("Change "+dgme.lcLabel());
-            connect(actionSetValue, &QAction::triggered, this, &DetailsGeneralModel::editValueTriggered);
+            action = contextMenu->addAction("Change " + dgme.lcLabel());
+            connect(action, &QAction::triggered, this, &DetailsGeneralModel::editValueTriggered);
         }
-        contextMenu->addAction(QString("action <%1>").arg(data(inx,Qt::DisplayRole).toString()));
-        QString py = dgme.pythonGetter();
-        if (!py.isEmpty()) contextMenu->addAction(py);
+        if (!dgme.pythonGetter().isEmpty())
+        {
+            action = contextMenu->addAction("Extract raw " + dgme.lcLabel() + " (copy to clipboard)");
+            connect(action, &QAction::triggered, this, &DetailsGeneralModel::extractRawTriggered);
+            action = contextMenu->addAction(QIcon(":/icons/python"),"Extract " + dgme.lcLabel() + " as python code (copy to clipboard)");
+            connect(action, &QAction::triggered, this, &DetailsGeneralModel::extractPythonTriggered);
+        }
         contextMenu->exec(tv->viewport()->mapToGlobal(pos));
     }
 

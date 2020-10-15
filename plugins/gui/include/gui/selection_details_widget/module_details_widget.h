@@ -96,8 +96,6 @@ namespace hal
         DetailsSectionWidget* m_outputPortsSection;
         DetailsSectionWidget* m_dataFieldsSection;
 
-//        QTableWidget* m_general_table;
-
         QTableView* mGeneralView;
         DetailsGeneralModel* mGeneralModel;
         QTableWidgetItem* m_name_item;
