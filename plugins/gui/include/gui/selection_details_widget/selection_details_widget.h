@@ -61,6 +61,8 @@ namespace hal
         void set_search_icon_path(const QString &path);
         void set_search_icon_style(const QString &style);
 
+        void selectionToGroupingInternal(Grouping* grp);
+
     Q_SIGNALS:
         void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
 
@@ -79,7 +81,6 @@ namespace hal
         void selectionToExistingGrouping();
 
     private:
-        void selectionToGroupingInternal(Grouping* grp);
         void singleSelectionInternal(const SelectionTreeItem* sti);
 
         QSplitter*           m_splitter;

@@ -23,6 +23,7 @@
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
 #include "gui/implementations/qpoint_extension.h"
+#include "gui/selection_details_widget/selection_details_widget.h"
 
 #include <algorithm>
 
@@ -539,6 +540,8 @@ namespace hal
         QGraphicsItem* item = itemAt(pos);
         bool isGate         = false;
         bool isModule       = false;
+        bool isMultiSelect  = false;
+
         // bool isNet = false;
         if (item)
         {
@@ -594,6 +597,9 @@ namespace hal
                 context_menu.addAction("Entire selection:")->setEnabled(false);
             }
 
+            if (g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() + g_selection_relay->m_selected_nets.size() > 1)
+                isMultiSelect = true;
+
             if (isGate || isModule)
             {
                 action = context_menu.addAction("  Isolate In New View");
@@ -636,6 +642,40 @@ namespace hal
                     }
                     QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
                 }
+
+                Grouping* assignedGrouping = nullptr;
+                if (isGate)
+                {
+                    if (g) assignedGrouping = g->get_grouping();
+                }
+                if (isModule)
+                {
+                    if (m) assignedGrouping = m->get_grouping();
+                }
+                QMenu* groupingSubmenu;
+                if (isMultiSelect)
+                    groupingSubmenu = context_menu.addMenu("  Assign all to grouping …");
+                else if (assignedGrouping)
+                    groupingSubmenu = context_menu.addMenu("  Change grouping assignment …");
+                else
+                    groupingSubmenu = context_menu.addMenu("  Assign to grouping …");
+
+                QString assignedGroupingName;
+                if (assignedGrouping && !isMultiSelect)
+                {
+                    action = groupingSubmenu->addAction("Delete current assignment");
+                    connect(action,  &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
+                    assignedGroupingName = QString::fromStdString(assignedGrouping->get_name());
+                }
+                action = groupingSubmenu->addAction("Assign to new grouping");
+                connect(action,  &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssignNew);
+                for (Grouping* grouping : g_netlist->get_groupings())
+                {
+                    QString groupingName = QString::fromStdString(grouping->get_name());
+                    if (groupingName == assignedGroupingName && !isMultiSelect) continue;
+                    action = groupingSubmenu->addAction(ASSIGN_TO_GROUPING + groupingName);
+                    connect(action,  &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssingExisting);
+                }
             }
 
             if (g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() > 1)
@@ -658,36 +698,6 @@ namespace hal
                 }
             }
 
-            Grouping* assignedGrouping = nullptr;
-            if (isGate)
-            {
-                Gate* g   = g_netlist->get_gate_by_id(m_item->id());
-                if (g) assignedGrouping = g->get_grouping();
-            }
-            if (isModule)
-            {
-                Module* m = g_netlist->get_module_by_id(m_item->id());
-                if (m) assignedGrouping = m->get_grouping();
-            }
-            QMenu* groupingSubmenu = assignedGrouping
-                    ? context_menu.addMenu("  Change grouping assignment ...")
-                    : context_menu.addMenu("  Assign to grouping ...");
-            QString assignedGroupingName;
-            if (assignedGrouping)
-            {
-                action = groupingSubmenu->addAction("Delete current assignment");
-                connect(action,  &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
-                assignedGroupingName = QString::fromStdString(assignedGrouping->get_name());
-            }
-            action = groupingSubmenu->addAction("Assign to new grouping");
-            connect(action,  &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssignNew);
-            for (Grouping* grouping : g_netlist->get_groupings())
-            {
-                QString groupingName = QString::fromStdString(grouping->get_name());
-                if (groupingName == assignedGroupingName) continue;
-                action = groupingSubmenu->addAction(ASSIGN_TO_GROUPING + groupingName);
-                connect(action,  &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssingExisting);
-            }
         }
 
         // if (!item || isNet)
@@ -950,6 +960,12 @@ namespace hal
 
     void GraphGraphicsView::groupingAssignInternal(Grouping* grp)
     {
+        if (g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() + g_selection_relay->m_selected_nets.size() > 1)
+        {
+            g_content_manager->getSelectionDetailsWidget()->selectionToGroupingInternal(grp);
+            return;
+        }
+
         if (m_item->item_type() == item_type::gate)
         {
             Gate* g   = g_netlist->get_gate_by_id(m_item->id());
@@ -960,6 +976,8 @@ namespace hal
             Module* m = g_netlist->get_module_by_id(m_item->id());
             if (m) grp->assign_module(m);
         }
+        g_selection_relay->clear();
+        g_selection_relay->relay_selection_changed(nullptr);
     }
 
     void GraphGraphicsView::handleGroupingAssignNew()
