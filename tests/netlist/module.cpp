@@ -4,6 +4,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
+#include "hal_core/netlist/event_system/module_event_handler.h"
 
 namespace hal {
 
@@ -783,6 +784,62 @@ namespace hal {
                 NO_COUT_TEST_BLOCK;
                 EXPECT_EQ(m_0->get_input_port_net(""), nullptr);
                 EXPECT_EQ(m_0->get_output_port_net(""), nullptr);
+            }
+        TEST_END
+    }
+
+    /*************************************
+     * Event System
+     *************************************/
+
+    /**
+     * Testing the triggering of events.
+     */
+    TEST_F(ModuleTest, check_events) {
+        TEST_START
+            const u32 NO_DATA = 0xFFFFFFFF;
+
+            std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
+            Module* test_mod = test_nl->get_top_module();
+            Module* other_mod_0 = test_nl->create_module("other_mod_0", test_nl->get_top_module());
+
+            // Small functions that should trigger certain events exactly once (these operations are executed in this order)
+            std::function<void(void)> trigger_name_changed = [=](){test_mod->set_name("new_name");};
+
+            // The events that are tested
+            std::vector<module_event_handler::event> event_type = {
+                module_event_handler::event::name_changed };
+
+            // A list of the functions that will trigger its associated event exactly once
+            std::vector<std::function<void(void)>> trigger_event = { trigger_name_changed };
+
+            // The parameters of the events that are expected
+            std::vector<std::tuple<module_event_handler::event, Module*, u32>> expected_parameter = {
+                std::make_tuple(module_event_handler::event::name_changed, test_mod, NO_DATA)
+            };
+
+            // IN_PROGRESS: Other events...
+
+            // Check all events in a for-loop
+            for(u32 event_idx = 0; event_idx < event_type.size(); event_idx++)
+            {
+                // Create the listener for the tested event
+                test_utils::EventListener<void, module_event_handler::event, Module*, u32> listener;
+                std::function<void(module_event_handler::event, Module*, u32)> cb = listener.get_conditional_callback(
+                    [=](module_event_handler::event ev, Module* m, u32 id){return ev == event_type[event_idx] && m == test_mod;}
+                );
+                std::string cb_name = "nl_event_callback_" + std::to_string((u32)event_type[event_idx]);
+                // Register a callback of the listener
+                module_event_handler::register_callback(cb_name, cb);
+
+                // Trigger the event
+                trigger_event[event_idx]();
+
+                EXPECT_EQ(listener.get_event_count(), 1);
+                EXPECT_EQ(listener.get_last_parameters(), expected_parameter[event_idx]);
+
+                // Unregister the callback
+                module_event_handler::unregister_callback(cb_name);
             }
         TEST_END
     }
