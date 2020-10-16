@@ -6,7 +6,7 @@ namespace hal
     {
         py::class_<BooleanFunction> py_boolean_function(m, "BooleanFunction", R"(Boolean function class.)");
 
-        py::enum_<BooleanFunction::Value>(py_boolean_function, "value", R"(
+        py::enum_<BooleanFunction::Value>(py_boolean_function, "Value", R"(
         Represents the logic value that a boolean function operates on. Available are: X, ZERO, and ONE.)")
             .value("X", BooleanFunction::X)
             .value("ZERO", BooleanFunction::ZERO)
