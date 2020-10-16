@@ -109,6 +109,12 @@ if "__decorated_gui__" not in dir():
             # first condition was already visited (with a boolean)
             possible_args_type2 = [("gates", 1, 10000, hal_py.Gate), ("nets", 1, 2, hal_py.Net), ("modules", 1, 3, hal_py.Module)]
             tmp_param_value = None
+            # a bit hacky but i need to check if an empty net or module list has already
+            # been logged so that the next for-loop does not log an empty list again
+            logged_empty_gate_list = False
+            logged_empty_net_list = False
+            logged_empty_module_list = False
+
             for arg_tup in possible_args_type2:
                 tmp_param_value = kwargs.get(arg_tup[0])
                 if tmp_param_value is None:
@@ -116,13 +122,33 @@ if "__decorated_gui__" not in dir():
                         if len(args[arg_tup[1]]) > 0 and isinstance(args[arg_tup[1]][0], arg_tup[3]):
                             sorted_item_ids = sorted(args[arg_tup[1]], key = lambda  item: item.id)
                             log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {" + "".join([str(i.id) + ", " for i in sorted_item_ids])[:-2] + "}"
+                        elif len(args[arg_tup[1]]) == 0:
+                            if ("net" in arg_tup[0] and not logged_empty_net_list) or ("module" in arg_tup[0] and not logged_empty_module_list) or ("gate" in arg_tup[0] and not logged_empty_gate_list):
+                                log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {}"
+                                logged_empty_gate_list = True if "gate" in arg_tup[0] else logged_empty_gate_list
+                                logged_empty_net_list = True if "net" in arg_tup[0] else logged_empty_net_list
+                                logged_empty_module_list = True if "module" in arg_tup[0] else logged_empty_module_list
                     if len(args) >= arg_tup[2]+1 and isinstance(args[arg_tup[2]], list):
                         if len(args[arg_tup[2]]) > 0 and isinstance(args[arg_tup[2]][0], arg_tup[3]):
                             sorted_item_ids = sorted(args[arg_tup[2]], key = lambda  item: item.id)
                             log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {" + "".join([str(i.id) + ", " for i in sorted_item_ids])[:-2] + "}"
+                        elif len(args[arg_tup[2]]) == 0:
+                            if ("net" in arg_tup[0] and not logged_empty_net_list) or ("module" in arg_tup[0] and not logged_empty_module_list) or ("gate" in arg_tup[0] and not logged_empty_gate_list):
+                                log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {}"
+                                logged_empty_gate_list = True if "gate" in arg_tup[0] else logged_empty_gate_list
+                                logged_empty_net_list = True if "net" in arg_tup[0] else logged_empty_net_list
+                                logged_empty_module_list = True if "module" in arg_tup[0] else logged_empty_module_list
                 elif tmp_param_value is not None:
-                    sorted_item_ids = sorted(tmp_param_value, key=lambda item: item.id)
-                    log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {" + "".join([str(i.id) + ", " for i in sorted_item_ids])[:-2] + "}"
+                    if len(tmp_param_value) == 0:
+                        if ("net" in arg_tup[0] and not logged_empty_net_list) or ("module" in arg_tup[0] and not logged_empty_module_list) or ("gate" in arg_tup[0] and not logged_empty_gate_list):
+                            logged_empty_gate_list = True if "gate" in arg_tup[0] else logged_empty_gate_list
+                            logged_empty_net_list = True if "net" in arg_tup[0] else logged_empty_net_list
+                            logged_empty_module_list = True if "module" in arg_tup[0] else logged_empty_module_list
+                            sorted_item_ids = sorted(tmp_param_value, key=lambda item: item.id)
+                            log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {" + "".join([str(i.id) + ", " for i in sorted_item_ids])[:-2] + "}"
+                    else:
+                        sorted_item_ids = sorted(tmp_param_value, key=lambda item: item.id)
+                        log_string += ", " + arg_tup[0].capitalize()[:-1] + "-Id(s): {" + "".join([str(i.id) + ", " for i in sorted_item_ids])[:-2] + "}"
 
             possible_args_type3 = [("gate_ids", 1), ("net_ids", 2), ("module_ids", 3)]
             tmp_param_value = None
@@ -132,9 +158,9 @@ if "__decorated_gui__" not in dir():
                     sorted_item_ids = sorted(args[arg_tup[1]])
                     log_string += ", {}-Id(s): {{".format(arg_tup[0].capitalize()[:-4]) + "".join([str(i) + ", " for i in sorted_item_ids])[:-2] + "}"
                 elif tmp_param_value is not None:
-                    sorted_item_ids = sorted(tmp_param_value)
-                    log_string += ", {}-Id(s): {{".format(arg_tup[0].capitalize()[:-4]) + "".join([str(i) + ", " for i in sorted_item_ids])[:-2] + "}"
-
+                    if ("net" in arg_tup[0] and not logged_empty_net_list) or ("module" in arg_tup[0] and not logged_empty_module_list) or ("gate" in arg_tup[0] and not logged_empty_gate_list):
+                        sorted_item_ids = sorted(tmp_param_value)
+                        log_string += ", {}-Id(s): {{".format(arg_tup[0].capitalize()[:-4]) + "".join([str(i) + ", " for i in sorted_item_ids])[:-2] + "}"
             hal_py.log_info(log_string)
             return result
         return decorated
@@ -144,9 +170,9 @@ if "__decorated_gui__" not in dir():
     hal_gui.GuiApi.select_net = generic_select_gate_net_module("GuiApi.select_net", "Net", hal_gui.GuiApi.select_net)
     hal_gui.GuiApi.select_module = generic_select_gate_net_module("GuiApi.select_module", "Module", hal_gui.GuiApi.select_module)
 
-    hal_gui.GuiApi.deselect_gate = generic_select_gate_net_module("GuiApi.delect_gate", "Gate", hal_gui.GuiApi.deselect_gate)
-    hal_gui.GuiApi.deselect_net = generic_select_gate_net_module("GuiApi.delect_net", "Net", hal_gui.GuiApi.deselect_net)
-    hal_gui.GuiApi.deselect_module = generic_select_gate_net_module("GuiApi.delect_module", "Module", hal_gui.GuiApi.deselect_module)
+    hal_gui.GuiApi.deselect_gate = generic_select_gate_net_module("GuiApi.deselect_gate", "Gate", hal_gui.GuiApi.deselect_gate)
+    hal_gui.GuiApi.deselect_net = generic_select_gate_net_module("GuiApi.deselect_net", "Net", hal_gui.GuiApi.deselect_net)
+    hal_gui.GuiApi.deselect_module = generic_select_gate_net_module("GuiApi.deselect_module", "Module", hal_gui.GuiApi.deselect_module)
 
     hal_gui.GuiApi.get_selected_gate_ids = generic_get_selected_ids_decorator("GuiApi.get_selected_gate_ids", "Gate", hal_gui.GuiApi.get_selected_gate_ids)
     hal_gui.GuiApi.get_selected_net_ids = generic_get_selected_ids_decorator("GuiApi.get_selected_net_ids", "Net", hal_gui.GuiApi.get_selected_net_ids)
@@ -161,7 +187,6 @@ if "__decorated_gui__" not in dir():
 
     hal_gui.GuiApi.select = select_deselect_decorator("GuiApi.select", hal_gui.GuiApi.select)
     hal_gui.GuiApi.deselect = select_deselect_decorator("GuiApi.deselect", hal_gui.GuiApi.deselect)
-
 
 else:
     hal_py.log_info("Gui slready decorated. Not applying again.")
