@@ -1,4 +1,5 @@
 #include "netlist_test_utils.h"
+#include "hal_core/netlist/event_system/net_event_handler.h"
 
 namespace hal {
     using test_utils::MIN_GATE_ID;
@@ -559,4 +560,103 @@ namespace hal {
 
         TEST_END
     }
+
+    /*************************************
+     * Event System
+     *************************************/
+
+    /**
+     * Testing the triggering of events.
+     */
+    TEST_F(NetTest, check_events) {
+        TEST_START
+            const u32 NO_DATA = 0xFFFFFFFF;
+
+            std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
+            Net* test_net = test_nl->get_net_by_id(MIN_NET_ID + 13);
+            Gate* new_gate = test_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "new_gate");
+
+            // Small functions that should trigger certain events exactly once (these operations are executed in this order)
+            std::function<void(void)> trigger_name_changed = [=](){test_net->set_name("new_name");};
+            std::function<void(void)> trigger_src_added = [=](){test_net->add_source(new_gate, "O");};
+            std::function<void(void)> trigger_src_removed = [=](){test_net->remove_source(new_gate, "O");};
+            std::function<void(void)> trigger_dst_added = [=](){test_net->add_destination(new_gate, "I");};
+            std::function<void(void)> trigger_dst_removed = [=](){test_net->remove_destination(new_gate, "I");};
+
+            // The events that are tested
+            std::vector<net_event_handler::event> event_type = {
+                net_event_handler::event::name_changed, net_event_handler::event::src_added,
+                net_event_handler::event::src_removed, net_event_handler::event::dst_added,
+                net_event_handler::event::dst_removed};
+
+            // A list of the functions that will trigger its associated event exactly once
+            std::vector<std::function<void(void)>> trigger_event = { trigger_name_changed, trigger_src_added,
+                 trigger_src_removed, trigger_dst_added, trigger_dst_removed };
+
+            // The parameters of the events that are expected
+            std::vector<std::tuple<net_event_handler::event, Net*, u32>> expected_parameter = {
+                std::make_tuple(net_event_handler::event::name_changed, test_net, NO_DATA),
+                std::make_tuple(net_event_handler::event::src_added, test_net, new_gate->get_id()),
+                std::make_tuple(net_event_handler::event::src_removed, test_net, new_gate->get_id()),
+                std::make_tuple(net_event_handler::event::dst_added, test_net, new_gate->get_id()),
+                std::make_tuple(net_event_handler::event::dst_removed, test_net, new_gate->get_id())
+            };
+
+            // Check all events in a for-loop
+            for(u32 event_idx = 0; event_idx < event_type.size(); event_idx++)
+            {
+                // Create the listener for the tested event
+                test_utils::EventListener<void, net_event_handler::event, Net*, u32> listener;
+                std::function<void(net_event_handler::event, Net*, u32)> cb = listener.get_conditional_callback(
+                    [=](net_event_handler::event ev, Net* n, u32 id){return ev == event_type[event_idx] && n == test_net;}
+                );
+                std::string cb_name = "net_event_callback_" + std::to_string((u32)event_type[event_idx]);
+                // Register a callback of the listener
+                net_event_handler::register_callback(cb_name, cb);
+
+                // Trigger the event
+                trigger_event[event_idx]();
+
+                EXPECT_EQ(listener.get_event_count(), 1);
+                EXPECT_EQ(listener.get_last_parameters(), expected_parameter[event_idx]);
+
+                // Unregister the callback
+                net_event_handler::unregister_callback(cb_name);
+            }
+
+            // Test the events 'created' and 'removed'
+            // -- 'created' event
+            test_utils::EventListener<void, net_event_handler::event, Net*, u32> listener_created;
+            std::function<void(net_event_handler::event, Net*, u32)> cb_created = listener_created.get_conditional_callback(
+                [=](net_event_handler::event ev, Net* m, u32 id){return ev == net_event_handler::created;}
+            );
+            std::string cb_name_created = "net_event_callback_created";
+            net_event_handler::register_callback(cb_name_created, cb_created);
+
+            // Create a new mod
+            Net* new_net = test_nl->create_net("new_net");
+            EXPECT_EQ(listener_created.get_event_count(), 1);
+            EXPECT_EQ(listener_created.get_last_parameters(), std::make_tuple(net_event_handler::event::created, new_net, NO_DATA));
+
+            net_event_handler::unregister_callback(cb_name_created);
+
+            // -- 'removed' event
+            test_utils::EventListener<void, net_event_handler::event, Net*, u32> listener_removed;
+            std::function<void(net_event_handler::event, Net*, u32)> cb_removed = listener_removed.get_conditional_callback(
+                [=](net_event_handler::event ev, Net* m, u32 id){return ev == net_event_handler::removed;}
+            );
+            std::string cb_name_removed = "net_event_callback_removed";
+            net_event_handler::register_callback(cb_name_removed, cb_removed);
+
+            // Delete the module which was created in the previous part
+            test_nl->delete_net(new_net);
+            EXPECT_EQ(listener_removed.get_event_count(), 1);
+            EXPECT_EQ(listener_removed.get_last_parameters(), std::make_tuple(net_event_handler::event::removed, new_net, NO_DATA));
+
+            net_event_handler::unregister_callback(cb_name_removed);
+
+        TEST_END
+    }
+
+
 } //namespace hal

@@ -4,6 +4,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
+#include "hal_core/netlist/event_system/module_event_handler.h"
 
 namespace hal {
 
@@ -784,6 +785,123 @@ namespace hal {
                 EXPECT_EQ(m_0->get_input_port_net(""), nullptr);
                 EXPECT_EQ(m_0->get_output_port_net(""), nullptr);
             }
+        TEST_END
+    }
+
+    /*************************************
+     * Event System
+     *************************************/
+
+    /**
+     * Testing the triggering of events.
+     */
+    TEST_F(ModuleTest, check_events) {
+        TEST_START
+            const u32 NO_DATA = 0xFFFFFFFF;
+
+            std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
+            Module* top_mod = test_nl->get_top_module();
+            Module* test_mod = test_nl->create_module("test_mod", test_nl->get_top_module());
+            Module* other_mod = test_nl->create_module("other_mod", test_nl->get_top_module());
+            Module* other_mod_sub = test_nl->create_module("other_mod_sub", test_nl->get_top_module());
+            Gate* test_gate = test_nl->get_gate_by_id(MIN_GATE_ID + 0);
+
+            // Small functions that should trigger certain events exactly once (these operations are executed in this order)
+            std::function<void(void)> trigger_name_changed = [=](){test_mod->set_name("new_name");};
+            std::function<void(void)> trigger_type_changed = [=](){test_mod->set_type("new_type");};
+            std::function<void(void)> trigger_parent_changed = [=](){test_mod->set_parent_module(other_mod);};
+            std::function<void(void)> trigger_submodule_added = [=](){other_mod_sub->set_parent_module(test_mod);};
+            std::function<void(void)> trigger_submodule_removed = [=](){other_mod_sub->set_parent_module(top_mod);};
+            std::function<void(void)> trigger_gate_assigned = [=](){test_mod->assign_gate(test_gate);};
+            std::function<void(void)> trigger_gate_removed = [=](){test_mod->remove_gate(test_gate);};
+            std::function<void(void)> trigger_input_port_name_changed = [=](){
+                test_mod->assign_gate(test_gate);
+                test_mod->set_input_port_name(test_gate->get_fan_in_net("I0"), "mod_in_0");
+            };
+            std::function<void(void)> trigger_output_port_name_changed = [=](){
+                test_mod->assign_gate(test_gate);
+                test_mod->set_output_port_name(test_gate->get_fan_out_net("O"), "mod_out");
+            };
+
+            // The events that are tested
+            std::vector<module_event_handler::event> event_type = {
+                module_event_handler::event::name_changed, module_event_handler::event::type_changed,
+                module_event_handler::event::parent_changed, module_event_handler::event::submodule_added,
+                module_event_handler::event::submodule_removed, module_event_handler::event::gate_assigned,
+                module_event_handler::event::gate_removed, module_event_handler::event::input_port_name_changed,
+                module_event_handler::event::output_port_name_changed};
+
+            // A list of the functions that will trigger its associated event exactly once
+            std::vector<std::function<void(void)>> trigger_event = { trigger_name_changed, trigger_type_changed,
+                 trigger_parent_changed, trigger_submodule_added, trigger_submodule_removed, trigger_gate_assigned,
+                 trigger_gate_removed, trigger_input_port_name_changed, trigger_output_port_name_changed};
+
+            // The parameters of the events that are expected
+            std::vector<std::tuple<module_event_handler::event, Module*, u32>> expected_parameter = {
+                std::make_tuple(module_event_handler::event::name_changed, test_mod, NO_DATA),
+                std::make_tuple(module_event_handler::event::type_changed, test_mod, NO_DATA),
+                std::make_tuple(module_event_handler::event::parent_changed, test_mod, NO_DATA),
+                std::make_tuple(module_event_handler::event::submodule_added, test_mod, other_mod_sub->get_id()),
+                std::make_tuple(module_event_handler::event::submodule_removed, test_mod, other_mod_sub->get_id()),
+                std::make_tuple(module_event_handler::event::gate_assigned, test_mod, test_gate->get_id()),
+                std::make_tuple(module_event_handler::event::gate_removed, test_mod, test_gate->get_id()),
+                std::make_tuple(module_event_handler::event::input_port_name_changed, test_mod, test_gate->get_fan_in_net("I0")->get_id()),
+                std::make_tuple(module_event_handler::event::output_port_name_changed, test_mod, test_gate->get_fan_out_net("O")->get_id())
+            };
+
+            // Check all events in a for-loop
+            for(u32 event_idx = 0; event_idx < event_type.size(); event_idx++)
+            {
+                // Create the listener for the tested event
+                test_utils::EventListener<void, module_event_handler::event, Module*, u32> listener;
+                std::function<void(module_event_handler::event, Module*, u32)> cb = listener.get_conditional_callback(
+                    [=](module_event_handler::event ev, Module* m, u32 id){return ev == event_type[event_idx] && m == test_mod;}
+                );
+                std::string cb_name = "mod_event_callback_" + std::to_string((u32)event_type[event_idx]);
+                // Register a callback of the listener
+                module_event_handler::register_callback(cb_name, cb);
+
+                // Trigger the event
+                trigger_event[event_idx]();
+
+                EXPECT_EQ(listener.get_event_count(), 1);
+                EXPECT_EQ(listener.get_last_parameters(), expected_parameter[event_idx]);
+
+                // Unregister the callback
+                module_event_handler::unregister_callback(cb_name);
+            }
+
+            // Test the events 'created' and 'removed'
+            // -- 'created' event
+            test_utils::EventListener<void, module_event_handler::event, Module*, u32> listener_created;
+            std::function<void(module_event_handler::event, Module*, u32)> cb_created = listener_created.get_conditional_callback(
+                [=](module_event_handler::event ev, Module* m, u32 id){return ev == module_event_handler::created;}
+            );
+            std::string cb_name_created = "mod_event_callback_created";
+            module_event_handler::register_callback(cb_name_created, cb_created);
+
+            // Create a new mod
+            Module* new_mod = test_nl->create_module("new_mod", test_nl->get_top_module());
+            EXPECT_EQ(listener_created.get_event_count(), 1);
+            EXPECT_EQ(listener_created.get_last_parameters(), std::make_tuple(module_event_handler::event::created, new_mod, NO_DATA));
+
+            module_event_handler::unregister_callback(cb_name_created);
+
+            // -- 'removed' event
+            test_utils::EventListener<void, module_event_handler::event, Module*, u32> listener_removed;
+            std::function<void(module_event_handler::event, Module*, u32)> cb_removed = listener_removed.get_conditional_callback(
+                [=](module_event_handler::event ev, Module* m, u32 id){return ev == module_event_handler::removed;}
+            );
+            std::string cb_name_removed = "mod_event_callback_removed";
+            module_event_handler::register_callback(cb_name_removed, cb_removed);
+
+            // Delete the module which was created in the previous part
+            test_nl->delete_module(new_mod);
+            EXPECT_EQ(listener_removed.get_event_count(), 1);
+            EXPECT_EQ(listener_removed.get_last_parameters(), std::make_tuple(module_event_handler::event::removed, new_mod, NO_DATA));
+
+            module_event_handler::unregister_callback(cb_name_removed);
+
         TEST_END
     }
 
