@@ -37,7 +37,7 @@ namespace hal
         m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_rename_grouping_icon_style, m_rename_grouping_icon_path));
         m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
 
-        mColorSelectAction->setIcon(QIcon(":/icons/color_select"));
+        mColorSelectAction->setIcon(gui_utility::get_styled_svg_icon(m_color_select_icon_style, m_color_select_icon_path));
 
         m_new_grouping_action->setToolTip("New");
         m_rename_action->setToolTip("Rename");
@@ -210,6 +210,16 @@ namespace hal
         return m_delete_icon_style;
     }
 
+    QString GroupingManagerWidget::color_select_icon_path() const
+    {
+        return m_color_select_icon_path;
+    }
+
+    QString GroupingManagerWidget::color_select_icon_style() const
+    {
+        return m_color_select_icon_style;
+    }
+
     void GroupingManagerWidget::set_new_grouping_icon_path(const QString& path)
     {
         m_new_grouping_icon_path = path;
@@ -238,5 +248,15 @@ namespace hal
     void GroupingManagerWidget::set_delete_icon_style(const QString& style)
     {
         m_delete_icon_style = style;
+    }
+
+    void GroupingManagerWidget::set_color_select_icon_path(const QString& path)
+    {
+        m_color_select_icon_path = path;
+    }
+
+    void GroupingManagerWidget::set_color_select_icon_style(const QString& style)
+    {
+        m_color_select_icon_style = style;
     }
 }

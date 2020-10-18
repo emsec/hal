@@ -53,6 +53,8 @@ namespace hal
         Q_PROPERTY(QString delete_icon_style READ delete_icon_style WRITE set_delete_icon_style)
         Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
         Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
+        Q_PROPERTY(QString color_select_icon_path READ color_select_icon_path WRITE set_color_select_icon_path)
+        Q_PROPERTY(QString color_select_icon_style READ color_select_icon_style WRITE set_color_select_icon_style)
 
     public:
         GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
@@ -67,6 +69,8 @@ namespace hal
         QString delete_icon_style() const;
         QString open_icon_path() const;
         QString open_icon_style() const;
+        QString color_select_icon_path() const;
+        QString color_select_icon_style() const;
 
         void set_new_grouping_icon_path(const QString &path);
         void set_new_grouping_icon_style(const QString &style);
@@ -76,6 +80,8 @@ namespace hal
         void set_delete_icon_style(const QString &style);
         void set_open_icon_path(const QString &path);
         void set_open_icon_style(const QString &style);
+        void set_color_select_icon_path(const QString &path);
+        void set_color_select_icon_style(const QString &style);
 
         GroupingTableModel* getModel() const { return mGroupingTableModel; }
 
@@ -93,6 +99,8 @@ namespace hal
         QString m_rename_grouping_icon_style;
 
         QAction* mColorSelectAction;
+        QString m_color_select_icon_path;
+        QString m_color_select_icon_style;
 
         QAction* m_delete_action;
         QString m_delete_icon_path;

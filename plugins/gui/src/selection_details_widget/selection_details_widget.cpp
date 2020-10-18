@@ -31,9 +31,6 @@ const QString ADD_TO_GROUPING("Add to grouping ");
 
 namespace hal
 {
-    const QString SelectionDetailsWidget::disableIconStyle = QString("all->#515050");
-
-
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), m_numberSelectedItems(0),
           m_restoreLastSelection(new QAction),
@@ -114,6 +111,8 @@ namespace hal
         m_restoreLastSelection->setToolTip("Restore last selection");
         m_selectionToGrouping->setToolTip("Assign to grouping");
         m_selectionToModule->setToolTip("Assign to module");
+        m_selectionToGrouping->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_to_grouping_icon_path));
+        m_selectionToModule->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_to_module_icon_path));
         canRestoreSelection();
 
         m_search_action->setToolTip("Search");
@@ -225,7 +224,7 @@ namespace hal
     {
         QString iconStyle = enable
                 ? m_search_icon_style
-                : disableIconStyle;
+                : m_disabled_icon_style;
         m_search_action->setIcon(gui_utility::get_styled_svg_icon(iconStyle, m_search_icon_path));
         if (!enable && m_searchbar->isVisible())
         {
@@ -241,12 +240,9 @@ namespace hal
 
         QString iconStyle = enable
                 ? m_search_icon_style
-                : disableIconStyle;
-        QString iconName(":/icons/undo2");
+                : m_disabled_icon_style;
 
-        m_restoreLastSelection->setIcon( gui_utility::get_styled_svg_icon(iconStyle,iconName));
-        m_selectionToGrouping->setIcon(QIcon(":/icons/to_grouping"));
-        m_selectionToModule->setIcon(QIcon(":/icons/to_module"));
+        m_restoreLastSelection->setIcon(gui_utility::get_styled_svg_icon(iconStyle, m_restore_icon_path));
         m_restoreLastSelection->setEnabled(enable);
     }
 
@@ -281,6 +277,8 @@ namespace hal
             enableSearchbar(true);
             m_selectionToGrouping->setEnabled(true);
             m_selectionToModule->setEnabled(true);
+            m_selectionToGrouping->setIcon(gui_utility::get_styled_svg_icon(m_to_grouping_icon_style, m_to_grouping_icon_path));
+            m_selectionToModule->setIcon(gui_utility::get_styled_svg_icon(m_to_module_icon_style, m_to_module_icon_path));
         }
         else
         {
@@ -292,6 +290,9 @@ namespace hal
             enableSearchbar(false);
             m_selectionToGrouping->setDisabled(true);
             m_selectionToModule->setDisabled(true);
+            m_selectionToGrouping->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_to_grouping_icon_path));
+            m_selectionToModule->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_to_module_icon_path));
+
             return;
         }
 
@@ -383,7 +384,7 @@ namespace hal
         if(filter_text.isEmpty())
             m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
         else
-            m_search_action->setIcon(gui_utility::get_styled_svg_icon("all->#30ac4f", m_search_icon_path)); //color test, integrate into stylsheet later
+            m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_active_icon_style, m_search_icon_path));
     }
 
     void SelectionDetailsWidget::setup_toolbar(Toolbar* toolbar)
@@ -392,6 +393,16 @@ namespace hal
         toolbar->addAction(m_selectionToGrouping);
         toolbar->addAction(m_selectionToModule);
         toolbar->addAction(m_search_action);
+    }
+
+    QString SelectionDetailsWidget::disabled_icon_style() const
+    {
+        return m_disabled_icon_style;
+    }
+
+    void SelectionDetailsWidget::set_disabled_icon_style(const QString& style)
+    {
+        m_disabled_icon_style = style;
     }
 
     QString SelectionDetailsWidget::search_icon_path() const
@@ -404,6 +415,11 @@ namespace hal
         return m_search_icon_style;
     }
 
+    QString SelectionDetailsWidget::search_active_icon_style() const
+    {
+        return m_search_active_icon_style;
+    }
+
     void SelectionDetailsWidget::set_search_icon_path(const QString& path)
     {
         m_search_icon_path = path;
@@ -412,5 +428,70 @@ namespace hal
     void SelectionDetailsWidget::set_search_icon_style(const QString& style)
     {
         m_search_icon_style = style;
-    }    
+    }
+
+    void SelectionDetailsWidget::set_search_active_icon_style(const QString& style)
+    {
+        m_search_active_icon_style = style;
+    }
+
+    QString SelectionDetailsWidget::restore_icon_path() const
+    {
+        return m_restore_icon_path;
+    }
+
+    QString SelectionDetailsWidget::restore_icon_style() const
+    {
+        return m_restore_icon_style;
+    }
+
+    void SelectionDetailsWidget::set_restore_icon_path(const QString& path)
+    {
+        m_restore_icon_path = path;
+    }
+
+    void SelectionDetailsWidget::set_restore_icon_style(const QString& style)
+    {
+        m_restore_icon_style = style;
+    }
+    
+    QString SelectionDetailsWidget::to_grouping_icon_path() const
+    {
+        return m_to_grouping_icon_path;
+    }
+
+    QString SelectionDetailsWidget::to_grouping_icon_style() const
+    {
+        return m_to_grouping_icon_style;
+    }
+
+    void SelectionDetailsWidget::set_to_grouping_icon_path(const QString& path)
+    {
+        m_to_grouping_icon_path = path;
+    }
+
+    void SelectionDetailsWidget::set_to_grouping_icon_style(const QString& style)
+    {
+        m_to_grouping_icon_style = style;
+    }
+    
+    QString SelectionDetailsWidget::to_module_icon_path() const
+    {
+        return m_to_module_icon_path;
+    }
+    
+    QString SelectionDetailsWidget::to_module_icon_style() const
+    {
+        return m_to_module_icon_style;
+    }
+    
+    void SelectionDetailsWidget::set_to_module_icon_path(const QString& path)
+    {
+        m_to_module_icon_path = path;
+    }
+    
+    void SelectionDetailsWidget::set_to_module_icon_style(const QString& style)
+    {
+        m_to_module_icon_style = style;
+    }
 }
