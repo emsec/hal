@@ -4,12 +4,15 @@
 
 namespace hal
 {
-    namespace evaluation
+    namespace dataflow
     {
-        struct Configuration
+        namespace evaluation
         {
-            std::vector<u32> prioritized_sizes;
-        };
+            struct Configuration
+            {
+                std::vector<u32> prioritized_sizes;
+            };
 
-    }    // namespace evaluation
-}    // namespace hal
+        }    // namespace evaluation
+    }        // namespace dataflow
+}

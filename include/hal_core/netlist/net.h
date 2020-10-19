@@ -39,6 +39,7 @@ namespace hal
     /* forward declaration */
     class Netlist;
     class Gate;
+    class Grouping;
     class NetlistInternalManager;
     class Endpoint;
 
@@ -58,7 +59,7 @@ namespace hal
         u32 get_id() const;
 
         /**
-         * Get the parent netlist of the net.
+         * Get the netlist this net is associated with.
          *
          * @returns The netlist.
          */
@@ -77,6 +78,13 @@ namespace hal
          * @param[in] name - The new name.
          */
         void set_name(const std::string& name);
+
+        /**
+         * Gets the grouping in which this net is contained.
+         *
+         * @returns The grouping.
+         */
+        Grouping* get_grouping() const;
 
         /*
          *      src specific functions
@@ -151,8 +159,7 @@ namespace hal
          *
          * @returns The (first) source endpoint.
          */
-        [[deprecated("Use get_sources() instead.")]]
-        Endpoint* get_source() const;
+        [[deprecated("Use get_sources() instead.")]] Endpoint* get_source() const;
 
         /*
          *      dst specific functions
@@ -284,6 +291,9 @@ namespace hal
 
         /* stores the name of the net */
         std::string m_name;
+
+        /* grouping */
+        Grouping* m_grouping = nullptr;
 
         /* stores the dst gate and pin id of the dst gate */
         std::vector<std::unique_ptr<Endpoint>> m_destinations;

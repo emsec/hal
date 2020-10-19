@@ -4,71 +4,73 @@ namespace hal
 {
     void endpoint_init(py::module& m)
     {
-        py::class_<Endpoint, RawPtrWrapper<Endpoint>> py_endpoint(m, "Endpoint");
+        py::class_<Endpoint, RawPtrWrapper<Endpoint>> py_endpoint(m, "Endpoint", R"(
+            An endpoint comprises the pin of a gate, the respective gate, and the connected net.
+        )");
 
         py_endpoint.def_property_readonly("gate", &Endpoint::get_gate, R"(
-        The gate of the endpoint.
+            The gate associated with the endpoint.
 
-        :type: hal_py.Gate
-)");
+            :type: hal_py.Gate
+        )");
 
         py_endpoint.def("get_gate", &Endpoint::get_gate, R"(
-        Returns the gate of the endpoint.
+            Get the gate associated with the endpoint.
 
-        :returns: The gate.
-        :rtype: hal_py.Gate
-)");
+            :returns: The gate.
+            :rtype: hal_py.Gate
+        )");
 
         py_endpoint.def_property_readonly("pin", &Endpoint::get_pin, R"(
-        The pin of the endpoint.
+            The name of the pin associated with the endpoint.
 
-        :type: str
-)");
+            :type: str
+        )");
 
         py_endpoint.def("get_pin", &Endpoint::get_pin, R"(
-        Returns the pin of the endpoint.
+            Get the name of the pin associated with the endpoint.
 
-        :returns: The pin.
-        :rtype: str
-)");
+            :returns: The name of the pin.
+            :rtype: str
+        )");
 
         py_endpoint.def_property_readonly("net", &Endpoint::get_net, R"(
-        The net of the endpoint.
+            The net associated with the endpoint.
 
-        :type: hal_py.Net
-)");
+            :type: hal_py.Net
+        )");
 
         py_endpoint.def("get_net", &Endpoint::get_net, R"(
-        Returns the net of the endpoint.
+            Get the net associated with the endpoint.
 
-        :returns: The net.
-        :rtype: hal_py.Net
-)");
+            :returns: The net.
+            :rtype: hal_py.Net
+        )");
 
         py_endpoint.def_property_readonly("is_source", &Endpoint::is_source_pin, R"(
-        True if the pin of the endpoint is a source pin, false otherwise.
+            True if the pin of the endpoint is a source (output) pin, false otherwise.
 
-        :type: bool
-)");
+            :type: bool
+        )");
 
         py_endpoint.def("is_source_pin", &Endpoint::is_source_pin, R"(
-        Checks whether the pin of the endpoint is a source pin.
+            Checks whether the pin of the endpoint is a source (output) pin.
 
-        :returns: The pin type.
-        :rtype: bool
-)");
+            :returns: True if the endpoint is an source (output) pin, false otherwise.
+            :rtype: bool
+        )");
 
         py_endpoint.def_property_readonly("is_destination", &Endpoint::is_destination_pin, R"(
-        True if the pin of the endpoint is a destination pin, false otherwise.
+            True if the pin of the endpoint is a destination (input) pin, false otherwise.
 
-        :type: bool
-)");
+            :type: bool
+        )");
 
         py_endpoint.def("is_destination_pin", &Endpoint::is_destination_pin, R"(
-        Checks whether the pin of the endpoint is a destination pin.
+            Checks whether the pin of the endpoint is a destination (input) pin.
 
-        :returns: The pin type.
-        :rtype: bool
-)");
+            :returns: True if the endpoint is an destination (input) pin, false otherwise.
+            :rtype: bool
+        )");
     }
 }    // namespace hal

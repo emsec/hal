@@ -2,6 +2,8 @@
 #include "gui/selection_details_widget/data_fields_table.h"
 #include "gui/selection_details_widget/disputed_big_icon.h"
 #include "gui/selection_details_widget/details_section_widget.h"
+#include "gui/selection_details_widget/details_general_model.h"
+#include "gui/selection_details_widget/details_table_utilities.h"
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
@@ -50,7 +52,10 @@ namespace hal
         m_general_info_button->setEnabled(false);
 
         //table initializations
-        m_general_table          = new QTableWidget(3, 2);
+        mGeneralView        = new QTableView(this);
+        mGeneralModel       = new DetailsGeneralModel(mGeneralView);
+        mGeneralModel->setDummyContent<Net>();
+        mGeneralView->setModel(mGeneralModel);
         m_source_pins_table      = new QTableWidget(0, 3);
         m_destination_pins_table = new QTableWidget(0, 3);
         m_dataFieldsTable        = new DataFieldsTable(this);
@@ -59,35 +64,15 @@ namespace hal
         m_destinationPinsSection = new DetailsSectionWidget("Destination Pins (%1)", m_destination_pins_table, this);
         m_dataFieldsSection      = new DetailsSectionWidget("Data Fields (%1)", m_dataFieldsTable, this);
 
-        DetailsSectionWidget::setDefaultTableStyle(m_general_table);
-
-        QList<QTableWidgetItem*> tmp_general_info_list = {new QTableWidgetItem("Name:"), new QTableWidgetItem("Type:"), new QTableWidgetItem("ID:")};
-        for (int i = 0; i < tmp_general_info_list.size(); i++)
-        {
-            auto item = tmp_general_info_list.at(i);
-            item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-            item->setFont(m_keyFont);
-            m_general_table->setItem(i, 0, item);
-        }
-
-        //create dynamic items that change when gate is changed
-        m_name_item = new QTableWidgetItem();
-        m_name_item->setFlags(Qt::ItemIsEnabled);
-        m_general_table->setItem(0, 1, m_name_item);
-
-        m_type_item = new QTableWidgetItem();
-        m_type_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-        m_general_table->setItem(1, 1, m_type_item);
-
-        m_id_item = new QTableWidgetItem();
-        m_id_item->setFlags(Qt::ItemIsEnabled);
-        m_general_table->setItem(2, 1, m_id_item);
+        DetailsTableUtilities::setDefaultTableStyle(mGeneralView);
+        mGeneralView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        mGeneralView->setSelectionMode(QAbstractItemView::SingleSelection);
 
         // place net icon
         QLabel* img = new DisputedBigIcon("sel_net", this);
 
         //adding things to intermediate layout (the one thats neccessary for the left spacing)
-        intermediate_layout_gt->addWidget(m_general_table);
+        intermediate_layout_gt->addWidget(mGeneralView);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
@@ -107,7 +92,6 @@ namespace hal
         //connect the tables
         connect(m_source_pins_table, &QTableWidget::itemDoubleClicked, this, &NetDetailsWidget::handle_table_item_clicked);
         connect(m_destination_pins_table, &QTableWidget::itemDoubleClicked, this, &NetDetailsWidget::handle_table_item_clicked);
-        connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_general_table_menu_requeted);
         connect(m_source_pins_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_sources_table_menu_requeted);
         connect(m_destination_pins_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_destinations_table_menu_requeted);
 
@@ -126,6 +110,7 @@ namespace hal
         connect(g_netlist_relay, &NetlistRelay::net_destination_added, this, &NetDetailsWidget::handle_net_destination_added);
         connect(g_netlist_relay, &NetlistRelay::net_destination_removed, this, &NetDetailsWidget::handle_net_destination_removed);
         connect(g_netlist_relay, &NetlistRelay::gate_name_changed, this, &NetDetailsWidget::handle_gate_name_changed);
+        connect(mGeneralModel, &DetailsGeneralModel::requireUpdate, this, &NetDetailsWidget::update);
     }
 
     NetDetailsWidget::~NetDetailsWidget()
@@ -166,21 +151,10 @@ namespace hal
         if (m_currentId == 0 || !n)
             return;
 
-        // (1) update general info section
-        m_name_item->setText(QString::fromStdString(n->get_name()));
-        m_id_item->setText(QString::number(m_currentId));
+        mGeneralModel->setContent<Net>(n);
 
-        //get net type
-        QString n_type = "Internal";
-
-        if (g_netlist->is_global_input_net(n))
-            n_type = "Input";
-        else if (g_netlist->is_global_output_net(n))
-            n_type = "Output";
-
-        m_type_item->setText(n_type);
-        m_general_table->resizeColumnsToContents();
-        m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
+        mGeneralView->resizeColumnsToContents();
+        mGeneralView->setFixedSize(DetailsTableUtilities::tableViewSize(mGeneralView,mGeneralModel->rowCount(),mGeneralModel->columnCount()));
 
         // (2) update sources section
         m_source_pins_table->clearContents();
@@ -210,7 +184,7 @@ namespace hal
         }
 
         m_source_pins_table->resizeColumnsToContents();
-        m_source_pins_table->setFixedWidth(calculate_table_size(m_source_pins_table).width());
+        m_source_pins_table->setFixedWidth(DetailsTableUtilities::tableWidgetSize(m_source_pins_table).width());
 
         // (3) update destinations section
         m_destination_pins_table->clearContents();
@@ -239,13 +213,13 @@ namespace hal
             }
         }
         m_destination_pins_table->resizeColumnsToContents();
-        m_destination_pins_table->setFixedWidth(calculate_table_size(m_destination_pins_table).width());
+        m_destination_pins_table->setFixedWidth(DetailsTableUtilities::tableWidgetSize(m_destination_pins_table).width());
 
         m_dataFieldsSection->setRowCount(n->get_data().size());
         m_dataFieldsTable->updateData(net_id,  n->get_data());
 
         //to prevent any updating(render) erros that can occur, manually tell the tables to update
-        m_general_table->update();
+        mGeneralView->update();
         m_source_pins_table->update();
         m_destination_pins_table->update();
         m_dataFieldsTable->update();
@@ -258,8 +232,7 @@ namespace hal
 
     void NetDetailsWidget::handle_net_name_changed(Net* n)
     {
-        if (m_currentId == n->get_id())
-            m_name_item->setText(QString::fromStdString(n->get_name()));
+        mGeneralModel->setContent<Net>(n);
     }
 
     void NetDetailsWidget::handle_net_source_added(Net* n, const u32 src_gate_id)
@@ -365,57 +338,6 @@ namespace hal
         g_selection_relay->relay_selection_changed(this);
     }
 
-    void NetDetailsWidget::handle_general_table_menu_requeted(const QPoint& pos)
-    {
-        if (!m_general_table->itemAt(pos) || m_general_table->itemAt(pos)->column() != 1 || m_general_table->itemAt(pos)->row() == 1)
-            return;
-
-        auto curr_item = m_general_table->itemAt(pos);
-        QMenu menu;
-        QString description;
-        QString python_command = "netlist.get_net_by_id(" + QString::number(m_currentId) + ").";
-        QString raw_string = "", raw_desc = "";
-        switch (curr_item->row())
-        {
-            case 0:
-                python_command += "get_name()";
-                description = "Extract name as python code (copy to clipboard)";
-                raw_string  = m_general_table->itemAt(pos)->text();
-                raw_desc    = "Extract raw name (copy to clipboard)";
-                break;
-            case 1:
-                break;    //there is no "explicit" type
-            case 2:
-                python_command += "get_id()";
-                description = "Extract id as python code (copy to clipboard)";
-                raw_string  = m_general_table->itemAt(pos)->text();
-                raw_desc    = "Ectract raw id (copy to clipboard)";
-                break;
-        }
-
-        if(m_general_table->itemAt(pos)->row() == 0)
-        {
-            menu.addAction("Change name", [this, curr_item](){
-                InputDialog ipd("Change name", "New name", curr_item->text());
-                if(ipd.exec() == QDialog::Accepted)
-                {
-                    g_netlist->get_net_by_id(m_currentId)->set_name(ipd.text_value().toStdString());
-                    update(m_currentId);
-                }
-            });
-        }
-
-        if (!raw_string.isEmpty())
-        {
-            menu.addAction(raw_desc, [raw_string]() { QApplication::clipboard()->setText(raw_string); });
-        }
-
-        menu.addAction(QIcon(":/icons/python"), description, [python_command]() { QApplication::clipboard()->setText(python_command); });
-
-        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
-        menu.exec();
-    }
-
     void NetDetailsWidget::handle_sources_table_menu_requeted(const QPoint& pos)
     {
         if (!m_source_pins_table->itemAt(pos) || m_source_pins_table->itemAt(pos)->column() != 2)
@@ -446,19 +368,4 @@ namespace hal
         menu.exec();
     }
 
-    QSize NetDetailsWidget::calculate_table_size(QTableWidget* table)
-    {
-        //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
-        //is the tables width far too big, so just return 0 as the size
-        if (!table->rowCount())
-            return QSize(0, 0);
-
-        int w = table->verticalHeader()->width() + 4;    // +4 seems to be needed
-        for (int i = 0; i < table->columnCount(); i++)
-            w += table->columnWidth(i);    // seems to include gridline
-        int h = table->horizontalHeader()->height() + 4;
-        for (int i = 0; i < table->rowCount(); i++)
-            h += table->rowHeight(i);
-        return QSize(w + 5, h);
-    }
 }    // namespace hal

@@ -32,7 +32,7 @@ namespace hal
     class Net;
 
     /**
-     *  Endpoint data structure for (gate, pin) tuples
+     * An endpoint comprises the pin of a gate, the respective gate, and the connected net.
      *
      * @ingroup netlist
      */
@@ -40,39 +40,39 @@ namespace hal
     {
     public:
         /**
-         * Returns the gate of the endpoint.
+         * Get the gate associated with the endpoint.
          *
          * @returns The gate.
          */
         Gate* get_gate() const;
 
         /**
-         * Returns the pin of the endpoint.
+         * Get the name of the pin associated with the endpoint.
          *
-         * @returns The pin.
+         * @returns The name of the pin.
          */
         std::string get_pin() const;
 
         /**
-         * Returns the net of the endpoint.
+         * Get the net associated with the endpoint.
          *
          * @returns The net.
          */
         Net* get_net() const;
 
         /**
-         * Checks whether the pin of the endpoint is a destination pin.
+         * Checks whether the pin of the endpoint is a source (output) pin.
          *
-         * @returns True, if the endpoint is an input pin.
-         */
-        bool is_destination_pin() const;
-
-        /**
-         * Checks whether the pin of the endpoint is a source pin.
-         *
-         * @returns True, if the endpoint is an output pin.
+         * @returns True if the endpoint is an source (output) pin, false otherwise.
          */
         bool is_source_pin() const;
+
+        /**
+         * Checks whether the pin of the endpoint is a destination (input) pin.
+         *
+         * @returns True if the endpoint is an destination (input) pin, false otherwise.
+         */
+        bool is_destination_pin() const;
 
     private:
         friend class NetlistInternalManager;

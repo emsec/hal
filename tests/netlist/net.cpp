@@ -561,6 +561,33 @@ namespace hal {
         TEST_END
     }
 
+    /**
+     * Testing the get_grouping function
+     *
+     * Functions: get_grouping
+     */
+    TEST_F(NetTest, check_get_grouping) {
+        TEST_START
+            {
+                // get the grouping of a net (nullptr), then add it to another grouping and check again
+                auto nl = test_utils::create_empty_netlist();
+                Net* test_net = nl->create_net("test_net");
+
+                EXPECT_EQ(test_net->get_grouping(), nullptr);
+
+                // move the net in the test_grouping
+                Grouping* test_grouping = nl->create_grouping("test_grouping");
+                test_grouping->assign_net(test_net);
+
+                EXPECT_EQ(test_net->get_grouping(), test_grouping);
+
+                // -- delete the test_grouping, so the net should be nullptr again
+                nl->delete_grouping(test_grouping);
+                EXPECT_EQ(test_net->get_grouping(), nullptr);
+            }
+        TEST_END
+    }
+    
     /*************************************
      * Event System
      *************************************/

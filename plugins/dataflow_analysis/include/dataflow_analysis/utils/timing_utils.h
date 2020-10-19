@@ -14,22 +14,25 @@
 
 namespace hal
 {
-    class measure_block_time_t
+    namespace dataflow
     {
-    public:
-        measure_block_time_t(const std::string& section_name)
+        class measure_block_time_t
         {
-            m_name       = section_name;
-            m_begin_time = std::chrono::high_resolution_clock::now();
-        }
+        public:
+            measure_block_time_t(const std::string& section_name)
+            {
+                m_name       = section_name;
+                m_begin_time = std::chrono::high_resolution_clock::now();
+            }
 
-        ~measure_block_time_t()
-        {
-            log_info("dataflow", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
-        }
+            ~measure_block_time_t()
+            {
+                log_info("dataflow", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
+            }
 
-    private:
-        std::string m_name;
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
-    };
-}    // namespace hal
+        private:
+            std::string m_name;
+            std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
+        };
+    }    // namespace dataflow
+}

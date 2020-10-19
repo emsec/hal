@@ -33,6 +33,7 @@
 class QVBoxLayout;
 class QHBoxLayout;
 class QScrollArea;
+class QTableView;
 class QTableWidget;
 class QTableWidgetItem;
 class QPushButton;
@@ -45,6 +46,7 @@ namespace hal
     class Gate;
     class DataFieldsTable;
     class DetailsSectionWidget;
+    class DetailsGeneralModel;
 
     class NetDetailsWidget : public DetailsWidget
     {
@@ -82,10 +84,8 @@ namespace hal
 
         //the sections to unfold
         //(1) general information section
-        QTableWidget* m_general_table;
-        QTableWidgetItem* m_name_item;
-        QTableWidgetItem* m_type_item;
-        QTableWidgetItem* m_id_item;
+        QTableView*       mGeneralView;
+        DetailsGeneralModel* mGeneralModel;
 
         //(2) source_pins section
         QTableWidget* m_source_pins_table;
@@ -100,11 +100,7 @@ namespace hal
         void handle_table_item_clicked(QTableWidgetItem* item);
 
         //straightforward context menu handlers
-        void handle_general_table_menu_requeted(const QPoint& pos);
         void handle_sources_table_menu_requeted(const QPoint& pos);
         void handle_destinations_table_menu_requeted(const QPoint& pos);
-
-        //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
-        QSize calculate_table_size(QTableWidget* table);
     };
 }    // namespace hal

@@ -5,6 +5,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/grouping.h"
 
 #include "gui/module_model/module_item.h"
 #include "gui/module_model/module_model.h"
@@ -54,6 +55,10 @@ namespace hal
         module_event_handler::register_callback("relay",
                                                 std::function<void(module_event_handler::event, Module*, u32)>(
                                                     std::bind(&NetlistRelay::relay_module_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+
+        grouping_event_handler::register_callback("relay",
+                                                std::function<void(grouping_event_handler::event, Grouping*, u32)>(
+                                                    std::bind(&NetlistRelay::relay_grouping_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
     }
 
     QColor NetlistRelay::get_module_color(const u32 id)
@@ -272,6 +277,44 @@ namespace hal
                 Q_EMIT netlist_unmarked_global_inout(object, associated_data);
                 break;
             }
+        }
+    }
+
+    void NetlistRelay::relay_grouping_event(grouping_event_handler::event ev, Grouping *object, u32 associated_data)
+    {
+
+        if (!object)
+            return;    // SHOULD NEVER BE REACHED
+
+        switch (ev)
+        {
+        case grouping_event_handler::event::created:
+            Q_EMIT grouping_created(object);
+            break;
+        case grouping_event_handler::event::removed:
+            Q_EMIT grouping_removed(object);
+            break;
+        case grouping_event_handler::name_changed:
+            Q_EMIT grouping_nameChanged(object);
+            break;
+        case grouping_event_handler::event::gate_assigned:
+            Q_EMIT grouping_gate_assigned(object,associated_data);
+            break;
+        case grouping_event_handler::event::gate_removed:
+            Q_EMIT grouping_gate_removed(object,associated_data);
+            break;
+        case grouping_event_handler::event::net_assigned:
+            Q_EMIT grouping_net_assigned(object,associated_data);
+            break;
+        case grouping_event_handler::event::net_removed:
+            Q_EMIT grouping_net_removed(object,associated_data);
+            break;
+        case grouping_event_handler::event::module_assigned:
+            Q_EMIT grouping_module_assigned(object,associated_data);
+            break;
+        case grouping_event_handler::event::module_removed:
+            Q_EMIT grouping_module_removed(object,associated_data);
+            break;
         }
     }
 

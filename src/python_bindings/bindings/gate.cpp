@@ -19,14 +19,16 @@ namespace hal
         :type: int
 )");
 
-        py_gate.def_property_readonly("netlist", [](Gate* g){return RawPtrWrapper(g->get_netlist());}, R"(
-        The parent netlist of the gate.
+        py_gate.def_property_readonly(
+            "netlist", [](Gate* g) { return RawPtrWrapper(g->get_netlist()); }, R"(
+        The netlist this gate is associated with.
 
         :type: hal_py.Netlist
 )");
 
-        py_gate.def("get_netlist", [](Gate* g){return RawPtrWrapper(g->get_netlist());}, R"(
-        Gets the parent netlist of the gate.
+        py_gate.def(
+            "get_netlist", [](Gate* g) { return RawPtrWrapper(g->get_netlist()); }, R"(
+        Get the netlist this gate is associated with.
 
         :returns: The netlist.
         :rtype: hal_py.Netlist
@@ -140,6 +142,13 @@ namespace hal
 
         :returns: The module.
         :rtype: hal_py.Module
+)");
+
+        py_gate.def("get_grouping", &Gate::get_grouping, R"(
+        Gets the grouping in which this gate is contained.
+
+        :returns: The grouping.
+        :rtype: hal_py.Grouping
 )");
 
         py_gate.def("get_boolean_function", &Gate::get_boolean_function, py::arg("name") = "", R"(

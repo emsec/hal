@@ -1,4 +1,7 @@
 #include "gui/graph_widget/items/graphics_item.h"
+#include "gui/gui_globals.h"
+#include "gui/grouping/grouping_manager_widget.h"
+#include "gui/grouping/grouping_table_model.h"
 
 namespace hal
 {
@@ -49,9 +52,16 @@ namespace hal
         return s_selectionColor;
     }
 
+    QColor GraphicsItem::groupingColor() const
+    {
+        return g_content_manager->getGroupingManagerWidget()->getModel()->colorForItem(m_item_type,m_id);
+    }
+
     QColor GraphicsItem::penColor(QStyle::State state) const
     {
         if (state & QStyle::State_Selected) return selectionColor();
+        QColor gcol = groupingColor();
+        if (gcol.isValid()) return gcol;
         return m_color;
     }
 }

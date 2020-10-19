@@ -5,18 +5,21 @@
 
 namespace hal
 {
-    namespace evaluation
+    namespace dataflow
     {
-        struct Context
+        namespace evaluation
         {
-            Context(){
-                // phase   = 0;
+            struct Context
+            {
+                Context(){
+                    // phase   = 0;
+                };
+
+                // u32 phase;
+                // std::shared_ptr<grouping> control_state;
+                std::vector<std::shared_ptr<Grouping>> partial_results;
             };
 
-            // u32 phase;
-            // std::shared_ptr<grouping> control_state;
-            std::vector<std::shared_ptr<Grouping>> partial_results;
-        };
-
-    }    // namespace evaluation
-}    // namespace hal
+        }    // namespace evaluation
+    }        // namespace dataflow
+}

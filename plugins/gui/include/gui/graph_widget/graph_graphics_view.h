@@ -71,6 +71,9 @@ namespace hal
 
         void handle_select_outputs();
         void handle_select_inputs();
+        void handleGroupingUnassign();
+        void handleGroupingAssignNew();
+        void handleGroupingAssingExisting();
 
         void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
@@ -98,6 +101,7 @@ namespace hal
         void toggle_antialiasing();
 
         bool item_draggable(GraphicsItem* item);
+        void groupingAssignInternal(Grouping* grp);
 
         struct layouter_point
         {

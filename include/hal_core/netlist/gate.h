@@ -42,6 +42,7 @@ namespace hal
     class Netlist;
     class Net;
     class Module;
+    class Grouping;
     class Endpoint;
     class NetlistInternalManager;
 
@@ -61,7 +62,7 @@ namespace hal
         u32 get_id() const;
 
         /**
-         * Gets the parent netlist of the gate.
+         * Get the netlist this gate is associated with.
          *
          * @returns The netlist.
          */
@@ -145,6 +146,13 @@ namespace hal
          * @returns The module.
          */
         Module* get_module() const;
+
+        /**
+         * Gets the grouping in which this gate is contained.
+         *
+         * @returns The grouping.
+         */
+        Grouping* get_grouping() const;
 
         /**
          * Get the boolean function associated with a specific name.
@@ -374,6 +382,9 @@ namespace hal
 
         /* owning module */
         Module* m_module;
+
+        /* grouping */
+        Grouping* m_grouping = nullptr;
 
         /* connected nets */
         std::vector<Endpoint*> m_in_endpoints;

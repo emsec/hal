@@ -28,12 +28,12 @@
 namespace hal
 {
     /**
-     * @ingroup core
+     * @ingroup utilities
      */
     namespace core_strings
     {
         /**
-         * Converts one kind of string into a different kind of string.
+         * Converts one kind of string into another kind of string.
          * 
          * @param[in] str - The string to convert.
          * @returns The converted string.

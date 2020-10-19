@@ -4,6 +4,7 @@
 #include "gui/selection_details_widget/gate_details_widget.h"
 #include "gui/selection_details_widget/net_details_widget.h"
 #include "gui/selection_details_widget/module_details_widget.h"
+#include "gui/grouping/grouping_manager_widget.h"
 #include "gui/selection_history_navigator/selection_history_navigator.h"
 
 #include "gui/gui_globals.h"
@@ -23,15 +24,18 @@
 #include <QShortcut>
 #include <QSplitter>
 #include <QListWidget>
+#include <QMenu>
+#include <QAction>
+
+const QString ADD_TO_GROUPING("Add to grouping ");
 
 namespace hal
 {
-    const QString SelectionDetailsWidget::disableIconStyle = QString("all->#515050");
-
-
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), m_numberSelectedItems(0),
           m_restoreLastSelection(new QAction),
+          m_selectionToGrouping(new QAction),
+          m_selectionToModule(new QAction),
           m_search_action(new QAction),
           m_history(new SelectionHistoryNavigator(5))
     {
@@ -89,8 +93,6 @@ namespace hal
         m_no_selection_label->setAlignment(Qt::AlignmentFlag::AlignCenter);
         m_stacked_widget->addWidget(m_no_selection_label);
 
-
-
         m_stacked_widget->setCurrentWidget(m_no_selection_label);
 
         selDetailsLayout->addWidget(m_stacked_widget);
@@ -107,12 +109,20 @@ namespace hal
         //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
 
         m_restoreLastSelection->setToolTip("Restore last selection");
+        m_selectionToGrouping->setToolTip("Assign to grouping");
+        m_selectionToModule->setToolTip("Assign to module");
+        m_selectionToGrouping->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_to_grouping_icon_path));
+        m_selectionToModule->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_to_module_icon_path));
         canRestoreSelection();
 
         m_search_action->setToolTip("Search");
         enableSearchbar(false);  // enable upon first non-zero selection
+        m_selectionToGrouping->setDisabled(true);
+        m_selectionToModule->setDisabled(true);
 
         connect(m_restoreLastSelection, &QAction::triggered, this, &SelectionDetailsWidget::restoreLastSelection);
+        connect(m_selectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
+        connect(m_selectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModule);
         connect(m_search_action, &QAction::triggered, this, &SelectionDetailsWidget::toggle_searchbar);
         connect(m_selectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
@@ -128,11 +138,93 @@ namespace hal
         canRestoreSelection();
     }
 
+    void SelectionDetailsWidget::selectionToModule()
+    {
+
+    }
+
+    void SelectionDetailsWidget::selectionToGrouping()
+    {
+        QStringList groupingNames =
+                g_content_manager->getGroupingManagerWidget()->getModel()->groupingNames();
+        if (groupingNames.isEmpty())
+            selectionToNewGrouping();
+        else
+        {
+            QMenu* contextMenu = new QMenu(this);
+
+            QAction* newGrouping = contextMenu->addAction("Create new grouping from selected items");
+            connect(newGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToNewGrouping);
+
+            contextMenu->addSeparator();
+
+            for (const QString& gn : groupingNames)
+            {
+                QAction* toGrouping = contextMenu->addAction(ADD_TO_GROUPING+gn);
+                connect(toGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToExistingGrouping);
+            }
+            contextMenu->exec(mapToGlobal(geometry().topLeft()+QPoint(100,0)));
+        }
+    }
+
+    void SelectionDetailsWidget::selectionToNewGrouping()
+    {
+        Grouping* grp = g_content_manager->getGroupingManagerWidget()->getModel()->addDefaultEntry();
+        if (grp) selectionToGroupingInternal(grp);
+    }
+
+    void SelectionDetailsWidget::selectionToExistingGrouping()
+    {
+        const QAction* action = static_cast<const QAction*>(QObject::sender());
+        QString grpName = action->text();
+        if (grpName.startsWith(ADD_TO_GROUPING)) grpName.remove(0,ADD_TO_GROUPING.size());
+        Grouping* grp =
+                g_content_manager->getGroupingManagerWidget()->getModel()->groupingByName(grpName);
+        if (grp) selectionToGroupingInternal(grp);
+    }
+
+    void SelectionDetailsWidget::selectionToGroupingInternal(Grouping* grp)
+    {
+        for (u32 mid : g_selection_relay->m_selected_modules)
+        {
+            Module* m = g_netlist->get_module_by_id(mid);
+            if (m)
+            {
+                Grouping* mg = m->get_grouping();
+                if (mg) mg->remove_module(m);
+                grp->assign_module(m);
+            }
+        }
+        for (u32 gid : g_selection_relay->m_selected_gates)
+        {
+            Gate* g = g_netlist->get_gate_by_id(gid);
+            if (g)
+            {
+                Grouping* gg = g->get_grouping();
+                if (gg) gg->remove_gate(g);
+                grp->assign_gate(g);
+            }
+        }
+        for (u32 nid : g_selection_relay->m_selected_nets)
+        {
+            Net* n = g_netlist->get_net_by_id(nid);
+            if (n)
+            {
+                Grouping* ng = n->get_grouping();
+                if (ng) ng->remove_net(n);
+                grp->assign_net(n);
+            }
+        }
+        g_selection_relay->clear();
+        g_selection_relay->relay_selection_changed(nullptr);
+        canRestoreSelection();
+    }
+
     void SelectionDetailsWidget::enableSearchbar(bool enable)
     {
         QString iconStyle = enable
                 ? m_search_icon_style
-                : disableIconStyle;
+                : m_disabled_icon_style;
         m_search_action->setIcon(gui_utility::get_styled_svg_icon(iconStyle, m_search_icon_path));
         if (!enable && m_searchbar->isVisible())
         {
@@ -148,10 +240,9 @@ namespace hal
 
         QString iconStyle = enable
                 ? m_search_icon_style
-                : disableIconStyle;
-        QString iconName(":/icons/undo2");
+                : m_disabled_icon_style;
 
-        m_restoreLastSelection->setIcon( gui_utility::get_styled_svg_icon(iconStyle,iconName));
+        m_restoreLastSelection->setIcon(gui_utility::get_styled_svg_icon(iconStyle, m_restore_icon_path));
         m_restoreLastSelection->setEnabled(enable);
     }
 
@@ -184,6 +275,10 @@ namespace hal
             m_history->storeCurrentSelection();
             canRestoreSelection();
             enableSearchbar(true);
+            m_selectionToGrouping->setEnabled(true);
+            m_selectionToModule->setEnabled(true);
+            m_selectionToGrouping->setIcon(gui_utility::get_styled_svg_icon(m_to_grouping_icon_style, m_to_grouping_icon_path));
+            m_selectionToModule->setIcon(gui_utility::get_styled_svg_icon(m_to_module_icon_style, m_to_module_icon_path));
         }
         else
         {
@@ -193,6 +288,11 @@ namespace hal
             m_selectionTreeView->populate(false);
             m_history->emptySelection();
             enableSearchbar(false);
+            m_selectionToGrouping->setDisabled(true);
+            m_selectionToModule->setDisabled(true);
+            m_selectionToGrouping->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_to_grouping_icon_path));
+            m_selectionToModule->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_to_module_icon_path));
+
             return;
         }
 
@@ -284,13 +384,25 @@ namespace hal
         if(filter_text.isEmpty())
             m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
         else
-            m_search_action->setIcon(gui_utility::get_styled_svg_icon("all->#30ac4f", m_search_icon_path)); //color test, integrate into stylsheet later
+            m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_active_icon_style, m_search_icon_path));
     }
 
     void SelectionDetailsWidget::setup_toolbar(Toolbar* toolbar)
     {
         toolbar->addAction(m_restoreLastSelection);
+        toolbar->addAction(m_selectionToGrouping);
+        toolbar->addAction(m_selectionToModule);
         toolbar->addAction(m_search_action);
+    }
+
+    QString SelectionDetailsWidget::disabled_icon_style() const
+    {
+        return m_disabled_icon_style;
+    }
+
+    void SelectionDetailsWidget::set_disabled_icon_style(const QString& style)
+    {
+        m_disabled_icon_style = style;
     }
 
     QString SelectionDetailsWidget::search_icon_path() const
@@ -303,6 +415,11 @@ namespace hal
         return m_search_icon_style;
     }
 
+    QString SelectionDetailsWidget::search_active_icon_style() const
+    {
+        return m_search_active_icon_style;
+    }
+
     void SelectionDetailsWidget::set_search_icon_path(const QString& path)
     {
         m_search_icon_path = path;
@@ -311,5 +428,70 @@ namespace hal
     void SelectionDetailsWidget::set_search_icon_style(const QString& style)
     {
         m_search_icon_style = style;
-    }    
+    }
+
+    void SelectionDetailsWidget::set_search_active_icon_style(const QString& style)
+    {
+        m_search_active_icon_style = style;
+    }
+
+    QString SelectionDetailsWidget::restore_icon_path() const
+    {
+        return m_restore_icon_path;
+    }
+
+    QString SelectionDetailsWidget::restore_icon_style() const
+    {
+        return m_restore_icon_style;
+    }
+
+    void SelectionDetailsWidget::set_restore_icon_path(const QString& path)
+    {
+        m_restore_icon_path = path;
+    }
+
+    void SelectionDetailsWidget::set_restore_icon_style(const QString& style)
+    {
+        m_restore_icon_style = style;
+    }
+    
+    QString SelectionDetailsWidget::to_grouping_icon_path() const
+    {
+        return m_to_grouping_icon_path;
+    }
+
+    QString SelectionDetailsWidget::to_grouping_icon_style() const
+    {
+        return m_to_grouping_icon_style;
+    }
+
+    void SelectionDetailsWidget::set_to_grouping_icon_path(const QString& path)
+    {
+        m_to_grouping_icon_path = path;
+    }
+
+    void SelectionDetailsWidget::set_to_grouping_icon_style(const QString& style)
+    {
+        m_to_grouping_icon_style = style;
+    }
+    
+    QString SelectionDetailsWidget::to_module_icon_path() const
+    {
+        return m_to_module_icon_path;
+    }
+    
+    QString SelectionDetailsWidget::to_module_icon_style() const
+    {
+        return m_to_module_icon_style;
+    }
+    
+    void SelectionDetailsWidget::set_to_module_icon_path(const QString& path)
+    {
+        m_to_module_icon_path = path;
+    }
+    
+    void SelectionDetailsWidget::set_to_module_icon_style(const QString& style)
+    {
+        m_to_module_icon_style = style;
+    }
 }

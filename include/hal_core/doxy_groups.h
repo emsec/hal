@@ -22,7 +22,17 @@
 //  SOFTWARE.
 
 /**
+ * @defgroup core HAL Core
+ */
+
+/**
  * @defgroup netlist Netlist
+ * @ingroup core
+ */
+
+/**
+ * @defgroup gate_lib Gate Library
+ * @ingroup netlist
  */
 
 /**
@@ -31,33 +41,31 @@
  */
 
 /**
- * @defgroup handler Event Handler
+ * @defgroup events Event System
  * @ingroup netlist
  */
 
 /**
- * @defgroup submodule Submodule Information
+ * @defgroup netlist_parser Netlist Parser
  * @ingroup netlist
  */
 
 /**
- * @defgroup core HAL Core
+ * @defgroup netlist_writer Netlist Writer
+ * @ingroup netlist
  */
 
 /**
- * @defgroup gate_decorator_system Gate Decorator System
+ * @defgroup plugins Plugin System
+ * @ingroup core
  */
 
 /**
- * @defgroup hdl_interfaces HDL Interfaces
+ * @defgroup utilities Utilities
+ * @ingroup core
  */
 
 /**
- * @defgroup hdl_parsers HDL Parsers
- * @ingroup hdl_interfaces
- */
-
-/**
- * @defgroup hdl_writers HDL Writers
- * @ingroup hdl_interfaces
+ * @defgroup pybind Python Bindings
+ * @ingroup core
  */

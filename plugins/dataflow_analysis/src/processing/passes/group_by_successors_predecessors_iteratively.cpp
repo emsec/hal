@@ -5,23 +5,26 @@
 
 namespace hal
 {
-    namespace group_by_successors_predecessors_iteratively
+    namespace dataflow
     {
-        std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool successors)
+        namespace group_by_successors_predecessors_iteratively
         {
-            auto new_state  = group_by_successors_predecessors::process(state, successors);
-            auto last_state = new_state;
-
-            u32 last_candidate_set_size = state->gates_of_group.size();
-            while (new_state->gates_of_group.size() < last_candidate_set_size)
+            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool successors)
             {
-                last_candidate_set_size = new_state->gates_of_group.size();
-                last_state              = new_state;
-                new_state               = group_by_successors_predecessors::process(new_state, successors);
+                auto new_state  = group_by_successors_predecessors::process(state, successors);
+                auto last_state = new_state;
+
+                u32 last_candidate_set_size = state->gates_of_group.size();
+                while (new_state->gates_of_group.size() < last_candidate_set_size)
+                {
+                    last_candidate_set_size = new_state->gates_of_group.size();
+                    last_state              = new_state;
+                    new_state               = group_by_successors_predecessors::process(new_state, successors);
+                }
+
+                return last_state;
             }
 
-            return last_state;
-        }
-
-    }    // namespace group_by_successors_predecessors_iteratively
-}    // namespace hal
+        }    // namespace group_by_successors_predecessors_iteratively
+    }        // namespace dataflow
+}

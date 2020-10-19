@@ -23,9 +23,9 @@
 
 #pragma once
 
-#include "hal_core/utilities/program_options.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/utilities/program_options.h"
 
 namespace hal
 {
@@ -44,44 +44,44 @@ namespace hal
     namespace netlist_factory
     {
         /**
-         * Creates a new netlist for a specific gate library.
+         * Create a new empty netlist using the specified gate library.
          *
-         * @param[in] gate_library - The underlying gate library.
-         * @returns The new netlist.
+         * @param[in] gate_library - The gate library.
+         * @returns The netlist on success, nullptr otherwise.
          */
         NETLIST_API std::unique_ptr<Netlist> create_netlist(const GateLibrary* gate_library);
 
         /**
-         * Creates a new netlist for a specific file.
+         * Create a netlist from the given file using the specified gate library file.
          *
-         * @param[in] hdl_file - Path to the HDL file.
+         * @param[in] hdl_file - Path to the file.
          * @param[in] gate_library_file - Path to the gate library file.
-         * @returns The new netlist.
+         * @returns The netlist on success, nullptr otherwise.
          */
         NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file);
 
         /**
-         * Creates a new netlist for a specific '.hal' file.
+         * Create a netlist from the given '.hal' file.
          *
-         * @param[in] hal_file - Name of the '.hal' file.
+         * @param[in] hal_file - Path to the '.hal' file.
          * file.
-         * @returns The new netlist.
+         * @returns The netlist on success, nullptr otherwise.
          */
         NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hal_file);
 
         /**
-         * Creates a new netlist entirely from program options.
-         * Invokes parsers or serializers as needed.<br>
+         * Create a netlist using information specified in command line arguments on startup.<br>
+         * Invokes parsers or serializers as needed.
          *
-         * @param[in] args - Command line options.
-         * @returns The new netlist.
+         * @param[in] args - Command line arguments.
+         * @returns The netlist on success, nullptr otherwise.
          */
         NETLIST_API std::unique_ptr<Netlist> load_netlist(const ProgramArguments& args);
 
         /**
-          * Creates a new netlist from an HDL file for each matching pre-loaded gate library.
+          * Create a netlist from a given file for each matching pre-loaded gate library.
           *
-          * @param[in] hdl_file - Path to the HDL file.
+          * @param[in] hdl_file - Path to the file.
           * @returns A vector of netlists.
           */
         NETLIST_API std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& hdl_file);
