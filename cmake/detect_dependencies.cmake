@@ -90,17 +90,6 @@ endif()
 
 find_package(Filesystem REQUIRED Final Experimental)
 
-################################
-#####   Boost
-################################
-
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED TRUE)
-find_package(Boost 1.58.0 REQUIRED)
-message(VERBOSE "Boost version: ${Boost_VERSION}")
-if(Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
-endif()
 
 ################################
 #####   RapidJSON

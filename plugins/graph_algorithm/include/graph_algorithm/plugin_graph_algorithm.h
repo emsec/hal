@@ -80,24 +80,7 @@ namespace hal
          * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)
          * @returns A set of strongly connected components where each component is a set of gates.
          */
-        std::vector<std::vector<Gate*>> get_strongly_connected_components(Netlist* const nl, const std::vector<Gate*> gates = {});
-
-        /**
-         * Returns the set of strongly connected components.
-         *
-         * @param[in] nl - Netlist (internally transformed to di-graph)
-         * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)
-         * @returns A set of strongly connected components where each component is a set of gates.
-         */
-        std::set<std::set<Gate*>> get_scc(Netlist* nl);
-
-        /**
-         * Returns the shortest path distances for one gate to all other gates.
-         *
-         * @param[in] g - Gate (starting vertex for Dijkstra's algorithm)
-         * @returns A map of path and distance to the starting gate g for all other gates in the netlist.
-         */
-        std::map<Gate*, std::tuple<std::vector<Gate*>, int>> get_dijkstra_shortest_paths(Gate* g);
+        std::set<std::set<Gate*>> get_strongly_connected_components(Netlist* nl);
 
         /**
          * Returns a graph cut for a specific gate and depth.
@@ -108,10 +91,8 @@ namespace hal
          * @param[in] synchronous_gate_type - Marks terminal vertex gate types of graph cut (typically memory gates such as flip-flops)
          * @returns A vector of gate sets where each vector entry refers to the distance to the starting gate g.
          */
-        std::vector<std::set<Gate*>> get_graph_cut(Netlist* const nl,
-                                                                   Gate* g,
-                                                                   const u32 depth                                = std::numeric_limits<u32>::max(),
-                                                                   const std::set<std::string> terminal_gate_type = std::set<std::string>());
+        std::vector<std::set<Gate*>>
+            get_graph_cut(Netlist* const nl, Gate* g, const u32 depth = std::numeric_limits<u32>::max(), const std::set<std::string> terminal_gate_type = std::set<std::string>());
 
         /*
          *      igraph specific functions
