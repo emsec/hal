@@ -48,6 +48,19 @@ qreal StandardGraphicsGate::s_outer_name_type_spacing = 3;
 qreal StandardGraphicsGate::s_first_pin_y;
 qreal StandardGraphicsGate::s_pin_y_stride;
 
+const int StandardGraphicsGate::ICON_PADDING = 3;
+const QSize StandardGraphicsGate::ICON_SIZE(s_color_bar_height - 2 * ICON_PADDING,
+                                              s_color_bar_height - 2 * ICON_PADDING);
+QPixmap* StandardGraphicsGate::sIconInstance = nullptr;
+
+const QPixmap& StandardGraphicsGate::iconPixmap()
+{
+    if (!sIconInstance) sIconInstance
+            = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_gate").scaled(ICON_SIZE)));
+    return *sIconInstance;
+}
+
+
 void StandardGraphicsGate::load_settings()
 {
     s_pen.setCosmetic(true);
@@ -104,6 +117,9 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
     {
         painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
         painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
+        QRectF iconRect(ICON_PADDING,ICON_PADDING,ICON_SIZE.width(),ICON_SIZE.height());
+        painter->fillRect(iconRect,Qt::black);
+        painter->drawPixmap(QPoint(ICON_PADDING,ICON_PADDING), iconPixmap());
 
         s_pen.setColor(penColor(option->state));
         painter->setPen(s_pen);

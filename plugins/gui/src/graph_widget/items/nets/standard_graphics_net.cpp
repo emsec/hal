@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QPointF>
+#include <QDebug>
 #include <QStyleOptionGraphicsItem>
 
 #include <limits>
@@ -115,7 +116,8 @@ namespace hal
 
             if (h.y < smallest_y)
                 smallest_y = h.y;
-            else if (h.y > biggest_y)
+
+            if (h.y > biggest_y)
                 biggest_y = h.y;
 
             QLineF line(h.small_x, h.y, h.big_x, h.y);
@@ -144,6 +146,9 @@ namespace hal
         }
 
         const qreal padding = s_split_radius + s_shape_width;
+
+        qDebug() << "net rect" << m_id << smallest_x << biggest_x << smallest_y << biggest_y << padding;
+
         m_rect = QRectF(smallest_x - padding, smallest_y - padding, biggest_x - smallest_x + padding, biggest_y - smallest_y + padding);
     }
 

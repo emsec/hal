@@ -4,6 +4,7 @@
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -14,7 +15,7 @@ namespace hal
         m_color(g_netlist_relay->get_module_color(id)),
         m_highlighted(false)
     {
-
+        qDebug() << "ModuleItem" << id << m_color.name();
     }
 
     ModuleItem::ModuleItem(const QString& name, const u32 id) :
@@ -24,6 +25,7 @@ namespace hal
         m_color(g_netlist_relay->get_module_color(id)),
         m_highlighted(false)
     {
+        qDebug() << "ModuleItem" << name << id << m_color.name();
     }
 
     void ModuleItem::insert_child(int row, ModuleItem* child)
@@ -122,6 +124,7 @@ namespace hal
     void ModuleItem::set_color(const QColor& color)
     {
         m_color = color;
+        qDebug() << "Module::set_color" << color.name();
     }
 
     void ModuleItem::set_highlighted(const bool highlighted)

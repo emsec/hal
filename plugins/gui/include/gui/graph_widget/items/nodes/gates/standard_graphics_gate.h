@@ -81,5 +81,10 @@ namespace hal
         QPointF m_type_position;
 
         QVector<QPointF> m_output_pin_positions;
+        static const int ICON_PADDING;
+        static const QSize ICON_SIZE;
+
+        static QPixmap* sIconInstance;
+        static const QPixmap& iconPixmap();
     };
 }

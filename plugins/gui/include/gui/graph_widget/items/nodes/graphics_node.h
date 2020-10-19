@@ -72,6 +72,7 @@ namespace hal
         QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
         QString m_name;
+        QString m_type;
 
         qreal m_width;
         qreal m_height;

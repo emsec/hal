@@ -93,6 +93,7 @@ namespace hal
         QString m_rename_grouping_icon_style;
 
         QAction* mColorSelectAction;
+        QAction* mToSelectionAction;
 
         QAction* m_delete_action;
         QString m_delete_icon_path;
@@ -101,6 +102,7 @@ namespace hal
         void handleCreateGroupingClicked();
         void handleRenameGroupingClicked();
         void handleColorSelectClicked();
+        void handleToSelectionClicked();
         void handleDeleteGroupingClicked();
 
         void handle_context_menu_request(const QPoint& point);

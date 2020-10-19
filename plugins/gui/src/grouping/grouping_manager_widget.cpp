@@ -27,6 +27,7 @@ namespace hal
           m_new_grouping_action(new QAction(this)),
           m_rename_action(new QAction(this)),
           mColorSelectAction(new QAction(this)),
+          mToSelectionAction(new QAction(this)),
           m_delete_action(new QAction(this))
     {
         //needed to load the properties
@@ -38,15 +39,18 @@ namespace hal
         m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
 
         mColorSelectAction->setIcon(QIcon(":/icons/color_select"));
+        mToSelectionAction->setIcon(QIcon(":icons/to_selection"));
 
         m_new_grouping_action->setToolTip("New");
         m_rename_action->setToolTip("Rename");
         mColorSelectAction->setToolTip("Color");
+        mToSelectionAction->setToolTip("To selection");
         m_delete_action->setToolTip("Delete");
 
         m_new_grouping_action->setText("Create New Grouping");
         m_rename_action->setText("Rename Grouping");
         mColorSelectAction->setText("Select Color for Grouping");
+        mToSelectionAction->setText("Add grouping to selection");
         m_delete_action->setText("Delete View");
 
         //m_open_action->setEnabled(false);
@@ -76,6 +80,7 @@ namespace hal
         connect(m_new_grouping_action, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);
         connect(m_rename_action, &QAction::triggered, this, &GroupingManagerWidget::handleRenameGroupingClicked);
         connect(mColorSelectAction, &QAction::triggered, this, &GroupingManagerWidget::handleColorSelectClicked);
+        connect(mToSelectionAction, &QAction::triggered, this, &GroupingManagerWidget::handleToSelectionClicked);
         connect(m_delete_action, &QAction::triggered, this, &GroupingManagerWidget::handleDeleteGroupingClicked);
 
         connect(mGroupingTableView, &QTableView::customContextMenuRequested, this, &GroupingManagerWidget::handle_context_menu_request);
@@ -98,6 +103,11 @@ namespace hal
         color = QColorDialog::getColor(color,this,"Select color for grouping " + name);
         if (color.isValid())
             mGroupingTableModel->setData(modelIndex,color,Qt::EditRole);
+    }
+
+    void GroupingManagerWidget::handleToSelectionClicked()
+    {
+
     }
 
     void GroupingManagerWidget::handleRenameGroupingClicked()
@@ -146,6 +156,7 @@ namespace hal
         {
             context_menu.addAction(m_rename_action);
             context_menu.addAction(mColorSelectAction);
+            context_menu.addAction(mToSelectionAction);
             context_menu.addAction(m_delete_action);
         }
 
@@ -164,6 +175,7 @@ namespace hal
         toolbar->addAction(m_new_grouping_action);
         toolbar->addAction(m_rename_action);
         toolbar->addAction(mColorSelectAction);
+        toolbar->addAction(mToSelectionAction);
         toolbar->addAction(m_delete_action);
     }
 
@@ -171,6 +183,7 @@ namespace hal
     {
         m_rename_action->setEnabled(enabled);
         mColorSelectAction->setEnabled(enabled);
+        mToSelectionAction->setEnabled(enabled);
         m_delete_action->setEnabled(enabled);
     }
 

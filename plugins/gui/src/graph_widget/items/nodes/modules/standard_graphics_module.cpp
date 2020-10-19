@@ -4,6 +4,7 @@
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
 
 #include <QFont>
 #include <QFontMetricsF>
@@ -11,6 +12,8 @@
 #include <QPen>
 #include <QStyle>
 #include <QStyleOptionGraphicsItem>
+#include <QImage>
+#include <QDebug>
 
 namespace hal
 {
@@ -46,6 +49,18 @@ namespace hal
 
     qreal StandardGraphicsModule::s_inner_name_type_spacing = 1.2;
     qreal StandardGraphicsModule::s_outer_name_type_spacing = 3;
+
+    const int StandardGraphicsModule::ICON_PADDING = 3;
+    const QSize StandardGraphicsModule::ICON_SIZE(s_color_bar_height - 2 * ICON_PADDING,
+                                                  s_color_bar_height - 2 * ICON_PADDING);
+    QPixmap* StandardGraphicsModule::sIconInstance = nullptr;
+
+    const QPixmap& StandardGraphicsModule::iconPixmap()
+    {
+        if (!sIconInstance) sIconInstance
+                = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_module").scaled(ICON_SIZE)));
+        return *sIconInstance;
+    }
 
     void StandardGraphicsModule::load_settings()
     {
@@ -88,6 +103,7 @@ namespace hal
     StandardGraphicsModule::StandardGraphicsModule(Module* m, bool adjust_size_to_grid) : GraphicsModule(m)
     {
         format(adjust_size_to_grid);
+        qDebug() << "module constructor" << m->get_id() << m_color.name();
     }
 
     void StandardGraphicsModule::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -102,15 +118,18 @@ namespace hal
         else
         {
             painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
+            qDebug() << "module paint" << m_id << m_color.name();
             painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
-
+            QRectF iconRect(ICON_PADDING,ICON_PADDING,ICON_SIZE.width(),ICON_SIZE.height());
+            painter->fillRect(iconRect,Qt::black);
+            painter->drawPixmap(QPoint(ICON_PADDING,ICON_PADDING), iconPixmap());
             s_pen.setColor(penColor(option->state));
             painter->setPen(s_pen);
 
             painter->setFont(s_name_font);
             painter->drawText(m_name_position, m_name);
             painter->setFont(s_type_font);
-            painter->drawText(m_type_position, "Module");
+            painter->drawText(m_type_position, mModuleType.isEmpty() ? QString("Module") : mModuleType);
             painter->setFont(s_pin_font);
 
             s_pen.setColor(s_text_color);
