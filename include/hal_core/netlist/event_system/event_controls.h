@@ -26,7 +26,7 @@
 #include "hal_core/defines.h"
 
 /**
- * @ingroup handler
+ * @ingroup events
  */
 
 namespace hal

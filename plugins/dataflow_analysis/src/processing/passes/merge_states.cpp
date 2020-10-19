@@ -6,34 +6,37 @@
 
 namespace hal
 {
-    namespace merge_states
+    namespace dataflow
     {
-        std::shared_ptr<Grouping> process(const std::shared_ptr<const Grouping>& state1, const std::shared_ptr<const Grouping>& state2, bool delete_from_smaller)
+        namespace merge_states
         {
-            auto new_state = std::make_shared<Grouping>(state1->netlist_abstr);
-
-            u32 id_counter = -1;
-
-            for (const auto& state : {state1, state2})
+            std::shared_ptr<Grouping> process(const std::shared_ptr<const Grouping>& state1, const std::shared_ptr<const Grouping>& state2, bool delete_from_smaller)
             {
-                for (const auto& [group_id, gates] : state->gates_of_group)
+                auto new_state = std::make_shared<Grouping>(state1->netlist_abstr);
+
+                u32 id_counter = -1;
+
+                for (const auto& state : {state1, state2})
                 {
-                    u32 new_group_id = ++id_counter;
-
-                    new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
-
-                    new_state->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
-                    for (const auto& sg : gates)
+                    for (const auto& [group_id, gates] : state->gates_of_group)
                     {
-                        new_state->parent_group_of_gate[sg] = new_group_id;
+                        u32 new_group_id = ++id_counter;
+
+                        new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
+
+                        new_state->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
+                        for (const auto& sg : gates)
+                        {
+                            new_state->parent_group_of_gate[sg] = new_group_id;
+                        }
                     }
                 }
-            }
 
-            new_state = remove_duplicates::process(new_state, delete_from_smaller);
+                new_state = remove_duplicates::process(new_state, delete_from_smaller);
 
-            return new_state;
+                return new_state;
+            }    // namespace merge_states
+
         }    // namespace merge_states
-
-    }    // namespace merge_states
-}    // namespace hal
+    }        // namespace dataflow
+}

@@ -19,6 +19,21 @@ namespace hal
         :rtype: int
 )");
 
+        py_net.def_property_readonly(
+            "netlist", [](Net* net) { return RawPtrWrapper(net->get_netlist()); }, R"(
+        The netlist this net is associated with.
+
+        :type: hal_py.Netlist
+)");
+
+        py_net.def(
+            "get_netlist", [](Net* net) { return RawPtrWrapper(net->get_netlist()); }, R"(
+        Get the netlist this net is associated with.
+
+        :returns: The netlist.
+        :rtype: hal_py.Netlist
+)");
+
         py_net.def_property("name", &Net::get_name, &Net::set_name, R"(
         The name of the net.
 
@@ -36,6 +51,13 @@ namespace hal
         Set the name of the net.
 
         :param str name: The new name.
+)");
+
+        py_net.def("get_grouping", &Net::get_grouping, R"(
+        Gets the grouping in which this net is contained.
+
+        :returns: The grouping.
+        :rtype: hal_py.Grouping
 )");
 
         py_net.def("add_source", &Net::add_source, py::arg("gate"), py::arg("pin"), R"(

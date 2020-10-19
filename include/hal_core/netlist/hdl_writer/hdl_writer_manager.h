@@ -23,13 +23,13 @@
 
 #pragma once
 
-#include "hal_core/utilities/program_options.h"
 #include "hal_core/defines.h"
+#include "hal_core/utilities/program_options.h"
 
+#include <functional>
 #include <set>
 #include <string>
 #include <tuple>
-#include <functional>
 
 namespace hal
 {
@@ -38,7 +38,7 @@ namespace hal
     class HDLWriter;
 
     /**
-     * @ingroup hdl_writers
+     * @ingroup netlist_writer
      */
     namespace hdl_writer_manager
     {

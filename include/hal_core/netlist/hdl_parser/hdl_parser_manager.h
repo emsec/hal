@@ -23,9 +23,9 @@
 
 #pragma once
 
-#include "hal_core/utilities/program_options.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser.h"
+#include "hal_core/utilities/program_options.h"
 
 #include <functional>
 #include <set>
@@ -38,7 +38,7 @@ namespace hal
     class Netlist;
 
     /**
-     * @ingroup hdl_parsers
+     * @ingroup netlist_parser
      */
     namespace hdl_parser_manager
     {

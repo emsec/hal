@@ -23,8 +23,8 @@
 
 #pragma once
 
-#include "hal_core/utilities/log.h"
 #include "hal_core/defines.h"
+#include "hal_core/utilities/log.h"
 
 #include <set>
 #include <string>
@@ -47,6 +47,8 @@ namespace hal
 
     /**
      * Enum for all possible plugin types
+     * 
+     * @ingroup plugins
      */
     enum class CORE_API PluginInterfaceType
     {
@@ -57,7 +59,7 @@ namespace hal
     };
 
     /**
-     * @ingroup core
+     * @ingroup plugins
      */
     class CORE_API BasePluginInterface
     {

@@ -35,7 +35,7 @@ namespace hal
     /**
      * LUT gate type class containing information about the internals of a specific LUT gate type.
      *
-     * @ingroup netlist
+     * @ingroup gate_lib
      */
     class GateTypeLut : public GateType
     {

@@ -1,16 +1,17 @@
 #pragma once
 
-#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/module.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
-#include "test_def.h"
+#include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
+#include "test_def.h"
 
 #include <fstream>
 #include <math.h>
@@ -27,21 +28,22 @@ namespace hal
 {
     namespace test_utils
     {
-
         /*********************************************************
          *                      Constants                        *
          *********************************************************/
 
         // Minimum and invali ids for netlists, gates, nets and modules
-        const u32 INVALID_GATE_ID   = 0;
-        const u32 INVALID_NET_ID    = 0;
-        const u32 INVALID_MODULE_ID = 0;
+        const u32 INVALID_GATE_ID     = 0;
+        const u32 INVALID_NET_ID      = 0;
+        const u32 INVALID_MODULE_ID   = 0;
+        const u32 INVALID_GROUPING_ID = 0;
 
-        const u32 MIN_MODULE_ID  = 2;
-        const u32 MIN_GATE_ID    = 1;
-        const u32 MIN_NET_ID     = 1;
-        const u32 MIN_NETLIST_ID = 1;
-        const u32 TOP_MODULE_ID  = 1;
+        const u32 MIN_MODULE_ID   = 2;
+        const u32 MIN_GATE_ID     = 1;
+        const u32 MIN_NET_ID      = 1;
+        const u32 MIN_GROUPING_ID = 1;
+        const u32 MIN_NETLIST_ID  = 1;
+        const u32 TOP_MODULE_ID   = 1;
 
         // Name for accessing our example Gate library
         static const std::string g_lib_name = "EXAMPLE_GATE_LIBRARY.lib";
@@ -409,6 +411,20 @@ namespace hal
         bool modules_are_equal(Module* m_0, Module* m_1, const bool ignore_id = false, const bool ignore_name = false);
 
         /**
+         * Checks if two groupings are equal regardless if they are in the same netlist (they doesn't share a pointer).
+         * Two groupings are considered equal iff:
+         * id is equal AND name is equal AND
+         * their gates, nets, and modules are equal according the function 'gates_are_equal', 'nets_are_equal', and 'modules_are_equal'
+         *
+         * @param g_0[in] - grouping
+         * @param g_1[in] - other grouping
+         * @param ignore_id - if the ids should be ignored in comparison
+         * @param ignore_name - if the names should be ignored in comparison
+         * @returns TRUE if g_0 and g_1 are equal under the considered conditions. FALSE otherwise.
+         */
+        bool groupings_are_equal(Grouping* g_0, Grouping* g_1, const bool ignore_id = false, const bool ignore_name = false);
+
+        /**
          * Checks if two netlist are equal regardless if they are the same object.
          * Two netlists are considered equal iff:
          * id is equal AND Gate library is equal AND their gates are equal according the function 'gates_are_equal' AND
@@ -435,6 +451,16 @@ namespace hal
          * @return the std::function object of the filter function
          */
         std::function<bool(Module*)> module_name_filter(const std::string& name);
+
+        // +++ Grouping Filter +++
+
+        /**
+         * Filter returns true for groupings with the name 'name'
+         *
+         * @param name - the name of the grouping the filter is searching for
+         * @return the std::function object of the filter function
+         */
+        std::function<bool(Grouping*)> grouping_name_filter(const std::string& name);
 
         // +++ Gate Filter +++
 
@@ -523,8 +549,6 @@ namespace hal
          */
         std::function<bool(const std::string&, Endpoint*)> adjacent_gate_type_filter(const std::string& type);
 
-
-
         /**
          * Used to test the event system. It can create callback hooks (via get_callback/get_conditional_callback) and
          * observes if/how often they are triggered (via is_triggered/get_trigger_count)
@@ -532,11 +556,11 @@ namespace hal
          * @tparam R - the return type of the callback function
          * @tparam P - all parameter types of the callback function
          */
-        template <class R, class... P> // R: callback return type, P: parameters
+        template<class R, class... P>    // R: callback return type, P: parameters
         class EventListener
         {
         private:
-            std::stack<std::tuple<P ...>> m_call_parameters;
+            std::stack<std::tuple<P...>> m_call_parameters;
 
             /**
              * Triggers a conditional event. Trigger count is only increased, if the condition specified by cond with
@@ -545,13 +569,16 @@ namespace hal
              * @param cond - a filter function that represents the conditions for given parameters
              * @param params - the actual parameters the cond is check for
              */
-            void trigger_event_conditional(std::function<bool(P ...)> cond, P ... params){
-                if(cond(params ...)){
-                    m_call_parameters.push(std::tuple<P ...>(params ...));
+            void trigger_event_conditional(std::function<bool(P...)> cond, P... params)
+            {
+                if (cond(params...))
+                {
+                    m_call_parameters.push(std::tuple<P...>(params...));
                 }
             }
+
         public:
-            EventListener() = default;
+            EventListener()  = default;
             ~EventListener() = default;
 
             /**
@@ -560,10 +587,11 @@ namespace hal
              *
              * @returns a tuple of the parameters of the last triggered event
              */
-            std::tuple<P ...> get_last_parameters()
+            std::tuple<P...> get_last_parameters()
             {
-                if(m_call_parameters.size() == 0){
-                    return std::tuple<P ...>();
+                if (m_call_parameters.size() == 0)
+                {
+                    return std::tuple<P...>();
                 }
                 return m_call_parameters.top();
             }
@@ -573,7 +601,8 @@ namespace hal
              *
              * @returns true, iff at least one time, an event was triggered
              */
-            bool is_triggered(){
+            bool is_triggered()
+            {
                 return !m_call_parameters.empty();
             }
 
@@ -582,22 +611,25 @@ namespace hal
              *
              * @returns the event count
              */
-            u32 get_event_count(){
+            u32 get_event_count()
+            {
                 return m_call_parameters.size();
             }
 
             /**
              * Resets the event history.
              */
-            void reset_events(){
-                m_call_parameters = std::stack<std::tuple<P ...>>();
+            void reset_events()
+            {
+                m_call_parameters = std::stack<std::tuple<P...>>();
             }
 
             /**
              * Removes the last event from the history
              */
-            void pop_event(){
-                if(!m_call_parameters.empty())
+            void pop_event()
+            {
+                if (!m_call_parameters.empty())
                     m_call_parameters.pop();
             }
 
@@ -608,11 +640,9 @@ namespace hal
              * @param cond - a function that represents the condition, that must be fulfilled by the parameters.
              * @returns the conditional callback hook
              */
-            std::function<R(P ...)> get_conditional_callback(std::function<bool(P ...)> cond)
+            std::function<R(P...)> get_conditional_callback(std::function<bool(P...)> cond)
             {
-                std::function<R(P ...)> f = [=](P ... params) {
-                    this->trigger_event_conditional(cond, params ...);
-                };
+                std::function<R(P...)> f = [=](P... params) { this->trigger_event_conditional(cond, params...); };
                 return f;
             }
 
@@ -622,15 +652,13 @@ namespace hal
              *
              * @return the unconditional callback hook
              */
-            std::function<R(P ...)> get_callback()
+            std::function<R(P...)> get_callback()
             {
-                return get_conditional_callback(
-                    [=](P ...) { return true; }
-                );
+                return get_conditional_callback([=](P...) { return true; });
             }
         };
 
-    } // namespace test_utils
-} // namespace hal
+    }    // namespace test_utils
+}    // namespace hal
 
 //}

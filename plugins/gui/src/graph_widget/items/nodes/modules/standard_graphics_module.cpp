@@ -192,6 +192,15 @@ namespace hal
                 //painter->drawRect(boundingRect().marginsAdded(QMarginsF(0.5, 0.5, 0.5, 0.5)));
                 painter->setRenderHint(QPainter::Antialiasing, original_antialiasing_value);
             }
+            else
+            {
+                QColor gcol = groupingColor();
+                if (gcol.isValid())
+                {
+                    QPen grPen(gcol);
+                    painter->drawRect(boundingRect());
+                }
+            }
         }
     }
 

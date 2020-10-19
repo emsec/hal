@@ -38,7 +38,7 @@ namespace hal
     class ProgramArguments;
 
     /**
-    * @ingroup core
+    * @ingroup utilities
     */
     class CORE_API ProgramOptions
     {

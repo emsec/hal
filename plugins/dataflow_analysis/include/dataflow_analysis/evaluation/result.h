@@ -6,13 +6,16 @@
 
 namespace hal
 {
-    namespace evaluation
+    namespace dataflow
     {
-        struct Result
+        namespace evaluation
         {
-            std::shared_ptr<Grouping> merged_result;
-            bool is_final_result;
-        };
+            struct Result
+            {
+                std::shared_ptr<Grouping> merged_result;
+                bool is_final_result;
+            };
 
-    }    // namespace evaluation
-}    // namespace hal
+        }    // namespace evaluation
+    }        // namespace dataflow
+}

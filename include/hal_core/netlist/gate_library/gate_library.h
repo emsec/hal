@@ -36,7 +36,7 @@ namespace hal
     /**
      * Gate library class containing information about the gates contained in the library.
      *
-     * @ingroup netlist
+     * @ingroup gate_lib
      */
     class NETLIST_API GateLibrary
     {

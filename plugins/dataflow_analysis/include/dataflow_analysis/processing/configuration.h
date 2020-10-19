@@ -4,13 +4,16 @@
 
 namespace hal
 {
-    namespace processing
+    namespace dataflow
     {
-        struct Configuration
+        namespace processing
         {
-            u32 pass_layers;
-            u32 num_threads;
-        };
+            struct Configuration
+            {
+                u32 pass_layers;
+                u32 num_threads;
+            };
 
-    }    // namespace processing
-}    // namespace hal
+        }    // namespace processing
+    }        // namespace dataflow
+}

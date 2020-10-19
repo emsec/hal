@@ -4,13 +4,16 @@
 
 namespace hal
 {
-    /* forward declaration */
-    struct Grouping;
-
-    namespace group_by_control_signals
+    namespace dataflow
     {
-        std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset);
-        std::shared_ptr<Grouping> pure_control_signals_process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset);
+        /* forward declaration */
+        struct Grouping;
 
-    }    // namespace group_by_control_signals
-}    // namespace hal
+        namespace group_by_control_signals
+        {
+            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset);
+            std::shared_ptr<Grouping> pure_control_signals_process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset);
+
+        }    // namespace group_by_control_signals
+    }        // namespace dataflow
+}

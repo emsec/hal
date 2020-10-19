@@ -32,7 +32,7 @@
 namespace hal
 {
     /**
-     * @ingroup netlist
+     * @ingroup gate_lib
      */
     class NETLIST_API GateLibraryParser
     {
