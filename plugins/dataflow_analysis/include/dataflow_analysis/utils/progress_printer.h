@@ -3,6 +3,7 @@
 #include "hal_core/defines.h"
 
 #include <iostream>
+#include <sstream>
 #include <sys/ioctl.h>    //ioctl() and TIOCGWINSZ
 #include <unistd.h>       // for STDOUT_FILENO
 
