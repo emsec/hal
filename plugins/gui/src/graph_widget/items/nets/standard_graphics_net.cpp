@@ -115,7 +115,7 @@ namespace hal
 
             if (h.y < smallest_y)
                 smallest_y = h.y;
-            else if (h.y > biggest_y)
+            if (h.y > biggest_y)
                 biggest_y = h.y;
 
             QLineF line(h.small_x, h.y, h.big_x, h.y);
