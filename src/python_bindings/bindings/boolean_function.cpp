@@ -102,14 +102,14 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_boolean_function.def_static("from_string", &BooleanFunction::from_string, py::arg("expression"), py::arg("variable_names") = std::vector<std::string>(), R"(
+        py_boolean_function.def_static("from_string", &BooleanFunction::from_string, py::arg("expression"), py::arg("variable_names"), R"(
             Parse a function from a string representation.
             Supported operators are  NOT (\"!\", \"'\"), AND (\"&\", \"*\", \" \"), OR (\"|\", \"+\"), XOR (\"^\") and brackets (\"(\", \")\").
-            Operator precedence is !' > '&' > '^' > '|'.
+            Operator precedence is '!' > '&' > '^' > '|'.
 
             Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.
 
-            If there is an error during bracket matching, X is returned for that part.
+            If there is an error during bracket matching, 'X' is returned for that part.
 
             :param str expression: String containing a Boolean function.
             :param list[str] variable_names: List of variable names.

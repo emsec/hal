@@ -3,6 +3,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/grouping.h"
 #include "netlist_test_utils.h"
+#include "hal_core/netlist/event_system/netlist_event_handler.h"
 
 namespace hal {
     using test_utils::MIN_NETLIST_ID;
@@ -1456,6 +1457,7 @@ namespace hal {
         TEST_END
     }
 
+
     /**
     * Testing the function get_unique_grouping_id
     *
@@ -1504,4 +1506,96 @@ namespace hal {
             }
         TEST_END
     }
+
+    /*************************************
+     * Event System
+     *************************************/
+
+    /**
+     * Testing the triggering of events.
+     */
+    TEST_F(NetlistTest, check_events) {
+        TEST_START
+            const u32 NO_DATA = 0xFFFFFFFF;
+            u32 nl_old_id = MIN_NETLIST_ID + 123;
+
+            std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist(nl_old_id);
+            Gate* gnd_gate = test_nl->get_gate_by_id(MIN_GATE_ID + 1);
+            Gate* vcc_gate = test_nl->get_gate_by_id(MIN_GATE_ID + 2);
+            Net* test_net = test_nl->get_net_by_id(MIN_NET_ID + 13);
+
+            // Small functions that should trigger certain events exactly once (these operations are executed in this order)
+            std::function<void(Netlist*)> trigger_id_changed = [](Netlist* nl){nl->set_id(456);};
+            std::function<void(Netlist*)> trigger_input_filename_changed = [](Netlist* nl){nl->set_input_filename("other_filename");};
+            std::function<void(Netlist*)> trigger_design_name_changed = [](Netlist* nl){nl->set_design_name("new_design_name");};
+            std::function<void(Netlist*)> trigger_device_name_changed = [](Netlist* nl){nl->set_device_name("new_device_name");};
+            std::function<void(Netlist*)> trigger_marked_global_vcc = [=](Netlist* nl){nl->mark_vcc_gate(vcc_gate);};
+            std::function<void(Netlist*)> trigger_marked_global_gnd = [=](Netlist* nl){nl->mark_gnd_gate(gnd_gate);};
+            std::function<void(Netlist*)> trigger_unmarked_global_vcc = [=](Netlist* nl){nl->unmark_vcc_gate(vcc_gate);};
+            std::function<void(Netlist*)> trigger_unmarked_global_gnd = [=](Netlist* nl){nl->unmark_gnd_gate(gnd_gate);};
+            std::function<void(Netlist*)> trigger_marked_global_input = [=](Netlist* nl){nl->mark_global_input_net(test_net);};
+            std::function<void(Netlist*)> trigger_marked_global_output = [=](Netlist* nl){nl->mark_global_output_net(test_net);};
+            std::function<void(Netlist*)> trigger_marked_global_inout = [=](Netlist* nl){return;}; // ISSUE: legacy?
+            std::function<void(Netlist*)> trigger_unmarked_global_input = [=](Netlist* nl){nl->unmark_global_input_net(test_net);};
+            std::function<void(Netlist*)> trigger_unmarked_global_output = [=](Netlist* nl){nl->unmark_global_output_net(test_net);};
+            std::function<void(Netlist*)> trigger_unmarked_global_inout = [=](Netlist* nl){return;}; // ISSUE: legacy?
+
+            // The events that are tested
+            std::vector<netlist_event_handler::event> event_type = {
+                netlist_event_handler::event::id_changed, netlist_event_handler::event::input_filename_changed,
+                netlist_event_handler::event::design_name_changed ,netlist_event_handler::event::device_name_changed,
+                netlist_event_handler::event::marked_global_vcc, netlist_event_handler::event::marked_global_gnd,
+                netlist_event_handler::event::unmarked_global_vcc, netlist_event_handler::event::unmarked_global_gnd,
+                netlist_event_handler::event::marked_global_input, netlist_event_handler::event::marked_global_output,
+                /*netlist_event_handler::event::marked_global_inout,*/ netlist_event_handler::event::unmarked_global_input,
+                netlist_event_handler::event::unmarked_global_output/*, netlist_event_handler::event::unmarked_global_inout*/};
+
+            // A list of the functions that will trigger its associated event exactly once
+            std::vector<std::function<void(Netlist*)>> trigger_event = {trigger_id_changed, trigger_input_filename_changed,
+                trigger_design_name_changed, trigger_device_name_changed, trigger_marked_global_vcc, trigger_marked_global_gnd,
+                trigger_unmarked_global_vcc, trigger_unmarked_global_gnd, trigger_marked_global_input, trigger_marked_global_output,
+                /*trigger_marked_global_inout,*/trigger_unmarked_global_input, trigger_unmarked_global_output/*, trigger_unmarked_global_inout*/ };
+
+            // The parameters of the events that are expected
+            std::vector<std::tuple<netlist_event_handler::event, Netlist*, u32>> expected_parameter = {
+                std::make_tuple(netlist_event_handler::event::id_changed, test_nl.get(), nl_old_id),
+                std::make_tuple(netlist_event_handler::input_filename_changed, test_nl.get(), NO_DATA),
+                std::make_tuple(netlist_event_handler::design_name_changed, test_nl.get(), NO_DATA),
+                std::make_tuple(netlist_event_handler::device_name_changed, test_nl.get(), NO_DATA),
+                std::make_tuple(netlist_event_handler::marked_global_vcc, test_nl.get(), vcc_gate->get_id()),
+                std::make_tuple(netlist_event_handler::marked_global_gnd, test_nl.get(), gnd_gate->get_id()),
+                std::make_tuple(netlist_event_handler::unmarked_global_vcc, test_nl.get(), vcc_gate->get_id()),
+                std::make_tuple(netlist_event_handler::unmarked_global_gnd, test_nl.get(), gnd_gate->get_id()),
+                std::make_tuple(netlist_event_handler::marked_global_input, test_nl.get(), test_net->get_id()),
+                std::make_tuple(netlist_event_handler::marked_global_output, test_nl.get(), test_net->get_id()),
+                //std::make_tuple(netlist_event_handler::marked_global_inout, test_nl.get(), test_net->get_id()),
+                std::make_tuple(netlist_event_handler::unmarked_global_input, test_nl.get(), test_net->get_id()),
+                std::make_tuple(netlist_event_handler::unmarked_global_output, test_nl.get(), test_net->get_id()),
+                //std::make_tuple(netlist_event_handler::unmarked_global_inout, test_nl.get(), test_net->get_id())
+            };
+
+            // Check all events in a for-loop
+            for(u32 event_idx = 0; event_idx < event_type.size(); event_idx++)
+            {
+                // Create the listener for the tested event
+                test_utils::EventListener<void, netlist_event_handler::event, Netlist*, u32> listener;
+                std::function<void(netlist_event_handler::event, Netlist*, u32)> cb = listener.get_conditional_callback(
+                    [=](netlist_event_handler::event ev, Netlist* nl, u32 id){return ev == event_type[event_idx];}
+                );
+                std::string cb_name = "nl_event_callback_" + std::to_string((u32)event_type[event_idx]);
+                // Register a callback of the listener
+                netlist_event_handler::register_callback(cb_name, cb);
+
+                // Trigger the event
+                trigger_event[event_idx](test_nl.get());
+
+                EXPECT_EQ(listener.get_event_count(), 1);
+                EXPECT_EQ(listener.get_last_parameters(), expected_parameter[event_idx]);
+
+                // Unregister the callback
+                netlist_event_handler::unregister_callback(cb_name);
+            }
+        TEST_END
+    }
+
 } //namespace hal
