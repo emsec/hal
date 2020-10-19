@@ -19,9 +19,8 @@ namespace hal
         }
 
         // get igraph
-        std::tuple<igraph_t, std::map<int, Gate*>> igraph_tuple = get_igraph_directed(nl);
-        igraph_t graph                                          = std::get<0>(igraph_tuple);
-        std::map<int, Gate*> vertex_to_gate                     = std::get<1>(igraph_tuple);
+        igraph_t graph;
+        std::map<int, Gate*> vertex_to_gate = get_igraph_directed(nl, &graph);
 
         igraph_vector_t membership, csize;
         igraph_integer_t number_of_clusters;
@@ -40,6 +39,12 @@ namespace hal
         {
             sccs.insert(scc.second);
         }
+
+        // cleanup
+        igraph_destroy(&graph);
+        igraph_vector_destroy(&membership);
+        igraph_vector_destroy(&csize);
+
         return sccs;
     }
 }    // namespace hal

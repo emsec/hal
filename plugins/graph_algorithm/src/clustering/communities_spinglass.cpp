@@ -20,11 +20,11 @@ namespace hal
 
         log_info("graph_algorithm", "netlist has {} gates and {} nets", nl->get_gates().size(), nl->get_nets().size());
 
-        std::tuple<igraph_t, std::map<int, Gate*>> igraph_tuple = get_igraph_directed(nl);
+        // get igraph
+        igraph_t graph;
+        std::map<int, Gate*> vertex_to_gate = get_igraph_directed(nl, &graph);
 
-        igraph_t graph                      = std::get<0>(igraph_tuple);
-        std::map<int, Gate*> vertex_to_gate = std::get<1>(igraph_tuple);
-
+        
         igraph_real_t modularity, temperature;
         igraph_vector_t membership, csize;
 

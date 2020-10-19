@@ -10,9 +10,9 @@
 
 namespace hal
 {
-    std::tuple<igraph_t, std::map<int, Gate*>> GraphAlgorithmPlugin::get_igraph_directed(Netlist* const nl)
+    std::map<int, Gate*> GraphAlgorithmPlugin::get_igraph_directed(Netlist* const nl, igraph_t* graph)
     {
-        igraph_t graph;
+        //igraph_t graph;
 
         // count all edges, remember in HAL one net(edge) has multiple sinks
         u32 edge_counter = 0;
@@ -100,7 +100,7 @@ namespace hal
             }
         }
 
-        igraph_create(&graph, &edges, 0, IGRAPH_DIRECTED);
+        igraph_create(graph, &edges, 0, IGRAPH_DIRECTED);
 
         // map with vertice id to hal-gate
         std::map<int, Gate*> vertice_to_gate;
@@ -109,13 +109,13 @@ namespace hal
             vertice_to_gate[gate->get_id() - 1] = gate;
         }
 
-        return std::make_tuple(graph, vertice_to_gate);
+        return vertice_to_gate;
     }
 
-    std::map<int, std::set<Gate*>> GraphAlgorithmPlugin::get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate)
+    std::map<int, std::set<Gate*>> GraphAlgorithmPlugin::get_memberships_for_hal(igraph_t* graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate)
     {
         // map back to HAL structures
-        int vertices_num = (int)igraph_vcount(&graph);
+        int vertices_num = (int)igraph_vcount(graph);
         std::map<int, std::set<Gate*>> community_sets;
 
         for (int i = 0; i < vertices_num; i++)

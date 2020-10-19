@@ -106,7 +106,7 @@ namespace hal
          * @param[in] vertex_to_gate - map from vertex ID in igraph to HAL gate
          * @returns map from membership id to set of gates that have the membership.
          */
-        std::map<int, std::set<Gate*>> get_memberships_for_hal(igraph_t graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate);
+        std::map<int, std::set<Gate*>> get_memberships_for_hal(igraph_t* graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate);
 
         /**
          * Return the igraph object from the provided netlist.
@@ -114,6 +114,6 @@ namespace hal
          * @param[in] nl - Netlist
          * @returns tuple of igraph_t object and map from igraph vertex id to HAL gate ID for further graph analysis.
          */
-        std::tuple<igraph_t, std::map<int, Gate*>> get_igraph_directed(Netlist* const nl);
+        std::map<int, Gate*> get_igraph_directed(Netlist* const nl, igraph_t* igraph);
     };
 }    // namespace hal
