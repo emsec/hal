@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Base Plugin Interface &mdash; hal_py v2.0.0-664-g214510c97 documentation</title>
+  <title>Base Plugin Interface &mdash; hal_py v2.0.0-678-g458beb3ac documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-664-g214510c97
+                v2.0.0-678-g458beb3ac
               </div>
             
           
@@ -85,7 +85,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">hal_py Documentation</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="core_utils.html">Core Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
@@ -104,10 +104,9 @@
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hdl_writer_manager.html">HDL Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithm</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="hal_gui.html">hal_gui Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
 </ul>
 
             
@@ -153,7 +152,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="hal_py.html">hal_py Documentation</a> &raquo;</li>
+          <li><a href="hal_py.html">HAL Core Documentation</a> &raquo;</li>
         
       <li>Base Plugin Interface</li>
     
@@ -161,7 +160,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/i_base.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/base_plugin_interface.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -177,11 +176,11 @@
   <div class="section" id="base-plugin-interface">
 <h1>Base Plugin Interface<a class="headerlink" href="#base-plugin-interface" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="hal_py.i_base">
-<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">i_base</code><a class="headerlink" href="#hal_py.i_base" title="Permalink to this definition">¶</a></dt>
+<dt id="hal_py.BasePluginInterface">
+<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">BasePluginInterface</code><a class="headerlink" href="#hal_py.BasePluginInterface" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
-<dt id="hal_py.i_base.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.i_base</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.i_base.get_name" title="Permalink to this definition">¶</a></dt>
+<dt id="hal_py.BasePluginInterface.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.BasePluginInterface</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.BasePluginInterface.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the name of the plugin.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -196,8 +195,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.i_base.get_version">
-<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: hal_py.i_base</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.i_base.get_version" title="Permalink to this definition">¶</a></dt>
+<dt id="hal_py.BasePluginInterface.get_version">
+<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: hal_py.BasePluginInterface</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.BasePluginInterface.get_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the version of the plugin.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -212,8 +211,8 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.i_base.name">
-<code class="descname">name</code><a class="headerlink" href="#hal_py.i_base.name" title="Permalink to this definition">¶</a></dt>
+<dt id="hal_py.BasePluginInterface.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.BasePluginInterface.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>The name of the plugin.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -226,8 +225,8 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.i_base.version">
-<code class="descname">version</code><a class="headerlink" href="#hal_py.i_base.version" title="Permalink to this definition">¶</a></dt>
+<dt id="hal_py.BasePluginInterface.version">
+<code class="descname">version</code><a class="headerlink" href="#hal_py.BasePluginInterface.version" title="Permalink to this definition">¶</a></dt>
 <dd><p>The version of the plugin.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

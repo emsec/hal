@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v2.0.0-664-g214510c97 documentation</title>
+  <title>Boolean Function &mdash; hal_py v2.0.0-678-g458beb3ac documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-664-g214510c97
+                v2.0.0-678-g458beb3ac
               </div>
             
           
@@ -85,7 +85,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">hal_py Documentation</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="core_utils.html">Core Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
@@ -99,15 +99,14 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_base.html">Base Plugin Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hdl_writer_manager.html">HDL Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithm</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="hal_gui.html">hal_gui Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
 </ul>
 
             
@@ -153,7 +152,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="hal_py.html">hal_py Documentation</a> &raquo;</li>
+          <li><a href="hal_py.html">HAL Core Documentation</a> &raquo;</li>
         
       <li>Boolean Function</li>
     
@@ -187,7 +186,7 @@
 <ol class="arabic">
 <li><p class="first">__init__(self: hal_py.BooleanFunction) -&gt; None</p>
 <blockquote>
-<div><p>Constructor for an empty function. Evaluates to X (undefined). Combining a function with an empty function leaves the other one unchanged.</p>
+<div><p>Constructor for an empty function. Evaluates to <code class="code docutils literal notranslate"><span class="pre">X</span></code>. Combining a function with an empty function leaves the other one unchanged.</p>
 </div></blockquote>
 </li>
 <li><p class="first">__init__(self: hal_py.BooleanFunction, variable: str) -&gt; None</p>
@@ -206,13 +205,13 @@
 </li>
 <li><p class="first">__init__(self: hal_py.BooleanFunction, arg0: hal_py.BooleanFunction.Value) -&gt; None</p>
 <blockquote>
-<div><p>Constructor for a constant, usable in other functions.
-The constant can be either X, Zero, or ONE.</p>
+<div><p>Constructor for a constant, usable in other functions.</p>
+<p>The constant can be either <code class="code docutils literal notranslate"><span class="pre">X</span></code>, <code class="code docutils literal notranslate"><span class="pre">ZERO</span></code>, or <code class="code docutils literal notranslate"><span class="pre">ONE</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.value constant:</th></tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param Value constant:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">A constant value.</td>
 </tr>
 </tbody>
@@ -222,16 +221,34 @@ The constant can be either X, Zero, or ONE.</p>
 </ol>
 </dd></dl>
 
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction, inputs: Dict[str, hal_py.BooleanFunction.Value]</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction.Value<a class="headerlink" href="#hal_py.BooleanFunction.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the function on the given inputs and returns the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference internal" href="#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><em>Value</em></a><em>]</em>) – A map from variable names to values.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The value that the function evaluates to.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value">Value</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="class">
 <dt id="hal_py.BooleanFunction.Value">
 <em class="property">class </em><code class="descname">Value</code><a class="headerlink" href="#hal_py.BooleanFunction.Value" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div>Represents the logic value that a boolean function operates on. Available are: X, ZERO, and ONE.</div></blockquote>
+<div>Represents the logic value that a boolean function operates on. Available are: <code class="code docutils literal notranslate"><span class="pre">X</span></code>, <code class="code docutils literal notranslate"><span class="pre">ZERO</span></code>, and <code class="code docutils literal notranslate"><span class="pre">ONE</span></code>.</div></blockquote>
 <p>Members:</p>
 <blockquote>
-<div><p>X</p>
-<p>ZERO</p>
-<p>ONE</p>
+<div><p>X : undefined value</p>
+<p>ZERO : value of 0</p>
+<p>ONE : value of 1</p>
 </div></blockquote>
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.Value.name">
@@ -249,11 +266,11 @@ The constant can be either X, Zero, or ONE.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>value</em><em>]</em>) – A map from variable names to values.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference internal" href="#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><em>Value</em></a><em>]</em>) – A map from variable names to values.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The value that the function evaluates to.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">hal_py.value</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value">Value</a></td>
 </tr>
 </tbody>
 </table>
@@ -263,7 +280,7 @@ The constant can be either X, Zero, or ONE.</p>
 <dt id="hal_py.BooleanFunction.from_string">
 <em class="property">static </em><code class="descname">from_string</code><span class="sig-paren">(</span><em>expression: str, variable_names: List[str]</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.from_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a function from a string representation.
-Supported operators are  NOT (“!”, “’”), AND (“&amp;”, “<a href="#id1"><span class="problematic" id="id2">*</span></a>”, ” “), OR (“<a href="#id3"><span class="problematic" id="id4">|</span></a>”, “+”), XOR (“^”) and brackets (“(“, “)”).
+Supported operators are  NOT (“!”, “’”), AND (“&amp;”, “*”, ” “), OR (“|”, “+”), XOR (“^”) and brackets (“(“, “)”).
 Operator precedence is ! &gt; &amp; &gt; ^ &gt; |</p>
 <p>Since, for example, ‘(‘ is interpreted as a new term, but might also be an intended part of a variable,
 a vector of known variable names can be supplied, which are extracted before parsing.
@@ -291,8 +308,8 @@ If there is an error during bracket matching, X is returned for that part.</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.get_truth_table">
 <code class="descname">get_truth_table</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>ordered_variables: List[str] = []</em>, <em>remove_unknown_variables: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.BooleanFunction.Value]<a class="headerlink" href="#hal_py.BooleanFunction.get_truth_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the truth table outputs of the function.
-WARNING: Exponential runtime in the number of variables!</p>
+<dd><p>Get the truth table outputs of the function.</p>
+<p>WARNING: Exponential runtime in the number of variables!</p>
 <p>Output is the vector of output values when walking the truth table in ascending order.</p>
 <p>If ordered_variables is empty, all included variables are used and ordered alphabetically.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -308,7 +325,7 @@ WARNING: Exponential runtime in the number of variables!</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The vector of output values.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[value]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference internal" href="#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value">Value</a>]</p>
 </td>
 </tr>
 </tbody>
@@ -334,12 +351,12 @@ WARNING: Exponential runtime in the number of variables!</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.is_constant_one">
 <code class="descname">is_constant_one</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.is_constant_one" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the function constantly outputs ONE.</p>
+<dd><p>Checks whether the function constantly outputs <code class="code docutils literal notranslate"><span class="pre">ONE</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant ONE, false otherwise.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant <code class="code docutils literal notranslate"><span class="pre">ONE</span></code>, false otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>
@@ -350,12 +367,12 @@ WARNING: Exponential runtime in the number of variables!</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.is_constant_zero">
 <code class="descname">is_constant_zero</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.is_constant_zero" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the function constantly outputs ZERO.</p>
+<dd><p>Checks whether the function constantly outputs <code class="code docutils literal notranslate"><span class="pre">ZERO</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant ZERO, false otherwise.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant <code class="code docutils literal notranslate"><span class="pre">ZERO</span></code>, false otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>

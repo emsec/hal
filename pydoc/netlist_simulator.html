@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Netlist Simulator &mdash; hal_py v2.0.0-678-g458beb3ac documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="GUI API" href="gui.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> hal_py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v2.0.0-678-g458beb3ac
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gui.html">GUI API</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist Simulator</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hal_py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="plugins.html">HAL Plugins Documentation</a> &raquo;</li>
+        
+      <li>Netlist Simulator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/netlist_simulator.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="netlist-simulator">
+<h1>Netlist Simulator<a class="headerlink" href="#netlist-simulator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="netlist_simulator.NetlistSimulatorPlugin">
+<em class="property">class </em><code class="descclassname">netlist_simulator.</code><code class="descname">NetlistSimulatorPlugin</code><a class="headerlink" href="#netlist_simulator.NetlistSimulatorPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="netlist_simulator.NetlistSimulatorPlugin.create_simulator">
+<code class="descname">create_simulator</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulatorPlugin</em><span class="sig-paren">)</span> &#x2192; hal::NetlistSimulator<a class="headerlink" href="#netlist_simulator.NetlistSimulatorPlugin.create_simulator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulatorPlugin.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulatorPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#netlist_simulator.NetlistSimulatorPlugin.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulatorPlugin.get_version">
+<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulatorPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#netlist_simulator.NetlistSimulatorPlugin.get_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="netlist_simulator.NetlistSimulator">
+<em class="property">class </em><code class="descclassname">netlist_simulator.</code><code class="descname">NetlistSimulator</code><a class="headerlink" href="#netlist_simulator.NetlistSimulator" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.add_clock_frequency">
+<code class="descname">add_clock_frequency</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>clock_net: hal_py.Net</em>, <em>frequency: int</em>, <em>start_at_zero: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.add_clock_frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify a net that carries the clock signal and set the clock frequency in hertz.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.add_clock_period">
+<code class="descname">add_clock_period</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>clock_net: hal_py.Net</em>, <em>period: int</em>, <em>start_at_zero: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.add_clock_period" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify a net that carries the clock signal and set the clock period in picoseconds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>clock_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net that carries the clock signal.</li>
+<li><strong>period</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The clock period from rising edge to rising edge in picoseconds.</li>
+<li><strong>start_at_zero</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Initial clock state is 0 if true, 1 otherwise.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.add_gates">
+<code class="descname">add_gates</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator, gates: List[hal_py.Gate]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.add_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add gates to the simulation set.
+Only elements in the simulation set are considered during simulation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates to add.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.get_gates">
+<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; Set[hal_py.Gate]<a class="headerlink" href="#netlist_simulator.NetlistSimulator.get_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all gates that are in the simulation set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.get_input_nets">
+<code class="descname">get_input_nets</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Net]<a class="headerlink" href="#netlist_simulator.NetlistSimulator.get_input_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all nets that are considered inputs, i.e., not driven by a gate in the simulation set or global inputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The input nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.get_output_nets">
+<code class="descname">get_output_nets</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Net]<a class="headerlink" href="#netlist_simulator.NetlistSimulator.get_output_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all output nets of gates in the simulation set that have a destination outside of the set or that are global outputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The output nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.get_simulation_state">
+<code class="descname">get_simulation_state</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; hal::Simulation<a class="headerlink" href="#netlist_simulator.NetlistSimulator.get_simulation_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current simulation state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The current simulation state.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">libnetlist_simulator.Simulation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.get_simulation_timeout">
+<code class="descname">get_simulation_timeout</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#netlist_simulator.NetlistSimulator.get_simulation_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current iteration timeout value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The iteration timeout.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.load_initial_values">
+<code class="descname">load_initial_values</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.load_initial_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the initial values for all sequential elements into the current state.
+For example, a Flip Flop may be initialized with HIGH output in FPGAs.
+This is not done automatically!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the simulator state, i.e., treat all signals as unknown.
+Does not remove gates/nets from the simulation set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.set_input">
+<code class="descname">set_input</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>net: hal_py.Net</em>, <em>value: hal::SignalValue</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.set_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the signal for a specific wire to control input signals between simulation cycles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net to set a signal value for.</li>
+<li><strong>value</strong> (<em>netlist_simulator.SignalValue</em>) – The value to set.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.set_iteration_timeout">
+<code class="descname">set_iteration_timeout</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>iterations: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.set_iteration_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the iteration timeout, i.e., the maximum number of events processed for a single point in time.
+Useful to abort in case of infinite loops.
+A value of 0 disables the timeout.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>iterations</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The iteration timeout.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.set_simulation_state">
+<code class="descname">set_simulation_state</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>state: hal::Simulation</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.set_simulation_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the simulator state, i.e., net signals, to a given state.
+Does not influence gates/nets added to the simulation set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> (<a class="reference internal" href="#netlist_simulator.Simulation" title="netlist_simulator.Simulation"><em>netlist_simulator.Simulation</em></a>) – The state to apply.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.simulate">
+<code class="descname">simulate</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>picoseconds: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.simulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate for a specific period, advancing the internal state.
+Use p set_input to control specific signals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>picoseconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The duration to simulate.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="netlist_simulator.Simulation">
+<em class="property">class </em><code class="descclassname">netlist_simulator.</code><code class="descname">Simulation</code><a class="headerlink" href="#netlist_simulator.Simulation" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="netlist_simulator.Simulation.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: netlist_simulator.Simulation</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.Simulation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.Simulation.add_event">
+<code class="descname">add_event</code><span class="sig-paren">(</span><em>self: netlist_simulator.Simulation</em>, <em>event: hal::Event</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.Simulation.add_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a custom event to the simulation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>event</strong> (<a class="reference internal" href="#netlist_simulator.Event" title="netlist_simulator.Event"><em>netlist_simulator.Event</em></a>) – The event to add.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.Simulation.get_events">
+<code class="descname">get_events</code><span class="sig-paren">(</span><em>self: netlist_simulator.Simulation</em><span class="sig-paren">)</span> &#x2192; Dict[hal_py.Net, List[hal::Event]]<a class="headerlink" href="#netlist_simulator.Simulation.get_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all events of the simulation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A map from net to associated events for that net sorted by time.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.Simulation.get_net_value">
+<code class="descname">get_net_value</code><span class="sig-paren">(</span><em>self: netlist_simulator.Simulation</em>, <em>net: hal_py.Net</em>, <em>time: int</em><span class="sig-paren">)</span> &#x2192; hal::SignalValue<a class="headerlink" href="#netlist_simulator.Simulation.get_net_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the signal value of a specific net at a specific point in time specified in picoseconds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net to inspect.</li>
+<li><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The time in picoseconds.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The net’s signal value.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">netlist_simulator.SignalValue</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="netlist_simulator.Event">
+<em class="property">class </em><code class="descclassname">netlist_simulator.</code><code class="descname">Event</code><a class="headerlink" href="#netlist_simulator.Event" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="netlist_simulator.Event.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: netlist_simulator.Event</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.Event.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="gui.html" class="btn btn-neutral float-left" title="GUI API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

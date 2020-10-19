@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v2.0.0-664-g214510c97 documentation</title>
+  <title>Index &mdash; hal_py v2.0.0-678-g458beb3ac documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v2.0.0-664-g214510c97
+                v2.0.0-678-g458beb3ac
               </div>
             
           
@@ -84,8 +84,8 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="hal_py.html">hal_py Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hal_gui.html">hal_gui Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
 </ul>
 
             
@@ -178,6 +178,8 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="boolean_function.html#hal_py.BooleanFunction.__call__">__call__() (hal_py.BooleanFunction method)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.__init__">__init__() (hal_py.BooleanFunction method)</a>
 
       <ul>
@@ -192,6 +194,10 @@
         <li><a href="gate_type_sequential.html#hal_py.GateTypeSequential.__init__">(hal_py.GateTypeSequential method)</a>
 </li>
         <li><a href="path.html#hal_py.HalPath.__init__">(hal_py.HalPath method)</a>
+</li>
+        <li><a href="netlist_simulator.html#netlist_simulator.Event.__init__">(netlist_simulator.Event method)</a>
+</li>
+        <li><a href="netlist_simulator.html#netlist_simulator.Simulation.__init__">(netlist_simulator.Simulation method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -222,9 +228,17 @@
         <li><a href="gate_type_sequential.html#hal_py.GateTypeSequential.add_boolean_functions">(hal_py.GateTypeSequential method)</a>
 </li>
       </ul></li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.add_clock_frequency">add_clock_frequency() (netlist_simulator.NetlistSimulator method)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.add_clock_period">add_clock_period() (netlist_simulator.NetlistSimulator method)</a>
+</li>
       <li><a href="gate_type_sequential.html#hal_py.GateTypeSequential.add_clock_pin">add_clock_pin() (hal_py.GateTypeSequential method)</a>
 </li>
       <li><a href="net.html#hal_py.Net.add_destination">add_destination() (hal_py.Net method)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.Simulation.add_event">add_event() (netlist_simulator.Simulation method)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.add_gates">add_gates() (netlist_simulator.NetlistSimulator method)</a>
 </li>
       <li><a href="gate_library.html#hal_py.GateLibrary.add_include">add_include() (hal_py.GateLibrary method)</a>
 </li>
@@ -246,6 +260,8 @@
       </ul></li>
       <li><a href="gate_type_sequential.html#hal_py.GateTypeSequential.add_inverted_state_output_pin">add_inverted_state_output_pin() (hal_py.GateTypeSequential method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type_lut.html#hal_py.GateTypeLut.add_output_from_init_string_pin">add_output_from_init_string_pin() (hal_py.GateTypeLut method)</a>
 </li>
       <li><a href="gate_type.html#hal_py.GateType.add_output_pin">add_output_pin() (hal_py.GateType method)</a>
@@ -256,8 +272,6 @@
         <li><a href="gate_type_sequential.html#hal_py.GateTypeSequential.add_output_pin">(hal_py.GateTypeSequential method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type.html#hal_py.GateType.add_output_pins">add_output_pins() (hal_py.GateType method)</a>
 
       <ul>
@@ -310,6 +324,8 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface">BasePluginInterface (class in hal_py)</a>
+</li>
       <li><a href="gate.html#hal_py.Gate.boolean_functions">boolean_functions (hal_py.Gate attribute)</a>
 
       <ul>
@@ -340,10 +356,10 @@
 </li>
       <li><a href="module.html#hal_py.Module.contains_gate">contains_gate() (hal_py.Module method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module.html#hal_py.Module.contains_module">contains_module() (hal_py.Module method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist.create_gate">create_gate() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.create_module">create_module() (hal_py.Netlist method)</a>
@@ -351,6 +367,8 @@
       <li><a href="netlist.html#hal_py.Netlist.create_net">create_net() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist_factory.html#hal_py.NetlistFactory.create_netlist">create_netlist() (in module hal_py.NetlistFactory)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.create_simulator">create_simulator() (netlist_simulator.NetlistSimulatorPlugin method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -422,9 +440,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="endpoint.html#hal_py.Endpoint">Endpoint (class in hal_py)</a>
 </li>
+      <li><a href="boolean_function.html#hal_py.BooleanFunction.evaluate">evaluate() (hal_py.BooleanFunction method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="boolean_function.html#hal_py.BooleanFunction.evaluate">evaluate() (hal_py.BooleanFunction method)</a>
+      <li><a href="netlist_simulator.html#netlist_simulator.Event">Event (class in netlist_simulator)</a>
 </li>
       <li><a href="gui_plugin_interface.html#hal_py.GUIPluginInterface.exec">exec() (hal_py.GUIPluginInterface method)</a>
 </li>
@@ -530,6 +550,8 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_device_name">get_device_name() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="netlist_simulator.html#netlist_simulator.Simulation.get_events">get_events() (netlist_simulator.Simulation method)</a>
+</li>
       <li><a href="gate.html#hal_py.Gate.get_fan_in_endpoints">get_fan_in_endpoints() (hal_py.Gate method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_fan_in_net">get_fan_in_net() (hal_py.Gate method)</a>
@@ -563,6 +585,8 @@
       <ul>
         <li><a href="netlist.html#hal_py.Netlist.get_gates">(hal_py.Netlist method)</a>
 </li>
+        <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.get_gates">(netlist_simulator.NetlistSimulator method)</a>
+</li>
       </ul></li>
       <li><a href="netlist.html#hal_py.Netlist.get_global_input_nets">get_global_input_nets() (hal_py.Netlist method)</a>
 </li>
@@ -591,7 +615,11 @@
       <li><a href="netlist.html#hal_py.Netlist.get_input_filename">get_input_filename() (hal_py.Netlist method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.get_input_nets">get_input_nets() (hal_py.Module method)</a>
+
+      <ul>
+        <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.get_input_nets">(netlist_simulator.NetlistSimulator method)</a>
 </li>
+      </ul></li>
       <li><a href="gate_type.html#hal_py.GateType.get_input_pin_groups">get_input_pin_groups() (hal_py.GateType method)</a>
 
       <ul>
@@ -620,12 +648,12 @@
 </li>
       <li><a href="core_utils.html#hal_py.CoreUtils.get_library_directory">get_library_directory() (in module hal_py.CoreUtils)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate.html#hal_py.Gate.get_location">get_location() (hal_py.Gate method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_location_x">get_location_x() (hal_py.Gate method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate.html#hal_py.Gate.get_location_y">get_location_y() (hal_py.Gate method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_module">get_module() (hal_py.Gate method)</a>
@@ -634,9 +662,11 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_modules">get_modules() (hal_py.Netlist method)</a>
 </li>
-      <li><a href="gate.html#hal_py.Gate.get_name">get_name() (hal_py.Gate method)</a>
+      <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.get_name">get_name() (hal_py.BasePluginInterface method)</a>
 
       <ul>
+        <li><a href="gate.html#hal_py.Gate.get_name">(hal_py.Gate method)</a>
+</li>
         <li><a href="gate_library.html#hal_py.GateLibrary.get_name">(hal_py.GateLibrary method)</a>
 </li>
         <li><a href="gate_type.html#hal_py.GateType.get_name">(hal_py.GateType method)</a>
@@ -649,12 +679,14 @@
 </li>
         <li><a href="net.html#hal_py.Net.get_name">(hal_py.Net method)</a>
 </li>
-        <li><a href="i_base.html#hal_py.i_base.get_name">(hal_py.i_base method)</a>
+        <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.get_name">(netlist_simulator.NetlistSimulatorPlugin method)</a>
 </li>
       </ul></li>
       <li><a href="endpoint.html#hal_py.Endpoint.get_net">get_net() (hal_py.Endpoint method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_net_by_id">get_net_by_id() (hal_py.Netlist method)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.Simulation.get_net_value">get_net_value() (netlist_simulator.Simulation method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_netlist">get_netlist() (hal_py.Gate method)</a>
 
@@ -671,7 +703,11 @@
       <li><a href="gate_type_lut.html#hal_py.GateTypeLut.get_output_from_init_string_pins">get_output_from_init_string_pins() (hal_py.GateTypeLut method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.get_output_nets">get_output_nets() (hal_py.Module method)</a>
+
+      <ul>
+        <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.get_output_nets">(netlist_simulator.NetlistSimulator method)</a>
 </li>
+      </ul></li>
       <li><a href="gate_type.html#hal_py.GateType.get_output_pin_groups">get_output_pin_groups() (hal_py.GateType method)</a>
 
       <ul>
@@ -730,6 +766,10 @@
 </li>
       <li><a href="core_utils.html#hal_py.CoreUtils.get_share_directory">get_share_directory() (in module hal_py.CoreUtils)</a>
 </li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.get_simulation_state">get_simulation_state() (netlist_simulator.NetlistSimulator method)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.get_simulation_timeout">get_simulation_timeout() (netlist_simulator.NetlistSimulator method)</a>
+</li>
       <li><a href="net.html#hal_py.Net.get_source">get_source() (hal_py.Net method)</a>
 </li>
       <li><a href="net.html#hal_py.Net.get_sources">get_sources() (hal_py.Net method)</a>
@@ -772,8 +812,12 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_vcc_gates">get_vcc_gates() (hal_py.Netlist method)</a>
 </li>
-      <li><a href="i_base.html#hal_py.i_base.get_version">get_version() (hal_py.i_base method)</a>
+      <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.get_version">get_version() (hal_py.BasePluginInterface method)</a>
+
+      <ul>
+        <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.get_version">(netlist_simulator.NetlistSimulatorPlugin method)</a>
 </li>
+      </ul></li>
       <li><a href="netlist.html#hal_py.Netlist.global_input_nets">global_input_nets (hal_py.Netlist attribute)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.global_output_nets">global_output_nets (hal_py.Netlist attribute)</a>
@@ -812,8 +856,6 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="i_base.html#hal_py.i_base">i_base (class in hal_py)</a>
-</li>
       <li><a href="gate.html#hal_py.Gate.id">id (hal_py.Gate attribute)</a>
 
       <ul>
@@ -854,10 +896,10 @@
 </li>
       <li><a href="gate_type_lut.html#hal_py.GateTypeLut.is_config_data_ascending_order">is_config_data_ascending_order() (hal_py.GateTypeLut method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.is_constant_one">is_constant_one() (hal_py.BooleanFunction method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.is_constant_zero">is_constant_zero() (hal_py.BooleanFunction method)</a>
 </li>
       <li><a href="endpoint.html#hal_py.Endpoint.is_destination">is_destination (hal_py.Endpoint attribute)</a>
@@ -913,6 +955,8 @@
       <li><a href="plugin_manager.html#hal_py.plugin_manager.load">load() (in module hal_py.plugin_manager)</a>
 </li>
       <li><a href="plugin_manager.html#hal_py.plugin_manager.load_all_plugins">load_all_plugins() (in module hal_py.plugin_manager)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.load_initial_values">load_initial_values() (netlist_simulator.NetlistSimulator method)</a>
 </li>
       <li><a href="netlist_factory.html#hal_py.NetlistFactory.load_netlist">load_netlist() (in module hal_py.NetlistFactory)</a>
 </li>
@@ -970,9 +1014,11 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.name">name (hal_py.BooleanFunction.Value attribute)</a>
+      <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.name">name (hal_py.BasePluginInterface attribute)</a>
 
       <ul>
+        <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.name">(hal_py.BooleanFunction.Value attribute)</a>
+</li>
         <li><a href="gate.html#hal_py.Gate.name">(hal_py.Gate attribute)</a>
 </li>
         <li><a href="gate_library.html#hal_py.GateLibrary.name">(hal_py.GateLibrary attribute)</a>
@@ -995,8 +1041,6 @@
 </li>
         <li><a href="net.html#hal_py.Net.name">(hal_py.Net attribute)</a>
 </li>
-        <li><a href="i_base.html#hal_py.i_base.name">(hal_py.i_base attribute)</a>
-</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1012,6 +1056,10 @@
         <li><a href="module.html#hal_py.Module.netlist">(hal_py.Module attribute)</a>
 </li>
       </ul></li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator">NetlistSimulator (class in netlist_simulator)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin">NetlistSimulatorPlugin (class in netlist_simulator)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.nets">nets (hal_py.Netlist attribute)</a>
 </li>
       <li><a href="net.html#hal_py.Net.num_of_destinations">num_of_destinations (hal_py.Net attribute)</a>
@@ -1068,11 +1116,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="net.html#hal_py.Net.remove_destination">remove_destination() (hal_py.Net method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module.html#hal_py.Module.remove_gate">remove_gate() (hal_py.Module method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="net.html#hal_py.Net.remove_source">remove_source() (hal_py.Net method)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.reset">reset() (netlist_simulator.NetlistSimulator method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1114,11 +1164,15 @@
 </li>
       <li><a href="gate_type_sequential.html#hal_py.GateTypeSequential.set_init_data_identifier">set_init_data_identifier() (hal_py.GateTypeSequential method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.set_input">set_input() (netlist_simulator.NetlistSimulator method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.set_input_filename">set_input_filename() (hal_py.Netlist method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module.html#hal_py.Module.set_input_port_name">set_input_port_name() (hal_py.Module method)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.set_iteration_timeout">set_iteration_timeout() (netlist_simulator.NetlistSimulator method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.set_location">set_location() (hal_py.Gate method)</a>
 </li>
@@ -1140,7 +1194,13 @@
 </li>
       <li><a href="gate_type_sequential.html#hal_py.GateTypeSequential.set_set_reset_behavior">set_set_reset_behavior() (hal_py.GateTypeSequential method)</a>
 </li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.set_simulation_state">set_simulation_state() (netlist_simulator.NetlistSimulator method)</a>
+</li>
       <li><a href="module.html#hal_py.Module.set_type">set_type() (hal_py.Module method)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.simulate">simulate() (netlist_simulator.NetlistSimulator method)</a>
+</li>
+      <li><a href="netlist_simulator.html#netlist_simulator.Simulation">Simulation (class in netlist_simulator)</a>
 </li>
       <li><a href="net.html#hal_py.Net.sources">sources (hal_py.Net attribute)</a>
 </li>
@@ -1220,7 +1280,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist.vcc_gates">vcc_gates (hal_py.Netlist attribute)</a>
 </li>
-      <li><a href="i_base.html#hal_py.i_base.version">version (hal_py.i_base attribute)</a>
+      <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.version">version (hal_py.BasePluginInterface attribute)</a>
 </li>
   </ul></td>
 </tr></table>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v2.0.0-664-g214510c97 documentation</title>
+  <title>Module &mdash; hal_py v2.0.0-678-g458beb3ac documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-664-g214510c97
+                v2.0.0-678-g458beb3ac
               </div>
             
           
@@ -85,7 +85,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">hal_py Documentation</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="core_utils.html">Core Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
@@ -99,15 +99,14 @@
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="path.html">HAL Path</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i_base.html">Base Plugin Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hdl_writer_manager.html">HDL Writer Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithm</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="hal_gui.html">hal_gui Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
 </ul>
 
             
@@ -153,7 +152,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="hal_py.html">hal_py Documentation</a> &raquo;</li>
+          <li><a href="hal_py.html">HAL Core Documentation</a> &raquo;</li>
         
       <li>Module</li>
     
@@ -505,7 +504,7 @@ Therefore it may contain some nets that are also regarded as output nets.</p>
 <dl class="method">
 <dt id="hal_py.Module.get_output_nets">
 <code class="descname">get_output_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Net]<a class="headerlink" href="#hal_py.Module.get_output_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the output nets to this module.
+<dd><p>Get the output nets to this module.     
 A module output net is either a global output of the netlist or has a destination outside of the module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -643,16 +642,14 @@ If recursive parameter is true, all indirect submodules are also included.</p>
 <dt id="hal_py.Module.input_port_names">
 <code class="descname">input_port_names</code><a class="headerlink" href="#hal_py.Module.input_port_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the mapping of all input nets to their corresponding port names.</p>
-<blockquote>
-<div><table class="docutils field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">dict[hal_py.Net,str]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
 </tr>
 </tbody>
 </table>
-</div></blockquote>
 </dd></dl>
 
 <dl class="attribute">
@@ -715,16 +712,14 @@ If recursive parameter is true, all indirect submodules are also included.</p>
 <dt id="hal_py.Module.output_port_names">
 <code class="descname">output_port_names</code><a class="headerlink" href="#hal_py.Module.output_port_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the mapping of all output nets to their corresponding port names.</p>
-<blockquote>
-<div><table class="docutils field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">dict[hal_py.Net,str]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
 </tr>
 </tbody>
 </table>
-</div></blockquote>
 </dd></dl>
 
 <dl class="attribute">
