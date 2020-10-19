@@ -11,9 +11,6 @@ namespace py = pybind11;
 
 namespace hal
 {
-    // the name in PYBIND11_MODULE/PYBIND11_PLUGIN *MUST* match the filename of the output library (without extension),
-    // otherwise you will get "ImportError: dynamic module does not define module export function" when importing the module
-
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(netlist_simulator, m)
     {
@@ -41,23 +38,7 @@ namespace hal
 
             .def("add_clock_frequency", &NetlistSimulator::add_clock_frequency, py::arg("clock_net"), py::arg("frequency"), py::arg("start_at_zero"), R"(
                 Specify a net that carries the clock signal and set the clock frequency in hertz.
-
-        py::class_<NetlistSimulator>(m, "NetlistSimulator")
-            .def("add_gates", &NetlistSimulator::add_gates)
-            .def("add_clock_hertz", &NetlistSimulator::add_clock_hertz)
-            .def("add_clock_period", &NetlistSimulator::add_clock_period)
-            .def("get_gates", &NetlistSimulator::get_gates)
-            .def("get_input_nets", &NetlistSimulator::get_input_nets)
-            .def("get_output_nets", &NetlistSimulator::get_output_nets)
-            .def("set_input", &NetlistSimulator::set_input)
-            .def("load_initial_values", &NetlistSimulator::load_initial_values)
-            .def("simulate", &NetlistSimulator::simulate)
-            .def("reset", &NetlistSimulator::reset)
-            .def("set_simulation_state", &NetlistSimulator::set_simulation_state)
-            .def("get_simulation_state", &NetlistSimulator::get_simulation_state)
-            .def("set_iteration_timeout", &NetlistSimulator::set_iteration_timeout)
-            .def("get_simulation_timeout", &NetlistSimulator::get_simulation_timeout)
-            ;
+            )")
 
             .def("add_clock_period", &NetlistSimulator::add_clock_period, py::arg("clock_net"), py::arg("period"), py::arg("start_at_zero"), R"(
                 Specify a net that carries the clock signal and set the clock period in picoseconds.
