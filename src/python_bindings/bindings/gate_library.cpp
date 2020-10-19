@@ -39,6 +39,7 @@ namespace hal
             :rtype: hal_py.hal_path
         )");
 
+        // TODO find a way to enable 'add_gate_type' via Python
         // py_gate_library.def("add_gate_type", &GateLibrary::add_gate_type, py::arg("gate_type"), R"(
         //     Add a gate type to the gate library.
 
