@@ -1,16 +1,16 @@
 #include "dataflow_analysis/pre_processing/pre_processing.h"
 
 #include "dataflow_analysis/common/netlist_abstraction.h"
-#include "hal_core/utilities/log.h"
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/net.h"
-#include "hal_core/netlist/netlist.h"
 #include "dataflow_analysis/pre_processing/counter_identification.h"
 #include "dataflow_analysis/pre_processing/register_stage_identification.h"
 #include "dataflow_analysis/utils/parallel_for_each.h"
 #include "dataflow_analysis/utils/progress_printer.h"
 #include "dataflow_analysis/utils/timing_utils.h"
 #include "dataflow_analysis/utils/utils.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/log.h"
 
 #include <algorithm>
 #include <chrono>
@@ -239,22 +239,13 @@ namespace hal
             log_info("dataflow", "pre-processing netlist...");
             measure_block_time("pre-processing");
             NetlistAbstraction netlist_abstr(netlist);
-            remove_buffers(netlist_abstr);
+            //remove_buffers(netlist_abstr);
             identify_all_sequential_gates(netlist_abstr);
-            for (auto g: netlist_abstr.all_sequential_gates){
-                    g->get_name();
-                }
-            merge_duplicated_logic_cones(netlist_abstr);
-            for (auto g: netlist_abstr.all_sequential_gates){
-                    g->get_name();
-                }
+            //merge_duplicated_logic_cones(netlist_abstr);
             identify_all_control_signals(netlist_abstr);
-            for (auto g: netlist_abstr.all_sequential_gates){
-                    g->get_name();
-                }
             identify_all_succesors_predecessors_ffs_of_all_ffs(netlist_abstr);
-            identify_counters(netlist_abstr);
-            identify_register_stages(netlist_abstr);
+            //identify_counters(netlist_abstr);
+            //identify_register_stages(netlist_abstr);
             return netlist_abstr;
         }
     }    // namespace pre_processing

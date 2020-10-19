@@ -5,6 +5,7 @@
 #include <cmath>
 #include <functional>
 #include <thread>
+#include <set>
 
 namespace hal
 {
