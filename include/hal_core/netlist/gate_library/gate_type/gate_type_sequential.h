@@ -33,98 +33,74 @@
 namespace hal
 {
     /**
-     * Sequential gate type class containing information about the internals of a specific sequential gate type.
+     * A sequential gate type contains information about its internals such as input and output pins as well as its Boolean functions.<br>
+     * In addition to the standard gate type functionality, it provides mechanisms to specify outputs that depend on the internal state of the sequential gate as well as clock pins.
      *
      * @ingroup gate_lib
      */
     class GateTypeSequential : public GateType
     {
     public:
+        /**
+         * Defines the behavior of the gate type in case both set and reset are active at the same time.
+         */
         enum class SetResetBehavior
         {
-            U = 0,    // not set
-            L = 1,
-            H = 2,
-            N = 3,
-            T = 4,
-            X = 5
+            U = 0, /**< Default value when no behavior is specified. **/
+            L = 1, /**< Set the internal state to \p 0. **/
+            H = 2, /**< Set the internal state to \p 1. **/
+            N = 3, /**< Do not change the internal state. **/
+            T = 4, /**< Toggle, i.e., invert the internal state. **/
+            X = 5  /**< Set the internal state to \p X. **/
         };
 
         /**
-         * Constructor for a sequential gate type.
+         * Construct a new LUT gate type by specifying its name and base type.
+         * The base type must be either \p ff or \p latch .
          *
          * @param[in] name - The name of the sequential gate type.
-         * @param[in] bt - The base type of the sequential gate type.
+         * @param[in] base_type - The base type of the sequential gate type.
          */
-        GateTypeSequential(const std::string& name, BaseType bt);
+        GateTypeSequential(const std::string& name, BaseType base_type);
         ~GateTypeSequential() override = default;
 
         /**
-         * Add an output pin to the collection of output pins that generate their output from the next_state function.
+         * Add an existing output pin to the collection of output pins that generate their output from the internal state of the gate.<br>
          * The pin has to be declared as an output pin beforehand.
          *
-         * @param[in] pin_name - Name of the output pin.
+         * @param[in] pin_name - The name of the output pin to add.
          */
         void add_state_output_pin(const std::string& pin_name);
 
         /**
-         * Add an output pin to the collection of output pins that generate their output from the inverted next_state function.
-         * The pin has to be declared as an output pin beforehand.
-         *
-         * @param[in] pin_name - Name of the output pin.
-         */
-        void add_inverted_state_output_pin(const std::string& pin_name);
-
-        /**
-         * Add an input pin to the collection of input pins that are connected to a clock pin.
-         * The pin has to be declared as an input pin beforehand.
-         *
-         * @param[in] pin_name - Name of the input pin.
-         */
-        void add_clock_pin(const std::string& pin_name);
-
-        /**
-         * Set the behavior that describes the internal state when both set and reset are active.
-         * Each may be one of the following:
-         *  - U: not specified for this gate type
-         *  - L: set internal state to 0
-         *  - H: set internal state to 1
-         *  - N: keep current internal state
-         *  - T: toggle internal state
-         *  - X: undefined behavior
-         *
-         * @param[in] sb1 - The value specifying the behavior for the internal state.
-         * @param[in] sb2 - The value specifying the behavior for the inverted internal state.
-         */
-        void set_set_reset_behavior(SetResetBehavior sb1, SetResetBehavior sb2);
-
-        /**
-         * Set the category in which to find the INIT string.
-         *
-         * @param[in] category - The category as a string.
-         */
-        void set_init_data_category(const std::string& category);
-
-        /**
-         * Set the identifier used to specify the INIT string.
-         *
-         * @param[in] identifier - The identifier as a string.
-         */
-        void set_init_data_identifier(const std::string& identifier);
-
-        /**
-         * Get the output pins that use the next_state function to generate their output.
+         * Get the output pins that use the internal state of the gate to generate their output.
          *
          * @returns The set of output pin names.
          */
         std::unordered_set<std::string> get_state_output_pins() const;
 
         /**
-         * Get the output pins that use the inverted next_state function to generate their output.
+         * Add an existing output pin to the collection of output pins that generate their output from the inverted internal state of the gate.<br>
+         * The pin has to be declared as an output pin beforehand.
+         *
+         * @param[in] pin_name - The name of the output pin to add.
+         */
+        void add_inverted_state_output_pin(const std::string& pin_name);
+
+        /**
+         * Get the output pins that use the inverted internal state of the gate to generate their output.
          *
          * @returns The set of output pin names.
          */
         std::unordered_set<std::string> get_inverted_state_output_pins() const;
+
+        /**
+         * Add an existing input pin to the collection of input pins that are connected to a clock signal.<br>
+         * The pin has to be declared as an input pin beforehand.
+         *
+         * @param[in] pin_name - The name of the input pin to add.
+         */
+        void add_clock_pin(const std::string& pin_name);
 
         /**
          * Get the input pins that that are connected to a clock signal.
@@ -134,30 +110,45 @@ namespace hal
         std::unordered_set<std::string> get_clock_pins() const;
 
         /**
-         * Get the behavior of the internal state and the inverted internal state when both set and reset are active.
-         * May be one of the following:
-         *  - U: not specified for this gate type
-         *  - L: set (inverted) internal state to 0
-         *  - H: set (inverted) internal state to 1
-         *  - N: keep current (inverted) internal state
-         *  - T: toggle (inverted) internal state
-         *  - X: undefined behavior
+         * Set the behavior that describes the internal state when both set and reset are active at the same time.
          *
-         * @returns The boolean function.
+         * @param[in] sb1 - The value specifying the behavior for the internal state.
+         * @param[in] sb2 - The value specifying the behavior for the inverted internal state.
+         */
+        void set_set_reset_behavior(SetResetBehavior sb1, SetResetBehavior sb2);
+
+        /**
+         * Get the behavior of the internal state and the inverted internal state when both set and reset are active at the same time.
+         *
+         * @returns The values specifying the behavior for the internal and inverted internal state.
          */
         std::pair<SetResetBehavior, SetResetBehavior> get_set_reset_behavior() const;
 
         /**
-         * Get the category in which to find the INIT string.
+         * Set the data category in which to find the initialization value.
          *
-         * @returns The string describing the category.
+         * @param[in] category - The data category.
+         */
+        void set_init_data_category(const std::string& category);
+
+        /**
+         * Get the data category in which to find the initialization value.
+         *
+         * @returns The data category.
          */
         std::string get_init_data_category() const;
 
         /**
-         * Get the identifier used to specify the INIT string.
+         * Set the data identifier used to specify the initialization value.
          *
-         * @returns The identifier as a string.
+         * @param[in] identifier - The data identifier.
+         */
+        void set_init_data_identifier(const std::string& identifier);
+
+        /**
+         * Get the data identifier used to specify the initialization value.
+         *
+         * @returns The data identifier.
          */
         std::string get_init_data_identifier() const;
 
