@@ -13,6 +13,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/plugin_system/plugin_interface_gui.h"
 #include "hal_core/plugin_system/plugin_manager.h"
@@ -156,6 +157,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void netlist_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL netlist in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void netlist_utils_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL gate in a python module.
