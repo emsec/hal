@@ -1,7 +1,7 @@
 
-#include "graph_algorithm/plugin_graph_algorithm.h"
-
 #include "hal_core/python_bindings/python_bindings.h"
+
+#include "graph_algorithm/plugin_graph_algorithm.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
@@ -11,35 +11,30 @@
 #pragma clang diagnostic ignored "-Wshadow-field-in-constructor-modified"
 #endif
 
+#include "hal_core/defines.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/utilities/utils.h"
-#include "hal_core/defines.h"
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/net.h"
-#include "hal_core/netlist/netlist.h"
-
 #pragma GCC diagnostic pop
 
+namespace py = pybind11;
 namespace hal
 {
-    namespace py = pybind11;
-
-    // the name in PYBIND11_MODULE/PYBIND11_PLUGIN *MUST* match the filename of the output library (without extension),
-    // otherwise you will get "ImportError: dynamic module does not define module export function" when importing the module
-
 #ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(libgraph_algorithm, m)
+    PYBIND11_MODULE(graph_algorithm, m)
     {
-        m.doc() = "hal libgraph_algorithm python bindings";
+        m.doc() = "hal GraphAlgorithmPlugin python bindings";
 #else
-    PYBIND11_PLUGIN(libgraph_algorithm)
+    PYBIND11_PLUGIN(graph_algorithm)
     {
-        py::module m("libgraph_algorithm", "hal graph_algorithm python bindings");
+        py::module m("graph_algorithm", "hal GraphAlgorithmPlugin python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<GraphAlgorithmPlugin, RawPtrWrapper<GraphAlgorithmPlugin>, BasePluginInterface>(m, "GraphAlgorithmPlugin")
@@ -65,11 +60,10 @@ namespace hal
                 :returns: Plugin version.
                 :rtype: str
                 )")
-            .def(
-                "get_communities_fast_greedy",
-                &GraphAlgorithmPlugin::get_communities_fast_greedy,
-                py::arg("netlist"),
-                R"(
+            .def("get_communities_fast_greedy",
+                 &GraphAlgorithmPlugin::get_communities_fast_greedy,
+                 py::arg("netlist"),
+                 R"(
                 Returns the map of community-IDs to communities running the fast-greedy clustering algorithm.
 
                 :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
@@ -77,11 +71,10 @@ namespace hal
                 :returns: A map of clusters.
                 :rtype: dict[set[hal_py.get_gate()]]
                 )")
-            .def(
-                "get_communities_multilevel",
-                &GraphAlgorithmPlugin::get_communities_multilevel,
-                py::arg("netlist"),
-                R"(
+            .def("get_communities_multilevel",
+                 &GraphAlgorithmPlugin::get_communities_multilevel,
+                 py::arg("netlist"),
+                 R"(
                 Returns the map of community-IDs to communities running the multilevel clustering algorithm.
 
                 :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
@@ -97,12 +90,11 @@ namespace hal
                 :returns: A map of clusters.
                 :rtype: dict[int,set[hal_py.get_gate()]]
                 )")
-            .def(
-                "get_strongly_connected_components",
-                &GraphAlgorithmPlugin::get_strongly_connected_components,
-                py::arg("netlist"),
-                py::arg("gates"),
-                R"(
+            .def("get_strongly_connected_components",
+                 &GraphAlgorithmPlugin::get_strongly_connected_components,
+                 py::arg("netlist"),
+                 py::arg("gates"),
+                 R"(
                 Returns the set of strongly connected components.
 
                 :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
@@ -135,8 +127,9 @@ namespace hal
                 :rtype: list[set[hal_py.get_gate()]]
                 )");
 
-#ifndef PYBIND11_MODULE
-        return m.ptr();
-#endif    // PYBIND11_MODULE
+        // #ifndef PYBIND11_MODULE
+        //         return m.ptr();
+        // #endif    // PYBIND11_MODULE
+        //     }
     }
 }    // namespace hal

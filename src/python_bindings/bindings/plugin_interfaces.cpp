@@ -2,6 +2,7 @@
 
 namespace hal
 {
+
     class Pyi_base : public BasePluginInterface
     {
     public:
@@ -40,7 +41,7 @@ namespace hal
 
     void plugin_interfaces_init(py::module& m)
     {
-        py::class_<BasePluginInterface, RawPtrWrapper<BasePluginInterface>, Pyi_base> py_i_base(m, "i_base");
+        py::class_<BasePluginInterface, RawPtrWrapper<BasePluginInterface>, Pyi_base> py_i_base(m, "BasePluginInterface");
 
         py_i_base.def_property_readonly("name", &BasePluginInterface::get_name, R"(
         The name of the plugin.
