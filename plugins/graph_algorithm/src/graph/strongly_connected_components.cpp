@@ -31,7 +31,7 @@ namespace hal
         igraph_clusters(&graph, &membership, &csize, &number_of_clusters, IGRAPH_STRONG);
 
         // map back to HAL structures
-        std::map<int, std::set<Gate*>> ssc_membership = get_memberships_for_hal(graph, membership, vertex_to_gate);
+        std::map<int, std::set<Gate*>> ssc_membership = get_memberships_for_hal(&graph, membership, vertex_to_gate);
 
         // convert to set
         std::set<std::set<Gate*>> sccs;

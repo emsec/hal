@@ -42,7 +42,7 @@ namespace hal
         {
             community_sets[(int)VECTOR(membership)[i]].insert(vertex_to_gate[i]);
         }
-        igraph_vector_destroy(&membership);
+        //igraph_vector_destroy(&membership);
 
         igraph_destroy(&graph);
         igraph_vector_destroy(&membership);
