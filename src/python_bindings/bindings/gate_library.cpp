@@ -6,7 +6,7 @@ namespace hal
     {
         py::class_<GateLibrary> py_gate_library(m, "GateLibrary", R"(Gate library class containing information about the gates contained in the library.)");
 
-        py_gate_library.def(py::init<>(), py::arg("path"), py::arg("name"), R"(
+        py_gate_library.def(py::init<const std::filesystem::path&, const std::string&>(), py::arg("path"), py::arg("name"), R"(
             Construct a gate library by specifying its name and the path to the file that describes the library.
             
             :param hal_py.hal_path path: The path to the gate library file.
