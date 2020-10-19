@@ -69,7 +69,13 @@ namespace hal
 
         for (auto net : nl->get_nets())
         {
-            Gate* src_gate = net->get_source()->get_gate();
+            Gate* src_gate;
+
+            if (net->get_sources().size() != 0)
+            {
+                src_gate = net->get_sources().at(0)->get_gate();
+            }
+            
             std::vector<Gate*> dst_gates;
 
             auto dst_gates_endpoints = net->get_destinations();
