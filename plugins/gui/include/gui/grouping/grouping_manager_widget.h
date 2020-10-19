@@ -51,8 +51,8 @@ namespace hal
         Q_PROPERTY(QString rename_grouping_icon_style READ rename_grouping_icon_style WRITE set_rename_grouping_icon_style)
         Q_PROPERTY(QString delete_icon_path READ delete_icon_path WRITE set_delete_icon_path)
         Q_PROPERTY(QString delete_icon_style READ delete_icon_style WRITE set_delete_icon_style)
-        Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
-        Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
+        // Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
+        // Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
         Q_PROPERTY(QString color_select_icon_path READ color_select_icon_path WRITE set_color_select_icon_path)
         Q_PROPERTY(QString color_select_icon_style READ color_select_icon_style WRITE set_color_select_icon_style)
 
@@ -67,8 +67,8 @@ namespace hal
         QString rename_grouping_icon_style() const;
         QString delete_icon_path() const;
         QString delete_icon_style() const;
-        QString open_icon_path() const;
-        QString open_icon_style() const;
+        // QString open_icon_path() const;
+        // QString open_icon_style() const;
         QString color_select_icon_path() const;
         QString color_select_icon_style() const;
 
@@ -76,7 +76,7 @@ namespace hal
         void set_new_grouping_icon_style(const QString &style);
         void set_rename_grouping_icon_path(const QString &path);
         void set_rename_grouping_icon_style(const QString &style);
-        void set_delete_icon_path(const QString &path);
+        void x(const QString &path);
         void set_delete_icon_style(const QString &style);
         void set_open_icon_path(const QString &path);
         void set_open_icon_style(const QString &style);
