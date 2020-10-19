@@ -76,10 +76,10 @@ namespace hal
         void set_new_grouping_icon_style(const QString &style);
         void set_rename_grouping_icon_path(const QString &path);
         void set_rename_grouping_icon_style(const QString &style);
-        void x(const QString &path);
+        void set_delete_icon_path(const QString &path);
         void set_delete_icon_style(const QString &style);
-        void set_open_icon_path(const QString &path);
-        void set_open_icon_style(const QString &style);
+        // void set_open_icon_path(const QString &path);
+        // void set_open_icon_style(const QString &style);
         void set_color_select_icon_path(const QString &path);
         void set_color_select_icon_style(const QString &style);
 
