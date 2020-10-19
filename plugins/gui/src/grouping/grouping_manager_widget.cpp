@@ -27,7 +27,8 @@ namespace hal
           m_new_grouping_action(new QAction(this)),
           m_rename_action(new QAction(this)),
           mColorSelectAction(new QAction(this)),
-          m_delete_action(new QAction(this))
+          m_delete_action(new QAction(this)),
+          m_to_selection_action(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -36,18 +37,20 @@ namespace hal
         m_new_grouping_action->setIcon(gui_utility::get_styled_svg_icon(m_new_grouping_icon_style, m_new_grouping_icon_path));
         m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_rename_grouping_icon_style, m_rename_grouping_icon_path));
         m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
-
         mColorSelectAction->setIcon(gui_utility::get_styled_svg_icon(m_color_select_icon_style, m_color_select_icon_path));
+        m_to_selection_action->setIcon(gui_utility::get_styled_svg_icon(m_to_selection_icon_style, m_to_selection_icon_path));
 
         m_new_grouping_action->setToolTip("New");
         m_rename_action->setToolTip("Rename");
         mColorSelectAction->setToolTip("Color");
         m_delete_action->setToolTip("Delete");
+        m_to_selection_action->setToolTip("Select Grouping in Graph");
 
         m_new_grouping_action->setText("Create New Grouping");
         m_rename_action->setText("Rename Grouping");
         mColorSelectAction->setText("Select Color for Grouping");
         m_delete_action->setText("Delete View");
+        m_to_selection_action->setText("Select Grouping in Graph");
 
         //m_open_action->setEnabled(false);
         //m_rename_action->setEnabled(false);
@@ -146,6 +149,7 @@ namespace hal
         {
             context_menu.addAction(m_rename_action);
             context_menu.addAction(mColorSelectAction);
+            context_menu.addAction(m_to_selection_action);
             context_menu.addAction(m_delete_action);
         }
 
@@ -164,6 +168,7 @@ namespace hal
         toolbar->addAction(m_new_grouping_action);
         toolbar->addAction(m_rename_action);
         toolbar->addAction(mColorSelectAction);
+        toolbar->addAction(m_to_selection_action);
         toolbar->addAction(m_delete_action);
     }
 
@@ -220,6 +225,16 @@ namespace hal
         return m_color_select_icon_style;
     }
 
+    QString GroupingManagerWidget::to_selection_icon_path() const
+    {
+        return m_to_selection_icon_path;
+    }
+
+    QString GroupingManagerWidget::to_selection_icon_style() const
+    {
+        return m_to_selection_icon_style;
+    }
+
     void GroupingManagerWidget::set_new_grouping_icon_path(const QString& path)
     {
         m_new_grouping_icon_path = path;
@@ -258,5 +273,15 @@ namespace hal
     void GroupingManagerWidget::set_color_select_icon_style(const QString& style)
     {
         m_color_select_icon_style = style;
+    }
+
+    void GroupingManagerWidget::set_to_selection_icon_path(const QString& path)
+    {
+        m_to_selection_icon_path = path;
+    }
+
+    void GroupingManagerWidget::set_to_selection_icon_style(const QString& style)
+    {
+        m_to_selection_icon_style = style;
     }
 }
