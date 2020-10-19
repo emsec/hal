@@ -39,11 +39,11 @@ namespace hal
             :rtype: hal_py.hal_path
         )");
 
-        py_gate_library.def("add_gate_type", &GateLibrary::add_gate_type, py::arg("gate_type"), R"(
-            Add a gate type to the gate library.
+        // py_gate_library.def("add_gate_type", &GateLibrary::add_gate_type, py::arg("gate_type"), R"(
+        //     Add a gate type to the gate library.
 
-            :param hal_py.GateType gate_type: The gate type to add.
-        )");
+        //     :param hal_py.GateType gate_type: The gate type to add.
+        // )");
 
         py_gate_library.def("contains_gate_type", &GateLibrary::contains_gate_type, py::arg("gate_type"), R"(
             Check whether the given gate type is contained in this library.
