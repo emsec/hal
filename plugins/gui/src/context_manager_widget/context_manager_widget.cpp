@@ -30,7 +30,7 @@
 namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
-        : ContentWidget("View Manager", parent), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
+        : ContentWidget("Views", parent), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
           m_delete_action(new QAction(this)), m_open_action(new QAction(this)), m_search_action(new QAction(this))
     {
         //needed to load the properties
