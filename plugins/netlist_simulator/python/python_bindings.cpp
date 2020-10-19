@@ -1,34 +1,30 @@
+#include "hal_core/python_bindings/python_bindings.h"
+
+#include "netlist_simulator/netlist_simulator.h"
+#include "netlist_simulator/plugin_netlist_simulator.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
 
-#include "hal_core/python_bindings/python_bindings.h"
-
-#include "netlist_simulator/plugin_netlist_simulator.h"
-#include "netlist_simulator/netlist_simulator.h"
-
-#include "hal_core/python_bindings/python_bindings.h"
-
 namespace py = pybind11;
 
 namespace hal
 {
-
-// the name in PYBIND11_MODULE/PYBIND11_PLUGIN *MUST* match the filename of the output library (without extension),
+    // the name in PYBIND11_MODULE/PYBIND11_PLUGIN *MUST* match the filename of the output library (without extension),
     // otherwise you will get "ImportError: dynamic module does not define module export function" when importing the module
 
-    #ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(libnetlist_simulator, m)
+#ifdef PYBIND11_MODULE
+    PYBIND11_MODULE(netlist_simulator, m)
     {
-        m.doc() = "hal netlist_simulator python bindings";
+        m.doc() = "hal NetlistSimulatorPlugin python bindings";
 #else
-    PYBIND11_PLUGIN(libnetlist_simulator)
+    PYBIND11_PLUGIN(netlist_simulator)
     {
-        py::module m("netlist_simulator", "hal netlist_simulator python bindings");
+        py::module m("netlist_simulator", "hal NetlistSimulatorPlugin python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
-        py::class_<NetlistSimulatorPlugin, RawPtrWrapper<NetlistSimulatorPlugin>, BasePluginInterface, RawPtrWrapper<NetlistSimulatorPlugin>>(m, "NetlistSimulatorPlugin")
+        py::class_<NetlistSimulatorPlugin, RawPtrWrapper<NetlistSimulatorPlugin>, BasePluginInterface>(m, "NetlistSimulatorPlugin")
             .def_property_readonly("name", &NetlistSimulatorPlugin::get_name)
             .def("get_name", &NetlistSimulatorPlugin::get_name)
             .def_property_readonly("version", &NetlistSimulatorPlugin::get_version)
@@ -170,16 +166,11 @@ namespace hal
                 :returns: A map from net to associated events for that net sorted by time.
             )");
 
-        py::enum_<SignalValue>(m, "SignalValue")
-            .value("X", SignalValue::X)
-            .value("ZERO", SignalValue::ZERO)
-            .value("ONE", SignalValue::ONE)
-            .value("Z", SignalValue::Z)
-            .export_values();
+        py::enum_<SignalValue>(m, "SignalValue").value("X", SignalValue::X).value("ZERO", SignalValue::ZERO).value("ONE", SignalValue::ONE).value("Z", SignalValue::Z).export_values();
 
         py::class_<Event>(m, "Event")
             .def(py::init<>())
-            
+
             .def(py::self == py::self, R"(
                 Tests whether two events are equal.
 
@@ -194,8 +185,8 @@ namespace hal
                 :rtype: bool
             )");
 
-    #ifndef PYBIND11_MODULE
+#ifndef PYBIND11_MODULE
         return m.ptr();
-    #endif    // PYBIND11_MODULE
+#endif    // PYBIND11_MODULE
     }
-}
+}    // namespace hal

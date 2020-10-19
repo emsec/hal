@@ -1,4 +1,5 @@
 #include "hal_core/python_bindings/python_bindings.h"
+
 #include "dataflow_analysis/plugin_dataflow.h"
 #include "hal_core/netlist/netlist.h"
 #include "pybind11/operators.h"
@@ -10,11 +11,11 @@ namespace py = pybind11;
 namespace hal
 {
 #ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(libdataflow, m)
+    PYBIND11_MODULE(dataflow, m)
     {
         m.doc() = "hal DataflowPlugin python bindings";
 #else
-    PYBIND11_PLUGIN(libdataflow)
+    PYBIND11_PLUGIN(dataflow)
     {
         py::module m("dataflow", "hal Dataflow python bindings");
 #endif    // ifdef PYBIND11_MODULE
