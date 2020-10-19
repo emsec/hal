@@ -9,8 +9,6 @@ namespace hal
     /**
      * @ingroup netlist
      */
-    namespace netlist_utils
-    {
-        CORE_API BooleanFunction get_subgraph_function(const std::vector<const Gate*> subgraph_gates, const Net* output_net);
-    }
+
+    CORE_API BooleanFunction get_subgraph_function(const std::set<const Gate*> subgraph_gates, const Net* output_net);
 }    // namespace hal
