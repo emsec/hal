@@ -5,7 +5,8 @@ namespace hal
     void module_init(py::module& m)
     {
         py::class_<Module, DataContainer, RawPtrWrapper<Module>> py_module(m, "Module", R"(
-            Module class containing information about a module including its gates, submodules, and parent module.
+            A module is a container for gates and their associated nets that enables hierarchization within the netlist.
+            Each gate can only be in one module at a time. Nets are only loosely associated with modules.
         )");
 
         py_module.def_property_readonly("id", &Module::get_id, R"(

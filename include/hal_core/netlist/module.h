@@ -45,7 +45,8 @@ namespace hal
     class Gate;
 
     /**
-     * Module class containing information about a module including its gates, submodules, and parent module.
+     * A module is a container for gates and their associated nets that enables hierarchization within the netlist.<br>
+     * Each gate can only be in one module at a time. Nets are only loosely associated with modules.
      *
      * @ingroup module
      */

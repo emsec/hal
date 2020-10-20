@@ -6,6 +6,7 @@
 #include <functional>
 #include <set>
 #include <thread>
+#include <set>
 
 namespace hal
 {

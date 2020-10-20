@@ -6,3 +6,4 @@ Boolean Function
 
    .. automethod:: __init__
    .. automethod:: __call__
+   .. automethod:: __str__
