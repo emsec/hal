@@ -52,9 +52,9 @@ namespace hal
     {
     public:
         /**
-         * Gets the unique id of the net.
+         * Get the unique id of the net.
          *
-         * @returns The net's id.
+         * @returns The unique id.
          */
         u32 get_id() const;
 
@@ -80,7 +80,8 @@ namespace hal
         void set_name(const std::string& name);
 
         /**
-         * Gets the grouping in which this net is contained.
+         * Get the grouping in which this net is contained. <br>
+         * If no grouping contains this gate, a nullptr is returned.
          *
          * @returns The grouping.
          */
@@ -91,26 +92,26 @@ namespace hal
          */
 
         /**
-         * Add a source to this net.
+         * Add a source-endpoint to this net.
          *
          * @param[in] gate - The source gate.
-         * @param[in] pin - The input pin of the gate.
+         * @param[in] pin - The output pin of the source gate.
          * @returns The new endpoint or nullptr on error.
          */
         Endpoint* add_source(Gate* gate, const std::string& pin);
 
         /**
-         * Remove a source from this net.
+         * Remove a source-endpoint from this net.
          *
          * @param[in] gate - The source gate.
-         * @param[in] pin - The input pin of the gate.
+         * @param[in] pin - The output pin of the source gate.
          * @returns True on success.
          */
         bool remove_source(Gate* gate, const std::string& pin);
 
         /**
-         * Remove a source endpoint from this net.
-         * If the endpoint is a destination-endpoint this function aborts.
+         * Remove a source endpoint from this net. <br>
+         * If the endpoint is no source-endpoint of the net this function aborts.
          *
          * @param[in] ep - The source endpoint.
          * @returns True on success.
@@ -118,7 +119,7 @@ namespace hal
         bool remove_source(Endpoint* ep);
 
         /**
-         * Check whether a gate is a source of this net.
+         * Check whether an endpoint, given by its gate and pin type, is a source-endpoint of this net.
          *
          * @param[in] gate - The source gate.
          * @param[in] pin - The source output pin.
@@ -127,8 +128,7 @@ namespace hal
         bool is_a_source(Gate* gate, const std::string& pin) const;
 
         /**
-         * Check whether an endpoint is a source of this net.
-         * If the endpoint is a destination-endpoint this function aborts.
+         * Check whether an endpoint is a source-endpoint of this net.
          *
          * @param[in] ep - The endpoint.
          * @returns True if the endpoint is a source of this net.
@@ -144,17 +144,19 @@ namespace hal
         u32 get_num_of_sources() const;
 
         /**
-         * Get the vector of sources of the net.
+         * Get a list of sources of the net. <br>
+         * A filter can be supplied which filters out all potential values that return false.
          *
-         * @param[in] filter - a filter for endpoints.
+         * @param[in] filter - A filter for endpoints. Leave empty for no filtering.
          * @returns A vector of source endpoints.
          */
         std::vector<Endpoint*> get_sources(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * DEPRECATED
-         * Get the (first) src of the net.
-         * If there was no src assigned, the gate element of the returned endpoint is a nullptr.
+         * \deprecated
+         * DEPRECATED <br>
+         * Get the (first) source-endpoint of the net. <br>
+         * If there was no source assigned, the gate element of the returned endpoint is a nullptr. <br>
          * If the net is multi-driven a warning is printed.
          *
          * @returns The (first) source endpoint.
@@ -166,10 +168,10 @@ namespace hal
          */
 
         /**
-         * Add a destination to this net.
+         * Add a destination-endpoint to this net.
          *
          * @param[in] gate - The destination gate.
-         * @param[in] pin - The input pin of the gate.
+         * @param[in] pin - The input pin of the destination gate.
          * @returns The new endpoint or nullptr on error.
          */
         Endpoint* add_destination(Gate* gate, const std::string& pin);
@@ -178,14 +180,14 @@ namespace hal
          * Remove a destination from this net.
          *
          * @param[in] gate - The destination gate.
-         * @param[in] pin - The input pin of the gate.
+         * @param[in] pin - The input pin of the destination gate.
          * @returns True on success.
          */
         bool remove_destination(Gate* gate, const std::string& pin);
 
         /**
-         * Remove a destination endpoint from this net.
-         * If the endpoint is a source-endpoint this function aborts.
+         * Remove a destination-endpoint from this net. <br>
+         * If the endpoint is no destination-endpoint of the net this function aborts.
          *
          * @param[in] ep - The destination endpoint.
          * @returns True on success.
@@ -193,17 +195,16 @@ namespace hal
         bool remove_destination(Endpoint* ep);
 
         /**
-         * Check whether a gate is a destination of this net.
+         * Check whether an endpoint, given by its gate and pin type, is a destination-endpoint of this net.
          *
          * @param[in] gate - The destination gate.
-         * @param[in] pin - The destination output pin.
+         * @param[in] pin - The destination input pin.
          * @returns True if the gate's pin is a destination of this net.
          */
         bool is_a_destination(Gate* gate, const std::string& pin) const;
 
         /**
-         * Check whether an endpoint is a destination of this net.
-         * If the endpoint is a source-endpoint this function aborts.
+         * Check whether an endpoint is a destination-endpoint of this net.
          *
          * @param[in] ep - The endpoint.
          * @returns True if the endpoint is a destination of this net.
@@ -219,15 +220,16 @@ namespace hal
         u32 get_num_of_destinations() const;
 
         /**
-         * Get the vector of destinations of the net.
+         * Get a list of destinations of the net. <br>
+         * A filter can be supplied which filters out all potential values that return false.
          *
-         * @param[in] filter - a filter for endpoints.
-         * @returns A vector of destination endpoints.
+         * @param[in] filter - A filter for endpoints. Leave empty for no filtering.
+         * @returns A vector of destination-endpoints.
          */
         std::vector<Endpoint*> get_destinations(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
         /**
-         * Check whether the net is routed, i.e. it has no source or the no destinations.
+         * Check whether the net is unrouted, i.e. it has no source or no destination.
          *
          * @returns True if the net is unrouted.
          */
