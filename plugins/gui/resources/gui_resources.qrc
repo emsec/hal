@@ -81,6 +81,7 @@
         <file alias="color_select">icons/color_select.svg</file>
 	    <file alias="to_grouping">icons/to_grouping.svg</file>
 	    <file alias="to_module">icons/to_module.svg</file>
+        <file alias="to_selection">icons/to_selection.svg</file>
         <file alias="sel_module">icons/sel_module.png</file>
         <file alias="sel_gate">icons/sel_gate.png</file>
         <file alias="sel_net">icons/sel_net.png</file>

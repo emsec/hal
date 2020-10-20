@@ -1395,6 +1395,9 @@ qproperty-delete_icon_path: ":/icons/trashcan";
 
 qproperty-color_select_icon_style: "all->#e8e8e8";
 qproperty-color_select_icon_path: ":/icons/color_select";
+
+qproperty-to_selection_icon_style: "all->#e8e8e8";
+qproperty-to_selection_icon_path: ":/icons/to_selection";
 }
 
 hal--ContextManagerWidget {
