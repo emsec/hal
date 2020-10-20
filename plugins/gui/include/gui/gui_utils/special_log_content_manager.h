@@ -39,9 +39,14 @@ namespace hal
     {
         Q_OBJECT
     public:
-        SpecialLogContentManager();
-        SpecialLogContentManager(MainWindow* main_window, PythonEditor* python_editor);
+        SpecialLogContentManager(QObject* parent = nullptr);
+        SpecialLogContentManager(MainWindow* parent, PythonEditor* python_editor);
         ~SpecialLogContentManager();
+
+        void safe_screenshot();
+        void safe_python_editor();
+
+        void start_logging(int msec);
 
     private:
         QTimer* m_timer;

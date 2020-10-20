@@ -28,6 +28,7 @@
 #include <QStringList>
 
 #include "gui/netlist_watcher/netlist_watcher.h"
+#include "gui/gui_utils/special_log_content_manager.h"
 
 namespace hal
 {
@@ -88,5 +89,7 @@ namespace hal
         ContextManagerWidget* m_context_manager_wid;
 
         SelectionDetailsWidget* mSelectionDetailsWidget;
+
+        SpecialLogContentManager* m_special_log_content_manager;
     };
 }

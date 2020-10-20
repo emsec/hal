@@ -89,6 +89,8 @@ namespace hal
         void tab_load_file(u32 index, QString file_name);
 
         void save_file(const bool ask_path, int index = -1);
+        //added so that the speciallogcontentmanager has access to all the code editors
+        QTabWidget* get_tab_widget();
 
         void discard_tab(int index);
         bool confirm_discard_for_range(int start, int end, int exclude = -1);
