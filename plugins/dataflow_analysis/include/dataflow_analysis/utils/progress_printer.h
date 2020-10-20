@@ -6,7 +6,7 @@
 #include <sstream>
 #include <sys/ioctl.h>    //ioctl() and TIOCGWINSZ
 #include <unistd.h>       // for STDOUT_FILENO
-
+#include <sstream>
 namespace hal
 {
     namespace dataflow
