@@ -10,12 +10,12 @@
 
 namespace hal
 {
-    std::set<std::set<Gate*>> GraphAlgorithmPlugin::get_strongly_connected_components(Netlist* nl)
+    std::vector<std::vector<Gate*>> GraphAlgorithmPlugin::get_strongly_connected_components(Netlist* nl)
     {
         if (nl == nullptr)
         {
             log_error(this->get_name(), "{}", "parameter 'nl' is nullptr");
-            return std::set<std::set<Gate*>>();
+            return std::vector<std::vector<Gate*>>();
         }
 
         // get igraph
@@ -34,10 +34,15 @@ namespace hal
         std::map<int, std::set<Gate*>> ssc_membership = get_memberships_for_hal(&graph, membership, vertex_to_gate);
 
         // convert to set
-        std::set<std::set<Gate*>> sccs;
-        for (auto scc : ssc_membership)
+        std::vector<std::vector<Gate*>> sccs;
+        for (const auto& scc : ssc_membership)
         {
-            sccs.insert(scc.second);
+            std::vector<Gate*> scc_vector;
+            for (const auto& scc_gate : scc.second)
+            {
+                scc_vector.push_back(scc_gate);
+            }
+            sccs.push_back(scc_vector);
         }
 
         // cleanup

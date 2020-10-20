@@ -80,7 +80,7 @@ namespace hal
          * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)
          * @returns A set of strongly connected components where each component is a set of gates.
          */
-        std::set<std::set<Gate*>> get_strongly_connected_components(Netlist* nl);
+        std::vector<std::vector<Gate*>> get_strongly_connected_components(Netlist* nl);
 
         /**
          * Returns a graph cut for a specific gate and depth.
