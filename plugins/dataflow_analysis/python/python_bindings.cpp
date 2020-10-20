@@ -11,11 +11,11 @@ namespace py = pybind11;
 namespace hal
 {
 #ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(libdataflow, m)
+    PYBIND11_MODULE(dataflow, m)
     {
         m.doc() = "hal DataflowPlugin python bindings";
 #else
-    PYBIND11_PLUGIN(libdataflow)
+    PYBIND11_PLUGIN(dataflow)
     {
         py::module m("dataflow", "hal Dataflow python bindings");
 #endif    // ifdef PYBIND11_MODULE

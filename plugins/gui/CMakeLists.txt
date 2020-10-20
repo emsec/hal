@@ -1,7 +1,6 @@
 option(PL_GUI "PL_GUI" ON)
 if(PL_GUI OR BUILD_ALL_PLUGINS)
 
-
     find_package(Qt5Widgets)
     if(Qt5Widgets_FOUND)
         message(VERBOSE "Qt5Widgets_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
@@ -32,9 +31,6 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
         set(Missing_package "TRUE")
     endif(Qt5Svg_FOUND)
 
-
-
-
     set(INCROOT ${CMAKE_CURRENT_SOURCE_DIR}/include)
     set(SRCROOT ${CMAKE_CURRENT_SOURCE_DIR}/src)
     set(UIROOT ${CMAKE_CURRENT_SOURCE_DIR}/ui)
@@ -46,7 +42,6 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                         ${CMAKE_CURRENT_SOURCE_DIR}/include
                         SYSTEM ${INCROOT}
                         )
-
 
     file(GLOB_RECURSE HDR ${INCROOT}/*.h)
     file(GLOB_RECURSE SRC ${SRCROOT}/*.cpp)
@@ -86,6 +81,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
     target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
     target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${PYTHON_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg)
+    hal_plugin_documentation(gui SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/gui.rst)
 
     install(TARGETS gui
             EXPORT hal
@@ -103,6 +99,5 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         add_sanitizers(gui)
     endif()
-
 
 endif()

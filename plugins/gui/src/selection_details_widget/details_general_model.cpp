@@ -45,7 +45,7 @@ namespace hal {
 
     void DetailsGeneralModel::additionalInformation(Module* m)
     {
-        mContent.append(DetailsGeneralModelEntry("Parent module", moduleNameId(m->get_parent_module()), "get_parent_module"));
+        mContent.append(DetailsGeneralModelEntry("Parent Module", moduleNameId(m->get_parent_module()), "get_parent_module"));
 
         int nGatesSumAll           = m->get_gates(nullptr, true).size();
         int nGatesDirectChild      = m->get_gates(nullptr, false).size();
@@ -57,7 +57,7 @@ namespace hal {
         QString numberGatesText = QString::number(nGatesSumAll);
 
         if (nGatesGrandChild > 0)
-            numberGatesText += " in total, " + QString::number(nGatesDirectChild) + " as direct members and " + QString::number(nGatesGrandChild) + " in submodules";
+            numberGatesText += " (" + QString::number(nGatesDirectChild) + " direct members and " + QString::number(nGatesGrandChild) + " within submodules)";
         mContent.append(DetailsGeneralModelEntry("Gates", numberGatesText));
         uint nSubmodules = m->get_submodules(nullptr, true).size();
         mContent.append(DetailsGeneralModelEntry("Submodules", nSubmodules));

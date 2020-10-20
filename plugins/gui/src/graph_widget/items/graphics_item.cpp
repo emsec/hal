@@ -57,11 +57,12 @@ namespace hal
         return g_content_manager->getGroupingManagerWidget()->getModel()->colorForItem(m_item_type,m_id);
     }
 
-    QColor GraphicsItem::penColor(QStyle::State state) const
+    QColor GraphicsItem::penColor(QStyle::State state, const QColor& colorHint) const
     {
         if (state & QStyle::State_Selected) return selectionColor();
         QColor gcol = groupingColor();
         if (gcol.isValid()) return gcol;
+        if (colorHint.isValid()) return colorHint;
         return m_color;
     }
 }

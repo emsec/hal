@@ -50,6 +50,5 @@ namespace hal
 
         QVector<module_pin> m_input_pins;
         QVector<module_pin> m_output_pins;
-        QString mModuleType;
     };
 }    // namespace hal

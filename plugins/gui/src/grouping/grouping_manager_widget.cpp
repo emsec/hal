@@ -1,7 +1,6 @@
 #include "gui/grouping/grouping_manager_widget.h"
 
 #include "gui/gui_globals.h"
-
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/grouping/grouping_color_delegate.h"
 #include "gui/input_dialog/input_dialog.h"
@@ -12,13 +11,13 @@
 #include "gui/gui_utils/graphics.h"
 #include "gui/toolbar/toolbar.h"
 #include <QAction>
-#include <QDebug>
 #include <QMenu>
 #include <QResizeEvent>
 #include <QSize>
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QColorDialog>
+#include <QStringList>
 
 namespace hal
 {
@@ -26,9 +25,9 @@ namespace hal
         : ContentWidget("Groupings", parent),
           m_new_grouping_action(new QAction(this)),
           m_rename_action(new QAction(this)),
-          mColorSelectAction(new QAction(this)),
-          mToSelectionAction(new QAction(this)),
-          m_delete_action(new QAction(this))
+          m_color_select_action(new QAction(this)),
+          m_delete_action(new QAction(this)),
+          m_to_selection_action(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -37,21 +36,20 @@ namespace hal
         m_new_grouping_action->setIcon(gui_utility::get_styled_svg_icon(m_new_grouping_icon_style, m_new_grouping_icon_path));
         m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_rename_grouping_icon_style, m_rename_grouping_icon_path));
         m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
-
-        mColorSelectAction->setIcon(QIcon(":/icons/color_select"));
-        mToSelectionAction->setIcon(QIcon(":icons/to_selection"));
+        m_color_select_action->setIcon(gui_utility::get_styled_svg_icon(m_color_select_icon_style, m_color_select_icon_path));
+        m_to_selection_action->setIcon(gui_utility::get_styled_svg_icon(m_to_selection_icon_style, m_to_selection_icon_path));
 
         m_new_grouping_action->setToolTip("New");
         m_rename_action->setToolTip("Rename");
-        mColorSelectAction->setToolTip("Color");
-        mToSelectionAction->setToolTip("To selection");
+        m_color_select_action->setToolTip("Color");
         m_delete_action->setToolTip("Delete");
+        m_to_selection_action->setToolTip("To selection");
 
         m_new_grouping_action->setText("Create New Grouping");
         m_rename_action->setText("Rename Grouping");
-        mColorSelectAction->setText("Select Color for Grouping");
-        mToSelectionAction->setText("Add grouping to selection");
+        m_color_select_action->setText("Select Color for Grouping");
         m_delete_action->setText("Delete View");
+        m_to_selection_action->setText("Add grouping to selection");
 
         //m_open_action->setEnabled(false);
         //m_rename_action->setEnabled(false);
@@ -79,12 +77,14 @@ namespace hal
 
         connect(m_new_grouping_action, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);
         connect(m_rename_action, &QAction::triggered, this, &GroupingManagerWidget::handleRenameGroupingClicked);
-        connect(mColorSelectAction, &QAction::triggered, this, &GroupingManagerWidget::handleColorSelectClicked);
-        connect(mToSelectionAction, &QAction::triggered, this, &GroupingManagerWidget::handleToSelectionClicked);
+        connect(m_color_select_action, &QAction::triggered, this, &GroupingManagerWidget::handleColorSelectClicked);
+        connect(m_to_selection_action, &QAction::triggered, this, &GroupingManagerWidget::handleToSelectionClicked);
         connect(m_delete_action, &QAction::triggered, this, &GroupingManagerWidget::handleDeleteGroupingClicked);
 
         connect(mGroupingTableView, &QTableView::customContextMenuRequested, this, &GroupingManagerWidget::handle_context_menu_request);
-        connect(mGroupingTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &GroupingManagerWidget::handle_selection_changed);
+        connect(mGroupingTableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &GroupingManagerWidget::handleCurrentChanged);
+        connect(mGroupingTableModel, &GroupingTableModel::lastEntryDeleted, this, &GroupingManagerWidget::handleLastEntryDeleted);
+        handleCurrentChanged();
     }
 
     void GroupingManagerWidget::handleCreateGroupingClicked()
@@ -107,7 +107,17 @@ namespace hal
 
     void GroupingManagerWidget::handleToSelectionClicked()
     {
-
+        QModelIndex currentIndex = mGroupingTableView->currentIndex();
+        if (!currentIndex.isValid()) return;
+        Grouping* grp = getCurrentGrouping().grouping();
+        if (!grp) return;
+        for (Module* m : grp->get_modules())
+            g_selection_relay->m_selected_modules.insert(m->get_id());
+        for (Gate* g : grp->get_gates())
+            g_selection_relay->m_selected_gates.insert(g->get_id());
+        for (Net* n : grp->get_nets())
+            g_selection_relay->m_selected_nets.insert(n->get_id());
+        g_selection_relay->relay_selection_changed(this);
     }
 
     void GroupingManagerWidget::handleRenameGroupingClicked()
@@ -155,8 +165,8 @@ namespace hal
         if (clicked_index.isValid())
         {
             context_menu.addAction(m_rename_action);
-            context_menu.addAction(mColorSelectAction);
-            context_menu.addAction(mToSelectionAction);
+            context_menu.addAction(m_color_select_action);
+            context_menu.addAction(m_to_selection_action);
             context_menu.addAction(m_delete_action);
         }
 
@@ -174,16 +184,16 @@ namespace hal
     {
         toolbar->addAction(m_new_grouping_action);
         toolbar->addAction(m_rename_action);
-        toolbar->addAction(mColorSelectAction);
-        toolbar->addAction(mToSelectionAction);
+        toolbar->addAction(m_color_select_action);
+        toolbar->addAction(m_to_selection_action);
         toolbar->addAction(m_delete_action);
     }
 
     void GroupingManagerWidget::set_toolbar_buttons_enabled(bool enabled)
     {
         m_rename_action->setEnabled(enabled);
-        mColorSelectAction->setEnabled(enabled);
-        mToSelectionAction->setEnabled(enabled);
+        m_color_select_action->setEnabled(enabled);
+        m_to_selection_action->setEnabled(enabled);
         m_delete_action->setEnabled(enabled);
     }
 
@@ -191,6 +201,44 @@ namespace hal
     {
         QList<QShortcut*> list;
         return list;
+    }
+
+    void GroupingManagerWidget::handleLastEntryDeleted()
+    {
+        if (mGroupingTableModel->rowCount())
+            mGroupingTableView->setCurrentIndex(mGroupingTableModel->index(0,0));
+        else
+            handleCurrentChanged();
+    }
+
+    void GroupingManagerWidget::handleCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
+    {
+        Q_UNUSED(previous);
+
+        bool enable = mGroupingTableModel->rowCount() > 0 && current.isValid();
+        QAction* entryBasedAction[] = { m_rename_action, m_color_select_action,
+                                        m_delete_action, m_to_selection_action, nullptr};
+
+        QStringList iconPath, iconStyle;
+        iconPath << m_rename_grouping_icon_path << m_color_select_icon_path
+                             << m_delete_icon_path << m_to_selection_icon_path;
+        iconStyle << m_rename_grouping_icon_style << m_color_select_icon_style
+                              << m_delete_icon_style << m_to_selection_icon_style;
+
+        for (int iacc = 0; entryBasedAction[iacc]; iacc++)
+        {
+            entryBasedAction[iacc]->setEnabled(enable);
+            entryBasedAction[iacc]->setIcon(
+                        gui_utility::get_styled_svg_icon(enable
+                                                         ? iconStyle.at(iacc)
+                                                         : disabled_icon_style(),
+                                                         iconPath.at(iacc)));
+        }
+    }
+
+    QString GroupingManagerWidget::disabled_icon_style() const
+    {
+        return m_disabled_icon_style;
     }
 
     QString GroupingManagerWidget::new_grouping_icon_path() const
@@ -223,6 +271,31 @@ namespace hal
         return m_delete_icon_style;
     }
 
+    QString GroupingManagerWidget::color_select_icon_path() const
+    {
+        return m_color_select_icon_path;
+    }
+
+    QString GroupingManagerWidget::color_select_icon_style() const
+    {
+        return m_color_select_icon_style;
+    }
+
+    QString GroupingManagerWidget::to_selection_icon_path() const
+    {
+        return m_to_selection_icon_path;
+    }
+
+    QString GroupingManagerWidget::to_selection_icon_style() const
+    {
+        return m_to_selection_icon_style;
+    }
+
+    void GroupingManagerWidget::set_disabled_icon_style(const QString& style)
+    {
+        m_disabled_icon_style = style;
+    }
+
     void GroupingManagerWidget::set_new_grouping_icon_path(const QString& path)
     {
         m_new_grouping_icon_path = path;
@@ -251,5 +324,25 @@ namespace hal
     void GroupingManagerWidget::set_delete_icon_style(const QString& style)
     {
         m_delete_icon_style = style;
+    }
+
+    void GroupingManagerWidget::set_color_select_icon_path(const QString& path)
+    {
+        m_color_select_icon_path = path;
+    }
+
+    void GroupingManagerWidget::set_color_select_icon_style(const QString& style)
+    {
+        m_color_select_icon_style = style;
+    }
+
+    void GroupingManagerWidget::set_to_selection_icon_path(const QString& path)
+    {
+        m_to_selection_icon_path = path;
+    }
+
+    void GroupingManagerWidget::set_to_selection_icon_style(const QString& style)
+    {
+        m_to_selection_icon_style = style;
     }
 }

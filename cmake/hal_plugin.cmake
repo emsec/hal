@@ -3,11 +3,11 @@
 #                     [NO_EXTRAS] [SYSTEM] [THIN_LTO] source1 [source2 ...])
 #
 function(hal_add_plugin target_name)
-    set(options  MODULE SHARED EXCLUDE_FROM_ALL INSTALL NO_INSTALL_INCLUDEDIR)
-    set(oneValueArgs RENAME INSTALL_INCLUDE_DIR)
-    set(multiValueArgs HEADER SOURCES LINK_LIBRARIES INCLUDES DEFINITIONS COMPILE_OPTIONS LINK_OPTIONS)
+    set(options  MODULE SHARED EXCLUDE_FROM_ALL INSTALL NO_INSTALL_INCLUDEDIR PYDOC)
+    set(oneValueArgs RENAME INSTALL_INCLUDE_DIR SPHINX_DOC_INDEX_FILE)
+    set(multiValueArgs HEADER SOURCES LINK_LIBRARIES INCLUDES DEFINITIONS COMPILE_OPTIONS LINK_OPTIONS SPHINX_DOC_FILES)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}"
-                          "${multiValueArgs}" ${ARGN} )
+                          "${multiValueArgs}" ${ARGN})
 
 
     if(ARG_MODULE AND ARG_SHARED)
@@ -26,6 +26,8 @@ function(hal_add_plugin target_name)
     file(WRITE ${CMAKE_BINARY_DIR}/lib/hal_plugins/__init__.py "")
 
     add_library(${target_name} ${lib_type} ${exclude_from_all} ${ARG_HEADER} ${ARG_SOURCES} ${ARG_PY_SOURCES})
+
+    set_target_properties(${target_name} PROPERTIES PREFIX "")
 
     target_include_directories(${target_name}
                                PUBLIC
@@ -73,4 +75,30 @@ function(hal_add_plugin target_name)
     if((${CMAKE_BUILD_TYPE} STREQUAL "Debug") AND (COMMAND add_sanitizers))
         add_sanitizers(${target_name})
     endif()
+
+    if (ARG_PYDOC)
+        hal_plugin_documentation(${target_name} PYDOC
+                                 SPHINX_DOC_INDEX_FILE ${ARG_SPHINX_DOC_INDEX_FILE}
+                                 SPHINX_DOC_FILES ${ARG_SPHINX_DOC_FILES})
+    endif()
+endfunction()
+
+function(hal_plugin_documentation target_name)
+    set(oneValueArgs SPHINX_DOC_INDEX_FILE)
+    set(multiValueArgs SPHINX_DOC_FILES)
+    cmake_parse_arguments(ARG "${options}" "${oneValueArgs}"
+                          "${multiValueArgs}" ${ARGN})
+
+    get_filename_component(idxf ${ARG_SPHINX_DOC_INDEX_FILE} NAME)
+    configure_file(${ARG_SPHINX_DOC_INDEX_FILE} ${SPHINX_BUILD_DIR}/${idxf} COPYONLY)
+
+    get_property(SPHINX_PLUGIN_INDEX_FILES_TMP GLOBAL PROPERTY SPHINX_PLUGIN_INDEX_FILES)
+    list(APPEND SPHINX_PLUGIN_INDEX_FILES_TMP ${ARG_SPHINX_DOC_INDEX_FILE})
+    set_property(GLOBAL PROPERTY SPHINX_PLUGIN_INDEX_FILES "${SPHINX_PLUGIN_INDEX_FILES_TMP}")
+
+    foreach(file ${ARG_SPHINX_DOC_FILES})
+        get_filename_component(f ${file} NAME)
+        configure_file(${file} ${SPHINX_BUILD_DIR}/${f} COPYONLY)
+    endforeach()
+
 endfunction()

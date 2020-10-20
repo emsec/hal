@@ -118,7 +118,8 @@ namespace hal {
         Q_UNUSED(count);
 
         mDisableEvents = true;
-        if (row >= mGroupings.size()) return false;
+        int nrows = mGroupings.size();
+        if (row >= nrows) return false;
         Grouping* grp = mGroupings.at(row).grouping();
         for (Module* m : grp->get_modules())
             grp->remove_module(m);
@@ -131,6 +132,8 @@ namespace hal {
         mGroupings.removeAt(row);
         Q_EMIT layoutChanged();
         mDisableEvents = false;
+        if (row >= nrows-1)
+            Q_EMIT lastEntryDeleted();
         return true;
     }
 
@@ -180,8 +183,9 @@ namespace hal {
             if (it->grouping() == grp)
             {
                 Q_EMIT layoutAboutToBeChanged();
-                mGroupings.erase(it);
+                it = mGroupings.erase(it);
                 Q_EMIT layoutChanged();
+                if (it == mGroupings.end()) Q_EMIT lastEntryDeleted();
                 return;
             }
     }

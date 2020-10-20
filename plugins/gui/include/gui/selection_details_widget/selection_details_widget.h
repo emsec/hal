@@ -46,8 +46,16 @@ namespace hal
     class SelectionDetailsWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString disabled_icon_style READ disabled_icon_style WRITE set_disabled_icon_style)
         Q_PROPERTY(QString search_icon_path READ search_icon_path WRITE set_search_icon_path)
         Q_PROPERTY(QString search_icon_style READ search_icon_style WRITE set_search_icon_style)
+        Q_PROPERTY(QString search_active_icon_style READ search_active_icon_style WRITE set_search_active_icon_style)
+        Q_PROPERTY(QString restore_icon_path READ restore_icon_path WRITE set_restore_icon_path)
+        Q_PROPERTY(QString restore_icon_style READ restore_icon_style WRITE set_restore_icon_style)
+        Q_PROPERTY(QString to_grouping_icon_path READ to_grouping_icon_path WRITE set_to_grouping_icon_path)
+        Q_PROPERTY(QString to_grouping_icon_style READ to_grouping_icon_style WRITE set_to_grouping_icon_style)
+        Q_PROPERTY(QString to_module_icon_path READ to_module_icon_path WRITE set_to_module_icon_path)
+        Q_PROPERTY(QString to_module_icon_style READ to_module_icon_style WRITE set_to_module_icon_style)
 
     public:
         SelectionDetailsWidget(QWidget* parent = 0);
@@ -55,12 +63,36 @@ namespace hal
 
         virtual void setup_toolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
 
+        QString disabled_icon_style() const;
+
         QString search_icon_path() const;
         QString search_icon_style() const;
+        QString search_active_icon_style() const;
+
+        QString restore_icon_path() const;
+        QString restore_icon_style() const;
+
+        QString to_grouping_icon_path() const;
+        QString to_grouping_icon_style() const;
+
+        QString to_module_icon_path() const;
+        QString to_module_icon_style() const;
+                
+        void set_disabled_icon_style(const QString &style);
 
         void set_search_icon_path(const QString &path);
         void set_search_icon_style(const QString &style);
+        void set_search_active_icon_style(const QString &style);
 
+        void set_restore_icon_path(const QString &path);
+        void set_restore_icon_style(const QString &style);
+
+        void set_to_grouping_icon_path(const QString &path);
+        void set_to_grouping_icon_style(const QString &style);
+        
+        void set_to_module_icon_path(const QString &path);
+        void set_to_module_icon_style(const QString &style);
+        
         void selectionToGroupingInternal(Grouping* grp);
 
     Q_SIGNALS:
@@ -102,15 +134,27 @@ namespace hal
         QAction* m_selectionToGrouping;
         QAction* m_selectionToModule;
         QAction* m_search_action;
+
+        QString m_disabled_icon_style;
+
         QString m_search_icon_path;
         QString m_search_icon_style;
+        QString m_search_active_icon_style;
 
+        QString m_restore_icon_path;
+        QString m_restore_icon_style;
+
+        QString m_to_grouping_icon_path;
+        QString m_to_grouping_icon_style;
+        
+        QString m_to_module_icon_path;
+        QString m_to_module_icon_style;
+        
         SelectionHistoryNavigator* m_history;
 
         void handle_filter_text_changed(const QString& filter_text);
         void canRestoreSelection();
+        void canMoveToModule(int nodes);
         void enableSearchbar(bool enable);
-
-        static const QString disableIconStyle;
     };
 }

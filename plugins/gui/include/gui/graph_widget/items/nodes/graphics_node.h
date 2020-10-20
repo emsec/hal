@@ -63,7 +63,7 @@ namespace hal
         qreal width() const;
         qreal height() const;
 
-        void set_name(QString name);
+        void set_name(const QString& name);
 
     //    qreal x_offset() const;
     //    qreal y_offset() const;
@@ -71,8 +71,7 @@ namespace hal
     protected:
         QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
-        QString m_name;
-        QString m_type;
+        QString mNodeText[3];
 
         qreal m_width;
         qreal m_height;

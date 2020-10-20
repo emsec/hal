@@ -3,13 +3,13 @@
 #include "gui/graph_widget/graph_widget_constants.h"
 
 #include <QApplication>
-#include <QDebug>
 
 namespace hal
 {
     GraphicsNode::GraphicsNode(const hal::item_type type, const u32 id, const QString& name)
-        : GraphicsItem(type, id), m_name(name)
+        : GraphicsItem(type, id)
     {
+        mNodeText[0] = name;
         setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
         //setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges | ItemIsFocusable);
         //setAcceptHoverEvents(true);
@@ -32,8 +32,6 @@ namespace hal
         setVisible(v.visible);
 
         m_color = v.main_color;
-        if (item_type() == item_type::module)
-            qDebug() << "set_visuals" << m_id << v.main_color.name();
     }
 
     qreal GraphicsNode::width() const
@@ -46,9 +44,9 @@ namespace hal
         return m_height;
     }
 
-    void GraphicsNode::set_name(QString name)
+    void GraphicsNode::set_name(const QString &name)
     {
-        m_name = name;
+        mNodeText[0] = name;
     }
 
     QVariant GraphicsNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)

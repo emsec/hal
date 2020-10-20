@@ -50,7 +50,7 @@ namespace hal
         static QColor s_selectionColor;
         static QColor s_highlightColor;
 
-        QColor penColor(QStyle::State state) const;
+        QColor penColor(QStyle::State state, const QColor& colorHint=QColor()) const;
         QColor selectionColor() const;
         QColor groupingColor() const;
 
