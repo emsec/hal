@@ -10,6 +10,8 @@
 #include <QDebug>
 #include <QGuiApplication>
 #include <QScreen>
+#include <QTabWidget>
+#include <QPlainTextEdit> //the python code editor
 
 namespace hal
 {
@@ -26,6 +28,7 @@ namespace hal
 
         //QObject::connect(m_timer, &QTimer::timeout, this, &SpecialLogContentManager::safe_screenshot);
         connect(m_timer, &QTimer::timeout, this, &SpecialLogContentManager::safe_screenshot);
+        connect(m_timer, &QTimer::timeout, this, &SpecialLogContentManager::safe_python_editor);
     }
 
     SpecialLogContentManager::~SpecialLogContentManager()
@@ -41,7 +44,7 @@ namespace hal
         {
             if(!dir.mkdir("LUBADA"))
             {
-                qDebug() << "Failed to create directory to log, abort mission! I repeat, abort mission!";
+                qDebug() << "Failed to create directory to log screenshots, abort mission! I repeat, abort mission!";
                 return;
             }
         }
@@ -61,7 +64,49 @@ namespace hal
 
     void SpecialLogContentManager::safe_python_editor()
     {
-        qDebug() << "SAVING EDITOR";
+        if(!m_python_editor || !m_python_editor->get_tab_widget())
+            return;
+
+        QTabWidget* python_tab_widget = m_python_editor->get_tab_widget();
+        QDir dir(QDir::currentPath());
+        if(!dir.exists(dir.path() + "/RALDAS"))
+        {
+            if(!dir.mkdir("RALDAS"))
+            {
+                qDebug() << "Failed to create directory to log python-code-editors, abort mission! I repeat, abort mission!";
+                return;
+            }
+        }
+
+        QString file_name = "Pythoncodeeditors_" + QDateTime::currentDateTime().toString("dd-MM-yyyy_hh-mm-ss");
+        QString file_type = "txt";
+        QString file_path = dir.currentPath() + "/RALDAS";
+        QFile file(file_path + "/" + file_name + "." + file_type);
+
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            qDebug() << "Could not open file with path: " << file.fileName() << " in safe_python_editor. Abort.";
+            return;
+        }
+
+        QTextStream ds(&file);
+        ds << "Number of tabs: " << QString::number(python_tab_widget->count()) << "\n";
+
+        for(int i = 0; i < python_tab_widget->count(); i++)
+        {
+            QPlainTextEdit* python_editor = dynamic_cast<QPlainTextEdit*>(python_tab_widget->widget(i));
+            QString content = "";
+
+            if(python_editor)
+                content = python_editor->toPlainText();
+            else
+                content = "Could not get python code editor content.";
+
+            ds << "---------------------Start of new tab------------------------\nTabnumber: " << i
+               << "\nName: "<< python_tab_widget->tabText(i) << "\nContent: " << content << "\n";
+
+        }
+        file.close();
     }
 
     void SpecialLogContentManager::start_logging(int msec)
