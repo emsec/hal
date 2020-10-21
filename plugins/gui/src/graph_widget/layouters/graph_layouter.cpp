@@ -436,6 +436,7 @@ namespace hal
         for (auto it = mJunctionEntries.constBegin(); it != mJunctionEntries.constEnd(); ++it)
         {
 //            it.value().dumpFile(it.key());
+//            qDebug() << "Junction at" << it.key().x() << it.key().y();
             NetLayoutJunction* nlj = new NetLayoutJunction(it.value());
             if (nlj->lastError() != NetLayoutJunction::Ok)
                 qDebug() << "Junction route error" << nlj->lastError() << it.key();
@@ -1144,6 +1145,8 @@ namespace hal
                         y1 = itEpc != mEndpointHash.constEnd()
                                 ? itEpc.value().lanePosition(j1->rect().top(),true)
                                 : mCoordY[iy1].junctionEntry();
+//                        if (itEpc==mEndpointHash.constEnd())
+//                            qDebug() << "xxx to endp" << wToPoint.x() << wToPoint.y() << y0 << y1;
                     }
                     else
                     {
@@ -1155,6 +1158,8 @@ namespace hal
                         y1 = j1
                                 ? mCoordY[iy1].lanePosition(j1->rect().top())
                                 : mCoordY[iy1].junctionEntry();
+//                        if (itEpc==mEndpointHash.constEnd())
+//                            qDebug() << "xxx fr endp" << wFromPoint.x() << wFromPoint.y() << y0 << y1;
                     }
                     lines.append_v_line(xx,y0,y1);
                 }
@@ -1228,7 +1233,7 @@ namespace hal
     {
         for (auto jt = mJunctionHash.constBegin(); jt!=mJunctionHash.constEnd(); ++jt)
         {
-            const EndpointCoordinate& epc = mEndpointHash.value(jt.key());
+            auto epcIt = mEndpointHash.find(jt.key());
             int x = jt.key().x();
             int y = jt.key().y();
             bool isEndpoint = (y%2 == 0);
@@ -1237,21 +1242,32 @@ namespace hal
             {
                 if (jw.mHorizontal==0)
                 {
+                    Q_ASSERT(epcIt != mEndpointHash.constEnd() || !isEndpoint);
                     float x0 = mCoordX.value(x).lanePosition(jw.mFirst);
                     float x1 = mCoordX.value(x).lanePosition(jw.mLast);
                     float yy = isEndpoint
-                            ? epc.lanePosition(jw.mRoad,true)
+                            ? epcIt.value().lanePosition(jw.mRoad,true)
                             : mCoordY.value(y).lanePosition(jw.mRoad);
                     lines.append_h_line(x0,x1,yy);
                 }
                 else
                 {
-                   float y0 = isEndpoint
-                            ? epc.lanePosition(jw.mFirst,true)
-                            : mCoordY.value(y).lanePosition(jw.mFirst);
-                    float y1 = isEndpoint
-                            ? epc.lanePosition(jw.mLast,true)
-                            : mCoordY.value(y).lanePosition(jw.mLast);
+                    float y0, y1;
+                    if (!isEndpoint)
+                    {
+                        y0 = mCoordY.value(y).lanePosition(jw.mFirst);
+                        y1 = mCoordY.value(y).lanePosition(jw.mLast);
+                    }
+                    else if (epcIt != mEndpointHash.constEnd())
+                    {
+                        y0 = epcIt.value().lanePosition(jw.mFirst,true);
+                        y1 = epcIt.value().lanePosition(jw.mLast,true);
+                    }
+                    else
+                    {
+                        y0 = mCoordY.value(y).junctionEntry();
+                        y1 = mCoordY.value(y).junctionExit();
+                    }
                     float xx = mCoordX.value(x).lanePosition(jw.mRoad);
                     lines.append_v_line(xx,y0,y1);
                 }
