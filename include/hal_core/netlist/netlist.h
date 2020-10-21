@@ -533,6 +533,13 @@ namespace hal
          */
         std::vector<Grouping*> get_groupings(const std::function<bool(Grouping*)>& filter = nullptr) const;
 
+        /*
+         * ################################################################
+         *      copy functions
+         * ################################################################
+         */
+        std::unique_ptr<Netlist> create_deepcopy() const;
+
     private:
         /* stores the pointer to the netlist internal manager */
         NetlistInternalManager* m_manager;

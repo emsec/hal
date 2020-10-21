@@ -86,6 +86,9 @@ namespace hal
         bool grouping_remove_net(Grouping* grouping, Net* net);
         bool grouping_assign_module(Grouping* grouping, Module* module, bool force = false);
         bool grouping_remove_module(Grouping* grouping, Module* module);
+        
+        // copy functions
+        std::unique_ptr<Netlist> create_deepcopy() const;
 
         // caches
         void clear_caches();
