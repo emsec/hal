@@ -533,6 +533,181 @@ namespace hal
          */
         std::vector<Grouping*> get_groupings(const std::function<bool(Grouping*)>& filter = nullptr) const;
 
+        /*
+         * ################################################################
+         *      getter/setter for id tracking
+         * ################################################################
+         */
+
+        /**
+         * Get the next gate id.
+         * 
+         * @returns The next gate id.
+         */
+        u32 get_next_gate_id() const;
+
+        /**
+         * Set the next gate id.
+         * 
+         * @param[in] id - The next gate id.
+         */
+        void set_next_gate_id(const u32 id);
+
+        /**
+         * Get the used gate ids.
+         * 
+         * @returns The used gate ids.
+         */
+        std::set<u32> get_used_gate_ids() const;
+
+        /**
+         * Set the used gate ids.
+         * 
+         * @param[in] ids - The used gate ids.
+         */
+        void set_used_gate_ids(const std::set<u32> ids);
+
+        /**
+         * Get the free gate ids.
+         * 
+         * @returns The free gate ids.
+         */
+        std::set<u32> get_free_gate_ids() const;
+
+        /**
+         * Set the free gate ids.
+         * 
+         * @param[in] ids - The free gate ids.
+         */
+        void set_free_gate_ids(const std::set<u32> ids);
+
+        /**
+         * Get the next net id.
+         * 
+         * @returns The next net id.
+         */
+        u32 get_next_net_id() const;
+
+        /**
+         * Set the next net id.
+         * 
+         * @param[in] id - The next net id.
+         */
+        void set_next_net_id(const u32 id);
+
+        /**
+         * Get the used net ids.
+         * 
+         * @returns The used net ids.
+         */
+        std::set<u32> get_used_net_ids() const;
+
+        /**
+         * Set the used net ids.
+         * 
+         * @param[in] ids - The used net ids.
+         */
+        void set_used_net_ids(const std::set<u32> ids);
+
+        /**
+         * Get the free net ids.
+         * 
+         * @returns The free net ids.
+         */
+        std::set<u32> get_free_net_ids() const;
+
+        /**
+         * Set the free net ids.
+         * 
+         * @param[in] ids - The free net ids.
+         */
+        void set_free_net_ids(const std::set<u32> ids);
+
+        /**
+         * Get the next module id.
+         * 
+         * @returns The next module id.
+         */
+        u32 get_next_module_id() const;
+
+        /**
+         * Set the next module id.
+         * 
+         * @param[in] id - The next module id.
+         */
+        void set_next_module_id(const u32 id);
+
+        /**
+         * Get the used module ids.
+         * 
+         * @returns The used module ids.
+         */
+        std::set<u32> get_used_module_ids() const;
+
+        /**
+         * Set the used module ids.
+         * 
+         * @param[in] ids - The used module ids.
+         */
+        void set_used_module_ids(const std::set<u32> ids);
+
+        /**
+         * Get the free module ids.
+         * 
+         * @returns The free module ids.
+         */
+        std::set<u32> get_free_module_ids() const;
+
+        /**
+         * Set the free module ids.
+         * 
+         * @param[in] ids - The free module ids.
+         */
+        void set_free_module_ids(const std::set<u32> ids);
+
+        /**
+         * Get the next net id.
+         * 
+         * @returns The next net id.
+         */
+        u32 get_next_grouping_id() const;
+
+        /**
+         * Set the next grouping id.
+         * 
+         * @param[in] id - The next grouping id.
+         */
+        void set_next_grouping_id(const u32 id);
+
+        /**
+         * Get the used grouping ids.
+         * 
+         * @returns The used grouping ids.
+         */
+        std::set<u32> get_used_grouping_ids() const;
+
+        /**
+         * Set the used grouping ids.
+         * 
+         * @param[in] ids - The used grouping ids.
+         */
+        void set_used_grouping_ids(const std::set<u32> ids);
+
+        /**
+         * Get the free grouping ids.
+         * 
+         * @returns The free grouping ids.
+         */
+        std::set<u32> get_free_grouping_ids() const;
+
+        /**
+         * Set the free grouping ids.
+         * 
+         * @param[in] ids - The free grouping ids.
+         */
+        void set_free_grouping_ids(const std::set<u32> ids);
+
+
     private:
         /* stores the pointer to the netlist internal manager */
         NetlistInternalManager* m_manager;

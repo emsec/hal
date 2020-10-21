@@ -109,7 +109,11 @@ namespace hal
             // copy gates
             for (const auto& gate : nl->get_gates()) {
                 auto c_gate = c_netlist->create_gate(gate->get_id(), gate->get_type(), gate->get_name(), gate->get_location_x(), gate->get_location_y());
-            
+                
+                for (const auto& [name, func] : gate->get_boolean_functions(true)) {
+                    c_gate->add_boolean_function(name, func);
+                }
+
                 for (const auto& in_point : gate->get_fan_in_endpoints()) {
                     const auto net_id = in_point->get_net()->get_id();
                     auto c_net = c_netlist->get_net_by_id(net_id);
@@ -199,30 +203,22 @@ namespace hal
             c_netlist->set_device_name(nl->get_device_name());
             c_netlist->set_input_filename(nl->get_input_filename());
 
-
-            /* 
-            * The ids for all components after the deepcopy are identical, however after the copy
-            * the ids for newly created components might diverge.
-            * This could be prevented by synching the id tracking members aswell, which would require additional getters/setters for those.
-            */
-            
             // update ids last, after all the creation
-            // c_netlist->m_next_gate_id = nl->m_next_gate_id;
-            // c_netlist->m_used_gate_ids = nl->m_used_gate_ids;
-            // c_netlist->m_free_gate_ids = nl->m_free_gate_ids;
+            c_netlist->set_next_gate_id(nl->get_next_gate_id());
+            c_netlist->set_used_gate_ids(nl->get_used_gate_ids());
+            c_netlist->set_free_gate_ids(nl->get_free_gate_ids());
 
-            // c_netlist->m_next_net_id = nl->m_next_net_id;
-            // c_netlist->m_used_net_ids = nl->m_used_net_ids;
-            // c_netlist->m_free_net_ids = nl->m_free_net_ids;
+            c_netlist->set_next_net_id(nl->get_next_net_id());
+            c_netlist->set_used_net_ids(nl->get_used_net_ids());
+            c_netlist->set_free_net_ids(nl->get_free_net_ids());
 
-            // c_netlist->m_next_module_id = nl->m_next_module_id;
-            // c_netlist->m_used_module_ids = nl->m_used_module_ids;
-            // c_netlist->m_free_module_ids = nl->m_free_module_ids;
+            c_netlist->set_next_module_id(nl->get_next_module_id());
+            c_netlist->set_used_module_ids(nl->get_used_module_ids());
+            c_netlist->set_free_module_ids(nl->get_free_module_ids());
 
-            // c_netlist->m_next_grouping_id = nl->m_next_grouping_id;
-            // c_netlist->m_used_grouping_ids = nl->m_used_grouping_ids;
-            // c_netlist->m_free_grouping_ids = nl->m_free_grouping_ids;
-
+            c_netlist->set_next_grouping_id(nl->get_next_grouping_id());
+            c_netlist->set_used_grouping_ids(nl->get_used_grouping_ids());
+            c_netlist->set_free_grouping_ids(nl->get_free_grouping_ids());
 
             return std::move(c_netlist);
         }

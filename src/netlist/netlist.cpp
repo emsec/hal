@@ -525,4 +525,108 @@ namespace hal
         }
         return res;
     }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    u32 Netlist::get_next_gate_id() const {
+        return m_next_gate_id;
+    }
+
+    void Netlist::set_next_gate_id(const u32 id) {
+        m_next_gate_id = id;
+    }
+
+    std::set<u32> Netlist::get_used_gate_ids() const {
+        return m_used_gate_ids;
+    }
+
+    void Netlist::set_used_gate_ids(const std::set<u32> ids) {
+        m_used_gate_ids = ids;
+    }
+
+    std::set<u32> Netlist::get_free_gate_ids() const {
+        return m_free_gate_ids;
+    }
+
+    void Netlist::set_free_gate_ids(const std::set<u32> ids) {
+        m_free_gate_ids = ids;
+    }
+
+    u32 Netlist::get_next_net_id() const {
+        return m_next_net_id;
+    }
+
+    void Netlist::set_next_net_id(const u32 id) {
+        m_next_net_id = id;
+    }
+
+    std::set<u32> Netlist::get_used_net_ids() const {
+        return m_used_net_ids;
+    }
+
+    void Netlist::set_used_net_ids(const std::set<u32> ids) {
+        m_used_net_ids = ids;
+    }
+
+    std::set<u32> Netlist::get_free_net_ids() const {
+        return m_free_net_ids;
+    }
+
+    void Netlist::set_free_net_ids(const std::set<u32> ids) {
+        m_free_net_ids = ids;
+    }
+
+    u32 Netlist::get_next_module_id() const {
+        return m_next_module_id;
+    }
+
+    void Netlist::set_next_module_id(const u32 id) {
+        m_next_module_id = id;
+    }
+
+    std::set<u32> Netlist::get_used_module_ids() const {
+        return m_used_module_ids;
+    }
+
+    void Netlist::set_used_module_ids(const std::set<u32> ids) {
+        m_used_module_ids = ids;
+    }
+
+    std::set<u32> Netlist::get_free_module_ids() const {
+        return m_free_module_ids;
+    }
+
+    void Netlist::set_free_module_ids(const std::set<u32> ids) {
+        m_free_module_ids = ids;
+    }
+
+    u32 Netlist::get_next_grouping_id() const {
+        return m_next_grouping_id;
+    }
+
+    void Netlist::set_next_grouping_id(const u32 id) {
+        m_next_grouping_id = id;
+    }
+
+    std::set<u32> Netlist::get_used_grouping_ids() const {
+        return m_used_grouping_ids;
+    }
+
+    void Netlist::set_used_grouping_ids(const std::set<u32> ids) {
+        m_used_grouping_ids = ids;
+    }
+
+    std::set<u32> Netlist::get_free_grouping_ids() const {
+        return m_free_grouping_ids;
+    }
+
+    void Netlist::set_free_grouping_ids(const std::set<u32> ids) {
+        m_free_grouping_ids = ids;
+    }
+
 }    // namespace hal
