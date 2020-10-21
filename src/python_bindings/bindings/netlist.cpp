@@ -124,16 +124,16 @@ namespace hal
 
         py_netlist.def("create_gate",
                        py::overload_cast<u32, const GateType*, const std::string&, float, float>(&Netlist::create_gate),
-                       py::arg("id"),
-                       py::arg("gt"),
+                       py::arg("gate_id"),
+                       py::arg("gate_type"),
                        py::arg("name"),
                        py::arg("x") = -1,
                        py::arg("y") = -1,
                        R"(
             Create a new gate and add it to the netlist.
 
-            :param int id: The unique ID of the gate.
-            :param hal_py.Gate_type gt: The gate type.
+            :param int gate_id: The unique ID of the gate.
+            :param hal_py.Gate_type gate_type: The gate type.
             :param str name: The name of the gate.
             :param float x: The x-coordinate of the gate.
             :param float y: The y-coordinate of the gate.
@@ -143,7 +143,7 @@ namespace hal
 
         py_netlist.def("create_gate",
                        py::overload_cast<const GateType*, const std::string&, float, float>(&Netlist::create_gate),
-                       py::arg("gt"),
+                       py::arg("gate_type"),
                        py::arg("name"),
                        py::arg("x") = -1,
                        py::arg("y") = -1,
@@ -151,7 +151,7 @@ namespace hal
             Create a new gate and add it to the netlist.
             The ID of the gate is set automatically.
 
-            :param hal_py.Gate_type gt: The gate type.
+            :param hal_py.Gate_type gate_type: The gate type.
             :param str name: The name of the gate.
             :param float x: The x-coordinate of the gate.
             :param float y: The y-coordinate of the gate.
@@ -285,10 +285,10 @@ namespace hal
             :rtype: int
         )");
 
-        py_netlist.def("create_net", py::overload_cast<const u32, const std::string&>(&Netlist::create_net), py::arg("id"), py::arg("name"), R"(
+        py_netlist.def("create_net", py::overload_cast<const u32, const std::string&>(&Netlist::create_net), py::arg("net_id"), py::arg("name"), R"(
             Create a new net and add it to the netlist.
 
-            :param int id: The unique ID of the net.
+            :param int net_id: The unique ID of the net.
             :param str name: The name of the net.
             :returns: The new net on success, None otherwise.
             :rtype: hal_py.Net or None
@@ -427,14 +427,14 @@ namespace hal
 
         py_netlist.def("create_module",
                        py::overload_cast<const u32, const std::string&, Module*, const std::vector<Gate*>&>(&Netlist::create_module),
-                       py::arg("id"),
+                       py::arg("module_id"),
                        py::arg("name"),
                        py::arg("parent"),
                        py::arg("gates") = std::vector<Gate*>(),
                        R"(
             Create a new module and add it to the netlist.
 
-            :param int id: The unique ID of the module.
+            :param int module_id: The unique ID of the module.
             :param str name: The name of the module.
             :param hal_py.Module parent: The parent module.
             :param list gates: Gates to assign to the new module.
@@ -475,10 +475,10 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def("get_module_by_id", &Netlist::get_module_by_id, py::arg("id"), R"(
+        py_netlist.def("get_module_by_id", &Netlist::get_module_by_id, py::arg("module_id"), R"(
             Get the module specified by the given ID.
 
-            :param int id: The unique ID of the module.
+            :param int module_id: The unique ID of the module.
             :returns: The module on success, None otherwise.
             :rtype: hal_py.Module
         )");
@@ -519,12 +519,12 @@ namespace hal
 
         py_netlist.def("create_grouping",
                        py::overload_cast<const u32, const std::string&>(&Netlist::create_grouping),
-                       py::arg("id"),
+                       py::arg("grouping_id"),
                        py::arg("name"),
                        R"(
             Create a new grouping and add it to the netlist.
 
-            :param int id: The unique ID of the grouping.
+            :param int grouping_id: The unique ID of the grouping.
             :param str name: The name of the grouping.
             :returns: The new grouping on success, None otherwise.
             :rtype: hal_py.Grouping or None
@@ -558,10 +558,10 @@ namespace hal
             :rtype: bool
         )");
 
-        py_netlist.def("get_grouping_by_id", &Netlist::get_grouping_by_id, py::arg("id"), R"(
+        py_netlist.def("get_grouping_by_id", &Netlist::get_grouping_by_id, py::arg("grouping_id"), R"(
             Get the grouping specified by the given ID.
 
-            :param int id: The unique ID of the grouping.
+            :param int grouping_id: The unique ID of the grouping.
             :returns: The grouping on success, nullptr otherwise.
             :rtype: hal_py.Grouping
         )");

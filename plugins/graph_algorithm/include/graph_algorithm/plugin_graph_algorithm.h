@@ -46,7 +46,7 @@ namespace hal
          * Returns map of community-IDs to communities running the spinglass clustering.
          *
          * @param[in] nl - Netlist (internally transformed to di-graph)
-         * @param[in] spin -
+         * @param[in] spins -
          * @returns A map of community-IDs to sets of gates belonging to the communities
          */
         std::map<int, std::set<Gate*>> get_communities_spinglass(Netlist* const nl, u32 const spins);
@@ -55,7 +55,7 @@ namespace hal
          * Returns map of community-IDs to communities running the fast greedy clustering from igraph.
          *
          * @param[in] nl - Netlist (internally transformed to di-graph)
-         * @param[in] spin -
+         * @param[in] spins -
          * @returns A map of community-IDs to sets of gates belonging to the communities
          */
         std::map<int, std::set<Gate*>> get_communities_fast_greedy(Netlist* const nl);

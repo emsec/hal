@@ -151,26 +151,26 @@ namespace hal
         /**
          * Create a new gate and add it to the netlist.
          *
-         * @param[in] id - The unique ID of the gate.
-         * @param[in] gt - The gate type.
+         * @param[in] gate_id - The unique ID of the gate.
+         * @param[in] gate_type - The gate type.
          * @param[in] name - The name of the gate.
          * @param[in] x - The x-coordinate of the gate.
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr otherwise.
          */
-        Gate* create_gate(const u32 id, const GateType* gt, const std::string& name = "", float x = -1, float y = -1);
+        Gate* create_gate(const u32 gate_id, const GateType* gate_type, const std::string& name = "", float x = -1, float y = -1);
 
         /**
          * Create a new gate and add it to the netlist.<br>
          * The ID of the gate is set automatically.
          *
-         * @param[in] gt - The gate type.
+         * @param[in] gate_type - The gate type.
          * @param[in] name - The name of the gate.
          * @param[in] x - The x-coordinate of the gate.
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr otherwise.
          */
-        Gate* create_gate(const GateType* gt, const std::string& name = "", float x = -1, float y = -1);
+        Gate* create_gate(const GateType* gate_type, const std::string& name = "", float x = -1, float y = -1);
 
         /**
          * Remove a gate from the netlist.
@@ -191,7 +191,7 @@ namespace hal
         /**
          * Get the gate specified by the given ID.
          *
-         * @param[in] id - The unique ID of the gate.
+         * @param[in] gate_id - The unique ID of the gate.
          * @returns The gate on success, nullptr otherwise.
          */
         Gate* get_gate_by_id(const u32 gate_id) const;
@@ -284,11 +284,11 @@ namespace hal
         /**
          * Create a new net and add it to the netlist.
          *
-         * @param[in] id - The unique ID of the net.
+         * @param[in] net_id - The unique ID of the net.
          * @param[in] name - The name of the net.
          * @returns The new net on success, nullptr otherwise.
          */
-        Net* create_net(const u32 id, const std::string& name = "");
+        Net* create_net(const u32 net_id, const std::string& name = "");
 
         /**
          * Create a new net and add it to the netlist.<br>
@@ -305,7 +305,7 @@ namespace hal
          * @param[in] net - The net.
          * @returns True on success, false otherwise.
          */
-        bool delete_net(Net* n);
+        bool delete_net(Net* net);
 
         /**
          * Check whether the net is registered in the netlist.
@@ -313,15 +313,15 @@ namespace hal
          * @param[in] net - The net to check.
          * @returns True if the net is in the netlist, false otherwise.
          */
-        bool is_net_in_netlist(Net* n) const;
+        bool is_net_in_netlist(Net* net) const;
 
         /**
          * Get the net specified by the given ID.
          *
-         * @param[in] id - The unique ID of the net.
+         * @param[in] net_id - The unique ID of the net.
          * @returns The net on success, nullptr otherwise.
          */
-        Net* get_net_by_id(u32 id) const;
+        Net* get_net_by_id(u32 net_id) const;
 
         /**
          * Get all nets contained within the netlist.<br>
@@ -411,13 +411,13 @@ namespace hal
         /**
          * Create a new module and add it to the netlist.
          *
-         * @param[in] id - The unique ID of the module.
+         * @param[in] module_id - The unique ID of the module.
          * @param[in] name - The name of the module.
          * @param[in] parent - The parent module.
          * @param[in] gates - Gates to assign to the new module.
          * @returns The new module on success, nullptr otherwise.
          */
-        Module* create_module(const u32 id, const std::string& name, Module* parent, const std::vector<Gate*>& gates = {});
+        Module* create_module(const u32 module_id, const std::string& name, Module* parent, const std::vector<Gate*>& gates = {});
 
         /**
          * Create a new module and add it to the netlist.<br>
@@ -449,10 +449,10 @@ namespace hal
         /**
          * Get the module specified by the given ID.
          *
-         * @param[in] id - The unique ID of the module.
+         * @param[in] module_id - The unique ID of the module.
          * @returns The module on success, nullptr otherwise.
          */
-        Module* get_module_by_id(u32 id) const;
+        Module* get_module_by_id(u32 module_id) const;
 
         /**
          * Get all modules contained within the netlist including the top module.
@@ -485,11 +485,11 @@ namespace hal
         /**
          * Create a new grouping and add it to the netlist.
          *
-         * @param[in] id - The unique ID of the grouping.
+         * @param[in] grouping_id - The unique ID of the grouping.
          * @param[in] name - The name of the grouping.
          * @returns The new grouping on success, nullptr otherwise.
          */
-        Grouping* create_grouping(const u32 id, const std::string& name = "");
+        Grouping* create_grouping(const u32 grouping_id, const std::string& name = "");
 
         /**
          * Create a new grouping and add it to the netlist.<br>
@@ -519,10 +519,10 @@ namespace hal
         /**
          * Get the grouping specified by the given ID.
          *
-         * @param[in] id - The unique ID of the grouping.
+         * @param[in] grouping_id - The unique ID of the grouping.
          * @returns The grouping on success, nullptr otherwise.
          */
-        Grouping* get_grouping_by_id(u32 id) const;
+        Grouping* get_grouping_by_id(u32 grouping_id) const;
 
         /**
          * Get all groupings contained within the netlist.<br>
