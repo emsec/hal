@@ -115,9 +115,9 @@ namespace hal
             // draw box and icon
             painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
             painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
-            QRectF iconRect(ICON_PADDING,ICON_PADDING,ICON_SIZE.width(),ICON_SIZE.height());
-            painter->fillRect(iconRect,Qt::black);
-            painter->drawPixmap(QPoint(ICON_PADDING,ICON_PADDING), iconPixmap());
+//            QRectF iconRect(ICON_PADDING,ICON_PADDING,ICON_SIZE.width(),ICON_SIZE.height());
+//            painter->fillRect(iconRect,Qt::black);
+//            painter->drawPixmap(QPoint(ICON_PADDING,ICON_PADDING), iconPixmap());
 
             // draw center text
             s_pen.setColor(penColor(option->state,s_text_color));
