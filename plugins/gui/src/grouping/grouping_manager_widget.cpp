@@ -84,6 +84,7 @@ namespace hal
         connect(mGroupingTableView, &QTableView::customContextMenuRequested, this, &GroupingManagerWidget::handle_context_menu_request);
         connect(mGroupingTableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &GroupingManagerWidget::handleCurrentChanged);
         connect(mGroupingTableModel, &GroupingTableModel::lastEntryDeleted, this, &GroupingManagerWidget::handleLastEntryDeleted);
+        connect(mGroupingTableModel, &GroupingTableModel::newEntryAdded, this, &GroupingManagerWidget::handleNewEntryAdded);
         handleCurrentChanged();
     }
 
@@ -203,10 +204,20 @@ namespace hal
         return list;
     }
 
+    void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex &index)
+    {
+        mGroupingTableView->setCurrentIndex(index);
+        handleCurrentChanged(index);
+    }
+
     void GroupingManagerWidget::handleLastEntryDeleted()
     {
         if (mGroupingTableModel->rowCount())
-            mGroupingTableView->setCurrentIndex(mGroupingTableModel->index(0,0));
+        {
+            QModelIndex inx = mGroupingTableModel->index(0,0);
+            mGroupingTableView->setCurrentIndex(inx);
+            handleCurrentChanged(inx);
+        }
         else
             handleCurrentChanged();
     }

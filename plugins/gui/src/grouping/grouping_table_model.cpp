@@ -163,10 +163,13 @@ namespace hal {
         Q_EMIT layoutAboutToBeChanged();
         GroupingTableEntry gte(generateUniqueName(QString("grouping%1").arg(maxId+1),existingNames),
                                nextColor());
+        int n = mGroupings.size();
         mGroupings.append(gte);
         Q_EMIT layoutChanged();
         mDisableEvents = false;
 
+        QModelIndex inx = index(n,0);
+        Q_EMIT newEntryAdded(inx);
         return gte.grouping();
     }
 
@@ -194,8 +197,11 @@ namespace hal {
     {
         if (mDisableEvents) return;
         Q_EMIT layoutAboutToBeChanged();
+        int n = mGroupings.size();
         mGroupings.append(GroupingTableEntry(grp,nextColor()));
         Q_EMIT layoutChanged();
+        QModelIndex inx = index(n,0);
+        Q_EMIT newEntryAdded(inx);
     }
 
     void GroupingTableModel::groupingNameChangedEvent(Grouping *grp)

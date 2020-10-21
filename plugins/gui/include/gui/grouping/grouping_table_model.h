@@ -63,6 +63,7 @@ namespace hal {
     Q_SIGNALS:
         void groupingColorChanged(Grouping* grp);
         void lastEntryDeleted();
+        void newEntryAdded(QModelIndex& index);
 
     private:
         QColor nextColor() const;

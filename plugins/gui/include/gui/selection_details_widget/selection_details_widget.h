@@ -107,10 +107,11 @@ namespace hal
     private Q_SLOTS:
         void restoreLastSelection();
         void selectionToGrouping();
-        void selectionToModule();
+        void selectionToModuleMenu();
         void toggle_searchbar();
         void selectionToNewGrouping();
         void selectionToExistingGrouping();
+        void selectionToModuleAction();
 
     private:
         void singleSelectionInternal(const SelectionTreeItem* sti);

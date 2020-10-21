@@ -118,7 +118,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         painter->fillRect(iconRect,Qt::black);
         painter->drawPixmap(QPoint(ICON_PADDING,ICON_PADDING), iconPixmap());
 
-        s_pen.setColor(penColor(option->state));
+        s_pen.setColor(penColor(option->state,s_text_color));
         painter->setPen(s_pen);
 
         for (int iline=0; iline<2; iline++)
@@ -147,7 +147,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                 else
                     s_pen.setColor(s_text_color);
             else
-                s_pen.setColor(penColor(option->state));
+                s_pen.setColor(penColor(option->state,s_text_color));
             painter->setPen(s_pen);
             painter->drawText(text_pos, m_input_pins.at(i));
             text_pos.setY(text_pos.y() + s_pin_font_height + s_pin_inner_vertical_spacing);
@@ -162,7 +162,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                 else
                     s_pen.setColor(s_text_color);
             else
-               s_pen.setColor(penColor(option->state));
+               s_pen.setColor(penColor(option->state,s_text_color));
             painter->setPen(s_pen);
             painter->drawText(m_output_pin_positions.at(i), m_output_pins.at(i));
         }

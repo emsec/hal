@@ -14,8 +14,10 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/toolbar/toolbar.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/gui_utils/netlist.h"
 
 #include <QHeaderView>
+#include <QInputDialog>
 #include <QLabel>
 #include <QPushButton>
 #include <QStackedWidget>
@@ -24,6 +26,7 @@
 #include <QShortcut>
 #include <QSplitter>
 #include <QListWidget>
+#include <QLineEdit>
 #include <QMenu>
 #include <QAction>
 
@@ -123,7 +126,7 @@ namespace hal
 
         connect(m_restoreLastSelection, &QAction::triggered, this, &SelectionDetailsWidget::restoreLastSelection);
         connect(m_selectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
-        connect(m_selectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModule);
+        connect(m_selectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleMenu);
         connect(m_search_action, &QAction::triggered, this, &SelectionDetailsWidget::toggle_searchbar);
         connect(m_selectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
@@ -139,15 +142,15 @@ namespace hal
         canRestoreSelection();
     }
 
-    void SelectionDetailsWidget::selectionToModule()
+    void SelectionDetailsWidget::selectionToModuleMenu()
     {
-        if (g_selection_relay->m_selected_modules.size() + g_selection_relay->m_selected_modules.size() <= 0) return;
+        if (g_selection_relay->m_selected_modules.size() + g_selection_relay->m_selected_gates.size() <= 0) return;
         QMenu* menu = new QMenu(this);
         QAction* action = menu->addAction("New module …");
-//        QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_move_new_action);
+        action->setData(-1);
+        connect(action, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleAction);
         menu->addSeparator();
 
-        QActionGroup* moduleAction = new QActionGroup(menu);
         for (Module* module : g_netlist->get_modules())
         {
             bool canAdd = true;
@@ -183,12 +186,55 @@ namespace hal
                 QString modName = QString::fromStdString(module->get_name());
                 const u32 modId = module->get_id();
                 action          = menu->addAction(modName);
-                moduleAction->addAction(action);
+                connect(action, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleAction);
                 action->setData(modId);
             }
         }
-       // QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handle_move_action(QAction*)));
-        menu->exec(mapToGlobal(geometry().topRight()));
+        menu->exec(mapToGlobal(geometry().topLeft()+QPoint(120,0)));
+    }
+
+    void SelectionDetailsWidget::selectionToModuleAction()
+    {
+        Module* targetModule = nullptr;
+        const QAction* senderAction = static_cast<const QAction*>(sender());
+        Q_ASSERT(senderAction);
+        int actionCode = senderAction->data().toInt();
+        if (actionCode < 0)
+        {
+            std::unordered_set<Gate*> gatesSelected;
+            std::unordered_set<Module*> modulesSelected;
+            for (u32 id : g_selection_relay->m_selected_gates)
+                gatesSelected.insert(g_netlist->get_gate_by_id(id));
+
+            for (u32 id : g_selection_relay->m_selected_modules)
+                modulesSelected.insert(g_netlist->get_module_by_id(id));
+
+            Module* parentModule = gui_utility::first_common_ancestor(modulesSelected, gatesSelected);
+            QString parentName            = QString::fromStdString(parentModule->get_name());
+            bool ok;
+            QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parentName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
+            if (!ok || name.isEmpty()) return;
+            targetModule = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), parentModule);
+        }
+        else
+        {
+            u32 mod_id = actionCode;
+            targetModule = g_netlist->get_module_by_id(mod_id);
+        }
+        Q_ASSERT(targetModule);
+        for (const auto& id : g_selection_relay->m_selected_gates)
+        {
+            targetModule->assign_gate(g_netlist->get_gate_by_id(id));
+        }
+        for (const auto& id : g_selection_relay->m_selected_modules)
+        {
+            g_netlist->get_module_by_id(id)->set_parent_module(targetModule);
+        }
+
+        auto gates   = g_selection_relay->m_selected_gates;
+        auto modules = g_selection_relay->m_selected_modules;
+        g_selection_relay->clear();
+        g_selection_relay->relay_selection_changed(this);
     }
 
     void SelectionDetailsWidget::selectionToGrouping()
