@@ -231,6 +231,9 @@ namespace hal
 
         const QMap<hal::node, QPoint> node_to_position_map() const;
         const QMap<QPoint, hal::node> position_to_node_map() const;
+        QPoint gridPointByItem(GraphicsNode* item) const;
+
+        void dumpNodePositions(const QPoint &search) const;
 
         void set_node_position(const hal::node& n, const QPoint& p);
         void swap_node_positions(const hal::node& n1, const hal::node& n2);
@@ -327,9 +330,10 @@ namespace hal
         void commit_used_paths(const used_paths& used);
         static bool isConstNet(const Net* n);
 
-        QVector<node_box> m_boxes;
-        QHash<QPoint,int> m_boxPosition;
-        QHash<node,int>  m_boxNode;
+        QVector<node_box>        m_boxes;
+        QHash<QPoint,int>        m_boxPosition;
+        QHash<node,int>          m_boxNode;
+        QHash<GraphicsNode*,int> m_boxGraphItem;
 
         QHash<QPoint,road*> m_h_roads;
         QHash<QPoint,road*> m_v_roads;

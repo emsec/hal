@@ -436,7 +436,7 @@ namespace hal
                 // convert scene coordinates into layouter grid coordinates
                 QPointF targetPos = s->drop_target();
                 QPoint targetLayouterPos = closest_layouter_pos(targetPos)[0];
-                QPoint sourceLayouterPos = closest_layouter_pos(m_drag_item->pos())[0];
+                QPoint sourceLayouterPos = layouter->gridPointByItem(m_drag_item);
 
                 if (targetLayouterPos == sourceLayouterPos)
                 {
@@ -459,10 +459,10 @@ namespace hal
                 else
                 {
                     // move mode; move gate to the selected location
-
-                    hal::node nodeTo = layouter->position_to_node_map().value(sourceLayouterPos);
-                    assert(nodeTo != hal::node());
-                    layouter->set_node_position(nodeTo, targetLayouterPos);
+                    QMap<QPoint,hal::node> nodeMap = layouter->position_to_node_map();
+                    auto nodeToMoveIt = nodeMap.find(sourceLayouterPos);
+                    Q_ASSERT(nodeToMoveIt != nodeMap.end());
+                    layouter->set_node_position(nodeToMoveIt.value(), targetLayouterPos);
                 }
                 // re-layout the nets
                 context->schedule_scene_update();

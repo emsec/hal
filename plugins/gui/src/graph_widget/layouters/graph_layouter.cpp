@@ -24,7 +24,6 @@ uint qHash(const QPoint& p)
     return retval;
 }
 
-
 namespace hal
 {
     uint qHash(const hal::node& n)
@@ -66,6 +65,19 @@ namespace hal
     const QMap<hal::node, QPoint> GraphLayouter::node_to_position_map() const
     {
         return m_node_to_position_map;
+    }
+
+    void GraphLayouter::dumpNodePositions(const QPoint& search) const
+    {
+        QTextStream xout(stderr, QIODevice::WriteOnly);
+        xout << "Node positions " << search.x() << " " << search.y() << "\n";
+        xout.setFieldAlignment(QTextStream::AlignRight);
+        xout.setFieldWidth(4);
+        for (auto it = m_position_to_node_map.constBegin(); it != m_position_to_node_map.constEnd(); ++it)
+        {
+            xout << (it.key() == search ? "*" : " ") << it.key().x() << it.key().y() << (it.value().type == node_type::module ? "M" : "G") << it.value().id << "\n";
+        }
+        xout << "=======\n";
     }
 
     const QMap<QPoint, hal::node> GraphLayouter::position_to_node_map() const
@@ -110,6 +122,16 @@ namespace hal
             m_node_to_position_map.remove(n);
             m_position_to_node_map.remove(old_p);
         }
+    }
+
+    QPoint GraphLayouter::gridPointByItem(GraphicsNode* item) const
+    {
+        QPoint retval(-1,-1);
+        if (!item) return retval;
+        int ibox= m_boxGraphItem.value(item,-1);
+        if (ibox<0) return retval;
+        const node_box& nbox = m_boxes.at(ibox);
+        return QPoint(nbox.x,nbox.y);
     }
 
     int GraphLayouter::min_x_index() const
@@ -229,6 +251,7 @@ namespace hal
         m_boxes.clear();
         m_boxNode.clear();
         m_boxPosition.clear();
+        m_boxGraphItem.clear();
 
         for (const GraphLayouter::road* r : m_h_roads.values())
             delete r;
@@ -298,9 +321,11 @@ namespace hal
         while (i != position_to_node_map().constEnd())
         {
             int n = m_boxes.size();
-            m_boxes.append(create_box(i.value(), i.key().x(), i.key().y()));
+            node_box nbox = create_box(i.value(), i.key().x(), i.key().y());
+            m_boxes.append(nbox);
             m_boxNode.insert(i.value(),n);
             m_boxPosition.insert(i.key(),n);
+            m_boxGraphItem.insert(nbox.item,n);
             ++i;
         }
     }
@@ -1161,7 +1186,8 @@ namespace hal
 //                        if (itEpc==mEndpointHash.constEnd())
 //                            qDebug() << "xxx fr endp" << wFromPoint.x() << wFromPoint.y() << y0 << y1;
                     }
-                    lines.append_v_line(xx,y0,y1);
+                    if (y1 > y0)
+                        lines.append_v_line(xx,y0,y1);
                 }
             }
             drawNetsJunction(lines,id);
@@ -1267,6 +1293,7 @@ namespace hal
                     {
                         y0 = mCoordY.value(y).junctionEntry();
                         y1 = mCoordY.value(y).junctionExit();
+                        if (y1 <= y0) y1 = y0 + 1;
                     }
                     float xx = mCoordX.value(x).lanePosition(jw.mRoad);
                     lines.append_v_line(xx,y0,y1);
