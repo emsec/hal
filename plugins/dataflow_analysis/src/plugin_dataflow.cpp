@@ -18,6 +18,7 @@
 #include "dataflow_analysis/utils/utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 
@@ -192,7 +193,8 @@ namespace hal
             log_info("dataflow", "");
         }
 
-        auto netlist_abstr = dataflow::pre_processing::run(nl);
+        auto nl_copy       = netlist_utils::copy_netlist(nl);
+        auto netlist_abstr = dataflow::pre_processing::run(nl_copy.get());
 
         auto initial_grouping = netlist_abstr.utils->create_initial_grouping(netlist_abstr);
         std::shared_ptr<dataflow::Grouping> final_grouping;

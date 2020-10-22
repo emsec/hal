@@ -28,7 +28,7 @@ namespace hal
          *
          * @returns The unique id.
          */
-        u32 get_id();
+        u32 get_id() const;
 
         /**
          * Set the name of the grouping.
@@ -42,7 +42,7 @@ namespace hal
          *
          * @returns The name.
          */
-        std::string get_name();
+        std::string get_name() const;
 
         /**
          * Get the netlist this grouping is associated with.
@@ -86,7 +86,7 @@ namespace hal
          * @param[in] filter - Filter to be applied to the gates.
          * @returns A vector of gates.
          */
-        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr);
+        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr) const;
 
         /**
          * Get the IDs of all gates contained within the grouping. <br>
@@ -95,7 +95,7 @@ namespace hal
          * @param[in] filter - Filter to be applied to the gates.
          * @returns A vector of gate IDs.
          */
-        std::vector<u32> get_gate_ids(const std::function<bool(Gate*)>& filter = nullptr);
+        std::vector<u32> get_gate_ids(const std::function<bool(Gate*)>& filter = nullptr) const;
 
         /**
          * Remove a gate from the grouping.<br>
@@ -121,7 +121,7 @@ namespace hal
          * @param[in] gate - The gate to check for.
          * @returns True on success, false otherwise.
          */
-        bool contains_gate(Gate* gate);
+        bool contains_gate(Gate* gate) const;
 
         /**
          * Check whether a gate is in the grouping by ID.
@@ -129,7 +129,7 @@ namespace hal
          * @param[in] gate_id - The ID of the gate to check for.
          * @returns True on success, false otherwise.
          */
-        bool contains_gate_by_id(const u32 gate_id);
+        bool contains_gate_by_id(const u32 gate_id) const;
 
         /*
          * ################################################################
@@ -166,7 +166,7 @@ namespace hal
          * @param[in] filter - Filter to be applied to the nets.
          * @returns A vector of nets.
          */
-        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr);
+        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr) const;
 
         /**
          * Get the IDs of all nets contained within the grouping. <br>
@@ -175,7 +175,7 @@ namespace hal
          * @param[in] filter - Filter to be applied to the nets.
          * @returns A vector of net IDs.
          */
-        std::vector<u32> get_net_ids(const std::function<bool(Net*)>& filter = nullptr);
+        std::vector<u32> get_net_ids(const std::function<bool(Net*)>& filter = nullptr) const;
 
         /**
          * Remove a net from the grouping.<br>
@@ -201,7 +201,7 @@ namespace hal
          * @param[in] net - The net to check for.
          * @returns True on success, false otherwise.
          */
-        bool contains_net(Net* net);
+        bool contains_net(Net* net) const;
 
         /**
          * Check whether a net is in the grouping by ID.<br>
@@ -209,7 +209,7 @@ namespace hal
          * @param[in] net_id - The ID of the net to check for.
          * @returns True on success, false otherwise.
          */
-        bool contains_net_by_id(const u32 net_id);
+        bool contains_net_by_id(const u32 net_id) const;
 
         /*
          * ################################################################
@@ -246,7 +246,7 @@ namespace hal
          * @param[in] filter - Filter to be applied to the modules.
          * @returns A vector of modules.
          */
-        std::vector<Module*> get_modules(const std::function<bool(Module*)>& filter = nullptr);
+        std::vector<Module*> get_modules(const std::function<bool(Module*)>& filter = nullptr) const;
 
         /**
          * Get the IDs of all modules contained within the grouping. <br>
@@ -255,7 +255,7 @@ namespace hal
          * @param[in] filter - Filter to be applied to the modules.
          * @returns A vector of module IDs.
          */
-        std::vector<u32> get_module_ids(const std::function<bool(Module*)>& filter = nullptr);
+        std::vector<u32> get_module_ids(const std::function<bool(Module*)>& filter = nullptr) const;
 
         /**
          * Remove a module from the grouping.<br>
@@ -281,7 +281,7 @@ namespace hal
          * @param[in] module - The module to check for.
          * @returns True on success, false otherwise.
          */
-        bool contains_module(Module* module);
+        bool contains_module(Module* module) const;
 
         /**
          * Check whether a module is in the grouping by ID.<br>
@@ -289,7 +289,7 @@ namespace hal
          * @param[in] module_id - The ID of the module to check for.
          * @returns True on success, false otherwise.
          */
-        bool contains_module_by_id(const u32 module_id);
+        bool contains_module_by_id(const u32 module_id) const;
 
     private:
         friend class NetlistInternalManager;
