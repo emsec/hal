@@ -104,8 +104,8 @@ namespace hal
 
         py_boolean_function.def_static("from_string", &BooleanFunction::from_string, py::arg("expression"), py::arg("variable_names"), R"(
             Parse a function from a string representation.
-            Supported operators are  NOT (\"!\", \"'\"), AND (\"&\", \"*\", \" \"), OR (\"|\", \"+\"), XOR (\"^\") and brackets (\"(\", \")\").
-            Operator precedence is '!' > '&' > '^' > '|'.
+            Supported operators are  NOT (\"!\", \"'\"), AND (\"&\", \"*\", \" \"), OR (\"\|\", \"+\"), XOR (\"^\") and brackets (\"(\", \")\").
+            Operator precedence is '!' > '&' > '^' > '\|'.
 
             Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.
 
