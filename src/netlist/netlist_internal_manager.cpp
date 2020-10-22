@@ -2,10 +2,12 @@
 
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_system/gate_event_handler.h"
+#include "hal_core/netlist/event_system/grouping_event_handler.h"
 #include "hal_core/netlist/event_system/module_event_handler.h"
 #include "hal_core/netlist/event_system/net_event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -46,7 +48,8 @@ namespace hal
             log_error("netlist.internal", "netlist::create_gate: gate id {:08x} is already taken.", id);
             return nullptr;
         }
-        if (gt == nullptr) {
+        if (gt == nullptr)
+        {
             log_error("netlist.internal", "netlist::create_gate: nullptr given for gate type.", id);
             return nullptr;
         }
@@ -560,6 +563,262 @@ namespace hal
 
         module_event_handler::notify(module_event_handler::event::gate_removed, m, g->get_id());
         module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, g->get_id());
+
+        return true;
+    }
+
+    //######################################################################
+    //###                      groupings                                 ###
+    //######################################################################
+
+    Grouping* NetlistInternalManager::create_grouping(u32 id, const std::string name)
+    {
+        if (id == 0)
+        {
+            log_error("netlist.internal", "netlist::create_grouping: id 0 represents 'invalid ID'.");
+            return nullptr;
+        }
+        if (m_netlist->m_used_grouping_ids.find(id) != m_netlist->m_used_grouping_ids.end())
+        {
+            log_error("netlist.internal", "netlist::create_grouping: grouping id {:08x} is already taken.", id);
+            return nullptr;
+        }
+        if (utils::trim(name).empty())
+        {
+            log_error("netlist.internal", "netlist::create_grouping: empty name is not allowed.");
+            return nullptr;
+        }
+
+        auto new_grouping = std::unique_ptr<Grouping>(new Grouping(this, id, name));
+
+        auto free_id_it = m_netlist->m_free_grouping_ids.find(id);
+        if (free_id_it != m_netlist->m_free_grouping_ids.end())
+        {
+            m_netlist->m_free_grouping_ids.erase(free_id_it);
+        }
+
+        m_netlist->m_used_grouping_ids.insert(id);
+
+        auto raw = new_grouping.get();
+
+        m_netlist->m_groupings_map[id] = std::move(new_grouping);
+        m_netlist->m_groupings_set.insert(raw);
+        m_netlist->m_groupings.push_back(raw);
+
+        // notify
+        grouping_event_handler::notify(grouping_event_handler::event::created, raw);
+
+        return raw;
+    }
+
+    bool NetlistInternalManager::delete_grouping(Grouping* grouping)
+    {
+        if (!m_netlist->is_grouping_in_netlist(grouping))
+        {
+            return false;
+        }
+
+        for (Gate* gate : grouping->get_gates()) 
+        {
+            gate->m_grouping = nullptr;
+        }
+
+        for (Net* net : grouping->get_nets()) 
+        {
+            net->m_grouping = nullptr;
+        }
+
+        for (Module* module : grouping->get_modules()) 
+        {
+            module->m_grouping = nullptr;
+        }
+        
+        auto it  = m_netlist->m_groupings_map.find(grouping->get_id());
+        auto ptr = std::move(it->second);
+        m_netlist->m_groupings_map.erase(it);
+        m_netlist->m_groupings_set.erase(grouping);
+        unordered_vector_erase(m_netlist->m_groupings, grouping);
+
+        // free ids
+        m_netlist->m_free_grouping_ids.insert(grouping->get_id());
+        m_netlist->m_used_grouping_ids.erase(grouping->get_id());
+
+        // notify
+        grouping_event_handler::notify(grouping_event_handler::event::removed, grouping);
+
+        return true;
+    }
+
+    bool NetlistInternalManager::grouping_assign_gate(Grouping* grouping, Gate* gate, bool force)
+    {
+        if (gate == nullptr || gate->get_grouping() == grouping) 
+        {
+            return false;
+        }
+
+        u32 gate_id = gate->get_id();
+
+        if (Grouping* other = gate->get_grouping(); other != nullptr)
+        {
+            if(force) 
+            {
+                other->remove_gate(gate);
+            } 
+            else 
+            {
+                log_error("netlist.internal", "netlist::grouping_assign_gate: gate with ID {:08x} is already part of a grouping with ID {:08x}.", gate_id, other->get_id());
+                return false;
+            }
+        }
+
+        grouping->m_gates.push_back(gate);
+        grouping->m_gates_map.emplace(gate_id, gate);
+        gate->m_grouping = grouping;
+
+        grouping_event_handler::notify(grouping_event_handler::event::gate_assigned, grouping, gate_id);
+
+        return true;
+    }
+
+    bool NetlistInternalManager::grouping_remove_gate(Grouping* grouping, Gate* gate)
+    {
+        if (gate == nullptr) 
+        {
+            return false;
+        }
+
+        u32 gate_id = gate->get_id();
+
+        if (!grouping->contains_gate(gate))
+        {
+            log_error("netlist.internal", "netlist::grouping_remove_gate: gate with ID {:08x} is not part of grouping with ID {:08x}.", gate_id, grouping->get_id());
+            return false;
+        }
+
+        auto vec_it = std::find(grouping->m_gates.begin(), grouping->m_gates.end(), gate);
+
+        *vec_it = grouping->m_gates.back();
+        grouping->m_gates.pop_back();
+        grouping->m_gates_map.erase(gate_id);
+        gate->m_grouping = nullptr;
+
+        grouping_event_handler::notify(grouping_event_handler::event::gate_removed, grouping, gate_id);
+
+        return true;
+    }
+
+    bool NetlistInternalManager::grouping_assign_net(Grouping* grouping, Net* net, bool force)
+    {
+        if (net == nullptr || net->get_grouping() == grouping) 
+        {
+            return false;
+        }
+
+        u32 net_id = net->get_id();
+
+        if (Grouping* other = net->get_grouping(); other != nullptr)
+        {
+            if(force) 
+            {
+                other->remove_net(net);
+            } 
+            else 
+            {
+                log_error("netlist.internal", "netlist::grouping_assign_net: net with ID {:08x} is already part of grouping with ID {:08x}.", net_id, other->get_id());
+                return false;
+            }
+        }
+
+        grouping->m_nets.push_back(net);
+        grouping->m_nets_map.emplace(net_id, net);
+        net->m_grouping = grouping;
+
+        grouping_event_handler::notify(grouping_event_handler::event::net_assigned, grouping, net_id);
+
+        return true;
+    }
+
+    bool NetlistInternalManager::grouping_remove_net(Grouping* grouping, Net* net)
+    {
+        if (net == nullptr) 
+        {
+            return false;
+        }
+
+        u32 net_id = net->get_id();
+
+        if (!grouping->contains_net(net))
+        {
+            log_error("netlist.internal", "netlist::grouping_remove_net: net with ID {:08x} is not part of grouping with ID {:08x}.", net_id, grouping->get_id());
+            return false;
+        }
+
+        auto vec_it = std::find(grouping->m_nets.begin(), grouping->m_nets.end(), net);
+
+        *vec_it = grouping->m_nets.back();
+        grouping->m_nets.pop_back();
+        grouping->m_nets_map.erase(net_id);
+        net->m_grouping = nullptr;
+
+        grouping_event_handler::notify(grouping_event_handler::event::net_removed, grouping, net_id);
+
+        return true;
+    }
+
+    bool NetlistInternalManager::grouping_assign_module(Grouping* grouping, Module* module, bool force)
+    {
+        if (module == nullptr || module->get_grouping() == grouping) 
+        {
+            return false;
+        }
+
+        u32 module_id = module->get_id();
+
+        if (Grouping* other = module->get_grouping(); other != nullptr)
+        {
+            if(force) 
+            {
+                other->remove_module(module);
+            } 
+            else 
+            {
+                log_error("netlist.internal", "netlist::grouping_assign_module: module with ID {:08x} is already part of grouping with ID {:08x}.", module_id, other->get_id());
+                return false;
+            }
+        }
+
+        grouping->m_modules.push_back(module);
+        grouping->m_modules_map.emplace(module_id, module);
+        module->m_grouping = grouping;
+
+        grouping_event_handler::notify(grouping_event_handler::event::module_assigned, grouping, module_id);
+
+        return true;
+    }
+
+    bool NetlistInternalManager::grouping_remove_module(Grouping* grouping, Module* module)
+    {
+        if (module == nullptr) 
+        {
+            return false;
+        }
+
+        u32 module_id = module->get_id();
+
+        if (!grouping->contains_module(module))
+        {
+            log_error("netlist.internal", "netlist::grouping_remove_module: module with ID {:08x} is not part of grouping with ID {:08x}.", module_id, grouping->get_id());
+            return false;
+        }
+
+        auto vec_it = std::find(grouping->m_modules.begin(), grouping->m_modules.end(), module);
+
+        *vec_it = grouping->m_modules.back();
+        grouping->m_modules.pop_back();
+        grouping->m_modules_map.erase(module_id);
+        module->m_grouping = nullptr;
+
+        grouping_event_handler::notify(grouping_event_handler::event::module_removed, grouping, module_id);
 
         return true;
     }

@@ -1,6 +1,7 @@
 #include "gui/content_manager/content_manager.h"
 
 #include "gui/context_manager_widget/context_manager_widget.h"
+#include "gui/grouping/grouping_manager_widget.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/graph_context_manager.h"
@@ -67,6 +68,11 @@ namespace hal
         return mSelectionDetailsWidget;
     }
 
+    GroupingManagerWidget* ContentManager::getGroupingManagerWidget()
+    {
+        return mGroupingManagerWidget;
+    }
+
     ContextManagerWidget* ContentManager::get_context_manager_widget()
     {
         return m_context_manager_wid;
@@ -86,6 +92,10 @@ namespace hal
         m_context_manager_wid = new ContextManagerWidget(m_graph_tab_wid);
         m_MainWindow->add_content(m_context_manager_wid, 1, content_anchor::left);
         m_context_manager_wid->open();
+
+        mGroupingManagerWidget = new GroupingManagerWidget(m_graph_tab_wid);
+        m_MainWindow->add_content(mGroupingManagerWidget, 2, content_anchor::left);
+        mGroupingManagerWidget->open();
 
         //we should probably document somewhere why we need this timer and why we have some sort of racing condition(?) here?
         //QTimer::singleShot(50, [this]() { this->m_context_manager_wid->handle_create_context_clicked(); });

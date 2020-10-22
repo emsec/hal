@@ -41,10 +41,12 @@ namespace hal
     class Netlist;
     class NetlistInternalManager;
     class Net;
+    class Grouping;
     class Gate;
 
     /**
-     * Module class containing information about a module including its gates, submodules, and parent module.
+     * A module is a container for gates and their associated nets that enables hierarchization within the netlist.<br>
+     * Each gate can only be in one module at a time. Nets are only loosely associated with modules.
      *
      * @ingroup module
      */
@@ -52,74 +54,82 @@ namespace hal
     {
     public:
         /**
-         * Get the module's id.
+         * Get the unique ID of the module.
          *
-         * @returns The module's id.
+         * @returns The unique id.
          */
         u32 get_id() const;
 
         /**
-         * Get the module's name.
+         * Get the name of the module.
          *
-         * @returns The module's name.
+         * @returns The name.
          */
         std::string get_name() const;
 
         /**
-         * Set the module's name.
+         * Set the name of the module.
          *
          * @params[in] name - The new name.
          */
         void set_name(const std::string& name);
 
         /**
-         * Get the module's type.
+         * Get the type of the module.
          *
-         * @returns The module's type.
+         * @returns The type.
          */
         std::string get_type() const;
 
         /**
-         * Set the module's type.
+         * Set the type of the module.
          *
          * @params[in] type - The new type.
          */
         void set_type(const std::string& type);
 
         /**
-         * Get the parent of this module.<br>
-         * This returns nullptr for the top module.
+         * Get the grouping in which this module is contained.
+         *
+         * @returns The grouping.
+         */
+        Grouping* get_grouping() const;
+
+        /**
+         * Get the parent module of this module.<br>
+         * For the top module, a \p nullptr is returned.
          *
          * @returns The parent module.
          */
         Module* get_parent_module() const;
 
         /**
-         * Sets a new parent for this module.<br>
+         * Set a new parent for this module.<br>
          * If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
          *
-         * @param[in] new_parent - the new parent module
-         * @returns True if the parent was changed
+         * @param[in] new_parent - The new parent module.
+         * @returns True if the parent was changed, false otherwise.
          */
         bool set_parent_module(Module* new_parent);
 
         /**
          * Get all direct submodules of this module.<br>
-         * If \p recursive is true, all indirect submodules are also included.
+         * If \p recursive is set to true, all indirect submodules are also included.<br>
+         * A filter can be applied to the result to only get submodules matching the specified condition.
          *
-         * @param[in] filter - Filter for the modules
-         * @param[in] recursive - Look into submodules as well
-         * @returns The set of submodules
+         * @param[in] filter - Filter to be applied to the modules.
+         * @param[in] recursive - True to include indirect submodules as well.
+         * @returns The vector of submodules.
          */
         std::vector<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
 
         /**
          * Checks whether another module is a submodule of this module.<br>
-         * If \p recursive is true, all indirect submodules are also included.
+         * If \p recursive is set to true, all indirect submodules are also included.
          *
-         * @param[in] other - Other module to check
-         * @param[in] recursive - Look into submodules as well
-         * @returns True if the other module is a submodule
+         * @param[in] other - Other module to check for.
+         * @param[in] recursive - True to include indirect submodules as well.
+         * @returns True if the other module is a submodule, false otherwise.
          */
         bool contains_module(Module* other, bool recursive = false) const;
 
@@ -131,61 +141,45 @@ namespace hal
         Netlist* get_netlist() const;
 
         /**
-         * Get the input nets to this module.<br>
-         * A module input net is either a global input to the netlist or has a source outside of the module.
+         * Get the input nets of this module.<br>
+         * An input net is either a global input to the netlist or has a source outside of the module.
          *
-         * @returns The sorted set of module input nets.
+         * @returns The sorted vector of input nets.
          */
         std::vector<Net*> get_input_nets() const;
 
         /**
          * Get the output nets of this module.<br>
-         * A module output net is either a global output of the netlist or has a destination outside of the module.
+         * An output net is either a global output to the netlist or has a destination outside of the module.
          *
-         * @returns The sorted set of module output nets.
+         * @returns The sorted vector of output nets.
          */
         std::vector<Net*> get_output_nets() const;
 
         /**
          * Get the internal nets of this module.<br>
-         * A net is internal if its source and at least one output are inside the module.<br>
-         * Therefore it may contain some nets that are also regarded as output nets.
+         * An internal net has at least one source and one destination within the module.<br>
+         * Therefore it may contain some nets that are also regarded as input or output nets.
          *
-         * @returns The sorted set of module input nets.
+         * @returns The sorted vector of internal nets.
          */
         std::vector<Net*> get_internal_nets() const;
 
         /**
-         * Set the name of the port corresponding to the specified input net to the given string.
+         * Set the name of the port corresponding to the specified input net.
          *
          * @param[in] input_net - The input net.
-         * @param[in] port_name - The port name.
+         * @param[in] port_name - The input port name.
          */
         void set_input_port_name(Net* input_net, const std::string& port_name);
-
-        /**
-         * Set the name of the port corresponding to the specified output net to the given string.
-         *
-         * @param[in] output_net - The output net.
-         * @param[in] port_name - The port name.
-         */
-        void set_output_port_name(Net* output_net, const std::string& port_name);
 
         /**
          * Get the name of the port corresponding to the specified input net.
          *
          * @param[in] net - The input net.
-         * @returns The port name.
+         * @returns The input port name.
          */
         std::string get_input_port_name(Net* net);
-
-        /**
-         * Get the name of the port corresponding to the specified output net.
-         *
-         * @param[in] net - The output net.
-         * @returns The port name.
-         */
-        std::string get_output_port_name(Net* net);
 
         /**
          * Get the input net of the port corresponding to the specified port name.
@@ -196,19 +190,35 @@ namespace hal
         Net* get_input_port_net(const std::string& port_name);
 
         /**
+         * Get the mapping of all input nets to their corresponding port names.
+         *
+         * @returns The map from input net to port name.
+         */
+        const std::map<Net*, std::string>& get_input_port_names() const;
+
+        /**
+         * Set the name of the port corresponding to the specified output net.
+         *
+         * @param[in] output_net - The output net.
+         * @param[in] port_name - The output port name.
+         */
+        void set_output_port_name(Net* output_net, const std::string& port_name);
+
+        /**
+         * Get the name of the port corresponding to the specified output net.
+         *
+         * @param[in] net - The output net.
+         * @returns The output port name.
+         */
+        std::string get_output_port_name(Net* net);
+
+        /**
          * Get the output net of the port corresponding to the specified port name.
          *
          * @param[in] port_name - The output port name.
          * @returns The output net.
          */
         Net* get_output_port_net(const std::string& port_name);
-
-        /**
-         * Get the mapping of all input nets to their corresponding port names.
-         *
-         * @returns The map from input net to port name.
-         */
-        const std::map<Net*, std::string>& get_input_port_names() const;
 
         /**
          * Get the mapping of all output nets to their corresponding port names.
@@ -224,51 +234,51 @@ namespace hal
          */
 
         /**
-         * Moves a gate into this module.<br>
+         * Assign a gate to the module.<br>
          * The gate is removed from its previous module in the process.
          *
-         * @param[in] gate - The gate to move.
-         * @returns True on success.
+         * @param[in] gate - The gate to assign.
+         * @returns True on success, false otherwise.
          */
         bool assign_gate(Gate* gate);
 
         /**
-         * Removes a gate from the module.<br>
-         * It is automatically moved to the netlist's top module.
+         * Remove a gate from the module.<br>
+         * Automatically moves the gate to the top module of the netlist.
          *
-         * @param[in] gate - Pointer to the gate pointer.
-         * @returns True on success.
+         * @param[in] gate - The gate to remove.
+         * @returns True on success, false otherwise.
          */
         bool remove_gate(Gate* gate);
 
         /**
-         * Checks whether a gate is in the module.<br>
-         * If \p recursive is true, all submodules are searched as well.
+         * Check whether a gate is in the module.<br>
+         * If \p recursive is set to true, all submodules are searched as well.
          *
-         * @param[in] gate - The gate to check.
-         * @param[in] recursive - Look into submodules too
-         * @returns True if the gate is in module
+         * @param[in] gate - The gate to check for.
+         * @param[in] recursive - True to also search in submodules.
+         * @returns True if the gate is in the module, false otherwise.
          */
         bool contains_gate(Gate* gate, bool recursive = false) const;
 
         /**
-         * Get a gate specified by id.<br>
+         * Get a gate specified by the given ID.<br>
          * If \p recursive is true, all submodules are searched as well.
          *
-         * @param[in] id - The gate's id.
-         * @param[in] recursive - Look into submodules too
-         * @returns The gate or a nullptr.
+         * @param[in] id - The unique ID of the gate.
+         * @param[in] recursive - True to also search in submodules.
+         * @returns The gate if found, a nullptr otherwise.
          */
         Gate* get_gate_by_id(const u32 id, bool recursive = false) const;
 
         /**
-         * Get all gates of the module. <br>
-         * You can filter the set before output with the optional parameters.<br>
+         * Get all gates contained within the module.<br>
+         * A filter can be applied to the result to only get gates matching the specified condition.<br>
          * If \p recursive is true, all submodules are searched as well.
          *
-         * @param[in] filter - Filter for the returned gates
-         * @param[in] recursive - Look into submodules too
-         * @return A set of gates.
+         * @param[in] filter - Filter to be applied to the gates.
+         * @param[in] recursive - True to also search in submodules.
+         * @return The vector of all gates.
          */
         std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
 
@@ -285,6 +295,9 @@ namespace hal
         NetlistInternalManager* m_internal_manager;
         u32 m_id;
 
+        /* grouping */
+        Grouping* m_grouping = nullptr;
+
         Module* m_parent;
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
@@ -292,10 +305,10 @@ namespace hal
         /* port names */
         mutable u32 m_next_input_port_id  = 0;
         mutable u32 m_next_output_port_id = 0;
-        mutable std::set<Net*> m_named_input_nets; // ordering necessary, cannot be replaced with unordered_set
-        mutable std::set<Net*> m_named_output_nets; // ordering necessary, cannot be replaced with unordered_set
-        mutable std::map<Net*, std::string> m_input_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
-        mutable std::map<Net*, std::string> m_output_net_to_port_name; // ordering necessary, cannot be replaced with unordered_map
+        mutable std::set<Net*> m_named_input_nets;                        // ordering necessary, cannot be replaced with unordered_set
+        mutable std::set<Net*> m_named_output_nets;                       // ordering necessary, cannot be replaced with unordered_set
+        mutable std::map<Net*, std::string> m_input_net_to_port_name;     // ordering necessary, cannot be replaced with unordered_map
+        mutable std::map<Net*, std::string> m_output_net_to_port_name;    // ordering necessary, cannot be replaced with unordered_map
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;

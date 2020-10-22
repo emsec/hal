@@ -769,6 +769,143 @@ namespace hal
         return true;
     }
 
+    bool test_utils::groupings_are_equal(Grouping* g_0, Grouping* g_1, const bool ignore_id, const bool ignore_name)
+    {
+        // Not only one of them may be a nullptr
+        if (g_0 == nullptr || g_1 == nullptr)
+        {
+            if (g_0 == g_1)
+                return true;
+            else {
+                log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: One netlist is a nullptr.");
+                return false;
+            }
+        }
+        // The ids should be equal
+        if (!ignore_id && g_0->get_id() != g_1->get_id()) {
+            log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: IDs are different (\"{}\" vs \"{}\")", g_0->get_id(),g_1->get_id());
+            return false;
+        }
+        // The names should be equal
+        if (!ignore_name && g_0->get_name() != g_1->get_name()) {
+            log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Names are different (\"{}\" vs \"{}\")", g_0->get_name(),g_1->get_name());
+            return false;
+        }
+
+        // Check if gates are the same
+        if (g_0->get_gates().size() != g_1->get_gates().size()) {
+            log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: The number of gates is different ({} vs {})", g_0->get_gates().size(),g_1->get_gates().size());
+            return false;
+        }
+        for (auto gate_0 : g_0->get_gates())
+        {
+            if (ignore_id)
+            {
+                auto g_1_list = g_1->get_gates(gate_name_filter(gate_0->get_name()));
+                if (g_1_list.size() > 1) {
+                    log_info("test_utils", "groupings_are_equal: Groupings can't be compared! Reason: Multiple gates with name \"{}\" are found in the second grouping.", gate_0->get_name());
+                    return false;
+                }
+                if (g_1_list.size() < 1) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Cannot find a gate with name \"{}\" in second grouping.", gate_0->get_name());
+                    return false;
+                }
+                if (!gates_are_equal(gate_0, *g_1_list.begin(), ignore_id)) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Gates with name \"{}\" are not equal.", gate_0->get_name());
+                    return false;
+                }
+            } 
+            else 
+            {
+                Gate* gate_1 = g_1->get_netlist()->get_gate_by_id(gate_0->get_id());
+                if (!gates_are_equal(gate_0, gate_1, ignore_id, ignore_name)) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Gates with name \"{}\" are not equal.", gate_0->get_name());
+                    return false;
+                }
+                if (!g_1->contains_gate(gate_1)) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Second grouping does not contain a gate with name \"{}\".", gate_1->get_name());
+                    return false;
+                }
+            }
+        }
+
+        // Check if nets are the same
+        if (g_0->get_nets().size() != g_1->get_nets().size()) {
+            log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: The number of nets is different ({} vs {})", g_0->get_nets().size(),g_1->get_nets().size());
+            return false;
+        }
+        for (auto net_0 : g_0->get_nets())
+        {
+            if (ignore_id)
+            {
+                auto g_1_list = g_1->get_nets(net_name_filter(net_0->get_name()));
+                if (g_1_list.size() > 1) {
+                    log_info("test_utils", "groupings_are_equal: Groupings can't be compared! Reason: Multiple nets with name \"{}\" are found in the second grouping.", net_0->get_name());
+                    return false;
+                }
+                if (g_1_list.size() < 1) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Cannot find a net with name \"{}\" in second grouping.", net_0->get_name());
+                    return false;
+                }
+                if (!nets_are_equal(net_0, *g_1_list.begin(), ignore_id)) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Nets with name \"{}\" are not equal.", net_0->get_name());
+                    return false;
+                }
+            } 
+            else 
+            {
+                Net* net_1 = g_1->get_netlist()->get_net_by_id(net_0->get_id());
+                if (!nets_are_equal(net_0, net_1, ignore_id, ignore_name)) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Nets with name \"{}\" are not equal.", net_0->get_name());
+                    return false;
+                }
+                if (!g_1->contains_net(net_1)) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Second grouping does not contain a net with name \"{}\".", net_1->get_name());
+                    return false;
+                }
+            }
+        }
+
+        // Check if modules are the same
+        if (g_0->get_modules().size() != g_1->get_modules().size()) {
+            log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: The number of modules is different ({} vs {})", g_0->get_modules().size(),g_1->get_modules().size());
+            return false;
+        }
+        for (auto module_0 : g_0->get_modules())
+        {
+            if (ignore_id)
+            {
+                auto g_1_list = g_1->get_modules(module_name_filter(module_0->get_name()));
+                if (g_1_list.size() > 1) {
+                    log_info("test_utils", "groupings_are_equal: Groupings can't be compared! Reason: Multiple modules with name \"{}\" are found in the second grouping.", module_0->get_name());
+                    return false;
+                }
+                if (g_1_list.size() < 1) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Cannot find a module with name \"{}\" in second grouping.", module_0->get_name());
+                    return false;
+                }
+                if (!modules_are_equal(module_0, *g_1_list.begin(), ignore_id)) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Modules with name \"{}\" are not equal.", module_0->get_name());
+                    return false;
+                }
+            } 
+            else 
+            {
+                Module* module_1 = g_1->get_netlist()->get_module_by_id(module_0->get_id());
+                if (!modules_are_equal(module_0, module_1, ignore_id, ignore_name)) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Modules with name \"{}\" are not equal.", module_0->get_name());
+                    return false;
+                }
+                if (!g_1->contains_module(module_1)) {
+                    log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Second grouping does not contain a module with name \"{}\".", module_1->get_name());
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     bool test_utils::netlists_are_equal(Netlist* nl_0, Netlist* nl_1, const bool ignore_id)
     {
         if (nl_0 == nullptr || nl_1 == nullptr)
@@ -866,7 +1003,7 @@ namespace hal
             }
         }
 
-        // -- Check if the modules are the same
+        // Check if the modules are the same
         if (nl_0->get_modules().size() != nl_1->get_modules().size()) {
             log_info("test_utils",
                      "netlists_are_equal: Netlists are not equal! Reason: The number of modules is different ({} vs {})",
@@ -899,12 +1036,49 @@ namespace hal
             }
         }
 
+        // Check of the groupings are the same
+        if (nl_0->get_groupings().size() != nl_1->get_groupings().size()) {
+            log_info("test_utils",
+                     "netlists_are_equal: Netlists are not equal! Reason: The number of groupings is different ({} vs {})",
+                     nl_0->get_groupings().size(),
+                     nl_1->get_groupings().size());
+            return false;
+        }
+        std::vector<Grouping*> groupings_1 = nl_1->get_groupings();
+        for (auto g_0 : nl_0->get_groupings())
+        {
+            if (ignore_id)
+            {
+                auto g_1     = std::find_if(groupings_1.begin(), groupings_1.end(), [g_0](Grouping* g) { return g->get_name() == g_0->get_name(); });
+                if (g_1 == groupings_1.end()) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Cannot find a grouping with name \"{}\" in second netlist.", g_0->get_name());
+                    return false;
+                }
+                if (!groupings_are_equal(g_0, *g_1, ignore_id)) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Groupings with name \"{}\" are not equal.", g_0->get_name());
+                    return false;
+                }
+            }
+            else
+            {
+                if (!groupings_are_equal(g_0, nl_1->get_grouping_by_id(g_0->get_id()), ignore_id)) {
+                    log_info("test_utils", "netlists_are_equal: Netlists are not equal! Reason: Groupings with name \"{}\" are not equal.", g_0->get_name());
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
     // Filter Functions
 
     std::function<bool(Module*)> test_utils::module_name_filter(const std::string& name)
+    {
+        return [name](auto m) { return m->get_name() == name; };
+    }
+
+    std::function<bool(Grouping*)> test_utils::grouping_name_filter(const std::string& name)
     {
         return [name](auto m) { return m->get_name() == name; };
     }

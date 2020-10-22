@@ -67,7 +67,7 @@ namespace hal
                 Returns the map of community-IDs to communities running the fast-greedy clustering algorithm.
 
                 :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
-                :param set[hal_py.get_gate()] gates: Set of gates for which the strongly connected components are determined. (default = empty means that all gates of the netlist are considered)
+                :param set[hal_py.get_gate()] gates: Set of gates in clustering
                 :returns: A map of clusters.
                 :rtype: dict[set[hal_py.get_gate()]]
                 )")
@@ -78,7 +78,7 @@ namespace hal
                 Returns the map of community-IDs to communities running the multilevel clustering algorithm.
 
                 :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
-                :param set[hal_py.get_gate()] gates: Set of gates for which the strongly connected components are determined. (default = empty means that all gates of the netlist are considered)
+                :param set[hal_py.get_gate()] gates: Set of gates in clustering
                 :returns: A map of clusters.
                 :rtype: dict[int,set[hal_py.get_gate()]]
                 )")
@@ -93,21 +93,12 @@ namespace hal
             .def("get_strongly_connected_components",
                  &GraphAlgorithmPlugin::get_strongly_connected_components,
                  py::arg("netlist"),
-                 py::arg("gates"),
                  R"(
                 Returns the set of strongly connected components.
 
                 :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
-                :param set[hal_py.get_gate()] gates: Set of gates for which the strongly connected components are determined. (default = empty means that all gates of the netlist are considered)
                 :returns: A set of strongly connected components where each component is a set of gates.
                 :rtype: set[set[hal_py.get_gate()]]
-                )")
-            .def("get_dijkstra_shortest_paths", &GraphAlgorithmPlugin::get_dijkstra_shortest_paths, py::arg("gate"), R"(
-                Returns the shortest path distances for one gate to all other gates.
-
-                :param hal_py.get_gate() gate: Gate (starting vertex for Dijkstra's algorithm)
-                :returns: A map of path and distance to the starting gate for all pther gates in the netlist.
-                :rtype: dict[hal_py.get_gate(),tuple(list[hal_py.get_gate()],int)]
                 )")
             .def("get_graph_cut",
                  &GraphAlgorithmPlugin::get_graph_cut,
@@ -127,9 +118,8 @@ namespace hal
                 :rtype: list[set[hal_py.get_gate()]]
                 )");
 
-        // #ifndef PYBIND11_MODULE
-        //         return m.ptr();
-        // #endif    // PYBIND11_MODULE
-        //     }
+#ifndef PYBIND11_MODULE
+        return m.ptr();
+#endif    // PYBIND11_MODULE
     }
 }    // namespace hal

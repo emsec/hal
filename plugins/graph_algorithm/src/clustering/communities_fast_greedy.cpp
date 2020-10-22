@@ -17,10 +17,9 @@ namespace hal
             log_error(this->get_name(), "{}", "parameter 'nl' is nullptr");
             return std::map<int, std::set<Gate*>>();
         }
-
-        std::tuple<igraph_t, std::map<int, Gate*>> igraph_tuple = get_igraph_directed(nl);
-        igraph_t graph                                          = std::get<0>(igraph_tuple);
-        std::map<int, Gate*> vertex_to_gate                     = std::get<1>(igraph_tuple);
+        // get igraph
+        igraph_t graph;
+        std::map<int, Gate*> vertex_to_gate = get_igraph_directed(nl, &graph);
 
         igraph_vector_t membership, modularity;
         igraph_matrix_t merges;
@@ -43,7 +42,7 @@ namespace hal
         {
             community_sets[(int)VECTOR(membership)[i]].insert(vertex_to_gate[i]);
         }
-        igraph_vector_destroy(&membership);
+        //igraph_vector_destroy(&membership);
 
         igraph_destroy(&graph);
         igraph_vector_destroy(&membership);

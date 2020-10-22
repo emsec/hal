@@ -1,6 +1,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/grouping.h"
 #include "netlist_test_utils.h"
 #include "hal_core/netlist/event_system/netlist_event_handler.h"
 
@@ -9,6 +10,7 @@ namespace hal {
     using test_utils::MIN_MODULE_ID;
     using test_utils::MIN_GATE_ID;
     using test_utils::MIN_NET_ID;
+    using test_utils::MIN_GROUPING_ID;
 
     class NetlistTest : public ::testing::Test {
     protected:
@@ -1289,6 +1291,218 @@ namespace hal {
 
                 u32 new_module_id_2 = nl->get_unique_module_id();
                 EXPECT_TRUE(used_ids.find(new_module_id_2) == used_ids.end());
+            }
+        TEST_END
+    }
+
+    /***************************************************
+     *               Grouping Functions
+     ***************************************************/
+
+    /**
+    * Testing the creation of a grouping
+    *
+    * Functions: create_grouping
+    */
+    TEST_F(NetlistTest, check_create_grouping) {
+        TEST_START
+            // Positive
+            {// Create a grouping
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                EXPECT_TRUE(nl->is_grouping_in_netlist(g_0));
+            }
+            {
+                // Create a grouping without passing an ID
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping("grouping_0");
+                EXPECT_TRUE(nl->is_grouping_in_netlist(g_0));
+            }
+            {
+                // Add a grouping, remove it and add a grouping with the same ID (to test the free_grouping_id logic)
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                nl->delete_grouping(g_0);
+                Grouping* g_0_other = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0_other");
+                EXPECT_TRUE(nl->is_grouping_in_netlist(g_0_other));
+            }
+
+            // Negative
+            {
+                // Create a grouping with an invalid ID
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(test_utils::INVALID_GROUPING_ID, "grouping_0");
+                EXPECT_EQ(g_0, nullptr);
+            }
+            {
+                // Create a grouping with an ID that is already used
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                Grouping* g_0_other = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0_other");
+                EXPECT_EQ(g_0_other, nullptr);
+            }
+            {
+                // Create a grouping with an invalid name (empty string)
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "");
+                EXPECT_EQ(g_0, nullptr);
+            }
+        TEST_END
+    }
+
+    /**
+     * Testing the get_grouping_by_id function
+     *
+     * Functions: get_grouping_by_id
+     */
+    TEST_F(NetlistTest, check_get_grouping_by_id) {
+        TEST_START
+            // Positive
+            {
+                // Testing the access on a module by its name
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_123 = nl->create_grouping(MIN_GROUPING_ID + 123, "grouping_123");
+                if (g_123 != nullptr) 
+                {
+                    Grouping* g_123_by_id = nl->get_grouping_by_id(MIN_GROUPING_ID + 123);
+                    EXPECT_EQ(g_123_by_id, g_123);
+                }
+            }
+            // Negative
+            {
+                // The passed ID is not taken
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+
+                EXPECT_EQ(nl->get_grouping_by_id(MIN_GROUPING_ID + 123), nullptr);
+            }
+        TEST_END
+    }
+
+    /**
+    * Testing the deletion of groupings from the netlist. Verification of success by is_grouping_in_netlist
+    *
+    * Functions: delete_grouping, is_grouping_in_netlist
+    */
+    TEST_F(NetlistTest, check_delete_grouping) {
+        TEST_START
+            // Positive
+            {
+                // Add a grouping and delete it afterwards
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                nl->delete_grouping(g_0);
+                EXPECT_FALSE(nl->is_grouping_in_netlist(g_0));
+            }
+            {
+                // Remove grouping with content
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+
+                // Add a Net and a Gate to the test_module
+                Gate* gate_0 = nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Net* net_0 = nl->create_net("net_0");
+                Module* module_0 = nl->create_module("module_0", nl->get_top_module());
+
+                g_0->assign_gate(gate_0);
+                g_0->assign_net(net_0);
+                g_0->assign_module(module_0);
+
+                nl->delete_grouping(g_0);
+
+                EXPECT_FALSE(nl->is_grouping_in_netlist(g_0));
+                EXPECT_TRUE(nl->is_gate_in_netlist(gate_0));
+                EXPECT_TRUE(nl->is_net_in_netlist(net_0));
+                EXPECT_TRUE(nl->is_module_in_netlist(module_0));
+
+                EXPECT_EQ(gate_0->get_grouping(), nullptr);
+                EXPECT_EQ(net_0->get_grouping(), nullptr);
+                EXPECT_EQ(module_0->get_grouping(), nullptr);
+            }
+        TEST_END
+    }
+
+    /**
+    * Testing the function is_grouping_in_netlist
+    *
+    * Functions: is_grouping_in_netlist
+    */
+    TEST_F(NetlistTest, check_is_grouping_in_netlist) {
+        TEST_START
+            // Positive
+            {
+                // Add a grouping and check if it is in the netlist
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                EXPECT_TRUE(nl->is_grouping_in_netlist(g_0));
+            }
+            {
+                // Create a grouping, delete it and create a new grouping with the same id and check if the !old_one! is in the netlist
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0_old = nl->create_grouping(MIN_GROUPING_ID+0, "grouping_0_old");
+                nl->delete_grouping(g_0_old); // Adress of m_0_old is now freed
+                Grouping* g_0_other = nl->create_grouping(MIN_GROUPING_ID+0, "grouping_0_other");
+                EXPECT_TRUE(g_0_old == g_0_other || !nl->is_grouping_in_netlist(g_0_old));
+            }
+            // Negative
+            {
+                // Pass a nullptr
+                auto nl = test_utils::create_empty_netlist();
+                EXPECT_FALSE(nl->is_grouping_in_netlist(nullptr));
+            }
+        TEST_END
+    }
+
+
+    /**
+    * Testing the function get_unique_grouping_id
+    *
+    * Functions: get_unique_grouping_id
+    */
+    TEST_F(NetlistTest, check_get_unique_grouping_id) {
+        TEST_START
+            // Positive
+            {
+                // Create some groupings and get unique grouping ids
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                Grouping* g_1 = nl->create_grouping(MIN_GROUPING_ID + 1, "grouping_1");
+                Grouping* g_3 = nl->create_grouping(MIN_GROUPING_ID + 3, "grouping_3");
+                std::set<u32> used_ids = {MIN_GROUPING_ID + 0, MIN_GROUPING_ID + 1, MIN_GROUPING_ID + 3};
+
+                u32 new_grouping_id_1 = nl->get_unique_grouping_id();
+                ASSERT_TRUE(used_ids.find(new_grouping_id_1) == used_ids.end());
+
+                Grouping* g_new = nl->create_grouping(new_grouping_id_1, "grouping_new");
+                used_ids.insert(new_grouping_id_1);
+
+                u32 new_grouping_id_2 = nl->get_unique_grouping_id();
+                EXPECT_TRUE(used_ids.find(new_grouping_id_2) == used_ids.end());
+            }
+            {
+                // Create some groupings, delete some and get a unique grouping id (for testing the free_grouping_ids logic)
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                Grouping* g_1 = nl->create_grouping(MIN_GROUPING_ID + 1, "grouping_1");
+                Grouping* g_2 = nl->create_grouping(MIN_GROUPING_ID + 2, "grouping_2");
+                Grouping* g_3 = nl->create_grouping(MIN_GROUPING_ID + 3, "grouping_3");
+
+                nl->delete_grouping(g_0);
+                nl->delete_grouping(g_2);
+                std::set<u32> used_ids = {MIN_GROUPING_ID + 1, MIN_GROUPING_ID + 3};
+
+                u32 new_grouping_id_1 = nl->get_unique_grouping_id();
+                ASSERT_TRUE(used_ids.find(new_grouping_id_1) == used_ids.end());
+
+                Grouping* g_new = nl->create_grouping(new_grouping_id_1, "grouping_new");
+                used_ids.insert(new_grouping_id_1);
+
+                u32 new_grouping_id_2 = nl->get_unique_grouping_id();
+                EXPECT_TRUE(used_ids.find(new_grouping_id_2) == used_ids.end());
             }
         TEST_END
     }

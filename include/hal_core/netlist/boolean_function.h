@@ -27,9 +27,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <ostream>
 #include <unordered_map>
 #include <unordered_set>
-#include <ostream>
 #include <vector>
 
 namespace hal
@@ -42,15 +42,18 @@ namespace hal
     class BooleanFunction
     {
     public:
+        /**
+         * Represents the logic value that a boolean function operates on.
+         */
         enum Value
         {
-            X    = -1,
-            ZERO = 0,
-            ONE  = 1
+            X    = -1, /**< Represents an undefined value. */
+            ZERO = 0,  /**< Represents a logical 0. */
+            ONE  = 1   /**< Represents a logical 1 */
         };
 
         /**
-         * Returns the value as a string.
+         * Get the value as a string.
          *
          * @param[in] v - the value.
          * @returns A string describing the value.
@@ -67,52 +70,47 @@ namespace hal
         friend std::ostream& operator<<(std::ostream& os, Value v);
 
         /**
-         * Constructor for an empty function.
-         * Evaluates to X (undefined).
-         * Combining a function with an empty function leaves the other one unchanged.
+         * Construct an empty Boolean function and thus evaluates to X (undefined).
          */
         BooleanFunction();
 
         /**
-         * Constructor for a variable, usable in other functions.
-         * Variable name must not be empty.
+         * Construct a Boolean function comprising a single variable.
+         * The name of the variable must not be empty.
          *
-         * @param[in] variable_name - Name of the variable.
+         * @param[in] variable_name - The name of the variable.
          */
         BooleanFunction(const std::string& variable_name);
 
         /**
-         * Constructor for a constant, usable in other functions.
-         * The constant can be either X, Zero, or ONE.
+         * Construct a Boolean function from a single constant value.
          *
-         * @param[in] constant - A constant value.
+         * @param[in] constant - The constant value.
          */
         BooleanFunction(Value constant);
 
         /**
-         * Substitutes a variable with another variable (i.e., variable renaming).
-         * Applies to all instances of the variable in the function.
+         * Substitute a variable with another one and thus renames the variable.
+         * The operation is applied to all instances of the variable in the function.
          *
-         * This is just a shorthand for the generic substitute function.
-         *
-         * @param[in] old_variable_name - The old variable to substitute
-         * @param[in] new_variable_name - The new variable name
-         * @returns The new boolean function.
+         * @param[in] old_variable_name - The old variable to substitute.
+         * @param[in] new_variable_name - The new variable.
+         * @returns The resulting Boolean function.
          */
         BooleanFunction substitute(const std::string& old_variable_name, const std::string& new_variable_name) const;
 
         /**
-         * Substitutes a variable with another function (can again be a single variable).
-         * Applies to all instances of the variable in the function.
+         * Substitute a variable with another function.
+         * The operation is applied to all instances of the variable in the function.
          *
-         * @param[in] variable_name - The variable to substitute
-         * @param[in] function - The function to take the place of the varible
-         * @returns The new boolean function.
+         * @param[in] variable_name - The variable to substitute.
+         * @param[in] function - The function replace the variable with.
+         * @returns The resulting Boolean function.
          */
         BooleanFunction substitute(const std::string& variable_name, const BooleanFunction& function) const;
 
         /**
-         * Evaluates the function on the given inputs and returns the result.
+         * Evaluate the Boolean function on the given inputs and returns the result.
          *
          * @param[in] inputs - A map from variable names to values.
          * @returns The value that the function evaluates to.
@@ -120,7 +118,7 @@ namespace hal
         Value evaluate(const std::unordered_map<std::string, Value>& inputs = {}) const;
 
         /**
-         * Evaluates the function on the given inputs and returns the result.
+         * Evaluate the function on the given inputs and returns the result.
          *
          * @param[in] inputs - A map from variable names to values.
          * @returns The value that the function evaluates to.
@@ -128,58 +126,57 @@ namespace hal
         Value operator()(const std::unordered_map<std::string, Value>& inputs = {}) const;
 
         /**
-         * Checks whether the function constantly outputs ONE.
+         * Check whether the Boolean function always evaluates to ONE.
          *
          * @returns True if function is constant ONE, false otherwise.
          */
         bool is_constant_one() const;
 
         /**
-         * Checks whether the function constantly outputs ZERO.
+         * Check whether the Boolean function always evaluates to ZERO.
          *
          * @returns True if function is constant ZERO, false otherwise.
          */
         bool is_constant_zero() const;
 
         /**
-         * Checks whether the function is empty.
+         * Check whether the function is empty.
          *
          * @returns True if function is empty, false otherwise.
          */
         bool is_empty() const;
 
         /**
-         * Get all variable names used in this boolean function.
+         * Get all variable names utilized in this Boolean function.
          *
-         * @returns A set of all variable names.
+         * @returns A vector of all variable names.
          */
         std::vector<std::string> get_variables() const;
 
         /**
          * Parse a function from a string representation.
          * Supported operators are  NOT ("!", "'"), AND ("&", "*", " "), OR ("|", "+"), XOR ("^") and brackets ("(", ")").
-         * Operator precedence is ! > & > ^ > |
+         * Operator precedence is ! > & > ^ > |.
          *
-         * Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable,
-         * a vector of known variable names can be supplied, which are extracted before parsing.
+         * Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.
          *
          * If there is an error during bracket matching, X is returned for that part.
          *
-         * @param[in] expression - String containing a boolean function.
-         * @param[in] variable_names - Names of variables to help resolve problematic functions
-         * @returns The boolean function extracted from the string.
+         * @param[in] expression - String containing a Boolean function.
+         * @param[in] variable_names - List of variable names.
+         * @returns The Boolean function extracted from the string.
          */
         static BooleanFunction from_string(std::string expression, const std::vector<std::string>& variable_names = {});
 
         /**
-         * Returns the boolean function as a string.
+         * Get the boolean function as a string.
          *
          * @returns A string describing the boolean function.
          */
         std::string to_string() const;
 
         /**
-         * ostream operator that forwards to_string of a boolean function.
+         * The ostream operator that forwards to_string of a boolean function.
          *
          * @param[in] os - the stream to write to.
          * @param[in] f - the function.
@@ -188,127 +185,118 @@ namespace hal
         friend std::ostream& operator<<(std::ostream& os, const BooleanFunction& f);
 
         /**
-         * Combines two boolean functions using an AND operator.
+         * Combine two Boolean functions using an AND operator.
          *
-         * @param[in] other - the other function to combine with.
-         * @returns The combined boolean function.
+         * @param[in] other - The other Boolean function to combine with.
+         * @returns The combined Boolean function.
          */
         BooleanFunction operator&(const BooleanFunction& other) const;
 
         /**
-         * Combines two boolean functions using an OR operator.
+         * Combine two Boolean functions using an OR operator.
          *
-         * @param[in] other - the other function to combine with.
-         * @returns The combined boolean function.
+         * @param[in] other - The other Boolean function to combine with.
+         * @returns The combined Boolean function.
          */
         BooleanFunction operator|(const BooleanFunction& other) const;
 
         /**
-         * Combines two boolean functions using an XOR operator.
+         * Combine two Boolean functions using an XOR operator.
          *
-         * @param[in] other - the other function to combine with.
-         * @returns The combined boolean function.
+         * @param[in] other - The other Boolean function to combine with.
+         * @returns The combined Boolean function.
          */
         BooleanFunction operator^(const BooleanFunction& other) const;
 
         /**
-         * Combines two boolean functions using an AND operator in place.
+         * Combine two Boolean functions using an AND operator in-place.
          *
-         * @param[in] other - the other function to combine with.
-         * @returns Self-reference.
+         * @param[in] other - The other Boolean function to combine with.
+         * @returns The combined Boolean function.
          */
         BooleanFunction& operator&=(const BooleanFunction& other);
 
         /**
-         * Combines two boolean functions using an OR operator in place.
+         * Combine two boolean functions using an OR operator in-place.
          *
-         * @param[in] other - the other function to combine with.
-         * @returns Self-reference.
+         * @param[in] other - The other Boolean function to combine with.
+         * @returns The combined Boolean function.
          */
         BooleanFunction& operator|=(const BooleanFunction& other);
 
         /**
-         * Combines two boolean functions using an XOR operator in place.
+         * Combine two Boolean functions using an XOR operator in-place.
          *
-         * @param[in] other - the other function to combine with.
-         * @returns Self-reference.
+         * @param[in] other - The other Boolean function to combine with.
+         * @returns The combined Boolean function.
          */
         BooleanFunction& operator^=(const BooleanFunction& other);
 
         /**
-         * Negates the boolean function.
+         * Negate the Boolean function.
          *
-         * @returns The negated boolean function.
+         * @returns The negated Boolean function.
          */
         BooleanFunction operator!() const;
 
         /**
-         * Tests whether two boolean functions are equal.
+         * Check whether two Boolean functions are equal.
          *
-         * @param[in] other - Boolean function to compare to.
-         * @returns True when both boolean functions are equal, false otherwise.
+         * @param[in] other - The Boolean function to compare to.
+         * @returns True if both Boolean functions are equal, false otherwise.
          */
         bool operator==(const BooleanFunction& other) const;
 
         /**
-         * Tests whether two boolean functions are unequal.
+         * Check whether two Boolean functions are unequal.
          *
-         * @param[in] other - Boolean function to compare to.
-         * @returns True when both boolean functions are unequal, false otherwise.
+         * @param[in] other - The Boolean function to compare to.
+         * @returns True if both Boolean functions are unequal, false otherwise.
          */
         bool operator!=(const BooleanFunction& other) const;
 
         /**
-         * Tests whether the function is in DNF.
+         * Check whether the Boolean function is in disjunctive normal form (DNF).
          *
          * @returns True if in DNF, false otherwise.
          */
         bool is_dnf() const;
 
         /**
-         * Gets the plain DNF representation of the function.
+         * Get the plain disjunctive normal form (DNF) representation of the Boolean function.
          *
-         * @returns The DNF as a boolean function.
+         * @returns The DNF as a Boolean function.
          */
         BooleanFunction to_dnf() const;
 
         /**
-         * Gets the DNF clauses of the function.
-         * Useful for parsing into other formats etc.
+         * Get the disjunctive normal form (DNF) clauses of the function.
          *
-         * Returns all clauses that are OR-ed together.
-         * Each clause is a vector of pairs <variable name, boolean value>.
-         * Example:
-         * [[("a", true), ("b", false)], [("c", true)]] -> (a & !b) | c
+         * Each clause is a vector of pairs (variable name, Boolean value).
          *
-         * If the function is empty, this returns an empty vector.
+         * Returns an empty vector if the Boolean function is empty.
          *
-         * @returns The DNF clauses as a vector of vectors of pairs <string, bool>.
+         * @returns The DNF clauses as a vector of vectors of pairs (string, bool).
          */
         std::vector<std::vector<std::pair<std::string, bool>>> get_dnf_clauses() const;
 
         /**
-         * Optimizes the function by first converting it to DNF and then applying the Quine-McCluskey algorithm.
+         * Optimizes the Boolean function by first converting it to disjunctive normal form (DNF) and then applying the Quine-McCluskey algorithm.
          *
-         * @returns The optimized boolean function.
+         * @returns The optimized Boolean function.
          */
         BooleanFunction optimize() const;
 
         /**
          * Get the truth table outputs of the function.
+         * 
          * WARNING: Exponential runtime in the number of variables!
          *
          * Output is the vector of output values when walking the truth table in ascending order.
-         * The variable values are changed in order of appearance, i.e.:
-         * first_var second_var | output_vector_index
-         *     0         0      |   0
-         *     1         0      |   1
-         *     0         1      |   2
-         *     1         1      |   3
          *
          * If ordered_variables is empty, all included variables are used and ordered alphabetically.
          *
-         * @param[in] ordered_variables - Specific order in which the inputs shall be structured in the truth table.
+         * @param[in] ordered_variables - Variables in the order of the inputs.
          * @param[in] remove_unknown_variables - If true, all given variables that are not found in the function are removed from the truth table.
          * @returns The vector of output values.
          */

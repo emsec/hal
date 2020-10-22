@@ -321,6 +321,11 @@ min-height: 1px;
 max-height: 1px;
 }*/
 
+QHeaderView::section {
+font: "Iosevka";
+font-weight: bold;
+}
+
 hal--Toolbar {
     background : rgb(9, 11, 13);
     spacing    : 1px;
@@ -1378,7 +1383,28 @@ qproperty-new_file_icon_style: "";
 qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
+hal--GroupingManagerWidget {
+qproperty-disabled_icon_style: "all->#515050";
+
+qproperty-new_grouping_icon_style: "all->#e8e8e8";
+qproperty-new_grouping_icon_path: ":/icons/plus";
+
+qproperty-rename_grouping_icon_style: "all->#e8e8e8";
+qproperty-rename_grouping_icon_path: ":/icons/pen";
+
+qproperty-delete_icon_style: "all->#e8e8e8";
+qproperty-delete_icon_path: ":/icons/trashcan";
+
+qproperty-color_select_icon_style: "all->#e8e8e8";
+qproperty-color_select_icon_path: ":/icons/color_select";
+
+qproperty-to_selection_icon_style: "all->#e8e8e8";
+qproperty-to_selection_icon_path: ":/icons/to_selection";
+}
+
 hal--ContextManagerWidget {
+qproperty-disabled_icon_style: "all->#515050";
+
 qproperty-new_view_icon_style: "all->#e8e8e8";
 qproperty-new_view_icon_path: ":/icons/plus";
 
@@ -1399,8 +1425,16 @@ qproperty-search_icon_path: ":/icons/search";
 }
 
 hal--SelectionDetailsWidget {
+qproperty-disabled_icon_style: "all->#515050";
+qproperty-search_active_icon_style: "all->#30ac4f";
 qproperty-search_icon_style: "all->#e8e8e8";
 qproperty-search_icon_path: ":/icons/search";
+qproperty-restore_icon_style: "all->#e8e8e8";
+qproperty-restore_icon_path: ":/icons/undo2";
+qproperty-to_grouping_icon_style: "all->#e8e8e8";
+qproperty-to_grouping_icon_path: ":/icons/to_grouping";
+qproperty-to_module_icon_style: "all->#e8e8e8";
+qproperty-to_module_icon_path: ":/icons/to_module";
 }
 
 hal--MainWindow {

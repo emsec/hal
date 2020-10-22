@@ -3,6 +3,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/module.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
@@ -13,8 +14,9 @@
 
 namespace hal {
     using test_utils::MIN_GATE_ID;
-    using test_utils::MIN_MODULE_ID;
     using test_utils::MIN_NET_ID;
+    using test_utils::MIN_MODULE_ID;
+    using test_utils::MIN_GROUPING_ID;
 
     class NetlistSerializerTest : public ::testing::Test {
     protected:
@@ -80,35 +82,35 @@ namespace hal {
 
             // Create the gates
 
-            Gate *gate_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_0");
-            Gate *gate_1 = nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gnd", m_gl), "gate_1");
-            Gate *gate_2 = nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("vcc", m_gl), "gate_2");
-            Gate *gate_3 = nl->create_gate(MIN_GATE_ID + 3, test_utils::get_gate_type_by_name("gate_1_to_1", m_gl), "gate_3");
-            Gate *gate_4 = nl->create_gate(MIN_GATE_ID + 4, test_utils::get_gate_type_by_name("gate_1_to_1", m_gl), "gate_4");
-            Gate *gate_5 = nl->create_gate(MIN_GATE_ID + 5, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_5");
-            Gate *gate_6 = nl->create_gate(MIN_GATE_ID + 6, test_utils::get_gate_type_by_name("gate_2_to_0", m_gl), "gate_6");
-            Gate *gate_7 = nl->create_gate(MIN_GATE_ID + 7, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_7");
-            Gate *gate_8 = nl->create_gate(MIN_GATE_ID + 8, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_8");
+            Gate* gate_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_0");
+            Gate* gate_1 = nl->create_gate(MIN_GATE_ID + 1, test_utils::get_gate_type_by_name("gnd", m_gl), "gate_1");
+            Gate* gate_2 = nl->create_gate(MIN_GATE_ID + 2, test_utils::get_gate_type_by_name("vcc", m_gl), "gate_2");
+            Gate* gate_3 = nl->create_gate(MIN_GATE_ID + 3, test_utils::get_gate_type_by_name("gate_1_to_1", m_gl), "gate_3");
+            Gate* gate_4 = nl->create_gate(MIN_GATE_ID + 4, test_utils::get_gate_type_by_name("gate_1_to_1", m_gl), "gate_4");
+            Gate* gate_5 = nl->create_gate(MIN_GATE_ID + 5, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_5");
+            Gate* gate_6 = nl->create_gate(MIN_GATE_ID + 6, test_utils::get_gate_type_by_name("gate_2_to_0", m_gl), "gate_6");
+            Gate* gate_7 = nl->create_gate(MIN_GATE_ID + 7, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_7");
+            Gate* gate_8 = nl->create_gate(MIN_GATE_ID + 8, test_utils::get_gate_type_by_name("gate_2_to_1", m_gl), "gate_8");
 
             // Add the nets (net_x_y1_y2... := Net between the Gate with id x and the gates y1,y2,...)
-            Net *net_1_3 = nl->create_net(MIN_NET_ID + 13, "net_1_3");
+            Net* net_1_3 = nl->create_net(MIN_NET_ID + 13, "net_1_3");
             net_1_3->add_source(gate_1, "O");
             net_1_3->add_destination(gate_3, "I");
 
-            Net *net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
+            Net* net_3_0 = nl->create_net(MIN_NET_ID + 30, "net_3_0");
             net_3_0->add_source(gate_3, "O");
             net_3_0->add_destination(gate_0, "I0");
 
-            Net *net_2_0 = nl->create_net(MIN_NET_ID + 20, "net_2_0");
+            Net* net_2_0 = nl->create_net(MIN_NET_ID + 20, "net_2_0");
             net_2_0->add_source(gate_2, "O");
             net_2_0->add_destination(gate_0, "I1");
 
-            Net *net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
+            Net* net_0_4_5 = nl->create_net(MIN_NET_ID + 045, "net_0_4_5");
             net_0_4_5->add_source(gate_0, "O");
             net_0_4_5->add_destination(gate_4, "I");
             net_0_4_5->add_destination(gate_5, "I0");
 
-            Net *net_7_8 = nl->create_net(MIN_NET_ID + 78, "net_7_8");
+            Net* net_7_8 = nl->create_net(MIN_NET_ID + 78, "net_7_8");
             net_7_8->add_source(gate_7, "O");
             net_7_8->add_destination(gate_8, "I0");
 
@@ -121,12 +123,12 @@ namespace hal {
             nl->mark_global_output_net(nl->get_net_by_id(MIN_NET_ID + 30));
 
             // Create the modules
-            Module *test_m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_mod_0", nl->get_top_module());
+            Module* test_m_0 = nl->create_module(MIN_MODULE_ID + 0, "test_mod_0", nl->get_top_module());
             test_m_0->set_type("test_mod_type_0");
             test_m_0->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0));
             test_m_0->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 3));
 
-            Module *test_m_1 = nl->create_module(MIN_MODULE_ID + 1, "test_mod_1", test_m_0);
+            Module* test_m_1 = nl->create_module(MIN_MODULE_ID + 1, "test_mod_1", test_m_0);
             test_m_1->set_type("test_mod_type_1");
             test_m_1->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0));
 
@@ -151,6 +153,22 @@ namespace hal {
                                                                       BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0","I1"})));
             nl->get_gate_by_id(MIN_GATE_ID + 4)->add_boolean_function("O_not",
                                                                       BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
+
+            // create the groupings
+            Grouping* grouping_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+            grouping_0->assign_gate(gate_0);
+            grouping_0->assign_gate(gate_1);
+            grouping_0->assign_gate(gate_2);
+            grouping_0->assign_net(net_1_3);
+            grouping_0->assign_net(net_2_0);
+            grouping_0->assign_module(test_m_0);
+            grouping_0->assign_module(test_m_1);
+
+            Grouping* grouping_1 = nl->create_grouping(MIN_GROUPING_ID + 1, "grouping_1");
+            grouping_1->assign_gate(gate_3);
+            grouping_1->assign_gate(gate_4);
+            grouping_1->assign_gate(gate_5);
+            grouping_1->assign_net(net_7_8);
 
             return nl;
         }

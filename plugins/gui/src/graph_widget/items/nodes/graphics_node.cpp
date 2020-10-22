@@ -6,9 +6,10 @@
 
 namespace hal
 {
-    GraphicsNode::GraphicsNode(const hal::item_type type, const u32 id, const QString& name) : GraphicsItem(type, id),
-        m_name(name)
+    GraphicsNode::GraphicsNode(const hal::item_type type, const u32 id, const QString& name)
+        : GraphicsItem(type, id)
     {
+        mNodeText[0] = name;
         setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
         //setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges | ItemIsFocusable);
         //setAcceptHoverEvents(true);
@@ -43,9 +44,9 @@ namespace hal
         return m_height;
     }
 
-    void GraphicsNode::set_name(QString name)
+    void GraphicsNode::set_name(const QString &name)
     {
-        m_name = name;
+        mNodeText[0] = name;
     }
 
     QVariant GraphicsNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)

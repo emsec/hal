@@ -9,6 +9,7 @@ HAL Core Documentation
    gate_library
    endpoint
    netlist
+   netlist_utils
    boolean_function
    gate_type
    gate_type_lut

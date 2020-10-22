@@ -18,9 +18,9 @@ namespace hal
             return std::map<int, std::set<Gate*>>();
         }
 
-        std::tuple<igraph_t, std::map<int, Gate*>> igraph_tuple = get_igraph_directed(nl);
-        igraph_t graph                                          = std::get<0>(igraph_tuple);
-        std::map<int, Gate*> vertex_to_gate                     = std::get<1>(igraph_tuple);
+        // get igraph
+        igraph_t graph;
+        std::map<int, Gate*> vertex_to_gate = get_igraph_directed(nl, &graph);
 
         // convert to undirected
         igraph_to_undirected(&graph, IGRAPH_TO_UNDIRECTED_MUTUAL, 0);

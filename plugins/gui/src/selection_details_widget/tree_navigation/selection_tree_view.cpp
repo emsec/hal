@@ -12,6 +12,7 @@ namespace hal {
         m_selectionTreeProxyModel->setSourceModel(m_selectionTreeModel);
         setModel(m_selectionTreeProxyModel);
         setDefaultColumnWidth();
+        header()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
     }
 
     void SelectionTreeView::setDefaultColumnWidth()
