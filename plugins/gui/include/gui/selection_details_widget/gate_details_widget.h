@@ -33,6 +33,7 @@
 #include <QWidget>
 
 class QTableWidget;
+class QTableView;
 class QTableWidgetItem;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -46,6 +47,7 @@ namespace hal
     class GraphNavigationWidget;
     class DataFieldsTable;
     class DetailsSectionWidget;
+    class DetailsGeneralModel;
 
     class GateDetailsWidget : public DetailsWidget
     {
@@ -107,11 +109,8 @@ namespace hal
         // widgets / sections to be unfold (not all structures are sections in itself, it may be a container necessary)
 
         //(1) general-information section ("static" information)
-        QTableWidget* m_general_table;
-        QTableWidgetItem* m_name_item;
-        QTableWidgetItem* m_type_item;
-        QTableWidgetItem* m_id_item;
-        QTableWidgetItem* m_ModuleItem;
+        QTableView*       mGeneralView;
+        DetailsGeneralModel* mGeneralModel;
 
         //(2) input-pins section
         QTableWidget* m_input_pins_table;
@@ -131,15 +130,10 @@ namespace hal
 
         void handle_input_pin_item_clicked(const QTableWidgetItem* item);
         void handle_output_pin_item_clicked(const QTableWidgetItem* item);
-        void handle_general_table_item_clicked(const QTableWidgetItem* item);
 
         //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
-        void handle_general_table_menu_requested(const QPoint &pos);
         void handle_input_pin_table_menu_requested(const QPoint &pos);
         void handle_output_pin_table_menu_requested(const QPoint &pos);
         void handle_data_table_menu_requested(const QPoint &pos);
-
-        //utility function, used to calculate the actual width so the scrollbars and the accuracy of the click functionality is correct
-        QSize calculate_table_size(QTableWidget* table);
     };
 }

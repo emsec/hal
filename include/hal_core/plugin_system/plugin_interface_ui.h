@@ -23,16 +23,16 @@
 
 #pragma once
 
+#include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/utilities/program_options.h"
-#include "hal_core/defines.h"
 
 namespace hal
 {
     /**
      * generic plugin instance interface
      *
-     * @ingroup core
+     * @ingroup plugins
      */
     class CORE_API UIPluginInterface : virtual public BasePluginInterface
     {

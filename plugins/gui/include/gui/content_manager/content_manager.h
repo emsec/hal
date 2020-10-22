@@ -36,6 +36,7 @@ namespace hal
     class PythonEditor;
     class GraphTabWidget;
     class vigation_widget;
+    class GroupingManagerWidget;
     class ContextManagerWidget;
     class NetlistWatcher;
     class SelectionDetailsWidget;
@@ -56,6 +57,8 @@ namespace hal
         ContextManagerWidget* get_context_manager_widget();
 
         SelectionDetailsWidget* getSelectionDetailsWidget();
+
+        GroupingManagerWidget* getGroupingManagerWidget();
 
         void hack_delete_content();
 
@@ -86,6 +89,8 @@ namespace hal
         GraphTabWidget* m_graph_tab_wid;
 
         ContextManagerWidget* m_context_manager_wid;
+
+        GroupingManagerWidget* mGroupingManagerWidget;
 
         SelectionDetailsWidget* mSelectionDetailsWidget;
     };

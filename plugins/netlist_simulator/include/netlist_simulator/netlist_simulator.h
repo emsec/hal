@@ -13,115 +13,111 @@ namespace hal
     class NetlistSimulator
     {
     public:
-        /*
-        * Add gates to the simulation set.
-        * Only elements in the simulation set are considered during simulation.
-        *
-        * @param[in] gates - the gates to add
-        */
+        /**
+         * Add gates to the simulation set.
+         * Only elements in the simulation set are considered during simulation.
+         *
+         * @param[in] gates - The gates to add.
+         */
         void add_gates(const std::vector<Gate*>& gates);
 
-        /*
-        * Add a clock signal.
-        * Specify clock speed in hertz.
-        *
-        * @param[in] clock_net - The net that carries the clock signal
-        * @param[in] hertz - the clock frequency in Hz
-        * @param[in] start_at_zero - If true, the initial clock state is 0 else 1
-        */
-        void add_clock_hertz(Net* clock_net, u64 hertz, bool start_at_zero = true);
+        /**
+         * Specify a net that carries the clock signal and set the clock frequency in hertz.
+         *
+         * @param[in] clock_net - The net that carries the clock signal.
+         * @param[in] frequency - The clock frequency in hertz.
+         * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
+         */
+        void add_clock_frequency(Net* clock_net, u64 frequency, bool start_at_zero = true);
 
-        /*
-        * Add a clock signal.
-        * Specify clock speed in picoseconds period.
-        * A period of 10 means 5 high, 5 low.
-        *
-        * @param[in] clock_net - The net that carries the clock signal
-        * @param[in] period - the clock period from rising edge to rising edge in picoseconds
-        * @param[in] start_at_zero - If true, the initial clock state is 0 else 1
-        */
+        /**
+         * Specify a net that carries the clock signal and set the clock period in picoseconds.
+         *
+         * @param[in] clock_net - The net that carries the clock signal.
+         * @param[in] period - The clock period from rising edge to rising edge in picoseconds.
+         * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
+         */
         void add_clock_period(Net* clock_net, u64 period, bool start_at_zero = true);
 
-        /*
-        * Get all gates that are in the simulation set.
-        *
-        * @returns the simulation set
-        */
+        /**
+         * Get all gates that are in the simulation set.
+         *
+         * @returns The simulation set.
+         */
         std::unordered_set<Gate*> get_gates() const;
 
-        /*
-        * Get all nets that are considered inputs, i.e., not driven by a gate in the simulation set or global inputs
-        *
-        * @returns the input nets
-        */
+        /**
+         * Get all nets that are considered inputs, i.e., not driven by a gate in the simulation set or global inputs.
+         *
+         * @returns The input nets.
+         */
         std::vector<Net*> get_input_nets() const;
 
-        /*
-        * Get all output nets of gates in the simulation set that have a destination outside of the set or that are global outputs.
-        *
-        * @returns the output nets
-        */
+        /**
+         * Get all output nets of gates in the simulation set that have a destination outside of the set or that are global outputs.
+         *
+         * @returns The output nets.
+         */
         std::vector<Net*> get_output_nets() const;
 
-        /*
-        * Set the signal for a specific wire.
-        * Can be used to control input signals between simulation cycles.
-        *
-        * @param[in] net - the net to set a signal value for
-        * @param[in] value - the value to set
-        */
+        /**
+         * Set the signal for a specific wire to control input signals between simulation cycles.
+         *
+         * @param[in] net - The net to set a signal value for.
+         * @param[in] value - The value to set.
+         */
         void set_input(Net* net, SignalValue value);
 
-        /*
-        * Load the initial values for all sequential elements into the current state.
-        * For example, a Flip Flop may be initialized with HIGH output in FPGAs.
-        * This is not done automatically!
-        */
+        /**
+         * Load the initial values for all sequential elements into the current state.
+         * For example, a Flip Flop may be initialized with HIGH output in FPGAs.
+         * This is not done automatically!
+         */
         void load_initial_values();
 
-        /*
-        * Simulate for a specific period, advancing the internal state.
-        * Use 'set_input' to control specific signals.
-        *
-        * @param[in] picoseconds - the duration to simulate
-        */
+        /**
+         * Simulate for a specific period, advancing the internal state.
+         * Use 'set_input' to control specific signals.
+         *
+         * @param[in] picoseconds - The duration to simulate.
+         */
         void simulate(u64 picoseconds);
 
-        /*
-        * Reset the simulator state, i.e., treat all signals as unknown.
-        * Does not remove gates/nets from the simulation set.
-        */
+        /**
+         * Reset the simulator state, i.e., treat all signals as unknown.
+         * Does not remove gates/nets from the simulation set.
+         */
         void reset();
 
-        /*
-        * Set the simulator state, i.e., net signals, to a given state.
-        * Does not influence gates/nets added to the simulation set.
-        *
-        * @param[in] state - the state to apply
-        */
+        /**
+         * Set the simulator state, i.e., net signals, to a given state.
+         * Does not influence gates/nets added to the simulation set.
+         *
+         * @param[in] state - The state to apply.
+         */
         void set_simulation_state(const Simulation& state);
 
-        /*
-        * Get the current simulation state.
-        *
-        * @returns the current simulation state
-        */
+        /**
+         * Get the current simulation state.
+         *
+         * @returns The current simulation state.
+         */
         Simulation get_simulation_state() const;
 
-        /*
-        * Set the iteration timeout, i.e., the maximum number of events processed for a single point in time.
-        * Useful to abort in case of infinite loops.
-        * A value of 0 disables the timeout.
-        *
-        * @param[in] iterations - the state to apply
-        */
+        /**
+         * Set the iteration timeout, i.e., the maximum number of events processed for a single point in time.
+         * Useful to abort in case of infinite loops.
+         * A value of 0 disables the timeout.
+         *
+         * @param[in] iterations - The iteration timeout.
+         */
         void set_iteration_timeout(u64 iterations);
 
-        /*
-        * Get the current iteration timeout value.
-        *
-        * @returns the iteration timeout
-        */
+        /**
+         * Get the current iteration timeout value.
+         *
+         * @returns The iteration timeout.
+         */
         u64 get_simulation_timeout() const;
 
     private:

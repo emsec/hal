@@ -38,7 +38,7 @@ namespace hal
     class CallbackHook;
 
     /**
-     * @ingroup core
+     * @ingroup utilities
      */
     template<class R, class... ArgTypes>
     class CallbackHook<R(ArgTypes...)>

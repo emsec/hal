@@ -47,6 +47,7 @@ namespace hal
     class ContextManagerWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString disabled_icon_style READ disabled_icon_style WRITE set_disabled_icon_style)
         Q_PROPERTY(QString new_view_icon_path READ new_view_icon_path WRITE set_new_view_icon_path)
         Q_PROPERTY(QString new_view_icon_style READ new_view_icon_style WRITE set_new_view_icon_style)
         Q_PROPERTY(QString rename_icon_path READ rename_icon_path WRITE set_rename_icon_path)
@@ -67,6 +68,7 @@ namespace hal
 
         virtual void setup_toolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
 
+        QString disabled_icon_style() const;
         QString new_view_icon_path() const;
         QString new_view_icon_style() const;
         QString rename_icon_path() const;
@@ -80,6 +82,7 @@ namespace hal
         QString search_icon_path() const;
         QString search_icon_style() const;
 
+        void set_disabled_icon_style(const QString &path);
         void set_new_view_icon_path(const QString &path);
         void set_new_view_icon_style(const QString &style);
         void set_rename_icon_path(const QString &path);
@@ -106,6 +109,8 @@ namespace hal
         ContextTableProxyModel* m_context_table_proxy_model;
 
         Searchbar m_searchbar;
+
+        QString m_disabled_icon_style;
 
         QAction* m_new_view_action;
         QString m_new_view_icon_path;

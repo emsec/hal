@@ -26,7 +26,7 @@
 #include "hal_core/utilities/callback_hook.h"
 
 /**
- * @ingroup handler
+ * @ingroup events
  */
 
 namespace hal

@@ -667,7 +667,7 @@ namespace hal {
                 // -- create the Gate at the top_module
                 auto nl = test_utils::create_empty_netlist();
                 Gate* test_gate =
-                    nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
+                    nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
 
                 EXPECT_EQ(test_gate->get_module(), nl->get_top_module());
 
@@ -681,6 +681,33 @@ namespace hal {
                 nl->delete_module(test_module);
                 EXPECT_EQ(test_gate->get_module(), nl->get_top_module());
 
+            }
+        TEST_END
+    }
+
+    /**
+     * Testing the get_grouping function
+     *
+     * Functions: get_grouping
+     */
+    TEST_F(GateTest, check_get_grouping) {
+        TEST_START
+            {
+                // get the grouping of a Gate (nullptr), then add it to another grouping and check again
+                auto nl = test_utils::create_empty_netlist();
+                Gate* test_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate");
+
+                EXPECT_EQ(test_gate->get_grouping(), nullptr);
+
+                // -- move the Gate in the test_grouping
+                Grouping* test_grouping = nl->create_grouping("test_grouping");
+                test_grouping->assign_gate(test_gate);
+
+                EXPECT_EQ(test_gate->get_grouping(), test_grouping);
+
+                // -- delete the test_grouping, so the Gate should be nullptr again
+                nl->delete_grouping(test_grouping);
+                EXPECT_EQ(test_gate->get_grouping(), nullptr);
             }
         TEST_END
     }

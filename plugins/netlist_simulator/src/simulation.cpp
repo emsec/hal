@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    SignalValue Simulation::get_net_value(Net* net, u64 nanoseconds)
+    SignalValue Simulation::get_net_value(Net* net, u64 time)
     {
         auto it = m_events.find(net);
 
@@ -14,7 +14,7 @@ namespace hal
         {
             for (auto& e : it->second)
             {
-                if (e.time > nanoseconds)
+                if (e.time > time)
                 {
                     break;
                 }
@@ -24,9 +24,9 @@ namespace hal
         return result;
     }
 
-    void Simulation::add_event(const Event& ev)
+    void Simulation::add_event(const Event& event)
     {
-        m_events[ev.affected_net].push_back(ev);
+        m_events[event.affected_net].push_back(event);
     }
 
     std::unordered_map<Net*, std::vector<Event>> Simulation::get_events() const

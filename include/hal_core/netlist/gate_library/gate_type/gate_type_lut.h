@@ -33,15 +33,16 @@
 namespace hal
 {
     /**
-     * LUT gate type class containing information about the internals of a specific LUT gate type.
+     * A LUT gate type contains information about its internals such as input and output pins as well as its Boolean functions.<br>
+     * In addition to the standard gate type functionality, it provides the foundation to automatically read the initialization string of each LUT gate of the netlist and convert it to a Boolean function.
      *
-     * @ingroup netlist
+     * @ingroup gate_lib
      */
     class GateTypeLut : public GateType
     {
     public:
         /**
-         * Constructor for a LUT gate type.
+         * Construct a new LUT gate type by specifying its name.
          *
          * @param[in] name - The name of the LUT gate type.
          */
@@ -49,57 +50,57 @@ namespace hal
         ~GateTypeLut() override = default;
 
         /**
-         * Adds an output pin to the collection of output pins that generate their output not from a boolean function but an initialization string.
+         * Add an existing output pin to the collection of output pins that generate their output not from a Boolean function but an initialization string.<br>
          * The pin has to be declared as an output pin beforehand.
          *
-         * @param[in] pin_name - The name of the output string.
+         * @param[in] pin_name - The name of the output pin to add.
          */
         void add_output_from_init_string_pin(const std::string& pin_name);
 
         /**
-         * Get the set of output pins that generate their output not from a boolean function but an initialization string.
+         * Get the set of output pins that generate their output not from a Boolean function but an initialization string.
          *
-         * @returns Set of oputput pin names.
+         * @returns The set of output pin names.
          */
         std::unordered_set<std::string> get_output_from_init_string_pins() const;
 
         /**
-         * Set the category in which to find the INIT string.
+         * Set the data category in which to find the initialization string.
          *
-         * @param[in] category - The category as a string.
+         * @param[in] category - The data category.
          */
         void set_config_data_category(const std::string& category);
 
         /**
-         * Get the category in which to find the INIT string.
+         * Get the data category in which to find the initialization string.
          *
-         * @returns The string describing the category.
+         * @returns The data category.
          */
         std::string get_config_data_category() const;
 
         /**
-         * Set the identifier used to specify the INIT string.
+         * Set the data identifier used to specify the initialization string.
          *
-         * @param[in] identifier - The identifier as a string.
+         * @param[in] identifier - The data identifier.
          */
         void set_config_data_identifier(const std::string& identifier);
 
         /**
-         * Get the identifier used to specify the INIT string.
+         * Get the data identifier used to specify the initialization string.
          *
-         * @returns The identifier as a string.
+         * @returns The data identifier.
          */
         std::string get_config_data_identifier() const;
 
         /**
-         * Set the bit-order of the INIT string.
+         * Set the bit-order of the initialization string.
          *
          * @param[in] ascending - True if ascending bit-order, false otherwise.
          */
         void set_config_data_ascending_order(bool ascending);
 
         /**
-         * Get the bit-order of the INIT string.
+         * Get the bit-order of the initialization string.
          *
          * @returns True if ascending bit-order, false otherwise.
          */

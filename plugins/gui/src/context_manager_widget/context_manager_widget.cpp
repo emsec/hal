@@ -30,7 +30,7 @@
 namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
-        : ContentWidget("View Manager", parent), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
+        : ContentWidget("Views", parent), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
           m_delete_action(new QAction(this)), m_open_action(new QAction(this)), m_search_action(new QAction(this))
     {
         //needed to load the properties
@@ -222,6 +222,21 @@ namespace hal
         m_rename_action->setEnabled(enabled);
         m_duplicate_action->setEnabled(enabled);
         m_delete_action->setEnabled(enabled);
+
+        if(enabled)
+        {
+            m_open_action->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
+            m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_rename_icon_style, m_rename_icon_path));
+            m_duplicate_action->setIcon(gui_utility::get_styled_svg_icon(m_duplicate_icon_style, m_duplicate_icon_path));
+            m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
+        }
+        else
+        {
+            m_open_action->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_open_icon_path));
+            m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_rename_icon_path));
+            m_duplicate_action->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_duplicate_icon_path));
+            m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_delete_icon_path));
+        }
     }
 
     QList<QShortcut*> ContextManagerWidget::create_shortcuts()
@@ -246,6 +261,11 @@ namespace hal
         {
             m_searchbar.hide();
         }
+    }
+
+    QString ContextManagerWidget::disabled_icon_style() const
+    {
+        return m_disabled_icon_style;
     }
 
     QString ContextManagerWidget::new_view_icon_path() const
@@ -306,6 +326,11 @@ namespace hal
     QString ContextManagerWidget::search_icon_style() const
     {
         return m_search_icon_style;
+    }
+
+    void ContextManagerWidget::set_disabled_icon_style(const QString& style)
+    {
+        m_disabled_icon_style = style;
     }
 
     void ContextManagerWidget::set_new_view_icon_path(const QString& path)

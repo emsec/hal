@@ -6,10 +6,8 @@
 #include <QPen>
 #include <QPointF>
 #include <QStyleOptionGraphicsItem>
-
-#include <limits>
-
 #include <assert.h>
+#include <limits>
 
 namespace hal
 {
@@ -32,25 +30,25 @@ namespace hal
     {
         s_wire_length = 26;
 
-        s_left_arrow_offset = 3;
+        s_left_arrow_offset  = 3;
         s_right_arrow_offset = 3;
 
-        s_arrow_left_x_shift = 0;
+        s_arrow_left_x_shift  = 0;
         s_arrow_right_x_shift = 3;
-        s_arrow_side_length = 12;
+        s_arrow_side_length   = 12;
 
         s_arrow_height = 6;
-        s_arrow_width = s_arrow_left_x_shift + s_arrow_side_length + s_arrow_right_x_shift;
+        s_arrow_width  = s_arrow_left_x_shift + s_arrow_side_length + s_arrow_right_x_shift;
 
         QPointF point(s_arrow_left_x_shift, -s_arrow_height / 2);
 
-        #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
-            // only available in Qt >= 5.13.0
-            s_arrow.clear();
-        #else
-            // low-performance fallback for older Qt
-            s_arrow = QPainterPath();
-        #endif
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+        // only available in Qt >= 5.13.0
+        s_arrow.clear();
+#else
+        // low-performance fallback for older Qt
+        s_arrow = QPainterPath();
+#endif
         s_arrow.lineTo(point);
         point.setX(point.x() + s_arrow_side_length);
         s_arrow.lineTo(point);
@@ -100,10 +98,10 @@ namespace hal
         }
 
         qreal smallest_x = std::numeric_limits<qreal>::max();
-        qreal biggest_x = std::numeric_limits<qreal>::min();
+        qreal biggest_x  = std::numeric_limits<qreal>::min();
 
         qreal smallest_y = std::numeric_limits<qreal>::max();
-        qreal biggest_y = std::numeric_limits<qreal>::min();
+        qreal biggest_y  = std::numeric_limits<qreal>::min();
 
         for (const h_line& h : l.h_lines)
         {
@@ -115,7 +113,7 @@ namespace hal
 
             if (h.y < smallest_y)
                 smallest_y = h.y;
-            else if (h.y > biggest_y)
+            if (h.y > biggest_y)
                 biggest_y = h.y;
 
             QLineF line(h.small_x, h.y, h.big_x, h.y);
@@ -144,6 +142,7 @@ namespace hal
         }
 
         const qreal padding = s_split_radius + s_shape_width;
+
         m_rect = QRectF(smallest_x - padding, smallest_y - padding, biggest_x - smallest_x + padding, biggest_y - smallest_y + padding);
     }
 
@@ -182,14 +181,14 @@ namespace hal
         s_brush.setStyle(Qt::NoBrush);
         painter->setBrush(s_brush);
 
-    #ifdef HAL_DEBUG_GUI_GRAPH_WIDGET
+#ifdef HAL_DEBUG_GUI_GRAPH_WIDGET
         s_pen.setColor(Qt::green);
         const bool original_cosmetic = s_pen.isCosmetic();
         s_pen.setCosmetic(true);
         painter->setPen(s_pen);
         painter->drawPath(m_shape);
         s_pen.setCosmetic(original_cosmetic);
-    #endif
+#endif
     }
 
     void StandardGraphicsNet::lines::append_h_line(const qreal small_x, const qreal big_x, const qreal y)
@@ -224,13 +223,12 @@ namespace hal
                     overlaps.append(i);
                 }
 
-
             if (overlaps.isEmpty())
                 merged_h_lines.append(h);
             else
             {
                 qreal smallest_x = h.small_x;
-                qreal biggest_x = h.big_x;
+                qreal biggest_x  = h.big_x;
 
                 for (int i = 0; i < overlaps.size(); ++i)
                 {
@@ -262,13 +260,12 @@ namespace hal
                     overlaps.append(i);
                 }
 
-
             if (overlaps.isEmpty())
                 merged_v_lines.append(v);
             else
             {
                 qreal smallest_y = v.small_y;
-                qreal biggest_y = v.big_y;
+                qreal biggest_y  = v.big_y;
 
                 for (int i = 0; i < overlaps.size(); ++i)
                 {
@@ -290,4 +287,4 @@ namespace hal
         h_lines = merged_h_lines;
         v_lines = merged_v_lines;
     }
-}
+}    // namespace hal

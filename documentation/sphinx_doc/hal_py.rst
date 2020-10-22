@@ -1,5 +1,5 @@
-hal_py Documentation
-=====================
+HAL Core Documentation
+======================
 
 .. toctree::
    :maxdepth: 1
@@ -9,6 +9,7 @@ hal_py Documentation
    gate_library
    endpoint
    netlist
+   netlist_utils
    boolean_function
    gate_type
    gate_type_lut
@@ -17,9 +18,8 @@ hal_py Documentation
    net
    module
    path
-   i_base
+   base_plugin_interface
    gui_plugin_interface
    plugin_manager
    netlist_factory
    hdl_writer_manager
-   graph_algorithm

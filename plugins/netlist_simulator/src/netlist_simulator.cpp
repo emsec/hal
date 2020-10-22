@@ -58,9 +58,9 @@ namespace hal
         m_needs_initialization = true;
     }
 
-    void NetlistSimulator::add_clock_hertz(Net* clock_net, u64 hertz, bool start_at_zero)
+    void NetlistSimulator::add_clock_frequency(Net* clock_net, u64 frequency, bool start_at_zero)
     {
-        u64 period = 1'000'000'000'000ul / hertz;
+        u64 period = 1'000'000'000'000ul / frequency;
         add_clock_period(clock_net, period, start_at_zero);
     }
 

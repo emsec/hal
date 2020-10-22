@@ -36,7 +36,7 @@
 namespace hal
 {
     /**
-    * @ingroup core
+    * @ingroup utilities
     */
     class CORE_API ProgramArguments
     {

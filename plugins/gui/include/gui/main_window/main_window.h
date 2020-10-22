@@ -162,8 +162,8 @@ namespace hal
         Action* m_action_save;
         Action* m_action_save_as;
         Action* m_action_about;
-        Action* m_action_schedule;
-        Action* m_action_run_schedule;
+   //     Action* m_action_schedule;
+   //     Action* m_action_run_schedule;
    //     Action* m_action_content;
         Action* m_action_settings;
         Action* m_action_close;

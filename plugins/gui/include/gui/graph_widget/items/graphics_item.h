@@ -50,8 +50,9 @@ namespace hal
         static QColor s_selectionColor;
         static QColor s_highlightColor;
 
-        QColor penColor(QStyle::State state) const;
+        QColor penColor(QStyle::State state, const QColor& colorHint=QColor()) const;
         QColor selectionColor() const;
+        QColor groupingColor() const;
 
         hal::item_type m_item_type; // USE QT ITEM TYPE SYSTEM INSTEAD ???
         bool m_highlight;  // paint with hightlight color

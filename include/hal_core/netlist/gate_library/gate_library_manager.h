@@ -26,17 +26,17 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_library_parser.h"
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <vector>
-#include <functional>
 
 namespace hal
 {
     class GateLibrary;
 
     /**
-     * @ingroup netlist
+     * @ingroup gate_lib
      */
     namespace gate_library_manager
     {
