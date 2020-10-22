@@ -22,10 +22,18 @@ namespace hal
         plugin_dataflow()  = default;
         ~plugin_dataflow() = default;
 
-        /** interface implementation: i_base */
+        /**
+         * Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
         std::string get_name() const override;
 
-        /** interface implementation: i_base */
+        /**
+         * Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
         std::string get_version() const override;
 
         /** interface implementation: i_cli */

@@ -77,14 +77,14 @@ namespace hal
         /**
          * Get the name of the plugin.
          *
-         * @returns Plugin name.
+         * @returns The name of the plugin.
          */
         virtual std::string get_name() const = 0;
 
         /**
          * Get the version of the plugin.
          *
-         * @returns Plugin version.
+         * @returns The version of the plugin.
          */
         virtual std::string get_version() const = 0;
 

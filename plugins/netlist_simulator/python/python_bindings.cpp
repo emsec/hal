@@ -22,11 +22,38 @@ namespace hal
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<NetlistSimulatorPlugin, RawPtrWrapper<NetlistSimulatorPlugin>, BasePluginInterface>(m, "NetlistSimulatorPlugin")
-            .def_property_readonly("name", &NetlistSimulatorPlugin::get_name)
-            .def("get_name", &NetlistSimulatorPlugin::get_name)
-            .def_property_readonly("version", &NetlistSimulatorPlugin::get_version)
-            .def("get_version", &NetlistSimulatorPlugin::get_version)
-            .def("create_simulator", &NetlistSimulatorPlugin::create_simulator);
+            .def_property_readonly("name", &NetlistSimulatorPlugin::get_name, R"(
+                The name of the plugin.
+
+                :type: str
+            )")
+
+            .def("get_name", &NetlistSimulatorPlugin::get_name, R"(
+                Get the name of the plugin.
+
+                :returns: The name of the plugin.
+                :rtype: str
+            )")
+
+            .def_property_readonly("version", &NetlistSimulatorPlugin::get_version, R"(
+                The version of the plugin.
+
+                :type: str
+            )")
+
+            .def("get_version", &NetlistSimulatorPlugin::get_version, R"(
+                Get the version of the plugin.
+
+                :returns: The version of the plugin.
+                :rtype: str
+            )")
+
+            .def("create_simulator", &NetlistSimulatorPlugin::create_simulator, R"(
+                Create a netlist simulator instance.
+
+                :returns: The simulator instance.
+                :rtype: netlist_simulator.NetlistSimulator
+            )");
 
         py::class_<NetlistSimulator>(m, "NetlistSimulator")
             .def("add_gates", &NetlistSimulator::add_gates, py::arg("gates"), R"(
@@ -36,11 +63,15 @@ namespace hal
                 :param list[hal_py.Gate] gates: The gates to add.
             )")
 
-            .def("add_clock_frequency", &NetlistSimulator::add_clock_frequency, py::arg("clock_net"), py::arg("frequency"), py::arg("start_at_zero"), R"(
+            .def("add_clock_frequency", &NetlistSimulator::add_clock_frequency, py::arg("clock_net"), py::arg("frequency"), py::arg("start_at_zero") = true, R"(
                 Specify a net that carries the clock signal and set the clock frequency in hertz.
+
+                :param hal_py.Net clock_net: The net that carries the clock signal.
+                :param int frequency: The clock frequency in hertz.
+                :param bool start_at_zero: Initial clock state is 0 if true, 1 otherwise.
             )")
 
-            .def("add_clock_period", &NetlistSimulator::add_clock_period, py::arg("clock_net"), py::arg("period"), py::arg("start_at_zero"), R"(
+            .def("add_clock_period", &NetlistSimulator::add_clock_period, py::arg("clock_net"), py::arg("period"), py::arg("start_at_zero") = true, R"(
                 Specify a net that carries the clock signal and set the clock period in picoseconds.
         
                 :param hal_py.Net clock_net: The net that carries the clock signal.
@@ -147,10 +178,39 @@ namespace hal
                 :returns: A map from net to associated events for that net sorted by time.
             )");
 
-        py::enum_<SignalValue>(m, "SignalValue").value("X", SignalValue::X).value("ZERO", SignalValue::ZERO).value("ONE", SignalValue::ONE).value("Z", SignalValue::Z).export_values();
+        py::enum_<SignalValue>(m, "SignalValue", R"(Represents the logic value that a signal can take.)")
+            .value("ZERO", SignalValue::ZERO, R"(Represents a logical 0.)")
+            .value("ONE", SignalValue::ONE, R"(Represents a logical 1.)")
+            .value("X", SignalValue::X, R"(Represents an undefined value.)")
+            .value("Z", SignalValue::Z, R"(Represents high impedance (currently not supported by the simulator).)")
+            .export_values();
 
         py::class_<Event>(m, "Event")
-            .def(py::init<>())
+            .def(py::init<>(), R"(Construct a new event.)")
+
+            .def_readwrite("affected_net", &Event::affected_net, R"(
+                The net affected by the event.
+
+                :type: hal_py.Net
+            )")
+
+            .def_readwrite("new_value", &Event::new_value, R"(
+                The new value caused by the event.
+
+                :type: netlist_simulator.SignalValue
+            )")
+
+            .def_readwrite("time", &Event::time, R"(
+                The time of the event.
+
+                :type: int
+            )")
+
+            .def_readwrite("id", &Event::id, R"(
+                The unique ID of the event.
+
+                :type: int
+            )")
 
             .def(py::self == py::self, R"(
                 Tests whether two events are equal.
