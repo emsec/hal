@@ -9,7 +9,6 @@ function(hal_add_plugin target_name)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}"
                           "${multiValueArgs}" ${ARGN})
 
-
     if(ARG_MODULE AND ARG_SHARED)
         message(FATAL_ERROR "Can't be both MODULE and SHARED")
     elseif(ARG_SHARED)
@@ -95,6 +94,10 @@ function(hal_plugin_documentation target_name)
     get_property(SPHINX_PLUGIN_INDEX_FILES_TMP GLOBAL PROPERTY SPHINX_PLUGIN_INDEX_FILES)
     list(APPEND SPHINX_PLUGIN_INDEX_FILES_TMP ${ARG_SPHINX_DOC_INDEX_FILE})
     set_property(GLOBAL PROPERTY SPHINX_PLUGIN_INDEX_FILES "${SPHINX_PLUGIN_INDEX_FILES_TMP}")
+
+    get_property(SPHINX_PLUGIN_TARGETS_TMP GLOBAL PROPERTY SPHINX_PLUGIN_TARGETS)
+    list(APPEND SPHINX_PLUGIN_TARGETS_TMP ${target_name})
+    set_property(GLOBAL PROPERTY SPHINX_PLUGIN_TARGETS "${SPHINX_PLUGIN_TARGETS_TMP}")
 
     foreach(file ${ARG_SPHINX_DOC_FILES})
         get_filename_component(f ${file} NAME)
