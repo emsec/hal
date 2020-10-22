@@ -581,5 +581,161 @@ namespace hal
             :returns: A list of groupings.
             :rtype: list[hal_py.Grouping]
         )");
+
+        py_netlist.def("get_next_gate_id", &Netlist::get_next_gate_id, R"(
+            Get the gate ID following the highest currently used ID.
+
+            :returns: The next gate ID.
+            :rtype: int
+        )");
+
+        py_netlist.def("set_next_gate_id", &Netlist::set_next_gate_id, py::arg("id"), R"(
+            Set the gate ID following the highest currently used ID.
+
+            :param int id: The next gate ID.
+        )");
+
+        py_netlist.def("get_used_gate_ids", &Netlist::get_used_gate_ids, R"(
+            Get a set of all currently used gate IDs.
+
+            :returns: All used gate IDs.
+            :rtype: set[int]
+        )");
+
+        py_netlist.def("set_used_gate_ids", &Netlist::set_used_gate_ids, py::arg("ids"), R"(
+            Set a set of all currently used gate IDs.
+
+            :param set[int] ids: All used gate IDs.
+        )");
+
+        py_netlist.def("get_free_gate_ids", &Netlist::get_free_gate_ids, R"(
+            Get a set of all gate IDs that have previously been used but been freed ever since.
+
+            :returns: All freed gate IDs.
+            :rtype: set[int]
+        )");
+
+        py_netlist.def("set_free_gate_ids", &Netlist::set_free_gate_ids, py::arg("ids"), R"(
+            Set a set of all gate IDs that have previously been used but been freed ever since.
+
+            :param set[int] ids: All freed gate IDs.
+        )");
+
+        py_netlist.def("get_next_net_id", &Netlist::get_next_net_id, R"(
+            Get the net ID following the highest currently used ID.
+
+            :returns: The next net ID.
+            :rtype: int
+        )");
+
+        py_netlist.def("set_next_net_id", &Netlist::set_next_net_id, py::arg("id"), R"(
+            Set the net ID following the highest currently used ID.
+
+            :param int id: The next net ID.
+        )");
+
+        py_netlist.def("get_used_net_ids", &Netlist::get_used_net_ids, R"(
+            Get a set of all currently used net IDs.
+
+            :returns: All used net IDs.
+            :rtype: set[int]
+        )");
+
+        py_netlist.def("set_used_net_ids", &Netlist::set_used_net_ids, py::arg("ids"), R"(
+            Set a set of all currently used net IDs.
+
+            :param set[int] ids: All used net IDs.
+        )");
+
+        py_netlist.def("get_free_net_ids", &Netlist::get_free_net_ids, R"(
+            Get a set of all net IDs that have previously been used but been freed ever since.
+
+            :returns: All freed net IDs.
+            :rtype: set[int]
+        )");
+
+        py_netlist.def("set_free_net_ids", &Netlist::set_free_net_ids, py::arg("ids"), R"(
+            Set a set of all net IDs that have previously been used but been freed ever since.
+
+            :param set[int] ids: All freed net IDs.
+        )");
+
+        py_netlist.def("get_next_module_id", &Netlist::get_next_module_id, R"(
+            Get the module ID following the highest currently used ID.
+
+            :returns: The next module ID.
+            :rtype: int
+        )");
+
+        py_netlist.def("set_next_module_id", &Netlist::set_next_module_id, py::arg("id"), R"(
+            Set the module ID following the highest currently used ID.
+
+            :param int id: The next module ID.
+        )");
+
+        py_netlist.def("get_used_module_ids", &Netlist::get_used_module_ids, R"(
+            Get a set of all currently used module IDs.
+
+            :returns: All used module IDs.
+            :rtype: set[int]
+        )");
+
+        py_netlist.def("set_used_module_ids", &Netlist::set_used_module_ids, py::arg("ids"), R"(
+            Set a set of all currently used module IDs.
+
+            :param set[int] ids: All used module IDs.
+        )");
+
+        py_netlist.def("get_free_module_ids", &Netlist::get_free_module_ids, R"(
+            Get a set of all module IDs that have previously been used but been freed ever since.
+
+            :returns: All freed module IDs.
+            :rtype: set[int]
+        )");
+
+        py_netlist.def("set_free_module_ids", &Netlist::set_free_module_ids, py::arg("ids"), R"(
+            Set a set of all module IDs that have previously been used but been freed ever since.
+
+            :param set[int] ids: All freed module IDs.
+        )");
+
+        py_netlist.def("get_next_grouping_id", &Netlist::get_next_grouping_id, R"(
+            Get the grouping ID following the highest currently used ID.
+
+            :returns: The next grouping ID.
+            :rtype: int
+        )");
+
+        py_netlist.def("set_next_grouping_id", &Netlist::set_next_grouping_id, py::arg("id"), R"(
+            Set the grouping ID following the highest currently used ID.
+
+            :param int id: The next grouping ID.
+        )");
+
+        py_netlist.def("get_used_grouping_ids", &Netlist::get_used_grouping_ids, R"(
+            Get a set of all currently used grouping IDs.
+
+            :returns: All used grouping IDs.
+            :rtype: set[int]
+        )");
+
+        py_netlist.def("set_used_grouping_ids", &Netlist::set_used_grouping_ids, py::arg("ids"), R"(
+            Set a set of all currently used grouping IDs.
+
+            :param set[int] ids: All used grouping IDs.
+        )");
+
+        py_netlist.def("get_free_grouping_ids", &Netlist::get_free_grouping_ids, R"(
+            Get a set of all grouping IDs that have previously been used but been freed ever since.
+
+            :returns: All freed grouping IDs.
+            :rtype: set[int]
+        )");
+
+        py_netlist.def("set_free_grouping_ids", &Netlist::set_free_grouping_ids, py::arg("ids"), R"(
+            Set a set of all grouping IDs that have previously been used but been freed ever since.
+
+            :param set[int] ids: All freed grouping IDs.
+        )");
     }
 }    // namespace hal
