@@ -7,24 +7,27 @@
 
 namespace hal
 {
-    namespace processing
+    namespace dataflow
     {
-        using pass_function = std::function<std::shared_ptr<Grouping>(const std::shared_ptr<Grouping>&)>;
-        using pass_id       = u16;
-
-        struct PassConfiguration
+        namespace processing
         {
-            PassConfiguration(const pass_function& func);
-            PassConfiguration() = default;
+            using pass_function = std::function<std::shared_ptr<Grouping>(const std::shared_ptr<Grouping>&)>;
+            using pass_id       = u16;
 
-            pass_function function;
-            pass_id id;
-        };
+            struct PassConfiguration
+            {
+                PassConfiguration(const pass_function& func);
+                PassConfiguration() = default;
 
-        namespace pass_collection
-        {
-            std::vector<PassConfiguration> get_passes(const std::vector<std::vector<pass_id>>& previous_passes);
-        }    // namespace pass_collection
+                pass_function function;
+                pass_id id;
+            };
 
-    }    // namespace processing
-}    // namespace hal
+            namespace pass_collection
+            {
+                std::vector<PassConfiguration> get_passes(const std::vector<std::vector<pass_id>>& previous_passes);
+            }    // namespace pass_collection
+
+        }    // namespace processing
+    }        // namespace dataflow
+}

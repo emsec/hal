@@ -34,55 +34,55 @@
 namespace hal
 {
     /**
-     * Gate library class containing information about the gates contained in the library.
+     * A gate library is a collection of gate types including their pins and Boolean functions.
      *
-     * @ingroup netlist
+     * @ingroup gate_lib
      */
     class NETLIST_API GateLibrary
     {
     public:
         /**
-         * Constructs a gate library object.
+         * Construct a gate library by specifying its name and the path to the file that describes the library.
          *
-         * @param[in] path - Path to the file containing the gate library definition.
-         * @param[in] name - Name of the gate library.
+         * @param[in] path - The path to the gate library file.
+         * @param[in] name - The name of the gate library.
          */
         GateLibrary(const std::filesystem::path& path, const std::string& name);
         ~GateLibrary() = default;
 
         /**
-         * Get the name of the library.
+         * Get the name of the gate library.
          *
-         * @returns The name.
+         * @returns The name of the gate library.
          */
         std::string get_name() const;
 
         /**
-         * Get the file path of the library.
+         * Get the path to the file describing the gate library.
          *
-         * @returns The file path.
+         * @returns The path to the gate library file.
          */
         std::filesystem::path get_path() const;
 
         /**
          * Add a gate type to the gate library.
          *
-         * @param[in] gt - The gate type object.
+         * @param[in] gate_type - The gate type to add.
          */
-        void add_gate_type(std::unique_ptr<const GateType> gt);
+        void add_gate_type(std::unique_ptr<const GateType> gate_type);
 
         /**
-         * Checks whether a gate type is contained in this library.
+         * Check whether the given gate type is contained in this library.
          *
-         * @param[in] gt - The gate type
-         * @returns True, if the gate type is part of this library
+         * @param[in] gate_type - The gate type to check.
+         * @returns True if the gate type is part of this library, false otherwise.
          */
-        bool contains_gate_type(const GateType* gt) const;
+        bool contains_gate_type(const GateType* gate_type) const;
 
         /**
          * Get all gate types of the library.
          *
-         * @returns A map from gate type names to gate type objects.
+         * @returns A map from gate type names to gate types.
          */
         std::unordered_map<std::string, const GateType*> get_gate_types() const;
 
@@ -101,14 +101,14 @@ namespace hal
         std::unordered_map<std::string, const GateType*> get_gnd_gate_types() const;
 
         /**
-         * Add a necessary includes of the gate library, e.g., VHDL libraries.
+         * Add an include required for parsing a corresponding netlist, e.g., VHDL libraries.
          *
          * @param[in] inc - The include to add.
          */
         void add_include(const std::string& inc);
 
         /**
-         * Get a vector of necessary includes of the gate library, e.g., VHDL libraries.
+         * Get a vector of includes required for parsing a corresponding netlist, e.g., VHDL libraries.
          *
          * @returns A vector of includes.
          */

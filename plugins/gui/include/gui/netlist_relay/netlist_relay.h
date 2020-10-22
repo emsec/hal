@@ -27,6 +27,7 @@
 #include "hal_core/netlist/event_system/net_event_handler.h"
 #include "hal_core/netlist/event_system/netlist_event_handler.h"
 #include "hal_core/netlist/event_system/module_event_handler.h"
+#include "hal_core/netlist/event_system/grouping_event_handler.h"
 
 #include <QMap>
 #include <QObject>
@@ -104,6 +105,16 @@ namespace hal
         void net_destination_added(Net* n, const u32 dst_gate_id) const;
         void net_destination_removed(Net* n, const u32 dst_gate_id) const;
 
+        void grouping_created(Grouping* grp) const;
+        void grouping_removed(Grouping* grp) const;
+        void grouping_nameChanged(Grouping* grp) const;
+        void grouping_gate_assigned(Grouping* grp, u32 id) const;
+        void grouping_gate_removed(Grouping* grp, u32 id) const;
+        void grouping_net_assigned(Grouping* grp, u32 id) const;
+        void grouping_net_removed(Grouping* grp, u32 id) const;
+        void grouping_module_assigned(Grouping* grp, u32 id) const;
+        void grouping_module_removed(Grouping* grp, u32 id) const;
+
         // GUI
         void module_color_changed(Module* m) const;
 
@@ -116,6 +127,7 @@ namespace hal
         void relay_module_event(module_event_handler::event ev, Module* object, u32 associated_data);
         void relay_gate_event(gate_event_handler::event ev, Gate* object, u32 associated_data);
         void relay_net_event(net_event_handler::event ev, Net* object, u32 associated_data);
+        void relay_grouping_event(grouping_event_handler::event ev, Grouping* object, u32 associated_data);
 
         QMap<u32, QColor> m_module_colors;
 

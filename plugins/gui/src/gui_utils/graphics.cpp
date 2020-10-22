@@ -3,6 +3,7 @@
 #include "gui/svg_icon_engine/svg_icon_engine.h"
 
 #include <QFile>
+#include <QImage>
 
 namespace hal
 {
@@ -31,6 +32,21 @@ namespace hal
         QIcon get_icon_from_svg_data(const QString& svg_data)
         {
             return QIcon(new SvgIconEngine(svg_data.toStdString()));
+        }
+
+        QPixmap get_colored_pixmap(const QString& imagePath, const QColor& color, const QSize& size)
+        {
+            QImage img(imagePath);
+            /*
+            int w = img.width();
+            int h = img.height();
+            for (int x=0; x<w; x++)
+                for (int y=0; y<h; y++)
+                    if (img.pixel(x,y)==0xFFFFFFFF)
+                        img.setPixel(x,y,color.value());
+                        */
+
+            return QPixmap::fromImage(img.scaled(size));
         }
 
         QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path)

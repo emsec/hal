@@ -23,10 +23,10 @@
 
 #pragma once
 
-#include "hal_core/utilities/callback_hook.h"
-#include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/utilities/program_options.h"
 #include "hal_core/defines.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/utilities/callback_hook.h"
+#include "hal_core/utilities/program_options.h"
 
 #include <functional>
 #include <map>
@@ -37,17 +37,18 @@
 namespace hal
 {
     /**
-     * Plugin manager to load and unload plugins
+     * The plugin manager takes care of loading and unloading plugins at runtime.
      *
-     * @ingroup core
+     * @ingroup plugins
      */
     namespace plugin_manager
     {
         /**
-         * Add existing program options.<br>
-         * Required to detect whether a plugin reuses existing flags.
+         * TODO Python binding.
+         * 
+         * Register existing program options to avoid reuse by plugins.
          *
-         * @param[in] existing_options - The existing options.
+         * @param[in] existing_options - The program options.
          */
         void add_existing_options_description(const ProgramOptions& existing_options);
 
@@ -59,23 +60,29 @@ namespace hal
         std::set<std::string> get_plugin_names();
 
         /**
-         * Get a mapping of flags pointing to their corresponding cli plugin.
+         * TODO Python binding.
+         * 
+         * Get a mapping of flags pointing to their corresponding CLI plugin.
          *
          * @returns A map from flag to plugin name.
          */
         std::unordered_map<std::string, std::string> get_cli_plugin_flags();
 
         /**
-         * Get a mapping of flags pointing to their corresponding ui plugin.
+         * TODO Python binding.
+         * 
+         * Get a mapping of flags pointing to their corresponding UI plugin.
          *
          * @returns A map from flag to plugin name.
          */
         std::unordered_map<std::string, std::string> get_ui_plugin_flags();
 
         /**
-         * Returns command line interface options for all plugins
+         * TODO Python binding.
+         * 
+         * Get command line interface options for all plugins.
          *
-         * @returns The program options
+         * @returns The program options.
          */
         ProgramOptions get_cli_plugin_options();
 
@@ -84,31 +91,31 @@ namespace hal
          * If \p directory_names is empty, the default directories will be searched.
          *
          * @param[in] directory_names - A vector of directory paths.
-         * @returns True on success.
+         * @returns True on success, false otherwise.
          */
         bool load_all_plugins(const std::vector<std::filesystem::path>& directory_names = {});
 
         /**
-         * Load a single plugin by specifying a name and the file path,.
+         * Load a single plugin by specifying its name and file path.
          *
-         * @param[in] plugin_name - The desired name, unique in the framework.
-         * @param[in] file_name - The path to the plugin file.
-         * @returns True on success.
+         * @param[in] plugin_name - The desired name that is unique in the framework.
+         * @param[in] file_path - The path to the plugin file.
+         * @returns True on success, false otherwise.
          */
-        bool load(const std::string& plugin_name, const std::filesystem::path& file_name);
+        bool load(const std::string& plugin_name, const std::filesystem::path& file_path);
 
         /**
-         * Releases all plugins and associated resources.
+         * Releases all plugins and their associated resources.
          *
-         * @returns True on success.
+         * @returns True on success, false otherwise.
          */
         bool unload_all_plugins();
 
         /**
-         * Releases all associated resources related to one plugin.
+         * Releases a single plugin and its associated ressources.
          *
-         * @param[in] plugin_name - The plugin to unload.
-         * @returns True on success.
+         * @param[in] plugin_name - The name of the plugin to unload.
+         * @returns True on success, false otherwise.
          */
         bool unload(const std::string& plugin_name);
 
@@ -116,19 +123,21 @@ namespace hal
          * Gets the basic interface for a plugin specified by name.
          * By default calls the initialize() function of the plugin.
          *
-         * @param[in] plugin_name - The plugin name.
+         * @param[in] plugin_name - The name of the plugin.
          * @param[in] initialize - If false, the plugin's initialize function is not called.
-         * @returns A plugin instance.
+         * @returns The basic plugin interface.
          */
         BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize = true);
 
         /**
+         * TODO Python bindings for different types and extend by initialize flag.
+         * 
          * Gets a specific interface for a plugin specified by name.
          * By default calls the initialize() function of the plugin.
          *
-         * @param[in] plugin_name - The plugin name.
+         * @param[in] plugin_name - The name of the plugin.
          * @param[in] initialize - If false, the plugin's initialize function is not called.
-         * @returns A plugin instance.
+         * @returns The specific plugin interface.
          */
         template<typename T>
         T* get_plugin_instance(const std::string& plugin_name, bool initialize = true)
@@ -137,6 +146,8 @@ namespace hal
         }
 
         /**
+         * TODO Python binding.
+         * 
          * Add a callback to notify the GUI about loaded or unloaded plugins.
          *
          * @param[in] callback - The callback function. Parameters are:
@@ -148,6 +159,8 @@ namespace hal
         u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback);
 
         /**
+         * TODO Python binding.
+         * 
          * Remove a registered callback.
          *
          * @param[in] id - The id of the registered callback.

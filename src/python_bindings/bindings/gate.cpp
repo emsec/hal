@@ -13,20 +13,22 @@ namespace hal
 )");
 
         py_gate.def("get_id", &Gate::get_id, R"(
-        Gets the gate's unique id.
+        Get the unique ID of the gate.
 
-        :returns: The gate's id.
+        :returns: The unique id.
         :type: int
 )");
 
-        py_gate.def_property_readonly("netlist", [](Gate* g){return RawPtrWrapper(g->get_netlist());}, R"(
-        The parent netlist of the gate.
+        py_gate.def_property_readonly(
+            "netlist", [](Gate* g) { return RawPtrWrapper(g->get_netlist()); }, R"(
+        The netlist this gate is associated with.
 
         :type: hal_py.Netlist
 )");
 
-        py_gate.def("get_netlist", [](Gate* g){return RawPtrWrapper(g->get_netlist());}, R"(
-        Gets the parent netlist of the gate.
+        py_gate.def(
+            "get_netlist", [](Gate* g) { return RawPtrWrapper(g->get_netlist()); }, R"(
+        Get the netlist this gate is associated with.
 
         :returns: The netlist.
         :rtype: hal_py.Netlist
@@ -39,14 +41,14 @@ namespace hal
 )");
 
         py_gate.def("get_name", &Gate::get_name, R"(
-        Gets the gate's name.
+        Get the name of the gate.
 
         :returns: The name.
         :rtype: str
 )");
 
         py_gate.def("set_name", &Gate::set_name, py::arg("name"), R"(
-        Sets the gate's name.
+        Set the name of the gate.
 
         :param str name: The new name.
 )");
@@ -58,7 +60,7 @@ namespace hal
 )");
 
         py_gate.def("get_type", &Gate::get_type, R"(
-        Gets the type of the gate.
+        Get the type of the gate.
 
         :returns: The gate's type.
         :rtype: hal_py.Gate_type
@@ -78,16 +80,18 @@ namespace hal
 )");
 
         py_gate.def("get_location_x", &Gate::get_location_x, R"(
-        Gets the x-coordinate of the physical location of the gate in the layout.
+        Get the physical location x-coordinate of the gate in the layout.
+        If no valid physical location x-coordinate is assigned, a negative value is returned.
 
-        :returns: The x-coordinate.
+        :returns: The gate's x-coordinate.
         :rtype: float
 )");
 
         py_gate.def("set_location_x", &Gate::set_location_x, py::arg("x"), R"(
-        Sets the x-coordinate of the physical location of the gate in the layout. Only positive values are valid, negative values will be regarded as no location assigned.
+        Set the physical location x-coordinate of the gate in the layout.
+        Only positive values are valid, negative values will be regarded as no location assigned.
 
-        :param float x: The x-coordinate.
+        :param float x: The gate's x-coordinate.
 )");
 
         py_gate.def_property("location_y", &Gate::get_location_y, &Gate::set_location_y, R"(
@@ -98,48 +102,61 @@ namespace hal
 )");
 
         py_gate.def("get_location_y", &Gate::get_location_y, R"(
-        Gets the y-coordinate of the physical location of the gate in the layout.
+        Get the physical location y-coordinate of the gate in the layout.
+        If no valid physical location y-coordinate is assigned, a negative value is returned.
 
-        :returns: The  y-coordinate.
+        :returns: The gate's y-coordinate.
         :rtype: float
 )");
 
         py_gate.def("set_location_y", &Gate::set_location_y, py::arg("y"), R"(
-        Sets the y-coordinate of the physical location of the gate in the layout. Only positive values are valid, negative values will be regarded as no location assigned.
+        Set the physical location y-coordinate of the gate in the layout.
+        Only positive values are valid, negative values will be regarded as no location assigned.
 
-        :param float y: The  y-coordinate.
+        :param float y: The gate's y-coordinate.
 )");
 
         py_gate.def_property("location", &Gate::get_location, &Gate::set_location, R"(
-        The physical location of the gate in the layout. Only positive values are valid, negative values will be regarded as no location assigned.
+        The physical location of the gate in the layout.
+        Only positive values are valid, negative values will be regarded as no location assigned.
 
         :type: tuple(float,float)
 )");
 
         py_gate.def("get_location", &Gate::get_location, R"(
-        Gets the physical location of the gate in the layout.
+        Get the physical location of the gate in the layout.
+        If no valid physical location coordinate is assigned, a negative value is returned for the respective coordinate.
 
         :returns: A tuple <x-coordinate, y-coordinate>.
         :rtype: tuple(float,float)
 )");
 
         py_gate.def("set_location", &Gate::set_location, py::arg("location"), R"(
-        Sets the physical location of the gate in the layout. Only positive values are valid, negative values will be regarded as no location assigned.
+        Set the physical location of the gate in the layout.
+        Only positive coordinates are valid, negative values will be regarded as no location assigned.
 
-        :param tuple(float,float) location: A pair <x-coordinate, y-coordinate>.
+        :param tuple(float,float) location: A tuple <x-coordinate, y-coordinate>.
 )");
 
         py_gate.def_property_readonly("module", &Gate::get_module, R"(
-        The module in which this gate is contained.
+        The module in which contains this gate.
 
         :type: hal_py.Module
 )");
 
         py_gate.def("get_module", &Gate::get_module, R"(
-        Gets the module in which this gate is contained.
+        Get the module which contains this gate.
 
         :returns: The module.
         :rtype: hal_py.Module
+)");
+
+        py_gate.def("get_grouping", &Gate::get_grouping, R"(
+        Gets the grouping in which this gate is contained.
+        If no grouping contains this gate, *None* is returned.
+
+        :returns: The grouping.
+        :rtype: hal_py.Grouping
 )");
 
         py_gate.def("get_boolean_function", &Gate::get_boolean_function, py::arg("name") = "", R"(
@@ -153,15 +170,15 @@ namespace hal
 
         py_gate.def_property_readonly(
             "boolean_functions", [](Gate* g) { return g->get_boolean_functions(); }, R"(
-        A map from function name to boolean function for all boolean functions associated with this gate.
+        A dictionary from function name to boolean function for all boolean functions associated with this gate.
 
         :rtype: dict[str,hal_py.BooleanFunction]
 )");
 
         py_gate.def("get_boolean_functions", &Gate::get_boolean_functions, py::arg("only_custom_functions") = false, R"(
-        Get a map from function name to boolean function for all boolean functions associated with this gate.
+        Get a dictionary from function name to boolean function for all boolean functions associated with this gate.
 
-        :param bool only_custom_functions: If true, this returns only the functions which were set via set_boolean_function.
+        :param bool only_custom_functions: If true, this returns only the functions which were set via :func:`add_boolean_function`.
         :returns: A map from function name to function.
         :rtype: dict[str,hal_py.BooleanFunction]
 )");
@@ -242,64 +259,69 @@ namespace hal
 )");
 
         py_gate.def_property_readonly("fan_in_nets", &Gate::get_fan_in_nets, R"(
-        A set of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.
+        A list of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.
 
-        :type: set[hal_py.Net]
+        :type: list[hal_py.Net]
 )");
 
         py_gate.def("get_fan_in_nets", &Gate::get_fan_in_nets, R"(
-        Get a set of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.
+        Get a list of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.
 
-        :returns: A set of all connected input nets.
-        :rtype: set[hal_py.Net]
+        :returns: A list of all connected input nets.
+        :rtype: list[hal_py.Net]
 )");
 
         py_gate.def("get_fan_out_endpoints", &Gate::get_fan_out_endpoints, R"(
-        Get a set of all fan-out endpoints of the gate, i.e. all endpoints that are connected to one of the output pins.
+        Get a list of all fan-out endpoints of the gate,
+        i.e. all connected endpoints that represent an output pin of this gate.
 
-        :returns: A set of all connected output endpoints.
-        :rtype: set[hal_py.Endpoint]
+        :returns: A list of all output endpoints.
+        :rtype: list[hal_py.Endpoint]
 )");
 
         py_gate.def("get_fan_in_net", &Gate::get_fan_in_net, py::arg("pin"), R"(
         Get the fan-in net which is connected to a specific input pin.
+        If the input pin type is unknown or no net is connected, *None* is returned.
 
         :param str pin: The input pin type.
         :returns: The connected input net.
         :rtype: hal_py.Net
 )");
 
-        py_gate.def("get_fan_in_net", &Gate::get_fan_in_net, py::arg("pin"), R"(
-        Get the fan-in endpoint which is connected to a specific output pin.
+        py_gate.def("get_fan_in_endpoint", &Gate::get_fan_in_endpoint, py::arg("pin"), R"(
+        Get the fan-out endpoint which represents a specific input pin.
+        If the input pin type is unknown or no net is connected, *None* is returned.
 
         :param str pin: The output pin type.
-        :returns: The connected output net.
+        :returns: The output endpoint.
         :rtype: hal_py.Endpoint
 )");
 
         py_gate.def_property_readonly("fan_out_nets", &Gate::get_fan_out_nets, R"(
-        A set of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
+        A list of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
 
-        :returns: A set of all connected output nets.
-        :rtype: set[hal_py.Net]
+        :returns: A list of all connected output nets.
+        :rtype: list[hal_py.Net]
 )");
 
         py_gate.def("get_fan_out_nets", &Gate::get_fan_out_nets, R"(
-        Get a set of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
+        Get a list of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.
 
-        :returns: A set of all connected output nets.
-        :rtype: set[hal_py.Net]
+        :returns: A list of all connected output nets.
+        :rtype: list[hal_py.Net]
 )");
 
         py_gate.def("get_fan_in_endpoints", &Gate::get_fan_in_endpoints, R"(
-        Get a set of all fan-in endpoints of the gate, i.e. all endpoints that are connected to one of the input pins.
+        Get a list of all fan-in endpoints of the gate,
+        i.e. all connected endpoints that represent an input pin of this gate.
 
-        :returns: A set of all connected input endpoints.
-        :rtype: set[hal_py.Endpoint]
+        :returns: A list of all connected input endpoints.
+        :rtype: list[hal_py.Endpoint]
 )");
 
         py_gate.def("get_fan_out_net", &Gate::get_fan_out_net, py::arg("pin"), R"(
         Get the fan-out net which is connected to a specific output pin.
+        If the output pin type is unknown or no net is connected, *None* is returned.
 
         :param str pin: The output pin type.
         :returns: The connected output net.
@@ -307,26 +329,28 @@ namespace hal
 )");
 
         py_gate.def("get_fan_out_endpoint", &Gate::get_fan_out_endpoint, py::arg("pin"), R"(
-        Get the fan-out endpoint which is connected to a specific output pin.
+        Get the fan-out endpoint which represents a specific output pin.
+        If the input pin type is unknown or no net is connected to the respective pin, *None* is returned.
 
         :param str pin: The output pin type.
-        :returns: The connected output net.
+        :returns: The connected output endpoint.
         :rtype: hal_py.Endpoint
 )");
 
         py_gate.def_property_readonly(
             "unique_predecessors", [](Gate* g) { return g->get_unique_predecessors(); }, R"(
-        A set of all unique predecessor gates of the gate.
+        A list of all unique predecessor gates of the gate.
 
         :type: list[hal_py.Gate]
 )");
 
         py_gate.def("get_unique_predecessors", &Gate::get_unique_predecessors, py::arg("filter") = nullptr, R"(
-        Get a set of all unique predecessor endpoints of the gate filterable by the gate's input pin and a specific gate type.
+        Get a list of all unique predecessor gates of the gate.
+        A filter can be supplied which filters out all potential values that return false.
 
-        :param lambda filter: The function used for filtering. Leave empty for no filtering.
-        :returns: A set of unique predecessors endpoints.
-        :rtype: set[hal_py.Endpoint]
+        :param lambda filter: A function to filter the output, using the input pin type of the gate (1st param) and a connected predecessor endpoint (2nd param). Leave empty for no filtering.
+        :returns: A list of unique predecessors endpoints.
+        :rtype: list[hal_py.Gate]
 )");
 
         py_gate.def_property_readonly(
@@ -341,30 +365,33 @@ namespace hal
 
         :param lambda filter: The function used for filtering. Leave empty for no filtering.
         :returns: A list of predecessors endpoints.
-                :rtype: list[hal_py.Endpoint]
+        :rtype: list[hal_py.Endpoint]
 )");
 
         py_gate.def("get_predecessor", &Gate::get_predecessor, py::arg("which_pin"), R"(
         Get the direct predecessor endpoint of the gate connected to a specific input pin.
+        If the input pin type is unknown or there is no predecessor endpoint or there are multiple predecessor
+        endpoints, *None* is returned.
 
-        :param str which_pin: The input pin type of the this gate. Leave empty for no filtering.
+        :param str which_pin: The input pin type of the this gate.
         :returns: The predecessor endpoint.
         :rtype: hal_py.Endpoint
 )");
 
         py_gate.def_property_readonly(
             "unique_successors", [](Gate* g) { return g->get_unique_successors(); }, R"(
-        A set of all unique successor gates of the gate.
+        A list of all unique successor gates of the gate.
 
         :type: list[hal_py.Gate]
 )");
 
         py_gate.def("get_unique_successors", &Gate::get_unique_successors, py::arg("filter") = nullptr, R"(
-        Get a set of all unique successors of the gate filterable by the gate's output pin and a specific gate type.
+        Get a list of all unique successor gates of the gate.
+        A filter can be supplied which filters out all potential values that return false.
 
-        :param lambda filter: The function used for filtering. Leave empty for no filtering.
-        :returns: A set of unique successor endpoints.
-        :rtype: set[hal_py.Endpoint]
+        :param lambda filter: A function to filter the output, using the output pin type of the gate (1st param) and a connected successor endpoint (2nd param). Leave empty for no filtering.
+        :returns: A list of unique successor endpoints.
+        :rtype: list[hal_py.Gate]
 )");
 
         py_gate.def_property_readonly(
@@ -375,17 +402,20 @@ namespace hal
 )");
 
         py_gate.def("get_successors", &Gate::get_successors, py::arg("filter") = nullptr, R"(
-        Get a list of all direct successor endpoints of the gate filterable by the gate's output pin and a specific gate type.
+        Get a list of all direct successor endpoints of the gate.
+        A filter can be supplied which filters out all potential values that return false.
 
-        :param lambda filter: The function used for filtering. Leave empty for no filtering.
+        :param lambda filter: A function to filter the output, using the output pin type of the gate (1st param) and a connected successor endpoint (2nd param). Leave empty for no filtering.
         :returns: A list of successor endpoints.
         :rtype: list[hal_py.Endpoint]
 )");
 
         py_gate.def("get_successor", &Gate::get_successor, py::arg("which_pin"), R"(
         Get the direct successor endpoint of the gate connected to a specific input pin.
+        If the input pin type is unknown or there is no successor endpoint or there are multiple successor
+        endpoints, *None* is returned.
 
-        :param str which_pin: The input pin type of the this gate. Leave empty for no filtering.
+        :param str which_pin: The output pin type of this gate to get the successor from.
         :returns: The successor endpoint.
         :rtype: hal_py.Endpoint
 )");

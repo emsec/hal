@@ -2,6 +2,7 @@
 
 #include "hal_core/netlist/event_system/netlist_event_handler.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
@@ -11,13 +12,14 @@ namespace hal
 {
     Netlist::Netlist(const GateLibrary* library) : m_gate_library(library)
     {
-        m_manager        = new NetlistInternalManager(this);
-        m_netlist_id     = 1;
-        m_next_gate_id   = 1;
-        m_next_net_id    = 1;
-        m_next_module_id = 1;
-        m_top_module     = nullptr;    // this triggers the internal manager to allow creation of a module without parent
-        m_top_module     = create_module("top module", nullptr);
+        m_manager          = new NetlistInternalManager(this);
+        m_netlist_id       = 1;
+        m_next_gate_id     = 1;
+        m_next_net_id      = 1;
+        m_next_module_id   = 1;
+        m_next_grouping_id = 1;
+        m_top_module       = nullptr;    // this triggers the internal manager to allow creation of a module without parent
+        m_top_module       = create_module("top module", nullptr);
     }
 
     Netlist::~Netlist()
@@ -455,5 +457,72 @@ namespace hal
     std::vector<Net*> Netlist::get_global_output_nets() const
     {
         return m_global_output_nets;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    u32 Netlist::get_unique_grouping_id()
+    {
+        if (!m_free_grouping_ids.empty())
+        {
+            return *(m_free_grouping_ids.begin());
+        }
+        while (m_used_grouping_ids.find(m_next_grouping_id) != m_used_grouping_ids.end())
+        {
+            m_next_grouping_id++;
+        }
+        return m_next_grouping_id;
+    }
+
+    Grouping* Netlist::create_grouping(const u32 id, const std::string& name)
+    {
+        return m_manager->create_grouping(id, name);
+    }
+
+    Grouping* Netlist::create_grouping(const std::string& name)
+    {
+        return m_manager->create_grouping(get_unique_grouping_id(), name);
+    }
+
+    bool Netlist::delete_grouping(Grouping* g)
+    {
+        return m_manager->delete_grouping(g);
+    }
+
+    bool Netlist::is_grouping_in_netlist(Grouping* n) const
+    {
+        return n != nullptr && m_groupings_set.find(n) != m_groupings_set.end();
+    }
+
+    Grouping* Netlist::get_grouping_by_id(u32 grouping_id) const
+    {
+        auto it = m_groupings_map.find(grouping_id);
+        if (it == m_groupings_map.end())
+        {
+            log_error("netlist", "no grouping with id {:08x} registered in netlist.", grouping_id);
+            return nullptr;
+        }
+        return it->second.get();
+    }
+
+    std::vector<Grouping*> Netlist::get_groupings(const std::function<bool(Grouping*)>& filter) const
+    {
+        if (!filter)
+        {
+            return m_groupings;
+        }
+        std::vector<Grouping*> res;
+        for (auto grouping : m_groupings)
+        {
+            if (!filter(grouping))
+            {
+                continue;
+            }
+            res.push_back(grouping);
+        }
+        return res;
     }
 }    // namespace hal

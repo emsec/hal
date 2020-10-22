@@ -3,6 +3,7 @@
 #include "hal_core/utilities/log.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/grouping.h"
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_factory.h"
@@ -10,6 +11,8 @@
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
 #include "gui/graph_widget/items/nets/graphics_net.h"
+#include "gui/grouping/grouping_manager_widget.h"
+#include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
 
 #include <QGraphicsSceneMouseEvent>
@@ -320,6 +323,14 @@ namespace hal
 
         connect(g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
         connect(g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
+        connect(g_netlist_relay, &NetlistRelay::grouping_module_assigned, this, &GraphicsScene::handleGroupingAssignModule);
+        connect(g_netlist_relay, &NetlistRelay::grouping_module_removed, this, &GraphicsScene::handleGroupingAssignModule);
+        connect(g_netlist_relay, &NetlistRelay::grouping_gate_assigned, this, &GraphicsScene::handleGroupingAssignGate);
+        connect(g_netlist_relay, &NetlistRelay::grouping_gate_removed, this, &GraphicsScene::handleGroupingAssignGate);
+        connect(g_netlist_relay, &NetlistRelay::grouping_net_assigned, this, &GraphicsScene::handleGroupingAssignNet);
+        connect(g_netlist_relay, &NetlistRelay::grouping_net_removed, this, &GraphicsScene::handleGroupingAssignNet);
+        connect(g_content_manager->getGroupingManagerWidget()->getModel(),&GroupingTableModel::groupingColorChanged,
+                this, &GraphicsScene::handleGroupingColorChanged);
     }
 
     void GraphicsScene::disconnect_all()
@@ -330,6 +341,14 @@ namespace hal
 
         disconnect(g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
         disconnect(g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
+        disconnect(g_netlist_relay, &NetlistRelay::grouping_module_assigned, this, &GraphicsScene::handleGroupingAssignModule);
+        disconnect(g_netlist_relay, &NetlistRelay::grouping_module_removed, this, &GraphicsScene::handleGroupingAssignModule);
+        disconnect(g_netlist_relay, &NetlistRelay::grouping_gate_assigned, this, &GraphicsScene::handleGroupingAssignGate);
+        disconnect(g_netlist_relay, &NetlistRelay::grouping_gate_removed, this, &GraphicsScene::handleGroupingAssignGate);
+        disconnect(g_netlist_relay, &NetlistRelay::grouping_net_assigned, this, &GraphicsScene::handleGroupingAssignNet);
+        disconnect(g_netlist_relay, &NetlistRelay::grouping_net_removed, this, &GraphicsScene::handleGroupingAssignNet);
+        disconnect(g_content_manager->getGroupingManagerWidget()->getModel(),&GroupingTableModel::groupingColorChanged,
+                   this, &GraphicsScene::handleGroupingColorChanged);
     }
 
     void GraphicsScene::delete_all_items()
@@ -436,6 +455,43 @@ namespace hal
         // END OF TEST CODE
 
         g_selection_relay->relay_selection_changed(this);
+    }
+
+    void GraphicsScene::handleGroupingAssignModule(Grouping *grp, u32 id)
+    {
+        Q_UNUSED(grp);
+
+        GraphicsModule* gm = (GraphicsModule*) get_ModuleItem(id);
+        if (gm) gm->update();
+    }
+
+    void GraphicsScene::handleGroupingAssignGate(Grouping *grp, u32 id)
+    {
+        Q_UNUSED(grp);
+
+        GraphicsGate* gg = (GraphicsGate*) get_gate_item(id);
+        if (gg) gg->update();
+    }
+
+    void GraphicsScene::handleGroupingAssignNet(Grouping *grp, u32 id)
+    {
+        Q_UNUSED(grp);
+
+        GraphicsNet* gn = (GraphicsNet*) get_net_item(id);
+        if (gn) gn->update();
+    }
+
+    void GraphicsScene::handleGroupingColorChanged(Grouping *grp)
+    {
+        for (const module_data& md : m_ModuleItems)
+            if (grp->contains_module_by_id(md.id))
+                md.item->update();
+        for (const gate_data& gd : m_gate_items)
+            if (grp->contains_gate_by_id(gd.id))
+                gd.item->update();
+        for (const net_data& nd : m_net_items)
+            if (grp->contains_net_by_id(nd.id))
+                nd.item->update();
     }
 
     void GraphicsScene::handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems)

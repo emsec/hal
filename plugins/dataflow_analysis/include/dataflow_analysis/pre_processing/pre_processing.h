@@ -6,8 +6,11 @@ namespace hal
 {
     class Netlist;
 
-    namespace pre_processing
+    namespace dataflow
     {
-        NetlistAbstraction run(Netlist* netlist);
-    }    // namespace pre_processing
+        namespace pre_processing
+        {
+            NetlistAbstraction run(Netlist* netlist);
+        }    // namespace pre_processing
+    }        // namespace dataflow
 }    // namespace hal

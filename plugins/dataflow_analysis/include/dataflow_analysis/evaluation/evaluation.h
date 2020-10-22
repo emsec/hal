@@ -8,8 +8,11 @@
 
 namespace hal
 {
-    namespace evaluation
+    namespace dataflow
     {
-        evaluation::Result run(const Configuration& config, Context& ctx, const std::shared_ptr<Grouping>& initial_grouping, const processing::Result& result);
-    }    // namespace evaluation
-}    // namespace hal
+        namespace evaluation
+        {
+            evaluation::Result run(const Configuration& config, Context& ctx, const std::shared_ptr<Grouping>& initial_grouping, const processing::Result& result);
+        }    // namespace evaluation
+    }        // namespace dataflow
+}

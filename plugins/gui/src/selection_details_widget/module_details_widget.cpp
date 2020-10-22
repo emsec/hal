@@ -9,6 +9,8 @@
 #include "gui/selection_details_widget/data_fields_table.h"
 #include "gui/selection_details_widget/details_section_widget.h"
 #include "gui/selection_details_widget/disputed_big_icon.h"
+#include "gui/selection_details_widget/details_general_model.h"
+#include "gui/selection_details_widget/details_table_utilities.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -47,7 +49,10 @@ namespace hal
         m_general_info_button = new QPushButton("Module Information", this);
         m_general_info_button->setEnabled(false);
 
-        m_general_table      = new QTableWidget(6, 2);
+        mGeneralView         = new QTableView(this);
+        mGeneralModel        = new DetailsGeneralModel(mGeneralView);
+        mGeneralModel->setDummyContent<Module>();
+        mGeneralView->setModel(mGeneralModel);
         m_input_ports_table  = new QTableWidget(0, 3);
         m_output_ports_table = new QTableWidget(0, 3);
         m_dataFieldsTable    = new DataFieldsTable(this);
@@ -56,38 +61,14 @@ namespace hal
         m_outputPortsSection = new DetailsSectionWidget("Output Ports (%1)", m_output_ports_table, this);
         m_dataFieldsSection  = new DetailsSectionWidget("Data Fields (%1)", m_dataFieldsTable, this);
 
-        DetailsSectionWidget::setDefaultTableStyle(m_general_table);
-
-        QList<QTableWidgetItem*> tmp_general_table_static_items = {new QTableWidgetItem("Name:"),
-                                                                   new QTableWidgetItem("Id:"),
-                                                                   new QTableWidgetItem("Type:"),
-                                                                   new QTableWidgetItem("Gates:"),
-                                                                   new QTableWidgetItem("Submodules:"),
-                                                                   new QTableWidgetItem("Nets:")};
-
-        QList<QTableWidgetItem*> tmp_general_table_dynamic_items = {m_name_item                 = new QTableWidgetItem(),
-                                                                    m_id_item                   = new QTableWidgetItem(),
-                                                                    m_type_item                 = new QTableWidgetItem(),
-                                                                    m_number_of_gates_item      = new QTableWidgetItem(),
-                                                                    m_number_of_submodules_item = new QTableWidgetItem(),
-                                                                    m_number_of_nets_item       = new QTableWidgetItem()};
-
-        for (const auto& item : tmp_general_table_static_items)
-            add_general_table_static_item(item);
-
-        for (const auto& item : tmp_general_table_dynamic_items)
-            add_general_table_dynamic_item(item);
-
-        //first 3 items of the general table are interactive, instead of checking id the function above
-        //just declare it here
-        m_name_item->setFlags(Qt::ItemIsEnabled);
-        m_id_item->setFlags(Qt::ItemIsEnabled);
-        m_type_item->setFlags(Qt::ItemIsEnabled);
+        DetailsTableUtilities::setDefaultTableStyle(mGeneralView);
+        mGeneralView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        mGeneralView->setSelectionMode(QAbstractItemView::SingleSelection);
 
         // place module icon
         QLabel* img = new DisputedBigIcon("sel_module", this);
 
-        intermediate_layout_gt->addWidget(m_general_table);
+        intermediate_layout_gt->addWidget(mGeneralView);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         intermediate_layout_gt->addWidget(img);
         intermediate_layout_gt->setAlignment(img, Qt::AlignTop);
@@ -133,12 +114,12 @@ namespace hal
         connect(g_netlist_relay, &NetlistRelay::net_destination_added, this, &ModuleDetailsWidget::handle_net_destination_added);
         connect(g_netlist_relay, &NetlistRelay::net_destination_removed, this, &ModuleDetailsWidget::handle_net_destination_removed);
 
-        connect(m_general_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_general_table_menu_requested);
         connect(m_input_ports_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_input_ports_table_menu_requested);
         connect(m_output_ports_table, &QTableWidget::customContextMenuRequested, this, &ModuleDetailsWidget::handle_output_ports_table_menu_requested);
         connect(m_input_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_input_net_item_clicked);
         connect(m_output_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_output_net_item_clicked);
 
+        connect(mGeneralModel, &DetailsGeneralModel::requireUpdate, this, &ModuleDetailsWidget::update);
         //eventfilters
         m_input_ports_table->viewport()->setMouseTracking(true);
         m_input_ports_table->viewport()->installEventFilter(this);
@@ -184,40 +165,13 @@ namespace hal
             return;
 
         auto m = g_netlist->get_module_by_id(module_id);
+        if (!m) return;
 
-        if (!m)
-            return;
+        mGeneralModel->setContent<Module>(m);
 
-        //update table with general information
-        m_name_item->setText(QString::fromStdString(m->get_name()));
-        m_id_item->setText(QString::number(m_currentId));
-        m_number_of_submodules_item->setText(QString::number(m->get_submodules(nullptr, true).size()));
-        m_number_of_nets_item->setText(QString::number(m->get_internal_nets().size()));
-
-        QString type_text = QString::fromStdString(m->get_type());
-
-        if (type_text.isEmpty())
-            type_text = "None";
-
-        m_type_item->setText(type_text);
-
-        int total_number_of_gates           = m->get_gates(nullptr, true).size();
-        int direct_member_number_of_gates   = m->get_gates(nullptr, false).size();
-        int indirect_member_number_of_gates = 0;
-
-        for (auto module : m->get_submodules())
-            indirect_member_number_of_gates += module->get_gates(nullptr, true).size();
-
-        QString number_of_gates_text = QString::number(total_number_of_gates);
-
-        if (indirect_member_number_of_gates > 0)
-            number_of_gates_text += " in total, " + QString::number(direct_member_number_of_gates) + " as direct members and " + QString::number(indirect_member_number_of_gates) + " in submodules";
-
-        m_number_of_gates_item->setText(number_of_gates_text);
-
-        m_general_table->resizeColumnsToContents();
-        m_general_table->setFixedWidth(calculate_table_size(m_general_table).width());
-        m_general_table->update();
+        mGeneralView->resizeColumnsToContents();
+        mGeneralView->setFixedSize(DetailsTableUtilities::tableViewSize(mGeneralView,mGeneralModel->rowCount(),mGeneralModel->columnCount()));
+        mGeneralView->update();
 
         //update table with input ports
         m_input_ports_table->clearContents();
@@ -247,7 +201,7 @@ namespace hal
         }
 
         m_input_ports_table->resizeColumnsToContents();
-        m_input_ports_table->setFixedWidth(calculate_table_size(m_input_ports_table).width());
+        m_input_ports_table->setFixedWidth(DetailsTableUtilities::tableWidgetSize(m_input_ports_table).width());
 
         //update table with output ports
         m_output_ports_table->clearContents();
@@ -277,7 +231,7 @@ namespace hal
         }
 
         m_output_ports_table->resizeColumnsToContents();
-        m_output_ports_table->setFixedWidth(calculate_table_size(m_output_ports_table).width());
+        m_output_ports_table->setFixedWidth(DetailsTableUtilities::tableWidgetSize(m_output_ports_table).width());
 
         //update data fields table
         m_dataFieldsSection->setRowCount(m->get_data().size());
@@ -575,111 +529,6 @@ namespace hal
 
         if (module->contains_gate(gate, true))
             update(m_currentId);
-    }
-
-    void ModuleDetailsWidget::add_general_table_static_item(QTableWidgetItem* item)
-    {
-        static int row_index = 0;
-
-        item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-        item->setFont(m_keyFont);
-        m_general_table->setItem(row_index, 0, item);
-
-        row_index++;
-    }
-
-    void ModuleDetailsWidget::add_general_table_dynamic_item(QTableWidgetItem* item)
-    {
-        static int row_index = 0;
-
-        item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
-        m_general_table->setItem(row_index, 1, item);
-
-        row_index++;
-    }
-
-    QSize ModuleDetailsWidget::calculate_table_size(QTableWidget* table)
-    {
-        //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
-        //is the tables width far too big, so just return 0 as the size
-        if (!table->rowCount())
-            return QSize(0, 0);
-
-        int w = table->verticalHeader()->width() + 4;    // +4 seems to be needed
-
-        for (int i = 0; i < table->columnCount(); i++)
-            w += table->columnWidth(i);    // seems to include gridline
-
-        int h = table->horizontalHeader()->height() + 4;
-
-        for (int i = 0; i < table->rowCount(); i++)
-            h += table->rowHeight(i);
-
-        return QSize(w + 5, h);
-    }
-
-    void ModuleDetailsWidget::handle_general_table_menu_requested(const QPoint& pos)
-    {
-        auto curr_item = m_general_table->itemAt(pos);
-
-        if (!curr_item || curr_item->column() != 1 || curr_item->row() >= 3)
-            return;
-
-        QMenu menu;
-        QString description;
-        QString python_command = "netlist.get_module_by_id(" + QString::number(m_currentId) + ").";
-        QString raw_string = curr_item->text(), raw_desc = "";
-        switch (curr_item->row())
-        {
-            case 0:
-                python_command += "get_name()";
-                description = "Extract name as python code (copy to clipboard)";
-                raw_desc    = "Extract raw name (copy to clipboard)";
-                break;
-            case 1:
-                python_command += "get_id()";
-                description = "Extract id as python code (copy to clipboard)";
-                raw_desc    = "Extract raw id (copy to clipboard)";
-                break;
-            case 2:
-                python_command += "get_type()";
-                description = "Extract type as python code (copy to clipboard)";
-                raw_desc    = "Extract raw type (copy to clipboard)";
-                break;
-            default:
-                break;    //cases 3-5 are currently not in use
-        }
-
-        if (curr_item->row() == 0)
-        {
-            menu.addAction("Change name", [this, curr_item]() {
-                InputDialog ipd("Change name", "New name", curr_item->text());
-                if (ipd.exec() == QDialog::Accepted)
-                {
-                    g_netlist->get_module_by_id(m_currentId)->set_name(ipd.text_value().toStdString());
-                    update(m_currentId);
-                }
-            });
-        }
-
-        if (curr_item->row() == 2)
-        {
-            menu.addAction("Change type", [this, curr_item]() {
-                InputDialog ipd("Change type", "New type", curr_item->text());
-                if (ipd.exec() == QDialog::Accepted)
-                {
-                    g_netlist->get_module_by_id(m_currentId)->set_type(ipd.text_value().toStdString());
-                    update(m_currentId);
-                }
-            });
-        }
-
-        menu.addAction(raw_desc, [raw_string]() { QApplication::clipboard()->setText(raw_string); });
-
-        menu.addAction(QIcon(":/icons/python"), description, [python_command]() { QApplication::clipboard()->setText(python_command); });
-
-        menu.move(dynamic_cast<QWidget*>(sender())->mapToGlobal(pos));
-        menu.exec();
     }
 
     void ModuleDetailsWidget::handle_input_ports_table_menu_requested(const QPoint& pos)
