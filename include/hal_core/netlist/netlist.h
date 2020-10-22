@@ -535,178 +535,177 @@ namespace hal
 
         /*
          * ################################################################
-         *      getter/setter for id tracking
+         *      getter/setter for ID tracking
          * ################################################################
          */
 
         /**
-         * Get the next gate id.
+         * Get the gate ID following the highest currently used ID.
          * 
-         * @returns The next gate id.
+         * @returns The next gate ID.
          */
         u32 get_next_gate_id() const;
 
         /**
-         * Set the next gate id.
+         * Set the gate ID following the highest currently used ID.
          * 
-         * @param[in] id - The next gate id.
+         * @param[in] id - The next gate ID.
          */
         void set_next_gate_id(const u32 id);
 
         /**
-         * Get the used gate ids.
+         * Get a set of all currently used gate IDs.
          * 
-         * @returns The used gate ids.
+         * @returns All used gate IDs.
          */
         std::set<u32> get_used_gate_ids() const;
 
         /**
-         * Set the used gate ids.
+         * Set a set of all currently used gate IDs.
          * 
-         * @param[in] ids - The used gate ids.
+         * @param[in] ids - All used gate IDs.
          */
         void set_used_gate_ids(const std::set<u32> ids);
 
         /**
-         * Get the free gate ids.
+         * Get a set of all gate IDs that have previously been used but been freed ever since.
          * 
-         * @returns The free gate ids.
+         * @returns All freed gate IDs.
          */
         std::set<u32> get_free_gate_ids() const;
 
         /**
-         * Set the free gate ids.
+         * Set a set of all gate IDs that have previously been used but been freed ever since.
          * 
-         * @param[in] ids - The free gate ids.
+         * @param[in] ids - All freed gate IDs.
          */
         void set_free_gate_ids(const std::set<u32> ids);
 
         /**
-         * Get the next net id.
+         * Get the net ID following the highest currently used ID.
          * 
-         * @returns The next net id.
+         * @returns The next net ID.
          */
         u32 get_next_net_id() const;
 
         /**
-         * Set the next net id.
+         * Set the net ID following the highest currently used ID.
          * 
-         * @param[in] id - The next net id.
+         * @param[in] id - The next net ID.
          */
         void set_next_net_id(const u32 id);
 
         /**
-         * Get the used net ids.
+         * Get a set of all currently used net IDs.
          * 
-         * @returns The used net ids.
+         * @returns All used net IDs.
          */
         std::set<u32> get_used_net_ids() const;
 
         /**
-         * Set the used net ids.
+         * Set a set of all currently used net IDs.
          * 
-         * @param[in] ids - The used net ids.
+         * @param[in] ids - All used net IDs.
          */
         void set_used_net_ids(const std::set<u32> ids);
 
         /**
-         * Get the free net ids.
+         * Get a set of all net IDs that have previously been used but been freed ever since.
          * 
-         * @returns The free net ids.
+         * @returns All freed net IDs.
          */
         std::set<u32> get_free_net_ids() const;
 
         /**
-         * Set the free net ids.
+         * Set a set of all net IDs that have previously been used but been freed ever since.
          * 
-         * @param[in] ids - The free net ids.
+         * @param[in] ids - All freed net IDs.
          */
         void set_free_net_ids(const std::set<u32> ids);
 
         /**
-         * Get the next module id.
+         * Get the module ID following the highest currently used ID.
          * 
-         * @returns The next module id.
+         * @returns The next module ID.
          */
         u32 get_next_module_id() const;
 
         /**
-         * Set the next module id.
+         * Set the module ID following the highest currently used ID.
          * 
          * @param[in] id - The next module id.
          */
         void set_next_module_id(const u32 id);
 
         /**
-         * Get the used module ids.
+         * Get a set of all currently used module IDs.
          * 
-         * @returns The used module ids.
+         * @returns All used module IDs.
          */
         std::set<u32> get_used_module_ids() const;
 
         /**
-         * Set the used module ids.
+         * Set a set of all currently used module IDs.
          * 
-         * @param[in] ids - The used module ids.
+         * @param[in] ids - All used module IDs.
          */
         void set_used_module_ids(const std::set<u32> ids);
 
         /**
-         * Get the free module ids.
+         * Get a set of all module IDs that have previously been used but been freed ever since.
          * 
-         * @returns The free module ids.
+         * @returns All freed module IDs.
          */
         std::set<u32> get_free_module_ids() const;
 
         /**
-         * Set the free module ids.
+         * Set a set of all module IDs that have previously been used but been freed ever since.
          * 
-         * @param[in] ids - The free module ids.
+         * @param[in] ids - All freed module IDs.
          */
         void set_free_module_ids(const std::set<u32> ids);
 
         /**
-         * Get the next net id.
+         * Get the grouping ID following the highest currently used ID.
          * 
-         * @returns The next net id.
+         * @returns The next grouping ID.
          */
         u32 get_next_grouping_id() const;
 
         /**
-         * Set the next grouping id.
+         * Set the grouping ID following the highest currently used ID.
          * 
-         * @param[in] id - The next grouping id.
+         * @param[in] id - The next grouping ID.
          */
         void set_next_grouping_id(const u32 id);
 
         /**
-         * Get the used grouping ids.
+         * Get a set of all currently used grouping IDs.
          * 
-         * @returns The used grouping ids.
+         * @returns All used grouping IDs.
          */
         std::set<u32> get_used_grouping_ids() const;
 
         /**
-         * Set the used grouping ids.
+         * Set a set of all currently used grouping IDs.
          * 
-         * @param[in] ids - The used grouping ids.
+         * @param[in] ids - All used grouping IDs.
          */
         void set_used_grouping_ids(const std::set<u32> ids);
 
         /**
-         * Get the free grouping ids.
+         * Get a set of all grouping IDs that have previously been used but been freed ever since.
          * 
-         * @returns The free grouping ids.
+         * @returns All freed grouping ids.
          */
         std::set<u32> get_free_grouping_ids() const;
 
         /**
-         * Set the free grouping ids.
+         * Get a set of all grouping IDs that have previously been used but been freed ever since.
          * 
-         * @param[in] ids - The free grouping ids.
+         * @param[in] ids - All freed grouping ids.
          */
         void set_free_grouping_ids(const std::set<u32> ids);
-
 
     private:
         /* stores the pointer to the netlist internal manager */
