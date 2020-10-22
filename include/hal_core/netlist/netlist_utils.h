@@ -1,3 +1,5 @@
+#pragma once
+
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/netlist.h"

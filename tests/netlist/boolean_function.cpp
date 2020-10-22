@@ -173,7 +173,7 @@ namespace hal {
                     {((a & b) ^ (b & c)), "(A & B) ^ (B & C)"},
                     {(a ^ _1), "A ^ 1"},
                     {(a ^ _0), "A ^ 0"},
-                    {(!a), "!A"}
+                    {(~a), "!A"}
                 };
 
             for (auto tc : test_cases) {
@@ -201,17 +201,17 @@ namespace hal {
             {
                 // Some samples that are constant zero
                 EXPECT_TRUE((_0).is_constant_zero());
-                EXPECT_TRUE((!_1).is_constant_zero());
+                EXPECT_TRUE((~_1).is_constant_zero());
                 EXPECT_TRUE((a ^ a).is_constant_zero());
-                EXPECT_TRUE((a & (!a)).is_constant_zero());
+                EXPECT_TRUE((a & (~a)).is_constant_zero());
                 EXPECT_TRUE((_0 | _0).is_constant_zero());
             }
             {
                 // Some samples that are constant one
                 EXPECT_TRUE((_1).is_constant_one());
-                EXPECT_TRUE((!_0).is_constant_one());
-                EXPECT_TRUE((a ^ (!a)).is_constant_one());
-                EXPECT_TRUE((a | (!a)).is_constant_one());
+                EXPECT_TRUE((~_0).is_constant_one());
+                EXPECT_TRUE((a ^ (~a)).is_constant_one());
+                EXPECT_TRUE((a | (~a)).is_constant_one());
                 EXPECT_TRUE((_1 & _1).is_constant_one());
             }
             {
@@ -324,7 +324,7 @@ namespace hal {
                 BooleanFunction b("B");
                 EXPECT_TRUE(((a & b) != (a | b)));
                 EXPECT_TRUE(((a ^ b) != (a & b)));
-                EXPECT_TRUE(((a ^ b) != ((!a) & b)));
+                EXPECT_TRUE(((a ^ b) != ((~a) & b)));
             }
         TEST_END
     }
@@ -343,7 +343,7 @@ namespace hal {
             BooleanFunction _1(ONE);
             {
                 // Optimize some boolean functions and compare their truth_table
-                BooleanFunction bf = (!(a ^ b & c) | (b | c & _1)) ^((a & b) | (a | b | c));
+                BooleanFunction bf = (~(a ^ b & c) | (b | c & _1)) ^((a & b) | (a | b | c));
                 EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"C", "B", "A"})),
                           bf.optimize().get_truth_table(std::vector<std::string>({"C", "B", "A"})));
             }
@@ -355,13 +355,13 @@ namespace hal {
             }
             {
                 // Optimize a boolean function that is constant one
-                BooleanFunction bf = (a & b) | (!a & b) | (a & !b) | (!a & !b);
+                BooleanFunction bf = (a & b) | (~a & b) | (a & ~b) | (~a & ~b);
                 EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"A", "B"})),
                           bf.optimize().get_truth_table(std::vector<std::string>({"A", "B"})));
             }
             {
                 // Optimize a boolean function that is constant zero
-                BooleanFunction bf = (a & !a) | (b & !b);
+                BooleanFunction bf = (a & ~a) | (b & ~b);
                 EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"A", "B"})),
                           bf.optimize().get_truth_table(std::vector<std::string>({"A", "B"})));
             }
@@ -483,9 +483,9 @@ namespace hal {
             {
                 // Substitute a variable with a boolean function (negated variable)
                 BooleanFunction bf = a & b;
-                BooleanFunction sub_bf = bf.substitute("B", !c);
+                BooleanFunction sub_bf = bf.substitute("B", ~c);
 
-                EXPECT_EQ(sub_bf, a & !c);
+                EXPECT_EQ(sub_bf, a & ~c);
             }
             {
                 // Substitute a variable with a boolean function (term)
@@ -516,7 +516,7 @@ namespace hal {
             BooleanFunction a("A"), b("B"), c("C"), d("D"), _0(ZERO), _1(ONE);
             {
                 // Get the dnf clauses of a boolean function that is already in dnf
-                BooleanFunction bf = (a & b & !c) | (a & !b) | d;
+                BooleanFunction bf = (a & b & ~c) | (a & ~b) | d;
                 auto dnf_clauses = bf.get_dnf_clauses();
 
                 std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
@@ -553,7 +553,7 @@ namespace hal {
             }
             {
                 // Get the dnf clauses of a constant
-                BooleanFunction bf = a & !b & c;
+                BooleanFunction bf = a & ~b & c;
                 auto dnf_clauses = bf.get_dnf_clauses();
 
                 std::vector<std::vector<std::pair<std::string, bool>>> exp_clauses;
