@@ -95,7 +95,7 @@ namespace hal
         {
             if (f.m_invert)
             {
-                f = !s;
+                f = ~s;
             }
             else
             {
@@ -110,7 +110,7 @@ namespace hal
                 {
                     if (f.m_operands[i].m_invert)
                     {
-                        f.m_operands[i] = !s;
+                        f.m_operands[i] = ~s;
                     }
                     else
                     {
@@ -450,7 +450,7 @@ namespace hal
             }
             if (negate_next)
             {
-                first_term  = !first_term;
+                first_term  = ~first_term;
                 negate_next = false;
             }
 
@@ -485,7 +485,7 @@ namespace hal
                     }
                     if (negate_next)
                     {
-                        next_term = !next_term;
+                        next_term = ~next_term;
                     }
 
                     parsed_terms.push_back({next_op, next_term});
@@ -669,6 +669,11 @@ namespace hal
 
     BooleanFunction BooleanFunction::operator!() const
     {
+        return this->operator~();
+    }
+
+    BooleanFunction BooleanFunction::operator~() const
+    {
         auto result = *this;
         if ((m_content == content_type::TERMS && !m_operands.empty()) || m_content == content_type::VARIABLE)
         {
@@ -719,15 +724,15 @@ namespace hal
         }
 
         // actually replace the current xors
-        auto result = (terms[0] & (!terms[1])) | ((!terms[0]) & terms[1]);
+        auto result = (terms[0] & (~terms[1])) | ((~terms[0]) & terms[1]);
         for (u32 i = 2; i < terms.size(); ++i)
         {
-            result = (result & (!terms[i])) | ((!result) & terms[i]);
+            result = (result & (~terms[i])) | ((~result) & terms[i]);
         }
 
         if (m_invert)
         {
-            result = !result;
+            result = ~result;
         }
         return result;
     }
@@ -905,7 +910,7 @@ namespace hal
         {
             if (negate_term)
             {
-                return !(*this);
+                return ~(*this);
             }
             return *this;
         }
@@ -1179,7 +1184,7 @@ namespace hal
                 }
                 else if (term[i] == Value::ZERO)
                 {
-                    tmp &= !BooleanFunction(vars[i]);
+                    tmp &= ~BooleanFunction(vars[i]);
                 }
             }
             if (tmp.is_empty())    // all variables are "dont care"

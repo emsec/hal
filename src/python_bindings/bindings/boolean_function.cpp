@@ -167,7 +167,7 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def(!py::self, R"(
+        py_boolean_function.def(~py::self, R"(
             Negate the Boolean function.
 
             :returns: The negated Boolean function.
