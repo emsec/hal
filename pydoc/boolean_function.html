@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v2.0.0-776-g6b5fb5b50 documentation</title>
+  <title>Boolean Function &mdash; hal_py v2.0.0-785-g8c2db0813 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-776-g6b5fb5b50
+                v2.0.0-785-g8c2db0813
               </div>
             
           
@@ -256,6 +256,150 @@ The name of the variable must not be empty.</p>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__and__">
+<code class="descname">__and__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__and__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine two Boolean functions using an AND operator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The combined Boolean Bunction.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__or__">
+<code class="descname">__or__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__or__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine two Boolean functions using an OR operator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The combined Boolean function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__xor__">
+<code class="descname">__xor__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__xor__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine two Boolean functions using an XOR operator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The combined Boolean function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__iand__">
+<code class="descname">__iand__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__iand__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine two Boolean functions using an AND operator in-place.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The combined Boolean function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__ior__">
+<code class="descname">__ior__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__ior__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine two Boolean functions using an OR operator in-place.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The combined Boolean function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__ixor__">
+<code class="descname">__ixor__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__ixor__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine two Boolean functions using an XOR operator in-place.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The combined Boolean function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__invert__">
+<code class="descname">__invert__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__invert__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Negate the Boolean function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The negated Boolean function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__eq__">
+<code class="descname">__eq__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether two Boolean functions are equal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if both Boolean functions are equal, false otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__ne__">
+<code class="descname">__ne__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether two Boolean functions are unequal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True when both Boolean functions are unequal, false otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="class">
 <dt id="hal_py.BooleanFunction.Value">
 <em class="property">class </em><code class="descname">Value</code><a class="headerlink" href="#hal_py.BooleanFunction.Value" title="Permalink to this definition">¶</a></dt>
@@ -294,7 +438,7 @@ The name of the variable must not be empty.</p>
 
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.from_string">
-<em class="property">static </em><code class="descname">from_string</code><span class="sig-paren">(</span><em>expression: str, variable_names: List[str]</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.from_string" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">from_string</code><span class="sig-paren">(</span><em>expression: str</em>, <em>variable_names: List[str] = []</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.from_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a function from a string representation.
 Supported operators are  NOT (<code class="docutils literal notranslate"><span class="pre">!</span></code>, <code class="docutils literal notranslate"><span class="pre">'</span></code>), AND (<code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">␣</span></code>), OR (<code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">+</span></code>), XOR (<code class="docutils literal notranslate"><span class="pre">^</span></code>) and brackets (<code class="docutils literal notranslate"><span class="pre">(</span></code>, <code class="docutils literal notranslate"><span class="pre">)</span></code>).
 Operator precedence is <code class="docutils literal notranslate"><span class="pre">!</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">^</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">|</span></code>.</p>
@@ -358,7 +502,7 @@ Operator precedence is <code class="docutils literal notranslate"><span class="p
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The list of output values.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[value]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference internal" href="#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value">hal_py.BooleanFunction.Value</a>]</p>
 </td>
 </tr>
 </tbody>

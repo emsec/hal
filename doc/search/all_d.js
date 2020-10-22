@@ -17,6 +17,7 @@ var searchData=
   ['operator_5e_3d_496',['operator^=',['../d6/d9d/classhal_1_1BooleanFunction.html#ab51c99d458071b55f20f692fa9e00cea',1,'hal::BooleanFunction']]],
   ['operator_7c_497',['operator|',['../d6/d9d/classhal_1_1BooleanFunction.html#a8ad60bb9eda7dd6293754ae95a68690d',1,'hal::BooleanFunction']]],
   ['operator_7c_3d_498',['operator|=',['../d6/d9d/classhal_1_1BooleanFunction.html#acb85df6107517cd562f1b5ea3644ca95',1,'hal::BooleanFunction']]],
-  ['optimize_499',['optimize',['../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a',1,'hal::BooleanFunction']]],
-  ['output_5fport_5fname_5fchanged_500',['output_port_name_changed',['../d9/df4/namespacehal_1_1module__event__handler.html#af00b94311e9de6106b00acfaa58d520ea678bada1d1b40ab348bb7d8f61f12e6f',1,'hal::module_event_handler']]]
+  ['operator_7e_499',['operator~',['../d6/d9d/classhal_1_1BooleanFunction.html#a6b1fe0e3deb588e7126faee8fc13115e',1,'hal::BooleanFunction']]],
+  ['optimize_500',['optimize',['../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a',1,'hal::BooleanFunction']]],
+  ['output_5fport_5fname_5fchanged_501',['output_port_name_changed',['../d9/df4/namespacehal_1_1module__event__handler.html#af00b94311e9de6106b00acfaa58d520ea678bada1d1b40ab348bb7d8f61f12e6f',1,'hal::module_event_handler']]]
 ];
