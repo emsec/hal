@@ -72,7 +72,7 @@ $(function() {
 <a href="#friends">Friends</a> &#124;
 <a href="../../d4/dd0/classhal_1_1Endpoint-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hal::Endpoint Class Reference<div class="ingroups"><a class="el" href="../../de/d89/group__netlist.html">Netlist</a></div></div>  </div>
+<div class="title">hal::Endpoint Class Reference<div class="ingroups"><a class="el" href="../../d0/de1/group__core.html">HAL Core</a> &raquo; <a class="el" href="../../de/d89/group__netlist.html">Netlist</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -94,10 +94,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abb701e971149c5bf2eea49c8a1dd9d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4eb6a0c6fc8133fb74feebfdf0cd1589"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a4eb6a0c6fc8133fb74feebfdf0cd1589">get_net</a> () const</td></tr>
 <tr class="separator:a4eb6a0c6fc8133fb74feebfdf0cd1589"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade1baf1f38d7cf9e518b8564767fcdde"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">is_destination_pin</a> () const</td></tr>
-<tr class="separator:ade1baf1f38d7cf9e518b8564767fcdde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93c74ed50f0ce4d8db33bc156edf7c35"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">is_source_pin</a> () const</td></tr>
 <tr class="separator:a93c74ed50f0ce4d8db33bc156edf7c35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade1baf1f38d7cf9e518b8564767fcdde"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">is_destination_pin</a> () const</td></tr>
+<tr class="separator:ade1baf1f38d7cf9e518b8564767fcdde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -105,7 +105,7 @@ Friends</h2></td></tr>
 <tr class="separator:a71851ef81c1a491be6395f4c883218de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> data structure for (gate, pin) tuples </p>
+<div class="textblock"><p>An endpoint comprises the pin of a gate, the respective gate, and the connected net. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa5d98029f04ec9dc36da48b3fece7bd6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa5d98029f04ec9dc36da48b3fece7bd6">&#9670;&nbsp;</a></span>get_gate()</h2>
@@ -121,7 +121,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the gate of the endpoint.</p>
+<p>Get the gate associated with the endpoint.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>.</p>
@@ -142,8 +142,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the pin of the endpoint.</p>
-<dl class="section return"><dt>Returns</dt><dd>The pin. </dd></dl>
+<p>Get the name of the pin associated with the endpoint.</p>
+<dl class="section return"><dt>Returns</dt><dd>The name of the pin. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>.</p>
 
@@ -163,31 +163,10 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the net of the endpoint.</p>
+<p>Get the net associated with the endpoint.</p>
 <dl class="section return"><dt>Returns</dt><dd>The net. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>.</p>
-
-</div>
-</div>
-<a id="ade1baf1f38d7cf9e518b8564767fcdde"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade1baf1f38d7cf9e518b8564767fcdde">&#9670;&nbsp;</a></span>is_destination_pin()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool hal::Endpoint::is_destination_pin </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Checks whether the pin of the endpoint is a destination pin.</p>
-<dl class="section return"><dt>Returns</dt><dd>True, if the endpoint is an input pin. </dd></dl>
-
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, and <a class="el" href="../../de/db0/classhal_1_1Net.html#a873703738f1425608306e7d8ebffb659">hal::Net::is_a_destination()</a>.</p>
 
 </div>
 </div>
@@ -205,10 +184,31 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Checks whether the pin of the endpoint is a source pin.</p>
-<dl class="section return"><dt>Returns</dt><dd>True, if the endpoint is an output pin. </dd></dl>
+<p>Checks whether the pin of the endpoint is a source (output) pin.</p>
+<dl class="section return"><dt>Returns</dt><dd>True if the endpoint is an source (output) pin, false otherwise. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, and <a class="el" href="../../de/db0/classhal_1_1Net.html#a60403244b06321face6198a108043817">hal::Net::is_a_source()</a>.</p>
+
+</div>
+</div>
+<a id="ade1baf1f38d7cf9e518b8564767fcdde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade1baf1f38d7cf9e518b8564767fcdde">&#9670;&nbsp;</a></span>is_destination_pin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::Endpoint::is_destination_pin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Checks whether the pin of the endpoint is a destination (input) pin.</p>
+<dl class="section return"><dt>Returns</dt><dd>True if the endpoint is an destination (input) pin, false otherwise. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init()</a>, and <a class="el" href="../../de/db0/classhal_1_1Net.html#a873703738f1425608306e7d8ebffb659">hal::Net::is_a_destination()</a>.</p>
 
 </div>
 </div>
@@ -242,7 +242,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:06 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type Sequential &mdash; hal_py v2.0.0-679-gf0a734a2f documentation</title>
+  <title>Gate Type Sequential &mdash; hal_py v2.0.0-766-ged47aebc3 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-679-gf0a734a2f
+                v2.0.0-766-ged47aebc3
               </div>
             
           
@@ -179,18 +179,20 @@
 <dt id="hal_py.GateTypeSequential">
 <em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">GateTypeSequential</code><a class="headerlink" href="#hal_py.GateTypeSequential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><code class="xref py py-class docutils literal notranslate"><span class="pre">hal_py.GateType</span></code></a></p>
-<p>Sequential gate type class containing information about the internals of a specific sequential gate type.</p>
+<p>A sequential gate type contains information about its internals such as input and output pins as well as its Boolean functions.
+In addition to the standard gate type functionality, it provides mechanisms to specify outputs that depend on the internal state of the sequential gate as well as clock pins.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em>, <em>name: str</em>, <em>bt: hal_py.GateType.BaseType</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a new sequential gate type.</p>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em>, <em>name: str</em>, <em>base_type: hal_py.GateType.BaseType</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a new LUT gate type by specifying its name and base type.
+The base type must be either ‘ff’ or ‘latch’.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the sequential gate type.</li>
-<li><strong>bt</strong> (<a class="reference internal" href="gate_type.html#hal_py.GateType.BaseType" title="hal_py.GateType.BaseType"><em>hal_py.GateType.BaseType</em></a>) – The base type of the sequential gate type.</li>
+<li><strong>base_type</strong> (<a class="reference internal" href="gate_type.html#hal_py.GateType.BaseType" title="hal_py.GateType.BaseType"><em>hal_py.GateType.BaseType</em></a>) – The base type of the sequential gate type.</li>
 </ul>
 </td>
 </tr>
@@ -203,13 +205,13 @@
 <em class="property">class </em><code class="descname">BaseType</code><a class="headerlink" href="#hal_py.GateTypeSequential.BaseType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
 <blockquote>
-<div>Represents the base type of a gate type. Available are: combinatorial, lut, ff, and latch.</div></blockquote>
+<div>Represents the base type of a gate type.</div></blockquote>
 <p>Members:</p>
 <blockquote>
-<div><p>combinatorial</p>
-<p>lut</p>
-<p>ff</p>
-<p>latch</p>
+<div><p>combinatorial : Represents a combinatorial gate type.</p>
+<p>lut : Represents a combinatorial LUT gate type.</p>
+<p>ff : Represents a sequential FF gate type.</p>
+<p>latch : Represents a sequential latch gate type.</p>
 </div></blockquote>
 <dl class="attribute">
 <dt id="hal_py.GateTypeSequential.BaseType.name">
@@ -224,15 +226,15 @@
 <em class="property">class </em><code class="descname">SetResetBehavior</code><a class="headerlink" href="#hal_py.GateTypeSequential.SetResetBehavior" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_builtins.pybind11_object</span></code></p>
 <blockquote>
-<div>Represents the behavior that a sequential cell shows when both set and reset are active. Available are: U (not specified for gate type), L (set to ZERO), H (set to ONE), N (no change), T (toggle), and X (undefined).</div></blockquote>
+<div>Defines the behavior of the gate type in case both set and reset are active at the same time.</div></blockquote>
 <p>Members:</p>
 <blockquote>
-<div><p>U</p>
-<p>L</p>
-<p>H</p>
-<p>N</p>
-<p>T</p>
-<p>X</p>
+<div><p>U : Default value when no behavior is specified.</p>
+<p>L : Set the internal state to ‘0’.</p>
+<p>H : Set the internal state to ‘1’.</p>
+<p>N : Do not change the internal state.</p>
+<p>T : Toggle, i.e., invert the internal state.</p>
+<p>X : Set the internal state to ‘X’.</p>
 </div></blockquote>
 <dl class="attribute">
 <dt id="hal_py.GateTypeSequential.SetResetBehavior.name">
@@ -244,15 +246,15 @@
 
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.add_boolean_function">
-<code class="descname">add_boolean_function</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin_name: str</em>, <em>bf: hal::BooleanFunction</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.add_boolean_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a boolean function with the specified name to the gate type.</p>
+<code class="descname">add_boolean_function</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin_name: str</em>, <em>function: hal::BooleanFunction</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.add_boolean_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a Boolean function with the specified name to the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the boolean function.</li>
-<li><strong>bf</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – A boolean function object.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the Boolean function.</li>
+<li><strong>function</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function.</li>
 </ul>
 </td>
 </tr>
@@ -268,7 +270,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – Map from function name to boolean function.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – A dict from Boolean function names to Boolean functions.</td>
 </tr>
 </tbody>
 </table>
@@ -277,13 +279,13 @@
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.add_clock_pin">
 <code class="descname">add_clock_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em>, <em>pin_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.add_clock_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an input pin to the collection of input pins that are connected to a clock pin.
+<dd><p>Add an existing input pin to the collection of input pins that are connected to a clock signal.
 The pin has to be declared as an input pin beforehand.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the output pin.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the input pin to add.</td>
 </tr>
 </tbody>
 </table>
@@ -297,7 +299,7 @@ The pin has to be declared as an input pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of an input pin.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the input pin to add.</td>
 </tr>
 </tbody>
 </table>
@@ -311,7 +313,7 @@ The pin has to be declared as an input pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The list of input pins.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The list of names of input pins to add.</td>
 </tr>
 </tbody>
 </table>
@@ -320,13 +322,13 @@ The pin has to be declared as an input pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.add_inverted_state_output_pin">
 <code class="descname">add_inverted_state_output_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em>, <em>pin_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.add_inverted_state_output_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an output pin to the collection of output pins that generate their output from the inverted next_state function.
+<dd><p>Add an existing output pin to the collection of output pins that generate their output from the inverted internal state of the gate.
 The pin has to be declared as an output pin beforehand.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the output pin.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the output pin to add.</td>
 </tr>
 </tbody>
 </table>
@@ -340,7 +342,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of an output pin.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the output pin to add.</td>
 </tr>
 </tbody>
 </table>
@@ -354,7 +356,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The list of output pins.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The list of names of output pins to add.</td>
 </tr>
 </tbody>
 </table>
@@ -363,13 +365,13 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.add_state_output_pin">
 <code class="descname">add_state_output_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em>, <em>pin_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.add_state_output_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an output pin to the collection of output pins that generate their output from the next_state function.
+<dd><p>Add an existing output pin to the collection of output pins that generate their output from the internal state of the gate.
 The pin has to be declared as an output pin beforehand.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the output pin.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the output pin to add.</td>
 </tr>
 </tbody>
 </table>
@@ -385,7 +387,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>group_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the input pin group.</li>
-<li><strong>index_to_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – Map from index to output pin name.</li>
+<li><strong>index_to_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – A dict from pin index to input pin name.</li>
 </ul>
 </td>
 </tr>
@@ -401,7 +403,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em>) – A map from group names to a map from indices to pin names.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em>) – A dict from pin group names to a dict from pin indices to pin names.</td>
 </tr>
 </tbody>
 </table>
@@ -417,7 +419,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>group_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the output pin group.</li>
-<li><strong>index_to_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – Map from index to output pin name.</li>
+<li><strong>index_to_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – A dict from pin index to output pin name.</li>
 </ul>
 </td>
 </tr>
@@ -433,7 +435,21 @@ The pin has to be declared as an output pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em>) – A map from group names to a map from indices to pin names.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em>) – A dict from pin group names to a dict from pin indices to pin names.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateTypeSequential.base_type">
+<code class="descname">base_type</code><a class="headerlink" href="#hal_py.GateTypeSequential.base_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base type of the gate typ, which can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latch’.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="gate_type.html#hal_py.GateType.BaseType" title="hal_py.GateType.BaseType">hal_py.GateType.BaseType</a></td>
 </tr>
 </tbody>
 </table>
@@ -442,7 +458,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="attribute">
 <dt id="hal_py.GateTypeSequential.boolean_functions">
 <code class="descname">boolean_functions</code><a class="headerlink" href="#hal_py.GateTypeSequential.boolean_functions" title="Permalink to this definition">¶</a></dt>
-<dd><p>A map from function names to the boolean functions of the gate type.</p>
+<dd><p>All Boolean functions of the gate type as a dict from Boolean function names to Boolean functions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -453,10 +469,25 @@ The pin has to be declared as an output pin beforehand.</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="hal_py.GateTypeSequential.clock_pins">
+<code class="descname">clock_pins</code><a class="headerlink" href="#hal_py.GateTypeSequential.clock_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set of names of the input pins that that are connected to a clock signal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.get_base_type">
 <code class="descname">get_base_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; hal_py.GateType.BaseType<a class="headerlink" href="#hal_py.GateTypeSequential.get_base_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the base type of the gate type. The base type can be either combinatorial, lut, ff, or latch.</p>
+<dd><p>Get the base type of the gate type.
+The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latch’.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -472,12 +503,12 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.get_boolean_functions">
 <code class="descname">get_boolean_functions</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Dict[str, hal::BooleanFunction]<a class="headerlink" href="#hal_py.GateTypeSequential.get_boolean_functions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a map containing the boolean functions of the gate type.</p>
+<dd><p>Get all Boolean functions of the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A map from function names to boolean functions.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from Boolean function names to Boolean functions.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</td>
 </tr>
@@ -502,14 +533,30 @@ The pin has to be declared as an output pin beforehand.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.GateTypeSequential.get_init_data_category">
-<code class="descname">get_init_data_category</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GateTypeSequential.get_init_data_category" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the category in which to find the INIT string.</p>
+<dt id="hal_py.GateTypeSequential.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.GateTypeSequential.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the unique ID of the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The category as a string.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The unique ID of the gate type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateTypeSequential.get_init_data_category">
+<code class="descname">get_init_data_category</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GateTypeSequential.get_init_data_category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the data category in which to find the initialization value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The data category.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
 </tr>
@@ -520,12 +567,12 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.get_init_data_identifier">
 <code class="descname">get_init_data_identifier</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GateTypeSequential.get_init_data_identifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the identifier used to specify the INIT string.</p>
+<dd><p>Get the data identifier used to specify the initialization value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The identifier as a string.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The data identifier.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
 </tr>
@@ -541,7 +588,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A map from group names to a map from indices to pin names.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin group names to a dict from pin indices to pin names.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
 </tr>
@@ -557,7 +604,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of input pins of the gate type.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of input pin names of the gate type.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
 </tr>
@@ -568,7 +615,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.get_inverted_state_output_pins">
 <code class="descname">get_inverted_state_output_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#hal_py.GateTypeSequential.get_inverted_state_output_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the output pins that use the inverted next_state function to generate their output.</p>
+<dd><p>Get the output pins that use the inverted internal state of the gate to generate their output.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -605,7 +652,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A map from group names to a map from indices to pin names.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin group names to a dict from pin indices to pin names.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
 </tr>
@@ -621,7 +668,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A vector of output pins of the gate type.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of output pin names of the gate type.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
 </tr>
@@ -632,12 +679,12 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.get_set_reset_behavior">
 <code class="descname">get_set_reset_behavior</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em><span class="sig-paren">)</span> &#x2192; Tuple[hal_py.GateTypeSequential.SetResetBehavior, hal_py.GateTypeSequential.SetResetBehavior]<a class="headerlink" href="#hal_py.GateTypeSequential.get_set_reset_behavior" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the behavior that describes the internal state when both set and reset are active.</p>
+<dd><p>Get the behavior of the internal state and the inverted internal state when both set and reset are active at the same time.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple of values specifying the behavior of the internal state and the inverted internal state.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The values specifying the behavior for the internal and inverted internal state.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Rytpe:</th><td class="field-body">tuple(hal_py.SetResetBehavior, hal_py.SetResetBehavior)</td>
 </tr>
@@ -648,7 +695,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.get_state_output_pins">
 <code class="descname">get_state_output_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#hal_py.GateTypeSequential.get_state_output_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the output pins that use the next_state function to generate their output.</p>
+<dd><p>Get the output pins that use the internal state of the gate to generate their output.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -662,9 +709,22 @@ The pin has to be declared as an output pin beforehand.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="hal_py.GateTypeSequential.id">
+<code class="descname">id</code><a class="headerlink" href="#hal_py.GateTypeSequential.id" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">The unique ID of the gate type.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="hal_py.GateTypeSequential.init_data_category">
 <code class="descname">init_data_category</code><a class="headerlink" href="#hal_py.GateTypeSequential.init_data_category" title="Permalink to this definition">¶</a></dt>
-<dd><p>The category in which to find the INIT string.</p>
+<dd><p>The data category in which to find the initialization value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -678,7 +738,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="attribute">
 <dt id="hal_py.GateTypeSequential.init_data_identifier">
 <code class="descname">init_data_identifier</code><a class="headerlink" href="#hal_py.GateTypeSequential.init_data_identifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>The identifier used to specify the INIT string.</p>
+<dd><p>The data identifier used to specify the initialization value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -690,14 +750,42 @@ The pin has to be declared as an output pin beforehand.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="hal_py.GateTypeSequential.input_pin_groups">
+<code class="descname">input_pin_groups</code><a class="headerlink" href="#hal_py.GateTypeSequential.input_pin_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>All input pin groups of the gate type as a dict from pin group names to a dict from pin indices to pin names.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="hal_py.GateTypeSequential.input_pins">
 <code class="descname">input_pins</code><a class="headerlink" href="#hal_py.GateTypeSequential.input_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of input pins of the gate type.</p>
+<dd><p>A list of input pin names of the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateTypeSequential.inverted_state_output_pins">
+<code class="descname">inverted_state_output_pins</code><a class="headerlink" href="#hal_py.GateTypeSequential.inverted_state_output_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set of names of the output pins that use the inverted internal state of the gate to generate their output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -718,9 +806,23 @@ The pin has to be declared as an output pin beforehand.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="hal_py.GateTypeSequential.output_pin_groups">
+<code class="descname">output_pin_groups</code><a class="headerlink" href="#hal_py.GateTypeSequential.output_pin_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>All output pin groups of the gate type as a dict from pin group names to a dict from pin indices to pin names.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="hal_py.GateTypeSequential.output_pins">
 <code class="descname">output_pins</code><a class="headerlink" href="#hal_py.GateTypeSequential.output_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of output pins of the gate type.</p>
+<dd><p>A list of output pin names of the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -734,12 +836,12 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.set_init_data_category">
 <code class="descname">set_init_data_category</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em>, <em>category: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.set_init_data_category" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the category in which to find the INIT string.</p>
+<dd><p>Set the data category in which to find the initialization value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The category as a string.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The data category.</td>
 </tr>
 </tbody>
 </table>
@@ -748,12 +850,12 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.set_init_data_identifier">
 <code class="descname">set_init_data_identifier</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em>, <em>identifier: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.set_init_data_identifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the identifier used to specify the INIT string.</p>
+<dd><p>Set the data identifier used to specify the initialization value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The identifier as a string.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The data identifier.</td>
 </tr>
 </tbody>
 </table>
@@ -762,7 +864,7 @@ The pin has to be declared as an output pin beforehand.</p>
 <dl class="method">
 <dt id="hal_py.GateTypeSequential.set_set_reset_behavior">
 <code class="descname">set_set_reset_behavior</code><span class="sig-paren">(</span><em>self: hal_py.GateTypeSequential</em>, <em>sb1: hal_py.GateTypeSequential.SetResetBehavior</em>, <em>sb2: hal_py.GateTypeSequential.SetResetBehavior</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateTypeSequential.set_set_reset_behavior" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the behavior that describes the internal state when both set and reset are active.</p>
+<dd><p>Set the behavior that describes the internal state when both set and reset are active at the same time.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -772,6 +874,20 @@ The pin has to be declared as an output pin beforehand.</p>
 <li><strong>sb2</strong> (<em>hal_py.SetResetBehavior</em>) – The value specifying the behavior for the inverted internal state.</li>
 </ul>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateTypeSequential.state_output_pins">
+<code class="descname">state_output_pins</code><a class="headerlink" href="#hal_py.GateTypeSequential.state_output_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>The set of names of the output pins that use the internal state of the gate to generate their output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
 </tr>
 </tbody>
 </table>

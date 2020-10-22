@@ -72,7 +72,7 @@ $(function() {
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="../../dc/db2/structhal_1_1Token-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hal::Token&lt; T &gt; Struct Template Reference<div class="ingroups"><a class="el" href="../../d0/de1/group__core.html">HAL Core</a></div></div>  </div>
+<div class="title">hal::Token&lt; T &gt; Struct Template Reference<div class="ingroups"><a class="el" href="../../d0/de1/group__core.html">HAL Core</a> &raquo; <a class="el" href="../../dc/d39/group__utilities.html">Utilities</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -108,7 +108,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a851dd465345e9aab0ed6b974170b7d0c"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7a/structhal_1_1Token.html#a851dd465345e9aab0ed6b974170b7d0c">string</a></td></tr>
 <tr class="separator:a851dd465345e9aab0ed6b974170b7d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename T&gt;<br />
+struct hal::Token&lt; T &gt;</h3>
+
+<p>A token holds a string and a line number and may, for example, be used during parsing of input files. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8cdf807a9ee95404f43c2416a05fc2a3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8cdf807a9ee95404f43c2416a05fc2a3">&#9670;&nbsp;</a></span>Token()</h2>
 
@@ -144,11 +149,11 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Base <a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a> class that holds a string and a line number. Can be set to be case insensitive in all string comparisons (default).</p>
+<p>Construct a token from a line number and a string.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>- the line number </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- the string </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>- The line number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- The string. </td></tr>
   </table>
   </dd>
 </dl>
@@ -180,7 +185,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>A <a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a> is implicitly cast to string if possible. </p>
+<p>The token is implicitly cast to a string when being used instead of a string. </p>
 
 </div>
 </div>
@@ -209,14 +214,14 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Assigns a new string to this <a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a>.</p>
+<p>Assign a new string to the token.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- the new string </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- The new string. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A reference to this <a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A reference to the token. </dd></dl>
 
 </div>
 </div>
@@ -245,14 +250,14 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Extends the string in this <a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a>.</p>
+<p>Append a string to the one stored within the token.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- the string to add </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- The string to append. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A reference to this <a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A reference to the token. </dd></dl>
 
 </div>
 </div>
@@ -281,14 +286,14 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Checks if the string in this <a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a> is equal to another string. If the case_sensitive member is true, the comparison is case sensitive.</p>
+<p>Check if the string stored within the token is equal to another string.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- the string to check against </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- The string to compare against. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if both strings are equal. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both strings are equal, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -317,14 +322,14 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Checks if the string in this <a class="el" href="../../d7/d7a/structhal_1_1Token.html">Token</a> is unequal to another string. If the case_sensitive member is true, the comparison is case sensitive.</p>
+<p>Check if the string stored within the token is unequal to another string.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- the string to check against </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- The string to compare against. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if both strings are not equal. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both strings are not equal, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -342,6 +347,7 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The line number. </p>
 
 </div>
 </div>
@@ -358,6 +364,7 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The string. </p>
 
 </div>
 </div>
@@ -367,7 +374,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:07 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -70,7 +70,7 @@ $(function() {
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">hal::plugin_manager Namespace Reference<div class="ingroups"><a class="el" href="../../d0/de1/group__core.html">HAL Core</a></div></div>  </div>
+<div class="title">hal::plugin_manager Namespace Reference<div class="ingroups"><a class="el" href="../../d0/de1/group__core.html">HAL Core</a> &raquo; <a class="el" href="../../d1/d29/group__plugins.html">Plugin System</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
@@ -88,8 +88,8 @@ Functions</h2></td></tr>
 <tr class="separator:ad34e384af419d40a22d5486356772c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a991b240018747caa41b17846d5b722b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#a991b240018747caa41b17846d5b722b6">load_all_plugins</a> (const std::vector&lt; std::filesystem::path &gt; &amp;directory_names={})</td></tr>
 <tr class="separator:a991b240018747caa41b17846d5b722b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d5a62ed3f2759dda79dced8902aa376"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#a5d5a62ed3f2759dda79dced8902aa376">load</a> (const std::string &amp;plugin_name, const std::filesystem::path &amp;file_name)</td></tr>
-<tr class="separator:a5d5a62ed3f2759dda79dced8902aa376"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a223f5f76833a94861454eb6b07c4fe98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#a223f5f76833a94861454eb6b07c4fe98">load</a> (const std::string &amp;plugin_name, const std::filesystem::path &amp;file_path)</td></tr>
+<tr class="separator:a223f5f76833a94861454eb6b07c4fe98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb6d1f3c164b832fb19257b1df06aa53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#acb6d1f3c164b832fb19257b1df06aa53">unload_all_plugins</a> ()</td></tr>
 <tr class="separator:acb6d1f3c164b832fb19257b1df06aa53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54caf767ba2c2f754875e9aad4849767"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#a54caf767ba2c2f754875e9aad4849767">unload</a> (const std::string &amp;plugin_name)</td></tr>
@@ -102,7 +102,7 @@ Functions</h2></td></tr>
 <tr class="separator:ad66fea3d4017a3c7b058436924d3dda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Plugin manager to load and unload plugins </p>
+<div class="textblock"><p>The plugin manager takes care of loading and unloading plugins at runtime. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a id="a01b664fe781926cb67034f778e5242b1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a01b664fe781926cb67034f778e5242b1">&#9670;&nbsp;</a></span>add_existing_options_description()</h2>
@@ -119,11 +119,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add existing program options.<br  />
- Required to detect whether a plugin reuses existing flags.</p>
+<p>TODO Python binding.</p>
+<p>Register existing program options to avoid reuse by plugins.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">existing_options</td><td>- The existing options. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">existing_options</td><td>- The program options. </td></tr>
   </table>
   </dd>
 </dl>
@@ -165,7 +165,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a mapping of flags pointing to their corresponding cli plugin.</p>
+<p>TODO Python binding.</p>
+<p>Get a mapping of flags pointing to their corresponding CLI plugin.</p>
 <dl class="section return"><dt>Returns</dt><dd>A map from flag to plugin name. </dd></dl>
 
 </div>
@@ -184,7 +185,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a mapping of flags pointing to their corresponding ui plugin.</p>
+<p>TODO Python binding.</p>
+<p>Get a mapping of flags pointing to their corresponding UI plugin.</p>
 <dl class="section return"><dt>Returns</dt><dd>A map from flag to plugin name. </dd></dl>
 
 </div>
@@ -203,8 +205,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns command line interface options for all plugins</p>
-<dl class="section return"><dt>Returns</dt><dd>The program options </dd></dl>
+<p>TODO Python binding.</p>
+<p>Get command line interface options for all plugins.</p>
+<dl class="section return"><dt>Returns</dt><dd>The program options. </dd></dl>
 
 </div>
 </div>
@@ -231,16 +234,16 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#a5d5a62ed3f2759dda79dced8902aa376">load()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>.</p>
+<p class="reference">References <a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#a223f5f76833a94861454eb6b07c4fe98">load()</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a9e03e20ad125cd9eb1f4e601ac556777">hal::plugin_manager_init()</a>.</p>
 
 </div>
 </div>
-<a id="a5d5a62ed3f2759dda79dced8902aa376"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d5a62ed3f2759dda79dced8902aa376">&#9670;&nbsp;</a></span>load()</h2>
+<a id="a223f5f76833a94861454eb6b07c4fe98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a223f5f76833a94861454eb6b07c4fe98">&#9670;&nbsp;</a></span>load()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -255,7 +258,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
-          <td class="paramname"><em>file_name</em>&#160;</td>
+          <td class="paramname"><em>file_path</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -264,17 +267,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Load a single plugin by specifying a name and the file path,.</p>
+<p>Load a single plugin by specifying its name and file path.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The desired name, unique in the framework. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">file_name</td><td>- The path to the plugin file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The desired name that is unique in the framework. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file_path</td><td>- The path to the plugin file. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a>, <a class="el" href="../../dd/d86/classhal_1_1UIPluginInterface.html#aa402ba253b62f31e37ffa2f140600da3">hal::UIPluginInterface::get_cli_options()</a>, <a class="el" href="../../d1/d82/classhal_1_1CLIPluginInterface.html#ad8ef97cbc2f3c5ae5280d48c6c25a7c6">hal::CLIPluginInterface::get_cli_options()</a>, <a class="el" href="../../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a>, <a class="el" href="../../d0/de1/group__core.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, and <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a>, <a class="el" href="../../dd/d86/classhal_1_1UIPluginInterface.html#aa402ba253b62f31e37ffa2f140600da3">hal::UIPluginInterface::get_cli_options()</a>, <a class="el" href="../../d1/d82/classhal_1_1CLIPluginInterface.html#ad8ef97cbc2f3c5ae5280d48c6c25a7c6">hal::CLIPluginInterface::get_cli_options()</a>, <a class="el" href="../../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#a991b240018747caa41b17846d5b722b6">load_all_plugins()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#a9e03e20ad125cd9eb1f4e601ac556777">hal::plugin_manager_init()</a>.</p>
 
@@ -294,10 +297,10 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Releases all plugins and associated resources.</p>
-<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
+<p>Releases all plugins and their associated resources.</p>
+<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#aacd4893d3d32447c4ed1f27b21a827cf">get_plugin_names()</a>, <a class="el" href="../../d0/de1/group__core.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#a54caf767ba2c2f754875e9aad4849767">unload()</a>.</p>
+<p class="reference">References <a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#aacd4893d3d32447c4ed1f27b21a827cf">get_plugin_names()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, and <a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#a54caf767ba2c2f754875e9aad4849767">unload()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a9e03e20ad125cd9eb1f4e601ac556777">hal::plugin_manager_init()</a>.</p>
 
@@ -318,18 +321,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Releases all associated resources related to one plugin.</p>
+<p>Releases a single plugin and its associated ressources.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The plugin to unload. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The name of the plugin to unload. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d0/de1/group__core.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, and <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>.</p>
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#acb6d1f3c164b832fb19257b1df06aa53">unload_all_plugins()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a9e03e20ad125cd9eb1f4e601ac556777">hal::plugin_manager_init()</a>, and <a class="el" href="../../da/d5a/namespacehal_1_1plugin__manager.html#acb6d1f3c164b832fb19257b1df06aa53">unload_all_plugins()</a>.</p>
 
 </div>
 </div>
@@ -361,21 +364,22 @@ Functions</h2></td></tr>
 <p>Gets the basic interface for a plugin specified by name. By default calls the <a class="el" href="../../dd/d38/namespacehal_1_1event__log.html#af323996a0be7df9b6bf64ca4292fce55">initialize()</a> function of the plugin.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The plugin name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The name of the plugin. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">initialize</td><td>- If false, the plugin's initialize function is not called. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A plugin instance.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The basic plugin interface.</dd></dl>
+<p>TODO Python bindings for different types and extend by initialize flag.</p>
 <p>Gets a specific interface for a plugin specified by name. By default calls the <a class="el" href="../../dd/d38/namespacehal_1_1event__log.html#af323996a0be7df9b6bf64ca4292fce55">initialize()</a> function of the plugin.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The plugin name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The name of the plugin. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">initialize</td><td>- If false, the plugin's initialize function is not called. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A plugin instance. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The specific plugin interface. </dd></dl>
 
 <p class="reference">References <a class="el" href="../../dd/d38/namespacehal_1_1event__log.html#af323996a0be7df9b6bf64ca4292fce55">hal::event_log::initialize()</a>.</p>
 
@@ -396,6 +400,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>TODO Python binding.</p>
 <p>Add a callback to notify the GUI about loaded or unloaded plugins.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -410,7 +415,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The id of the registered callback. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
 
 </div>
 </div>
@@ -429,6 +434,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>TODO Python binding.</p>
 <p>Remove a registered callback.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -442,7 +448,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:07 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -71,7 +71,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="../../d7/d66/classhal_1_1GateLibrary-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hal::GateLibrary Class Reference<div class="ingroups"><a class="el" href="../../de/d89/group__netlist.html">Netlist</a></div></div>  </div>
+<div class="title">hal::GateLibrary Class Reference<div class="ingroups"><a class="el" href="../../d0/de1/group__core.html">HAL Core</a> &raquo; <a class="el" href="../../de/d89/group__netlist.html">Netlist</a> &raquo; <a class="el" href="../../de/de8/group__gate__lib.html">Gate Library</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -95,10 +95,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aef64b8371779e27c778227552deb3a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a203b238f213e1980b82f796763ea2ac7"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a203b238f213e1980b82f796763ea2ac7">get_path</a> () const</td></tr>
 <tr class="separator:a203b238f213e1980b82f796763ea2ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b5a37289ae6fa4cafd37089ae09bca5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a3b5a37289ae6fa4cafd37089ae09bca5">add_gate_type</a> (std::unique_ptr&lt; const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> &gt; gt)</td></tr>
-<tr class="separator:a3b5a37289ae6fa4cafd37089ae09bca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0e3524b2b765f718ffc552de9fb5849"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#ab0e3524b2b765f718ffc552de9fb5849">contains_gate_type</a> (const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *gt) const</td></tr>
-<tr class="separator:ab0e3524b2b765f718ffc552de9fb5849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abafcc6da5e5d000d3dcebf36aec84f31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#abafcc6da5e5d000d3dcebf36aec84f31">add_gate_type</a> (std::unique_ptr&lt; const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> &gt; gate_type)</td></tr>
+<tr class="separator:abafcc6da5e5d000d3dcebf36aec84f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb40159f6ad605ef063aecdad4607139"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#acb40159f6ad605ef063aecdad4607139">contains_gate_type</a> (const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *gate_type) const</td></tr>
+<tr class="separator:acb40159f6ad605ef063aecdad4607139"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af244ebe63555e8ee771e3d0dca62095b"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#af244ebe63555e8ee771e3d0dca62095b">get_gate_types</a> () const</td></tr>
 <tr class="separator:af244ebe63555e8ee771e3d0dca62095b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5186e691271b4d42cbd632fd02e3195"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#ab5186e691271b4d42cbd632fd02e3195">get_vcc_gate_types</a> () const</td></tr>
@@ -111,7 +111,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a955208e223376a19c808f83d486311d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> library class containing information about the gates contained in the library. </p>
+<div class="textblock"><p>A gate library is a collection of gate types including their pins and Boolean functions. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5ad57ba019b35e2ceb386c3b0be1e0b1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5ad57ba019b35e2ceb386c3b0be1e0b1">&#9670;&nbsp;</a></span>GateLibrary()</h2>
@@ -138,11 +138,11 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Constructs a gate library object.</p>
+<p>Construct a gate library by specifying its name and the path to the file that describes the library.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>- Path to the file containing the gate library definition. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- Name of the gate library. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>- The path to the gate library file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the gate library. </td></tr>
   </table>
   </dd>
 </dl>
@@ -189,8 +189,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the name of the library.</p>
-<dl class="section return"><dt>Returns</dt><dd>The name. </dd></dl>
+<p>Get the name of the gate library.</p>
+<dl class="section return"><dt>Returns</dt><dd>The name of the gate library. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
 
@@ -210,13 +210,13 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the file path of the library.</p>
-<dl class="section return"><dt>Returns</dt><dd>The file path. </dd></dl>
+<p>Get the path to the file describing the gate library.</p>
+<dl class="section return"><dt>Returns</dt><dd>The path to the gate library file. </dd></dl>
 
 </div>
 </div>
-<a id="a3b5a37289ae6fa4cafd37089ae09bca5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b5a37289ae6fa4cafd37089ae09bca5">&#9670;&nbsp;</a></span>add_gate_type()</h2>
+<a id="abafcc6da5e5d000d3dcebf36aec84f31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abafcc6da5e5d000d3dcebf36aec84f31">&#9670;&nbsp;</a></span>add_gate_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -225,7 +225,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">void hal::GateLibrary::add_gate_type </td>
           <td>(</td>
           <td class="paramtype">std::unique_ptr&lt; const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> &gt;&#160;</td>
-          <td class="paramname"><em>gt</em></td><td>)</td>
+          <td class="paramname"><em>gate_type</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -233,15 +233,17 @@ Public Member Functions</h2></td></tr>
 <p>Add a gate type to the gate library.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">gt</td><td>- The gate type object. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate_type</td><td>- The gate type to add. </td></tr>
   </table>
   </dd>
 </dl>
 
+<p class="reference">References <a class="el" href="../../dd/d38/netlist_2netlist__utils_8cpp.html#a96d88068eebcb30992d237f46c7f130e">functions</a>.</p>
+
 </div>
 </div>
-<a id="ab0e3524b2b765f718ffc552de9fb5849"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0e3524b2b765f718ffc552de9fb5849">&#9670;&nbsp;</a></span>contains_gate_type()</h2>
+<a id="acb40159f6ad605ef063aecdad4607139"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb40159f6ad605ef063aecdad4607139">&#9670;&nbsp;</a></span>contains_gate_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -250,21 +252,23 @@ Public Member Functions</h2></td></tr>
           <td class="memname">bool hal::GateLibrary::contains_gate_type </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td>
-          <td class="paramname"><em>gt</em></td><td>)</td>
+          <td class="paramname"><em>gate_type</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Checks whether a gate type is contained in this library.</p>
+<p>Check whether the given gate type is contained in this library.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">gt</td><td>- The gate type </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate_type</td><td>- The gate type to check. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True, if the gate type is part of this library </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the gate type is part of this library, false otherwise. </dd></dl>
 
 <p class="reference">References <a class="el" href="../../d1/d05/classhal_1_1GateType.html#ada08ed06b774c41353d1d943f9eff203">hal::GateType::get_name()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
 
 </div>
 </div>
@@ -283,7 +287,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Get all gate types of the library.</p>
-<dl class="section return"><dt>Returns</dt><dd>A map from gate type names to gate type objects. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A map from gate type names to gate types. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
 
@@ -346,7 +350,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add a necessary includes of the gate library, e.g., VHDL libraries.</p>
+<p>Add an include required for parsing a corresponding netlist, e.g., VHDL libraries.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">inc</td><td>- The include to add. </td></tr>
@@ -372,7 +376,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a vector of necessary includes of the gate library, e.g., VHDL libraries.</p>
+<p>Get a vector of includes required for parsing a corresponding netlist, e.g., VHDL libraries.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of includes. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
@@ -386,7 +390,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:06 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -103,16 +103,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a new netlist for a specific gate library.</p>
+<p>Create a new empty netlist using the specified gate library.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">gate_library</td><td>- The underlying gate library. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate_library</td><td>- The gate library. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The new netlist. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The netlist on success, nullptr otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d0/de1/group__core.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>.</p>
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#af8d3775de7aff4ada2993c698332de33">hal::netlist_factory_init()</a>.</p>
 
@@ -143,17 +143,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a new netlist for a specific file.</p>
+<p>Create a netlist from the given file using the specified gate library file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hdl_file</td><td>- Path to the HDL file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hdl_file</td><td>- Path to the file. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">gate_library_file</td><td>- Path to the gate library file. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The new netlist. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The netlist on success, nullptr otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a73ae5e426dd92db0800fadbb7fff250c">hal::gate_library_manager::load_file()</a>, <a class="el" href="../../d0/de1/group__core.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>, and <a class="el" href="../../d5/d96/namespacehal_1_1hdl__parser__manager.html#ae4dc38bc8200dcdb7f9ba6e6000259de">hal::hdl_parser_manager::parse()</a>.</p>
+<p class="reference">References <a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a73ae5e426dd92db0800fadbb7fff250c">hal::gate_library_manager::load_file()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>, and <a class="el" href="../../d5/d96/namespacehal_1_1hdl__parser__manager.html#ae4dc38bc8200dcdb7f9ba6e6000259de">hal::hdl_parser_manager::parse()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#af8d3775de7aff4ada2993c698332de33">hal::netlist_factory_init()</a>.</p>
 
@@ -174,16 +174,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a new netlist for a specific '.hal' file.</p>
+<p>Create a netlist from the given '.hal' file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- Name of the '.hal' file. file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- Path to the '.hal' file. file. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The new netlist. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The netlist on success, nullptr otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#ae74f82d776171fbdf0d63e3f8b918eb1">hal::netlist_serializer::deserialize_from_file()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>.</p>
+<p class="reference">References <a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#ae74f82d776171fbdf0d63e3f8b918eb1">hal::netlist_serializer::deserialize_from_file()</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>.</p>
 
 </div>
 </div>
@@ -202,17 +202,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a new netlist entirely from program options. Invokes parsers or serializers as needed.<br  />
-</p>
+<p>Create a netlist using information specified in command line arguments on startup.<br  />
+ Invokes parsers or serializers as needed.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">args</td><td>- Command line options. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">args</td><td>- Command line arguments. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The new netlist. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The netlist on success, nullptr otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#ae74f82d776171fbdf0d63e3f8b918eb1">hal::netlist_serializer::deserialize_from_file()</a>, <a class="el" href="../../d8/d68/classhal_1_1ProgramArguments.html#adae86e00300f9752b2b4e49c78d574c1">hal::ProgramArguments::get_parameter()</a>, <a class="el" href="../../d8/d68/classhal_1_1ProgramArguments.html#ae4c920e8f0aa75b441a7118efad8074f">hal::ProgramArguments::is_option_set()</a>, <a class="el" href="../../d0/de1/group__core.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>, and <a class="el" href="../../d5/d96/namespacehal_1_1hdl__parser__manager.html#ae4dc38bc8200dcdb7f9ba6e6000259de">hal::hdl_parser_manager::parse()</a>.</p>
+<p class="reference">References <a class="el" href="../../d9/dcb/namespacehal_1_1netlist__serializer.html#ae74f82d776171fbdf0d63e3f8b918eb1">hal::netlist_serializer::deserialize_from_file()</a>, <a class="el" href="../../d8/d68/classhal_1_1ProgramArguments.html#adae86e00300f9752b2b4e49c78d574c1">hal::ProgramArguments::get_parameter()</a>, <a class="el" href="../../d8/d68/classhal_1_1ProgramArguments.html#ae4c920e8f0aa75b441a7118efad8074f">hal::ProgramArguments::is_option_set()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>, and <a class="el" href="../../d5/d96/namespacehal_1_1hdl__parser__manager.html#ae4dc38bc8200dcdb7f9ba6e6000259de">hal::hdl_parser_manager::parse()</a>.</p>
 
 </div>
 </div>
@@ -231,16 +231,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a new netlist from an HDL file for each matching pre-loaded gate library.</p>
+<p>Create a netlist from a given file for each matching pre-loaded gate library.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hdl_file</td><td>- Path to the HDL file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hdl_file</td><td>- Path to the file. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of netlists. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d0/de1/group__core.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>, and <a class="el" href="../../d5/d96/namespacehal_1_1hdl__parser__manager.html#ac48804124e85703a5c2a799f3ae29dc1">hal::hdl_parser_manager::parse_all()</a>.</p>
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce">log_critical</a>, and <a class="el" href="../../d5/d96/namespacehal_1_1hdl__parser__manager.html#ac48804124e85703a5c2a799f3ae29dc1">hal::hdl_parser_manager::parse_all()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#af8d3775de7aff4ada2993c698332de33">hal::netlist_factory_init()</a>.</p>
 
@@ -249,7 +249,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:07 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -93,14 +93,16 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae097b80b9466bc95462704458b31f37f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#ae097b80b9466bc95462704458b31f37f">RecursiveDirectoryRange</a> (std::filesystem::path p)</td></tr>
-<tr class="separator:ae097b80b9466bc95462704458b31f37f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96a1554b62cd303048c1928ff2ed6603"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a96a1554b62cd303048c1928ff2ed6603">RecursiveDirectoryRange</a> (std::filesystem::path path)</td></tr>
+<tr class="separator:a96a1554b62cd303048c1928ff2ed6603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6856c4aac06e17832b187c698cdbc082"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a3352aa0beb99907d05f526cad21a78e9">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a6856c4aac06e17832b187c698cdbc082">begin</a> ()</td></tr>
 <tr class="separator:a6856c4aac06e17832b187c698cdbc082"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56f2de338dc17a167719fb5cfc4f1ebd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a3352aa0beb99907d05f526cad21a78e9">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a56f2de338dc17a167719fb5cfc4f1ebd">end</a> ()</td></tr>
 <tr class="separator:a56f2de338dc17a167719fb5cfc4f1ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A recursive range of directories starting at a top level root directory. </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a3352aa0beb99907d05f526cad21a78e9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3352aa0beb99907d05f526cad21a78e9">&#9670;&nbsp;</a></span>iterator</h2>
 
@@ -116,8 +118,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae097b80b9466bc95462704458b31f37f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae097b80b9466bc95462704458b31f37f">&#9670;&nbsp;</a></span>RecursiveDirectoryRange()</h2>
+<a id="a96a1554b62cd303048c1928ff2ed6603"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96a1554b62cd303048c1928ff2ed6603">&#9670;&nbsp;</a></span>RecursiveDirectoryRange()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -129,7 +131,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">hal::utils::RecursiveDirectoryRange::RecursiveDirectoryRange </td>
           <td>(</td>
           <td class="paramtype">std::filesystem::path&#160;</td>
-          <td class="paramname"><em>p</em></td><td>)</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -139,9 +141,10 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Construct a recursive directory range from a top level directory.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>- The top level directory. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>- The path to the top level directory. </td></tr>
   </table>
   </dd>
 </dl>
@@ -171,8 +174,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Gets an iterator pointing to the first element in the top level directory.<br  />
- The iterator will iterate recursively through all elements inside of the top level container.</p>
+<p>Get an iterator pointing to the first element in the top level directory.<br  />
+ The iterator will iterate recursively through all elements inside the top level container.</p>
 <dl class="section return"><dt>Returns</dt><dd>The iterator. </dd></dl>
 
 </div>
@@ -199,7 +202,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Gets an iterator pointing behind the last element in the top level directory.</p>
+<p>Get an iterator pointing behind the last element in the top level directory.</p>
 <dl class="section return"><dt>Returns</dt><dd>The iterator. </dd></dl>
 
 </div>
@@ -210,7 +213,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:07 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

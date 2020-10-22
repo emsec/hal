@@ -93,14 +93,16 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac43df8231050de5bed11513bd0980b2a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac43df8231050de5bed11513bd0980b2a">DirectoryRange</a> (std::filesystem::path p)</td></tr>
-<tr class="separator:ac43df8231050de5bed11513bd0980b2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab98604808d3da3e5492578bfc9f2cb3e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ab98604808d3da3e5492578bfc9f2cb3e">DirectoryRange</a> (std::filesystem::path path)</td></tr>
+<tr class="separator:ab98604808d3da3e5492578bfc9f2cb3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f18aefae3f1ef9085c253cd51490bf0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a7f18aefae3f1ef9085c253cd51490bf0">begin</a> ()</td></tr>
 <tr class="separator:a7f18aefae3f1ef9085c253cd51490bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c64904d713ee57bb2c81b81a592c35e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a3c64904d713ee57bb2c81b81a592c35e">end</a> ()</td></tr>
 <tr class="separator:a3c64904d713ee57bb2c81b81a592c35e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A range of directories within the top level root directory. </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ac58e3e6f46f8e5a746540806063aac58"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac58e3e6f46f8e5a746540806063aac58">&#9670;&nbsp;</a></span>iterator</h2>
 
@@ -116,8 +118,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac43df8231050de5bed11513bd0980b2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac43df8231050de5bed11513bd0980b2a">&#9670;&nbsp;</a></span>DirectoryRange()</h2>
+<a id="ab98604808d3da3e5492578bfc9f2cb3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab98604808d3da3e5492578bfc9f2cb3e">&#9670;&nbsp;</a></span>DirectoryRange()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -129,7 +131,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">hal::utils::DirectoryRange::DirectoryRange </td>
           <td>(</td>
           <td class="paramtype">std::filesystem::path&#160;</td>
-          <td class="paramname"><em>p</em></td><td>)</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -139,9 +141,10 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Construct a directory range from a top level directory.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>- The top level directory. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>- The top level directory. </td></tr>
   </table>
   </dd>
 </dl>
@@ -171,8 +174,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Gets an iterator pointing to the first element in the top level directory.<br  />
- The iterator will iterate through all elements inside of the top level container.<br  />
+<p>Get an iterator pointing to the first element in the top level directory.<br  />
+ The iterator will iterate through all elements inside the top level container.<br  />
  Lower levels are ignored.</p>
 <dl class="section return"><dt>Returns</dt><dd>The iterator. </dd></dl>
 
@@ -211,7 +214,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:07 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

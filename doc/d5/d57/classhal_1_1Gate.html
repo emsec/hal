@@ -72,7 +72,7 @@ $(function() {
 <a href="#friends">Friends</a> &#124;
 <a href="../../de/dbd/classhal_1_1Gate-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hal::Gate Class Reference<div class="ingroups"><a class="el" href="../../de/d89/group__netlist.html">Netlist</a></div></div>  </div>
+<div class="title">hal::Gate Class Reference<div class="ingroups"><a class="el" href="../../d0/de1/group__core.html">HAL Core</a> &raquo; <a class="el" href="../../de/d89/group__netlist.html">Netlist</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -82,7 +82,7 @@ Collaboration diagram for hal::Gate:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d6/dce/classhal_1_1Gate__coll__graph.png" border="0" usemap="#hal_1_1Gate_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1Gate_coll__map" id="hal_1_1Gate_coll__map">
-<area shape="rect" title=" " alt="" coords="5,219,217,839"/>
+<area shape="rect" title=" " alt="" coords="5,219,217,853"/>
 <area shape="rect" href="../../d1/d7d/classhal_1_1DataContainer.html" title=" " alt="" coords="33,5,190,171"/>
 </map>
 </div>
@@ -115,6 +115,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abaf49e05231c21206b67b349daf8fbde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ebbb9b79db2666beadc913467436a1f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d57/classhal_1_1Gate.html#a8ebbb9b79db2666beadc913467436a1f">get_module</a> () const</td></tr>
 <tr class="separator:a8ebbb9b79db2666beadc913467436a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b0652086f601967e3fac66118571117"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d2/d20/classhal_1_1Grouping.html">Grouping</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d57/classhal_1_1Gate.html#a5b0652086f601967e3fac66118571117">get_grouping</a> () const</td></tr>
+<tr class="separator:a5b0652086f601967e3fac66118571117"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85e1b1097c28a695df849f11b87c2a2f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d57/classhal_1_1Gate.html#a85e1b1097c28a695df849f11b87c2a2f">get_boolean_function</a> (std::string name=&quot;&quot;) const</td></tr>
 <tr class="separator:a85e1b1097c28a695df849f11b87c2a2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa206d7a1f84eeb201466cf7e6f211bd"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d57/classhal_1_1Gate.html#afa206d7a1f84eeb201466cf7e6f211bd">get_boolean_functions</a> (bool only_custom_functions=false) const</td></tr>
@@ -203,10 +205,10 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the unique id of the gate.</p>
-<dl class="section return"><dt>Returns</dt><dd>The gate's id. </dd></dl>
+<p>Get the unique id of the gate.</p>
+<dl class="section return"><dt>Returns</dt><dd>The unique id. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1600d7ec1cf6455657786174bc958589">hal::Netlist::mark_gnd_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a13814c485dc7040d31820466b0a6883f">hal::Netlist::mark_vcc_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a71338941318c4d1cd89daf208c204251">hal::Netlist::unmark_gnd_gate()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8f8cff382fcbad02221028e6d52ae920">hal::Netlist::unmark_vcc_gate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d2/d20/classhal_1_1Grouping.html#a8c082467c28ed2ea732da489a2c6ee9f">hal::Grouping::contains_gate()</a>, <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1600d7ec1cf6455657786174bc958589">hal::Netlist::mark_gnd_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a13814c485dc7040d31820466b0a6883f">hal::Netlist::mark_vcc_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a71338941318c4d1cd89daf208c204251">hal::Netlist::unmark_gnd_gate()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8f8cff382fcbad02221028e6d52ae920">hal::Netlist::unmark_vcc_gate()</a>.</p>
 
 </div>
 </div>
@@ -224,7 +226,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the parent netlist of the gate.</p>
+<p>Get the netlist this gate is associated with.</p>
 <dl class="section return"><dt>Returns</dt><dd>The netlist. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
@@ -245,7 +247,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the gate's name.</p>
+<p>Get the name of the gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a2bb7660dab70b6eb878328565f32cba3">get_fan_in_endpoint()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a07a6aead63e62bbd7d5ca75d46905b8a">get_fan_out_endpoint()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ac59ae4de6cdb8ef057245594fa03758e">get_predecessor()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#aaa02ffdfe2818d4a45af3aae72e2bc63">get_successor()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1600d7ec1cf6455657786174bc958589">hal::Netlist::mark_gnd_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a13814c485dc7040d31820466b0a6883f">hal::Netlist::mark_vcc_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a71338941318c4d1cd89daf208c204251">hal::Netlist::unmark_gnd_gate()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a8f8cff382fcbad02221028e6d52ae920">hal::Netlist::unmark_vcc_gate()</a>.</p>
@@ -267,7 +269,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the gate's name.</p>
+<p>Set the name of the gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The new name. </td></tr>
@@ -275,7 +277,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="../../d1/d05/classhal_1_1GateType.html#ada08ed06b774c41353d1d943f9eff203">hal::GateType::get_name()</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, <a class="el" href="../../de/d4d/namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4edaf06e538c44d7cdeea37fca5aa10771cc">hal::gate_event_handler::name_changed</a>, <a class="el" href="../../de/d4d/namespacehal_1_1gate__event__handler.html#a74d484a5005b887671f77d7eb7fb9f2b">hal::gate_event_handler::notify()</a>, and <a class="el" href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">hal::utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="../../d1/d05/classhal_1_1GateType.html#ada08ed06b774c41353d1d943f9eff203">hal::GateType::get_name()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, <a class="el" href="../../de/d4d/namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4edaf06e538c44d7cdeea37fca5aa10771cc">hal::gate_event_handler::name_changed</a>, <a class="el" href="../../de/d4d/namespacehal_1_1gate__event__handler.html#a74d484a5005b887671f77d7eb7fb9f2b">hal::gate_event_handler::notify()</a>, and <a class="el" href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">hal::utils::trim()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
 
@@ -295,8 +297,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the type of the gate.</p>
-<dl class="section return"><dt>Returns</dt><dd>The gate's type. </dd></dl>
+<p>Get the type of the gate.</p>
+<dl class="section return"><dt>Returns</dt><dd>The type. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a2bb7660dab70b6eb878328565f32cba3">get_fan_in_endpoint()</a>, and <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a07a6aead63e62bbd7d5ca75d46905b8a">get_fan_out_endpoint()</a>.</p>
 
@@ -316,7 +318,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Checks whether the gate's location in the layout is available.</p>
+<p>Check whether the gate's location in the layout is available.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if valid location data is available, false otherwise. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
@@ -338,7 +340,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the physical location x-coordinate of the gate in the layout. Only positive values are valid, negative values will be regarded as no location assigned.</p>
+<p>Set the physical location x-coordinate of the gate in the layout.<br  />
+ Only positive values are valid, negative values will be regarded as no location assigned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>- The gate's x-coordinate. </td></tr>
@@ -366,7 +369,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the physical location x-coordinate of the gate in the layout.</p>
+<p>Get the physical location x-coordinate of the gate in the layout.<br  />
+ If no valid physical location x-coordinate is assigned, a negative value is returned.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate's x-coordinate. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
@@ -388,7 +392,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the physical location y-coordinate of the gate in the layout. Only positive values are valid, negative values will be regarded as no location assigned.</p>
+<p>Set the physical location y-coordinate of the gate in the layout.<br  />
+ Only positive values are valid, negative values will be regarded as no location assigned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>- The gate's y-coordinate. </td></tr>
@@ -416,7 +421,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the physical location y-coordinate of the gate in the layout.</p>
+<p>Get the physical location y-coordinate of the gate in the layout.<br  />
+ If no valid physical location y-coordinate is assigned, a negative value is returned.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate's y-coordinate. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
@@ -438,7 +444,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the physical location of the gate in the layout.</p>
+<p>Set the physical location of the gate in the layout.<br  />
+ Only positive coordinates are valid, negative values will be regarded as no location assigned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">location</td><td>- A pair &lt;x-coordinate, y-coordinate&gt;. </td></tr>
@@ -466,7 +473,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the physical location of the gate in the layout.</p>
+<p>Get the physical location of the gate in the layout.<br  />
+ If no valid physical location coordinate is assigned, a negative value is returned for the respective coordinate.</p>
 <dl class="section return"><dt>Returns</dt><dd>A pair &lt;x-coordinate, y-coordinate&gt;. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
@@ -487,8 +495,30 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the module in which this gate is contained.</p>
+<p>Get the module which contains this gate.</p>
 <dl class="section return"><dt>Returns</dt><dd>The module. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
+
+</div>
+</div>
+<a id="a5b0652086f601967e3fac66118571117"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b0652086f601967e3fac66118571117">&#9670;&nbsp;</a></span>get_grouping()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d2/d20/classhal_1_1Grouping.html">Grouping</a> * hal::Gate::get_grouping </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the grouping in which this gate is contained.<br  />
+ If no grouping contains this gate, a nullptr is returned.</p>
+<dl class="section return"><dt>Returns</dt><dd>The grouping. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
 
@@ -509,7 +539,9 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the boolean function associated with a specific name. This name can for example be an output pin of the gate or a defined functionality like "reset". If name is empty, the function of the first output pin is returned. If there is no function for the given name, an empty function is returned.</p>
+<p>Get the boolean function associated with a specific name. This name can for example be an output pin of the gate or a defined functionality like "reset".<br  />
+ If name is empty, the function of the first output pin is returned.<br  />
+ If there is no function for the given name, an empty function is returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The function name. </td></tr>
@@ -588,7 +620,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="../../d1/d05/classhal_1_1GateType.html#abbfebac5d20601b45513bb584ce2b413">hal::GateType::get_base_type()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a0a6692d6ed8bff35f957d205fbaeeedb">get_input_pins()</a>, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a6187126b28eb574fca729c2418b628c5">hal::GateType::get_output_pins()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a79f7213798c1927842874c8271fba751">hal::BooleanFunction::get_truth_table()</a>, <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36ab56efdaa67baedcc830a453ecd15b37f">hal::GateType::lut</a>, <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#ab5cb9be187148a5be1f9ee9e558df2c9">hal::DataContainer::set_data()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#aac7bb4fda3bf06664f6bc717c3be92fba65f3ff6b5989443249c6173d99e8815e">hal::BooleanFunction::X</a>.</p>
+<p class="reference">References <a class="el" href="../../d1/d05/classhal_1_1GateType.html#abbfebac5d20601b45513bb584ce2b413">hal::GateType::get_base_type()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a0a6692d6ed8bff35f957d205fbaeeedb">get_input_pins()</a>, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a6187126b28eb574fca729c2418b628c5">hal::GateType::get_output_pins()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a79f7213798c1927842874c8271fba751">hal::BooleanFunction::get_truth_table()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36ab56efdaa67baedcc830a453ecd15b37f">hal::GateType::lut</a>, <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#ab5cb9be187148a5be1f9ee9e558df2c9">hal::DataContainer::set_data()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#aac7bb4fda3bf06664f6bc717c3be92fba65f3ff6b5989443249c6173d99e8815e">hal::BooleanFunction::X</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
 
@@ -792,8 +824,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a set of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.</p>
-<dl class="section return"><dt>Returns</dt><dd>A set of all connected input nets. </dd></dl>
+<p>Get a list of all fan-in nets of the gate, i.e. all nets that are connected to one of the input pins.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of all connected input nets. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
 
@@ -813,8 +845,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a all fan-in endpoint of the gate, i.e. all nets that are connected to one of the input pins + the respective pin.</p>
-<dl class="section return"><dt>Returns</dt><dd>A set of all connected input endpoints. </dd></dl>
+<p>Get a list of all fan-in endpoints of the gate, i.e. all connected endpoints that represent an input pin of this gate.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of all connected input endpoints. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
 
@@ -835,7 +867,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the fan-in net which is connected to a specific input pin.</p>
+<p>Get the fan-in net which is connected to a specific input pin. <br  />
+ If the input pin type is unknown or no net is connected, a nullptr is returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The input pin type. </td></tr>
@@ -865,7 +898,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the fan-in endpoint which is connected to a specific input pin.</p>
+<p>Get the fan-in endpoint which represents a specific input pin. <br  />
+ If the input pin type is unknown or no net is connected to the respective pin, a nullptr is returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The input pin type. </td></tr>
@@ -874,9 +908,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The endpoint. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#aecef7c2206f4e6360a17299e368e08e9">get_type()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#aecef7c2206f4e6360a17299e368e08e9">get_type()</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#adc1350d1fa7c318c08bd1188f8806c6e">get_fan_in_net()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>, and <a class="el" href="../../d5/d57/classhal_1_1Gate.html#adc1350d1fa7c318c08bd1188f8806c6e">get_fan_in_net()</a>.</p>
 
 </div>
 </div>
@@ -894,8 +928,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a set of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.</p>
-<dl class="section return"><dt>Returns</dt><dd>A set of all connected output nets. </dd></dl>
+<p>Get a list of all fan-out nets of the gate, i.e. all nets that are connected to one of the output pins.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of all connected output nets. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
 
@@ -915,8 +949,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a all fan-out endpoint of the gate, i.e. all nets that are connected to one of the output pins + the respective pin.</p>
-<dl class="section return"><dt>Returns</dt><dd>A set of all connected output endpoints. </dd></dl>
+<p>Get a list of all fan-out endpoints of the gate, i.e. all connected endpoints that represent an output pin of this gate.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of all connected output endpoints. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
 
@@ -937,7 +971,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the fan-out net which is connected to a specific output pin.</p>
+<p>Get the fan-out net which is connected to a specific output pin. <br  />
+ If the output pin type is unknown or no net is connected, a nullptr is returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The output pin type. </td></tr>
@@ -967,7 +1002,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the fan-out endpoint which is connected to a specific output pin.</p>
+<p>Get the fan-out endpoint which represents a specific output pin. <br  />
+ If the input pin type is unknown or no net is connected to the respective pin, a nullptr is returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The output pin type. </td></tr>
@@ -976,7 +1012,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The endpoint. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#aecef7c2206f4e6360a17299e368e08e9">get_type()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#aecef7c2206f4e6360a17299e368e08e9">get_type()</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>, and <a class="el" href="../../d5/d57/classhal_1_1Gate.html#aaeecea9fb6d0532d9ed3c7ba64c538b7">get_fan_out_net()</a>.</p>
 
@@ -997,10 +1033,11 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a set of all unique predecessor gates of the gate. A filter can be supplied which filters out all potential values that return false.</p>
+<p>Get a list of all unique predecessor gates of the gate. <br  />
+ A filter can be supplied which filters out all potential values that return false.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- a function to filter the output. Leave empty for no filtering. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A function to filter the output, using the input pin type of the gate (1st param) and a connected predecessor endpoint (2nd param). Leave empty for no filtering. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1027,10 +1064,11 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a vector of all direct predecessor endpoints of the gate. A filter can be supplied which filters out all potential values that return false.</p>
+<p>Get a list of all direct predecessor endpoints of the gate, i.e. all output endpoints that are connected to an input pin of the gate. <br  />
+ A filter can be supplied which filters out all potential values that return false.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- a function to filter the output. Leave empty for no filtering. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A function to filter the output, using the input pin type of the gate (1st param) and a connected predecessor endpoint (2nd param). Leave empty for no filtering. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1055,16 +1093,17 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the direct predecessor endpoint of the gate connected to a specific input pin.</p>
+<p>Get the direct predecessor endpoint of the gate connected to a specific input pin. <br  />
+ If the input pin type is unknown or there is no predecessor endpoint or there are multiple predecessor endpoints, a nullptr is returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">which_pin</td><td>- the pin of this gate to get the predecessor from. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">which_pin</td><td>- the input pin type of this gate to get the predecessor from. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The predecessor endpoint. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ae9a40e0c855882d3904c7251b2d48996">get_predecessors()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ae9a40e0c855882d3904c7251b2d48996">get_predecessors()</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
 
@@ -1085,10 +1124,11 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a set of all unique successor gates of the gate. A filter can be supplied which filters out all potential values that return false.</p>
+<p>Get a list of all unique successor gates of the gate. <br  />
+ A filter can be supplied which filters out all potential values that return false.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- a function to filter the output. Leave empty for no filtering. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A function to filter the output, using the output pin type of the gate (1st param) and a connected successor endpoint (2nd param). Leave empty for no filtering. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1115,10 +1155,11 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a vector of all direct successor endpoints of the gate. A filter can be supplied which filters out all potential values that return false.</p>
+<p>Get a list of all direct successor endpoints of the gate. <br  />
+ A filter can be supplied which filters out all potential values that return false.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- a function to filter the output. Leave empty for no filtering. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A function to filter the output, using the output pin type of the gate (1st param) and a connected successor endpoint (2nd param). Leave empty for no filtering. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1143,16 +1184,17 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the direct successor endpoint of the gate connected to a specific input pin.</p>
+<p>Get the direct successor endpoint of the gate connected to a specific input pin. <br  />
+ If the input pin type is unknown or there is no successor endpoint or there are multiple successor endpoints, a nullptr is returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">which_pin</td><td>- the pin of this gate to get the successor from. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">which_pin</td><td>- The output pin type of this gate to get the successor from. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The successor endpoint. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a753a06f17fa224adea5887cdb3e7ee5b">get_successors()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a753a06f17fa224adea5887cdb3e7ee5b">get_successors()</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init()</a>.</p>
 
@@ -1188,7 +1230,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:06 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

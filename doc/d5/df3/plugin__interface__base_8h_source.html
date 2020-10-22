@@ -96,8 +96,8 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/d7f/log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d8/db0/defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d8/db0/defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/d7f/log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
@@ -114,63 +114,63 @@ $(function() {
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#pragma clang diagnostic pop</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">enum class</span> <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> PluginInterfaceType</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    {</div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="../../d5/df3/plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">   53</a></span>&#160;        <a class="code" href="../../d5/df3/plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a>,</div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="../../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">   54</a></span>&#160;        <a class="code" href="../../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a>,</div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="../../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">   55</a></span>&#160;        <a class="code" href="../../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a>,</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        gui</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    };</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="../../d5/ddc/classhal_1_1BasePluginInterface.html">   62</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="../../d5/ddc/classhal_1_1BasePluginInterface.html">BasePluginInterface</a></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="code" href="../../d5/ddc/classhal_1_1BasePluginInterface.html">BasePluginInterface</a>()          = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="../../d5/ddc/classhal_1_1BasePluginInterface.html">BasePluginInterface</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="../../dd/d38/namespacehal_1_1event__log.html#af323996a0be7df9b6bf64ca4292fce55">initialize</a>();</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keyword">virtual</span> std::string get_name() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">virtual</span> std::string get_version() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordtype">bool</span> has_type(PluginInterfaceType t) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="../../d5/ddc/classhal_1_1BasePluginInterface.html#a05a8364dad5101585d352f97c98ff527">  103</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="../../d5/ddc/classhal_1_1BasePluginInterface.html#a05a8364dad5101585d352f97c98ff527">log</a>(<span class="keyword">const</span> Args&amp;... args)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <a class="code" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(get_name(), args...);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keyword">virtual</span> std::set&lt;std::string&gt; get_dependencies() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> on_load();</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> on_unload();</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> initialize_logging();</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    };</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="../../d0/d7f/namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">  132</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="../../d0/d7f/namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">instantiate_plugin_function</a> = std::unique_ptr&lt;BasePluginInterface&gt; (*)();</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">enum class</span> <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> PluginInterfaceType</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    {</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="../../d5/df3/plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">   55</a></span>&#160;        <a class="code" href="../../d5/df3/plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a>,</div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="../../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">   56</a></span>&#160;        <a class="code" href="../../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a>,</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="../../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">   57</a></span>&#160;        <a class="code" href="../../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a>,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        gui</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    };</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="../../d5/ddc/classhal_1_1BasePluginInterface.html">   64</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="../../d5/ddc/classhal_1_1BasePluginInterface.html">BasePluginInterface</a></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="code" href="../../d5/ddc/classhal_1_1BasePluginInterface.html">BasePluginInterface</a>()          = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="../../d5/ddc/classhal_1_1BasePluginInterface.html">BasePluginInterface</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="../../dd/d38/namespacehal_1_1event__log.html#af323996a0be7df9b6bf64ca4292fce55">initialize</a>();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keyword">virtual</span> std::string get_name() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keyword">virtual</span> std::string get_version() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">bool</span> has_type(PluginInterfaceType t) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="../../d5/ddc/classhal_1_1BasePluginInterface.html#a05a8364dad5101585d352f97c98ff527">  105</a></span>&#160;        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="../../d5/ddc/classhal_1_1BasePluginInterface.html#a05a8364dad5101585d352f97c98ff527">log</a>(<span class="keyword">const</span> Args&amp;... args)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <a class="code" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(get_name(), args...);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        }</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keyword">virtual</span> std::set&lt;std::string&gt; get_dependencies() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> on_load();</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> on_unload();</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> initialize_logging();</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    };</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="../../d0/d7f/namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">  134</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="../../d0/d7f/namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">instantiate_plugin_function</a> = std::unique_ptr&lt;BasePluginInterface&gt; (*)();</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aplugin__interface__base_8h_html_a10e7df18d8a816af76f947453883ff42"><div class="ttname"><a href="../../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a></div><div class="ttdeci">interactive_ui</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:55</div></div>
+<div class="ttc" id="aplugin__interface__base_8h_html_a10e7df18d8a816af76f947453883ff42"><div class="ttname"><a href="../../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a></div><div class="ttdeci">interactive_ui</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:57</div></div>
 <div class="ttc" id="anamespacehal_1_1event__log_html_af323996a0be7df9b6bf64ca4292fce55"><div class="ttname"><a href="../../dd/d38/namespacehal_1_1event__log.html#af323996a0be7df9b6bf64ca4292fce55">hal::event_log::initialize</a></div><div class="ttdeci">NETLIST_API void initialize()</div><div class="ttdef"><b>Definition:</b> event_log.cpp:218</div></div>
-<div class="ttc" id="aclasshal_1_1BasePluginInterface_html"><div class="ttname"><a href="../../d5/ddc/classhal_1_1BasePluginInterface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:62</div></div>
-<div class="ttc" id="anamespacehal_html_af1388a5c4377a81f3215cac5d274fd60"><div class="ttname"><a href="../../d0/d7f/namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">hal::instantiate_plugin_function</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt;(*)() instantiate_plugin_function</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:132</div></div>
+<div class="ttc" id="aclasshal_1_1BasePluginInterface_html"><div class="ttname"><a href="../../d5/ddc/classhal_1_1BasePluginInterface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:64</div></div>
+<div class="ttc" id="anamespacehal_html_af1388a5c4377a81f3215cac5d274fd60"><div class="ttname"><a href="../../d0/d7f/namespacehal.html#af1388a5c4377a81f3215cac5d274fd60">hal::instantiate_plugin_function</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt;(*)() instantiate_plugin_function</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:134</div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
-<div class="ttc" id="aclasshal_1_1BasePluginInterface_html_a05a8364dad5101585d352f97c98ff527"><div class="ttname"><a href="../../d5/ddc/classhal_1_1BasePluginInterface.html#a05a8364dad5101585d352f97c98ff527">hal::BasePluginInterface::log</a></div><div class="ttdeci">void log(const Args &amp;... args) const</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:103</div></div>
-<div class="ttc" id="aplugin__interface__base_8h_html_a9280bc62af1b57e6460d0b1c251908bd"><div class="ttname"><a href="../../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a></div><div class="ttdeci">cli</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:54</div></div>
+<div class="ttc" id="aclasshal_1_1BasePluginInterface_html_a05a8364dad5101585d352f97c98ff527"><div class="ttname"><a href="../../d5/ddc/classhal_1_1BasePluginInterface.html#a05a8364dad5101585d352f97c98ff527">hal::BasePluginInterface::log</a></div><div class="ttdeci">void log(const Args &amp;... args) const</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:105</div></div>
+<div class="ttc" id="aplugin__interface__base_8h_html_a9280bc62af1b57e6460d0b1c251908bd"><div class="ttname"><a href="../../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a></div><div class="ttdeci">cli</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:56</div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_afea66f9a6812c2354b544f31910fd72f"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a></div><div class="ttdeci">#define CORE_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:26</div></div>
-<div class="ttc" id="agroup__core_html_ga5a10e8bbe0ebf932e114b116b32d7ed2"><div class="ttname"><a href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a></div><div class="ttdeci">#define log_info(channel,...)</div><div class="ttdef"><b>Definition:</b> log.h:67</div></div>
+<div class="ttc" id="agroup__utilities_html_ga5a10e8bbe0ebf932e114b116b32d7ed2"><div class="ttname"><a href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a></div><div class="ttdeci">#define log_info(channel,...)</div><div class="ttdef"><b>Definition:</b> log.h:67</div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="../../d7/d7f/log_8h.html">log.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_afcb1b0bf7320fa3ebfc13fd896ebca4d"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a></div><div class="ttdeci">#define PLUGIN_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:34</div></div>
-<div class="ttc" id="aplugin__interface__base_8h_html_a42221ae13c427234b08a21d229eb2ad9"><div class="ttname"><a href="../../d5/df3/plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a></div><div class="ttdeci">base</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:53</div></div>
+<div class="ttc" id="aplugin__interface__base_8h_html_a42221ae13c427234b08a21d229eb2ad9"><div class="ttname"><a href="../../d5/df3/plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a></div><div class="ttdeci">base</div><div class="ttdef"><b>Definition:</b> plugin_interface_base.h:55</div></div>
 <div class="ttc" id="anamespacehal_html_a5f5dd456d7ad61e7cc14445fbb1c17e1"><div class="ttname"><a href="../../d0/d7f/namespacehal.html#a5f5dd456d7ad61e7cc14445fbb1c17e1">hal::create_plugin_instance</a></div><div class="ttdeci">PLUGIN_API std::unique_ptr&lt; BasePluginInterface &gt; create_plugin_instance()</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:06 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

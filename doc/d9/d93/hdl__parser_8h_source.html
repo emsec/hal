@@ -97,24 +97,24 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d8/db0/defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment">/* forward declaration*/</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">class </span>Netlist;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">class </span>GateLibrary;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="../../d0/d0e/classhal_1_1HDLParser.html">   38</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#a13c2dbe3c937bdd9654ee83dc5e12c8a">HDL_PARSER_API</a> <a class="code" href="../../d0/d0e/classhal_1_1HDLParser.html">HDLParser</a></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="../../d0/d0e/classhal_1_1HDLParser.html">HDLParser</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="../../d0/d0e/classhal_1_1HDLParser.html">HDLParser</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="../../d5/d96/namespacehal_1_1hdl__parser__manager.html#ae4dc38bc8200dcdb7f9ba6e6000259de">parse</a>(std::stringstream&amp; stream) = 0;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keyword">virtual</span> std::unique_ptr&lt;Netlist&gt; instantiate(<span class="keyword">const</span> <a class="code" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a>* gl) = 0;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="comment">/* forward declaration*/</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">class </span>Netlist;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">class </span>GateLibrary;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="../../d0/d0e/classhal_1_1HDLParser.html">   39</a></span>&#160;    <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#a13c2dbe3c937bdd9654ee83dc5e12c8a">HDL_PARSER_API</a> <a class="code" href="../../d0/d0e/classhal_1_1HDLParser.html">HDLParser</a></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="../../d0/d0e/classhal_1_1HDLParser.html">HDLParser</a>()          = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">virtual</span> ~<a class="code" href="../../d0/d0e/classhal_1_1HDLParser.html">HDLParser</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="../../d5/d96/namespacehal_1_1hdl__parser__manager.html#ae4dc38bc8200dcdb7f9ba6e6000259de">parse</a>(std::stringstream&amp; stream) = 0;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">virtual</span> std::unique_ptr&lt;Netlist&gt; instantiate(<span class="keyword">const</span> <a class="code" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a>* gl) = 0;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
 <div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="../../d0/d0e/classhal_1_1HDLParser.html#afec5fe0610064a1f6c4999d88dccef92">   68</a></span>&#160;        std::unique_ptr&lt;Netlist&gt; <a class="code" href="../../d0/d0e/classhal_1_1HDLParser.html#afec5fe0610064a1f6c4999d88dccef92">parse_and_instantiate</a>(std::stringstream&amp; stream, <span class="keyword">const</span> <a class="code" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a>* gl)</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        {</div>
@@ -124,9 +124,8 @@ $(function() {
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            }</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    };</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    };</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
@@ -134,10 +133,10 @@ $(function() {
 <div class="ttc" id="aarch__linux_8h_html_a13c2dbe3c937bdd9654ee83dc5e12c8a"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#a13c2dbe3c937bdd9654ee83dc5e12c8a">HDL_PARSER_API</a></div><div class="ttdeci">#define HDL_PARSER_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:30</div></div>
 <div class="ttc" id="aclasshal_1_1HDLParser_html_afec5fe0610064a1f6c4999d88dccef92"><div class="ttname"><a href="../../d0/d0e/classhal_1_1HDLParser.html#afec5fe0610064a1f6c4999d88dccef92">hal::HDLParser::parse_and_instantiate</a></div><div class="ttdeci">std::unique_ptr&lt; Netlist &gt; parse_and_instantiate(std::stringstream &amp;stream, const GateLibrary *gl)</div><div class="ttdef"><b>Definition:</b> hdl_parser.h:68</div></div>
 <div class="ttc" id="aclasshal_1_1GateLibrary_html"><div class="ttname"><a href="../../d7/daf/classhal_1_1GateLibrary.html">hal::GateLibrary</a></div><div class="ttdef"><b>Definition:</b> gate_library.h:41</div></div>
-<div class="ttc" id="aclasshal_1_1HDLParser_html"><div class="ttname"><a href="../../d0/d0e/classhal_1_1HDLParser.html">hal::HDLParser</a></div><div class="ttdef"><b>Definition:</b> hdl_parser.h:38</div></div>
+<div class="ttc" id="aclasshal_1_1HDLParser_html"><div class="ttname"><a href="../../d0/d0e/classhal_1_1HDLParser.html">hal::HDLParser</a></div><div class="ttdef"><b>Definition:</b> hdl_parser.h:39</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:06 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

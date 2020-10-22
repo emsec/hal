@@ -1,17 +1,17 @@
 <map id="hal_core/netlist/hdl_writer/hdl_writer_manager.h" name="hal_core/netlist/hdl_writer/hdl_writer_manager.h">
 <area shape="rect" id="node1" title=" " alt="" coords="665,5,877,47"/>
-<area shape="rect" id="node2" href="$d5/d5e/program__options_8h.html" title=" " alt="" coords="559,95,707,136"/>
-<area shape="rect" id="node3" href="$d8/db0/defines_8h.html" title=" " alt="" coords="149,184,289,211"/>
+<area shape="rect" id="node2" href="$d8/db0/defines_8h.html" title=" " alt="" coords="149,184,289,211"/>
+<area shape="rect" id="node7" href="$d5/d5e/program__options_8h.html" title=" " alt="" coords="559,95,707,136"/>
 <area shape="rect" id="node11" title=" " alt="" coords="712,184,755,211"/>
 <area shape="rect" id="node12" title=" " alt="" coords="779,184,837,211"/>
 <area shape="rect" id="node13" title=" " alt="" coords="862,184,917,211"/>
 <area shape="rect" id="node15" title=" " alt="" coords="885,102,971,129"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,259,96,285"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,259,207,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,259,318,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,259,413,285"/>
 <area shape="rect" id="node8" title=" " alt="" coords="313,184,423,211"/>
 <area shape="rect" id="node9" title=" " alt="" coords="448,184,499,211"/>
 <area shape="rect" id="node10" title=" " alt="" coords="523,184,600,211"/>
 <area shape="rect" id="node14" title=" " alt="" coords="625,184,687,211"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,259,96,285"/>
-<area shape="rect" id="node5" title=" " alt="" coords="121,259,207,285"/>
-<area shape="rect" id="node6" title=" " alt="" coords="231,259,318,285"/>
-<area shape="rect" id="node7" title=" " alt="" coords="342,259,413,285"/>
 </map>

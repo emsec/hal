@@ -178,334 +178,334 @@ $(function() {
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            <span class="keywordflow">return</span> (ss.eof() &amp;&amp; !ss.fail());</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        }</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00179"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a43bf1ffd1c76cf2b5809c2346dd561c4">  179</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt;T&gt; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a43bf1ffd1c76cf2b5809c2346dd561c4">split</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> <span class="keywordtype">char</span> delim, <span class="keywordtype">bool</span> obey_brackets = <span class="keyword">false</span>)</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        {</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            std::vector&lt;T&gt; result;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            T item = <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <span class="keywordflow">if</span> (obey_brackets)</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            {</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                <span class="keywordtype">int</span> bracket_level = 0;</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; s.length(); ++i)</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                {</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                    <span class="keywordtype">char</span> c = s.at(i);</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                    <span class="keywordflow">switch</span> (c)</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                    {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;(&#39;</span>:</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;{&#39;</span>:</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;[&#39;</span>:</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                            ++bracket_level;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;)&#39;</span>:</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;}&#39;</span>:</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;]&#39;</span>:</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                            --bracket_level;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                        <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                    }</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                    <span class="keywordflow">if</span> (bracket_level &lt; 0)</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                    {</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                        bracket_level = 0;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                    }</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                    <span class="keywordflow">if</span> (c == delim)</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                    {</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                        <span class="comment">// No constant expression, therefore not usable in switch case</span></div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                        <span class="keywordflow">if</span> (bracket_level == 0)</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                        {</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                            result.push_back(item);</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                            item = <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                        }</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                        {</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                            item.push_back(c);</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                        }</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                    }</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                    {</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                        item.push_back(c);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                    }</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                }</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                <span class="keywordflow">if</span> (!item.empty())</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                {</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                    result.push_back(item);</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                }</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            }</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            {</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                std::stringstream ss(s);</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                <span class="keywordflow">while</span> (std::getline(ss, item, delim))</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                {</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                    result.push_back(item);</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                }</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            }</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            <span class="keywordflow">if</span> (s.back() == delim)</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            {</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                result.push_back(<span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            }</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        }</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00256"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a25f9f24b47512daf25a4a192486c26c4">  256</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a25f9f24b47512daf25a4a192486c26c4">ltrim</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> <span class="keywordtype">char</span>* to_remove = <span class="stringliteral">&quot; \t\r\n&quot;</span>)</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        {</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keywordtype">size_t</span> start = s.find_first_not_of(to_remove);</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160; </div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <span class="keywordflow">if</span> (start != std::string::npos)</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            {</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                <span class="keywordflow">return</span> s.substr(start, s.size() - start);</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;            }</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            {</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            }</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        }</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00278"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">  278</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">rtrim</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> <span class="keywordtype">char</span>* to_remove = <span class="stringliteral">&quot; \t\r\n&quot;</span>)</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        {</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            <span class="keywordtype">size_t</span> end = s.find_last_not_of(to_remove);</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;            <span class="keywordflow">if</span> (end != std::string::npos)</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;            {</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                <span class="keywordflow">return</span> s.substr(0, end + 1);</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            }</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            {</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            }</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        }</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00300"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">  300</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">trim</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> <span class="keywordtype">char</span>* to_remove = <span class="stringliteral">&quot; \t\r\n&quot;</span>)</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        {</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            <span class="keywordtype">size_t</span> start = s.find_first_not_of(to_remove);</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;            <span class="keywordtype">size_t</span> end   = s.find_last_not_of(to_remove);</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;            <span class="keywordflow">if</span> (start != T::npos)</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            {</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;                <span class="keywordflow">return</span> s.substr(start, end - start + 1);</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            }</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            {</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            }</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        }</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00324"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">  324</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">replace</a>(<span class="keyword">const</span> T&amp; str, <span class="keyword">const</span> T&amp; search, <span class="keyword">const</span> T&amp; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">replace</a>)</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        {</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <span class="keyword">auto</span> s     = str;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            <span class="keywordtype">size_t</span> pos = 0;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            <span class="keywordflow">if</span> (search.empty())</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            {</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                <span class="keywordflow">return</span> str;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            }</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            <span class="keywordflow">while</span> ((pos = s.find(search, pos)) != T::npos)</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            {</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                s.replace(pos, search.length(), <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">replace</a>);</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                pos += <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">replace</a>.length();</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            }</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            <span class="keywordflow">return</span> s;</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        }</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">class</span> Transform&gt;</div>
-<div class="line"><a name="l00353"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">  353</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">join</a>(<span class="keyword">const</span> std::string&amp; joiner, <span class="keyword">const</span> T&amp; items, <span class="keyword">const</span> Transform&amp; transform)</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        {</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            std::stringstream ss;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            <span class="keywordtype">bool</span> first = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = items.begin(); it != items.end(); ++it)</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;            {</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;                <span class="keywordflow">if</span> (!first)</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;                {</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                    ss &lt;&lt; joiner;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                }</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                first = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                ss &lt;&lt; transform(*it);</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;            }</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            <span class="keywordflow">return</span> ss.str();</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        }</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00377"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a6cb70a4b78fcbc3a2cfe1bc7b4bc7313">  377</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">join</a>(<span class="keyword">const</span> std::string&amp; joiner, <span class="keyword">const</span> T&amp; items)</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        {</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">join</a>(joiner, items, [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; v) { <span class="keywordflow">return</span> v; });</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        }</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160; </div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00389"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#ac4b3b46a9b2575322a0a296daac79828">  389</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#ac4b3b46a9b2575322a0a296daac79828">to_upper</a>(<span class="keyword">const</span> T&amp; s)</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        {</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;            T result = s;</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;            std::transform(result.begin(), result.end(), result.begin(), [](<span class="keywordtype">char</span> c) { return std::toupper(c); });</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        }</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00403"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">  403</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">to_lower</a>(<span class="keyword">const</span> T&amp; s)</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        {</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;            T result = s;</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;            std::transform(result.begin(), result.end(), result.begin(), [](<span class="keywordtype">char</span> c) { return std::tolower(c); });</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        }</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00418"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">  418</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">num_of_occurrences</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> T&amp; substr)</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        {</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">num_of_occurrences</a> = 0;</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;            <span class="keyword">auto</span> position          = s.find(substr, 0);</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160; </div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;            <span class="keywordflow">while</span> (position != std::string::npos)</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;            {</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;                <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">num_of_occurrences</a>++;</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;                position = s.find(substr, position + 1);</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;            }</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">num_of_occurrences</a>;</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        }</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160; </div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">template</span>&lt;<span class="keyword">typename</span>, <span class="keyword">typename</span>...&gt; <span class="keyword">class </span>Container, <span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00439"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#ad08c09cde6e4c84be543db4fac49f08c">  439</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <span class="keyword">inline</span> std::vector&lt;T&gt; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#ad08c09cde6e4c84be543db4fac49f08c">to_vector</a>(<span class="keyword">const</span> Container&lt;T, Args...&gt;&amp; container)</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;        {</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;            <span class="keywordflow">return</span> std::vector&lt;T&gt;(container.begin(), container.end());</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        }</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160; </div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <span class="keywordtype">bool</span> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#acbdd92cdaa605c9686aa1afc89ccd289">file_exists</a>(<span class="keyword">const</span> std::string&amp; filename);</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160; </div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <span class="keywordtype">bool</span> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#ace98e7488d23b5183c7acaf9770ed498">folder_exists_and_is_accessible</a>(<span class="keyword">const</span> std::filesystem::path&amp; folder);</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160; </div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a2b0a5b8e62f97d9e4ce5eefc428b0a2f">which</a>(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> std::string&amp; path = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160; </div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#aae9f42db99741088a4f442129ac332c3">get_binary_directory</a>();</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160; </div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a596f16ce81c40fb40fe94dd41d5b5ab7">get_base_directory</a>();</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160; </div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a23c89e12c9dca94e778f13090de02f09">get_library_directory</a>();</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160; </div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a1974cb00df4f8ecb41f85ab1cb1e5df7">get_share_directory</a>();</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00180"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a43bf1ffd1c76cf2b5809c2346dd561c4">  180</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt;T&gt; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a43bf1ffd1c76cf2b5809c2346dd561c4">split</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> <span class="keywordtype">char</span> delim, <span class="keywordtype">bool</span> obey_brackets = <span class="keyword">false</span>)</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            std::vector&lt;T&gt; result;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            T item = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <span class="keywordflow">if</span> (obey_brackets)</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            {</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                <span class="keywordtype">int</span> bracket_level = 0;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; s.length(); ++i)</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                    <span class="keywordtype">char</span> c = s.at(i);</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                    <span class="keywordflow">switch</span> (c)</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                    {</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;(&#39;</span>:</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;{&#39;</span>:</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;[&#39;</span>:</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                            ++bracket_level;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;)&#39;</span>:</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;}&#39;</span>:</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                        <span class="keywordflow">case</span> <span class="charliteral">&#39;]&#39;</span>:</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                            --bracket_level;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                    }</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                    <span class="keywordflow">if</span> (bracket_level &lt; 0)</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                    {</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                        bracket_level = 0;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                    }</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                    <span class="keywordflow">if</span> (c == delim)</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                    {</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                        <span class="comment">// No constant expression, therefore not usable in switch case</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                        <span class="keywordflow">if</span> (bracket_level == 0)</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                        {</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                            result.push_back(item);</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                            item = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                        }</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                        {</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                            item.push_back(c);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                        }</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                    }</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                    {</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                        item.push_back(c);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                    }</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                }</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                <span class="keywordflow">if</span> (!item.empty())</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                {</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                    result.push_back(item);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                }</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            }</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;            {</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                std::stringstream ss(s);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                <span class="keywordflow">while</span> (std::getline(ss, item, delim))</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                {</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                    result.push_back(item);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                }</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            }</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            <span class="keywordflow">if</span> (s.back() == delim)</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            {</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                result.push_back(<span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            }</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        }</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00257"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a25f9f24b47512daf25a4a192486c26c4">  257</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a25f9f24b47512daf25a4a192486c26c4">ltrim</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> <span class="keywordtype">char</span>* to_remove = <span class="stringliteral">&quot; \t\r\n&quot;</span>)</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        {</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            <span class="keywordtype">size_t</span> start = s.find_first_not_of(to_remove);</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            <span class="keywordflow">if</span> (start != std::string::npos)</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;            {</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                <span class="keywordflow">return</span> s.substr(start, s.size() - start);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            }</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            {</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            }</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        }</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00279"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">  279</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">rtrim</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> <span class="keywordtype">char</span>* to_remove = <span class="stringliteral">&quot; \t\r\n&quot;</span>)</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            <span class="keywordtype">size_t</span> end = s.find_last_not_of(to_remove);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;            <span class="keywordflow">if</span> (end != std::string::npos)</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;            {</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                <span class="keywordflow">return</span> s.substr(0, end + 1);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            }</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;            {</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;            }</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        }</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00301"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">  301</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">trim</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> <span class="keywordtype">char</span>* to_remove = <span class="stringliteral">&quot; \t\r\n&quot;</span>)</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        {</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;            <span class="keywordtype">size_t</span> start = s.find_first_not_of(to_remove);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;            <span class="keywordtype">size_t</span> end   = s.find_last_not_of(to_remove);</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            <span class="keywordflow">if</span> (start != T::npos)</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            {</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                <span class="keywordflow">return</span> s.substr(start, end - start + 1);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            }</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            {</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;            }</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        }</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00325"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">  325</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">replace</a>(<span class="keyword">const</span> T&amp; str, <span class="keyword">const</span> T&amp; search, <span class="keyword">const</span> T&amp; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">replace</a>)</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        {</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            <span class="keyword">auto</span> s     = str;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keywordtype">size_t</span> pos = 0;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160; </div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            <span class="keywordflow">if</span> (search.empty())</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            {</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                <span class="keywordflow">return</span> str;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            }</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keywordflow">while</span> ((pos = s.find(search, pos)) != T::npos)</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;            {</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                s.replace(pos, search.length(), <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">replace</a>);</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                pos += <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">replace</a>.length();</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;            }</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;            <span class="keywordflow">return</span> s;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        }</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">class</span> Transform&gt;</div>
+<div class="line"><a name="l00354"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">  354</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">join</a>(<span class="keyword">const</span> std::string&amp; joiner, <span class="keyword">const</span> T&amp; items, <span class="keyword">const</span> Transform&amp; transform)</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        {</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            std::stringstream ss;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;            <span class="keywordtype">bool</span> first = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = items.begin(); it != items.end(); ++it)</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            {</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;                <span class="keywordflow">if</span> (!first)</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                {</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                    ss &lt;&lt; joiner;</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                }</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                first = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                ss &lt;&lt; transform(*it);</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            }</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;            <span class="keywordflow">return</span> ss.str();</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        }</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160; </div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00378"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a6cb70a4b78fcbc3a2cfe1bc7b4bc7313">  378</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">join</a>(<span class="keyword">const</span> std::string&amp; joiner, <span class="keyword">const</span> T&amp; items)</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        {</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">join</a>(joiner, items, [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; v) { <span class="keywordflow">return</span> v; });</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        }</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160; </div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00390"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#ac4b3b46a9b2575322a0a296daac79828">  390</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#ac4b3b46a9b2575322a0a296daac79828">to_upper</a>(<span class="keyword">const</span> T&amp; s)</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        {</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;            T result = s;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            std::transform(result.begin(), result.end(), result.begin(), [](<span class="keywordtype">char</span> c) { return std::toupper(c); });</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;            <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        }</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; </div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00404"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">  404</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">to_lower</a>(<span class="keyword">const</span> T&amp; s)</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        {</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;            T result = s;</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            std::transform(result.begin(), result.end(), result.begin(), [](<span class="keywordtype">char</span> c) { return std::tolower(c); });</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;            <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        }</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160; </div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00419"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">  419</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">num_of_occurrences</a>(<span class="keyword">const</span> T&amp; s, <span class="keyword">const</span> T&amp; substr)</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        {</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;            <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">num_of_occurrences</a> = 0;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;            <span class="keyword">auto</span> position          = s.find(substr, 0);</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160; </div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;            <span class="keywordflow">while</span> (position != std::string::npos)</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;            {</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;                <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">num_of_occurrences</a>++;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;                position = s.find(substr, position + 1);</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;            }</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160; </div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">num_of_occurrences</a>;</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        }</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">template</span>&lt;<span class="keyword">typename</span>, <span class="keyword">typename</span>...&gt; <span class="keyword">class </span>Container, <span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00440"></a><span class="lineno"><a class="line" href="../../d4/dd6/namespacehal_1_1utils.html#ad08c09cde6e4c84be543db4fac49f08c">  440</a></span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <span class="keyword">inline</span> std::vector&lt;T&gt; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#ad08c09cde6e4c84be543db4fac49f08c">to_vector</a>(<span class="keyword">const</span> Container&lt;T, Args...&gt;&amp; container)</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        {</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;            <span class="keywordflow">return</span> std::vector&lt;T&gt;(container.begin(), container.end());</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        }</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160; </div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <span class="keywordtype">bool</span> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#acbdd92cdaa605c9686aa1afc89ccd289">file_exists</a>(<span class="keyword">const</span> std::string&amp; filename);</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160; </div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <span class="keywordtype">bool</span> <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a0a841fbbc1aae2637aedb4970f07ef95">folder_exists_and_is_accessible</a>(<span class="keyword">const</span> std::filesystem::path&amp; path);</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160; </div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a2b0a5b8e62f97d9e4ce5eefc428b0a2f">which</a>(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> std::string&amp; path = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160; </div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#aae9f42db99741088a4f442129ac332c3">get_binary_directory</a>();</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160; </div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a596f16ce81c40fb40fe94dd41d5b5ab7">get_base_directory</a>();</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160; </div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a23c89e12c9dca94e778f13090de02f09">get_library_directory</a>();</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160; </div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a1974cb00df4f8ecb41f85ab1cb1e5df7">get_share_directory</a>();</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160; </div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#aeed9440c9520fc5c1297906c2487253b">get_user_share_directory</a>();</div>
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160; </div>
 <div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a04466a8dc8315116fb04b5181d8e234a">get_config_directory</a>();</div>
 <div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160; </div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#af26065b993bd3dcb5d3a0ab60db751f3">get_user_config_directory</a>();</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160; </div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a35ff967d30ff87d1273d853db1e488d8">get_default_log_directory</a>(std::filesystem::path source_file = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160; </div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt;std::filesystem::path&gt; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#ab1faa0b1fbf4a02f7cd2f9640ebf4989">get_gate_library_directories</a>();</div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160; </div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt;std::filesystem::path&gt; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#ab0b52723214e8a9dbff003c362155fac">get_plugin_directories</a>();</div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160; </div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a38ecafc501af44b5a045df327490d4c2">get_first_directory_exists</a>(std::vector&lt;std::filesystem::path&gt; path_hints);</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160; </div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a3f382fca6115b61ad29b49e960495742">get_file</a>(std::string file_name, std::vector&lt;std::filesystem::path&gt; path_hints);</div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160; </div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a5e4955372961aa67900c3baf70d82cb7">get_open_source_licenses</a>();</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160; </div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#af26065b993bd3dcb5d3a0ab60db751f3">get_user_config_directory</a>();</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160; </div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a35ff967d30ff87d1273d853db1e488d8">get_default_log_directory</a>(std::filesystem::path source_file = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160; </div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt;std::filesystem::path&gt; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#ab1faa0b1fbf4a02f7cd2f9640ebf4989">get_gate_library_directories</a>();</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160; </div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt;std::filesystem::path&gt; <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#ab0b52723214e8a9dbff003c362155fac">get_plugin_directories</a>();</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160; </div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a38ecafc501af44b5a045df327490d4c2">get_first_directory_exists</a>(std::vector&lt;std::filesystem::path&gt; path_hints);</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160; </div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a3f382fca6115b61ad29b49e960495742">get_file</a>(std::string file_name, std::vector&lt;std::filesystem::path&gt; path_hints);</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160; </div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string <a class="code" href="../../d4/dd6/namespacehal_1_1utils.html#a5e4955372961aa67900c3baf70d82cb7">get_open_source_licenses</a>();</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160; </div>
 <div class="line"><a name="l00575"></a><span class="lineno"><a class="line" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html">  575</a></span>&#160;        <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html">RecursiveDirectoryRange</a></div>
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;        {</div>
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;        <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00578"></a><span class="lineno"><a class="line" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a3352aa0beb99907d05f526cad21a78e9">  578</a></span>&#160;            <span class="keyword">using</span> <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a3352aa0beb99907d05f526cad21a78e9">iterator</a> = std::filesystem::recursive_directory_iterator;</div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160; </div>
-<div class="line"><a name="l00583"></a><span class="lineno"><a class="line" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#ae097b80b9466bc95462704458b31f37f">  583</a></span>&#160;            <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#ae097b80b9466bc95462704458b31f37f">RecursiveDirectoryRange</a>(std::filesystem::path p) : p_(p)</div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;            {</div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;            }</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160; </div>
-<div class="line"><a name="l00593"></a><span class="lineno"><a class="line" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a6856c4aac06e17832b187c698cdbc082">  593</a></span>&#160;            <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a3352aa0beb99907d05f526cad21a78e9">iterator</a> <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a6856c4aac06e17832b187c698cdbc082">begin</a>()</div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;            {</div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;                <span class="keywordflow">return</span> std::filesystem::recursive_directory_iterator(p_);</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;            }</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160; </div>
-<div class="line"><a name="l00603"></a><span class="lineno"><a class="line" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a56f2de338dc17a167719fb5cfc4f1ebd">  603</a></span>&#160;            <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a3352aa0beb99907d05f526cad21a78e9">iterator</a> <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a56f2de338dc17a167719fb5cfc4f1ebd">end</a>()</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;            {</div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;                <span class="keywordflow">return</span> std::filesystem::recursive_directory_iterator();</div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;            }</div>
-<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160; </div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;            std::filesystem::path p_;</div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;        };</div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160; </div>
-<div class="line"><a name="l00612"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html">  612</a></span>&#160;        <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html">DirectoryRange</a></div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;        {</div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00615"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">  615</a></span>&#160;            <span class="keyword">using</span> <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">iterator</a> = std::filesystem::directory_iterator;</div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160; </div>
-<div class="line"><a name="l00620"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac43df8231050de5bed11513bd0980b2a">  620</a></span>&#160;            <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac43df8231050de5bed11513bd0980b2a">DirectoryRange</a>(std::filesystem::path p) : p_(p)</div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;            {</div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;            }</div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160; </div>
-<div class="line"><a name="l00631"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a7f18aefae3f1ef9085c253cd51490bf0">  631</a></span>&#160;            <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">iterator</a> <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a7f18aefae3f1ef9085c253cd51490bf0">begin</a>()</div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;            {</div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;                <span class="keywordflow">return</span> std::filesystem::directory_iterator(p_);</div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;            }</div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160; </div>
-<div class="line"><a name="l00641"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a3c64904d713ee57bb2c81b81a592c35e">  641</a></span>&#160;            <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">iterator</a> <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a3c64904d713ee57bb2c81b81a592c35e">end</a>()</div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;            {</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;                <span class="keywordflow">return</span> std::filesystem::directory_iterator();</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;            }</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160; </div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;            std::filesystem::path p_;</div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;        };</div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;    }    <span class="comment">// namespace core_utils</span></div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00585"></a><span class="lineno"><a class="line" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a96a1554b62cd303048c1928ff2ed6603">  585</a></span>&#160;            <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a96a1554b62cd303048c1928ff2ed6603">RecursiveDirectoryRange</a>(std::filesystem::path path) : p_(path)</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;            {</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;            }</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160; </div>
+<div class="line"><a name="l00595"></a><span class="lineno"><a class="line" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a6856c4aac06e17832b187c698cdbc082">  595</a></span>&#160;            <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a3352aa0beb99907d05f526cad21a78e9">iterator</a> <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a6856c4aac06e17832b187c698cdbc082">begin</a>()</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;            {</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;                <span class="keywordflow">return</span> std::filesystem::recursive_directory_iterator(p_);</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;            }</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160; </div>
+<div class="line"><a name="l00605"></a><span class="lineno"><a class="line" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a56f2de338dc17a167719fb5cfc4f1ebd">  605</a></span>&#160;            <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a3352aa0beb99907d05f526cad21a78e9">iterator</a> <a class="code" href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a56f2de338dc17a167719fb5cfc4f1ebd">end</a>()</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;            {</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;                <span class="keywordflow">return</span> std::filesystem::recursive_directory_iterator();</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;            }</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160; </div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;            std::filesystem::path p_;</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;        };</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160; </div>
+<div class="line"><a name="l00617"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html">  617</a></span>&#160;        <span class="keyword">class </span><a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html">DirectoryRange</a></div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;        {</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00620"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">  620</a></span>&#160;            <span class="keyword">using</span> <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">iterator</a> = std::filesystem::directory_iterator;</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160; </div>
+<div class="line"><a name="l00627"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ab98604808d3da3e5492578bfc9f2cb3e">  627</a></span>&#160;            <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ab98604808d3da3e5492578bfc9f2cb3e">DirectoryRange</a>(std::filesystem::path path) : p_(path)</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;            {</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;            }</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160; </div>
+<div class="line"><a name="l00638"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a7f18aefae3f1ef9085c253cd51490bf0">  638</a></span>&#160;            <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">iterator</a> <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a7f18aefae3f1ef9085c253cd51490bf0">begin</a>()</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;            {</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;                <span class="keywordflow">return</span> std::filesystem::directory_iterator(p_);</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;            }</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160; </div>
+<div class="line"><a name="l00648"></a><span class="lineno"><a class="line" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a3c64904d713ee57bb2c81b81a592c35e">  648</a></span>&#160;            <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">iterator</a> <a class="code" href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a3c64904d713ee57bb2c81b81a592c35e">end</a>()</div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;            {</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;                <span class="keywordflow">return</span> std::filesystem::directory_iterator();</div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;            }</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160; </div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;            std::filesystem::path p_;</div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;        };</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;    }    <span class="comment">// namespace utils</span></div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasshal_1_1utils_1_1RecursiveDirectoryRange_html_a6856c4aac06e17832b187c698cdbc082"><div class="ttname"><a href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a6856c4aac06e17832b187c698cdbc082">hal::utils::RecursiveDirectoryRange::begin</a></div><div class="ttdeci">iterator begin()</div><div class="ttdef"><b>Definition:</b> utils.h:593</div></div>
+<div class="ttc" id="aclasshal_1_1utils_1_1RecursiveDirectoryRange_html_a6856c4aac06e17832b187c698cdbc082"><div class="ttname"><a href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a6856c4aac06e17832b187c698cdbc082">hal::utils::RecursiveDirectoryRange::begin</a></div><div class="ttdeci">iterator begin()</div><div class="ttdef"><b>Definition:</b> utils.h:595</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_acbdd92cdaa605c9686aa1afc89ccd289"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#acbdd92cdaa605c9686aa1afc89ccd289">hal::utils::file_exists</a></div><div class="ttdeci">CORE_API bool file_exists(const std::string &amp;filename)</div><div class="ttdef"><b>Definition:</b> utils.cpp:28</div></div>
+<div class="ttc" id="aclasshal_1_1utils_1_1RecursiveDirectoryRange_html_a96a1554b62cd303048c1928ff2ed6603"><div class="ttname"><a href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a96a1554b62cd303048c1928ff2ed6603">hal::utils::RecursiveDirectoryRange::RecursiveDirectoryRange</a></div><div class="ttdeci">RecursiveDirectoryRange(std::filesystem::path path)</div><div class="ttdef"><b>Definition:</b> utils.h:585</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a5e4955372961aa67900c3baf70d82cb7"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a5e4955372961aa67900c3baf70d82cb7">hal::utils::get_open_source_licenses</a></div><div class="ttdeci">CORE_API std::string get_open_source_licenses()</div><div class="ttdef"><b>Definition:</b> utils.cpp:255</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_a25f9f24b47512daf25a4a192486c26c4"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a25f9f24b47512daf25a4a192486c26c4">hal::utils::ltrim</a></div><div class="ttdeci">CORE_API T ltrim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> utils.h:256</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_a25f9f24b47512daf25a4a192486c26c4"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a25f9f24b47512daf25a4a192486c26c4">hal::utils::ltrim</a></div><div class="ttdeci">CORE_API T ltrim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> utils.h:257</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a38ecafc501af44b5a045df327490d4c2"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a38ecafc501af44b5a045df327490d4c2">hal::utils::get_first_directory_exists</a></div><div class="ttdeci">CORE_API std::filesystem::path get_first_directory_exists(std::vector&lt; std::filesystem::path &gt; path_hints)</div><div class="ttdef"><b>Definition:</b> utils.cpp:186</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_a49847bd2008decfefbfeb8edc1c9d0c0"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">hal::utils::rtrim</a></div><div class="ttdeci">CORE_API T rtrim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> utils.h:278</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_a49847bd2008decfefbfeb8edc1c9d0c0"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">hal::utils::rtrim</a></div><div class="ttdeci">CORE_API T rtrim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> utils.h:279</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a35ff967d30ff87d1273d853db1e488d8"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a35ff967d30ff87d1273d853db1e488d8">hal::utils::get_default_log_directory</a></div><div class="ttdeci">CORE_API std::filesystem::path get_default_log_directory(std::filesystem::path source_file=&quot;&quot;)</div><div class="ttdef"><b>Definition:</b> utils.cpp:158</div></div>
 <div class="ttc" id="aclasshal_1_1utils_1_1RecursiveDirectoryRange_html_a3352aa0beb99907d05f526cad21a78e9"><div class="ttname"><a href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a3352aa0beb99907d05f526cad21a78e9">hal::utils::RecursiveDirectoryRange::iterator</a></div><div class="ttdeci">std::filesystem::recursive_directory_iterator iterator</div><div class="ttdef"><b>Definition:</b> utils.h:578</div></div>
 <div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> defines.h:43</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a34ef9fc77538514e7bb5a9fe55275550"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a34ef9fc77538514e7bb5a9fe55275550">hal::utils::set_bit</a></div><div class="ttdeci">CORE_API u64 set_bit(const u64 value, const u64 index)</div><div class="ttdef"><b>Definition:</b> utils.h:65</div></div>
-<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html_ac43df8231050de5bed11513bd0980b2a"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac43df8231050de5bed11513bd0980b2a">hal::utils::DirectoryRange::DirectoryRange</a></div><div class="ttdeci">DirectoryRange(std::filesystem::path p)</div><div class="ttdef"><b>Definition:</b> utils.h:620</div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a596f16ce81c40fb40fe94dd41d5b5ab7"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a596f16ce81c40fb40fe94dd41d5b5ab7">hal::utils::get_base_directory</a></div><div class="ttdeci">CORE_API std::filesystem::path get_base_directory()</div><div class="ttdef"><b>Definition:</b> utils.cpp:89</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a3f382fca6115b61ad29b49e960495742"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a3f382fca6115b61ad29b49e960495742">hal::utils::get_file</a></div><div class="ttdeci">CORE_API std::filesystem::path get_file(std::string file_name, std::vector&lt; std::filesystem::path &gt; path_hints)</div><div class="ttdef"><b>Definition:</b> utils.cpp:199</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_a3b3244bd8945cb61cfa299c32686a601"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">hal::utils::trim</a></div><div class="ttdeci">CORE_API T trim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> utils.h:300</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_a3b3244bd8945cb61cfa299c32686a601"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">hal::utils::trim</a></div><div class="ttdeci">CORE_API T trim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> utils.h:301</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a1974cb00df4f8ecb41f85ab1cb1e5df7"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a1974cb00df4f8ecb41f85ab1cb1e5df7">hal::utils::get_share_directory</a></div><div class="ttdeci">CORE_API std::filesystem::path get_share_directory()</div><div class="ttdef"><b>Definition:</b> utils.cpp:128</div></div>
-<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html">hal::utils::DirectoryRange</a></div><div class="ttdef"><b>Definition:</b> utils.h:612</div></div>
+<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html">hal::utils::DirectoryRange</a></div><div class="ttdef"><b>Definition:</b> utils.h:617</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a04466a8dc8315116fb04b5181d8e234a"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a04466a8dc8315116fb04b5181d8e234a">hal::utils::get_config_directory</a></div><div class="ttdeci">CORE_API std::filesystem::path get_config_directory()</div><div class="ttdef"><b>Definition:</b> utils.cpp:143</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_aae9f42db99741088a4f442129ac332c3"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#aae9f42db99741088a4f442129ac332c3">hal::utils::get_binary_directory</a></div><div class="ttdeci">CORE_API std::filesystem::path get_binary_directory()</div><div class="ttdef"><b>Definition:</b> utils.cpp:61</div></div>
-<div class="ttc" id="aclasshal_1_1utils_1_1RecursiveDirectoryRange_html_ae097b80b9466bc95462704458b31f37f"><div class="ttname"><a href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#ae097b80b9466bc95462704458b31f37f">hal::utils::RecursiveDirectoryRange::RecursiveDirectoryRange</a></div><div class="ttdeci">RecursiveDirectoryRange(std::filesystem::path p)</div><div class="ttdef"><b>Definition:</b> utils.h:583</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_ad08c09cde6e4c84be543db4fac49f08c"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#ad08c09cde6e4c84be543db4fac49f08c">hal::utils::to_vector</a></div><div class="ttdeci">CORE_API std::vector&lt; T &gt; to_vector(const Container&lt; T, Args... &gt; &amp;container)</div><div class="ttdef"><b>Definition:</b> utils.h:439</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_ad08c09cde6e4c84be543db4fac49f08c"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#ad08c09cde6e4c84be543db4fac49f08c">hal::utils::to_vector</a></div><div class="ttdeci">CORE_API std::vector&lt; T &gt; to_vector(const Container&lt; T, Args... &gt; &amp;container)</div><div class="ttdef"><b>Definition:</b> utils.h:440</div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_ab0b52723214e8a9dbff003c362155fac"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#ab0b52723214e8a9dbff003c362155fac">hal::utils::get_plugin_directories</a></div><div class="ttdeci">CORE_API std::vector&lt; std::filesystem::path &gt; get_plugin_directories()</div><div class="ttdef"><b>Definition:</b> utils.cpp:174</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_ac066333866ab6d67d66f1d9ec5671d79"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#ac066333866ab6d67d66f1d9ec5671d79">hal::utils::is_floating_point</a></div><div class="ttdeci">CORE_API bool is_floating_point(const T &amp;s)</div><div class="ttdef"><b>Definition:</b> utils.h:161</div></div>
-<div class="ttc" id="aclasshal_1_1utils_1_1RecursiveDirectoryRange_html_a56f2de338dc17a167719fb5cfc4f1ebd"><div class="ttname"><a href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a56f2de338dc17a167719fb5cfc4f1ebd">hal::utils::RecursiveDirectoryRange::end</a></div><div class="ttdeci">iterator end()</div><div class="ttdef"><b>Definition:</b> utils.h:603</div></div>
+<div class="ttc" id="aclasshal_1_1utils_1_1RecursiveDirectoryRange_html_a56f2de338dc17a167719fb5cfc4f1ebd"><div class="ttname"><a href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a56f2de338dc17a167719fb5cfc4f1ebd">hal::utils::RecursiveDirectoryRange::end</a></div><div class="ttdeci">iterator end()</div><div class="ttdef"><b>Definition:</b> utils.h:605</div></div>
 <div class="ttc" id="aarch__linux_8h_html_afea66f9a6812c2354b544f31910fd72f"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a></div><div class="ttdeci">#define CORE_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:26</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_a0b35fa35b17eeadefc578daab0de6c06"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">hal::utils::replace</a></div><div class="ttdeci">CORE_API T replace(const T &amp;str, const T &amp;search, const T &amp;replace)</div><div class="ttdef"><b>Definition:</b> utils.h:324</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_a0b35fa35b17eeadefc578daab0de6c06"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">hal::utils::replace</a></div><div class="ttdeci">CORE_API T replace(const T &amp;str, const T &amp;search, const T &amp;replace)</div><div class="ttdef"><b>Definition:</b> utils.h:325</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a2b0a5b8e62f97d9e4ce5eefc428b0a2f"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a2b0a5b8e62f97d9e4ce5eefc428b0a2f">hal::utils::which</a></div><div class="ttdeci">CORE_API std::filesystem::path which(const std::string &amp;name, const std::string &amp;path=&quot;&quot;)</div><div class="ttdef"><b>Definition:</b> utils.cpp:222</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_aeed9440c9520fc5c1297906c2487253b"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#aeed9440c9520fc5c1297906c2487253b">hal::utils::get_user_share_directory</a></div><div class="ttdeci">CORE_API std::filesystem::path get_user_share_directory()</div><div class="ttdef"><b>Definition:</b> utils.cpp:136</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_ab1faa0b1fbf4a02f7cd2f9640ebf4989"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#ab1faa0b1fbf4a02f7cd2f9640ebf4989">hal::utils::get_gate_library_directories</a></div><div class="ttdeci">CORE_API std::vector&lt; std::filesystem::path &gt; get_gate_library_directories()</div><div class="ttdef"><b>Definition:</b> utils.cpp:165</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a4a7452b760ebd68235319a6db5ff8965"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a4a7452b760ebd68235319a6db5ff8965">hal::utils::toggle_bit</a></div><div class="ttdeci">CORE_API u64 toggle_bit(const u64 value, const u64 index)</div><div class="ttdef"><b>Definition:</b> utils.h:89</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_a63e9eeee5acde021a4c6643e679531c8"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">hal::utils::join</a></div><div class="ttdeci">CORE_API std::string join(const std::string &amp;joiner, const T &amp;items, const Transform &amp;transform)</div><div class="ttdef"><b>Definition:</b> utils.h:353</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_a63e9eeee5acde021a4c6643e679531c8"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">hal::utils::join</a></div><div class="ttdeci">CORE_API std::string join(const std::string &amp;joiner, const T &amp;items, const Transform &amp;transform)</div><div class="ttdef"><b>Definition:</b> utils.h:354</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a2ca8da557f49866efbd3d79be8bf5815"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a2ca8da557f49866efbd3d79be8bf5815">hal::utils::starts_with</a></div><div class="ttdeci">CORE_API bool starts_with(const T &amp;s, const T &amp;start)</div><div class="ttdef"><b>Definition:</b> utils.h:122</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a0de77a47a2551c69619fd6e3fce84674"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a0de77a47a2551c69619fd6e3fce84674">hal::utils::ends_with</a></div><div class="ttdeci">CORE_API bool ends_with(const T &amp;s, const T &amp;end)</div><div class="ttdef"><b>Definition:</b> utils.h:102</div></div>
-<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html_a3c64904d713ee57bb2c81b81a592c35e"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a3c64904d713ee57bb2c81b81a592c35e">hal::utils::DirectoryRange::end</a></div><div class="ttdeci">iterator end()</div><div class="ttdef"><b>Definition:</b> utils.h:641</div></div>
+<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html_a3c64904d713ee57bb2c81b81a592c35e"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a3c64904d713ee57bb2c81b81a592c35e">hal::utils::DirectoryRange::end</a></div><div class="ttdeci">iterator end()</div><div class="ttdef"><b>Definition:</b> utils.h:648</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_a0a841fbbc1aae2637aedb4970f07ef95"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a0a841fbbc1aae2637aedb4970f07ef95">hal::utils::folder_exists_and_is_accessible</a></div><div class="ttdeci">CORE_API bool folder_exists_and_is_accessible(const std::filesystem::path &amp;path)</div><div class="ttdef"><b>Definition:</b> utils.cpp:34</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a99df1ac028bf7f9696ea4c631ff0ff38"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a99df1ac028bf7f9696ea4c631ff0ff38">hal::utils::clear_bit</a></div><div class="ttdeci">CORE_API u64 clear_bit(const u64 value, const u64 index)</div><div class="ttdef"><b>Definition:</b> utils.h:77</div></div>
-<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html_ac58e3e6f46f8e5a746540806063aac58"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">hal::utils::DirectoryRange::iterator</a></div><div class="ttdeci">std::filesystem::directory_iterator iterator</div><div class="ttdef"><b>Definition:</b> utils.h:615</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_ac4b3b46a9b2575322a0a296daac79828"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#ac4b3b46a9b2575322a0a296daac79828">hal::utils::to_upper</a></div><div class="ttdeci">CORE_API T to_upper(const T &amp;s)</div><div class="ttdef"><b>Definition:</b> utils.h:389</div></div>
-<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html_a7f18aefae3f1ef9085c253cd51490bf0"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a7f18aefae3f1ef9085c253cd51490bf0">hal::utils::DirectoryRange::begin</a></div><div class="ttdeci">iterator begin()</div><div class="ttdef"><b>Definition:</b> utils.h:631</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_a43bf1ffd1c76cf2b5809c2346dd561c4"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a43bf1ffd1c76cf2b5809c2346dd561c4">hal::utils::split</a></div><div class="ttdeci">CORE_API std::vector&lt; T &gt; split(const T &amp;s, const char delim, bool obey_brackets=false)</div><div class="ttdef"><b>Definition:</b> utils.h:179</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_ace98e7488d23b5183c7acaf9770ed498"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#ace98e7488d23b5183c7acaf9770ed498">hal::utils::folder_exists_and_is_accessible</a></div><div class="ttdeci">CORE_API bool folder_exists_and_is_accessible(const std::filesystem::path &amp;folder)</div><div class="ttdef"><b>Definition:</b> utils.cpp:34</div></div>
+<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html_ac58e3e6f46f8e5a746540806063aac58"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ac58e3e6f46f8e5a746540806063aac58">hal::utils::DirectoryRange::iterator</a></div><div class="ttdeci">std::filesystem::directory_iterator iterator</div><div class="ttdef"><b>Definition:</b> utils.h:620</div></div>
+<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html_ab98604808d3da3e5492578bfc9f2cb3e"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#ab98604808d3da3e5492578bfc9f2cb3e">hal::utils::DirectoryRange::DirectoryRange</a></div><div class="ttdeci">DirectoryRange(std::filesystem::path path)</div><div class="ttdef"><b>Definition:</b> utils.h:627</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_ac4b3b46a9b2575322a0a296daac79828"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#ac4b3b46a9b2575322a0a296daac79828">hal::utils::to_upper</a></div><div class="ttdeci">CORE_API T to_upper(const T &amp;s)</div><div class="ttdef"><b>Definition:</b> utils.h:390</div></div>
+<div class="ttc" id="aclasshal_1_1utils_1_1DirectoryRange_html_a7f18aefae3f1ef9085c253cd51490bf0"><div class="ttname"><a href="../../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a7f18aefae3f1ef9085c253cd51490bf0">hal::utils::DirectoryRange::begin</a></div><div class="ttdeci">iterator begin()</div><div class="ttdef"><b>Definition:</b> utils.h:638</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_a43bf1ffd1c76cf2b5809c2346dd561c4"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a43bf1ffd1c76cf2b5809c2346dd561c4">hal::utils::split</a></div><div class="ttdeci">CORE_API std::vector&lt; T &gt; split(const T &amp;s, const char delim, bool obey_brackets=false)</div><div class="ttdef"><b>Definition:</b> utils.h:180</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a5bb3205d9597f2279b18a99fdd7affa6"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a5bb3205d9597f2279b18a99fdd7affa6">hal::utils::get_bit</a></div><div class="ttdeci">CORE_API u64 get_bit(const u64 value, const u64 index)</div><div class="ttdef"><b>Definition:</b> utils.h:53</div></div>
 <div class="ttc" id="adefines_8h_html_a1af9f95651e921615e75917a6dd1b574"><div class="ttname"><a href="../../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a></div><div class="ttdeci">uint64_t u64</div><div class="ttdef"><b>Definition:</b> defines.h:44</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_af26065b993bd3dcb5d3a0ab60db751f3"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#af26065b993bd3dcb5d3a0ab60db751f3">hal::utils::get_user_config_directory</a></div><div class="ttdeci">CORE_API std::filesystem::path get_user_config_directory()</div><div class="ttdef"><b>Definition:</b> utils.cpp:151</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a23c89e12c9dca94e778f13090de02f09"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a23c89e12c9dca94e778f13090de02f09">hal::utils::get_library_directory</a></div><div class="ttdeci">CORE_API std::filesystem::path get_library_directory()</div><div class="ttdef"><b>Definition:</b> utils.cpp:118</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_a976e31871ae699ca28b23136fd728ee5"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">hal::utils::to_lower</a></div><div class="ttdeci">CORE_API T to_lower(const T &amp;s)</div><div class="ttdef"><b>Definition:</b> utils.h:403</div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_a482e8e80d0fd8189b7b0f119afd74c61"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">hal::utils::num_of_occurrences</a></div><div class="ttdeci">CORE_API u32 num_of_occurrences(const T &amp;s, const T &amp;substr)</div><div class="ttdef"><b>Definition:</b> utils.h:418</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_a976e31871ae699ca28b23136fd728ee5"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">hal::utils::to_lower</a></div><div class="ttdeci">CORE_API T to_lower(const T &amp;s)</div><div class="ttdef"><b>Definition:</b> utils.h:404</div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_a482e8e80d0fd8189b7b0f119afd74c61"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">hal::utils::num_of_occurrences</a></div><div class="ttdeci">CORE_API u32 num_of_occurrences(const T &amp;s, const T &amp;substr)</div><div class="ttdef"><b>Definition:</b> utils.h:419</div></div>
 <div class="ttc" id="aclasshal_1_1utils_1_1RecursiveDirectoryRange_html"><div class="ttname"><a href="../../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html">hal::utils::RecursiveDirectoryRange</a></div><div class="ttdef"><b>Definition:</b> utils.h:575</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a94d00e2a6c7e4945e1301d5e96377459"><div class="ttname"><a href="../../d4/dd6/namespacehal_1_1utils.html#a94d00e2a6c7e4945e1301d5e96377459">hal::utils::is_integer</a></div><div class="ttdeci">CORE_API bool is_integer(const T &amp;s)</div><div class="ttdef"><b>Definition:</b> utils.h:141</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:06 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

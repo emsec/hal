@@ -1,18 +1,18 @@
 <map id="hal_core/netlist/gate_library/gate_type/gate_type_lut.h" name="hal_core/netlist/gate_library/gate_type/gate_type_lut.h">
 <area shape="rect" id="node1" title=" " alt="" coords="535,5,708,61"/>
 <area shape="rect" id="node2" href="$dc/d6d/boolean__function_8h.html" title=" " alt="" coords="405,213,584,255"/>
-<area shape="rect" id="node10" title=" " alt="" coords="703,303,827,329"/>
-<area shape="rect" id="node11" title=" " alt="" coords="9,303,124,329"/>
+<area shape="rect" id="node11" title=" " alt="" coords="703,303,827,329"/>
+<area shape="rect" id="node12" title=" " alt="" coords="9,303,124,329"/>
 <area shape="rect" id="node14" href="$db/dd6/gate__type_8h.html" title=" " alt="" coords="659,109,832,165"/>
-<area shape="rect" id="node15" title=" " alt="" coords="840,221,899,247"/>
+<area shape="rect" id="node16" title=" " alt="" coords="840,221,899,247"/>
 <area shape="rect" id="node3" href="$d8/db0/defines_8h.html" title=" " alt="" coords="149,303,289,329"/>
 <area shape="rect" id="node8" title=" " alt="" coords="313,303,399,329"/>
 <area shape="rect" id="node9" title=" " alt="" coords="423,303,492,329"/>
-<area shape="rect" id="node12" title=" " alt="" coords="517,303,593,329"/>
+<area shape="rect" id="node10" title=" " alt="" coords="517,303,593,329"/>
 <area shape="rect" id="node13" title=" " alt="" coords="617,303,679,329"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,377,96,404"/>
 <area shape="rect" id="node5" title=" " alt="" coords="121,377,207,404"/>
 <area shape="rect" id="node6" title=" " alt="" coords="231,377,318,404"/>
 <area shape="rect" id="node7" title=" " alt="" coords="342,377,413,404"/>
-<area shape="rect" id="node16" title=" " alt="" coords="765,221,816,247"/>
+<area shape="rect" id="node15" title=" " alt="" coords="765,221,816,247"/>
 </map>

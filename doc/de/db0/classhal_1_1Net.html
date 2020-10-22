@@ -72,7 +72,7 @@ $(function() {
 <a href="#friends">Friends</a> &#124;
 <a href="../../db/dda/classhal_1_1Net-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hal::Net Class Reference<div class="ingroups"><a class="el" href="../../de/d89/group__netlist.html">Netlist</a></div></div>  </div>
+<div class="title">hal::Net Class Reference<div class="ingroups"><a class="el" href="../../d0/de1/group__core.html">HAL Core</a> &raquo; <a class="el" href="../../de/d89/group__netlist.html">Netlist</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -82,7 +82,7 @@ Collaboration diagram for hal::Net:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d7/d18/classhal_1_1Net__coll__graph.png" border="0" usemap="#hal_1_1Net_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1Net_coll__map" id="hal_1_1Net_coll__map">
-<area shape="rect" title=" " alt="" coords="5,219,227,663"/>
+<area shape="rect" title=" " alt="" coords="5,219,227,677"/>
 <area shape="rect" href="../../d1/d7d/classhal_1_1DataContainer.html" title=" " alt="" coords="37,5,195,171"/>
 </map>
 </div>
@@ -97,6 +97,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6d3751bef8641fc34323e5773ccb4ce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1703f0e71b660976800a3329264106cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#a1703f0e71b660976800a3329264106cc">set_name</a> (const std::string &amp;name)</td></tr>
 <tr class="separator:a1703f0e71b660976800a3329264106cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a871510d25bdfd08d2b40e5013868a13c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d2/d20/classhal_1_1Grouping.html">Grouping</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#a871510d25bdfd08d2b40e5013868a13c">get_grouping</a> () const</td></tr>
+<tr class="separator:a871510d25bdfd08d2b40e5013868a13c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa62fea0598dfe92f6a950ada68446eb4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d9/df8/classhal_1_1Endpoint.html">Endpoint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#aa62fea0598dfe92f6a950ada68446eb4">add_source</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate, const std::string &amp;pin)</td></tr>
 <tr class="separator:aa62fea0598dfe92f6a950ada68446eb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a1392ffea2809f992febeb11557af6a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/db0/classhal_1_1Net.html#a1a1392ffea2809f992febeb11557af6a">remove_source</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate, const std::string &amp;pin)</td></tr>
@@ -179,10 +181,10 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the unique id of the net.</p>
-<dl class="section return"><dt>Returns</dt><dd>The net's id. </dd></dl>
+<p>Get the unique id of the net.</p>
+<dl class="section return"><dt>Returns</dt><dd>The unique id. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d1/d10/classhal_1_1Module.html#a5c6e10f6a0b7b21c6a7357ea0dcb9a17">hal::Module::get_input_port_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a28bdb54aea5e9b7cd4981f9c187fbc96">hal::Module::get_output_port_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a9b2353349272a95760d03c118900f4cc">hal::Netlist::mark_global_input_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ab5341a316daab6aafceac102a744c8ee">hal::Netlist::mark_global_output_net()</a>, <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a6503f5b2ad22fdc5d235ab4f5bcf24ec">hal::Module::set_input_port_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a85f8916ad7d510b04ee4c81f66303f91">hal::Module::set_output_port_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aef44997a66ed0834dd0893092f2f7bdc">hal::Netlist::unmark_global_input_net()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ac796504ffcf3d4d3748cc9b7213b22e1">hal::Netlist::unmark_global_output_net()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d2/d20/classhal_1_1Grouping.html#ac8d5873f9cf2b8e266624018e242f051">hal::Grouping::contains_net()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a5c6e10f6a0b7b21c6a7357ea0dcb9a17">hal::Module::get_input_port_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a28bdb54aea5e9b7cd4981f9c187fbc96">hal::Module::get_output_port_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a9b2353349272a95760d03c118900f4cc">hal::Netlist::mark_global_input_net()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ab5341a316daab6aafceac102a744c8ee">hal::Netlist::mark_global_output_net()</a>, <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a6503f5b2ad22fdc5d235ab4f5bcf24ec">hal::Module::set_input_port_name()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a85f8916ad7d510b04ee4c81f66303f91">hal::Module::set_output_port_name()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aef44997a66ed0834dd0893092f2f7bdc">hal::Netlist::unmark_global_input_net()</a>, and <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ac796504ffcf3d4d3748cc9b7213b22e1">hal::Netlist::unmark_global_output_net()</a>.</p>
 
 </div>
 </div>
@@ -200,8 +202,10 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the parent netlist of the net.</p>
+<p>Get the netlist this net is associated with.</p>
 <dl class="section return"><dt>Returns</dt><dd>The netlist. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
 
 </div>
 </div>
@@ -249,7 +253,29 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d0/de1/group__core.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, <a class="el" href="../../de/d4d/namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4edaf06e538c44d7cdeea37fca5aa10771cc">hal::gate_event_handler::name_changed</a>, <a class="el" href="../../da/ddd/namespacehal_1_1net__event__handler.html#af56289bff61f93851f47dd77332d21aa">hal::net_event_handler::notify()</a>, and <a class="el" href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">hal::utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>, <a class="el" href="../../de/d4d/namespacehal_1_1gate__event__handler.html#a9f136def1005f377aca10767cdcaa4edaf06e538c44d7cdeea37fca5aa10771cc">hal::gate_event_handler::name_changed</a>, <a class="el" href="../../da/ddd/namespacehal_1_1net__event__handler.html#af56289bff61f93851f47dd77332d21aa">hal::net_event_handler::notify()</a>, and <a class="el" href="../../d4/dd6/namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">hal::utils::trim()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
+
+</div>
+</div>
+<a id="a871510d25bdfd08d2b40e5013868a13c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a871510d25bdfd08d2b40e5013868a13c">&#9670;&nbsp;</a></span>get_grouping()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d2/d20/classhal_1_1Grouping.html">Grouping</a> * hal::Net::get_grouping </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the grouping in which this net is contained. <br  />
+ If no grouping contains this gate, a nullptr is returned.</p>
+<dl class="section return"><dt>Returns</dt><dd>The grouping. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
 
@@ -280,11 +306,11 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add a source to this net.</p>
+<p>Add a source-endpoint to this net.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The source gate. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The input pin of the gate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The output pin of the source gate. </td></tr>
   </table>
   </dd>
 </dl>
@@ -319,11 +345,11 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Remove a source from this net.</p>
+<p>Remove a source-endpoint from this net.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The source gate. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The input pin of the gate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The output pin of the source gate. </td></tr>
   </table>
   </dd>
 </dl>
@@ -348,7 +374,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Remove a source endpoint from this net. If the endpoint is a destination-endpoint this function aborts.</p>
+<p>Remove a source endpoint from this net. <br  />
+ If the endpoint is no source-endpoint of the net this function aborts.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ep</td><td>- The source endpoint. </td></tr>
@@ -384,7 +411,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Check whether a gate is a source of this net.</p>
+<p>Check whether an endpoint, given by its gate and pin type, is a source-endpoint of this net.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The source gate. </td></tr>
@@ -413,7 +440,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Check whether an endpoint is a source of this net. If the endpoint is a destination-endpoint this function aborts.</p>
+<p>Check whether an endpoint is a source-endpoint of this net.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ep</td><td>- The endpoint. </td></tr>
@@ -422,7 +449,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the endpoint is a source of this net. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">hal::Endpoint::is_source_pin()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+<p class="reference">References <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">hal::Endpoint::is_source_pin()</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
 
 </div>
 </div>
@@ -444,7 +471,7 @@ Friends</h2></td></tr>
  Faster than <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">get_sources()</a>.size().</p>
 <dl class="section return"><dt>Returns</dt><dd>The number of sources of this net. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../de/db0/classhal_1_1Net.html#a6c37f7b0c730e6fc541350e02740dfa9">is_unrouted()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a388b5f96b4c761a64b2c42706640be4d">hal::netlist_utils::get_subgraph_function()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a6c37f7b0c730e6fc541350e02740dfa9">is_unrouted()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
 
 </div>
 </div>
@@ -463,16 +490,17 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the vector of sources of the net.</p>
+<p>Get a list of sources of the net. <br  />
+ A filter can be supplied which filters out all potential values that return false.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- a filter for endpoints. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A filter for endpoints. Leave empty for no filtering. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of source endpoints. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a388b5f96b4c761a64b2c42706640be4d">hal::netlist_utils::get_subgraph_function()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
 
 </div>
 </div>
@@ -490,10 +518,13 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>DEPRECATED Get the (first) src of the net. If there was no src assigned, the gate element of the returned endpoint is a nullptr. If the net is multi-driven a warning is printed.</p>
+<dl class="deprecated"><dt><b><a class="el" href="../../da/d58/deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>DEPRECATED <br  />
+ Get the (first) source-endpoint of the net. <br  />
+ If there was no source assigned, the gate element of the returned endpoint is a nullptr. <br  />
+ If the net is multi-driven a warning is printed.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The (first) source endpoint. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d0/de1/group__core.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>.</p>
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
 
@@ -524,11 +555,11 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add a destination to this net.</p>
+<p>Add a destination-endpoint to this net.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The destination gate. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The input pin of the gate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The input pin of the destination gate. </td></tr>
   </table>
   </dd>
 </dl>
@@ -567,7 +598,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The destination gate. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The input pin of the gate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The input pin of the destination gate. </td></tr>
   </table>
   </dd>
 </dl>
@@ -592,7 +623,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Remove a destination endpoint from this net. If the endpoint is a source-endpoint this function aborts.</p>
+<p>Remove a destination-endpoint from this net. <br  />
+ If the endpoint is no destination-endpoint of the net this function aborts.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ep</td><td>- The destination endpoint. </td></tr>
@@ -628,11 +660,11 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Check whether a gate is a destination of this net.</p>
+<p>Check whether an endpoint, given by its gate and pin type, is a destination-endpoint of this net.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The destination gate. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The destination output pin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin</td><td>- The destination input pin. </td></tr>
   </table>
   </dd>
 </dl>
@@ -657,7 +689,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Check whether an endpoint is a destination of this net. If the endpoint is a source-endpoint this function aborts.</p>
+<p>Check whether an endpoint is a destination-endpoint of this net.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ep</td><td>- The endpoint. </td></tr>
@@ -666,7 +698,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the endpoint is a destination of this net. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">hal::Endpoint::is_destination_pin()</a>, and <a class="el" href="../../d0/de1/group__core.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+<p class="reference">References <a class="el" href="../../d9/df8/classhal_1_1Endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">hal::Endpoint::is_destination_pin()</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
 
 </div>
 </div>
@@ -707,14 +739,15 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the vector of destinations of the net.</p>
+<p>Get a list of destinations of the net. <br  />
+ A filter can be supplied which filters out all potential values that return false.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- a filter for endpoints. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- A filter for endpoints. Leave empty for no filtering. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A vector of destination endpoints. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector of destination-endpoints. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a434508b48c606a9d6f30e5f2f39730b5">hal::net_init()</a>.</p>
 
@@ -734,7 +767,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Check whether the net is routed, i.e. it has no source or the no destinations.</p>
+<p>Check whether the net is unrouted, i.e. it has no source or no destination.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if the net is unrouted. </dd></dl>
 
 <p class="reference">References <a class="el" href="../../de/db0/classhal_1_1Net.html#a64c732bd554df5a840aa5d4ec38eee0a">get_num_of_destinations()</a>, and <a class="el" href="../../de/db0/classhal_1_1Net.html#ae13cde7edde05bcd731a564d41e4d58e">get_num_of_sources()</a>.</p>
@@ -911,7 +944,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 19 2020 19:06:59 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 07:37:07 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
