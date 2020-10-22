@@ -118,9 +118,8 @@ namespace hal
                 :rtype: list[set[hal_py.get_gate()]]
                 )");
 
-        // #ifndef PYBIND11_MODULE
-        //         return m.ptr();
-        // #endif    // PYBIND11_MODULE
-        //     }
+#ifndef PYBIND11_MODULE
+        return m.ptr();
+#endif    // PYBIND11_MODULE
     }
 }    // namespace hal

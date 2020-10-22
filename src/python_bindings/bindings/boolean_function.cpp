@@ -13,7 +13,7 @@ namespace hal
             .export_values();
 
         py_boolean_function.def(py::init<>(), R"(
-            Construct an empty Boolean function and thus evaluates to X (undefined).
+            Construct an empty Boolean function and thus evaluates to ``X`` (undefined).
         )");
 
         py_boolean_function.def(py::init<const std::string&>(), py::arg("variable_name"), R"(
@@ -69,16 +69,16 @@ namespace hal
         )");
 
         py_boolean_function.def("is_constant_one", &BooleanFunction::is_constant_one, R"(
-            Check whether the Boolean function always evaluates to ONE.
+            Check whether the Boolean function always evaluates to ``ONE``.
 
-            :returns: True if function is constant ONE, false otherwise.
+            :returns: True if function is constant ``ONE``, false otherwise.
             :rtype: bool
         )");
 
         py_boolean_function.def("is_constant_zero", &BooleanFunction::is_constant_zero, R"(
-            Check whether the Boolean function always evaluates to ZERO.
+            Check whether the Boolean function always evaluates to ``ZERO``.
 
-            :returns: True if function is constant ZERO, false otherwise.
+            :returns: True if function is constant ``ZERO``, false otherwise.
             :rtype: bool
         )");
 
@@ -104,12 +104,12 @@ namespace hal
 
         py_boolean_function.def_static("from_string", &BooleanFunction::from_string, py::arg("expression"), py::arg("variable_names"), R"(
             Parse a function from a string representation.
-            Supported operators are  NOT (\"!\", \"'\"), AND (\"&\", \"*\", \" \"), OR (\"\|\", \"+\"), XOR (\"^\") and brackets (\"(\", \")\").
-            Operator precedence is '!' > '&' > '^' > '\|'.
+            Supported operators are  NOT (``!``, ``'``), AND (``&``, ``*``, ``␣``), OR (``|``, ``+``), XOR (``^``) and brackets (``(``, ``)``).
+            Operator precedence is ``!`` > ``&`` > ``^`` > ``|``.
 
-            Since, for example, '(' is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.
+            Since, for example, ``(`` is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.
 
-            If there is an error during bracket matching, 'X' is returned for that part.
+            If there is an error during bracket matching, ``X`` is returned for that part.
 
             :param str expression: String containing a Boolean function.
             :param list[str] variable_names: List of variable names.
