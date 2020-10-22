@@ -193,7 +193,7 @@ namespace hal
             log_info("dataflow", "");
         }
 
-        auto nl_copy = netlist_utils::create_deepcopy(nl);
+        auto nl_copy       = netlist_utils::copy_netlist(nl);
         auto netlist_abstr = dataflow::pre_processing::run(nl_copy.get());
 
         auto initial_grouping = netlist_abstr.utils->create_initial_grouping(netlist_abstr);
