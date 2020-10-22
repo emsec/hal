@@ -290,7 +290,7 @@ namespace hal
                     }
                     else
                     {
-                        clause &= !BooleanFunction(input);
+                        clause &= ~BooleanFunction(input);
                     }
                     input_values >>= 1;
                 }
