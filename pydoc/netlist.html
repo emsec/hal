@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist &mdash; hal_py v2.0.0-766-ged47aebc3 documentation</title>
+  <title>Netlist &mdash; hal_py v2.0.0-775-gcb932d460 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Boolean Function" href="boolean_function.html" />
+    <link rel="next" title="Netlist Utils" href="netlist_utils.html" />
     <link rel="prev" title="Endpoint" href="endpoint.html" /> 
 </head>
 
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-766-ged47aebc3
+                v2.0.0-775-gcb932d460
               </div>
             
           
@@ -91,6 +91,7 @@
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type.html">Gate Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_lut.html">Gate Type LUT</a></li>
@@ -557,6 +558,70 @@ The ID of the net is set automatically.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.Netlist.get_free_gate_ids">
+<code class="descname">get_free_gate_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Set[int]<a class="headerlink" href="#hal_py.Netlist.get_free_gate_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of all gate IDs that have previously been used but been freed ever since.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">All freed gate IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_free_grouping_ids">
+<code class="descname">get_free_grouping_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Set[int]<a class="headerlink" href="#hal_py.Netlist.get_free_grouping_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of all grouping IDs that have previously been used but been freed ever since.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">All freed grouping IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_free_module_ids">
+<code class="descname">get_free_module_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Set[int]<a class="headerlink" href="#hal_py.Netlist.get_free_module_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of all module IDs that have previously been used but been freed ever since.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">All freed module IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_free_net_ids">
+<code class="descname">get_free_net_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Set[int]<a class="headerlink" href="#hal_py.Netlist.get_free_net_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of all net IDs that have previously been used but been freed ever since.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">All freed net IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.Netlist.get_gate_by_id">
 <code class="descname">get_gate_by_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>gate_id: int</em><span class="sig-paren">)</span> &#x2192; hal::Gate<a class="headerlink" href="#hal_py.Netlist.get_gate_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the gate specified by the given ID.</p>
@@ -799,6 +864,70 @@ A filter can be applied to the result to only get nets matching the specified co
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.Netlist.get_next_gate_id">
+<code class="descname">get_next_gate_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Netlist.get_next_gate_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the gate ID following the highest currently used ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The next gate ID.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_next_grouping_id">
+<code class="descname">get_next_grouping_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Netlist.get_next_grouping_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the grouping ID following the highest currently used ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The next grouping ID.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_next_module_id">
+<code class="descname">get_next_module_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Netlist.get_next_module_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the module ID following the highest currently used ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The next module ID.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_next_net_id">
+<code class="descname">get_next_net_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Netlist.get_next_net_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the net ID following the highest currently used ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The next net ID.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.Netlist.get_top_module">
 <code class="descname">get_top_module</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; hal::Module<a class="headerlink" href="#hal_py.Netlist.get_top_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the top module of the netlist.</p>
@@ -877,6 +1006,70 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The net ID.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_used_gate_ids">
+<code class="descname">get_used_gate_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Set[int]<a class="headerlink" href="#hal_py.Netlist.get_used_gate_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of all currently used gate IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">All used gate IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_used_grouping_ids">
+<code class="descname">get_used_grouping_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Set[int]<a class="headerlink" href="#hal_py.Netlist.get_used_grouping_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of all currently used grouping IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">All used grouping IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_used_module_ids">
+<code class="descname">get_used_module_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Set[int]<a class="headerlink" href="#hal_py.Netlist.get_used_module_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of all currently used module IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">All used module IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.get_used_net_ids">
+<code class="descname">get_used_net_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Set[int]<a class="headerlink" href="#hal_py.Netlist.get_used_net_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of all currently used net IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">All used net IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -1256,6 +1449,62 @@ If not explicitly set, the ID defaults to 0.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.Netlist.set_free_gate_ids">
+<code class="descname">set_free_gate_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist, ids: Set[int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_free_gate_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a set of all gate IDs that have previously been used but been freed ever since.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – All freed gate IDs.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_free_grouping_ids">
+<code class="descname">set_free_grouping_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist, ids: Set[int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_free_grouping_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a set of all grouping IDs that have previously been used but been freed ever since.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – All freed grouping IDs.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_free_module_ids">
+<code class="descname">set_free_module_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist, ids: Set[int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_free_module_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a set of all module IDs that have previously been used but been freed ever since.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – All freed module IDs.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_free_net_ids">
+<code class="descname">set_free_net_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist, ids: Set[int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_free_net_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a set of all net IDs that have previously been used but been freed ever since.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – All freed net IDs.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.Netlist.set_id">
 <code class="descname">set_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>id: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the ID of the netlist to the specified value.</p>
@@ -1278,6 +1527,118 @@ If not explicitly set, the ID defaults to 0.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>hal_py.hal_path</em>) – The path to the input file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_next_gate_id">
+<code class="descname">set_next_gate_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>id: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_next_gate_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the gate ID following the highest currently used ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The next gate ID.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_next_grouping_id">
+<code class="descname">set_next_grouping_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>id: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_next_grouping_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the grouping ID following the highest currently used ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The next grouping ID.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_next_module_id">
+<code class="descname">set_next_module_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>id: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_next_module_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the module ID following the highest currently used ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The next module ID.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_next_net_id">
+<code class="descname">set_next_net_id</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>id: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_next_net_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the net ID following the highest currently used ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The next net ID.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_used_gate_ids">
+<code class="descname">set_used_gate_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist, ids: Set[int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_used_gate_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a set of all currently used gate IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – All used gate IDs.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_used_grouping_ids">
+<code class="descname">set_used_grouping_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist, ids: Set[int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_used_grouping_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a set of all currently used grouping IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – All used grouping IDs.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_used_module_ids">
+<code class="descname">set_used_module_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist, ids: Set[int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_used_module_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a set of all currently used module IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – All used module IDs.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Netlist.set_used_net_ids">
+<code class="descname">set_used_net_ids</code><span class="sig-paren">(</span><em>self: hal_py.Netlist, ids: Set[int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.set_used_net_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a set of all currently used net IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) – All used net IDs.</td>
 </tr>
 </tbody>
 </table>
@@ -1395,7 +1756,7 @@ If not explicitly set, the ID defaults to 0.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="boolean_function.html" class="btn btn-neutral float-right" title="Boolean Function" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="netlist_utils.html" class="btn btn-neutral float-right" title="Netlist Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="endpoint.html" class="btn btn-neutral float-left" title="Endpoint" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

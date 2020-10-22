@@ -82,7 +82,7 @@ Collaboration diagram for hal::Netlist:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/da5/classhal_1_1Netlist__coll__graph.png" border="0" usemap="#hal_1_1Netlist_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1Netlist_coll__map" id="hal_1_1Netlist_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,227,904"/>
+<area shape="rect" title=" " alt="" coords="5,5,227,1256"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -202,6 +202,54 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae41916880e2d766ab5367d26ee6cb2b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad160f871d2d498b67a64562404eb59e2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d2/d20/classhal_1_1Grouping.html">Grouping</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ad160f871d2d498b67a64562404eb59e2">get_groupings</a> (const std::function&lt; bool(<a class="el" href="../../d2/d20/classhal_1_1Grouping.html">Grouping</a> *)&gt; &amp;filter=nullptr) const</td></tr>
 <tr class="separator:ad160f871d2d498b67a64562404eb59e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4152742f2e30b4694ffb6b0632e6675"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ad4152742f2e30b4694ffb6b0632e6675">get_next_gate_id</a> () const</td></tr>
+<tr class="separator:ad4152742f2e30b4694ffb6b0632e6675"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c3928f77d98147ce5577f2b6defb65f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5c3928f77d98147ce5577f2b6defb65f">set_next_gate_id</a> (const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> id)</td></tr>
+<tr class="separator:a5c3928f77d98147ce5577f2b6defb65f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88bc7f3434b6fd4e08a97bccc141e0e2"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a88bc7f3434b6fd4e08a97bccc141e0e2">get_used_gate_ids</a> () const</td></tr>
+<tr class="separator:a88bc7f3434b6fd4e08a97bccc141e0e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16914d7332760bcbf7fd663a7dd537d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a16914d7332760bcbf7fd663a7dd537d5">set_used_gate_ids</a> (const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; ids)</td></tr>
+<tr class="separator:a16914d7332760bcbf7fd663a7dd537d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f7900676fda58ddebf01044f10a7312"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5f7900676fda58ddebf01044f10a7312">get_free_gate_ids</a> () const</td></tr>
+<tr class="separator:a5f7900676fda58ddebf01044f10a7312"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab501f50d05fdd684b7a5185c183c0e9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ab501f50d05fdd684b7a5185c183c0e9d">set_free_gate_ids</a> (const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; ids)</td></tr>
+<tr class="separator:ab501f50d05fdd684b7a5185c183c0e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a730c75bae75323000569ced56870e395"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a730c75bae75323000569ced56870e395">get_next_net_id</a> () const</td></tr>
+<tr class="separator:a730c75bae75323000569ced56870e395"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace12a9ca88fa9e93e65ec01e5d477317"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ace12a9ca88fa9e93e65ec01e5d477317">set_next_net_id</a> (const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> id)</td></tr>
+<tr class="separator:ace12a9ca88fa9e93e65ec01e5d477317"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a507df53724c277efd4aacfb512906d82"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a507df53724c277efd4aacfb512906d82">get_used_net_ids</a> () const</td></tr>
+<tr class="separator:a507df53724c277efd4aacfb512906d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1aa7685dac8e78db0d6cfb96ad9b053d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a1aa7685dac8e78db0d6cfb96ad9b053d">set_used_net_ids</a> (const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; ids)</td></tr>
+<tr class="separator:a1aa7685dac8e78db0d6cfb96ad9b053d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4e985be054eb29cf3a218edbe23f390"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ae4e985be054eb29cf3a218edbe23f390">get_free_net_ids</a> () const</td></tr>
+<tr class="separator:ae4e985be054eb29cf3a218edbe23f390"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a904bed7669e36ad72c6531fb205f2f76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a904bed7669e36ad72c6531fb205f2f76">set_free_net_ids</a> (const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; ids)</td></tr>
+<tr class="separator:a904bed7669e36ad72c6531fb205f2f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e2dfd8c4fa7be87c0a307eb643bdd06"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a7e2dfd8c4fa7be87c0a307eb643bdd06">get_next_module_id</a> () const</td></tr>
+<tr class="separator:a7e2dfd8c4fa7be87c0a307eb643bdd06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9af17a9e3eb966f7093a6ff66f92dd1c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a9af17a9e3eb966f7093a6ff66f92dd1c">set_next_module_id</a> (const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> id)</td></tr>
+<tr class="separator:a9af17a9e3eb966f7093a6ff66f92dd1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa33a445d0c41a8087e36068cf7cf8544"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aa33a445d0c41a8087e36068cf7cf8544">get_used_module_ids</a> () const</td></tr>
+<tr class="separator:aa33a445d0c41a8087e36068cf7cf8544"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0968fba28731bc4ed56e9a2f9b42816"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ad0968fba28731bc4ed56e9a2f9b42816">set_used_module_ids</a> (const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; ids)</td></tr>
+<tr class="separator:ad0968fba28731bc4ed56e9a2f9b42816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a349e8a245c3c36d2ce27196958dcd824"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a349e8a245c3c36d2ce27196958dcd824">get_free_module_ids</a> () const</td></tr>
+<tr class="separator:a349e8a245c3c36d2ce27196958dcd824"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ccd60af2c23cff09dc2440dd26be1c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a5ccd60af2c23cff09dc2440dd26be1c1">set_free_module_ids</a> (const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; ids)</td></tr>
+<tr class="separator:a5ccd60af2c23cff09dc2440dd26be1c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0c4a5818446c1036802ef588bf18d4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ad0c4a5818446c1036802ef588bf18d4f">get_next_grouping_id</a> () const</td></tr>
+<tr class="separator:ad0c4a5818446c1036802ef588bf18d4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab54b519ce01ac34e41a9bc9e0916df0f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ab54b519ce01ac34e41a9bc9e0916df0f">set_next_grouping_id</a> (const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> id)</td></tr>
+<tr class="separator:ab54b519ce01ac34e41a9bc9e0916df0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6263f727eaa5a5c498025aa2abc11176"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a6263f727eaa5a5c498025aa2abc11176">get_used_grouping_ids</a> () const</td></tr>
+<tr class="separator:a6263f727eaa5a5c498025aa2abc11176"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf2a126190fdc755281a54b70f9113b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#abf2a126190fdc755281a54b70f9113b0">set_used_grouping_ids</a> (const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; ids)</td></tr>
+<tr class="separator:abf2a126190fdc755281a54b70f9113b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6f2ca6f0f49b95d39b3637d30849a9a"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#ab6f2ca6f0f49b95d39b3637d30849a9a">get_free_grouping_ids</a> () const</td></tr>
+<tr class="separator:ab6f2ca6f0f49b95d39b3637d30849a9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a317676a3e9d5961ae27e3fd221cb0a87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a317676a3e9d5961ae27e3fd221cb0a87">set_free_grouping_ids</a> (const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; ids)</td></tr>
+<tr class="separator:a317676a3e9d5961ae27e3fd221cb0a87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -333,7 +381,7 @@ Friends</h2></td></tr>
 <p>Get the path to the input file.</p>
 <dl class="section return"><dt>Returns</dt><dd>The path to the input file. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -383,7 +431,7 @@ Friends</h2></td></tr>
 <p>Get the name of the design.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the design. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../db/d60/namespacehal_1_1hdl__writer__manager.html#afa883489f1310c7e74351170fac7612a">hal::hdl_writer_manager::write()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>, and <a class="el" href="../../db/d60/namespacehal_1_1hdl__writer__manager.html#afa883489f1310c7e74351170fac7612a">hal::hdl_writer_manager::write()</a>.</p>
 
 </div>
 </div>
@@ -433,7 +481,7 @@ Friends</h2></td></tr>
 <p>Get the name of the target device.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the target device. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -483,7 +531,7 @@ Friends</h2></td></tr>
 <p>Get the gate library associated with the netlist.</p>
 <dl class="section return"><dt>Returns</dt><dd>The gate library. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -757,7 +805,7 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="../../d1/d10/classhal_1_1Module.html#a49b749b873deac748be305b71aca962c">hal::Module::get_gates()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -954,7 +1002,7 @@ Friends</h2></td></tr>
 <p>Get all global VCC gates.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of gates. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -975,7 +1023,7 @@ Friends</h2></td></tr>
 <p>Get all global GND gates.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of gates. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1180,7 +1228,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of nets. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1377,7 +1425,7 @@ Friends</h2></td></tr>
 <p>Get all global input nets.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of nets. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1398,7 +1446,7 @@ Friends</h2></td></tr>
 <p>Get all global output nets.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of nets. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1629,7 +1677,7 @@ Friends</h2></td></tr>
 <p>Get all modules contained within the netlist including the top module.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of modules. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1855,6 +1903,582 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of groupings. </dd></dl>
 
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="ad4152742f2e30b4694ffb6b0632e6675"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4152742f2e30b4694ffb6b0632e6675">&#9670;&nbsp;</a></span>get_next_gate_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::Netlist::get_next_gate_id </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the gate ID following the highest currently used ID.</p>
+<dl class="section return"><dt>Returns</dt><dd>The next gate ID. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a5c3928f77d98147ce5577f2b6defb65f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c3928f77d98147ce5577f2b6defb65f">&#9670;&nbsp;</a></span>set_next_gate_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_next_gate_id </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the gate ID following the highest currently used ID.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>- The next gate ID. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a88bc7f3434b6fd4e08a97bccc141e0e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88bc7f3434b6fd4e08a97bccc141e0e2">&#9670;&nbsp;</a></span>get_used_gate_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::Netlist::get_used_gate_ids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a set of all currently used gate IDs.</p>
+<dl class="section return"><dt>Returns</dt><dd>All used gate IDs. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a16914d7332760bcbf7fd663a7dd537d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16914d7332760bcbf7fd663a7dd537d5">&#9670;&nbsp;</a></span>set_used_gate_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_used_gate_ids </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
+          <td class="paramname"><em>ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set a set of all currently used gate IDs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ids</td><td>- All used gate IDs. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a5f7900676fda58ddebf01044f10a7312"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f7900676fda58ddebf01044f10a7312">&#9670;&nbsp;</a></span>get_free_gate_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::Netlist::get_free_gate_ids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a set of all gate IDs that have previously been used but been freed ever since.</p>
+<dl class="section return"><dt>Returns</dt><dd>All freed gate IDs. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="ab501f50d05fdd684b7a5185c183c0e9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab501f50d05fdd684b7a5185c183c0e9d">&#9670;&nbsp;</a></span>set_free_gate_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_free_gate_ids </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
+          <td class="paramname"><em>ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set a set of all gate IDs that have previously been used but been freed ever since.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ids</td><td>- All freed gate IDs. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a730c75bae75323000569ced56870e395"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a730c75bae75323000569ced56870e395">&#9670;&nbsp;</a></span>get_next_net_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::Netlist::get_next_net_id </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the net ID following the highest currently used ID.</p>
+<dl class="section return"><dt>Returns</dt><dd>The next net ID. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="ace12a9ca88fa9e93e65ec01e5d477317"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace12a9ca88fa9e93e65ec01e5d477317">&#9670;&nbsp;</a></span>set_next_net_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_next_net_id </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the net ID following the highest currently used ID.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>- The next net ID. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a507df53724c277efd4aacfb512906d82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a507df53724c277efd4aacfb512906d82">&#9670;&nbsp;</a></span>get_used_net_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::Netlist::get_used_net_ids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a set of all currently used net IDs.</p>
+<dl class="section return"><dt>Returns</dt><dd>All used net IDs. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a1aa7685dac8e78db0d6cfb96ad9b053d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1aa7685dac8e78db0d6cfb96ad9b053d">&#9670;&nbsp;</a></span>set_used_net_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_used_net_ids </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
+          <td class="paramname"><em>ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set a set of all currently used net IDs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ids</td><td>- All used net IDs. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="ae4e985be054eb29cf3a218edbe23f390"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4e985be054eb29cf3a218edbe23f390">&#9670;&nbsp;</a></span>get_free_net_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::Netlist::get_free_net_ids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a set of all net IDs that have previously been used but been freed ever since.</p>
+<dl class="section return"><dt>Returns</dt><dd>All freed net IDs. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a904bed7669e36ad72c6531fb205f2f76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a904bed7669e36ad72c6531fb205f2f76">&#9670;&nbsp;</a></span>set_free_net_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_free_net_ids </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
+          <td class="paramname"><em>ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set a set of all net IDs that have previously been used but been freed ever since.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ids</td><td>- All freed net IDs. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a7e2dfd8c4fa7be87c0a307eb643bdd06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e2dfd8c4fa7be87c0a307eb643bdd06">&#9670;&nbsp;</a></span>get_next_module_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::Netlist::get_next_module_id </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the module ID following the highest currently used ID.</p>
+<dl class="section return"><dt>Returns</dt><dd>The next module ID. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a9af17a9e3eb966f7093a6ff66f92dd1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9af17a9e3eb966f7093a6ff66f92dd1c">&#9670;&nbsp;</a></span>set_next_module_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_next_module_id </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the module ID following the highest currently used ID.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>- The next module id. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="aa33a445d0c41a8087e36068cf7cf8544"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa33a445d0c41a8087e36068cf7cf8544">&#9670;&nbsp;</a></span>get_used_module_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::Netlist::get_used_module_ids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a set of all currently used module IDs.</p>
+<dl class="section return"><dt>Returns</dt><dd>All used module IDs. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="ad0968fba28731bc4ed56e9a2f9b42816"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0968fba28731bc4ed56e9a2f9b42816">&#9670;&nbsp;</a></span>set_used_module_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_used_module_ids </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
+          <td class="paramname"><em>ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set a set of all currently used module IDs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ids</td><td>- All used module IDs. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a349e8a245c3c36d2ce27196958dcd824"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a349e8a245c3c36d2ce27196958dcd824">&#9670;&nbsp;</a></span>get_free_module_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::Netlist::get_free_module_ids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a set of all module IDs that have previously been used but been freed ever since.</p>
+<dl class="section return"><dt>Returns</dt><dd>All freed module IDs. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a5ccd60af2c23cff09dc2440dd26be1c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ccd60af2c23cff09dc2440dd26be1c1">&#9670;&nbsp;</a></span>set_free_module_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_free_module_ids </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
+          <td class="paramname"><em>ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set a set of all module IDs that have previously been used but been freed ever since.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ids</td><td>- All freed module IDs. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="ad0c4a5818446c1036802ef588bf18d4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0c4a5818446c1036802ef588bf18d4f">&#9670;&nbsp;</a></span>get_next_grouping_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::Netlist::get_next_grouping_id </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the grouping ID following the highest currently used ID.</p>
+<dl class="section return"><dt>Returns</dt><dd>The next grouping ID. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="ab54b519ce01ac34e41a9bc9e0916df0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab54b519ce01ac34e41a9bc9e0916df0f">&#9670;&nbsp;</a></span>set_next_grouping_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_next_grouping_id </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the grouping ID following the highest currently used ID.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>- The next grouping ID. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a6263f727eaa5a5c498025aa2abc11176"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6263f727eaa5a5c498025aa2abc11176">&#9670;&nbsp;</a></span>get_used_grouping_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::Netlist::get_used_grouping_ids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a set of all currently used grouping IDs.</p>
+<dl class="section return"><dt>Returns</dt><dd>All used grouping IDs. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="abf2a126190fdc755281a54b70f9113b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf2a126190fdc755281a54b70f9113b0">&#9670;&nbsp;</a></span>set_used_grouping_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_used_grouping_ids </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
+          <td class="paramname"><em>ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set a set of all currently used grouping IDs.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ids</td><td>- All used grouping IDs. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="ab6f2ca6f0f49b95d39b3637d30849a9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6f2ca6f0f49b95d39b3637d30849a9a">&#9670;&nbsp;</a></span>get_free_grouping_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::Netlist::get_free_grouping_ids </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a set of all grouping IDs that have previously been used but been freed ever since.</p>
+<dl class="section return"><dt>Returns</dt><dd>All freed grouping ids. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a317676a3e9d5961ae27e3fd221cb0a87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a317676a3e9d5961ae27e3fd221cb0a87">&#9670;&nbsp;</a></span>set_free_grouping_ids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::Netlist::set_free_grouping_ids </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
+          <td class="paramname"><em>ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get a set of all grouping IDs that have previously been used but been freed ever since.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ids</td><td>- All freed grouping ids. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#aa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init()</a>.</p>
 
 </div>
@@ -1891,7 +2515,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 22 2020 07:37:07 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 09:21:05 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

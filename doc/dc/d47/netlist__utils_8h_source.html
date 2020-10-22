@@ -73,30 +73,36 @@ $(function() {
 <div class="contents">
 <a href="../../dc/d47/netlist__utils_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d8/db0/defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dc/d6d/boolean__function_8h.html">hal_core/netlist/boolean_function.h</a>&quot;</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">class </span>Gate;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">class </span>Net;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="../../da/d42/namespacehal_1_1netlist__utils.html">   15</a></span>&#160;    <span class="keyword">namespace </span>netlist_utils</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> <a class="code" href="../../da/d42/namespacehal_1_1netlist__utils.html#a388b5f96b4c761a64b2c42706640be4d">get_subgraph_function</a>(<span class="keyword">const</span> std::set&lt;const Gate*&gt; subgraph_gates, <span class="keyword">const</span> <a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* output_net);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    }</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../df/d5f/netlist_8h.html">hal_core/netlist/netlist.h</a>&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;unordered_set&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">class </span>Gate;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">class </span>Net;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="../../da/d42/namespacehal_1_1netlist__utils.html">   16</a></span>&#160;    <span class="keyword">namespace </span>netlist_utils</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> <a class="code" href="../../da/d42/namespacehal_1_1netlist__utils.html#afdf9fe7104ffba05b650abea3f2150db">get_subgraph_function</a>(<span class="keyword">const</span> std::unordered_set&lt;const Gate*&gt;&amp; subgraph_gates, <span class="keyword">const</span> <a class="code" href="../../de/db0/classhal_1_1Net.html">Net</a>* output_net);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <a class="code" href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::unique_ptr&lt;Netlist&gt; <a class="code" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">copy_netlist</a>(<span class="keyword">const</span> <a class="code" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a>* nl);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    }    <span class="comment">// namespace netlist_utils</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="anamespacehal_1_1netlist__utils_html_a388b5f96b4c761a64b2c42706640be4d"><div class="ttname"><a href="../../da/d42/namespacehal_1_1netlist__utils.html#a388b5f96b4c761a64b2c42706640be4d">hal::netlist_utils::get_subgraph_function</a></div><div class="ttdeci">CORE_API BooleanFunction get_subgraph_function(const std::set&lt; const Gate * &gt; subgraph_gates, const Net *output_net)</div><div class="ttdef"><b>Definition:</b> netlist_utils.cpp:42</div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1BooleanFunction_html"><div class="ttname"><a href="../../d6/d9d/classhal_1_1BooleanFunction.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> boolean_function.h:42</div></div>
 <div class="ttc" id="aarch__linux_8h_html_afea66f9a6812c2354b544f31910fd72f"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a></div><div class="ttdeci">#define CORE_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:26</div></div>
+<div class="ttc" id="anamespacehal_1_1netlist__utils_html_a5e81261c6bc8c9602a2e53bf0f0c9b90"><div class="ttname"><a href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist</a></div><div class="ttdeci">CORE_API std::unique_ptr&lt; Netlist &gt; copy_netlist(const Netlist *nl)</div><div class="ttdef"><b>Definition:</b> netlist_utils.cpp:106</div></div>
 <div class="ttc" id="aboolean__function_8h_html"><div class="ttname"><a href="../../dc/d6d/boolean__function_8h.html">boolean_function.h</a></div></div>
+<div class="ttc" id="anetlist_8h_html"><div class="ttname"><a href="../../df/d5f/netlist_8h.html">netlist.h</a></div></div>
+<div class="ttc" id="aclasshal_1_1Netlist_html"><div class="ttname"><a href="../../dc/d06/classhal_1_1Netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> netlist.h:52</div></div>
+<div class="ttc" id="anamespacehal_1_1netlist__utils_html_afdf9fe7104ffba05b650abea3f2150db"><div class="ttname"><a href="../../da/d42/namespacehal_1_1netlist__utils.html#afdf9fe7104ffba05b650abea3f2150db">hal::netlist_utils::get_subgraph_function</a></div><div class="ttdeci">CORE_API BooleanFunction get_subgraph_function(const std::unordered_set&lt; const Gate * &gt; &amp;subgraph_gates, const Net *output_net)</div><div class="ttdef"><b>Definition:</b> netlist_utils.cpp:43</div></div>
 <div class="ttc" id="aclasshal_1_1Net_html"><div class="ttname"><a href="../../de/db0/classhal_1_1Net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> net.h:51</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 22 2020 07:37:06 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 22 2020 09:21:05 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

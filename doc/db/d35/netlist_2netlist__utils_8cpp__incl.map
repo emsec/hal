@@ -1,41 +1,45 @@
 <map id="/home/runner/work/hal/hal/src/netlist/netlist_utils.cpp" name="/home/runner/work/hal/hal/src/netlist/netlist_utils.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="2084,5,2253,61"/>
-<area shape="rect" id="node2" href="$dc/d47/netlist__utils_8h.html" title=" " alt="" coords="257,281,424,322"/>
-<area shape="rect" id="node8" href="$dc/d6d/boolean__function_8h.html" title=" " alt="" coords="155,377,334,419"/>
-<area shape="rect" id="node15" title=" " alt="" coords="2034,385,2077,411"/>
-<area shape="rect" id="node16" href="$d4/db6/gate_8h.html" title=" " alt="" coords="541,191,708,218"/>
-<area shape="rect" id="node25" href="$d7/d97/net_8h.html" title=" " alt="" coords="1488,191,1647,218"/>
-<area shape="rect" id="node26" href="$df/d5f/netlist_8h.html" title=" " alt="" coords="2381,109,2559,136"/>
-<area shape="rect" id="node29" href="$d7/d7f/log_8h.html" title=" " alt="" coords="2273,184,2403,225"/>
-<area shape="rect" id="node39" title=" " alt="" coords="3313,109,3376,136"/>
-<area shape="rect" id="node3" href="$d8/db0/defines_8h.html" title=" " alt="" coords="1784,467,1924,493"/>
-<area shape="rect" id="node4" title=" " alt="" coords="1639,541,1730,568"/>
-<area shape="rect" id="node5" title=" " alt="" coords="1755,541,1841,568"/>
-<area shape="rect" id="node6" title=" " alt="" coords="1865,541,1952,568"/>
-<area shape="rect" id="node7" title=" " alt="" coords="1976,541,2047,568"/>
-<area shape="rect" id="node9" title=" " alt="" coords="154,467,239,493"/>
-<area shape="rect" id="node10" title=" " alt="" coords="263,467,333,493"/>
-<area shape="rect" id="node11" title=" " alt="" coords="357,467,433,493"/>
-<area shape="rect" id="node12" title=" " alt="" coords="5,467,129,493"/>
-<area shape="rect" id="node13" title=" " alt="" coords="3373,467,3487,493"/>
-<area shape="rect" id="node14" title=" " alt="" coords="767,467,829,493"/>
-<area shape="rect" id="node17" href="$d1/df3/data__container_8h.html" title=" " alt="" coords="849,281,1003,322"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1319,385,1370,411"/>
-<area shape="rect" id="node20" href="$d5/d97/endpoint_8h.html" title=" " alt="" coords="701,385,895,411"/>
-<area shape="rect" id="node21" href="$db/dd6/gate__type_8h.html" title=" " alt="" coords="601,273,774,329"/>
-<area shape="rect" id="node23" title=" " alt="" coords="2947,385,3033,411"/>
-<area shape="rect" id="node24" title=" " alt="" coords="1211,385,1289,411"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1127,385,1181,411"/>
-<area shape="rect" id="node22" title=" " alt="" coords="2139,385,2198,411"/>
-<area shape="rect" id="node27" href="$de/d88/gate__library_8h.html" title=" " alt="" coords="2037,184,2199,225"/>
-<area shape="rect" id="node28" title=" " alt="" coords="2428,191,2520,218"/>
-<area shape="rect" id="node30" href="$d8/db4/callback__hook_8h.html" title=" " alt="" coords="2753,281,2883,322"/>
-<area shape="rect" id="node31" href="$d0/dae/program__arguments_8h.html" title=" " alt="" coords="1534,281,1705,322"/>
-<area shape="rect" id="node33" href="$d5/d5e/program__options_8h.html" title=" " alt="" coords="1729,281,1877,322"/>
-<area shape="rect" id="node34" href="$d5/d60/utils_8h.html" title=" " alt="" coords="3211,281,3342,322"/>
-<area shape="rect" id="node36" title=" " alt="" coords="2206,288,2270,315"/>
-<area shape="rect" id="node37" title=" " alt="" coords="2294,288,2478,315"/>
-<area shape="rect" id="node38" title=" " alt="" coords="2503,288,2627,315"/>
-<area shape="rect" id="node32" title=" " alt="" coords="1655,385,1765,411"/>
-<area shape="rect" id="node35" title=" " alt="" coords="3165,385,3239,411"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1825,5,1994,61"/>
+<area shape="rect" id="node2" href="$dc/d47/netlist__utils_8h.html" title=" " alt="" coords="229,109,395,151"/>
+<area shape="rect" id="node25" href="$d4/db6/gate_8h.html" title=" " alt="" coords="706,295,873,322"/>
+<area shape="rect" id="node28" href="$d2/d8d/grouping_8h.html" title=" " alt="" coords="4085,295,4280,322"/>
+<area shape="rect" id="node30" href="$d5/d16/module_8h.html" title=" " alt="" coords="1897,206,2084,233"/>
+<area shape="rect" id="node31" href="$d7/d97/net_8h.html" title=" " alt="" coords="1242,295,1401,322"/>
+<area shape="rect" id="node32" href="$d0/d0a/netlist__factory_8h.html" title=" " alt="" coords="1697,199,1863,240"/>
+<area shape="rect" id="node35" href="$d7/d7f/log_8h.html" title=" " alt="" coords="3215,288,3345,329"/>
+<area shape="rect" id="node43" title=" " alt="" coords="2210,117,2273,143"/>
+<area shape="rect" id="node3" href="$d8/db0/defines_8h.html" title=" " alt="" coords="1417,571,1557,597"/>
+<area shape="rect" id="node8" href="$dc/d6d/boolean__function_8h.html" title=" " alt="" coords="147,481,325,523"/>
+<area shape="rect" id="node13" title=" " alt="" coords="5,571,120,597"/>
+<area shape="rect" id="node15" href="$df/d5f/netlist_8h.html" title=" " alt="" coords="948,206,1127,233"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1272,645,1363,672"/>
+<area shape="rect" id="node5" title=" " alt="" coords="1387,645,1474,672"/>
+<area shape="rect" id="node6" title=" " alt="" coords="1498,645,1585,672"/>
+<area shape="rect" id="node7" title=" " alt="" coords="1609,645,1679,672"/>
+<area shape="rect" id="node9" title=" " alt="" coords="144,571,229,597"/>
+<area shape="rect" id="node10" title=" " alt="" coords="253,571,323,597"/>
+<area shape="rect" id="node11" title=" " alt="" coords="347,571,423,597"/>
+<area shape="rect" id="node12" title=" " alt="" coords="447,571,571,597"/>
+<area shape="rect" id="node14" title=" " alt="" coords="1918,571,1981,597"/>
+<area shape="rect" id="node16" href="$de/d88/gate__library_8h.html" title=" " alt="" coords="1695,288,1857,329"/>
+<area shape="rect" id="node19" title=" " alt="" coords="2613,489,2672,515"/>
+<area shape="rect" id="node21" title=" " alt="" coords="3199,489,3286,515"/>
+<area shape="rect" id="node22" title=" " alt="" coords="1780,489,1857,515"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1882,489,1937,515"/>
+<area shape="rect" id="node24" title=" " alt="" coords="1527,295,1619,322"/>
+<area shape="rect" id="node17" href="$db/dd6/gate__type_8h.html" title=" " alt="" coords="1279,377,1452,433"/>
+<area shape="rect" id="node18" title=" " alt="" coords="2017,489,2068,515"/>
+<area shape="rect" id="node20" title=" " alt="" coords="2799,489,2841,515"/>
+<area shape="rect" id="node26" href="$d1/df3/data__container_8h.html" title=" " alt="" coords="1100,385,1255,426"/>
+<area shape="rect" id="node27" href="$d5/d97/endpoint_8h.html" title=" " alt="" coords="603,489,797,515"/>
+<area shape="rect" id="node29" href="$d7/de4/netlist__internal__manager_8h.html" title=" " alt="" coords="4221,385,4387,426"/>
+<area shape="rect" id="node33" href="$d5/d5e/program__options_8h.html" title=" " alt="" coords="2135,385,2283,426"/>
+<area shape="rect" id="node34" title=" " alt="" coords="2194,489,2305,515"/>
+<area shape="rect" id="node36" href="$d8/db4/callback__hook_8h.html" title=" " alt="" coords="2959,385,3089,426"/>
+<area shape="rect" id="node37" href="$d0/dae/program__arguments_8h.html" title=" " alt="" coords="2308,385,2479,426"/>
+<area shape="rect" id="node38" href="$d5/d60/utils_8h.html" title=" " alt="" coords="4015,385,4145,426"/>
+<area shape="rect" id="node40" title=" " alt="" coords="3367,392,3431,419"/>
+<area shape="rect" id="node41" title=" " alt="" coords="3455,392,3639,419"/>
+<area shape="rect" id="node42" title=" " alt="" coords="3663,392,3787,419"/>
+<area shape="rect" id="node39" title=" " alt="" coords="4041,489,4116,515"/>
 </map>
