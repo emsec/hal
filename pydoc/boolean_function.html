@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v2.0.0-775-gcb932d460 documentation</title>
+  <title>Boolean Function &mdash; hal_py v2.0.0-776-g6b5fb5b50 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v2.0.0-775-gcb932d460
+                v2.0.0-776-g6b5fb5b50
               </div>
             
           
@@ -187,7 +187,7 @@
 <ol class="arabic">
 <li><p class="first">__init__(self: hal_py.BooleanFunction) -&gt; None</p>
 <blockquote>
-<div><p>Construct an empty Boolean function and thus evaluates to X (undefined).</p>
+<div><p>Construct an empty Boolean function and thus evaluates to <code class="docutils literal notranslate"><span class="pre">X</span></code> (undefined).</p>
 </div></blockquote>
 </li>
 <li><p class="first">__init__(self: hal_py.BooleanFunction, variable_name: str) -&gt; None</p>
@@ -296,10 +296,10 @@ The name of the variable must not be empty.</p>
 <dt id="hal_py.BooleanFunction.from_string">
 <em class="property">static </em><code class="descname">from_string</code><span class="sig-paren">(</span><em>expression: str, variable_names: List[str]</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.from_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a function from a string representation.
-Supported operators are  NOT (“!”, “’”), AND (“&amp;”, “<a href="#id1"><span class="problematic" id="id2">*</span></a>”, ” “), OR (“|”, “+”), XOR (“^”) and brackets (“(“, “)”).
-Operator precedence is ‘!’ &gt; ‘&amp;’ &gt; ‘^’ &gt; ‘|’.</p>
-<p>Since, for example, ‘(‘ is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.</p>
-<p>If there is an error during bracket matching, ‘X’ is returned for that part.</p>
+Supported operators are  NOT (<code class="docutils literal notranslate"><span class="pre">!</span></code>, <code class="docutils literal notranslate"><span class="pre">'</span></code>), AND (<code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">␣</span></code>), OR (<code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">+</span></code>), XOR (<code class="docutils literal notranslate"><span class="pre">^</span></code>) and brackets (<code class="docutils literal notranslate"><span class="pre">(</span></code>, <code class="docutils literal notranslate"><span class="pre">)</span></code>).
+Operator precedence is <code class="docutils literal notranslate"><span class="pre">!</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">^</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">|</span></code>.</p>
+<p>Since, for example, <code class="docutils literal notranslate"><span class="pre">(</span></code> is interpreted as a new term, but might also be an intended part of a variable, a vector of known variable names can be supplied, which are extracted before parsing.</p>
+<p>If there is an error during bracket matching, <code class="docutils literal notranslate"><span class="pre">X</span></code> is returned for that part.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -384,12 +384,12 @@ Operator precedence is ‘!’ &gt; ‘&amp;’ &gt; ‘^’ &gt; ‘|’.</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.is_constant_one">
 <code class="descname">is_constant_one</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.is_constant_one" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether the Boolean function always evaluates to ONE.</p>
+<dd><p>Check whether the Boolean function always evaluates to <code class="docutils literal notranslate"><span class="pre">ONE</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant ONE, false otherwise.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant <code class="docutils literal notranslate"><span class="pre">ONE</span></code>, false otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>
@@ -400,12 +400,12 @@ Operator precedence is ‘!’ &gt; ‘&amp;’ &gt; ‘^’ &gt; ‘|’.</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.is_constant_zero">
 <code class="descname">is_constant_zero</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.is_constant_zero" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether the Boolean function always evaluates to ZERO.</p>
+<dd><p>Check whether the Boolean function always evaluates to <code class="docutils literal notranslate"><span class="pre">ZERO</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant ZERO, false otherwise.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if function is constant <code class="docutils literal notranslate"><span class="pre">ZERO</span></code>, false otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>
