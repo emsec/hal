@@ -69,6 +69,7 @@ namespace hal
             SceneCoordinate() : minLane(0), maxLane(0), mOffset(0), mPadding(0) {;}
             void testMinMax(int ilane);
             void setOffset(float off) { mOffset = off; }
+            void setPadding(float pad) { mPadding = pad; }
             void setOffsetYje(const SceneCoordinate& previous, float minimumJunction);
             void setOffsetYej(const SceneCoordinate& previous, float maximumBlock, float minimumJunction);
             void setOffsetX(const SceneCoordinate& previous, float maximumBlock, float sepOut, float sepInp);

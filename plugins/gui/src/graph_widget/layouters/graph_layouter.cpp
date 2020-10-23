@@ -954,30 +954,31 @@ namespace hal
 
     void GraphLayouter::calculateGateOffsets()
     {
+        QHash<int,float> xInputPadding;
+        QHash<int,float> xOutputPadding;
+        for (auto itSep = mSeparatedWidth.constBegin(); itSep != mSeparatedWidth.constEnd(); itSep++)
+        {
+            NetLayoutJunction* jx = mJunctionHash.value(itSep.key());
+            if (!jx) continue;
+            int ix = itSep.key().x();
+            float xinp = jx->rect().right() * lane_spacing + itSep.value().mInputSpace;
+            float xout = itSep.value().mOutputSpace - jx->rect().left() * lane_spacing;
+            if (xinp > xInputPadding[ix])  xInputPadding[ix] = xinp;
+            if (xout > xOutputPadding[ix]) xOutputPadding[ix] = xout;
+        }
+
         m_x_values.append(0);
         m_y_values.append(0);
 
         float x0 = mCoordX[0].preLanes() * lane_spacing + h_road_padding;
         mCoordX[0].setOffset(x0);
+        mCoordX[0].setPadding(xInputPadding[0]);
         auto itxLast = mCoordX.begin();
         for(auto itNext = itxLast + 1; itNext!= mCoordX.end(); ++itNext)
         {
             int ix0 = itxLast.key();
             int ix1 = itNext.key();
             float xsum = 0;
-            float xsepOut = 0;
-            float xsepInp = 0;
-
-            for (auto itSep = mSeparatedWidth.constBegin(); itSep != mSeparatedWidth.constEnd(); itSep++)
-            {
-                if (itSep.key().x() != ix1) continue;
-                NetLayoutJunction* jx = mJunctionHash.value(itSep.key());
-                if (!jx) continue;
-                float xout = itSep.value().mOutputSpace - jx->rect().left() * lane_spacing;
-                if (xout > xsepOut) xsepOut = xout;
-                float xinp = jx->rect().right() * lane_spacing + itSep.value().mInputSpace;
-                if (xinp > xsepInp) xsepInp = xinp;
-            }
 
             // loop in case that we span several columns
             for (int ix=ix0; ix<ix1;ix++)
@@ -986,7 +987,7 @@ namespace hal
                 if (xn != m_max_node_width_for_x.end())
                     xsum += xn.value();
             }
-            itNext->setOffsetX(itxLast.value(), xsum + 4*h_road_padding, xsepOut, xsepInp);
+            itNext->setOffsetX(itxLast.value(), xsum + 4*h_road_padding, xOutputPadding[ix1], xInputPadding[ix1]);
             float lastX  = itxLast.value().lanePosition(0);
             float deltaX = itNext.value().lanePosition(0) - lastX;
             int   nx     = ix1 - ix0;
