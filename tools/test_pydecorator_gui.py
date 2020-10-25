@@ -1,9 +1,9 @@
 import pydecorator_gui
 
 # create some convenient variables to use later
-g_l = [g for g in netlist.get_gates()]
-n_l = [n for n in netlist.get_nets()]
-m_l = [m for m in netlist.get_modules()]
+g_l = netlist.get_gates()
+n_l = netlist.get_nets()
+m_l = netlist.get_modules()
 
 g = netlist.get_gate_by_id(2)
 n = netlist.get_net_by_id(5)
