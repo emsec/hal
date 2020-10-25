@@ -45,14 +45,12 @@ if(BUILD_DOCUMENTATION)
     endforeach()
 
     get_property(SPHINX_PLUGIN_INDEX_FILES_LOCAL GLOBAL PROPERTY SPHINX_PLUGIN_INDEX_FILES)
-    message(STATUS "SPHINX_PLUGIN_INDEX_FILES_LOCAL: ${SPHINX_PLUGIN_INDEX_FILES_LOCAL}")
-    set(SPHINX_PLUGIN_IDX_TESTS "")
-    foreach(idx ${SPHINX_PLUGIN_INDEX_FILES_LOCAL})
-        get_filename_component(i ${idx} NAME)
-        get_filename_component(i2 ${i} NAME_WE)
-        set(PYDOC_PLUGINS "${PYDOC_PLUGINS}\n   ${i2}")
+    get_property(SPHINX_PLUGIN_TARGETS_LOCAL GLOBAL PROPERTY SPHINX_PLUGIN_TARGETS)
+
+    foreach(idx ${SPHINX_PLUGIN_TARGETS_LOCAL})
+        set(PYDOC_PLUGINS "${PYDOC_PLUGINS}\n   ${idx}")
+        set(PYDOC_PLUGINS_TARGETS "${PYDOC_PLUGINS_TARGETS} ${idx}")
     endforeach()
-    message(STATUS "PYDOC_PLUGINS: ${PYDOC_PLUGINS}")
 
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/sphinx_doc/plugins.rst.in ${SPHINX_BUILD_DIR}/plugins.rst)
 
@@ -71,6 +69,8 @@ if(BUILD_DOCUMENTATION)
                       "${SPHINX_BUILD_DIR}"
                       "${SPHINX_HTML_DIR}"
                       COMMENT "Building HTML documentation with Sphinx" VERBATIM
-                      DEPENDS hal::py hal::gui graph_algorithm netlist_simulator ${SPHINX_DOC_FILES} copy_sphinx_doc_files)
+                      DEPENDS hal::py copy_sphinx_doc_files)
+
+    add_dependencies(pydoc ${SPHINX_PLUGIN_TARGETS_LOCAL})
 
 endif()

@@ -233,11 +233,20 @@ namespace hal
         BooleanFunction& operator^=(const BooleanFunction& other);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Negate the Boolean function.
          *
          * @returns The negated Boolean function.
          */
-        BooleanFunction operator!() const;
+        [[deprecated("Use operator~() instead.")]] BooleanFunction operator!() const;
+
+        /**
+         * Negate the Boolean function.
+         *
+         * @returns The negated Boolean function.
+         */
+        BooleanFunction operator~() const;
 
         /**
          * Check whether two Boolean functions are equal.

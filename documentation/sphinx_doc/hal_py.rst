@@ -17,6 +17,7 @@ HAL Core Documentation
    gate
    net
    module
+   grouping
    path
    base_plugin_interface
    gui_plugin_interface

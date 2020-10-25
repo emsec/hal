@@ -7,9 +7,24 @@ namespace hal
 {
     struct Event
     {
+        /**
+         * The net affected by the event.
+         */
         Net* affected_net;
+
+        /**
+         * The new value caused by the event.
+         */
         SignalValue new_value;
+
+        /**
+         * The time of the event.
+         */
         u64 time;
+
+        /**
+         * The unique ID of the event.
+         */
         u64 id;
 
         /**

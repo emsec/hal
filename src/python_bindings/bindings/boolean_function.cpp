@@ -102,7 +102,7 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_boolean_function.def_static("from_string", &BooleanFunction::from_string, py::arg("expression"), py::arg("variable_names"), R"(
+        py_boolean_function.def_static("from_string", &BooleanFunction::from_string, py::arg("expression"), py::arg("variable_names") = std::vector<std::string>(), R"(
             Parse a function from a string representation.
             Supported operators are  NOT (``!``, ``'``), AND (``&``, ``*``, ``␣``), OR (``|``, ``+``), XOR (``^``) and brackets (``(``, ``)``).
             Operator precedence is ``!`` > ``&`` > ``^`` > ``|``.
@@ -167,7 +167,7 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_boolean_function.def(!py::self, R"(
+        py_boolean_function.def(~py::self, R"(
             Negate the Boolean function.
 
             :returns: The negated Boolean function.
@@ -232,7 +232,7 @@ namespace hal
             :param list[str] ordered_variables: Variables in the order of the inputs.
             :param bool remove_unknown_variables: If true, all given variables that are not found in the function are removed from the truth table.
             :returns: The list of output values.
-            :rtype: list[value]
+            :rtype: list[hal_py.BooleanFunction.Value]
         )");
     }
 }    // namespace hal
