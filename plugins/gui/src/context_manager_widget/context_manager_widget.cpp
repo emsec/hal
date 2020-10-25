@@ -171,8 +171,8 @@ namespace hal
         if (clicked_index.isValid())
         {
             context_menu.addAction(m_open_action);
-            context_menu.addAction(m_rename_action);
             context_menu.addAction(m_duplicate_action);
+            context_menu.addAction(m_rename_action);
             context_menu.addAction(m_delete_action);
         }
 
