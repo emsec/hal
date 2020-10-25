@@ -103,7 +103,7 @@ namespace hal
                 content = "Could not get python code editor content.";
 
             ds << "---------------------Start of new tab------------------------\nTabnumber: " << i
-               << "\nName: "<< python_tab_widget->tabText(i) << "\nContent: " << content << "\n";
+               << "\nName: "<< python_tab_widget->tabText(i) << "\nContent:\n" << content << "\n";
 
         }
         file.close();
