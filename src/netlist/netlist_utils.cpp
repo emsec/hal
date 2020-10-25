@@ -58,7 +58,7 @@ namespace hal
                 log_error("netlist", "target net with ID {} has more than one source.", output_net->get_id());
                 return BooleanFunction();
             }
-            else if (output_net->get_num_of_sources() == 1)
+            else if (output_net->get_num_of_sources() == 0)
             {
                 log_error("netlist", "target net with ID {} has no sources.", output_net->get_id());
                 return BooleanFunction();
