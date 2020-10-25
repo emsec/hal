@@ -172,8 +172,8 @@ namespace hal
         {
             context_menu.addAction(m_open_action);
             context_menu.addAction(m_rename_action);
-            context_menu.addAction(m_delete_action);
             context_menu.addAction(m_duplicate_action);
+            context_menu.addAction(m_delete_action);
         }
 
         context_menu.exec(m_context_table_view->viewport()->mapToGlobal(point));
