@@ -122,11 +122,23 @@ namespace hal
             // draw center text
             s_pen.setColor(penColor(option->state,s_text_color));
             painter->setPen(s_pen);
+
             for (int iline=0; iline<3; iline++)
             {
+                int i = 0;
+
+                switch (iline)
+                {
+                case 0: i = 2; break;
+                case 1: i = 0; break;
+                case 2: i = 1; break;
+                }
+
                 if (mNodeText[iline].isEmpty()) continue;
                 painter->setFont(sTextFont[iline]);
-                painter->drawText(mTextPosition[iline], mNodeText[iline]);
+                painter->drawText(QPointF(mTextPosition[i].x(), mTextPosition[iline].y()), mNodeText[i]);
+
+                // Weird generalization but okay...
             }
 
             bool moduleHasFocus =

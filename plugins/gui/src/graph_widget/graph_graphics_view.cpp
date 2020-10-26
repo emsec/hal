@@ -181,7 +181,7 @@ namespace hal
             Gate* g = g_netlist->get_gate_by_id(m_item->id());
             const QString name      = QString::fromStdString(g->get_name());
             bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Rename gate", "New name:", QLineEdit::Normal, name, &confirm);
+            const QString new_name = QInputDialog::getText(this, "Change Gate Name", "New name:", QLineEdit::Normal, name, &confirm);
             if (confirm)
             {
                 g->set_name(new_name.toStdString());
@@ -192,10 +192,36 @@ namespace hal
             Module* m = g_netlist->get_module_by_id(m_item->id());
             const QString name        = QString::fromStdString(m->get_name());
             bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Rename module", "New name:", QLineEdit::Normal, name, &confirm);
+            const QString new_name = QInputDialog::getText(this, "Change Module Name", "New name:", QLineEdit::Normal, name, &confirm);
             if (confirm)
             {
                 m->set_name(new_name.toStdString());
+            }
+        }
+        else if (m_item->item_type() == hal::item_type::net)
+        {
+            Net* n = g_netlist->get_net_by_id(m_item->id());
+            const QString name        = QString::fromStdString(n->get_name());
+            bool confirm;
+            const QString new_name = QInputDialog::getText(this, "Change Net Name", "New name:", QLineEdit::Normal, name, &confirm);
+            if (confirm)
+            {
+                n->set_name(new_name.toStdString());
+            }
+        }
+    }
+
+    void GraphGraphicsView::handle_change_type_action()
+    {
+        if (m_item->item_type() == hal::item_type::module)
+        {
+            Module* m = g_netlist->get_module_by_id(m_item->id());
+            const QString type        = QString::fromStdString(m->get_type());
+            bool confirm;
+            const QString new_type = QInputDialog::getText(this, "Change Module Type", "New type:", QLineEdit::Normal, type, &confirm);
+            if (confirm)
+            {
+                m->set_type(new_type.toStdString());
             }
         }
     }
@@ -541,14 +567,14 @@ namespace hal
         bool isGate         = false;
         bool isModule       = false;
         bool isMultiSelect  = false;
+        bool isNet          = false;
 
-        // bool isNet = false;
         if (item)
         {
             m_item   = static_cast<GraphicsItem*>(item);
             isGate   = m_item->item_type() == hal::item_type::gate;
             isModule = m_item->item_type() == hal::item_type::module;
-            // isNet    = m_item->item_type() == hal::item_type::net;
+            isNet    = m_item->item_type() == hal::item_type::net;
 
             if (isGate)
             {
@@ -564,7 +590,7 @@ namespace hal
 
                 context_menu.addAction("This gate:")->setEnabled(false);
 
-                action = context_menu.addAction("  Rename …");
+                action = context_menu.addAction("  Change Gate Name");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_rename_action);
 
                 action = context_menu.addAction("  Fold parent module");
@@ -584,11 +610,31 @@ namespace hal
 
                 context_menu.addAction("This module:")->setEnabled(false);
 
-                action = context_menu.addAction("  Rename …");
+                action = context_menu.addAction("  Change Module Name");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_rename_action);
+
+                action = context_menu.addAction("  Change Module Type");
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_change_type_action);
 
                 action = context_menu.addAction("  Unfold module");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_unfold_single_action);
+            }
+            else if (isNet)
+            {
+                if (g_selection_relay->m_selected_nets.find(m_item->id()) == g_selection_relay->m_selected_nets.end())
+                {
+                    g_selection_relay->clear();
+                    g_selection_relay->m_selected_nets.insert(m_item->id());
+                    g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                    g_selection_relay->m_focus_id   = m_item->id();
+                    g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
+                    g_selection_relay->relay_selection_changed(this);
+                }
+
+                context_menu.addAction("This net:")->setEnabled(false);
+
+                action = context_menu.addAction("  Change Net Name");
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_rename_action);
             }
 
             if (g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() > 1)

@@ -58,6 +58,7 @@ namespace hal
         //void handle_module_created(Module* m) const;
         void handle_module_removed(Module* m);
         void handle_module_name_changed(Module* m) const;
+        void handle_module_type_changed(Module* m) const;
         void handle_module_color_changed(Module* m) const;
         //void handle_module_parent_changed(Module* m) const;
         void handle_module_submodule_added(Module* m, const u32 added_module) const;
