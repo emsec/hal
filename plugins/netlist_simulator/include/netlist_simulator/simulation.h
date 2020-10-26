@@ -16,7 +16,7 @@ namespace hal
          * Get the signal value of a specific net at a specific point in time specified in picoseconds.
          *
          * @param[in] net - The net to inspect.
-         * @param[in] time - The time in picoseconds.
+         * @param[in] time - The time in   .
          * @returns The net's signal value.
          */
         SignalValue get_net_value(Net* net, u64 time);

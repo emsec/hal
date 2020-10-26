@@ -119,6 +119,14 @@ namespace hal
          * @returns The iteration timeout.
          */
         u64 get_simulation_timeout() const;
+        
+        /**
+         * Generates a vcd file of the simulated netlist, which is stored in a std::string.
+         * The waveform can be opened by, e.g., GTKWave or Scansion (MacOS)
+         * @param[in] cycles_to_simulate - The amount of cycles that should be simulated.
+         * @returns String of VCD file, which can be written to a file.
+         */
+        std::string generate_vcd(u32 cycles_to_simulate);
 
     private:
         friend class NetlistSimulatorPlugin;
