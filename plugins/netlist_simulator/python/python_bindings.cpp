@@ -154,12 +154,11 @@ namespace hal
                 :rtype: int
             )")
 
-            .def("generate_vcd", &NetlistSimulator::generate_vcd, R"(
-                Generates a vcd file of the simulated netlist, which is stored in a std::string.
-                The waveform can be opened by, e.g., GTKWave or Scansion (MacOS)
+            .def("generate_vcd", &NetlistSimulator::generate_vcd, py::arg("start_time"), py::arg("end_time"), R"(
+                Generates the content of a VCD file for parts the simulated netlist and returns it as a string.
 
-                :param int time_to_simulate: The amount of cycles that should be simulated.
-
+                :param int start_time: Start of the timeframe to write to the file (in picoseconds).
+                :param int end_time: End of the timeframe to write to the file (in picoseconds).
                 :returns: String of VCD file, which can be written to a file.
                 :rtype: str
             )");

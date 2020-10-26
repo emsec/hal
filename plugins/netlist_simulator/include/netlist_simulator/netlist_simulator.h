@@ -119,13 +119,13 @@ namespace hal
          * @returns The iteration timeout.
          */
         u64 get_simulation_timeout() const;
-        
+
         /**
-         * Generates a vcd file of the simulated netlist, which is stored in a std::string.
-         * The waveform can be opened by, e.g., GTKWave or Scansion (MacOS)
-         * @param[in] start_time - start time in ps.
-         * @param[in] end_time - end time in ps.
-         * @returns String of VCD file, which can be written to a file.
+         * Generates the content of a VCD file for parts the simulated netlist and returns it as a string.
+         * 
+         * @param[in] start_time - Start of the timeframe to write to the file (in picoseconds).
+         * @param[in] end_time - End of the timeframe to write to the file (in picoseconds).
+         * @returns String with the content of the VCD file.
          */
         std::string generate_vcd(u32 start_time, u32 end_time);
 
