@@ -19,7 +19,7 @@ namespace hal
          * @param[in] time - The time in   .
          * @returns The net's signal value.
          */
-        SignalValue get_net_value(Net* net, u64 time);
+        SignalValue get_net_value(Net* net, u64 time) const;
 
         /**
          * Adds a custom event to the simulation.

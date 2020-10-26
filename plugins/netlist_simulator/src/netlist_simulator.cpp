@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <chrono>
 #include <ctime>
+#include <fstream>
 #include <iomanip>
 #include <sstream>
 
@@ -748,24 +749,24 @@ namespace hal
         return SignalValue::X;
     }
 
-    std::string NetlistSimulator::generate_vcd(u32 start_time, u32 end_time)
+    bool NetlistSimulator::generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time) const
     {
         if (m_simulation_set.empty())
         {
-            log_error("netlist simulator", "no gates have been added to the simulator");
-            return std::string();
+            log_error("netlist simulator", "no gates have been added to the simulator.");
+            return false;
         }
 
         if (m_simulation.get_events().empty())
         {
-            log_error("netlist simulator", "you have not simulated anything, cannot generate vcd...");
-            return std::string();
+            log_error("netlist simulator", "nothing has been simulated, cannot generate VCD.");
+            return false;
         }
 
         if (end_time > m_current_time)
         {
-            log_error("netlist simulator", "cannot generate vcd for {}ps, you have only simulated {}ps so far...", end_time, m_current_time);
-            return std::string();
+            log_error("netlist simulator", "cannot generate VCD for {} ps, only {} ps have been simulated thus far.", end_time, m_current_time);
+            return false;
         }
 
         // write header
@@ -819,13 +820,13 @@ namespace hal
             }
             else if (value == SignalValue::Z)
             {
-                log_error("netlist simulator", "signal value for {} at {}ps is Z, currently not supported, aborting...", simulated_net->get_name(), time);
-                return std::string();
+                log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", simulated_net->get_id(), time);
+                return false;
             }
             else
             {
-                log_error("netlist simulator", "signal value for {} at {}ps is unknown, this is weird, aborting...", simulated_net->get_name(), time);
-                return std::string();
+                log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", simulated_net->get_id(), time);
+                return false;
             }
         }
 
@@ -872,19 +873,29 @@ namespace hal
                     }
                     else if (value == SignalValue::Z)
                     {
-                        log_error("netlist simulator", "signal value for {} at {}ps is Z, currently not supported, aborting...", simulated_net->get_name(), time);
-                        return std::string();
+                        log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", simulated_net->get_id(), time);
+                        return false;
                     }
                     else
                     {
-                        log_error("netlist simulator", "signal value for {} at {}ps is unknown, this is weird, aborting...", simulated_net->get_name(), time);
-                        return std::string();
+                        log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", simulated_net->get_name(), time);
+                        return false;
                     }
                 }
             }
         }
         vcd << "#" << traces_count << std::endl;
-        return vcd.str();
+
+        std::ofstream ofs(path);
+        if (!ofs.is_open())
+        {
+            log_error("netlist_simulator", "could not open file '{}' for writing.", path.string());
+            return false;
+        }
+
+        ofs << vcd.str();
+
+        return true;
     }
 
 }    // namespace hal

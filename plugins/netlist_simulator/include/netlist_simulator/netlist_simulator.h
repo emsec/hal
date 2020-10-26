@@ -121,13 +121,14 @@ namespace hal
         u64 get_simulation_timeout() const;
 
         /**
-         * Generates the content of a VCD file for parts the simulated netlist and returns it as a string.
+         * Generates the a VCD file for parts the simulated netlist.
          * 
+         * @param[in] path - The path to the VCD file.
          * @param[in] start_time - Start of the timeframe to write to the file (in picoseconds).
          * @param[in] end_time - End of the timeframe to write to the file (in picoseconds).
-         * @returns String with the content of the VCD file.
+         * @returns True if the file gerneration was successful, false otherwise.
          */
-        std::string generate_vcd(u32 start_time, u32 end_time);
+        bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time) const;
 
     private:
         friend class NetlistSimulatorPlugin;
