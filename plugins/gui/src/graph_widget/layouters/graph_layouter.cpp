@@ -330,6 +330,19 @@ namespace hal
         }
     }
 
+    bool GraphLayouter::verifyModulePort(const Net* n, const node& modNode, bool isModInput)
+    {
+        // bypass test for gates
+        if (modNode.type != node_type::module) return true;
+
+        Module* m = g_netlist->get_module_by_id(modNode.id);
+        Q_ASSERT(m);
+        std::vector<Net*> knownNets = isModInput ? m->get_input_nets() : m->get_output_nets();
+        for (const Net* kn : knownNets)
+            if (kn == n) return true;
+        return false;
+    }
+
     void GraphLayouter::getWireHash()
     {
         for (const u32 id : m_context->nets())
@@ -350,6 +363,9 @@ namespace hal
                 if (!m_context->node_for_gate(srcNode, src->get_gate()->get_id()))
                     continue;
 
+                if (!verifyModulePort(n,srcNode,false))
+                    continue;
+
                 node_box* srcBox = nullptr;
                 int ibox = m_boxNode.value(srcNode,-1);
                 if (ibox >= 0)
@@ -368,6 +384,9 @@ namespace hal
                 node dstNode;
 
                 if (!m_context->node_for_gate(dstNode, dst->get_gate()->get_id()))
+                    continue;
+
+                if (!verifyModulePort(n,dstNode,true))
                     continue;
 
                 node_box* dstBox = nullptr;

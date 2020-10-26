@@ -283,6 +283,8 @@ namespace hal
         void drawNetsEndpoint(StandardGraphicsNet::lines &lines, u32 id);
         void drawNetsIsolated(u32 id, Net *n, const EndpointList& epl);
         void update_scene_rect();
+        static bool verifyModulePort(const Net *n, const node& modNode, bool isModInput);
+
 
         node_box create_box(const hal::node& node, const int x, const int y) const;
 
