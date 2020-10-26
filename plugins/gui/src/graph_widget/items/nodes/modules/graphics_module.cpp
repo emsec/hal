@@ -13,7 +13,7 @@ namespace hal
         for (Net* n : m->get_output_nets())
             m_output_pins.append(module_pin{QString::fromStdString(m->get_output_port_name(n)), n->get_id()});
 
-        mNodeText[1] = QString::fromStdString(m->get_type());
-        mNodeText[2] = "Module";
+        mNodeText[1]                              = QString::fromStdString(m->get_type());
+        mNodeText[mNodeText[1].isEmpty() ? 1 : 2] = "Module";
     }
-}
+}    // namespace hal
