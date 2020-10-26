@@ -82,7 +82,7 @@ namespace hal
          */
 
         /**
-         * Returns the set of strongly connected components.
+         * Returns a set of strongly connected components.
          *
          * @param[in] nl - Netlist (internally transformed to di-graph)
          * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)

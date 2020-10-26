@@ -13,7 +13,7 @@ namespace hal
             The gates within the net should be connected and the given output net should represent the targeted output of the subgraph.
             The resulting Boolean function uses the net IDs of the automatically identified input nets as variables.
 
-            :param set[hal_py.Gate] subgraph_gates: The gates making up the subgraph.
+            :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph.
             :param hal_py.Net output_net: The output net for which to generate the Boolean function.
             :returns: The combined Boolean function of the subgraph.
             :rtype: hal_py.BooleanFunction

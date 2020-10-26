@@ -748,7 +748,7 @@ namespace hal
         return SignalValue::X;
     }
 
-    std::string NetlistSimulator::generate_vcd(u32 time_to_simulate)
+    std::string NetlistSimulator::generate_vcd(u32 start_time, u32 end_time)
     {
         if (m_simulation_set.empty())
         {
@@ -762,9 +762,9 @@ namespace hal
             return std::string();
         }
 
-        if (time_to_simulate > m_current_time)
+        if (end_time > m_current_time)
         {
-            log_error("netlist simulator", "cannot generate vcd for {}ps, you have only simulated {}ps so far...", time_to_simulate, m_current_time);
+            log_error("netlist simulator", "cannot generate vcd for {}ps, you have only simulated {}ps so far...", end_time, m_current_time);
             return std::string();
         }
 
@@ -796,11 +796,11 @@ namespace hal
         vcd << "$enddefinitions $end" << std::endl;
 
         std::unordered_map<Net*, SignalValue> change_tracker;
+        vcd << "#" << 0 << std::endl;
 
         for (const auto& simulated_net : simulated_nets)
         {
-            vcd << "#" << 0 << std::endl;
-            auto value = m_simulation.get_net_value(simulated_net, 0);
+            auto value = m_simulation.get_net_value(simulated_net, start_time);
 
             change_tracker[simulated_net] = value;
 
@@ -811,11 +811,11 @@ namespace hal
             }
             else if (value == SignalValue::ONE)
             {
-                vcd << "x1" << simulated_net->get_id() << std::endl;
+                vcd << "1n" << simulated_net->get_id() << std::endl;
             }
             else if (value == SignalValue::ZERO)
             {
-                vcd << "x0" << simulated_net->get_id() << std::endl;
+                vcd << "0n" << simulated_net->get_id() << std::endl;
             }
             else if (value == SignalValue::Z)
             {
@@ -829,9 +829,9 @@ namespace hal
             }
         }
 
-        u32 traces_count;
+        u32 traces_count = 0;
 
-        for (u32 time = 1; time < time_to_simulate; ++time)
+        for (u32 time = start_time + 1; time < end_time; ++time)
         {
             bool print_new_cycle_count = true;
             traces_count++;
@@ -848,7 +848,7 @@ namespace hal
                 else    // we need to print an update!
                 {
                     // update change tracker
-                    change_tracker[simulated_net] == value;
+                    change_tracker[simulated_net] = value;
 
                     // if this is the first update for this time, print current cycle count
                     if (print_new_cycle_count)
@@ -864,11 +864,11 @@ namespace hal
                     }
                     else if (value == SignalValue::ONE)
                     {
-                        vcd << "x1" << simulated_net->get_id() << std::endl;
+                        vcd << "1n" << simulated_net->get_id() << std::endl;
                     }
                     else if (value == SignalValue::ZERO)
                     {
-                        vcd << "x0" << simulated_net->get_id() << std::endl;
+                        vcd << "0n" << simulated_net->get_id() << std::endl;
                     }
                     else if (value == SignalValue::Z)
                     {

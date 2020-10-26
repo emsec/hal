@@ -94,11 +94,11 @@ namespace hal
                  &GraphAlgorithmPlugin::get_strongly_connected_components,
                  py::arg("netlist"),
                  R"(
-                Returns the set of strongly connected components.
+                Returns a set of strongly connected components.
 
                 :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
-                :returns: A set of strongly connected components where each component is a set of gates.
-                :rtype: set[set[hal_py.get_gate()]]
+                :returns: A list of strongly connected components, where each component is a list of gates.
+                :rtype: list[list[hal_py.get_gate()]]
                 )")
             .def("get_graph_cut",
                  &GraphAlgorithmPlugin::get_graph_cut,
