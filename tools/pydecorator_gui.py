@@ -190,4 +190,3 @@ if "__decorated_gui__" not in dir():
 
 else:
     hal_py.log_info("Gui slready decorated. Not applying again.")
-
