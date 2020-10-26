@@ -429,6 +429,8 @@ namespace hal
             {
                 //< no associated_data
 
+                g_graph_context_manager->handle_module_type_changed(object);
+
                 Q_EMIT module_type_changed(object);
                 break;
             }

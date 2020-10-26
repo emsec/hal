@@ -1,22 +1,15 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 
-#include "hal_core/utilities/log.h"
-
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/module.h"
-#include "hal_core/netlist/net.h"
-#include "hal_core/netlist/grouping.h"
-
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_scene.h"
-#include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/nets/separated_graphics_net.h"
+#include "gui/graph_widget/items/nets/standard_graphics_net.h"
+#include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
-#include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
@@ -24,12 +17,16 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
-
-#include <algorithm>
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/grouping.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/utilities/log.h"
 
 #include <QAction>
 #include <QApplication>
 #include <QColorDialog>
+#include <QDebug>
 #include <QDrag>
 #include <QInputDialog>
 #include <QLabel>
@@ -41,9 +38,8 @@
 #include <QStyleOptionGraphicsItem>
 #include <QWheelEvent>
 #include <QWidgetAction>
+#include <algorithm>
 #include <qmath.h>
-
-#include <QDebug>
 
 const QString ASSIGN_TO_GROUPING("Assign to grouping ");
 
@@ -75,19 +71,19 @@ namespace hal
         m_move_modifier                    = Qt::KeyboardModifier(move_modifier_setting);
 
         // might think about Q_ENUM to avoid separate enum and config file tokens
-        const char* gridTypeNames[] = { "lines", "dots", "none", 0};
+        const char* gridTypeNames[] = {"lines", "dots", "none", 0};
 
         QString sGridType = g_settings_manager->get("graph_view/grid_type").toString();
-        for (int i=0; gridTypeNames[i]; i++)
+        for (int i = 0; gridTypeNames[i]; i++)
             if (sGridType == gridTypeNames[i])
             {
                 m_grid_type = static_cast<graph_widget_constants::grid_type>(i);
                 break;
             }
 
-        #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
         m_debug_gridpos_enable = g_settings_manager->get("debug/grid").toBool();
-        #endif
+#endif
     }
 
     void GraphGraphicsView::conditional_update()
@@ -122,8 +118,8 @@ namespace hal
 
     void GraphGraphicsView::handle_move_action(QAction* action)
     {
-        const u32 mod_id          = action->data().toInt();
-        Module* m = g_netlist->get_module_by_id(mod_id);
+        const u32 mod_id = action->data().toInt();
+        Module* m        = g_netlist->get_module_by_id(mod_id);
         for (const auto& id : g_selection_relay->m_selected_gates)
         {
             m->assign_gate(g_netlist->get_gate_by_id(id));
@@ -151,8 +147,8 @@ namespace hal
         {
             module_objs.insert(g_netlist->get_module_by_id(id));
         }
-        Module* parent = gui_utility::first_common_ancestor(module_objs, gate_objs);
-        QString parent_name            = QString::fromStdString(parent->get_name());
+        Module* parent      = gui_utility::first_common_ancestor(module_objs, gate_objs);
+        QString parent_name = QString::fromStdString(parent->get_name());
         bool ok;
         QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parent_name + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
         if (!ok || name.isEmpty())
@@ -178,10 +174,10 @@ namespace hal
     {
         if (m_item->item_type() == hal::item_type::gate)
         {
-            Gate* g = g_netlist->get_gate_by_id(m_item->id());
-            const QString name      = QString::fromStdString(g->get_name());
+            Gate* g            = g_netlist->get_gate_by_id(m_item->id());
+            const QString name = QString::fromStdString(g->get_name());
             bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Rename gate", "New name:", QLineEdit::Normal, name, &confirm);
+            const QString new_name = QInputDialog::getText(this, "Change gate name", "New name:", QLineEdit::Normal, name, &confirm);
             if (confirm)
             {
                 g->set_name(new_name.toStdString());
@@ -189,13 +185,39 @@ namespace hal
         }
         else if (m_item->item_type() == hal::item_type::module)
         {
-            Module* m = g_netlist->get_module_by_id(m_item->id());
-            const QString name        = QString::fromStdString(m->get_name());
+            Module* m          = g_netlist->get_module_by_id(m_item->id());
+            const QString name = QString::fromStdString(m->get_name());
             bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Rename module", "New name:", QLineEdit::Normal, name, &confirm);
+            const QString new_name = QInputDialog::getText(this, "Change module name", "New name:", QLineEdit::Normal, name, &confirm);
             if (confirm)
             {
                 m->set_name(new_name.toStdString());
+            }
+        }
+        else if (m_item->item_type() == hal::item_type::net)
+        {
+            Net* n             = g_netlist->get_net_by_id(m_item->id());
+            const QString name = QString::fromStdString(n->get_name());
+            bool confirm;
+            const QString new_name = QInputDialog::getText(this, "Change net name", "New name:", QLineEdit::Normal, name, &confirm);
+            if (confirm)
+            {
+                n->set_name(new_name.toStdString());
+            }
+        }
+    }
+
+    void GraphGraphicsView::handle_change_type_action()
+    {
+        if (m_item->item_type() == hal::item_type::module)
+        {
+            Module* m          = g_netlist->get_module_by_id(m_item->id());
+            const QString type = QString::fromStdString(m->get_type());
+            bool confirm;
+            const QString new_type = QInputDialog::getText(this, "Change module type", "New type:", QLineEdit::Normal, type, &confirm);
+            if (confirm)
+            {
+                m->set_type(new_type.toStdString());
             }
         }
     }
@@ -247,10 +269,10 @@ namespace hal
     {
         Q_UNUSED(rect)
 
-        #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
         if (m_debug_gridpos_enable)
             debug_draw_layouter_gridpos(painter);
-        #endif
+#endif
 
         if (!m_minimap_enabled)
             return;
@@ -260,7 +282,7 @@ namespace hal
         painter->fillRect(map, QColor(0, 0, 0, 170));
     }
 
-    #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
     void GraphGraphicsView::debug_draw_layouter_gridpos(QPainter* painter)
     {
         painter->resetTransform();
@@ -268,7 +290,7 @@ namespace hal
         QString pos_str = QString("(%1, %2)").arg(m_debug_gridpos.x()).arg(m_debug_gridpos.y());
         painter->drawText(QPoint(25, 25), pos_str);
     }
-    #endif
+#endif
 
     void GraphGraphicsView::mousePressEvent(QMouseEvent* event)
     {
@@ -339,9 +361,9 @@ namespace hal
                 }
             }
         }
-        #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
         debug_show_layouter_gridpos(event->pos());
-        #endif
+#endif
 
         QGraphicsView::mouseMoveEvent(event);
     }
@@ -394,9 +416,9 @@ namespace hal
             m_drag_current_gridpos  = snap[0];
             m_drag_current_modifier = swapModifier;
 
-            auto context = m_graph_widget->get_context();
+            auto context            = m_graph_widget->get_context();
             GraphLayouter* layouter = context->debug_get_layouter();
-            assert(layouter->done()); // ensure grid stable
+            assert(layouter->done());    // ensure grid stable
             QMap<QPoint, hal::node>::const_iterator node_iter = layouter->position_to_node_map().find(snap[0]);
 
             NodeDragShadow::drag_cue cue = NodeDragShadow::drag_cue::rejected;
@@ -435,12 +457,12 @@ namespace hal
             s->stop_drag_shadow();
             if (m_drop_allowed)
             {
-                auto context = m_graph_widget->get_context();
+                auto context            = m_graph_widget->get_context();
                 GraphLayouter* layouter = context->debug_get_layouter();
-                assert(layouter->done()); // ensure grid stable
+                assert(layouter->done());    // ensure grid stable
 
                 // convert scene coordinates into layouter grid coordinates
-                QPointF targetPos = s->drop_target();
+                QPointF targetPos        = s->drop_target();
                 QPoint targetLayouterPos = closest_layouter_pos(targetPos)[0];
                 QPoint sourceLayouterPos = closest_layouter_pos(m_drag_item->pos())[0];
 
@@ -457,8 +479,8 @@ namespace hal
                     // swap mode; swap gates
 
                     hal::node nodeFrom = layouter->position_to_node_map().value(sourceLayouterPos);
-                    hal::node nodeTo = layouter->position_to_node_map().value(targetLayouterPos);
-                    assert(nodeFrom != hal::node()); // assert that value was found
+                    hal::node nodeTo   = layouter->position_to_node_map().value(targetLayouterPos);
+                    assert(nodeFrom != hal::node());    // assert that value was found
                     assert(nodeTo != hal::node());
                     layouter->swap_node_positions(nodeFrom, nodeTo);
                 }
@@ -497,8 +519,7 @@ namespace hal
     {
         switch (event->key())
         {
-            case Qt::Key_Space:
-            {
+            case Qt::Key_Space: {
                 //qDebug() << "Space pressed";
             }
             break;
@@ -511,8 +532,7 @@ namespace hal
     {
         switch (event->key())
         {
-            case Qt::Key_Space:
-            {
+            case Qt::Key_Space: {
                 //qDebug() << "Space released";
             }
             break;
@@ -541,14 +561,14 @@ namespace hal
         bool isGate         = false;
         bool isModule       = false;
         bool isMultiSelect  = false;
+        bool isNet          = false;
 
-        // bool isNet = false;
         if (item)
         {
             m_item   = static_cast<GraphicsItem*>(item);
             isGate   = m_item->item_type() == hal::item_type::gate;
             isModule = m_item->item_type() == hal::item_type::module;
-            // isNet    = m_item->item_type() == hal::item_type::net;
+            isNet    = m_item->item_type() == hal::item_type::net;
 
             if (isGate)
             {
@@ -564,7 +584,7 @@ namespace hal
 
                 context_menu.addAction("This gate:")->setEnabled(false);
 
-                action = context_menu.addAction("  Rename …");
+                action = context_menu.addAction("  Change gate name");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_rename_action);
 
                 action = context_menu.addAction("  Fold parent module");
@@ -584,11 +604,31 @@ namespace hal
 
                 context_menu.addAction("This module:")->setEnabled(false);
 
-                action = context_menu.addAction("  Rename …");
+                action = context_menu.addAction("  Change module name");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_rename_action);
+
+                action = context_menu.addAction("  Change module type");
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_change_type_action);
 
                 action = context_menu.addAction("  Unfold module");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_unfold_single_action);
+            }
+            else if (isNet)
+            {
+                if (g_selection_relay->m_selected_nets.find(m_item->id()) == g_selection_relay->m_selected_nets.end())
+                {
+                    g_selection_relay->clear();
+                    g_selection_relay->m_selected_nets.insert(m_item->id());
+                    g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                    g_selection_relay->m_focus_id   = m_item->id();
+                    g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
+                    g_selection_relay->relay_selection_changed(this);
+                }
+
+                context_menu.addAction("This net:")->setEnabled(false);
+
+                action = context_menu.addAction("  Change net name");
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_rename_action);
             }
 
             if (g_selection_relay->m_selected_gates.size() + g_selection_relay->m_selected_modules.size() > 1)
@@ -646,11 +686,13 @@ namespace hal
                 Grouping* assignedGrouping = nullptr;
                 if (isGate)
                 {
-                    if (g) assignedGrouping = g->get_grouping();
+                    if (g)
+                        assignedGrouping = g->get_grouping();
                 }
                 if (isModule)
                 {
-                    if (m) assignedGrouping = m->get_grouping();
+                    if (m)
+                        assignedGrouping = m->get_grouping();
                 }
                 QMenu* groupingSubmenu;
                 if (isMultiSelect)
@@ -664,17 +706,18 @@ namespace hal
                 if (assignedGrouping && !isMultiSelect)
                 {
                     action = groupingSubmenu->addAction("Delete current assignment");
-                    connect(action,  &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingUnassign);
                     assignedGroupingName = QString::fromStdString(assignedGrouping->get_name());
                 }
-                action = groupingSubmenu->addAction("Assign to new grouping");
-                connect(action,  &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssignNew);
+                action = groupingSubmenu->addAction("New grouping …");
+                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssignNew);
                 for (Grouping* grouping : g_netlist->get_groupings())
                 {
                     QString groupingName = QString::fromStdString(grouping->get_name());
-                    if (groupingName == assignedGroupingName && !isMultiSelect) continue;
+                    if (groupingName == assignedGroupingName && !isMultiSelect)
+                        continue;
                     action = groupingSubmenu->addAction(ASSIGN_TO_GROUPING + groupingName);
-                    connect(action,  &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssingExisting);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssingExisting);
                 }
             }
 
@@ -697,7 +740,6 @@ namespace hal
                     QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handle_unfold_all_action);
                 }
             }
-
         }
 
         // if (!item || isNet)
@@ -884,12 +926,12 @@ namespace hal
             unsigned int modifier = value.toUInt();
             m_move_modifier       = Qt::KeyboardModifier(modifier);
         }
-        #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
         else if (key == "debug/grid")
         {
             m_debug_gridpos_enable = value.toBool();
         }
-        #endif
+#endif
     }
 
     void GraphGraphicsView::handle_fold_single_action()
@@ -944,16 +986,20 @@ namespace hal
         Grouping* assignedGrouping = nullptr;
         if (m_item->item_type() == item_type::gate)
         {
-            Gate* g   = g_netlist->get_gate_by_id(m_item->id());
-            if (g) assignedGrouping = g->get_grouping();
-            if (!assignedGrouping) return;
+            Gate* g = g_netlist->get_gate_by_id(m_item->id());
+            if (g)
+                assignedGrouping = g->get_grouping();
+            if (!assignedGrouping)
+                return;
             assignedGrouping->remove_gate(g);
         }
         if (m_item->item_type() == item_type::module)
         {
             Module* m = g_netlist->get_module_by_id(m_item->id());
-            if (m) assignedGrouping = m->get_grouping();
-            if (!assignedGrouping) return;
+            if (m)
+                assignedGrouping = m->get_grouping();
+            if (!assignedGrouping)
+                return;
             assignedGrouping->remove_module(m);
         }
     }
@@ -968,13 +1014,15 @@ namespace hal
 
         if (m_item->item_type() == item_type::gate)
         {
-            Gate* g   = g_netlist->get_gate_by_id(m_item->id());
-            if (g) grp->assign_gate(g);
+            Gate* g = g_netlist->get_gate_by_id(m_item->id());
+            if (g)
+                grp->assign_gate(g);
         }
         if (m_item->item_type() == item_type::module)
         {
             Module* m = g_netlist->get_module_by_id(m_item->id());
-            if (m) grp->assign_module(m);
+            if (m)
+                grp->assign_module(m);
         }
         g_selection_relay->clear();
         g_selection_relay->relay_selection_changed(nullptr);
@@ -984,22 +1032,23 @@ namespace hal
     {
         handleGroupingUnassign();
         Grouping* grp = g_content_manager->getGroupingManagerWidget()->getModel()->addDefaultEntry();
-        if (grp) groupingAssignInternal(grp);
+        if (grp)
+            groupingAssignInternal(grp);
     }
 
     void GraphGraphicsView::handleGroupingAssingExisting()
     {
         handleGroupingUnassign();
         const QAction* action = static_cast<const QAction*>(QObject::sender());
-        QString grpName = action->text();
-        if (grpName.startsWith(ASSIGN_TO_GROUPING)) grpName.remove(0,ASSIGN_TO_GROUPING.size());
-        Grouping* grp =
-                g_content_manager->getGroupingManagerWidget()->getModel()->groupingByName(grpName);
-        if (grp) groupingAssignInternal(grp);
+        QString grpName       = action->text();
+        if (grpName.startsWith(ASSIGN_TO_GROUPING))
+            grpName.remove(0, ASSIGN_TO_GROUPING.size());
+        Grouping* grp = g_content_manager->getGroupingManagerWidget()->getModel()->groupingByName(grpName);
+        if (grp)
+            groupingAssignInternal(grp);
     }
 
-
-    #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
     void GraphGraphicsView::debug_show_layouter_gridpos(const QPoint& mouse_pos)
     {
         auto context = m_graph_widget->get_context();
@@ -1011,10 +1060,10 @@ namespace hal
             return;
 
         QPointF scene_mouse_pos = mapToScene(mouse_pos);
-        QPoint layouter_pos = closest_layouter_pos(scene_mouse_pos)[0];
-        m_debug_gridpos = layouter_pos;
+        QPoint layouter_pos     = closest_layouter_pos(scene_mouse_pos)[0];
+        m_debug_gridpos         = layouter_pos;
     }
-    #endif
+#endif
 
     QVector<QPoint> GraphGraphicsView::closest_layouter_pos(const QPointF& scene_pos) const
     {
@@ -1022,17 +1071,17 @@ namespace hal
         assert(context);
 
         GraphLayouter* layouter = context->debug_get_layouter();
-        assert(layouter->done()); // ensure grid stable
+        assert(layouter->done());    // ensure grid stable
 
-        int default_width = layouter->default_grid_width();
-        int default_height = layouter->default_grid_height();
-        int min_x = layouter->min_x_index();
-        int min_y = layouter->min_y_index();
-        QVector<qreal> x_vals = layouter->x_values();
-        QVector<qreal> y_vals = layouter->y_values();
+        int default_width      = layouter->default_grid_width();
+        int default_height     = layouter->default_grid_height();
+        int min_x              = layouter->min_x_index();
+        int min_y              = layouter->min_y_index();
+        QVector<qreal> x_vals  = layouter->x_values();
+        QVector<qreal> y_vals  = layouter->y_values();
         layouter_point x_point = closest_layouter_point(scene_pos.x(), default_width, min_x, x_vals);
         layouter_point y_point = closest_layouter_point(scene_pos.y(), default_height, min_y, y_vals);
-        return  QVector({QPoint(x_point.index, y_point.index), QPoint(x_point.pos, y_point.pos)});
+        return QVector({QPoint(x_point.index, y_point.index), QPoint(x_point.pos, y_point.pos)});
     }
 
     GraphGraphicsView::layouter_point GraphGraphicsView::closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const
@@ -1041,15 +1090,15 @@ namespace hal
         qreal pos = 0;
         if (sections.first() > scene_pos)
         {
-            int distance = sections.first() - scene_pos;
-            int nSections = distance / default_spacing; // this rounds down
-            qreal posThis = sections.first() - nSections * default_spacing;
+            int distance   = sections.first() - scene_pos;
+            int nSections  = distance / default_spacing;    // this rounds down
+            qreal posThis  = sections.first() - nSections * default_spacing;
             qreal distThis = qAbs(scene_pos - posThis);
-            qreal posPrev = posThis - default_spacing;
+            qreal posPrev  = posThis - default_spacing;
             qreal distPrev = qAbs(scene_pos - posPrev);
             if (distPrev < distThis)
             {
-                index -= nSections+1;
+                index -= nSections + 1;
                 pos = posPrev;
             }
             else
@@ -1060,11 +1109,11 @@ namespace hal
         }
         else if (sections.last() < scene_pos)
         {
-            int distance = scene_pos - sections.last();
-            int nSections = distance / default_spacing; // this rounds down
-            qreal posThis = sections.last() + nSections * default_spacing;
+            int distance   = scene_pos - sections.last();
+            int nSections  = distance / default_spacing;    // this rounds down
+            qreal posThis  = sections.last() + nSections * default_spacing;
             qreal distThis = qAbs(scene_pos - posThis);
-            qreal posNext = posThis + default_spacing;
+            qreal posNext  = posThis + default_spacing;
             qreal distNext = qAbs(scene_pos - posNext);
             if (distNext < distThis)
             {
@@ -1073,7 +1122,7 @@ namespace hal
             }
             else
             {
-                index += nSections + sections.size()-1;
+                index += nSections + sections.size() - 1;
                 pos = posThis;
             }
         }
@@ -1081,12 +1130,12 @@ namespace hal
         {
             // binary search for first value in sections larger than or equal to scene_pos
             const qreal* needle = std::lower_bound(sections.constBegin(), sections.constEnd(), scene_pos);
-            int i = needle - sections.begin(); // position of needle in the vector
+            int i               = needle - sections.begin();    // position of needle in the vector
             index += i;
             // check if we're closer to this or the next position
-            qreal posThis = *needle;
+            qreal posThis  = *needle;
             qreal distThis = qAbs(scene_pos - posThis);
-            qreal posPrev = (i > 0) ? sections[i-1] : (sections.first() - default_spacing);
+            qreal posPrev  = (i > 0) ? sections[i - 1] : (sections.first() - default_spacing);
             qreal distPrev = qAbs(scene_pos - posPrev);
             if (distPrev < distThis)
             {
@@ -1100,4 +1149,4 @@ namespace hal
         }
         return layouter_point{index, pos};
     }
-}
+}    // namespace hal
