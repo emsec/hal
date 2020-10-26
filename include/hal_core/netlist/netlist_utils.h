@@ -18,7 +18,7 @@ namespace hal
     namespace netlist_utils
     {
         /**
-         * Get the combined Boolean function of a subgraph of the netlist that is defined by a set of gates and an output net.<br>
+         * Get the combined Boolean function of a subgraph of the netlist that is defined by a vector of gates and an output net.<br>
          * The gates within the net should be connected and the given output net should represent the targeted output of the subgraph.<br>
          * The resulting Boolean function uses the net IDs of the automatically identified input nets as variables.
          * 
