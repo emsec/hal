@@ -56,7 +56,6 @@ namespace hal
         NetDetailsWidget(QWidget* parent = 0);
         ~NetDetailsWidget();
 
-        virtual bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
         void update(u32 net_id);
 
     public Q_SLOTS:
