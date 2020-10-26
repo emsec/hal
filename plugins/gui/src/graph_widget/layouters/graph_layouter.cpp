@@ -403,7 +403,12 @@ namespace hal
                     if (isInput)
                         mSeparatedWidth[pnt].requireInputSpace(net_item->input_width()+lane_spacing);
                     else
-                        mSeparatedWidth[pnt].requireOutputSpace(net_item->output_width()+lane_spacing);
+                    {
+                        int ibox = m_boxPosition.value(QPoint(pnt.x()-1,pnt.y()/2));
+                        Q_ASSERT(ibox >= 0);
+                        mSeparatedWidth[pnt].requireOutputSpace(
+                                    m_boxes.at(ibox).item->width() + net_item->output_width() + 3*lane_spacing);
+                    }
                     delete net_item;
                 }
             }
@@ -2474,9 +2479,9 @@ namespace hal
 
     void GraphLayouter::SceneCoordinate::setOffsetX(const SceneCoordinate& previous, float maximumBlock, float sepOut, float sepInp)
     {
-        float delta = (previous.maxLane - minLane - 1) * lane_spacing + previous.mPadding + maximumBlock;
+        float delta = (previous.maxLane - minLane - 1) * lane_spacing  + maximumBlock;
         if (delta < sepOut) delta = sepOut;
-        mOffset = previous.mOffset + delta;
+        mOffset = previous.mOffset + previous.mPadding + delta;
         float xDefaultBoxPadding = maxLane * lane_spacing;
         if (xDefaultBoxPadding < sepInp)
             mPadding = sepInp - xDefaultBoxPadding;
