@@ -3,13 +3,14 @@
 #include "gui/gui_globals.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/grouping/grouping_color_delegate.h"
+#include "gui/grouping/grouping_proxy_model.h"
 #include "gui/input_dialog/input_dialog.h"
-
-//#include "gui/graph_widget/graph_widget.h"
-
-
+#include "gui/searchbar/searchbar.h"
 #include "gui/gui_utils/graphics.h"
 #include "gui/toolbar/toolbar.h"
+
+#include "hal_core/utilities/log.h"
+
 #include <QAction>
 #include <QMenu>
 #include <QResizeEvent>
@@ -23,6 +24,8 @@ namespace hal
 {
     GroupingManagerWidget::GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
         : ContentWidget("Groupings", parent),
+          m_proxy_model(new GroupingProxyModel(this)),
+          m_searchbar(new Searchbar(this)),
           m_new_grouping_action(new QAction(this)),
           m_rename_action(new QAction(this)),
           m_color_select_action(new QAction(this)),
@@ -57,14 +60,19 @@ namespace hal
 
         mGroupingTableModel = new GroupingTableModel;
 
+        m_proxy_model->setSourceModel(mGroupingTableModel);
+        m_proxy_model->setSortRole(Qt::UserRole);
+
         mGroupingTableView = new QTableView(this);
-        mGroupingTableView->setModel(mGroupingTableModel);
+        mGroupingTableView->setModel(m_proxy_model);
         mGroupingTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mGroupingTableView->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
         mGroupingTableView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         mGroupingTableView->verticalHeader()->hide();
         mGroupingTableView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mGroupingTableView->setItemDelegateForColumn(2,new GroupingColorDelegate(mGroupingTableView));
+        mGroupingTableView->setSortingEnabled(true);
+        mGroupingTableView->sortByColumn(0, Qt::SortOrder::AscendingOrder);
 
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
@@ -74,6 +82,11 @@ namespace hal
         font.setBold(true);
         mGroupingTableView->horizontalHeader()->setFont(font);
         m_content_layout->addWidget(mGroupingTableView);
+        m_content_layout->addWidget(m_searchbar);
+
+        m_searchbar->hide();
+
+        connect(m_searchbar, &Searchbar::text_edited, this, &GroupingManagerWidget::filter);
 
         connect(m_new_grouping_action, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);
         connect(m_rename_action, &QAction::triggered, this, &GroupingManagerWidget::handleRenameGroupingClicked);
@@ -86,6 +99,17 @@ namespace hal
         connect(mGroupingTableModel, &GroupingTableModel::lastEntryDeleted, this, &GroupingManagerWidget::handleLastEntryDeleted);
         connect(mGroupingTableModel, &GroupingTableModel::newEntryAdded, this, &GroupingManagerWidget::handleNewEntryAdded);
         handleCurrentChanged();
+    }
+
+    QList<QShortcut*> GroupingManagerWidget::create_shortcuts()
+    {
+        QShortcut* search_shortcut = g_keybind_manager->make_shortcut(this, "keybinds/searchbar_toggle");
+        connect(search_shortcut, &QShortcut::activated, this, &GroupingManagerWidget::toggle_searchbar);
+
+        QList<QShortcut*> list;
+        list.append(search_shortcut);
+
+        return list;
     }
 
     void GroupingManagerWidget::handleCreateGroupingClicked()
@@ -198,12 +222,6 @@ namespace hal
         m_delete_action->setEnabled(enabled);
     }
 
-    QList<QShortcut*> GroupingManagerWidget::create_shortcuts()
-    {
-        QList<QShortcut*> list;
-        return list;
-    }
-
     void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex &index)
     {
         mGroupingTableView->setCurrentIndex(index);
@@ -244,6 +262,28 @@ namespace hal
                                                          ? iconStyle.at(iacc)
                                                          : disabled_icon_style(),
                                                          iconPath.at(iacc)));
+        }
+    }
+
+    void GroupingManagerWidget::toggle_searchbar()
+    {
+        if (m_searchbar->isHidden())
+        {
+            m_searchbar->show();
+            m_searchbar->setFocus();
+        }
+        else
+            m_searchbar->hide();
+    }
+
+    void GroupingManagerWidget::filter(const QString& text)
+    {
+        QRegExp* regex = new QRegExp(text);
+        if (regex->isValid())
+        {
+            m_proxy_model->setFilterRegExp(*regex);
+            QString output = "Groupings widget regular expression '" + text + "' entered.";
+            log_info("user", output.toStdString());
         }
     }
 
