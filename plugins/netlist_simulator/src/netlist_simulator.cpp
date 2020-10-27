@@ -778,19 +778,28 @@ namespace hal
 
         std::map<u32, std::map<Net*, SignalValue>> time_to_changes_map;
 
-        std::unordered_map<Net*, std::vector<Event>> events = m_simulation.get_events();
+        std::unordered_map<Net*, std::vector<Event>> event_tracker = m_simulation.get_events();
 
         for (const auto& simulated_net : simulated_nets)
         {
-            std::vector<Event> net_events = events.at(simulated_net);
-            for (const auto& event : net_events)
+            std::vector<Event> net_events = event_tracker.at(simulated_net);
+            SignalValue initial_value;
+            u32 initial_time = 0;
+            for (const auto& event_it : net_events)
             {
-                u32 event_time = event.time;
+                u32 event_time = event_it.time;
+                if (initial_time == event_time || ((event_time > initial_time) && (event_time < start_time)))
+                {
+                    initial_time = event_time;
+                    initial_value = event_it.new_value;
+                }
                 if (event_time > start_time && event_time < end_time)
                 {
-                    time_to_changes_map[event.time][simulated_net] = event.new_value;
+                    time_to_changes_map[event_it.time][simulated_net] = event_it.new_value;
                 }
             }
+            time_to_changes_map[initial_time][simulated_net] = initial_value;
+
         }
 
         u32 traces_count = 0;
