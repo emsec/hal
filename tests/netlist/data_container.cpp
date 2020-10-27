@@ -1,6 +1,5 @@
 #include "netlist_test_utils.h"
 #include "gtest/gtest.h"
-#include "hal_core/utilities/log.h"
 #include <iostream>
 #include "hal_core/netlist/data_container.h"
 

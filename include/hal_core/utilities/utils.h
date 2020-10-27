@@ -39,15 +39,15 @@
 namespace hal
 {
     /**
-     * @ingroup core
+     * @ingroup utilities
      */
     namespace utils
     {
         /**
-         * Returns a single bit of an integer value.
+         * Get a single bit of an integer value.
          *
-         * @param[in] value - The integer.
-         * @param[in] index - The bit's position.
+         * @param[in] value - The integer value.
+         * @param[in] index - The bit position.
          * @returns The specified bit (0 or 1).
          */
         CORE_API inline u64 get_bit(const u64 value, const u64 index)
@@ -56,10 +56,10 @@ namespace hal
         }
 
         /**
-         * Sets a single bit of an integer to 1.
+         * Set a single bit of an integer to 1.
          *
-         * @param[in] value - The integer.
-         * @param[in] index - The bit's position.
+         * @param[in] value - The integer value.
+         * @param[in] index - The bit position.
          * @returns The manipulated value.
          */
         CORE_API inline u64 set_bit(const u64 value, const u64 index)
@@ -68,10 +68,10 @@ namespace hal
         }
 
         /**
-         * Clears a single bit of an integer to 0.
+         * Clear a single bit of an integer to 0.
          *
-         * @param[in] value - The integer.
-         * @param[in] index - The bit's position.
+         * @param[in] value - The integer value.
+         * @param[in] index - The bit position.
          * @returns The manipulated value.
          */
         CORE_API inline u64 clear_bit(const u64 value, const u64 index)
@@ -80,10 +80,10 @@ namespace hal
         }
 
         /**
-         * Toggles a single bit of an integer.
+         * Toggle a single bit of an integer.
          *
-         * @param[in] value - The integer.
-         * @param[in] index - The bit's position.
+         * @param[in] value - The integer value.
+         * @param[in] index - The bit position.
          * @returns The manipulated value.
          */
         CORE_API inline u64 toggle_bit(const u64 value, const u64 index)
@@ -96,7 +96,7 @@ namespace hal
          *
          * @param[in] s - The string to analyze.
          * @param[in] end - The ending to check for.
-         * @returns True, if \p s ends with \p end.
+         * @returns True if \p s ends with \p end, false otherwise.
          */
         template<typename T>
         CORE_API bool ends_with(const T& s, const T& end)
@@ -116,7 +116,7 @@ namespace hal
          *
          * @param[in] s - The string to analyze.
          * @param[in] start - The beginning to check for.
-         * @returns True, if \p s begins with \p start.
+         * @returns True if \p s begins with \p start, false otherwise.
          */
         template<typename T>
         CORE_API bool starts_with(const T& s, const T& start)
@@ -135,7 +135,7 @@ namespace hal
          * Checks whether a string represents an integer.
          *
          * @param[in] s - The string to analyze.
-         * @returns True, if \p s contains an integer.
+         * @returns True if \p s contains an integer, false otherwise.
          */
         template<typename T>
         CORE_API bool is_integer(const T& s)
@@ -155,7 +155,7 @@ namespace hal
          * Checks whether a string represents a real number.
          *
          * @param[in] s - The string to analyze.
-         * @returns True, if \p s contains a real number.
+         * @returns True if \p s contains a real number, false otherwise.
          */
         template<typename T>
         CORE_API bool is_floating_point(const T& s)
@@ -167,13 +167,14 @@ namespace hal
         }
 
         /**
-         * Splits a string into a vector of strings. The split delimiter can be specified.
-         * The delimiters are removed in the splitting process.
+         * Split a string into a vector of strings. The split delimiter can be specified by the user.<br>
+         * The delimiters are removed in the splitting process.<br>
+         * To avoid splitting within brackets, set \p obey_brackets to \p true.
          *
          * @param[in] s - The string to split.
          * @param[in] delim - The delimiter, indicating where to split.
          * @param[in] obey_brackets - Flag to indicate whether brackets are obeyed.
-         * @returns The string parts.
+         * @returns The vector of strings.
          */
         template<typename T>
         CORE_API std::vector<T> split(const T& s, const char delim, bool obey_brackets = false)
@@ -246,10 +247,10 @@ namespace hal
         }
 
         /**
-         * Removes any whitespace characters from the beginning of a string.
+         * Remove any leading whitespace characters from the beginning of a string.
          *
          * @param[in] s - The string to trim.
-         * @param[in] to_remove - All chars that should be removed.
+         * @param[in] to_remove - The characters to remove.
          * @returns The trimmed string.
          */
         template<typename T>
@@ -268,10 +269,10 @@ namespace hal
         }
 
         /**
-         * Removes any whitespace characters from the end of a string.
+         * Remove any trailing whitespace characters from the end of a string.
          *
          * @param[in] s - The string to trim.
-         * @param[in] to_remove - All chars that should be removed.
+         * @param[in] to_remove - The characters to remove.
          * @returns The trimmed string.
          */
         template<typename T>
@@ -290,10 +291,10 @@ namespace hal
         }
 
         /**
-         * Removes any whitespace characters from the beginning and the end of a string.
+         * Remove any leading and trailing whitespace characters from the beginning and the end of a string.
          *
          * @param[in] s - The string to trim.
-         * @param[in] to_remove - All chars that should be removed.
+         * @param[in] to_remove - The characters to remove.
          * @returns The trimmed string.
          */
         template<typename T>
@@ -313,12 +314,12 @@ namespace hal
         }
 
         /**
-         * Replaces substring from begin to end of a string.
+         * Replace all occurences of a substring within a string with another string.
          *
-         * @param[in] str - The string which is subject to replacement.
-         * @param[in] search - The search substring which should be replaced.
-         * @param[in] replace - The replacement string which replaces all occurrences of search.
-         * @returns String with replaced substring.
+         * @param[in] str - The initial string.
+         * @param[in] search - The targetted substring.
+         * @param[in] replace - The replacement string.
+         * @returns String with replaced substrings.
          */
         template<typename T>
         CORE_API T replace(const T& str, const T& search, const T& replace)
@@ -341,13 +342,13 @@ namespace hal
         }
 
         /**
-         * Joins all elements of a collection with a joiner-string.
-         * Every element is transformed before being printed.
+         * v
+         * A transformation is applied to all elements of the collections before joining.
          *
-         * @param[in] joiner - The string to put between the elements.
+         * @param[in] joiner - The string joining the elements.
          * @param[in] items - The collection of elements to join.
-         * @param[in] transform - The transformation function for each element.
-         * @returns The combined string.
+         * @param[in] transform - The transformation function.
+         * @returns The joined string.
          */
         template<typename T, class Transform>
         CORE_API std::string join(const std::string& joiner, const T& items, const Transform& transform)
@@ -367,11 +368,11 @@ namespace hal
         }
 
         /**
-         * Joins all elements of a collection with a joiner-string.
+         * Join all elements of a collection with a joiner-string.
          *
-         * @param[in] joiner - The string to put between the elements.
+         * @param[in] joiner - The string joining the elements.
          * @param[in] items - The collection of elements to join.
-         * @returns The combined string.
+         * @returns The joined string.
          */
         template<typename T>
         CORE_API std::string join(const std::string& joiner, const T& items)
@@ -383,7 +384,7 @@ namespace hal
          * Convert a string to upper case.
          *
          * @param[in] s - The string to convert.
-         * @returns The converted string.
+         * @returns The upper case string.
          */
         template<typename T>
         CORE_API T to_upper(const T& s)
@@ -397,7 +398,7 @@ namespace hal
          * Convert a string to lower case.
          *
          * @param[in] s - The string to convert.
-         * @returns The converted string.
+         * @returns The lower case string.
          */
         template<typename T>
         CORE_API T to_lower(const T& s)
@@ -408,10 +409,10 @@ namespace hal
         }
 
         /**
-         * Counts number of substring occurrences in a string.
+         * Count occurences of a substring in a string.
          *
-         * @param[in] s - String containing the substring.
-         * @param[in] substr - Substring.
+         * @param[in] s - The string containing the substring.
+         * @param[in] substr - The substring.
          * @returns The number of occurrences.
          */
         template<typename T>
@@ -430,10 +431,10 @@ namespace hal
         }
 
         /**
-         * Turns an iterable collection into a std vector.
+         * Turn a given iterable collection into a vector.
          *
          * @param[in] container - The input collection.
-         * @returns A vector containing all items copied from collection
+         * @returns The vector containing all items copied from the collection.
          */
         template<typename T, template<typename, typename...> class Container, typename... Args>
         CORE_API inline std::vector<T> to_vector(const Container<T, Args...>& container)
@@ -442,27 +443,27 @@ namespace hal
         }
 
         /**
-         * Checks whether a file exists.
+         * Check whether a file exists.
          *
          * @param[in] filename - The file to check.
-         * @returns True, if file exists
+         * @returns True if file exists, false otherwise.
          */
         CORE_API bool file_exists(const std::string& filename);
 
         /**
-         * Checks whether a directory exists and access rights are available.
+         * Check whether a directory exists and access rights are granted.
          *
-         * @param[in] folder - The directory to check.
-         * @returns True, if \p folder exists and is accessible.
+         * @param[in] path - The directory to check.
+         * @returns True if \p path exists and is accessible, false otherwise.
          */
-        CORE_API bool folder_exists_and_is_accessible(const std::filesystem::path& folder);
+        CORE_API bool folder_exists_and_is_accessible(const std::filesystem::path& path);
 
         /**
-         * Locate an executable in the given path environment
+         * Locate an executable in the given path environment.
          *
-         * @param[in] name - The executable name
-         * @param[in] path - PATH to search (defaults to PATH environment variable)
-         * @returns path if executable is found else empty std::filesystem::path.
+         * @param[in] name - The name of the executable.
+         * @param[in] path - The search path (defaults to PATH environment variable).
+         * @returns The path if an executable is found, an empty path otherwise.
          */
         CORE_API std::filesystem::path which(const std::string& name, const std::string& path = "");
 
@@ -474,9 +475,9 @@ namespace hal
         CORE_API std::filesystem::path get_binary_directory();
 
         /**
-         * Get the base path to the HAL installation.
-         * 1. Use Environment Variable HAL_BASE_PATH
-         * 2. If current executable is hal (not e.g. python3 interpreter) use it's path to determine base path.
+         * Get the base path to the HAL installation.<br>
+         * 1. Use Environment Variable HAL_BASE_PATH<br>
+         * 2. If current executable is hal (not e.g. python3 interpreter) use it's path to determine base path.<br>
          * 3. Try to find hal executable in path and use its base path.
          *
          * @returns The path.
@@ -485,7 +486,7 @@ namespace hal
 
         /**
          * Get the path to the shared and static libraries of HAL.<br>
-         * Relative to the binary directory.
+         * The resulting path is relative to the binary directory.
          *
          * @returns The path.
          */
@@ -493,7 +494,7 @@ namespace hal
 
         /**
          * Get the path to the shared objects of HAL.<br>
-         * Relative to the binary directory.
+         * The resulting path is relative to the binary directory.
          *
          * @returns The path.
          */
@@ -501,7 +502,6 @@ namespace hal
 
         /**
          * Get the path to shared objects and files provided by the user.<br>
-         * home/.local/share for Unix
          *
          * @returns The path.
          */
@@ -509,7 +509,7 @@ namespace hal
 
         /**
          * Get the path to the read-only global configuration directory of HAL.<br>
-         * Relative to the binary directory.
+         * The resulting path is relative to the binary directory.
          *
          * @returns The path.
          */
@@ -517,7 +517,6 @@ namespace hal
 
         /**
          * Get the path to the configuration directory of the user.<br>
-         * home/.config/hal for Unix
          *
          * @returns The path.
          */
@@ -525,68 +524,71 @@ namespace hal
 
         /**
          * Get the path to the default directory for log files.<br>
-         * If an hdl source file is provided, the function returns the parent directory, otherwise get_user_share_directory() / "log".
+         * If an netlist source file is provided, the function returns the parent directory.
          *
-         * @param[in] source_file - The hdl source file.
+         * @param[in] source_file - The netlist source file.
          * @returns The path.
          */
         CORE_API std::filesystem::path get_default_log_directory(std::filesystem::path source_file = "");
 
         /**
-         * Get the paths where gate libraries are searched.<br>
-         * Contains the share and user share directories.
+         * Get the paths to the locations where gate libraries are searched.<br>
          *
          * @returns A vector of paths.
          */
         CORE_API std::vector<std::filesystem::path> get_gate_library_directories();
 
         /**
-         * Get the paths where plugins are searched.<br>
-         * Contains the library and user share directories.
+         * Get the paths to the locations where plugins are searched.<br>
          *
          * @returns A vector of paths.
          */
         CORE_API std::vector<std::filesystem::path> get_plugin_directories();
 
         /**
-         * Returns the first directory of all path hints that exists.
+         * Get the first directory out of all the path hints that exists (searched in order).
          *
          * @param[in] path_hints - A vector of hints.
-         * @returns The first existing path. If none exists an empty string is returned.
+         * @returns The first existing path or an empty string if none of them exists.
          */
         CORE_API std::filesystem::path get_first_directory_exists(std::vector<std::filesystem::path> path_hints);
 
         /**
-         * Search in all paths provided by path hints (used in order) for a given filename.
+         * Search for the given filename in all paths provided by the path hints (searched in order).
          *
          * @param[in] file_name - The filename to search for.
          * @param[in] path_hints - A vector of hints.
-         * @returns The first to match. If none matches an empty string is returned.
+         * @returns The first to match or an empty string if no match is found.
          */
         CORE_API std::filesystem::path get_file(std::string file_name, std::vector<std::filesystem::path> path_hints);
 
         /**
-         * Get all licenses of used OpenSource Projects.
+         * Get the licenses of all embedded OpenSource Projects.
          *
-         * @returns All open source licenses;
+         * @returns The open source licenses.
          */
         CORE_API std::string get_open_source_licenses();
 
+        /**
+         * A recursive range of directories starting at a top level root directory.
+         */
         class CORE_API RecursiveDirectoryRange
         {
         public:
             using iterator = std::filesystem::recursive_directory_iterator;
 
             /**
-             * @param[in] p - The top level directory.
+             * Construct a recursive directory range from a top level directory.
+             * 
+             * @param[in] path - The path to the top level directory.
              */
-            RecursiveDirectoryRange(std::filesystem::path p) : p_(p)
+            RecursiveDirectoryRange(std::filesystem::path path) : p_(path)
             {
             }
 
             /**
-             * Gets an iterator pointing to the first element in the top level directory.<br>
-             * The iterator will iterate recursively through all elements inside of the top level container.
+             * Get an iterator pointing to the first element in the top level directory.<br>
+             * The iterator will iterate recursively through all elements inside the top level container.
              *
              * @returns The iterator.
              */
@@ -596,7 +598,7 @@ namespace hal
             }
 
             /**
-             * Gets an iterator pointing behind the last element in the top level directory.
+             * Get an iterator pointing behind the last element in the top level directory.
              *
              * @returns The iterator.
              */
@@ -609,21 +611,26 @@ namespace hal
             std::filesystem::path p_;
         };
 
+        /**
+         * A range of directories within the top level root directory.
+         */
         class CORE_API DirectoryRange
         {
         public:
             using iterator = std::filesystem::directory_iterator;
 
             /**
-             * @param[in] p - The top level directory.
+             * Construct a directory range from a top level directory.
+             * 
+             * @param[in] path - The top level directory.
              */
-            DirectoryRange(std::filesystem::path p) : p_(p)
+            DirectoryRange(std::filesystem::path path) : p_(path)
             {
             }
 
             /**
-             * Gets an iterator pointing to the first element in the top level directory.<br>
-             * The iterator will iterate through all elements inside of the top level container.<br>
+             * Get an iterator pointing to the first element in the top level directory.<br>
+             * The iterator will iterate through all elements inside the top level container.<br>
              * Lower levels are ignored.
              *
              * @returns The iterator.
@@ -646,5 +653,5 @@ namespace hal
         private:
             std::filesystem::path p_;
         };
-    }    // namespace core_utils
+    }    // namespace utils
 }    // namespace hal

@@ -98,6 +98,10 @@ namespace hal
         void handle_extern_selection_changed(void* sender);
         void handle_extern_subfocus_changed(void* sender);
         void handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems);
+        void handleGroupingAssignModule(Grouping* grp, u32 id);
+        void handleGroupingAssignGate(Grouping* grp, u32 id);
+        void handleGroupingAssignNet(Grouping* grp, u32 id);
+        void handleGroupingColorChanged(Grouping* grp);
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override;

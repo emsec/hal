@@ -1,5 +1,7 @@
 #include "gui/window_manager/window_manager.h"
 
+#include "gui/dialogs/warning_dialog.h"
+#include "gui/overlay/dialog_overlay.h"
 #include "gui/overlay/overlay.h"
 #include "gui/plugin_management/plugin_schedule_widget.h"
 #include "gui/settings/main_settings_widget.h"
@@ -13,28 +15,25 @@
 #include <QShortcut>
 #include <QDebug>
 
+#include <cassert>
+
 namespace hal
 {
     WindowManager::WindowManager(QObject* parent) : QObject(parent),
-        m_MainWindow        (nullptr),
-        m_action_open_file   (new QAction("Open File", this)),
-        m_action_close_file  (new QAction("Close File", this)),
-        m_action_save        (new QAction("Save", this)),
-        m_action_schedule    (new QAction("Schedule", this)),
-        m_action_run_schedule(new QAction("Run Schedule", this)),
-        m_action_content     (new QAction("Content", this)),
-        m_action_settings    (new QAction("Settings", this)),
-        m_action_about       (new QAction("About", this)),
-        m_welcome_screen     (new WelcomeScreen()),
-        m_PluginScheduleWidget(new PluginScheduleWidget()),
-        m_main_settings_widget(new MainSettingsWidget())
+        m_main_window           (nullptr),
+        m_toolbar               (new WindowToolbar(nullptr)),
+        m_action_open_file      (new QAction("Open File", this)),
+        m_action_close_file     (new QAction("Close File", this)),
+        m_action_save           (new QAction("Save", this)),
+        m_action_schedule       (new QAction("Schedule", this)),
+        m_action_run_schedule   (new QAction("Run Schedule", this)),
+        m_action_content        (new QAction("Content", this)),
+        m_action_settings       (new QAction("Settings", this)),
+        m_action_about          (new QAction("About", this)),
+        m_welcome_screen        (new WelcomeScreen()),
+        m_plugin_schedule_widget(new PluginScheduleWidget()),
+        m_main_settings_widget  (new MainSettingsWidget())
     {
-        // DEBUG CODE
-        // CHECK IF SHORTCUTS WORK AS EXPECTED
-        m_action_open_file->setShortcut(QKeySequence("Ctrl+O"));
-        m_action_save->setShortcut(QKeySequence("Ctrl+S"));
-        m_action_run_schedule->setShortcut(QKeySequence("Ctrl+Shift+R"));
-
         connect(m_action_open_file,    &QAction::triggered, this, &WindowManager::handle_action_open);
         connect(m_action_close_file,   &QAction::triggered, this, &WindowManager::handle_action_close);
         connect(m_action_save,         &QAction::triggered, this, &WindowManager::handle_action_save);
@@ -46,6 +45,16 @@ namespace hal
 
         repolish();
 
+        m_toolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+
+        m_toolbar->addAction(m_action_open_file);
+        m_toolbar->addAction(m_action_save);
+        m_toolbar->addAction(m_action_schedule);
+        m_toolbar->addAction(m_action_run_schedule);
+        m_toolbar->addAction(m_action_content);
+        m_toolbar->add_spacer();
+        m_toolbar->addAction(m_action_settings);
+
         // LOAD ALL LAYOUTS
         // RESTORE SELECTED LAYOUT OR USE DEFAULT LAYOUT
 
@@ -53,7 +62,12 @@ namespace hal
         add_window();
         add_window();
 
-        m_MainWindow->special_view(m_welcome_screen);
+        // CHECK IF SHORTCUTS WORK AS EXPECTED
+        m_action_open_file->setShortcut(QKeySequence("Ctrl+O"));
+        m_action_save->setShortcut(QKeySequence("Ctrl+S"));
+        m_action_run_schedule->setShortcut(QKeySequence("Ctrl+Shift+R"));
+
+        m_main_window->show_special_screen(m_welcome_screen);
 
         // THIS WORKS, COMPARE TO HARDCODED EVENT LISTENER
         QShortcut* shortcut = new QShortcut(QKeySequence("F1"), m_windows.at(0));
@@ -66,63 +80,57 @@ namespace hal
         Window* window = new Window(nullptr);
         m_windows.append(window);
 
-        if (!m_MainWindow)
-            set_MainWindow(window);
+        if (!m_main_window)
+            set_main_window(window);
 
         window->show();
     }
 
     void WindowManager::remove_window(Window* window)
     {
-        if (!window)
-            return;
+        assert(window);
 
         if (m_windows.removeOne(window))
         {
-            if (window == m_MainWindow)
+            if (window == m_main_window)
             {
                 if (!m_windows.empty())
-                    set_MainWindow(m_windows[0]);
+                    set_main_window(m_windows[0]);
                 else
-                    m_MainWindow = nullptr;
+                    m_main_window = nullptr;
             }
             window->deleteLater();
         }
     }
 
-    void WindowManager::set_MainWindow(Window* window)
+    void WindowManager::set_main_window(Window* window)
     {
-        if (m_MainWindow)
-            m_MainWindow->get_toolbar()->clear();
-        // REMOVE CORRECT ACTIONS
+        assert(window);
 
-        // MAYBE BETTER TO JUST HAVE 1 TOOLBAR, LESS WORK TO MANAGE
+        if (m_main_window)
+            m_main_window->show_toolbar_extension(); // USE SETTING HERE
 
-        // CHANGE TOOLBAR CONTENT DEPENDING ON APPLICATION STATE
-        // ADD FANCY ANIMATION
-        // WRITE OWN TOOLBAR CLASS BECAUSE QT CLASS SUCKS
-        WindowToolbar* t = window->get_toolbar();
-
-        t->addAction(m_action_open_file);
-        t->addAction(m_action_save);
-        t->addAction(m_action_schedule);
-        t->addAction(m_action_run_schedule);
-        t->addAction(m_action_content);
-        t->add_spacer();
-        t->addAction(m_action_settings);
-
-        m_MainWindow = window;
+        m_main_window = window;
+        m_main_window->show_toolbar(m_toolbar);
+        m_main_window->hide_toolbar_extension();
     }
 
     void WindowManager::lock_all()
     {
-        for (Window* window : m_windows)
-            window->lock();
+        for (Window*& window : m_windows)
+        {
+            //Overlay* overlay = new Overlay();
+            DialogOverlay* overlay = new DialogOverlay();
+            WarningDialog* dialog = new WarningDialog();
+            overlay->set_dialog(dialog);
+            dialog->fade_in();
+            window->lock(overlay);
+        }
     }
 
     void WindowManager::unlock_all()
     {
-        for (Window* window : m_windows)
+        for (Window*& window : m_windows)
             window->unlock();
     }
 
@@ -152,13 +160,11 @@ namespace hal
         m_action_settings    ->setIcon(style::get_styled_svg_icon(a->m_settings_icon_style, a->m_settings_icon_path));
         //m_action_about       ->setIcon(style::get_styled_svg_icon(a->m_about_icon_style, a->m_about_icon_path));
 
-        // UPDATE ICONS IN TOOLBAR
-
-        for (Window* window : m_windows)
+        for (Window*& window : m_windows)
             window->repolish();
     }
 
-    void WindowManager::handle_Overlay_clicked()
+    void WindowManager::handle_overlay_clicked()
     {
         unlock_all();
     }
@@ -166,12 +172,13 @@ namespace hal
     void WindowManager::handle_action_open()
     {
         qDebug() << "handle action open called";
-        lock_all(); // DEBUG CODE
+        lock_all();
     }
 
     void WindowManager::handle_action_close()
     {
         qDebug() << "handle action close called";
+        unlock_all();
     }
 
     void WindowManager::handle_action_save()

@@ -1,5 +1,12 @@
 library (XILINX_SIMPRIM) {
-    define(cell);
+    type (bus4) {
+        base_type : array;
+        data_type : bit;
+        bit_width : 4;
+        bit_from  : 0;
+        bit_to    : 3;
+    }
+
     cell(DOUT_OSERDESE1_VHD) {
         pin(BUFO) { direction: input; }
         pin(CLK) { direction: input; }
@@ -971,8 +978,13 @@ library (XILINX_SIMPRIM) {
     }
 
     cell(X_BUF) {
-        pin(I) { direction: input; }
-        pin(O) { direction: output; }
+        pin(I) { 
+            direction: input; 
+        }
+        pin(O) { 
+            direction: output; 
+            function: "I";
+        }
     }
 
     cell(X_BUFGCTRL) {
@@ -1085,22 +1097,62 @@ library (XILINX_SIMPRIM) {
     cell(X_CARRY4) {
         pin(CI) { direction: input; }
         pin(CYINIT) { direction: input; }
-        pin("DI(0)") { direction: input; }
-        pin("DI(1)") { direction: input; }
-        pin("DI(2)") { direction: input; }
-        pin("DI(3)") { direction: input; }
-        pin("S(0)") { direction: input; }
-        pin("S(1)") { direction: input; }
-        pin("S(2)") { direction: input; }
-        pin("S(3)") { direction: input; }
-        pin("CO(0)") { direction: output; }
-        pin("CO(1)") { direction: output; }
-        pin("CO(2)") { direction: output; }
-        pin("CO(3)") { direction: output; }
-        pin("O(0)") { direction: output; }
-        pin("O(1)") { direction: output; }
-        pin("O(2)") { direction: output; }
-        pin("O(3)") { direction: output; }
+
+        bus(DI) {
+            bus_type: bus4;
+            direction: input;
+
+            pin(DI[0]) {}
+            pin(DI[1]) {}
+            pin(DI[2]) {}
+            pin(DI[3]) {}
+        }
+
+         bus(S) {
+            bus_type: bus4;
+            direction: input;
+
+            pin(S[0]) {}
+            pin(S[1]) {}
+            pin(S[2]) {}
+            pin(S[3]) {}
+        }
+
+        bus(CO) {
+            bus_type: bus4;
+            direction: output;
+
+            pin(CO[0]) {
+                function: "(S[0] & (CI | CYINIT)) | (!S[0] & DI[0])";
+            }
+            pin(CO[1]) {
+                function: "S[1] & CO[0] | !S[1] & DI[1]";
+            }
+            pin(CO[2]) {
+                function: "S[2] & CO[1] | !S[2] & DI[2]";
+            }
+            pin(CO[3]) {
+                function: "S[3] & CO[2] | !S[3] & DI[3]";
+            }
+        }
+
+        bus(O) {
+            bus_type: bus4;
+            direction: output;
+
+            pin(O[0]) {
+                function: "S[0] ^ (CI | CYINIT)";
+            }
+            pin(O[1]) {
+                function: "S[1] ^ CO[0]";
+            }
+            pin(O[2]) {
+                function: "S[2] ^ CO[1]";
+            }
+            pin(O[3]) {
+                function: "S[3] ^ CO[2]";
+            }
+        }
     }
 
     cell(X_CKBUF) {
@@ -4015,12 +4067,35 @@ library (XILINX_SIMPRIM) {
     }
 
     cell(X_FF) {
-        pin(CE) { direction: input; }
-        pin(CLK) { direction: input; }
-        pin(I) { direction: input; }
-        pin(RST) { direction: input; }
-        pin(SET) { direction: input; }
-        pin(O) { direction: output; }
+        ff ("IQ" , "IQN") {
+            next_state          : "I";
+            clocked_on          : "CE & CLK";
+            preset              : "SET";
+            clear               : "RST";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+
+        pin(CE) { 
+            direction: input; 
+        }
+        pin(CLK) { 
+            direction: input;
+            clock: true;
+        }
+        pin(I) { 
+            direction: input; 
+        }
+        pin(RST) { 
+            direction: input; 
+        }
+        pin(SET) { 
+            direction: input; 
+        }
+        pin(O) { 
+            direction: output; 
+            function: "IQ";
+        }
     }
 
     cell(X_FF18_INTERNAL_VHDL) {
@@ -12324,11 +12399,21 @@ library (XILINX_SIMPRIM) {
             data_identifier   : "INIT";
             bit_order         : "ascending";
         }
-        pin(ADR0) { direction: input; }
-        pin(ADR1) { direction: input; }
-        pin(ADR2) { direction: input; }
-        pin(ADR3) { direction: input; }
-        pin(ADR4) { direction: input; }
+        pin(ADR0) { 
+            direction: input; 
+        }
+        pin(ADR1) { 
+            direction: input; 
+        }
+        pin(ADR2) { 
+            direction: input; 
+        }
+        pin(ADR3) { 
+            direction: input; 
+        }
+        pin(ADR4) {
+            direction: input; 
+        }
         pin(O) {
             direction: output;
             function: "lut_out";
@@ -12341,12 +12426,24 @@ library (XILINX_SIMPRIM) {
             data_identifier   : "INIT";
             bit_order         : "ascending";
         }
-        pin(ADR0) { direction: input; }
-        pin(ADR1) { direction: input; }
-        pin(ADR2) { direction: input; }
-        pin(ADR3) { direction: input; }
-        pin(ADR4) { direction: input; }
-        pin(ADR5) { direction: input; }
+        pin(ADR0) { 
+            direction: input; 
+        }
+        pin(ADR1) { 
+            direction: input; 
+        }
+        pin(ADR2) { 
+            direction: input; 
+        }
+        pin(ADR3) { 
+            direction: input; 
+        }
+        pin(ADR4) { 
+            direction: input; 
+        }
+        pin(ADR5) { 
+            direction: input; 
+        }
         pin(O) {
             direction: output;
             function: "lut_out";
@@ -13792,10 +13889,20 @@ library (XILINX_SIMPRIM) {
     }
 
     cell(X_MUX2) {
-        pin(IA) { direction: input; }
-        pin(IB) { direction: input; }
-        pin(SEL) { direction: input; }
-        pin(O) { direction: output; }
+        pin(IA) { 
+            direction: input;
+        }
+        pin(IB) { 
+            direction: input; 
+        }
+        pin(SEL) { 
+            direction: input; 
+        }
+        pin(O) { 
+            direction: output; 
+            function: "(!SEL & IA) | (SEL & IB)";
+        }
+        
     }
 
     cell(X_OBUF) {
@@ -13908,7 +14015,10 @@ library (XILINX_SIMPRIM) {
     }
 
     cell(X_ONE) {
-        pin(O) { direction: output; function: "1"; }
+        pin(O) { 
+            direction: output; 
+            function: "1"; 
+        }
     }
 
     cell(X_OPAD) {
@@ -40815,7 +40925,10 @@ library (XILINX_SIMPRIM) {
     }
 
     cell(X_ZERO) {
-        pin(O) { direction: output; function: "0"; }
+        pin(O) { 
+            direction: output; 
+            function: "0";
+        }
     }
 
     cell(X_ZHOLD_DELAY) {

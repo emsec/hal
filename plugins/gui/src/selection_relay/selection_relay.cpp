@@ -507,17 +507,24 @@ namespace hal
 
     void SelectionRelay::follow_module_input_pin(Module* m, u32 input_pin_index)
     {
+        Q_UNUSED(m)
+        Q_UNUSED(input_pin_index)
         // TODO implement
     }
 
     void SelectionRelay::follow_module_output_pin(Module* m, u32 output_pin_index)
     {
+        Q_UNUSED(m)
+        Q_UNUSED(output_pin_index)
         // TODO implement
     }
 
     void SelectionRelay::follow_net_to_source(Net* n)
     {
-        auto e = n->get_source();
+        if(n->get_sources().empty())
+            return;
+
+        auto e = n->get_sources().at(0);
         auto g = e->get_gate();
 
         if (!g)

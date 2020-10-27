@@ -23,8 +23,8 @@
 
 #pragma once
 
-#include "hal_core/utilities/callback_hook.h"
 #include "hal_core/defines.h"
+#include "hal_core/utilities/callback_hook.h"
 
 #define RAPIDJSON_HAS_STDSTRING 1
 #include "rapidjson/document.h"
@@ -36,7 +36,7 @@ namespace hal
     /**
      * Plugin manager to load and unload plugins
      *
-     * @ingroup core
+     * @ingroup utilities
      */
     namespace hal_file_manager
     {

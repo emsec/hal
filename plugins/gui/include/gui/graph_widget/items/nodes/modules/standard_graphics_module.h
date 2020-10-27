@@ -24,6 +24,7 @@
 #pragma once
 
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
+#include <QPixmap>
 
 namespace hal
 {
@@ -50,12 +51,10 @@ namespace hal
 
         static QColor s_text_color;
 
-        static QFont s_name_font;
-        static QFont s_type_font;
+        static QFont sTextFont[3];
         static QFont s_pin_font;
 
-        static qreal s_name_font_height;
-        static qreal s_type_font_height;
+        static qreal sTextFontHeight[3];
 
         static qreal s_color_bar_height;
 
@@ -77,9 +76,13 @@ namespace hal
 
         void format(const bool& adjust_size_to_grid);
 
-        QPointF m_name_position;
-        QPointF m_type_position;
+        QPointF mTextPosition[3];
 
         QVector<QPointF> m_output_pin_positions;
+        static const int ICON_PADDING;
+        static const QSize ICON_SIZE;
+
+        static QPixmap* sIconInstance;
+        static const QPixmap& iconPixmap();
     };
 }    // namespace hal

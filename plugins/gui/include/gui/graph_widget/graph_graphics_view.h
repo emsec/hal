@@ -62,6 +62,7 @@ namespace hal
         void handle_move_action(QAction* action);
         void handle_move_new_action();
         void handle_rename_action();
+        void handle_change_type_action();
         void adjust_min_scale();
 
         void handle_fold_single_action();
@@ -71,6 +72,9 @@ namespace hal
 
         void handle_select_outputs();
         void handle_select_inputs();
+        void handleGroupingUnassign();
+        void handleGroupingAssignNew();
+        void handleGroupingAssingExisting();
 
         void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
@@ -98,6 +102,7 @@ namespace hal
         void toggle_antialiasing();
 
         bool item_draggable(GraphicsItem* item);
+        void groupingAssignInternal(Grouping* grp);
 
         struct layouter_point
         {

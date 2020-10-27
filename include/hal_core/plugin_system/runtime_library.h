@@ -41,7 +41,7 @@ namespace hal
 #endif
 
     /**
-     * @ingroup core
+     * @ingroup plugins
      */
     class CORE_API RuntimeLibrary
     {

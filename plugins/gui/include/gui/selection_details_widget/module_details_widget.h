@@ -32,6 +32,7 @@
 #include <QWidget>
 
 class QTableWidget;
+class QTableView;
 class QTableWidgetItem;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -45,6 +46,7 @@ namespace hal
     class GraphNavigationWidget;
     class DataFieldsTable;
     class DetailsSectionWidget;
+    class DetailsGeneralModel;
 
     class ModuleDetailsWidget : public DetailsWidget
     {
@@ -52,8 +54,6 @@ namespace hal
     public:
         ModuleDetailsWidget(QWidget* parent = nullptr);
         ~ModuleDetailsWidget();
-
-        virtual bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
 
         void update(const u32 module_id);
 
@@ -94,14 +94,8 @@ namespace hal
         DetailsSectionWidget* m_outputPortsSection;
         DetailsSectionWidget* m_dataFieldsSection;
 
-        QTableWidget* m_general_table;
-
-        QTableWidgetItem* m_name_item;
-        QTableWidgetItem* m_id_item;
-        QTableWidgetItem* m_type_item;
-        QTableWidgetItem* m_number_of_gates_item;
-        QTableWidgetItem* m_number_of_submodules_item;
-        QTableWidgetItem* m_number_of_nets_item;
+        QTableView* mGeneralView;
+        DetailsGeneralModel* mGeneralModel;
 
         QTableWidget* m_input_ports_table;
 
@@ -109,13 +103,7 @@ namespace hal
 
         DataFieldsTable* m_dataFieldsTable;
 
-        QSize calculate_table_size(QTableWidget* table);
-
-        void add_general_table_static_item(QTableWidgetItem* item);
-        void add_general_table_dynamic_item(QTableWidgetItem* item);
-
         //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
-        void handle_general_table_menu_requested(const QPoint& pos);
         void handle_input_ports_table_menu_requested(const QPoint& pos);
         void handle_output_ports_table_menu_requested(const QPoint& pos);
 

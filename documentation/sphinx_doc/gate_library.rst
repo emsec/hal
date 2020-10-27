@@ -1,7 +1,7 @@
 Gate Library
 ==========================
 
-.. autoclass:: hal_py.gate_library
+.. autoclass:: hal_py.GateLibrary
    :members:
 
    .. automethod:: __init__

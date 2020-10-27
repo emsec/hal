@@ -1,9 +1,5 @@
 #pragma once
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/plugin_system/plugin_interface_gui.h"
-#include "hal_core/plugin_system/plugin_manager.h"
-#include "hal_core/utilities/utils.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
@@ -11,12 +7,18 @@
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/plugin_system/plugin_interface_gui.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
@@ -35,27 +37,44 @@
 #pragma GCC diagnostic pop
 
 /**
- * Wrapper class so that PyBind can work with classes that are managed by HAL.
+ * Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL.
  *
- * @param[in] m - the python module
+ * @ingroup pybind
  */
 template<class T>
 class RawPtrWrapper
 {
 public:
+    /**
+     * Construct an empty wrapper.
+     */
     RawPtrWrapper() : m_ptr(nullptr)
     {
     }
+
+    /**
+     * Construct a wrapper from a raw pointer.
+     * 
+     * @param[in] ptr - The raw pointer.
+     */
     RawPtrWrapper(T* ptr) : m_ptr(ptr)
     {
     }
+
+    /**
+     * Construct a wrapper from another one (i.e., copy constructor).
+     * 
+     * @param[in] other - The other wrapper to copy.
+     */
     RawPtrWrapper(const RawPtrWrapper& other) : m_ptr(other.m_ptr)
     {
     }
-    /*
-         *  Pybind needs a get() method that returns the raw ptr.
-         * @returns the raw pointer.
-         */
+
+    /**
+     * Get the raw pointer from the wrapper.
+     * 
+     * @returns The raw pointer.
+     */
     T* get() const
     {
         return m_ptr;
@@ -69,6 +88,12 @@ PYBIND11_DECLARE_HOLDER_TYPE(T, RawPtrWrapper<T>, true)
 namespace hal
 {
     namespace py = pybind11;
+    /**
+     * TODO move into own namespace
+     * 
+     * @ingroup pybind
+     * @{
+     */
 
     /**
      * Initializes Python bindings for the HAL path in a python module.
@@ -134,6 +159,13 @@ namespace hal
     void netlist_init(py::module& m);
 
     /**
+     * Initializes Python bindings for the HAL netlist in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void netlist_utils_init(py::module& m);
+
+    /**
      * Initializes Python bindings for the HAL gate in a python module.
      *
      * @param[in] m - the python module
@@ -153,6 +185,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void module_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL grouping in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void grouping_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL netlist factory in a python module.
@@ -188,4 +227,8 @@ namespace hal
      * @param[in] m - the python module
      */
     void boolean_function_init(py::module& m);
+
+    /**
+     * @}
+     */
 }    // namespace hal

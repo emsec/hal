@@ -1,22 +1,16 @@
-#include "hal_core/netlist/netlist.h"
-
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/grouping.h"
 #include "netlist_test_utils.h"
-
-#include "gtest/gtest.h"
-#include "hal_core/utilities/log.h"
-#include <iostream>
+#include "hal_core/netlist/event_system/netlist_event_handler.h"
 
 namespace hal {
     using test_utils::MIN_NETLIST_ID;
     using test_utils::MIN_MODULE_ID;
     using test_utils::MIN_GATE_ID;
     using test_utils::MIN_NET_ID;
+    using test_utils::MIN_GROUPING_ID;
 
     class NetlistTest : public ::testing::Test {
     protected:
@@ -187,7 +181,7 @@ namespace hal {
      *
      * Functions: create_gate
      */
-    TEST_F(NetlistTest, check_add_gate) {
+    TEST_F(NetlistTest, check_create_gate) {
         TEST_START
             {// Add a Gate the normal way
                 auto nl = test_utils::create_empty_netlist();
@@ -237,6 +231,26 @@ namespace hal {
                 auto g_0 = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "");
                 EXPECT_EQ(g_0, nullptr);
             }
+            {
+                // Try to add a Gate with a nullptr gate type
+                NO_COUT_TEST_BLOCK;
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, nullptr, "");
+                EXPECT_EQ(g_0, nullptr);
+            }
+            {
+                // Try to add a Gate with an invalid gate type
+                NO_COUT_TEST_BLOCK;
+                std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+                // Create a GateType of another gate library
+                std::unique_ptr<GateLibrary> gl = std::make_unique<GateLibrary>("imaginary_path", "OtherLibrary");
+                std::unique_ptr<GateType> not_in_gl_gate_type = std::make_unique<GateType>("not_in_gl_gate");
+                not_in_gl_gate_type->add_output_pins({"O"});
+                gl->add_gate_type(std::move(not_in_gl_gate_type));
+
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types()["not_in_gl_gate"], "");
+                EXPECT_EQ(g_0, nullptr);
+            }
         TEST_END
     }
 
@@ -264,7 +278,7 @@ namespace hal {
                 EXPECT_FALSE(nl->is_gate_in_netlist(gate_0));
                 EXPECT_TRUE(nl->get_net_by_id(MIN_NET_ID + 30)->get_destinations([gate_0](auto ep){return ep->get_gate() == gate_0;}).empty());
                 EXPECT_TRUE(nl->get_net_by_id(MIN_NET_ID + 20)->get_destinations([gate_0](auto ep){return ep->get_gate() == gate_0;}).empty());
-                EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID + 045)->get_source(), nullptr);
+                EXPECT_EQ(nl->get_net_by_id(MIN_NET_ID + 045)->get_sources().size(), 0);
             }
             {
                 // Add and delete global_gnd Gate
@@ -1057,7 +1071,6 @@ namespace hal {
                 nl->delete_module(m_0);
                 Module*
                     m_0_other = nl->create_module(MIN_MODULE_ID + 0, "module_0_other", nl->get_top_module());
-                //EXPECT_FALSE(nl->is_module_in_netlist(m_0)); //ISSUE: should be  true
                 EXPECT_TRUE(nl->is_module_in_netlist(m_0_other));
             }
 
@@ -1102,14 +1115,14 @@ namespace hal {
                 Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "module_0", nullptr);
                 EXPECT_EQ(m_0, nullptr);
             }
-            /*{
-                        // Create a module where the parrent module is part of ANOTHER netlist ISSUE: fails
-                        NO_COUT_TEST_BLOCK;
-                        auto nl = create_empty_netlist();
-                        auto nl_other = create_empty_netlist();
-                        Module* m_0 = nl->create_module(MIN_MODULE_ID+0,"module_0", nl_other->get_top_module());
-                        EXPECT_EQ(m_0, nullptr);
-                    }*/
+            {
+                // Create a module where the parrent module is part of ANOTHER netlist
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                auto nl_other = test_utils::create_empty_netlist();
+                Module* m_0 = nl->create_module(MIN_MODULE_ID+0,"module_0", nl_other->get_top_module());
+                EXPECT_EQ(m_0, nullptr);
+            }
 
         TEST_END
     }
@@ -1209,27 +1222,26 @@ namespace hal {
     TEST_F(NetlistTest, check_is_module_in_netlist) {
         TEST_START
             // Positive
-            {// Add a module and check if it is in the netlist
+            {
+                // Add a module and check if it is in the netlist
                 auto nl = test_utils::create_empty_netlist();
                 Module* m_0 = nl->create_module(MIN_MODULE_ID + 0, "module_0", nl->get_top_module());
                 EXPECT_TRUE(nl->is_module_in_netlist(m_0));
             }
-            /*{
-                        // Create a module, delete it and create a new module with the same id and check if the !old_one! is in the netlist
-                        // ISSUE: fails
-                        auto nl = create_empty_netlist();
-                        Module* m_0_old = nl->create_module(MIN_MODULE_ID+0, "module_0_old", nl->get_top_module());
-                        nl->delete_module(m_0_old);
-                        Module* m_0_other = nl->create_module(MIN_MODULE_ID+0, "module_0_other", nl->get_top_module());
-                        EXPECT_FALSE(nl->is_module_in_netlist(m_0_old));
-                    }
-                    // Negative
-                    {
-                        // Pass a nullptr
-                        // ISSUE: fails (SIGSEGV)
-                        auto nl = create_empty_netlist();
-                        EXPECT_TRUE(nl->is_module_in_netlist(nullptr));
-                    }*/
+            {
+                // Create a module, delete it and create a new module with the same id and check if the !old_one! is in the netlist
+                auto nl = test_utils::create_empty_netlist();
+                Module* m_0_old = nl->create_module(MIN_MODULE_ID+0, "module_0_old", nl->get_top_module());
+                nl->delete_module(m_0_old); // Adress of m_0_old is now freed
+                Module* m_0_other = nl->create_module(MIN_MODULE_ID+0, "module_0_other", nl->get_top_module());
+                EXPECT_TRUE(m_0_old == m_0_other || !nl->is_module_in_netlist(m_0_old));
+            }
+            // Negative
+            {
+                // Pass a nullptr
+                auto nl = test_utils::create_empty_netlist();
+                EXPECT_FALSE(nl->is_module_in_netlist(nullptr));
+            }
         TEST_END
     }
 
@@ -1282,4 +1294,308 @@ namespace hal {
             }
         TEST_END
     }
+
+    /***************************************************
+     *               Grouping Functions
+     ***************************************************/
+
+    /**
+    * Testing the creation of a grouping
+    *
+    * Functions: create_grouping
+    */
+    TEST_F(NetlistTest, check_create_grouping) {
+        TEST_START
+            // Positive
+            {// Create a grouping
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                EXPECT_TRUE(nl->is_grouping_in_netlist(g_0));
+            }
+            {
+                // Create a grouping without passing an ID
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping("grouping_0");
+                EXPECT_TRUE(nl->is_grouping_in_netlist(g_0));
+            }
+            {
+                // Add a grouping, remove it and add a grouping with the same ID (to test the free_grouping_id logic)
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                nl->delete_grouping(g_0);
+                Grouping* g_0_other = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0_other");
+                EXPECT_TRUE(nl->is_grouping_in_netlist(g_0_other));
+            }
+
+            // Negative
+            {
+                // Create a grouping with an invalid ID
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(test_utils::INVALID_GROUPING_ID, "grouping_0");
+                EXPECT_EQ(g_0, nullptr);
+            }
+            {
+                // Create a grouping with an ID that is already used
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                Grouping* g_0_other = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0_other");
+                EXPECT_EQ(g_0_other, nullptr);
+            }
+            {
+                // Create a grouping with an invalid name (empty string)
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "");
+                EXPECT_EQ(g_0, nullptr);
+            }
+        TEST_END
+    }
+
+    /**
+     * Testing the get_grouping_by_id function
+     *
+     * Functions: get_grouping_by_id
+     */
+    TEST_F(NetlistTest, check_get_grouping_by_id) {
+        TEST_START
+            // Positive
+            {
+                // Testing the access on a module by its name
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_123 = nl->create_grouping(MIN_GROUPING_ID + 123, "grouping_123");
+                if (g_123 != nullptr) 
+                {
+                    Grouping* g_123_by_id = nl->get_grouping_by_id(MIN_GROUPING_ID + 123);
+                    EXPECT_EQ(g_123_by_id, g_123);
+                }
+            }
+            // Negative
+            {
+                // The passed ID is not taken
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+
+                EXPECT_EQ(nl->get_grouping_by_id(MIN_GROUPING_ID + 123), nullptr);
+            }
+        TEST_END
+    }
+
+    /**
+    * Testing the deletion of groupings from the netlist. Verification of success by is_grouping_in_netlist
+    *
+    * Functions: delete_grouping, is_grouping_in_netlist
+    */
+    TEST_F(NetlistTest, check_delete_grouping) {
+        TEST_START
+            // Positive
+            {
+                // Add a grouping and delete it afterwards
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                nl->delete_grouping(g_0);
+                EXPECT_FALSE(nl->is_grouping_in_netlist(g_0));
+            }
+            {
+                // Remove grouping with content
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+
+                // Add a Net and a Gate to the test_module
+                Gate* gate_0 = nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Net* net_0 = nl->create_net("net_0");
+                Module* module_0 = nl->create_module("module_0", nl->get_top_module());
+
+                g_0->assign_gate(gate_0);
+                g_0->assign_net(net_0);
+                g_0->assign_module(module_0);
+
+                nl->delete_grouping(g_0);
+
+                EXPECT_FALSE(nl->is_grouping_in_netlist(g_0));
+                EXPECT_TRUE(nl->is_gate_in_netlist(gate_0));
+                EXPECT_TRUE(nl->is_net_in_netlist(net_0));
+                EXPECT_TRUE(nl->is_module_in_netlist(module_0));
+
+                EXPECT_EQ(gate_0->get_grouping(), nullptr);
+                EXPECT_EQ(net_0->get_grouping(), nullptr);
+                EXPECT_EQ(module_0->get_grouping(), nullptr);
+            }
+        TEST_END
+    }
+
+    /**
+    * Testing the function is_grouping_in_netlist
+    *
+    * Functions: is_grouping_in_netlist
+    */
+    TEST_F(NetlistTest, check_is_grouping_in_netlist) {
+        TEST_START
+            // Positive
+            {
+                // Add a grouping and check if it is in the netlist
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                EXPECT_TRUE(nl->is_grouping_in_netlist(g_0));
+            }
+            {
+                // Create a grouping, delete it and create a new grouping with the same id and check if the !old_one! is in the netlist
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0_old = nl->create_grouping(MIN_GROUPING_ID+0, "grouping_0_old");
+                nl->delete_grouping(g_0_old); // Adress of m_0_old is now freed
+                Grouping* g_0_other = nl->create_grouping(MIN_GROUPING_ID+0, "grouping_0_other");
+                EXPECT_TRUE(g_0_old == g_0_other || !nl->is_grouping_in_netlist(g_0_old));
+            }
+            // Negative
+            {
+                // Pass a nullptr
+                auto nl = test_utils::create_empty_netlist();
+                EXPECT_FALSE(nl->is_grouping_in_netlist(nullptr));
+            }
+        TEST_END
+    }
+
+
+    /**
+    * Testing the function get_unique_grouping_id
+    *
+    * Functions: get_unique_grouping_id
+    */
+    TEST_F(NetlistTest, check_get_unique_grouping_id) {
+        TEST_START
+            // Positive
+            {
+                // Create some groupings and get unique grouping ids
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                Grouping* g_1 = nl->create_grouping(MIN_GROUPING_ID + 1, "grouping_1");
+                Grouping* g_3 = nl->create_grouping(MIN_GROUPING_ID + 3, "grouping_3");
+                std::set<u32> used_ids = {MIN_GROUPING_ID + 0, MIN_GROUPING_ID + 1, MIN_GROUPING_ID + 3};
+
+                u32 new_grouping_id_1 = nl->get_unique_grouping_id();
+                ASSERT_TRUE(used_ids.find(new_grouping_id_1) == used_ids.end());
+
+                Grouping* g_new = nl->create_grouping(new_grouping_id_1, "grouping_new");
+                used_ids.insert(new_grouping_id_1);
+
+                u32 new_grouping_id_2 = nl->get_unique_grouping_id();
+                EXPECT_TRUE(used_ids.find(new_grouping_id_2) == used_ids.end());
+            }
+            {
+                // Create some groupings, delete some and get a unique grouping id (for testing the free_grouping_ids logic)
+                auto nl = test_utils::create_empty_netlist();
+                Grouping* g_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
+                Grouping* g_1 = nl->create_grouping(MIN_GROUPING_ID + 1, "grouping_1");
+                Grouping* g_2 = nl->create_grouping(MIN_GROUPING_ID + 2, "grouping_2");
+                Grouping* g_3 = nl->create_grouping(MIN_GROUPING_ID + 3, "grouping_3");
+
+                nl->delete_grouping(g_0);
+                nl->delete_grouping(g_2);
+                std::set<u32> used_ids = {MIN_GROUPING_ID + 1, MIN_GROUPING_ID + 3};
+
+                u32 new_grouping_id_1 = nl->get_unique_grouping_id();
+                ASSERT_TRUE(used_ids.find(new_grouping_id_1) == used_ids.end());
+
+                Grouping* g_new = nl->create_grouping(new_grouping_id_1, "grouping_new");
+                used_ids.insert(new_grouping_id_1);
+
+                u32 new_grouping_id_2 = nl->get_unique_grouping_id();
+                EXPECT_TRUE(used_ids.find(new_grouping_id_2) == used_ids.end());
+            }
+        TEST_END
+    }
+
+    /*************************************
+     * Event System
+     *************************************/
+
+    /**
+     * Testing the triggering of events.
+     */
+    TEST_F(NetlistTest, check_events) {
+        TEST_START
+            const u32 NO_DATA = 0xFFFFFFFF;
+            u32 nl_old_id = MIN_NETLIST_ID + 123;
+
+            std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist(nl_old_id);
+            Gate* gnd_gate = test_nl->get_gate_by_id(MIN_GATE_ID + 1);
+            Gate* vcc_gate = test_nl->get_gate_by_id(MIN_GATE_ID + 2);
+            Net* test_net = test_nl->get_net_by_id(MIN_NET_ID + 13);
+
+            // Small functions that should trigger certain events exactly once (these operations are executed in this order)
+            std::function<void(Netlist*)> trigger_id_changed = [](Netlist* nl){nl->set_id(456);};
+            std::function<void(Netlist*)> trigger_input_filename_changed = [](Netlist* nl){nl->set_input_filename("other_filename");};
+            std::function<void(Netlist*)> trigger_design_name_changed = [](Netlist* nl){nl->set_design_name("new_design_name");};
+            std::function<void(Netlist*)> trigger_device_name_changed = [](Netlist* nl){nl->set_device_name("new_device_name");};
+            std::function<void(Netlist*)> trigger_marked_global_vcc = [=](Netlist* nl){nl->mark_vcc_gate(vcc_gate);};
+            std::function<void(Netlist*)> trigger_marked_global_gnd = [=](Netlist* nl){nl->mark_gnd_gate(gnd_gate);};
+            std::function<void(Netlist*)> trigger_unmarked_global_vcc = [=](Netlist* nl){nl->unmark_vcc_gate(vcc_gate);};
+            std::function<void(Netlist*)> trigger_unmarked_global_gnd = [=](Netlist* nl){nl->unmark_gnd_gate(gnd_gate);};
+            std::function<void(Netlist*)> trigger_marked_global_input = [=](Netlist* nl){nl->mark_global_input_net(test_net);};
+            std::function<void(Netlist*)> trigger_marked_global_output = [=](Netlist* nl){nl->mark_global_output_net(test_net);};
+            std::function<void(Netlist*)> trigger_marked_global_inout = [=](Netlist* nl){return;}; // ISSUE: legacy?
+            std::function<void(Netlist*)> trigger_unmarked_global_input = [=](Netlist* nl){nl->unmark_global_input_net(test_net);};
+            std::function<void(Netlist*)> trigger_unmarked_global_output = [=](Netlist* nl){nl->unmark_global_output_net(test_net);};
+            std::function<void(Netlist*)> trigger_unmarked_global_inout = [=](Netlist* nl){return;}; // ISSUE: legacy?
+
+            // The events that are tested
+            std::vector<netlist_event_handler::event> event_type = {
+                netlist_event_handler::event::id_changed, netlist_event_handler::event::input_filename_changed,
+                netlist_event_handler::event::design_name_changed ,netlist_event_handler::event::device_name_changed,
+                netlist_event_handler::event::marked_global_vcc, netlist_event_handler::event::marked_global_gnd,
+                netlist_event_handler::event::unmarked_global_vcc, netlist_event_handler::event::unmarked_global_gnd,
+                netlist_event_handler::event::marked_global_input, netlist_event_handler::event::marked_global_output,
+                /*netlist_event_handler::event::marked_global_inout,*/ netlist_event_handler::event::unmarked_global_input,
+                netlist_event_handler::event::unmarked_global_output/*, netlist_event_handler::event::unmarked_global_inout*/};
+
+            // A list of the functions that will trigger its associated event exactly once
+            std::vector<std::function<void(Netlist*)>> trigger_event = {trigger_id_changed, trigger_input_filename_changed,
+                trigger_design_name_changed, trigger_device_name_changed, trigger_marked_global_vcc, trigger_marked_global_gnd,
+                trigger_unmarked_global_vcc, trigger_unmarked_global_gnd, trigger_marked_global_input, trigger_marked_global_output,
+                /*trigger_marked_global_inout,*/trigger_unmarked_global_input, trigger_unmarked_global_output/*, trigger_unmarked_global_inout*/ };
+
+            // The parameters of the events that are expected
+            std::vector<std::tuple<netlist_event_handler::event, Netlist*, u32>> expected_parameter = {
+                std::make_tuple(netlist_event_handler::event::id_changed, test_nl.get(), nl_old_id),
+                std::make_tuple(netlist_event_handler::input_filename_changed, test_nl.get(), NO_DATA),
+                std::make_tuple(netlist_event_handler::design_name_changed, test_nl.get(), NO_DATA),
+                std::make_tuple(netlist_event_handler::device_name_changed, test_nl.get(), NO_DATA),
+                std::make_tuple(netlist_event_handler::marked_global_vcc, test_nl.get(), vcc_gate->get_id()),
+                std::make_tuple(netlist_event_handler::marked_global_gnd, test_nl.get(), gnd_gate->get_id()),
+                std::make_tuple(netlist_event_handler::unmarked_global_vcc, test_nl.get(), vcc_gate->get_id()),
+                std::make_tuple(netlist_event_handler::unmarked_global_gnd, test_nl.get(), gnd_gate->get_id()),
+                std::make_tuple(netlist_event_handler::marked_global_input, test_nl.get(), test_net->get_id()),
+                std::make_tuple(netlist_event_handler::marked_global_output, test_nl.get(), test_net->get_id()),
+                //std::make_tuple(netlist_event_handler::marked_global_inout, test_nl.get(), test_net->get_id()),
+                std::make_tuple(netlist_event_handler::unmarked_global_input, test_nl.get(), test_net->get_id()),
+                std::make_tuple(netlist_event_handler::unmarked_global_output, test_nl.get(), test_net->get_id()),
+                //std::make_tuple(netlist_event_handler::unmarked_global_inout, test_nl.get(), test_net->get_id())
+            };
+
+            // Check all events in a for-loop
+            for(u32 event_idx = 0; event_idx < event_type.size(); event_idx++)
+            {
+                // Create the listener for the tested event
+                test_utils::EventListener<void, netlist_event_handler::event, Netlist*, u32> listener;
+                std::function<void(netlist_event_handler::event, Netlist*, u32)> cb = listener.get_conditional_callback(
+                    [=](netlist_event_handler::event ev, Netlist* nl, u32 id){return ev == event_type[event_idx];}
+                );
+                std::string cb_name = "nl_event_callback_" + std::to_string((u32)event_type[event_idx]);
+                // Register a callback of the listener
+                netlist_event_handler::register_callback(cb_name, cb);
+
+                // Trigger the event
+                trigger_event[event_idx](test_nl.get());
+
+                EXPECT_EQ(listener.get_event_count(), 1);
+                EXPECT_EQ(listener.get_last_parameters(), expected_parameter[event_idx]);
+
+                // Unregister the callback
+                netlist_event_handler::unregister_callback(cb_name);
+            }
+        TEST_END
+    }
+
 } //namespace hal

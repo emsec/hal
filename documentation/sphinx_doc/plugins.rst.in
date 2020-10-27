@@ -1,0 +1,6 @@
+HAL Plugins Documentation
+=========================
+
+.. toctree::
+   :maxdepth: 1
+@PYDOC_PLUGINS@

@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+
 #include <sstream>
 
 namespace hal
@@ -33,12 +34,12 @@ namespace hal
     class GateLibrary;
 
     /**
-     * @ingroup hdl_parsers
+     * @ingroup netlist_parser
      */
     class HDL_PARSER_API HDLParser
     {
     public:
-        HDLParser() = default;
+        HDLParser()          = default;
         virtual ~HDLParser() = default;
 
         /**
@@ -57,7 +58,6 @@ namespace hal
          */
         virtual std::unique_ptr<Netlist> instantiate(const GateLibrary* gl) = 0;
 
-
         /**
          * Parses and instantiates a netlist using the specified gate library.
          *
@@ -73,6 +73,5 @@ namespace hal
             }
             return nullptr;
         }
-
     };
 }    // namespace hal

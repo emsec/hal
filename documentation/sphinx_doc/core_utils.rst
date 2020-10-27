@@ -1,5 +1,5 @@
 Core Utils
 ====================
 
-.. automodule:: hal_py.core_utils
+.. automodule:: hal_py.CoreUtils
    :members:

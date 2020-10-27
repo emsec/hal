@@ -3,6 +3,7 @@
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_system/net_event_handler.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
 #include "hal_core/utilities/log.h"
@@ -50,6 +51,11 @@ namespace hal
 
             net_event_handler::notify(net_event_handler::event::name_changed, this);
         }
+    }
+
+    Grouping* Net::get_grouping() const
+    {
+        return m_grouping;
     }
 
     Endpoint* Net::add_source(Gate* gate, const std::string& pin)

@@ -182,7 +182,7 @@ namespace hal
         g_file_status_manager   = new FileStatusManager();
         g_graph_context_manager = new GraphContextManager();
 
-        //    g_window_manager       = new WindowManager();
+        //g_window_manager       = new WindowManager();
         g_notification_manager = new NotificationManager();
 
         g_thread_pool = new ThreadPool();

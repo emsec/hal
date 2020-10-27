@@ -4,11 +4,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"
-#include "gtest/gtest.h"
-#include "hal_core/utilities/log.h"
-#include <iostream>
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/event_system/module_event_handler.h"
 
 namespace hal {
 
@@ -166,15 +162,15 @@ namespace hal {
                 EXPECT_EQ(m_2->get_parent_module(), m_0);
             }
             // NEGATIVE
-            /*{ // FAILS: new_parent == m_parent wrong! => new_parent == this
+            {
                 // Hang a Module to itself
                 NO_COUT_TEST_BLOCK;
-                auto nl = create_empty_netlist();
+                auto nl = test_utils::create_empty_netlist();
                 Module* m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
 
                 m_0->set_parent_module(m_0);
                 EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
-            }*/
+            }
             {
                 // Try to change the parent of the top_module
                 NO_COUT_TEST_BLOCK;
@@ -186,28 +182,28 @@ namespace hal {
                 EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
                 EXPECT_EQ(nl->get_top_module()->get_parent_module(), nullptr);
             }
-            /*{ // FAILS with SIGSEGV
+            {
                 // new_parent is a nullptr
                 NO_COUT_TEST_BLOCK;
-                auto nl = create_empty_netlist();
+                auto nl = test_utils::create_empty_netlist();
                 Module* m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
 
                 m_0->set_parent_module(nullptr);
                 nl->get_top_module()->set_parent_module(m_0);
                 EXPECT_EQ(m_0->get_parent_module(), nl->get_top_module());
-            }*/
-            /*{ // FAILS (necessary?)
+            }
+            {
                 // new_parent not part of the netlist (anymore)
                 NO_COUT_TEST_BLOCK;
-                auto nl = create_empty_netlist();
-                auto nl_other = create_empty_netlist();
+                auto nl = test_utils::create_empty_netlist();
+                auto nl_other = test_utils::create_empty_netlist();
                 Module* m_0 = nl->create_module(MIN_MODULE_ID+0, "test_module_0", nl->get_top_module());
                 Module* m_1 = nl->create_module(MIN_MODULE_ID+1, "test_module_1", nl->get_top_module());
                 nl->delete_module(m_0); // m_0 is removed from the netlist
 
                 m_1->set_parent_module(m_0);
                 EXPECT_EQ(m_1->get_parent_module(), nl->get_top_module());
-            }*/
+            }
         TEST_END
     }
 
@@ -273,7 +269,7 @@ namespace hal {
      * Testing the addition of gates to the Module. Verify the addition by call the
      * get_gates function and the contains_gate function
      *
-     * Functions: assign_gate
+     * Functions: assign_gate, contains_gate
      */
     TEST_F(ModuleTest, check_assign_gate) {
         TEST_START
@@ -351,13 +347,21 @@ namespace hal {
 
             // NEGATIVE
             {
-                // Gate is a nullptr
+                // Assigned Gate is a nullptr
                 NO_COUT_TEST_BLOCK;
                 auto nl = test_utils::create_empty_netlist();
                 Module*
                     test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
                 test_module->assign_gate(nullptr);
                 EXPECT_TRUE(test_module->get_gates().empty());
+            }
+            {
+                // Call contains_gate with a nullptr
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                Module*
+                    test_module = nl->create_module(MIN_MODULE_ID + 0, "test Module", nl->get_top_module());
+                EXPECT_FALSE(test_module->contains_gate(nullptr));
             }
         TEST_END
     }
@@ -673,7 +677,7 @@ namespace hal {
      * Testing the usage of port names
      *
      * Functions: get_input_port_name, set_input_port_name, get_output_port_name, set_output_port_name,
-     *            get_input_port_names, get_output_port_names
+     *            get_input_port_names, get_output_port_names, get_input_port_net, get_output_port_net
      */
     TEST_F(ModuleTest, check_port_names) {
         TEST_START
@@ -693,14 +697,15 @@ namespace hal {
             }
             {
                 // Set and get an input port name
-                // std::cout << "\n===\n" << m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)) << "\n===\n" << std::endl;
                 m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "port_name_net_1_3");
                 EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13)), "port_name_net_1_3");
+                EXPECT_EQ(m_0->get_input_port_net("port_name_net_1_3"), nl->get_net_by_id(MIN_NET_ID + 13));
             }
             {
                 // Set and get an output port name
                 m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "port_name_net_0_4_5");
                 EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045)), "port_name_net_0_4_5");
+                EXPECT_EQ(m_0->get_output_port_net("port_name_net_0_4_5"), nl->get_net_by_id(MIN_NET_ID + 045));
             }
             // Create a new Module with more modules (with 2 input and ouput nets)
             Module* m_1 = nl->create_module("mod_1",
@@ -753,16 +758,18 @@ namespace hal {
 
             // NEGATIVE
             {
-                // Set the input port name of a Net, that is no input Net of the Module
+                // Set the input port name of a Net that is no input Net of the Module
                 NO_COUT_TEST_BLOCK;
                 m_0->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name");
                 EXPECT_EQ(m_0->get_input_port_name(nl->get_net_by_id(MIN_NET_ID + 78)), "");
+                EXPECT_EQ(m_0->get_input_port_net("port_name"), nullptr);
             }
             {
                 // Set the output port name of a Net, that is no input Net of the Module
                 NO_COUT_TEST_BLOCK;
                 m_0->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 78), "port_name");
                 EXPECT_EQ(m_0->get_output_port_name(nl->get_net_by_id(MIN_NET_ID + 78)), "");
+                EXPECT_EQ(m_0->get_output_port_net("port_name"), nullptr);
             }
             {
                 // Pass a nullptr
@@ -772,6 +779,156 @@ namespace hal {
                 EXPECT_EQ(m_0->get_input_port_name(nullptr), "");
                 EXPECT_EQ(m_0->get_output_port_name(nullptr), "");
             }
+            {
+                // Pass an empty string to get_input_port_net/get_output_port_net
+                NO_COUT_TEST_BLOCK;
+                EXPECT_EQ(m_0->get_input_port_net(""), nullptr);
+                EXPECT_EQ(m_0->get_output_port_net(""), nullptr);
+            }
+        TEST_END
+    }
+
+    /**
+     * Testing the get_grouping function
+     *
+     * Functions: get_grouping
+     */
+    TEST_F(ModuleTest, check_get_grouping) {
+        TEST_START
+            {
+                // get the grouping of a module (nullptr), then add it to another grouping and check again
+                auto nl = test_utils::create_empty_netlist();
+                Module* test_module = nl->create_module("test_module", nl->get_top_module());
+
+                EXPECT_EQ(test_module->get_grouping(), nullptr);
+
+                // -- move the module in the test_grouping
+                Grouping* test_grouping = nl->create_grouping("test_grouping");
+                test_grouping->assign_module(test_module);
+
+                EXPECT_EQ(test_module->get_grouping(), test_grouping);
+
+                // -- delete the test_grouping, so the module should be nullptr again
+                nl->delete_grouping(test_grouping);
+                EXPECT_EQ(test_module->get_grouping(), nullptr);
+            }
+        TEST_END
+    }  
+      
+    /*************************************
+     * Event System
+     *************************************/
+
+    /**
+     * Testing the triggering of events.
+     */
+    TEST_F(ModuleTest, check_events) {
+        TEST_START
+            const u32 NO_DATA = 0xFFFFFFFF;
+
+            std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
+            Module* top_mod = test_nl->get_top_module();
+            Module* test_mod = test_nl->create_module("test_mod", test_nl->get_top_module());
+            Module* other_mod = test_nl->create_module("other_mod", test_nl->get_top_module());
+            Module* other_mod_sub = test_nl->create_module("other_mod_sub", test_nl->get_top_module());
+            Gate* test_gate = test_nl->get_gate_by_id(MIN_GATE_ID + 0);
+
+            // Small functions that should trigger certain events exactly once (these operations are executed in this order)
+            std::function<void(void)> trigger_name_changed = [=](){test_mod->set_name("new_name");};
+            std::function<void(void)> trigger_type_changed = [=](){test_mod->set_type("new_type");};
+            std::function<void(void)> trigger_parent_changed = [=](){test_mod->set_parent_module(other_mod);};
+            std::function<void(void)> trigger_submodule_added = [=](){other_mod_sub->set_parent_module(test_mod);};
+            std::function<void(void)> trigger_submodule_removed = [=](){other_mod_sub->set_parent_module(top_mod);};
+            std::function<void(void)> trigger_gate_assigned = [=](){test_mod->assign_gate(test_gate);};
+            std::function<void(void)> trigger_gate_removed = [=](){test_mod->remove_gate(test_gate);};
+            std::function<void(void)> trigger_input_port_name_changed = [=](){
+                test_mod->assign_gate(test_gate);
+                test_mod->set_input_port_name(test_gate->get_fan_in_net("I0"), "mod_in_0");
+            };
+            std::function<void(void)> trigger_output_port_name_changed = [=](){
+                test_mod->assign_gate(test_gate);
+                test_mod->set_output_port_name(test_gate->get_fan_out_net("O"), "mod_out");
+            };
+
+            // The events that are tested
+            std::vector<module_event_handler::event> event_type = {
+                module_event_handler::event::name_changed, module_event_handler::event::type_changed,
+                module_event_handler::event::parent_changed, module_event_handler::event::submodule_added,
+                module_event_handler::event::submodule_removed, module_event_handler::event::gate_assigned,
+                module_event_handler::event::gate_removed, module_event_handler::event::input_port_name_changed,
+                module_event_handler::event::output_port_name_changed};
+
+            // A list of the functions that will trigger its associated event exactly once
+            std::vector<std::function<void(void)>> trigger_event = { trigger_name_changed, trigger_type_changed,
+                 trigger_parent_changed, trigger_submodule_added, trigger_submodule_removed, trigger_gate_assigned,
+                 trigger_gate_removed, trigger_input_port_name_changed, trigger_output_port_name_changed};
+
+            // The parameters of the events that are expected
+            std::vector<std::tuple<module_event_handler::event, Module*, u32>> expected_parameter = {
+                std::make_tuple(module_event_handler::event::name_changed, test_mod, NO_DATA),
+                std::make_tuple(module_event_handler::event::type_changed, test_mod, NO_DATA),
+                std::make_tuple(module_event_handler::event::parent_changed, test_mod, NO_DATA),
+                std::make_tuple(module_event_handler::event::submodule_added, test_mod, other_mod_sub->get_id()),
+                std::make_tuple(module_event_handler::event::submodule_removed, test_mod, other_mod_sub->get_id()),
+                std::make_tuple(module_event_handler::event::gate_assigned, test_mod, test_gate->get_id()),
+                std::make_tuple(module_event_handler::event::gate_removed, test_mod, test_gate->get_id()),
+                std::make_tuple(module_event_handler::event::input_port_name_changed, test_mod, test_gate->get_fan_in_net("I0")->get_id()),
+                std::make_tuple(module_event_handler::event::output_port_name_changed, test_mod, test_gate->get_fan_out_net("O")->get_id())
+            };
+
+            // Check all events in a for-loop
+            for(u32 event_idx = 0; event_idx < event_type.size(); event_idx++)
+            {
+                // Create the listener for the tested event
+                test_utils::EventListener<void, module_event_handler::event, Module*, u32> listener;
+                std::function<void(module_event_handler::event, Module*, u32)> cb = listener.get_conditional_callback(
+                    [=](module_event_handler::event ev, Module* m, u32 id){return ev == event_type[event_idx] && m == test_mod;}
+                );
+                std::string cb_name = "mod_event_callback_" + std::to_string((u32)event_type[event_idx]);
+                // Register a callback of the listener
+                module_event_handler::register_callback(cb_name, cb);
+
+                // Trigger the event
+                trigger_event[event_idx]();
+
+                EXPECT_EQ(listener.get_event_count(), 1);
+                EXPECT_EQ(listener.get_last_parameters(), expected_parameter[event_idx]);
+
+                // Unregister the callback
+                module_event_handler::unregister_callback(cb_name);
+            }
+
+            // Test the events 'created' and 'removed'
+            // -- 'created' event
+            test_utils::EventListener<void, module_event_handler::event, Module*, u32> listener_created;
+            std::function<void(module_event_handler::event, Module*, u32)> cb_created = listener_created.get_conditional_callback(
+                [=](module_event_handler::event ev, Module* m, u32 id){return ev == module_event_handler::created;}
+            );
+            std::string cb_name_created = "mod_event_callback_created";
+            module_event_handler::register_callback(cb_name_created, cb_created);
+
+            // Create a new mod
+            Module* new_mod = test_nl->create_module("new_mod", test_nl->get_top_module());
+            EXPECT_EQ(listener_created.get_event_count(), 1);
+            EXPECT_EQ(listener_created.get_last_parameters(), std::make_tuple(module_event_handler::event::created, new_mod, NO_DATA));
+
+            module_event_handler::unregister_callback(cb_name_created);
+
+            // -- 'removed' event
+            test_utils::EventListener<void, module_event_handler::event, Module*, u32> listener_removed;
+            std::function<void(module_event_handler::event, Module*, u32)> cb_removed = listener_removed.get_conditional_callback(
+                [=](module_event_handler::event ev, Module* m, u32 id){return ev == module_event_handler::removed;}
+            );
+            std::string cb_name_removed = "mod_event_callback_removed";
+            module_event_handler::register_callback(cb_name_removed, cb_removed);
+
+            // Delete the module which was created in the previous part
+            test_nl->delete_module(new_mod);
+            EXPECT_EQ(listener_removed.get_event_count(), 1);
+            EXPECT_EQ(listener_removed.get_last_parameters(), std::make_tuple(module_event_handler::event::removed, new_mod, NO_DATA));
+
+            module_event_handler::unregister_callback(cb_name_removed);
+
         TEST_END
     }
 

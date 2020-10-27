@@ -26,6 +26,7 @@
 #include <QColor>
 #include <QIcon>
 #include <QString>
+#include <QPixmap>
 
 namespace hal
 {
@@ -36,7 +37,7 @@ namespace hal
         extern void change_all_svg_colors(QString& svg_data, const QColor& to);
         extern QIcon get_icon_from_svg_data(const QString& svg_data);
         extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
-
+        extern QPixmap get_colored_pixmap(const QString& imagePath, const QColor& color, const QSize& size);
         extern QColor get_random_color();
     }
 }

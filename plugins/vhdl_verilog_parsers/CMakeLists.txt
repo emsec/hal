@@ -8,4 +8,5 @@ if(PL_VHDL_VERILOG_PARSERS OR BUILD_ALL_PLUGINS)
                    HEADER ${VHDL_VERILOG_PARSERS_INC}
                    SOURCES ${VHDL_VERILOG_PARSERS_SRC}
                    )
+    add_subdirectory(test)
 endif()

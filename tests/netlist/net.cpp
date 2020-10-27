@@ -1,10 +1,5 @@
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
-#include "hal_core/netlist/netlist.h"
 #include "netlist_test_utils.h"
-#include "gtest/gtest.h"
-#include <iostream>
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/event_system/net_event_handler.h"
 
 namespace hal {
     using test_utils::MIN_GATE_ID;
@@ -84,7 +79,8 @@ namespace hal {
                 Gate* t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_source(t_gate, "O");
                 EXPECT_TRUE(suc);
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O"));
+                ASSERT_EQ(test_net->get_sources().size(), 1);
+                EXPECT_EQ(test_net->get_sources()[0], test_utils::get_endpoint(t_gate, "O"));
             }
             // Negative
             {
@@ -94,7 +90,7 @@ namespace hal {
                 Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->add_source(nullptr, "O");
                 EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
             }
             {
                 // Pin is an input pin (not an output/inout pin)
@@ -104,7 +100,7 @@ namespace hal {
                 auto t_gate_0 = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 bool suc = test_net->add_source(t_gate_0, "I0");    // <- input pin
                 EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
             }
             {
                 // Pin is already occupied (example netlist is used)
@@ -113,7 +109,7 @@ namespace hal {
                 Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->add_source(nl->get_gate_by_id(MIN_NET_ID + 1), "O");
                 EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
             }
             {
                 // Set the source of the Net (invalid pin type)
@@ -124,7 +120,7 @@ namespace hal {
                 bool suc = test_net->add_source(t_gate, "NEx_PIN");
                 testing::internal::GetCapturedStdout();
                 EXPECT_FALSE(suc);
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
             }
 
         TEST_END
@@ -135,6 +131,9 @@ namespace hal {
      *
      * Functions: get_sources, get_source
      */
+    // disable get_source() deprecated warning for this test (because get_source() is also tested)
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    #pragma warning(disable:1478)
     TEST_F(NetTest, check_get_sources) {
         TEST_START
             {
@@ -144,7 +143,7 @@ namespace hal {
                 auto t_gate =
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
                 test_net->add_source(t_gate, "O0");
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0"));
+                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0")); // (compiler warning intended)
             }
             {
                 // Get all sources (no filter)
@@ -179,7 +178,7 @@ namespace hal {
                 // Get the source(s) if the Gate has no source
                 auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
                 Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_TRUE(test_utils::is_empty(test_net->get_source())); // (compiler warning intended)
                 EXPECT_TRUE(test_net->get_sources().empty());
             }
             // NEGATIVE
@@ -192,10 +191,13 @@ namespace hal {
                     nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_4_to_4"), "test_gate");
                 test_net->add_source(t_gate, "O0");
                 test_net->add_source(t_gate, "O1");
-                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0"));
+                EXPECT_EQ(test_net->get_source(), test_utils::get_endpoint(t_gate, "O0")); // (compiler warning intended)
             }
         TEST_END
     }
+    // enable get_source() deprecated warning
+    #pragma GCC diagnostic warning "-Wdeprecated-declarations"
+    #pragma warning(enable:1478) // enable get_source() deprecated warning
 
     /**
      * Testing the function remove_src
@@ -211,7 +213,7 @@ namespace hal {
                 auto t_gate = test_utils::create_test_gate(nl.get(), MIN_GATE_ID + 1);
                 test_net->add_source(t_gate, "O");
                 bool suc = test_net->remove_source(t_gate, "O");
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
                 EXPECT_TRUE(suc);
             }
             // NEGATIVE
@@ -221,7 +223,7 @@ namespace hal {
                 auto nl = test_utils::create_empty_netlist(MIN_NETLIST_ID + 0);
                 Net* test_net = nl->create_net(MIN_NET_ID + 1, "test_net");
                 bool suc = test_net->remove_source(nullptr, "");
-                EXPECT_TRUE(test_utils::is_empty(test_net->get_source()));
+                EXPECT_EQ(test_net->get_sources().size(), 0);
                 EXPECT_FALSE(suc);
             }
         TEST_END
@@ -558,4 +560,130 @@ namespace hal {
 
         TEST_END
     }
+
+    /**
+     * Testing the get_grouping function
+     *
+     * Functions: get_grouping
+     */
+    TEST_F(NetTest, check_get_grouping) {
+        TEST_START
+            {
+                // get the grouping of a net (nullptr), then add it to another grouping and check again
+                auto nl = test_utils::create_empty_netlist();
+                Net* test_net = nl->create_net("test_net");
+
+                EXPECT_EQ(test_net->get_grouping(), nullptr);
+
+                // move the net in the test_grouping
+                Grouping* test_grouping = nl->create_grouping("test_grouping");
+                test_grouping->assign_net(test_net);
+
+                EXPECT_EQ(test_net->get_grouping(), test_grouping);
+
+                // -- delete the test_grouping, so the net should be nullptr again
+                nl->delete_grouping(test_grouping);
+                EXPECT_EQ(test_net->get_grouping(), nullptr);
+            }
+        TEST_END
+    }
+    
+    /*************************************
+     * Event System
+     *************************************/
+
+    /**
+     * Testing the triggering of events.
+     */
+    TEST_F(NetTest, check_events) {
+        TEST_START
+            const u32 NO_DATA = 0xFFFFFFFF;
+
+            std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
+            Net* test_net = test_nl->get_net_by_id(MIN_NET_ID + 13);
+            Gate* new_gate = test_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "new_gate");
+
+            // Small functions that should trigger certain events exactly once (these operations are executed in this order)
+            std::function<void(void)> trigger_name_changed = [=](){test_net->set_name("new_name");};
+            std::function<void(void)> trigger_src_added = [=](){test_net->add_source(new_gate, "O");};
+            std::function<void(void)> trigger_src_removed = [=](){test_net->remove_source(new_gate, "O");};
+            std::function<void(void)> trigger_dst_added = [=](){test_net->add_destination(new_gate, "I");};
+            std::function<void(void)> trigger_dst_removed = [=](){test_net->remove_destination(new_gate, "I");};
+
+            // The events that are tested
+            std::vector<net_event_handler::event> event_type = {
+                net_event_handler::event::name_changed, net_event_handler::event::src_added,
+                net_event_handler::event::src_removed, net_event_handler::event::dst_added,
+                net_event_handler::event::dst_removed};
+
+            // A list of the functions that will trigger its associated event exactly once
+            std::vector<std::function<void(void)>> trigger_event = { trigger_name_changed, trigger_src_added,
+                 trigger_src_removed, trigger_dst_added, trigger_dst_removed };
+
+            // The parameters of the events that are expected
+            std::vector<std::tuple<net_event_handler::event, Net*, u32>> expected_parameter = {
+                std::make_tuple(net_event_handler::event::name_changed, test_net, NO_DATA),
+                std::make_tuple(net_event_handler::event::src_added, test_net, new_gate->get_id()),
+                std::make_tuple(net_event_handler::event::src_removed, test_net, new_gate->get_id()),
+                std::make_tuple(net_event_handler::event::dst_added, test_net, new_gate->get_id()),
+                std::make_tuple(net_event_handler::event::dst_removed, test_net, new_gate->get_id())
+            };
+
+            // Check all events in a for-loop
+            for(u32 event_idx = 0; event_idx < event_type.size(); event_idx++)
+            {
+                // Create the listener for the tested event
+                test_utils::EventListener<void, net_event_handler::event, Net*, u32> listener;
+                std::function<void(net_event_handler::event, Net*, u32)> cb = listener.get_conditional_callback(
+                    [=](net_event_handler::event ev, Net* n, u32 id){return ev == event_type[event_idx] && n == test_net;}
+                );
+                std::string cb_name = "net_event_callback_" + std::to_string((u32)event_type[event_idx]);
+                // Register a callback of the listener
+                net_event_handler::register_callback(cb_name, cb);
+
+                // Trigger the event
+                trigger_event[event_idx]();
+
+                EXPECT_EQ(listener.get_event_count(), 1);
+                EXPECT_EQ(listener.get_last_parameters(), expected_parameter[event_idx]);
+
+                // Unregister the callback
+                net_event_handler::unregister_callback(cb_name);
+            }
+
+            // Test the events 'created' and 'removed'
+            // -- 'created' event
+            test_utils::EventListener<void, net_event_handler::event, Net*, u32> listener_created;
+            std::function<void(net_event_handler::event, Net*, u32)> cb_created = listener_created.get_conditional_callback(
+                [=](net_event_handler::event ev, Net* m, u32 id){return ev == net_event_handler::created;}
+            );
+            std::string cb_name_created = "net_event_callback_created";
+            net_event_handler::register_callback(cb_name_created, cb_created);
+
+            // Create a new mod
+            Net* new_net = test_nl->create_net("new_net");
+            EXPECT_EQ(listener_created.get_event_count(), 1);
+            EXPECT_EQ(listener_created.get_last_parameters(), std::make_tuple(net_event_handler::event::created, new_net, NO_DATA));
+
+            net_event_handler::unregister_callback(cb_name_created);
+
+            // -- 'removed' event
+            test_utils::EventListener<void, net_event_handler::event, Net*, u32> listener_removed;
+            std::function<void(net_event_handler::event, Net*, u32)> cb_removed = listener_removed.get_conditional_callback(
+                [=](net_event_handler::event ev, Net* m, u32 id){return ev == net_event_handler::removed;}
+            );
+            std::string cb_name_removed = "net_event_callback_removed";
+            net_event_handler::register_callback(cb_name_removed, cb_removed);
+
+            // Delete the module which was created in the previous part
+            test_nl->delete_net(new_net);
+            EXPECT_EQ(listener_removed.get_event_count(), 1);
+            EXPECT_EQ(listener_removed.get_last_parameters(), std::make_tuple(net_event_handler::event::removed, new_net, NO_DATA));
+
+            net_event_handler::unregister_callback(cb_name_removed);
+
+        TEST_END
+    }
+
+
 } //namespace hal

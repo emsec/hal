@@ -1,4 +1,7 @@
+#include <QApplication>
+#include <QClipboard>
 #include <QHeaderView>
+#include <QMenu>
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
 
@@ -12,6 +15,10 @@ namespace hal {
         m_selectionTreeProxyModel->setSourceModel(m_selectionTreeModel);
         setModel(m_selectionTreeProxyModel);
         setDefaultColumnWidth();
+        header()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
+
+        setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(this, &QTreeView::customContextMenuRequested, this, &SelectionTreeView::handle_custom_context_menu_requested);
     }
 
     void SelectionTreeView::setDefaultColumnWidth()
@@ -48,6 +55,48 @@ namespace hal {
 
         QModelIndex modelIndex = m_selectionTreeProxyModel->mapToSource(proxyIndex);
         return static_cast<SelectionTreeItem*>(modelIndex.internalPointer());
+    }
+
+    void SelectionTreeView::handle_custom_context_menu_requested(const QPoint& point)
+    {
+        QModelIndex index = indexAt(point);
+
+        if (index.isValid())
+        {
+            QMenu menu;
+
+            SelectionTreeItem* item = itemFromIndex(index);
+
+            if (item)
+            {
+                switch (item->itemType())
+                {
+                case SelectionTreeItem::itemType_t::ModuleItem:
+
+                    menu.addAction(QIcon(":/icons/python"), "Extract Module as python code (copy to clipboard)",[item](){
+                        QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
+                    });
+
+                    break;
+                case SelectionTreeItem::itemType_t::GateItem:
+
+                    menu.addAction(QIcon(":/icons/python"), "Extract Gate as python code (copy to clipboard)",[item](){
+                        QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");
+                    });
+
+                    break;
+                case SelectionTreeItem::itemType_t::NetItem:
+
+                    menu.addAction(QIcon(":/icons/python"), "Extract Net as python code (copy to clipboard)",[item](){
+                        QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");
+                    });
+
+                    break;
+                }
+            }
+
+            menu.exec(viewport()->mapToGlobal(point));
+        }
     }
 
     void SelectionTreeView::populate(bool visible)

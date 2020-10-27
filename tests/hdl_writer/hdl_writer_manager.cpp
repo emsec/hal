@@ -14,7 +14,7 @@ namespace hal {
 
     class hdl_writer_managerTest : public ::testing::Test {
     protected:
-        const std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY) {\n"
+        const std::string m_min_gl_content = "library (MIN_TEST_GATE_LIBRARY_FOR_WRITER_MANAGER_TESTS) {\n"
                                              "    define(cell);\n"
                                              "    cell(gate_1_to_1) {\n"
                                              "        pin(I) { direction: input; }\n"
@@ -31,7 +31,7 @@ namespace hal {
             test_utils::init_log_channels();
             test_utils::create_sandbox_directory();
             plugin_manager::load_all_plugins();
-            m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib.lib", m_min_gl_content);
+            m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib_for_writer_manager_tests.lib", m_min_gl_content);
             m_gl = gate_library_manager::load_file(m_g_lib_path);
         }
 
@@ -76,7 +76,7 @@ namespace hal {
     /**
      * Testing writing of a netlist using program arguments
      *
-     * Functions: get_cli_options
+     * Functions: write
      */
     TEST_F(hdl_writer_managerTest, check_write_by_program_args) {
         TEST_START
@@ -108,9 +108,9 @@ namespace hal {
     }
 
     /**
-     * Testing writing of a netlist by passing a format and a file name
+     * Testing the writing of a netlist by passing a format and a file name
      *
-     * Functions: get_cli_options
+     * Functions: write
      */
     TEST_F(hdl_writer_managerTest, check_write_by_format_and_filename) {
         TEST_START
@@ -143,6 +143,47 @@ namespace hal {
                 auto simple_nl = create_simple_netlist();
                 // Write the two files
                 EXPECT_FALSE(hdl_writer_manager::write(simple_nl.get(), out_path));
+            }
+        TEST_END
+    }
+
+    /**
+    * Testing the writing of a netlist to a stringstream
+    *
+    * Functions: write
+    */
+    TEST_F(hdl_writer_managerTest, check_write_to_stringstream) {
+        TEST_START
+            {
+                auto simple_nl = create_simple_netlist();
+                // Write the two files
+                std::stringstream out_ss_vhdl;
+                std::stringstream out_ss_verilog;
+                bool suc_vhdl = hdl_writer_manager::write(simple_nl.get(), ".vhdl", out_ss_vhdl);
+                bool suc_verilog = hdl_writer_manager::write(simple_nl.get(), ".v", out_ss_verilog);
+
+                EXPECT_TRUE(suc_vhdl);
+                EXPECT_TRUE(suc_verilog);
+
+                std::filesystem::path out_path_vhdl = test_utils::create_sandbox_file("writer_out_vhdl.vhd", out_ss_vhdl.str());
+                std::filesystem::path out_path_verilog = test_utils::create_sandbox_file("writer_out_verilog.v", out_ss_verilog.str());
+
+                // Verify the correctness of the output by parsing it
+                auto parsed_nl_vhdl = hdl_parser_manager::parse(out_path_vhdl, m_gl);
+                auto parsed_nl_verilog = hdl_parser_manager::parse(out_path_verilog, m_gl);
+
+                parsed_nl_vhdl->get_top_module()->set_type("top_module_type");
+                parsed_nl_verilog->get_top_module()->set_type("top_module_type");
+                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_vhdl.get(), simple_nl.get(), true));
+                EXPECT_TRUE(test_utils::netlists_are_equal(parsed_nl_verilog.get(), simple_nl.get(), true));
+            }
+            // NEAGTIVE
+            {
+                // The type extension is unknown
+                NO_COUT_TEST_BLOCK;
+                auto simple_nl = create_simple_netlist();
+                std::stringstream dummy_ss;
+                EXPECT_FALSE(hdl_writer_manager::write(simple_nl.get(), ".unknown_extension",dummy_ss));
             }
         TEST_END
     }

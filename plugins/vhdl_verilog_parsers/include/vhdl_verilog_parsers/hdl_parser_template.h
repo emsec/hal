@@ -23,8 +23,6 @@
 
 #pragma once
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/utilities/special_strings.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
@@ -34,18 +32,20 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/special_strings.h"
 
 #include <cctype>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <unordered_map>
 #include <queue>
 #include <set>
 #include <sstream>
 #include <string>
 #include <type_traits>
+#include <unordered_map>
 #include <vector>
 
 namespace hal
@@ -104,6 +104,13 @@ namespace hal
                 log_error("hdl_parser", "file did not contain any entities");
                 return nullptr;
             }
+
+            m_signal_name_occurrences.clear();
+            m_instance_name_occurrences.clear();
+            m_net_by_name.clear();
+            m_nets_to_merge.clear();
+            m_tmp_gate_types.clear();
+            m_module_ports.clear();
 
             // retrieve available gate types
             if constexpr (std::is_same<T, std::string>::value)
@@ -174,7 +181,7 @@ namespace hal
                     {
                         // cache pin types
                         std::vector<T> pins;
-                        std::unordered_map<T, std::unordered_map<u32, std::string>> pin_groups;
+                        std::unordered_map<T, std::map<u32, std::string>> pin_groups;
 
                         if constexpr (std::is_same<T, std::string>::value)
                         {
@@ -182,8 +189,8 @@ namespace hal
                             std::vector<T> output_pins = gate_it->second->get_output_pins();
                             pins.insert(pins.end(), output_pins.begin(), output_pins.end());
 
-                            pin_groups                                                = gate_it->second->get_input_pin_groups();
-                            std::unordered_map<T, std::unordered_map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
+                            pin_groups                                                          = gate_it->second->get_input_pin_groups();
+                            std::unordered_map<T, std::map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
                             pin_groups.insert(output_pin_groups.begin(), output_pin_groups.end());
                         }
                         else
@@ -1012,8 +1019,6 @@ namespace hal
         // unique alias generation
         std::unordered_map<T, u32> m_signal_name_occurrences;
         std::unordered_map<T, u32> m_instance_name_occurrences;
-        std::unordered_map<T, u32> m_current_signal_index;
-        std::unordered_map<T, u32> m_current_instance_index;
 
         // net generation
         Net* m_zero_net;
@@ -1038,7 +1043,7 @@ namespace hal
             q.push(&top_entity);
 
             // top entity instance will be named after its entity, so take into account for aliases
-            m_instance_name_occurrences["top_entity"]++;
+            m_instance_name_occurrences["top_module"]++;
 
             // signals will be named after ports, so take into account for aliases
             for (const auto& port : top_entity.get_ports())
@@ -1172,11 +1177,14 @@ namespace hal
 
                         for (auto src : slave_net->get_sources())
                         {
+                            Gate* src_gate      = src->get_gate();
+                            std::string src_pin = src->get_pin();
+
                             slave_net->remove_source(src);
 
-                            if (!master_net->is_a_source(src->get_gate(), src->get_pin()))
+                            if (!master_net->is_a_source(src_gate, src_pin))
                             {
-                                master_net->add_source(src->get_gate(), src->get_pin());
+                                master_net->add_source(src_gate, src_pin);
                             }
                         }
 
@@ -1188,11 +1196,14 @@ namespace hal
 
                         for (auto dst : slave_net->get_destinations())
                         {
+                            Gate* dst_gate      = dst->get_gate();
+                            std::string dst_pin = dst->get_pin();
+
                             slave_net->remove_destination(dst);
 
-                            if (!master_net->is_a_destination(dst->get_gate(), dst->get_pin()))
+                            if (!master_net->is_a_destination(dst_gate, dst_pin))
                             {
-                                master_net->add_destination(dst->get_gate(), dst->get_pin());
+                                master_net->add_destination(dst_gate, dst_pin);
                             }
                         }
 
@@ -1378,7 +1389,7 @@ namespace hal
                 {
                     a = alias_it->second;
                 }
-                else if (a != "'0'" && a != "'1'" && a != "'Z'")
+                else    //if (a != "'0'" && a != "'1'" && a != "'Z'")
                 {
                     log_warning("hdl_parser", "no alias for net '{}'", a);
                 }
@@ -1438,25 +1449,45 @@ namespace hal
                 for (const auto& [port, assignments] : inst.get_port_assignments())
                 {
                     const std::vector<T> expanded_port = expand_signal(port);
-                    std::move(expanded_port.begin(), expanded_port.end(), std::back_inserter(expanded_ports));
 
+                    std::vector<T> expanded_assignment;
                     for (const auto& s : assignments)
                     {
-                        std::vector<T> expanded_assignment;
                         if (s.is_binary())
                         {
-                            expanded_assignment = expand_binary_signal(s);
+                            for (const T& expanded_signal : expand_binary_signal(s))
+                            {
+                                expanded_assignment.push_back(expanded_signal);
+                            }
                         }
                         else
                         {
-                            expanded_assignment = expand_signal(s);
+                            for (const T& expanded_signal : expand_signal(s))
+                            {
+                                expanded_assignment.push_back(expanded_signal);
+                            }
                         }
-                        std::move(expanded_assignment.begin(), expanded_assignment.end(), std::back_inserter(expanded_assignments));
+                    }
+
+                    if (expanded_assignment.size() <= expanded_port.size())
+                    {
+                        for (u32 i = 0; i < expanded_assignment.size(); i++)
+                        {
+                            expanded_ports.push_back(expanded_port.at(i));
+                            expanded_assignments.push_back(expanded_assignment.at(i));
+                        }
+                    }
+                    else
+                    {
+                        for (u32 i = 0; i < expanded_port.size(); i++)
+                        {
+                            expanded_ports.push_back(expanded_port.at(i));
+                            expanded_assignments.push_back(expanded_assignment.at(i));
+                        }
                     }
                 }
 
-                unsigned int limit = (expanded_assignments.size() < expanded_ports.size()) ? expanded_assignments.size() : expanded_ports.size();
-                for (unsigned int i = 0; i < limit; i++)
+                for (unsigned int i = 0; i < expanded_assignments.size(); i++)
                 {
                     if (const auto it = parent_module_assignments.find(expanded_assignments[i]); it != parent_module_assignments.end())
                     {

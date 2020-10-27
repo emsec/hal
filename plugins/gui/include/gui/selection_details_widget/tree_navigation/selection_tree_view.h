@@ -52,6 +52,9 @@ namespace hal
         void populate(bool visible);
         SelectionTreeItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
 
+    private Q_SLOTS:
+        void handle_custom_context_menu_requested(const QPoint& point);
+
     private:
         SelectionTreeModel* m_selectionTreeModel;
         SelectionTreeProxyModel* m_selectionTreeProxyModel;

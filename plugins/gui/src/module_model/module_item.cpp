@@ -13,9 +13,7 @@ namespace hal
         m_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name())),
         m_color(g_netlist_relay->get_module_color(id)),
         m_highlighted(false)
-    {
-
-    }
+    {;}
 
     ModuleItem::ModuleItem(const QString& name, const u32 id) :
         m_parent(nullptr),
@@ -23,8 +21,7 @@ namespace hal
         m_name(name),
         m_color(g_netlist_relay->get_module_color(id)),
         m_highlighted(false)
-    {
-    }
+    {;}
 
     void ModuleItem::insert_child(int row, ModuleItem* child)
     {

@@ -27,7 +27,7 @@
 
 namespace hal
 {
-    class Workspace : public QFrame
+    class Workspace final : public QFrame
     {
         Q_OBJECT
 

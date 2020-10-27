@@ -4,11 +4,14 @@
 
 namespace hal
 {
+    /**
+     * Represents the logic value that a signal can take.
+     */
     enum SignalValue
     {
-        ZERO = BooleanFunction::ZERO,
-        ONE  = BooleanFunction::ONE,
-        X    = BooleanFunction::X,
-        Z    = 42
+        ZERO = BooleanFunction::ZERO, /**< Represents a logical 0. */
+        ONE  = BooleanFunction::ONE,  /**< Represents a logical 1. */
+        X    = BooleanFunction::X,    /**< Represents an undefined value. */
+        Z    = 42                     /**< Represents high impedance (currently not supported by the simulator). */
     };
-}
+}    // namespace hal
