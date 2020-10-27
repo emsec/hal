@@ -175,108 +175,108 @@ namespace hal
 
         switch (ev)
         {
-            case netlist_event_handler::event::id_changed:
-            {
-                ///< associated_data = old id
+        case netlist_event_handler::event::id_changed:
+        {
+            ///< associated_data = old id
 
-                Q_EMIT netlist_id_changed(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::input_filename_changed:
-            {
-                ///< no associated_data
+            Q_EMIT netlist_id_changed(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::input_filename_changed:
+        {
+            ///< no associated_data
 
-                Q_EMIT netlist_input_filename_changed(object);
-                break;
-            }
-            case netlist_event_handler::event::design_name_changed:
-            {
-                ///< no associated_data
+            Q_EMIT netlist_input_filename_changed(object);
+            break;
+        }
+        case netlist_event_handler::event::design_name_changed:
+        {
+            ///< no associated_data
 
-                Q_EMIT netlist_design_name_changed(object);
-                break;
-            }
-            case netlist_event_handler::event::device_name_changed:
-            {
-                ///< no associated_data
+            Q_EMIT netlist_design_name_changed(object);
+            break;
+        }
+        case netlist_event_handler::event::device_name_changed:
+        {
+            ///< no associated_data
 
-                Q_EMIT netlist_device_name_changed(object);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_vcc:
-            {
-                ///< associated_data = id of gate
+            Q_EMIT netlist_device_name_changed(object);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_vcc:
+        {
+            ///< associated_data = id of gate
 
-                Q_EMIT netlist_marked_global_vcc(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_gnd:
-            {
-                ///< associated_data = id of gate
+            Q_EMIT netlist_marked_global_vcc(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_gnd:
+        {
+            ///< associated_data = id of gate
 
-                Q_EMIT netlist_marked_global_gnd(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_vcc:
-            {
-                ///< associated_data = id of gate
+            Q_EMIT netlist_marked_global_gnd(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_vcc:
+        {
+            ///< associated_data = id of gate
 
-                Q_EMIT netlist_unmarked_global_vcc(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_gnd:
-            {
-                ///< associated_data = id of gate
+            Q_EMIT netlist_unmarked_global_vcc(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_gnd:
+        {
+            ///< associated_data = id of gate
 
-                Q_EMIT netlist_unmarked_global_gnd(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_input:
-            {
-                ///< associated_data = id of net
-                g_graph_context_manager->handle_marked_global_input(associated_data);
+            Q_EMIT netlist_unmarked_global_gnd(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_input:
+        {
+            ///< associated_data = id of net
+            g_graph_context_manager->handle_marked_global_input(associated_data);
 
-                Q_EMIT netlist_marked_global_input(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_output:
-            {
-                ///< associated_data = id of net
-                g_graph_context_manager->handle_marked_global_output(associated_data);
+            Q_EMIT netlist_marked_global_input(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_output:
+        {
+            ///< associated_data = id of net
+            g_graph_context_manager->handle_marked_global_output(associated_data);
 
-                Q_EMIT netlist_marked_global_output(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_inout:
-            {
-                ///< associated_data = id of net
+            Q_EMIT netlist_marked_global_output(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_inout:
+        {
+            ///< associated_data = id of net
 
-                Q_EMIT netlist_marked_global_inout(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_input:
-            {
-                ///< associated_data = id of net
-                g_graph_context_manager->handle_unmarked_global_input(associated_data);
+            Q_EMIT netlist_marked_global_inout(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_input:
+        {
+            ///< associated_data = id of net
+            g_graph_context_manager->handle_unmarked_global_input(associated_data);
 
-                Q_EMIT netlist_unmarked_global_input(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_output:
-            {
-                ///< associated_data = id of net
-                g_graph_context_manager->handle_unmarked_global_output(associated_data);
+            Q_EMIT netlist_unmarked_global_input(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_output:
+        {
+            ///< associated_data = id of net
+            g_graph_context_manager->handle_unmarked_global_output(associated_data);
 
-                Q_EMIT netlist_unmarked_global_output(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_inout:
-            {
-                ///< associated_data = id of net
+            Q_EMIT netlist_unmarked_global_output(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_inout:
+        {
+            ///< associated_data = id of net
 
-                Q_EMIT netlist_unmarked_global_inout(object, associated_data);
-                break;
-            }
+            Q_EMIT netlist_unmarked_global_inout(object, associated_data);
+            break;
+        }
         }
     }
 
@@ -328,112 +328,116 @@ namespace hal
 
         switch (ev)
         {
-            case module_event_handler::event::created:
+        case module_event_handler::event::created:
+        {
+            //< no associated_data
+
+            // suppress actions if we receive this for the top module
+            if (object->get_parent_module() != nullptr)
             {
-                //< no associated_data
-
-                // suppress actions if we receive this for the top module
-                if (object->get_parent_module() != nullptr)
-                {
-                    m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
-                }
-
-                Q_EMIT module_created(object);
-                break;
+                m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
             }
-            case module_event_handler::event::removed:
-            {
-                //< no associated_data
 
-                m_module_colors.remove(object->get_id());
+            Q_EMIT module_created(object);
+            break;
+        }
+        case module_event_handler::event::removed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_module_removed(object);
-                g_selection_relay->handle_module_removed(object->get_id());
+            m_module_colors.remove(object->get_id());
 
-                Q_EMIT module_removed(object);
-                break;
-            }
-            case module_event_handler::event::name_changed:
-            {
-                //< no associated_data
+            g_graph_context_manager->handle_module_removed(object);
+            g_selection_relay->handle_module_removed(object->get_id());
 
-                m_ModuleModel->update_module(object->get_id());
+            Q_EMIT module_removed(object);
+            break;
+        }
+        case module_event_handler::event::name_changed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_module_name_changed(object);
+            m_ModuleModel->update_module(object->get_id());
 
-                Q_EMIT module_name_changed(object);
-                break;
-            }
-            case module_event_handler::event::parent_changed:
-            {
-                //< no associated_data
+            g_graph_context_manager->handle_module_name_changed(object);
 
-                Q_EMIT module_parent_changed(object);
-                break;
-            }
-            case module_event_handler::event::submodule_added:
-            {
-                //< associated_data = id of added module
+            Q_EMIT module_name_changed(object);
+            break;
+        }
+        case module_event_handler::event::parent_changed:
+        {
+            //< no associated_data
 
-                m_ModuleModel->add_module(associated_data, object->get_id());
+            Q_EMIT module_parent_changed(object);
+            break;
+        }
+        case module_event_handler::event::submodule_added:
+        {
+            //< associated_data = id of added module
 
-                g_graph_context_manager->handle_module_submodule_added(object, associated_data);
+            m_ModuleModel->add_module(associated_data, object->get_id());
 
-                Q_EMIT module_submodule_added(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::submodule_removed:
-            {
-                //< associated_data = id of removed module
+            g_graph_context_manager->handle_module_submodule_added(object, associated_data);
 
-                m_ModuleModel->remove_module(associated_data);
+            Q_EMIT module_submodule_added(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::submodule_removed:
+        {
+            //< associated_data = id of removed module
 
-                g_graph_context_manager->handle_module_submodule_removed(object, associated_data);
+            m_ModuleModel->remove_module(associated_data);
 
-                Q_EMIT module_submodule_removed(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::gate_assigned:
-            {
-                //< associated_data = id of inserted gate
+            g_graph_context_manager->handle_module_submodule_removed(object, associated_data);
 
-                g_graph_context_manager->handle_module_gate_assigned(object, associated_data);
+            Q_EMIT module_submodule_removed(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::gate_assigned:
+        {
+            //< associated_data = id of inserted gate
 
-                Q_EMIT module_gate_assigned(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::gate_removed:
-            {
-                //< associated_data = id of removed gate
+            g_graph_context_manager->handle_module_gate_assigned(object, associated_data);
 
-                g_graph_context_manager->handle_module_gate_removed(object, associated_data);
+            Q_EMIT module_gate_assigned(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::gate_removed:
+        {
+            //< associated_data = id of removed gate
 
-                Q_EMIT module_gate_removed(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::input_port_name_changed:
-            {
-                //< associated data = respective net
+            g_graph_context_manager->handle_module_gate_removed(object, associated_data);
 
-                Q_EMIT module_input_port_name_changed(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::output_port_name_changed:
-            {
-                //< associated data = respective net
+            Q_EMIT module_gate_removed(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::input_port_name_changed:
+        {
+            //< associated data = respective net
 
-                Q_EMIT module_output_port_name_changed(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::type_changed:
-            {
-                //< no associated_data
+            g_graph_context_manager->handle_module_input_port_name_changed(object, associated_data);
 
-                g_graph_context_manager->handle_module_type_changed(object);
+            Q_EMIT module_input_port_name_changed(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::output_port_name_changed:
+        {
+            //< associated data = respective net
 
-                Q_EMIT module_type_changed(object);
-                break;
-            }
+            g_graph_context_manager->handle_module_output_port_name_changed(object, associated_data);
+
+            Q_EMIT module_output_port_name_changed(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::type_changed:
+        {
+            //< no associated_data
+
+            g_graph_context_manager->handle_module_type_changed(object);
+
+            Q_EMIT module_type_changed(object);
+            break;
+        }
         }
     }
 
@@ -448,33 +452,33 @@ namespace hal
 
         switch (ev)
         {
-            case gate_event_handler::event::created:
-            {
-                //< no associated_data
+        case gate_event_handler::event::created:
+        {
+            //< no associated_data
 
-                Q_EMIT gate_created(object);
-                break;
-            }
-            case gate_event_handler::removed:
-            {
-                //< no associated_data
+            Q_EMIT gate_created(object);
+            break;
+        }
+        case gate_event_handler::removed:
+        {
+            //< no associated_data
 
-                g_selection_relay->handle_gate_removed(object->get_id());
+            g_selection_relay->handle_gate_removed(object->get_id());
 
-                Q_EMIT gate_removed(object);
-                break;
-            }
-            case gate_event_handler::name_changed:
-            {
-                //< no associated_data
+            Q_EMIT gate_removed(object);
+            break;
+        }
+        case gate_event_handler::name_changed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_gate_name_changed(object);
+            g_graph_context_manager->handle_gate_name_changed(object);
 
-                Q_EMIT gate_name_changed(object);
-                break;
-            }
-            default:
-                break;
+            Q_EMIT gate_name_changed(object);
+            break;
+        }
+        default:
+            break;
         }
     }
 
@@ -488,34 +492,34 @@ namespace hal
 
         switch (ev)
         {
-            case net_event_handler::event::created:
-            {
-                //< no associated_data
+        case net_event_handler::event::created:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_net_created(object);
+            g_graph_context_manager->handle_net_created(object);
 
-                Q_EMIT net_created(object);
-                break;
-            }
-            case net_event_handler::event::removed:
-            {
-                //< no associated_data
+            Q_EMIT net_created(object);
+            break;
+        }
+        case net_event_handler::event::removed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_net_removed(object);
-                g_selection_relay->handle_net_removed(object->get_id());
+            g_graph_context_manager->handle_net_removed(object);
+            g_selection_relay->handle_net_removed(object->get_id());
 
-                Q_EMIT net_removed(object);
-                break;
-            }
-            case net_event_handler::event::name_changed:
-            {
-                //< no associated_data
+            Q_EMIT net_removed(object);
+            break;
+        }
+        case net_event_handler::event::name_changed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_net_name_changed(object);
+            g_graph_context_manager->handle_net_name_changed(object);
 
-                Q_EMIT net_name_changed(object);
-                break;
-            }
+            Q_EMIT net_name_changed(object);
+            break;
+        }
             // FIXME add src_added, src_removed
             // case net_event_handler::event::src_changed:
             // {
@@ -526,42 +530,42 @@ namespace hal
             //     Q_EMIT net_source_changed(object);
             //     break;
             // }
-            case net_event_handler::event::src_added:
-            {
-                //< associated_data = id of src gate
+        case net_event_handler::event::src_added:
+        {
+            //< associated_data = id of src gate
 
-                g_graph_context_manager->handle_net_source_added(object, associated_data);
+            g_graph_context_manager->handle_net_source_added(object, associated_data);
 
-                Q_EMIT net_source_added(object, associated_data);
-                break;
-            }
-            case net_event_handler::event::src_removed:
-            {
-                //< associated_data = id of src gate
+            Q_EMIT net_source_added(object, associated_data);
+            break;
+        }
+        case net_event_handler::event::src_removed:
+        {
+            //< associated_data = id of src gate
 
-                g_graph_context_manager->handle_net_source_removed(object, associated_data);
+            g_graph_context_manager->handle_net_source_removed(object, associated_data);
 
-                Q_EMIT net_source_removed(object, associated_data);
-                break;
-            }
-            case net_event_handler::event::dst_added:
-            {
-                //< associated_data = id of dst gate
+            Q_EMIT net_source_removed(object, associated_data);
+            break;
+        }
+        case net_event_handler::event::dst_added:
+        {
+            //< associated_data = id of dst gate
 
-                g_graph_context_manager->handle_net_destination_added(object, associated_data);
+            g_graph_context_manager->handle_net_destination_added(object, associated_data);
 
-                Q_EMIT net_destination_added(object, associated_data);
-                break;
-            }
-            case net_event_handler::event::dst_removed:
-            {
-                //< associated_data = id of dst gate
+            Q_EMIT net_destination_added(object, associated_data);
+            break;
+        }
+        case net_event_handler::event::dst_removed:
+        {
+            //< associated_data = id of dst gate
 
-                g_graph_context_manager->handle_net_destination_removed(object, associated_data);
+            g_graph_context_manager->handle_net_destination_removed(object, associated_data);
 
-                Q_EMIT net_destination_removed(object, associated_data);
-                break;
-            }
+            Q_EMIT net_destination_removed(object, associated_data);
+            break;
+        }
         }
     }
 
