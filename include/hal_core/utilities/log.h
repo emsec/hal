@@ -200,11 +200,21 @@ namespace hal
         void activate_channel(const std::string& channel_name);
 
         /**
+         * Activate all logging channels.
+         */
+        void activate_all_channels();
+
+        /**
          * Deactivate a channel suppressing all output.
          *
          * @param[in] channel_name - The name of the channel.
          */
         void deactivate_channel(const std::string& channel_name);
+
+        /**
+         * Deactivate all logging channels.
+         */
+        void deactivate_all_channels();
 
         /**
          * Get the GUI callback hook for displaying log messages inside the GUI.

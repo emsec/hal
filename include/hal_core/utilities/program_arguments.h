@@ -36,8 +36,10 @@
 namespace hal
 {
     /**
-    * @ingroup utilities
-    */
+     * Holds the program arguments that have been passed to HAL using the command line or at any other point in time during execution.
+     * 
+     * @ingroup utilities
+     */
     class CORE_API ProgramArguments
     {
     public:
