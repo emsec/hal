@@ -23,29 +23,6 @@ static T toggle(T v)
 
 namespace hal
 {
-    // #define seconds_since(X) ((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - (X)).count() / 1000)
-
-    // #define measure_block_time(X) measure_block_time_t _UNIQUE_NAME_(X);
-
-    //     class measure_block_time_t
-    //     {
-    //     public:
-    //         measure_block_time_t(const std::string& section_name)
-    //         {
-    //             m_name       = section_name;
-    //             m_begin_time = std::chrono::high_resolution_clock::now();
-    //         }
-
-    //         ~measure_block_time_t()
-    //         {
-    //             log_info("netlist simulator", "{} took {:3.2f}s", m_name, seconds_since(m_begin_time));
-    //         }
-
-    //     private:
-    //         std::string m_name;
-    //         std::chrono::time_point<std::chrono::high_resolution_clock> m_begin_time;
-    //     };
-
 #define measure_block_time(X)
 
     NetlistSimulator::NetlistSimulator()
@@ -799,88 +776,54 @@ namespace hal
         std::unordered_map<Net*, SignalValue> change_tracker;
         vcd << "#" << 0 << std::endl;
 
+        std::map<u32, std::map<Net*, SignalValue>> time_to_changes_map;
+
+        std::unordered_map<Net*, std::vector<Event>> events = m_simulation.get_events();
+
         for (const auto& simulated_net : simulated_nets)
         {
-            auto value = m_simulation.get_net_value(simulated_net, start_time);
-
-            change_tracker[simulated_net] = value;
-
-            //  print signal value
-            if (value == SignalValue::X)
+            std::vector<Event> net_events = events.at(simulated_net);
+            for (const auto& event : net_events)
             {
-                vcd << "xn" << simulated_net->get_id() << std::endl;
-            }
-            else if (value == SignalValue::ONE)
-            {
-                vcd << "1n" << simulated_net->get_id() << std::endl;
-            }
-            else if (value == SignalValue::ZERO)
-            {
-                vcd << "0n" << simulated_net->get_id() << std::endl;
-            }
-            else if (value == SignalValue::Z)
-            {
-                log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", simulated_net->get_id(), time);
-                return false;
-            }
-            else
-            {
-                log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", simulated_net->get_id(), time);
-                return false;
+                u32 event_time = event.time;
+                if (event_time > start_time && event_time < end_time)
+                {
+                    time_to_changes_map[event.time][simulated_net] = event.new_value;
+                }
             }
         }
 
         u32 traces_count = 0;
 
-        for (u32 time = start_time + 1; time < end_time; ++time)
+        for (const auto& [event_time, changed_nets] : time_to_changes_map)
         {
-            bool print_new_cycle_count = true;
             traces_count++;
+            vcd << "#" << event_time << std::endl;
 
-            for (const auto& simulated_net : simulated_nets)
+            for (const auto& [net, value] : changed_nets)
             {
-                auto value = m_simulation.get_net_value(simulated_net, time);
-
-                // check if changes occured
-                if (value == change_tracker.at(simulated_net))
+                //  print signal value
+                if (value == SignalValue::X)
                 {
-                    // do nothing
+                    vcd << "xn" << net->get_id() << std::endl;
                 }
-                else    // we need to print an update!
+                else if (value == SignalValue::ONE)
                 {
-                    // update change tracker
-                    change_tracker[simulated_net] = value;
-
-                    // if this is the first update for this time, print current cycle count
-                    if (print_new_cycle_count)
-                    {
-                        print_new_cycle_count = false;
-                        vcd << "#" << time << std::endl;
-                    }
-
-                    //  print signal value
-                    if (value == SignalValue::X)
-                    {
-                        vcd << "xn" << simulated_net->get_id() << std::endl;
-                    }
-                    else if (value == SignalValue::ONE)
-                    {
-                        vcd << "1n" << simulated_net->get_id() << std::endl;
-                    }
-                    else if (value == SignalValue::ZERO)
-                    {
-                        vcd << "0n" << simulated_net->get_id() << std::endl;
-                    }
-                    else if (value == SignalValue::Z)
-                    {
-                        log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", simulated_net->get_id(), time);
-                        return false;
-                    }
-                    else
-                    {
-                        log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", simulated_net->get_name(), time);
-                        return false;
-                    }
+                    vcd << "1n" << net->get_id() << std::endl;
+                }
+                else if (value == SignalValue::ZERO)
+                {
+                    vcd << "0n" << net->get_id() << std::endl;
+                }
+                else if (value == SignalValue::Z)
+                {
+                    log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", net->get_id(), time);
+                    return false;
+                }
+                else
+                {
+                    log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", net->get_id(), time);
+                    return false;
                 }
             }
         }
@@ -897,5 +840,4 @@ namespace hal
 
         return true;
     }
-
 }    // namespace hal
