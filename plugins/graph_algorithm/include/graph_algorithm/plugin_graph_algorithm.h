@@ -43,85 +43,89 @@ namespace hal
         */
 
         /**
-         * Returns map of community-IDs to communities.
+         * Get a map of community IDs to communities. Each community is represented by a set of gates.
          *
-         * @param[in] nl - Netlist (internally transformed to di-graph)
-         * @returns A map of community-IDs to sets of gates belonging to the communities
+         * @param[in] netlist - The netlist to operate on.
+         * @returns A map from community IDs to communities.
          */
-        std::map<int, std::set<Gate*>> get_communities(Netlist* const nl);
+        std::map<int, std::set<Gate*>> get_communities(Netlist* const netlist);
 
         /**
-         * Returns map of community-IDs to communities running the spinglass clustering.
+         * Get a map of community IDs to communities running the spinglass clustering algorithm. Each community is represented by a set of gates.
          *
-         * @param[in] nl - Netlist (internally transformed to di-graph)
-         * @param[in] spins -
-         * @returns A map of community-IDs to sets of gates belonging to the communities
+         * @param[in] netlist - The netlist to operate on.
+         * @param[in] spins - The number of spins.
+         * @returns A map from community IDs to communities.
          */
-        std::map<int, std::set<Gate*>> get_communities_spinglass(Netlist* const nl, u32 const spins);
+        std::map<int, std::set<Gate*>> get_communities_spinglass(Netlist* const netlist, u32 const spins);
 
         /**
-         * Returns map of community-IDs to communities running the fast greedy clustering from igraph.
+         * Get a map of community IDs to communities running the fast greedy clustering algorithm from igraph. Each community is represented by a set of gates.
          *
-         * @param[in] nl - Netlist (internally transformed to di-graph)
-         * @param[in] spins -
-         * @returns A map of community-IDs to sets of gates belonging to the communities
+         * @param[in] netlist - The netlist to operate on.
+         * @returns A map from community IDs to communities.
          */
-        std::map<int, std::set<Gate*>> get_communities_fast_greedy(Netlist* const nl);
+        std::map<int, std::set<Gate*>> get_communities_fast_greedy(Netlist* const netlist);
 
         /**
-         * Returns map of community-IDs to communities running the multilevel clustering from igraph.
+         * Get a map of community IDs to communities running the multilevel clustering algorithm from igraph. Each community is represented by a set of gates.
          *
-         * @param[in] nl - Netlist (internally transformed to di-graph)
-         * @param[in] spin -
-         * @returns A map of community-IDs to sets of gates belonging to the communities
+         * @param[in] netlist - The netlist to operate on.
+         * @returns A map from community IDs to communities.
          */
-        std::map<int, std::set<Gate*>> get_communities_multilevel(Netlist* nl);
+        std::map<int, std::set<Gate*>> get_communities_multilevel(Netlist* netlist);
 
         /**
          *  other graph algorithm
          */
 
         /**
-         * Returns the set of strongly connected components.
+         * Get a vector of strongly connected components (SCC) with each SSC being represented by a vector of gates.
          *
-         * @param[in] nl - Netlist (internally transformed to di-graph)
-         * @param[in] gates - Set of gates for which the strongly connected components are determined (default = empty means that all gates of the netlist are considered)
-         * @returns A set of strongly connected components where each component is a set of gates.
+         * @param[in] netlist - The netlist to operate on.
+         * @returns A vector of SCCs.
          */
-        std::vector<std::vector<Gate*>> get_strongly_connected_components(Netlist* nl);
+        std::vector<std::vector<Gate*>> get_strongly_connected_components(Netlist* netlist);
 
         /**
-         * Returns a graph cut for a specific gate and depth.
+         * Get a graph cut for a specific gate and depth. Further, a set of gates can be specified that limit the graph cut, i.e., flip-flops and memory cells.<br>
+         * The graph cut is returned as a vector of sets of gates with the vector's index representing the distance of each set to the starting point.
          *
-         * @param[in] nl - Netlist (internally transformed to di-graph)
-         * @param[in] g - Gate (starting vertex for graph cut)
-         * @param[in] depth - Graph cut depth
-         * @param[in] synchronous_gate_type - Marks terminal vertex gate types of graph cut (typically memory gates such as flip-flops)
-         * @returns A vector of gate sets where each vector entry refers to the distance to the starting gate g.
+         * @param[in] netlist - The netlist to operate on.
+         * @param[in] gate - The gate that is the starting point for the graph cut.
+         * @param[in] depth - The depth of the graph cut.
+         * @param[in] terminal_gate_type - A set of gates at which to terminate the graph cut.
+         * @returns The graph cut as a vector of sets of gates.
          */
         std::vector<std::set<Gate*>>
-            get_graph_cut(Netlist* const nl, Gate* g, const u32 depth = std::numeric_limits<u32>::max(), const std::set<std::string> terminal_gate_type = std::set<std::string>());
+            get_graph_cut(Netlist* const netlist, Gate* gate, const u32 depth = std::numeric_limits<u32>::max(), const std::set<std::string> terminal_gate_type = std::set<std::string>());
 
         /*
          *      igraph specific functions
          */
 
         /**
-         * Return a map of sets of gates with the same membership id
+         * Generates an directed graph, based on the current netlist. Each gate is transformed to a node, while each
+         * net is transformed to an edge. The function returns the mapping from igraph node ids to HAL gates. Note
+         * that for each global input and output dummy nodes are generated in the igraph representation.
+         *
+         * @param[in] netlist - The netlist to operate on.
+         * @returns map from igraph node id to HAL gate ID, to be able to match back any graph operations.
+         */
+        std::map<int, Gate*> get_igraph_directed(Netlist* const netlist, igraph_t* igraph);
+
+        /**
+         * Uses the mapping provided by the the get_igraph_directed() function to generate sets of HAL gates
+         * that were generated by the clustering algorithms of igraph. The igraph membership vector contains
+         * the generated clusters from the igraph framework, which is used to generate the sets of gates in HAL.
+         * The sets are stored in a map with the regarding cluster ID from igraph, since these can contain information
+         * generated by the clustering algorithm.
          *
          * @param[in] graph - igraph graph object
          * @param[in] membership - membership vector
-         * @param[in] vertex_to_gate - map from vertex ID in igraph to HAL gate
+         * @param[in] vertex_to_gate - map from node ID in igraph to HAL gate
          * @returns map from membership id to set of gates that have the membership.
          */
         std::map<int, std::set<Gate*>> get_memberships_for_hal(igraph_t* graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate);
-
-        /**
-         * Return the igraph object from the provided netlist.
-         *
-         * @param[in] nl - Netlist
-         * @returns tuple of igraph_t object and map from igraph vertex id to HAL gate ID for further graph analysis.
-         */
-        std::map<int, Gate*> get_igraph_directed(Netlist* const nl, igraph_t* igraph);
     };
 }    // namespace hal

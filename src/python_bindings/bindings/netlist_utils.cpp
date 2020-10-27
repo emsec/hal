@@ -9,11 +9,11 @@ namespace hal
         )");
 
         py_netlist_utils.def("get_subgraph_function", &netlist_utils::get_subgraph_function, py::arg("subgraph_gates"), py::arg("output_net"), R"(
-            Get the combined Boolean function of a subgraph of the netlist that is defined by a set of gates and an output net.
-            The gates within the net should be connected and the given output net should represent the targeted output of the subgraph.
+            Get the combined Boolean function of a subgraph of the netlist that is defined by a list of gates and an output net.
+            The gates within the list should be connected and the given output net should represent the targeted output of the subgraph.
             The resulting Boolean function uses the net IDs of the automatically identified input nets as variables.
 
-            :param set[hal_py.Gate] subgraph_gates: The gates making up the subgraph.
+            :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph.
             :param hal_py.Net output_net: The output net for which to generate the Boolean function.
             :returns: The combined Boolean function of the subgraph.
             :rtype: hal_py.BooleanFunction
