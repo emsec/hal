@@ -6,11 +6,11 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
-#include "hal_core/utilities/log.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/plugin_system/plugin_interface_cli.h"
 #include "hal_core/plugin_system/plugin_interface_ui.h"
 #include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
 #include "hal_core/utilities/program_options.h"
 #include "hal_core/utilities/utils.h"
@@ -67,7 +67,7 @@ int main(int argc, const char* argv[])
     ProgramOptions all_options("all options");
     all_options.add(cli_options);
     all_options.add(LogManager::get_instance().get_option_descriptions());
-    auto args = all_options.parse(argc, argv);
+    ProgramArguments args = all_options.parse(argc, argv);
 
     /* initialize logging */
     LogManager& lm = LogManager::get_instance();
@@ -96,6 +96,12 @@ int main(int argc, const char* argv[])
 
     /* initialize plugin manager */
     plugin_manager::add_existing_options_description(cli_options);
+
+    // suppress output
+    if (args.is_option_set("--help") || args.is_option_set("--licenses") || args.is_option_set("--version") || args.get_set_options().size() == 0)
+    {
+        lm.deactivate_all_channels();
+    }
 
     if (!plugin_manager::load_all_plugins())
     {

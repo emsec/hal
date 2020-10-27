@@ -60,61 +60,57 @@ namespace hal
                 :returns: Plugin version.
                 :rtype: str
                 )")
-            .def("get_communities_fast_greedy",
-                 &GraphAlgorithmPlugin::get_communities_fast_greedy,
-                 py::arg("netlist"),
-                 R"(
-                Returns the map of community-IDs to communities running the fast-greedy clustering algorithm.
+            .def("get_communities", &GraphAlgorithmPlugin::get_communities, py::arg("netlist"), R"(
+                Get a dict of community IDs to communities. Each community is represented by a set of gates.
 
-                :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
-                :param set[hal_py.get_gate()] gates: Set of gates in clustering
-                :returns: A map of clusters.
+                :param hal_py.Netlist netlist: The netlist to operate on.
+                :returns: A dict from community IDs to communities.
+                :rtype: dict[int,set[hal_py.get_gate()]]
+                )")
+            .def("get_communities_spinglass", &GraphAlgorithmPlugin::get_communities_spinglass, py::arg("netlist"), py::arg("spins"), R"(
+                Get a dict of community IDs to communities running the spinglass clustering algorithm. Each community is represented by a set of gates.
+
+                :param hal_py.Netlist netlist: The netlist to operate on.
+                :param int spins: The number of spins.
+                :returns: A dict from community IDs to communities.
+                :rtype: dict[int,set[hal_py.get_gate()]]
+                )")
+            .def("get_communities_fast_greedy", &GraphAlgorithmPlugin::get_communities_fast_greedy, py::arg("netlist"), R"(
+                Get a dict of community IDs to communities running the fast greedy clustering algorithm from igraph. Each community is represented by a set of gates.
+
+                :param hal_py.Netlist netlist: The netlist to operate on.
+                :returns: A dict from community IDs to communities.
                 :rtype: dict[set[hal_py.get_gate()]]
                 )")
-            .def("get_communities_multilevel",
-                 &GraphAlgorithmPlugin::get_communities_multilevel,
-                 py::arg("netlist"),
-                 R"(
-                Returns the map of community-IDs to communities running the multilevel clustering algorithm.
+            .def("get_communities_multilevel", &GraphAlgorithmPlugin::get_communities_multilevel, py::arg("netlist"), R"(
+                Get a dict of community IDs to communities running the multilevel clustering algorithm from igraph. Each community is represented by a set of gates.
 
-                :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
-                :param set[hal_py.get_gate()] gates: Set of gates in clustering
-                :returns: A map of clusters.
+                :param hal_py.Netlist netlist: The netlist to operate on.
+                :returns: A dict from community IDs to communities.
                 :rtype: dict[int,set[hal_py.get_gate()]]
                 )")
-            .def("get_communities_spinglass", &GraphAlgorithmPlugin::get_communities_spinglass, py::arg("nl"), py::arg("spins"), R"(
-                Returns the map of community-IDs to communities running the spinglass clustering algorithm.
+            .def("get_strongly_connected_components", &GraphAlgorithmPlugin::get_strongly_connected_components, py::arg("netlist"), R"(
+                Get a list of strongly connected components (SCC) with each SSC being represented by a list of gates.
 
-                :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
-                :param int spins: Amount of spins
-                :returns: A map of clusters.
-                :rtype: dict[int,set[hal_py.get_gate()]]
-                )")
-            .def("get_strongly_connected_components",
-                 &GraphAlgorithmPlugin::get_strongly_connected_components,
-                 py::arg("netlist"),
-                 R"(
-                Returns the set of strongly connected components.
-
-                :param hal_py.Netlist netlist: Netlist (internelly transformed to di-graph)
-                :returns: A set of strongly connected components where each component is a set of gates.
-                :rtype: set[set[hal_py.get_gate()]]
+                :param hal_py.Netlist netlist: The netlist to operate on.
+                :returns: A list of SCCs.
+                :rtype: list[list[hal_py.get_gate()]]
                 )")
             .def("get_graph_cut",
                  &GraphAlgorithmPlugin::get_graph_cut,
                  py::arg("netlist"),
-                 py::arg("current_gate"),
+                 py::arg("gate"),
                  py::arg("depth")              = std::numeric_limits<u32>::max(),
                  py::arg("terminal_gate_type") = std::set<std::string>(),
                  R"(
-                Returns a graph cut for a specific gate and depth.
+                Get a graph cut for a specific gate and depth. Further, a set of gates can be specified that limit the graph cut, i.e., flip-flops and memory cells.
+                The graph cut is returned as a list of sets of gates with the list's index representing the distance of each set to the starting point.
 
-                :param hal_py.Netlist netlist: Netlist (internally transformed to di-graph)
-                :param hal_py.get_gate() current_gate: Gate (starting vertex for graph cut)
-                :param int depth: Graph cut depth
-                :param terminal_gate_type: Marks terminal vertex gate types of graph cut (typically memory gates such as flip-flops).
-                :type terminal_gate_type: set[str]
-                :returns: A list of gate sets where each list entry refers to the distance to the starting gate.
+                :param hal_py.Netlist netlist: The netlist to operate on.
+                :param hal_py.get_gate() gate: The gate that is the starting point for the graph cut.
+                :param int depth: The depth of the graph cut.
+                :param set[str] terminal_gate_type:  A set of gates at which to terminate the graph cut.
+                :returns: The graph cut as a list of sets of gates.
                 :rtype: list[set[hal_py.get_gate()]]
                 )");
 

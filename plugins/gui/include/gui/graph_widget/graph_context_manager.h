@@ -58,12 +58,15 @@ namespace hal
         //void handle_module_created(Module* m) const;
         void handle_module_removed(Module* m);
         void handle_module_name_changed(Module* m) const;
+        void handle_module_type_changed(Module* m) const;
         void handle_module_color_changed(Module* m) const;
         //void handle_module_parent_changed(Module* m) const;
         void handle_module_submodule_added(Module* m, const u32 added_module) const;
         void handle_module_submodule_removed(Module* m, const u32 removed_module);
         void handle_module_gate_assigned(Module* m, const u32 inserted_gate) const;
         void handle_module_gate_removed(Module* m, const u32 removed_gate);
+        void handle_module_input_port_name_changed(Module* m, const u32 net);
+        void handle_module_output_port_name_changed(Module* m, const u32 net);
 
         //void handle_gate_created(Gate* g) const;
         //void handle_gate_removed(Gate* g) const;

@@ -62,6 +62,7 @@ namespace hal
         void handle_move_action(QAction* action);
         void handle_move_new_action();
         void handle_rename_action();
+        void handle_change_type_action();
         void adjust_min_scale();
 
         void handle_fold_single_action();

@@ -38,8 +38,10 @@ namespace hal
     class ProgramArguments;
 
     /**
-    * @ingroup utilities
-    */
+     * Holds the command line options that can be configured from the command line or at runtime using \p ProgramArguments.
+     * 
+     * @ingroup utilities
+     */
     class CORE_API ProgramOptions
     {
     public:

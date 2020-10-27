@@ -95,13 +95,6 @@ namespace hal
         connect(m_source_pins_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_sources_table_menu_requeted);
         connect(m_destination_pins_table, &QTableWidget::customContextMenuRequested, this, &NetDetailsWidget::handle_destinations_table_menu_requeted);
 
-
-        //install eventfilter to change the cursor when hovering over the second colums of the pin tables
-        m_destination_pins_table->viewport()->setMouseTracking(true);
-        m_destination_pins_table->viewport()->installEventFilter(this);
-        m_source_pins_table->viewport()->setMouseTracking(true);
-        m_source_pins_table->viewport()->installEventFilter(this);
-
         //NetlistRelay connections
         connect(g_netlist_relay, &NetlistRelay::net_removed, this, &NetDetailsWidget::handle_net_removed);
         connect(g_netlist_relay, &NetlistRelay::net_name_changed, this, &NetDetailsWidget::handle_net_name_changed);
@@ -115,32 +108,6 @@ namespace hal
 
     NetDetailsWidget::~NetDetailsWidget()
     {
-    }
-
-    bool NetDetailsWidget::eventFilter(QObject* watched, QEvent* event)
-    {
-        //need to determine which of the tables is the "owner" of the viewport
-        QTableWidget* table = (watched == m_destination_pins_table->viewport()) ? m_destination_pins_table : m_source_pins_table;
-        if (event->type() == QEvent::MouseMove)
-        {
-            QMouseEvent* ev        = dynamic_cast<QMouseEvent*>(event);
-            QTableWidgetItem* item = table->itemAt(ev->pos());
-            if (item)
-            {
-                if (item->column() == 2)
-                    setCursor(QCursor(Qt::PointingHandCursor));
-                else
-                    setCursor(QCursor(Qt::ArrowCursor));
-            }
-            else
-                setCursor(QCursor(Qt::ArrowCursor));
-        }
-
-        //restore default cursor when leaving the widget (maybe save cursor before entering?)
-        if (event->type() == QEvent::Leave)
-            setCursor(QCursor(Qt::ArrowCursor));
-
-        return false;
     }
 
     void NetDetailsWidget::update(u32 net_id)

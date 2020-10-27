@@ -84,6 +84,13 @@ namespace hal
                 context->schedule_scene_update();
     }
 
+    void GraphContextManager::handle_module_type_changed(Module *m) const
+    {
+        for (GraphContext* context : m_graph_contexts)
+            if (context->modules().contains(m->get_id()))
+                context->schedule_scene_update();
+    }
+
     void GraphContextManager::handle_module_color_changed(Module* m) const
     {
         auto gates = m->get_gates();
@@ -146,6 +153,20 @@ namespace hal
         }
     }
 
+    void GraphContextManager::handle_module_input_port_name_changed(Module* m, const u32 net)
+    {
+        for (GraphContext* context : m_graph_contexts)
+            if (context->modules().contains(m->get_id()))
+                context->schedule_scene_update();
+    }
+
+    void GraphContextManager::handle_module_output_port_name_changed(Module* m, const u32 net)
+    {
+        for (GraphContext* context : m_graph_contexts)
+            if (context->modules().contains(m->get_id()))
+                context->schedule_scene_update();
+    }
+
     void GraphContextManager::handle_gate_name_changed(Gate* g) const
     {
         for (GraphContext* context : m_graph_contexts)
@@ -170,9 +191,9 @@ namespace hal
 
     void GraphContextManager::handle_net_name_changed(Net* n) const
     {
-        Q_UNUSED(n)
-
-        // TRIGGER RESHADE FOR ALL CONTEXTS THAT RECURSIVELY CONTAIN THE NET
+        for (GraphContext* context : m_graph_contexts)
+            if (context->nets().contains(n->get_id()))
+                context->schedule_scene_update();
     }
 
     void GraphContextManager::handle_net_source_added(Net* n, const u32 src_gate_id) const
@@ -277,13 +298,11 @@ namespace hal
 
     GraphLayouter* GraphContextManager::get_default_layouter(GraphContext* const context) const
     {
-        // USE SETTINGS + FACTORY
         return new StandardGraphLayouter(context);
     }
 
     GraphShader* GraphContextManager::get_default_shader(GraphContext* const context) const
     {
-        // USE SETTINGS + FACTORY
         return new ModuleShader(context);
     }
 

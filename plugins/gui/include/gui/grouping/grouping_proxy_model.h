@@ -23,40 +23,27 @@
 
 #pragma once
 
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
+#include "gui/gui_utils/sort.h"
 
-#include <QTreeView>
-#include <QWidget>
+#include <QSortFilterProxyModel>
 
 namespace hal
 {
-    class SelectionTreeView : public QTreeView
+    class GroupingProxyModel : public QSortFilterProxyModel
     {
         Q_OBJECT
 
-    Q_SIGNALS:
-        void triggerSelection(const SelectionTreeItem* sti);
-
-    public Q_SLOTS:
-        void handle_filter_text_changed(const QString& filter_text);
- 
-    protected:
-        virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous) Q_DECL_OVERRIDE;
-
     public:
-        SelectionTreeView(QWidget* parent = nullptr);
-        void setDefaultColumnWidth();
-        void clearHide();
-        void populate(bool visible);
-        SelectionTreeItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
+        GroupingProxyModel(QObject* parent = nullptr);
+
+    protected:
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
+        bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
     private Q_SLOTS:
-        void handle_custom_context_menu_requested(const QPoint& point);
+        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
     private:
-        SelectionTreeModel* m_selectionTreeModel;
-        SelectionTreeProxyModel* m_selectionTreeProxyModel;
+        gui_utility::sort_mechanism m_sort_mechanism;
     };
-}    // namespace hal
+}

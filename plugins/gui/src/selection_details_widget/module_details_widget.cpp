@@ -120,41 +120,11 @@ namespace hal
         connect(m_output_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_output_net_item_clicked);
 
         connect(mGeneralModel, &DetailsGeneralModel::requireUpdate, this, &ModuleDetailsWidget::update);
-        //eventfilters
-        m_input_ports_table->viewport()->setMouseTracking(true);
-        m_input_ports_table->viewport()->installEventFilter(this);
-        m_output_ports_table->viewport()->setMouseTracking(true);
-        m_output_ports_table->viewport()->installEventFilter(this);
     }
 
     ModuleDetailsWidget::~ModuleDetailsWidget()
     {
         delete m_navigation_table;
-    }
-
-    bool ModuleDetailsWidget::eventFilter(QObject* watched, QEvent* event)
-    {
-        if (event->type() == QEvent::MouseMove)
-        {
-            QTableWidget* table    = (watched == m_input_ports_table->viewport()) ? m_input_ports_table : m_output_ports_table;
-            QMouseEvent* ev        = dynamic_cast<QMouseEvent*>(event);
-            QTableWidgetItem* item = table->itemAt(ev->pos());
-            if (item)
-            {
-                if (item->column() == 2)
-                    setCursor(QCursor(Qt::PointingHandCursor));
-                else
-                    setCursor(QCursor(Qt::ArrowCursor));
-            }
-            else
-                setCursor(QCursor(Qt::ArrowCursor));
-        }
-
-        //restore default cursor when leaving any watched widget (maybe save cursor before entering?)
-        if (event->type() == QEvent::Leave)
-            setCursor(QCursor(Qt::ArrowCursor));
-
-        return false;
     }
 
     void ModuleDetailsWidget::update(const u32 module_id)

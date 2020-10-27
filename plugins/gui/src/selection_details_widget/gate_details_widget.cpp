@@ -128,12 +128,6 @@ namespace hal
         connect(m_input_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_input_pin_table_menu_requested);
         connect(m_output_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_output_pin_table_menu_requested);
 
-        //install eventfilers
-        m_input_pins_table->viewport()->setMouseTracking(true);
-        m_input_pins_table->viewport()->installEventFilter(this);
-        m_output_pins_table->viewport()->setMouseTracking(true);
-        m_output_pins_table->viewport()->installEventFilter(this);
-
         //extract the width of the scrollbar out of the stylesheet to fix a scrollbar related bug
         QString main_stylesheet = qApp->styleSheet();
         main_stylesheet.replace("\n", ""); //remove newlines so the regex is a bit easier
@@ -413,42 +407,6 @@ namespace hal
     {
         //2 is needed because just the scrollbarwitdth is not enough (does not include its border?)
         m_boolean_functions_container->setFixedWidth(event->size().width() - m_scrollbar_width-2);
-    }
-
-    bool GateDetailsWidget::eventFilter(QObject *watched, QEvent *event)
-    {
-        if((watched == m_input_pins_table->viewport() || watched == m_output_pins_table->viewport()) && event->type() == QEvent::MouseMove)
-        {
-            //need to determine which of the tables is the "owner" of the viewport
-            QTableWidget* table = (watched == m_input_pins_table->viewport()) ? m_input_pins_table : m_output_pins_table;
-            QMouseEvent* ev = dynamic_cast<QMouseEvent*>(event);
-            QTableWidgetItem* item = table->itemAt(ev->pos());
-            if(item)
-            {
-                if(item->column() == 2)
-                    setCursor(QCursor(Qt::PointingHandCursor));
-                else
-                    setCursor(QCursor(Qt::ArrowCursor));
-            }
-            else
-                setCursor(QCursor(Qt::ArrowCursor));
-
-        }
-        /* TODO : check
-        if(watched == m_general_table->viewport() && event->type() == QEvent::MouseMove)
-        {
-            QTableWidgetItem* item = m_general_table->itemAt(dynamic_cast<QMouseEvent*>(event)->pos());
-            if(item == m_ModuleItem)
-                setCursor(QCursor(Qt::PointingHandCursor));
-            else
-                setCursor(QCursor(Qt::ArrowCursor));
-        }
-*/
-        //restore default cursor when leaving any watched widget (maybe save cursor before entering?)
-        if(event->type() == QEvent::Leave)
-            setCursor(QCursor(Qt::ArrowCursor));
-
-        return false;
     }
 
     void GateDetailsWidget::update(const u32 gate_id)
