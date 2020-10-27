@@ -76,14 +76,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:afdf9fe7104ffba05b650abea3f2150db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#afdf9fe7104ffba05b650abea3f2150db">get_subgraph_function</a> (const std::unordered_set&lt; const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;subgraph_gates, const <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *output_net)</td></tr>
-<tr class="separator:afdf9fe7104ffba05b650abea3f2150db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdb5923123404f4d9d49bc9f7c68a384"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#afdb5923123404f4d9d49bc9f7c68a384">get_subgraph_function</a> (const std::vector&lt; const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;subgraph_gates, const <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> *output_net)</td></tr>
+<tr class="separator:afdb5923123404f4d9d49bc9f7c68a384"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e81261c6bc8c9602a2e53bf0f0c9b90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::unique_ptr&lt; <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">copy_netlist</a> (const <a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> *nl)</td></tr>
 <tr class="separator:a5e81261c6bc8c9602a2e53bf0f0c9b90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="afdf9fe7104ffba05b650abea3f2150db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afdf9fe7104ffba05b650abea3f2150db">&#9670;&nbsp;</a></span>get_subgraph_function()</h2>
+<a id="afdb5923123404f4d9d49bc9f7c68a384"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdb5923123404f4d9d49bc9f7c68a384">&#9670;&nbsp;</a></span>get_subgraph_function()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -91,7 +91,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> hal::netlist_utils::get_subgraph_function </td>
           <td>(</td>
-          <td class="paramtype">const std::unordered_set&lt; const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; const <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;&#160;</td>
           <td class="paramname"><em>subgraph_gates</em>, </td>
         </tr>
         <tr>
@@ -107,8 +107,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the combined Boolean function of a subgraph of the netlist that is defined by a set of gates and an output net.<br  />
- The gates within the net should be connected and the given output net should represent the targeted output of the subgraph.<br  />
+<p>Get the combined Boolean function of a subgraph of the netlist that is defined by a vector of gates and an output net.<br  />
+ The gates within the vector should be connected and the given output net should represent the targeted output of the subgraph.<br  />
  The resulting Boolean function uses the net IDs of the automatically identified input nets as variables.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -119,7 +119,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The combined Boolean function of the subgraph. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a8e4c1d4f77683babcdf5c834ef1723a5">hal::Gate::get_fan_in_nets()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#ae13cde7edde05bcd731a564d41e4d58e">hal::Net::get_num_of_sources()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">hal::BooleanFunction::optimize()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae9242e7d969fc9b6eb402fc5c2386153">hal::BooleanFunction::substitute()</a>.</p>
+<p class="reference">References <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a8e4c1d4f77683babcdf5c834ef1723a5">hal::Gate::get_fan_in_nets()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#ae13cde7edde05bcd731a564d41e4d58e">hal::Net::get_num_of_sources()</a>, <a class="el" href="../../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac">hal::Net::get_sources()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae9242e7d969fc9b6eb402fc5c2386153">hal::BooleanFunction::substitute()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a60d7e2dfe01bc847292f5473e2b849d1">hal::netlist_utils_init()</a>.</p>
 
@@ -158,7 +158,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Oct 27 2020 10:48:23 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 27 2020 13:31:32 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

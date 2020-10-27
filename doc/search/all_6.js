@@ -152,7 +152,7 @@ var searchData=
   ['get_5fsource_285',['get_source',['../de/db0/classhal_1_1Net.html#a261285edd2702cf3bfcf47a646a55234',1,'hal::Net']]],
   ['get_5fsources_286',['get_sources',['../de/db0/classhal_1_1Net.html#af62cd3da438ede28f00f3076fd949fac',1,'hal::Net']]],
   ['get_5fstate_5foutput_5fpins_287',['get_state_output_pins',['../dd/dd1/classhal_1_1GateTypeSequential.html#ae34e7ba54bb29c56022ea00341869b44',1,'hal::GateTypeSequential']]],
-  ['get_5fsubgraph_5ffunction_288',['get_subgraph_function',['../da/d42/namespacehal_1_1netlist__utils.html#afdf9fe7104ffba05b650abea3f2150db',1,'hal::netlist_utils']]],
+  ['get_5fsubgraph_5ffunction_288',['get_subgraph_function',['../da/d42/namespacehal_1_1netlist__utils.html#afdb5923123404f4d9d49bc9f7c68a384',1,'hal::netlist_utils']]],
   ['get_5fsubmodules_289',['get_submodules',['../d1/d10/classhal_1_1Module.html#af1256fe9a3080693b07d7e657d9a31ba',1,'hal::Module']]],
   ['get_5fsuccessor_290',['get_successor',['../d5/d57/classhal_1_1Gate.html#aaa02ffdfe2818d4a45af3aae72e2bc63',1,'hal::Gate']]],
   ['get_5fsuccessors_291',['get_successors',['../d5/d57/classhal_1_1Gate.html#a753a06f17fa224adea5887cdb3e7ee5b',1,'hal::Gate']]],
