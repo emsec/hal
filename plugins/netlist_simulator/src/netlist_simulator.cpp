@@ -798,7 +798,7 @@ namespace hal
                     time_to_changes_map[event_it.time][simulated_net] = event_it.new_value;
                 }
             }
-            time_to_changes_map[initial_time][simulated_net] = initial_value;
+            time_to_changes_map[start_time][simulated_net] = initial_value;
 
         }
 
