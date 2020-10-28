@@ -329,7 +329,7 @@ min-height: 1px;
 max-height: 1px;
 }*/
 
-Toolbar {
+hal--Toolbar {
     background : rgb(60, 60, 60);
     spacing    : 1px;
     min-height : 24px;
@@ -337,13 +337,13 @@ Toolbar {
     border     : 0px solid black; /* HACKFIX FOR MAC, REMOVE LATER */
 }
 
-double_toolbar {
+hal--double_toolbar {
     background : #273138;
     min-height : 24px;
     max-height : 24px;
 }
 
-Searchbar {
+hal--Searchbar {
     background-color            : #25292D /*rgb(25, 28, 29)*/;
     min-height                  : 30px;
     max-height                  : 30px;
@@ -357,7 +357,7 @@ Searchbar {
     qproperty-clear_icon_style  : "all -> #E4E4E4";
 }
 
-Searchbar QLabel {
+hal--Searchbar QLabel {
     font             : bold "Iosevka";
     color            : rgb(165, 165, 165);
     background-color : rgb(25, 28, 29);
@@ -365,12 +365,12 @@ Searchbar QLabel {
     padding-right    : 4px;
 }
 
-Searchbar QLabel:hover {
+hal--Searchbar QLabel:hover {
     color       : rgb(255, 255, 255);
     font-weight : bold;
 }
 
-Searchbar QPushButton {
+hal--Searchbar QPushButton {
     font-weight      : normal;
     background-color : rgb(25, 28, 29);
     border           : none;
@@ -379,7 +379,7 @@ Searchbar QPushButton {
     max-width        : 25;
 }
 
-Searchbar QLineEdit {
+hal--Searchbar QLineEdit {
     color            : #CBD2D0;
     font-family      : "Iosevka";
     font-style       : normal;
@@ -387,16 +387,16 @@ Searchbar QLineEdit {
     border           : none;
 }
 
-Searchbar QLineEdit[text=""] {
+hal--Searchbar QLineEdit[text=""] {
     font-style : italic;
 }
 
-Searchbar QToolButton {
+hal--Searchbar QToolButton {
     background-color : rgb(25, 28, 29);
     border           : none;
 }
 
-SettingsWidget {
+hal--SettingsWidget {
     /*background-color : #c1bdb3;*/
     background-color : rgb(189, 189, 189);
     /*border : 1px solid rgb(23, 26, 26);*/
@@ -409,16 +409,16 @@ SettingsWidget {
     /*border-left : 5px solid #232ed1;*/
 }
 
-SettingsWidget[conflicts=true] {
+hal--SettingsWidget[conflicts=true] {
     border-left      : 5px solid #A61F1F;
     background-color : rgb(231, 137, 137);
 }
 
-SettingsWidget[dirty=true][conflicts=false] {
+hal--SettingsWidget[dirty=true][conflicts=false] {
     border-left      : 5px solid rgb(73, 200, 76);
 }
 
-SettingsWidget QLabel {
+hal--SettingsWidget QLabel {
     /* color            : #D3DCE6;
     background-color : #25292D; */
     color: rgb(0, 0, 0);
@@ -426,7 +426,7 @@ SettingsWidget QLabel {
     margin-right     : 10px;
 }
 
-SettingsWidget #name-label {
+hal--SettingsWidget #name-label {
     min-height : 42px;
     max-height : 42px;
     font       : 14px bold "Iosevka";
@@ -442,7 +442,7 @@ hal--SettingsWidget QToolButton:disabled {
 
 /* LABEL_BUTTON */
 
-SettingsWidget label_button {
+hal--SettingsWidget label_button {
     font           : bold "Iosevka";
     /*background: rgba(228, 228, 228, 0.05);*/
     border         : 1px solid rgb(228, 228, 228);
@@ -455,39 +455,39 @@ SettingsWidget label_button {
 
 /* KEYBIND_EDIT */
 
-SettingsWidget keybind_edit [validated=false] {
+hal--SettingsWidget keybind_edit [validated=false] {
     color: red;
 }
 
 /* MainSettingsWidget */
 
-MainSettingsWidget {
+hal--MainSettingsWidget {
     border : 1px solid rgb(23, 26, 26);
 }
 
-MainSettingsWidget #Searchbar-container {
+hal--MainSettingsWidget #Searchbar-container {
     min-height : 80px;
     max-height : 80px;
     /*background-color : rgba(38, 40, 41, 1);*/
 }
 
-MainSettingsWidget #Searchbar-container Searchbar {
+hal--MainSettingsWidget #Searchbar-container hal--Searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
 }
 
-MainSettingsWidget SettingsDisplay {
+hal--MainSettingsWidget hal--SettingsDisplay {
     background-color : red;
     border           : 1px solid #A9B7C6;
 }
 
-MainSettingsWidget SettingsDisplay * {
+hal--MainSettingsWidget hal--SettingsDisplay * {
     background-color : red;
     border           : 1px solid #A9B7C6;
 }
 
-MainSettingsWidget PreviewWidget {
+hal--MainSettingsWidget hal--PreviewWidget {
     /*background-color: rgb(9, 11, 13);*/
     border          : 2px solid rgb(73, 74, 76);
     border-radius   : 8px;
@@ -495,31 +495,31 @@ MainSettingsWidget PreviewWidget {
     padding         : 5px 0;
 }
 
-MainSettingsWidget PreviewWidget *{
+hal--MainSettingsWidget hal--PreviewWidget *{
     background-color: rgba(255, 255, 255, 0);
 }
 
 /* ExpandingListWidget */
 
-MainSettingsWidget ExpandingListWidget {
+hal--MainSettingsWidget hal--ExpandingListWidget {
     border-right : 1px solid rgb(23, 26, 26);
     min-width    : 250px;
     max-width    : 250px;
 }
 
-MainSettingsWidget ExpandingListWidget #content {
+hal--MainSettingsWidget hal--ExpandingListWidget #content {
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-MainSettingsWidget ExpandingListWidget #spacer {
+hal--MainSettingsWidget hal--ExpandingListWidget #spacer {
     min-height   : 80px;
     max-height   : 80px;
     background   : rgb(9, 11, 13);
     border-right : 5px solid rgb(13, 15, 17);
 }
 
-MainSettingsWidget ExpandingListButton {
+hal--MainSettingsWidget hal--ExpandingListButton {
     min-height           : 42px;
     max-height           : 42px;
     background-color     : rgb(9, 11, 13);
@@ -528,58 +528,58 @@ MainSettingsWidget ExpandingListButton {
     qproperty-icon_style : "all -> #969696";
 }
 
-MainSettingsWidget ExpandingListButton[hover=true] {
+hal--MainSettingsWidget hal--ExpandingListButton[hover=true] {
     qproperty-icon_style : "all -> #E4E4E4";
 }
 
-MainSettingsWidget ExpandingListButton[hover=true] * {
+hal--MainSettingsWidget hal--ExpandingListButton[hover=true] * {
     /*color: rgb(228, 228, 228);*/
     color            : rgb(255, 255, 255);
     background-color : rgba(255, 255, 255, 0.012);
 }
 
-MainSettingsWidget ExpandingListButton[selected=true] {
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] {
     background-color     : rgb(34, 37, 38);
     qproperty-icon_style : "all -> #A9B7C6";
 }
 
-MainSettingsWidget ExpandingListButton[type="child"] {
+hal--MainSettingsWidget hal--ExpandingListButton[type="child"] {
     background-color : rgb(14, 17, 20);
 }
 
-MainSettingsWidget ExpandingListButton[type="child"][selected=true] {
+hal--MainSettingsWidget hal--ExpandingListButton[type="child"][selected=true] {
     background-color : rgb(34, 37, 38);
 }
 
-MainSettingsWidget ExpandingListButton * {
+hal--MainSettingsWidget hal--ExpandingListButton * {
     font             : 14px bold "Iosevka";
     background-color : transparent;
 }
 
-MainSettingsWidget ExpandingListButton #left-border {
+hal--MainSettingsWidget hal--ExpandingListButton #left-border {
     min-width : 4px;
     max-width : 4px;
     /*padding-right: 40px;*/
 }
 
-MainSettingsWidget ExpandingListButton #icon-label {
+hal--MainSettingsWidget hal--ExpandingListButton #icon-label {
     padding-left  : 40px;
     padding-right : 10px;
 }
 
-MainSettingsWidget ExpandingListButton #right-border {
+hal--MainSettingsWidget hal--ExpandingListButton #right-border {
     min-width : 4px;
     max-width : 4px;
 }
 
-MainSettingsWidget ExpandingListButton[selected=true] #text-label {
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #text-label {
     /*color : rgb(114, 140, 0);*/
     /*color : rgb(35, 200, 46);*/
     color : rgb(85, 255, 0);
     /*color : rgb(0, 255, 0);*/
 }
 
-MainSettingsWidget ExpandingListButton[selected=true] #right-border {
+hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #right-border {
     /*background-color: rgb(114, 140, 0);*/
     /*background-color : rgb(35, 200, 46);*/
     background-color : rgb(85, 255, 0);
@@ -590,45 +590,45 @@ MainSettingsWidget ExpandingListButton[selected=true] #right-border {
 background-color : rgb(9, 11, 13);
 }*/
 
-ContentLayoutArea #left-dock-bar {
+hal--ContentLayoutArea #left-dock-bar {
     min-width    : 19px;
     max-width    : 19px;
     border-right : 1px solid rgb(23, 26, 26);
 }
 
-ContentLayoutArea #right-dock-bar {
+hal--ContentLayoutArea #right-dock-bar {
     min-width   : 19px;
     max-width   : 19px;
     border-left : 1px solid rgb(23, 26, 26);
 }
 
-ContentLayoutArea #bottom-dock-bar {
+hal--ContentLayoutArea #bottom-dock-bar {
     min-height : 19px;
     max-height : 19px;
     border-top : 1px solid rgb(23, 26, 26);
 }
 
-ContentLayoutArea #left-spacer {
+hal--ContentLayoutArea #left-spacer {
     min-width  : 19px;
     max-width  : 19px;
     min-height : 19px;
     max-height : 19px;
 }
 
-ContentLayoutArea #right-spacer {
+hal--ContentLayoutArea #right-spacer {
     min-width  : 19px;
     max-width  : 19px;
     min-height : 19px;
     max-height : 19px;
 }
 
-TabWidget DockBar {
+hal--TabWidget hal--DockBar {
     background : rgb(60, 60, 60);
     min-height : 24px;
     max-height : 24px;
 }
 
-CodeEditor {
+hal--CodeEditor {
     font-style                                 : normal;
     font-size                                  : 14px;
     font-weight                                : normal;
@@ -639,7 +639,7 @@ CodeEditor {
     /*qproperty-line_number_background : rgb(14, 16, 18);*/
 }
 
-CodeEditor LineNumberArea {
+hal--CodeEditor hal--LineNumberArea {
     /*background : rgb(31, 34, 35);*/
     /*background : rgb(42, 44, 46);*/
     background             : rgb(219, 219, 219);
@@ -656,7 +656,7 @@ CodeEditor LineNumberArea {
 /*background: qlineargradient( x1:0 y1:0, x2:1 y2:0, stop:0 cyan, stop:1 blue);}*/
 /*}*/
 
-VhdlSyntaxHighlighter {
+hal--VhdlSyntaxHighlighter {
     qproperty-keyword_color : rgb(204, 120, 50);
     qproperty-comment_color : rgb(97, 150, 71);
     qproperty-type_color    : rgb(152, 118, 170);
@@ -675,7 +675,7 @@ margin-left : 30px;
 margin-right : 30px;
 }*/
 
-LabeledFrame {
+hal--LabeledFrame {
     /*background : rgb(39, 49, 56);*/
     background    : rgb(219, 219, 219);
     /*border : 1px solid rgb(49, 61, 70);*/
@@ -686,7 +686,7 @@ LabeledFrame {
     margin-right  : 30px;
 }
 
-WelcomeScreen {
+hal--WelcomeScreen {
     /*background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0.273, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));*/
     /*background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0.273, stop:0 rgb(13, 20, 24), stop:1 rgb(23, 30, 34));*/
     /*background : qlineargradient(spread:pad,
@@ -705,19 +705,19 @@ WelcomeScreen {
         stop       : 1 rgb(234, 234, 234));
 }
 
-WelcomeScreen LabeledFrame {
+hal--WelcomeScreen hal--LabeledFrame {
     min-width  : 200px;
     max-width  : 400px;
     min-height : 200px;
     max-height : 800px;
 }
 
-LabeledFrame #header {
+hal--LabeledFrame #header {
     /*background : rgb(49, 61, 70);*/
     background : #37a4de;
 }
 
-LabeledFrame #left-spacer {
+hal--LabeledFrame #left-spacer {
     /*background : rgb(49, 61, 70);*/
     /*background : #313d46;*/
     background  : rgb(255, 255, 255);
@@ -729,7 +729,7 @@ LabeledFrame #left-spacer {
     margin-left : 6px;
 }
 
-LabeledFrame #label {
+hal--LabeledFrame #label {
     /*background : rgb(49, 61, 70);*/
     background     : #37a4de;
     padding-top    : 21px;
@@ -758,7 +758,7 @@ LabeledFrame #label {
     qproperty-text : "GET IN <font color='#FFFFFF'>TOUCH</font>";
 }
 
-LabeledFrame #right-spacer {
+hal--LabeledFrame #right-spacer {
     /*background : rgb(49, 61, 70);*/
     /*background : #313d46;*/
     background   : rgb(255, 255, 255);
@@ -776,7 +776,7 @@ rgb(107, 135, 255)
 *                RECENT_FILES                *
 *********************************************/
 
-RecentFilesWidget {
+hal--RecentFilesWidget {
     background    : rgb(14, 16, 18);
     margin-top    : 15px;
     margin-bottom : 15px;
@@ -784,7 +784,7 @@ RecentFilesWidget {
     margin-right : 5px;*/
 }
 
-RecentFileItem {
+hal--RecentFileItem {
     background           : rgb(219, 219, 219);
     /*background: rgb(12, 15, 19);*/
     /*padding : 5px;*/
@@ -797,7 +797,7 @@ RecentFileItem {
     qproperty-icon_style : "all->#ff6a47";
 }
 
-RecentFileItem * {
+hal--RecentFileItem * {
     background  : rgb(219, 219, 219);
     color       : #000000;
     /*color : #31383D;*/
@@ -806,46 +806,46 @@ RecentFileItem * {
     font-size   : 16px;
 }
 
-RecentFileItem #icon-label {
+hal--RecentFileItem #icon-label {
     margin-right : 10px;
 }
 
-RecentFileItem #path-label {
+hal--RecentFileItem #path-label {
     /*color : #1f2123;*/
     color : #292B2D;
 }
 
-RecentFileItem[hover=true] {
+hal--RecentFileItem[hover=true] {
     background : #7D7D7D;
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
 
-RecentFileItem[hover=true] * {
+hal--RecentFileItem[hover=true] * {
     background : rgb(255, 255 255);
     color: #FFFFFF;
     /*color : #6F7D87;*/
 }
 
-RecentFileItem[hover=true] #path-label {
+hal--RecentFileItem[hover=true] #path-label {
     color: #FFFFFF;
     /*color : #44494D;*/
 }
 
-RecentFileItem QToolButton:hover {
+hal--RecentFileItem QToolButton:hover {
     background: #222222;
     color: white;
 }
 
-RecentFileItem[disabled=true]{
+hal--RecentFileItem[disabled=true]{
     qproperty-icon_style : "all->#888888"
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
 
-RecentFileItem[disabled=true] #name-label{
+hal--RecentFileItem[disabled=true] #name-label{
     color: #555555;
     /*qproperty-icon_style : "all->#ffeea5";*/
 }
-RecentFileItem[disabled=true] #path-label {
+hal--RecentFileItem[disabled=true] #path-label {
     /*color : #555555;*/
     color: red;
 }
@@ -854,22 +854,22 @@ RecentFileItem[disabled=true] #path-label {
 *                OPEN_FILE                   *
 *********************************************/
 
-OpenFileWidget {
+hal--OpenFileWidget {
     background           : rgb(219, 219, 219);
     qproperty-icon_path  : ":/icons/drop";
     qproperty-icon_style : "all->#3b3c3d";/*151719*/
 }
 
-OpenFileWidget[drag_active=true] {
+hal--OpenFileWidget[drag_active=true] {
     qproperty-icon_style : "all->#000000";
 }
 
-OpenFileWidget QLabel {
+hal--OpenFileWidget QLabel {
     background : rgb(219, 219, 219);
     /*background: rgb(6, 7, 8);*/
 }
 
-OpenFileWidget #text-label {
+hal--OpenFileWidget #text-label {
     background    : rgb(219, 219, 219);
     font-family   : "Iosevka";
     font-weight   : 550;
@@ -882,7 +882,7 @@ OpenFileWidget #text-label {
     margin-right  : 10px;
 }
 
-OpenFileWidget #icon-label {
+hal--OpenFileWidget #icon-label {
     margin-top : 220px;
 }
 
@@ -890,13 +890,13 @@ OpenFileWidget #icon-label {
 *                GET IN TOUCH                *
 *********************************************/
 
-GetInTouchWidget {
+hal--GetInTouchWidget {
     background    : rgb(255, 255, 255);
     margin-top    : 15px;
     margin-bottom : 15px;
 }
 
-GetInTouchWidget #core-version-label {
+hal--GetInTouchWidget #core-version-label {
     background  : rgb(255, 255, 255);
     color       : #FFFFFF;
     font-family : "Iosevka";
@@ -904,7 +904,7 @@ GetInTouchWidget #core-version-label {
     font-size   : 15px;
 }
 
-GetInTouchWidget #gui-version-label {
+hal--GetInTouchWidget #gui-version-label {
     background    : rgb(255, 255, 255);
     color         : #FFFFFF;
     font-family   : "Iosevka";
@@ -913,7 +913,7 @@ GetInTouchWidget #gui-version-label {
     margin-bottom : 10px;
 }
 
-GetInTouchItem {
+hal--GetInTouchItem {
     background           : rgb(219, 219, 219);
     padding-top          : 6px;
     padding-bottom       : 6px;
@@ -923,7 +923,7 @@ GetInTouchItem {
     qproperty-icon_style : "all->#D3C68A";
 }
 
-GetInTouchItem * {
+hal--GetInTouchItem * {
     background  : rgb(219, 219, 219);
     color       : #000000;
     font-family : "Iosevka";
@@ -931,28 +931,28 @@ GetInTouchItem * {
     font-size   : 16px;
 }
 
-GetInTouchItem #icon-label {
+hal--GetInTouchItem #icon-label {
     margin-right : 10px;
 }
 
-GetInTouchItem #description-label {
+hal--GetInTouchItem #description-label {
     color : #292B2D;
 }
 
-GetInTouchItem[hover=true] {
+hal--GetInTouchItem[hover=true] {
    background : #7D7D7D;
    color: white;
 }
 
-GetInTouchItem[hover=true] * {
+hal--GetInTouchItem[hover=true] * {
     background : #7D7D7D;
     color: white;
 }
-GetInTouchItem[hover=true] #description-label {/**neccessary, the * specifier above does not work */
+hal--GetInTouchItem[hover=true] #description-label {/**neccessary, the * specifier above does not work */
     color : white;
 }
 
-GetInTouchItem[hover=true] #description-label {
+hal--GetInTouchItem[hover=true] #description-label {
     /*color : #44494D;*/
 }
 
@@ -960,7 +960,7 @@ GetInTouchItem[hover=true] #description-label {
 *                  Overlay                   *
 *********************************************/
 
-Overlay {
+hal--Overlay {
     background : rgba(255, 255, 255, 128);
 }
 
@@ -968,11 +968,11 @@ Overlay {
 *              REMINDER Overlay              *
 *********************************************/
 
-ReminderOverlay {
+hal--ReminderOverlay {
     background : rgb(0, 0, 0);
 }
 
-ReminderOverlay * {
+hal--ReminderOverlay * {
     font-family : "Iosevka";
     font-weight : 700;
     font-size   : 32px;
@@ -980,7 +980,7 @@ ReminderOverlay * {
     background  : rgb(0, 0, 0);
 }
 
-ReminderOverlay QPushButton {
+hal--ReminderOverlay QPushButton {
     padding-left  : 20px;
     padding-right : 20px;
     border-style  : solid;
@@ -989,13 +989,13 @@ ReminderOverlay QPushButton {
     border-radius : 0px;
 }
 
-ReminderOverlay QPushButton:hover {
+hal--ReminderOverlay QPushButton:hover {
     color        : #A9B7C6;
     background   : rgb(0, 0, 0);
     border-color : #A9B7C6;
 }
 
-ReminderOverlay #image-label {
+hal--ReminderOverlay #image-label {
     min-width     : 320px;
     min-height    : 320px;
     max-width     : 320px;
@@ -1003,7 +1003,7 @@ ReminderOverlay #image-label {
     margin-bottom : 15px;
 }
 
-ReminderOverlay #text-label {
+hal--ReminderOverlay #text-label {
     margin-bottom : 15px;
 }
 
@@ -1011,7 +1011,7 @@ ReminderOverlay #text-label {
 *               CONTENT WIDGET               *
 *********************************************/
 
-ContentWidget * {
+hal--ContentWidget * {
     background : rgb(240, 240, 240);
 }
 
@@ -1019,7 +1019,7 @@ ContentWidget * {
 *         PLUGIN SCHEDULE WIDGET             *
 *********************************************/
 
-PluginScheduleWidget {
+hal--PluginScheduleWidget {
     /* background : qlineargradient(spread:pad,
     x1         : 0,
     y1         : 0,
@@ -1036,63 +1036,63 @@ PluginScheduleWidget {
     stop       : 1 rgb(234, 234, 234));
 }
 
-PluginScheduleWidget #Searchbar-container {
+hal--PluginScheduleWidget #Searchbar-container {
     background : transparent;
     min-height : 80px;
     max-height : 80px;
 }
 
-PluginScheduleWidget Searchbar {
+hal--PluginScheduleWidget hal--Searchbar {
     min-width : 400px;
     max-width : 400px;
     border    : 1px solid rgb(73, 74, 76);
 }
 
-PluginScheduleWidget #plugin-frame {
+hal--PluginScheduleWidget #plugin-frame {
     min-width : 400px;
     max-width : 400px;
 }
 
-PluginScheduleWidget #description-frame {
+hal--PluginScheduleWidget #description-frame {
     border : 1px solid #313D46;
 }
 
-PluginScheduleWidget #description-frame #header {
+hal--PluginScheduleWidget #description-frame #header {
     background : #313D46;
 }
 
-PluginScheduleWidget #description-frame #left-spacer {
+hal--PluginScheduleWidget #description-frame #left-spacer {
     background : #171E22;
 }
 
-PluginScheduleWidget #description-frame #label {
+hal--PluginScheduleWidget #description-frame #label {
     background : #313D46;
 }
 
-PluginScheduleWidget #description-frame #right-spacer {
+hal--PluginScheduleWidget #description-frame #right-spacer {
     background : #171E22;
 }
 
-PluginScheduleWidget #schedule-frame {
+hal--PluginScheduleWidget #schedule-frame {
     /*min-width : 400px;
     max-width : 400px;*/
     margin-left : 0px;
     /*margin-right: 0px;*/
 }
 
-PluginScheduleWidget #plugin-frame #label {
+hal--PluginScheduleWidget #plugin-frame #label {
     qproperty-text : "LOADED <font color='#A9B7C6'>PLUGINS</font>";
 }
 
-PluginScheduleWidget #description-frame #label {
+hal--PluginScheduleWidget #description-frame #label {
     qproperty-text : "<font color='#171e22'>PLUGIN DESCRIPTION</font>";
 }
 
-PluginScheduleWidget #schedule-frame #label {
+hal--PluginScheduleWidget #schedule-frame #label {
     qproperty-text : "SCHEDULED <font color='#A9B7C6'>PLUGINS</font>";
 }
 
-PluginScheduleWidget QPlainTextEdit {
+hal--PluginScheduleWidget QPlainTextEdit {
     font-family    : "Iosevka";
     /*font-weight    : 400;*/
     font-size      : 15px;
@@ -1107,21 +1107,21 @@ PluginScheduleWidget QPlainTextEdit {
 *               LOADED PLUGINS               *
 *********************************************/
 
-LoadedPluginsWidget {
+hal--LoadedPluginsWidget {
     background : rgb(219, 219, 219);
 }
 
-LoadedPluginsWidget #container {
+hal--LoadedPluginsWidget #container {
     background : rgb(219, 219, 219);
 }
 
-LoadedPluginsWidget #spacer {
+hal--LoadedPluginsWidget #spacer {
     background : rgb(219, 219, 219);
     min-height : 14px;
     max-height : 14px;
 }
 
-LoadedPluginItem #name-label {
+hal--LoadedPluginItem #name-label {
     background     : rgb(219, 219, 219);
     font-family    : "Iosevka";
     font-weight    : 400;
@@ -1133,7 +1133,7 @@ LoadedPluginItem #name-label {
     padding-right  : 10px;
 }
 
-LoadedPluginItem[hover=true] #name-label {
+hal--LoadedPluginItem[hover=true] #name-label {
     background : rgb(79, 79, 79);
     color: white;
 }
@@ -1142,23 +1142,23 @@ LoadedPluginItem[hover=true] #name-label {
 *              SCHEDULED PLUGINS             *
 *********************************************/
 
-ScheduledPluginsWidget {
+hal--ScheduledPluginsWidget {
     background : rgb(219, 219, 219);
     min-width  : 400px;
     max-width  : 400px;
 }
 
-ScheduledPluginsWidget #container {
+hal--ScheduledPluginsWidget #container {
     background : rgb(219, 219, 219);
 }
 
-ScheduledPluginsWidget #spacer {
+hal--ScheduledPluginsWidget #spacer {
     background : rgb(219, 219, 219);
     min-height : 14px;
     max-height : 14px;
 }
 
-ScheduledPluginItem #name-label {
+hal--ScheduledPluginItem #name-label {
     background     : rgb(219, 219, 219);
     font-family    : "Iosevka";
     font-weight    : 400;
@@ -1170,7 +1170,7 @@ ScheduledPluginItem #name-label {
     padding-right  : 10px;
 }
 
-ScheduledPluginItem[hover=true] #name-label {
+hal--ScheduledPluginItem[hover=true] #name-label {
     background : rgb(99, 99, 99);
     color: white;
 }
@@ -1179,7 +1179,7 @@ ScheduledPluginItem[hover=true] #name-label {
 *            NO_SCHEDULED PLUGINS            *
 *********************************************/
 
-NoScheduledPluginsWidget {
+hal--NoScheduledPluginsWidget {
     background           : rgb(219, 219, 219);
     qproperty-icon_path  : ":/icons/drop";
     qproperty-icon_style : "all->#3b3c3d";
@@ -1187,15 +1187,15 @@ NoScheduledPluginsWidget {
     max-width            : 400px;
 }
 
-NoScheduledPluginsWidget[drag_active=true] {
+hal--NoScheduledPluginsWidget[drag_active=true] {
     qproperty-icon_style : "all->#000000";
 }
 
-NoScheduledPluginsWidget QLabel {
+hal--NoScheduledPluginsWidget QLabel {
     background : rgb(219, 219, 219);
 }
 
-NoScheduledPluginsWidget #text-label {
+hal--NoScheduledPluginsWidget #text-label {
     background    : rgb(219, 219, 219);
     font-family   : "Iosevka";
     font-weight   : 400;
@@ -1208,7 +1208,7 @@ NoScheduledPluginsWidget #text-label {
     margin-right  : 10px;
 }
 
-NoScheduledPluginsWidget #icon-label {
+hal--NoScheduledPluginsWidget #icon-label {
     margin-top : 220px;
 }
 
@@ -1216,13 +1216,13 @@ NoScheduledPluginsWidget #icon-label {
 *          PLUGIN ARGUMENTS WIDGET           *
 *********************************************/
 
-PluginArgumentsWidget {
+hal--PluginArgumentsWidget {
     /*background: rgb(14, 16, 18);*/
     background  : rgb(199, 199, 199);
     padding-top : 7px;
 }
 
-PluginArgumentsWidget QPushButton {
+hal--PluginArgumentsWidget QPushButton {
     font-family : "Iosevka";
     font-weight : 500;
     font-size   : 14px;
@@ -1231,13 +1231,13 @@ PluginArgumentsWidget QPushButton {
     border      : 1px solid black;
 }
 
-PluginArgumentsWidget QPushButton:checked {
+hal--PluginArgumentsWidget QPushButton:checked {
     color            : rgb(14, 16, 18);
     background-color : rgba(85, 255, 0, 0.6);
     border           : 1px solid black;
 }
 
-PluginArgumentsWidget QLineEdit {
+hal--PluginArgumentsWidget QLineEdit {
     font-family    : "Iosevka";
     font-weight    : 500;
     font-size      : 14px;
@@ -1253,20 +1253,20 @@ PluginArgumentsWidget QLineEdit {
     border         : none;
 }
 
-PluginArgumentsWidget QLineEdit:disabled {
+hal--PluginArgumentsWidget QLineEdit:disabled {
     color      : rgb(32, 32, 32);
     background : rgb(199, 199, 199);
 }
 
-ScheduledPluginItemArea {
+hal--ScheduledPluginItemArea {
     background : rgb(219, 219, 219);
 }
 
-DropMarker {
+hal--DropMarker {
     background : rgb(14, 16, 18);
 }
 
-PythonEditor {
+hal--PythonEditor {
     background : qlineargradient(spread:pad,
     x1         : 0,
     y1         : 0,
@@ -1276,7 +1276,7 @@ PythonEditor {
     stop       : 1 rgb(23, 30, 34));
 }
 
-PythonEditor CodeEditor {
+hal--PythonEditor hal--CodeEditor {
     /*font-family : "SourceCodePro-Black";*/
     font-family                       : "Iosevka";
     font-size                         : 14px;
@@ -1297,14 +1297,14 @@ PythonEditor CodeEditor {
     qproperty-current_line_background : #323232;
 }
 
-PythonEditor CodeEditor LineNumberArea {
+hal--PythonEditor hal--CodeEditor hal--LineNumberArea {
     /*background : #0C1112;*/
     /*background : #0C0F12;*/
     background   : rgb(219, 219, 219);
     border-right : 1px solid #606366;
 }
 
-CodeEditorMinimap {
+hal--CodeEditorMinimap {
     font-style  : normal;
     font-size   : 3px;
     font-weight : normal;
@@ -1313,47 +1313,47 @@ CodeEditorMinimap {
     color       : black;
 }
 
-CodeEditorMinimap QScrollBar:vertical {
+hal--CodeEditorMinimap QScrollBar:vertical {
     border     : 0px;
     background : transparent;
     margin     : 0px 0px 0px 0px;
 }
 
-CodeEditorMinimap QScrollBar::handle:vertical {
+hal--CodeEditorMinimap QScrollBar::handle:vertical {
     background    : rgba(120, 120, 120, 0.1);
     border-radius : 0px;
 }
 
-GetInTouchItem#about_item {
+hal--GetInTouchItem#about_item {
     /*qproperty-icon_style: "all->#FFFFFF";*/
     qproperty-icon_style : "all->#f27800";
     qproperty-icon_path  : ":/icons/info" /*qproperty-icon_style: "";
 qproperty-icon_path: ":/icons/hal"*/
 }
 
-GetInTouchItem#documentation_item {
+hal--GetInTouchItem#documentation_item {
     /*qproperty-icon_style: "all->#FFFFFF";*/
     qproperty-icon_style : "all->#f27800";
     qproperty-icon_path  : ":/icons/info"
 }
 
-GetInTouchItem#ticket_item {
+hal--GetInTouchItem#ticket_item {
     qproperty-icon_style : "";
     qproperty-icon_path  : ":/icons/gitlab"
 }
 
-PythonConsole {
+hal--PythonConsole {
     font-family : "Iosevka";
     /*font-family : "DroidSansMono";*/
     font-size   : 14px;
     color       : red;
 }
 
-MinimapScrollbar #slider {
+hal--MinimapScrollbar #slider {
 background : rgba(120, 120, 120, 0.3);
 }
 
-PythonEditor {
+hal--PythonEditor {
 background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb(33, 40, 44), stop:1 rgb(23, 30, 34));
 
 qproperty-open_icon_style: "all->#ff6a47";
@@ -1377,17 +1377,27 @@ qproperty-new_file_icon_path: ":/icons/new-file";
 }
 
 hal--GroupingManagerWidget {
-qproperty-new_grouping_icon_style: "all->#00AA00";
+qproperty-disabled_icon_style: "all->#515050";
+
+qproperty-new_grouping_icon_style: "all->#e8e8e8";
 qproperty-new_grouping_icon_path: ":/icons/plus";
 
-qproperty-rename_grouping_icon_style: "all->#00AA00";
+qproperty-rename_grouping_icon_style: "all->#e8e8e8";
 qproperty-rename_grouping_icon_path: ":/icons/pen";
 
-qproperty-delete_icon_style: "all->#00AA00";
+qproperty-delete_icon_style: "all->#e8e8e8";
 qproperty-delete_icon_path: ":/icons/trashcan";
+
+qproperty-color_select_icon_style: "all->#e8e8e8";
+qproperty-color_select_icon_path: ":/icons/color_select";
+
+qproperty-to_selection_icon_style: "all->#e8e8e8";
+qproperty-to_selection_icon_path: ":/icons/to_selection";
 }
 
-ContextManagerWidget {
+hal--ContextManagerWidget {
+qproperty-disabled_icon_style: "all->#515050";
+
 qproperty-new_view_icon_style: "all->#00AA00";
 qproperty-new_view_icon_path: ":/icons/plus";
 
@@ -1399,9 +1409,28 @@ qproperty-duplicate_icon_path: ":/icons/content";
 
 qproperty-delete_icon_style: "all->#A61F1F";
 qproperty-delete_icon_path: ":/icons/trashcan";
+
+qproperty-open_icon_style: "all->#e8e8e8";
+qproperty-open_icon_path: ":/icons/open-alt";
+
+qproperty-search_icon_style: "all->#e8e8e8";
+qproperty-search_icon_path: ":/icons/search";
 }
 
-main_window {
+hal--SelectionDetailsWidget {
+qproperty-disabled_icon_style: "all->#515050";
+qproperty-search_active_icon_style: "all->#30ac4f";
+qproperty-search_icon_style: "all->#e8e8e8";
+qproperty-search_icon_path: ":/icons/search";
+qproperty-restore_icon_style: "all->#e8e8e8";
+qproperty-restore_icon_path: ":/icons/undo2";
+qproperty-to_grouping_icon_style: "all->#e8e8e8";
+qproperty-to_grouping_icon_path: ":/icons/to_grouping";
+qproperty-to_module_icon_style: "all->#e8e8e8";
+qproperty-to_module_icon_path: ":/icons/to_module";
+}
+
+hal--MainWindow {
 qproperty-hal_icon_style: "";
 qproperty-hal_icon_path: ":/icons/hal";
 
@@ -1427,7 +1456,7 @@ qproperty-settings_icon_style: "all->#AFB1B3";
 qproperty-settings_icon_path: ":/icons/settings";
 }
 
-PythonQssAdapter {
+hal--PythonQssAdapter {
 qproperty-text_color: #DEE9AF;
 qproperty-keyword_color: #7805c1;
 qproperty-operator_color: black;
@@ -1440,7 +1469,7 @@ qproperty-double_quoted_string_color: #a80b0b;
 qproperty-comment_color: #629755;
 }
 
-VhdlQssAdapter {
+hal--VhdlQssAdapter {
 qproperty-keyword_color: #0042d7;
 qproperty-type_color: #7805c1;
 qproperty-number_color: #013220;
@@ -1448,7 +1477,7 @@ qproperty-string_color: #a80b0b;
 qproperty-comment_color: #1fc600;
 }
 
-LoggerQssAdapter {
+hal--LoggerQssAdapter {
     qproperty-trace_color: #90C023;
     qproperty-debug_color: #90C023;
     qproperty-info_color: #000000;
@@ -1466,14 +1495,14 @@ LoggerQssAdapter {
     qproperty-default_highlight: #FFEF0B;
 }
 
-PythonConsoleQssAdapter {
+hal--PythonConsoleQssAdapter {
     qproperty-standard_color: #000000;
     qproperty-error_color: #FF0000;
     qproperty-promt_color: #7805c1;
 }
 
 /**only for temporary use, the old graphics classes will be replaced */
-old_graphics_item_qss_adapter {
+hal--old_graphics_item_qss_adapter {
     qproperty-gate_default_color: #1e1e1e;
     qproperty-gate_background_color: #c0c0c0;
     qproperty-gate_font_color: #1e1e1e;
@@ -1487,53 +1516,53 @@ old_graphics_item_qss_adapter {
     qproperty-tree_navigation_open_folder_path: ":/icons/open";
 }
 
-table_selector_widget {
+hal--table_selector_widget {
     background-color: black;
     color: white;
     selection-background-color: grey;
 }
 
-table_selector_widget::item {
+hal--table_selector_widget::item {
     border-right : 1px solid rgb(169, 183, 198);
 }
 
-gui_graph_gate_selection_widget {
+hal--gui_graph_gate_selection_widget {
     background-color: black;
     color: white;
     selection-background-color: grey;
 }
 
-gui_graph_gate_selection_widget::item {
+hal--gui_graph_gate_selection_widget::item {
     border-right : 1px solid rgb(169, 183, 198);
 }
 
-QFileDialog {
+hal--QFileDialog {
     background: white;
 }
 
-QFileDialog QLabel{
+hal--QFileDialog QLabel{
     color: black;
     background: white;
 }
 
-QFileDialog QLineEdit{
+hal--QFileDialog QLineEdit{
     color: black;
     background: #dfdfdf;
 }
 
-GateDetailsWidget QLabel{
+hal--GateDetailsWidget QLabel{
     color: black;
 }
 
-graph_layouter_view QScrollBar{
+hal--graph_layouter_view QScrollBar{
     color: red;
 }
 
-DockBar{
+hal--DockBar{
     background: rgb(110, 110, 110);
 }
 
-MainSettingsWidget{
+hal--MainSettingsWidget{
     background: red;
 }
 
@@ -1542,23 +1571,23 @@ QMenu::item{
     background: rgb(110,110,110);
 }
 /**########## INPUT DIALOG ######### */
-input_dialog{
+hal--input_dialog{
     background: white;
     color: black;
 }
 
-input_dialog QLabel{
+hal--input_dialog QLabel{
     background: white;
     color: black;
 }
 
-input_dialog QPushButton{
+hal--input_dialog QPushButton{
     background: white;
     color: black;
     border: 1px solid black;
 }
 
-input_dialog QLineEdit{
+hal--input_dialog QLineEdit{
     background: #f0f0f0;
     color: black;
     border: 1px solid black;
