@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * hierarchical view of all items within the current selection
     * a single item can be selected within that view
     * selected item will be highlighted in a different color than the rest of the graph view selection
+    * current selection can be moved to a module or grouping by using the respective buttons
   * details section
     * shows additional details for the item selected in the hierarchical view
     * sections can be collapsed and expanded
@@ -19,19 +20,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * new view manager widget
   * now presented in a table view additionally containing information about the time of creation of the view
   * views can be sorted by name and date
-* new gate library features
+* gate library parsers
+  * moved from the core into plugins that register with a parser manager
   * support for gate types with multi-bit pins
   * clear identification of clock pins
+* netlist parsers and writers
+  * moved from the core into plugins that register with a parser manager
 * new netlist features
   * module types and named module ports (parsed from netlist or set by user)
   * support for multi-driven nets (i.e., nets with more than one source)
+* groupings
+  * an interactive container for gates, nets, and modules
+  * new groupings widget within the GUI to control groupings
+    * allows to be filtered and sorted
+    * groupings can be added to the current selection
+  * members of a grouping are shown in a dedicated color within the graph view
 * new graph view features
   * Python GUI API to control the graph view
   * zoom level of graph view can now be controlled by shortcuts
+* netlist utilities 
+  * added function to deep copy a netlist
+  * added function to get the Boolean function of a subgraph
 * state-of-the-art suite of benchmark netlists
 * new simulator plugin
-* added `get_fan_in_endpoint`, `get_fan_out_endpoint`, `get_fan_in_endpoints` and `get_fan_out_endpoints` to class `Gate`
-* added `clear_caches` to `Netlist`
+  * simulates (parts of) a netlist cycle accurate
+  * can export to VCD
+* updated/fixed the graph algorithms plugin by switching entirely to igraph
+* core performance improvements, e.g., by expanding the use of caching
+  * added `clear_caches` to `Netlist`
+* endpoints are now a managed ressource
+  * added `get_fan_in_endpoint`, `get_fan_out_endpoint`, `get_fan_in_endpoints` and `get_fan_out_endpoints` to class `Gate`
+* cleaned up the documentation in many parts of the core
 
 ### CHANGED
 
