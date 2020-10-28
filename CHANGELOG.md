@@ -69,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * updated/fixed the graph algorithms plugin by switching entirely to igraph
 * Endpoints are now managed classes as well, owned by the respective nets and passed via pointers
 * cleaned up the documentation in many parts of the core
+* inverting a Boolean function is now done using `~` instead of `!`
 
 ### FIXED
 
@@ -85,6 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### DEPRECATED
 
 * accessing the single source of a net is superseeded by accessing its source list to support multi-driven nets
+* using `!`to invert a Boolean function
 
 ## [2.0.0] - 2019-12-19 22:00:00+02:00 (urgency: medium)
 Note: This is an API breaking release.
