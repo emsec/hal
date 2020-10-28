@@ -20,12 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * new view manager widget
   * now presented in a table view additionally containing information about the time of creation of the view
   * views can be sorted by name and date
-* gate library parsers
-  * moved from the core into plugins that register with a parser manager
+* gate library improvements
   * support for gate types with multi-bit pins
   * clear identification of clock pins
-* netlist parsers and writers
-  * moved from the core into plugins that register with a parser manager
 * new netlist features
   * module types and named module ports (parsed from netlist or set by user)
   * support for multi-driven nets (i.e., nets with more than one source)
@@ -45,12 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * new simulator plugin
   * simulates (parts of) a netlist cycle accurate
   * can export to VCD
-* updated/fixed the graph algorithms plugin by switching entirely to igraph
-* core performance improvements, e.g., by expanding the use of caching
-  * added `clear_caches` to `Netlist`
-* endpoints are now a managed ressource
-  * added `get_fan_in_endpoint`, `get_fan_out_endpoint`, `get_fan_in_endpoints` and `get_fan_out_endpoints` to class `Gate`
-* cleaned up the documentation in many parts of the core
+* added `clear_caches` to `Netlist`
+* added `get_fan_in_endpoint`, `get_fan_out_endpoint`, `get_fan_in_endpoints` and `get_fan_out_endpoints` to class `Gate`
 
 ### CHANGED
 
@@ -73,7 +66,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * no more `shared_ptr`
   * clear ownership management via `unique_ptr` at necessary locations
   * instances passed via non-owning raw pointers
+* updated/fixed the graph algorithms plugin by switching entirely to igraph
 * Endpoints are now managed classes as well, owned by the respective nets and passed via pointers
+* cleaned up the documentation in many parts of the core
 
 ### FIXED
 
