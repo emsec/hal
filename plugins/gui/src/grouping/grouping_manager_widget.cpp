@@ -119,7 +119,7 @@ namespace hal
 
     void GroupingManagerWidget::handleColorSelectClicked()
     {
-        QModelIndex currentIndex = mGroupingTableView->currentIndex();
+        QModelIndex currentIndex = m_proxy_model->mapToSource(mGroupingTableView->currentIndex());
         if (!currentIndex.isValid()) return;
         QModelIndex nameIndex = mGroupingTableModel->index(currentIndex.row(),0);
         QString name = mGroupingTableModel->data(nameIndex,Qt::DisplayRole).toString();
@@ -132,7 +132,7 @@ namespace hal
 
     void GroupingManagerWidget::handleToSelectionClicked()
     {
-        QModelIndex currentIndex = mGroupingTableView->currentIndex();
+        QModelIndex currentIndex = m_proxy_model->mapToSource(mGroupingTableView->currentIndex());
         if (!currentIndex.isValid()) return;
         Grouping* grp = getCurrentGrouping().grouping();
         if (!grp) return;
@@ -147,7 +147,7 @@ namespace hal
 
     void GroupingManagerWidget::handleRenameGroupingClicked()
     {
-        QModelIndex currentIndex = mGroupingTableView->currentIndex();
+        QModelIndex currentIndex = m_proxy_model->mapToSource(mGroupingTableView->currentIndex());
         if (!currentIndex.isValid()) return;
         QModelIndex modelIndex = mGroupingTableModel->index(currentIndex.row(),0);
 
@@ -166,7 +166,7 @@ namespace hal
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()
     {
-        mGroupingTableModel->removeRows(mGroupingTableView->currentIndex().row());
+        mGroupingTableModel->removeRows(m_proxy_model->mapToSource(mGroupingTableView->currentIndex()).row());
     }
 
     void GroupingManagerWidget::handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected)
@@ -200,7 +200,7 @@ namespace hal
 
     GroupingTableEntry GroupingManagerWidget::getCurrentGrouping()
     {
-        QModelIndex modelIndex = mGroupingTableView->currentIndex();
+        QModelIndex modelIndex = m_proxy_model->mapToSource(mGroupingTableView->currentIndex());
 
         return mGroupingTableModel->groupingAt(modelIndex.row());
     }
