@@ -97,7 +97,7 @@ if(CPACK_GENERATORS)
 
     if(ENABLE_PPA)
         if(NOT PROJECT_PPA_DISTRIB_TARGET)
-            set(PROJECT_PPA_DISTRIB_TARGET bionic)
+            set(PROJECT_PPA_DISTRIB_TARGET focal)
         endif()
         set(DPUT_CONFIG_IN ${CMAKE_CURRENT_SOURCE_DIR}/deb/dput.cf.in)
         include(UploadPPA)
