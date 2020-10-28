@@ -313,21 +313,34 @@ namespace hal
         mCoordY.clear();
         mJunctionMinDistanceY.clear();
         mWireEndpoint.clear();
+        mGlobalInputHash.clear();
+        mNodeBoundingBox = QRect();
     }
 
     void GraphLayouter::create_boxes()
     {
+        bool first = true;
+        int xmin, xmax, ymin, ymax;
+        xmin = ymin = xmax = ymax = 0;
         QMap<QPoint, hal::node>::const_iterator i = position_to_node_map().constBegin();
         while (i != position_to_node_map().constEnd())
         {
+            int x = i.key().x();
+            int y = i.key().y();
+            if (first || x+1 > xmax) xmax = x+1;
+            if (first || y+1 > ymax) ymax = y+1;
+            if (first || x < xmin) xmin = x;
+            if (first || y < ymin) ymin = y;
+            first = false;
             int n = m_boxes.size();
-            node_box nbox = create_box(i.value(), i.key().x(), i.key().y());
+            node_box nbox = create_box(i.value(), x, y);
             m_boxes.append(nbox);
             m_boxNode.insert(i.value(),n);
             m_boxPosition.insert(i.key(),n);
             m_boxGraphItem.insert(nbox.item,n);
             ++i;
         }
+        mNodeBoundingBox = QRect(xmin, ymin, xmax-xmin, ymax-ymin);
     }
 
     bool GraphLayouter::verifyModulePort(const Net* n, const node& modNode, bool isModInput)
@@ -404,9 +417,21 @@ namespace hal
 
             if (isConstNet(n))
                 mWireEndpoint[id].setConstantLevel();
-
+/*
+            const EndpointList& testGlobalInput = mWireEndpoint.value(id);
+            if (testGlobalInput.hasEndpoint() == EndpointList::OnlyDestination
+                    && testGlobalInput.size() > 1)
+            {
+                // global input connects to multiple boxes
+                int ypos = mGlobalInputHash.size();
+                NetLayoutPoint srcPnt(0,2*ypos);
+                srcPoints.append(srcPnt);
+                mWireEndpoint[id].addSource(srcPnt);
+                mGlobalInputHash[id] = ypos;
+                qDebug() << "global input" << id << srcPnt.x() << srcPnt.y();
+            }
+*/
             const EndpointList& epl = mWireEndpoint.value(id);
-
             switch (epl.hasEndpoint()) {
             case EndpointList::OnlySource:
             case EndpointList::OnlyDestination:
@@ -461,7 +486,9 @@ namespace hal
             for (int iend=0; iend<2; iend++)
             {
                 // iend == 0 =>  horizontal wire: right endpoint   junction: left entry
-                NetLayoutPoint pnt = iend ? it.key().endPoint(true) : it.key().endPoint(false);
+                NetLayoutPoint pnt = iend
+                        ? it.key().endPoint(NetLayoutWire::SourcePoint)
+                        : it.key().endPoint(NetLayoutWire::DestinationPoint);
                 int idirBase = it.key().isHorizontal() ? NetLayoutDirection::Left : NetLayoutDirection::Up;
                 mJunctionEntries[pnt].setEntries(idirBase+iend, it.value());
             }
@@ -809,12 +836,13 @@ namespace hal
         // maximum parallel wires for atomic network
         for (auto it = mWireHash.constBegin(); it != mWireHash.constEnd(); ++it)
         {
-            const NetLayoutPoint& pnt = it.key().endPoint(true);  // wire start point
+            const NetLayoutPoint& pnt =
+                    it.key().endPoint(NetLayoutWire::SourcePoint);
             unsigned int nw = it.value().size();
             if (it.key().isHorizontal())
-                mCoordX[pnt.y()].testMinMax(nw);
+                mCoordY[pnt.y()].testMinMax(nw);
             else
-                mCoordY[pnt.x()].testMinMax(nw);
+                mCoordX[pnt.x()].testMinMax(nw);
         }
 
         // maximal roads per junction
@@ -994,13 +1022,15 @@ namespace hal
         m_x_values.append(0);
         m_y_values.append(0);
 
-        float x0 = mCoordX[0].preLanes() * lane_spacing + h_road_padding;
-        mCoordX[0].setOffset(x0);
-        mCoordX[0].setPadding(xInputPadding[0]);
+        int ix0 = mNodeBoundingBox.x();
+
+        float x0 = mCoordX[ix0].preLanes() * lane_spacing + h_road_padding;
+        mCoordX[ix0].setOffset(x0);
+        mCoordX[ix0].setPadding(xInputPadding[ix0]);
         auto itxLast = mCoordX.begin();
         for(auto itNext = itxLast + 1; itNext!= mCoordX.end(); ++itNext)
         {
-            int ix0 = itxLast.key();
+            ix0 = itxLast.key();
             int ix1 = itNext.key();
             float xsum = 0;
 
@@ -1021,12 +1051,13 @@ namespace hal
             itxLast = itNext;
         }
 
-        float y0 = mCoordY[0].preLanes() * lane_spacing + v_road_padding;
-        mCoordY[0].setOffset(y0);
+        int iy0 = mNodeBoundingBox.y();
+        float y0 = mCoordY[iy0].preLanes() * lane_spacing + v_road_padding;
+        mCoordY[iy0].setOffset(y0);
         auto ityLast = mCoordY.begin();
         for(auto itNext = ityLast + 1; itNext!= mCoordY.end(); ++itNext)
         {
-            int iy0 = ityLast.key();
+            iy0 = ityLast.key();
             int iy1 = itNext.key();
 
             Q_ASSERT(iy1 = iy0+1);
@@ -1160,8 +1191,8 @@ namespace hal
             const QHash<NetLayoutWire,int>& wMap = laneMap.value(id);
             for (auto it=wMap.constBegin(); it!=wMap.constEnd(); ++it)
             {
-                NetLayoutPoint wFromPoint = it.key().endPoint(true);
-                NetLayoutPoint wToPoint   = it.key().endPoint(false);
+                NetLayoutPoint wFromPoint = it.key().endPoint(NetLayoutWire::SourcePoint);
+                NetLayoutPoint wToPoint   = it.key().endPoint(NetLayoutWire::DestinationPoint);
                 NetLayoutJunction* j0 = mJunctionHash.value(wFromPoint);
                 NetLayoutJunction* j1 = mJunctionHash.value(wToPoint);
                 int ilane = it.value();

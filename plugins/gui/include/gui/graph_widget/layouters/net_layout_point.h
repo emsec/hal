@@ -42,13 +42,13 @@ namespace hal {
     class NetLayoutPoint : public QPoint
     {
     public:
-        NetLayoutPoint(int x_=-1, int y_=-1);
+        NetLayoutPoint(int x_=INT_MIN, int y_=INT_MIN);
         NetLayoutPoint(const QPoint& p);
         QGraphicsEllipseItem* graphicsFactory(float r) const;
         int distanceTo(const NetLayoutPoint& other) const;
         int yGrid() const { return (y() + 1) / 2; }
         bool isEndpoint() const;
-        bool isUndefined() const { return x() < 0 || y() < 0; }
+        bool isUndefined() const { return x()==INT_MIN || y()==INT_MIN; }
         NetLayoutPoint nextPoint(const NetLayoutDirection& dir, bool omitEndpoint=false) const;
         static NetLayoutPoint fromBox(const QPoint& boxPosition, bool isInput);
         static QList<NetLayoutPoint> orderByDistance(const QList<NetLayoutPoint>& points);
@@ -57,10 +57,11 @@ namespace hal {
     class NetLayoutWire
     {
     public:
+        enum point_t {SourcePoint, DestinationPoint};
         NetLayoutWire(const NetLayoutPoint& p, const NetLayoutDirection& dir, bool isEnd);
         QGraphicsLineItem* graphicsFactory() const;
 
-        NetLayoutPoint endPoint(bool startPoint) const;
+        NetLayoutPoint endPoint(point_t pnt) const;
         bool isEndpoint() const { return mIsEndpoint; }
         bool isHorizontal() const { return mDir.isHorizontal(); }
         bool operator==(const NetLayoutWire& other) const;

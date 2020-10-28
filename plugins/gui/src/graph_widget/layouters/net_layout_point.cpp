@@ -25,7 +25,7 @@ uint qHash(const hal::NetLayoutPoint& p)
 
 uint qHash(const hal::NetLayoutWire& w)
 {
-    uint retval = qHash(w.endPoint(true)) << 1;
+    uint retval = qHash(w.endPoint(NetLayoutWire::SourcePoint)) << 1;
     return retval + (w.isHorizontal() ? 1 : 0);
 }
 
@@ -208,9 +208,9 @@ QGraphicsLineItem* NetLayoutWire::graphicsFactory() const
     return retval;
 }
 
-NetLayoutPoint NetLayoutWire::endPoint(bool startPoint) const
+NetLayoutPoint NetLayoutWire::endPoint(point_t pnt) const
 {
-    if (startPoint) return mPoint;
+    if (pnt == SourcePoint) return mPoint;
     return NetLayoutPoint(static_cast<QPoint>(mPoint)+mDir.step(!mIsEndpoint));
 }
 
@@ -294,11 +294,11 @@ void NetLayoutConnection::add(const NetLayoutConnection& other, bool atomicNet)
         if (atomicNet && !w.isHorizontal() && !w.isEndpoint())
         {
             // split vertical wires so that only atomic parts get stored
-            NetLayoutPoint pA = w.endPoint(true);
+            NetLayoutPoint pA = w.endPoint(NetLayoutWire::SourcePoint);
             NetLayoutWire wA(pA, NetLayoutDirection::Down, true);
-            NetLayoutPoint pB = wA.endPoint(false);
+            NetLayoutPoint pB = wA.endPoint(NetLayoutWire::DestinationPoint);
             NetLayoutWire wB(pB, NetLayoutDirection::Down, true);
-            NetLayoutPoint pC = wB.endPoint(false);
+            NetLayoutPoint pC = wB.endPoint(NetLayoutWire::DestinationPoint);
             append(wA);
             append(wB);
             mWaypointLinks[pA].append(n);
@@ -309,8 +309,8 @@ void NetLayoutConnection::add(const NetLayoutConnection& other, bool atomicNet)
         else
         {
             append(w);
-            mWaypointLinks[w.endPoint(true)].append(n);
-            mWaypointLinks[w.endPoint(false)].append(n);
+            mWaypointLinks[w.endPoint(NetLayoutWire::SourcePoint)].append(n);
+            mWaypointLinks[w.endPoint(NetLayoutWire::DestinationPoint)].append(n);
         }
     }
 }
@@ -334,7 +334,7 @@ NetLayoutMetric::NetLayoutMetric(u32 id, const NetLayoutConnection *con)
 
     for (const NetLayoutWire& w : *con)
     {
-        NetLayoutPoint p = w.endPoint(true);
+        NetLayoutPoint p = w.endPoint(NetLayoutWire::SourcePoint);
         if (w.isHorizontal())
             horizontalMap[p.y()].insert(p.x(),0);
         else
@@ -424,7 +424,10 @@ void NetLayoutConnectionFactory::dump(const QString& stub) const
     xout << "\nwire:";
     for (const NetLayoutWire& w : *connection)
     {
-        xout << QString(" <%1,%2>%3").arg(w.endPoint(true).x()).arg(w.endPoint(true).y()).arg(w.isHorizontal()?'-':'|');
+        xout << QString(" <%1,%2>%3")
+                .arg(w.endPoint(NetLayoutWire::SourcePoint).x())
+                .arg(w.endPoint(NetLayoutWire::SourcePoint).y())
+                .arg(w.isHorizontal()?'-':'|');
     }
     xout << "\n===========================\n";
 }

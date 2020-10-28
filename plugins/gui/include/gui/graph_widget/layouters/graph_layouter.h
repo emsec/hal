@@ -40,6 +40,7 @@
 #include <QSet>
 #include <QMap>
 #include <QVector>
+#include <QRect>
 
 namespace hal
 {
@@ -385,6 +386,7 @@ namespace hal
 
         bool m_done;
 
+        QRect mNodeBoundingBox;
         NetLayoutConnectionMetric mConnectionMetric;
         QHash<NetLayoutWire,QList<u32>> mWireHash;
         QHash<NetLayoutPoint,NetLayoutJunctionEntries> mJunctionEntries;
@@ -396,6 +398,7 @@ namespace hal
         QMap<int,SceneCoordinate> mCoordY;
         QMap<int,float> mJunctionMinDistanceY;
         QHash<u32,EndpointList> mWireEndpoint;
+        QHash<u32,int> mGlobalInputHash;
     };
 
     uint qHash(const hal::node& n);
