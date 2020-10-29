@@ -454,6 +454,9 @@ namespace hal
         g_selection_relay->m_subfocus = SelectionRelay::subfocus::none;
         // END OF TEST CODE
 
+        //LOG MANUAL SELECTION CHANGED:
+        log_info("gui", "Selection changed through manual interaction with a view to: insert here..");
+
         g_selection_relay->relay_selection_changed(this);
     }
 

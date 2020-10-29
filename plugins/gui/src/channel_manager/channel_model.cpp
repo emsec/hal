@@ -6,10 +6,9 @@
 namespace hal
 {
 
-
     ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent), m_temporary_items(30)
     {
-        //m_channel_to_ignore = {"PythonContext"};
+        //m_channel_to_ignore = {"PythonContext", "python"};
         LogManager::get_instance().get_gui_callback().add_callback("gui",
                                                                    std::bind(&ChannelModel::handle_logmanager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
