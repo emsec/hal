@@ -259,7 +259,6 @@ foreach(DISTRI ${PROJECT_PPA_DISTRIB_TARGET})
         ${CPACK_SOURCE_IGNORE_FILES}
         "/.*/.*build.*/"
         "/Testing/"
-        "/test/"
         "/tmp/"
         "/debian/"
         "/\\\\.git.*"
