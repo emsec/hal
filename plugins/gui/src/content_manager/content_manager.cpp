@@ -36,7 +36,6 @@ namespace hal
         // has to be created this early in order to receive deserialization by the core signals
         m_python_widget = new PythonEditor();
         m_special_log_content_manager = new SpecialLogContentManager(m_MainWindow, m_python_widget);
-        m_special_log_content_manager->start_logging(10000);
 
         connect(FileManager::get_instance(), &FileManager::file_opened, this, &ContentManager::handle_open_document);
         connect(FileManager::get_instance(), &FileManager::file_closed, this, &ContentManager::handle_close_document);
@@ -170,6 +169,7 @@ namespace hal
         m_MainWindow->add_content(PythonConsole, 5, content_anchor::bottom);
         PythonConsole->open();
         m_NetlistWatcher = new NetlistWatcher(this);
+        m_special_log_content_manager->start_logging(60000);
     }
 
     void ContentManager::handle_close_document()

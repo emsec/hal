@@ -54,7 +54,7 @@ namespace hal
         PythonEditor* m_python_editor;
         //either save it in the same directory (eg. /SpecialLogs) or split it into something
         //like (SpecialLogs/Screenshots and SpecialLogs/PyhthonContent)
-        QString m_screenshot_path;
-        QString m_python_content_path;
+        QString m_screenshot_sub_path;
+        QString m_python_content_sub_path;
     };
 }
