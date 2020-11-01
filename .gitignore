@@ -134,3 +134,8 @@ buttons.jsonc
 # Documentation
 Doxyfile
 html/
+
+HAL_DEPLOYMENT_KEY
+HAL_GPG_KEY
+changelog
+hal_pass
