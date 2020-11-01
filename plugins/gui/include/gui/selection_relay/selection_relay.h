@@ -140,6 +140,8 @@ namespace hal
         void subfocus_left();
         void subfocus_right();
 
+        void evaluate_selection_changed(void* sender);
+
         //    bool try_subfocus_left();
         //    bool try_subfocus_right();
         //    bool try_subfocus_up();

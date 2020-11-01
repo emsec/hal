@@ -51,6 +51,7 @@ namespace hal
 
     void SelectionRelay::relay_selection_changed(void* sender)
     {
+        evaluate_selection_changed(sender);
         Q_EMIT selection_changed(sender);
     }
 
@@ -620,5 +621,37 @@ namespace hal
         m_subfocus_index = 0;
 
         Q_EMIT subfocus_changed(nullptr);
+    }
+
+    void SelectionRelay::evaluate_selection_changed(void *sender)
+    {
+        QString method = "unknown";
+        for(const auto pair : m_sender_register)
+        {
+            if(pair.first == sender)
+            {
+                method = pair.second;
+                break;
+            }
+        }
+
+        auto create_substring = [](std::string first_part, QSet<u32> ids){
+
+            std::string final_string = first_part;
+            for(const auto &i : ids)
+                final_string += std::to_string(i) + ", ";
+
+            if(!ids.isEmpty())
+                final_string.resize(final_string.size()-2);
+
+            return final_string + "}";
+        };
+
+        std::string gate_ids_substring = create_substring("Gate-Ids: {", m_selected_gates);
+        std::string net_ids_substring = create_substring("Net-Ids: {", m_selected_nets);
+        std::string module_ids_substring = create_substring("Module-Ids: {", m_selected_modules);
+        log_info("gui", "Selection changed, Method: {}, New Sel.: {}, {}, {}", method.toStdString(), gate_ids_substring, net_ids_substring, module_ids_substring);
+
+
     }
 }    // namespace hal

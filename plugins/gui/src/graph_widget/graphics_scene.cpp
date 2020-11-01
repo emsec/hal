@@ -113,6 +113,7 @@ namespace hal
         //m_scene.setBspTreeDepth(10);
 
         connect_all();
+        g_selection_relay->register_sender(this, "GraphView");
 
         QGraphicsScene::addItem(m_drag_shadow_gate);
 
@@ -455,7 +456,7 @@ namespace hal
         // END OF TEST CODE
 
         //LOG MANUAL SELECTION CHANGED:
-        log_info("gui", "Selection changed through manual interaction with a view to: insert here..");
+        //log_info("gui", "Selection changed through manual interaction with a view to: insert here..");
 
         g_selection_relay->relay_selection_changed(this);
     }
