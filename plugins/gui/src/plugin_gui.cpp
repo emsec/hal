@@ -105,7 +105,7 @@ namespace hal
         const char** argv;
         args.get_original_arguments(&argc, &argv);
         QApplication a(argc, const_cast<char**>(argv));
-        FocusLogger focusLogger(&a);
+        //FocusLogger focusLogger(&a);
 
         QObject::connect(&a, &QApplication::aboutToQuit, cleanup);
 
