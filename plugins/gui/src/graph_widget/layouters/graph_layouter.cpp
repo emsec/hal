@@ -315,6 +315,7 @@ namespace hal
         mJunctionMinDistanceY.clear();
         mWireEndpoint.clear();
         mGlobalInputHash.clear();
+        mGlobalOutputHash.clear();
         mNodeBoundingBox = QRect();
         mNodeBoxForGate.clear();
     }
@@ -404,16 +405,29 @@ namespace hal
                 mWireEndpoint[id].setNetType(EndpointList::ConstantLevel);
 
             // test for global inputs
-            if (mWireEndpoint.value(id).netType() == EndpointList::SingleDestination
-                    && dstPoints.size() > 1)
+            EndpointList::netType_t nType = mWireEndpoint.value(id).netType();
+            if ((nType == EndpointList::SingleDestination && dstPoints.size() > 1) ||
+                    (nType == EndpointList::SourceAndDestination && n->is_global_input_net()))
             {
                 // global input connects to multiple boxes
                 int ypos = mGlobalInputHash.size();
-                NetLayoutPoint srcPnt(mNodeBoundingBox.x(),2*ypos);
+                NetLayoutPoint srcPnt(mNodeBoundingBox.left(),2*ypos);
                 srcPoints.insert(srcPnt);
                 mWireEndpoint[id].addSource(srcPnt);
                 mGlobalInputHash[id] = ypos;
                 mWireEndpoint[id].setNetType(EndpointList::MultipleDestination);
+            }
+
+            if ((nType == EndpointList::SingleSource && srcPoints.size() > 1) ||
+                    (nType == EndpointList::SourceAndDestination && n->is_global_output_net()))
+            {
+                // multi-driven global output or global output back coupled to net gate
+                int ypos = mGlobalOutputHash.size();
+                NetLayoutPoint dstPnt(mNodeBoundingBox.right(),2*ypos);
+                dstPoints.insert(dstPnt);
+                mWireEndpoint[id].addDestination(dstPnt);
+                mGlobalOutputHash[id] = ypos;
+                mWireEndpoint[id].setNetType(EndpointList::MultipleSource);
             }
 
             const EndpointList& epl = mWireEndpoint.value(id);
@@ -501,12 +515,20 @@ namespace hal
         {
             QList<u32> netIds;
             netIds.append(itGlInp.key());
-            NetLayoutPoint pnt(mNodeBoundingBox.x(), 2*itGlInp.value());
+            NetLayoutPoint pnt(mNodeBoundingBox.left(), 2*itGlInp.value());
             mJunctionEntries[pnt].setEntries(NetLayoutDirection::Left, netIds);
             if (!mEndpointHash.contains(pnt))
-            {
                 mEndpointHash[pnt].setOutputPins(netIds,0,0);
-            }
+        }
+
+        for (auto itGlOut = mGlobalOutputHash.constBegin(); itGlOut != mGlobalOutputHash.constEnd(); ++itGlOut)
+        {
+            QList<u32> netIds;
+            netIds.append(itGlOut.key());
+            NetLayoutPoint pnt(mNodeBoundingBox.right(), 2*itGlOut.value());
+            mJunctionEntries[pnt].setEntries(NetLayoutDirection::Right, netIds);
+            if (!mEndpointHash.contains(pnt))
+                mEndpointHash[pnt].setInputPins(netIds,0,0);
         }
 
         for (auto it = mJunctionEntries.constBegin(); it != mJunctionEntries.constEnd(); ++it)
@@ -1009,8 +1031,6 @@ namespace hal
             if (xout > xOutputPadding[ix]) xOutputPadding[ix] = xout;
         }
 
-        m_x_values.append(0);
-        m_y_values.append(0);
 
         int ix0 = mNodeBoundingBox.x();
 
@@ -1018,6 +1038,9 @@ namespace hal
         if (!mGlobalInputHash.isEmpty()) x0 += 50;
         mCoordX[ix0].setOffset(x0);
         mCoordX[ix0].setPadding(xInputPadding[ix0]);
+
+        m_x_values.append(mCoordX.value(ix0).xBoxOffset());
+
         auto itxLast = mCoordX.begin();
         for(auto itNext = itxLast + 1; itNext!= mCoordX.end(); ++itNext)
         {
@@ -1035,16 +1058,15 @@ namespace hal
             itNext->setOffsetX(itxLast.value(), xsum + 4*h_road_padding, xOutputPadding[ix1], xInputPadding[ix1]);
             float lastX  = itxLast.value().lanePosition(0);
             float deltaX = itNext.value().lanePosition(0) - lastX;
-            int   nx     = ix1 - ix0;
-            if (nx<=0) nx=1;
-            for (int ix=1; ix<=nx; ix++)
-                m_x_values.append(lastX + deltaX * ix / nx);
+
+            m_x_values.append(itNext.value().xBoxOffset());
             itxLast = itNext;
         }
 
         int iy0 = mNodeBoundingBox.y();
         float y0 = mCoordY[iy0].preLanes() * lane_spacing + v_road_padding;
         mCoordY[iy0].setOffset(y0);
+        m_y_values.append(mCoordY.value(iy0).lanePosition(0));
         auto ityLast = mCoordY.begin();
         for(auto itNext = ityLast + 1; itNext!= mCoordY.end(); ++itNext)
         {
@@ -1057,6 +1079,7 @@ namespace hal
             {
                 // netjunction -> endpoint
                 itNext->setOffsetYje(ityLast.value(), mJunctionMinDistanceY.value(iy1));
+                m_y_values.append(itNext.value().lanePosition(0));
             }
             else
             {
@@ -1066,7 +1089,6 @@ namespace hal
                 if (yn != m_max_node_height_for_y.constEnd())
                     ydelta += yn.value();
                 itNext->setOffsetYej(ityLast.value(), ydelta, mJunctionMinDistanceY.value(iy1));
-                m_y_values.append(itNext.value().lanePosition(0));
             }
             ityLast = itNext;
         }
@@ -1254,17 +1276,38 @@ namespace hal
             lines.merge_lines();
 
             GraphicsNet* graphicsNet = nullptr;
-            if (epl.netType() == EndpointList::MultipleDestination)
+            switch (epl.netType()) {
+            case EndpointList::MultipleDestination:
             {
                 StandardArrowNet* san = new StandardArrowNet(n, lines);
                 graphicsNet = san;
                 int yGridPos = mGlobalInputHash.value(id,-1);
                 Q_ASSERT(yGridPos >= 0);
-                const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.x(),yGridPos*2));
-                san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.x()).lanePosition(-1),epc.lanePosition(0,true)));
+                const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(),yGridPos*2));
+                san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.left()).lanePosition(-1),epc.lanePosition(0,true)));
             }
-            else
+                break;
+            case EndpointList::MultipleSource:
+            {
+                StandardArrowNet* san = new StandardArrowNet(n, lines);
+                graphicsNet = san;
+                int yGridPos = mGlobalOutputHash.value(id,-1);
+                Q_ASSERT(yGridPos >= 0);
+                QPoint pnt(mNodeBoundingBox.right(),yGridPos*2);
+                const EndpointCoordinate& epc = mEndpointHash.value(pnt);
+                const NetLayoutJunction* nlj = mJunctionHash.value(pnt);
+                Q_ASSERT(nlj);
+                san->setOutputPosition(QPointF(mCoordX.value(pnt.x()).lanePosition(nlj->rect().right()+1),
+                                               epc.lanePosition(0,true)));
+            }
+                break;
+            case EndpointList::SourceAndDestination:
                 graphicsNet = new StandardGraphicsNet(n, lines);
+                break;
+            default:
+                Q_ASSERT(0 > 1); // should never occur
+                break;
+            }
 
             m_scene->add_item(graphicsNet);
 

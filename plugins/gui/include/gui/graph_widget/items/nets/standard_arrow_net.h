@@ -11,6 +11,7 @@ namespace hal {
     public:
         StandardArrowNet(Net* n, const lines& l);
         void setInputPosition(const QPointF &pos);
+        void setOutputPosition(const QPointF &pos);
         virtual void set_visuals(const visuals& v);
         void paint(QPainter* painter,
                    const QStyleOptionGraphicsItem* option,

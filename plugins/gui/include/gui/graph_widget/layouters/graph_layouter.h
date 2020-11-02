@@ -416,6 +416,7 @@ namespace hal
         QMap<int,float> mJunctionMinDistanceY;
         QHash<u32,EndpointList> mWireEndpoint;
         QHash<u32,int> mGlobalInputHash;
+        QHash<u32,int> mGlobalOutputHash;
     };
 
     uint qHash(const hal::node& n);
