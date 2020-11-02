@@ -392,7 +392,8 @@ namespace hal
         }
         else
         {
-            QGraphicsView::dragEnterEvent(event);
+            //causes a bug where dockbar-buttons just disappear instead of snapping back when dragged into the view
+//            QGraphicsView::dragEnterEvent(event);
         }
     }
 
