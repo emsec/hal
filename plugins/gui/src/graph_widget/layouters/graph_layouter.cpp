@@ -7,6 +7,7 @@
 #include "gui/graph_widget/items/nets/circle_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
+#include "gui/graph_widget/items/nets/standard_arrow_net.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/implementations/qpoint_extension.h"
@@ -126,12 +127,11 @@ namespace hal
 
     QPoint GraphLayouter::gridPointByItem(GraphicsNode* item) const
     {
-        QPoint retval(-1,-1);
+        QPoint retval(INT_MIN,INT_MIN);
         if (!item) return retval;
-        int ibox= m_boxGraphItem.value(item,-1);
-        if (ibox<0) return retval;
-        const node_box& nbox = m_boxes.at(ibox);
-        return QPoint(nbox.x,nbox.y);
+        const NodeBox* nbox = mBoxGraphItem.value(item);
+        if (!nbox) return retval;
+        return QPoint(nbox->x(),nbox->y());
     }
 
     int GraphLayouter::min_x_index() const
@@ -248,10 +248,11 @@ namespace hal
     {
         m_done = false;
 
-        m_boxes.clear();
-        m_boxNode.clear();
-        m_boxPosition.clear();
-        m_boxGraphItem.clear();
+        for (NodeBox* nb : mBoxes) delete nb;
+        mBoxes.clear();
+        mBoxNode.clear();
+        mBoxPosition.clear();
+        mBoxGraphItem.clear();
 
         for (const GraphLayouter::road* r : m_h_roads.values())
             delete r;
@@ -315,6 +316,7 @@ namespace hal
         mWireEndpoint.clear();
         mGlobalInputHash.clear();
         mNodeBoundingBox = QRect();
+        mNodeBoxForGate.clear();
     }
 
     void GraphLayouter::create_boxes()
@@ -332,12 +334,12 @@ namespace hal
             if (first || x < xmin) xmin = x;
             if (first || y < ymin) ymin = y;
             first = false;
-            int n = m_boxes.size();
-            node_box nbox = create_box(i.value(), x, y);
-            m_boxes.append(nbox);
-            m_boxNode.insert(i.value(),n);
-            m_boxPosition.insert(i.key(),n);
-            m_boxGraphItem.insert(nbox.item,n);
+            NodeBox* nbox = new NodeBox(i.value(), x, y);
+            mBoxes.append(nbox);
+            mBoxNode.insert(i.value(),nbox);
+            mBoxPosition.insert(i.key(),nbox);
+            mBoxGraphItem.insert(nbox->item(),nbox);
+            mNodeBoxForGate.insertNode(nbox);
             ++i;
         }
         mNodeBoundingBox = QRect(xmin, ymin, xmax-xmin, ymax-ymin);
@@ -363,103 +365,88 @@ namespace hal
             Net* n = g_netlist->get_net_by_id(id);
             Q_ASSERT(n);
 
-            QList<NetLayoutPoint> srcPoints;
-            QList<NetLayoutPoint> dstPoints;
+            QSet<NetLayoutPoint> srcPoints;
+            QSet<NetLayoutPoint> dstPoints;
 
             mWireEndpoint[id] = EndpointList();
 
             for (const Endpoint* src : n->get_sources())
             {
                 // FIND SRC BOX
-                node srcNode;
-
-                if (!m_context->node_for_gate(srcNode, src->get_gate()->get_id()))
+                const NodeBox* srcBox = mNodeBoxForGate.value(src->get_gate());
+                if (!srcBox)
                     continue;
 
-                if (!verifyModulePort(n,srcNode,false))
+                if (!verifyModulePort(n,srcBox->getNode(),false))
                     continue;
 
-                node_box* srcBox = nullptr;
-                int ibox = m_boxNode.value(srcNode,-1);
-                if (ibox >= 0)
-                    srcBox = & (m_boxes[ibox]);
-
-                if (srcBox)
-                {
-                    NetLayoutPoint srcPnt(srcBox->x+1,2*srcBox->y);
-                    srcPoints.append(srcPnt);
-                    mWireEndpoint[id].addSource(srcPnt);
-                }
+                NetLayoutPoint srcPnt(srcBox->x()+1,2*srcBox->y());
+                srcPoints.insert(srcPnt);
+                mWireEndpoint[id].addSource(srcPnt);
             }
 
             for (const Endpoint* dst : n->get_destinations())
             {
-                node dstNode;
-
-                if (!m_context->node_for_gate(dstNode, dst->get_gate()->get_id()))
+                // find dst box
+                const NodeBox* dstBox = mNodeBoxForGate.value(dst->get_gate());
+                if (!dstBox)
                     continue;
 
-                if (!verifyModulePort(n,dstNode,true))
+                if (!verifyModulePort(n,dstBox->getNode(),true))
                     continue;
 
-                node_box* dstBox = nullptr;
-                int ibox = m_boxNode.value(dstNode,-1);
-                if (ibox >= 0)
-                    dstBox = & (m_boxes[ibox]);
-
-                if (dstBox)
-                {
-                    NetLayoutPoint dstPnt(dstBox->x,2*dstBox->y);
-                    dstPoints.append(dstPnt);
-                    mWireEndpoint[id].addDestination(dstPnt);
-                }
+                NetLayoutPoint dstPnt(dstBox->x(),2*dstBox->y());
+                dstPoints.insert(dstPnt);
+                mWireEndpoint[id].addDestination(dstPnt);
             }
 
             if (isConstNet(n))
-                mWireEndpoint[id].setConstantLevel();
-/*
-            const EndpointList& testGlobalInput = mWireEndpoint.value(id);
-            if (testGlobalInput.hasEndpoint() == EndpointList::OnlyDestination
-                    && testGlobalInput.size() > 1)
+                mWireEndpoint[id].setNetType(EndpointList::ConstantLevel);
+
+            // test for global inputs
+            if (mWireEndpoint.value(id).netType() == EndpointList::SingleDestination
+                    && dstPoints.size() > 1)
             {
                 // global input connects to multiple boxes
                 int ypos = mGlobalInputHash.size();
-                NetLayoutPoint srcPnt(0,2*ypos);
-                srcPoints.append(srcPnt);
+                NetLayoutPoint srcPnt(mNodeBoundingBox.x(),2*ypos);
+                srcPoints.insert(srcPnt);
                 mWireEndpoint[id].addSource(srcPnt);
                 mGlobalInputHash[id] = ypos;
-                qDebug() << "global input" << id << srcPnt.x() << srcPnt.y();
+                mWireEndpoint[id].setNetType(EndpointList::MultipleDestination);
             }
-*/
+
             const EndpointList& epl = mWireEndpoint.value(id);
-            switch (epl.hasEndpoint()) {
-            case EndpointList::OnlySource:
-            case EndpointList::OnlyDestination:
+            switch (epl.netType()) {
+            case EndpointList::SingleSource:
+            case EndpointList::SingleDestination:
             case EndpointList::ConstantLevel:
             {
                 int ipnt = 0;
                 for (const NetLayoutPoint& pnt : epl)
                 {
                     bool isInput = epl.isInput(ipnt++);
-                    SeparatedGraphicsNet* net_item = epl.hasEndpoint() == EndpointList::ConstantLevel
+                    SeparatedGraphicsNet* net_item = epl.netType() == EndpointList::ConstantLevel
                             ? static_cast<SeparatedGraphicsNet*>(new LabeledSeparatedNet(n,QString::fromStdString(n->get_name())))
                             : static_cast<SeparatedGraphicsNet*>(new ArrowSeparatedNet(n));
                     if (isInput)
                         mSeparatedWidth[pnt].requireInputSpace(net_item->input_width()+lane_spacing);
                     else
                     {
-                        int ibox = m_boxPosition.value(QPoint(pnt.x()-1,pnt.y()/2));
-                        Q_ASSERT(ibox >= 0);
+                        const NodeBox* nb = mBoxPosition.value(QPoint(pnt.x()-1,pnt.y()/2));
+                        Q_ASSERT(nb);
                         mSeparatedWidth[pnt].requireOutputSpace(
-                                    m_boxes.at(ibox).item->width() + net_item->output_width() + 3*lane_spacing);
+                                    nb->item()->width() + net_item->output_width() + 3*lane_spacing);
                     }
                     delete net_item;
                 }
             }
                 break;
             case EndpointList::SourceAndDestination:
+            case EndpointList::MultipleDestination:
+            case EndpointList::MultipleSource:
             {
-                NetLayoutConnectionFactory nlcf(srcPoints,dstPoints);
+                NetLayoutConnectionFactory nlcf(srcPoints.toList(),dstPoints.toList());
                 // nlcf.dump(QString("wire %1").arg(id));
                 mConnectionMetric.insert(NetLayoutMetric(id,nlcf.connection),nlcf.connection);
             }
@@ -494,19 +481,32 @@ namespace hal
             }
         }
 
-        for (const node_box& nbox : m_boxes)
+        /// end points -> junction entries
+        for (const NodeBox* nbox : mBoxes)
         {
-            NetLayoutPoint inPnt(nbox.x,nbox.y*2);
-            QList<u32> inpNets = nbox.item->inputNets();
-            mJunctionEntries[inPnt].setEntries(NetLayoutDirection::Right, nbox.item->inputNets());
-            mEndpointHash[inPnt].setInputPins(nbox.item->inputNets(),
-                                              nbox.item->yTopPinDistance(),
-                                              nbox.item->yEndpointDistance());
-            NetLayoutPoint outPnt(nbox.x+1,nbox.y*2);
-            mJunctionEntries[outPnt].setEntries(NetLayoutDirection::Left, nbox.item->outputNets());
-            mEndpointHash[outPnt].setOutputPins(nbox.item->outputNets(),
-                                                nbox.item->yTopPinDistance(),
-                                                nbox.item->yEndpointDistance());
+            NetLayoutPoint inPnt(nbox->x(),nbox->y()*2);
+            QList<u32> inpNets = nbox->item()->inputNets();
+            mJunctionEntries[inPnt].setEntries(NetLayoutDirection::Right, nbox->item()->inputNets());
+            mEndpointHash[inPnt].setInputPins(nbox->item()->inputNets(),
+                                              nbox->item()->yTopPinDistance(),
+                                              nbox->item()->yEndpointDistance());
+            NetLayoutPoint outPnt(nbox->x()+1,nbox->y()*2);
+            mJunctionEntries[outPnt].setEntries(NetLayoutDirection::Left, nbox->item()->outputNets());
+            mEndpointHash[outPnt].setOutputPins(nbox->item()->outputNets(),
+                                                nbox->item()->yTopPinDistance(),
+                                                nbox->item()->yEndpointDistance());
+        }
+
+        for (auto itGlInp = mGlobalInputHash.constBegin(); itGlInp != mGlobalInputHash.constEnd(); ++itGlInp)
+        {
+            QList<u32> netIds;
+            netIds.append(itGlInp.key());
+            NetLayoutPoint pnt(mNodeBoundingBox.x(), 2*itGlInp.value());
+            mJunctionEntries[pnt].setEntries(NetLayoutDirection::Left, netIds);
+            if (!mEndpointHash.contains(pnt))
+            {
+                mEndpointHash[pnt].setOutputPins(netIds,0,0);
+            }
         }
 
         for (auto it = mJunctionEntries.constBegin(); it != mJunctionEntries.constEnd(); ++it)
@@ -540,12 +540,7 @@ namespace hal
                 if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
                     continue;
 
-                node_box* src_box = nullptr;
-
-                int ibox = m_boxNode.value(node,-1);
-                if (ibox >= 0)
-                    src_box = & (m_boxes[ibox]);
-
+                NodeBox* src_box = mBoxNode.value(node);
                 assert(src_box);
 
                 // FOR EVERY DST
@@ -555,27 +550,22 @@ namespace hal
                     if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                         continue;
 
-                    node_box* dst_box = nullptr;
-
-                    int jbox = m_boxNode.value(node,-1);
-                    if (jbox >= 0)
-                        dst_box = & (m_boxes[jbox]);
-
+                    NodeBox* dst_box = mBoxNode.value(node);
                     assert(dst_box);
 
                     // ROAD BASED DISTANCE (x_distance - 1)
-                    const int x_distance = dst_box->x - src_box->x - 1;
-                    const int y_distance = dst_box->y - src_box->y;
+                    const int x_distance = dst_box->x() - src_box->x() - 1;
+                    const int y_distance = dst_box->y() - src_box->y();
 
-                    if (!y_distance && v_road_jump_possible(src_box->x + 1, dst_box->x, src_box->y))
+                    if (!y_distance && v_road_jump_possible(src_box->x() + 1, dst_box->x(), src_box->y()))
                     {
                         // SPECIAL CASE INDIRECT HORIZONTAL NEIGHBORS
-                        road* dst_v_road = get_v_road(dst_box->x, dst_box->y);
+                        road* dst_v_road = get_v_road(dst_box->x(), dst_box->y());
                         used.v_roads.insert(dst_v_road);
                         continue;
                     }
 
-                    road* src_v_road = get_v_road(src_box->x + 1, src_box->y);
+                    road* src_v_road = get_v_road(src_box->x() + 1, src_box->y());
 
                     if (!(x_distance || y_distance))
                     {
@@ -805,29 +795,29 @@ namespace hal
 
     void GraphLayouter::find_max_box_dimensions()
     {
-        for (const node_box& box : m_boxes)
+        for (const NodeBox* box : mBoxes)
         {
-            if (box.x < m_min_x_index)
-                m_min_x_index = box.x;
-            else if (box.x > m_max_x_index)
-                m_max_x_index = box.x;
+            if (box->x() < m_min_x_index)
+                m_min_x_index = box->x();
+            else if (box->x() > m_max_x_index)
+                m_max_x_index = box->x();
 
-            if (box.y < m_min_y_index)
-                m_min_y_index = box.y;
-            else if (box.y > m_max_y_index)
-                m_max_y_index = box.y;
+            if (box->y() < m_min_y_index)
+                m_min_y_index = box->y();
+            else if (box->y() > m_max_y_index)
+                m_max_y_index = box->y();
 
-            if (m_max_node_width < box.item->width())
-                m_max_node_width = box.item->width();
+            if (m_max_node_width < box->item()->width())
+                m_max_node_width = box->item()->width();
 
-            if (m_max_node_height < box.item->height())
-                m_max_node_height = box.item->height();
+            if (m_max_node_height < box->item()->height())
+                m_max_node_height = box->item()->height();
 
-            store_max(m_max_node_width_for_x, box.x, box.item->width());
-            store_max(m_max_node_height_for_y, box.y, box.item->height());
+            store_max(m_max_node_width_for_x, box->x(), box->item()->width());
+            store_max(m_max_node_height_for_y, box->y(), box->item()->height());
 
-            store_max(m_max_right_io_padding_for_channel_x, box.x, box.input_padding);
-            store_max(m_max_left_io_padding_for_channel_x, box.x + 1, box.output_padding);
+            store_max(m_max_right_io_padding_for_channel_x, box->x(), box->inputPadding());
+            store_max(m_max_left_io_padding_for_channel_x, box->x() + 1, box->outputPadding());
         }
     }
 
@@ -1025,6 +1015,7 @@ namespace hal
         int ix0 = mNodeBoundingBox.x();
 
         float x0 = mCoordX[ix0].preLanes() * lane_spacing + h_road_padding;
+        if (!mGlobalInputHash.isEmpty()) x0 += 50;
         mCoordX[ix0].setOffset(x0);
         mCoordX[ix0].setPadding(xInputPadding[ix0]);
         auto itxLast = mCoordX.begin();
@@ -1124,28 +1115,39 @@ namespace hal
 
     void GraphLayouter::placeGates()
     {
-        for (node_box& box : m_boxes)
+        for (const NodeBox* box : mBoxes)
         {
-            box.item->setPos(mCoordX[box.x].xBoxOffset(),
-                             mCoordY[box.y*2].lanePosition(0));
-            m_scene->add_item(box.item);
+            box->item()->setPos(mCoordX[box->x()].xBoxOffset(),
+                             mCoordY[box->y()*2].lanePosition(0));
+            m_scene->add_item(box->item());
 
-            NetLayoutPoint outPnt(box.x+1,box.y*2);
-            QPointF outPos = box.item->endpointPositionByIndex(0,false);
+            NetLayoutPoint outPnt(box->x()+1,box->y()*2);
+            QPointF outPos = box->item()->endpointPositionByIndex(0,false);
             mEndpointHash[outPnt].setOutputPosition(outPos);
 
-            NetLayoutPoint inPnt(box.x,box.y*2);
-            QPointF inPos = box.item->endpointPositionByIndex(0,true);
+            NetLayoutPoint inPnt(box->x(),box->y()*2);
+            QPointF inPos = box->item()->endpointPositionByIndex(0,true);
             mEndpointHash[inPnt].setInputPosition(inPos);
+        }
+
+        /// place endpoints which are not connected to any box
+        for (auto itEp = mEndpointHash.begin(); itEp != mEndpointHash.end(); ++itEp)
+        {
+            if (itEp.value().lanePosition(0,true) <= 0)
+            {
+                float px = mCoordX[itEp.key().x()].lanePosition(-1);
+                float py = mCoordY[itEp.key().y()].lanePosition(0);
+                itEp->setOutputPosition(QPointF(px,py));
+            }
         }
     }
 
     void GraphLayouter::place_gates()
     {
-        for (node_box& box : m_boxes)
+        for (NodeBox* box : mBoxes)
         {
-            box.item->setPos(m_node_offset_for_x.value(box.x), m_node_offset_for_y.value(box.y));
-            m_scene->add_item(box.item);
+            box->setItemPosition(m_node_offset_for_x.value(box->x()), m_node_offset_for_y.value(box->y()));
+            m_scene->add_item(box->item());
         }
     }
 
@@ -1168,12 +1170,12 @@ namespace hal
             const EndpointList& epl = mWireEndpoint.value(id);
             bool regularNet = false;
 
-            switch(epl.hasEndpoint())
+            switch(epl.netType())
             {
             case EndpointList::NoEndpoint:
                 break;
-            case EndpointList::OnlySource:
-            case EndpointList::OnlyDestination:
+            case EndpointList::SingleSource:
+            case EndpointList::SingleDestination:
             case EndpointList::ConstantLevel:
                 drawNetsIsolated(id,n,epl);
                 break;;
@@ -1250,15 +1252,28 @@ namespace hal
             drawNetsEndpoint(lines,id);
 
             lines.merge_lines();
-            StandardGraphicsNet* GraphicsNet = new StandardGraphicsNet(n, lines);
-            m_scene->add_item(GraphicsNet);
+
+            GraphicsNet* graphicsNet = nullptr;
+            if (epl.netType() == EndpointList::MultipleDestination)
+            {
+                StandardArrowNet* san = new StandardArrowNet(n, lines);
+                graphicsNet = san;
+                int yGridPos = mGlobalInputHash.value(id,-1);
+                Q_ASSERT(yGridPos >= 0);
+                const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.x(),yGridPos*2));
+                san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.x()).lanePosition(-1),epc.lanePosition(0,true)));
+            }
+            else
+                graphicsNet = new StandardGraphicsNet(n, lines);
+
+            m_scene->add_item(graphicsNet);
 
         }
     }
 
     void GraphLayouter::drawNetsIsolated(u32 id, Net* n, const EndpointList &epl)
     {
-        SeparatedGraphicsNet* net_item = epl.hasEndpoint() == EndpointList::ConstantLevel
+        SeparatedGraphicsNet* net_item = epl.netType() == EndpointList::ConstantLevel
                 ? static_cast<SeparatedGraphicsNet*>(new LabeledSeparatedNet(n,QString::fromStdString(n->get_name())))
                 : static_cast<SeparatedGraphicsNet*>(new ArrowSeparatedNet(n));
 
@@ -1366,6 +1381,8 @@ namespace hal
             Net* n = g_netlist->get_net_by_id(id);
             assert(n);
 
+            QSet<const NodeBox*> outputAssigned;
+
             if (n->is_unrouted())
             {
                 // HANDLE GLOBAL NETS
@@ -1380,12 +1397,17 @@ namespace hal
                         if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
                             continue;
 
-                        int ibox = m_boxNode.value(node,-1);
-                        if (ibox >= 0)
-                            net_item->add_output(m_boxes.at(ibox).item->get_output_scene_position(n->get_id(),
+                        const NodeBox* nb = mBoxNode.value(node);
+                        if (nb && !outputAssigned.contains(nb))
+                        {
+                            net_item->add_output(nb->item()->get_output_scene_position(n->get_id(),
                                                  QString::fromStdString(src->get_pin())));
+                            outputAssigned.insert(nb);
+                        }
                     }
                 }
+
+                QSet<const NodeBox*> inputAssigned;
 
                 for (Endpoint* dst : n->get_destinations())
                 {
@@ -1396,10 +1418,13 @@ namespace hal
                         if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                             continue;
 
-                        int ibox = m_boxNode.value(node,-1);
-                        if (ibox >= 0)
-                            net_item->add_input(m_boxes.at(ibox).item->get_input_scene_position(n->get_id(),
+                        const NodeBox* nb = mBoxNode.value(node);
+                        if (nb && !inputAssigned.contains(nb))
+                        {
+                            net_item->add_input(nb->item()->get_input_scene_position(n->get_id(),
                                                 QString::fromStdString(dst->get_pin())));
+                            inputAssigned.insert(nb);
+                        }
                     }
                 }
 
@@ -1420,9 +1445,9 @@ namespace hal
 
                     if (m_context->node_for_gate(node, src->get_gate()->get_id()))
                     {
-                        int ibox = m_boxNode.value(node,-1);
-                        if (ibox >= 0)
-                            net_item->add_output(m_boxes.at(ibox).item->get_output_scene_position(n->get_id(),
+                        const NodeBox* nb = mBoxNode.value(node);
+                        if (nb)
+                            net_item->add_output(nb->item()->get_output_scene_position(n->get_id(),
                                                  QString::fromStdString(src->get_pin())));
                     }
                 }
@@ -1434,9 +1459,9 @@ namespace hal
                     if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                         continue;
 
-                    int ibox = m_boxNode.value(node,-1);
-                    if (ibox >= 0)
-                        net_item->add_input(m_boxes.at(ibox).item->get_input_scene_position(n->get_id(),
+                    const NodeBox* nb = mBoxNode.value(node);
+                    if (nb)
+                        net_item->add_input(nb->item()->get_input_scene_position(n->get_id(),
                                             QString::fromStdString(dst->get_pin())));
                 }
 
@@ -1481,9 +1506,9 @@ namespace hal
                     if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
                         continue;
 
-                    int ibox = m_boxNode.value(node,-1);
-                    if (ibox >= 0)
-                        net_item->add_output(m_boxes.at(ibox).item->get_output_scene_position(n->get_id(),
+                    const NodeBox* nb = mBoxNode.value(node);
+                    if (nb)
+                        net_item->add_output(nb->item()->get_output_scene_position(n->get_id(),
                                              QString::fromStdString(src->get_pin())));
                 }
 
@@ -1504,9 +1529,9 @@ namespace hal
                     if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                         continue;
 
-                    int ibox = m_boxNode.value(node,-1);
-                    if (ibox >= 0)
-                        net_item->add_input(m_boxes.at(ibox).item->get_input_scene_position(n->get_id(), QString::fromStdString(dst->get_pin())));
+                    const NodeBox* nb = mBoxNode.value(node);
+                    if (nb)
+                        net_item->add_input(nb->item()->get_input_scene_position(n->get_id(), QString::fromStdString(dst->get_pin())));
                 }
 
                 net_item->finalize();
@@ -1523,54 +1548,52 @@ namespace hal
             for (Endpoint* src : n->get_sources())
             {
                 // FIND SRC BOX
-                node_box* src_box = nullptr;
+                const NodeBox* src_box = nullptr;
                 {
                     hal::node node;
 
                     if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
                         continue;
 
-                    int ibox = m_boxNode.value(node,-1);
-                    if (ibox >= 0)
-                        src_box = & (m_boxes[ibox]);
+                    const NodeBox* nb = mBoxNode.value(node);
+                    if (nb) src_box = nb;
                 }
                 assert(src_box);
 
-                const QPointF src_pin_position = src_box->item->get_output_scene_position(n->get_id(), QString::fromStdString(src->get_pin()));
+                const QPointF src_pin_position = src_box->item()->get_output_scene_position(n->get_id(), QString::fromStdString(src->get_pin()));
 
                 // FOR EVERY DST
                 for (Endpoint* dst : n->get_destinations())
                 {
                     // FIND DST BOX
-                    node_box* dst_box = nullptr;
+                    const NodeBox* dst_box = nullptr;
 
                     hal::node node;
 
                     if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
                         continue;
 
-                    int ibox = m_boxNode.value(node,-1);
-                    if (ibox >= 0)
-                        dst_box = & (m_boxes[ibox]);
+                    const NodeBox* nb = mBoxNode.value(node);
+                    if (nb) dst_box = nb;
 
                     assert(dst_box);
 
                     // don't attempt to loop back a module output into its input
                     // (if this triggers, we found the net because it also has
                     // destinations outside the module)
-                    if (src_box == dst_box && src_box->node.type == hal::node_type::module)
+                    if (src_box == dst_box && src_box->type() == hal::node_type::module)
                         continue;
 
-                    QPointF dst_pin_position = dst_box->item->get_input_scene_position(n->get_id(), QString::fromStdString(dst->get_pin()));
+                    QPointF dst_pin_position = dst_box->item()->get_input_scene_position(n->get_id(), QString::fromStdString(dst->get_pin()));
 
                     // ROAD BASED DISTANCE (x_distance - 1)
-                    const int x_distance = dst_box->x - src_box->x - 1;
-                    const int y_distance = dst_box->y - src_box->y;
+                    const int x_distance = dst_box->x() - src_box->x() - 1;
+                    const int y_distance = dst_box->y() - src_box->y();
 
-                    if (!y_distance && v_road_jump_possible(src_box->x + 1, dst_box->x, src_box->y))
+                    if (!y_distance && v_road_jump_possible(src_box->x() + 1, dst_box->x(), src_box->y()))
                     {
                         // SPECIAL CASE INDIRECT HORIZONTAL NEIGHBORS
-                        road* dst_v_road = get_v_road(dst_box->x, dst_box->y);
+                        road* dst_v_road = get_v_road(dst_box->x(), dst_box->y());
 
                         qreal x = scene_x_for_v_channel_lane(dst_v_road->x, dst_v_road->lanes);
 
@@ -1587,7 +1610,7 @@ namespace hal
                         continue;
                     }
 
-                    road* src_v_road = get_v_road(src_box->x + 1, src_box->y);
+                    road* src_v_road = get_v_road(src_box->x() + 1, src_box->y());
 
                     if (!(x_distance || y_distance))
                     {
@@ -2140,36 +2163,34 @@ namespace hal
         m_scene->setSceneRect(rect);
     }
 
-    GraphLayouter::node_box GraphLayouter::create_box(const hal::node& node, const int x, const int y) const
+    GraphLayouter::NodeBox::NodeBox(const node& n, int px, int py)
+        : mNode(n), mX(px), mY(py),
+          // GATE IO SPACING SHOULD BE CALCULATED HERE, FOR NOW IT IS JUST ASSUMED TO BE THE MINIMUM ACROSS THE BORD
+          mInputPadding(minimum_gate_io_padding),
+          mOutputPadding(minimum_gate_io_padding)
     {
-        node_box box;
-        box.node = node;
-
-        switch (node.type)
+        switch (type())
         {
             case hal::node_type::module: {
-                box.item = GraphicsFactory::create_graphics_module(g_netlist->get_module_by_id(node.id), 0);
+                mItem = GraphicsFactory::create_graphics_module(g_netlist->get_module_by_id(id()), 0);
                 break;
             }
             case hal::node_type::gate: {
-                box.item = GraphicsFactory::create_graphics_gate(g_netlist->get_gate_by_id(node.id), 0);
+                mItem = GraphicsFactory::create_graphics_gate(g_netlist->get_gate_by_id(id()), 0);
                 break;
             }
-        }
+        }        
+    }
 
-        box.x = x;
-        box.y = y;
-
-        // GATE IO SPACING SHOULD BE CALCULATED HERE, FOR NOW IT IS JUST ASSUMED TO BE THE MINIMUM ACROSS THE BORD
-        box.input_padding  = minimum_gate_io_padding;
-        box.output_padding = minimum_gate_io_padding;
-
-        return box;
+    void GraphLayouter::NodeBox::setItemPosition(qreal xpos, qreal ypos)
+    {
+        Q_ASSERT(mItem);
+        mItem->setPos(xpos,ypos);
     }
 
     bool GraphLayouter::box_exists(const int x, const int y) const
     {
-        return m_boxPosition.contains(QPoint(x,y));
+        return mBoxPosition.contains(QPoint(x,y));
     }
 
     bool GraphLayouter::h_road_jump_possible(const int x, const int y1, const int y2) const
@@ -2628,21 +2649,20 @@ namespace hal
 
     void GraphLayouter::EndpointList::addSource(const NetLayoutPoint &pnt)
     {
-        mHasEndpoint = static_cast<hasEndpoint_t>(mHasEndpoint | OnlySource);
+        mNetType = static_cast<netType_t>(mNetType | SingleSource);
+        int existingIndex = indexOf(pnt);
+        if (existingIndex >= 0 && !mPointIsInput.at(existingIndex)) return;
         append(pnt);
         mPointIsInput.append(false);
     }
 
     void GraphLayouter::EndpointList::addDestination(const NetLayoutPoint &pnt)
     {
-        mHasEndpoint = static_cast<hasEndpoint_t>(mHasEndpoint | OnlyDestination);
+        mNetType = static_cast<netType_t>(mNetType | SingleDestination);
+        int existingIndex = indexOf(pnt);
+        if (existingIndex >= 0 && mPointIsInput.at(existingIndex)) return;
         append(pnt);
         mPointIsInput.append(true);
-    }
-
-    void GraphLayouter::EndpointList::setConstantLevel()
-    {
-        mHasEndpoint = ConstantLevel;
     }
 
     void GraphLayouter::SeparatedNetWidth::requireInputSpace(float spc)
@@ -2663,5 +2683,23 @@ namespace hal
                 return true;
         }
         return false;
+    }
+
+    void GraphLayouter::NodeBoxForGate::insertNode(const NodeBox* nb)
+    {
+        Gate* g;
+        Module* m;
+        switch (nb->type()) {
+        case node_type::gate:
+            g = g_netlist->get_gate_by_id(nb->id());
+            if (g) insert(g,nb);
+            break;
+        case node_type::module:
+            m = g_netlist->get_module_by_id(nb->id());
+            if (!m) return;
+            for (Gate* ig : m->get_gates(nullptr, true))
+                if (ig) insert(ig,nb);
+            break;
+        }
     }
 }

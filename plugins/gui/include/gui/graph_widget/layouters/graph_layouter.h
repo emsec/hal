@@ -108,15 +108,16 @@ namespace hal
         class EndpointList : public QList<NetLayoutPoint>
         {
         public:
-            enum hasEndpoint_t { NoEndpoint = 0, OnlySource = 1, OnlyDestination = 2, SourceAndDestination = 3, ConstantLevel = 4 };
-            EndpointList() : mHasEndpoint(NoEndpoint) {;}
+            enum netType_t { NoEndpoint = 0, SingleSource = 1, SingleDestination = 2, SourceAndDestination = 3,
+                                 ConstantLevel = 4, MultipleSource = 5, MultipleDestination = 6};
+            EndpointList() : mNetType(NoEndpoint) {;}
             void addSource(const NetLayoutPoint& pnt);
             void addDestination(const NetLayoutPoint& pnt);
-            void setConstantLevel();
-            hasEndpoint_t hasEndpoint() const { return mHasEndpoint; }
+            void setNetType(netType_t tp) { mNetType = tp; }
+            netType_t netType() const { return mNetType; }
             bool isInput(int index) const {return mPointIsInput.at(index); }
         private:
-            hasEndpoint_t mHasEndpoint;
+            netType_t mNetType;
             QList<bool> mPointIsInput;
         };
 
@@ -136,16 +137,34 @@ namespace hal
             int level;
         };
 
-        struct node_box
+        class NodeBox
         {
-            hal::node node;
-            GraphicsNode* item;
+            node mNode;
+            GraphicsNode* mItem;
 
-            int x;
-            int y;
+            int mX;
+            int mY;
 
-            qreal input_padding;
-            qreal output_padding;
+            qreal mInputPadding;
+            qreal mOutputPadding;
+        public:
+            NodeBox(const node& n, int px, int py);
+            node getNode() const { return mNode; }
+            node_type type() const { return mNode.type; }
+            u32 id() const { return mNode.id; }
+            int x() const { return mX; }
+            int y() const { return mY; }
+            void setItem(GraphicsNode* item_) { mItem = item_; }
+            void setItemPosition(qreal xpos, qreal ypos);
+            GraphicsNode* item() const { return mItem; }
+            qreal inputPadding() const { return mInputPadding; }
+            qreal outputPadding() const { return mOutputPadding; }
+        };
+
+        class NodeBoxForGate : public QHash<Gate*,const NodeBox*>
+        {
+        public:
+            void insertNode(const NodeBox* nb);
         };
 
         struct road
@@ -286,9 +305,6 @@ namespace hal
         void update_scene_rect();
         static bool verifyModulePort(const Net *n, const node& modNode, bool isModInput);
 
-
-        node_box create_box(const hal::node& node, const int x, const int y) const;
-
         bool box_exists(const int x, const int y) const;
 
         bool h_road_jump_possible(const int x, const int y1, const int y2) const;
@@ -334,10 +350,11 @@ namespace hal
         void commit_used_paths(const used_paths& used);
         static bool isConstNet(const Net* n);
 
-        QVector<node_box>        m_boxes;
-        QHash<QPoint,int>        m_boxPosition;
-        QHash<node,int>          m_boxNode;
-        QHash<GraphicsNode*,int> m_boxGraphItem;
+        NodeBoxForGate           mNodeBoxForGate;
+        QVector<NodeBox*>        mBoxes;
+        QHash<QPoint,NodeBox*>   mBoxPosition;
+        QHash<node,NodeBox*>     mBoxNode;
+        QHash<GraphicsNode*,NodeBox*> mBoxGraphItem;
 
         QHash<QPoint,road*> m_h_roads;
         QHash<QPoint,road*> m_v_roads;
