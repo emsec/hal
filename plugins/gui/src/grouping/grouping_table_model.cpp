@@ -37,6 +37,21 @@ namespace hal {
     GroupingTableModel::GroupingTableModel(QObject* parent)
         : QAbstractTableModel(parent), mDisableEvents(false)
     {
+        //on creation load all already existing groupings from the netlist into the model
+        for(auto grp : g_netlist->get_groupings())
+        {
+            mDisableEvents = true;
+            Q_EMIT layoutAboutToBeChanged();
+            GroupingTableEntry gte(grp->get_id(), nextColor());
+            int n = mGroupings.size();
+            mGroupings.append(gte);
+            Q_EMIT layoutChanged();
+            mDisableEvents = false;
+
+            QModelIndex inx = index(n,0);
+            Q_EMIT newEntryAdded(inx);
+        }
+
         connect(g_netlist_relay, &NetlistRelay::grouping_created, this, &GroupingTableModel::createGroupingEvent);
         connect(g_netlist_relay, &NetlistRelay::grouping_removed, this, &GroupingTableModel::deleteGroupingEvent);
         connect(g_netlist_relay, &NetlistRelay::grouping_nameChanged, this, &GroupingTableModel::groupingNameChangedEvent);
