@@ -226,7 +226,6 @@ namespace hal
     {
         if (!scene())
             return;
-
         m_min_scale = std::min(viewport()->width() / scene()->width(), viewport()->height() / scene()->height());
     }
 

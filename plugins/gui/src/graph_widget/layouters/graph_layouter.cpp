@@ -181,23 +181,14 @@ namespace hal
 
     void GraphLayouter::alternateLayout()
     {
-   //     m_scene->delete_all_items();
-  //      clear_layout_data();
+        getWireHash();
 
-  //      create_boxes();
- //       getWireHash();
-  //      calculate_nets();
         find_max_box_dimensions();
         findMaxChannelLanes();
-  //      reset_roads_and_junctions();
-  //      calculate_max_channel_dimensions();
         calculateJunctionMinDistance();
         calculateGateOffsets();
-  //      calculate_gate_offsets();
         placeGates();
-//        place_gates();
         m_done = true;
-  //      draw_nets();
         drawNets();
         update_scene_rect();
 
@@ -217,8 +208,7 @@ namespace hal
         clear_layout_data();
 
         create_boxes();
-        getWireHash();
-        if (!mWireHash.isEmpty() && g_settings_manager->get("graph_view/layout_nets").toBool())
+        if (g_settings_manager->get("graph_view/layout_nets").toBool())
         {
             alternateLayout();
             qDebug() << "elapsed time (experimental new) layout [ms]" << timer.elapsed();
@@ -1069,9 +1059,7 @@ namespace hal
         {
             iy0 = ityLast.key();
             int iy1 = itNext.key();
-
-            Q_ASSERT(iy1 = iy0+1);
-
+            Q_ASSERT(iy1 == iy0+1);
             if (iy0 % 2 == 1)
             {
                 // netjunction -> endpoint
@@ -1299,14 +1287,16 @@ namespace hal
             }
                 break;
             case EndpointList::SourceAndDestination:
-                graphicsNet = new StandardGraphicsNet(n, lines);
+                if (lines.nLines() > 0)
+                    graphicsNet = new StandardGraphicsNet(n, lines);
                 break;
             default:
                 Q_ASSERT(0 > 1); // should never occur
                 break;
             }
 
-            m_scene->add_item(graphicsNet);
+            if (graphicsNet)
+                m_scene->add_item(graphicsNet);
 
         }
     }
@@ -2186,9 +2176,11 @@ namespace hal
             }
 
             lines.merge_lines();
-            StandardGraphicsNet* GraphicsNet = new StandardGraphicsNet(n, lines);
-            m_scene->add_item(GraphicsNet);
-
+            if (lines.nLines() > 0)
+            {
+                StandardGraphicsNet* GraphicsNet = new StandardGraphicsNet(n, lines);
+                m_scene->add_item(GraphicsNet);
+            }
             commit_used_paths(used);
         }
     }
