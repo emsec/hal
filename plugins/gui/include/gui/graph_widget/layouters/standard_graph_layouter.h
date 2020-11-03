@@ -40,6 +40,7 @@ namespace hal
 
     private:
         void add_compact(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
+        void add_waitToBeSeated(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
         void add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const hal::node& preferred_origin);
     };
 }
