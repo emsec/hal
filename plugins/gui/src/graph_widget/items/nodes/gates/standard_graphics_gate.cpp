@@ -207,11 +207,7 @@ QPointF StandardGraphicsGate::get_input_scene_position(const u32 net_id, const Q
     int index = m_input_pins.indexOf(pin_type);
     assert(index != -1);
 
-    qreal y = s_color_bar_height + s_pin_upper_vertical_spacing;
-    y += index * (s_pin_font_height + s_pin_inner_vertical_spacing);
-    y += s_pin_font_height / 2;
-
-    return mapToScene(QPointF(0, y));
+    return endpointPositionByIndex(index,true);
 }
 
 QPointF StandardGraphicsGate::get_output_scene_position(const u32 net_id, const QString& pin_type) const
@@ -221,11 +217,23 @@ QPointF StandardGraphicsGate::get_output_scene_position(const u32 net_id, const 
     int index = m_output_pins.indexOf(pin_type);
     assert(index != -1);
 
-    qreal y = s_color_bar_height + s_pin_upper_vertical_spacing;
-    y += index * (s_pin_font_height + s_pin_inner_vertical_spacing);
-    y += s_pin_font_height / 2;
+    return endpointPositionByIndex(index,false);
+}
 
-    return mapToScene(QPointF(m_width, y));
+float StandardGraphicsGate::yEndpointDistance() const
+{
+    return (s_pin_font_height + s_pin_inner_vertical_spacing);
+}
+
+float StandardGraphicsGate::yTopPinDistance() const
+{
+    return (s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_height / 2);
+}
+
+QPointF StandardGraphicsGate::endpointPositionByIndex(int index, bool isInput) const
+{
+    qreal y = yTopPinDistance() + index * yEndpointDistance();
+    return mapToScene(QPointF(isInput ? 0 : m_width, y));
 }
 
 void StandardGraphicsGate::format(const bool& adjust_size_to_grid)

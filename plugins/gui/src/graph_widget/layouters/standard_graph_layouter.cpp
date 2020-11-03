@@ -1,6 +1,9 @@
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 
 #include "gui/implementations/qpoint_extension.h"
+#include "gui/graph_widget/layouters/position_generator.h"
+#include "gui/graph_widget/layouters/wait_to_be_seated.h"
+#include "gui/gui_globals.h"
 
 namespace hal
 {
@@ -37,124 +40,62 @@ namespace hal
         }
     }
 
+    void StandardGraphLayouter::add_waitToBeSeated(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
+    {
+        Q_UNUSED(nets)
+
+        WaitToBeSeatedList wtbsl;
+        for (QSet<u32>::const_iterator it = modules.constBegin();
+             it != modules.constEnd(); ++it)
+            wtbsl.add(new WaitToBeSeatedEntry(node_type::module, *it));
+
+        for (QSet<u32>::const_iterator it = gates.constBegin();
+             it != gates.constEnd(); ++it)
+            wtbsl.add(new WaitToBeSeatedEntry(node_type::gate, *it));
+
+        wtbsl.setLinks();
+
+        PositionGenerator pg;
+
+        while(!wtbsl.placementDone())
+        {
+            QPoint p(pg.position());
+            while (position_to_node_map().contains(p))
+                p = pg.next();
+            const WaitToBeSeatedEntry* wtbse = wtbsl.nextPlacement(p);
+            if (! wtbse) return;
+            set_node_position(wtbse->getNode(), p);
+        }
+    }
+
     void StandardGraphLayouter::add_compact(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
     {
         Q_UNUSED(nets)
 
-        int x = 0;
-        int y = 0;
-
-        int x_pos = 0;
-        int y_pos = 0;
-
-        QSet<u32>::const_iterator i = modules.constBegin();
-
-        module_id_loop:
-
-        if (i != modules.constEnd())
+        if (g_settings_manager->get("graph_view/layout_boxes").toBool())
         {
-            u32 id = *i;
-            ++i;
-
-            module_position_loop:
-
-            while (y_pos != y)
-            {
-                QPoint p(x, y_pos);
-                ++y_pos;
-
-                if (!position_to_node_map().contains(p))
-                {
-                    hal::node n{hal::node_type::module, id};
-                    set_node_position(n, p);
-                    goto module_id_loop;
-                }
-            }
-
-            while (x_pos != x)
-            {
-                QPoint p(x_pos, y);
-                ++x_pos;
-
-                if (!position_to_node_map().contains(p))
-                {
-                    hal::node n{hal::node_type::module, id};
-                    set_node_position(n, p);
-                    goto module_id_loop;
-                }
-            }
-
-            QPoint p(x, y);
-
-            ++x;
-            ++y;
-
-            x_pos = 0;
-            y_pos = 0;
-
-            if (!position_to_node_map().contains(p))
-            {
-                hal::node n{hal::node_type::module, id};
-                set_node_position(n, p);
-                goto module_id_loop;
-            }
-            else
-                goto module_position_loop;
+            add_waitToBeSeated(modules, gates, nets);
+            return;
         }
 
-        i = gates.constBegin();
+        QList<node> nodeList;
 
-        gate_id_loop:
+        for (QSet<u32>::const_iterator it = modules.constBegin();
+             it != modules.constEnd(); ++it)
+            nodeList.append(node{node_type::module,*it});
 
-        if (i != gates.constEnd())
+        for (QSet<u32>::const_iterator it = gates.constBegin();
+             it != gates.constEnd(); ++it)
+            nodeList.append(node{node_type::gate,*it});
+
+        PositionGenerator pg;
+
+        for (const node& n : nodeList)
         {
-            u32 id = *i;
-            ++i;
-
-            gate_position_loop:
-
-            while (y_pos != y)
-            {
-                QPoint p(x, y_pos);
-                ++y_pos;
-
-                if (!position_to_node_map().contains(p))
-                {
-                    hal::node n{hal::node_type::gate, id};
-                    set_node_position(n, p);
-                    goto gate_id_loop;
-                }
-            }
-
-            while (x_pos != x)
-            {
-                QPoint p(x_pos, y);
-                ++x_pos;
-
-                if (!position_to_node_map().contains(p))
-                {
-                    hal::node n{hal::node_type::gate, id};
-                    set_node_position(n, p);
-                    goto gate_id_loop;
-                }
-            }
-
-            QPoint p(x, y);
-
-            ++x;
-            ++y;
-
-            x_pos = 0;
-            y_pos = 0;
-
-            if (!position_to_node_map().contains(p))
-            {
-                hal::node n{hal::node_type::gate, id};
-                set_node_position(n, p);
-                goto gate_id_loop;
-            }
-            else
-                goto gate_position_loop;
+            QPoint p(pg.position());
+            while (position_to_node_map().contains(p))
+                p = pg.next();
+            set_node_position(n, p);
         }
     }
 
