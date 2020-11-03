@@ -423,7 +423,7 @@ namespace hal
             {
                 // multi-driven global output or global output back coupled to net gate
                 int ypos = mGlobalOutputHash.size();
-                NetLayoutPoint dstPnt(mNodeBoundingBox.right(),2*ypos);
+                NetLayoutPoint dstPnt(mNodeBoundingBox.right()+1,2*ypos);
                 dstPoints.insert(dstPnt);
                 mWireEndpoint[id].addDestination(dstPnt);
                 mGlobalOutputHash[id] = ypos;
@@ -450,7 +450,7 @@ namespace hal
                         const NodeBox* nb = mBoxPosition.value(QPoint(pnt.x()-1,pnt.y()/2));
                         Q_ASSERT(nb);
                         mSeparatedWidth[pnt].requireOutputSpace(
-                                    nb->item()->width() + net_item->output_width() + 3*lane_spacing);
+                                    nb->item()->width() + net_item->output_width() + lane_spacing);
                     }
                     delete net_item;
                 }
@@ -525,7 +525,7 @@ namespace hal
         {
             QList<u32> netIds;
             netIds.append(itGlOut.key());
-            NetLayoutPoint pnt(mNodeBoundingBox.right(), 2*itGlOut.value());
+            NetLayoutPoint pnt(mNodeBoundingBox.right()+1, 2*itGlOut.value());
             mJunctionEntries[pnt].setEntries(NetLayoutDirection::Right, netIds);
             if (!mEndpointHash.contains(pnt))
                 mEndpointHash[pnt].setInputPins(netIds,0,0);
@@ -1055,10 +1055,7 @@ namespace hal
                 if (xn != m_max_node_width_for_x.end())
                     xsum += xn.value();
             }
-            itNext->setOffsetX(itxLast.value(), xsum + 4*h_road_padding, xOutputPadding[ix1], xInputPadding[ix1]);
-            float lastX  = itxLast.value().lanePosition(0);
-            float deltaX = itNext.value().lanePosition(0) - lastX;
-
+            itNext->setOffsetX(itxLast.value(), xsum + 2*h_road_padding, xOutputPadding[ix1], xInputPadding[ix1]);
             m_x_values.append(itNext.value().xBoxOffset());
             itxLast = itNext;
         }
@@ -1293,7 +1290,7 @@ namespace hal
                 graphicsNet = san;
                 int yGridPos = mGlobalOutputHash.value(id,-1);
                 Q_ASSERT(yGridPos >= 0);
-                QPoint pnt(mNodeBoundingBox.right(),yGridPos*2);
+                QPoint pnt(mNodeBoundingBox.right()+1,yGridPos*2);
                 const EndpointCoordinate& epc = mEndpointHash.value(pnt);
                 const NetLayoutJunction* nlj = mJunctionHash.value(pnt);
                 Q_ASSERT(nlj);
@@ -2593,9 +2590,9 @@ namespace hal
 
     void GraphLayouter::SceneCoordinate::setOffsetX(const SceneCoordinate& previous, float maximumBlock, float sepOut, float sepInp)
     {
-        float delta = (previous.maxLane - minLane - 1) * lane_spacing  + maximumBlock;
+        float delta =  maximumBlock;
         if (delta < sepOut) delta = sepOut;
-        mOffset = previous.mOffset + previous.mPadding + delta;
+        mOffset = previous.xBoxOffset() + (1 - minLane) * lane_spacing  + delta;
         float xDefaultBoxPadding = maxLane * lane_spacing;
         if (xDefaultBoxPadding < sepInp)
             mPadding = sepInp - xDefaultBoxPadding;
