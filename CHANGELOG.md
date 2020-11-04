@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 
+* new (deterministic) layouter
+  * tries to minimize wire length by placing connected gates closer to each other
+  * combines multiple in-/outputs into one port if driven by the same net
+  * cleaner overall appearance of the graph
+* added Python tool to convert SkyWater gate libraries into a Liberty file that can be read by HAL
+* fix bug with selection within grouping widget
+* fix return code of GUI
+* fixed problems when dragging around the docking bars of widgets
+
+
 ## [3.0.2] - 2020-10-29 16:00:00+02:00 (urgency: medium)
 * Focal Test Release 2
 
