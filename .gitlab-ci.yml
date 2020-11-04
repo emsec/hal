@@ -194,7 +194,7 @@ test:package:ubuntu:
   script:
     - apt update
     - dpkg --force-all -i build/Debian/*/hal-reverse*.deb
-    export DEBIAN_FRONTEND=noninteractive
+    - export DEBIAN_FRONTEND=noninteractive
     - apt-get install -f -y -q
     - hal --version
     - apt-get purge -y hal-reverse
