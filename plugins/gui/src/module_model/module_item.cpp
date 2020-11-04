@@ -46,7 +46,11 @@ namespace hal
         {
             auto it = moduleMap.find(subm->get_id());
             if (it != moduleMap.constEnd())
-                append_child(it.value());
+            {
+                ModuleItem* childItem = it.value();
+                append_child(childItem);
+                childItem->set_parent(this);
+            }
         }
     }
 
