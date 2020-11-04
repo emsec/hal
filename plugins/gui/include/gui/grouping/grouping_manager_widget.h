@@ -99,7 +99,7 @@ namespace hal
 
     public Q_SLOTS:
         void handleLastEntryDeleted();
-        void handleNewEntryAdded(const QModelIndex& index);
+        void handleNewEntryAdded(const QModelIndex& modelIndex);
         void handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected);
         void handleCurrentChanged(const QModelIndex &current = QModelIndex(), const QModelIndex &previous = QModelIndex());
 
