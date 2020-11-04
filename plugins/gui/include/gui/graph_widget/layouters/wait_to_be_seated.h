@@ -2,6 +2,7 @@
 
 #include <QList>
 #include <QMap>
+#include <QSet>
 #include <QPoint>
 #include "gui/gui_def.h"
 

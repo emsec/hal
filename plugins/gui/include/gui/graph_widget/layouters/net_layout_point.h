@@ -4,6 +4,8 @@
 #include <QPointF>
 
 #include <QList>
+#include <QMap>
+#include <QHash>
 
 class QGraphicsEllipseItem;
 class QGraphicsLineItem;
