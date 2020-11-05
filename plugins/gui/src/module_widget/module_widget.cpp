@@ -22,7 +22,10 @@
 
 namespace hal
 {
-    ModuleWidget::ModuleWidget(QWidget* parent) : ContentWidget("Modules", parent), m_tree_view(new ModuleTreeView(this)), m_ModuleProxyModel(new ModuleProxyModel(this))
+    ModuleWidget::ModuleWidget(QWidget* parent)
+        : ContentWidget("Modules", parent),
+          m_tree_view(new ModuleTreeView(this)),
+          m_ModuleProxyModel(new ModuleProxyModel(this))
     {
         connect(m_tree_view, &QTreeView::customContextMenuRequested, this, &ModuleWidget::handle_tree_view_context_menu_requested);
 
