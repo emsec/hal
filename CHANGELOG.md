@@ -4,14 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1] - 
+* fix bug that preventes module widget from showing the full tree in some instances
+* fix missing cleaup of groupings when deleting gates, nets, or modules
+* display Python Editor Widget by default, but hide its navigation bar
+* do not display Log Widget by default anymore
+
 ## [3.1.0] - 2020-11-04 14:00:00+02:00 (urgency: medium)
 * new (deterministic) layouter
   * tries to minimize wire length by placing connected gates closer to each other
   * combines multiple in-/outputs into one port if driven by the same net
   * cleaner overall appearance of the graph
 * added Python tool to convert SkyWater gate libraries into a Liberty file that can be read by HAL
-* display Python Editor Widget by default, but hide its navigation bar
-* do not display Log Widget by default anymore
 * fix bug with selection within grouping widget
 * fix return code of GUI
 * fixed problems when dragging around the docking bars of widgets
