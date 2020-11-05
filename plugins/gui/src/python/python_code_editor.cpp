@@ -19,8 +19,6 @@ namespace hal
         connect(redo_shortcut, &QShortcut::activated, this, &PythonCodeEditor::handle_redo_requested);
 
         m_base_file_modified = false;
-
-        toggle_minimap();
     }
 
     void PythonCodeEditor::keyPressEvent(QKeyEvent* e)
