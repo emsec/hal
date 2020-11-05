@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * combines multiple in-/outputs into one port if driven by the same net
   * cleaner overall appearance of the graph
 * added Python tool to convert SkyWater gate libraries into a Liberty file that can be read by HAL
+* display Python Editor Widget by default, but hide its navigation bar
+* do not display Log Widget by default anymore
 * fix bug with selection within grouping widget
 * fix return code of GUI
 * fixed problems when dragging around the docking bars of widgets
