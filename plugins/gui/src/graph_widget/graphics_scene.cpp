@@ -154,7 +154,7 @@ namespace hal
 
         switch (item->item_type())
         {
-        case hal::item_type::gate:
+        case item_type::Gate:
         {
             GraphicsGate* g = static_cast<GraphicsGate*>(item);
             int i = 0;
@@ -168,7 +168,7 @@ namespace hal
             m_gate_items.insert(i, gate_data{g->id(), g});
             return;
         }
-        case hal::item_type::net:
+        case item_type::Net:
         {
             GraphicsNet* n = static_cast<GraphicsNet*>(item);
             int i = 0;
@@ -182,7 +182,7 @@ namespace hal
             m_net_items.insert(i, net_data{n->id(), n});
             return;
         }
-        case hal::item_type::module:
+        case item_type::Module:
         {
             GraphicsModule* m = static_cast<GraphicsModule*>(item);
             int i = 0;
@@ -210,7 +210,7 @@ namespace hal
 
         switch (item->item_type())
         {
-        case hal::item_type::gate:
+        case item_type::Gate:
         {
             GraphicsGate* g = static_cast<GraphicsGate*>(item);
             u32 id = g->id();
@@ -230,7 +230,7 @@ namespace hal
 
             return;
         }
-        case hal::item_type::net:
+        case item_type::Net:
         {
             GraphicsNet* n = static_cast<GraphicsNet*>(item);
             u32 id = n->id();
@@ -250,7 +250,7 @@ namespace hal
 
             return;
         }
-        case hal::item_type::module:
+        case item_type::Module:
         {
             GraphicsModule* m = static_cast<GraphicsModule*>(item);
             u32 id = m->id();
@@ -406,19 +406,19 @@ namespace hal
         {
             switch (static_cast<const GraphicsItem*>(item)->item_type())
             {
-            case hal::item_type::gate:
+            case item_type::Gate:
             {
                 g_selection_relay->m_selected_gates.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++gates;
                 break;
             }
-            case hal::item_type::net:
+            case item_type::Net:
             {
                 g_selection_relay->m_selected_nets.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++nets;
                 break;
             }
-            case hal::item_type::module:
+            case item_type::Module:
             {
                 g_selection_relay->m_selected_modules.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++modules;

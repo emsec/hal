@@ -21,20 +21,20 @@ namespace hal
         return "<p>PLACEHOLDER</p>";
     }
 
-    void StandardGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
+    void StandardGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, PlacementHint placement)
     {
-        switch(placement.mode)
+        switch(placement.mode())
         {
-        case hal::placement_mode::standard: {
+        case PlacementHint::Standard: {
             add_compact(modules, gates, nets);
             break;
         }
-        case hal::placement_mode::prefer_left: {
-            add_vertical(modules, gates, nets, true, placement.preferred_origin);
+        case PlacementHint::PreferLeft: {
+            add_vertical(modules, gates, nets, true, placement.preferredOrigin());
             break;
         }
-        case hal::placement_mode::prefer_right: {
-            add_vertical(modules, gates, nets, false, placement.preferred_origin);
+        case PlacementHint::PreferRight: {
+            add_vertical(modules, gates, nets, false, placement.preferredOrigin());
             break;
         }
         }
@@ -47,11 +47,11 @@ namespace hal
         WaitToBeSeatedList wtbsl;
         for (QSet<u32>::const_iterator it = modules.constBegin();
              it != modules.constEnd(); ++it)
-            wtbsl.add(new WaitToBeSeatedEntry(node_type::module, *it));
+            wtbsl.add(new WaitToBeSeatedEntry(Node::Module, *it));
 
         for (QSet<u32>::const_iterator it = gates.constBegin();
              it != gates.constEnd(); ++it)
-            wtbsl.add(new WaitToBeSeatedEntry(node_type::gate, *it));
+            wtbsl.add(new WaitToBeSeatedEntry(Node::Gate, *it));
 
         wtbsl.setLinks();
 
@@ -78,19 +78,19 @@ namespace hal
             return;
         }
 
-        QList<node> nodeList;
+        QList<Node> nodeList;
 
         for (QSet<u32>::const_iterator it = modules.constBegin();
              it != modules.constEnd(); ++it)
-            nodeList.append(node{node_type::module,*it});
+            nodeList.append(Node(*it,Node::Module));
 
         for (QSet<u32>::const_iterator it = gates.constBegin();
              it != gates.constEnd(); ++it)
-            nodeList.append(node{node_type::gate,*it});
+            nodeList.append(Node(*it,Node::Gate));
 
         PositionGenerator pg;
 
-        for (const node& n : nodeList)
+        for (const Node& n : nodeList)
         {
             QPoint p(pg.position());
             while (position_to_node_map().contains(p))
@@ -99,16 +99,16 @@ namespace hal
         }
     }
 
-    void StandardGraphLayouter::add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const hal::node& preferred_origin) {
+    void StandardGraphLayouter::add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const Node &preferredOrigin) {
         Q_UNUSED(nets);
 
         int x;
         int y;
 
-        if (preferred_origin.id != 0 && node_to_position_map().contains(preferred_origin))
+        if (!preferredOrigin.isNull() && node_to_position_map().contains(preferredOrigin))
         {
             // place all new nodes right respectively left of the origin node
-            QPoint originPoint = node_to_position_map().value(preferred_origin);
+            QPoint originPoint = node_to_position_map().value(preferredOrigin);
             x = originPoint.x() + (left ? -1 : 1);
             // vertically center the column of new nodes relative to the origin node
             int totalNodes = modules.size() + gates.size();
@@ -123,9 +123,9 @@ namespace hal
         }
 
 
-        for (const u32 m : modules)
+        for (const u32 mid : modules)
         {
-            hal::node n{hal::node_type::module, m};
+            Node n(mid, Node::Module);
             QPoint p;
             do
             {
@@ -135,9 +135,9 @@ namespace hal
             while(position_to_node_map().contains(p));
             set_node_position(n, p);
         }
-        for (const u32 g : gates)
+        for (const u32 gid : gates)
         {
-            hal::node n{hal::node_type::gate, g};
+            Node n(gid, Node::Gate);
             QPoint p;
             do
             {
@@ -155,9 +155,9 @@ namespace hal
         Q_UNUSED(nets)
 
         for (u32 id : modules)
-            remove_node_from_maps({hal::node_type::module, id});
+            remove_node_from_maps(Node(id,Node::Module));
 
         for (u32 id : gates)
-            remove_node_from_maps({hal::node_type::gate, id});
+            remove_node_from_maps(Node(id,Node::Gate));
     }
 }

@@ -23,7 +23,7 @@ namespace hal
         return "<p>PLACEHOLDER</p>";
     }
 
-    void PhysicalGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
+    void PhysicalGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, PlacementHint placement)
     {
         Q_UNUSED(modules)
         Q_UNUSED(gates)
@@ -77,9 +77,9 @@ namespace hal
         Q_UNUSED(nets)
 
         for (u32 id : modules)
-            remove_node_from_maps({hal::node_type::module, id});
+            remove_node_from_maps(Node(id,Node::Module));
 
         for (u32 id : gates)
-            remove_node_from_maps({hal::node_type::gate, id});
+            remove_node_from_maps(Node(id,Node::Gate));
     }
 }

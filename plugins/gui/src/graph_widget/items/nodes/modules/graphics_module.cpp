@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(hal::item_type::module, m->get_id(), QString::fromStdString(m->get_name()))
+    GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(item_type::Module, m->get_id(), QString::fromStdString(m->get_name()))
     {
         mNodeText[1]                              = QString::fromStdString(m->get_type());
         mNodeText[mNodeText[1].isEmpty() ? 1 : 2] = "Module";

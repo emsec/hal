@@ -110,7 +110,7 @@ namespace hal
         //jump logic
         void handle_output_net_item_clicked(const QTableWidgetItem* item);
         void handle_input_net_item_clicked(const QTableWidgetItem* item);
-        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+        void handle_navigation_jump_requested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates);
 
     };
 }    // namespace hal

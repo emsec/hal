@@ -15,7 +15,7 @@ namespace hal
    {
        friend class WaitToBeSeatedList;
        friend class WaitToBeSeatedWaiting;
-       node mNode;
+       Node mNode;
        QList<QPoint> mPredecessorPositions;
        QSet<WaitToBeSeatedEntry*> mPredecessorSet;
        QSet<WaitToBeSeatedEntry*> mSuccessorSet;
@@ -23,10 +23,10 @@ namespace hal
        void setPredecessorIds(const QMap<u32,WaitToBeSeatedEntry*>& gateMap);
 
    public:
-       WaitToBeSeatedEntry(node_type t=node_type::module, u32 id=0);
+       WaitToBeSeatedEntry(Node::type_t t=Node::Module, u32 id=0);
 
-       node getNode() const { return mNode; }
-       u32 getId() const { return mNode.id; }
+       Node getNode() const { return mNode; }
+       u32 getId() const { return mNode.id(); }
        QString tagName() const;
        bool isModule() const;
 

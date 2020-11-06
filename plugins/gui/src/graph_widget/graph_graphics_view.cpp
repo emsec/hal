@@ -172,7 +172,7 @@ namespace hal
 
     void GraphGraphicsView::handle_rename_action()
     {
-        if (m_item->item_type() == hal::item_type::gate)
+        if (m_item->item_type() == item_type::Gate)
         {
             Gate* g            = g_netlist->get_gate_by_id(m_item->id());
             const QString name = QString::fromStdString(g->get_name());
@@ -183,7 +183,7 @@ namespace hal
                 g->set_name(new_name.toStdString());
             }
         }
-        else if (m_item->item_type() == hal::item_type::module)
+        else if (m_item->item_type() == item_type::Module)
         {
             Module* m          = g_netlist->get_module_by_id(m_item->id());
             const QString name = QString::fromStdString(m->get_name());
@@ -194,7 +194,7 @@ namespace hal
                 m->set_name(new_name.toStdString());
             }
         }
-        else if (m_item->item_type() == hal::item_type::net)
+        else if (m_item->item_type() == item_type::Net)
         {
             Net* n             = g_netlist->get_net_by_id(m_item->id());
             const QString name = QString::fromStdString(n->get_name());
@@ -209,7 +209,7 @@ namespace hal
 
     void GraphGraphicsView::handle_change_type_action()
     {
-        if (m_item->item_type() == hal::item_type::module)
+        if (m_item->item_type() == item_type::Module)
         {
             Module* m          = g_netlist->get_module_by_id(m_item->id());
             const QString type = QString::fromStdString(m->get_type());
@@ -260,7 +260,7 @@ namespace hal
         if (!item)
             return;
 
-        if (item->item_type() == hal::item_type::module)
+        if (item->item_type() == item_type::Module)
             Q_EMIT module_double_clicked(item->id());
     }
 
@@ -419,7 +419,7 @@ namespace hal
             auto context            = m_graph_widget->get_context();
             GraphLayouter* layouter = context->debug_get_layouter();
             assert(layouter->done());    // ensure grid stable
-            QMap<QPoint, hal::node>::const_iterator node_iter = layouter->position_to_node_map().find(snap[0]);
+            QMap<QPoint, Node>::const_iterator node_iter = layouter->position_to_node_map().find(snap[0]);
 
             NodeDragShadow::drag_cue cue = NodeDragShadow::drag_cue::rejected;
             // disallow dropping an item on itself
@@ -478,16 +478,16 @@ namespace hal
                 {
                     // swap mode; swap gates
 
-                    hal::node nodeFrom = layouter->position_to_node_map().value(sourceLayouterPos);
-                    hal::node nodeTo   = layouter->position_to_node_map().value(targetLayouterPos);
-                    assert(nodeFrom != hal::node());    // assert that value was found
-                    assert(nodeTo != hal::node());
+                    Node nodeFrom = layouter->position_to_node_map().value(sourceLayouterPos);
+                    Node nodeTo   = layouter->position_to_node_map().value(targetLayouterPos);
+                    assert(!nodeFrom.isNull());    // assert that value was found
+                    assert(!nodeTo.isNull());
                     layouter->swap_node_positions(nodeFrom, nodeTo);
                 }
                 else
                 {
                     // move mode; move gate to the selected location
-                    QMap<QPoint,hal::node> nodeMap = layouter->position_to_node_map();
+                    QMap<QPoint,Node> nodeMap = layouter->position_to_node_map();
                     auto nodeToMoveIt = nodeMap.find(sourceLayouterPos);
                     Q_ASSERT(nodeToMoveIt != nodeMap.end());
                     layouter->set_node_position(nodeToMoveIt.value(), targetLayouterPos);
@@ -566,9 +566,9 @@ namespace hal
         if (item)
         {
             m_item   = static_cast<GraphicsItem*>(item);
-            isGate   = m_item->item_type() == hal::item_type::gate;
-            isModule = m_item->item_type() == hal::item_type::module;
-            isNet    = m_item->item_type() == hal::item_type::net;
+            isGate   = m_item->item_type() == item_type::Gate;
+            isModule = m_item->item_type() == item_type::Module;
+            isNet    = m_item->item_type() == item_type::Net;
 
             if (isGate)
             {
@@ -775,8 +775,8 @@ namespace hal
 
     bool GraphGraphicsView::item_draggable(GraphicsItem* item)
     {
-        hal::item_type type = item->item_type();
-        return type == hal::item_type::gate || type == hal::item_type::module;
+        item_type type = item->item_type();
+        return type == item_type::Gate || type == item_type::Module;
     }
 
     void GraphGraphicsView::gentle_zoom(const qreal factor)
@@ -984,7 +984,7 @@ namespace hal
     void GraphGraphicsView::handleGroupingUnassign()
     {
         Grouping* assignedGrouping = nullptr;
-        if (m_item->item_type() == item_type::gate)
+        if (m_item->item_type() == item_type::Gate)
         {
             Gate* g = g_netlist->get_gate_by_id(m_item->id());
             if (g)
@@ -993,7 +993,7 @@ namespace hal
                 return;
             assignedGrouping->remove_gate(g);
         }
-        if (m_item->item_type() == item_type::module)
+        if (m_item->item_type() == item_type::Module)
         {
             Module* m = g_netlist->get_module_by_id(m_item->id());
             if (m)
@@ -1012,13 +1012,13 @@ namespace hal
             return;
         }
 
-        if (m_item->item_type() == item_type::gate)
+        if (m_item->item_type() == item_type::Gate)
         {
             Gate* g = g_netlist->get_gate_by_id(m_item->id());
             if (g)
                 grp->assign_gate(g);
         }
-        if (m_item->item_type() == item_type::module)
+        if (m_item->item_type() == item_type::Module)
         {
             Module* m = g_netlist->get_module_by_id(m_item->id());
             if (m)

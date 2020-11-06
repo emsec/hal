@@ -133,13 +133,13 @@ namespace hal
 
         struct node_level
         {
-            hal::node node;
+            Node node;
             int level;
         };
 
         class NodeBox
         {
-            node mNode;
+            Node mNode;
             GraphicsNode* mItem;
 
             int mX;
@@ -148,10 +148,10 @@ namespace hal
             qreal mInputPadding;
             qreal mOutputPadding;
         public:
-            NodeBox(const node& n, int px, int py);
-            node getNode() const { return mNode; }
-            node_type type() const { return mNode.type; }
-            u32 id() const { return mNode.id; }
+            NodeBox(const Node& n, int px, int py);
+            Node getNode() const { return mNode; }
+            Node::type_t type() const { return mNode.type(); }
+            u32 id() const { return mNode.id(); }
             int x() const { return mX; }
             int y() const { return mY; }
             void setItem(GraphicsNode* item_) { mItem = item_; }
@@ -242,7 +242,7 @@ namespace hal
         virtual QString name() const        = 0;
         virtual QString description() const = 0;
 
-        virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement = hal::placement_hint{hal::placement_mode::standard, hal::node()})    = 0;
+        virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, PlacementHint placement = PlacementHint())    = 0;
         virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
 
         void layout();
@@ -250,15 +250,15 @@ namespace hal
 
         GraphicsScene* scene() const;
 
-        const QMap<hal::node, QPoint> node_to_position_map() const;
-        const QMap<QPoint, hal::node> position_to_node_map() const;
+        const QMap<Node, QPoint> node_to_position_map() const;
+        const QMap<QPoint, Node> position_to_node_map() const;
         QPoint gridPointByItem(GraphicsNode* item) const;
 
         void dumpNodePositions(const QPoint &search) const;
 
-        void set_node_position(const hal::node& n, const QPoint& p);
-        void swap_node_positions(const hal::node& n1, const hal::node& n2);
-        void remove_node_from_maps(const hal::node& n);
+        void set_node_position(const Node& n, const QPoint& p);
+        void swap_node_positions(const Node& n1, const Node& n2);
+        void remove_node_from_maps(const Node& n);
 
         int min_x_index() const;
         int min_y_index() const;
@@ -303,7 +303,7 @@ namespace hal
         void drawNetsEndpoint(StandardGraphicsNet::lines &lines, u32 id);
         void drawNetsIsolated(u32 id, Net *n, const EndpointList& epl);
         void update_scene_rect();
-        static bool verifyModulePort(const Net *n, const node& modNode, bool isModInput);
+        static bool verifyModulePort(const Net *n, const Node& modNode, bool isModInput);
 
         bool box_exists(const int x, const int y) const;
 
@@ -353,7 +353,7 @@ namespace hal
         NodeBoxForGate           mNodeBoxForGate;
         QVector<NodeBox*>        mBoxes;
         QHash<QPoint,NodeBox*>   mBoxPosition;
-        QHash<node,NodeBox*>     mBoxNode;
+        QHash<Node,NodeBox*>     mBoxNode;
         QHash<GraphicsNode*,NodeBox*> mBoxGraphItem;
 
         QHash<QPoint,road*> m_h_roads;
@@ -386,8 +386,8 @@ namespace hal
         QMap<int, qreal> m_max_left_io_padding_for_channel_x;
         QMap<int, qreal> m_max_right_io_padding_for_channel_x;
 
-        QMap<hal::node, QPoint> m_node_to_position_map;
-        QMap<QPoint, hal::node> m_position_to_node_map;
+        QMap<Node, QPoint> m_node_to_position_map;
+        QMap<QPoint, Node> m_position_to_node_map;
 
         int m_min_x_index;
         int m_min_y_index;
@@ -419,6 +419,6 @@ namespace hal
         QHash<u32,int> mGlobalOutputHash;
     };
 
-    uint qHash(const hal::node& n);
+    uint qHash(const Node& n);
 }
 

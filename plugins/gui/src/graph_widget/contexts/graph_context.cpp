@@ -78,7 +78,7 @@ namespace hal
         }
     }
 
-    void GraphContext::add(const QSet<u32>& modules, const QSet<u32>& gates, hal::placement_hint placement)
+    void GraphContext::add(const QSet<u32>& modules, const QSet<u32>& gates, PlacementHint placement)
     {
         QSet<u32> new_modules = modules - m_modules;
         QSet<u32> new_gates   = gates - m_gates;
@@ -321,35 +321,26 @@ namespace hal
         update();
     }
 
-    bool GraphContext::node_for_gate(hal::node& node, const u32 id) const
+    Node GraphContext::node_for_gate(const u32 id) const
     {
         if (m_gates.contains(id))
-        {
-            node.id   = id;
-            node.type = hal::node_type::gate;
-            return true;
-        }
+            return Node(id, Node::Gate);
 
         Gate* g = g_netlist->get_gate_by_id(id);
 
         if (!g)
-            return false;
+            return Node();
 
         Module* m = g->get_module();
 
         while (m)
         {
             if (m_modules.contains(m->get_id()))
-            {
-                node.id   = m->get_id();
-                node.type = hal::node_type::module;
-                return true;
-            }
-
+                return Node(m->get_id(), Node::Module);
             m = m->get_parent_module();
         }
 
-        return false;
+        return Node();
     }
 
     GraphLayouter* GraphContext::debug_get_layouter() const
@@ -450,7 +441,7 @@ namespace hal
         }
 
         // number of placement hints is small, not performance critical
-        QVector<hal::placement_hint> queued_hints;
+        QVector<PlacementHint> queued_hints;
         queued_hints.append(m_module_hints.uniqueKeys().toVector());
         // we can't use QSet for enum class
         for (auto h : m_gate_hints.uniqueKeys())
@@ -461,7 +452,7 @@ namespace hal
             }
         }
 
-        for (hal::placement_hint h : queued_hints)
+        for (PlacementHint h : queued_hints)
         {
             // call the placer once for each placement hint
 

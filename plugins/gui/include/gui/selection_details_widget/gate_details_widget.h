@@ -125,7 +125,7 @@ namespace hal
         QVBoxLayout* m_boolean_functions_container_layout;
 
         //function section
-        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+        void handle_navigation_jump_requested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates);
 
         void handle_input_pin_item_clicked(const QTableWidgetItem* item);
         void handle_output_pin_item_clicked(const QTableWidgetItem* item);

@@ -48,7 +48,7 @@ namespace hal
 
                 assert(g);
 
-                m_origin = hal::node{hal::node_type::gate, g->get_id()};
+                m_origin = Node(g->get_id(), Node::Gate);
 
                 std::string pin_type   = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay->m_subfocus_index];
                 Net* n = (direction ? g->get_fan_out_net(pin_type) : g->get_fan_in_net(pin_type));
@@ -66,7 +66,7 @@ namespace hal
                 assert(n);
                 assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
 
-                m_origin = hal::node{hal::node_type::gate, 0};
+                m_origin = Node();
 
                 fill_table(n, direction);
 
@@ -80,7 +80,7 @@ namespace hal
         }
     }
 
-    void GraphNavigationWidget::setup(hal::node origin, Net* via_net, bool direction)
+    void GraphNavigationWidget::setup(Node origin, Net* via_net, bool direction)
     {
         clearContents();
         fill_table(via_net, direction);

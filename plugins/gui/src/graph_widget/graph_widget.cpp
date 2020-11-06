@@ -298,7 +298,7 @@ namespace hal
         }
     }
 
-    void GraphWidget::handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
+    void GraphWidget::handle_navigation_jump_requested(const Node &origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules)
     {
         bool bail_animation = false;
 
@@ -345,12 +345,14 @@ namespace hal
                 in_nets = utils::to_vector(g_netlist->get_gate_by_id(*to_gates.begin())->get_fan_in_nets());
             }
             bool netIsInput               = std::find(in_nets.begin(), in_nets.end(), n) != in_nets.cend();
-            hal::placement_mode placement = netIsInput ? hal::placement_mode::prefer_right : hal::placement_mode::prefer_left;
+            PlacementHint::mode_t placementMode = netIsInput
+                    ? PlacementHint::PreferRight
+                    : PlacementHint::PreferLeft;
 
             // add all new gates and modules
             m_context->begin_change();
             m_context->remove(remove_modules, remove_gates);
-            m_context->add(nonvisible_modules, nonvisible_gates, hal::placement_hint{placement, origin});
+            m_context->add(nonvisible_modules, nonvisible_gates, PlacementHint{placementMode, origin});
             m_context->end_change();
 
             // FIXME find out how to do this properly
@@ -509,7 +511,7 @@ namespace hal
                     }
                     else if (n->get_num_of_sources() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_sources().at(0)->get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(Node(g->get_id(),Node::Gate), n->get_id(), {n->get_sources().at(0)->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -539,7 +541,7 @@ namespace hal
 
                 if (n->get_num_of_sources() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
+                    handle_navigation_jump_requested(Node(), n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -580,7 +582,7 @@ namespace hal
                     }
                     else if (n->get_num_of_sources() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(Node(m->get_id(),Node::Module), n->get_id(), {n->get_sources()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -630,7 +632,7 @@ namespace hal
                     }
                     else if (n->get_num_of_destinations() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::gate, g->get_id()}, n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(Node(g->get_id(),Node::Gate), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {
@@ -661,7 +663,7 @@ namespace hal
 
                 if (n->get_num_of_destinations() == 1)
                 {
-                    handle_navigation_jump_requested(hal::node{hal::node_type::gate, 0}, n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
+                    handle_navigation_jump_requested(Node(), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                 }
                 else
                 {
@@ -702,7 +704,7 @@ namespace hal
                     }
                     else if (n->get_num_of_destinations() == 1)
                     {
-                        handle_navigation_jump_requested(hal::node{hal::node_type::module, m->get_id()}, n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
+                        handle_navigation_jump_requested(Node(m->get_id(),Node::Module), n->get_id(), {n->get_destinations()[0]->get_gate()->get_id()}, {});
                     }
                     else
                     {

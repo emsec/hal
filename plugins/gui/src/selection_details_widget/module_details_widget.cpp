@@ -621,7 +621,7 @@ namespace hal
         }
         else
         {
-            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, clicked_net, true);
+            m_navigation_table->setup(Node(), clicked_net, true);
             m_navigation_table->move(QCursor::pos());
             m_navigation_table->show();
             m_navigation_table->setFocus();
@@ -664,14 +664,14 @@ namespace hal
         }
         else
         {
-            m_navigation_table->setup(hal::node{hal::node_type::gate, 0}, net, false);
+            m_navigation_table->setup(Node(), net, false);
             m_navigation_table->move(QCursor::pos());
             m_navigation_table->show();
             m_navigation_table->setFocus();
         }
     }
 
-    void ModuleDetailsWidget::handle_navigation_jump_requested(const node origin, const u32 via_net, const QSet<u32>& to_gates)
+    void ModuleDetailsWidget::handle_navigation_jump_requested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates)
     {
         Q_UNUSED(origin);
 

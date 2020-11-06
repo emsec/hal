@@ -50,7 +50,7 @@ namespace hal
         void begin_change();
         void end_change();
 
-        void add(const QSet<u32>& modules, const QSet<u32>& gates, hal::placement_hint placement = hal::placement_hint{hal::placement_mode::standard, hal::node()});
+        void add(const QSet<u32>& modules, const QSet<u32>& gates, PlacementHint placement = PlacementHint());
         void remove(const QSet<u32>& modules, const QSet<u32>& gates);
         void clear();
 
@@ -79,7 +79,7 @@ namespace hal
 
         void schedule_scene_update();
 
-        bool node_for_gate(hal::node& node, const u32 id) const;
+        Node node_for_gate(const u32 id) const;
 
         GraphLayouter* debug_get_layouter() const;
 
@@ -110,8 +110,8 @@ namespace hal
         QSet<u32> m_added_modules;
         QSet<u32> m_added_gates;
 
-        QMultiMap<hal::placement_hint, u32> m_module_hints;
-        QMultiMap<hal::placement_hint, u32> m_gate_hints;
+        QMultiMap<PlacementHint, u32> m_module_hints;
+        QMultiMap<PlacementHint, u32> m_gate_hints;
 
         QSet<u32> m_removed_modules;
         QSet<u32> m_removed_gates;

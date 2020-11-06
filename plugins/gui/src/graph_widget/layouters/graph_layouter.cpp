@@ -10,6 +10,7 @@
 #include "gui/graph_widget/items/nets/standard_arrow_net.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/gui_globals.h"
+#include "gui/gui_def.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
@@ -27,10 +28,10 @@ uint qHash(const QPoint& p)
 
 namespace hal
 {
-    uint qHash(const hal::node& n)
+    uint qHash(const Node &n)
     {
-        uint retval = ( n.id << 1);
-        if (n.type == hal::node_type::module) ++retval;
+        uint retval = ( n.id() << 1);
+        if (n.type() == Node::Module) ++retval;
         return retval;
     }
 
@@ -63,7 +64,7 @@ namespace hal
         return m_scene;
     }
 
-    const QMap<hal::node, QPoint> GraphLayouter::node_to_position_map() const
+    const QMap<Node, QPoint> GraphLayouter::node_to_position_map() const
     {
         return m_node_to_position_map;
     }
@@ -76,17 +77,17 @@ namespace hal
         xout.setFieldWidth(4);
         for (auto it = m_position_to_node_map.constBegin(); it != m_position_to_node_map.constEnd(); ++it)
         {
-            xout << (it.key() == search ? "*" : " ") << it.key().x() << it.key().y() << (it.value().type == node_type::module ? "M" : "G") << it.value().id << "\n";
+            xout << (it.key() == search ? "*" : " ") << it.key().x() << it.key().y() << (it.value().type() == Node::Module ? "M" : "G") << it.value().id() << "\n";
         }
         xout << "=======\n";
     }
 
-    const QMap<QPoint, hal::node> GraphLayouter::position_to_node_map() const
+    const QMap<QPoint,Node> GraphLayouter::position_to_node_map() const
     {
         return m_position_to_node_map;
     }
 
-    void GraphLayouter::set_node_position(const hal::node& n, const QPoint& p)
+    void GraphLayouter::set_node_position(const Node &n, const QPoint& p)
     {
         if (m_node_to_position_map.contains(n))
         {
@@ -100,7 +101,7 @@ namespace hal
         //manual relayout call needed
     }
 
-    void GraphLayouter::swap_node_positions(const hal::node& n1, const hal::node& n2)
+    void GraphLayouter::swap_node_positions(const Node &n1, const Node &n2)
     {
         assert(m_node_to_position_map.contains(n1));
         assert(m_node_to_position_map.contains(n2));
@@ -115,7 +116,7 @@ namespace hal
         m_position_to_node_map.insert(p2, n1);
     }
 
-    void GraphLayouter::remove_node_from_maps(const hal::node& n)
+    void GraphLayouter::remove_node_from_maps(const Node &n)
     {
         if (m_node_to_position_map.contains(n))
         {
@@ -315,7 +316,7 @@ namespace hal
         bool first = true;
         int xmin, xmax, ymin, ymax;
         xmin = ymin = xmax = ymax = 0;
-        QMap<QPoint, hal::node>::const_iterator i = position_to_node_map().constBegin();
+        QMap<QPoint, Node>::const_iterator i = position_to_node_map().constBegin();
         while (i != position_to_node_map().constEnd())
         {
             int x = i.key().x();
@@ -336,12 +337,12 @@ namespace hal
         mNodeBoundingBox = QRect(xmin, ymin, xmax-xmin, ymax-ymin);
     }
 
-    bool GraphLayouter::verifyModulePort(const Net* n, const node& modNode, bool isModInput)
+    bool GraphLayouter::verifyModulePort(const Net* n, const Node &modNode, bool isModInput)
     {
         // bypass test for gates
-        if (modNode.type != node_type::module) return true;
+        if (modNode.type() != Node::Module) return true;
 
-        Module* m = g_netlist->get_module_by_id(modNode.id);
+        Module* m = g_netlist->get_module_by_id(modNode.id());
         Q_ASSERT(m);
         std::vector<Net*> knownNets = isModInput ? m->get_input_nets() : m->get_output_nets();
         for (const Net* kn : knownNets)
@@ -547,9 +548,9 @@ namespace hal
             for (Endpoint* src : n->get_sources())
             {
                 // FIND SRC BOX
-                hal::node node;
+                Node node = m_context->node_for_gate(src->get_gate()->get_id());
 
-                if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
+                if (node.isNull())
                     continue;
 
                 NodeBox* src_box = mBoxNode.value(node);
@@ -559,7 +560,8 @@ namespace hal
                 for (Endpoint* dst : n->get_destinations())
                 {
                     // FIND DST BOX
-                    if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
+                    node = m_context->node_for_gate(dst->get_gate()->get_id());
+                    if (node.isNull())
                         continue;
 
                     NodeBox* dst_box = mBoxNode.value(node);
@@ -1422,9 +1424,9 @@ namespace hal
                 {
                     if (src->get_gate())
                     {
-                        hal::node node;
+                        Node node = m_context->node_for_gate(src->get_gate()->get_id());
 
-                        if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
+                        if (node.isNull())
                             continue;
 
                         const NodeBox* nb = mBoxNode.value(node);
@@ -1443,9 +1445,9 @@ namespace hal
                 {
                     if (dst->get_gate())
                     {
-                        hal::node node;
+                        Node node = m_context->node_for_gate(dst->get_gate()->get_id());
 
-                        if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
+                        if (node.isNull())
                             continue;
 
                         const NodeBox* nb = mBoxNode.value(node);
@@ -1471,9 +1473,9 @@ namespace hal
 
                 for (Endpoint* src : n->get_sources())
                 {
-                    hal::node node;
+                    Node node = m_context->node_for_gate(src->get_gate()->get_id());
 
-                    if (m_context->node_for_gate(node, src->get_gate()->get_id()))
+                    if (!node.isNull())
                     {
                         const NodeBox* nb = mBoxNode.value(node);
                         if (nb)
@@ -1484,9 +1486,9 @@ namespace hal
 
                 for (Endpoint* dst : n->get_destinations())
                 {
-                    hal::node node;
+                    Node node = m_context->node_for_gate(dst->get_gate()->get_id());
 
-                    if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
+                    if (node.isNull())
                         continue;
 
                     const NodeBox* nb = mBoxNode.value(node);
@@ -1507,22 +1509,22 @@ namespace hal
 
             for (Endpoint* src : n->get_sources())
             {
-                hal::node node;
+                Node node = m_context->node_for_gate(src->get_gate()->get_id());
 
-                if (m_context->node_for_gate(node, src->get_gate()->get_id()))
-                    src_found = true;
-                else
+                if (node.isNull())
                     incomplete_net = true;
+                else
+                    src_found = true;
             }
 
             for (Endpoint* dst : n->get_destinations())
             {
-                hal::node node;
+                Node node = m_context->node_for_gate(dst->get_gate()->get_id());
 
-                if (m_context->node_for_gate(node, dst->get_gate()->get_id()))
-                    dst_found = true;
-                else
+                if (node.isNull())
                     incomplete_net = true;
+                else
+                    dst_found = true;
             }
 
             if (src_found && !dst_found)
@@ -1531,9 +1533,9 @@ namespace hal
 
                 for (Endpoint* src : n->get_sources())
                 {
-                    hal::node node;
+                    Node node = m_context->node_for_gate(src->get_gate()->get_id());
 
-                    if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
+                    if (node.isNull())
                         continue;
 
                     const NodeBox* nb = mBoxNode.value(node);
@@ -1554,9 +1556,9 @@ namespace hal
 
                 for (Endpoint* dst : n->get_destinations())
                 {
-                    hal::node node;
+                    Node node = m_context->node_for_gate(dst->get_gate()->get_id());
 
-                    if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
+                    if (node.isNull())
                         continue;
 
                     const NodeBox* nb = mBoxNode.value(node);
@@ -1580,9 +1582,9 @@ namespace hal
                 // FIND SRC BOX
                 const NodeBox* src_box = nullptr;
                 {
-                    hal::node node;
+                    Node node = m_context->node_for_gate(src->get_gate()->get_id());
 
-                    if (!m_context->node_for_gate(node, src->get_gate()->get_id()))
+                    if (node.isNull())
                         continue;
 
                     const NodeBox* nb = mBoxNode.value(node);
@@ -1598,9 +1600,9 @@ namespace hal
                     // FIND DST BOX
                     const NodeBox* dst_box = nullptr;
 
-                    hal::node node;
+                    Node node = m_context->node_for_gate(dst->get_gate()->get_id());
 
-                    if (!m_context->node_for_gate(node, dst->get_gate()->get_id()))
+                    if (node.isNull())
                         continue;
 
                     const NodeBox* nb = mBoxNode.value(node);
@@ -1611,7 +1613,7 @@ namespace hal
                     // don't attempt to loop back a module output into its input
                     // (if this triggers, we found the net because it also has
                     // destinations outside the module)
-                    if (src_box == dst_box && src_box->type() == hal::node_type::module)
+                    if (src_box == dst_box && src_box->type() == Node::Module)
                         continue;
 
                     QPointF dst_pin_position = dst_box->item()->get_input_scene_position(n->get_id(), QString::fromStdString(dst->get_pin()));
@@ -2195,7 +2197,7 @@ namespace hal
         m_scene->setSceneRect(rect);
     }
 
-    GraphLayouter::NodeBox::NodeBox(const node& n, int px, int py)
+    GraphLayouter::NodeBox::NodeBox(const Node &n, int px, int py)
         : mNode(n), mX(px), mY(py),
           // GATE IO SPACING SHOULD BE CALCULATED HERE, FOR NOW IT IS JUST ASSUMED TO BE THE MINIMUM ACROSS THE BORD
           mInputPadding(minimum_gate_io_padding),
@@ -2203,15 +2205,15 @@ namespace hal
     {
         switch (type())
         {
-            case hal::node_type::module: {
-                mItem = GraphicsFactory::create_graphics_module(g_netlist->get_module_by_id(id()), 0);
-                break;
-            }
-            case hal::node_type::gate: {
-                mItem = GraphicsFactory::create_graphics_gate(g_netlist->get_gate_by_id(id()), 0);
-                break;
-            }
-        }        
+        case Node::Module: {
+            mItem = GraphicsFactory::create_graphics_module(g_netlist->get_module_by_id(id()), 0);
+            break;
+        }
+        case Node::Gate: {
+            mItem = GraphicsFactory::create_graphics_gate(g_netlist->get_gate_by_id(id()), 0);
+            break;
+        }
+        }
     }
 
     void GraphLayouter::NodeBox::setItemPosition(qreal xpos, qreal ypos)
@@ -2719,19 +2721,17 @@ namespace hal
 
     void GraphLayouter::NodeBoxForGate::insertNode(const NodeBox* nb)
     {
-        Gate* g;
-        Module* m;
-        switch (nb->type()) {
-        case node_type::gate:
-            g = g_netlist->get_gate_by_id(nb->id());
+        if (nb->getNode().isGate())
+        {
+            Gate* g = g_netlist->get_gate_by_id(nb->id());
             if (g) insert(g,nb);
-            break;
-        case node_type::module:
-            m = g_netlist->get_module_by_id(nb->id());
+        }
+        else if (nb->getNode().isModule())
+        {
+            Module* m = g_netlist->get_module_by_id(nb->id());
             if (!m) return;
             for (Gate* ig : m->get_gates(nullptr, true))
                 if (ig) insert(ig,nb);
-            break;
         }
     }
 }

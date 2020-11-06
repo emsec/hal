@@ -29,73 +29,73 @@ namespace hal
 {
     enum class item_type
     {
-        module,
-        gate,
-        net
+        Module, Gate, Net
     };
 
-    enum class node_type
+    class Node
     {
-        module,
-        gate
-    };
+    public:
+        enum type_t {None, Module, Gate};
 
-    struct node
-    {
-        node_type type;
-        u32 id;
+        Node(u32 i=0, type_t t=None) : mId(i), mType(t) {;}
+        type_t type() const { return mType; }
+        u32 id() const { return mId; }
 
-        bool operator<(const node& rhs) const
+        bool isNull()   const { return mType == None; }
+        bool isGate()   const { return mType == Gate; }
+        bool isModule() const { return mType == Module; }
+
+        bool operator<(const Node& rhs) const
         {
-            if (type < rhs.type)
+            if (mType < rhs.mType)
                 return true;
-            else if (rhs.type < type)
+            if (mType > rhs.mType)
                 return false;
-            else if (id < rhs.id)
-                return true;
-            else
-                return false;
+            return mId < rhs.mId;
         }
 
-        bool operator==(const node& rhs) const
+        bool operator==(const Node& rhs) const
         {
-            return type == rhs.type && id == rhs.id;
+            return mType == rhs.mType && mId == rhs.mId;
         }
 
-        bool operator!=(const node& rhs) const
+        bool operator!=(const Node& rhs) const
         {
             return !(*this == rhs);
         }
+
+    private:
+
+        u32 mId;
+        type_t mType;
     };
 
-    enum class placement_mode
+    class PlacementHint
     {
-        standard = 0,
-        prefer_left = 1,
-        prefer_right = 2
-    };
+    public:
+        enum mode_t {Standard = 0, PreferLeft = 1, PreferRight = 2};
+        PlacementHint(mode_t mod = Standard, const Node& orign=Node())
+            : mMode(mod), mPreferredOrigin(orign) {;}
+        mode_t mode() const { return mMode; }
+        Node preferredOrigin() const { return mPreferredOrigin; }
 
-    struct placement_hint
-    {
-        placement_mode mode;
-        node preferred_origin;
-
-        bool operator<(const placement_hint& rhs) const
+        bool operator<(const PlacementHint& rhs) const
         {
-            if (mode < rhs.mode)
+            if (mMode < rhs.mMode)
                 return true;
-            else if (rhs.mode < mode)
+            if (mMode > rhs.mMode)
                 return false;
-            else if (preferred_origin < rhs.preferred_origin)
-                return true;
-            else
-                return false;
+            return mPreferredOrigin < rhs.mPreferredOrigin;
         }
 
-        bool operator==(const placement_hint& rhs) const
+        bool operator==(const PlacementHint& rhs) const
         {
-            return mode == rhs.mode && preferred_origin == rhs.preferred_origin;
+            return mMode == rhs.mMode && mPreferredOrigin == rhs.mPreferredOrigin;
         }
+    private:
+        mode_t mMode;
+        Node mPreferredOrigin;
+
     };
 
 }

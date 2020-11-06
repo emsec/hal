@@ -45,11 +45,11 @@ namespace hal
 
         // right = true
         void setup(bool direction);
-        void setup(hal::node origin, Net* via_net, bool direction);
+        void setup(Node origin, Net* via_net, bool direction);
         void hide_when_focus_lost(bool hide);
 
     Q_SIGNALS:
-        void navigation_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void navigation_requested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
         void close_requested();
         void reset_focus();
 
@@ -64,7 +64,7 @@ namespace hal
 
         GraphGraphicsView* m_view;
         u32 m_via_net;
-        hal::node m_origin;
+        Node m_origin;
         bool m_hide_when_focus_lost;
     };
 }

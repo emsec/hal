@@ -55,7 +55,7 @@ namespace hal
 
                 assert(n);
 
-                m_origin = hal::node{hal::node_type::gate, g->get_id()};
+                m_origin = Node(g->get_id(), Node::Gate);
                 m_via_net = n;
 
                 fill_table(direction);
@@ -69,7 +69,7 @@ namespace hal
                 assert(n);
                 assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
 
-                m_origin = hal::node{hal::node_type::gate, 0};
+                m_origin = Node();
                 m_via_net = n;
 
                 fill_table(direction);
@@ -98,7 +98,7 @@ namespace hal
 
                 assert(n);
 
-                m_origin = hal::node{hal::node_type::module, m->get_id()};
+                m_origin = Node(m->get_id(),Node::Module);
                 m_via_net = n;
 
                 fill_table(direction);
@@ -108,7 +108,7 @@ namespace hal
         }
     }
 
-    void GraphNavigationWidgetV2::setup(hal::node origin, Net* via_net, bool direction)
+    void GraphNavigationWidgetV2::setup(Node origin, Net* via_net, bool direction)
     {
         clear();
         fill_table(direction);
@@ -157,7 +157,7 @@ namespace hal
             // gate, then we don't want to offer navigating to that module or any
             // modules further up the hierarchy)
             Module* common_ancestor = nullptr; //fixes uninit warning
-            if (m_origin.id == 0)
+            if (m_origin.id() == 0)
             {
                 // we're navigating from a net
                 if (m_via_net->is_global_input_net() || m_via_net->is_global_output_net())
@@ -181,15 +181,15 @@ namespace hal
                     common_ancestor = gui_utility::first_common_ancestor({}, net_gates);
                 }
             }
-            else if (m_origin.type == hal::node_type::gate)
+            else if (m_origin.type() == Node::Gate)
             {
-                Gate* origin = g_netlist->get_gate_by_id(m_origin.id);
+                Gate* origin = g_netlist->get_gate_by_id(m_origin.id());
                 assert(origin);
                 common_ancestor = gui_utility::first_common_ancestor({}, {origin, g});
             }
-            else if (m_origin.type == hal::node_type::module)
+            else if (m_origin.type() == Node::Module)
             {
-                Module* origin = g_netlist->get_module_by_id(m_origin.id);
+                Module* origin = g_netlist->get_module_by_id(m_origin.id());
                 assert(origin);
                 common_ancestor = gui_utility::first_common_ancestor({origin}, {g});
             }

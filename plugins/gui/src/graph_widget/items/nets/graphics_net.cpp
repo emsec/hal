@@ -21,7 +21,7 @@ namespace hal
         s_pen.setJoinStyle(Qt::MiterJoin);
     }
 
-    GraphicsNet::GraphicsNet(Net* n) : GraphicsItem(hal::item_type::net, n->get_id())
+    GraphicsNet::GraphicsNet(Net* n) : GraphicsItem(item_type::Net, n->get_id())
     {
     }
 

@@ -43,10 +43,10 @@ namespace hal
         explicit GraphNavigationWidgetV2(QWidget *parent = nullptr);
 
         void setup(bool direction);
-        void setup(hal::node origin, Net* via_net, bool direction);
+        void setup(Node origin, Net* via_net, bool direction);
 
     Q_SIGNALS:
-        void navigation_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void navigation_requested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
         void close_requested();
         void reset_focus();
 
@@ -63,7 +63,7 @@ namespace hal
         void handle_item_double_clicked(QTreeWidgetItem* item);
         void commit_selection();
 
-        hal::node m_origin;
+        Node m_origin;
         Net* m_via_net;
         QSet<QTreeWidgetItem*> m_previous_selection;
 

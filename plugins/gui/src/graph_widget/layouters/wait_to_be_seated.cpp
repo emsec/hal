@@ -7,9 +7,9 @@
 
 namespace hal
 {
-   WaitToBeSeatedEntry::WaitToBeSeatedEntry(node_type t, u32 id)
+   WaitToBeSeatedEntry::WaitToBeSeatedEntry(Node::type_t t, u32 id)
    {
-       mNode = node{t,id};
+       mNode = Node(id,t);
    }
 
    void WaitToBeSeatedEntry::setPredecessorIds(const QMap<u32, WaitToBeSeatedEntry *>& gateMap)
@@ -51,7 +51,7 @@ namespace hal
 
    bool WaitToBeSeatedEntry::isModule() const
    {
-       return mNode.type == node_type::module && mNode.id > 0;
+       return mNode.isModule() && mNode.id() > 0;
    }
 
    //---------------------------------------------------

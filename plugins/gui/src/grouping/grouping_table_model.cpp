@@ -267,15 +267,15 @@ namespace hal {
         const Gate* g = nullptr;
         const Net* n = nullptr;
         switch (itemType) {
-        case item_type::module:
+        case item_type::Module:
             m = g_netlist->get_module_by_id(itemId);
             if (m) itemGrouping = m->get_grouping();
             break;
-        case item_type::gate:
+        case item_type::Gate:
             g = g_netlist->get_gate_by_id(itemId);
             if (g) itemGrouping = g->get_grouping();
             break;
-        case item_type::net:
+        case item_type::Net:
             n = g_netlist->get_net_by_id(itemId);
             if (n) itemGrouping = n->get_grouping();
             break;

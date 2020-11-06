@@ -65,7 +65,7 @@ namespace hal
         void keyPressEvent(QKeyEvent* event) override;
 
     private Q_SLOTS:
-        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void handle_navigation_jump_requested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
         void handle_module_double_clicked(const u32 id);
         void reset_focus();
 
