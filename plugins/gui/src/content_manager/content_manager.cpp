@@ -170,7 +170,7 @@ namespace hal
         PythonConsole->open();
         m_NetlistWatcher = new NetlistWatcher(this);
 #ifdef HAL_STUDY
-        log_info("gui", "HAL_STUDY activated");
+        //log_info("gui", "HAL_STUDY activated");
         m_special_log_content_manager = new SpecialLogContentManager(m_MainWindow, m_python_widget);
         m_special_log_content_manager->start_logging(2000);
 #endif

@@ -51,7 +51,9 @@ namespace hal
 
     void SelectionRelay::relay_selection_changed(void* sender)
     {
+#ifdef HAL_STUDY
         evaluate_selection_changed(sender);
+#endif
         Q_EMIT selection_changed(sender);
     }
 
@@ -622,7 +624,7 @@ namespace hal
 
         Q_EMIT subfocus_changed(nullptr);
     }
-
+#ifdef HAL_STUDY
     void SelectionRelay::evaluate_selection_changed(void *sender)
     {
         QString method = "unknown";
@@ -654,4 +656,5 @@ namespace hal
 
 
     }
+#endif
 }    // namespace hal

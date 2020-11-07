@@ -120,6 +120,7 @@ namespace hal
         connect(m_output_ports_table, &QTableWidget::itemDoubleClicked, this, &ModuleDetailsWidget::handle_output_net_item_clicked);
 
         connect(mGeneralModel, &DetailsGeneralModel::requireUpdate, this, &ModuleDetailsWidget::update);
+        g_selection_relay->register_sender(this, "SelectionDetailsWidget");
     }
 
     ModuleDetailsWidget::~ModuleDetailsWidget()

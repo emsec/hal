@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_config.h"
 
 #include <QObject>
 #include <QPair>
@@ -139,8 +140,9 @@ namespace hal
         void subfocus_none();
         void subfocus_left();
         void subfocus_right();
-
+#ifdef HAL_STUDY
         void evaluate_selection_changed(void* sender);
+#endif
 
         //    bool try_subfocus_left();
         //    bool try_subfocus_right();

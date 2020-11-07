@@ -132,6 +132,7 @@ namespace hal
         connect(g_selection_relay, &SelectionRelay::selection_changed, this, &SelectionDetailsWidget::handle_selection_update);
         connect(m_searchbar, &Searchbar::text_edited, m_selectionTreeView, &SelectionTreeView::handle_filter_text_changed);
         connect(m_searchbar, &Searchbar::text_edited, this, &SelectionDetailsWidget::handle_filter_text_changed);
+        g_selection_relay->register_sender(this, "SelectionDetailsWidget");
     }
 
     void SelectionDetailsWidget::restoreLastSelection()

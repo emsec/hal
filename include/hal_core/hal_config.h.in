@@ -24,4 +24,4 @@
 /* hal_config.h.in */
 
 /* use Study Config for build */
-#cmakedefine HAL_STUDY 1
+#cmakedefine HAL_STUDY 0

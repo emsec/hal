@@ -128,6 +128,8 @@ namespace hal
         connect(m_input_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_input_pin_table_menu_requested);
         connect(m_output_pins_table, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handle_output_pin_table_menu_requested);
 
+        g_selection_relay->register_sender(this, "SelectionDetailsWidget");
+
         //extract the width of the scrollbar out of the stylesheet to fix a scrollbar related bug
         QString main_stylesheet = qApp->styleSheet();
         main_stylesheet.replace("\n", ""); //remove newlines so the regex is a bit easier
