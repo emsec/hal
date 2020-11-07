@@ -160,7 +160,7 @@ namespace hal
             {
                 Module* m = g_netlist->get_module_by_id(mid);
                 if (!m) continue;
-                if (module == m || module->contains_module(m))
+                if (module == m || module->contains_module(m) || m->contains_module(module))
                 {
                     canAdd = false;
                     break;

@@ -199,7 +199,7 @@ int main(int argc, const char* argv[])
 
             auto ret = plugin->exec(args);
 
-            return cleanup(ret ? SUCCESS : ERROR);
+            return cleanup(ret ? ERROR : SUCCESS);
         }
     }
 

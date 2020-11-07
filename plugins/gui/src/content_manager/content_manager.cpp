@@ -121,7 +121,7 @@ namespace hal
         m_MainWindow->add_content(logger_widget, 1, content_anchor::bottom);
 
         mSelectionDetailsWidget->open();
-        logger_widget->open();
+        //logger_widget->open();
 
         //m_content.append(code_edit);
         //m_content.append(navigation);
@@ -163,7 +163,7 @@ namespace hal
         m_MainWindow->setWindowTitle(m_window_title);
 
         m_MainWindow->add_content(m_python_widget, 3, content_anchor::right);
-        //m_python_widget->open();
+        m_python_widget->open();
 
         PythonConsoleWidget* PythonConsole = new PythonConsoleWidget();
         m_MainWindow->add_content(PythonConsole, 5, content_anchor::bottom);

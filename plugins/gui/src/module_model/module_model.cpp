@@ -231,6 +231,7 @@ namespace hal
         assert(m_ModuleItems.contains(parent_module));
 
         ModuleItem* item   = new ModuleItem(id);
+        item->appendExistingChildIfAny(m_ModuleItems);
         ModuleItem* parent = m_ModuleItems.value(parent_module);
 
         item->set_parent(parent);

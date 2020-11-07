@@ -118,11 +118,21 @@ namespace hal
         std::filesystem::path get_library_directory()
         {
             std::vector<std::filesystem::path> path_hints = {
-                get_base_directory() / "lib64/",
                 get_base_directory() / "lib/x86_64-linux-gnu",
+                get_base_directory() / "lib64/",
                 get_base_directory() / "lib/",
             };
-            return get_first_directory_exists(path_hints);
+            
+            for (const auto& path : path_hints)
+            {
+                hal::error_code ec;
+                if (std::filesystem::exists(path / "hal_plugins", ec))
+                {
+                    return path;
+                }
+            }
+
+            return std::filesystem::path();
         }
 
         std::filesystem::path get_share_directory()

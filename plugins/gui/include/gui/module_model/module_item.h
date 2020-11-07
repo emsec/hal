@@ -42,6 +42,7 @@ namespace hal
         void remove_child(ModuleItem* child);
 
         void append_child(ModuleItem* child);
+        void appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap);
         void prepend_child(ModuleItem* child);
 
         ModuleItem* parent();

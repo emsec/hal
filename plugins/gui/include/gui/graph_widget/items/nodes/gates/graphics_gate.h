@@ -26,6 +26,7 @@
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <memory>
+#include <QHash>
 
 namespace hal
 {
