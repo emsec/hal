@@ -41,6 +41,8 @@ namespace hal
 {
     class GraphTabWidget;
     class Grouping;
+    class GroupingProxyModel;
+    class Searchbar;
 
     class GroupingManagerWidget : public ContentWidget
     {
@@ -63,6 +65,7 @@ namespace hal
         GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
         virtual void setup_toolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual QList<QShortcut*> create_shortcuts() override;
 
         QString new_grouping_icon_path() const;
         QString new_grouping_icon_style() const;
@@ -96,11 +99,13 @@ namespace hal
 
     public Q_SLOTS:
         void handleLastEntryDeleted();
-        void handleNewEntryAdded(const QModelIndex& index);
+        void handleNewEntryAdded(const QModelIndex& modelIndex);
         void handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected);
         void handleCurrentChanged(const QModelIndex &current = QModelIndex(), const QModelIndex &previous = QModelIndex());
 
     private Q_SLOTS:
+        void toggle_searchbar();
+        void filter(const QString& text);
         void handleCreateGroupingClicked();
         void handleRenameGroupingClicked();
         void handleColorSelectClicked();
@@ -110,10 +115,11 @@ namespace hal
         void handle_context_menu_request(const QPoint& point);
 
     private:
-
         GraphTabWidget* m_tab_view;
         QTableView* mGroupingTableView;
         GroupingTableModel* mGroupingTableModel;
+        GroupingProxyModel* m_proxy_model;
+        Searchbar* m_searchbar;
 
         QAction* m_new_grouping_action;
         QString m_new_grouping_icon_path;
@@ -140,7 +146,5 @@ namespace hal
         void set_toolbar_buttons_enabled(bool enabled);
 
         GroupingTableEntry getCurrentGrouping();
-
-        QList<QShortcut*> create_shortcuts() override;
     };
 }

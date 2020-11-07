@@ -110,7 +110,7 @@ namespace hal
         )");
 
         py_netlist.def("clear_caches", &Netlist::clear_caches, R"(
-            Clear all internal caches of the netlist.<br>
+            Clear all internal caches of the netlist.
             In a typical application, calling this function is not required.
         )");
 
@@ -193,7 +193,7 @@ namespace hal
         )");
 
         py_netlist.def("get_gates", &Netlist::get_gates, py::arg("filter") = nullptr, R"(
-            Get all gates contained within the netlist.<br>
+            Get all gates contained within the netlist.
             A filter can be applied to the result to only get gates matching the specified condition.
 
             :param lambda filter: Filter to be applied to the gates.

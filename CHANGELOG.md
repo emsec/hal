@@ -6,11 +6,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.1] - 2020-11-05 16:18:00+02:00 (urgency: medium)
+* fix bug that preventes module widget from showing the full tree in some instances
+* fix missing cleaup of groupings when deleting gates, nets, or modules
+* display Python Editor Widget by default, but hide its navigation bar
+* do not display Log Widget by default anymore
+
+## [3.1.0] - 2020-11-04 14:00:00+02:00 (urgency: medium)
+* new (deterministic) layouter
+  * tries to minimize wire length by placing connected gates closer to each other
+  * combines multiple in-/outputs into one port if driven by the same net
+  * cleaner overall appearance of the graph
+* added Python tool to convert SkyWater gate libraries into a Liberty file that can be read by HAL
+* fix bug with selection within grouping widget
+* fix return code of GUI
+* fixed problems when dragging around the docking bars of widgets
+* Fix detect Library Path
+
+## [3.0.2] - 2020-10-29 16:00:00+02:00 (urgency: medium)
+* Focal Test Release 2
+
+## [3.0.1] - 2020-10-29 13:00:00+02:00 (urgency: medium)
+* Focal Test Release
+
+## [3.0.0] - 2020-10-29 12:00:00+02:00 (urgency: medium)
+
 ### Added
 * new selections details widget
   * hierarchical view of all items within the current selection
     * a single item can be selected within that view
     * selected item will be highlighted in a different color than the rest of the graph view selection
+    * current selection can be moved to a module or grouping by using the respective buttons
   * details section
     * shows additional details for the item selected in the hierarchical view
     * sections can be collapsed and expanded
@@ -19,19 +45,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * new view manager widget
   * now presented in a table view additionally containing information about the time of creation of the view
   * views can be sorted by name and date
-* new gate library features
+* gate library improvements
   * support for gate types with multi-bit pins
   * clear identification of clock pins
 * new netlist features
   * module types and named module ports (parsed from netlist or set by user)
   * support for multi-driven nets (i.e., nets with more than one source)
+* groupings
+  * an interactive container for gates, nets, and modules
+  * new groupings widget within the GUI to control groupings
+    * allows to be filtered and sorted
+    * groupings can be added to the current selection
+  * members of a grouping are shown in a dedicated color within the graph view
 * new graph view features
   * Python GUI API to control the graph view
   * zoom level of graph view can now be controlled by shortcuts
+* netlist utilities 
+  * added function to deep copy a netlist
+  * added function to get the Boolean function of a subgraph
 * state-of-the-art suite of benchmark netlists
 * new simulator plugin
-* added `get_fan_in_endpoint`, `get_fan_out_endpoint`, `get_fan_in_endpoints` and `get_fan_out_endpoints` to class `Gate`
+  * simulates (parts of) a netlist cycle accurate
+  * can export to VCD
 * added `clear_caches` to `Netlist`
+* added `get_fan_in_endpoint`, `get_fan_out_endpoint`, `get_fan_in_endpoints` and `get_fan_out_endpoints` to class `Gate`
 
 ### CHANGED
 
@@ -54,7 +91,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * no more `shared_ptr`
   * clear ownership management via `unique_ptr` at necessary locations
   * instances passed via non-owning raw pointers
+* updated/fixed the graph algorithms plugin by switching entirely to igraph
 * Endpoints are now managed classes as well, owned by the respective nets and passed via pointers
+* cleaned up the documentation in many parts of the core
+* inverting a Boolean function is now done using `~` instead of `!`
 
 ### FIXED
 
@@ -71,6 +111,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### DEPRECATED
 
 * accessing the single source of a net is superseeded by accessing its source list to support multi-driven nets
+* using `!`to invert a Boolean function
 
 ## [2.0.0] - 2019-12-19 22:00:00+02:00 (urgency: medium)
 Note: This is an API breaking release.
@@ -330,7 +371,12 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v1.1.8...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.1...HEAD
+[3.1.1]: https://github.com/emsec/hal/compare/v3.1.0...v3.1.1
+[3.1.0]: https://github.com/emsec/hal/compare/v3.0.2...v3.1.0
+[3.0.2]: https://github.com/emsec/hal/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/emsec/hal/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/emsec/hal/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/emsec/hal/compare/v1.1.8...v2.0.0
 [1.1.8]: https://github.com/emsec/hal/compare/v1.1.7...v1.1.8
 [1.1.7]: https://github.com/emsec/hal/compare/v1.1.6...v1.1.7

@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    SignalValue Simulation::get_net_value(Net* net, u64 time)
+    SignalValue Simulation::get_net_value(Net* net, u64 time) const
     {
         auto it = m_events.find(net);
 

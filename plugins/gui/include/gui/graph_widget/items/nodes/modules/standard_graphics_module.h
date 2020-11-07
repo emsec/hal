@@ -40,6 +40,9 @@ namespace hal
 
         QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const override;
         QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const override;
+        QPointF endpointPositionByIndex(int index, bool isInput) const override;
+        float   yEndpointDistance() const override;
+        float   yTopPinDistance() const override;
 
     private:
         static qreal s_alpha;

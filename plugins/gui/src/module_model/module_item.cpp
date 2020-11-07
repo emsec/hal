@@ -35,8 +35,23 @@ namespace hal
 
     void ModuleItem::append_child(ModuleItem* child)
     {
-        // PROBABLY OBSOLETE
         m_child_items.append(child);
+    }
+
+    void ModuleItem::appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap)
+    {
+        Module* m = g_netlist->get_module_by_id(m_id);
+        Q_ASSERT(m);
+        for (Module* subm : m->get_submodules())
+        {
+            auto it = moduleMap.find(subm->get_id());
+            if (it != moduleMap.constEnd())
+            {
+                ModuleItem* childItem = it.value();
+                append_child(childItem);
+                childItem->set_parent(this);
+            }
+        }
     }
 
     void ModuleItem::prepend_child(ModuleItem* child)

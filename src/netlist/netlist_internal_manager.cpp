@@ -116,6 +116,12 @@ namespace hal
             }
         }
 
+        // remove from grouping
+        if (Grouping* g = gate->get_grouping(); g != nullptr)
+        {
+            g->remove_gate(gate);
+        }
+
         // check global_gnd and global_vcc gates
         m_netlist->unmark_gnd_gate(gate);
         m_netlist->unmark_vcc_gate(gate);
@@ -212,6 +218,12 @@ namespace hal
             {
                 return false;
             }
+        }
+
+        // remove from grouping
+        if (Grouping* g = net->get_grouping(); g != nullptr)
+        {
+            g->remove_net(net);
         }
 
         // check global_input and global_output gates
@@ -469,6 +481,12 @@ namespace hal
 
         // at this point parent is guaranteed to be not null
 
+        // remove from grouping
+        if (Grouping* g = to_remove->get_grouping(); g != nullptr)
+        {
+            g->remove_module(to_remove);
+        }
+
         // move gates and nets to parent, work on a copy since assign_gate will modify m_gates
         auto gates_copy = to_remove->m_gates;
         for (auto gate : gates_copy)
@@ -618,21 +636,21 @@ namespace hal
             return false;
         }
 
-        for (Gate* gate : grouping->get_gates()) 
+        for (Gate* gate : grouping->get_gates())
         {
             gate->m_grouping = nullptr;
         }
 
-        for (Net* net : grouping->get_nets()) 
+        for (Net* net : grouping->get_nets())
         {
             net->m_grouping = nullptr;
         }
 
-        for (Module* module : grouping->get_modules()) 
+        for (Module* module : grouping->get_modules())
         {
             module->m_grouping = nullptr;
         }
-        
+
         auto it  = m_netlist->m_groupings_map.find(grouping->get_id());
         auto ptr = std::move(it->second);
         m_netlist->m_groupings_map.erase(it);
@@ -651,7 +669,7 @@ namespace hal
 
     bool NetlistInternalManager::grouping_assign_gate(Grouping* grouping, Gate* gate, bool force)
     {
-        if (gate == nullptr || gate->get_grouping() == grouping) 
+        if (gate == nullptr || gate->get_grouping() == grouping)
         {
             return false;
         }
@@ -660,11 +678,11 @@ namespace hal
 
         if (Grouping* other = gate->get_grouping(); other != nullptr)
         {
-            if(force) 
+            if (force)
             {
                 other->remove_gate(gate);
-            } 
-            else 
+            }
+            else
             {
                 log_error("netlist.internal", "netlist::grouping_assign_gate: gate with ID {:08x} is already part of a grouping with ID {:08x}.", gate_id, other->get_id());
                 return false;
@@ -682,7 +700,7 @@ namespace hal
 
     bool NetlistInternalManager::grouping_remove_gate(Grouping* grouping, Gate* gate)
     {
-        if (gate == nullptr) 
+        if (gate == nullptr)
         {
             return false;
         }
@@ -709,7 +727,7 @@ namespace hal
 
     bool NetlistInternalManager::grouping_assign_net(Grouping* grouping, Net* net, bool force)
     {
-        if (net == nullptr || net->get_grouping() == grouping) 
+        if (net == nullptr || net->get_grouping() == grouping)
         {
             return false;
         }
@@ -718,11 +736,11 @@ namespace hal
 
         if (Grouping* other = net->get_grouping(); other != nullptr)
         {
-            if(force) 
+            if (force)
             {
                 other->remove_net(net);
-            } 
-            else 
+            }
+            else
             {
                 log_error("netlist.internal", "netlist::grouping_assign_net: net with ID {:08x} is already part of grouping with ID {:08x}.", net_id, other->get_id());
                 return false;
@@ -740,7 +758,7 @@ namespace hal
 
     bool NetlistInternalManager::grouping_remove_net(Grouping* grouping, Net* net)
     {
-        if (net == nullptr) 
+        if (net == nullptr)
         {
             return false;
         }
@@ -767,7 +785,7 @@ namespace hal
 
     bool NetlistInternalManager::grouping_assign_module(Grouping* grouping, Module* module, bool force)
     {
-        if (module == nullptr || module->get_grouping() == grouping) 
+        if (module == nullptr || module->get_grouping() == grouping)
         {
             return false;
         }
@@ -776,11 +794,11 @@ namespace hal
 
         if (Grouping* other = module->get_grouping(); other != nullptr)
         {
-            if(force) 
+            if (force)
             {
                 other->remove_module(module);
-            } 
-            else 
+            }
+            else
             {
                 log_error("netlist.internal", "netlist::grouping_assign_module: module with ID {:08x} is already part of grouping with ID {:08x}.", module_id, other->get_id());
                 return false;
@@ -798,7 +816,7 @@ namespace hal
 
     bool NetlistInternalManager::grouping_remove_module(Grouping* grouping, Module* module)
     {
-        if (module == nullptr) 
+        if (module == nullptr)
         {
             return false;
         }

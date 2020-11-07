@@ -56,6 +56,7 @@ namespace hal
 
             void merge_lines();
 
+            int nLines() { return h_lines.size() + v_lines.size(); }
         private:
             QVector<h_line> h_lines;
             QVector<v_line> v_lines;

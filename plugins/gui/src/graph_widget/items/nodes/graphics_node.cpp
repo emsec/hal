@@ -44,6 +44,42 @@ namespace hal
         return m_height;
     }
 
+    QList<u32> GraphicsNode::inputNets() const
+    {
+        if (mInputByNet.isEmpty()) return QList<u32>();
+        int n = mInputByNet.size();
+        QVector<u32> retval(n);
+        for (auto it=mInputByNet.constBegin(); it!=mInputByNet.constEnd(); ++it)
+        {
+            Q_ASSERT(it.value() < n);
+            retval[it.value()] = it.key();
+        }
+        return retval.toList();
+    }
+
+    QList<u32> GraphicsNode::outputNets() const
+    {
+        if (mOutputByNet.isEmpty()) return QList<u32>();
+        int n = mOutputByNet.size();
+        QVector<u32> retval(n);
+        for (auto it=mOutputByNet.constBegin(); it!=mOutputByNet.constEnd(); ++it)
+        {
+            Q_ASSERT(it.value() < n);
+            retval[it.value()] = it.key();
+        }
+        return retval.toList();
+    }
+
+    int GraphicsNode::inputByNet(u32 netId) const
+    {
+        return mInputByNet.value(netId,-1);
+    }
+
+    int GraphicsNode::outputByNet(u32 netId) const
+    {
+        return mOutputByNet.value(netId,-1);
+    }
+
     void GraphicsNode::set_name(const QString &name)
     {
         mNodeText[0] = name;

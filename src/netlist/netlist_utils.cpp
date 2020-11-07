@@ -40,7 +40,7 @@ namespace hal
             }
         }    // namespace
 
-        BooleanFunction get_subgraph_function(const std::unordered_set<const Gate*>& subgraph_gates, const Net* output_net)
+        BooleanFunction get_subgraph_function(const std::vector<const Gate*>& subgraph_gates, const Net* output_net)
         {
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
@@ -58,7 +58,7 @@ namespace hal
                 log_error("netlist", "target net with ID {} has more than one source.", output_net->get_id());
                 return BooleanFunction();
             }
-            else if (output_net->get_num_of_sources() == 1)
+            else if (output_net->get_num_of_sources() == 0)
             {
                 log_error("netlist", "target net with ID {} has no sources.", output_net->get_id());
                 return BooleanFunction();
@@ -84,12 +84,13 @@ namespace hal
                 }
                 else if (n->get_num_of_sources() == 0)
                 {
-                    log_error("verification", "net with ID {} has no sources cannot expand Boolean function in this direction.", n->get_id());
+                    //log_error("verification", "net with ID {} has no sources cannot expand Boolean function in this direction.", n->get_id());
                     continue;
                 }
 
                 const Gate* src_gate = n->get_sources()[0]->get_gate();
-                if (subgraph_gates.find(src_gate) != subgraph_gates.end())
+                
+                if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
                 {
                     result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate));
 
@@ -100,7 +101,7 @@ namespace hal
                 }
             }
 
-            return result.optimize();
+            return result;
         }
 
         std::unique_ptr<Netlist> copy_netlist(const Netlist* nl)

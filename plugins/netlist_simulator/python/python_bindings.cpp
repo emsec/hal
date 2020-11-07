@@ -152,6 +152,16 @@ namespace hal
 
                 :returns: The iteration timeout.
                 :rtype: int
+            )")
+
+            .def("generate_vcd", &NetlistSimulator::generate_vcd, py::arg("path"), py::arg("start_time"), py::arg("end_time"), R"(
+                Generates the a VCD file for parts the simulated netlist.
+
+                :param hal_py.hal_path path: The path to the VCD file.
+                :param int start_time: Start of the timeframe to write to the file (in picoseconds).
+                :param int end_time: End of the timeframe to write to the file (in picoseconds).
+                :returns: True if the file gerneration was successful, false otherwise.
+                :rtype: bool
             )");
 
         py::class_<Simulation>(m, "Simulation")

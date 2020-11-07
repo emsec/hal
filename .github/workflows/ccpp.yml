@@ -22,9 +22,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Clean Brew
-        if: startsWith(runner.os, 'macOS')
-        run: brew cleanup
+      # - name: Clean Brew
+      #   if: startsWith(runner.os, 'macOS')
+      #   run: brew cleanup
 
       - name: Cache pip Linux
         uses: actions/cache@v1

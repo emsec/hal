@@ -3,13 +3,14 @@
 #include "gui/gui_globals.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/grouping/grouping_color_delegate.h"
+#include "gui/grouping/grouping_proxy_model.h"
 #include "gui/input_dialog/input_dialog.h"
-
-//#include "gui/graph_widget/graph_widget.h"
-
-
+#include "gui/searchbar/searchbar.h"
 #include "gui/gui_utils/graphics.h"
 #include "gui/toolbar/toolbar.h"
+
+#include "hal_core/utilities/log.h"
+
 #include <QAction>
 #include <QMenu>
 #include <QResizeEvent>
@@ -23,6 +24,8 @@ namespace hal
 {
     GroupingManagerWidget::GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
         : ContentWidget("Groupings", parent),
+          m_proxy_model(new GroupingProxyModel(this)),
+          m_searchbar(new Searchbar(this)),
           m_new_grouping_action(new QAction(this)),
           m_rename_action(new QAction(this)),
           m_color_select_action(new QAction(this)),
@@ -45,10 +48,10 @@ namespace hal
         m_delete_action->setToolTip("Delete");
         m_to_selection_action->setToolTip("To selection");
 
-        m_new_grouping_action->setText("Create New Grouping");
-        m_rename_action->setText("Rename Grouping");
-        m_color_select_action->setText("Select Color for Grouping");
-        m_delete_action->setText("Delete View");
+        m_new_grouping_action->setText("Create new grouping");
+        m_rename_action->setText("Rename grouping");
+        m_color_select_action->setText("Select color for grouping");
+        m_delete_action->setText("Delete grouping");
         m_to_selection_action->setText("Add grouping to selection");
 
         //m_open_action->setEnabled(false);
@@ -57,14 +60,19 @@ namespace hal
 
         mGroupingTableModel = new GroupingTableModel;
 
+        m_proxy_model->setSourceModel(mGroupingTableModel);
+        m_proxy_model->setSortRole(Qt::UserRole);
+
         mGroupingTableView = new QTableView(this);
-        mGroupingTableView->setModel(mGroupingTableModel);
+        mGroupingTableView->setModel(m_proxy_model);
         mGroupingTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mGroupingTableView->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
         mGroupingTableView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         mGroupingTableView->verticalHeader()->hide();
         mGroupingTableView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mGroupingTableView->setItemDelegateForColumn(2,new GroupingColorDelegate(mGroupingTableView));
+        mGroupingTableView->setSortingEnabled(true);
+        mGroupingTableView->sortByColumn(0, Qt::SortOrder::AscendingOrder);
 
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
         mGroupingTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
@@ -74,6 +82,11 @@ namespace hal
         font.setBold(true);
         mGroupingTableView->horizontalHeader()->setFont(font);
         m_content_layout->addWidget(mGroupingTableView);
+        m_content_layout->addWidget(m_searchbar);
+
+        m_searchbar->hide();
+
+        connect(m_searchbar, &Searchbar::text_edited, this, &GroupingManagerWidget::filter);
 
         connect(m_new_grouping_action, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);
         connect(m_rename_action, &QAction::triggered, this, &GroupingManagerWidget::handleRenameGroupingClicked);
@@ -88,6 +101,17 @@ namespace hal
         handleCurrentChanged();
     }
 
+    QList<QShortcut*> GroupingManagerWidget::create_shortcuts()
+    {
+        QShortcut* search_shortcut = g_keybind_manager->make_shortcut(this, "keybinds/searchbar_toggle");
+        connect(search_shortcut, &QShortcut::activated, this, &GroupingManagerWidget::toggle_searchbar);
+
+        QList<QShortcut*> list;
+        list.append(search_shortcut);
+
+        return list;
+    }
+
     void GroupingManagerWidget::handleCreateGroupingClicked()
     {
         mGroupingTableModel->addDefaultEntry();
@@ -95,7 +119,7 @@ namespace hal
 
     void GroupingManagerWidget::handleColorSelectClicked()
     {
-        QModelIndex currentIndex = mGroupingTableView->currentIndex();
+        QModelIndex currentIndex = m_proxy_model->mapToSource(mGroupingTableView->currentIndex());
         if (!currentIndex.isValid()) return;
         QModelIndex nameIndex = mGroupingTableModel->index(currentIndex.row(),0);
         QString name = mGroupingTableModel->data(nameIndex,Qt::DisplayRole).toString();
@@ -108,7 +132,7 @@ namespace hal
 
     void GroupingManagerWidget::handleToSelectionClicked()
     {
-        QModelIndex currentIndex = mGroupingTableView->currentIndex();
+        QModelIndex currentIndex = m_proxy_model->mapToSource(mGroupingTableView->currentIndex());
         if (!currentIndex.isValid()) return;
         Grouping* grp = getCurrentGrouping().grouping();
         if (!grp) return;
@@ -123,7 +147,7 @@ namespace hal
 
     void GroupingManagerWidget::handleRenameGroupingClicked()
     {
-        QModelIndex currentIndex = mGroupingTableView->currentIndex();
+        QModelIndex currentIndex = m_proxy_model->mapToSource(mGroupingTableView->currentIndex());
         if (!currentIndex.isValid()) return;
         QModelIndex modelIndex = mGroupingTableModel->index(currentIndex.row(),0);
 
@@ -142,7 +166,7 @@ namespace hal
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()
     {
-        mGroupingTableModel->removeRows(mGroupingTableView->currentIndex().row());
+        mGroupingTableModel->removeRows(m_proxy_model->mapToSource(mGroupingTableView->currentIndex()).row());
     }
 
     void GroupingManagerWidget::handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected)
@@ -176,7 +200,7 @@ namespace hal
 
     GroupingTableEntry GroupingManagerWidget::getCurrentGrouping()
     {
-        QModelIndex modelIndex = mGroupingTableView->currentIndex();
+        QModelIndex modelIndex = m_proxy_model->mapToSource(mGroupingTableView->currentIndex());
 
         return mGroupingTableModel->groupingAt(modelIndex.row());
     }
@@ -198,23 +222,20 @@ namespace hal
         m_delete_action->setEnabled(enabled);
     }
 
-    QList<QShortcut*> GroupingManagerWidget::create_shortcuts()
+    void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex& modelIndex)
     {
-        QList<QShortcut*> list;
-        return list;
-    }
-
-    void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex &index)
-    {
-        mGroupingTableView->setCurrentIndex(index);
-        handleCurrentChanged(index);
+        if (!modelIndex.isValid()) return;
+        QModelIndex proxyIndex = m_proxy_model->mapFromSource(modelIndex);
+        if (!proxyIndex.isValid()) return;
+        mGroupingTableView->setCurrentIndex(proxyIndex);
+        handleCurrentChanged(proxyIndex);
     }
 
     void GroupingManagerWidget::handleLastEntryDeleted()
     {
-        if (mGroupingTableModel->rowCount())
+        if (m_proxy_model->rowCount())
         {
-            QModelIndex inx = mGroupingTableModel->index(0,0);
+            QModelIndex inx = m_proxy_model->index(0,0);
             mGroupingTableView->setCurrentIndex(inx);
             handleCurrentChanged(inx);
         }
@@ -244,6 +265,28 @@ namespace hal
                                                          ? iconStyle.at(iacc)
                                                          : disabled_icon_style(),
                                                          iconPath.at(iacc)));
+        }
+    }
+
+    void GroupingManagerWidget::toggle_searchbar()
+    {
+        if (m_searchbar->isHidden())
+        {
+            m_searchbar->show();
+            m_searchbar->setFocus();
+        }
+        else
+            m_searchbar->hide();
+    }
+
+    void GroupingManagerWidget::filter(const QString& text)
+    {
+        QRegExp* regex = new QRegExp(text);
+        if (regex->isValid())
+        {
+            m_proxy_model->setFilterRegExp(*regex);
+            QString output = "Groupings widget regular expression '" + text + "' entered.";
+            log_info("user", output.toStdString());
         }
     }
 
