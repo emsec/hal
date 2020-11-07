@@ -160,7 +160,8 @@ namespace hal
         forward_stdout("\n");
         forward_stdout("<Execute Python Editor content>");
         forward_stdout("\n");
-        log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
+        //log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
+        log_info("UserStudy", "Python editor execute script:\n{}\n", input.toStdString());
         try
         {
             py::eval<py::eval_statements>(input.toStdString(), tmp_context, tmp_context);

@@ -652,7 +652,7 @@ namespace hal
         std::string gate_ids_substring = create_substring("Gate-Ids: {", m_selected_gates);
         std::string net_ids_substring = create_substring("Net-Ids: {", m_selected_nets);
         std::string module_ids_substring = create_substring("Module-Ids: {", m_selected_modules);
-        log_info("gui", "Selection changed, Method: {}, New Sel.: {}, {}, {}", method.toStdString(), gate_ids_substring, net_ids_substring, module_ids_substring);
+        log_info("UserStudy", "Selection changed, Method: {}, New Sel.: {}, {}, {}", method.toStdString(), gate_ids_substring, net_ids_substring, module_ids_substring);
 
 
     }
