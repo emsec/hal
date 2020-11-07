@@ -17,6 +17,7 @@
 #include <grammar.h>
 #include <node.h>
 #include <parsetok.h>
+#include "hal_config.h"
 
 extern grammar _PyParser_Grammar;
 
@@ -161,7 +162,9 @@ namespace hal
         forward_stdout("<Execute Python Editor content>");
         forward_stdout("\n");
         //log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
+#ifdef HAL_STUDY
         log_info("UserStudy", "Python editor execute script:\n{}\n", input.toStdString());
+#endif
         try
         {
             py::eval<py::eval_statements>(input.toStdString(), tmp_context, tmp_context);
