@@ -172,7 +172,7 @@ namespace hal
 #ifdef HAL_STUDY
         //log_info("gui", "HAL_STUDY activated");
         m_special_log_content_manager = new SpecialLogContentManager(m_MainWindow, m_python_widget);
-        m_special_log_content_manager->start_logging(2000);
+        m_special_log_content_manager->start_logging(60000);
 #endif
     }
 
