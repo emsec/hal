@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * updated existing Python decorators and added new ones for the GUI API
+* fixed `get_subgraph_function` crashing when `output_net` is a nullptr
 
 ## [3.1.1] - 2020-11-05 16:18:00+02:00 (urgency: medium)
 * fix bug that preventes module widget from showing the full tree in some instances
