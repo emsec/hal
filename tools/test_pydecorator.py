@@ -5,7 +5,9 @@ import pydecorator
 
 current_file_path = os.path.abspath(os.path.dirname(__file__))
 relative_path_to_example = os.path.join(current_file_path, "../examples/fsm.v")
-netlist = netlist_factory.load_netlist(relative_path_to_example, "verilog", "EXAMPLE_LIB")
+relative_path_to_example_hal = os.path.join(current_file_path, "../examples/fsm.hal")
+#netlist = NetlistFactory.load_netlist(relative_path_to_example, "verilog", "EXAMPLE_LIB")
+netlist = NetlistFactory.load_netlist(relative_path_to_example_hal)
 
 gate_id_test = 6
 net_id_test = 15
@@ -13,6 +15,8 @@ net_id_test = 15
 log_info("#############################################")
 log_info("NETLIST FUNCTIONS TESTING")
 log_info("#############################################\n")
+
+print(type(netlist))
 
 log_info("Calling function get_gate_by_id with NAMED-parameter id = {}".format(gate_id_test))
 test_gate = netlist.get_gate_by_id(gate_id = gate_id_test)
@@ -31,7 +35,7 @@ test_net = netlist.get_net_by_id(net_id_test)
 log_info("--------------------------------------------")
 
 log_info("Calling function get_gates")
-netlist.get_gates("BUF")
+netlist.get_gates()
 log_info("--------------------------------------------")
 
 log_info("Calling function get_nets")
@@ -115,12 +119,16 @@ log_info("Calling function set_data")
 test_net.set_data("category_0", "key_0", "data_type_0", "value_0")
 log_info("--------------------------------------------")
 
-log_info("Calling function get_src")
-test_net.get_src()
+log_info("Calling function get_source")
+test_net.get_source()
 log_info("--------------------------------------------")
 
-log_info("Calling function get_dsts")
-test_net.get_dsts()
+log_info("Calling function get_sources")
+test_net.get_sources()
+log_info("--------------------------------------------")
+
+log_info("Calling function get_destinations")
+test_net.get_destinations()
 log_info("--------------------------------------------")
 
 log_info("#############################################")
@@ -137,7 +145,7 @@ log_info("Calling function assign_gate with NAMED-parameter")
 test_module.assign_gate(gate = test_gate)
 log_info("--------------------------------------------")
 
-log_info("Calling function gates")
+log_info("Calling function get_gates")
 test_module.get_gates()
 log_info("--------------------------------------------")
 
@@ -147,5 +155,5 @@ log_info("#############################################\n")
 endpoint = test_gate.get_successors()[0]
 
 log_info("Calling function get_gate")
-endpoint->get_gate()
+endpoint.get_gate()
 log_info("--------------------------------------------")

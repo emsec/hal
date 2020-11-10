@@ -53,6 +53,11 @@ namespace hal
                 log_error("netlist", "set of gates contains a nullptr.");
                 return BooleanFunction();
             }
+            else if (output_net == nullptr)
+            {
+                log_error("netlist", "nullptr given for target net.");
+                return BooleanFunction();
+            }
             else if (output_net->get_num_of_sources() > 1)
             {
                 log_error("netlist", "target net with ID {} has more than one source.", output_net->get_id());
@@ -89,7 +94,7 @@ namespace hal
                 }
 
                 const Gate* src_gate = n->get_sources()[0]->get_gate();
-                
+
                 if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
                 {
                     result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate));
