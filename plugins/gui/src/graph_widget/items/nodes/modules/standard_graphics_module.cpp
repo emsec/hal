@@ -46,14 +46,14 @@ namespace hal
     qreal StandardGraphicsModule::s_inner_name_type_spacing = 1.2;
     qreal StandardGraphicsModule::s_outer_name_type_spacing = 3;
 
-    const int StandardGraphicsModule::ICON_PADDING = 3;
-    const QSize StandardGraphicsModule::ICON_SIZE(s_color_bar_height - 2 * ICON_PADDING, s_color_bar_height - 2 * ICON_PADDING);
+    const int StandardGraphicsModule::sIconPadding = 3;
+    const QSize StandardGraphicsModule::sIconSize(s_color_bar_height - 2 * sIconPadding, s_color_bar_height - 2 * sIconPadding);
     QPixmap* StandardGraphicsModule::sIconInstance = nullptr;
 
     const QPixmap& StandardGraphicsModule::iconPixmap()
     {
         if (!sIconInstance)
-            sIconInstance = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_module").scaled(ICON_SIZE)));
+            sIconInstance = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_module").scaled(sIconSize)));
         return *sIconInstance;
     }
 
@@ -113,9 +113,9 @@ namespace hal
             // draw box and icon
             painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
             painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
-            //            QRectF iconRect(ICON_PADDING,ICON_PADDING,ICON_SIZE.width(),ICON_SIZE.height());
+            //            QRectF iconRect(sIconPadding,sIconPadding,sIconSize.width(),sIconSize.height());
             //            painter->fillRect(iconRect,Qt::black);
-            //            painter->drawPixmap(QPoint(ICON_PADDING,ICON_PADDING), iconPixmap());
+            //            painter->drawPixmap(QPoint(sIconPadding,sIconPadding), iconPixmap());
 
             // draw center text
             s_pen.setColor(penColor(option->state, s_text_color));
@@ -129,7 +129,7 @@ namespace hal
                 painter->drawText(mTextPosition[iline], mNodeText[iline]);
             }
 
-            bool moduleHasFocus = g_selection_relay->m_focus_type == SelectionRelay::item_type::module && g_selection_relay->m_focus_id == m_id;
+            bool moduleHasFocus = g_selection_relay->m_focus_type == SelectionRelay::ItemType::Module && g_selection_relay->m_focus_id == m_id;
             int subFocusIndex   = static_cast<int>(g_selection_relay->m_subfocus_index);
 
             painter->setFont(s_pin_font);
@@ -138,7 +138,7 @@ namespace hal
             for (int i = 0; i < m_input_pins.size(); ++i)
             {
                 if (moduleHasFocus)
-                    if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::left && i == subFocusIndex)
+                    if (g_selection_relay->m_subfocus == SelectionRelay::Subfocus::Left && i == subFocusIndex)
                         s_pen.setColor(selectionColor());
                     else
                         s_pen.setColor(s_text_color);
@@ -152,7 +152,7 @@ namespace hal
             for (int i = 0; i < m_output_pins.size(); ++i)
             {
                 if (moduleHasFocus)
-                    if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::right && i == subFocusIndex)
+                    if (g_selection_relay->m_subfocus == SelectionRelay::Subfocus::Right && i == subFocusIndex)
                         s_pen.setColor(selectionColor());
                     else
                         s_pen.setColor(s_text_color);
@@ -252,14 +252,14 @@ namespace hal
         QFontMetricsF pin_fm(s_pin_font);
         qreal max_pin_width = 0;
 
-        for (const module_pin& input_pin : m_input_pins)
+        for (const ModulePin& input_pin : m_input_pins)
         {
             qreal width = pin_fm.width(input_pin.name);
             if (width > max_pin_width)
                 max_pin_width = width;
         }
 
-        for (const module_pin& output_pin : m_output_pins)
+        for (const ModulePin& output_pin : m_output_pins)
         {
             qreal width = pin_fm.width(output_pin.name);
             if (width > max_pin_width)
@@ -318,7 +318,7 @@ namespace hal
 
         qreal y = s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_ascent + baseline;
 
-        for (const module_pin& output_pin : m_output_pins)
+        for (const ModulePin& output_pin : m_output_pins)
         {
             qreal x = m_width - (pin_fm.size(0, output_pin.name).rwidth() + s_pin_outer_horizontal_spacing);
             m_output_pin_positions.append(QPointF(x, y));

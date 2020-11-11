@@ -3,7 +3,7 @@
 
 namespace hal
 {
-    DetailsWidget::DetailsWidget(detailsType_t tp, QWidget *parent)
+    DetailsWidget::DetailsWidget(DetailsType tp, QWidget *parent)
         : QWidget(parent), m_detailsType(tp), m_currentId(0)
     {
         m_keyFont = QFont("Iosevka");
@@ -20,7 +20,7 @@ namespace hal
 
     QString DetailsWidget::detailsTypeName() const
     {
-        // enum detailsType_t {ModuleDetails, GateDetails, NetDetails};
+        // enum DetailsType {ModuleDetails, GateDetails, NetDetails};
         const char* typeName[] = { "module", "gate", "net"};
         return QString(typeName[m_detailsType]);
     }

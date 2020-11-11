@@ -33,9 +33,9 @@
 namespace hal
 {
 
-    struct channel_entry
+    struct ChannelEntry
     {
-        channel_entry(std::string msg, spdlog::level::level_enum msg_type) : m_msg(msg), m_msg_type(msg_type)
+        ChannelEntry(std::string msg, spdlog::level::level_enum msg_type) : m_msg(msg), m_msg_type(msg_type)
         {
         }
 
@@ -45,15 +45,15 @@ namespace hal
 
     static const int max_entries = 1000;
 
-    struct log_channel
+    struct LogChannel
     {
-        //    log_channel(const QString& name) : m_name(name)
+        //    LogChannel(const QString& name) : m_name(name)
         //    {
         //    }
 
         const QString m_name;
 
-        channel_entry m_entries[max_entries];
+        ChannelEntry m_entries[max_entries];
 
         int m_entry_count;
         int m_first_entry;
@@ -71,14 +71,14 @@ namespace hal
 
         QVariant data(int column) const;
         const QString name() const;
-        const boost::circular_buffer<channel_entry*>* get_buffer() const;
+        const boost::circular_buffer<ChannelEntry*>* get_buffer() const;
         QReadWriteLock* get_lock();
 
-        void append_entry(channel_entry* entry);
+        void append_entry(ChannelEntry* entry);
 
     private:
         const QString m_name;
-        boost::circular_buffer<channel_entry*> m_log_entries;
+        boost::circular_buffer<ChannelEntry*> m_log_entries;
         QReadWriteLock m_lock;
 
         int m_observer;

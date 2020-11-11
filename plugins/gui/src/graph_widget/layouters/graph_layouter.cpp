@@ -185,12 +185,12 @@ namespace hal
         getWireHash();
 
         find_max_box_dimensions();
-        findMaxChannelLanes();
+        alternateMaxChannelLanes();
         calculateJunctionMinDistance();
-        calculateGateOffsets();
-        placeGates();
+        alternateGateOffsets();
+        alternatePlaceGates();
         m_done = true;
-        drawNets();
+        alternateDrawNets();
         update_scene_rect();
 
         m_scene->move_nets_to_background();
@@ -245,15 +245,15 @@ namespace hal
         mBoxPosition.clear();
         mBoxGraphItem.clear();
 
-        for (const GraphLayouter::road* r : m_h_roads.values())
+        for (const GraphLayouter::Road* r : m_h_roads.values())
             delete r;
         m_h_roads.clear();
 
-        for (const GraphLayouter::road* r : m_v_roads.values())
+        for (const GraphLayouter::Road* r : m_v_roads.values())
             delete r;
         m_v_roads.clear();
 
-        for (const GraphLayouter::junction* j : m_junctions.values())
+        for (const GraphLayouter::Junction* j : m_junctions.values())
             delete j;
         m_junctions.clear();
 
@@ -396,7 +396,7 @@ namespace hal
                 mWireEndpoint[id].setNetType(EndpointList::ConstantLevel);
 
             // test for global inputs
-            EndpointList::netType_t nType = mWireEndpoint.value(id).netType();
+            EndpointList::EndpointType nType = mWireEndpoint.value(id).netType();
             if ((nType == EndpointList::SingleDestination && dstPoints.size() > 1) ||
                     (nType == EndpointList::SourceAndDestination && n->is_global_input_net()))
             {
@@ -543,7 +543,7 @@ namespace hal
             if (n->is_unrouted())
                 continue;
 
-            used_paths used;
+            UsedPaths used;
 
             for (Endpoint* src : n->get_sources())
             {
@@ -574,12 +574,12 @@ namespace hal
                     if (!y_distance && v_road_jump_possible(src_box->x() + 1, dst_box->x(), src_box->y()))
                     {
                         // SPECIAL CASE INDIRECT HORIZONTAL NEIGHBORS
-                        road* dst_v_road = get_v_road(dst_box->x(), dst_box->y());
+                        Road* dst_v_road = get_v_road(dst_box->x(), dst_box->y());
                         used.v_roads.insert(dst_v_road);
                         continue;
                     }
 
-                    road* src_v_road = get_v_road(src_box->x() + 1, src_box->y());
+                    Road* src_v_road = get_v_road(src_box->x() + 1, src_box->y());
 
                     if (!(x_distance || y_distance))
                     {
@@ -592,7 +592,7 @@ namespace hal
                     // CONNECT SRC TO V ROAD, TRAVEL X DISTANCE, TRAVEL Y DISTANCE, CONNECT V ROAD TO DST
                     used.v_roads.insert(src_v_road);
 
-                    junction* initial_junction = nullptr;
+                    Junction* initial_junction = nullptr;
                     int remaining_y_distance   = y_distance;
 
                     if (y_distance < 0)
@@ -627,7 +627,7 @@ namespace hal
 
                     used.v_junctions.insert(initial_junction);
 
-                    junction* last_junction = initial_junction;
+                    Junction* last_junction = initial_junction;
 
                     if (x_distance)
                     {
@@ -638,8 +638,8 @@ namespace hal
                         // TRAVEL REMAINING X DISTANCE
                         while (remaining_x_distance)
                         {
-                            road* r     = nullptr;
-                            junction* j = nullptr;
+                            Road* r     = nullptr;
+                            Junction* j = nullptr;
 
                             if (x_distance > 0)
                             {
@@ -707,7 +707,7 @@ namespace hal
                         while (remaining_y_distance != 1)
                         {
                             // TRAVEL DOWN
-                            road* r = get_v_road(last_junction->x, last_junction->y);
+                            Road* r = get_v_road(last_junction->x, last_junction->y);
 
                             if (last_junction->v_lanes != r->lanes)
                             {
@@ -717,7 +717,7 @@ namespace hal
                                     used.close_bottom_junctions.insert(last_junction);
                             }
 
-                            junction* j = get_junction(last_junction->x, last_junction->y + 1);
+                            Junction* j = get_junction(last_junction->x, last_junction->y + 1);
 
                             if (r->lanes != j->v_lanes)
                             {
@@ -740,7 +740,7 @@ namespace hal
                         while (remaining_y_distance != -1)
                         {
                             // TRAVEL UP
-                            road* r = get_v_road(last_junction->x, last_junction->y - 1);
+                            Road* r = get_v_road(last_junction->x, last_junction->y - 1);
 
                             if (last_junction->v_lanes != r->lanes)
                             {
@@ -750,7 +750,7 @@ namespace hal
                                     used.close_top_junctions.insert(last_junction);
                             }
 
-                            junction* j = get_junction(last_junction->x, last_junction->y - 1);
+                            Junction* j = get_junction(last_junction->x, last_junction->y - 1);
 
                             if (r->lanes != j->v_lanes)
                             {
@@ -769,7 +769,7 @@ namespace hal
                         }
                     }
 
-                    road* dst_road = nullptr;
+                    Road* dst_road = nullptr;
 
                     if (y_distance > 0)
                     {
@@ -835,7 +835,7 @@ namespace hal
         }
     }
 
-    void GraphLayouter::findMaxChannelLanes()
+    void GraphLayouter::alternateMaxChannelLanes()
     {
         // maximum parallel wires for atomic network
         for (auto it = mWireHash.constBegin(); it != mWireHash.constEnd(); ++it)
@@ -863,13 +863,13 @@ namespace hal
 
     void GraphLayouter::find_max_channel_lanes()
     {
-        for (const road* r : m_v_roads.values())
+        for (const Road* r : m_v_roads.values())
             store_max(m_max_v_channel_lanes_for_x, r->x, r->lanes);
 
-        for (const road* r : m_h_roads.values())
+        for (const Road* r : m_h_roads.values())
             store_max(m_max_h_channel_lanes_for_y, r->y, r->lanes);
 
-        for (const junction* j : m_junctions.values())
+        for (const Junction* j : m_junctions.values())
         {
             store_max(m_max_v_channel_lanes_for_x, j->x, j->v_lanes);
             store_max(m_max_h_channel_lanes_for_y, j->y, j->h_lanes);
@@ -878,13 +878,13 @@ namespace hal
 
     void GraphLayouter::reset_roads_and_junctions()
     {
-        for (road* r : m_h_roads.values())
+        for (Road* r : m_h_roads.values())
             r->lanes = 0;
 
-        for (road* r : m_v_roads.values())
+        for (Road* r : m_v_roads.values())
             r->lanes = 0;
 
-        for (junction* j : m_junctions.values())
+        for (Junction* j : m_junctions.values())
         {
             // LEFT
             unsigned int combined_lane_changes = j->close_left_lane_changes + j->far_left_lane_changes;
@@ -1008,7 +1008,7 @@ namespace hal
         }
     }
 
-    void GraphLayouter::calculateGateOffsets()
+    void GraphLayouter::alternateGateOffsets()
     {
         QHash<int,float> xInputPadding;
         QHash<int,float> xOutputPadding;
@@ -1122,13 +1122,13 @@ namespace hal
             }
     }
 
-    void GraphLayouter::placeGates()
+    void GraphLayouter::alternatePlaceGates()
     {
         for (const NodeBox* box : mBoxes)
         {
             box->item()->setPos(mCoordX[box->x()].xBoxOffset(),
                              mCoordY[box->y()*2].lanePosition(0));
-            m_scene->add_item(box->item());
+            m_scene->addGraphItem(box->item());
 
             NetLayoutPoint outPnt(box->x()+1,box->y()*2);
             QPointF outPos = box->item()->endpointPositionByIndex(0,false);
@@ -1156,11 +1156,11 @@ namespace hal
         for (NodeBox* box : mBoxes)
         {
             box->setItemPosition(m_node_offset_for_x.value(box->x()), m_node_offset_for_y.value(box->y()));
-            m_scene->add_item(box->item());
+            m_scene->addGraphItem(box->item());
         }
     }
 
-    void GraphLayouter::drawNets()
+    void GraphLayouter::alternateDrawNets()
     {
         // lane for given wire and net id
         QHash<u32,QHash<NetLayoutWire,int>> laneMap;
@@ -1197,7 +1197,7 @@ namespace hal
             if (!regularNet)
                 continue;
 
-            StandardGraphicsNet::lines lines;
+            StandardGraphicsNet::Lines lines;
 
             const QHash<NetLayoutWire,int>& wMap = laneMap.value(id);
             for (auto it=wMap.constBegin(); it!=wMap.constEnd(); ++it)
@@ -1298,7 +1298,7 @@ namespace hal
             }
 
             if (graphicsNet)
-                m_scene->add_item(graphicsNet);
+                m_scene->addGraphItem(graphicsNet);
 
         }
     }
@@ -1324,10 +1324,10 @@ namespace hal
                 net_item->add_output(scenePnt);
         }
         net_item->finalize();
-        m_scene->add_item(net_item);
+        m_scene->addGraphItem(net_item);
     }
 
-    void GraphLayouter::drawNetsEndpoint(StandardGraphicsNet::lines &lines, u32 id)
+    void GraphLayouter::drawNetsEndpoint(StandardGraphicsNet::Lines &lines, u32 id)
     {
         for (auto it=mEndpointHash.constBegin(); it!=mEndpointHash.constEnd(); ++it)
         {
@@ -1358,7 +1358,7 @@ namespace hal
         }
     }
 
-    void GraphLayouter::drawNetsJunction(StandardGraphicsNet::lines& lines, u32 id)
+    void GraphLayouter::drawNetsJunction(StandardGraphicsNet::Lines& lines, u32 id)
     {
         for (auto jt = mJunctionHash.constBegin(); jt!=mJunctionHash.constEnd(); ++jt)
         {
@@ -1461,7 +1461,7 @@ namespace hal
                 }
 
                 net_item->finalize();
-                m_scene->add_item(net_item);
+                m_scene->addGraphItem(net_item);
                 continue;
             }
 
@@ -1498,7 +1498,7 @@ namespace hal
                 }
 
                 net_item->finalize();
-                m_scene->add_item(net_item);
+                m_scene->addGraphItem(net_item);
 
                 continue;
             }
@@ -1545,7 +1545,7 @@ namespace hal
                 }
 
                 net_item->finalize();
-                m_scene->add_item(net_item);
+                m_scene->addGraphItem(net_item);
 
                 continue;
             }
@@ -1567,14 +1567,14 @@ namespace hal
                 }
 
                 net_item->finalize();
-                m_scene->add_item(net_item);
+                m_scene->addGraphItem(net_item);
 
                 continue;
             }
 
             // HANDLE NORMAL NETS
-            used_paths used;
-            StandardGraphicsNet::lines lines;
+            UsedPaths used;
+            StandardGraphicsNet::Lines lines;
 
             // FOR EVERY SRC
             for (Endpoint* src : n->get_sources())
@@ -1625,7 +1625,7 @@ namespace hal
                     if (!y_distance && v_road_jump_possible(src_box->x() + 1, dst_box->x(), src_box->y()))
                     {
                         // SPECIAL CASE INDIRECT HORIZONTAL NEIGHBORS
-                        road* dst_v_road = get_v_road(dst_box->x(), dst_box->y());
+                        Road* dst_v_road = get_v_road(dst_box->x(), dst_box->y());
 
                         qreal x = scene_x_for_v_channel_lane(dst_v_road->x, dst_v_road->lanes);
 
@@ -1642,7 +1642,7 @@ namespace hal
                         continue;
                     }
 
-                    road* src_v_road = get_v_road(src_box->x() + 1, src_box->y());
+                    Road* src_v_road = get_v_road(src_box->x() + 1, src_box->y());
 
                     if (!(x_distance || y_distance))
                     {
@@ -1669,7 +1669,7 @@ namespace hal
                     lines.append_h_line(src_pin_position.x(), current_position.x(), src_pin_position.y());
                     used.v_roads.insert(src_v_road);
 
-                    junction* initial_junction = nullptr;
+                    Junction* initial_junction = nullptr;
                     int remaining_y_distance   = y_distance;
 
                     if (y_distance < 0)
@@ -1748,7 +1748,7 @@ namespace hal
 
                     used.v_junctions.insert(initial_junction);
 
-                    junction* last_junction = initial_junction;
+                    Junction* last_junction = initial_junction;
 
                     if (x_distance)
                     {
@@ -1769,8 +1769,8 @@ namespace hal
                         // TRAVEL REMAINING X DISTANCE
                         while (remaining_x_distance)
                         {
-                            road* r     = nullptr;
-                            junction* j = nullptr;
+                            Road* r     = nullptr;
+                            Junction* j = nullptr;
 
                             if (x_distance > 0)
                             {
@@ -1937,7 +1937,7 @@ namespace hal
                         while (remaining_y_distance != 1)
                         {
                             // TRAVEL DOWN
-                            road* r = get_v_road(last_junction->x, last_junction->y);
+                            Road* r = get_v_road(last_junction->x, last_junction->y);
 
                             if (last_junction->v_lanes != r->lanes)
                             {
@@ -1969,7 +1969,7 @@ namespace hal
                                 current_position.setX(x);
                             }
 
-                            junction* j = get_junction(last_junction->x, last_junction->y + 1);
+                            Junction* j = get_junction(last_junction->x, last_junction->y + 1);
 
                             if (r->lanes != j->v_lanes)
                             {
@@ -2014,7 +2014,7 @@ namespace hal
                         while (remaining_y_distance != -1)
                         {
                             // TRAVEL UP
-                            road* r = get_v_road(last_junction->x, last_junction->y - 1);
+                            Road* r = get_v_road(last_junction->x, last_junction->y - 1);
 
                             if (last_junction->v_lanes != r->lanes)
                             {
@@ -2046,7 +2046,7 @@ namespace hal
                                 current_position.setX(x);
                             }
 
-                            junction* j = get_junction(last_junction->x, last_junction->y - 1);
+                            Junction* j = get_junction(last_junction->x, last_junction->y - 1);
 
                             if (r->lanes != j->v_lanes)
                             {
@@ -2087,7 +2087,7 @@ namespace hal
                         }
                     }
 
-                    road* dst_road = nullptr;
+                    Road* dst_road = nullptr;
 
                     if (y_distance > 0)
                     {
@@ -2181,7 +2181,7 @@ namespace hal
             if (lines.nLines() > 0)
             {
                 StandardGraphicsNet* GraphicsNet = new StandardGraphicsNet(n, lines);
-                m_scene->add_item(GraphicsNet);
+                m_scene->addGraphItem(GraphicsNet);
             }
             commit_used_paths(used);
         }
@@ -2213,6 +2213,8 @@ namespace hal
             mItem = GraphicsFactory::create_graphics_gate(g_netlist->get_gate_by_id(id()), 0);
             break;
         }
+        default:
+            break;
         }
     }
 
@@ -2252,7 +2254,7 @@ namespace hal
         return true;
     }
 
-    bool GraphLayouter::h_road_jump_possible(const GraphLayouter::road* const r1, const GraphLayouter::road* const r2) const
+    bool GraphLayouter::h_road_jump_possible(const GraphLayouter::Road* const r1, const GraphLayouter::Road* const r2) const
     {
         // CONVENIENCE METHOD
         assert(r1 && r2);
@@ -2286,7 +2288,7 @@ namespace hal
         return true;
     }
 
-    bool GraphLayouter::v_road_jump_possible(const GraphLayouter::road* const r1, const GraphLayouter::road* const r2) const
+    bool GraphLayouter::v_road_jump_possible(const GraphLayouter::Road* const r1, const GraphLayouter::Road* const r2) const
     {
         // CONVENIENCE METHOD
         assert(r1 && r2);
@@ -2295,31 +2297,31 @@ namespace hal
         return v_road_jump_possible(r1->x, r2->x, r1->y);
     }
 
-    GraphLayouter::road* GraphLayouter::get_h_road(const int x, const int y)
+    GraphLayouter::Road* GraphLayouter::get_h_road(const int x, const int y)
     {
         QPoint p(x,y);
         auto it = m_h_roads.find(p);
         if (it != m_h_roads.end())
             return it.value();
 
-        GraphLayouter::road* r = new road(x, y);
+        GraphLayouter::Road* r = new Road(x, y);
         m_h_roads.insert(p,r);
         return r;
     }
 
-    GraphLayouter::road* GraphLayouter::get_v_road(const int x, const int y)
+    GraphLayouter::Road* GraphLayouter::get_v_road(const int x, const int y)
     {
         QPoint p(x,y);
         auto it = m_v_roads.find(p);
         if (it != m_v_roads.end())
             return it.value();
 
-        GraphLayouter::road* r = new road(x, y);
+        GraphLayouter::Road* r = new Road(x, y);
         m_v_roads.insert(p,r);
         return r;
     }
 
-    GraphLayouter::junction* GraphLayouter::get_junction(const int x, const int y)
+    GraphLayouter::Junction* GraphLayouter::get_junction(const int x, const int y)
     {
         QPoint p(x,y);
         auto it = m_junctions.find(p);
@@ -2328,7 +2330,7 @@ namespace hal
             return it.value();
         }
 
-        GraphLayouter::junction* j = new junction(x, y);
+        GraphLayouter::Junction* j = new Junction(x, y);
         m_junctions.insert(p,j);
         return j;
     }
@@ -2473,7 +2475,7 @@ namespace hal
                    - m_max_h_channel_bottom_spacing_for_y.value(channel_y) + m_max_bottom_junction_spacing_for_y.value(channel_y) - lane_change * lane_spacing;
     }
 
-    qreal GraphLayouter::scene_x_for_close_left_lane_change(const junction* const j) const
+    qreal GraphLayouter::scene_x_for_close_left_lane_change(const Junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -2481,7 +2483,7 @@ namespace hal
         return scene_x_for_close_left_lane_change(j->x, j->close_left_lane_changes);
     }
 
-    qreal GraphLayouter::scene_x_for_far_left_lane_change(const GraphLayouter::junction* const j) const
+    qreal GraphLayouter::scene_x_for_far_left_lane_change(const GraphLayouter::Junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -2489,7 +2491,7 @@ namespace hal
         return scene_x_for_far_left_lane_change(j->x, j->far_left_lane_changes);
     }
 
-    qreal GraphLayouter::scene_x_for_close_right_lane_change(const junction* const j) const
+    qreal GraphLayouter::scene_x_for_close_right_lane_change(const Junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -2497,7 +2499,7 @@ namespace hal
         return scene_x_for_close_right_lane_change(j->x, j->close_right_lane_changes);
     }
 
-    qreal GraphLayouter::scene_x_for_far_right_lane_change(const GraphLayouter::junction* const j) const
+    qreal GraphLayouter::scene_x_for_far_right_lane_change(const GraphLayouter::Junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -2505,7 +2507,7 @@ namespace hal
         return scene_x_for_far_right_lane_change(j->x, j->far_right_lane_changes);
     }
 
-    qreal GraphLayouter::scene_y_for_close_top_lane_change(const junction* const j) const
+    qreal GraphLayouter::scene_y_for_close_top_lane_change(const Junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -2513,7 +2515,7 @@ namespace hal
         return scene_y_for_close_top_lane_change(j->y, j->close_top_lane_changes);
     }
 
-    qreal GraphLayouter::scene_y_for_far_top_lane_change(const GraphLayouter::junction* const j) const
+    qreal GraphLayouter::scene_y_for_far_top_lane_change(const GraphLayouter::Junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -2521,7 +2523,7 @@ namespace hal
         return scene_y_for_far_top_lane_change(j->y, j->far_top_lane_changes);
     }
 
-    qreal GraphLayouter::scene_y_for_close_bottom_lane_change(const junction* const j) const
+    qreal GraphLayouter::scene_y_for_close_bottom_lane_change(const Junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -2529,7 +2531,7 @@ namespace hal
         return scene_y_for_close_bottom_lane_change(j->y, j->close_bottom_lane_changes);
     }
 
-    qreal GraphLayouter::scene_y_for_far_bottom_lane_change(const GraphLayouter::junction* const j) const
+    qreal GraphLayouter::scene_y_for_far_bottom_lane_change(const GraphLayouter::Junction* const j) const
     {
         // CONVENIENCE METHOD
         assert(j);
@@ -2537,42 +2539,42 @@ namespace hal
         return scene_y_for_far_bottom_lane_change(j->y, j->far_bottom_lane_changes);
     }
 
-    void GraphLayouter::commit_used_paths(const GraphLayouter::used_paths& used)
+    void GraphLayouter::commit_used_paths(const UsedPaths &used)
     {
-        for (road* r : used.h_roads)
+        for (Road* r : used.h_roads)
             r->lanes += 1;
 
-        for (road* r : used.v_roads)
+        for (Road* r : used.v_roads)
             r->lanes += 1;
 
-        for (junction* j : used.h_junctions)
+        for (Junction* j : used.h_junctions)
             j->h_lanes += 1;
 
-        for (junction* j : used.v_junctions)
+        for (Junction* j : used.v_junctions)
             j->v_lanes += 1;
 
-        for (junction* j : used.close_left_junctions)
+        for (Junction* j : used.close_left_junctions)
             j->close_left_lane_changes += 1;
 
-        for (junction* j : used.close_right_junctions)
+        for (Junction* j : used.close_right_junctions)
             j->close_right_lane_changes += 1;
 
-        for (junction* j : used.close_top_junctions)
+        for (Junction* j : used.close_top_junctions)
             j->close_top_lane_changes += 1;
 
-        for (junction* j : used.close_bottom_junctions)
+        for (Junction* j : used.close_bottom_junctions)
             j->close_bottom_lane_changes += 1;
 
-        for (junction* j : used.far_left_junctions)
+        for (Junction* j : used.far_left_junctions)
             j->far_left_lane_changes += 1;
 
-        for (junction* j : used.far_right_junctions)
+        for (Junction* j : used.far_right_junctions)
             j->far_right_lane_changes += 1;
 
-        for (junction* j : used.far_top_junctions)
+        for (Junction* j : used.far_top_junctions)
             j->far_top_lane_changes += 1;
 
-        for (junction* j : used.far_bottom_junctions)
+        for (Junction* j : used.far_bottom_junctions)
             j->far_bottom_lane_changes += 1;
     }
 
@@ -2683,7 +2685,7 @@ namespace hal
 
     void GraphLayouter::EndpointList::addSource(const NetLayoutPoint &pnt)
     {
-        mNetType = static_cast<netType_t>(mNetType | SingleSource);
+        mNetType = static_cast<EndpointType>(mNetType | SingleSource);
         int existingIndex = indexOf(pnt);
         if (existingIndex >= 0 && !mPointIsInput.at(existingIndex)) return;
         append(pnt);
@@ -2692,7 +2694,7 @@ namespace hal
 
     void GraphLayouter::EndpointList::addDestination(const NetLayoutPoint &pnt)
     {
-        mNetType = static_cast<netType_t>(mNetType | SingleDestination);
+        mNetType = static_cast<EndpointType>(mNetType | SingleDestination);
         int existingIndex = indexOf(pnt);
         if (existingIndex >= 0 && mPointIsInput.at(existingIndex)) return;
         append(pnt);

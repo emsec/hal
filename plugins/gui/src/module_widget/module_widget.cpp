@@ -188,7 +188,7 @@ namespace hal
 
         if (current_selection.size() == 1)
         {
-            g_selection_relay->m_focus_type = SelectionRelay::item_type::module;
+            g_selection_relay->m_focus_type = SelectionRelay::ItemType::Module;
             g_selection_relay->m_focus_id   = g_netlist_relay->get_ModuleModel()->get_item(m_ModuleProxyModel->mapToSource(current_selection.first()))->id();
         }
 

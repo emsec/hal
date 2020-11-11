@@ -47,15 +47,15 @@ qreal StandardGraphicsGate::s_outer_name_type_spacing = 3;
 qreal StandardGraphicsGate::s_first_pin_y;
 qreal StandardGraphicsGate::s_pin_y_stride;
 
-const int StandardGraphicsGate::ICON_PADDING = 3;
-const QSize StandardGraphicsGate::ICON_SIZE(s_color_bar_height - 2 * ICON_PADDING,
-                                              s_color_bar_height - 2 * ICON_PADDING);
+const int StandardGraphicsGate::sIconPadding = 3;
+const QSize StandardGraphicsGate::sIconSize(s_color_bar_height - 2 * sIconPadding,
+                                              s_color_bar_height - 2 * sIconPadding);
 QPixmap* StandardGraphicsGate::sIconInstance = nullptr;
 
 const QPixmap& StandardGraphicsGate::iconPixmap()
 {
     if (!sIconInstance) sIconInstance
-            = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_gate").scaled(ICON_SIZE)));
+            = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_gate").scaled(sIconSize)));
     return *sIconInstance;
 }
 
@@ -114,9 +114,9 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
     {
         painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
         painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
-//        QRectF iconRect(ICON_PADDING,ICON_PADDING,ICON_SIZE.width(),ICON_SIZE.height());
+//        QRectF iconRect(sIconPadding,sIconPadding,sIconSize.width(),sIconSize.height());
 //        painter->fillRect(iconRect,Qt::black);
-//        painter->drawPixmap(QPoint(ICON_PADDING,ICON_PADDING), iconPixmap());
+//        painter->drawPixmap(QPoint(sIconPadding,sIconPadding), iconPixmap());
 
         s_pen.setColor(penColor(option->state,s_text_color));
         painter->setPen(s_pen);
@@ -128,7 +128,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         }
 
         bool gateHasFocus =
-                g_selection_relay->m_focus_type == SelectionRelay::item_type::gate
+                g_selection_relay->m_focus_type == SelectionRelay::ItemType::Gate
                 && g_selection_relay->m_focus_id == m_id;
         int subFocusIndex = static_cast<int>(g_selection_relay->m_subfocus_index);
 
@@ -141,7 +141,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         for (int i = 0; i < m_input_pins.size(); ++i)
         {
             if (gateHasFocus)
-                if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::left
+                if (g_selection_relay->m_subfocus == SelectionRelay::Subfocus::Left
                         && i == subFocusIndex)
                     s_pen.setColor(selectionColor());
                 else
@@ -156,7 +156,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         for (int i = 0; i < m_output_pins.size(); ++i)
         {
             if (gateHasFocus)
-                if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::right
+                if (g_selection_relay->m_subfocus == SelectionRelay::Subfocus::Right
                         && i == subFocusIndex)
                     s_pen.setColor(selectionColor());
                 else

@@ -34,7 +34,7 @@ namespace hal
     class GraphicsNet : public GraphicsItem
     {
     public:
-        struct visuals
+        struct Visuals
         {
             bool visible;
             QColor color;
@@ -51,7 +51,7 @@ namespace hal
         QRectF boundingRect() const override;
         QPainterPath shape() const override;
 
-        virtual void set_visuals(const visuals& v);
+        virtual void set_visuals(const Visuals& v);
 
     protected:
         static qreal s_line_width;

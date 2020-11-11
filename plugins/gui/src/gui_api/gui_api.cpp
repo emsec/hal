@@ -72,7 +72,7 @@ namespace hal
 
         g_selection_relay->m_selected_gates.insert(gate->get_id());
         g_selection_relay->selection_changed(this);
-        g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+        g_selection_relay->m_focus_type = SelectionRelay::ItemType::Gate;
         g_selection_relay->m_focus_id = gate->get_id();
 
         if(navigate_to_selection)
@@ -123,7 +123,7 @@ namespace hal
 
         g_selection_relay->m_selected_nets.insert(net->get_id());
         g_selection_relay->selection_changed(this);
-        g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+        g_selection_relay->m_focus_type = SelectionRelay::ItemType::Net;
         g_selection_relay->m_focus_id = net->get_id();
 
         if(navigate_to_selection)
@@ -174,7 +174,7 @@ namespace hal
 
         g_selection_relay->m_selected_modules.insert(module->get_id());
         g_selection_relay->selection_changed(this);
-        g_selection_relay->m_focus_type = SelectionRelay::item_type::module;
+        g_selection_relay->m_focus_type = SelectionRelay::ItemType::Module;
         g_selection_relay->m_focus_id = module->get_id();
 
         if(navigate_to_selection)

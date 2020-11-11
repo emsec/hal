@@ -72,14 +72,14 @@ namespace hal
     }
 
     //StandardGraphicsNet::StandardGraphicsNet(Net* n, const lines& l) : GraphicsNet(n),
-    OldStandardGraphicsNet::OldStandardGraphicsNet(Net* n, lines& l, const bool complete) : GraphicsNet(n),
+    OldStandardGraphicsNet::OldStandardGraphicsNet(Net* n, Lines& l, const bool complete) : GraphicsNet(n),
         m_complete(complete)
     {
-        QVector<h_line> collapsed_h;
-        QVector<v_line> collapsed_v;
+        QVector<HLine> collapsed_h;
+        QVector<VLine> collapsed_v;
 
-        //for (const h_line& h : l.h_lines)
-        for (h_line& h : l.h_lines)
+        //for (const HLine& h : l.h_lines)
+        for (HLine& h : l.h_lines)
         {
             if (h.small_x == h.big_x)
                 continue;
@@ -125,12 +125,12 @@ namespace hal
                     collapsed_h.remove(index);
                 }
 
-                collapsed_h.append(h_line{smallest_x, biggest_x, h.y});
+                collapsed_h.append(HLine{smallest_x, biggest_x, h.y});
             }
         }
 
-        //for (const v_line& v : l.v_lines)
-        for (v_line& v : l.v_lines)
+        //for (const VLine& v : l.v_lines)
+        for (VLine& v : l.v_lines)
         {
             if (v.small_y == v.big_y)
                 continue;
@@ -176,14 +176,14 @@ namespace hal
                     collapsed_v.remove(index);
                 }
 
-                collapsed_v.append(v_line{v.x, smallest_y, biggest_y});
+                collapsed_v.append(VLine{v.x, smallest_y, biggest_y});
             }
         }
 
         // CALCULATE SPLITS
-        for (const h_line& h : collapsed_h)
+        for (const HLine& h : collapsed_h)
         {
-            for (const v_line& v : collapsed_v)
+            for (const VLine& v : collapsed_v)
             {
                 // ON EVERY INTERSECTION
     //            if (h.small_x <= v.x && v.x <= h.big_x)
@@ -220,7 +220,7 @@ namespace hal
         qreal smallest_y = 0;
         qreal biggest_y = 0;
 
-        for (const h_line& h : collapsed_h)
+        for (const HLine& h : collapsed_h)
         {
             qreal small_x = h.small_x;
             qreal big_x = h.big_x;
@@ -243,7 +243,7 @@ namespace hal
             m_shape.addRect(rect);
         }
 
-        for (const v_line& v : collapsed_v)
+        for (const VLine& v : collapsed_v)
         {
             qreal x = v.x;
             qreal small_y = v.small_y;
@@ -270,10 +270,10 @@ namespace hal
         // COMPENSATE FOR SPLITS ?
         m_rect = QRectF(smallest_x, smallest_y, biggest_x - smallest_x, biggest_y - smallest_y);
 
-    //    for (const h_line& h : l.h_lines)
+    //    for (const HLine& h : l.h_lines)
     //        m_lines.append(QLineF(h.small_x - l.src_x, h.y - l.src_y, h.big_x - l.src_x, h.y - l.src_y));
 
-    //    for (const v_line& v : l.v_lines)
+    //    for (const VLine& v : l.v_lines)
         //        m_lines.append(QLineF(v.x - l.src_x, v.small_y - l.src_y, v.x - l.src_x, v.big_y - l.src_y));
     }
 

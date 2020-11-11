@@ -157,5 +157,7 @@ namespace hal
         void canRestoreSelection();
         void canMoveToModule(int nodes);
         void enableSearchbar(bool enable);
+
+        static const QString sAddToGrouping;
     };
 }

@@ -12,7 +12,7 @@ namespace hal
 {
     SettingsWidget::SettingsWidget(const QString& key, QWidget* parent)
         : QFrame(parent), m_layout(new QVBoxLayout()), m_container(new QBoxLayout(QBoxLayout::TopToBottom)), m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()),
-          m_default(new QToolButton()), m_highlight_color(52, 56, 57), m_key(key)
+          m_default(new QToolButton()), mHighlightColor(52, 56, 57), m_key(key)
     {
         setFrameStyle(QFrame::NoFrame);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -54,7 +54,7 @@ namespace hal
 
     QColor SettingsWidget::highlight_color()
     {
-        return m_highlight_color;
+        return mHighlightColor;
     }
 
     QString SettingsWidget::key()
@@ -64,7 +64,7 @@ namespace hal
 
     void SettingsWidget::set_highlight_color(const QColor& color)
     {
-        m_highlight_color = color;
+        mHighlightColor = color;
     }
 
     void SettingsWidget::reset_labels()
@@ -89,7 +89,7 @@ namespace hal
 
         if (!string.isEmpty())
         {
-            QString color        = m_highlight_color.name();
+            QString color        = mHighlightColor.name();
             QString opening_html = "<span style=\"background-color:" + color + "\">";
             QString closing_html = "</span>";
             int string_length    = string.length();

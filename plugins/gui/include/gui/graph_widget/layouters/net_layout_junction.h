@@ -12,10 +12,6 @@ class QGraphicsEllipseItem;
 class QGraphicsLineItem;
 class QGraphicsScene;
 
-const int DELTA = 20;
-const int FIRST = 400;
-const int GAP   = 200;
-
 QColor colorFromId(u32 netId);
 
 namespace hal {
@@ -26,7 +22,7 @@ namespace hal {
     public:
         NetLayoutJunctionWireIntersection(bool valid=false, int x_=0, int y_=0)
             : QPoint(x_,y_), mValid(valid) {;}
-        enum placement_t { Normal, Verify, Endpoint };
+        enum PlacementType { Normal, Verify, Endpoint };
         bool isValid() const { return mValid; }
         QGraphicsEllipseItem* graphicsFactory(u32 netId) const;
     };
@@ -81,7 +77,7 @@ namespace hal {
         void addWire(const NetLayoutJunctionWire& wire) { mWires.append(wire); }
         NetLayoutJunctionWireIntersection junctionPoint() const { return mJunction; }
         void setJunctionPoint(const NetLayoutJunctionWireIntersection& jp,
-                              NetLayoutJunctionWireIntersection::placement_t placement
+                              NetLayoutJunctionWireIntersection::PlacementType placement
                               = NetLayoutJunctionWireIntersection::Normal);
     };
 
@@ -93,6 +89,9 @@ namespace hal {
     public:
         static const int MinInf = -32767;
         static const int MaxInf =  32767;
+        static const int sSceneDelta = 20;
+        static const int sSceneFirst = 400;
+        static const int sSceneGap   = 200;
         NetLayoutJunctionRange(u32 netId_, int first, int last);
 
         NetLayoutJunctionWire toWire(int hor, int rd) const;

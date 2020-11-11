@@ -9,7 +9,7 @@ namespace hal
         assert(context);
     }
 
-    const GraphShader::shading& GraphShader::get_shading()
+    const GraphShader::Shading& GraphShader::get_shading()
     {
         return m_shading;
     }

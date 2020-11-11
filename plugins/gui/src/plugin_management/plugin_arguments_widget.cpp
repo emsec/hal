@@ -181,8 +181,8 @@ namespace hal
         QString flag        = button->text();
 
         int current_index                     = PluginScheduleManager::get_instance()->get_current_index();
-        QPair<QString, QList<argument>>& pair = (*PluginScheduleManager::get_instance()->get_schedule())[current_index];
-        for (argument& arg : pair.second)
+        QPair<QString, QList<Argument>>& pair = (*PluginScheduleManager::get_instance()->get_schedule())[current_index];
+        for (Argument& arg : pair.second)
         {
             if (arg.flag == flag)
             {
@@ -208,8 +208,8 @@ namespace hal
             }
         }
 
-        QPair<QString, QList<argument>>& pair = (*PluginScheduleManager::get_instance()->get_schedule())[m_current_index];
-        for (argument& arg : pair.second)
+        QPair<QString, QList<Argument>>& pair = (*PluginScheduleManager::get_instance()->get_schedule())[m_current_index];
+        for (Argument& arg : pair.second)
         {
             if (arg.flag == flag)
             {

@@ -23,13 +23,10 @@ namespace hal {
 
     void SelectionTreeView::setDefaultColumnWidth()
     {
-        setColumnWidth(SelectionTreeModel::NAME_COLUMN, 160);
-        setColumnWidth(SelectionTreeModel::ID_COLUMN, 40);
-        setColumnWidth(SelectionTreeModel::TYPE_COLUMN, 80);
+        setColumnWidth(SelectionTreeModel::sNameColumn, 160);
+        setColumnWidth(SelectionTreeModel::sIdColumn,    40);
+        setColumnWidth(SelectionTreeModel::sTypeColumn,  80);
         header()->setStretchLastSection(true);
-//        header()->setSectionResizeMode(SelectionTreeModel::NAME_COLUMN, QHeaderView::Interactive);
-//        header()->setSectionResizeMode(SelectionTreeModel::ID_COLUMN, QHeaderView::Interactive);
-//        header()->setSectionResizeMode(SelectionTreeModel::TYPE_COLUMN, QHeaderView::Interactive);
     }
 
     void SelectionTreeView::currentChanged(const QModelIndex& current, const QModelIndex& previous)
@@ -71,26 +68,28 @@ namespace hal {
             {
                 switch (item->itemType())
                 {
-                case SelectionTreeItem::itemType_t::ModuleItem:
+                case SelectionTreeItem::TreeItemType::ModuleItem:
 
                     menu.addAction(QIcon(":/icons/python"), "Extract Module as python code (copy to clipboard)",[item](){
                         QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
                     });
 
                     break;
-                case SelectionTreeItem::itemType_t::GateItem:
+                case SelectionTreeItem::TreeItemType::GateItem:
 
                     menu.addAction(QIcon(":/icons/python"), "Extract Gate as python code (copy to clipboard)",[item](){
                         QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");
                     });
 
                     break;
-                case SelectionTreeItem::itemType_t::NetItem:
+                case SelectionTreeItem::TreeItemType::NetItem:
 
                     menu.addAction(QIcon(":/icons/python"), "Extract Net as python code (copy to clipboard)",[item](){
                         QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");
                     });
 
+                    break;
+                default: // make compiler happy and handle irrelevant MaxItem, NullItem
                     break;
                 }
             }

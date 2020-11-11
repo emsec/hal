@@ -41,7 +41,7 @@ namespace hal
     class SettingsWidget : public QFrame
     {
         Q_OBJECT
-        Q_PROPERTY(QColor highlight_color READ highlight_color WRITE set_highlight_color)
+        Q_PROPERTY(QColor highlightColor READ highlight_color WRITE set_highlight_color)
         Q_PROPERTY(bool dirty READ dirty WRITE set_dirty)
         Q_PROPERTY(bool conflicts READ conflicts WRITE set_conflicts)
 
@@ -96,7 +96,7 @@ namespace hal
         QList<QPair<QLabel*, QString>> m_labels;
 
     private:
-        QColor m_highlight_color;
+        QColor mHighlightColor;
         QString m_key;
         bool m_signals_enabled = true;
         bool m_prepared = false;

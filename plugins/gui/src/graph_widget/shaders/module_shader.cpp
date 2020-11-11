@@ -34,8 +34,8 @@ namespace hal
 
         for (const u32& id : m_context->modules())
         {
-            GraphicsNode::visuals v;
-            v.main_color = g_netlist_relay->get_module_color(id);
+            GraphicsNode::Visuals v;
+            v.mMainColor = g_netlist_relay->get_module_color(id);
             v.visible = true;
             m_shading.module_visuals.insert(id, v);
         }
@@ -50,8 +50,8 @@ namespace hal
                 Module* m = g->get_module();
                 assert(m);
 
-                GraphicsNode::visuals v;
-                v.main_color = g_netlist_relay->get_module_color(m->get_id());
+                GraphicsNode::Visuals v;
+                v.mMainColor = g_netlist_relay->get_module_color(m->get_id());
                 v.visible = true;
                 m_shading.gate_visuals.insert(id, v);
             }
@@ -60,7 +60,7 @@ namespace hal
         // DEBUG CODE
         for (const u32& id : m_context->nets())
         {
-            GraphicsNet::visuals v{true, QColor(200, 200, 200), Qt::SolidLine, true, QColor(100, 100, 100), Qt::SolidPattern};
+            GraphicsNet::Visuals v{true, QColor(200, 200, 200), Qt::SolidLine, true, QColor(100, 100, 100), Qt::SolidPattern};
             m_shading.net_visuals.insert(id, v);
         }
     }

@@ -42,26 +42,10 @@ namespace hal
     {
         Q_OBJECT
 
-        struct module_pin
+        struct ModulePin
         {
-            std::string name;
-            u32 net;
-        };
-
-        // PROBABLY OBSOLETE, INTEGRATE INTO ITEMS
-        struct module_extension
-        {
-            module_extension(const u32 module_id) : id(module_id) {}
-            ~module_extension();
-
-            u32 id;
-            QSet<module_pin> input_pins; // UNSURE
-            QSet<module_pin> output_pins; // UNSURE
-            bool isolated = true; // UNSURE
-            QColor color = QColor(255, 255, 255);
-            bool compressed = false;
-            bool hidden = false;
-            QVector<u32> stray_nets; // UNSURE
+            std::string mName;
+            u32 mNet;
         };
 
     public:

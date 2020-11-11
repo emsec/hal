@@ -437,7 +437,7 @@ namespace hal {
     }
 
     void NetLayoutJunctionNet::setJunctionPoint(const NetLayoutJunctionWireIntersection& jp,
-            NetLayoutJunctionWireIntersection::placement_t placement)
+            NetLayoutJunctionWireIntersection::PlacementType placement)
     {
         bool found = false;
 
@@ -497,9 +497,9 @@ namespace hal {
 
     QGraphicsEllipseItem* NetLayoutJunctionWireIntersection::graphicsFactory(u32 netId) const
     {
-        float dd = DELTA / 2.;
-        float x0 = FIRST + x() * DELTA - dd/2;
-        float y0 = FIRST + y() * DELTA - dd/2;
+        float dd = NetLayoutJunctionRange::sSceneDelta / 2.;
+        float x0 = NetLayoutJunctionRange::sSceneFirst + x() * NetLayoutJunctionRange::sSceneDelta - dd/2;
+        float y0 = NetLayoutJunctionRange::sSceneFirst + y() * NetLayoutJunctionRange::sSceneDelta - dd/2;
         QGraphicsEllipseItem* retval = new QGraphicsEllipseItem(x0,y0,dd,dd);
         retval->setBrush(colorFromId(netId));
         return retval;
@@ -536,14 +536,14 @@ namespace hal {
 
     int NetLayoutJunctionRange::graphFirst() const
     {
-        if (mFirst == MinInf) return FIRST-GAP;
-        return mFirst * DELTA + FIRST;
+        if (mFirst == MinInf) return sSceneFirst - sSceneGap;
+        return mFirst * sSceneDelta + sSceneFirst;
     }
 
     int NetLayoutJunctionRange::graphLast() const
     {
-        if (mLast == MaxInf) return 1000 + GAP - FIRST;
-        return mLast * DELTA + FIRST;
+        if (mLast == MaxInf) return 1000 + sSceneGap - sSceneFirst;
+        return mLast * sSceneDelta + sSceneFirst;
     }
 
     bool NetLayoutJunctionRange::conflict(const NetLayoutJunctionRange& other) const

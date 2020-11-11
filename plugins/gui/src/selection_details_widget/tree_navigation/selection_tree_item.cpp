@@ -3,14 +3,14 @@
 
 namespace hal
 {
-    SelectionTreeItem::SelectionTreeItem(SelectionTreeItem::itemType_t t, u32 id_)
+    SelectionTreeItem::SelectionTreeItem(SelectionTreeItem::TreeItemType t, u32 id_)
         : mItemType(t), mId(id_), mParent(0)
     {;}
 
     SelectionTreeItem::~SelectionTreeItem()
     {;}
 
-    SelectionTreeItem::itemType_t SelectionTreeItem::itemType() const
+    SelectionTreeItem::TreeItemType SelectionTreeItem::itemType() const
     {
         return mItemType;
     }

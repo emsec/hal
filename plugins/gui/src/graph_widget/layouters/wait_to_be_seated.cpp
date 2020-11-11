@@ -7,7 +7,7 @@
 
 namespace hal
 {
-   WaitToBeSeatedEntry::WaitToBeSeatedEntry(Node::type_t t, u32 id)
+   WaitToBeSeatedEntry::WaitToBeSeatedEntry(Node::NodeType t, u32 id)
    {
        mNode = Node(id,t);
    }

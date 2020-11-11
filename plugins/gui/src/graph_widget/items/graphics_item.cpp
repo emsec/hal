@@ -20,7 +20,7 @@ namespace hal
         s_lod = lod;
     }
 
-    GraphicsItem::GraphicsItem(const hal::item_type type, const u32 id) :
+    GraphicsItem::GraphicsItem(const ItemType type, const u32 id) :
         m_item_type(type),
         m_highlight(false),
         m_id(id),
@@ -29,7 +29,7 @@ namespace hal
         setFlags(ItemIsSelectable);
     }
 
-    hal::item_type GraphicsItem::item_type() const
+    ItemType GraphicsItem::item_type() const
     {
         return m_item_type;
     }

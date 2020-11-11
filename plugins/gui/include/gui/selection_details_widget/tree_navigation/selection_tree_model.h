@@ -66,10 +66,10 @@ namespace hal
         void suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                 const QRegularExpression& regex) const;
 
-        static const int NAME_COLUMN = 0;
-        static const int ID_COLUMN   = 1;
-        static const int TYPE_COLUMN = 2;
-        static const int MAX_COLUMN  = 3;
+        static const int sNameColumn = 0;
+        static const int sIdColumn   = 1;
+        static const int sTypeColumn = 2;
+        static const int sMaxColumn  = 3;
 
 
     private:

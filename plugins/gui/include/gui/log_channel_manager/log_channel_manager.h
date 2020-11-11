@@ -33,17 +33,17 @@
 
 namespace hal
 {
-    struct log_entry
+    struct LogEntry
     {
         QString m_message;
         spdlog::level::level_enum m_type;
     };
 
-    struct log_channel
+    struct LogChannel
     {
         QString m_name;
 
-        log_entry m_entries[LogChannelManager_constants::max_entries];
+        LogEntry m_entries[LogChannelManager_constants::max_entries];
 
         int m_entry_count;
         int m_first_entry;
@@ -62,7 +62,7 @@ namespace hal
         void logmanager_callback(const spdlog::details::log_msg& msg);
 
     private:
-        std::vector<log_channel*> m_fixed_channels;
-        log_channel* m_temporary_channels[LogChannelManager_constants::max_channels];
+        std::vector<LogChannel*> m_fixed_channels;
+        LogChannel* m_temporary_channels[LogChannelManager_constants::max_channels];
     };
 }

@@ -30,10 +30,11 @@
 #include <QMenu>
 #include <QAction>
 
-const QString ADD_TO_GROUPING("Add to grouping ");
 
 namespace hal
 {
+    const QString SelectionDetailsWidget::sAddToGrouping("Add to grouping ");
+
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), m_numberSelectedItems(0),
           m_restoreLastSelection(new QAction),
@@ -254,7 +255,7 @@ namespace hal
 
             for (const QString& gn : groupingNames)
             {
-                QAction* toGrouping = contextMenu->addAction(ADD_TO_GROUPING+gn);
+                QAction* toGrouping = contextMenu->addAction(sAddToGrouping+gn);
                 connect(toGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToExistingGrouping);
             }
             contextMenu->exec(mapToGlobal(geometry().topLeft()+QPoint(100,0)));
@@ -271,7 +272,7 @@ namespace hal
     {
         const QAction* action = static_cast<const QAction*>(QObject::sender());
         QString grpName = action->text();
-        if (grpName.startsWith(ADD_TO_GROUPING)) grpName.remove(0,ADD_TO_GROUPING.size());
+        if (grpName.startsWith(sAddToGrouping)) grpName.remove(0,sAddToGrouping.size());
         Grouping* grp =
                 g_content_manager->getGroupingManagerWidget()->getModel()->groupingByName(grpName);
         if (grp) selectionToGroupingInternal(grp);
@@ -430,7 +431,7 @@ namespace hal
 
     void SelectionDetailsWidget::singleSelectionInternal(const SelectionTreeItem *sti)
     {
-        SelectionTreeItem::itemType_t tp = sti
+        SelectionTreeItem::TreeItemType tp = sti
                 ? sti->itemType()
                 : SelectionTreeItem::NullItem;
 

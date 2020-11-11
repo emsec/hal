@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    GraphicsNode::GraphicsNode(const hal::item_type type, const u32 id, const QString& name)
+    GraphicsNode::GraphicsNode(const ItemType type, const u32 id, const QString& name)
         : GraphicsItem(type, id)
     {
         mNodeText[0] = name;
@@ -27,11 +27,11 @@ namespace hal
         return path;
     }
 
-    void GraphicsNode::set_visuals(const GraphicsNode::visuals& v)
+    void GraphicsNode::set_visuals(const GraphicsNode::Visuals& v)
     {
         setVisible(v.visible);
 
-        m_color = v.main_color;
+        m_color = v.mMainColor;
     }
 
     qreal GraphicsNode::width() const

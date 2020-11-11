@@ -2,7 +2,7 @@
 
 namespace hal
 {
-    StandardArrowNet::StandardArrowNet(Net* n, const lines& l)
+    StandardArrowNet::StandardArrowNet(Net* n, const Lines &l)
         : StandardGraphicsNet(n,l), mArrowNet(n)
     {;}
 
@@ -31,7 +31,7 @@ namespace hal
         mArrowNet.paint(painter,option,widget);
     }
 
-    void StandardArrowNet::set_visuals(const visuals& v)
+    void StandardArrowNet::set_visuals(const Visuals &v)
     {
         StandardGraphicsNet::set_visuals(v);
         mArrowNet.set_visuals(v);

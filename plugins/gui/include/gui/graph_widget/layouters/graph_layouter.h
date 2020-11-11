@@ -108,16 +108,16 @@ namespace hal
         class EndpointList : public QList<NetLayoutPoint>
         {
         public:
-            enum netType_t { NoEndpoint = 0, SingleSource = 1, SingleDestination = 2, SourceAndDestination = 3,
+            enum EndpointType { NoEndpoint = 0, SingleSource = 1, SingleDestination = 2, SourceAndDestination = 3,
                                  ConstantLevel = 4, MultipleSource = 5, MultipleDestination = 6};
             EndpointList() : mNetType(NoEndpoint) {;}
             void addSource(const NetLayoutPoint& pnt);
             void addDestination(const NetLayoutPoint& pnt);
-            void setNetType(netType_t tp) { mNetType = tp; }
-            netType_t netType() const { return mNetType; }
+            void setNetType(EndpointType tp) { mNetType = tp; }
+            EndpointType netType() const { return mNetType; }
             bool isInput(int index) const {return mPointIsInput.at(index); }
         private:
-            netType_t mNetType;
+            EndpointType mNetType;
             QList<bool> mPointIsInput;
         };
 
@@ -129,12 +129,6 @@ namespace hal
             SeparatedNetWidth() : mInputSpace(0), mOutputSpace(0) {;}
             void requireInputSpace(float spc);
             void requireOutputSpace(float spc);
-        };
-
-        struct node_level
-        {
-            Node node;
-            int level;
         };
 
         class NodeBox
@@ -150,7 +144,7 @@ namespace hal
         public:
             NodeBox(const Node& n, int px, int py);
             Node getNode() const { return mNode; }
-            Node::type_t type() const { return mNode.type(); }
+            Node::NodeType type() const { return mNode.type(); }
             u32 id() const { return mNode.id(); }
             int x() const { return mX; }
             int y() const { return mY; }
@@ -167,9 +161,9 @@ namespace hal
             void insertNode(const NodeBox* nb);
         };
 
-        struct road
+        struct Road
         {
-            road(const int x_coordinate, const int y_coordinate) :
+            Road(const int x_coordinate, const int y_coordinate) :
                 x(x_coordinate),
                 y(y_coordinate),
                 lanes(0)
@@ -182,9 +176,9 @@ namespace hal
 
         };
 
-        struct junction
+        struct Junction
         {
-            junction(const int x_coordinate, const int y_coordinate) :
+            Junction(const int x_coordinate, const int y_coordinate) :
                 x(x_coordinate),
                 y(y_coordinate),
                 h_lanes(0),
@@ -217,23 +211,23 @@ namespace hal
 
         };
 
-        struct used_paths
+        struct UsedPaths
         {
-            QSet<road*> h_roads;
-            QSet<road*> v_roads;
+            QSet<Road*> h_roads;
+            QSet<Road*> v_roads;
 
-            QSet<junction*> h_junctions;
-            QSet<junction*> v_junctions;
+            QSet<Junction*> h_junctions;
+            QSet<Junction*> v_junctions;
 
-            QSet<junction*> close_left_junctions;
-            QSet<junction*> close_right_junctions;
-            QSet<junction*> close_top_junctions;
-            QSet<junction*> close_bottom_junctions;
+            QSet<Junction*> close_left_junctions;
+            QSet<Junction*> close_right_junctions;
+            QSet<Junction*> close_top_junctions;
+            QSet<Junction*> close_bottom_junctions;
 
-            QSet<junction*> far_left_junctions;
-            QSet<junction*> far_right_junctions;
-            QSet<junction*> far_top_junctions;
-            QSet<junction*> far_bottom_junctions;
+            QSet<Junction*> far_left_junctions;
+            QSet<Junction*> far_right_junctions;
+            QSet<Junction*> far_top_junctions;
+            QSet<Junction*> far_bottom_junctions;
         };
 
     public:
@@ -288,19 +282,19 @@ namespace hal
         void calculate_nets();
         void getWireHash();
         void find_max_box_dimensions();
-        void findMaxChannelLanes();
+        void alternateMaxChannelLanes();
         void find_max_channel_lanes();
         void calculate_max_channel_dimensions();
         void calculateJunctionMinDistance();
-        void calculateGateOffsets();
+        void alternateGateOffsets();
         void calculate_gate_offsets();
-        void placeGates();
+        void alternatePlaceGates();
         void place_gates();
         void reset_roads_and_junctions();
         void draw_nets();
-        void drawNets();
-        void drawNetsJunction(StandardGraphicsNet::lines &lines, u32 id);
-        void drawNetsEndpoint(StandardGraphicsNet::lines &lines, u32 id);
+        void alternateDrawNets();
+        void drawNetsJunction(StandardGraphicsNet::Lines &lines, u32 id);
+        void drawNetsEndpoint(StandardGraphicsNet::Lines &lines, u32 id);
         void drawNetsIsolated(u32 id, Net *n, const EndpointList& epl);
         void update_scene_rect();
         static bool verifyModulePort(const Net *n, const Node& modNode, bool isModInput);
@@ -308,14 +302,14 @@ namespace hal
         bool box_exists(const int x, const int y) const;
 
         bool h_road_jump_possible(const int x, const int y1, const int y2) const;
-        bool h_road_jump_possible(const road* const r1, const road* const r2) const;
+        bool h_road_jump_possible(const Road* const r1, const Road* const r2) const;
 
         bool v_road_jump_possible(const int x1, const int x2, const int y) const;
-        bool v_road_jump_possible(const road* const r1, const road* const r2) const;
+        bool v_road_jump_possible(const Road* const r1, const Road* const r2) const;
 
-        road* get_h_road(const int x, const int y);
-        road* get_v_road(const int x, const int y);
-        junction* get_junction(const int x, const int y);
+        Road* get_h_road(const int x, const int y);
+        Road* get_v_road(const int x, const int y);
+        Junction* get_junction(const int x, const int y);
 
         qreal h_road_height(const unsigned int lanes) const;
         qreal v_road_width(const unsigned int lanes) const;
@@ -335,19 +329,19 @@ namespace hal
         qreal scene_y_for_close_bottom_lane_change(const int channel_y, unsigned int lane_change) const;
         qreal scene_y_for_far_bottom_lane_change(const int channel_y, unsigned int lane_change) const;
 
-        qreal scene_x_for_close_left_lane_change(const junction* const j) const;
-        qreal scene_x_for_far_left_lane_change(const junction* const j) const;
+        qreal scene_x_for_close_left_lane_change(const Junction* const j) const;
+        qreal scene_x_for_far_left_lane_change(const Junction* const j) const;
 
-        qreal scene_x_for_close_right_lane_change(const junction* const j) const;
-        qreal scene_x_for_far_right_lane_change(const junction* const j) const;
+        qreal scene_x_for_close_right_lane_change(const Junction* const j) const;
+        qreal scene_x_for_far_right_lane_change(const Junction* const j) const;
 
-        qreal scene_y_for_close_top_lane_change(const junction* const j) const;
-        qreal scene_y_for_far_top_lane_change(const junction* const j) const;
+        qreal scene_y_for_close_top_lane_change(const Junction* const j) const;
+        qreal scene_y_for_far_top_lane_change(const Junction* const j) const;
 
-        qreal scene_y_for_close_bottom_lane_change(const junction* const j) const;
-        qreal scene_y_for_far_bottom_lane_change(const junction* const j) const;
+        qreal scene_y_for_close_bottom_lane_change(const Junction* const j) const;
+        qreal scene_y_for_far_bottom_lane_change(const Junction* const j) const;
 
-        void commit_used_paths(const used_paths& used);
+        void commit_used_paths(const UsedPaths& used);
         static bool isConstNet(const Net* n);
 
         NodeBoxForGate           mNodeBoxForGate;
@@ -356,9 +350,9 @@ namespace hal
         QHash<Node,NodeBox*>     mBoxNode;
         QHash<GraphicsNode*,NodeBox*> mBoxGraphItem;
 
-        QHash<QPoint,road*> m_h_roads;
-        QHash<QPoint,road*> m_v_roads;
-        QHash<QPoint,junction*> m_junctions;
+        QHash<QPoint,Road*> m_h_roads;
+        QHash<QPoint,Road*> m_v_roads;
+        QHash<QPoint,Junction*> m_junctions;
 
         QMap<int, qreal> m_max_node_width_for_x;
         QMap<int, qreal> m_max_node_height_for_y;

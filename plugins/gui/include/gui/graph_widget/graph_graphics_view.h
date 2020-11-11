@@ -104,13 +104,13 @@ namespace hal
         bool item_draggable(GraphicsItem* item);
         void groupingAssignInternal(Grouping* grp);
 
-        struct layouter_point
+        struct LayouterPoint
         {
-            int index;
-            qreal pos;
+            int mIndex;
+            qreal mPos;
         };
         QVector<QPoint> closest_layouter_pos(const QPointF& scene_pos) const;
-        layouter_point closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const;
+        LayouterPoint closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const;
 
         #ifdef GUI_DEBUG_GRID
         void debug_show_layouter_gridpos(const QPoint& mouse_pos);
@@ -147,5 +147,7 @@ namespace hal
         QPointF m_target_viewport_pos;
 
         qreal m_min_scale;
+
+        static const QString sAssignToGrouping;
     };
 }

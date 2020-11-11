@@ -39,9 +39,9 @@ namespace hal
         static void load_settings();
         static void set_lod(const qreal lod);
 
-        GraphicsItem(const hal::item_type type, const u32 id);
+        GraphicsItem(const ItemType type, const u32 id);
 
-        hal::item_type item_type() const;
+        ItemType item_type() const;
         u32 id() const;
         void setHightlight(bool hl);
 
@@ -54,7 +54,7 @@ namespace hal
         QColor selectionColor() const;
         QColor groupingColor() const;
 
-        hal::item_type m_item_type; // USE QT ITEM TYPE SYSTEM INSTEAD ???
+        ItemType m_item_type; // USE QT ITEM TYPE SYSTEM INSTEAD ???
         bool m_highlight;  // paint with hightlight color
         u32 m_id;
         QColor m_color;

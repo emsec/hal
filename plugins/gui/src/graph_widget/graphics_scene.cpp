@@ -121,13 +121,13 @@ namespace hal
         #endif
     }
 
-    void GraphicsScene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::drag_cue cue)
+    void GraphicsScene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
     {
         m_drag_shadow_gate->set_visual_cue(cue);
         m_drag_shadow_gate->start(posF, sizeF);
     }
 
-    void GraphicsScene::move_drag_shadow(const QPointF& posF, const NodeDragShadow::drag_cue cue)
+    void GraphicsScene::move_drag_shadow(const QPointF& posF, const NodeDragShadow::DragCue cue)
     {
         m_drag_shadow_gate->setPos(posF);
         m_drag_shadow_gate->set_visual_cue(cue);
@@ -143,7 +143,7 @@ namespace hal
         return m_drag_shadow_gate->pos();
     }
 
-    void GraphicsScene::add_item(GraphicsItem* item)
+    void GraphicsScene::addGraphItem(GraphicsItem* item)
     {
         // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
 
@@ -154,52 +154,54 @@ namespace hal
 
         switch (item->item_type())
         {
-        case item_type::Gate:
+        case ItemType::Gate:
         {
             GraphicsGate* g = static_cast<GraphicsGate*>(item);
             int i = 0;
             while (i < m_gate_items.size())
             {
-                if (g->id() < m_gate_items.at(i).id)
+                if (g->id() < m_gate_items.at(i).mId)
                     break;
 
                 i++;
             }
-            m_gate_items.insert(i, gate_data{g->id(), g});
+            m_gate_items.insert(i, GateData{g->id(), g});
             return;
         }
-        case item_type::Net:
+        case ItemType::Net:
         {
             GraphicsNet* n = static_cast<GraphicsNet*>(item);
             int i = 0;
             while (i < m_net_items.size())
             {
-                if (n->id() < m_net_items.at(i).id)
+                if (n->id() < m_net_items.at(i).mId)
                     break;
 
                 i++;
             }
-            m_net_items.insert(i, net_data{n->id(), n});
+            m_net_items.insert(i, NetData{n->id(), n});
             return;
         }
-        case item_type::Module:
+        case ItemType::Module:
         {
             GraphicsModule* m = static_cast<GraphicsModule*>(item);
             int i = 0;
             while (i < m_ModuleItems.size())
             {
-                if (m->id() < m_ModuleItems.at(i).id)
+                if (m->id() < m_ModuleItems.at(i).mId)
                     break;
 
                 i++;
             }
-            m_ModuleItems.insert(i, module_data{m->id(), m});
+            m_ModuleItems.insert(i, ModuleData{m->id(), m});
             return;
         }
+        default:
+            return;
         }
     }
 
-    void GraphicsScene::remove_item(GraphicsItem* item)
+    void GraphicsScene::removeGraphItem(GraphicsItem* item)
     {
         // SELECTION HAS TO BE UPDATED MANUALLY AFTER ADDING / REMOVING ITEMS
 
@@ -210,7 +212,7 @@ namespace hal
 
         switch (item->item_type())
         {
-        case item_type::Gate:
+        case ItemType::Gate:
         {
             GraphicsGate* g = static_cast<GraphicsGate*>(item);
             u32 id = g->id();
@@ -218,7 +220,7 @@ namespace hal
             int i = 0;
             while (i < m_gate_items.size())
             {
-                if (m_gate_items[i].id == id)
+                if (m_gate_items[i].mId == id)
                 {
                     m_gate_items.remove(i);
                     delete g;
@@ -230,7 +232,7 @@ namespace hal
 
             return;
         }
-        case item_type::Net:
+        case ItemType::Net:
         {
             GraphicsNet* n = static_cast<GraphicsNet*>(item);
             u32 id = n->id();
@@ -238,7 +240,7 @@ namespace hal
             int i = 0;
             while (i < m_net_items.size())
             {
-                if (m_net_items[i].id == id)
+                if (m_net_items[i].mId == id)
                 {
                     m_net_items.remove(i);
                     delete n;
@@ -250,7 +252,7 @@ namespace hal
 
             return;
         }
-        case item_type::Module:
+        case ItemType::Module:
         {
             GraphicsModule* m = static_cast<GraphicsModule*>(item);
             u32 id = m->id();
@@ -258,7 +260,7 @@ namespace hal
             int i = 0;
             while (i < m_ModuleItems.size())
             {
-                if (m_ModuleItems[i].id == id)
+                if (m_ModuleItems[i].mId == id)
                 {
                     m_ModuleItems.remove(i);
                     delete m;
@@ -270,18 +272,20 @@ namespace hal
 
             return;
         }
+        default:
+            return;
         }
     }
 
     const GraphicsGate* GraphicsScene::get_gate_item(const u32 id) const
     {
-        for (const gate_data& d : m_gate_items)
+        for (const GateData& d : m_gate_items)
         {
-            if (d.id > id)
+            if (d.mId > id)
                 break;
 
-            if (d.id == id)
-                return d.item;
+            if (d.mId == id)
+                return d.mItem;
         }
 
         return nullptr;
@@ -289,13 +293,13 @@ namespace hal
 
     const GraphicsNet* GraphicsScene::get_net_item(const u32 id) const
     {
-        for (const net_data& d : m_net_items)
+        for (const NetData& d : m_net_items)
         {
-            if (d.id > id)
+            if (d.mId > id)
                 break;
 
-            if (d.id == id)
-                return d.item;
+            if (d.mId == id)
+                return d.mItem;
         }
 
         return nullptr;
@@ -303,13 +307,13 @@ namespace hal
 
     const GraphicsModule* GraphicsScene::get_ModuleItem(const u32 id) const
     {
-        for (const module_data& d : m_ModuleItems)
+        for (const ModuleData& d : m_ModuleItems)
         {
-            if (d.id > id)
+            if (d.mId > id)
                 break;
 
-            if (d.id == id)
-                return d.item;
+            if (d.mId == id)
+                return d.mItem;
         }
 
         return nullptr;
@@ -370,28 +374,28 @@ namespace hal
         m_net_items.clear();
     }
 
-    void GraphicsScene::update_visuals(const GraphShader::shading& s)
+    void GraphicsScene::update_visuals(const GraphShader::Shading &s)
     {
-        for (module_data& m : m_ModuleItems)
+        for (ModuleData& m : m_ModuleItems)
         {
-            m.item->set_visuals(s.module_visuals.value(m.id));
+            m.mItem->set_visuals(s.module_visuals.value(m.mId));
         }
 
-        for (gate_data& g : m_gate_items)
+        for (GateData& g : m_gate_items)
         {
-            g.item->set_visuals(s.gate_visuals.value(g.id));
+            g.mItem->set_visuals(s.gate_visuals.value(g.mId));
         }
 
-        for (net_data& n : m_net_items)
+        for (NetData& n : m_net_items)
         {
-            n.item->set_visuals(s.net_visuals.value(n.id));
+            n.mItem->set_visuals(s.net_visuals.value(n.mId));
         }
     }
 
     void GraphicsScene::move_nets_to_background()
     {
-        for (net_data d : m_net_items)
-            d.item->setZValue(-1);
+        for (NetData d : m_net_items)
+            d.mItem->setZValue(-1);
     }
 
     void GraphicsScene::handle_intern_selection_changed()
@@ -406,24 +410,26 @@ namespace hal
         {
             switch (static_cast<const GraphicsItem*>(item)->item_type())
             {
-            case item_type::Gate:
+            case ItemType::Gate:
             {
                 g_selection_relay->m_selected_gates.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++gates;
                 break;
             }
-            case item_type::Net:
+            case ItemType::Net:
             {
                 g_selection_relay->m_selected_nets.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++nets;
                 break;
             }
-            case item_type::Module:
+            case ItemType::Module:
             {
                 g_selection_relay->m_selected_modules.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++modules;
                 break;
             }
+            default:
+                break;
             }
         }
 
@@ -433,25 +439,25 @@ namespace hal
         {
             if (gates)
             {
-                g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+                g_selection_relay->m_focus_type = SelectionRelay::ItemType::Gate;
                 g_selection_relay->m_focus_id = *g_selection_relay->m_selected_gates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
             else if (nets)
             {
-                g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                g_selection_relay->m_focus_type = SelectionRelay::ItemType::Net;
                 g_selection_relay->m_focus_id = *g_selection_relay->m_selected_nets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
             else
             {
-                g_selection_relay->m_focus_type = SelectionRelay::item_type::module;
+                g_selection_relay->m_focus_type = SelectionRelay::ItemType::Module;
                 g_selection_relay->m_focus_id = *g_selection_relay->m_selected_modules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
         }
         else
         {
-            g_selection_relay->m_focus_type = SelectionRelay::item_type::none;
+            g_selection_relay->m_focus_type = SelectionRelay::ItemType::None;
         }
-        g_selection_relay->m_subfocus = SelectionRelay::subfocus::none;
+        g_selection_relay->m_subfocus = SelectionRelay::Subfocus::None;
         // END OF TEST CODE
 
         g_selection_relay->relay_selection_changed(this);
@@ -483,15 +489,15 @@ namespace hal
 
     void GraphicsScene::handleGroupingColorChanged(Grouping *grp)
     {
-        for (const module_data& md : m_ModuleItems)
-            if (grp->contains_module_by_id(md.id))
-                md.item->update();
-        for (const gate_data& gd : m_gate_items)
-            if (grp->contains_gate_by_id(gd.id))
-                gd.item->update();
-        for (const net_data& nd : m_net_items)
-            if (grp->contains_net_by_id(nd.id))
-                nd.item->update();
+        for (const ModuleData& md : m_ModuleItems)
+            if (grp->contains_module_by_id(md.mId))
+                md.mItem->update();
+        for (const GateData& gd : m_gate_items)
+            if (grp->contains_gate_by_id(gd.mId))
+                gd.mItem->update();
+        for (const NetData& nd : m_net_items)
+            if (grp->contains_net_by_id(nd.mId))
+                nd.mItem->update();
     }
 
     void GraphicsScene::handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems)
@@ -502,12 +508,12 @@ namespace hal
             if (sti) highlightSet[sti->itemType()].insert(sti->id());
         }
 
-        for (const module_data& mdata :  m_ModuleItems)
-            mdata.item->setHightlight(highlightSet[SelectionTreeItem::ModuleItem].contains(mdata.id));
-        for (const gate_data& gdata :  m_gate_items)
-            gdata.item->setHightlight(highlightSet[SelectionTreeItem::GateItem].contains(gdata.id));
-        for (const net_data& ndata :  m_net_items)
-            ndata.item->setHightlight(highlightSet[SelectionTreeItem::NetItem].contains(ndata.id));
+        for (const ModuleData& mdata :  m_ModuleItems)
+            mdata.mItem->setHightlight(highlightSet[SelectionTreeItem::ModuleItem].contains(mdata.mId));
+        for (const GateData& gdata :  m_gate_items)
+            gdata.mItem->setHightlight(highlightSet[SelectionTreeItem::GateItem].contains(gdata.mId));
+        for (const NetData& ndata :  m_net_items)
+            ndata.mItem->setHightlight(highlightSet[SelectionTreeItem::NetItem].contains(ndata.mId));
     }
 
     void GraphicsScene::handle_extern_selection_changed(void* sender)
@@ -526,10 +532,10 @@ namespace hal
         {
             for (auto& element : m_ModuleItems)
             {
-                if (g_selection_relay->isModuleSelected(element.id))
+                if (g_selection_relay->isModuleSelected(element.mId))
                 {
-                    element.item->setSelected(true);
-                    element.item->update();
+                    element.mItem->setSelected(true);
+                    element.mItem->update();
                 }
             }
         }
@@ -538,10 +544,10 @@ namespace hal
         {
             for (auto& element : m_gate_items)
             {
-                if (g_selection_relay->isGateSelected(element.id))
+                if (g_selection_relay->isGateSelected(element.mId))
                 {
-                    element.item->setSelected(true);
-                    element.item->update();
+                    element.mItem->setSelected(true);
+                    element.mItem->update();
                 }
             }
         }
@@ -550,10 +556,10 @@ namespace hal
         {
             for (auto& element : m_net_items)
             {
-                if (g_selection_relay->isNetSelected(element.id))
+                if (g_selection_relay->isNetSelected(element.mId))
                 {
-                    element.item->setSelected(true);
-                    element.item->update();
+                    element.mItem->setSelected(true);
+                    element.mItem->update();
                 }
             }
         }

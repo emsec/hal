@@ -82,11 +82,11 @@ namespace hal
             const PluginItem plugin = m_items.at(index.row());
             switch (index.column())
             {
-                case static_cast<PluginItem::column_utype>(PluginItem::column_t::name):
-                    return plugin.name;
+                case static_cast<PluginItem::column_utype>(PluginItem::ColumnType::Name):
+                    return plugin.mName;
                     break;
-                case static_cast<PluginItem::column_utype>(PluginItem::column_t::path):
-                    return plugin.path;
+                case static_cast<PluginItem::column_utype>(PluginItem::ColumnType::Path):
+                    return plugin.mPath;
                     break;
             }
         }
@@ -126,11 +126,11 @@ namespace hal
             PluginItem plugin = m_items.at(index.row());
             switch (index.column())
             {
-                case static_cast<PluginItem::column_utype>(PluginItem::column_t::name):
-                    plugin.name = value.toString();
+                case static_cast<PluginItem::column_utype>(PluginItem::ColumnType::Name):
+                    plugin.mName = value.toString();
                     break;
-                case static_cast<PluginItem::column_utype>(PluginItem::column_t::path):
-                    plugin.path = value.toString();
+                case static_cast<PluginItem::column_utype>(PluginItem::ColumnType::Path):
+                    plugin.mPath = value.toString();
                     break;
             }
             m_items[index.row()] = plugin;
@@ -169,7 +169,7 @@ namespace hal
         int index = 0;
         for (int i = 0; i < m_items.length(); ++i)
         {
-            if (m_items.at(i).name == name)
+            if (m_items.at(i).mName == name)
             {
                 index = i;
                 break;
@@ -248,7 +248,7 @@ namespace hal
             return;
 
         int row_idx = idx.at(0).row();
-        plugin_manager::unload((std::string)m_items.at(row_idx).name.toLocal8Bit().constData());
+        plugin_manager::unload((std::string)m_items.at(row_idx).mName.toLocal8Bit().constData());
     }
 
     const QList<PluginItem> PluginModel::get_plugin_list()
@@ -261,6 +261,6 @@ namespace hal
         if (!index.isValid())
             return;
         int row_idx = index.row();
-        Q_EMIT run_plugin(m_items.at(row_idx).name);
+        Q_EMIT run_plugin(m_items.at(row_idx).mName);
     }
 }

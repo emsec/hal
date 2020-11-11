@@ -5,16 +5,16 @@
 
 namespace hal
 {
-    GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(item_type::Module, m->get_id(), QString::fromStdString(m->get_name()))
+    GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(ItemType::Module, m->get_id(), QString::fromStdString(m->get_name()))
     {
         mNodeText[1]                              = QString::fromStdString(m->get_type());
         mNodeText[mNodeText[1].isEmpty() ? 1 : 2] = "Module";
 
         for (Net* n : m->get_input_nets())
-            m_input_pins.append(module_pin{QString::fromStdString(m->get_input_port_name(n)), n->get_id()});
+            m_input_pins.append(ModulePin{QString::fromStdString(m->get_input_port_name(n)), n->get_id()});
 
         for (Net* n : m->get_output_nets())
-            m_output_pins.append(module_pin{QString::fromStdString(m->get_output_port_name(n)), n->get_id()});
+            m_output_pins.append(ModulePin{QString::fromStdString(m->get_output_port_name(n)), n->get_id()});
 
         if (m_input_pins.size() > 1)
             std::sort(m_input_pins.begin(), m_input_pins.end());

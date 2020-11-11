@@ -49,8 +49,8 @@ namespace hal
         //    {
         //        item = add_channel(QString::fromStdString(channel_name));
         //    }
-        //    all_channel->append_entry(new channel_entry(msg_text, t));
-        //    item->append_entry(new channel_entry(msg_text, t));
+        //    all_channel->append_entry(new ChannelEntry(msg_text, t));
+        //    item->append_entry(new ChannelEntry(msg_text, t));
         //    Q_EMIT updated(t, ALL_CHANNEL, msg_text);
         //    Q_EMIT updated(t, channel_name, msg_text);
     }

@@ -42,13 +42,13 @@ namespace hal
     private:
         int close_multiline_comment(const QString& text, const QRegularExpression& delimiter, const int offset = 0);
 
-        struct highlighting_rule
+        struct HighlightingRule
         {
-            QRegularExpression pattern;
-            QTextCharFormat format;
+            QRegularExpression mPattern;
+            QTextCharFormat mFormat;
         };
 
-        QVector<highlighting_rule> m_highlighting_rules;
+        QVector<HighlightingRule> m_highlighting_rules;
 
         QRegularExpression m_multi_line_comment_delimiter;
         QRegularExpression m_tripple_single_quote;

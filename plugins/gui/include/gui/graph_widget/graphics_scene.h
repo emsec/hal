@@ -68,20 +68,20 @@ namespace hal
 
         GraphicsScene(QObject* parent = nullptr);
 
-        void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::drag_cue cue);
-        void move_drag_shadow(const QPointF& posF, const NodeDragShadow::drag_cue cue);
+        void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue);
+        void move_drag_shadow(const QPointF& posF, const NodeDragShadow::DragCue cue);
         void stop_drag_shadow();
         QPointF drop_target();
 
-        void add_item(GraphicsItem* item);
-        void remove_item(GraphicsItem* item);
+        void addGraphItem(GraphicsItem* item);
+        void removeGraphItem(GraphicsItem* item);
 
         void delete_all_items();
 
         void connect_all();
         void disconnect_all();
 
-        void update_visuals(const GraphShader::shading& s);
+        void update_visuals(const GraphShader::Shading& s);
 
         void move_nets_to_background();
 
@@ -110,22 +110,22 @@ namespace hal
         void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
 
     private:
-        struct module_data
+        struct ModuleData
         {
-            u32 id;
-            GraphicsModule* item;
+            u32 mId;
+            GraphicsModule* mItem;
         };
 
-        struct gate_data
+        struct GateData
         {
-            u32 id;
-            GraphicsGate* item;
+            u32 mId;
+            GraphicsGate* mItem;
         };
 
-        struct net_data
+        struct NetData
         {
-            u32 id;
-            GraphicsNet* item;
+            u32 mId;
+            GraphicsNet* mItem;
         };
 
         static qreal s_lod;
@@ -151,9 +151,9 @@ namespace hal
 
         NodeDragShadow* m_drag_shadow_gate;
 
-        QVector<module_data> m_ModuleItems;
-        QVector<gate_data> m_gate_items;
-        QVector<net_data> m_net_items;
+        QVector<ModuleData> m_ModuleItems;
+        QVector<GateData> m_gate_items;
+        QVector<NetData> m_net_items;
 
         #ifdef GUI_DEBUG_GRID
         void debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to);

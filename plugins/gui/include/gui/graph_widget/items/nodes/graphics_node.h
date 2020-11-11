@@ -32,22 +32,21 @@ namespace hal
     class GraphicsNode : public GraphicsItem
     {
     public:
-        struct visuals
+        struct Visuals
         {
             bool visible;
 
-            QColor main_color;
+            QColor mMainColor;
             QColor name_color;
-            QColor type_color;
+            QColor mTypeColor;
             QColor pin_color;
             QColor background_color;
-            QColor border_color;
-            QColor highlight_color;
+            QColor mHighlightColor;
 
             // DRAW TYPE ENUM
         };
 
-        GraphicsNode(const hal::item_type type, const u32 id, const QString& name);
+        GraphicsNode(const ItemType type, const u32 id, const QString& name);
 
         virtual QRectF boundingRect() const override;
         virtual QPainterPath shape() const override;
@@ -66,7 +65,7 @@ namespace hal
     //    virtual std::string get_input_pin_type_at_position(const size_t pos) const = 0;
     //    virtual std::string get_output_pin_type_at_position(const size_t pos) const = 0;
 
-        virtual void set_visuals(const visuals& v);
+        virtual void set_visuals(const Visuals& v);
 
         qreal width() const;
         qreal height() const;

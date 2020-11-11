@@ -25,7 +25,7 @@ namespace hal
     {
         ProgramArguments args;
 
-        for (argument arg : m_schedule.at(index).second)
+        for (Argument arg : m_schedule.at(index).second)
         {
             std::vector<std::string> vector;
 
@@ -55,11 +55,11 @@ namespace hal
         if (!cli)
             return;
 
-        QList<argument> list;
+        QList<Argument> list;
 
         for (auto option_tupel : cli->get_cli_options().get_options())
         {
-            argument arg;
+            Argument arg;
             arg.flag        = QString::fromStdString(*std::get<0>(option_tupel).begin());
             arg.description = QString::fromStdString(std::get<1>(option_tupel));
             arg.value       = "";
@@ -67,7 +67,7 @@ namespace hal
             list.append(arg);
         }
 
-        m_schedule.insert(index, QPair<QString, QList<argument>>(plugin, list));
+        m_schedule.insert(index, QPair<QString, QList<Argument>>(plugin, list));
     }
 
     void PluginScheduleManager::move_plugin(int from, int to)

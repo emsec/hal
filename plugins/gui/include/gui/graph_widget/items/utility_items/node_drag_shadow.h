@@ -32,11 +32,11 @@ namespace hal
         Q_OBJECT
 
     public:
-        enum class drag_cue
+        enum class DragCue
         {
-            movable   = 0,
-            swappable = 1,
-            rejected  = 2
+            Movable   = 0,
+            Swappable = 1,
+            Rejected  = 2
         };
 
         NodeDragShadow();
@@ -51,7 +51,7 @@ namespace hal
         void set_width(const qreal width);
         void set_height(const qreal height);
 
-        void set_visual_cue(const drag_cue cue);
+        void set_visual_cue(const DragCue cue);
 
         static void set_lod(const qreal lod);
         static void load_settings();
@@ -68,7 +68,7 @@ namespace hal
         static QColor s_color_solid[];
         static QColor s_color_translucent[];
 
-        drag_cue m_cue;
+        DragCue m_cue;
 
         qreal m_width;
         qreal m_height;

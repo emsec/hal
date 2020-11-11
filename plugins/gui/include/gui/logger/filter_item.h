@@ -30,31 +30,31 @@ namespace hal
 {
     struct FilterItem
     {
-        enum class rule
+        enum class Rule
         {
             ShowAll = 0,
             HideAll = 1,
             Process = 2
         };
 
-        FilterItem(rule trace, rule debug, rule info, rule warning, rule error, rule critical, rule default_rule, QStringList& keywords, QRegularExpression& reg_ex)
+        FilterItem(Rule trace, Rule debug, Rule info, Rule warning, Rule error, Rule critical, Rule default_rule, QStringList& keywords, QRegularExpression& reg_ex)
             : m_trace(trace), m_debug(debug), m_info(info), m_warning(warning), m_error(error), m_critical(critical), m_default(default_rule), m_keywords(keywords), m_reg_ex(reg_ex)
         {
         }
 
-        const rule m_trace;
+        const Rule m_trace;
 
-        const rule m_debug;
+        const Rule m_debug;
 
-        const rule m_info;
+        const Rule m_info;
 
-        const rule m_warning;
+        const Rule m_warning;
 
-        const rule m_error;
+        const Rule m_error;
 
-        const rule m_critical;
+        const Rule m_critical;
 
-        const rule m_default;
+        const Rule m_default;
 
         const QStringList m_keywords;
 

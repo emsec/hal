@@ -41,19 +41,19 @@ namespace hal
         Q_OBJECT
 
     public:
-        enum class item_type
+        enum class ItemType
         {
-            none   = 0,
-            gate   = 1,
-            net    = 2,
-            module = 3
+            None   = 0,
+            Gate   = 1,
+            Net    = 2,
+            Module = 3
         };
 
-        enum class subfocus
+        enum class Subfocus
         {
-            none  = 0,
-            left  = 1,
-            right = 2
+            None  = 0,
+            Left  = 1,
+            Right = 2
             //        up     = 3,
             //        down   = 4,
             //        center = 5,
@@ -61,9 +61,9 @@ namespace hal
 
         enum class Mode
         {
-            override = 0,
-            add      = 1,
-            remove   = 2
+            Override = 0,
+            Add      = 1,
+            Remove   = 2
         };
 
         explicit SelectionRelay(QObject* parent = nullptr);
@@ -110,14 +110,14 @@ namespace hal
         QSet<u32> m_selected_modules;
 
         // MAYBE UNNECESSARY
-        item_type m_current_type;
+        ItemType m_current_type;
         u32 m_current_id;
 
         // USE ARRAY[0] INSTEAD OF MEMBER ???
-        item_type m_focus_type;
+        ItemType m_focus_type;
         u32 m_focus_id;
 
-        subfocus m_subfocus;
+        Subfocus m_subfocus;
         u32 m_subfocus_index;    // HANDLE VIA INT OR STRING ?? INDEX HAS TO BE KNOWN ANYWAY TO FIND NEXT / PREVIOUS BOTH OPTIONS KIND OF BAD
 
     private:

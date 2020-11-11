@@ -38,23 +38,23 @@ namespace hal
         explicit GraphicsModule(Module* m);
 
     protected:
-        struct module_pin
+        struct ModulePin
         {
             QString name;
             u32 net_id;
 
-            bool operator==(const module_pin& rhs) const
+            bool operator==(const ModulePin& rhs) const
             {
                 return this->name == rhs.name && this->net_id == rhs.net_id;
             }
 
-            bool operator<(const module_pin& rhs) const
+            bool operator<(const ModulePin& rhs) const
             {
                 return gui_utility::numerated_order_compare(this->name, rhs.name);
             }
         };
 
-        QVector<module_pin> m_input_pins;
-        QVector<module_pin> m_output_pins;
+        QVector<ModulePin> m_input_pins;
+        QVector<ModulePin> m_output_pins;
     };
 }    // namespace hal

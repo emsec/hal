@@ -58,12 +58,12 @@ namespace hal
         void reset(int);
 
     private:
-        class filter_combo_box : public QComboBox
+        class FilterComboBox : public QComboBox
         {
         public:
-            filter_combo_box(QWidget* parent = 0);
+            FilterComboBox(QWidget* parent = 0);
 
-            FilterItem::rule get_data();
+            FilterItem::Rule get_data();
         };
 
         FilterTabBar* m_caller;
@@ -82,19 +82,19 @@ namespace hal
 
         QLabel m_status_message;
 
-        filter_combo_box m_trace_box;
+        FilterComboBox m_trace_box;
 
-        filter_combo_box m_debug_box;
+        FilterComboBox m_debug_box;
 
-        filter_combo_box m_info_box;
+        FilterComboBox m_info_box;
 
-        filter_combo_box m_warning_box;
+        FilterComboBox m_warning_box;
 
-        filter_combo_box m_error_box;
+        FilterComboBox m_error_box;
 
-        filter_combo_box m_critical_box;
+        FilterComboBox m_critical_box;
 
-        filter_combo_box m_default_box;
+        FilterComboBox m_default_box;
 
         QDialogButtonBox m_button_box;
     };

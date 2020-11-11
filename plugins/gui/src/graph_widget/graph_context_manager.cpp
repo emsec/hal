@@ -155,6 +155,7 @@ namespace hal
 
     void GraphContextManager::handle_module_input_port_name_changed(Module* m, const u32 net)
     {
+        Q_UNUSED(net);
         for (GraphContext* context : m_graph_contexts)
             if (context->modules().contains(m->get_id()))
                 context->schedule_scene_update();
@@ -162,6 +163,7 @@ namespace hal
 
     void GraphContextManager::handle_module_output_port_name_changed(Module* m, const u32 net)
     {
+        Q_UNUSED(net);
         for (GraphContext* context : m_graph_contexts)
             if (context->modules().contains(m->get_id()))
                 context->schedule_scene_update();

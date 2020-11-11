@@ -40,11 +40,11 @@ namespace hal
 
         switch (g_selection_relay->m_focus_type)
         {
-            case SelectionRelay::item_type::none:
+        case SelectionRelay::ItemType::None:
             {
                 return;
             }
-            case SelectionRelay::item_type::gate:
+        case SelectionRelay::ItemType::Gate:
             {
                 Gate* g = g_netlist->get_gate_by_id(g_selection_relay->m_focus_id);
 
@@ -62,7 +62,7 @@ namespace hal
 
                 return;
             }
-            case SelectionRelay::item_type::net:
+        case SelectionRelay::ItemType::Net:
             {
                 Net* n = g_netlist->get_net_by_id(g_selection_relay->m_focus_id);
 
@@ -76,7 +76,7 @@ namespace hal
 
                 return;
             }
-            case SelectionRelay::item_type::module:
+        case SelectionRelay::ItemType::Module:
             {
                 Module* m = g_netlist->get_module_by_id(g_selection_relay->m_focus_id);
 

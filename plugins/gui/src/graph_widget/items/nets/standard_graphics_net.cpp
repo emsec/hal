@@ -73,11 +73,11 @@ namespace hal
             s_alpha = 1;
     }
 
-    StandardGraphicsNet::StandardGraphicsNet(Net* n, const lines& l) : GraphicsNet(n)
+    StandardGraphicsNet::StandardGraphicsNet(Net* n, const Lines& l) : GraphicsNet(n)
     {
-        for (const h_line& h : l.h_lines)
+        for (const HLine& h : l.h_lines)
         {
-            for (const v_line& v : l.v_lines)
+            for (const VLine& v : l.v_lines)
             {
                 if (h.small_x <= v.x && v.x <= h.big_x)
                     if (v.small_y < h.y && h.y < v.big_y)
@@ -103,7 +103,7 @@ namespace hal
         qreal smallest_y = std::numeric_limits<qreal>::max();
         qreal biggest_y  = std::numeric_limits<qreal>::min();
 
-        for (const h_line& h : l.h_lines)
+        for (const HLine& h : l.h_lines)
         {
             if (h.small_x < smallest_x)
                 smallest_x = h.small_x;
@@ -122,7 +122,7 @@ namespace hal
             m_shape.addRect(rect);
         }
 
-        for (const v_line& v : l.v_lines)
+        for (const VLine& v : l.v_lines)
         {
             if (v.x < smallest_x)
                 smallest_x = v.x;
@@ -191,26 +191,26 @@ namespace hal
 #endif
     }
 
-    void StandardGraphicsNet::lines::append_h_line(const qreal small_x, const qreal big_x, const qreal y)
+    void StandardGraphicsNet::Lines::append_h_line(const qreal small_x, const qreal big_x, const qreal y)
     {
         assert(small_x < big_x);
 
-        h_lines.append(h_line{small_x, big_x, y});
+        h_lines.append(HLine{small_x, big_x, y});
     }
 
-    void StandardGraphicsNet::lines::append_v_line(const qreal x, const qreal small_y, const qreal big_y)
+    void StandardGraphicsNet::Lines::append_v_line(const qreal x, const qreal small_y, const qreal big_y)
     {
         assert(small_y < big_y);
 
-        v_lines.append(v_line{x, small_y, big_y});
+        v_lines.append(VLine{x, small_y, big_y});
     }
 
-    void StandardGraphicsNet::lines::merge_lines()
+    void StandardGraphicsNet::Lines::merge_lines()
     {
-        QVector<h_line> merged_h_lines;
-        QVector<v_line> merged_v_lines;
+        QVector<HLine> merged_h_lines;
+        QVector<VLine> merged_v_lines;
 
-        for (const h_line& h : h_lines)
+        for (const HLine& h : h_lines)
         {
             QVector<int> overlaps;
 
@@ -243,11 +243,11 @@ namespace hal
                     merged_h_lines.remove(index);
                 }
 
-                merged_h_lines.append(h_line{smallest_x, biggest_x, h.y});
+                merged_h_lines.append(HLine{smallest_x, biggest_x, h.y});
             }
         }
 
-        for (const v_line& v : v_lines)
+        for (const VLine& v : v_lines)
         {
             QVector<int> overlaps;
 
@@ -280,7 +280,7 @@ namespace hal
                     merged_v_lines.remove(index);
                 }
 
-                merged_v_lines.append(v_line{v.x, smallest_y, biggest_y});
+                merged_v_lines.append(VLine{v.x, smallest_y, biggest_y});
             }
         }
 

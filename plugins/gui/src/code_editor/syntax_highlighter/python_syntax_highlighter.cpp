@@ -28,66 +28,66 @@ namespace hal
     //      //m_comment_color("#3A565A") //2.5
     //      m_comment_color("#629755")    //2.98
     {
-        highlighting_rule rule;
+        HighlightingRule rule;
 
-        rule.pattern = QRegularExpression("\\b(and|as|assert|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|"
+        rule.mPattern = QRegularExpression("\\b(and|as|assert|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|"
                                           "nonlocal|not|or|pass|raise|return|try|while|with|yield|False|None|True)\\b");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_keyword_format;
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->m_keyword_format;
         m_highlighting_rules.append(rule);
 
-        rule.pattern = QRegularExpression("=|==|!=|<|<=|>|>=|\\+|-|\\*|/|//|%|\\*\\*|\\+=|-=|\\*=|/=|%=|\\^|\\||&|~|>>|<<");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_operator_format;
+        rule.mPattern = QRegularExpression("=|==|!=|<|<=|>|>=|\\+|-|\\*|/|//|%|\\*\\*|\\+=|-=|\\*=|/=|%=|\\^|\\||&|~|>>|<<");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->m_operator_format;
         m_highlighting_rules.append(rule);
 
-        rule.pattern = QRegularExpression("{|}|\\(|\\)|\\[|]");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_brace_format;
+        rule.mPattern = QRegularExpression("{|}|\\(|\\)|\\[|]");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->m_brace_format;
         m_highlighting_rules.append(rule);
 
-        rule.pattern = QRegularExpression("'[^']*'");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_single_quoted_string_format;
+        rule.mPattern = QRegularExpression("'[^']*'");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->m_single_quoted_string_format;
         m_highlighting_rules.append(rule);
 
-        rule.pattern = QRegularExpression("\"[^\"]*\"");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_double_quoted_string_format;
+        rule.mPattern = QRegularExpression("\"[^\"]*\"");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->m_double_quoted_string_format;
         m_highlighting_rules.append(rule);
 
-        rule.pattern = QRegularExpression("\\bself\\b");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_self_format;
+        rule.mPattern = QRegularExpression("\\bself\\b");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->m_self_format;
         m_highlighting_rules.append(rule);
 
-        rule.pattern = QRegularExpression("(\\b([1-9][0-9]*|0)\\.[0-9]*[eE][+-]?[0-9]+\\b)|"    // Exponent float
+        rule.mPattern = QRegularExpression("(\\b([1-9][0-9]*|0)\\.[0-9]*[eE][+-]?[0-9]+\\b)|"    // Exponent float
                                           "(\\b([1-9][0-9]*|0)\\.[0-9]*)|"                      // Point float
                                           "(\\b0[xX][0-9A-Fa-f]+[lL]?\\b)|"                     // Hexadecimal integer
                                           "(\\b0[0-7]+[lL]?\\b)|"                               // Octal integer
                                           "(\\b([1-9][0-9]*|0)[lL]?\\b)");                      // Decimal integer
 
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_number_format;
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->m_number_format;
         m_highlighting_rules.append(rule);
 
-        rule.pattern = QRegularExpression("#[^\\n]*");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_comment_format;
+        rule.mPattern = QRegularExpression("#[^\\n]*");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->m_comment_format;
         m_highlighting_rules.append(rule);
     }
 
     void PythonSyntaxHighlighter::highlightBlock(const QString& text)
     {
-        for (const highlighting_rule& rule : m_highlighting_rules)
+        for (const HighlightingRule& rule : m_highlighting_rules)
         {
-            QRegularExpressionMatchIterator it = rule.pattern.globalMatch(text);
+            QRegularExpressionMatchIterator it = rule.mPattern.globalMatch(text);
             while (it.hasNext())
             {
                 QRegularExpressionMatch match = it.next();
                 int index                     = match.capturedStart();
                 int length                    = match.capturedLength();
-                setFormat(index, length, rule.format);
+                setFormat(index, length, rule.mFormat);
             }
         }
 

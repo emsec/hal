@@ -97,12 +97,12 @@ namespace hal
 
     //    m_plain_text_edit->clear();
     //    QWriteLocker item_locker(item->get_lock());
-    //    boost::circular_buffer<hal_channel_entry*>* buffer           = item->get_buffer();
-    //    boost::circular_buffer<hal_channel_entry*>::iterator itBegin = buffer->begin();
-    //    boost::circular_buffer<hal_channel_entry*>::iterator itEnd   = buffer->end();
+    //    boost::circular_buffer<hal_ChannelEntry*>* buffer           = item->get_buffer();
+    //    boost::circular_buffer<hal_ChannelEntry*>::iterator itBegin = buffer->begin();
+    //    boost::circular_buffer<hal_ChannelEntry*>::iterator itEnd   = buffer->end();
     //    for (; itBegin != itEnd; ++itBegin)
     //    {
-    //        hal_channel_entry* entry = *itBegin;
+    //        hal_ChannelEntry* entry = *itBegin;
     //        m_log_marshall->append_log(entry->m_msg_type, QString::fromStdString(entry->m_msg), filter);
     //    }
     //}    // item_locker scope
@@ -137,12 +137,12 @@ namespace hal
 
         m_plain_text_edit->clear();
         QWriteLocker item_locker(item->get_lock());
-        const boost::circular_buffer<channel_entry*>* buffer           = item->get_buffer();
-        boost::circular_buffer<channel_entry*>::const_iterator itBegin = buffer->begin();
-        boost::circular_buffer<channel_entry*>::const_iterator itEnd   = buffer->end();
+        const boost::circular_buffer<ChannelEntry*>* buffer           = item->get_buffer();
+        boost::circular_buffer<ChannelEntry*>::const_iterator itBegin = buffer->begin();
+        boost::circular_buffer<ChannelEntry*>::const_iterator itEnd   = buffer->end();
         for (; itBegin != itEnd; ++itBegin)
         {
-            channel_entry* entry = *itBegin;
+            ChannelEntry* entry = *itBegin;
             m_log_marshall->append_log(entry->m_msg_type, QString::fromStdString(entry->m_msg), filter);
         }
     }

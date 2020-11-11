@@ -41,10 +41,11 @@
 #include <algorithm>
 #include <qmath.h>
 
-const QString ASSIGN_TO_GROUPING("Assign to grouping ");
 
 namespace hal
 {
+    const QString GraphGraphicsView::sAssignToGrouping("Assign to grouping ");
+
     GraphGraphicsView::GraphGraphicsView(GraphWidget* parent)
         : QGraphicsView(parent), m_graph_widget(parent), m_minimap_enabled(false), m_grid_enabled(true), m_grid_clusters_enabled(true), m_grid_type(graph_widget_constants::grid_type::Lines),
           m_zoom_modifier(Qt::NoModifier), m_zoom_factor_base(1.0015)
@@ -172,7 +173,7 @@ namespace hal
 
     void GraphGraphicsView::handle_rename_action()
     {
-        if (m_item->item_type() == item_type::Gate)
+        if (m_item->item_type() == ItemType::Gate)
         {
             Gate* g            = g_netlist->get_gate_by_id(m_item->id());
             const QString name = QString::fromStdString(g->get_name());
@@ -183,7 +184,7 @@ namespace hal
                 g->set_name(new_name.toStdString());
             }
         }
-        else if (m_item->item_type() == item_type::Module)
+        else if (m_item->item_type() == ItemType::Module)
         {
             Module* m          = g_netlist->get_module_by_id(m_item->id());
             const QString name = QString::fromStdString(m->get_name());
@@ -194,7 +195,7 @@ namespace hal
                 m->set_name(new_name.toStdString());
             }
         }
-        else if (m_item->item_type() == item_type::Net)
+        else if (m_item->item_type() == ItemType::Net)
         {
             Net* n             = g_netlist->get_net_by_id(m_item->id());
             const QString name = QString::fromStdString(n->get_name());
@@ -209,7 +210,7 @@ namespace hal
 
     void GraphGraphicsView::handle_change_type_action()
     {
-        if (m_item->item_type() == item_type::Module)
+        if (m_item->item_type() == ItemType::Module)
         {
             Module* m          = g_netlist->get_module_by_id(m_item->id());
             const QString type = QString::fromStdString(m->get_type());
@@ -260,7 +261,7 @@ namespace hal
         if (!item)
             return;
 
-        if (item->item_type() == item_type::Module)
+        if (item->item_type() == ItemType::Module)
             Q_EMIT module_double_clicked(item->id());
     }
 
@@ -381,13 +382,13 @@ namespace hal
                 // item we are dragging
                 g_selection_relay->clear();
                 g_selection_relay->m_selected_gates.insert(m_drag_item->id());
-                g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+                g_selection_relay->m_focus_type = SelectionRelay::ItemType::Gate;
                 g_selection_relay->m_focus_id   = m_drag_item->id();
-                g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
+                g_selection_relay->m_subfocus   = SelectionRelay::Subfocus::None;
                 g_selection_relay->relay_selection_changed(nullptr);
             }
             m_drop_allowed = false;
-            static_cast<GraphicsScene*>(scene())->start_drag_shadow(snap, size, NodeDragShadow::drag_cue::rejected);
+            static_cast<GraphicsScene*>(scene())->start_drag_shadow(snap, size, NodeDragShadow::DragCue::Rejected);
         }
         else
         {
@@ -421,7 +422,7 @@ namespace hal
             assert(layouter->done());    // ensure grid stable
             QMap<QPoint, Node>::const_iterator node_iter = layouter->position_to_node_map().find(snap[0]);
 
-            NodeDragShadow::drag_cue cue = NodeDragShadow::drag_cue::rejected;
+            NodeDragShadow::DragCue cue = NodeDragShadow::DragCue::Rejected;
             // disallow dropping an item on itself
             if (snap[0] != m_drag_start_gridpos)
             {
@@ -430,7 +431,7 @@ namespace hal
                     if (node_iter != layouter->position_to_node_map().end())
                     {
                         // allow move only on empty cells
-                        cue = NodeDragShadow::drag_cue::swappable;
+                        cue = NodeDragShadow::DragCue::Swappable;
                     }
                 }
                 else
@@ -438,11 +439,11 @@ namespace hal
                     if (node_iter == layouter->position_to_node_map().end())
                     {
                         // allow move only on empty cells
-                        cue = NodeDragShadow::drag_cue::movable;
+                        cue = NodeDragShadow::DragCue::Movable;
                     }
                 }
             }
-            m_drop_allowed = (cue != NodeDragShadow::drag_cue::rejected);
+            m_drop_allowed = (cue != NodeDragShadow::DragCue::Rejected);
 
             static_cast<GraphicsScene*>(scene())->move_drag_shadow(snap[1], cue);
         }
@@ -566,9 +567,9 @@ namespace hal
         if (item)
         {
             m_item   = static_cast<GraphicsItem*>(item);
-            isGate   = m_item->item_type() == item_type::Gate;
-            isModule = m_item->item_type() == item_type::Module;
-            isNet    = m_item->item_type() == item_type::Net;
+            isGate   = m_item->item_type() == ItemType::Gate;
+            isModule = m_item->item_type() == ItemType::Module;
+            isNet    = m_item->item_type() == ItemType::Net;
 
             if (isGate)
             {
@@ -576,9 +577,9 @@ namespace hal
                 {
                     g_selection_relay->clear();
                     g_selection_relay->m_selected_gates.insert(m_item->id());
-                    g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+                    g_selection_relay->m_focus_type = SelectionRelay::ItemType::Gate;
                     g_selection_relay->m_focus_id   = m_item->id();
-                    g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
+                    g_selection_relay->m_subfocus   = SelectionRelay::Subfocus::None;
                     g_selection_relay->relay_selection_changed(this);
                 }
 
@@ -596,9 +597,9 @@ namespace hal
                 {
                     g_selection_relay->clear();
                     g_selection_relay->m_selected_modules.insert(m_item->id());
-                    g_selection_relay->m_focus_type = SelectionRelay::item_type::module;
+                    g_selection_relay->m_focus_type = SelectionRelay::ItemType::Module;
                     g_selection_relay->m_focus_id   = m_item->id();
-                    g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
+                    g_selection_relay->m_subfocus   = SelectionRelay::Subfocus::None;
                     g_selection_relay->relay_selection_changed(this);
                 }
 
@@ -619,9 +620,9 @@ namespace hal
                 {
                     g_selection_relay->clear();
                     g_selection_relay->m_selected_nets.insert(m_item->id());
-                    g_selection_relay->m_focus_type = SelectionRelay::item_type::net;
+                    g_selection_relay->m_focus_type = SelectionRelay::ItemType::Net;
                     g_selection_relay->m_focus_id   = m_item->id();
-                    g_selection_relay->m_subfocus   = SelectionRelay::subfocus::none;
+                    g_selection_relay->m_subfocus   = SelectionRelay::Subfocus::None;
                     g_selection_relay->relay_selection_changed(this);
                 }
 
@@ -716,7 +717,7 @@ namespace hal
                     QString groupingName = QString::fromStdString(grouping->get_name());
                     if (groupingName == assignedGroupingName && !isMultiSelect)
                         continue;
-                    action = groupingSubmenu->addAction(ASSIGN_TO_GROUPING + groupingName);
+                    action = groupingSubmenu->addAction(sAssignToGrouping + groupingName);
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleGroupingAssingExisting);
                 }
             }
@@ -775,8 +776,8 @@ namespace hal
 
     bool GraphGraphicsView::item_draggable(GraphicsItem* item)
     {
-        item_type type = item->item_type();
-        return type == item_type::Gate || type == item_type::Module;
+        ItemType type = item->item_type();
+        return type == ItemType::Gate || type == ItemType::Module;
     }
 
     void GraphGraphicsView::gentle_zoom(const qreal factor)
@@ -984,7 +985,7 @@ namespace hal
     void GraphGraphicsView::handleGroupingUnassign()
     {
         Grouping* assignedGrouping = nullptr;
-        if (m_item->item_type() == item_type::Gate)
+        if (m_item->item_type() == ItemType::Gate)
         {
             Gate* g = g_netlist->get_gate_by_id(m_item->id());
             if (g)
@@ -993,7 +994,7 @@ namespace hal
                 return;
             assignedGrouping->remove_gate(g);
         }
-        if (m_item->item_type() == item_type::Module)
+        if (m_item->item_type() == ItemType::Module)
         {
             Module* m = g_netlist->get_module_by_id(m_item->id());
             if (m)
@@ -1012,13 +1013,13 @@ namespace hal
             return;
         }
 
-        if (m_item->item_type() == item_type::Gate)
+        if (m_item->item_type() == ItemType::Gate)
         {
             Gate* g = g_netlist->get_gate_by_id(m_item->id());
             if (g)
                 grp->assign_gate(g);
         }
-        if (m_item->item_type() == item_type::Module)
+        if (m_item->item_type() == ItemType::Module)
         {
             Module* m = g_netlist->get_module_by_id(m_item->id());
             if (m)
@@ -1041,8 +1042,8 @@ namespace hal
         handleGroupingUnassign();
         const QAction* action = static_cast<const QAction*>(QObject::sender());
         QString grpName       = action->text();
-        if (grpName.startsWith(ASSIGN_TO_GROUPING))
-            grpName.remove(0, ASSIGN_TO_GROUPING.size());
+        if (grpName.startsWith(sAssignToGrouping))
+            grpName.remove(0, sAssignToGrouping.size());
         Grouping* grp = g_content_manager->getGroupingManagerWidget()->getModel()->groupingByName(grpName);
         if (grp)
             groupingAssignInternal(grp);
@@ -1079,12 +1080,12 @@ namespace hal
         int min_y              = layouter->min_y_index();
         QVector<qreal> x_vals  = layouter->x_values();
         QVector<qreal> y_vals  = layouter->y_values();
-        layouter_point x_point = closest_layouter_point(scene_pos.x(), default_width, min_x, x_vals);
-        layouter_point y_point = closest_layouter_point(scene_pos.y(), default_height, min_y, y_vals);
-        return QVector({QPoint(x_point.index, y_point.index), QPoint(x_point.pos, y_point.pos)});
+        LayouterPoint x_point = closest_layouter_point(scene_pos.x(), default_width, min_x, x_vals);
+        LayouterPoint y_point = closest_layouter_point(scene_pos.y(), default_height, min_y, y_vals);
+        return QVector({QPoint(x_point.mIndex, y_point.mIndex), QPoint(x_point.mPos, y_point.mPos)});
     }
 
-    GraphGraphicsView::layouter_point GraphGraphicsView::closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const
+    GraphGraphicsView::LayouterPoint GraphGraphicsView::closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const
     {
         int index = min_index;
         qreal pos = 0;
@@ -1147,6 +1148,6 @@ namespace hal
                 pos = posThis;
             }
         }
-        return layouter_point{index, pos};
+        return LayouterPoint{index, pos};
     }
 }    // namespace hal

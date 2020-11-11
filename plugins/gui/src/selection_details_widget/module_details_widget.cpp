@@ -608,9 +608,9 @@ namespace hal
             auto ep = *destinations.begin();
             g_selection_relay->clear();
             g_selection_relay->m_selected_gates.insert(ep->get_gate()->get_id());
-            g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+            g_selection_relay->m_focus_type = SelectionRelay::ItemType::Gate;
             g_selection_relay->m_focus_id   = ep->get_gate()->get_id();
-            g_selection_relay->m_subfocus   = SelectionRelay::subfocus::left;
+            g_selection_relay->m_subfocus   = SelectionRelay::Subfocus::Left;
 
             auto pins                          = ep->get_gate()->get_input_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
@@ -651,9 +651,9 @@ namespace hal
             auto ep = *sources.begin();
             g_selection_relay->clear();
             g_selection_relay->m_selected_gates.insert(ep->get_gate()->get_id());
-            g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+            g_selection_relay->m_focus_type = SelectionRelay::ItemType::Gate;
             g_selection_relay->m_focus_id   = ep->get_gate()->get_id();
-            g_selection_relay->m_subfocus   = SelectionRelay::subfocus::right;
+            g_selection_relay->m_subfocus   = SelectionRelay::Subfocus::Right;
 
             auto pins                          = ep->get_gate()->get_output_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
@@ -690,10 +690,10 @@ namespace hal
         g_selection_relay->m_selected_gates = to_gates;
         if (to_gates.size() == 1)
         {
-            g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+            g_selection_relay->m_focus_type = SelectionRelay::ItemType::Gate;
             auto g                         = g_netlist->get_gate_by_id(*to_gates.constBegin());
             g_selection_relay->m_focus_id   = g->get_id();
-            g_selection_relay->m_subfocus   = SelectionRelay::subfocus::left;
+            g_selection_relay->m_subfocus   = SelectionRelay::Subfocus::Left;
 
             u32 index_cnt = 0;
             for (const auto& pin : g->get_input_pins())

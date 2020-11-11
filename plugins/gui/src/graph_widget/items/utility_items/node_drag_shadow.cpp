@@ -20,17 +20,17 @@ namespace hal
 
     void NodeDragShadow::load_settings()
     {
-        s_color_pen[static_cast<int>(drag_cue::rejected)] = QColor(166, 31, 31, 255);
-        s_color_pen[static_cast<int>(drag_cue::movable)] = QColor(48, 172, 79, 255);
-        s_color_pen[static_cast<int>(drag_cue::swappable)] = QColor(37, 97, 176, 255);
+        s_color_pen[static_cast<int>(DragCue::Rejected)] = QColor(166, 31, 31, 255);
+        s_color_pen[static_cast<int>(DragCue::Movable)] = QColor(48, 172, 79, 255);
+        s_color_pen[static_cast<int>(DragCue::Swappable)] = QColor(37, 97, 176, 255);
 
-        s_color_solid[static_cast<int>(drag_cue::rejected)] = QColor(166, 31, 31, 200);
-        s_color_solid[static_cast<int>(drag_cue::movable)] = QColor(48, 172, 79, 200);
-        s_color_solid[static_cast<int>(drag_cue::swappable)] = QColor(37, 97, 176, 200);
+        s_color_solid[static_cast<int>(DragCue::Rejected)] = QColor(166, 31, 31, 200);
+        s_color_solid[static_cast<int>(DragCue::Movable)] = QColor(48, 172, 79, 200);
+        s_color_solid[static_cast<int>(DragCue::Swappable)] = QColor(37, 97, 176, 200);
 
-        s_color_translucent[static_cast<int>(drag_cue::rejected)] = QColor(166, 31, 31, 150);
-        s_color_translucent[static_cast<int>(drag_cue::movable)] = QColor(48, 172, 79, 150);
-        s_color_translucent[static_cast<int>(drag_cue::swappable)] = QColor(37, 97, 176, 150);
+        s_color_translucent[static_cast<int>(DragCue::Rejected)] = QColor(166, 31, 31, 150);
+        s_color_translucent[static_cast<int>(DragCue::Movable)] = QColor(48, 172, 79, 150);
+        s_color_translucent[static_cast<int>(DragCue::Swappable)] = QColor(37, 97, 176, 150);
 
         s_pen.setCosmetic(true);
         s_pen.setJoinStyle(Qt::MiterJoin);
@@ -89,7 +89,7 @@ namespace hal
         s_lod = lod;
     }
 
-    void NodeDragShadow::set_visual_cue(const drag_cue cue)
+    void NodeDragShadow::set_visual_cue(const DragCue cue)
     {
         m_cue = cue;
         update();

@@ -21,7 +21,7 @@ namespace hal
         return m_name;
     }
 
-    const boost::circular_buffer<channel_entry *> *ChannelItem::get_buffer() const
+    const boost::circular_buffer<ChannelEntry *> *ChannelItem::get_buffer() const
     {
         return &m_log_entries;
     }
@@ -31,7 +31,7 @@ namespace hal
         return &m_lock;
     }
 
-    void ChannelItem::append_entry(channel_entry* entry)
+    void ChannelItem::append_entry(ChannelEntry* entry)
     {
         m_log_entries.push_back(entry);
     }

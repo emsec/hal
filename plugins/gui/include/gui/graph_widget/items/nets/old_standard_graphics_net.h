@@ -35,24 +35,24 @@ namespace hal
     class OldStandardGraphicsNet : public GraphicsNet
     {
     public:
-        struct h_line
+        struct HLine
         {
             qreal small_x;
             qreal big_x;
             qreal y;
         };
 
-        struct v_line
+        struct VLine
         {
             qreal x;
             qreal small_y;
             qreal big_y;
         };
 
-        struct lines
+        struct Lines
         {
-            QVector<h_line> h_lines;
-            QVector<v_line> v_lines;
+            QVector<HLine> h_lines;
+            QVector<VLine> v_lines;
 
     //        void remove_zero_length_lines();
     //        void fix_order();
@@ -62,8 +62,8 @@ namespace hal
         static void load_settings();
         static void update_alpha();
 
-        //StandardGraphicsNet(Net* n, const lines& l);
-        OldStandardGraphicsNet(Net* n, lines& l, bool complete = true);
+        //StandardGraphicsNet(Net* n, const Lines& l);
+        OldStandardGraphicsNet(Net* n, Lines& l, bool complete = true);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 

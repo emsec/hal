@@ -27,18 +27,18 @@
 
 namespace hal
 {
-    enum class item_type
+    enum class ItemType
     {
-        Module, Gate, Net
+        None, Module, Gate, Net
     };
 
     class Node
     {
     public:
-        enum type_t {None, Module, Gate};
+        enum NodeType {None, Module, Gate};
 
-        Node(u32 i=0, type_t t=None) : mId(i), mType(t) {;}
-        type_t type() const { return mType; }
+        Node(u32 i=0, NodeType t=None) : mId(i), mType(t) {;}
+        NodeType type() const { return mType; }
         u32 id() const { return mId; }
 
         bool isNull()   const { return mType == None; }
@@ -67,16 +67,16 @@ namespace hal
     private:
 
         u32 mId;
-        type_t mType;
+        NodeType mType;
     };
 
     class PlacementHint
     {
     public:
-        enum mode_t {Standard = 0, PreferLeft = 1, PreferRight = 2};
-        PlacementHint(mode_t mod = Standard, const Node& orign=Node())
+        enum PlacementModeType {Standard = 0, PreferLeft = 1, PreferRight = 2};
+        PlacementHint(PlacementModeType mod = Standard, const Node& orign=Node())
             : mMode(mod), mPreferredOrigin(orign) {;}
-        mode_t mode() const { return mMode; }
+        PlacementModeType mode() const { return mMode; }
         Node preferredOrigin() const { return mPreferredOrigin; }
 
         bool operator<(const PlacementHint& rhs) const
@@ -93,7 +93,7 @@ namespace hal
             return mMode == rhs.mMode && mPreferredOrigin == rhs.mPreferredOrigin;
         }
     private:
-        mode_t mMode;
+        PlacementModeType mMode;
         Node mPreferredOrigin;
 
     };

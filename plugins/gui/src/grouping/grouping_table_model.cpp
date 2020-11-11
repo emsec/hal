@@ -260,24 +260,26 @@ namespace hal {
         return retval;
     }
 
-    QColor GroupingTableModel::colorForItem(item_type itemType, u32 itemId) const
+    QColor GroupingTableModel::colorForItem(ItemType itemType, u32 itemId) const
     {
         Grouping* itemGrouping = nullptr;
         const Module* m = nullptr;
         const Gate* g = nullptr;
         const Net* n = nullptr;
         switch (itemType) {
-        case item_type::Module:
+        case ItemType::Module:
             m = g_netlist->get_module_by_id(itemId);
             if (m) itemGrouping = m->get_grouping();
             break;
-        case item_type::Gate:
+        case ItemType::Gate:
             g = g_netlist->get_gate_by_id(itemId);
             if (g) itemGrouping = g->get_grouping();
             break;
-        case item_type::Net:
+        case ItemType::Net:
             n = g_netlist->get_net_by_id(itemId);
             if (n) itemGrouping = n->get_grouping();
+            break;
+        default:
             break;
         }
         if (itemGrouping)

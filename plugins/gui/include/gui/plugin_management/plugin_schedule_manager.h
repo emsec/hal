@@ -30,7 +30,7 @@ namespace hal
     class PluginArgumentsWidget;
     class ProgramArguments;
 
-    struct argument
+    struct Argument
     {
         QString flag;
         QString description;
@@ -40,7 +40,7 @@ namespace hal
 
     class PluginScheduleManager : public QObject
     {
-        using schedule = QList<QPair<QString, QList<argument>>>;
+        using schedule = QList<QPair<QString, QList<Argument>>>;
 
         Q_OBJECT
 

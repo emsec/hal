@@ -54,7 +54,7 @@ namespace hal
             msg_to_print = beginHTML + color + intermediateHTML + html_ready_msg + endHTML;
         else
         {
-            FilterItem::rule rule;
+            FilterItem::Rule rule;
             switch (t)
             {
                 case spdlog::level::level_enum::trace:
@@ -80,7 +80,7 @@ namespace hal
                     break;
             }
 
-            if (rule != FilterItem::rule::HideAll)
+            if (rule != FilterItem::Rule::HideAll)
             {
                 bool match = false;
                 for (QString key : filter->m_keywords)
@@ -122,7 +122,7 @@ namespace hal
                 }
                 else
                 {
-                    if (rule == FilterItem::rule::ShowAll)
+                    if (rule == FilterItem::Rule::ShowAll)
                         msg_to_print = beginHTML + color + intermediateHTML + html_ready_msg + endHTML;
                     else
                         return;

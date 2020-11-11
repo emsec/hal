@@ -23,7 +23,7 @@ namespace hal
        void setPredecessorIds(const QMap<u32,WaitToBeSeatedEntry*>& gateMap);
 
    public:
-       WaitToBeSeatedEntry(Node::type_t t=Node::Module, u32 id=0);
+       WaitToBeSeatedEntry(Node::NodeType t=Node::Module, u32 id=0);
 
        Node getNode() const { return mNode; }
        u32 getId() const { return mNode.id(); }

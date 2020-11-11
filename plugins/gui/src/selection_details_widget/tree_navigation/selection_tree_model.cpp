@@ -48,13 +48,13 @@ namespace hal
 
         switch (role) {
             case Qt::DecorationRole:
-                return index.column() == NAME_COLUMN
+                return index.column() == sNameColumn
                         ? QVariant(item->icon())
                         : QVariant();
             case Qt::DisplayRole:
                 return item->data(index.column());
             case Qt::TextAlignmentRole:
-                return index.column() == ID_COLUMN
+                return index.column() == sIdColumn
                         ? Qt::AlignRight
                         : Qt::AlignLeft;
             default:
@@ -137,7 +137,7 @@ namespace hal
     int SelectionTreeModel::columnCount(const QModelIndex& parent) const
     {
         Q_UNUSED(parent)
-        return MAX_COLUMN;
+        return sMaxColumn;
     }
 
     void SelectionTreeModel::fetchSelection(bool hasEntries)

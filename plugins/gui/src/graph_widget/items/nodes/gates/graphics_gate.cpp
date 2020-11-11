@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    GraphicsGate::GraphicsGate(Gate* g) : GraphicsNode(item_type::Gate, g->get_id(), QString::fromStdString(g->get_name())), m_type(QString::fromStdString(g->get_type()->get_name()))
+    GraphicsGate::GraphicsGate(Gate* g) : GraphicsNode(ItemType::Gate, g->get_id(), QString::fromStdString(g->get_name())), m_type(QString::fromStdString(g->get_type()->get_name()))
     {
         for (const std::string& input_pin : g->get_input_pins())
         {

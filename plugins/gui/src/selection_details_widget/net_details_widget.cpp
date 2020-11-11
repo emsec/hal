@@ -284,7 +284,7 @@ namespace hal
 
         QTableWidget* sender_table = dynamic_cast<QTableWidget*>(sender());
 
-        SelectionRelay::subfocus focus = (sender_table == m_source_pins_table) ? SelectionRelay::subfocus::right : SelectionRelay::subfocus::left;
+        SelectionRelay::Subfocus focus = (sender_table == m_source_pins_table) ? SelectionRelay::Subfocus::Right : SelectionRelay::Subfocus::Left;
         auto gate_id                   = item->data(Qt::UserRole).toInt();
         auto pin                       = sender_table->item(item->row(), 0)->text().toStdString();
 
@@ -294,7 +294,7 @@ namespace hal
 
         g_selection_relay->clear();
         g_selection_relay->m_selected_gates.insert(gate_id);
-        g_selection_relay->m_focus_type = SelectionRelay::item_type::gate;
+        g_selection_relay->m_focus_type = SelectionRelay::ItemType::Gate;
         g_selection_relay->m_focus_id   = gate_id;
         g_selection_relay->m_subfocus   = focus;
 
