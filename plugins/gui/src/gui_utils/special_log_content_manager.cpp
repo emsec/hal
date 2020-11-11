@@ -58,7 +58,7 @@ namespace hal
             }
         }
 
-        QString file_name = "Screenshot_" +QString::number(QDateTime::currentDateTime().toTime_t()) + "_" + QDateTime::currentDateTime().toString("dd-MM-yyyy_hh-mm-ss");
+        QString file_name = "Screenshot_" +QString::number(QDateTime::currentDateTime().toTime_t());
         QString file_type = "png";
 
         QList<QPixmap> pixmap_list;
@@ -77,7 +77,7 @@ namespace hal
 
             }
             else
-                qDebug() << "could not find top level widget to screenshot.";
+                qDebug() << "Could not find any top level widget to screenshot.";
         }
 
         QImage image(total_width, max_height, QImage::Format_RGB32);
@@ -92,7 +92,7 @@ namespace hal
         }
 
         if(!image.save(screenshot_path + "/" + file_name + "." + file_type))
-            qDebug() << "could not save image!";
+            qDebug() << "Could not save image!";
     }
 
     void SpecialLogContentManager::safe_python_editor()
@@ -115,13 +115,13 @@ namespace hal
         }
 
         QTabWidget* python_tab_widget = m_python_editor->get_tab_widget();
-        QString file_name = "Pythoncodeeditors_" + QString::number(QDateTime::currentDateTime().toTime_t()) + "_" + QDateTime::currentDateTime().toString("dd-MM-yyyy_hh-mm-ss");
+        QString file_name = "Pythoncodeeditors_" + QString::number(QDateTime::currentDateTime().toTime_t());
         QString file_type = "txt";
         QFile file(python_editor_content_dumb_path + "/" + file_name + "." + file_type);
 
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            qDebug() << "Could not open file with path: " << file.fileName() << " in safe_python_editor. Abort.";
+            qDebug() << "Could not open file with path: " << file.fileName() << ". Abort.";
             return;
         }
 
