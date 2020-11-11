@@ -48,10 +48,10 @@ namespace hal
         mDeleteAction->setToolTip("Delete");
         mToSelectionAction->setToolTip("To selection");
 
-        mNewGroupingAction->setText("Create New Grouping");
-        mRenameAction->setText("Rename Grouping");
-        mColorSelectAction->setText("Select Color for Grouping");
-        mDeleteAction->setText("Delete View");
+        mNewGroupingAction->setText("Create new grouping");
+        mRenameAction->setText("Rename grouping");
+        mColorSelectAction->setText("Select color for grouping");
+        mDeleteAction->setText("Delete grouping");
         mToSelectionAction->setText("Add grouping to selection");
 
         //mOpenAction->setEnabled(false);
