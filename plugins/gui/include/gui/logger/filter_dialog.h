@@ -45,11 +45,11 @@ namespace hal
 
         ~FilterDialog();
 
-        void append_filter_item(QString name, FilterItem* item);
+        void appendFilterItem(QString name, FilterItem* item);
 
     Q_SIGNALS:
 
-        void input_valid();
+        void inputValid();
 
     public Q_SLOTS:
 
@@ -66,36 +66,36 @@ namespace hal
             FilterItem::Rule get_data();
         };
 
-        FilterTabBar* m_caller;
+        FilterTabBar* mCaller;
 
-        QVBoxLayout m_content_layout;
+        QVBoxLayout mContentLayout;
 
-        QFormLayout m_form_layout;
+        QFormLayout mFormLayout;
 
-        QGridLayout m_grid_layout;
+        QGridLayout mGridLayout;
 
-        QLineEdit m_name;
+        QLineEdit mName;
 
-        QLineEdit m_keywords;
+        QLineEdit mKeywords;
 
-        QLineEdit m_regex;
+        QLineEdit mRegex;
 
-        QLabel m_status_message;
+        QLabel mStatusMessage;
 
-        FilterComboBox m_trace_box;
+        FilterComboBox mTraceBox;
 
-        FilterComboBox m_debug_box;
+        FilterComboBox mDebugBox;
 
-        FilterComboBox m_info_box;
+        FilterComboBox mInfoBox;
 
-        FilterComboBox m_warning_box;
+        FilterComboBox mWarningBox;
 
-        FilterComboBox m_error_box;
+        FilterComboBox mErrorBox;
 
-        FilterComboBox m_critical_box;
+        FilterComboBox mCriticalBox;
 
-        FilterComboBox m_default_box;
+        FilterComboBox mDefaultBox;
 
-        QDialogButtonBox m_button_box;
+        QDialogButtonBox mButtonBox;
     };
 }

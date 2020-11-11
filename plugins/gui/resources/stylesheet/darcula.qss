@@ -342,10 +342,10 @@ hal--Searchbar {
     border-width                : 6px;
     border-style                : solid;
     border-color                : rgb(9, 11, 13);
-    qproperty-search_icon       : ":/icons/search";
-    qproperty-search_icon_style : "all -> #E4E4E4";
-    qproperty-clear_icon        : ":/icons/cross";
-    qproperty-clear_icon_style  : "all -> #E4E4E4";
+    qproperty-searchIcon       : ":/icons/search";
+    qproperty-searchIconStyle : "all -> #E4E4E4";
+    qproperty-clearIcon        : ":/icons/cross";
+    qproperty-clearIconStyle  : "all -> #E4E4E4";
 }
 
 hal--Searchbar QLabel {
@@ -523,11 +523,11 @@ hal--MainSettingsWidget hal--ExpandingListButton {
     background-color     : rgb(9, 11, 13);
     color                : #D2DAE2;
     border-right         : 5px solid rgb(13, 15, 17);
-    qproperty-icon_style : "all -> #969696";
+    qproperty-iconStyle : "all -> #969696";
 }
 
 hal--MainSettingsWidget hal--ExpandingListButton[hover=true] {
-    qproperty-icon_style : "all -> #E4E4E4";
+    qproperty-iconStyle : "all -> #E4E4E4";
 }
 
 hal--MainSettingsWidget hal--ExpandingListButton[hover=true] * {
@@ -538,7 +538,7 @@ hal--MainSettingsWidget hal--ExpandingListButton[hover=true] * {
 
 hal--MainSettingsWidget hal--ExpandingListButton[selected=true] {
     background-color     : rgb(34, 37, 38);
-    qproperty-icon_style : "all -> #A9B7C6";
+    qproperty-iconStyle : "all -> #A9B7C6";
 }
 
 hal--MainSettingsWidget hal--ExpandingListButton[type="child"] {
@@ -630,11 +630,11 @@ hal--CodeEditor {
     font-style                                 : normal;
     font-size                                  : 14px;
     font-weight                                : normal;
-    qproperty-line_number_font                 : "Iosevka";
-    qproperty-line_number_color                : #65686B;
-    qproperty-current_line_background          : #323232;
-    qproperty-line_number_highlight_background : #214283;
-    /*qproperty-line_number_background : rgb(14, 16, 18);*/
+    qproperty-lineNumberFont                 : "Iosevka";
+    qproperty-lineNumberColor                : #65686B;
+    qproperty-currentLineBackground          : #323232;
+    qproperty-lineNumberHighlightBackground : #214283;
+    /*qproperty-lineNumberBackground : rgb(14, 16, 18);*/
 }
 
 hal--CodeEditor hal--LineNumberArea {
@@ -642,8 +642,8 @@ hal--CodeEditor hal--LineNumberArea {
     /*background : rgb(42, 44, 46);*/
     background             : rgb(49, 51, 53);
     border-right           : 1px solid #606366;
-    qproperty-left_offset  : 15;
-    qproperty-right_offset : 15;
+    qproperty-leftOffset  : 15;
+    qproperty-rightOffset : 15;
     /*background : #171a1d;*/
 }
 
@@ -655,11 +655,11 @@ hal--CodeEditor hal--LineNumberArea {
 /*}*/
 
 hal--VhdlSyntaxHighlighter {
-    qproperty-keyword_color : rgb(204, 120, 50);
-    qproperty-comment_color : rgb(97, 150, 71);
+    qproperty-keywordColor : rgb(204, 120, 50);
+    qproperty-commentColor : rgb(97, 150, 71);
     qproperty-type_color    : rgb(152, 118, 170);
-    qproperty-number_color  : rgb(104, 151, 187);
-    qproperty-text_color    : rgb(169, 183, 198);
+    qproperty-numberColor  : rgb(104, 151, 187);
+    qproperty-textColor    : rgb(169, 183, 198);
 }
 
 /*LabeledFrame {
@@ -818,8 +818,8 @@ hal--RecentFileItem {
     padding-left         : 10px;
     padding-right        : 10px;
     /*margin-bottom : 2px;*/
-    qproperty-icon_path  : ":/icons/folder";
-    qproperty-icon_style : "all->#3192C5";
+    qproperty-iconPath  : ":/icons/folder";
+    qproperty-iconStyle : "all->#3192C5";
 }
 
 hal--RecentFileItem * {
@@ -842,7 +842,7 @@ hal--RecentFileItem #path-label {
 
 hal--RecentFileItem[hover=true] {
     background : rgb(21, 23, 25);
-    /*qproperty-icon_style : "all->#ffeea5";*/
+    /*qproperty-iconStyle : "all->#ffeea5";*/
 }
 
 hal--RecentFileItem[hover=true] * {
@@ -860,13 +860,13 @@ hal--RecentFileItem QToolButton:hover {
 }
 
 hal--RecentFileItem[disabled=true]{
-    qproperty-icon_style : "all->#888888"
-    /*qproperty-icon_style : "all->#ffeea5";*/
+    qproperty-iconStyle : "all->#888888"
+    /*qproperty-iconStyle : "all->#ffeea5";*/
 }
 
 hal--RecentFileItem[disabled=true] #name-label{
     color: #555555;
-    /*qproperty-icon_style : "all->#ffeea5";*/
+    /*qproperty-iconStyle : "all->#ffeea5";*/
 }
 hal--RecentFileItem[disabled=true] #path-label {
     /*color : #292B2D;*/
@@ -879,12 +879,12 @@ hal--RecentFileItem[disabled=true] #path-label {
 
 hal--OpenFileWidget {
     background           : rgb(14, 16, 18);
-    qproperty-icon_path  : ":/icons/drop";
-    qproperty-icon_style : "all->#151719";
+    qproperty-iconPath  : ":/icons/drop";
+    qproperty-iconStyle : "all->#151719";
 }
 
 hal--OpenFileWidget[drag_active=true] {
-    qproperty-icon_style : "all->#1f2123";
+    qproperty-iconStyle : "all->#1f2123";
 }
 
 hal--OpenFileWidget QLabel {
@@ -942,8 +942,8 @@ hal--GetInTouchItem {
     padding-bottom       : 6px;
     padding-left         : 10px;
     padding-right        : 10px;
-    qproperty-icon_path  : ":/icons/folder";
-    qproperty-icon_style : "all->#D3C68A";
+    qproperty-iconPath  : ":/icons/folder";
+    qproperty-iconStyle : "all->#D3C68A";
 }
 
 hal--GetInTouchItem * {
@@ -1190,14 +1190,14 @@ hal--ScheduledPluginItem[hover=true] #name-label {
 
 hal--NoScheduledPluginsWidget {
     background           : rgb(14, 16, 18);
-    qproperty-icon_path  : ":/icons/drop";
-    qproperty-icon_style : "all->#151719";
+    qproperty-iconPath  : ":/icons/drop";
+    qproperty-iconStyle : "all->#151719";
     min-width            : 400px;
     max-width            : 400px;
 }
 
 hal--NoScheduledPluginsWidget[drag_active=true] {
-    qproperty-icon_style : "all->#1f2123";
+    qproperty-iconStyle : "all->#1f2123";
 }
 
 hal--NoScheduledPluginsWidget QLabel {
@@ -1295,13 +1295,13 @@ hal--PythonEditor hal--CodeEditor {
     /*color : #C5CDA7;*/
     color                             : #A9B7C6;
     background                        : #2B2B2B;
-    qproperty-line_number_font        : "Iosevka";
-    /*qproperty-line_number_color : #1E2C2E;*/
-    /*qproperty-line_number_color : #222931;*/
-    /*qproperty-line_number_color : #424242;*/
-    qproperty-line_number_color       : #65686B;
-    qproperty-line_number_background  : #2B2B2B;
-    qproperty-current_line_background : #323232;
+    qproperty-lineNumberFont        : "Iosevka";
+    /*qproperty-lineNumberColor : #1E2C2E;*/
+    /*qproperty-lineNumberColor : #222931;*/
+    /*qproperty-lineNumberColor : #424242;*/
+    qproperty-lineNumberColor       : #65686B;
+    qproperty-lineNumberBackground  : #2B2B2B;
+    qproperty-currentLineBackground : #323232;
 }
 
 hal--PythonEditor hal--CodeEditor hal--LineNumberArea {
@@ -1332,21 +1332,21 @@ hal--CodeEditorMinimap QScrollBar::handle:vertical {
 }
 
 hal--GetInTouchItem#about_item {
-    /*qproperty-icon_style: "all->#969696";*/
-    qproperty-icon_style : "all->#FFDD00";
-    qproperty-icon_path  : ":/icons/info" /*qproperty-icon_style: "";
-qproperty-icon_path: ":/icons/hal"*/
+    /*qproperty-iconStyle: "all->#969696";*/
+    qproperty-iconStyle : "all->#FFDD00";
+    qproperty-iconPath  : ":/icons/info" /*qproperty-iconStyle: "";
+qproperty-iconPath: ":/icons/hal"*/
 }
 
 hal--GetInTouchItem#documentation_item {
-    /*qproperty-icon_style: "all->#969696";*/
-    qproperty-icon_style : "all->#FFDD00";
-    qproperty-icon_path  : ":/icons/info"
+    /*qproperty-iconStyle: "all->#969696";*/
+    qproperty-iconStyle : "all->#FFDD00";
+    qproperty-iconPath  : ":/icons/info"
 }
 
 hal--GetInTouchItem#ticket_item {
-    qproperty-icon_style : "all->#ff9000";
-    qproperty-icon_path  : ":/icons/github"
+    qproperty-iconStyle : "all->#ff9000";
+    qproperty-iconPath  : ":/icons/github"
 }
 
 hal--PythonConsole {
@@ -1363,149 +1363,149 @@ background : rgba(120, 120, 120, 0.1);
 hal--PythonEditor {
 background : qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb(33, 40, 44), stop:1 rgb(23, 30, 34));
 
-qproperty-open_icon_style: "all->#3192C5";
-qproperty-open_icon_path: ":/icons/folder";
+qproperty-openIconStyle: "all->#3192C5";
+qproperty-openIconPath: ":/icons/folder";
 
-qproperty-save_icon_style: "all->#3192C5";
-qproperty-save_icon_path: ":/icons/folder-down";
+qproperty-saveIconStyle: "all->#3192C5";
+qproperty-saveIconPath: ":/icons/folder-down";
 
-qproperty-save_as_icon_style: "all->#3192C5";
-qproperty-save_as_icon_path: ":/icons/save-as";
+qproperty-saveAsIconStyle: "all->#3192C5";
+qproperty-saveAsIconPath: ":/icons/save-as";
 
-qproperty-run_icon_style: "all->#30AC4F";
-qproperty-run_icon_path: ":/icons/run";
+qproperty-runIconStyle: "all->#30AC4F";
+qproperty-runIconPath: ":/icons/run";
 
-qproperty-toggle_minimap_icon_style: "all->#FFDD00";
-qproperty-toggle_minimap_icon_path: ":/icons/placeholder";
+qproperty-toggleMinimapIconStyle: "all->#FFDD00";
+qproperty-toggleMinimapIconPath: ":/icons/placeholder";
 
 /*no style at all, the empty string is needed*/
-qproperty-new_file_icon_style: "";
-qproperty-new_file_icon_path: ":/icons/new-file";
+qproperty-newFileIconStyle: "";
+qproperty-newFileIconPath: ":/icons/new-file";
 }
 
 hal--GroupingManagerWidget {
-qproperty-disabled_icon_style: "all->#515050";
+qproperty-disabledIconStyle: "all->#515050";
 
-qproperty-new_grouping_icon_style: "all->#e8e8e8";
-qproperty-new_grouping_icon_path: ":/icons/plus";
+qproperty-newGroupingIconStyle: "all->#e8e8e8";
+qproperty-newGroupingIconPath: ":/icons/plus";
 
-qproperty-rename_grouping_icon_style: "all->#e8e8e8";
-qproperty-rename_grouping_icon_path: ":/icons/pen";
+qproperty-renameGroupingIconStyle: "all->#e8e8e8";
+qproperty-renameGroupingIconPath: ":/icons/pen";
 
-qproperty-delete_icon_style: "all->#e8e8e8";
-qproperty-delete_icon_path: ":/icons/trashcan";
+qproperty-deleteIconStyle: "all->#e8e8e8";
+qproperty-deleteIconPath: ":/icons/trashcan";
 
-qproperty-color_select_icon_style: "all->#e8e8e8";
-qproperty-color_select_icon_path: ":/icons/color_select";
+qproperty-colorSelectIconStyle: "all->#e8e8e8";
+qproperty-colorSelectIconPath: ":/icons/color_select";
 
-qproperty-to_selection_icon_style: "all->#e8e8e8";
-qproperty-to_selection_icon_path: ":/icons/to_selection";
+qproperty-toSelectionIconStyle: "all->#e8e8e8";
+qproperty-toSelectionIconPath: ":/icons/to_selection";
 }
 
 hal--ContextManagerWidget {
-qproperty-disabled_icon_style: "all->#515050";
+qproperty-disabledIconStyle: "all->#515050";
 
-qproperty-new_view_icon_style: "all->#e8e8e8";
-qproperty-new_view_icon_path: ":/icons/plus";
+qproperty-newViewIconStyle: "all->#e8e8e8";
+qproperty-newViewIconPath: ":/icons/plus";
 
-qproperty-rename_icon_style: "all->#e8e8e8";
-qproperty-rename_icon_path: ":/icons/pen";
+qproperty-renameIconStyle: "all->#e8e8e8";
+qproperty-renameIconPath: ":/icons/pen";
 
-qproperty-duplicate_icon_style: "all->#e8e8e8";
-qproperty-duplicate_icon_path: ":/icons/content";
+qproperty-duplicateIconStyle: "all->#e8e8e8";
+qproperty-duplicateIconPath: ":/icons/content";
 
-qproperty-delete_icon_style: "all->#e8e8e8";
-qproperty-delete_icon_path: ":/icons/trashcan";
+qproperty-deleteIconStyle: "all->#e8e8e8";
+qproperty-deleteIconPath: ":/icons/trashcan";
 
-qproperty-open_icon_style: "all->#e8e8e8";
-qproperty-open_icon_path: ":/icons/open-alt";
+qproperty-openIconStyle: "all->#e8e8e8";
+qproperty-openIconPath: ":/icons/open-alt";
 
-qproperty-search_icon_style: "all->#e8e8e8";
-qproperty-search_icon_path: ":/icons/search";
+qproperty-searchIconStyle: "all->#e8e8e8";
+qproperty-searchIconPath: ":/icons/search";
 }
 
 hal--SelectionDetailsWidget {
-qproperty-disabled_icon_style: "all->#515050";
-qproperty-search_active_icon_style: "all->#30ac4f";
-qproperty-search_icon_style: "all->#e8e8e8";
-qproperty-search_icon_path: ":/icons/search";
-qproperty-restore_icon_style: "all->#e8e8e8";
-qproperty-restore_icon_path: ":/icons/undo2";
-qproperty-to_grouping_icon_style: "all->#e8e8e8";
-qproperty-to_grouping_icon_path: ":/icons/to_grouping";
-qproperty-to_module_icon_style: "all->#e8e8e8";
-qproperty-to_module_icon_path: ":/icons/to_module";
+qproperty-disabledIconStyle: "all->#515050";
+qproperty-searchActiveIconStyle: "all->#30ac4f";
+qproperty-searchIconStyle: "all->#e8e8e8";
+qproperty-searchIconPath: ":/icons/search";
+qproperty-restoreIconStyle: "all->#e8e8e8";
+qproperty-restoreIconPath: ":/icons/undo2";
+qproperty-toGroupingIconStyle: "all->#e8e8e8";
+qproperty-toGroupingIconPath: ":/icons/to_grouping";
+qproperty-toModuleIconStyle: "all->#e8e8e8";
+qproperty-toModuleIconPath: ":/icons/to_module";
 }
 
 hal--MainWindow {
-qproperty-hal_icon_style: "";
-qproperty-hal_icon_path: ":/icons/hal";
+qproperty-halIconStyle: "";
+qproperty-halIconPath: ":/icons/hal";
 
-qproperty-new_file_icon_style: "";
-qproperty-new_file_icon_path: ":/icons/new-file";
+qproperty-newFileIconStyle: "";
+qproperty-newFileIconPath: ":/icons/new-file";
 
-qproperty-open_icon_style: "all->#3192C5";
-qproperty-open_icon_path: ":/icons/folder";
+qproperty-openIconStyle: "all->#3192C5";
+qproperty-openIconPath: ":/icons/folder";
 
-qproperty-save_icon_style: "all->#3192C5";
-qproperty-save_icon_path: ":/icons/folder-down";
+qproperty-saveIconStyle: "all->#3192C5";
+qproperty-saveIconPath: ":/icons/folder-down";
 
-qproperty-schedule_icon_style: "all->#30AC4F";
-qproperty-schedule_icon_path: ":/icons/list";
+qproperty-scheduleIconStyle: "all->#30AC4F";
+qproperty-scheduleIconPath: ":/icons/list";
 
-qproperty-run_icon_style: "all->#30AC4F";
-qproperty-run_icon_path: ":/icons/run";
+qproperty-runIconStyle: "all->#30AC4F";
+qproperty-runIconPath: ":/icons/run";
 
-qproperty-content_icon_style: "all->#AFB1B3";
-qproperty-content_icon_path: ":/icons/content";
+qproperty-contentIconStyle: "all->#AFB1B3";
+qproperty-contentIconPath: ":/icons/content";
 
-qproperty-settings_icon_style: "all->#AFB1B3";
-qproperty-settings_icon_path: ":/icons/settings";
+qproperty-settingsIconStyle: "all->#AFB1B3";
+qproperty-settingsIconPath: ":/icons/settings";
 }
 
 hal--PythonQssAdapter {
-qproperty-text_color: #DEE9AF;
-qproperty-keyword_color: #CC7832;
+qproperty-textColor: #DEE9AF;
+qproperty-keywordColor: #CC7832;
 qproperty-operator_color: #A9B7C6;
-qproperty-brace_color: #A9B7C6;
-qproperty-defclass_color: #A9B7C6;
-qproperty-self_color: #A9B7C6;
-qproperty-number_color: #6897BB;
-qproperty-single_quoted_string_color: #A5C25C;
-qproperty-double_quoted_string_color: #A5C25C;
-qproperty-comment_color: #629755;
+qproperty-braceColor: #A9B7C6;
+qproperty-defclassColor: #A9B7C6;
+qproperty-selfColor: #A9B7C6;
+qproperty-numberColor: #6897BB;
+qproperty-singleQuotedStringColor: #A5C25C;
+qproperty-doubleQuotedStringColor: #A5C25C;
+qproperty-commentColor: #629755;
 }
 
 hal--VhdlQssAdapter {
-qproperty-keyword_color: #CC7832;
+qproperty-keywordColor: #CC7832;
 qproperty-type_color: #A9B7C6;
-qproperty-number_color: #6897BB;
+qproperty-numberColor: #6897BB;
 qproperty-string_color: #A5C25C;
-qproperty-comment_color: #629755;
+qproperty-commentColor: #629755;
 }
 
 hal--LoggerQssAdapter {
-    qproperty-trace_color: #90C023;
-    qproperty-debug_color: #90C023;
-    qproperty-info_color: #e4e4e4;
-    qproperty-warning_color: #CC7832;
-    qproperty-error_color: #FF0000;
-    qproperty-critical_color: #FF6B68;
-    qproperty-default_color: #BBBBBB;
-    qproperty-marker_color: #FFEF0B;
-    qproperty-trace_highlight: #FFEF0B;
-    qproperty-debug_highlight: #FFEF0B;
-    qproperty-info_highlight: #00B7E0;
-    qproperty-warning_highlight: #FFEF0B;
-    qproperty-error_highlight: #FFEF0B;
-    qproperty-critical_highlight: #FFEF0B;
-    qproperty-default_highlight: #FFEF0B;
+    qproperty-traceColor: #90C023;
+    qproperty-debugColor: #90C023;
+    qproperty-infoColor: #e4e4e4;
+    qproperty-warningColor: #CC7832;
+    qproperty-errorColor: #FF0000;
+    qproperty-criticalColor: #FF6B68;
+    qproperty-defaultColor: #BBBBBB;
+    qproperty-markerColor: #FFEF0B;
+    qproperty-traceHighlight: #FFEF0B;
+    qproperty-debugHighlight: #FFEF0B;
+    qproperty-infoHighlight: #00B7E0;
+    qproperty-warningHighlight: #FFEF0B;
+    qproperty-errorHighlight: #FFEF0B;
+    qproperty-criticalHighlight: #FFEF0B;
+    qproperty-defaultHighlight: #FFEF0B;
 }
 
 hal--PythonConsoleQssAdapter {
-    qproperty-standard_color: #BBBBBB;
-    qproperty-error_color: #FF6B63;
-    qproperty-promt_color: #917EB7;
+    qproperty-standardColor: #BBBBBB;
+    qproperty-errorColor: #FF6B63;
+    qproperty-promtColor: #917EB7;
 }
 
 hal--old_graphics_item_qss_adapter {

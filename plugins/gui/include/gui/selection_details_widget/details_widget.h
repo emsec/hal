@@ -48,9 +48,9 @@ namespace hal
         QString detailsTypeName() const;
 
     protected:
-        DetailsType m_detailsType;
-        u32 m_currentId;
-        QFont m_keyFont;
-        bool m_hideEmptySections;
+        DetailsType mDetailsType;
+        u32 mCurrentId;
+        QFont mKeyFont;
+        bool mHideEmptySections;
     };
 }    // namespace hal

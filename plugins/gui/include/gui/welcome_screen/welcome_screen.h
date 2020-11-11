@@ -47,14 +47,14 @@ namespace hal
         //    void reset();
 
     private:
-        QHBoxLayout* m_layout;
+        QHBoxLayout* mLayout;
 
-        LabeledFrame* m_recent_files_frame;
-        LabeledFrame* m_open_file_frame;
-        LabeledFrame* m_get_in_touch_frame;
+        LabeledFrame* mRecentFilesFrame;
+        LabeledFrame* mOpenFileFrame;
+        LabeledFrame* mGetInTouchFrame;
 
-        RecentFilesWidget* m_recent_files_widget;
-        OpenFileWidget* m_open_file_widget;
-        GetInTouchWidget* m_get_in_touch_widget;
+        RecentFilesWidget* mRecentFilesWidget;
+        OpenFileWidget* mOpenFileWidget;
+        GetInTouchWidget* mGetInTouchWidget;
     };
 }

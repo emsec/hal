@@ -37,6 +37,6 @@ namespace hal
             bool validate(const QString &input);
 
         private:
-            const QStringList &m_unique_strings;
+            const QStringList &mUniqueStrings;
     };
 }

@@ -37,39 +37,39 @@ namespace hal
     {
         Q_OBJECT
         Q_PROPERTY(bool expanded READ expanded)
-        Q_PROPERTY(int fixed_height READ fixed_height WRITE set_fixed_height)
+        Q_PROPERTY(int fixedHeight READ fixedHeight WRITE setFixedHeight)
 
     public:
-        ExpandingListItem(ExpandingListButton* parent_button, QWidget* parent = 0);
+        ExpandingListItem(ExpandingListButton* parentButton, QWidget* parent = 0);
 
         virtual QSize minimumSizeHint() const Q_DECL_OVERRIDE;
         virtual QSize sizeHint() const Q_DECL_OVERRIDE;
         virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
         bool expanded();
-        int fixed_height();
+        int fixedHeight();
         bool contains(ExpandingListButton* button);
-        ExpandingListButton* parent_button();
-        void append_child_button(ExpandingListButton* button);
+        ExpandingListButton* parentButton();
+        void appendChildButton(ExpandingListButton* button);
 
         void repolish();
 
         void collapse();
         void expand();
 
-        void set_expanded(bool expanded);
-        void set_fixed_height(int height);
+        void setExpanded(bool expanded);
+        void setFixedHeight(int height);
 
     private:
-        ExpandingListButton* m_parent_button;
-        QList<ExpandingListButton*> m_child_buttons;
+        ExpandingListButton* mParentButton;
+        QList<ExpandingListButton*> mChildButtons;
 
-        int m_collapsed_height;
-        int m_expanded_height;
+        int mCollapsedHeight;
+        int mExpandedHeight;
 
-        QPropertyAnimation* m_animation;
+        QPropertyAnimation* mAnimation;
 
-        bool m_expanded;
-        int m_fixed_height;
+        bool mExpanded;
+        int mFixedHeight;
     };
 }

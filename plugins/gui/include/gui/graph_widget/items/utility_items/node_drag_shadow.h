@@ -48,13 +48,13 @@ namespace hal
         qreal height() const;
         QSizeF size() const;
 
-        void set_width(const qreal width);
-        void set_height(const qreal height);
+        void setWidth(const qreal width);
+        void setHeight(const qreal height);
 
-        void set_visual_cue(const DragCue cue);
+        void setVisualCue(const DragCue cue);
 
-        static void set_lod(const qreal lod);
-        static void load_settings();
+        static void setLod(const qreal lod);
+        static void loadSettings();
 
     protected:
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
@@ -62,15 +62,15 @@ namespace hal
         QPainterPath shape() const override;
 
     private:
-        static qreal s_lod;
-        static QPen s_pen;
-        static QColor s_color_pen[];
-        static QColor s_color_solid[];
-        static QColor s_color_translucent[];
+        static qreal sLod;
+        static QPen sPen;
+        static QColor sColorPen[];
+        static QColor sColorSolid[];
+        static QColor sColorTranslucent[];
 
-        DragCue m_cue;
+        DragCue mCue;
 
-        qreal m_width;
-        qreal m_height;
+        qreal mWidth;
+        qreal mHeight;
     };
 }    // namespace hal

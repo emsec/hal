@@ -35,12 +35,12 @@ namespace hal
     public:
         explicit CodeEditorScrollbar(QWidget* parent = nullptr);
 
-        void set_minimap_scrollbar(MinimapScrollbar* scrollbar);
+        void setMinimapScrollbar(MinimapScrollbar* scrollbar);
 
     protected:
         virtual void sliderChange(SliderChange change) Q_DECL_OVERRIDE;
 
     private:
-        MinimapScrollbar* m_minimap_scrollbar;
+        MinimapScrollbar* mMinimapScrollbar;
     };
 }

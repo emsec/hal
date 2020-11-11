@@ -17,7 +17,7 @@ namespace hal
         : mName(plugin_name), mPath(plugin_path)
     {;}
 
-    bool PluginItem::is_valid()
+    bool PluginItem::isValid()
     {
         if (!mName.isEmpty() && !mPath.isEmpty())
             return true;
@@ -25,7 +25,7 @@ namespace hal
             return false;
     }
 
-    QVector<QPair<QString, PluginItem::ColumnType>> PluginItem::get_column_description()
+    QVector<QPair<QString, PluginItem::ColumnType>> PluginItem::getColumnDescription()
     {
         return __plugin_item_impl::column_desc;
     }

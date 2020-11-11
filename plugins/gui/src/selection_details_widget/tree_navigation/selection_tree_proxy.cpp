@@ -9,9 +9,9 @@ namespace hal
     SelectionTreeProxyModel::SelectionTreeProxyModel(QObject* parent)
         : QSortFilterProxyModel(parent), mGraphicsBusy(0)
     {
-        m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager->get("navigation/sort_mechanism").toInt());
-        m_filter_expression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
-        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &SelectionTreeProxyModel::handle_global_setting_changed);
+        mSortMechanism = gui_utility::mSortMechanism(gSettingsManager->get("navigation/mSortMechanism").toInt());
+        mFilterExpression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &SelectionTreeProxyModel::handleGlobalSettingChanged);
     }
 
     bool SelectionTreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
@@ -20,7 +20,7 @@ namespace hal
         const QModelIndex& itemIndex = sourceModel()->index(source_row, 0, source_parent);
  
         const SelectionTreeItem* sti = static_cast<SelectionTreeItem*>(itemIndex.internalPointer());
-        return sti->match(m_filter_expression);
+        return sti->match(mFilterExpression);
     }
 
     bool SelectionTreeProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
@@ -33,7 +33,7 @@ namespace hal
             name_right = name_right.toLower();
         }
 
-        bool comparison = gui_utility::compare(m_sort_mechanism, name_left, name_right);
+        bool comparison = gui_utility::compare(mSortMechanism, name_left, name_right);
 
         // if left element is a structure element (these must be handled specially)
         // (right element must then also be a structure element)
@@ -46,12 +46,12 @@ namespace hal
         return comparison;
     }
 
-    void SelectionTreeProxyModel::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void SelectionTreeProxyModel::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
-        if (key == "navigation/sort_mechanism")
+        if (key == "navigation/mSortMechanism")
         {
-            m_sort_mechanism = gui_utility::sort_mechanism(value.toInt());
+            mSortMechanism = gui_utility::mSortMechanism(value.toInt());
             // force re-sort
             invalidate();
         }
@@ -64,14 +64,14 @@ namespace hal
         QList<u32> modIds;
         QList<u32> gatIds;
         QList<u32> netIds;
-        static_cast<const SelectionTreeModel*>(sourceModel())->suppressedByFilter(modIds, gatIds, netIds, m_filter_expression);
-        g_selection_relay->suppressedByFilter(modIds, gatIds, netIds);
+        static_cast<const SelectionTreeModel*>(sourceModel())->suppressedByFilter(modIds, gatIds, netIds, mFilterExpression);
+        gSelectionRelay->suppressedByFilter(modIds, gatIds, netIds);
         -- mGraphicsBusy;
     }
 
-    void SelectionTreeProxyModel::handle_filter_text_changed(const QString& filter_text)
+    void SelectionTreeProxyModel::handleFilterTextChanged(const QString& filter_text)
     {
-        m_filter_expression.setPattern(filter_text);
+        mFilterExpression.setPattern(filter_text);
         invalidateFilter();
         applyFilterOnGraphics();
     }

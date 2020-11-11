@@ -36,13 +36,13 @@ namespace hal
     public:
         WidgetOverlay(QWidget* parent = nullptr);
 
-        void set_widget(QWidget* widget);
+        void setWidget(QWidget* widget);
 
     //protected:
     //    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
     private:
-        QVBoxLayout* m_layout;
-        QWidget* m_widget;
+        QVBoxLayout* mLayout;
+        QWidget* mWidget;
     };
 }

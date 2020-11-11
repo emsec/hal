@@ -12,16 +12,16 @@
 namespace hal
 {
     ScheduledPluginItemArea::ScheduledPluginItemArea(QWidget* parent)
-        : QFrame(parent), m_layout(new QVBoxLayout()), m_spacer(new QFrame()), m_active_marker(nullptr), m_internal_drag_active(false), m_drag_index(-1)
+        : QFrame(parent), mLayout(new QVBoxLayout()), mSpacer(new QFrame()), mActiveMarker(nullptr), mInternalDragActive(false), mDragIndex(-1)
     {
-        m_layout->setContentsMargins(0, 0, 0, 0);
-        m_layout->setSpacing(0);
-        m_layout->setAlignment(Qt::AlignTop);
+        mLayout->setContentsMargins(0, 0, 0, 0);
+        mLayout->setSpacing(0);
+        mLayout->setAlignment(Qt::AlignTop);
 
-        m_spacer->setObjectName("spacer");
+        mSpacer->setObjectName("spacer");
 
-        setLayout(m_layout);
-        m_layout->addWidget(m_spacer);
+        setLayout(mLayout);
+        mLayout->addWidget(mSpacer);
 
         setAcceptDrops(true);
     }
@@ -34,16 +34,16 @@ namespace hal
         if (name.isEmpty())
             return;
 
-        m_y_values.clear();
-        int y = m_spacer->height();
+        mYValues.clear();
+        int y = mSpacer->height();
 
-        for (auto& pair : m_list)
+        for (auto& pair : mList)
         {
             y += pair.first->height();
-            m_y_values.append(y);
+            mYValues.append(y);
 
             // FIX MAGIC NUMBER
-            pair.second->set_end_value(30);
+            pair.second->setEndValue(30);
         }
 
         event->acceptProposedAction();
@@ -53,28 +53,28 @@ namespace hal
     {
         int y = event->pos().y();
 
-        for (int i = 0; i < m_y_values.length(); i++)
+        for (int i = 0; i < mYValues.length(); i++)
         {
-            if (y < m_y_values.at(i))
+            if (y < mYValues.at(i))
             {
-                DropMarker* new_marker = m_list.at(i).second;
+                DropMarker* new_marker = mList.at(i).second;
 
-                if (m_active_marker == new_marker)
+                if (mActiveMarker == new_marker)
                     return;
 
-                if (m_active_marker)
-                    m_active_marker->collapse();
+                if (mActiveMarker)
+                    mActiveMarker->collapse();
 
-                m_active_marker = new_marker;
-                m_active_marker->expand();
+                mActiveMarker = new_marker;
+                mActiveMarker->expand();
                 return;
             }
         }
 
-        if (m_active_marker)
-            m_active_marker->collapse();
+        if (mActiveMarker)
+            mActiveMarker->collapse();
 
-        m_active_marker = nullptr;
+        mActiveMarker = nullptr;
         // SHOW APPEND MARKER (MAYBE)
     }
 
@@ -82,122 +82,122 @@ namespace hal
     {
         Q_UNUSED(event)
 
-        if (m_active_marker)
-            m_active_marker->collapse();
+        if (mActiveMarker)
+            mActiveMarker->collapse();
 
-        m_active_marker = nullptr;
+        mActiveMarker = nullptr;
     }
 
     void ScheduledPluginItemArea::dropEvent(QDropEvent* event)
     {
         const QMimeData* mime_data = event->mimeData();
         QString name               = QString(mime_data->data("hal/plugin_name"));
-        insert_plugin(name);
+        insertPlugin(name);
         event->acceptProposedAction();
     }
 
-    void ScheduledPluginItemArea::insert_plugin(const QString& name)
+    void ScheduledPluginItemArea::insertPlugin(const QString& name)
     {
         ScheduledPluginItem* item = new ScheduledPluginItem(name);
-        connect(item, &ScheduledPluginItem::clicked, this, &ScheduledPluginItemArea::handle_item_clicked);
-        connect(item, &ScheduledPluginItem::drag_started, this, &ScheduledPluginItemArea::handle_item_drag_started);
-        connect(item, &ScheduledPluginItem::removed, this, &ScheduledPluginItemArea::handle_item_removed);
+        connect(item, &ScheduledPluginItem::clicked, this, &ScheduledPluginItemArea::handleItemClicked);
+        connect(item, &ScheduledPluginItem::dragStarted, this, &ScheduledPluginItemArea::handleItemDragStarted);
+        connect(item, &ScheduledPluginItem::removed, this, &ScheduledPluginItemArea::handleItemRemoved);
         DropMarker* marker = new DropMarker(Qt::Vertical);
 
         int drop_index = -1;
-        if (m_active_marker)
+        if (mActiveMarker)
         {
-            for (int i = 0; i < m_y_values.length(); i++)
+            for (int i = 0; i < mYValues.length(); i++)
             {
-                if (m_list.at(i).second == m_active_marker)
+                if (mList.at(i).second == mActiveMarker)
                 {
-                    m_list.insert(i, QPair<ScheduledPluginItem*, DropMarker*>(item, marker));
-                    //                m_layout->insertWidget(i+1, item);
-                    //                m_layout->insertWidget(i+1, marker); //DOESNT WORK, FIX
+                    mList.insert(i, QPair<ScheduledPluginItem*, DropMarker*>(item, marker));
+                    //                mLayout->insertWidget(i+1, item);
+                    //                mLayout->insertWidget(i+1, marker); //DOESNT WORK, FIX
 
                     //TEST
-                    for (auto& pair : m_list)
+                    for (auto& pair : mList)
                     {
-                        m_layout->removeWidget(pair.second);
-                        m_layout->removeWidget(pair.first);
+                        mLayout->removeWidget(pair.second);
+                        mLayout->removeWidget(pair.first);
 
-                        m_layout->addWidget(pair.second);
-                        m_layout->addWidget(pair.first);
+                        mLayout->addWidget(pair.second);
+                        mLayout->addWidget(pair.first);
                     }
                     //END OF TEST
                     drop_index = i;
                     break;
                 }
             }
-            m_active_marker->reset();
-            m_active_marker = nullptr;
+            mActiveMarker->reset();
+            mActiveMarker = nullptr;
         }
         else
         {
-            m_list.append(QPair<ScheduledPluginItem*, DropMarker*>(item, marker));
-            m_layout->addWidget(marker);
-            m_layout->addWidget(item);
-            drop_index = m_list.length() - 1;
+            mList.append(QPair<ScheduledPluginItem*, DropMarker*>(item, marker));
+            mLayout->addWidget(marker);
+            mLayout->addWidget(item);
+            drop_index = mList.length() - 1;
         }
 
-        if (m_internal_drag_active)
+        if (mInternalDragActive)
         {
-            PluginScheduleManager::get_instance()->move_plugin(m_drag_index, drop_index);
-            m_internal_drag_active = false;
+            PluginScheduleManager::get_instance()->movePlugin(mDragIndex, drop_index);
+            mInternalDragActive = false;
         }
         else
-            PluginScheduleManager::get_instance()->add_plugin(name, drop_index);
+            PluginScheduleManager::get_instance()->addPlugin(name, drop_index);
     }
 
-    void ScheduledPluginItemArea::handle_item_clicked(ScheduledPluginItem* item)
+    void ScheduledPluginItemArea::handleItemClicked(ScheduledPluginItem* item)
     {
         int i = 0;
 
-        for (auto& pair : m_list)
+        for (auto& pair : mList)
         {
             if (pair.first == item)
             {
-                PluginScheduleManager::get_instance()->set_current_index(i);
-                Q_EMIT plugin_selected(i);
+                PluginScheduleManager::get_instance()->setCurrentIndex(i);
+                Q_EMIT pluginSelected(i);
                 return;
             }
             i++;
         }
     }
 
-    void ScheduledPluginItemArea::handle_item_drag_started(ScheduledPluginItem* item)
+    void ScheduledPluginItemArea::handleItemDragStarted(ScheduledPluginItem* item)
     {
-        m_internal_drag_active = true;
-        m_drag_index           = 0;
+        mInternalDragActive = true;
+        mDragIndex           = 0;
         DropMarker* marker    = nullptr;
 
-        for (auto& pair : m_list)
+        for (auto& pair : mList)
         {
             if (pair.first == item)
             {
                 marker = pair.second;
                 break;
             }
-            m_drag_index++;
+            mDragIndex++;
         }
 
         item->hide();
         marker->hide();
-        m_layout->removeWidget(item);
-        m_layout->removeWidget(marker);
+        mLayout->removeWidget(item);
+        mLayout->removeWidget(marker);
         item->deleteLater();
         marker->deleteLater();
-        m_list.removeAt(m_drag_index);
+        mList.removeAt(mDragIndex);
     }
 
-    void ScheduledPluginItemArea::handle_item_removed(ScheduledPluginItem* item)
+    void ScheduledPluginItemArea::handleItemRemoved(ScheduledPluginItem* item)
     {
         Q_UNUSED(item)
 
-        m_internal_drag_active = false;
-        PluginScheduleManager::get_instance()->remove_plugin(m_drag_index);
+        mInternalDragActive = false;
+        PluginScheduleManager::get_instance()->removePlugin(mDragIndex);
 
-        if (m_list.isEmpty())
-            Q_EMIT no_scheduled_plugins();
+        if (mList.isEmpty())
+            Q_EMIT noScheduledPlugins();
     }
 }

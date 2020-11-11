@@ -37,9 +37,9 @@ namespace hal
         SelectionHistoryEntry(const QSet<u32>& modIds, const QSet<u32>& gatIds, const QSet<u32>& netIds, int cnt);
         bool isEmpty() const;
 
-        QSet<u32> m_module_ids;
-        QSet<u32> m_gate_ids;
-        QSet<u32> m_net_ids;
+        QSet<u32> mModuleIds;
+        QSet<u32> mGateIds;
+        QSet<u32> mNetIds;
 
         int count() const { return mCount; }
 

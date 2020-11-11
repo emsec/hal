@@ -11,65 +11,65 @@
 namespace hal
 {
     ContentFrame::ContentFrame(ContentWidget* widget, bool attached, QWidget* parent)
-        : QWidget(parent), m_vertical_layout(new QVBoxLayout()), m_horizontal_layout(new QHBoxLayout()), m_left_toolbar(new Toolbar()), m_right_toolbar(new Toolbar()), m_widget(widget),
-          m_name_label(new QLabel())
+        : QWidget(parent), mVerticalLayout(new QVBoxLayout()), mHorizontalLayout(new QHBoxLayout()), mLeftToolbar(new Toolbar()), mRightToolbar(new Toolbar()), mWidget(widget),
+          mNameLabel(new QLabel())
 
     {
         setWindowTitle(widget->name());
         setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 
-        m_vertical_layout->setContentsMargins(0, 0, 0, 0);
-        m_vertical_layout->setSpacing(0);
+        mVerticalLayout->setContentsMargins(0, 0, 0, 0);
+        mVerticalLayout->setSpacing(0);
 
-        m_horizontal_layout->setContentsMargins(0, 0, 0, 0);
-        m_horizontal_layout->setSpacing(0);
+        mHorizontalLayout->setContentsMargins(0, 0, 0, 0);
+        mHorizontalLayout->setSpacing(0);
 
-        m_left_toolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        m_left_toolbar->setIconSize(QSize(18, 18));
-        m_right_toolbar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        m_right_toolbar->setIconSize(QSize(18, 18));
+        mLeftToolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        mLeftToolbar->setIconSize(QSize(18, 18));
+        mRightToolbar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        mRightToolbar->setIconSize(QSize(18, 18));
 
         QAction* action = new QAction(this);
 
-        m_detach_icon_style = "all->#969696";
-        m_detach_icon_path  = ":/icons/detach";
+        mDetachIconStyle = "all->#969696";
+        mDetachIconPath  = ":/icons/detach";
 
         if (attached)
         {
-            m_name_label->setText(widget->name());
-            m_left_toolbar->addWidget(m_name_label);
-            m_left_toolbar->addSeparator();
+            mNameLabel->setText(widget->name());
+            mLeftToolbar->addWidget(mNameLabel);
+            mLeftToolbar->addSeparator();
             action->setText("Detach");
-            action->setIcon(gui_utility::get_styled_svg_icon(m_detach_icon_style, m_detach_icon_path));
-            connect(action, &QAction::triggered, this, &ContentFrame::detach_widget);
+            action->setIcon(gui_utility::getStyledSvgIcon(mDetachIconStyle, mDetachIconPath));
+            connect(action, &QAction::triggered, this, &ContentFrame::detachWidget);
         }
         else
         {
             action->setText("Reattach");
-            connect(action, &QAction::triggered, this, &ContentFrame::reattach_widget);
+            connect(action, &QAction::triggered, this, &ContentFrame::reattachWidget);
         }
-        widget->setup_toolbar(m_left_toolbar);
-        m_right_toolbar->addAction(action);
+        widget->setupToolbar(mLeftToolbar);
+        mRightToolbar->addAction(action);
 
-        for (QShortcut* s : widget->create_shortcuts())
+        for (QShortcut* s : widget->createShortcuts())
         {
             s->setParent(this);
             s->setContext(Qt::WidgetWithChildrenShortcut);
             s->setEnabled(true);
         }
 
-        setLayout(m_vertical_layout);
-        m_vertical_layout->addLayout(m_horizontal_layout, Qt::AlignTop);
-        m_horizontal_layout->addWidget(m_left_toolbar);
-        m_horizontal_layout->addWidget(m_right_toolbar);
-        m_vertical_layout->addWidget(widget, Qt::AlignBottom);
+        setLayout(mVerticalLayout);
+        mVerticalLayout->addLayout(mHorizontalLayout, Qt::AlignTop);
+        mHorizontalLayout->addWidget(mLeftToolbar);
+        mHorizontalLayout->addWidget(mRightToolbar);
+        mVerticalLayout->addWidget(widget, Qt::AlignBottom);
         widget->show();
-        connect(widget, &ContentWidget::name_changed, this, &ContentFrame::handle_name_changed);
+        connect(widget, &ContentWidget::name_changed, this, &ContentFrame::handleNameChanged);
     }
 
     void ContentFrame::childEvent(QChildEvent* event)
     {
-        if (event->removed() && event->child() == m_widget)
+        if (event->removed() && event->child() == mWidget)
         {
             hide();
             setParent(nullptr);
@@ -89,31 +89,31 @@ namespace hal
 
     ContentWidget* ContentFrame::content()
     {
-        return m_widget;
+        return mWidget;
     }
 
-    void ContentFrame::detach_widget()
+    void ContentFrame::detachWidget()
     {
         hide();
-        m_widget->detach();
+        mWidget->detach();
     }
 
-    void ContentFrame::reattach_widget()
+    void ContentFrame::reattachWidget()
     {
         hide();
-        m_widget->reattach();
+        mWidget->reattach();
     }
 
-    void ContentFrame::handle_name_changed(const QString &name)
+    void ContentFrame::handleNameChanged(const QString &name)
     {
-        m_name_label->setText(name);
+        mNameLabel->setText(name);
         setWindowTitle(name);
-        //m_name_label->update();
+        //mNameLabel->update();
     }
 
     void ContentFrame::closeEvent(QCloseEvent* event)
     {
         Q_UNUSED(event)
-        reattach_widget();
+        reattachWidget();
     }
 }

@@ -38,26 +38,26 @@ namespace hal
         };
 
         FilterItem(Rule trace, Rule debug, Rule info, Rule warning, Rule error, Rule critical, Rule default_rule, QStringList& keywords, QRegularExpression& reg_ex)
-            : m_trace(trace), m_debug(debug), m_info(info), m_warning(warning), m_error(error), m_critical(critical), m_default(default_rule), m_keywords(keywords), m_reg_ex(reg_ex)
+            : mTrace(trace), mDebug(debug), mInfo(info), mWarning(warning), mError(error), mCritical(critical), mDefault(default_rule), mKeywords(keywords), mRegEx(reg_ex)
         {
         }
 
-        const Rule m_trace;
+        const Rule mTrace;
 
-        const Rule m_debug;
+        const Rule mDebug;
 
-        const Rule m_info;
+        const Rule mInfo;
 
-        const Rule m_warning;
+        const Rule mWarning;
 
-        const Rule m_error;
+        const Rule mError;
 
-        const Rule m_critical;
+        const Rule mCritical;
 
-        const Rule m_default;
+        const Rule mDefault;
 
-        const QStringList m_keywords;
+        const QStringList mKeywords;
 
-        const QRegularExpression m_reg_ex;
+        const QRegularExpression mRegEx;
     };
 }

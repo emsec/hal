@@ -39,9 +39,9 @@ namespace hal
         ScheduledPluginItemArea* area();
 
     public Q_SLOTS:
-        void append_plugin(const QString& name);
+        void appendPlugin(const QString& name);
 
     private:
-        ScheduledPluginItemArea* m_area;
+        ScheduledPluginItemArea* mArea;
     };
 }

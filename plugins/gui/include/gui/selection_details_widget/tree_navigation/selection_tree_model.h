@@ -79,10 +79,10 @@ namespace hal
         SelectionTreeItem* itemFromIndex(const QModelIndex& index) const;
 
 
-        SelectionTreeItemRoot* m_rootItem;
+        SelectionTreeItemRoot* mRootItem;
 
         /// avoid calls while model is under reconstruction
-        int m_doNotDisturb;
+        int mDoNotDisturb;
     };
 
     class SelectionTreeModelDisposer : public QObject
@@ -95,7 +95,7 @@ namespace hal
         void dispose();
 
     private:
-        SelectionTreeItemRoot* m_rootItem;
+        SelectionTreeItemRoot* mRootItem;
     };
 
 

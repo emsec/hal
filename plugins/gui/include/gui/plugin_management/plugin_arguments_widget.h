@@ -46,26 +46,26 @@ namespace hal
     public:
         explicit PluginArgumentsWidget(QWidget* parent = nullptr);
 
-        ProgramArguments get_args();
+        ProgramArguments getArgs();
 
-        void setup_plugin_layout(const QString& plugin);
+        void setupPluginLayout(const QString& plugin);
 
     public Q_SLOTS:
         void setup(const QString& plugin_name);
-        void handle_plugin_selected(int index);
+        void handlePluginSelected(int index);
 
-        void handle_button_clicked(bool checked);
-        void handle_text_edited(const QString& text);
+        void handleButtonClicked(bool mChecked);
+        void handleTextEdited(const QString& text);
 
     private:
-        char* to_heap_cstring(const QString& string);
+        char* toHeapCstring(const QString& string);
 
-        QFormLayout* m_form_layout;
+        QFormLayout* mFormLayout;
 
-        CLIPluginInterface* m_plugin;
+        CLIPluginInterface* mPlugin;
 
-        QVector<QPair<QPushButton*, QLineEdit*>> m_vector;
+        QVector<QPair<QPushButton*, QLineEdit*>> mVector;
 
-        int m_current_index;
+        int mCurrentIndex;
     };
 }

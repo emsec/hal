@@ -30,21 +30,21 @@ namespace hal
     class CircleSeparatedNet : public SeparatedGraphicsNet
     {
     public:
-        static void load_settings();
+        static void loadSettings();
 
         CircleSeparatedNet(Net* n);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
-        void add_input(const QPointF& scene_position) override;
-        void add_output(const QPointF& scene_position) override;
+        void addInput(const QPointF& scene_position) override;
+        void addOutput(const QPointF& scene_position) override;
 
-        qreal input_width() const override;
-        qreal output_width() const override;
+        qreal inputWidth() const override;
+        qreal outputWidth() const override;
 
     private:
-        static qreal s_wire_length;
-        static qreal s_circle_offset;
-        static qreal s_radius;
+        static qreal sWireLength;
+        static qreal sCircleOffset;
+        static qreal sRadius;
     };
 }

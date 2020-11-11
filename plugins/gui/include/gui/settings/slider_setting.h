@@ -34,16 +34,16 @@ namespace hal
         Q_OBJECT
 
     public:
-        SliderSetting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent = 0);
+        SliderSetting(const QString& key, const QString& title, const int min, const int max, const QString& mDescription, QWidget* parent = 0);
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;
         //virtual void rollback() Q_DECL_OVERRIDE;
 
     private:
-        QSlider* m_slider;
-        QLabel* m_number;
-        void on_slider_value_changed();
+        QSlider* mSlider;
+        QLabel* mNumber;
+        void onSliderValueChanged();
 
     };
 }

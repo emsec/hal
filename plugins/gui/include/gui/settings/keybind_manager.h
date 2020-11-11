@@ -43,21 +43,21 @@ namespace hal
         void bind(QShortcut* shortcut, const QString& key);
         void release(Action* action);
         void release(QShortcut* shortcut);
-        QShortcut* make_shortcut(QWidget* parent, const QString& key);
+        QShortcut* makeShortcut(QWidget* parent, const QString& key);
 
     private Q_SLOTS:
-        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
-        QHash<QString, Action*> m_bindings_actions;
-        QSet<Action*> m_bound_actions;
+        QHash<QString, Action*> mBindingsActions;
+        QSet<Action*> mBoundActions;
 
-        QHash<QString, QShortcut*> m_bindings_shortcuts;
-        QSet<QShortcut*> m_bound_shortcuts;
+        QHash<QString, QShortcut*> mBindingsShortcuts;
+        QSet<QShortcut*> mBoundShortcuts;
     };
 
     template<typename T>
-    void delete_all_values(QHash<QString, T> map, T value)
+    void deleteAllValues(QHash<QString, T> map, T value)
     {
         for (auto it = map.begin(); it != map.end();)
         {

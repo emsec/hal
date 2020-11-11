@@ -13,21 +13,21 @@
 
 namespace hal
 {
-    bool ScheduledPluginItem::s_drag_in_progress = false;
-    QPoint ScheduledPluginItem::s_drag_start_position;
+    bool ScheduledPluginItem::sDragInProgress = false;
+    QPoint ScheduledPluginItem::sDragStartPosition;
 
-    ScheduledPluginItem::ScheduledPluginItem(const QString& name, QWidget* parent) : QFrame(parent), m_layout(new QHBoxLayout()), m_label(new QLabel()), m_hover(false)
+    ScheduledPluginItem::ScheduledPluginItem(const QString& name, QWidget* parent) : QFrame(parent), mLayout(new QHBoxLayout()), mLabel(new QLabel()), mHover(false)
     {
-        m_name = name;
+        mName = name;
 
-        m_layout->setContentsMargins(0, 0, 0, 0);
-        m_layout->setSpacing(0);
+        mLayout->setContentsMargins(0, 0, 0, 0);
+        mLayout->setSpacing(0);
 
-        m_label->setObjectName("name-label");
-        m_label->setText(name);
+        mLabel->setObjectName("name-label");
+        mLabel->setText(name);
 
-        setLayout(m_layout);
-        m_layout->addWidget(m_label);
+        setLayout(mLayout);
+        mLayout->addWidget(mLabel);
 
         repolish();
     }
@@ -36,7 +36,7 @@ namespace hal
     {
         if (event->type() == QEvent::Enter)
         {
-            m_hover = true;
+            mHover = true;
             repolish();
         }
     }
@@ -45,32 +45,32 @@ namespace hal
     {
         if (event->type() == QEvent::Leave)
         {
-            if (s_drag_in_progress)
-                exec_drag();
+            if (sDragInProgress)
+                execDrag();
 
-            m_hover = false;
+            mHover = false;
             repolish();
         }
     }
 
     void ScheduledPluginItem::mouseMoveEvent(QMouseEvent* event)
     {
-        if (!s_drag_in_progress)
+        if (!sDragInProgress)
             return;
         if (!(event->buttons() & Qt::LeftButton))
             return;
-        if ((event->pos() - s_drag_start_position).manhattanLength() < QApplication::startDragDistance())
+        if ((event->pos() - sDragStartPosition).manhattanLength() < QApplication::startDragDistance())
             return;
 
-        exec_drag();
+        execDrag();
     }
 
     void ScheduledPluginItem::mousePressEvent(QMouseEvent* event)
     {
         if (event->button() == Qt::LeftButton)
         {
-            s_drag_in_progress    = true;
-            s_drag_start_position = event->pos();
+            sDragInProgress    = true;
+            sDragStartPosition = event->pos();
         }
 
         event->accept();
@@ -80,7 +80,7 @@ namespace hal
     void ScheduledPluginItem::mouseReleaseEvent(QMouseEvent* event)
     {
         if (event->button() == Qt::LeftButton)
-            s_drag_in_progress = false;
+            sDragInProgress = false;
 
         event->accept();
     }
@@ -92,26 +92,26 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        s->unpolish(m_label);
-        s->polish(m_label);
+        s->unpolish(mLabel);
+        s->polish(mLabel);
     }
 
-    void ScheduledPluginItem::exec_drag()
+    void ScheduledPluginItem::execDrag()
     {
-        s_drag_in_progress   = false;
+        sDragInProgress   = false;
         QDrag* drag          = new QDrag(this);
         QMimeData* mime_data = new QMimeData();
-        mime_data->setData("hal/plugin_name", m_label->text().toUtf8());
+        mime_data->setData("hal/plugin_name", mLabel->text().toUtf8());
         mime_data->setData("hal/item_height", QString::number(height()).toUtf8());
         drag->setMimeData(mime_data);
         drag->setPixmap(grab());
         drag->setHotSpot(QPoint(drag->pixmap().width() / 2, drag->pixmap().height() / 2));
 
-        m_hover = false;
-        m_label->setText(m_name);
+        mHover = false;
+        mLabel->setText(mName);
         repolish();
 
-        Q_EMIT drag_started(this);
+        Q_EMIT dragStarted(this);
         Qt::DropAction dropAction = drag->exec(Qt::MoveAction);
 
         if (!(dropAction & Qt::MoveAction))
@@ -120,36 +120,36 @@ namespace hal
 
     bool ScheduledPluginItem::hover()
     {
-        return m_hover;
+        return mHover;
     }
 
-    QString ScheduledPluginItem::icon_path()
+    QString ScheduledPluginItem::iconPath()
     {
-        return m_icon_path;
+        return mIconPath;
     }
 
-    QString ScheduledPluginItem::icon_style()
+    QString ScheduledPluginItem::iconStyle()
     {
-        return m_icon_style;
+        return mIconStyle;
     }
 
     QString ScheduledPluginItem::name()
     {
-        return m_label->text();
+        return mLabel->text();
     }
 
-    void ScheduledPluginItem::set_hover_active(bool active)
+    void ScheduledPluginItem::setHoverActive(bool active)
     {
-        m_hover = active;
+        mHover = active;
     }
 
-    void ScheduledPluginItem::set_icon_path(const QString& path)
+    void ScheduledPluginItem::setIconPath(const QString& path)
     {
-        m_icon_path = path;
+        mIconPath = path;
     }
 
-    void ScheduledPluginItem::set_icon_style(const QString& style)
+    void ScheduledPluginItem::setIconStyle(const QString& style)
     {
-        m_icon_style = style;
+        mIconStyle = style;
     }
 }

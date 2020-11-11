@@ -8,7 +8,7 @@ namespace hal
 {
     namespace gui_utility
     {
-        void ensure_on_screen(QWidget* w)
+        void ensureOnScreen(QWidget* w)
         {
             auto boundingRect = QApplication::desktop()->availableGeometry(w);
             auto requiredRect = w->geometry();

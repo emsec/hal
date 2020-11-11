@@ -7,48 +7,48 @@
 namespace hal
 {
     DialogOverlay::DialogOverlay(QWidget* parent) : Overlay(parent),
-        //m_layout(new QVBoxLayout(this)),
-        m_dialog(nullptr)
+        //mLayout(new QVBoxLayout(this)),
+        mDialog(nullptr)
     {
     }
 
-    void DialogOverlay::set_dialog(Dialog* dialog)
+    void DialogOverlay::setDialog(Dialog* dialog)
     {
-        if (m_dialog)
+        if (mDialog)
         {
-            m_dialog->hide();
-            m_dialog->setParent(nullptr);
+            mDialog->hide();
+            mDialog->setParent(nullptr);
         }
 
-        m_dialog = dialog;
+        mDialog = dialog;
 
         dialog->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        //m_layout->addWidget(dialog, Qt::AlignCenter);
-        //m_layout->setAlignment(dialog, Qt::AlignCenter);
+        //mLayout->addWidget(dialog, Qt::AlignCenter);
+        //mLayout->setAlignment(dialog, Qt::AlignCenter);
 
         dialog->setParent(this);
 
-        m_dialog->show();
+        mDialog->show();
 
         // OLD
-        //    m_widget->setParent(this);
-        //    m_widget->resize(m_widget->sizeHint());
+        //    mWidget->setParent(this);
+        //    mWidget->resize(mWidget->sizeHint());
 
-        connect(m_dialog, &Dialog::offset_changed, this, &DialogOverlay::position_dialog);
+        connect(mDialog, &Dialog::offsetChanged, this, &DialogOverlay::positionDialog);
     }
 
     void DialogOverlay::resizeEvent(QResizeEvent* event)
     {
         Q_UNUSED(event)
 
-        position_dialog();
+        positionDialog();
     }
 
-    void DialogOverlay::position_dialog()
+    void DialogOverlay::positionDialog()
     {
-        int x = width() / 2 - m_dialog->width() / 2 + m_dialog->x_offset();
-        int y = height() / 2 - m_dialog->height() / 2 + m_dialog->y_offset();
+        int x = width() / 2 - mDialog->width() / 2 + mDialog->xOffset();
+        int y = height() / 2 - mDialog->height() / 2 + mDialog->yOffset();
 
-        m_dialog->move(x, y);
+        mDialog->move(x, y);
     }
 }

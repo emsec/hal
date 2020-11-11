@@ -33,15 +33,15 @@ namespace hal
         Q_OBJECT
 
     public:
-        TextSetting(const QString& key, const QString& title, const QString& description, const QString& placeholder = "", QWidget* parent = 0);
+        TextSetting(const QString& key, const QString& title, const QString& mDescription, const QString& placeholder = "", QWidget* parent = 0);
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;
         //virtual void rollback() Q_DECL_OVERRIDE;
 
     private:
-        QLineEdit* m_textfield;
-        void on_text_changed();
+        QLineEdit* mTextfield;
+        void onTextChanged();
 
     };
 }

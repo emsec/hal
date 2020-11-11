@@ -43,15 +43,15 @@ namespace hal
         MinimapScrollbar* scrollbar();
         QTextDocument* document();
 
-        void adjust_slider_height(int viewport_height);
-        void adjust_slider_height(qreal ratio);
-        void adjust_slider_height(int first_visible_block, int last_visible_block);
+        void adjustSliderHeight(int viewport_height);
+        void adjustSliderHeight(qreal ratio);
+        void adjustSliderHeight(int first_visible_block, int last_visible_block);
 
         void repolish();
 
     public Q_SLOTS:
-        void handle_document_size_changed(const QSizeF& new_size);
-        void handle_contents_change(int position, int chars_removed, int chars_added);
+        void handleDocumentSizeChanged(const QSizeF& new_size);
+        void handleContentsChange(int position, int chars_removed, int chars_added);
 
     protected:
         void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
@@ -60,13 +60,13 @@ namespace hal
         void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
 
     private:
-        void resize_scrollbar();
+        void resizeScrollbar();
 
-        CodeEditor* m_editor;
-        QTextDocument* m_document;
-        MinimapScrollbar* m_scrollbar;
+        CodeEditor* mEditor;
+        QTextDocument* mDocument;
+        MinimapScrollbar* mScrollbar;
 
-        int m_document_height;
-        qreal m_offset;
+        int mDocumentHeight;
+        qreal mOffset;
     };
 }

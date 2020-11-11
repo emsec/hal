@@ -36,55 +36,55 @@ namespace hal
     class Searchbar : public QFrame
     {
         Q_OBJECT
-        Q_PROPERTY(QString search_icon READ search_icon WRITE set_search_icon)
-        Q_PROPERTY(QString search_icon_style READ search_icon_style WRITE set_search_icon_style)
-        Q_PROPERTY(QString clear_icon READ clear_icon WRITE set_clear_icon)
-        Q_PROPERTY(QString clear_icon_style READ clear_icon_style WRITE set_clear_icon_style)
+        Q_PROPERTY(QString searchIcon READ searchIcon WRITE setSearchIcon)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
+        Q_PROPERTY(QString clearIcon READ clearIcon WRITE setClearIcon)
+        Q_PROPERTY(QString clearIconStyle READ clearIconStyle WRITE setClearIconStyle)
 
     public:
         Searchbar(QWidget* parent = 0);
 
-        QString search_icon() const;
-        QString search_icon_style() const;
-        QString clear_icon() const;
-        QString clear_icon_style() const;
+        QString searchIcon() const;
+        QString searchIconStyle() const;
+        QString clearIcon() const;
+        QString clearIconStyle() const;
 
-        void set_search_icon(const QString& icon);
-        void set_search_icon_style(const QString& style);
-        void set_clear_icon(const QString& icon);
-        void set_clear_icon_style(const QString& style);
+        void setSearchIcon(const QString& icon);
+        void setSearchIconStyle(const QString& style);
+        void setClearIcon(const QString& icon);
+        void setClearIconStyle(const QString& style);
 
-        void set_placeholder_text(const QString& text);
-        void set_mode_button_text(const QString& text);
+        void setPlaceholderText(const QString& text);
+        void setModeButtonText(const QString& text);
 
         void clear();
-        QString get_current_text();
+        QString getCurrentText();
 
         void repolish();
 
     Q_SIGNALS:
-        void text_edited(const QString& text);
-        void return_pressed();
-        void mode_clicked();
+        void textEdited(const QString& text);
+        void returnPressed();
+        void modeClicked();
 
     public Q_SLOTS:
-        void handle_text_edited(const QString& text);
-        void handle_return_pressed();
-        void handle_mode_clicked();
+        void handleTextEdited(const QString& text);
+        void handleReturnPressed();
+        void handleModeClicked();
 
     private:
-        QHBoxLayout* m_layout;
+        QHBoxLayout* mLayout;
 
-        QLabel* m_search_icon_label;
-        QLineEdit* m_LineEdit;
-        QLabel* m_clear_icon_label;
-        QPushButton* m_mode_button;
-        QToolButton* m_down_button;
-        QToolButton* m_up_button;
+        QLabel* mSearchIconLabel;
+        QLineEdit* mLineEdit;
+        QLabel* mClearIconLabel;
+        QPushButton* mModeButton;
+        QToolButton* mDownButton;
+        QToolButton* mUpButton;
 
-        QString m_search_icon;
-        QString m_search_icon_style;
-        QString m_clear_icon;
-        QString m_clear_icon_style;
+        QString mSearchIcon;
+        QString mSearchIconStyle;
+        QString mClearIcon;
+        QString mClearIconStyle;
     };
 }

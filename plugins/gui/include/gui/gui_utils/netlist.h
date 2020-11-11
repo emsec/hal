@@ -33,9 +33,9 @@ namespace hal
 {
     namespace gui_utility
     {
-        Module* first_common_ancestor(std::unordered_set<Module*> modules, const std::unordered_set<Gate*>& gates);
-        Module* first_common_ancestor(Module* m1, Module* m2);
-        QSet<u32> parent_modules(Gate* g);
-        QSet<u32> parent_modules(Module* m);
+        Module* firstCommonAncestor(std::unordered_set<Module*> modules, const std::unordered_set<Gate*>& gates);
+        Module* firstCommonAncestor(Module* m1, Module* m2);
+        QSet<u32> parentModules(Gate* g);
+        QSet<u32> parentModules(Module* m);
     }
 }

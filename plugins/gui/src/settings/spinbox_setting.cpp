@@ -13,39 +13,39 @@
 
 namespace hal
 {
-    SpinboxSetting::SpinboxSetting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent) : SettingsWidget(key, parent)
+    SpinboxSetting::SpinboxSetting(const QString& key, const QString& title, const int min, const int max, const QString& mDescription, QWidget* parent) : SettingsWidget(key, parent)
     {
-        m_labels.append(QPair<QLabel*, QString>(m_name, title));
+        mLabels.append(QPair<QLabel*, QString>(mName, title));
 
         QHBoxLayout* layout = new QHBoxLayout();
-        m_container->addLayout(layout);
+        mContainer->addLayout(layout);
 
-        m_spinbox = new QSpinBox(this);
-        m_spinbox->setMinimum(min);
-        m_spinbox->setMaximum(max);
-        connect(m_spinbox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpinboxSetting::on_spinbox_value_changed);
+        mSpinbox = new QSpinBox(this);
+        mSpinbox->setMinimum(min);
+        mSpinbox->setMaximum(max);
+        connect(mSpinbox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpinboxSetting::onSpinboxValueChanged);
 
-        layout->addWidget(m_spinbox);
+        layout->addWidget(mSpinbox);
 
         QLabel* label = new QLabel();
         layout->addWidget(label);
 
-        m_labels.append(QPair<QLabel*, QString>(label, description));
+        mLabels.append(QPair<QLabel*, QString>(label, mDescription));
     }
 
     void SpinboxSetting::load(const QVariant& value)
     {
-        m_spinbox->setValue(value.toInt());
+        mSpinbox->setValue(value.toInt());
     }
 
     QVariant SpinboxSetting::value()
     {
-        return QVariant(m_spinbox->value());
+        return QVariant(mSpinbox->value());
     }
 
-    void SpinboxSetting::on_spinbox_value_changed(int value)
+    void SpinboxSetting::onSpinboxValueChanged(int value)
     {
         Q_UNUSED(value);
-        trigger_setting_updated();
+        triggerSettingUpdated();
     }
 }

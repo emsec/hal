@@ -27,17 +27,17 @@ namespace hal
                 {
                     if (wasNumerical)
                     {
-                        numList.append(currentNumber);
+                        mNumList.append(currentNumber);
                         currentNumber = 0;
                         wasNumerical = false;
                     }
-                    remainder += cc;
+                    mRemainder += cc;
                 }
             }
-            if (wasNumerical) numList.append(currentNumber);
+            if (wasNumerical) mNumList.append(currentNumber);
         }
 
-        bool natural_order_compare(const QString& a, const QString& b)
+        bool naturalOrderCompare(const QString& a, const QString& b)
         {
             const QChar* a_it = a.constBegin();
             const QChar* b_it = b.constBegin();
@@ -65,7 +65,7 @@ namespace hal
                 {
                     if (number_mode)
                     {
-                        int diff = numeric_string_compare(a_num, b_num);
+                        int diff = numericStringCompare(a_num, b_num);
                         if (diff != 0) // keep looking if both numbers are equal
                         {
                             return diff < 0;
@@ -92,7 +92,7 @@ namespace hal
             // numbers
             if (a_it->isNull() && b_it->isNull() && number_mode)
             {
-                int diff = numeric_string_compare(a_num, b_num);
+                int diff = numericStringCompare(a_num, b_num);
                 if (diff) // keep looking if both numbers are equal
                 {
                     return diff < 0;
@@ -101,23 +101,23 @@ namespace hal
             return a_it->isNull(); // is a shorter than b?
         }
 
-        bool numerated_order_compare(const QString& a, const QString& b)
+        bool numeratedOrderCompare(const QString& a, const QString& b)
         {
             NumeratedString ans(a);
             NumeratedString bns(b);
 
             // check lexical part different
-            if (ans.remainder < bns.remainder) return true;
-            if (ans.remainder > bns.remainder) return false;
-            int na = ans.numList.size();
-            int nb = bns.numList.size();
+            if (ans.mRemainder < bns.mRemainder) return true;
+            if (ans.mRemainder > bns.mRemainder) return false;
+            int na = ans.mNumList.size();
+            int nb = bns.mNumList.size();
             int n = na < nb ? na : nb;
 
             // check whether numbers are different
             for (int i=0; i<n; i++)
             {
-                if (ans.numList.at(i) < bns.numList.at(i)) return true;
-                if (ans.numList.at(i) > bns.numList.at(i)) return false;
+                if (ans.mNumList.at(i) < bns.mNumList.at(i)) return true;
+                if (ans.mNumList.at(i) > bns.mNumList.at(i)) return false;
             }
 
             // check whether there are additional numbers
@@ -127,12 +127,12 @@ namespace hal
             return false;  // all equal
         }
 
-        bool lexical_order_compare(const QString& a, const QString& b)
+        bool lexicalOrderCompare(const QString& a, const QString& b)
         {
             return a < b;
         }
 
-        int numeric_string_compare(QString a_num, QString b_num)
+        int numericStringCompare(QString a_num, QString b_num)
         {
             // this allows us to compare any length of number, regardless of
             // any integer limits
@@ -150,16 +150,16 @@ namespace hal
             return a_num.compare(b_num);
         }
 
-        int compare(sort_mechanism mechanism, QString a, QString b)
+        int compare(mSortMechanism mechanism, QString a, QString b)
         {
             switch(mechanism)
             {
             case lexical:
-                return lexical_order_compare(a, b);
+                return lexicalOrderCompare(a, b);
             case natural:
-                return natural_order_compare(a, b);
+                return naturalOrderCompare(a, b);
             case numerated:
-                return numerated_order_compare(a, b);
+                return numeratedOrderCompare(a, b);
             default:
                 assert(false);
             }

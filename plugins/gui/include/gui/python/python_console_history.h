@@ -44,7 +44,7 @@ namespace hal
          *
          * @param command - Command to remember
          */
-        void add_history(const std::string& command);
+        void addHistory(const std::string& command);
 
         /**
          * Returns the history item at index.
@@ -52,7 +52,7 @@ namespace hal
          * @param index - Index of the history item to resolve.
          * @return command at index.
          */
-        const std::string& get_history_item(const int& index) const;
+        const std::string& getHistoryItem(const int& index) const;
 
         /**
          * Get the current size of the index;
@@ -65,13 +65,13 @@ namespace hal
          * Reloads the history from the history file.
          *
          */
-        void update_from_file();
+        void updateFromFile();
 
     private:
-        void append_to_file(const std::string& command);
+        void appendToFile(const std::string& command);
 
-        std::string m_file_name;
+        std::string mFileName;
 
-        std::vector<std::string> m_history;
+        std::vector<std::string> mHistory;
     };
 }

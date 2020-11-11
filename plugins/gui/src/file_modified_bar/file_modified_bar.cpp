@@ -7,69 +7,69 @@ namespace hal
     FileModifiedBar::FileModifiedBar(QWidget* parent)
     {
         Q_UNUSED(parent);
-        m_layout = new QHBoxLayout();
-        setLayout(m_layout);
+        mLayout = new QHBoxLayout();
+        setLayout(mLayout);
 
-        m_message_label = new QLabel("");
-        m_layout->addWidget(m_message_label);
+        mMessageLabel = new QLabel("");
+        mLayout->addWidget(mMessageLabel);
 
-        m_reload_button = new QPushButton("Reload");
-        m_reload_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        m_layout->addWidget(m_reload_button);
+        mReloadButton = new QPushButton("Reload");
+        mReloadButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        mLayout->addWidget(mReloadButton);
 
-        m_ignore_button = new QPushButton("Ignore");
-        m_ignore_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        m_layout->addWidget(m_ignore_button);
+        mIgnoreButton = new QPushButton("Ignore");
+        mIgnoreButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        mLayout->addWidget(mIgnoreButton);
 
-        m_ok_button = new QPushButton("Ok");
-        m_ok_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        m_layout->addWidget(m_ok_button);
+        mOkButton = new QPushButton("Ok");
+        mOkButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        mLayout->addWidget(mOkButton);
 
-        connect(m_reload_button, &QPushButton::clicked, this, &FileModifiedBar::handle_reload_clicked);
-        connect(m_ignore_button, &QPushButton::clicked, this, &FileModifiedBar::handle_ignore_clicked);
-        connect(m_ok_button, &QPushButton::clicked, this, &FileModifiedBar::handle_ok_clicked);
+        connect(mReloadButton, &QPushButton::clicked, this, &FileModifiedBar::handleReloadClicked);
+        connect(mIgnoreButton, &QPushButton::clicked, this, &FileModifiedBar::handleIgnoreClicked);
+        connect(mOkButton, &QPushButton::clicked, this, &FileModifiedBar::handleOkClicked);
     }
 
-    void FileModifiedBar::handle_file_changed(QString path)
+    void FileModifiedBar::handleFileChanged(QString path)
     {
         QFile file(path);
 
         if(file.exists())
-            handle_file_content_modified(path);
+            handleFileContentModified(path);
         else
-            handle_file_mov_or_del(path);
+            handleFileMovOrDel(path);
     }
 
-    void FileModifiedBar::handle_file_content_modified(QString path)
+    void FileModifiedBar::handleFileContentModified(QString path)
     {
-        m_ok_button->setHidden(true);
-        m_reload_button->setHidden(false);
-        m_ignore_button->setHidden(false);
+        mOkButton->setHidden(true);
+        mReloadButton->setHidden(false);
+        mIgnoreButton->setHidden(false);
 
-        m_message_label->setText(path + " has been modified on disk.");
+        mMessageLabel->setText(path + " has been modified on disk.");
     }
 
-    void FileModifiedBar::handle_file_mov_or_del(QString path)
+    void FileModifiedBar::handleFileMovOrDel(QString path)
     {
-        m_ok_button->setHidden(false);
-        m_reload_button->setHidden(true);
-        m_ignore_button->setHidden(true);
+        mOkButton->setHidden(false);
+        mReloadButton->setHidden(true);
+        mIgnoreButton->setHidden(true);
 
-        m_message_label->setText(path + " has been moved on disk.");
+        mMessageLabel->setText(path + " has been moved on disk.");
     }
 
-    void FileModifiedBar::handle_reload_clicked()
+    void FileModifiedBar::handleReloadClicked()
     {
-        Q_EMIT reload_clicked();
+        Q_EMIT reloadClicked();
     }
 
-    void FileModifiedBar::handle_ignore_clicked()
+    void FileModifiedBar::handleIgnoreClicked()
     {
-        Q_EMIT ignore_clicked();
+        Q_EMIT ignoreClicked();
     }
 
-    void FileModifiedBar::handle_ok_clicked()
+    void FileModifiedBar::handleOkClicked()
     {
-        Q_EMIT ok_clicked();
+        Q_EMIT okClicked();
     }
 }

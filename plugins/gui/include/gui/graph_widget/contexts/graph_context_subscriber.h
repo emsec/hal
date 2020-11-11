@@ -31,11 +31,11 @@ namespace hal
     public:
         virtual ~GraphContextSubscriber() = default;
 
-        virtual void handle_scene_available() = 0;
-        virtual void handle_scene_unavailable() = 0;
-        virtual void handle_context_about_to_be_deleted() = 0;
+        virtual void handleSceneAvailable() = 0;
+        virtual void handleSceneUnavailable() = 0;
+        virtual void handleContextAboutToBeDeleted() = 0;
 
-        virtual void handle_status_update(const int percent) = 0;
-        virtual void handle_status_update(const QString& message) = 0;
+        virtual void handleStatusUpdate(const int percent) = 0;
+        virtual void handleStatusUpdate(const QString& message) = 0;
     };
 }

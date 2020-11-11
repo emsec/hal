@@ -7,21 +7,21 @@
 
 namespace hal
 {
-    DockButton::DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent) : QToolButton(parent), m_widget(widget), m_orientation(orientation)
+    DockButton::DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent) : QToolButton(parent), mWidget(widget), mOrientation(orientation)
     {
-        setText(m_widget->name());
+        setText(mWidget->name());
         setCheckable(true);
         setStyleSheet("QToolButton { font-family                : \"Iosevka\";padding: 0; margin: 0; }");
-        setIcon(m_widget->icon());
+        setIcon(mWidget->icon());
         installEventFilter(eventFilter);
 
-        m_icon_size       = 14;
-        m_width_padding   = 16;
-        m_height_padding  = 0;
-        m_relative_height = 18;
-        adjust_size();
+        mIconSize       = 14;
+        mWidthPadding   = 16;
+        mHeightPadding  = 0;
+        mRelativeHeight = 18;
+        adjustSize();
 
-        connect(this, &DockButton::clicked, this, &DockButton::handle_clicked);
+        connect(this, &DockButton::clicked, this, &DockButton::handleClicked);
     }
 
     void DockButton::paintEvent(QPaintEvent* event)
@@ -33,102 +33,102 @@ namespace hal
         painter.setPen(Qt::white);
         if (underMouse())
         {
-            painter.fillRect(0, 0, m_width, m_height, QColor("#666769"));
+            painter.fillRect(0, 0, mWidth, mHeight, QColor("#666769"));
         }
         else if (isChecked())
         {
-            painter.fillRect(0, 0, m_width, m_height, QColor("#808080"));
+            painter.fillRect(0, 0, mWidth, mHeight, QColor("#808080"));
         }
 
-        switch (m_orientation)
+        switch (mOrientation)
         {
             case button_orientation::horizontal:
                 painter.translate(0, -1);
                 break;
             case button_orientation::vertical_up:
-                painter.translate(-1, m_height);
+                painter.translate(-1, mHeight);
                 painter.rotate(270);
                 break;
             case button_orientation::vertical_down:
-                painter.translate(m_width + 1, 0);
+                painter.translate(mWidth + 1, 0);
                 painter.rotate(90);
                 break;
         }
-        icon().paint(&painter, 0, (m_relative_height / 2) - (m_icon_size / 2), m_icon_size, (m_relative_height / 2) - (m_icon_size / 2) + m_icon_size);
-        painter.drawText(QRectF(QRect(m_icon_size, 0, m_relative_width, m_relative_height)), Qt::AlignVCenter, text());
+        icon().paint(&painter, 0, (mRelativeHeight / 2) - (mIconSize / 2), mIconSize, (mRelativeHeight / 2) - (mIconSize / 2) + mIconSize);
+        painter.drawText(QRectF(QRect(mIconSize, 0, mRelativeWidth, mRelativeHeight)), Qt::AlignVCenter, text());
     }
 
-    void DockButton::adjust_size()
+    void DockButton::adjustSize()
     {
         auto font = property("font").value<QFont>();
         //, QFont::PreferAntialias);
         QFontMetrics fm(font);
         int textwidth    = fm.width(text());
-        m_relative_width = m_icon_size + textwidth + m_width_padding;
+        mRelativeWidth = mIconSize + textwidth + mWidthPadding;
 
-        if (m_orientation == button_orientation::horizontal)
+        if (mOrientation == button_orientation::horizontal)
         {
-            m_width  = m_relative_width;
-            m_height = m_relative_height;
+            mWidth  = mRelativeWidth;
+            mHeight = mRelativeHeight;
         }
         else
         {
-            m_width  = m_relative_height;
-            m_height = m_relative_width;
+            mWidth  = mRelativeHeight;
+            mHeight = mRelativeWidth;
         }
 
-        setFixedHeight(m_height);
-        setFixedWidth(m_width);
+        setFixedHeight(mHeight);
+        setFixedWidth(mWidth);
     }
 
-    int DockButton::relative_width()
+    int DockButton::relativeWidth()
     {
-        return m_relative_width;
+        return mRelativeWidth;
     }
 
-    void DockButton::handle_clicked(bool checked)
+    void DockButton::handleClicked(bool mChecked)
     {
-        if (checked)
-            m_widget->open();
+        if (mChecked)
+            mWidget->open();
         else
-            m_widget->close();
+            mWidget->close();
     }
 
     ContentWidget* DockButton::widget()
     {
-        return m_widget;
+        return mWidget;
     }
 
     void DockButton::hide()
     {
         QWidget::hide();
-        m_hidden = true;
+        mHidden = true;
     }
 
     void DockButton::show()
     {
         QWidget::show();
-        m_hidden = false;
+        mHidden = false;
     }
 
     bool DockButton::hidden()
     {
-        return m_hidden;
+        return mHidden;
     }
 
     bool DockButton::available()
     {
-        return m_available;
+        return mAvailable;
     }
 
-    void DockButton::set_available(bool available)
+    void DockButton::setAvailable(bool available)
     {
-        m_available = available;
+        mAvailable = available;
     }
 
-    void DockButton::set_relative_height(int height)
+    void DockButton::setRelativeHeight(int height)
     {
-        m_relative_height = height;
-        adjust_size();
+        mRelativeHeight = height;
+        adjustSize();
     }
 }

@@ -42,36 +42,36 @@ namespace hal
     public:
         GraphTabWidget(QWidget* parent = nullptr);
 
-        virtual QList<QShortcut*> create_shortcuts() override;
+        virtual QList<QShortcut*> createShortcuts() override;
 
         int addTab(QWidget* tab, QString tab_name = "default");
-        void show_context(GraphContext* context);
+        void showContext(GraphContext* context);
 
     public Q_SLOTS:
-        void handle_context_created(GraphContext* context);
-        void handle_context_renamed(GraphContext* context);
-        void handle_context_removed(GraphContext* context);
+        void handleContextCreated(GraphContext* context);
+        void handleContextRenamed(GraphContext* context);
+        void handleContextRemoved(GraphContext* context);
 
-        void handle_tab_changed(int index);
+        void handleTabChanged(int index);
 
     private:
-        QTabWidget* m_tab_widget;
-        QVBoxLayout* m_layout;
+        QTabWidget* mTabWidget;
+        QVBoxLayout* mLayout;
 
-        float m_zoom_factor;
+        float mZoomFactor;
 
-        QMap<GraphContext*, QWidget*> m_context_widget_map;
+        QMap<GraphContext*, QWidget*> mContextWidgetMap;
 
-        GraphWidget* m_current_widget;
+        GraphWidget* mCurrentWidget;
 
-        int get_context_tab_index(GraphContext* context) const;
+        int getContextTabIndex(GraphContext* context) const;
 
         //functions
-        void handle_tab_close_requested(int index);
+        void handleTabCloseRequested(int index);
 
-        void add_graph_widget_tab(GraphContext* context);
+        void addGraphWidgetTab(GraphContext* context);
 
-        void zoom_in_shortcut();
-        void zoom_out_shortcut();
+        void zoomInShortcut();
+        void zoomOutShortcut();
     };
 }

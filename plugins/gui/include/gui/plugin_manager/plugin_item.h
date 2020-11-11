@@ -40,11 +40,11 @@ namespace hal
         };
 
         using column_utype = std::underlying_type<ColumnType>::type;
-        static QVector<QPair<QString, ColumnType>> get_column_description();
+        static QVector<QPair<QString, ColumnType>> getColumnDescription();
         explicit PluginItem();
         explicit PluginItem(const QString &plugin_name, const QString &plugin_path);
         QString mName;
         QString mPath;
-        bool is_valid();
+        bool isValid();
     };
 }

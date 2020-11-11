@@ -12,9 +12,9 @@ namespace hal
 
     void SelectionHistoryNavigator::storeCurrentSelection()
     {
-        SelectionHistoryEntry she(g_selection_relay->m_selected_modules,
-                                  g_selection_relay->m_selected_gates,
-                                  g_selection_relay->m_selected_nets,
+        SelectionHistoryEntry she(gSelectionRelay->mSelectedModules,
+                                  gSelectionRelay->mSelectedGates,
+                                  gSelectionRelay->mSelectedNets,
                                   ++mCount);
         if (she.isEmpty()) return;
 
@@ -39,9 +39,9 @@ namespace hal
             if (mSelectionContainer.isEmpty()) return;
             she = mSelectionContainer.takeLast();
         }
-        g_selection_relay->m_selected_modules = she.m_module_ids;
-        g_selection_relay->m_selected_gates   = she.m_gate_ids;
-        g_selection_relay->m_selected_nets    = she.m_net_ids;
+        gSelectionRelay->mSelectedModules = she.mModuleIds;
+        gSelectionRelay->mSelectedGates   = she.mGateIds;
+        gSelectionRelay->mSelectedNets    = she.mNetIds;
         mCount = she.count();
     }
 

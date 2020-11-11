@@ -30,22 +30,22 @@ namespace hal
     class SeparatedGraphicsNet : public GraphicsNet
     {
     public:
-        static void update_alpha();
+        static void updateAlpha();
 
         SeparatedGraphicsNet(Net* n);
 
-        virtual void add_input(const QPointF& scene_position) = 0;
-        virtual void add_output(const QPointF& scene_position) = 0;
+        virtual void addInput(const QPointF& scene_position) = 0;
+        virtual void addOutput(const QPointF& scene_position) = 0;
 
-        virtual qreal input_width() const = 0;
-        virtual qreal output_width() const = 0;
+        virtual qreal inputWidth() const = 0;
+        virtual qreal outputWidth() const = 0;
 
         virtual void finalize();
 
     protected:
-        static qreal s_alpha;
+        static qreal sAlpha;
 
-        QVector<QPointF> m_input_positions;
-        QVector<QPointF> m_output_positions;
+        QVector<QPointF> mInputPositions;
+        QVector<QPointF> mOutputPositions;
     };
 }

@@ -8,58 +8,58 @@
 
 namespace hal
 {
-    qreal ArrowSeparatedNet::s_wire_length;
-    qreal ArrowSeparatedNet::s_input_arrow_offset;
-    qreal ArrowSeparatedNet::s_output_arrow_offset;
-    qreal ArrowSeparatedNet::s_arrow_left_x_shift;
-    qreal ArrowSeparatedNet::s_arrow_right_x_shift;
-    qreal ArrowSeparatedNet::s_arrow_side_length;
-    qreal ArrowSeparatedNet::s_arrow_width;
-    qreal ArrowSeparatedNet::s_arrow_height;
+    qreal ArrowSeparatedNet::sWireLength;
+    qreal ArrowSeparatedNet::sInputArrowOffset;
+    qreal ArrowSeparatedNet::sOutputArrowOffset;
+    qreal ArrowSeparatedNet::sArrowLeftXShift;
+    qreal ArrowSeparatedNet::sArrowRightXShift;
+    qreal ArrowSeparatedNet::sArrowSideLength;
+    qreal ArrowSeparatedNet::sArrowWidth;
+    qreal ArrowSeparatedNet::sArrowHeight;
 
-    qreal ArrowSeparatedNet::s_input_width;
-    qreal ArrowSeparatedNet::s_output_width;
+    qreal ArrowSeparatedNet::sInputWidth;
+    qreal ArrowSeparatedNet::sOutputWidth;
 
-    QPainterPath ArrowSeparatedNet::s_arrow;
+    QPainterPath ArrowSeparatedNet::sArrow;
 
-    void ArrowSeparatedNet::load_settings()
+    void ArrowSeparatedNet::loadSettings()
     {
-        s_wire_length = 26;
+        sWireLength = 26;
 
-        s_input_arrow_offset = 3;
-        s_output_arrow_offset = 3;
+        sInputArrowOffset = 3;
+        sOutputArrowOffset = 3;
 
-        s_arrow_left_x_shift = 0;
-        s_arrow_right_x_shift = 3;
-        s_arrow_side_length = 12;
+        sArrowLeftXShift = 0;
+        sArrowRightXShift = 3;
+        sArrowSideLength = 12;
 
-        s_arrow_height = 6;
-        s_arrow_width = s_arrow_left_x_shift + s_arrow_side_length + s_arrow_right_x_shift;
+        sArrowHeight = 6;
+        sArrowWidth = sArrowLeftXShift + sArrowSideLength + sArrowRightXShift;
 
-        s_input_width = s_wire_length + s_input_arrow_offset + s_arrow_width + s_shape_width;
-        s_output_width = s_wire_length + s_output_arrow_offset + s_arrow_width + s_shape_width;
+        sInputWidth = sWireLength + sInputArrowOffset + sArrowWidth + sShapeWidth;
+        sOutputWidth = sWireLength + sOutputArrowOffset + sArrowWidth + sShapeWidth;
 
-        QPointF point(s_arrow_left_x_shift, -s_arrow_height / 2);
+        QPointF point(sArrowLeftXShift, -sArrowHeight / 2);
 
         #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
             // only available in Qt >= 5.13.0
-            s_arrow.clear();
+            sArrow.clear();
         #else
             // low-performance fallback for older Qt
-            s_arrow = QPainterPath();
+            sArrow = QPainterPath();
         #endif
-        s_arrow.lineTo(point);
-        point.setX(point.x() + s_arrow_side_length);
-        s_arrow.lineTo(point);
-        point.setX(point.x() + s_arrow_right_x_shift);
+        sArrow.lineTo(point);
+        point.setX(point.x() + sArrowSideLength);
+        sArrow.lineTo(point);
+        point.setX(point.x() + sArrowRightXShift);
         point.setY(0);
-        s_arrow.lineTo(point);
-        point.setX(point.x() - s_arrow_right_x_shift);
-        point.setY(s_arrow_height / 2);
-        s_arrow.lineTo(point);
-        point.setX(point.x() - s_arrow_side_length);
-        s_arrow.lineTo(point);
-        s_arrow.closeSubpath();
+        sArrow.lineTo(point);
+        point.setX(point.x() - sArrowRightXShift);
+        point.setY(sArrowHeight / 2);
+        sArrow.lineTo(point);
+        point.setX(point.x() - sArrowSideLength);
+        sArrow.lineTo(point);
+        sArrow.closeSubpath();
     }
 
     ArrowSeparatedNet::ArrowSeparatedNet(Net* n) : SeparatedGraphicsNet(n)
@@ -70,134 +70,134 @@ namespace hal
     {
         Q_UNUSED(widget);
 
-        if (s_lod < graph_widget_constants::separated_net_min_lod)
+        if (sLod < graph_widget_constants::sEparatedNetMinLod)
             return;
 
         QColor color = penColor(option->state);
-        color.setAlphaF(s_alpha);
+        color.setAlphaF(sAlpha);
 
-        s_pen.setColor(color);
-        painter->setPen(s_pen);
+        sPen.setColor(color);
+        painter->setPen(sPen);
 
-        if (m_fill_icon)
+        if (mFillIcon)
         {
-            s_brush.setColor(color);
-            s_brush.setStyle(m_brush_style);
-            painter->setBrush(s_brush);
+            sBrush.setColor(color);
+            sBrush.setStyle(mBrushStyle);
+            painter->setBrush(sBrush);
         }
 
-        const Qt::PenStyle original_pen_style = s_pen.style();
+        const Qt::PenStyle original_pen_style = sPen.style();
 
-        for (const QPointF& position : m_input_positions)
+        for (const QPointF& position : mInputPositions)
         {
-            QPointF to(position.x() - s_wire_length, position.y());
+            QPointF to(position.x() - sWireLength, position.y());
             painter->drawLine(position, to);
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing, true);
-            s_pen.setStyle(Qt::PenStyle::SolidLine);
-            painter->setPen(s_pen);
-            painter->translate(QPointF(position.x() - s_wire_length - s_input_arrow_offset - s_arrow_width, position.y()));
-            painter->drawPath(s_arrow);
-            s_pen.setStyle(original_pen_style);
+            sPen.setStyle(Qt::PenStyle::SolidLine);
+            painter->setPen(sPen);
+            painter->translate(QPointF(position.x() - sWireLength - sInputArrowOffset - sArrowWidth, position.y()));
+            painter->drawPath(sArrow);
+            sPen.setStyle(original_pen_style);
             painter->restore();
         }
 
-        for (const QPointF& position : m_output_positions)
+        for (const QPointF& position : mOutputPositions)
         {
-            QPointF to(position.x() + s_wire_length, position.y());
+            QPointF to(position.x() + sWireLength, position.y());
             painter->drawLine(position, to);
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing, true);
-            s_pen.setStyle(Qt::PenStyle::SolidLine);
-            painter->setPen(s_pen);
-            painter->translate(QPointF(position.x() + s_wire_length + s_output_arrow_offset, position.y()));
-            painter->drawPath(s_arrow);
-            s_pen.setStyle(original_pen_style);
+            sPen.setStyle(Qt::PenStyle::SolidLine);
+            painter->setPen(sPen);
+            painter->translate(QPointF(position.x() + sWireLength + sOutputArrowOffset, position.y()));
+            painter->drawPath(sArrow);
+            sPen.setStyle(original_pen_style);
             painter->restore();
         }
 
-        s_brush.setStyle(Qt::NoBrush);
-        painter->setBrush(s_brush);
+        sBrush.setStyle(Qt::NoBrush);
+        painter->setBrush(sBrush);
 
     #ifdef HAL_DEBUG_GUI_GRAPH_WIDGET
-        bool original_cosmetic = s_pen.isCosmetic();
-        s_pen.setCosmetic(true);
-        s_pen.setColor(Qt::green);
-        painter->setPen(s_pen);
-        painter->drawPath(m_shape);
-        s_pen.setCosmetic(original_cosmetic);
+        bool original_cosmetic = sPen.isCosmetic();
+        sPen.setCosmetic(true);
+        sPen.setColor(Qt::green);
+        painter->setPen(sPen);
+        painter->drawPath(mShape);
+        sPen.setCosmetic(original_cosmetic);
     #endif
     }
 
-    void ArrowSeparatedNet::add_input(const QPointF& scene_position)
+    void ArrowSeparatedNet::addInput(const QPointF& scene_position)
     {
         QPointF mapped_position = mapFromScene(scene_position);
-        m_input_positions.append(mapped_position);
+        mInputPositions.append(mapped_position);
 
-        const qreal half_of_shape_width = s_shape_width / 2;
+        const qreal half_of_shape_width = sShapeWidth / 2;
 
-        QPointF point(mapped_position.x() - s_wire_length - half_of_shape_width, mapped_position.y() - half_of_shape_width);
+        QPointF point(mapped_position.x() - sWireLength - half_of_shape_width, mapped_position.y() - half_of_shape_width);
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + s_wire_length + s_shape_width);
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_shape_width);
-        m_shape.lineTo(point);
-        point.setX(point.x() - s_wire_length - s_shape_width);
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + sWireLength + sShapeWidth);
+        mShape.lineTo(point);
+        point.setY(point.y() + sShapeWidth);
+        mShape.lineTo(point);
+        point.setX(point.x() - sWireLength - sShapeWidth);
+        mShape.lineTo(point);
+        mShape.closeSubpath();
 
-        point.setX(mapped_position.x() - s_wire_length - s_input_arrow_offset - s_arrow_width - half_of_shape_width);
-        point.setY(mapped_position.y() - s_arrow_height / 2 - half_of_shape_width);
+        point.setX(mapped_position.x() - sWireLength - sInputArrowOffset - sArrowWidth - half_of_shape_width);
+        point.setY(mapped_position.y() - sArrowHeight / 2 - half_of_shape_width);
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + s_arrow_width + s_shape_width);
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_arrow_height + s_shape_width);
-        m_shape.lineTo(point);
-        point.setX(point.x() - s_arrow_width - s_shape_width);
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + sArrowWidth + sShapeWidth);
+        mShape.lineTo(point);
+        point.setY(point.y() + sArrowHeight + sShapeWidth);
+        mShape.lineTo(point);
+        point.setX(point.x() - sArrowWidth - sShapeWidth);
+        mShape.lineTo(point);
+        mShape.closeSubpath();
     }
 
-    void ArrowSeparatedNet::add_output(const QPointF& scene_position)
+    void ArrowSeparatedNet::addOutput(const QPointF& scene_position)
     {
         QPointF mapped_position = mapFromScene(scene_position);
-        m_output_positions.append(mapped_position);
+        mOutputPositions.append(mapped_position);
 
-        const qreal half_of_shape_width = s_shape_width / 2;
+        const qreal half_of_shape_width = sShapeWidth / 2;
 
         QPointF point(mapped_position.x() - half_of_shape_width, mapped_position.y() - half_of_shape_width);
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + s_wire_length + s_shape_width);
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_shape_width);
-        m_shape.lineTo(point);
-        point.setX(point.x() - s_wire_length - s_shape_width);
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + sWireLength + sShapeWidth);
+        mShape.lineTo(point);
+        point.setY(point.y() + sShapeWidth);
+        mShape.lineTo(point);
+        point.setX(point.x() - sWireLength - sShapeWidth);
+        mShape.lineTo(point);
+        mShape.closeSubpath();
 
-        point.setX(mapped_position.x() + s_wire_length + s_output_arrow_offset - half_of_shape_width);
-        point.setY(mapped_position.y() - s_arrow_height / 2 - half_of_shape_width);
+        point.setX(mapped_position.x() + sWireLength + sOutputArrowOffset - half_of_shape_width);
+        point.setY(mapped_position.y() - sArrowHeight / 2 - half_of_shape_width);
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + s_arrow_width + s_shape_width);
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_arrow_height + s_shape_width);
-        m_shape.lineTo(point);
-        point.setX(point.x() - s_arrow_width - s_shape_width);
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + sArrowWidth + sShapeWidth);
+        mShape.lineTo(point);
+        point.setY(point.y() + sArrowHeight + sShapeWidth);
+        mShape.lineTo(point);
+        point.setX(point.x() - sArrowWidth - sShapeWidth);
+        mShape.lineTo(point);
+        mShape.closeSubpath();
     }
 
-    qreal ArrowSeparatedNet::input_width() const
+    qreal ArrowSeparatedNet::inputWidth() const
     {
-        return s_input_width;
+        return sInputWidth;
     }
 
-    qreal ArrowSeparatedNet::output_width() const
+    qreal ArrowSeparatedNet::outputWidth() const
     {
-        return s_output_width;
+        return sOutputWidth;
     }
 }

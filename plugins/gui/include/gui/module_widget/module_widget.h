@@ -51,34 +51,34 @@ namespace hal
     public:
         ModuleWidget(QWidget* parent = nullptr);
 
-        virtual void setup_toolbar(Toolbar* Toolbar) override;
-        virtual QList<QShortcut*> create_shortcuts() override;
+        virtual void setupToolbar(Toolbar* Toolbar) override;
+        virtual QList<QShortcut*> createShortcuts() override;
 
     public Q_SLOTS:
-        void toggle_searchbar();
+        void toggleSearchbar();
         void filter(const QString& text);
-        void handle_tree_view_context_menu_requested(const QPoint& point);
-        void handle_tree_selection_changed(const QItemSelection& selected, const QItemSelection& deselected);
-        void handle_item_double_clicked(const QModelIndex& index);
-        void handle_selection_changed(void* sender);
-        void handle_module_removed(Module* module, u32 module_id);
+        void handleTreeViewContextMenuRequested(const QPoint& point);
+        void handleTreeSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+        void handleItemDoubleClicked(const QModelIndex& index);
+        void handleSelectionChanged(void* sender);
+        void handleModuleRemoved(Module* module, u32 module_id);
 
     private:
-        ModuleTreeView* m_tree_view;
-        Searchbar m_searchbar;
+        ModuleTreeView* mTreeView;
+        Searchbar mSearchbar;
 
-        QAction* m_filter_action;
+        QAction* mFilterAction;
 
-        QSortFilterProxyModel* m_current_model;
+        QSortFilterProxyModel* mCurrentModel;
 
-        QList<QRegExp*> m_regexps;
+        QList<QRegExp*> mRegexps;
 
-        bool m_ignore_selection_change;
+        bool mIgnoreSelectionChange;
 
-        ModuleProxyModel* m_ModuleProxyModel;
+        ModuleProxyModel* mModuleProxyModel;
 
-        void open_module_in_view(const QModelIndex& index);
+        void openModuleInView(const QModelIndex& index);
 
-        ModuleItem* get_ModuleItem_from_index(const QModelIndex& index);
+        ModuleItem* getModuleItemFromIndex(const QModelIndex& index);
     };
 }    // namespace hal

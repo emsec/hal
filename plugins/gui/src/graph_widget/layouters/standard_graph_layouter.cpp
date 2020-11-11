@@ -16,7 +16,7 @@ namespace hal
         return "Standard Layouter";
     }
 
-    QString StandardGraphLayouter::description() const
+    QString StandardGraphLayouter::mDescription() const
     {
         return "<p>PLACEHOLDER</p>";
     }
@@ -26,21 +26,21 @@ namespace hal
         switch(placement.mode())
         {
         case PlacementHint::Standard: {
-            add_compact(modules, gates, nets);
+            addCompact(modules, gates, nets);
             break;
         }
         case PlacementHint::PreferLeft: {
-            add_vertical(modules, gates, nets, true, placement.preferredOrigin());
+            addVertical(modules, gates, nets, true, placement.preferredOrigin());
             break;
         }
         case PlacementHint::PreferRight: {
-            add_vertical(modules, gates, nets, false, placement.preferredOrigin());
+            addVertical(modules, gates, nets, false, placement.preferredOrigin());
             break;
         }
         }
     }
 
-    void StandardGraphLayouter::add_waitToBeSeated(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
+    void StandardGraphLayouter::addWaitToBeSeated(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
     {
         Q_UNUSED(nets)
 
@@ -60,21 +60,21 @@ namespace hal
         while(!wtbsl.placementDone())
         {
             QPoint p(pg.position());
-            while (position_to_node_map().contains(p))
+            while (positionToNodeMap().contains(p))
                 p = pg.next();
             const WaitToBeSeatedEntry* wtbse = wtbsl.nextPlacement(p);
             if (! wtbse) return;
-            set_node_position(wtbse->getNode(), p);
+            setNodePosition(wtbse->getNode(), p);
         }
     }
 
-    void StandardGraphLayouter::add_compact(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
+    void StandardGraphLayouter::addCompact(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
     {
         Q_UNUSED(nets)
 
-        if (g_settings_manager->get("graph_view/layout_boxes").toBool())
+        if (gSettingsManager->get("graph_view/layout_boxes").toBool())
         {
-            add_waitToBeSeated(modules, gates, nets);
+            addWaitToBeSeated(modules, gates, nets);
             return;
         }
 
@@ -93,22 +93,22 @@ namespace hal
         for (const Node& n : nodeList)
         {
             QPoint p(pg.position());
-            while (position_to_node_map().contains(p))
+            while (positionToNodeMap().contains(p))
                 p = pg.next();
-            set_node_position(n, p);
+            setNodePosition(n, p);
         }
     }
 
-    void StandardGraphLayouter::add_vertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const Node &preferredOrigin) {
+    void StandardGraphLayouter::addVertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const Node &preferredOrigin) {
         Q_UNUSED(nets);
 
         int x;
         int y;
 
-        if (!preferredOrigin.isNull() && node_to_position_map().contains(preferredOrigin))
+        if (!preferredOrigin.isNull() && nodeToPositionMap().contains(preferredOrigin))
         {
             // place all new nodes right respectively left of the origin node
-            QPoint originPoint = node_to_position_map().value(preferredOrigin);
+            QPoint originPoint = nodeToPositionMap().value(preferredOrigin);
             x = originPoint.x() + (left ? -1 : 1);
             // vertically center the column of new nodes relative to the origin node
             int totalNodes = modules.size() + gates.size();
@@ -117,9 +117,9 @@ namespace hal
         else
         {
             // create a new column right- respectively leftmost of all current nodes
-            x = left ? min_x_index() - 1 : min_x_index() + x_values().size();
+            x = left ? minXIndex() - 1 : minXIndex() + xValues().size();
             // center column of new ndoes vertically relative to the entire grid
-            y = min_y_index() + (y_values().size()-1) / 2;
+            y = minYIndex() + (yValues().size()-1) / 2;
         }
 
 
@@ -132,8 +132,8 @@ namespace hal
                 // skip over positions that are already taken
                 p = QPoint(x,y++);
             }
-            while(position_to_node_map().contains(p));
-            set_node_position(n, p);
+            while(positionToNodeMap().contains(p));
+            setNodePosition(n, p);
         }
         for (const u32 gid : gates)
         {
@@ -144,8 +144,8 @@ namespace hal
                 // skip over positions that are already taken
                 p = QPoint(x,y++);
             }
-            while(position_to_node_map().contains(p));
-            set_node_position(n, p);
+            while(positionToNodeMap().contains(p));
+            setNodePosition(n, p);
         }
     }
 
@@ -155,9 +155,9 @@ namespace hal
         Q_UNUSED(nets)
 
         for (u32 id : modules)
-            remove_node_from_maps(Node(id,Node::Module));
+            removeNodeFromMaps(Node(id,Node::Module));
 
         for (u32 id : gates)
-            remove_node_from_maps(Node(id,Node::Gate));
+            removeNodeFromMaps(Node(id,Node::Gate));
     }
 }

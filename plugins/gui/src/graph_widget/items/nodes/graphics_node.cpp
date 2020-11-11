@@ -17,31 +17,31 @@ namespace hal
 
     QRectF GraphicsNode::boundingRect() const
     {
-        return QRectF(0, 0, m_width, m_height);
+        return QRectF(0, 0, mWidth, mHeight);
     }
 
     QPainterPath GraphicsNode::shape() const
     {
         QPainterPath path;
-        path.addRect(QRectF(0, 0, m_width, m_height));
+        path.addRect(QRectF(0, 0, mWidth, mHeight));
         return path;
     }
 
-    void GraphicsNode::set_visuals(const GraphicsNode::Visuals& v)
+    void GraphicsNode::setVisuals(const GraphicsNode::Visuals& v)
     {
-        setVisible(v.visible);
+        setVisible(v.mVisible);
 
-        m_color = v.mMainColor;
+        mColor = v.mMainColor;
     }
 
     qreal GraphicsNode::width() const
     {
-        return m_width;
+        return mWidth;
     }
 
     qreal GraphicsNode::height() const
     {
-        return m_height;
+        return mHeight;
     }
 
     QList<u32> GraphicsNode::inputNets() const
@@ -94,8 +94,8 @@ namespace hal
         //     if(QApplication::mouseButtons() == Qt::LeftButton)
         //     {
         //         QPointF new_position = value.toPointF();
-        //         int adjusted_x = qRound(new_position.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
-        //         int adjusted_y = qRound(new_position.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+        //         int adjusted_x = qRound(new_position.x() / graph_widget_constants::sGridSize) * graph_widget_constants::sGridSize;
+        //         int adjusted_y = qRound(new_position.y() / graph_widget_constants::sGridSize) * graph_widget_constants::sGridSize;
         //         return QPoint(adjusted_x, adjusted_y);
         //     }
         //     else

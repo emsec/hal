@@ -54,47 +54,47 @@ namespace hal
         LoggerWidget(QWidget* parent = 0);
         ~LoggerWidget();
 
-        virtual void setup_toolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
+        virtual void setupToolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
 
-        QPlainTextEdit* get_plain_text_edit();
+        QPlainTextEdit* getPlainTextEdit();
 
-        FilterTabBar* get_tab_bar();
+        FilterTabBar* getTabBar();
 
-        void reload_log_content();
+        void reloadLogContent();
 
         void resizeEvent(QResizeEvent* event) override;
 
     Q_SIGNALS:
-        void queue_log_update(spdlog::level::level_enum t, QString const& msg, FilterItem* filter);
+        void queueLogUpdate(spdlog::level::level_enum t, QString const& msg, FilterItem* filter);
 
     public Q_SLOTS:
 
-        //void handle_current_channel_changed(hal_channel_item* item);
-        void handle_current_channel_updated(spdlog::level::level_enum t, QString const& msg);
-        void handle_channel_updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
-        void handle_current_channel_changed(int index);
-        void show_text_edit_context_menu(const QPoint& point);
-        void filter_item_clicked(const int& index);
-        void handle_first_user_interaction(int value);
+        //void handleCurrentChannelChanged(hal_channel_item* item);
+        void handleCurrentChannelUpdated(spdlog::level::level_enum t, QString const& msg);
+        void handleChannelUpdated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
+        void handleCurrentChannelChanged(int index);
+        void showTextEditContextMenu(const QPoint& point);
+        void filterItemClicked(const int& index);
+        void handleFirstUserInteraction(int value);
         //    void queue_log_update_adapter(spdlog::level::level_enum t, QString const &msg);
 
     private:
-        FilterTabBar* m_tab_bar;
+        FilterTabBar* mTabBar;
 
-        QPlainTextEdit* m_plain_text_edit;
+        QPlainTextEdit* mPlainTextEdit;
 
-        ChannelSelector* m_selector;
+        ChannelSelector* mSelector;
 
-        LoggerMarshall* m_log_marshall;
+        LoggerMarshall* mLogMarshall;
 
-        std::string m_current_channel;
+        std::string mCurrentChannel;
 
-        QReadWriteLock m_lock;
+        QReadWriteLock mLock;
 
-        QScrollBar* m_plain_text_edit_scrollbar;
+        QScrollBar* mPlainTextEditScrollbar;
 
-        bool m_user_interacted_with_scrollbar;
+        bool mUserInteractedWithScrollbar;
 
-        void scroll_to_bottom();
+        void scrollToBottom();
     };
 }

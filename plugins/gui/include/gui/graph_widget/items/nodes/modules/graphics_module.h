@@ -41,20 +41,20 @@ namespace hal
         struct ModulePin
         {
             QString name;
-            u32 net_id;
+            u32 mNetId;
 
             bool operator==(const ModulePin& rhs) const
             {
-                return this->name == rhs.name && this->net_id == rhs.net_id;
+                return this->name == rhs.name && this->mNetId == rhs.mNetId;
             }
 
             bool operator<(const ModulePin& rhs) const
             {
-                return gui_utility::numerated_order_compare(this->name, rhs.name);
+                return gui_utility::numeratedOrderCompare(this->name, rhs.name);
             }
         };
 
-        QVector<ModulePin> m_input_pins;
-        QVector<ModulePin> m_output_pins;
+        QVector<ModulePin> mInputPins;
+        QVector<ModulePin> mOutputPins;
     };
 }    // namespace hal

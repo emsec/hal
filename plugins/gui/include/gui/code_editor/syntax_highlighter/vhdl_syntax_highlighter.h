@@ -45,7 +45,7 @@ namespace hal
         //    QRegularExpression::MatchOptions m_match_options;
         //    QStringList m_valid_identifier;
         //    QStringList m_types;
-        //    QStringList m_keywords;
+        //    QStringList mKeywords;
         //    QHash<QString, QTextCharFormat> m_formatters;
         //
         //    QString m_current_state;
@@ -70,10 +70,10 @@ namespace hal
             QTextCharFormat mFormat;
         };
 
-        QVector<HighlightingRule> m_highlighting_rules;
+        QVector<HighlightingRule> mHighlightingRules;
 
-        QRegularExpression m_single_line_comment_expression;
-        QRegularExpression m_comment_start_expression;
-        QRegularExpression m_comment_end_expression;
+        QRegularExpression mSingleLineCommentExpression;
+        QRegularExpression mCommentStartExpression;
+        QRegularExpression mCommentEndExpression;
     };
 }

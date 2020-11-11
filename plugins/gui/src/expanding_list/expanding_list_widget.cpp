@@ -10,93 +10,93 @@
 namespace hal
 {
     ExpandingListWidget::ExpandingListWidget(QWidget* parent)
-        : QScrollArea(parent), m_content(new QFrame()), m_content_layout(new QVBoxLayout()), m_spacer(new QFrame()), m_selected_button(nullptr), m_extended_item(nullptr), m_offset(0)
+        : QScrollArea(parent), mContent(new QFrame()), mContentLayout(new QVBoxLayout()), mSpacer(new QFrame()), mSelectedButton(nullptr), mExtendedItem(nullptr), mOffset(0)
     {
         setFrameStyle(QFrame::NoFrame);
-        setWidget(m_content);
+        setWidget(mContent);
         setWidgetResizable(true);
-        m_content->setObjectName("content");
-        m_content->setFrameStyle(QFrame::NoFrame);
-        m_content->setLayout(m_content_layout);
-        m_content_layout->setAlignment(Qt::AlignTop);
-        m_content_layout->setContentsMargins(0, 0, 0, 0);
-        m_content_layout->setSpacing(0);
-        m_spacer->setObjectName("spacer");
-        m_spacer->setFrameStyle(QFrame::NoFrame);
-        m_content_layout->addWidget(m_spacer);
+        mContent->setObjectName("content");
+        mContent->setFrameStyle(QFrame::NoFrame);
+        mContent->setLayout(mContentLayout);
+        mContentLayout->setAlignment(Qt::AlignTop);
+        mContentLayout->setContentsMargins(0, 0, 0, 0);
+        mContentLayout->setSpacing(0);
+        mSpacer->setObjectName("spacer");
+        mSpacer->setFrameStyle(QFrame::NoFrame);
+        mContentLayout->addWidget(mSpacer);
     }
 
-    void ExpandingListWidget::append_item(ExpandingListButton* button, ExpandingListButton* parent_button)
+    void ExpandingListWidget::appendItem(ExpandingListButton* button, ExpandingListButton* parentButton)
     {
-        if (parent_button)
+        if (parentButton)
         {
-            for (ExpandingListItem* item : m_items)
-                if (parent_button == item->parent_button())
-                    item->append_child_button(button);
+            for (ExpandingListItem* item : mItems)
+                if (parentButton == item->parentButton())
+                    item->appendChildButton(button);
         }
         else
         {
             ExpandingListItem* item = new ExpandingListItem(button);
-            m_items.append(item);
-            m_content_layout->addWidget(item);
+            mItems.append(item);
+            mContentLayout->addWidget(item);
         }
-        connect(button, &ExpandingListButton::clicked, this, &ExpandingListWidget::handle_clicked);
+        connect(button, &ExpandingListButton::clicked, this, &ExpandingListWidget::handleClicked);
     }
 
-    void ExpandingListWidget::select_button(ExpandingListButton* button)
+    void ExpandingListWidget::selectButton(ExpandingListButton* button)
     {
-        if (button == m_selected_button)
+        if (button == mSelectedButton)
             return;
 
         if (!button)
         {
-            if (m_selected_button)
+            if (mSelectedButton)
             {
-                m_selected_button->set_selected(false);
-                m_selected_button = nullptr;
+                mSelectedButton->setSelected(false);
+                mSelectedButton = nullptr;
             }
 
-            if (m_extended_item)
+            if (mExtendedItem)
             {
-                m_extended_item->set_expanded(false);
-                m_extended_item->collapse();
-                m_extended_item = nullptr;
+                mExtendedItem->setExpanded(false);
+                mExtendedItem->collapse();
+                mExtendedItem = nullptr;
             }
             return;
         }
 
-        for (ExpandingListItem* item : m_items)
+        for (ExpandingListItem* item : mItems)
             if (item->contains(button))
             {
-                if (m_selected_button)
-                    m_selected_button->set_selected(false);
+                if (mSelectedButton)
+                    mSelectedButton->setSelected(false);
 
-                m_selected_button = button;
-                m_selected_button->set_selected(true);
+                mSelectedButton = button;
+                mSelectedButton->setSelected(true);
 
-                if (item != m_extended_item)
+                if (item != mExtendedItem)
                 {
-                    if (m_extended_item)
+                    if (mExtendedItem)
                     {
-                        m_extended_item->set_expanded(false);
-                        m_extended_item->collapse();
+                        mExtendedItem->setExpanded(false);
+                        mExtendedItem->collapse();
                     }
 
-                    m_extended_item = item;
-                    m_extended_item->set_expanded(true);
-                    m_extended_item->expand();
+                    mExtendedItem = item;
+                    mExtendedItem->setExpanded(true);
+                    mExtendedItem->expand();
                 }
             }
 
-        Q_EMIT button_selected(button);
+        Q_EMIT buttonSelected(button);
     }
 
-    void ExpandingListWidget::select_item(int index)
+    void ExpandingListWidget::selectItem(int index)
     {
-        if (index < 0 || index >= m_items.size())
+        if (index < 0 || index >= mItems.size())
             return;
 
-        select_button(m_items.at(index)->parent_button());
+        selectButton(mItems.at(index)->parentButton());
     }
 
     void ExpandingListWidget::repolish()
@@ -106,14 +106,14 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        for (ExpandingListItem* item : m_items)
+        for (ExpandingListItem* item : mItems)
             item->repolish();
     }
 
-    void ExpandingListWidget::handle_clicked()
+    void ExpandingListWidget::handleClicked()
     {
         QObject* obj                  = sender();
         ExpandingListButton* button = static_cast<ExpandingListButton*>(obj);
-        select_button(button);
+        selectButton(button);
     }
 }

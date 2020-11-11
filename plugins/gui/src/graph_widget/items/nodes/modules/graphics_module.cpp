@@ -11,19 +11,19 @@ namespace hal
         mNodeText[mNodeText[1].isEmpty() ? 1 : 2] = "Module";
 
         for (Net* n : m->get_input_nets())
-            m_input_pins.append(ModulePin{QString::fromStdString(m->get_input_port_name(n)), n->get_id()});
+            mInputPins.append(ModulePin{QString::fromStdString(m->get_input_port_name(n)), n->get_id()});
 
         for (Net* n : m->get_output_nets())
-            m_output_pins.append(ModulePin{QString::fromStdString(m->get_output_port_name(n)), n->get_id()});
+            mOutputPins.append(ModulePin{QString::fromStdString(m->get_output_port_name(n)), n->get_id()});
 
-        if (m_input_pins.size() > 1)
-            std::sort(m_input_pins.begin(), m_input_pins.end());
-        if (m_output_pins.size() > 1)
-            std::sort(m_output_pins.begin(), m_output_pins.end());
-        for (int inp=0; inp<m_input_pins.size(); inp++)
-            mInputByNet.insert(m_input_pins.at(inp).net_id,inp);
+        if (mInputPins.size() > 1)
+            std::sort(mInputPins.begin(), mInputPins.end());
+        if (mOutputPins.size() > 1)
+            std::sort(mOutputPins.begin(), mOutputPins.end());
+        for (int inp=0; inp<mInputPins.size(); inp++)
+            mInputByNet.insert(mInputPins.at(inp).mNetId,inp);
 
-        for (int outp=0; outp<m_output_pins.size(); outp++)
-            mOutputByNet.insert(m_output_pins.at(outp).net_id,outp);
+        for (int outp=0; outp<mOutputPins.size(); outp++)
+            mOutputByNet.insert(mOutputPins.at(outp).mNetId,outp);
     }
 }    // namespace hal

@@ -42,9 +42,9 @@ namespace hal
         void setToolTip(const QString& tooltip);
 
     private:
-        QString m_description_text;
-        void update_tooltip(const QKeySequence& seq);
-        bool m_tooltip_modified;
+        QString mDescriptionText;
+        void updateTooltip(const QKeySequence& seq);
+        bool mTooltipModified;
 
     };
 }

@@ -42,13 +42,13 @@ namespace hal
     public:
         explicit Window(QWidget* parent = nullptr);
 
-        void show_toolbar(WindowToolbar* toolbar);
+        void showToolbar(WindowToolbar* toolbar);
 
-        void hide_toolbar_extension();
-        void show_toolbar_extension();
+        void hideToolbarExtension();
+        void showToolbarExtension();
 
-        void show_workspace();
-        void show_special_screen(QWidget* widget);
+        void showWorkspace();
+        void showSpecialScreen(QWidget* widget);
 
         void lock(Overlay* overlay);
         void unlock();
@@ -59,14 +59,14 @@ namespace hal
         void closeEvent(QCloseEvent* event) override;
 
     private:
-        QVBoxLayout* m_window_layout;
-        WindowEffectLayer* m_effect_layer;
-        QVBoxLayout* m_effect_layer_layout;
-        WindowToolbar* m_toolbar;
-        QFrame* m_toolbar_extension;
-        Workspace* m_workspace;
+        QVBoxLayout* mWindowLayout;
+        WindowEffectLayer* mEffectLayer;
+        QVBoxLayout* mEffectLayerLayout;
+        WindowToolbar* mToolbar;
+        QFrame* mToolbarExtension;
+        Workspace* mWorkspace;
 
-        Overlay* m_overlay;
-        QGraphicsEffect* m_effect;
+        Overlay* mOverlay;
+        QGraphicsEffect* mEffect;
     };
 }

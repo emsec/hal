@@ -43,6 +43,6 @@ namespace hal
         void mousePressEvent(QMouseEvent* event) override;
 
     private:
-        void handle_parent_changed();
+        void handleParentChanged();
     };
 }

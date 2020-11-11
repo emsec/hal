@@ -52,42 +52,42 @@ namespace hal
 
     public:
         explicit ContentLayoutArea(QWidget* parent = 0);
-        void add_content(ContentWidget* widget, int index, content_anchor anchor);
+        void addContent(ContentWidget* widget, int index, content_anchor anchor);
 
-        void init_splitter_size(const QSize& size);
+        void initSplitterSize(const QSize& size);
 
     public Q_SLOTS:
-        void update_left_dock_bar();
-        void update_right_dock_bar();
-        void update_bottom_dock_bar();
+        void updateLeftDockBar();
+        void updateRightDockBar();
+        void updateBottomDockBar();
 
     private:
-        QVBoxLayout* m_top_level_layout;
-        QHBoxLayout* m_second_level_layout;
-        QVBoxLayout* m_third_level_layout;
-        QHBoxLayout* m_fourth_level_layout;
-        QVBoxLayout* m_splitter_layout;
-        QHBoxLayout* m_central_layout;
-        QHBoxLayout* m_spacer_layout;
+        QVBoxLayout* mTopLevelLayout;
+        QHBoxLayout* mSecondLevelLayout;
+        QVBoxLayout* mThirdLevelLayout;
+        QHBoxLayout* mFourthLevelLayout;
+        QVBoxLayout* mSplitterLayout;
+        QHBoxLayout* mCentralLayout;
+        QHBoxLayout* mSpacerLayout;
 
-        Splitter* m_vertical_splitter;
-        Splitter* m_horizontal_splitter;
-        Splitter* m_left_splitter;
-        Splitter* m_right_splitter;
-        Splitter* m_bottom_splitter;
+        Splitter* mVerticalSplitter;
+        Splitter* mHorizontalSplitter;
+        Splitter* mLeftSplitter;
+        Splitter* mRightSplitter;
+        Splitter* mBottomSplitter;
 
-        DockBar* m_left_dock;
-        DockBar* m_right_dock;
-        DockBar* m_bottom_dock;
+        DockBar* mLeftDock;
+        DockBar* mRightDock;
+        DockBar* mBottomDock;
 
-        QWidget* m_bottom_container;
-        QFrame* m_left_spacer;
-        QFrame* m_right_spacer;
+        QWidget* mBottomContainer;
+        QFrame* mLeftSpacer;
+        QFrame* mRightSpacer;
 
-        SplitterAnchor* m_left_anchor;
-        SplitterAnchor* m_right_anchor;
-        SplitterAnchor* m_bottom_anchor;
+        SplitterAnchor* mLeftAnchor;
+        SplitterAnchor* mRightAnchor;
+        SplitterAnchor* mBottomAnchor;
 
-        TabWidget* m_tab_widget;
+        TabWidget* mTabWidget;
     };
 }

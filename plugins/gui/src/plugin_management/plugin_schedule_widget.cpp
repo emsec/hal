@@ -16,79 +16,79 @@
 namespace hal
 {
     PluginScheduleWidget::PluginScheduleWidget(QWidget* parent)
-        : QFrame(parent), m_vertical_layout(new QVBoxLayout()), m_searchbar_container(new QFrame()), m_container_layout(new QHBoxLayout()), m_searchbar(new Searchbar()),
-          m_horizontal_layout(new QHBoxLayout()), m_plugin_frame(new LabeledFrame()), m_schedule_frame(new LabeledFrame()), m_schedule_frame_layout_container(new QWidget()),
-          m_horizontal_schedule_frame_layout(new QHBoxLayout()), m_vertical_schedule_frame_layout(new QVBoxLayout()), m_NoScheduledPluginsWidget(new NoScheduledPluginsWidget()),
-          m_PluginArgumentsWidget(new PluginArgumentsWidget()), m_ScheduledPluginsWidget(new ScheduledPluginsWidget()), m_LoadedPluginsWidget(new LoadedPluginsWidget())
+        : QFrame(parent), mVerticalLayout(new QVBoxLayout()), mSearchbarContainer(new QFrame()), mContainerLayout(new QHBoxLayout()), mSearchbar(new Searchbar()),
+          mHorizontalLayout(new QHBoxLayout()), mPluginFrame(new LabeledFrame()), mScheduleFrame(new LabeledFrame()), mScheduleFrameLayoutContainer(new QWidget()),
+          mHorizontalScheduleFrameLayout(new QHBoxLayout()), mVerticalScheduleFrameLayout(new QVBoxLayout()), mNoScheduledPluginsWidget(new NoScheduledPluginsWidget()),
+          mPluginArgumentsWidget(new PluginArgumentsWidget()), mScheduledPluginsWidget(new ScheduledPluginsWidget()), mLoadedPluginsWidget(new LoadedPluginsWidget())
     {
-        connect(m_NoScheduledPluginsWidget, &NoScheduledPluginsWidget::append_plugin, m_ScheduledPluginsWidget, &ScheduledPluginsWidget::append_plugin);
-        connect(m_ScheduledPluginsWidget->area(), &ScheduledPluginItemArea::no_scheduled_plugins, this, &PluginScheduleWidget::handle_no_scheduled_plugins);
+        connect(mNoScheduledPluginsWidget, &NoScheduledPluginsWidget::appendPlugin, mScheduledPluginsWidget, &ScheduledPluginsWidget::appendPlugin);
+        connect(mScheduledPluginsWidget->area(), &ScheduledPluginItemArea::noScheduledPlugins, this, &PluginScheduleWidget::handleNoScheduledPlugins);
 
-        connect(m_ScheduledPluginsWidget->area(), &ScheduledPluginItemArea::plugin_selected, m_PluginArgumentsWidget, &PluginArgumentsWidget::handle_plugin_selected);
+        connect(mScheduledPluginsWidget->area(), &ScheduledPluginItemArea::pluginSelected, mPluginArgumentsWidget, &PluginArgumentsWidget::handlePluginSelected);
 
-        m_vertical_layout->setContentsMargins(0, 0, 0, 0);
-        m_vertical_layout->setSpacing(0);
+        mVerticalLayout->setContentsMargins(0, 0, 0, 0);
+        mVerticalLayout->setSpacing(0);
 
-        m_searchbar_container->setObjectName("Searchbar-container");
+        mSearchbarContainer->setObjectName("Searchbar-container");
 
-        m_container_layout->setContentsMargins(0, 0, 0, 0);
-        m_container_layout->setSpacing(0);
+        mContainerLayout->setContentsMargins(0, 0, 0, 0);
+        mContainerLayout->setSpacing(0);
 
-        m_searchbar->setObjectName("Searchbar");
+        mSearchbar->setObjectName("Searchbar");
 
-        m_horizontal_layout->setContentsMargins(0, 0, 0, 0);
-        m_horizontal_layout->setSpacing(0);
+        mHorizontalLayout->setContentsMargins(0, 0, 0, 0);
+        mHorizontalLayout->setSpacing(0);
 
-        m_plugin_frame->setObjectName("plugin-frame");
-        m_plugin_frame->add_content(m_LoadedPluginsWidget);
+        mPluginFrame->setObjectName("plugin-frame");
+        mPluginFrame->addContent(mLoadedPluginsWidget);
 
-        m_schedule_frame->setObjectName("schedule-frame");
+        mScheduleFrame->setObjectName("schedule-frame");
 
-        m_horizontal_schedule_frame_layout->setContentsMargins(0, 0, 0, 0);
-        m_horizontal_schedule_frame_layout->setSpacing(0);
+        mHorizontalScheduleFrameLayout->setContentsMargins(0, 0, 0, 0);
+        mHorizontalScheduleFrameLayout->setSpacing(0);
 
-        m_vertical_schedule_frame_layout->setContentsMargins(0, 0, 0, 0);
-        m_vertical_schedule_frame_layout->setSpacing(0);
+        mVerticalScheduleFrameLayout->setContentsMargins(0, 0, 0, 0);
+        mVerticalScheduleFrameLayout->setSpacing(0);
 
-        setLayout(m_vertical_layout);
-        m_vertical_layout->addWidget(m_searchbar_container);
-        m_vertical_layout->setAlignment(m_searchbar_container, Qt::AlignTop);
-        m_searchbar_container->setLayout(m_container_layout);
-        m_container_layout->addWidget(m_searchbar);
-        //m_container_layout->setAlignment(m_searchbar, Qt::AlignLeft);
-        m_vertical_layout->addLayout(m_horizontal_layout);
-        //m_vertical_layout->setAlignment(m_horizontal_layout, Qt::AlignCenter);
-        m_horizontal_layout->addWidget(m_plugin_frame);
-        m_horizontal_layout->addWidget(m_schedule_frame, Qt::AlignRight);
-        m_schedule_frame->add_content(m_schedule_frame_layout_container);
-        m_schedule_frame_layout_container->setLayout(m_horizontal_schedule_frame_layout);
-        m_horizontal_schedule_frame_layout->addLayout(m_vertical_schedule_frame_layout);
-        m_vertical_schedule_frame_layout->addWidget(m_NoScheduledPluginsWidget);
-        m_vertical_schedule_frame_layout->addWidget(m_ScheduledPluginsWidget);
-        m_ScheduledPluginsWidget->hide();
-        m_horizontal_schedule_frame_layout->addWidget(m_PluginArgumentsWidget);
+        setLayout(mVerticalLayout);
+        mVerticalLayout->addWidget(mSearchbarContainer);
+        mVerticalLayout->setAlignment(mSearchbarContainer, Qt::AlignTop);
+        mSearchbarContainer->setLayout(mContainerLayout);
+        mContainerLayout->addWidget(mSearchbar);
+        //mContainerLayout->setAlignment(mSearchbar, Qt::AlignLeft);
+        mVerticalLayout->addLayout(mHorizontalLayout);
+        //mVerticalLayout->setAlignment(mHorizontalLayout, Qt::AlignCenter);
+        mHorizontalLayout->addWidget(mPluginFrame);
+        mHorizontalLayout->addWidget(mScheduleFrame, Qt::AlignRight);
+        mScheduleFrame->addContent(mScheduleFrameLayoutContainer);
+        mScheduleFrameLayoutContainer->setLayout(mHorizontalScheduleFrameLayout);
+        mHorizontalScheduleFrameLayout->addLayout(mVerticalScheduleFrameLayout);
+        mVerticalScheduleFrameLayout->addWidget(mNoScheduledPluginsWidget);
+        mVerticalScheduleFrameLayout->addWidget(mScheduledPluginsWidget);
+        mScheduledPluginsWidget->hide();
+        mHorizontalScheduleFrameLayout->addWidget(mPluginArgumentsWidget);
 
-        m_plugin_frame->setGraphicsEffect(new ShadowEffect());
-        m_schedule_frame->setGraphicsEffect(new ShadowEffect());
+        mPluginFrame->setGraphicsEffect(new ShadowEffect());
+        mScheduleFrame->setGraphicsEffect(new ShadowEffect());
 
-        m_NoScheduledPluginsWidget->repolish();    // MOVE TO REPOLISH METHOD
+        mNoScheduledPluginsWidget->repolish();    // MOVE TO REPOLISH METHOD
 
-        m_schedule_frame->ensurePolished();
+        mScheduleFrame->ensurePolished();
         ensurePolished();
 
         QShortcut* debug_shortcut = new QShortcut(QKeySequence(tr("Ctrl+x")), this);
-        connect(debug_shortcut, &QShortcut::activated, this, &PluginScheduleWidget::debug_stuff);
+        connect(debug_shortcut, &QShortcut::activated, this, &PluginScheduleWidget::debugStuff);
     }
 
-    void PluginScheduleWidget::debug_stuff()
+    void PluginScheduleWidget::debugStuff()
     {
         QString plugin = "libfsm_detection";
-        m_PluginArgumentsWidget->setup(plugin);
+        mPluginArgumentsWidget->setup(plugin);
     }
 
-    void PluginScheduleWidget::handle_no_scheduled_plugins()
+    void PluginScheduleWidget::handleNoScheduledPlugins()
     {
-        m_ScheduledPluginsWidget->hide();
-        m_NoScheduledPluginsWidget->show();
+        mScheduledPluginsWidget->hide();
+        mNoScheduledPluginsWidget->show();
     }
 }

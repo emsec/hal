@@ -53,23 +53,23 @@ namespace hal
         virtual void open(ContentWidget* widget);
         virtual void close(ContentWidget* widget);
 
-        void handle_no_current_widget(int index);
-        void remove_content();
+        void handleNoCurrentWidget(int index);
+        void removeContent();
 
     public Q_SLOTS:
-        void detach_current_widget();
-        void handle_drag_start();
-        void handle_drag_end();
+        void detachCurrentWidget();
+        void handleDragStart();
+        void handleDragEnd();
 
     private:
-        QVBoxLayout* m_vertical_layout;
-        QHBoxLayout* m_horizontal_layout;
-        DockBar* m_dock_bar;
-        Toolbar* m_left_toolbar;
-        Toolbar* m_right_toolbar;
-        ContentWidget* m_current_widget;
-        QAction* m_action_detach;
-        QList<ContentFrame*> m_detached_frames;
-        QList<QShortcut*> m_active_shortcuts;
+        QVBoxLayout* mVerticalLayout;
+        QHBoxLayout* mHorizontalLayout;
+        DockBar* mDockBar;
+        Toolbar* mLeftToolbar;
+        Toolbar* mRightToolbar;
+        ContentWidget* mCurrentWidget;
+        QAction* mActionDetach;
+        QList<ContentFrame*> mDetachedFrames;
+        QList<QShortcut*> mActiveShortcuts;
     };
 }

@@ -40,7 +40,7 @@ namespace hal
         void highlightBlock(const QString& text) Q_DECL_OVERRIDE;
 
     private:
-        int close_multiline_comment(const QString& text, const QRegularExpression& delimiter, const int offset = 0);
+        int closeMultilineComment(const QString& text, const QRegularExpression& delimiter, const int offset = 0);
 
         struct HighlightingRule
         {
@@ -48,10 +48,10 @@ namespace hal
             QTextCharFormat mFormat;
         };
 
-        QVector<HighlightingRule> m_highlighting_rules;
+        QVector<HighlightingRule> mHighlightingRules;
 
-        QRegularExpression m_multi_line_comment_delimiter;
-        QRegularExpression m_tripple_single_quote;
-        QRegularExpression m_tripple_double_quote;
+        QRegularExpression mMultiLineCommentDelimiter;
+        QRegularExpression mTrippleSingleQuote;
+        QRegularExpression mTrippleDoubleQuote;
     };
 }

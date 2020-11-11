@@ -7,9 +7,9 @@ namespace hal
     NotificationManagerQssAdapter::NotificationManagerQssAdapter(QWidget* parent) : QWidget(parent)
     {
         //DEFAULT VALUES
-        m_x_offset = 20;
-        m_y_offset = 20;
-        m_spacing  = 10;
+        mXOffset = 20;
+        mYOffset = 20;
+        mSpacing  = 10;
 
         repolish();
     }
@@ -22,33 +22,33 @@ namespace hal
         s->polish(this);
     }
 
-    int NotificationManagerQssAdapter::x_offset() const
+    int NotificationManagerQssAdapter::xOffset() const
     {
-        return m_x_offset;
+        return mXOffset;
     }
 
-    int NotificationManagerQssAdapter::y_offset() const
+    int NotificationManagerQssAdapter::yOffset() const
     {
-        return m_y_offset;
+        return mYOffset;
     }
 
     int NotificationManagerQssAdapter::spacing() const
     {
-        return m_spacing;
+        return mSpacing;
     }
 
-    void NotificationManagerQssAdapter::set_x_offset(const int offset)
+    void NotificationManagerQssAdapter::setXOffset(const int offset)
     {
-        m_x_offset = offset;
+        mXOffset = offset;
     }
 
-    void NotificationManagerQssAdapter::set_y_offset(const int offset)
+    void NotificationManagerQssAdapter::setYOffset(const int offset)
     {
-        m_y_offset = offset;
+        mYOffset = offset;
     }
 
-    void NotificationManagerQssAdapter::set_spacing(const int spacing)
+    void NotificationManagerQssAdapter::setSpacing(const int spacing)
     {
-        m_spacing = spacing;
+        mSpacing = spacing;
     }
 }

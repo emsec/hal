@@ -42,19 +42,19 @@ namespace hal
     Q_SIGNALS:
 
     public Q_SLOTS:
-        void debug_add_Notification();
+        void debugAddNotification();
 
     private:
-        void rearrange_Notifications();
+        void rearrangeNotifications();
 
-        int m_desktop_width;
-        int m_desktop_height;
+        int mDesktopWidth;
+        int mDesktopHeight;
 
-        int m_width_offset;
-        int m_height_offset;
+        int mWidthOffset;
+        int mHeightOffset;
 
-        int m_spacing;
+        int mSpacing;
 
-        QList<Notification*> m_list;
+        QList<Notification*> mList;
     };
 }

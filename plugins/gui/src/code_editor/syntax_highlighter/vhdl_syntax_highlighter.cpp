@@ -55,7 +55,7 @@ namespace hal
         //        m_type_rule.list << "Keyword.Type";
         //        m_type_rule.state = "";
         //
-        //        m_keywords << "\\babs\\b" << "\\baccess\\b" << "\\bafter\\b" << "\\balias\\b" << "\\ball\\b" << "\\band\\b"
+        //        mKeywords << "\\babs\\b" << "\\baccess\\b" << "\\bafter\\b" << "\\balias\\b" << "\\ball\\b" << "\\band\\b"
         //                        << "\\barchitecture\\b" << "\\barray\\b" << "\\bassert\\b" << "\\battribute\\b" << "\\bbegin\\b"
         //                        << "\\bblock\\b" << "\\bbody\\b" << "\\bbuffer\\b" << "\\bbus\\b" << "\\bcase\\b"
         //                        << "\\bcomponent\\b" << "\\bconfiguration\\b" << "\\bconstant\\b" << "\\bdisconnect\\b"
@@ -75,7 +75,7 @@ namespace hal
         //                        << "\\bvariable\\b" << "\\bwait\\b" << "\\bwhen\\b" << "\\bwhile\\b" << "\\bwith\\b"
         //                        << "\\bxnor\\b" << "\\bxor\\b";
         //
-        //        QString keywords_pattern = QString("(" + m_keywords.join('|') + ")");
+        //        QString keywords_pattern = QString("(" + mKeywords.join('|') + ")");
         //        m_keyword_rule.expression = QRegularExpression(keywords_pattern, m_pattern_options);
         //        m_keyword_rule.expression.optimize();
         //        m_keyword_rule.list << "Keyword";
@@ -129,48 +129,48 @@ namespace hal
                                           "severity|signal|shared|sla|sll|sra|srl|subtype|then|to|transport|type|unaffected|units|until|use|variable|wait|when|while|with|xnor|xor)\\b|=>|<=|:=))",
                                           QRegularExpression::CaseInsensitiveOption);
         rule.mPattern.optimize();
-        rule.mFormat = VhdlQssAdapter::instance()->m_keyword_format;
-        m_highlighting_rules.append(rule);
+        rule.mFormat = VhdlQssAdapter::instance()->mKeywordFormat;
+        mHighlightingRules.append(rule);
 
         rule.mPattern = QRegularExpression("(?<match>\\b[a-h,j-z]s\\b|\\bns\\b|rising_edge|falling_edge|TRUE|true|FALSE|false)");
         rule.mPattern.optimize();
-        rule.mFormat = VhdlQssAdapter::instance()->m_type_format;
-        m_highlighting_rules.append(rule);
+        rule.mFormat = VhdlQssAdapter::instance()->mTypeFormat;
+        mHighlightingRules.append(rule);
 
         rule.mPattern = QRegularExpression("(\\:\\s|in\\s|out\\s)(?<match>\\w*)(\\s?\\;|\\s:=|\\s\\()");
         rule.mPattern.optimize();
-        rule.mFormat = VhdlQssAdapter::instance()->m_type_format;
-        m_highlighting_rules.append(rule);
+        rule.mFormat = VhdlQssAdapter::instance()->mTypeFormat;
+        mHighlightingRules.append(rule);
 
         rule.mPattern = QRegularExpression("(\\:\\s+)(?<match>\\b.+\\b)(\\s*)$");
         rule.mPattern.optimize();
-        rule.mFormat = VhdlQssAdapter::instance()->m_keyword_format;
-        m_highlighting_rules.append(rule);
+        rule.mFormat = VhdlQssAdapter::instance()->mKeywordFormat;
+        mHighlightingRules.append(rule);
 
         rule.mPattern = QRegularExpression("(?<match>'.+'|\\b'?\\d+'?\\b)");
         rule.mPattern.optimize();
-        rule.mFormat = VhdlQssAdapter::instance()->m_number_format;
-        m_highlighting_rules.append(rule);
+        rule.mFormat = VhdlQssAdapter::instance()->mNumberFormat;
+        mHighlightingRules.append(rule);
 
         rule.mPattern = QRegularExpression("(?<match>\"\\D.*\")");
         rule.mPattern.optimize();
-        rule.mFormat = VhdlQssAdapter::instance()->m_string_format;
-        m_highlighting_rules.append(rule);
+        rule.mFormat = VhdlQssAdapter::instance()->mStringFormat;
+        mHighlightingRules.append(rule);
 
         rule.mPattern = QRegularExpression("(?<match>\\bX\".*\")");
         rule.mPattern.optimize();
-        rule.mFormat = VhdlQssAdapter::instance()->m_number_format;
-        m_highlighting_rules.append(rule);
+        rule.mFormat = VhdlQssAdapter::instance()->mNumberFormat;
+        mHighlightingRules.append(rule);
 
-        m_single_line_comment_expression = QRegularExpression("(?<match>--[^\n]*)");
-        m_comment_start_expression       = QRegularExpression("(/\\*)");
-        m_comment_end_expression         = QRegularExpression("(\\*/)");
+        mSingleLineCommentExpression = QRegularExpression("(?<match>--[^\n]*)");
+        mCommentStartExpression       = QRegularExpression("(/\\*)");
+        mCommentEndExpression         = QRegularExpression("(\\*/)");
     }
 
     void VhdlSyntaxHighlighter::highlightBlock(const QString& text)
     {
         //this->run_current_state(text);
-        for (const HighlightingRule& rule : m_highlighting_rules)
+        for (const HighlightingRule& rule : mHighlightingRules)
         {
             QRegularExpressionMatchIterator it = rule.mPattern.globalMatch(text);
             while (it.hasNext())
@@ -182,13 +182,13 @@ namespace hal
             }
         }
 
-        QRegularExpressionMatchIterator it = m_single_line_comment_expression.globalMatch(text);
+        QRegularExpressionMatchIterator it = mSingleLineCommentExpression.globalMatch(text);
         while (it.hasNext())
         {
             QRegularExpressionMatch match = it.next();
             int index                     = match.capturedStart("match");
             int length                    = match.capturedLength("match");
-            setFormat(index, length, VhdlQssAdapter::instance()->m_comment_format);
+            setFormat(index, length, VhdlQssAdapter::instance()->mCommentFormat);
         }
 
         setCurrentBlockState(0);
@@ -196,7 +196,7 @@ namespace hal
 
         if (previousBlockState() != 1)
         {
-            QRegularExpressionMatch match = m_comment_start_expression.match(text);
+            QRegularExpressionMatch match = mCommentStartExpression.match(text);
             if (match.hasMatch())
                 start_index = match.capturedStart(0);
             else
@@ -206,7 +206,7 @@ namespace hal
         while (start_index >= 0)
         {
             int end_index                 = 0;
-            QRegularExpressionMatch match = m_comment_end_expression.match(text, start_index);
+            QRegularExpressionMatch match = mCommentEndExpression.match(text, start_index);
             if (match.hasMatch())
                 end_index = match.capturedStart(0);
             else
@@ -221,8 +221,8 @@ namespace hal
             {
                 comment_length = end_index - start_index + match.capturedLength(0);
             }
-            setFormat(start_index, comment_length, VhdlQssAdapter::instance()->m_comment_format);
-            match = m_comment_start_expression.match(text, start_index + comment_length);
+            setFormat(start_index, comment_length, VhdlQssAdapter::instance()->mCommentFormat);
+            match = mCommentStartExpression.match(text, start_index + comment_length);
             if (match.hasMatch())
                 start_index = match.capturedStart(0);
             else

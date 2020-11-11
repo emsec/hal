@@ -2,14 +2,14 @@
 
 namespace hal
 {
-    UniqueStringValidator::UniqueStringValidator(const QStringList &unique_strings) : m_unique_strings(unique_strings)
+    UniqueStringValidator::UniqueStringValidator(const QStringList &unique_strings) : mUniqueStrings(unique_strings)
     {
-        set_fail_text("Chosen input is already assigned.");
+        setFailText("Chosen input is already assigned.");
     }
 
     bool UniqueStringValidator::validate(const QString &input)
     {
-        if(!m_unique_strings.contains(input))
+        if(!mUniqueStrings.contains(input))
             return true;
         else
             return false;

@@ -9,8 +9,8 @@ namespace hal
         if (!iconName.isEmpty())
             setPixmap(QPixmap(QString(":/icons/%1").arg(iconName),"PNG").scaled(64,64));
         setFixedSize(68,68);
-        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &DisputedBigIcon::handleGlobalSettingsChanged);
-        mIsVisible = g_settings_manager->get("selection_details/show_big_icon", true).toBool();
+        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &DisputedBigIcon::handleGlobalSettingsChanged);
+        mIsVisible = gSettingsManager->get("selection_details/show_big_icon", true).toBool();
         showOrHide();
     }
 

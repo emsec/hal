@@ -37,6 +37,6 @@ namespace hal
         void execute() override;
 
     private:
-        GraphLayouter* m_layouter;
+        GraphLayouter* mLayouter;
     };
 }

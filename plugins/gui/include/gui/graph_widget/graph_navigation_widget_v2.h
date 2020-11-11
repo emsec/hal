@@ -46,26 +46,26 @@ namespace hal
         void setup(Node origin, Net* via_net, bool direction);
 
     Q_SIGNALS:
-        void navigation_requested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
-        void close_requested();
-        void reset_focus();
+        void navigationRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void closeRequested();
+        void resetFocus();
 
     private Q_SLOTS:
-        void handle_selection_changed();
+        void handleSelectionChanged();
 
     protected:
         void keyPressEvent(QKeyEvent* event) override;
 
     private:
-        void fill_table(bool direction);
-        void resize_to_fit();
-        int sum_row_heights(const QTreeWidgetItem *itm, bool top = true);
-        void handle_item_double_clicked(QTreeWidgetItem* item);
-        void commit_selection();
+        void fillTable(bool direction);
+        void resizeToFit();
+        int sumRowHeights(const QTreeWidgetItem *itm, bool top = true);
+        void handleItemDoubleClicked(QTreeWidgetItem* item);
+        void commitSelection();
 
-        Node m_origin;
-        Net* m_via_net;
-        QSet<QTreeWidgetItem*> m_previous_selection;
+        Node mOrigin;
+        Net* mViaNet;
+        QSet<QTreeWidgetItem*> mPreviousSelection;
 
     };
 }

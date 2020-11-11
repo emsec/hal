@@ -39,12 +39,12 @@ namespace hal
         void reset();
 
     private:
-        void handle_netlist_event(netlist_event_handler::event ev, Netlist* object, u32 associated_data);
-        void handle_module_event(module_event_handler::event ev, Module* object, u32 associated_data);
-        void handle_gate_event(gate_event_handler::event ev, Gate* object, u32 associated_data);
-        void handle_net_event(net_event_handler::event ev, Net* object, u32 associated_data);
+        void handleNetlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data);
+        void handleModuleEvent(module_event_handler::event ev, Module* object, u32 associated_data);
+        void handleGateEvent(gate_event_handler::event ev, Gate* object, u32 associated_data);
+        void handleNetEvent(net_event_handler::event ev, Net* object, u32 associated_data);
 
-        void handle_netlist_modified();
-        bool m_notified;
+        void handleNetlistModified();
+        bool mNotified;
     };
 }

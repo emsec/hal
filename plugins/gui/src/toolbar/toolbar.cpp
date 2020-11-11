@@ -8,7 +8,7 @@ namespace hal
     {
     }
 
-    void Toolbar::add_spacer()
+    void Toolbar::addSpacer()
     {
         QWidget* spacer = new QWidget(this);
         spacer->setAttribute(Qt::WA_NoSystemBackground);

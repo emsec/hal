@@ -19,13 +19,13 @@ namespace hal
        std::vector<Net*> inputNets;
        if (isModule())
        {
-           const Module* m = g_netlist->get_module_by_id(getId());
+           const Module* m = gNetlist->get_module_by_id(getId());
            if (m)
                inputNets  = m->get_input_nets();
        }
        else
        {
-           const Gate* g = g_netlist->get_gate_by_id(getId());
+           const Gate* g = gNetlist->get_gate_by_id(getId());
            if (g)
                inputNets  = g->get_fan_in_nets();
        }
@@ -138,7 +138,7 @@ namespace hal
        append(wtse);
        if (wtse->isModule())
        {
-           const Module* m = g_netlist->get_module_by_id(wtse->getId());
+           const Module* m = gNetlist->get_module_by_id(wtse->getId());
            if (m)
            {
                for (const Gate* g : m->get_gates(nullptr,true))

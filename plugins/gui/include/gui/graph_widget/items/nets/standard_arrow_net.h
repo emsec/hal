@@ -12,7 +12,7 @@ namespace hal {
         StandardArrowNet(Net* n, const Lines& l);
         void setInputPosition(const QPointF &pos);
         void setOutputPosition(const QPointF &pos);
-        virtual void set_visuals(const Visuals& v);
+        virtual void setVisuals(const Visuals& v);
         void paint(QPainter* painter,
                    const QStyleOptionGraphicsItem* option,
                    QWidget* widget) override;

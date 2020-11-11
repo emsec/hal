@@ -87,8 +87,8 @@ namespace hal {
         int mFirst;
         int mLast;
     public:
-        static const int MinInf = -32767;
-        static const int MaxInf =  32767;
+        static const int sMinInf = -32767;
+        static const int sMaxInf =  32767;
         static const int sSceneDelta = 20;
         static const int sSceneFirst = 400;
         static const int sSceneGap   = 200;
@@ -119,8 +119,8 @@ namespace hal {
         QRect rect() const { return mRect; }
         void dump() const;
         NetLayoutJunctionNet netById(u32 id) const { return mNetsOutput.value(id); }
-        enum error_t {StraightRouteError = -2, CornerRouteError = -1, Ok = 0 };
-        error_t lastError() const { return mError; }
+        enum mErrorT {StraightRouteError = -2, CornerRouteError = -1, Ok = 0 };
+        mErrorT lastError() const { return mError; }
     private:
         void fourWayJunctions(QHash<u32, NetLayoutJunctionNet>::iterator& netIt);
         void routeT();
@@ -139,7 +139,7 @@ namespace hal {
         QHash<u32,NetLayoutJunctionNet> mNetsOutput;
         QHash<int,NetLayoutJunctionOccupied> mOccupied[2];  // 0=horizontal, 1=vertical
         int maxRoad[2];
-        error_t mError;
+        mErrorT mError;
     };
 
     class NetLayoutJunctionHash : public QHash<NetLayoutPoint,NetLayoutJunction*>

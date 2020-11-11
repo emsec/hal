@@ -8,33 +8,33 @@ namespace hal
 
     void StandardArrowNet::setInputPosition(const QPointF& pos)
     {
-        mArrowNet.add_input(pos);
+        mArrowNet.addInput(pos);
         QRectF r = mArrowNet.shape().boundingRect();
-        m_shape.addPath(mArrowNet.shape());
-        m_rect = m_rect.united(r);
+        mShape.addPath(mArrowNet.shape());
+        mRect = mRect.united(r);
     }
 
     void StandardArrowNet::setOutputPosition(const QPointF& pos)
     {
-        mArrowNet.add_output(pos);
+        mArrowNet.addOutput(pos);
         QRectF r = mArrowNet.shape().boundingRect();
-        m_shape.addPath(mArrowNet.shape());
-        m_rect = m_rect.united(r);
+        mShape.addPath(mArrowNet.shape());
+        mRect = mRect.united(r);
     }
 
     void StandardArrowNet::paint(QPainter* painter,
                                  const QStyleOptionGraphicsItem* option,
                                  QWidget* widget)
     {
-        mArrowNet.setHightlight(m_highlight);
+        mArrowNet.setHightlight(mHighlight);
         StandardGraphicsNet::paint(painter,option,widget);
         mArrowNet.paint(painter,option,widget);
     }
 
-    void StandardArrowNet::set_visuals(const Visuals &v)
+    void StandardArrowNet::setVisuals(const Visuals &v)
     {
-        StandardGraphicsNet::set_visuals(v);
-        mArrowNet.set_visuals(v);
+        StandardGraphicsNet::setVisuals(v);
+        mArrowNet.setVisuals(v);
     }
 
 }

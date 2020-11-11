@@ -12,29 +12,29 @@
 namespace hal
 {
     WelcomeScreen::WelcomeScreen(QWidget* parent)
-        : QFrame(parent), m_layout(new QHBoxLayout()), m_recent_files_frame(new LabeledFrame()), m_open_file_frame(new LabeledFrame()), m_get_in_touch_frame(new LabeledFrame()),
-          m_recent_files_widget(new RecentFilesWidget()), m_open_file_widget(new OpenFileWidget()), m_get_in_touch_widget(new GetInTouchWidget())
+        : QFrame(parent), mLayout(new QHBoxLayout()), mRecentFilesFrame(new LabeledFrame()), mOpenFileFrame(new LabeledFrame()), mGetInTouchFrame(new LabeledFrame()),
+          mRecentFilesWidget(new RecentFilesWidget()), mOpenFileWidget(new OpenFileWidget()), mGetInTouchWidget(new GetInTouchWidget())
     {
-        m_layout->setContentsMargins(0, 0, 0, 0);
-        m_layout->setSpacing(0);
-        m_layout->setAlignment(Qt::AlignCenter);
+        mLayout->setContentsMargins(0, 0, 0, 0);
+        mLayout->setSpacing(0);
+        mLayout->setAlignment(Qt::AlignCenter);
 
-        m_recent_files_frame->setObjectName("recent-files-frame");
-        m_open_file_frame->setObjectName("open-file-frame");
-        m_get_in_touch_frame->setObjectName("get-in-touch-frame");
+        mRecentFilesFrame->setObjectName("recent-files-frame");
+        mOpenFileFrame->setObjectName("open-file-frame");
+        mGetInTouchFrame->setObjectName("get-in-touch-frame");
 
-        m_recent_files_frame->add_content(m_recent_files_widget);
-        m_open_file_frame->add_content(m_open_file_widget);
-        m_get_in_touch_frame->add_content(m_get_in_touch_widget);
+        mRecentFilesFrame->addContent(mRecentFilesWidget);
+        mOpenFileFrame->addContent(mOpenFileWidget);
+        mGetInTouchFrame->addContent(mGetInTouchWidget);
 
-        m_recent_files_frame->setGraphicsEffect(new ShadowEffect());
-        m_open_file_frame->setGraphicsEffect(new ShadowEffect());
-        m_get_in_touch_frame->setGraphicsEffect(new ShadowEffect());
+        mRecentFilesFrame->setGraphicsEffect(new ShadowEffect());
+        mOpenFileFrame->setGraphicsEffect(new ShadowEffect());
+        mGetInTouchFrame->setGraphicsEffect(new ShadowEffect());
 
-        setLayout(m_layout);
-        m_layout->addWidget(m_recent_files_frame);
-        m_layout->addWidget(m_open_file_frame);
-        m_layout->addWidget(m_get_in_touch_frame);
+        setLayout(mLayout);
+        mLayout->addWidget(mRecentFilesFrame);
+        mLayout->addWidget(mOpenFileFrame);
+        mLayout->addWidget(mGetInTouchFrame);
 
         repolish();    // CALL FROM PARENT
     }
@@ -46,8 +46,8 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        m_recent_files_widget->repolish();
-        m_open_file_widget->repolish();
-        m_get_in_touch_widget->repolish();
+        mRecentFilesWidget->repolish();
+        mOpenFileWidget->repolish();
+        mGetInTouchWidget->repolish();
     }
 }

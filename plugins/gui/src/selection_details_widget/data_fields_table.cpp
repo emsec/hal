@@ -10,9 +10,9 @@ namespace hal {
     DataFieldsTable::DataFieldsTable(DetailsWidget *parent)
         : QTableWidget(0,2,parent), m_itemId(0)
     {
-        m_keyFont = QFont("Iosevka");
-        m_keyFont.setBold(true);
-        m_keyFont.setPixelSize(13);
+        mKeyFont = QFont("Iosevka");
+        mKeyFont.setBold(true);
+        mKeyFont.setPixelSize(13);
         m_pythonType = parent->detailsTypeName();
         connect(this, &QTableWidget::customContextMenuRequested, this, &DataFieldsTable::handleContextMenuRequest);
     }
@@ -31,7 +31,7 @@ namespace hal {
             QString keyTxt      = QString::fromStdString(std::get<1>(key)) + ":";
             QString valueTxt    = QString::fromStdString(std::get<1>(value));
             QTableWidgetItem* key_item = new QTableWidgetItem(keyTxt);
-            key_item->setFont(m_keyFont);
+            key_item->setFont(mKeyFont);
             key_item->setFlags((Qt::ItemFlag)~Qt::ItemIsEnabled);
             key_item->setData(Qt::UserRole, keyCategory);
             QTableWidgetItem* value_item = new QTableWidgetItem(valueTxt);

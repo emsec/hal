@@ -9,10 +9,10 @@
 namespace hal
 {
     // SET VIA SETTINGS OR TOOLBUTTON
-    bool SelectionRelay::s_navigation_skips_enabled = false;
+    bool SelectionRelay::sNavigationSkipsEnabled = false;
 
     SelectionRelay::SelectionRelay(QObject* parent) : QObject(parent),
-        m_current_type(ItemType::None), m_focus_type(ItemType::None), m_subfocus(Subfocus::None)
+        mCurrentType(ItemType::None), mFocusType(ItemType::None), mSubfocus(Subfocus::None)
     {
         clear();
     }
@@ -22,61 +22,61 @@ namespace hal
         mModulesSuppressedByFilter.clear();
         mGatesSuppressedByFilter.clear();
         mNetsSuppressedByFilter.clear();
-        m_selected_gates.clear();
-        m_selected_nets.clear();
-        m_selected_modules.clear();
-        m_subfocus       = Subfocus::None;
-        m_subfocus_index = 0;
-        m_focus_id       = 0;
+        mSelectedGates.clear();
+        mSelectedNets.clear();
+        mSelectedModules.clear();
+        mSubfocus       = Subfocus::None;
+        mSubfocusIndex = 0;
+        mFocusId       = 0;
     }
 
-    void SelectionRelay::clear_and_update()
+    void SelectionRelay::clearAndUpdate()
     {
         clear();
-        Q_EMIT selection_changed(nullptr);
+        Q_EMIT selectionChanged(nullptr);
     }
 
-    void SelectionRelay::register_sender(void* sender, QString name)
+    void SelectionRelay::registerSender(void* sender, QString name)
     {
-        m_sender_register.append(QPair<void*, QString>(sender, name));
+        mSenderRegister.append(QPair<void*, QString>(sender, name));
     }
 
-    void SelectionRelay::remove_sender(void* sender)
+    void SelectionRelay::removeSender(void* sender)
     {
-        for (QPair<void*, QString> pair : m_sender_register)
+        for (QPair<void*, QString> pair : mSenderRegister)
         {
             if (pair.first == sender)
-                m_sender_register.removeOne(pair);
+                mSenderRegister.removeOne(pair);
         }
     }
 
-    void SelectionRelay::relay_selection_changed(void* sender)
+    void SelectionRelay::relaySelectionChanged(void* sender)
     {
-        Q_EMIT selection_changed(sender);
+        Q_EMIT selectionChanged(sender);
     }
 
-    void SelectionRelay::relay_subfocus_changed(void* sender)
+    void SelectionRelay::relaySubfocusChanged(void* sender)
     {
-        Q_EMIT subfocus_changed(sender);
+        Q_EMIT subfocusChanged(sender);
     }
 
-    // TODO deduplicate navigate_up and navigate_down
-    void SelectionRelay::navigate_up()
+    // TODO deduplicate navigateUp and navigateDown
+    void SelectionRelay::navigateUp()
     {
         u32 size = 0;
 
-        switch (m_focus_type)
+        switch (mFocusType)
         {
         case ItemType::None: {
                 return;
             }
         case ItemType::Gate: {
-                Gate* g = g_netlist->get_gate_by_id(m_focus_id);
+                Gate* g = gNetlist->get_gate_by_id(mFocusId);
 
                 if (!g)
                     return;
 
-                if (m_subfocus == Subfocus::Left)
+                if (mSubfocus == Subfocus::Left)
                 {
                     size = g->get_input_pins().size();
 
@@ -86,7 +86,7 @@ namespace hal
                     break;
                 }
 
-                if (m_subfocus == Subfocus::Right)
+                if (mSubfocus == Subfocus::Right)
                 {
                     size = g->get_output_pins().size();
 
@@ -99,12 +99,12 @@ namespace hal
                 return;
             }
         case ItemType::Net: {
-                Net* n = g_netlist->get_net_by_id(m_focus_id);
+                Net* n = gNetlist->get_net_by_id(mFocusId);
 
                 if (!n)
                     return;
 
-                if (m_subfocus == Subfocus::Right)
+                if (mSubfocus == Subfocus::Right)
                 {
                     size = n->get_destinations().size();
 
@@ -117,12 +117,12 @@ namespace hal
                 return;
             }
         case ItemType::Module: {
-                Module* m = g_netlist->get_module_by_id(m_focus_id);
+                Module* m = gNetlist->get_module_by_id(mFocusId);
 
                 if (!m)
                     return;
 
-                if (m_subfocus == Subfocus::Left)
+                if (mSubfocus == Subfocus::Left)
                 {
                     size = m->get_input_nets().size();
 
@@ -132,7 +132,7 @@ namespace hal
                     break;
                 }
 
-                if (m_subfocus == Subfocus::Right)
+                if (mSubfocus == Subfocus::Right)
                 {
                     size = m->get_output_nets().size();
 
@@ -146,30 +146,30 @@ namespace hal
             }
         }
 
-        if (m_subfocus_index == 0)
-            m_subfocus_index = size - 1;
+        if (mSubfocusIndex == 0)
+            mSubfocusIndex = size - 1;
         else
-            --m_subfocus_index;
+            --mSubfocusIndex;
 
-        Q_EMIT subfocus_changed(nullptr);
+        Q_EMIT subfocusChanged(nullptr);
     }
 
-    void SelectionRelay::navigate_down()
+    void SelectionRelay::navigateDown()
     {
         u32 size = 0;
 
-        switch (m_focus_type)
+        switch (mFocusType)
         {
         case ItemType::None: {
                 return;
             }
         case ItemType::Gate: {
-                Gate* g = g_netlist->get_gate_by_id(m_focus_id);
+                Gate* g = gNetlist->get_gate_by_id(mFocusId);
 
                 if (!g)
                     return;
 
-                if (m_subfocus == Subfocus::Left)
+                if (mSubfocus == Subfocus::Left)
                 {
                     size = g->get_input_pins().size();
 
@@ -179,7 +179,7 @@ namespace hal
                     break;
                 }
 
-                if (m_subfocus == Subfocus::Right)
+                if (mSubfocus == Subfocus::Right)
                 {
                     size = g->get_output_pins().size();
 
@@ -192,12 +192,12 @@ namespace hal
                 return;
             }
         case ItemType::Net: {
-                Net* n = g_netlist->get_net_by_id(m_focus_id);
+                Net* n = gNetlist->get_net_by_id(mFocusId);
 
                 if (!n)
                     return;
 
-                if (m_subfocus == Subfocus::Right)
+                if (mSubfocus == Subfocus::Right)
                 {
                     size = n->get_destinations().size();
 
@@ -210,12 +210,12 @@ namespace hal
                 return;
             }
         case ItemType::Module: {
-                Module* m = g_netlist->get_module_by_id(m_focus_id);
+                Module* m = gNetlist->get_module_by_id(mFocusId);
 
                 if (!m)
                     return;
 
-                if (m_subfocus == Subfocus::Left)
+                if (mSubfocus == Subfocus::Left)
                 {
                     size = m->get_input_nets().size();
 
@@ -225,7 +225,7 @@ namespace hal
                     break;
                 }
 
-                if (m_subfocus == Subfocus::Right)
+                if (mSubfocus == Subfocus::Right)
                 {
                     size = m->get_output_nets().size();
 
@@ -239,77 +239,77 @@ namespace hal
             }
         }
 
-        if (m_subfocus_index == size - 1)
-            m_subfocus_index = 0;
+        if (mSubfocusIndex == size - 1)
+            mSubfocusIndex = 0;
         else
-            ++m_subfocus_index;
+            ++mSubfocusIndex;
 
-        Q_EMIT subfocus_changed(nullptr);
+        Q_EMIT subfocusChanged(nullptr);
     }
 
     // TODO nothing is using this method - do we need it?
-    void SelectionRelay::navigate_left()
+    void SelectionRelay::navigateLeft()
     {
-        switch (m_focus_type)
+        switch (mFocusType)
         {
         case ItemType::None: {
                 return;
             }
         case ItemType::Gate: {
-                Gate* g = g_netlist->get_gate_by_id(m_focus_id);
+                Gate* g = gNetlist->get_gate_by_id(mFocusId);
 
                 if (!g)
                     return;
 
                 if (g->get_input_pins().size())    // CHECK HERE OR IN PRIVATE METHODS ?
                 {
-                    if (m_subfocus == Subfocus::Left)
-                        follow_gate_input_pin(g, m_subfocus_index);
+                    if (mSubfocus == Subfocus::Left)
+                        followGateInputPin(g, mSubfocusIndex);
                     else
                     {
-                        if (s_navigation_skips_enabled && g->get_input_pins().size() == 1)
-                            follow_gate_input_pin(g, 0);
+                        if (sNavigationSkipsEnabled && g->get_input_pins().size() == 1)
+                            followGateInputPin(g, 0);
                         else
-                            subfocus_left();
+                            subfocusLeft();
                     }
                 }
 
                 return;
             }
         case ItemType::Net: {
-                Net* n = g_netlist->get_net_by_id(m_focus_id);
+                Net* n = gNetlist->get_net_by_id(mFocusId);
 
                 if (!n)
                     return;
 
-                if (m_subfocus == Subfocus::Left)
-                    follow_net_to_source(n);
+                if (mSubfocus == Subfocus::Left)
+                    followNetToSource(n);
                 else
                 {
-                    if (s_navigation_skips_enabled && n->get_destinations().size() == 1)
-                        follow_net_to_source(n);
+                    if (sNavigationSkipsEnabled && n->get_destinations().size() == 1)
+                        followNetToSource(n);
                     else
-                        subfocus_left();
+                        subfocusLeft();
                 }
 
                 return;
             }
         case ItemType::Module: {
-                Module* m = g_netlist->get_module_by_id(m_focus_id);
+                Module* m = gNetlist->get_module_by_id(mFocusId);
 
                 if (!m)
                     return;
 
                 if (m->get_input_nets().size())    // CHECK HERE OR IN PRIVATE METHODS ?
                 {
-                    if (m_subfocus == Subfocus::Left)
-                        follow_module_input_pin(m, m_subfocus_index);
+                    if (mSubfocus == Subfocus::Left)
+                        followModuleInputPin(m, mSubfocusIndex);
                     else
                     {
-                        if (s_navigation_skips_enabled && m->get_input_nets().size() == 1)
-                            follow_module_input_pin(m, 0);
+                        if (sNavigationSkipsEnabled && m->get_input_nets().size() == 1)
+                            followModuleInputPin(m, 0);
                         else
-                            subfocus_left();
+                            subfocusLeft();
                     }
                 }
 
@@ -319,64 +319,64 @@ namespace hal
     }
 
     // TODO nothing is using this method - do we need it?
-    void SelectionRelay::navigate_right()
+    void SelectionRelay::navigateRight()
     {
-        switch (m_focus_type)
+        switch (mFocusType)
         {
         case ItemType::None: {
                 return;
             }
         case ItemType::Gate: {
-                Gate* g = g_netlist->get_gate_by_id(m_focus_id);
+                Gate* g = gNetlist->get_gate_by_id(mFocusId);
 
                 if (!g)
                     return;
 
-                if (m_subfocus == Subfocus::Right)
-                    follow_gate_output_pin(g, m_subfocus_index);
+                if (mSubfocus == Subfocus::Right)
+                    followGateOutputPin(g, mSubfocusIndex);
                 else
                 {
-                    if (s_navigation_skips_enabled && g->get_output_pins().size() == 1)
-                        follow_gate_output_pin(g, 0);
+                    if (sNavigationSkipsEnabled && g->get_output_pins().size() == 1)
+                        followGateOutputPin(g, 0);
                     else
-                        subfocus_right();
+                        subfocusRight();
                 }
 
                 return;
             }
         case ItemType::Net: {
-                Net* n = g_netlist->get_net_by_id(m_focus_id);
+                Net* n = gNetlist->get_net_by_id(mFocusId);
 
                 if (!n)
                     return;
 
-                if (m_subfocus == Subfocus::Right)
+                if (mSubfocus == Subfocus::Right)
                 {
-                    follow_net_to_destination(n, m_subfocus_index);
+                    followNetToDestination(n, mSubfocusIndex);
                     return;
                 }
 
-                if (s_navigation_skips_enabled && n->get_destinations().size() == 1)
-                    follow_net_to_destination(n, 0);
+                if (sNavigationSkipsEnabled && n->get_destinations().size() == 1)
+                    followNetToDestination(n, 0);
                 else
-                    subfocus_right();
+                    subfocusRight();
 
                 return;
             }
         case ItemType::Module: {
-                Module* m = g_netlist->get_module_by_id(m_focus_id);
+                Module* m = gNetlist->get_module_by_id(mFocusId);
 
                 if (!m)
                     return;
 
-                if (m_subfocus == Subfocus::Right)
-                    follow_module_output_pin(m, m_subfocus_index);
+                if (mSubfocus == Subfocus::Right)
+                    followModuleOutputPin(m, mSubfocusIndex);
                 else
                 {
-                    if (s_navigation_skips_enabled && m->get_output_nets().size() == 1)
-                        follow_module_output_pin(m, 0);
+                    if (sNavigationSkipsEnabled && m->get_output_nets().size() == 1)
+                        followModuleOutputPin(m, 0);
                     else
-                        subfocus_right();
+                        subfocusRight();
                 }
 
                 return;
@@ -389,57 +389,57 @@ namespace hal
         mModulesSuppressedByFilter = modIds.toSet();
         mGatesSuppressedByFilter   = gatIds.toSet();
         mNetsSuppressedByFilter    = netIds.toSet();
-        Q_EMIT selection_changed(nullptr);
+        Q_EMIT selectionChanged(nullptr);
     }
 
     bool SelectionRelay::isModuleSelected(u32 id) const
     {
-        return m_selected_modules.contains(id) && !mModulesSuppressedByFilter.contains(id);
+        return mSelectedModules.contains(id) && !mModulesSuppressedByFilter.contains(id);
     }
 
     bool SelectionRelay::isGateSelected(u32 id) const
     {
-        return m_selected_gates.contains(id) && !mGatesSuppressedByFilter.contains(id);
+        return mSelectedGates.contains(id) && !mGatesSuppressedByFilter.contains(id);
     }
 
     bool SelectionRelay::isNetSelected(u32 id) const
     {
-        return m_selected_nets.contains(id) && !mNetsSuppressedByFilter.contains(id);
+        return mSelectedNets.contains(id) && !mNetsSuppressedByFilter.contains(id);
     }
 
-    void SelectionRelay::handle_module_removed(const u32 id)
+    void SelectionRelay::handleModuleRemoved(const u32 id)
     {
-        auto it = m_selected_modules.find(id);
-        if (it != m_selected_modules.end())
+        auto it = mSelectedModules.find(id);
+        if (it != mSelectedModules.end())
         {
-            m_selected_modules.erase(it);
-            Q_EMIT selection_changed(nullptr);
+            mSelectedModules.erase(it);
+            Q_EMIT selectionChanged(nullptr);
         }
     }
 
-    void SelectionRelay::handle_gate_removed(const u32 id)
+    void SelectionRelay::handleGateRemoved(const u32 id)
     {
-        auto it = m_selected_gates.find(id);
-        if (it != m_selected_gates.end())
+        auto it = mSelectedGates.find(id);
+        if (it != mSelectedGates.end())
         {
-            m_selected_gates.erase(it);
-            Q_EMIT selection_changed(nullptr);
+            mSelectedGates.erase(it);
+            Q_EMIT selectionChanged(nullptr);
         }
     }
 
-    void SelectionRelay::handle_net_removed(const u32 id)
+    void SelectionRelay::handleNetRemoved(const u32 id)
     {
-        auto it = m_selected_nets.find(id);
-        if (it != m_selected_nets.end())
+        auto it = mSelectedNets.find(id);
+        if (it != mSelectedNets.end())
         {
-            m_selected_nets.erase(it);
-            Q_EMIT selection_changed(nullptr);
+            mSelectedNets.erase(it);
+            Q_EMIT selectionChanged(nullptr);
         }
     }
 
     // GET CORE GUARANTEES
     // UNCERTAIN ABOUT UNROUTED (GLOBAL) NETS, DECIDE
-    void SelectionRelay::follow_gate_input_pin(Gate* g, u32 input_pin_index)
+    void SelectionRelay::followGateInputPin(Gate* g, u32 input_pin_index)
     {
         std::string pin_type = *std::next(g->get_input_pins().begin(), input_pin_index);
         Net* n               = g->get_fan_in_net(pin_type);
@@ -449,19 +449,19 @@ namespace hal
 
         clear();
 
-        m_selected_nets.insert(n->get_id());
+        mSelectedNets.insert(n->get_id());
 
-        m_focus_type = ItemType::Net;
-        m_focus_id   = n->get_id();
+        mFocusType = ItemType::Net;
+        mFocusId   = n->get_id();
 
         if (n->get_destinations().size() == 1)
         {
-            if (s_navigation_skips_enabled)
-                m_subfocus = Subfocus::None;
+            if (sNavigationSkipsEnabled)
+                mSubfocus = Subfocus::None;
             else
-                m_subfocus = Subfocus::Right;
+                mSubfocus = Subfocus::Right;
 
-            m_subfocus_index = 0;
+            mSubfocusIndex = 0;
         }
         else
         {
@@ -474,14 +474,14 @@ namespace hal
                 ++i;
             }
 
-            m_subfocus       = Subfocus::Right;
-            m_subfocus_index = i;
+            mSubfocus       = Subfocus::Right;
+            mSubfocusIndex = i;
         }
 
-        Q_EMIT selection_changed(nullptr);
+        Q_EMIT selectionChanged(nullptr);
     }
 
-    void SelectionRelay::follow_gate_output_pin(Gate* g, u32 output_pin_index)
+    void SelectionRelay::followGateOutputPin(Gate* g, u32 output_pin_index)
     {
         std::string pin_type = *std::next(g->get_output_pins().begin(), output_pin_index);
         auto n               = g->get_fan_out_net(pin_type);
@@ -491,36 +491,36 @@ namespace hal
 
         clear();
 
-        m_selected_nets.insert(n->get_id());
+        mSelectedNets.insert(n->get_id());
 
-        m_focus_type = ItemType::Net;
-        m_focus_id   = n->get_id();
+        mFocusType = ItemType::Net;
+        mFocusId   = n->get_id();
 
-        if (s_navigation_skips_enabled)
-            m_subfocus = Subfocus::None;
+        if (sNavigationSkipsEnabled)
+            mSubfocus = Subfocus::None;
         else
-            m_subfocus = Subfocus::Left;
+            mSubfocus = Subfocus::Left;
 
-        m_subfocus_index = 0;
+        mSubfocusIndex = 0;
 
-        Q_EMIT selection_changed(nullptr);
+        Q_EMIT selectionChanged(nullptr);
     }
 
-    void SelectionRelay::follow_module_input_pin(Module* m, u32 input_pin_index)
+    void SelectionRelay::followModuleInputPin(Module* m, u32 input_pin_index)
     {
         Q_UNUSED(m)
         Q_UNUSED(input_pin_index)
         // TODO implement
     }
 
-    void SelectionRelay::follow_module_output_pin(Module* m, u32 output_pin_index)
+    void SelectionRelay::followModuleOutputPin(Module* m, u32 output_pin_index)
     {
         Q_UNUSED(m)
         Q_UNUSED(output_pin_index)
         // TODO implement
     }
 
-    void SelectionRelay::follow_net_to_source(Net* n)
+    void SelectionRelay::followNetToSource(Net* n)
     {
         if(n->get_sources().empty())
             return;
@@ -533,15 +533,15 @@ namespace hal
 
         clear();
 
-        m_selected_gates.insert(g->get_id());
+        mSelectedGates.insert(g->get_id());
 
-        m_focus_type = ItemType::Gate;
-        m_focus_id   = g->get_id();
+        mFocusType = ItemType::Gate;
+        mFocusId   = g->get_id();
 
-        if (s_navigation_skips_enabled && g->get_output_pins().size() == 1)
+        if (sNavigationSkipsEnabled && g->get_output_pins().size() == 1)
         {
-            m_subfocus       = Subfocus::Left;    // NONE OR LEFT ???
-            m_subfocus_index = 0;
+            mSubfocus       = Subfocus::Left;    // NONE OR LEFT ???
+            mSubfocusIndex = 0;
         }
         else
         {
@@ -554,14 +554,14 @@ namespace hal
                 ++i;
             }
 
-            m_subfocus       = Subfocus::Right;
-            m_subfocus_index = i;
+            mSubfocus       = Subfocus::Right;
+            mSubfocusIndex = i;
         }
 
-        Q_EMIT selection_changed(nullptr);
+        Q_EMIT selectionChanged(nullptr);
     }
 
-    void SelectionRelay::follow_net_to_destination(Net* n, u32 dst_index)
+    void SelectionRelay::followNetToDestination(Net* n, u32 dst_index)
     {
         auto e  = n->get_destinations().at(dst_index);
         Gate* g = e->get_gate();
@@ -571,15 +571,15 @@ namespace hal
 
         clear();
 
-        m_selected_gates.insert(g->get_id());
+        mSelectedGates.insert(g->get_id());
 
-        m_focus_type = ItemType::Gate;
-        m_focus_id   = g->get_id();
+        mFocusType = ItemType::Gate;
+        mFocusId   = g->get_id();
 
-        if (s_navigation_skips_enabled && g->get_input_pins().size() == 1)
+        if (sNavigationSkipsEnabled && g->get_input_pins().size() == 1)
         {
-            m_subfocus       = Subfocus::Right;    // NONE OR RIGHT ???
-            m_subfocus_index = 0;
+            mSubfocus       = Subfocus::Right;    // NONE OR RIGHT ???
+            mSubfocusIndex = 0;
         }
         else
         {
@@ -592,34 +592,34 @@ namespace hal
                 ++i;
             }
 
-            m_subfocus       = Subfocus::Left;
-            m_subfocus_index = i;
+            mSubfocus       = Subfocus::Left;
+            mSubfocusIndex = i;
         }
 
-        Q_EMIT selection_changed(nullptr);
+        Q_EMIT selectionChanged(nullptr);
     }
 
-    void SelectionRelay::subfocus_none()
+    void SelectionRelay::subfocusNone()
     {
-        m_subfocus       = Subfocus::None;
-        m_subfocus_index = 0;    // TECHNICALLY REDUNDANT, KEEP FOR COMPLETENESS ???
+        mSubfocus       = Subfocus::None;
+        mSubfocusIndex = 0;    // TECHNICALLY REDUNDANT, KEEP FOR COMPLETENESS ???
 
-        Q_EMIT subfocus_changed(nullptr);
+        Q_EMIT subfocusChanged(nullptr);
     }
 
-    void SelectionRelay::subfocus_left()
+    void SelectionRelay::subfocusLeft()
     {
-        m_subfocus       = Subfocus::Left;
-        m_subfocus_index = 0;
+        mSubfocus       = Subfocus::Left;
+        mSubfocusIndex = 0;
 
-        Q_EMIT subfocus_changed(nullptr);
+        Q_EMIT subfocusChanged(nullptr);
     }
 
-    void SelectionRelay::subfocus_right()
+    void SelectionRelay::subfocusRight()
     {
-        m_subfocus       = Subfocus::Right;
-        m_subfocus_index = 0;
+        mSubfocus       = Subfocus::Right;
+        mSubfocusIndex = 0;
 
-        Q_EMIT subfocus_changed(nullptr);
+        Q_EMIT subfocusChanged(nullptr);
     }
 }    // namespace hal

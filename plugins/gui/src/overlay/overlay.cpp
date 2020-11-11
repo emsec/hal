@@ -10,7 +10,7 @@ namespace hal
     //    setAttribute(Qt::WA_NoSystemBackground);
     //    setAttribute(Qt::WA_TranslucentBackground);
         //setAttribute(Qt::WA_TransparentForMouseEvents);
-        handle_parent_changed();
+        handleParentChanged();
     }
 
     bool Overlay::eventFilter(QObject* watched, QEvent* event)
@@ -39,7 +39,7 @@ namespace hal
         }
         else if (event->type() == QEvent::ParentChange)
         {
-            handle_parent_changed();
+            handleParentChanged();
             return true;
         }
 
@@ -53,7 +53,7 @@ namespace hal
         event->accept(); // ACCEPT EXPLICITLY
     }
 
-    void Overlay::handle_parent_changed()
+    void Overlay::handleParentChanged()
     {
         if (!parent())
             return;

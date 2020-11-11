@@ -40,28 +40,28 @@ namespace hal
     public:
         FileModifiedBar(QWidget* parent = 0);
 
-        void set_message(QString message);
+        void setMessage(QString message);
 
     Q_SIGNALS:
-        void reload_clicked();
-        void ignore_clicked();
-        void ok_clicked();
+        void reloadClicked();
+        void ignoreClicked();
+        void okClicked();
 
     public Q_SLOTS:
-        void handle_file_changed(QString path);
+        void handleFileChanged(QString path);
 
     private:
-        QHBoxLayout* m_layout;
-        QLabel* m_message_label;
-        QPushButton* m_reload_button;
-        QPushButton* m_ignore_button;
-        QPushButton* m_ok_button;
+        QHBoxLayout* mLayout;
+        QLabel* mMessageLabel;
+        QPushButton* mReloadButton;
+        QPushButton* mIgnoreButton;
+        QPushButton* mOkButton;
 
-        void handle_reload_clicked();
-        void handle_ignore_clicked();
-        void handle_ok_clicked();
+        void handleReloadClicked();
+        void handleIgnoreClicked();
+        void handleOkClicked();
 
-        void handle_file_content_modified(QString path);
-        void handle_file_mov_or_del(QString path);
+        void handleFileContentModified(QString path);
+        void handleFileMovOrDel(QString path);
     };
 }

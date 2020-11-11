@@ -14,26 +14,26 @@
 
 namespace hal
 {
-    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), m_tab_widget(new QTabWidget()), m_layout(new QVBoxLayout()), m_zoom_factor(1.2)
+    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2)
     {
-        m_content_layout->addWidget(m_tab_widget);
-        m_tab_widget->setTabsClosable(true);
-        m_tab_widget->setMovable(true);
+        mContentLayout->addWidget(mTabWidget);
+        mTabWidget->setTabsClosable(true);
+        mTabWidget->setMovable(true);
 
-        connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &GraphTabWidget::handle_tab_close_requested);
-        connect(m_tab_widget, &QTabWidget::currentChanged, this, &GraphTabWidget::handle_tab_changed);
-        connect(g_graph_context_manager, &GraphContextManager::context_created, this, &GraphTabWidget::handle_context_created);
-        connect(g_graph_context_manager, &GraphContextManager::context_renamed, this, &GraphTabWidget::handle_context_renamed);
-        connect(g_graph_context_manager, &GraphContextManager::deleting_context, this, &GraphTabWidget::handle_context_removed);
+        connect(mTabWidget, &QTabWidget::tabCloseRequested, this, &GraphTabWidget::handleTabCloseRequested);
+        connect(mTabWidget, &QTabWidget::currentChanged, this, &GraphTabWidget::handleTabChanged);
+        connect(gGraphContextManager, &GraphContextManager::contextCreated, this, &GraphTabWidget::handleContextCreated);
+        connect(gGraphContextManager, &GraphContextManager::contextRenamed, this, &GraphTabWidget::handleContextRenamed);
+        connect(gGraphContextManager, &GraphContextManager::deletingContext, this, &GraphTabWidget::handleContextRemoved);
     }
 
-    QList<QShortcut *> GraphTabWidget::create_shortcuts()
+    QList<QShortcut *> GraphTabWidget::createShortcuts()
     {
-        QShortcut* zoom_in_sc = g_keybind_manager->make_shortcut(this, "keybinds/graph_view_zoom_in");
-        connect(zoom_in_sc, &QShortcut::activated, this, &GraphTabWidget::zoom_in_shortcut);
+        QShortcut* zoom_in_sc = gKeybindManager->makeShortcut(this, "keybinds/graph_view_zoom_in");
+        connect(zoom_in_sc, &QShortcut::activated, this, &GraphTabWidget::zoomInShortcut);
 
-        QShortcut* zoom_out_sc = g_keybind_manager->make_shortcut(this, "keybinds/graph_view_zoom_out");
-        connect(zoom_out_sc, &QShortcut::activated, this, &GraphTabWidget::zoom_out_shortcut);
+        QShortcut* zoom_out_sc = gKeybindManager->makeShortcut(this, "keybinds/graph_view_zoom_out");
+        connect(zoom_out_sc, &QShortcut::activated, this, &GraphTabWidget::zoomOutShortcut);
 
         QList<QShortcut*> list;
         list.append(zoom_in_sc);
@@ -44,103 +44,103 @@ namespace hal
 
     int GraphTabWidget::addTab(QWidget* tab, QString name)
     {
-        int tab_index = m_tab_widget->addTab(tab, name);
+        int tab_index = mTabWidget->addTab(tab, name);
         return tab_index;
     }
 
-    void GraphTabWidget::handle_tab_changed(int index)
+    void GraphTabWidget::handleTabChanged(int index)
     {
-        auto w = dynamic_cast<GraphWidget*>(m_tab_widget->widget(index));
+        auto w = dynamic_cast<GraphWidget*>(mTabWidget->widget(index));
         if (w)
         {
-            auto ctx = w->get_context();
-            g_content_manager->get_context_manager_widget()->select_view_context(ctx);
+            auto ctx = w->getContext();
+            gContentManager->getContextManagerWidget()->selectViewContext(ctx);
 
-            disconnect(g_gui_api, &GuiApi::navigation_requested, m_current_widget, &GraphWidget::ensure_selection_visible);
-            connect(g_gui_api, &GuiApi::navigation_requested, w, &GraphWidget::ensure_selection_visible);
-            m_current_widget = w;
+            disconnect(gGuiApi, &GuiApi::navigationRequested, mCurrentWidget, &GraphWidget::ensureSelectionVisible);
+            connect(gGuiApi, &GuiApi::navigationRequested, w, &GraphWidget::ensureSelectionVisible);
+            mCurrentWidget = w;
         }
     }
 
-    void GraphTabWidget::handle_tab_close_requested(int index)
+    void GraphTabWidget::handleTabCloseRequested(int index)
     {
-        auto w = dynamic_cast<GraphWidget*>(m_tab_widget->widget(index));
-        disconnect(g_gui_api, &GuiApi::navigation_requested, w, &GraphWidget::ensure_selection_visible);
-        m_tab_widget->removeTab(index);
+        auto w = dynamic_cast<GraphWidget*>(mTabWidget->widget(index));
+        disconnect(gGuiApi, &GuiApi::navigationRequested, w, &GraphWidget::ensureSelectionVisible);
+        mTabWidget->removeTab(index);
 
         //right way to do it??
-        //GraphWidget* graph_wid = dynamic_cast<GraphWidget*>(m_tab_widget->widget(index));
-        //GraphContext* dyn_con = g_graph_context_manager->get_context_by_name(m_tab_widget->tabText(index));
+        //GraphWidget* graph_wid = dynamic_cast<GraphWidget*>(mTabWidget->widget(index));
+        //GraphContext* dyn_con = gGraphContextManager->get_context_by_name(mTabWidget->tabText(index));
         //dyn_con->unsubscribe(graph_wid);
     }
 
-    void GraphTabWidget::show_context(GraphContext* context)
+    void GraphTabWidget::showContext(GraphContext* context)
     {
-        auto index = get_context_tab_index(context);
+        auto index = getContextTabIndex(context);
         if (index != -1)
         {
-            m_tab_widget->setCurrentIndex(index);
-            m_tab_widget->widget(index)->setFocus();
+            mTabWidget->setCurrentIndex(index);
+            mTabWidget->widget(index)->setFocus();
             return;
         }
 
-        add_graph_widget_tab(context);
+        addGraphWidgetTab(context);
     }
 
-    void GraphTabWidget::handle_context_created(GraphContext* context)
+    void GraphTabWidget::handleContextCreated(GraphContext* context)
     {
-        add_graph_widget_tab(context);
+        addGraphWidgetTab(context);
     }
 
-    void GraphTabWidget::handle_context_renamed(GraphContext* context)
+    void GraphTabWidget::handleContextRenamed(GraphContext* context)
     {
-        m_tab_widget->setTabText(get_context_tab_index(context), context->name());
+        mTabWidget->setTabText(getContextTabIndex(context), context->name());
     }
 
-    void GraphTabWidget::handle_context_removed(GraphContext* context)
+    void GraphTabWidget::handleContextRemoved(GraphContext* context)
     {
-        handle_tab_close_requested(get_context_tab_index(context));
+        handleTabCloseRequested(getContextTabIndex(context));
     }
 
-    void GraphTabWidget::add_graph_widget_tab(GraphContext* context)
+    void GraphTabWidget::addGraphWidgetTab(GraphContext* context)
     {
         GraphWidget* new_graph_widget = new GraphWidget(context);
-        //m_context_widget_map.insert(context, new_graph_widget);
+        //mContextWidgetMap.insert(context, new_graph_widget);
 
-        if(m_tab_widget->count() == 0)
+        if(mTabWidget->count() == 0)
         {
-            connect(g_gui_api, &GuiApi::navigation_requested, new_graph_widget, &GraphWidget::ensure_selection_visible);
-            m_current_widget = new_graph_widget;
+            connect(gGuiApi, &GuiApi::navigationRequested, new_graph_widget, &GraphWidget::ensureSelectionVisible);
+            mCurrentWidget = new_graph_widget;
         }
 
         int tab_index = addTab(new_graph_widget, context->name());
-        m_tab_widget->setCurrentIndex(tab_index);
-        m_tab_widget->widget(tab_index)->setFocus();
-        context->schedule_scene_update();
+        mTabWidget->setCurrentIndex(tab_index);
+        mTabWidget->widget(tab_index)->setFocus();
+        context->scheduleSceneUpdate();
     }
 
-    void GraphTabWidget::zoom_in_shortcut()
+    void GraphTabWidget::zoomInShortcut()
     {
-        GraphWidget* w = dynamic_cast<GraphWidget*>(m_tab_widget->currentWidget());
+        GraphWidget* w = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
         if(w)
-            w->view()->viewport_center_zoom(m_zoom_factor);
+            w->view()->viewportCenterZoom(mZoomFactor);
     }
 
-    void GraphTabWidget::zoom_out_shortcut()
+    void GraphTabWidget::zoomOutShortcut()
     {
-        GraphWidget* w = dynamic_cast<GraphWidget*>(m_tab_widget->currentWidget());
+        GraphWidget* w = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
         if(w)
-            w->view()->viewport_center_zoom(1.0 / m_zoom_factor);
+            w->view()->viewportCenterZoom(1.0 / mZoomFactor);
 
     }
 
-    int GraphTabWidget::get_context_tab_index(GraphContext* context) const
+    int GraphTabWidget::getContextTabIndex(GraphContext* context) const
     {
-        for (int i = 0; i < m_tab_widget->count(); i++)
+        for (int i = 0; i < mTabWidget->count(); i++)
         {
-            if (auto p = dynamic_cast<GraphWidget*>(m_tab_widget->widget(i)))
+            if (auto p = dynamic_cast<GraphWidget*>(mTabWidget->widget(i)))
             {
-                if (p->get_context() == context)
+                if (p->getContext() == context)
                 {
                     return i;
                 }

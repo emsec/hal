@@ -42,9 +42,9 @@ namespace hal
     public:
         struct Shading
         {
-            QMap<u32, GraphicsNode::Visuals> module_visuals;
-            QMap<u32, GraphicsNode::Visuals> gate_visuals;
-            QMap<u32, GraphicsNet::Visuals> net_visuals;
+            QMap<u32, GraphicsNode::Visuals> mOduleVisuals;
+            QMap<u32, GraphicsNode::Visuals> mGateVisuals;
+            QMap<u32, GraphicsNet::Visuals> mNetVisuals;
         };
 
         explicit GraphShader(const GraphContext* const context);
@@ -54,11 +54,11 @@ namespace hal
         virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
         virtual void update() = 0;
 
-        const Shading& get_shading();
+        const Shading& getShading();
 
     protected:
-        const GraphContext* const m_context;
+        const GraphContext* const mContext;
 
-        Shading m_shading;
+        Shading mShading;
     };
 }

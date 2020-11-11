@@ -42,23 +42,23 @@ namespace hal
         void repolish();
 
     public Q_SLOTS:
-        void handle_about_item_clicked();
-        void handle_cpp_documentation_item_clicked();
-        void handle_py_documentation_item_clicked();
-        void handle_ticket_item_clicked();
+        void handleAboutItemClicked();
+        void handleCppDocumentationItemClicked();
+        void handlePyDocumentationItemClicked();
+        void handleTicketItemClicked();
 
     private:
-        QVBoxLayout* m_layout;
+        QVBoxLayout* mLayout;
 
-        GetInTouchItem* m_about_item;
-        GetInTouchItem* m_news_item;
-        GetInTouchItem* m_forum_item;
-        GetInTouchItem* m_cpp_documentation_item;
-        GetInTouchItem* m_py_documentation_item;
-        GetInTouchItem* m_ticket_item;
+        GetInTouchItem* mAboutItem;
+        GetInTouchItem* mNewsItem;
+        GetInTouchItem* mForumItem;
+        GetInTouchItem* mCppDocumentationItem;
+        GetInTouchItem* mPyDocumentationItem;
+        GetInTouchItem* mTicketItem;
 
         //    QFrame* m_line;
-        QLabel* m_core_version_label;
-        QLabel* m_gui_version_label;
+        QLabel* mCoreVersionLabel;
+        QLabel* mGuiVersionLabel;
     };
 }

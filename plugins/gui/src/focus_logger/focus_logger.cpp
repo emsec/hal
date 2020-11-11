@@ -10,10 +10,10 @@ namespace hal
 {
     FocusLogger::FocusLogger(QApplication* app, QObject* parent) : QObject(parent)
     {
-        connect(app, &QApplication::focusChanged, this, &FocusLogger::handle_focus_change);
+        connect(app, &QApplication::focusChanged, this, &FocusLogger::handleFocusChange);
     }
 
-    void FocusLogger::handle_focus_change(QWidget* old, QWidget* new_obj)
+    void FocusLogger::handleFocusChange(QWidget* old, QWidget* new_obj)
     {
         if (old == nullptr && new_obj != nullptr)
         {

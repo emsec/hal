@@ -49,16 +49,16 @@ namespace hal
         ~PythonContext();
 
         void interpret(const QString& input, bool multiple_expressions = false);
-        void interpret_script(const QString& input);
+        void interpretScript(const QString& input);
 
-        void forward_stdout(const QString& output);
-        void forward_error(const QString& output);
+        void forwardStdout(const QString& output);
+        void forwardError(const QString& output);
 
-        void forward_clear();
+        void forwardClear();
 
-        void forward_reset();
+        void forwardReset();
 
-        void set_console(PythonConsole* console);
+        void setConsole(PythonConsole* console);
 
         std::vector<std::tuple<std::string, std::string>> complete(const QString& text, bool use_console_context);
 
@@ -67,31 +67,31 @@ namespace hal
          * @param[text] text - The text to check.
          * @returns -1 on error, 0 for an incomplete statement and 1 for an complete statement.
          */
-        int check_complete_statement(const QString& text);
+        int checkCompleteStatement(const QString& text);
 
         //    void set_history_length();
 
         //    void read_history_file(const QString& file);
         //    void write_history_file(const QString& file);
-        void init_python();
-        void close_python();
+        void initPython();
+        void closePython();
 
-        void update_netlist();
+        void updateNetlist();
 
     private:
-        void initialize_context(py::dict* context);
+        void initializeContext(py::dict* context);
 
-        void handle_reset();
+        void handleReset();
 
         // these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault
         // only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()
-        py::dict* m_context;
+        py::dict* mContext;
 
-        PythonContextSubscriber* m_sender;
+        PythonContextSubscriber* mSender;
 
-        std::string m_history_file;
+        std::string mHistoryFile;
 
-        PythonConsole* m_console;
-        bool m_trigger_reset = false;
+        PythonConsole* mConsole;
+        bool mTriggerReset = false;
     };
 }

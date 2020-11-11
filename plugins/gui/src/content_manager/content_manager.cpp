@@ -30,34 +30,34 @@
 
 namespace hal
 {
-    ContentManager::ContentManager(MainWindow* parent) : QObject(parent), m_MainWindow(parent)
+    ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent)
     {
         // has to be created this early in order to receive deserialization by the core signals
-        m_python_widget = new PythonEditor();
+        mPythonWidget = new PythonEditor();
 
-        connect(FileManager::get_instance(), &FileManager::file_opened, this, &ContentManager::handle_open_document);
-        connect(FileManager::get_instance(), &FileManager::file_closed, this, &ContentManager::handle_close_document);
-        connect(FileManager::get_instance(), &FileManager::file_changed, this, &ContentManager::handle_filsystem_doc_changed);
+        connect(FileManager::get_instance(), &FileManager::fileOpened, this, &ContentManager::handleOpenDocument);
+        connect(FileManager::get_instance(), &FileManager::fileClosed, this, &ContentManager::handleCloseDocument);
+        connect(FileManager::get_instance(), &FileManager::fileChanged, this, &ContentManager::handleFilsystemDocChanged);
     }
 
     ContentManager::~ContentManager()
     {
     }
 
-    void ContentManager::hack_delete_content()
+    void ContentManager::hackDeleteContent()
     {
-        for (auto content : m_content)
+        for (auto content : mContent)
             delete content;
     }
 
-    PythonEditor* ContentManager::get_python_editor_widget()
+    PythonEditor* ContentManager::getPythonEditorWidget()
     {
-        return m_python_widget;
+        return mPythonWidget;
     }
 
-    GraphTabWidget* ContentManager::get_graph_tab_widget()
+    GraphTabWidget* ContentManager::getGraphTabWidget()
     {
-        return m_graph_tab_wid;
+        return mGraphTabWid;
     }
 
     SelectionDetailsWidget* ContentManager::getSelectionDetailsWidget()
@@ -70,61 +70,61 @@ namespace hal
         return mGroupingManagerWidget;
     }
 
-    ContextManagerWidget* ContentManager::get_context_manager_widget()
+    ContextManagerWidget* ContentManager::getContextManagerWidget()
     {
-        return m_context_manager_wid;
+        return mContextManagerWid;
     }
 
-    void ContentManager::handle_open_document(const QString& file_name)
+    void ContentManager::handleOpenDocument(const QString& fileName)
     {
-        m_graph_tab_wid = new GraphTabWidget(nullptr);
+        mGraphTabWid = new GraphTabWidget(nullptr);
         //    VhdlEditor* code_edit = new VhdlEditor();
-        //    m_graph_tab_wid->addTab(code_edit, "Source");
-        m_MainWindow->add_content(m_graph_tab_wid, 2, content_anchor::center);
+        //    mGraphTabWid->addTab(code_edit, "Source");
+        mMainWindow->addContent(mGraphTabWid, 2, content_anchor::center);
 
         ModuleWidget* m = new ModuleWidget();
-        m_MainWindow->add_content(m, 0, content_anchor::left);
+        mMainWindow->addContent(m, 0, content_anchor::left);
         m->open();
 
-        m_context_manager_wid = new ContextManagerWidget(m_graph_tab_wid);
-        m_MainWindow->add_content(m_context_manager_wid, 1, content_anchor::left);
-        m_context_manager_wid->open();
+        mContextManagerWid = new ContextManagerWidget(mGraphTabWid);
+        mMainWindow->addContent(mContextManagerWid, 1, content_anchor::left);
+        mContextManagerWid->open();
 
-        mGroupingManagerWidget = new GroupingManagerWidget(m_graph_tab_wid);
-        m_MainWindow->add_content(mGroupingManagerWidget, 2, content_anchor::left);
+        mGroupingManagerWidget = new GroupingManagerWidget(mGraphTabWid);
+        mMainWindow->addContent(mGroupingManagerWidget, 2, content_anchor::left);
         mGroupingManagerWidget->open();
 
         //we should probably document somewhere why we need this timer and why we have some sort of racing condition(?) here?
-        //QTimer::singleShot(50, [this]() { this->m_context_manager_wid->handle_create_context_clicked(); });
+        //QTimer::singleShot(50, [this]() { this->mContextManagerWid->handleCreateContextClicked(); });
 
         //executes same code as found in 'create_context_clicked' from the context manager widget but allows to keep its method private
         QTimer::singleShot(50, [this]() {
             GraphContext* new_context = nullptr;
-            new_context = g_graph_context_manager->create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
-            new_context->add({g_netlist->get_top_module()->get_id()}, {});
+            new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
+            new_context->add({gNetlist->get_top_module()->get_id()}, {});
 
-            m_context_manager_wid->select_view_context(new_context);
+            mContextManagerWid->selectViewContext(new_context);
         });
 
         //why does this segfault without a timer?
         //GraphContext* new_context = nullptr;
-        //new_context = g_graph_context_manager->create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
-        //new_context->add({g_netlist->get_top_module()->get_id()}, {});
-        //m_context_manager_wid->select_view_context(new_context);
+        //new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
+        //new_context->add({gNetlist->get_top_module()->get_id()}, {});
+        //mContextManagerWid->selectViewContext(new_context);
 
         mSelectionDetailsWidget = new SelectionDetailsWidget();
-        m_MainWindow->add_content(mSelectionDetailsWidget, 0, content_anchor::bottom);
+        mMainWindow->addContent(mSelectionDetailsWidget, 0, content_anchor::bottom);
 
         LoggerWidget* logger_widget = new LoggerWidget();
-        m_MainWindow->add_content(logger_widget, 1, content_anchor::bottom);
+        mMainWindow->addContent(logger_widget, 1, content_anchor::bottom);
 
         mSelectionDetailsWidget->open();
         //logger_widget->open();
 
-        //m_content.append(code_edit);
-        //m_content.append(navigation);
-        m_content.append(mSelectionDetailsWidget);
-        m_content.append(logger_widget);
+        //mContent.append(code_edit);
+        //mContent.append(navigation);
+        mContent.append(mSelectionDetailsWidget);
+        mContent.append(logger_widget);
 
         //-------------------------Test Buttons---------------------------
 
@@ -140,9 +140,9 @@ namespace hal
         jade->setStyleSheet("* {background-color: #C3FDB8;}");
 */
 
-        //    m_MainWindow->add_content(blue, content_anchor::left);
-        //    m_MainWindow->add_content(venomgreen, content_anchor::left);
-        //    m_MainWindow->add_content(jade, content_anchor::left);
+        //    mMainWindow->addContent(blue, content_anchor::left);
+        //    mMainWindow->addContent(venomgreen, content_anchor::left);
+        //    mMainWindow->addContent(jade, content_anchor::left);
 
         //    hal_netlistics_view *view = new hal_netlistics_view();
         //    view->setScene(graph_scene);
@@ -151,47 +151,47 @@ namespace hal
 
         PluginModel* model                  = new PluginModel(this);
         PluginManagerWidget* plugin_widget = new PluginManagerWidget();
-        plugin_widget->set_plugin_model(model);
+        plugin_widget->setPluginModel(model);
 
-        //    m_MainWindow->add_content(plugin_widget, content_anchor::bottom);
+        //    mMainWindow->addContent(plugin_widget, content_anchor::bottom);
 
-        connect(model, &PluginModel::run_plugin, m_MainWindow, &MainWindow::run_plugin_triggered);
+        connect(model, &PluginModel::runPlugin, mMainWindow, &MainWindow::runPluginTriggered);
 
-        m_window_title = "HAL - " + QString::fromStdString(std::filesystem::path(file_name.toStdString()).stem().string());
-        m_MainWindow->setWindowTitle(m_window_title);
+        mWindowTitle = "HAL - " + QString::fromStdString(std::filesystem::path(fileName.toStdString()).stem().string());
+        mMainWindow->setWindowTitle(mWindowTitle);
 
-        m_MainWindow->add_content(m_python_widget, 3, content_anchor::right);
-        m_python_widget->open();
+        mMainWindow->addContent(mPythonWidget, 3, content_anchor::right);
+        mPythonWidget->open();
 
         PythonConsoleWidget* PythonConsole = new PythonConsoleWidget();
-        m_MainWindow->add_content(PythonConsole, 5, content_anchor::bottom);
+        mMainWindow->addContent(PythonConsole, 5, content_anchor::bottom);
         PythonConsole->open();
-        m_NetlistWatcher = new NetlistWatcher(this);
+        mNetlistWatcher = new NetlistWatcher(this);
     }
 
-    void ContentManager::handle_close_document()
+    void ContentManager::handleCloseDocument()
     {
         //(if possible) store state first, then remove all subwindows from main window
-        m_window_title = "HAL";
-        m_MainWindow->setWindowTitle(m_window_title);
-        m_MainWindow->on_action_close_document_triggered();
+        mWindowTitle = "HAL";
+        mMainWindow->setWindowTitle(mWindowTitle);
+        mMainWindow->onActionCloseDocumentTriggered();
         //delete all windows here
-        for (auto content : m_content)
+        for (auto content : mContent)
         {
-            m_content.removeOne(content);
+            mContent.removeOne(content);
             delete content;
         }
 
-        FileManager::get_instance()->close_file();
+        FileManager::get_instance()->closeFile();
     }
 
-    void ContentManager::handle_filsystem_doc_changed(const QString& file_name)
+    void ContentManager::handleFilsystemDocChanged(const QString& fileName)
     {
-        Q_UNUSED(file_name)
+        Q_UNUSED(fileName)
     }
 
-    void ContentManager::handle_save_triggered()
+    void ContentManager::handleSaveTriggered()
     {
-        Q_EMIT save_triggered();
+        Q_EMIT saveTriggered();
     }
 }

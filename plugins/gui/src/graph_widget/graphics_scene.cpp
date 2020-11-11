@@ -23,124 +23,124 @@
 
 namespace hal
 {
-    qreal GraphicsScene::s_lod = 0;
+    qreal GraphicsScene::sLod = 0;
 
-    const qreal GraphicsScene::s_grid_fade_start = 0.4;
-    const qreal GraphicsScene::s_grid_fade_end = 1.0;
+    const qreal GraphicsScene::sGridFadeStart = 0.4;
+    const qreal GraphicsScene::sGridFadeEnd = 1.0;
 
-    bool GraphicsScene::s_grid_enabled = true;
-    bool GraphicsScene::s_grid_clusters_enabled = true;
-    graph_widget_constants::grid_type GraphicsScene::s_grid_type = graph_widget_constants::grid_type::Lines;
+    bool GraphicsScene::sGridEnabled = true;
+    bool GraphicsScene::sGridClustersEnabled = true;
+    graph_widget_constants::grid_type GraphicsScene::sGridType = graph_widget_constants::grid_type::Lines;
 
-    QColor GraphicsScene::s_grid_base_line_color = QColor(30, 30, 30);
-    QColor GraphicsScene::s_grid_cluster_line_color = QColor(15, 15, 15);
+    QColor GraphicsScene::sGridBaseLineColor = QColor(30, 30, 30);
+    QColor GraphicsScene::sGridClusterLineColor = QColor(15, 15, 15);
 
-    QColor GraphicsScene::s_grid_base_dot_color = QColor(25, 25, 25);
-    QColor GraphicsScene::s_grid_cluster_dot_color = QColor(170, 160, 125);
+    QColor GraphicsScene::sGridBaseDotColor = QColor(25, 25, 25);
+    QColor GraphicsScene::sGridClusterDotColor = QColor(170, 160, 125);
 
-    void GraphicsScene::set_lod(const qreal& lod)
+    void GraphicsScene::setLod(const qreal& lod)
     {
-        s_lod = lod;
+        sLod = lod;
 
-        if (lod >= s_grid_fade_start && lod <= s_grid_fade_end)
+        if (lod >= sGridFadeStart && lod <= sGridFadeEnd)
         {
-            const qreal alpha = (lod - s_grid_fade_start) / (s_grid_fade_end - s_grid_fade_start);
+            const qreal alpha = (lod - sGridFadeStart) / (sGridFadeEnd - sGridFadeStart);
 
-            s_grid_base_line_color.setAlphaF(alpha);
-            s_grid_cluster_line_color.setAlphaF(alpha);
+            sGridBaseLineColor.setAlphaF(alpha);
+            sGridClusterLineColor.setAlphaF(alpha);
 
-            s_grid_base_dot_color.setAlphaF(alpha);
-            s_grid_cluster_dot_color.setAlphaF(alpha);
+            sGridBaseDotColor.setAlphaF(alpha);
+            sGridClusterDotColor.setAlphaF(alpha);
         }
         else
         {
             const int alpha = 255;
 
-            s_grid_base_line_color.setAlpha(alpha);
-            s_grid_cluster_line_color.setAlpha(alpha);
+            sGridBaseLineColor.setAlpha(alpha);
+            sGridClusterLineColor.setAlpha(alpha);
 
-            s_grid_base_dot_color.setAlpha(alpha);
-            s_grid_cluster_dot_color.setAlpha(alpha);
+            sGridBaseDotColor.setAlpha(alpha);
+            sGridClusterDotColor.setAlpha(alpha);
         }
     }
 
-    void GraphicsScene::set_grid_enabled(const bool& value)
+    void GraphicsScene::setGridEnabled(const bool& value)
     {
-        s_grid_enabled = value;
+        sGridEnabled = value;
     }
 
-    void GraphicsScene::set_grid_clusters_enabled(const bool& value)
+    void GraphicsScene::setGridClustersEnabled(const bool& value)
     {
-        s_grid_clusters_enabled = value;
+        sGridClustersEnabled = value;
     }
 
-    void GraphicsScene::set_grid_type(const graph_widget_constants::grid_type& grid_type)
+    void GraphicsScene::setGridType(const graph_widget_constants::grid_type& grid_type)
     {
-        s_grid_type = grid_type;
+        sGridType = grid_type;
     }
 
-    void GraphicsScene::set_grid_base_line_color(const QColor& color)
+    void GraphicsScene::setGridBaseLineColor(const QColor& color)
     {
-        s_grid_base_line_color = color;
+        sGridBaseLineColor = color;
     }
 
-    void GraphicsScene::set_grid_cluster_line_color(const QColor& color)
+    void GraphicsScene::setGridClusterLineColor(const QColor& color)
     {
-        s_grid_cluster_line_color = color;
+        sGridClusterLineColor = color;
     }
 
-    void GraphicsScene::set_grid_base_dot_color(const QColor& color)
+    void GraphicsScene::setGridBaseDotColor(const QColor& color)
     {
-        s_grid_base_dot_color = color;
+        sGridBaseDotColor = color;
     }
 
-    void GraphicsScene::set_grid_cluster_dot_color(const QColor& color)
+    void GraphicsScene::setGridClusterDotColor(const QColor& color)
     {
-        s_grid_cluster_dot_color = color;
+        sGridClusterDotColor = color;
     }
 
-    QPointF GraphicsScene::snap_to_grid(const QPointF& pos)
+    QPointF GraphicsScene::snapToGrid(const QPointF& pos)
     {
-        int adjusted_x = qRound(pos.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
-        int adjusted_y = qRound(pos.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+        int adjusted_x = qRound(pos.x() / graph_widget_constants::sGridSize) * graph_widget_constants::sGridSize;
+        int adjusted_y = qRound(pos.y() / graph_widget_constants::sGridSize) * graph_widget_constants::sGridSize;
         return QPoint(adjusted_x, adjusted_y);
     }
 
     GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
-        m_drag_shadow_gate(new NodeDragShadow())
+        mDragShadowGate(new NodeDragShadow())
     {
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
-        //m_scene.setBspTreeDepth(10);
+        //mScene.setBspTreeDepth(10);
 
-        connect_all();
+        connectAll();
 
-        QGraphicsScene::addItem(m_drag_shadow_gate);
+        QGraphicsScene::addItem(mDragShadowGate);
 
         #ifdef GUI_DEBUG_GRID
-        m_debug_grid_enable = g_settings_manager->get("debug/grid").toBool();
+        mDebugGridEnable = gSettingsManager->get("debug/grid").toBool();
         #endif
     }
 
-    void GraphicsScene::start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
+    void GraphicsScene::startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
     {
-        m_drag_shadow_gate->set_visual_cue(cue);
-        m_drag_shadow_gate->start(posF, sizeF);
+        mDragShadowGate->setVisualCue(cue);
+        mDragShadowGate->start(posF, sizeF);
     }
 
-    void GraphicsScene::move_drag_shadow(const QPointF& posF, const NodeDragShadow::DragCue cue)
+    void GraphicsScene::moveDragShadow(const QPointF& posF, const NodeDragShadow::DragCue cue)
     {
-        m_drag_shadow_gate->setPos(posF);
-        m_drag_shadow_gate->set_visual_cue(cue);
+        mDragShadowGate->setPos(posF);
+        mDragShadowGate->setVisualCue(cue);
     }
 
-    void GraphicsScene::stop_drag_shadow()
+    void GraphicsScene::stopDragShadow()
     {
-        m_drag_shadow_gate->stop();
+        mDragShadowGate->stop();
     }
 
-    QPointF GraphicsScene::drop_target()
+    QPointF GraphicsScene::dropTarget()
     {
-        return m_drag_shadow_gate->pos();
+        return mDragShadowGate->pos();
     }
 
     void GraphicsScene::addGraphItem(GraphicsItem* item)
@@ -152,48 +152,48 @@ namespace hal
 
         QGraphicsScene::addItem(item);
 
-        switch (item->item_type())
+        switch (item->itemType())
         {
         case ItemType::Gate:
         {
             GraphicsGate* g = static_cast<GraphicsGate*>(item);
             int i = 0;
-            while (i < m_gate_items.size())
+            while (i < mGateItems.size())
             {
-                if (g->id() < m_gate_items.at(i).mId)
+                if (g->id() < mGateItems.at(i).mId)
                     break;
 
                 i++;
             }
-            m_gate_items.insert(i, GateData{g->id(), g});
+            mGateItems.insert(i, GateData{g->id(), g});
             return;
         }
         case ItemType::Net:
         {
             GraphicsNet* n = static_cast<GraphicsNet*>(item);
             int i = 0;
-            while (i < m_net_items.size())
+            while (i < mNetItems.size())
             {
-                if (n->id() < m_net_items.at(i).mId)
+                if (n->id() < mNetItems.at(i).mId)
                     break;
 
                 i++;
             }
-            m_net_items.insert(i, NetData{n->id(), n});
+            mNetItems.insert(i, NetData{n->id(), n});
             return;
         }
         case ItemType::Module:
         {
             GraphicsModule* m = static_cast<GraphicsModule*>(item);
             int i = 0;
-            while (i < m_ModuleItems.size())
+            while (i < mModuleItems.size())
             {
-                if (m->id() < m_ModuleItems.at(i).mId)
+                if (m->id() < mModuleItems.at(i).mId)
                     break;
 
                 i++;
             }
-            m_ModuleItems.insert(i, ModuleData{m->id(), m});
+            mModuleItems.insert(i, ModuleData{m->id(), m});
             return;
         }
         default:
@@ -210,7 +210,7 @@ namespace hal
 
         QGraphicsScene::removeItem(item);
 
-        switch (item->item_type())
+        switch (item->itemType())
         {
         case ItemType::Gate:
         {
@@ -218,11 +218,11 @@ namespace hal
             u32 id = g->id();
 
             int i = 0;
-            while (i < m_gate_items.size())
+            while (i < mGateItems.size())
             {
-                if (m_gate_items[i].mId == id)
+                if (mGateItems[i].mId == id)
                 {
-                    m_gate_items.remove(i);
+                    mGateItems.remove(i);
                     delete g;
                     return;
                 }
@@ -238,11 +238,11 @@ namespace hal
             u32 id = n->id();
 
             int i = 0;
-            while (i < m_net_items.size())
+            while (i < mNetItems.size())
             {
-                if (m_net_items[i].mId == id)
+                if (mNetItems[i].mId == id)
                 {
-                    m_net_items.remove(i);
+                    mNetItems.remove(i);
                     delete n;
                     return;
                 }
@@ -258,11 +258,11 @@ namespace hal
             u32 id = m->id();
 
             int i = 0;
-            while (i < m_ModuleItems.size())
+            while (i < mModuleItems.size())
             {
-                if (m_ModuleItems[i].mId == id)
+                if (mModuleItems[i].mId == id)
                 {
-                    m_ModuleItems.remove(i);
+                    mModuleItems.remove(i);
                     delete m;
                     return;
                 }
@@ -277,9 +277,9 @@ namespace hal
         }
     }
 
-    const GraphicsGate* GraphicsScene::get_gate_item(const u32 id) const
+    const GraphicsGate* GraphicsScene::getGateItem(const u32 id) const
     {
-        for (const GateData& d : m_gate_items)
+        for (const GateData& d : mGateItems)
         {
             if (d.mId > id)
                 break;
@@ -291,9 +291,9 @@ namespace hal
         return nullptr;
     }
 
-    const GraphicsNet* GraphicsScene::get_net_item(const u32 id) const
+    const GraphicsNet* GraphicsScene::getNetItem(const u32 id) const
     {
-        for (const NetData& d : m_net_items)
+        for (const NetData& d : mNetItems)
         {
             if (d.mId > id)
                 break;
@@ -305,9 +305,9 @@ namespace hal
         return nullptr;
     }
 
-    const GraphicsModule* GraphicsScene::get_ModuleItem(const u32 id) const
+    const GraphicsModule* GraphicsScene::getModuleItem(const u32 id) const
     {
-        for (const ModuleData& d : m_ModuleItems)
+        for (const ModuleData& d : mModuleItems)
         {
             if (d.mId > id)
                 break;
@@ -319,88 +319,88 @@ namespace hal
         return nullptr;
     }
 
-    void GraphicsScene::connect_all()
+    void GraphicsScene::connectAll()
     {
-        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphicsScene::handleGlobalSettingChanged);
 
-        connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
+        connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
 
-        connect(g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
-        connect(g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
-        connect(g_netlist_relay, &NetlistRelay::grouping_module_assigned, this, &GraphicsScene::handleGroupingAssignModule);
-        connect(g_netlist_relay, &NetlistRelay::grouping_module_removed, this, &GraphicsScene::handleGroupingAssignModule);
-        connect(g_netlist_relay, &NetlistRelay::grouping_gate_assigned, this, &GraphicsScene::handleGroupingAssignGate);
-        connect(g_netlist_relay, &NetlistRelay::grouping_gate_removed, this, &GraphicsScene::handleGroupingAssignGate);
-        connect(g_netlist_relay, &NetlistRelay::grouping_net_assigned, this, &GraphicsScene::handleGroupingAssignNet);
-        connect(g_netlist_relay, &NetlistRelay::grouping_net_removed, this, &GraphicsScene::handleGroupingAssignNet);
-        connect(g_content_manager->getGroupingManagerWidget()->getModel(),&GroupingTableModel::groupingColorChanged,
+        connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GraphicsScene::handleExternSelectionChanged);
+        connect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphicsScene::handleExternSubfocusChanged);
+        connect(gNetlistRelay, &NetlistRelay::groupingModuleAssigned, this, &GraphicsScene::handleGroupingAssignModule);
+        connect(gNetlistRelay, &NetlistRelay::groupingModuleRemoved, this, &GraphicsScene::handleGroupingAssignModule);
+        connect(gNetlistRelay, &NetlistRelay::groupingGateAssigned, this, &GraphicsScene::handleGroupingAssignGate);
+        connect(gNetlistRelay, &NetlistRelay::groupingGateRemoved, this, &GraphicsScene::handleGroupingAssignGate);
+        connect(gNetlistRelay, &NetlistRelay::groupingNetAssigned, this, &GraphicsScene::handleGroupingAssignNet);
+        connect(gNetlistRelay, &NetlistRelay::groupingNetRemoved, this, &GraphicsScene::handleGroupingAssignNet);
+        connect(gContentManager->getGroupingManagerWidget()->getModel(),&GroupingTableModel::groupingColorChanged,
                 this, &GraphicsScene::handleGroupingColorChanged);
     }
 
-    void GraphicsScene::disconnect_all()
+    void GraphicsScene::disconnectAll()
     {
-        disconnect(g_settings_relay, &SettingsRelay::setting_changed, this, &GraphicsScene::handle_global_setting_changed);
+        disconnect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphicsScene::handleGlobalSettingChanged);
 
-        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handle_intern_selection_changed);
+        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
 
-        disconnect(g_selection_relay, &SelectionRelay::selection_changed, this, &GraphicsScene::handle_extern_selection_changed);
-        disconnect(g_selection_relay, &SelectionRelay::subfocus_changed, this, &GraphicsScene::handle_extern_subfocus_changed);
-        disconnect(g_netlist_relay, &NetlistRelay::grouping_module_assigned, this, &GraphicsScene::handleGroupingAssignModule);
-        disconnect(g_netlist_relay, &NetlistRelay::grouping_module_removed, this, &GraphicsScene::handleGroupingAssignModule);
-        disconnect(g_netlist_relay, &NetlistRelay::grouping_gate_assigned, this, &GraphicsScene::handleGroupingAssignGate);
-        disconnect(g_netlist_relay, &NetlistRelay::grouping_gate_removed, this, &GraphicsScene::handleGroupingAssignGate);
-        disconnect(g_netlist_relay, &NetlistRelay::grouping_net_assigned, this, &GraphicsScene::handleGroupingAssignNet);
-        disconnect(g_netlist_relay, &NetlistRelay::grouping_net_removed, this, &GraphicsScene::handleGroupingAssignNet);
-        disconnect(g_content_manager->getGroupingManagerWidget()->getModel(),&GroupingTableModel::groupingColorChanged,
+        disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GraphicsScene::handleExternSelectionChanged);
+        disconnect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphicsScene::handleExternSubfocusChanged);
+        disconnect(gNetlistRelay, &NetlistRelay::groupingModuleAssigned, this, &GraphicsScene::handleGroupingAssignModule);
+        disconnect(gNetlistRelay, &NetlistRelay::groupingModuleRemoved, this, &GraphicsScene::handleGroupingAssignModule);
+        disconnect(gNetlistRelay, &NetlistRelay::groupingGateAssigned, this, &GraphicsScene::handleGroupingAssignGate);
+        disconnect(gNetlistRelay, &NetlistRelay::groupingGateRemoved, this, &GraphicsScene::handleGroupingAssignGate);
+        disconnect(gNetlistRelay, &NetlistRelay::groupingNetAssigned, this, &GraphicsScene::handleGroupingAssignNet);
+        disconnect(gNetlistRelay, &NetlistRelay::groupingNetRemoved, this, &GraphicsScene::handleGroupingAssignNet);
+        disconnect(gContentManager->getGroupingManagerWidget()->getModel(),&GroupingTableModel::groupingColorChanged,
                    this, &GraphicsScene::handleGroupingColorChanged);
     }
 
-    void GraphicsScene::delete_all_items()
+    void GraphicsScene::deleteAllItems()
     {
-        // this breaks the m_drag_shadow_gate
+        // this breaks the mDragShadowGate
         // clear();
         // so we do this instead
         // TODO check performance hit
         for (auto item : items())
         {
-            if (item != m_drag_shadow_gate)
+            if (item != mDragShadowGate)
             {
                 removeItem(item);
             }
         }
 
-        m_ModuleItems.clear();
-        m_gate_items.clear();
-        m_net_items.clear();
+        mModuleItems.clear();
+        mGateItems.clear();
+        mNetItems.clear();
     }
 
-    void GraphicsScene::update_visuals(const GraphShader::Shading &s)
+    void GraphicsScene::updateVisuals(const GraphShader::Shading &s)
     {
-        for (ModuleData& m : m_ModuleItems)
+        for (ModuleData& m : mModuleItems)
         {
-            m.mItem->set_visuals(s.module_visuals.value(m.mId));
+            m.mItem->setVisuals(s.mOduleVisuals.value(m.mId));
         }
 
-        for (GateData& g : m_gate_items)
+        for (GateData& g : mGateItems)
         {
-            g.mItem->set_visuals(s.gate_visuals.value(g.mId));
+            g.mItem->setVisuals(s.mGateVisuals.value(g.mId));
         }
 
-        for (NetData& n : m_net_items)
+        for (NetData& n : mNetItems)
         {
-            n.mItem->set_visuals(s.net_visuals.value(n.mId));
+            n.mItem->setVisuals(s.mNetVisuals.value(n.mId));
         }
     }
 
-    void GraphicsScene::move_nets_to_background()
+    void GraphicsScene::moveNetsToBackground()
     {
-        for (NetData d : m_net_items)
+        for (NetData d : mNetItems)
             d.mItem->setZValue(-1);
     }
 
-    void GraphicsScene::handle_intern_selection_changed()
+    void GraphicsScene::handleInternSelectionChanged()
     {
-        g_selection_relay->clear();
+        gSelectionRelay->clear();
 
         int gates = 0;
         int nets = 0;
@@ -408,23 +408,23 @@ namespace hal
 
         for (const QGraphicsItem* item : selectedItems())
         {
-            switch (static_cast<const GraphicsItem*>(item)->item_type())
+            switch (static_cast<const GraphicsItem*>(item)->itemType())
             {
             case ItemType::Gate:
             {
-                g_selection_relay->m_selected_gates.insert(static_cast<const GraphicsItem*>(item)->id());
+                gSelectionRelay->mSelectedGates.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++gates;
                 break;
             }
             case ItemType::Net:
             {
-                g_selection_relay->m_selected_nets.insert(static_cast<const GraphicsItem*>(item)->id());
+                gSelectionRelay->mSelectedNets.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++nets;
                 break;
             }
             case ItemType::Module:
             {
-                g_selection_relay->m_selected_modules.insert(static_cast<const GraphicsItem*>(item)->id());
+                gSelectionRelay->mSelectedModules.insert(static_cast<const GraphicsItem*>(item)->id());
                 ++modules;
                 break;
             }
@@ -439,35 +439,35 @@ namespace hal
         {
             if (gates)
             {
-                g_selection_relay->m_focus_type = SelectionRelay::ItemType::Gate;
-                g_selection_relay->m_focus_id = *g_selection_relay->m_selected_gates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
+                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedGates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
             else if (nets)
             {
-                g_selection_relay->m_focus_type = SelectionRelay::ItemType::Net;
-                g_selection_relay->m_focus_id = *g_selection_relay->m_selected_nets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
+                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedNets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
             else
             {
-                g_selection_relay->m_focus_type = SelectionRelay::ItemType::Module;
-                g_selection_relay->m_focus_id = *g_selection_relay->m_selected_modules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
+                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedModules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
             }
         }
         else
         {
-            g_selection_relay->m_focus_type = SelectionRelay::ItemType::None;
+            gSelectionRelay->mFocusType = SelectionRelay::ItemType::None;
         }
-        g_selection_relay->m_subfocus = SelectionRelay::Subfocus::None;
+        gSelectionRelay->mSubfocus = SelectionRelay::Subfocus::None;
         // END OF TEST CODE
 
-        g_selection_relay->relay_selection_changed(this);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GraphicsScene::handleGroupingAssignModule(Grouping *grp, u32 id)
     {
         Q_UNUSED(grp);
 
-        GraphicsModule* gm = (GraphicsModule*) get_ModuleItem(id);
+        GraphicsModule* gm = (GraphicsModule*) getModuleItem(id);
         if (gm) gm->update();
     }
 
@@ -475,7 +475,7 @@ namespace hal
     {
         Q_UNUSED(grp);
 
-        GraphicsGate* gg = (GraphicsGate*) get_gate_item(id);
+        GraphicsGate* gg = (GraphicsGate*) getGateItem(id);
         if (gg) gg->update();
     }
 
@@ -483,19 +483,19 @@ namespace hal
     {
         Q_UNUSED(grp);
 
-        GraphicsNet* gn = (GraphicsNet*) get_net_item(id);
+        GraphicsNet* gn = (GraphicsNet*) getNetItem(id);
         if (gn) gn->update();
     }
 
     void GraphicsScene::handleGroupingColorChanged(Grouping *grp)
     {
-        for (const ModuleData& md : m_ModuleItems)
+        for (const ModuleData& md : mModuleItems)
             if (grp->contains_module_by_id(md.mId))
                 md.mItem->update();
-        for (const GateData& gd : m_gate_items)
+        for (const GateData& gd : mGateItems)
             if (grp->contains_gate_by_id(gd.mId))
                 gd.mItem->update();
-        for (const NetData& nd : m_net_items)
+        for (const NetData& nd : mNetItems)
             if (grp->contains_net_by_id(nd.mId))
                 nd.mItem->update();
     }
@@ -508,15 +508,15 @@ namespace hal
             if (sti) highlightSet[sti->itemType()].insert(sti->id());
         }
 
-        for (const ModuleData& mdata :  m_ModuleItems)
+        for (const ModuleData& mdata :  mModuleItems)
             mdata.mItem->setHightlight(highlightSet[SelectionTreeItem::ModuleItem].contains(mdata.mId));
-        for (const GateData& gdata :  m_gate_items)
+        for (const GateData& gdata :  mGateItems)
             gdata.mItem->setHightlight(highlightSet[SelectionTreeItem::GateItem].contains(gdata.mId));
-        for (const NetData& ndata :  m_net_items)
+        for (const NetData& ndata :  mNetItems)
             ndata.mItem->setHightlight(highlightSet[SelectionTreeItem::NetItem].contains(ndata.mId));
     }
 
-    void GraphicsScene::handle_extern_selection_changed(void* sender)
+    void GraphicsScene::handleExternSelectionChanged(void* sender)
     {
         // CLEAR CURRENT SELECTION EITHER MANUALLY OR USING clearSelection()
         // UNCERTAIN ABOUT THE SENDER PARAMETER
@@ -528,11 +528,11 @@ namespace hal
 
         clearSelection();
 
-        if (!g_selection_relay->m_selected_modules.isEmpty())
+        if (!gSelectionRelay->mSelectedModules.isEmpty())
         {
-            for (auto& element : m_ModuleItems)
+            for (auto& element : mModuleItems)
             {
-                if (g_selection_relay->isModuleSelected(element.mId))
+                if (gSelectionRelay->isModuleSelected(element.mId))
                 {
                     element.mItem->setSelected(true);
                     element.mItem->update();
@@ -540,11 +540,11 @@ namespace hal
             }
         }
 
-        if (!g_selection_relay->m_selected_gates.isEmpty())
+        if (!gSelectionRelay->mSelectedGates.isEmpty())
         {
-            for (auto& element : m_gate_items)
+            for (auto& element : mGateItems)
             {
-                if (g_selection_relay->isGateSelected(element.mId))
+                if (gSelectionRelay->isGateSelected(element.mId))
                 {
                     element.mItem->setSelected(true);
                     element.mItem->update();
@@ -552,11 +552,11 @@ namespace hal
             }
         }
 
-        if (!g_selection_relay->m_selected_nets.isEmpty())
+        if (!gSelectionRelay->mSelectedNets.isEmpty())
         {
-            for (auto& element : m_net_items)
+            for (auto& element : mNetItems)
             {
-                if (g_selection_relay->isNetSelected(element.mId))
+                if (gSelectionRelay->isNetSelected(element.mId))
                 {
                     element.mItem->setSelected(true);
                     element.mItem->update();
@@ -567,7 +567,7 @@ namespace hal
         blockSignals(original_value);
     }
 
-    void GraphicsScene::handle_extern_subfocus_changed(void* sender)
+    void GraphicsScene::handleExternSubfocusChanged(void* sender)
     {
         Q_UNUSED(sender)
     }
@@ -584,24 +584,24 @@ namespace hal
         QGraphicsScene::mousePressEvent(event);
     }
 
-    void GraphicsScene::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void GraphicsScene::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender)
 
         #ifdef GUI_DEBUG_GRID
         if (key == "debug/grid")
         {
-            m_debug_grid_enable = value.toBool();
+            mDebugGridEnable = value.toBool();
         }
         #endif
     }
 
     void GraphicsScene::drawBackground(QPainter* painter, const QRectF& rect)
     {
-        if (!s_grid_enabled)
+        if (!sGridEnabled)
             return;
 
-        if (s_lod < s_grid_fade_start)
+        if (sLod < sGridFadeStart)
             return;
 
         QFlags original_flags = painter->renderHints(); // UNNECESSARY ?
@@ -619,10 +619,10 @@ namespace hal
         const int y_from = rect.top() - overdraw;
         const int y_to = rect.bottom() + overdraw;
 
-        const int x_offset = x_from % graph_widget_constants::grid_size;
-        const int y_offset = y_from % graph_widget_constants::grid_size;
+        const int xOffset = x_from % graph_widget_constants::sGridSize;
+        const int yOffset = y_from % graph_widget_constants::sGridSize;
 
-        switch (s_grid_type)
+        switch (sGridType)
         {
         case graph_widget_constants::grid_type::None:
             return; // nothing to do
@@ -631,32 +631,32 @@ namespace hal
             QVarLengthArray<QLine, 512> base_lines;
             QVarLengthArray<QLine, 64> cluster_lines;
 
-            for (int x = x_from - x_offset; x < x_to; x += graph_widget_constants::grid_size)
+            for (int x = x_from - xOffset; x < x_to; x += graph_widget_constants::sGridSize)
             {
                 QLine line(x, y_from, x, y_to);
-                if (x % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size))
+                if (x % (graph_widget_constants::sGridSize * graph_widget_constants::sClusterSize))
                     base_lines.append(line);
                 else
                     cluster_lines.append(line);
             }
 
-            for (int y = y_from - y_offset; y < y_to; y += graph_widget_constants::grid_size)
+            for (int y = y_from - yOffset; y < y_to; y += graph_widget_constants::sGridSize)
             {
                 QLine line(x_from, y, x_to, y);
-                if (y % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size))
+                if (y % (graph_widget_constants::sGridSize * graph_widget_constants::sClusterSize))
                     base_lines.append(line);
                 else
                     cluster_lines.append(line);
             }
 
-            pen.setColor(s_grid_base_line_color);
+            pen.setColor(sGridBaseLineColor);
             painter->setPen(pen);
 
             painter->drawLines(base_lines.data(), base_lines.size());
 
-            if (s_grid_clusters_enabled)
+            if (sGridClustersEnabled)
             {
-                pen.setColor(s_grid_cluster_line_color);
+                pen.setColor(sGridClusterLineColor);
                 painter->setPen(pen);
             }
 
@@ -669,23 +669,23 @@ namespace hal
             QVector<QPoint> base_points;
             QVector<QPoint> cluster_points;
 
-            for (int x = x_from - x_offset; x < x_to; x += graph_widget_constants::grid_size)
-                for (int y = y_from - y_offset; y < y_to; y += graph_widget_constants::grid_size)
+            for (int x = x_from - xOffset; x < x_to; x += graph_widget_constants::sGridSize)
+                for (int y = y_from - yOffset; y < y_to; y += graph_widget_constants::sGridSize)
                 {
-                    if ((x % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size)) && (y % (graph_widget_constants::grid_size * graph_widget_constants::cluster_size)))
+                    if ((x % (graph_widget_constants::sGridSize * graph_widget_constants::sClusterSize)) && (y % (graph_widget_constants::sGridSize * graph_widget_constants::sClusterSize)))
                         base_points.append(QPoint(x,y));
                     else
                         cluster_points.append(QPoint(x,y));
                 }
 
-            pen.setColor(s_grid_base_dot_color);
+            pen.setColor(sGridBaseDotColor);
             painter->setPen(pen);
 
             painter->drawPoints(base_points.data(), base_points.size());
 
-            if (s_grid_clusters_enabled)
+            if (sGridClustersEnabled)
             {
-                pen.setColor(s_grid_cluster_dot_color);
+                pen.setColor(sGridClusterDotColor);
                 painter->setPen(pen);
             }
 
@@ -695,33 +695,33 @@ namespace hal
         }
 
         #ifdef GUI_DEBUG_GRID
-        if (m_debug_grid_enable)
-            debug_draw_layouter_grid(painter, x_from, x_to, y_from, y_to);
+        if (mDebugGridEnable)
+            debugDrawLayouterGrid(painter, x_from, x_to, y_from, y_to);
         #endif
 
         painter->setRenderHints(original_flags); // UNNECESSARY ?
     }
 
     #ifdef GUI_DEBUG_GRID
-    void GraphicsScene::debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
+    void GraphicsScene::debugSetLayouterGrid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width)
     {
-        m_debug_x_lines = debug_x_lines;
-        m_debug_y_lines = debug_y_lines;
-        m_debug_default_height = debug_default_height;
-        m_debug_default_width = debug_default_width;
+        mDebugXLines = debug_x_lines;
+        mDebugYLines = debug_y_lines;
+        mDebugDefaultHeight = debug_default_height;
+        mDebugDefaultWidth = debug_default_width;
     }
 
-    void GraphicsScene::debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
+    void GraphicsScene::debugDrawLayouterGrid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
     {
         painter->setPen(QPen(Qt::magenta));
 
-        for (qreal x : m_debug_x_lines)
+        for (qreal x : mDebugXLines)
         {
             QLineF line(x, y_from, x, y_to);
             painter->drawLine(line);
         }
 
-        for (qreal y : m_debug_y_lines)
+        for (qreal y : mDebugYLines)
         {
             QLineF line(x_from, y, x_to, y);
             painter->drawLine(line);
@@ -729,40 +729,40 @@ namespace hal
 
         painter->setPen(QPen(Qt::green));
 
-        qreal x = m_debug_x_lines.last() + m_debug_default_width;
+        qreal x = mDebugXLines.last() + mDebugDefaultWidth;
 
         while (x <= x_to)
         {
             QLineF line(x, y_from, x, y_to);
             painter->drawLine(line);
-            x += m_debug_default_width;
+            x += mDebugDefaultWidth;
         }
 
-        x = m_debug_x_lines.first() - m_debug_default_width;
+        x = mDebugXLines.first() - mDebugDefaultWidth;
 
         while (x >= x_from)
         {
             QLineF line(x, y_from, x, y_to);
             painter->drawLine(line);
-            x -= m_debug_default_width;
+            x -= mDebugDefaultWidth;
         }
 
-        qreal y = m_debug_y_lines.last() + m_debug_default_height;
+        qreal y = mDebugYLines.last() + mDebugDefaultHeight;
 
         while (y <= y_to)
         {
             QLineF line(x_from, y, x_to, y);
             painter->drawLine(line);
-            y += m_debug_default_height;
+            y += mDebugDefaultHeight;
         }
 
-        y = m_debug_y_lines.first() - m_debug_default_height;
+        y = mDebugYLines.first() - mDebugDefaultHeight;
 
         while (y >= y_from)
         {
             QLineF line(x_from, y, x_to, y);
             painter->drawLine(line);
-            y -= m_debug_default_height;
+            y -= mDebugDefaultHeight;
         }
     }
     #endif

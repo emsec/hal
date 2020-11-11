@@ -35,33 +35,33 @@ namespace hal
 
     struct ChannelEntry
     {
-        ChannelEntry(std::string msg, spdlog::level::level_enum msg_type) : m_msg(msg), m_msg_type(msg_type)
+        ChannelEntry(std::string msg, spdlog::level::level_enum msg_type) : mMsg(msg), mMsgType(msg_type)
         {
         }
 
-        const std::string m_msg;    // USE QSTRING HERE
-        const spdlog::level::level_enum m_msg_type;
+        const std::string mMsg;    // USE QSTRING HERE
+        const spdlog::level::level_enum mMsgType;
     };
 
-    static const int max_entries = 1000;
+    static const int sMaxEntries = 1000;
 
     struct LogChannel
     {
-        //    LogChannel(const QString& name) : m_name(name)
+        //    LogChannel(const QString& name) : mName(name)
         //    {
         //    }
 
-        const QString m_name;
+        const QString mName;
 
-        ChannelEntry m_entries[max_entries];
+        ChannelEntry mEntries[sMaxEntries];
 
-        int m_entry_count;
-        int m_first_entry;
+        int mEntryCount;
+        int mFirstEntry;
 
-        int unread_entries;
-        int unread_warnings;
-        int unread_errors;
-        int unread_successes;
+        int mUnreadEntries;
+        int mUnreadWarnings;
+        int mUnreadErrors;
+        int mUnreadSuccesses;
     };
 
     class ChannelItem
@@ -71,21 +71,21 @@ namespace hal
 
         QVariant data(int column) const;
         const QString name() const;
-        const boost::circular_buffer<ChannelEntry*>* get_buffer() const;
-        QReadWriteLock* get_lock();
+        const boost::circular_buffer<ChannelEntry*>* getBuffer() const;
+        QReadWriteLock* getLock();
 
-        void append_entry(ChannelEntry* entry);
+        void appendEntry(ChannelEntry* entry);
 
     private:
-        const QString m_name;
-        boost::circular_buffer<ChannelEntry*> m_log_entries;
-        QReadWriteLock m_lock;
+        const QString mName;
+        boost::circular_buffer<ChannelEntry*> mLogEntries;
+        QReadWriteLock mLock;
 
-        int m_observer;
-        int m_unread;
-        int m_unread_warnings;
-        int m_unread_errors;
-        int m_unread_successes;
+        int mObserver;
+        int mUnread;
+        int mUnreadWarnings;
+        int mUnreadErrors;
+        int mUnreadSuccesses;
     };
 
 }

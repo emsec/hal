@@ -45,54 +45,54 @@ namespace hal
 
         void setup();
 
-        void add_window();
-        void remove_window(Window* window);
-        void set_main_window(Window* window);
+        void addWindow();
+        void removeWindow(Window* window);
+        void setMainWindow(Window* window);
 
-        void lock_all();
-        void unlock_all();
+        void lockAll();
+        void unlockAll();
 
-        void save_layout(const QString& name);
-        void restore_layout(const QString& name);
+        void saveLayout(const QString& name);
+        void restoreLayout(const QString& name);
 
-        void handle_window_close_request(Window* window);
+        void handleWindowCloseRequest(Window* window);
 
         void repolish();
 
     public Q_SLOTS:
-        void handle_overlay_clicked();
+        void handleOverlayClicked();
 
     private Q_SLOTS:
-        void handle_action_open();
-        void handle_action_close();
-        void handle_action_save();
-        void handle_action_schedule();
-        void handle_action_run_schedule();
-        void handle_action_content();
-        void handle_action_settings();
-        void handle_action_about();
+        void handleActionOpen();
+        void handleActionClose();
+        void handleActionSave();
+        void handleActionSchedule();
+        void handleActionRunSchedule();
+        void handleActionContent();
+        void handleActionSettings();
+        void handleActionAbout();
 
     private:
-        Window* m_main_window;
-        QVector<Window*> m_windows;
+        Window* mMainWindow;
+        QVector<Window*> mWindows;
 
-        WindowToolbar* m_toolbar;
+        WindowToolbar* mToolbar;
 
-        bool m_static_windows;
-        bool m_shared_minimize;
-        bool m_switch_main_on_focus;
+        bool mStaticWindows;
+        bool mSharedMinimize;
+        bool mSwitchMainOnFocus;
 
-        QAction* m_action_open_file;
-        QAction* m_action_close_file;
-        QAction* m_action_save;
-        QAction* m_action_schedule;
-        QAction* m_action_run_schedule;
-        QAction* m_action_content;
-        QAction* m_action_settings;
-        QAction* m_action_about;
+        QAction* mActionOpenFile;
+        QAction* mActionCloseFile;
+        QAction* mActionSave;
+        QAction* mActionSchedule;
+        QAction* mActionRunSchedule;
+        QAction* mActionContent;
+        QAction* mActionSettings;
+        QAction* mActionAbout;
 
-        WelcomeScreen* m_welcome_screen;
-        PluginScheduleWidget* m_plugin_schedule_widget;
-        MainSettingsWidget* m_main_settings_widget;
+        WelcomeScreen* mWelcomeScreen;
+        PluginScheduleWidget* mPluginScheduleWidget;
+        MainSettingsWidget* mMainSettingsWidget;
     };
 }

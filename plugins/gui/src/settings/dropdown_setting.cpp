@@ -14,35 +14,35 @@
 
 namespace hal
 {
-    DropdownSetting::DropdownSetting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& description, QWidget *parent) : SettingsWidget(key, parent), m_options(options)
+    DropdownSetting::DropdownSetting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& mDescription, QWidget *parent) : SettingsWidget(key, parent), mOptions(options)
     {
-        m_labels.append(QPair<QLabel*, QString>(m_name, title));
+        mLabels.append(QPair<QLabel*, QString>(mName, title));
 
         QHBoxLayout* layout = new QHBoxLayout();
-        m_container->addLayout(layout);
+        mContainer->addLayout(layout);
 
-        m_combo_box = new QComboBox(this);
-        m_combo_box->addItems(options.keys());
-        m_combo_box->setStyleSheet("QComboBox{width: 150px;}");
-        connect(m_combo_box, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), this, &DropdownSetting::on_index_changed);
+        mComboBox = new QComboBox(this);
+        mComboBox->addItems(options.keys());
+        mComboBox->setStyleSheet("QComboBox{width: 150px;}");
+        connect(mComboBox, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), this, &DropdownSetting::onIndexChanged);
 
 
-        layout->addWidget(m_combo_box);
+        layout->addWidget(mComboBox);
 
         QLabel* label = new QLabel();
         layout->addWidget(label);
 
-        m_labels.append(QPair<QLabel*, QString>(label, description));
+        mLabels.append(QPair<QLabel*, QString>(label, mDescription));
     }
 
     void DropdownSetting::load(const QVariant& value)
     {
-        m_combo_box->setCurrentText(m_options.key(value.toString()));
+        mComboBox->setCurrentText(mOptions.key(value.toString()));
     }
 
     QVariant DropdownSetting::value()
     {
-        return m_options.value(m_combo_box->currentText());
+        return mOptions.value(mComboBox->currentText());
     }
 
     // void DropdownSetting::rollback()
@@ -50,9 +50,9 @@ namespace hal
 
     // }
 
-    void DropdownSetting::on_index_changed(QString text)
+    void DropdownSetting::onIndexChanged(QString text)
     {
         Q_UNUSED(text);
-        this->trigger_setting_updated();
+        this->triggerSettingUpdated();
     }
 }

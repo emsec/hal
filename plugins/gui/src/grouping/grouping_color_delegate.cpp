@@ -25,6 +25,7 @@ namespace hal {
 
     QSize GroupingColorDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
+        Q_UNUSED(index);
         return option.rect.size();
     }
 }

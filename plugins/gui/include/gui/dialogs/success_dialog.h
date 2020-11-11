@@ -9,7 +9,7 @@ namespace hal
     class SuccessDialog : public Dialog
     {
         Q_OBJECT
-        Q_PROPERTY(int arrow_offset READ arrow_offset WRITE set_arrow_offset)
+        Q_PROPERTY(int arrowOffset READ arrowOffset WRITE setArrowOffset)
 
     public:
         enum class direction
@@ -20,33 +20,33 @@ namespace hal
 
         explicit SuccessDialog(QWidget* parent = nullptr);
 
-        void fade_in_started() override;
-        void fade_in_finished() override;
+        void fadeInStarted() override;
+        void fadeInFinished() override;
 
         void start();
         void stop();
 
-        void set_direction(const direction direction);
+        void setDirection(const direction direction);
 
-        int arrow_offset() const;
-        void set_arrow_offset(const int offset);
+        int arrowOffset() const;
+        void setArrowOffset(const int offset);
 
     protected:
         void paintEvent(QPaintEvent* event) override;
         QSize sizeHint() const override;
 
     private:
-        QPropertyAnimation* m_arrow_animation;
+        QPropertyAnimation* mArrowAnimation;
 
-        int m_arrow_offset;
+        int mArrowOffset;
 
-        QPainterPath m_arrow_left;
-        QPainterPath m_arrow_right;
+        QPainterPath mArrowLeft;
+        QPainterPath mArrowRight;
 
-        qreal m_bar_height;
-        qreal m_arrow_width;
-        qreal m_arrow_length;
+        qreal mBarHeight;
+        qreal mArrowWidth;
+        qreal mArrowLength;
 
-        direction m_direction;
+        direction mDirection;
     };
 }

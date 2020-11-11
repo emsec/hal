@@ -3,11 +3,11 @@
 namespace hal
 {
     SelectionHistoryEntry::SelectionHistoryEntry(const QSet<u32> &modIds, const QSet<u32> &gatIds, const QSet<u32> &netIds, int cnt)
-        : m_module_ids(modIds), m_gate_ids(gatIds), m_net_ids(netIds), mCount(cnt)
+        : mModuleIds(modIds), mGateIds(gatIds), mNetIds(netIds), mCount(cnt)
     {;}
 
     bool SelectionHistoryEntry::isEmpty() const
     {
-        return m_module_ids.isEmpty() && m_gate_ids.isEmpty() && m_net_ids.isEmpty();
+        return mModuleIds.isEmpty() && mGateIds.isEmpty() && mNetIds.isEmpty();
     }
  }

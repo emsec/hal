@@ -51,44 +51,44 @@ namespace hal
         QSize sizeHint() const Q_DECL_OVERRIDE;
         QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
-        void set_anchor(ContentAnchor* anchor);
-        void set_autohide(bool autohide);
+        void setAnchor(ContentAnchor* anchor);
+        void setAutohide(bool autohide);
         bool unused();
         int count();
         int index(ContentWidget* widget);
-        void rearrange_buttons();
-        void collapse_buttons();
-        void add_button(ContentWidget* widget, int index);
-        bool remove_button(ContentWidget* widget);
-        bool remove_button(int index);
+        void rearrangeButtons();
+        void collapseButtons();
+        void addButton(ContentWidget* widget, int index);
+        bool removeButton(ContentWidget* widget);
+        bool removeButton(int index);
 
-        void detach_button(ContentWidget* widget);
-        void reattach_button(ContentWidget* widget);
-        void check_button(ContentWidget* widget);
-        void uncheck_button(ContentWidget* widget);
-        ContentWidget* widget_at(int index);
-        ContentWidget* next_available_widget(int index);
+        void detachButton(ContentWidget* widget);
+        void reattachButton(ContentWidget* widget);
+        void checkButton(ContentWidget* widget);
+        void uncheckButton(ContentWidget* widget);
+        ContentWidget* widgetAt(int index);
+        ContentWidget* nextAvailableWidget(int index);
 
     Q_SIGNALS:
-        void stop_animations();
+        void stopAnimations();
 
     public Q_SLOTS:
-        void handle_drag_start();
-        void handle_drag_end();
+        void handleDragStart();
+        void handleDragEnd();
 
     private:
-        ContentAnchor* m_anchor;
-        QList<DockButton*> m_buttons;
-        button_orientation m_button_orientation;
-        int m_button_offset  = 0;
-        int m_button_spacing = 1;
-        bool m_autohide      = true;
+        ContentAnchor* mAnchor;
+        QList<DockButton*> mButtons;
+        button_orientation mButtonOrientation;
+        int mButtonOffset  = 0;
+        int mButtonSpacing = 1;
+        bool mAutohide      = true;
 
-        static QPoint s_drag_start_position;
-        static DockButton* s_drag_button;
-        static int s_begin_drop_range;
-        static int s_end_drop_range;
-        static int s_drop_spacing;
-        static DockButton* s_move_marker;
+        static QPoint sDragStartPosition;
+        static DockButton* sDragButton;
+        static int sBeginDropRange;
+        static int sEndDropRange;
+        static int sDropSpacing;
+        static DockButton* sMoveMarker;
     };
 }

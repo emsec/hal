@@ -30,78 +30,78 @@ namespace hal
     class LoggerQssAdapter : public QWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QColor trace_color READ trace_color WRITE set_trace_color)
-        Q_PROPERTY(QColor debug_color READ debug_color WRITE set_debug_color)
-        Q_PROPERTY(QColor info_color READ info_color WRITE set_info_color)
-        Q_PROPERTY(QColor warning_color READ warning_color WRITE set_warning_color)
-        Q_PROPERTY(QColor error_color READ error_color WRITE set_error_color)
-        Q_PROPERTY(QColor critical_color READ critical_color WRITE set_critical_color)
-        Q_PROPERTY(QColor default_color READ default_color WRITE set_default_color)
-        Q_PROPERTY(QColor marker_color READ marker_color WRITE set_marker_color)
+        Q_PROPERTY(QColor traceColor READ traceColor WRITE setTraceColor)
+        Q_PROPERTY(QColor debugColor READ debugColor WRITE setDebugColor)
+        Q_PROPERTY(QColor infoColor READ infoColor WRITE setInfoColor)
+        Q_PROPERTY(QColor warningColor READ warningColor WRITE setWarningColor)
+        Q_PROPERTY(QColor errorColor READ errorColor WRITE setErrorColor)
+        Q_PROPERTY(QColor criticalColor READ criticalColor WRITE setCriticalColor)
+        Q_PROPERTY(QColor defaultColor READ defaultColor WRITE setDefaultColor)
+        Q_PROPERTY(QColor markerColor READ markerColor WRITE setMarkerColor)
 
-        Q_PROPERTY(QColor trace_highlight READ trace_highlight WRITE set_trace_highlight)
-        Q_PROPERTY(QColor debug_highlight READ debug_highlight WRITE set_debug_highlight)
-        Q_PROPERTY(QColor info_highlight READ info_highlight WRITE set_info_highlight)
-        Q_PROPERTY(QColor warning_highlight READ warning_highlight WRITE set_warning_highlight)
-        Q_PROPERTY(QColor error_highlight READ error_highlight WRITE set_error_highlight)
-        Q_PROPERTY(QColor critical_highlight READ critical_highlight WRITE set_critical_highlight)
-        Q_PROPERTY(QColor default_highlight READ default_highlight WRITE set_default_highlight)
+        Q_PROPERTY(QColor traceHighlight READ traceHighlight WRITE setTraceHighlight)
+        Q_PROPERTY(QColor debugHighlight READ debugHighlight WRITE setDebugHighlight)
+        Q_PROPERTY(QColor infoHighlight READ infoHighlight WRITE setInfoHighlight)
+        Q_PROPERTY(QColor warningHighlight READ warningHighlight WRITE setWarningHighlight)
+        Q_PROPERTY(QColor errorHighlight READ errorHighlight WRITE setErrorHighlight)
+        Q_PROPERTY(QColor criticalHighlight READ criticalHighlight WRITE setCriticalHighlight)
+        Q_PROPERTY(QColor defaultHighlight READ defaultHighlight WRITE setDefaultHighlight)
 
     public:
         static LoggerQssAdapter* instance();
 
-        QColor trace_color() const;
-        QColor debug_color() const;
-        QColor info_color() const;
-        QColor warning_color() const;
-        QColor error_color() const;
-        QColor critical_color() const;
-        QColor default_color() const;
-        QColor marker_color() const;
+        QColor traceColor() const;
+        QColor debugColor() const;
+        QColor infoColor() const;
+        QColor warningColor() const;
+        QColor errorColor() const;
+        QColor criticalColor() const;
+        QColor defaultColor() const;
+        QColor markerColor() const;
 
-        QColor trace_highlight() const;
-        QColor debug_highlight() const;
-        QColor info_highlight() const;
-        QColor warning_highlight() const;
-        QColor error_highlight() const;
-        QColor critical_highlight() const;
-        QColor default_highlight() const;
+        QColor traceHighlight() const;
+        QColor debugHighlight() const;
+        QColor infoHighlight() const;
+        QColor warningHighlight() const;
+        QColor errorHighlight() const;
+        QColor criticalHighlight() const;
+        QColor defaultHighlight() const;
 
-        void set_trace_color(const QColor& color);
-        void set_debug_color(const QColor& color);
-        void set_info_color(const QColor& color);
-        void set_warning_color(const QColor& color);
-        void set_error_color(const QColor& color);
-        void set_critical_color(const QColor& color);
-        void set_default_color(const QColor& color);
-        void set_marker_color(const QColor& color);
+        void setTraceColor(const QColor& color);
+        void setDebugColor(const QColor& color);
+        void setInfoColor(const QColor& color);
+        void setWarningColor(const QColor& color);
+        void setErrorColor(const QColor& color);
+        void setCriticalColor(const QColor& color);
+        void setDefaultColor(const QColor& color);
+        void setMarkerColor(const QColor& color);
 
-        void set_trace_highlight(const QColor& color);
-        void set_debug_highlight(const QColor& color);
-        void set_info_highlight(const QColor& color);
-        void set_warning_highlight(const QColor& color);
-        void set_error_highlight(const QColor& color);
-        void set_critical_highlight(const QColor& color);
-        void set_default_highlight(const QColor& color);
+        void setTraceHighlight(const QColor& color);
+        void setDebugHighlight(const QColor& color);
+        void setInfoHighlight(const QColor& color);
+        void setWarningHighlight(const QColor& color);
+        void setErrorHighlight(const QColor& color);
+        void setCriticalHighlight(const QColor& color);
+        void setDefaultHighlight(const QColor& color);
 
     private:
         explicit LoggerQssAdapter(QWidget* parent = nullptr);
 
-        QColor m_trace_color;
-        QColor m_debug_color;
-        QColor m_info_color;
-        QColor m_warning_color;
-        QColor m_error_color;
-        QColor m_critical_color;
-        QColor m_default_color;
-        QColor m_marker_color;
+        QColor mTraceColor;
+        QColor mDebugColor;
+        QColor mInfoColor;
+        QColor mWarningColor;
+        QColor mErrorColor;
+        QColor mCriticalColor;
+        QColor mDefaultColor;
+        QColor mMarkerColor;
 
-        QColor m_trace_highlight;
-        QColor m_debug_highlight;
-        QColor m_info_highlight;
-        QColor m_warning_highlight;
-        QColor m_error_highlight;
-        QColor m_critical_highlight;
-        QColor m_default_highlight;
+        QColor mTraceHighlight;
+        QColor mDebugHighlight;
+        QColor mInfoHighlight;
+        QColor mWarningHighlight;
+        QColor mErrorHighlight;
+        QColor mCriticalHighlight;
+        QColor mDefaultHighlight;
     };
 }    // namespace hal

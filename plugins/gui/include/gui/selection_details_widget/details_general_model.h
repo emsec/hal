@@ -57,9 +57,9 @@ namespace hal {
         void setTypeName(Net *n)
         {
             mTypeName = "Internal";
-            if (g_netlist->is_global_input_net(n))
+            if (gNetlist->is_global_input_net(n))
                 mTypeName = "Input";
-            if (g_netlist->is_global_output_net(n))
+            if (gNetlist->is_global_output_net(n))
                 mTypeName = "Output";
         }
 

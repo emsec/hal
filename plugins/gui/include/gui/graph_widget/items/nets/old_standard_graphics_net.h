@@ -37,30 +37,30 @@ namespace hal
     public:
         struct HLine
         {
-            qreal small_x;
-            qreal big_x;
+            qreal mSmallX;
+            qreal mBigX;
             qreal y;
         };
 
         struct VLine
         {
             qreal x;
-            qreal small_y;
-            qreal big_y;
+            qreal mSmallY;
+            qreal mBigY;
         };
 
         struct Lines
         {
-            QVector<HLine> h_lines;
-            QVector<VLine> v_lines;
+            QVector<HLine> mHLines;
+            QVector<VLine> mVLines;
 
     //        void remove_zero_length_lines();
     //        void fix_order();
     //        void move(qreal x, qreal y);
         };
 
-        static void load_settings();
-        static void update_alpha();
+        static void loadSettings();
+        static void updateAlpha();
 
         //StandardGraphicsNet(Net* n, const Lines& l);
         OldStandardGraphicsNet(Net* n, Lines& l, bool complete = true);
@@ -68,28 +68,28 @@ namespace hal
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
     private:
-        static qreal s_alpha;
+        static qreal sAlpha;
 
-        static qreal s_wire_length;
+        static qreal sWireLength;
 
-        static qreal s_left_arrow_offset;
-        static qreal s_right_arrow_offset;
+        static qreal sLeftArrowOffset;
+        static qreal sRightArrowOffset;
 
-        static qreal s_arrow_left_x_shift;
-        static qreal s_arrow_right_x_shift;
-        static qreal s_arrow_side_length;
+        static qreal sArrowLeftXShift;
+        static qreal sArrowRightXShift;
+        static qreal sArrowSideLength;
 
-        static qreal s_arrow_width;
-        static qreal s_arrow_height;
+        static qreal sArrowWidth;
+        static qreal sArrowHeight;
 
-        static QPainterPath s_arrow;
+        static QPainterPath sArrow;
 
-        static qreal s_split_radius;
+        static qreal sSplitRadius;
 
-        QVector<QLineF> m_output_lines;
-        QVector<QLineF> m_other_lines;
-        QVector<QPointF> m_splits;
+        QVector<QLineF> mOutputLines;
+        QVector<QLineF> mOtherLines;
+        QVector<QPointF> mSplits;
 
-        bool m_complete;
+        bool mComplete;
     };
 }
