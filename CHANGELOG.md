@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * GUI code refactoring
-
+* fix crash which occurs sometimes when invoking context menu from gate
+	
 ## [3.1.2] - 2020-11-09 20:00:00+02:00 (urgency: medium)
 * updated existing Python decorators and added new ones for the GUI API
 * fix `get_subgraph_function` crashing when `output_net` is a nullptr
