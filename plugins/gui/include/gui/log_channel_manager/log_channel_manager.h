@@ -33,25 +33,25 @@
 
 namespace hal
 {
-    struct log_entry
+    struct LogEntry
     {
-        QString m_message;
-        spdlog::level::level_enum m_type;
+        QString mMessage;
+        spdlog::level::level_enum mType;
     };
 
-    struct log_channel
+    struct LogChannel
     {
-        QString m_name;
+        QString mName;
 
-        log_entry m_entries[LogChannelManager_constants::max_entries];
+        LogEntry mEntries[LogChannelManager_constants::sMaxEntries];
 
-        int m_entry_count;
-        int m_first_entry;
+        int mEntryCount;
+        int mFirstEntry;
 
-        int unread_entries;
-        int unread_warnings;
-        int unread_errors;
-        int unread_successes;
+        int mUnreadEntries;
+        int mUnreadWarnings;
+        int mUnreadErrors;
+        int mUnreadSuccesses;
     };
 
     class LogChannelManager
@@ -59,10 +59,10 @@ namespace hal
     public:
         LogChannelManager();
 
-        void logmanager_callback(const spdlog::details::log_msg& msg);
+        void logmanagerCallback(const spdlog::details::log_msg& msg);
 
     private:
-        std::vector<log_channel*> m_fixed_channels;
-        log_channel* m_temporary_channels[LogChannelManager_constants::max_channels];
+        std::vector<LogChannel*> mFixedChannels;
+        LogChannel* mTemporaryChannels[LogChannelManager_constants::sMaxChannels];
     };
 }

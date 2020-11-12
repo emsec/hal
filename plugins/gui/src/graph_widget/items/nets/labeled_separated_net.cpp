@@ -8,160 +8,160 @@
 
 namespace hal
 {
-    static const qreal s_baseline = 1;
+    static const qreal sBaseline = 1;
 
-    qreal LabeledSeparatedNet::s_wire_length;
-    qreal LabeledSeparatedNet::s_text_offset;
+    qreal LabeledSeparatedNet::sWireLength;
+    qreal LabeledSeparatedNet::sTextOffset;
 
-    QFont LabeledSeparatedNet::s_font;
-    qreal LabeledSeparatedNet::s_font_height;
-    qreal LabeledSeparatedNet::s_font_ascend;
+    QFont LabeledSeparatedNet::sFont;
+    qreal LabeledSeparatedNet::sFontHeight;
+    qreal LabeledSeparatedNet::sFontAscend;
 
-    void LabeledSeparatedNet::load_settings()
+    void LabeledSeparatedNet::loadSettings()
     {
-        s_wire_length = 20;
-        s_text_offset = 2.4;
+        sWireLength = 20;
+        sTextOffset = 2.4;
 
-        s_font = QFont("Iosevka");
-        s_font.setPixelSize(12);
-        QFontMetricsF fm(s_font);
-        s_font_height = fm.height();
-        s_font_ascend = fm.ascent();
+        sFont = QFont("Iosevka");
+        sFont.setPixelSize(12);
+        QFontMetricsF fm(sFont);
+        sFontHeight = fm.height();
+        sFontAscend = fm.ascent();
     }
 
     LabeledSeparatedNet::LabeledSeparatedNet(Net* n, const QString& text) : SeparatedGraphicsNet(n),
-      m_text(text)
+      mText(text)
     {
-        QFontMetricsF fm(s_font);
-        m_text_width = fm.width(m_text);
+        QFontMetricsF fm(sFont);
+        mTextWidth = fm.width(mText);
     }
 
     void LabeledSeparatedNet::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
     {
         Q_UNUSED(widget);
 
-        if (s_lod < graph_widget_constants::separated_net_min_lod)
+        if (sLod < graph_widget_constants::sEparatedNetMinLod)
             return;
 
         QColor color = penColor(option->state);
-        color.setAlphaF(s_alpha);
+        color.setAlphaF(sAlpha);
 
-        s_pen.setColor(color);
-        painter->setPen(s_pen);
-        painter->setFont(s_font);
+        sPen.setColor(color);
+        painter->setPen(sPen);
+        painter->setFont(sFont);
 
-        if (m_fill_icon)
+        if (mFillIcon)
         {
-            s_brush.setColor(m_fill_color);
-            s_brush.setStyle(m_brush_style);
-            painter->setBrush(s_brush); // ???
+            sBrush.setColor(mFillColor);
+            sBrush.setStyle(mBrushStyle);
+            painter->setBrush(sBrush); // ???
         }
 
-        for (const QPointF& position : m_input_positions)
+        for (const QPointF& position : mInputPositions)
         {
-            if (m_fill_icon)
-                painter->fillRect(QRectF(position.x() - s_wire_length - s_text_offset - m_text_width, position.y() - s_font_height / 2, m_text_width, s_font_height), s_brush);
+            if (mFillIcon)
+                painter->fillRect(QRectF(position.x() - sWireLength - sTextOffset - mTextWidth, position.y() - sFontHeight / 2, mTextWidth, sFontHeight), sBrush);
 
-            QPointF point(position.x() - s_wire_length, position.y());
+            QPointF point(position.x() - sWireLength, position.y());
             painter->drawLine(position, point);
-            point.setX(point.x() - s_text_offset - m_text_width);
-            point.setY(point.y() + s_baseline + s_font_ascend - s_font_height / 2);
-            painter->drawText(point, m_text);
+            point.setX(point.x() - sTextOffset - mTextWidth);
+            point.setY(point.y() + sBaseline + sFontAscend - sFontHeight / 2);
+            painter->drawText(point, mText);
         }
 
-        for (const QPointF& position : m_output_positions)
+        for (const QPointF& position : mOutputPositions)
         {
-            if (m_fill_icon)
-                painter->fillRect(QRectF(position.x() + s_wire_length + s_text_offset, position.y() - s_font_height / 2, m_text_width, s_font_height), s_brush);
+            if (mFillIcon)
+                painter->fillRect(QRectF(position.x() + sWireLength + sTextOffset, position.y() - sFontHeight / 2, mTextWidth, sFontHeight), sBrush);
 
-            QPointF point(position.x() + s_wire_length, position.y());
+            QPointF point(position.x() + sWireLength, position.y());
             painter->drawLine(position, point);
-            point.setX(point.x() + s_text_offset);
-            point.setY(point.y() + s_baseline + s_font_ascend - s_font_height / 2);
-            painter->drawText(point, m_text);
+            point.setX(point.x() + sTextOffset);
+            point.setY(point.y() + sBaseline + sFontAscend - sFontHeight / 2);
+            painter->drawText(point, mText);
         }
 
-        s_brush.setStyle(Qt::NoBrush);
-        painter->setBrush(s_brush);
+        sBrush.setStyle(Qt::NoBrush);
+        painter->setBrush(sBrush);
 
     #ifdef HAL_DEBUG_GUI_GRAPH_WIDGET
-        s_pen.setColor(Qt::green);
-        painter->setPen(s_pen);
-        painter->drawPath(m_shape);
+        sPen.setColor(Qt::green);
+        painter->setPen(sPen);
+        painter->drawPath(mShape);
     #endif
     }
 
-    void LabeledSeparatedNet::add_input(const QPointF& scene_position)
+    void LabeledSeparatedNet::addInput(const QPointF& scene_position)
     {
         const QPointF mapped_position = mapFromScene(scene_position);
-        m_input_positions.append(mapped_position);
+        mInputPositions.append(mapped_position);
 
-        const qreal half_of_shape_width = s_shape_width / 2;
-        const qreal half_of_font_height = s_font_height / 2;
+        const qreal half_of_shape_width = sShapeWidth / 2;
+        const qreal half_of_font_height = sFontHeight / 2;
 
-        QPointF point(mapped_position.x() - s_wire_length - half_of_shape_width, mapped_position.y() - half_of_shape_width);
+        QPointF point(mapped_position.x() - sWireLength - half_of_shape_width, mapped_position.y() - half_of_shape_width);
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + s_wire_length + s_shape_width);
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_shape_width);
-        m_shape.lineTo(point);
-        point.setX(point.x() - s_wire_length - s_shape_width);
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + sWireLength + sShapeWidth);
+        mShape.lineTo(point);
+        point.setY(point.y() + sShapeWidth);
+        mShape.lineTo(point);
+        point.setX(point.x() - sWireLength - sShapeWidth);
+        mShape.lineTo(point);
+        mShape.closeSubpath();
 
-        point.setX(mapped_position.x() - s_wire_length - s_text_offset - m_text_width); // - half_of_shape_width
+        point.setX(mapped_position.x() - sWireLength - sTextOffset - mTextWidth); // - half_of_shape_width
         point.setY(mapped_position.y() - half_of_font_height); // - half_of_shape_width
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + m_text_width); // + s_shape_width
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_font_height); // + s_shape_width
-        m_shape.lineTo(point);
-        point.setX(point.x() - m_text_width); // - s_shape_width
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + mTextWidth); // + sShapeWidth
+        mShape.lineTo(point);
+        point.setY(point.y() + sFontHeight); // + sShapeWidth
+        mShape.lineTo(point);
+        point.setX(point.x() - mTextWidth); // - sShapeWidth
+        mShape.lineTo(point);
+        mShape.closeSubpath();
     }
 
-    void LabeledSeparatedNet::add_output(const QPointF& scene_position)
+    void LabeledSeparatedNet::addOutput(const QPointF& scene_position)
     {
         const QPointF mapped_position = mapFromScene(scene_position);
-        m_output_positions.append(mapped_position);
+        mOutputPositions.append(mapped_position);
 
-        const qreal half_of_shape_width = s_shape_width / 2;
-        const qreal half_of_font_height = s_font_height / 2;
+        const qreal half_of_shape_width = sShapeWidth / 2;
+        const qreal half_of_font_height = sFontHeight / 2;
 
         QPointF point(mapped_position.x() - half_of_shape_width, mapped_position.y() - half_of_shape_width);
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + s_wire_length + s_shape_width);
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_shape_width);
-        m_shape.lineTo(point);
-        point.setX(point.x() - s_wire_length - s_shape_width);
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + sWireLength + sShapeWidth);
+        mShape.lineTo(point);
+        point.setY(point.y() + sShapeWidth);
+        mShape.lineTo(point);
+        point.setX(point.x() - sWireLength - sShapeWidth);
+        mShape.lineTo(point);
+        mShape.closeSubpath();
 
-        point.setX(mapped_position.x() + s_wire_length + s_text_offset); // - half_of_shape_width
+        point.setX(mapped_position.x() + sWireLength + sTextOffset); // - half_of_shape_width
         point.setY(mapped_position.y() - half_of_font_height); // - half_of_shape_width
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + m_text_width); // + s_shape_width
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_font_height); // + s_shape_width
-        m_shape.lineTo(point);
-        point.setX(point.x() - m_text_width); // - s_shape_width
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + mTextWidth); // + sShapeWidth
+        mShape.lineTo(point);
+        point.setY(point.y() + sFontHeight); // + sShapeWidth
+        mShape.lineTo(point);
+        point.setX(point.x() - mTextWidth); // - sShapeWidth
+        mShape.lineTo(point);
+        mShape.closeSubpath();
     }
 
-    qreal LabeledSeparatedNet::input_width() const
+    qreal LabeledSeparatedNet::inputWidth() const
     {
-        return s_wire_length + s_text_offset + m_text_width;
+        return sWireLength + sTextOffset + mTextWidth;
     }
 
-    qreal LabeledSeparatedNet::output_width() const
+    qreal LabeledSeparatedNet::outputWidth() const
     {
-        return s_wire_length + s_text_offset + m_text_width;
+        return sWireLength + sTextOffset + mTextWidth;
     }
 }

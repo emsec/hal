@@ -15,9 +15,9 @@
 
 namespace hal
 {
-    GraphNavigationWidget::GraphNavigationWidget(QWidget* parent) : QTableWidget(parent), m_via_net(0)
+    GraphNavigationWidget::GraphNavigationWidget(QWidget* parent) : QTableWidget(parent), mViaNet(0)
     {
-        m_hide_when_focus_lost = false;
+        mHideWhenFocusLost = false;
         setSelectionMode(QAbstractItemView::SingleSelection);
         setSelectionBehavior(QAbstractItemView::SelectRows);
         //setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -29,50 +29,50 @@ namespace hal
 
         verticalHeader()->setVisible(false);
 
-        connect(this, &QTableWidget::itemDoubleClicked, this, &GraphNavigationWidget::handle_item_double_clicked);
+        connect(this, &QTableWidget::itemDoubleClicked, this, &GraphNavigationWidget::handleItemDoubleClicked);
     }
 
     void GraphNavigationWidget::setup(bool direction)
     {
         clearContents();
 
-        switch (g_selection_relay->m_focus_type)
+        switch (gSelectionRelay->mFocusType)
         {
-            case SelectionRelay::item_type::none:
+        case SelectionRelay::ItemType::None:
+        {
+            return;
+        }
+        case SelectionRelay::ItemType::Gate:
             {
-                return;
-            }
-            case SelectionRelay::item_type::gate:
-            {
-                Gate* g = g_netlist->get_gate_by_id(g_selection_relay->m_focus_id);
+                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->mFocusId);
 
                 assert(g);
 
-                m_origin = hal::node{hal::node_type::gate, g->get_id()};
+                mOrigin = Node(g->get_id(), Node::Gate);
 
-                std::string pin_type   = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay->m_subfocus_index];
+                std::string pin_type   = (direction ? g->get_output_pins() : g->get_input_pins())[gSelectionRelay->mSubfocusIndex];
                 Net* n = (direction ? g->get_fan_out_net(pin_type) : g->get_fan_in_net(pin_type));
 
                 assert(n);
 
-                fill_table(n, direction);
+                fillTable(n, direction);
 
                 return;
             }
-            case SelectionRelay::item_type::net:
+        case SelectionRelay::ItemType::Net:
             {
-                Net* n = g_netlist->get_net_by_id(g_selection_relay->m_focus_id);
+                Net* n = gNetlist->get_net_by_id(gSelectionRelay->mFocusId);
 
                 assert(n);
                 assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
 
-                m_origin = hal::node{hal::node_type::gate, 0};
+                mOrigin = Node();
 
-                fill_table(n, direction);
+                fillTable(n, direction);
 
                 return;
             }
-            case SelectionRelay::item_type::module:
+        case SelectionRelay::ItemType::Module:
             {
                 // TODO ???
                 return;
@@ -80,22 +80,22 @@ namespace hal
         }
     }
 
-    void GraphNavigationWidget::setup(hal::node origin, Net* via_net, bool direction)
+    void GraphNavigationWidget::setup(Node origin, Net* via_net, bool direction)
     {
         clearContents();
-        fill_table(via_net, direction);
-        m_origin = origin;
+        fillTable(via_net, direction);
+        mOrigin = origin;
     }
 
-    void GraphNavigationWidget::hide_when_focus_lost(bool hide)
+    void GraphNavigationWidget::hideWhenFocusLost(bool hide)
     {
-        m_hide_when_focus_lost = hide;
+        mHideWhenFocusLost = hide;
     }
 
     void GraphNavigationWidget::focusOutEvent(QFocusEvent* event)
     {
         Q_UNUSED(event);
-        if (m_hide_when_focus_lost)
+        if (mHideWhenFocusLost)
             hide();
     }
 
@@ -108,21 +108,21 @@ namespace hal
 
         if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
         {
-            commit_selection();
+            commitSelection();
         }
 
         if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Left)
         {
-            Q_EMIT close_requested();
-            Q_EMIT reset_focus();
+            Q_EMIT closeRequested();
+            Q_EMIT resetFocus();
         }
     }
 
-    void GraphNavigationWidget::fill_table(Net* n, bool direction)
+    void GraphNavigationWidget::fillTable(Net* n, bool direction)
     {
         assert(n);
 
-        m_via_net = n->get_id();
+        mViaNet = n->get_id();
 
         setRowCount(n->get_destinations().size() + 1);
 
@@ -214,13 +214,13 @@ namespace hal
         setFixedHeight((height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height);
     }
 
-    void GraphNavigationWidget::handle_item_double_clicked(QTableWidgetItem* item)
+    void GraphNavigationWidget::handleItemDoubleClicked(QTableWidgetItem* item)
     {
         Q_UNUSED(item)
-        commit_selection();
+        commitSelection();
     }
 
-    void GraphNavigationWidget::commit_selection()
+    void GraphNavigationWidget::commitSelection()
     {
         if (selectedItems().isEmpty())
         {
@@ -233,24 +233,24 @@ namespace hal
             QSet<u32> gates;
             for (u32 row = 1; row < (u32)rowCount(); ++row)
             {
-                Gate* g = g_netlist->get_gate_by_id(item(row, 0)->text().toLong());
+                Gate* g = gNetlist->get_gate_by_id(item(row, 0)->text().toLong());
                 if (g)
                 {
                     gates.insert(g->get_id());
                 }
             }
-            Q_EMIT navigation_requested(m_origin, m_via_net, gates, {});
+            Q_EMIT navigationRequested(mOrigin, mViaNet, gates, {});
             return;
         }
 
-        Gate* g = g_netlist->get_gate_by_id(selectedItems().at(0)->text().toLong());
+        Gate* g = gNetlist->get_gate_by_id(selectedItems().at(0)->text().toLong());
 
         if (!g)
         {
             return;
         }
 
-        Q_EMIT navigation_requested(m_origin, m_via_net, {g->get_id()}, {});
+        Q_EMIT navigationRequested(mOrigin, mViaNet, {g->get_id()}, {});
         return;
     }
 }

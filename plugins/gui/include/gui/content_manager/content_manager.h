@@ -51,45 +51,45 @@ namespace hal
 
         ~ContentManager();
 
-        PythonEditor* get_python_editor_widget();
+        PythonEditor* getPythonEditorWidget();
 
-        GraphTabWidget* get_graph_tab_widget();
+        GraphTabWidget* getGraphTabWidget();
 
-        ContextManagerWidget* get_context_manager_widget();
+        ContextManagerWidget* getContextManagerWidget();
 
         SelectionDetailsWidget* getSelectionDetailsWidget();
 
         GroupingManagerWidget* getGroupingManagerWidget();
 
-        void hack_delete_content();
+        void hackDeleteContent();
 
     Q_SIGNALS:
-        void save_triggered();
+        void saveTriggered();
 
     public Q_SLOTS:
 
-        void handle_open_document(const QString& file_name);
+        void handleOpenDocument(const QString& fileName);
 
-        void handle_close_document();
+        void handleCloseDocument();
 
-        void handle_filsystem_doc_changed(const QString& file_name);
+        void handleFilsystemDocChanged(const QString& fileName);
 
-        void handle_save_triggered();
+        void handleSaveTriggered();
 
     private:
-        MainWindow* m_MainWindow;
+        MainWindow* mMainWindow;
 
-        QString m_window_title;
+        QString mWindowTitle;
 
-        QList<ContentWidget*> m_content;
+        QList<ContentWidget*> mContent;
 
-        NetlistWatcher* m_NetlistWatcher;
+        NetlistWatcher* mNetlistWatcher;
 
-        PythonEditor* m_python_widget;
+        PythonEditor* mPythonWidget;
 
-        GraphTabWidget* m_graph_tab_wid;
+        GraphTabWidget* mGraphTabWid;
 
-        ContextManagerWidget* m_context_manager_wid;
+        ContextManagerWidget* mContextManagerWid;
 
         GroupingManagerWidget* mGroupingManagerWidget;
 

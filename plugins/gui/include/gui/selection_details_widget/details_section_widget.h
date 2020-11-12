@@ -49,13 +49,13 @@ namespace hal
         void bodyVisible();
         void constructor(const QString& txt);
 
-        QVBoxLayout* m_layout;
-        QPushButton* m_header;
-        QWidget* m_body;
-        QTableWidget* m_table;
-        QString m_headerText;
-        int m_rows;
-        bool m_hideEmpty;
-        bool m_bodyVisible;
+        QVBoxLayout* mLayout;
+        QPushButton* mHeader;
+        QWidget* mBody;
+        QTableWidget* mTable;
+        QString mHeaderText;
+        int mRows;
+        bool mHideEmpty;
+        bool mBodyVisible;
     };
 }    // namespace hal

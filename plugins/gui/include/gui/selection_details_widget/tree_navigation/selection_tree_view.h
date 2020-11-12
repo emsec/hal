@@ -40,7 +40,7 @@ namespace hal
         void triggerSelection(const SelectionTreeItem* sti);
 
     public Q_SLOTS:
-        void handle_filter_text_changed(const QString& filter_text);
+        void handleFilterTextChanged(const QString& filter_text);
  
     protected:
         virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous) Q_DECL_OVERRIDE;
@@ -49,14 +49,14 @@ namespace hal
         SelectionTreeView(QWidget* parent = nullptr);
         void setDefaultColumnWidth();
         void clearHide();
-        void populate(bool visible);
+        void populate(bool mVisible);
         SelectionTreeItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
 
     private Q_SLOTS:
-        void handle_custom_context_menu_requested(const QPoint& point);
+        void handleCustomContextMenuRequested(const QPoint& point);
 
     private:
-        SelectionTreeModel* m_selectionTreeModel;
-        SelectionTreeProxyModel* m_selectionTreeProxyModel;
+        SelectionTreeModel* mSelectionTreeModel;
+        SelectionTreeProxyModel* mSelectionTreeProxyModel;
     };
 }    // namespace hal

@@ -8,39 +8,39 @@
 namespace hal
 {
     ModuleItem::ModuleItem(const u32 id) :
-        m_parent(nullptr),
-        m_id(id),
-        m_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name())),
-        m_color(g_netlist_relay->get_module_color(id)),
-        m_highlighted(false)
+        mParent(nullptr),
+        mId(id),
+        mName(QString::fromStdString(gNetlist->get_module_by_id(id)->get_name())),
+        mColor(gNetlistRelay->getModuleColor(id)),
+        mHighlighted(false)
     {;}
 
     ModuleItem::ModuleItem(const QString& name, const u32 id) :
-        m_parent(nullptr),
-        m_id(id),
-        m_name(name),
-        m_color(g_netlist_relay->get_module_color(id)),
-        m_highlighted(false)
+        mParent(nullptr),
+        mId(id),
+        mName(name),
+        mColor(gNetlistRelay->getModuleColor(id)),
+        mHighlighted(false)
     {;}
 
-    void ModuleItem::insert_child(int row, ModuleItem* child)
+    void ModuleItem::insertChild(int row, ModuleItem* child)
     {
-        m_child_items.insert(row, child);
+        mChildItems.insert(row, child);
     }
 
-    void ModuleItem::remove_child(ModuleItem* child)
+    void ModuleItem::removeChild(ModuleItem* child)
     {
-        m_child_items.removeOne(child);
+        mChildItems.removeOne(child);
     }
 
-    void ModuleItem::append_child(ModuleItem* child)
+    void ModuleItem::appendChild(ModuleItem* child)
     {
-        m_child_items.append(child);
+        mChildItems.append(child);
     }
 
     void ModuleItem::appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap)
     {
-        Module* m = g_netlist->get_module_by_id(m_id);
+        Module* m = gNetlist->get_module_by_id(mId);
         Q_ASSERT(m);
         for (Module* subm : m->get_submodules())
         {
@@ -48,47 +48,47 @@ namespace hal
             if (it != moduleMap.constEnd())
             {
                 ModuleItem* childItem = it.value();
-                append_child(childItem);
-                childItem->set_parent(this);
+                appendChild(childItem);
+                childItem->setParent(this);
             }
         }
     }
 
-    void ModuleItem::prepend_child(ModuleItem* child)
+    void ModuleItem::prependChild(ModuleItem* child)
     {
         // PROBABLY OBSOLETE
-        m_child_items.prepend(child);
+        mChildItems.prepend(child);
     }
 
     ModuleItem* ModuleItem::parent()
     {
-        return m_parent;
+        return mParent;
     }
 
     ModuleItem* ModuleItem::child(int row)
     {
-        return m_child_items.value(row);
+        return mChildItems.value(row);
     }
 
-    const ModuleItem* ModuleItem::const_parent() const
+    const ModuleItem* ModuleItem::constParent() const
     {
-        return m_parent;
+        return mParent;
     }
 
-    const ModuleItem* ModuleItem::const_child(int row) const
+    const ModuleItem* ModuleItem::constChild(int row) const
     {
-        return m_child_items.value(row);
+        return mChildItems.value(row);
     }
 
     int ModuleItem::childCount() const
     {
-        return m_child_items.count();
+        return mChildItems.count();
     }
 
     int ModuleItem::row() const
     {
-        if (m_parent)
-            return m_parent->m_child_items.indexOf(const_cast<ModuleItem*>(this));
+        if (mParent)
+            return mParent->mChildItems.indexOf(const_cast<ModuleItem*>(this));
         else
             return 0;
     }
@@ -98,46 +98,46 @@ namespace hal
         // DEBUG CODE, USE STYLED DELEGATES OR SOMETHING
         if (column != 0)
             return QVariant();
-        return m_name;
+        return mName;
     }
 
     QString ModuleItem::name() const
     {
-        return m_name;
+        return mName;
     }
 
     u32 ModuleItem::id() const
     {
-        return m_id;
+        return mId;
     }
 
     QColor ModuleItem::color() const
     {
-        return m_color;
+        return mColor;
     }
 
     bool ModuleItem::highlighted() const
     {
-        return m_highlighted;
+        return mHighlighted;
     }
 
-    void ModuleItem::set_parent(ModuleItem* parent)
+    void ModuleItem::setParent(ModuleItem* parent)
     {
-        m_parent = parent;
+        mParent = parent;
     }
 
     void ModuleItem::set_name(const QString& name)
     {
-        m_name = name;
+        mName = name;
     }
 
-    void ModuleItem::set_color(const QColor& color)
+    void ModuleItem::setColor(const QColor& color)
     {
-        m_color = color;
+        mColor = color;
     }
 
-    void ModuleItem::set_highlighted(const bool highlighted)
+    void ModuleItem::setHighlighted(const bool highlighted)
     {
-        m_highlighted = highlighted;
+        mHighlighted = highlighted;
     }
 }

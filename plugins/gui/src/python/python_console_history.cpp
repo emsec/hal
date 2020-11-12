@@ -6,45 +6,45 @@
 
 namespace hal
 {
-    PythonConsoleHistory::PythonConsoleHistory() : m_file_name(QDir::home().filePath(".hal_history").toLocal8Bit().constData()), m_history()
+    PythonConsoleHistory::PythonConsoleHistory() : mFileName(QDir::home().filePath(".hal_history").toLocal8Bit().constData()), mHistory()
     {
-        update_from_file();
+        updateFromFile();
     }
 
     PythonConsoleHistory::~PythonConsoleHistory()
     {
     }
 
-    void PythonConsoleHistory::add_history(const std::string& command)
+    void PythonConsoleHistory::addHistory(const std::string& command)
     {
-        m_history.push_back(command);
-        append_to_file(command);
+        mHistory.push_back(command);
+        appendToFile(command);
     }
 
-    const std::string& PythonConsoleHistory::get_history_item(const int& index) const
+    const std::string& PythonConsoleHistory::getHistoryItem(const int& index) const
     {
-        return m_history.at(index);
+        return mHistory.at(index);
     }
 
     int PythonConsoleHistory::size() const
     {
-        return m_history.size();
+        return mHistory.size();
     }
 
-    void PythonConsoleHistory::update_from_file()
+    void PythonConsoleHistory::updateFromFile()
     {
-        std::ifstream f(m_file_name);
-        m_history.clear();
+        std::ifstream f(mFileName);
+        mHistory.clear();
         std::string line;
         while (std::getline(f, line))
         {
-            m_history.push_back(line);
+            mHistory.push_back(line);
         }
     }
 
-    void PythonConsoleHistory::append_to_file(const std::string& command)
+    void PythonConsoleHistory::appendToFile(const std::string& command)
     {
-        std::ofstream f(m_file_name, std::ios::out | std::ios::app);
+        std::ofstream f(mFileName, std::ios::out | std::ios::app);
         f << command << std::endl;
     }
 }

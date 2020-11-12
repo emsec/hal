@@ -30,26 +30,26 @@ namespace hal
     class NotificationManagerQssAdapter : public QWidget
     {
         Q_OBJECT
-        Q_PROPERTY(int x_offset READ x_offset WRITE set_x_offset)
-        Q_PROPERTY(int y_offset READ y_offset WRITE set_y_offset)
-        Q_PROPERTY(int spacing READ spacing WRITE set_spacing)
+        Q_PROPERTY(int xOffset READ xOffset WRITE setXOffset)
+        Q_PROPERTY(int yOffset READ yOffset WRITE setYOffset)
+        Q_PROPERTY(int spacing READ spacing WRITE setSpacing)
 
     public:
         explicit NotificationManagerQssAdapter(QWidget* parent = nullptr);
 
         void repolish();
 
-        int x_offset() const;
-        int y_offset() const;
+        int xOffset() const;
+        int yOffset() const;
         int spacing() const;
 
-        void set_x_offset(const int offset);
-        void set_y_offset(const int offset);
-        void set_spacing(const int spacing);
+        void setXOffset(const int offset);
+        void setYOffset(const int offset);
+        void setSpacing(const int spacing);
 
         // LEFT PUBLIC INTENTIONALLY
-        int m_x_offset;
-        int m_y_offset;
-        int m_spacing;
+        int mXOffset;
+        int mYOffset;
+        int mSpacing;
     };
 }

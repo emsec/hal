@@ -39,7 +39,7 @@ namespace hal
         void update(const QVariant& value) Q_DECL_OVERRIDE;
 
     private:
-        QLabel* m_label;
-        QFont m_font;
+        QLabel* mLabel;
+        QFont mFont;
     };
 }

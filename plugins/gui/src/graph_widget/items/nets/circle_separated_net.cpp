@@ -8,15 +8,15 @@
 
 namespace hal
 {
-    qreal CircleSeparatedNet::s_wire_length;
-    qreal CircleSeparatedNet::s_circle_offset;
-    qreal CircleSeparatedNet::s_radius;
+    qreal CircleSeparatedNet::sWireLength;
+    qreal CircleSeparatedNet::sCircleOffset;
+    qreal CircleSeparatedNet::sRadius;
 
-    void CircleSeparatedNet::load_settings()
+    void CircleSeparatedNet::loadSettings()
     {
-        s_wire_length   = 26;
-        s_circle_offset = 0;
-        s_radius        = 3;
+        sWireLength   = 26;
+        sCircleOffset = 0;
+        sRadius        = 3;
     }
 
     CircleSeparatedNet::CircleSeparatedNet(Net* n) : SeparatedGraphicsNet(n)
@@ -27,123 +27,123 @@ namespace hal
     {
         Q_UNUSED(widget);
 
-        if (s_lod < graph_widget_constants::separated_net_min_lod)
+        if (sLod < graph_widget_constants::sEparatedNetMinLod)
             return;
 
         QColor color = penColor(option->state);
-        color.setAlphaF(s_alpha);
+        color.setAlphaF(sAlpha);
 
-        s_pen.setColor(color);
-        painter->setPen(s_pen);
+        sPen.setColor(color);
+        painter->setPen(sPen);
 
-        if (m_fill_icon)
+        if (mFillIcon)
         {
-            s_brush.setColor(color);
-            s_brush.setStyle(m_brush_style);
-            painter->setBrush(s_brush);
+            sBrush.setColor(color);
+            sBrush.setStyle(mBrushStyle);
+            painter->setBrush(sBrush);
         }
 
         const bool original_antialiasing = painter->renderHints() & QPainter::Antialiasing;
-        const Qt::PenStyle original_pen_style = s_pen.style();
+        const Qt::PenStyle original_pen_style = sPen.style();
 
-        for (const QPointF& position : m_input_positions)
+        for (const QPointF& position : mInputPositions)
         {
-            QPointF to(position.x() - s_wire_length, position.y());
+            QPointF to(position.x() - sWireLength, position.y());
             painter->drawLine(position, to);
             painter->setRenderHint(QPainter::Antialiasing, true);
-            s_pen.setStyle(Qt::PenStyle::SolidLine);
-            painter->setPen(s_pen);
-            painter->drawEllipse(QPointF(to.x() - s_circle_offset, to.y()), s_radius, s_radius);
-            s_pen.setStyle(original_pen_style);
-            painter->setPen(s_pen);
+            sPen.setStyle(Qt::PenStyle::SolidLine);
+            painter->setPen(sPen);
+            painter->drawEllipse(QPointF(to.x() - sCircleOffset, to.y()), sRadius, sRadius);
+            sPen.setStyle(original_pen_style);
+            painter->setPen(sPen);
             painter->setRenderHint(QPainter::Antialiasing, original_antialiasing);
         }
 
-        for (const QPointF& position : m_output_positions)
+        for (const QPointF& position : mOutputPositions)
         {
-            QPointF to(position.x() + s_wire_length, position.y());
+            QPointF to(position.x() + sWireLength, position.y());
             painter->drawLine(position, to);
             painter->setRenderHint(QPainter::Antialiasing, true);
-            s_pen.setStyle(Qt::PenStyle::SolidLine);
-            painter->setPen(s_pen);
-            painter->drawEllipse(QPointF(to.x() + s_wire_length + s_circle_offset, to.y()), s_radius, s_radius);
-            s_pen.setStyle(original_pen_style);
-            painter->setPen(s_pen);
+            sPen.setStyle(Qt::PenStyle::SolidLine);
+            painter->setPen(sPen);
+            painter->drawEllipse(QPointF(to.x() + sWireLength + sCircleOffset, to.y()), sRadius, sRadius);
+            sPen.setStyle(original_pen_style);
+            painter->setPen(sPen);
             painter->setRenderHint(QPainter::Antialiasing, original_antialiasing);
         }
 
-        s_brush.setStyle(Qt::NoBrush);
-        painter->setBrush(s_brush);
+        sBrush.setStyle(Qt::NoBrush);
+        painter->setBrush(sBrush);
 
     #ifdef HAL_DEBUG_GUI_GRAPH_WIDGET
-        bool original_cosmetic = s_pen.isCosmetic();
-        s_pen.setCosmetic(true);
-        s_pen.setColor(Qt::green);
-        painter->setPen(s_pen);
+        bool original_cosmetic = sPen.isCosmetic();
+        sPen.setCosmetic(true);
+        sPen.setColor(Qt::green);
+        painter->setPen(sPen);
         painter->setRenderHint(QPainter::Antialiasing, true);
-        painter->drawPath(m_shape);
+        painter->drawPath(mShape);
         painter->setRenderHint(QPainter::Antialiasing, original_antialiasing);
-        s_pen.setCosmetic(original_cosmetic);
+        sPen.setCosmetic(original_cosmetic);
     #endif
     }
 
-    void CircleSeparatedNet::add_input(const QPointF& scene_position)
+    void CircleSeparatedNet::addInput(const QPointF& scene_position)
     {
         QPointF mapped_position = mapFromScene(scene_position);
-        m_input_positions.append(mapped_position);
+        mInputPositions.append(mapped_position);
 
-        const qreal half_of_shape_width = s_shape_width / 2;
+        const qreal half_of_shape_width = sShapeWidth / 2;
 
-        QPointF point(mapped_position.x() - s_wire_length - half_of_shape_width, mapped_position.y() - half_of_shape_width);
+        QPointF point(mapped_position.x() - sWireLength - half_of_shape_width, mapped_position.y() - half_of_shape_width);
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + s_wire_length + s_shape_width);
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_shape_width);
-        m_shape.lineTo(point);
-        point.setX(point.x() - s_wire_length - s_shape_width);
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + sWireLength + sShapeWidth);
+        mShape.lineTo(point);
+        point.setY(point.y() + sShapeWidth);
+        mShape.lineTo(point);
+        point.setX(point.x() - sWireLength - sShapeWidth);
+        mShape.lineTo(point);
+        mShape.closeSubpath();
 
-        point.setX(mapped_position.x() - s_wire_length - s_circle_offset);
+        point.setX(mapped_position.x() - sWireLength - sCircleOffset);
         point.setY(mapped_position.y());
-        const qreal radius = s_radius + half_of_shape_width;
+        const qreal radius = sRadius + half_of_shape_width;
 
-        m_shape.addEllipse(point, radius, radius);
+        mShape.addEllipse(point, radius, radius);
     }
 
-    void CircleSeparatedNet::add_output(const QPointF& scene_position)
+    void CircleSeparatedNet::addOutput(const QPointF& scene_position)
     {
         QPointF mapped_position = mapFromScene(scene_position);
-        m_output_positions.append(mapped_position);
+        mOutputPositions.append(mapped_position);
 
-        const qreal half_of_shape_width = s_shape_width / 2;
+        const qreal half_of_shape_width = sShapeWidth / 2;
 
         QPointF point(mapped_position.x() - half_of_shape_width, mapped_position.y() - half_of_shape_width);
 
-        m_shape.moveTo(point);
-        point.setX(point.x() + s_wire_length + s_shape_width);
-        m_shape.lineTo(point);
-        point.setY(point.y() + s_shape_width);
-        m_shape.lineTo(point);
-        point.setX(point.x() - s_wire_length - s_shape_width);
-        m_shape.lineTo(point);
-        m_shape.closeSubpath();
+        mShape.moveTo(point);
+        point.setX(point.x() + sWireLength + sShapeWidth);
+        mShape.lineTo(point);
+        point.setY(point.y() + sShapeWidth);
+        mShape.lineTo(point);
+        point.setX(point.x() - sWireLength - sShapeWidth);
+        mShape.lineTo(point);
+        mShape.closeSubpath();
 
-        point.setX(mapped_position.x() + s_wire_length + s_circle_offset);
+        point.setX(mapped_position.x() + sWireLength + sCircleOffset);
         point.setY(mapped_position.y());
-        const qreal radius = s_radius + half_of_shape_width;
+        const qreal radius = sRadius + half_of_shape_width;
 
-        m_shape.addEllipse(point, radius, radius);
+        mShape.addEllipse(point, radius, radius);
     }
 
-    qreal CircleSeparatedNet::input_width() const
+    qreal CircleSeparatedNet::inputWidth() const
     {
-        return s_wire_length + s_circle_offset + s_radius + s_line_width / 2;
+        return sWireLength + sCircleOffset + sRadius + sLineWidth / 2;
     }
 
-    qreal CircleSeparatedNet::output_width() const
+    qreal CircleSeparatedNet::outputWidth() const
     {
-        return s_wire_length + s_circle_offset + s_radius + s_line_width / 2;
+        return sWireLength + sCircleOffset + sRadius + sLineWidth / 2;
     }
 }

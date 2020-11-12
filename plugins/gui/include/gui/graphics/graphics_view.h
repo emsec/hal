@@ -39,14 +39,14 @@ namespace hal
 
     public:
         GraphicsView();
-        void gentle_zoom(double factor);
-        void set_modifiers(Qt::KeyboardModifiers modifiers);
-        void set_zoom_factor_base(double value);
+        void gentleZoom(double factor);
+        void setModifiers(Qt::KeyboardModifiers modifiers);
+        void setZoomFactorBase(double value);
 
     private:
-        Qt::KeyboardModifiers m_modifiers;
-        double m_zoom_factor_base;
-        QPointF m_target_scene_pos, m_target_viewport_pos;
+        Qt::KeyboardModifiers mModifiers;
+        double mZoomFactorBase;
+        QPointF mTargetScenePos, mTargetViewportPos;
         bool eventFilter(QObject* object, QEvent* event);
 
     Q_SIGNALS:

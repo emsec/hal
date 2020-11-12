@@ -55,7 +55,7 @@ namespace hal
         //        m_type_rule.list << "Keyword.Type";
         //        m_type_rule.state = "";
         //
-        //        m_keywords << "\\babs\\b" << "\\baccess\\b" << "\\bafter\\b" << "\\balias\\b" << "\\ball\\b" << "\\band\\b"
+        //        mKeywords << "\\babs\\b" << "\\baccess\\b" << "\\bafter\\b" << "\\balias\\b" << "\\ball\\b" << "\\band\\b"
         //                        << "\\barchitecture\\b" << "\\barray\\b" << "\\bassert\\b" << "\\battribute\\b" << "\\bbegin\\b"
         //                        << "\\bblock\\b" << "\\bbody\\b" << "\\bbuffer\\b" << "\\bbus\\b" << "\\bcase\\b"
         //                        << "\\bcomponent\\b" << "\\bconfiguration\\b" << "\\bconstant\\b" << "\\bdisconnect\\b"
@@ -75,13 +75,13 @@ namespace hal
         //                        << "\\bvariable\\b" << "\\bwait\\b" << "\\bwhen\\b" << "\\bwhile\\b" << "\\bwith\\b"
         //                        << "\\bxnor\\b" << "\\bxor\\b";
         //
-        //        QString keywords_pattern = QString("(" + m_keywords.join('|') + ")");
+        //        QString keywords_pattern = QString("(" + mKeywords.join('|') + ")");
         //        m_keyword_rule.expression = QRegularExpression(keywords_pattern, m_pattern_options);
         //        m_keyword_rule.expression.optimize();
         //        m_keyword_rule.list << "Keyword";
         //        m_keyword_rule.state = "";
         //
-        //        m_rules["root"] = QList<highlighting_rule>();
+        //        m_rules["root"] = QList<HighlightingRule>();
         //        m_rules["root"].append(make_rule("\\n", QStringList() << "Text", ""));
         //        m_rules["root"].append(make_rule("\\s+", QStringList() << "Text", ""));
         //        m_rules["root"].append(make_rule("\\\\\\n", QStringList() << "Text", ""));
@@ -107,13 +107,13 @@ namespace hal
         //        m_rules["root"].append(make_rule("O\"[0-7_]+\"", QStringList() << "Number.Oct", ""));
         //        m_rules["root"].append(make_rule("bB\"[01_]+\"", QStringList() << "Number.Bin", ""));
         //
-        //        m_rules["comment"] = QList<highlighting_rule>();
+        //        m_rules["comment"] = QList<HighlightingRule>();
         //        m_rules["comment"].append(make_rule("[^*/]", QStringList() << "Comment.Multi", ""));
         //        m_rules["comment"].append(make_rule("/\\*", QStringList() << "Comment.Multi", "#push"));
         //        m_rules["comment"].append(make_rule("\\*/", QStringList() << "Comment.Multi", "#pop"));
         //        m_rules["comment"].append(make_rule("[*/]", QStringList() << "Comment.Multi", ""));
         //
-        //        m_rules["endblock"] = QList<highlighting_rule>();
+        //        m_rules["endblock"] = QList<HighlightingRule>();
         //        m_rules["endblock"].append(m_keyword_rule);
         //        m_rules["endblock"].append(make_rule("[a-z_]\\w*", QStringList() << "Name.Class", ""));
         //        m_rules["endblock"].append(make_rule("(\\s+)", QStringList() << "Text", ""));
@@ -121,74 +121,74 @@ namespace hal
 
         // NEW STUFF HERE
 
-        highlighting_rule rule;
+        HighlightingRule rule;
 
-        rule.pattern = QRegularExpression("(?<match>(\\b(abs|access|after|alias|all|and|architecture|array|assert|attribute|begin|block|body|buffer|bus|case|component|configuration|constant|disconnect|"
+        rule.mPattern = QRegularExpression("(?<match>(\\b(abs|access|after|alias|all|and|architecture|array|assert|attribute|begin|block|body|buffer|bus|case|component|configuration|constant|disconnect|"
                                           "downto|else|elsif|end|entity|exit|file|for|function|generate|generic|group|guarded|if|impure|in|inertial|inout|is|label|library|linkage|literal|loop|map|mod|"
                                           "nand|new|next|nor|not|null|of|on|open|or|others|out|package|port|postponed|procedure|process|pure|range|record|register|reject|rem|report|return|rol|ror|select|"
                                           "severity|signal|shared|sla|sll|sra|srl|subtype|then|to|transport|type|unaffected|units|until|use|variable|wait|when|while|with|xnor|xor)\\b|=>|<=|:=))",
                                           QRegularExpression::CaseInsensitiveOption);
-        rule.pattern.optimize();
-        rule.format = VhdlQssAdapter::instance()->m_keyword_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern.optimize();
+        rule.mFormat = VhdlQssAdapter::instance()->mKeywordFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("(?<match>\\b[a-h,j-z]s\\b|\\bns\\b|rising_edge|falling_edge|TRUE|true|FALSE|false)");
-        rule.pattern.optimize();
-        rule.format = VhdlQssAdapter::instance()->m_type_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("(?<match>\\b[a-h,j-z]s\\b|\\bns\\b|rising_edge|falling_edge|TRUE|true|FALSE|false)");
+        rule.mPattern.optimize();
+        rule.mFormat = VhdlQssAdapter::instance()->mTypeFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("(\\:\\s|in\\s|out\\s)(?<match>\\w*)(\\s?\\;|\\s:=|\\s\\()");
-        rule.pattern.optimize();
-        rule.format = VhdlQssAdapter::instance()->m_type_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("(\\:\\s|in\\s|out\\s)(?<match>\\w*)(\\s?\\;|\\s:=|\\s\\()");
+        rule.mPattern.optimize();
+        rule.mFormat = VhdlQssAdapter::instance()->mTypeFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("(\\:\\s+)(?<match>\\b.+\\b)(\\s*)$");
-        rule.pattern.optimize();
-        rule.format = VhdlQssAdapter::instance()->m_keyword_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("(\\:\\s+)(?<match>\\b.+\\b)(\\s*)$");
+        rule.mPattern.optimize();
+        rule.mFormat = VhdlQssAdapter::instance()->mKeywordFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("(?<match>'.+'|\\b'?\\d+'?\\b)");
-        rule.pattern.optimize();
-        rule.format = VhdlQssAdapter::instance()->m_number_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("(?<match>'.+'|\\b'?\\d+'?\\b)");
+        rule.mPattern.optimize();
+        rule.mFormat = VhdlQssAdapter::instance()->mNumberFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("(?<match>\"\\D.*\")");
-        rule.pattern.optimize();
-        rule.format = VhdlQssAdapter::instance()->m_string_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("(?<match>\"\\D.*\")");
+        rule.mPattern.optimize();
+        rule.mFormat = VhdlQssAdapter::instance()->mStringFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("(?<match>\\bX\".*\")");
-        rule.pattern.optimize();
-        rule.format = VhdlQssAdapter::instance()->m_number_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("(?<match>\\bX\".*\")");
+        rule.mPattern.optimize();
+        rule.mFormat = VhdlQssAdapter::instance()->mNumberFormat;
+        mHighlightingRules.append(rule);
 
-        m_single_line_comment_expression = QRegularExpression("(?<match>--[^\n]*)");
-        m_comment_start_expression       = QRegularExpression("(/\\*)");
-        m_comment_end_expression         = QRegularExpression("(\\*/)");
+        mSingleLineCommentExpression = QRegularExpression("(?<match>--[^\n]*)");
+        mCommentStartExpression       = QRegularExpression("(/\\*)");
+        mCommentEndExpression         = QRegularExpression("(\\*/)");
     }
 
     void VhdlSyntaxHighlighter::highlightBlock(const QString& text)
     {
         //this->run_current_state(text);
-        for (const highlighting_rule& rule : m_highlighting_rules)
+        for (const HighlightingRule& rule : mHighlightingRules)
         {
-            QRegularExpressionMatchIterator it = rule.pattern.globalMatch(text);
+            QRegularExpressionMatchIterator it = rule.mPattern.globalMatch(text);
             while (it.hasNext())
             {
                 QRegularExpressionMatch match = it.next();
                 int index                     = match.capturedStart("match");
                 int length                    = match.capturedLength("match");
-                setFormat(index, length, rule.format);
+                setFormat(index, length, rule.mFormat);
             }
         }
 
-        QRegularExpressionMatchIterator it = m_single_line_comment_expression.globalMatch(text);
+        QRegularExpressionMatchIterator it = mSingleLineCommentExpression.globalMatch(text);
         while (it.hasNext())
         {
             QRegularExpressionMatch match = it.next();
             int index                     = match.capturedStart("match");
             int length                    = match.capturedLength("match");
-            setFormat(index, length, VhdlQssAdapter::instance()->m_comment_format);
+            setFormat(index, length, VhdlQssAdapter::instance()->mCommentFormat);
         }
 
         setCurrentBlockState(0);
@@ -196,7 +196,7 @@ namespace hal
 
         if (previousBlockState() != 1)
         {
-            QRegularExpressionMatch match = m_comment_start_expression.match(text);
+            QRegularExpressionMatch match = mCommentStartExpression.match(text);
             if (match.hasMatch())
                 start_index = match.capturedStart(0);
             else
@@ -206,7 +206,7 @@ namespace hal
         while (start_index >= 0)
         {
             int end_index                 = 0;
-            QRegularExpressionMatch match = m_comment_end_expression.match(text, start_index);
+            QRegularExpressionMatch match = mCommentEndExpression.match(text, start_index);
             if (match.hasMatch())
                 end_index = match.capturedStart(0);
             else
@@ -221,8 +221,8 @@ namespace hal
             {
                 comment_length = end_index - start_index + match.capturedLength(0);
             }
-            setFormat(start_index, comment_length, VhdlQssAdapter::instance()->m_comment_format);
-            match = m_comment_start_expression.match(text, start_index + comment_length);
+            setFormat(start_index, comment_length, VhdlQssAdapter::instance()->mCommentFormat);
+            match = mCommentStartExpression.match(text, start_index + comment_length);
             if (match.hasMatch())
                 start_index = match.capturedStart(0);
             else
@@ -231,10 +231,10 @@ namespace hal
     }
 }
 
-//VhdlSyntaxHighlighter::highlighting_rule VhdlSyntaxHighlighter::make_rule(QString expression,
+//VhdlSyntaxHighlighter::HighlightingRule VhdlSyntaxHighlighter::make_rule(QString expression,
 //                                                                              QStringList list, QString state)
 //{
-//        highlighting_rule rule;
+//        HighlightingRule rule;
 //        rule.expression = QRegularExpression(expression, m_pattern_options);
 //        rule.expression.optimize();
 //        rule.list = list;
@@ -249,9 +249,9 @@ namespace hal
 //                return;
 //        }
 //        bool rerun = false;
-//        QList<highlighting_rule> rule_set = m_rules[m_current_state];
+//        QList<HighlightingRule> rule_set = m_rules[m_current_state];
 //        int max = text.length() - 1;
-//        for (const highlighting_rule &rule : rule_set) {
+//        for (const HighlightingRule &rule : rule_set) {
 //                QRegularExpressionMatch match = rule.expression.match(text, offset, m_match_type, m_match_options);
 //                if (match.hasMatch()) {
 //                        if (rule.list.length() == 1) {

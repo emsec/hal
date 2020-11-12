@@ -42,42 +42,26 @@ namespace hal
     {
         Q_OBJECT
 
-        struct module_pin
+        struct ModulePin
         {
-            std::string name;
-            u32 net;
-        };
-
-        // PROBABLY OBSOLETE, INTEGRATE INTO ITEMS
-        struct module_extension
-        {
-            module_extension(const u32 module_id) : id(module_id) {}
-            ~module_extension();
-
-            u32 id;
-            QSet<module_pin> input_pins; // UNSURE
-            QSet<module_pin> output_pins; // UNSURE
-            bool isolated = true; // UNSURE
-            QColor color = QColor(255, 255, 255);
-            bool compressed = false;
-            bool hidden = false;
-            QVector<u32> stray_nets; // UNSURE
+            std::string mName;
+            u32 mNet;
         };
 
     public:
         explicit ModuleRelay(QObject* parent = nullptr);
 
-        void add_selection_to_module(const u32 id);
+        void addSelectionToModule(const u32 id);
 
-        void set_module_color(const u32 id, const QColor& color);
-        void set_module_compressed(const u32 id, const bool compressed);
-        void set_module_hidden(const u32 id, const bool hidden);
+        void setModuleColor(const u32 id, const QColor& color);
+        void setModuleCompressed(const u32 id, const bool mCompressed);
+        void setModuleHidden(const u32 id, const bool hidden);
 
     public Q_SLOTS:
-        void handle_module_event(module_event_handler::event ev, Module* object, u32 associated_data);
+        void handleModuleEvent(module_event_handler::event ev, Module* object, u32 associated_data);
 
     private:
-        QMap<u32, ModuleItem*> m_ModuleItems;
-        ModuleModel* m_model;
+        QMap<u32, ModuleItem*> mModuleItems;
+        ModuleModel* mModel;
     };
 }

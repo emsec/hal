@@ -30,219 +30,219 @@
 namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
-        : ContentWidget("Views", parent), m_new_view_action(new QAction(this)), m_rename_action(new QAction(this)), m_duplicate_action(new QAction(this)),
-          m_delete_action(new QAction(this)), m_open_action(new QAction(this)), m_search_action(new QAction(this))
+        : ContentWidget("Views", parent), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
+          mDeleteAction(new QAction(this)), mOpenAction(new QAction(this)), mSearchAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
-        m_tab_view = tab_view;
+        mTabView = tab_view;
 
-        m_open_action->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
-        m_new_view_action->setIcon(gui_utility::get_styled_svg_icon(m_new_view_icon_style, m_new_view_icon_path));
-        m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_rename_icon_style, m_rename_icon_path));
-        m_duplicate_action->setIcon(gui_utility::get_styled_svg_icon(m_duplicate_icon_style, m_duplicate_icon_path));
-        m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
-        m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
+        mOpenAction->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
+        mNewViewAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewViewIconPath));
+        mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
+        mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
+        mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
-        m_open_action->setToolTip("Open");
-        m_new_view_action->setToolTip("New");
-        m_rename_action->setToolTip("Rename");
-        m_duplicate_action->setToolTip("Duplicate");
-        m_delete_action->setToolTip("Delete");
-        m_search_action->setToolTip("Search");
+        mOpenAction->setToolTip("Open");
+        mNewViewAction->setToolTip("New");
+        mRenameAction->setToolTip("Rename");
+        mDuplicateAction->setToolTip("Duplicate");
+        mDeleteAction->setToolTip("Delete");
+        mSearchAction->setToolTip("Search");
 
-        m_open_action->setText("Open View");
-        m_new_view_action->setText("Create New View");
-        m_rename_action->setText("Rename View");
-        m_duplicate_action->setText("Duplicate View");
-        m_delete_action->setText("Delete View");
+        mOpenAction->setText("Open View");
+        mNewViewAction->setText("Create New View");
+        mRenameAction->setText("Rename View");
+        mDuplicateAction->setText("Duplicate View");
+        mDeleteAction->setText("Delete View");
 
-        //m_open_action->setEnabled(false);
-        //m_rename_action->setEnabled(false);
-        //m_duplicate_action->setEnabled(false);
-        //m_delete_action->setEnabled(false);
+        //mOpenAction->setEnabled(false);
+        //mRenameAction->setEnabled(false);
+        //mDuplicateAction->setEnabled(false);
+        //mDeleteAction->setEnabled(false);
 
-        m_context_table_model = g_graph_context_manager->get_context_table_model();
+        mContextTableModel = gGraphContextManager->getContextTableModel();
 
-        m_context_table_proxy_model = new ContextTableProxyModel();
-        m_context_table_proxy_model->setSourceModel(m_context_table_model);
-        m_context_table_proxy_model->setSortRole(Qt::UserRole);
+        mContextTableProxyModel = new ContextTableProxyModel();
+        mContextTableProxyModel->setSourceModel(mContextTableModel);
+        mContextTableProxyModel->setSortRole(Qt::UserRole);
 
-        m_context_table_view = new QTableView(this);
-        m_context_table_view->setModel(m_context_table_proxy_model);
-        m_context_table_view->setSortingEnabled(true);
-        m_context_table_view->setSelectionBehavior(QAbstractItemView::SelectRows);
-        m_context_table_view->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
-        m_context_table_view->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-        m_context_table_view->sortByColumn(1, Qt::SortOrder::DescendingOrder);
-        m_context_table_view->verticalHeader()->hide();
-        m_context_table_view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        mContextTableView = new QTableView(this);
+        mContextTableView->setModel(mContextTableProxyModel);
+        mContextTableView->setSortingEnabled(true);
+        mContextTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        mContextTableView->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
+        mContextTableView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+        mContextTableView->sortByColumn(1, Qt::SortOrder::DescendingOrder);
+        mContextTableView->verticalHeader()->hide();
+        mContextTableView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-        m_context_table_view->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-        m_context_table_view->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+        mContextTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+        mContextTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
 
-        m_content_layout->addWidget(m_context_table_view);
-        m_content_layout->addWidget(&m_searchbar);
+        mContentLayout->addWidget(mContextTableView);
+        mContentLayout->addWidget(&mSearchbar);
 
-        m_searchbar.hide();
+        mSearchbar.hide();
 
-        connect(m_open_action, &QAction::triggered, this, &ContextManagerWidget::handle_open_context_clicked);
-        connect(m_new_view_action, &QAction::triggered, this, &ContextManagerWidget::handle_create_context_clicked);
-        connect(m_rename_action, &QAction::triggered, this, &ContextManagerWidget::handle_rename_context_clicked);
-        connect(m_duplicate_action, &QAction::triggered, this, &ContextManagerWidget::handle_duplicate_context_clicked);
-        connect(m_delete_action, &QAction::triggered, this, &ContextManagerWidget::handle_delete_context_clicked);
-        connect(m_search_action, &QAction::triggered, this, &ContextManagerWidget::toggle_searchbar);
+        connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);
+        connect(mNewViewAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateContextClicked);
+        connect(mRenameAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameContextClicked);
+        connect(mDuplicateAction, &QAction::triggered, this, &ContextManagerWidget::handleDuplicateContextClicked);
+        connect(mDeleteAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteContextClicked);
+        connect(mSearchAction, &QAction::triggered, this, &ContextManagerWidget::toggleSearchbar);
 
-        connect(m_context_table_view, &QTableView::customContextMenuRequested, this, &ContextManagerWidget::handle_context_menu_request);
-        connect(m_context_table_view, &QTableView::doubleClicked, this, &ContextManagerWidget::handle_open_context_clicked);
-        connect(m_context_table_view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handle_selection_changed);
+        connect(mContextTableView, &QTableView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
+        connect(mContextTableView, &QTableView::doubleClicked, this, &ContextManagerWidget::handleOpenContextClicked);
+        connect(mContextTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handleSelectionChanged);
 
-        connect(&m_searchbar, &Searchbar::text_edited, m_context_table_proxy_model, &ContextTableProxyModel::handle_filter_text_changed);
-        connect(&m_searchbar, &Searchbar::text_edited, this, &ContextManagerWidget::handle_filter_text_changed);
+        connect(&mSearchbar, &Searchbar::textEdited, mContextTableProxyModel, &ContextTableProxyModel::handleFilterTextChanged);
+        connect(&mSearchbar, &Searchbar::textEdited, this, &ContextManagerWidget::handleFilterTextChanged);
     }
 
-    void ContextManagerWidget::handle_create_context_clicked()
+    void ContextManagerWidget::handleCreateContextClicked()
     {
         GraphContext* new_context = nullptr;
-        new_context = g_graph_context_manager->create_new_context(QString::fromStdString(g_netlist->get_top_module()->get_name()));
-        new_context->add({g_netlist->get_top_module()->get_id()}, {});
+        new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
+        new_context->add({gNetlist->get_top_module()->get_id()}, {});
     }
 
-    void ContextManagerWidget::handle_open_context_clicked()
+    void ContextManagerWidget::handleOpenContextClicked()
     {
-        GraphContext* clicked_context = get_current_context();
-        m_tab_view->show_context(clicked_context);
+        GraphContext* clicked_context = getCurrentContext();
+        mTabView->showContext(clicked_context);
     }
 
-    void ContextManagerWidget::handle_rename_context_clicked()
+    void ContextManagerWidget::handleRenameContextClicked()
     {
-        GraphContext* clicked_context = get_current_context();
+        GraphContext* clicked_context = getCurrentContext();
 
         QStringList used_context_names;
-        for (const auto& context : g_graph_context_manager->get_contexts())
+        for (const auto& context : gGraphContextManager->getContexts())
             used_context_names.append(context->name());
 
         UniqueStringValidator unique_validator(used_context_names);
         EmptyStringValidator empty_validator;
 
         InputDialog ipd;
-        ipd.set_window_title("Rename View");
-        ipd.set_info_text("Please select a new unique name for the view.");
-        ipd.set_input_text(clicked_context->name());
-        ipd.add_validator(&unique_validator);
-        ipd.add_validator(&empty_validator);
+        ipd.setWindowTitle("Rename View");
+        ipd.setInfoText("Please select a new unique name for the view.");
+        ipd.setInputText(clicked_context->name());
+        ipd.addValidator(&unique_validator);
+        ipd.addValidator(&empty_validator);
 
         if (ipd.exec() == QDialog::Accepted)
-            g_graph_context_manager->rename_graph_context(clicked_context, ipd.text_value());
+            gGraphContextManager->renameGraphContext(clicked_context, ipd.textValue());
     }
 
-    void ContextManagerWidget::handle_duplicate_context_clicked()
+    void ContextManagerWidget::handleDuplicateContextClicked()
     {
-        GraphContext* clicked_context = get_current_context();
-        GraphContext* new_context     = g_graph_context_manager->create_new_context(clicked_context->name() + " (Copy)");
+        GraphContext* clicked_context = getCurrentContext();
+        GraphContext* new_context     = gGraphContextManager->createNewContext(clicked_context->name() + " (Copy)");
         new_context->add(clicked_context->modules(), clicked_context->gates());
     }
 
-    void ContextManagerWidget::handle_delete_context_clicked()
+    void ContextManagerWidget::handleDeleteContextClicked()
     {
-        GraphContext* clicked_context = get_current_context();
-        g_graph_context_manager->delete_graph_context(clicked_context);
+        GraphContext* clicked_context = getCurrentContext();
+        gGraphContextManager->deleteGraphContext(clicked_context);
     }
 
-    void ContextManagerWidget::handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected)
+    void ContextManagerWidget::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
     {
         Q_UNUSED(deselected);
 
         if(selected.indexes().isEmpty())
-            set_toolbar_buttons_enabled(false);
+            setToolbarButtonsEnabled(false);
         else
-            set_toolbar_buttons_enabled(true);
+            setToolbarButtonsEnabled(true);
     }
 
-    void ContextManagerWidget::handle_context_menu_request(const QPoint& point)
+    void ContextManagerWidget::handleContextMenuRequest(const QPoint& point)
     {
-        const QModelIndex clicked_index = m_context_table_view->indexAt(point);
+        const QModelIndex clicked_index = mContextTableView->indexAt(point);
 
         QMenu context_menu;
 
-        context_menu.addAction(m_new_view_action);
+        context_menu.addAction(mNewViewAction);
 
         if (clicked_index.isValid())
         {
-            context_menu.addAction(m_open_action);
-            context_menu.addAction(m_duplicate_action);
-            context_menu.addAction(m_rename_action);
-            context_menu.addAction(m_delete_action);
+            context_menu.addAction(mOpenAction);
+            context_menu.addAction(mDuplicateAction);
+            context_menu.addAction(mRenameAction);
+            context_menu.addAction(mDeleteAction);
         }
 
-        context_menu.exec(m_context_table_view->viewport()->mapToGlobal(point));
+        context_menu.exec(mContextTableView->viewport()->mapToGlobal(point));
     }
 
-    void ContextManagerWidget::handle_filter_text_changed(const QString& filter_text)
+    void ContextManagerWidget::handleFilterTextChanged(const QString& filter_text)
     {
         if(filter_text.isEmpty())
-            m_search_action->setIcon(gui_utility::get_styled_svg_icon(m_search_icon_style, m_search_icon_path));
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
         else
-            m_search_action->setIcon(gui_utility::get_styled_svg_icon("all->#30ac4f", m_search_icon_path)); //color test, integrate into stylsheet later
+            mSearchAction->setIcon(gui_utility::getStyledSvgIcon("all->#30ac4f", mSearchIconPath)); //color test, integrate into stylsheet later
     }
 
-    void ContextManagerWidget::select_view_context(GraphContext* context)
+    void ContextManagerWidget::selectViewContext(GraphContext* context)
     {
-        const QModelIndex source_model_index = m_context_table_model->get_index(context);
-        const QModelIndex proxy_model_index = m_context_table_proxy_model->mapFromSource(source_model_index);
+        const QModelIndex source_model_index = mContextTableModel->getIndex(context);
+        const QModelIndex proxy_model_index = mContextTableProxyModel->mapFromSource(source_model_index);
 
         if(proxy_model_index.isValid())
-            m_context_table_view->setCurrentIndex(proxy_model_index);
+            mContextTableView->setCurrentIndex(proxy_model_index);
         else
-            m_context_table_view->clearSelection();
+            mContextTableView->clearSelection();
     }
 
-    GraphContext* ContextManagerWidget::get_current_context()
+    GraphContext* ContextManagerWidget::getCurrentContext()
     {
-        QModelIndex proxy_model_index = m_context_table_view->currentIndex();
-        QModelIndex source_model_index = m_context_table_proxy_model->mapToSource(proxy_model_index);
+        QModelIndex proxy_model_index = mContextTableView->currentIndex();
+        QModelIndex source_model_index = mContextTableProxyModel->mapToSource(proxy_model_index);
 
-        return m_context_table_model->get_context(source_model_index);
+        return mContextTableModel->getContext(source_model_index);
     }
 
-    void ContextManagerWidget::setup_toolbar(Toolbar* toolbar)
+    void ContextManagerWidget::setupToolbar(Toolbar* toolbar)
     {
-        toolbar->addAction(m_new_view_action);
-        toolbar->addAction(m_open_action);
-        toolbar->addAction(m_duplicate_action);
-        toolbar->addAction(m_rename_action);
-        toolbar->addAction(m_delete_action);
-        toolbar->addAction(m_search_action);
+        toolbar->addAction(mNewViewAction);
+        toolbar->addAction(mOpenAction);
+        toolbar->addAction(mDuplicateAction);
+        toolbar->addAction(mRenameAction);
+        toolbar->addAction(mDeleteAction);
+        toolbar->addAction(mSearchAction);
     }
 
-    void ContextManagerWidget::set_toolbar_buttons_enabled(bool enabled)
+    void ContextManagerWidget::setToolbarButtonsEnabled(bool enabled)
     {
-        m_open_action->setEnabled(enabled);
-        m_rename_action->setEnabled(enabled);
-        m_duplicate_action->setEnabled(enabled);
-        m_delete_action->setEnabled(enabled);
+        mOpenAction->setEnabled(enabled);
+        mRenameAction->setEnabled(enabled);
+        mDuplicateAction->setEnabled(enabled);
+        mDeleteAction->setEnabled(enabled);
 
         if(enabled)
         {
-            m_open_action->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
-            m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_rename_icon_style, m_rename_icon_path));
-            m_duplicate_action->setIcon(gui_utility::get_styled_svg_icon(m_duplicate_icon_style, m_duplicate_icon_path));
-            m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_delete_icon_style, m_delete_icon_path));
+            mOpenAction->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
+            mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
+            mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
+            mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
         }
         else
         {
-            m_open_action->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_open_icon_path));
-            m_rename_action->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_rename_icon_path));
-            m_duplicate_action->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_duplicate_icon_path));
-            m_delete_action->setIcon(gui_utility::get_styled_svg_icon(m_disabled_icon_style, m_delete_icon_path));
+            mOpenAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mOpenIconPath));
+            mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mRenameIconPath));
+            mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mDuplicateIconPath));
+            mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mDeleteIconPath));
         }
     }
 
-    QList<QShortcut*> ContextManagerWidget::create_shortcuts()
+    QList<QShortcut*> ContextManagerWidget::createShortcuts()
     {
-        QShortcut* search_shortcut = g_keybind_manager->make_shortcut(this, "keybinds/searchbar_toggle");
-        connect(search_shortcut, &QShortcut::activated, this, &ContextManagerWidget::toggle_searchbar);
+        QShortcut* search_shortcut = gKeybindManager->makeShortcut(this, "keybinds/searchbar_toggle");
+        connect(search_shortcut, &QShortcut::activated, this, &ContextManagerWidget::toggleSearchbar);
 
         QList<QShortcut*> list;
         list.append(search_shortcut);
@@ -250,146 +250,146 @@ namespace hal
         return list;
     }
 
-    void ContextManagerWidget::toggle_searchbar()
+    void ContextManagerWidget::toggleSearchbar()
     {
-        if (m_searchbar.isHidden())
+        if (mSearchbar.isHidden())
         {
-            m_searchbar.show();
-            m_searchbar.setFocus();
+            mSearchbar.show();
+            mSearchbar.setFocus();
         }
         else
         {
-            m_searchbar.hide();
+            mSearchbar.hide();
         }
     }
 
-    QString ContextManagerWidget::disabled_icon_style() const
+    QString ContextManagerWidget::disabledIconStyle() const
     {
-        return m_disabled_icon_style;
+        return mDisabledIconStyle;
     }
 
-    QString ContextManagerWidget::new_view_icon_path() const
+    QString ContextManagerWidget::newViewIconPath() const
     {
-        return m_new_view_icon_path;
+        return mNewViewIconPath;
     }
 
-    QString ContextManagerWidget::new_view_icon_style() const
+    QString ContextManagerWidget::newViewIconStyle() const
     {
-        return m_new_view_icon_style;
+        return mNewViewIconStyle;
     }
 
-    QString ContextManagerWidget::rename_icon_path() const
+    QString ContextManagerWidget::renameIconPath() const
     {
-        return m_rename_icon_path;
+        return mRenameIconPath;
     }
 
-    QString ContextManagerWidget::rename_icon_style() const
+    QString ContextManagerWidget::renameIconStyle() const
     {
-        return m_rename_icon_style;
+        return mRenameIconStyle;
     }
 
-    QString ContextManagerWidget::duplicate_icon_path() const
+    QString ContextManagerWidget::duplicateIconPath() const
     {
-        return m_duplicate_icon_path;
+        return mDuplicateIconPath;
     }
 
-    QString ContextManagerWidget::duplicate_icon_style() const
+    QString ContextManagerWidget::duplicateIconStyle() const
     {
-        return m_duplicate_icon_style;
+        return mDuplicateIconStyle;
     }
 
-    QString ContextManagerWidget::delete_icon_path() const
+    QString ContextManagerWidget::deleteIconPath() const
     {
-        return m_delete_icon_path;
+        return mDeleteIconPath;
     }
 
-    QString ContextManagerWidget::delete_icon_style() const
+    QString ContextManagerWidget::deleteIconStyle() const
     {
-        return m_delete_icon_style;
+        return mDeleteIconStyle;
     }
 
-    QString ContextManagerWidget::open_icon_path() const
+    QString ContextManagerWidget::openIconPath() const
     {
-        return m_open_icon_path;
+        return mOpenIconPath;
     }
 
-    QString ContextManagerWidget::open_icon_style() const
+    QString ContextManagerWidget::openIconStyle() const
     {
-        return m_open_icon_style;
+        return mOpenIconStyle;
     }
 
-    QString ContextManagerWidget::search_icon_path() const
+    QString ContextManagerWidget::searchIconPath() const
     {
-        return m_search_icon_path;
+        return mSearchIconPath;
     }
 
-    QString ContextManagerWidget::search_icon_style() const
+    QString ContextManagerWidget::searchIconStyle() const
     {
-        return m_search_icon_style;
+        return mSearchIconStyle;
     }
 
-    void ContextManagerWidget::set_disabled_icon_style(const QString& style)
+    void ContextManagerWidget::setDisabledIconStyle(const QString& style)
     {
-        m_disabled_icon_style = style;
+        mDisabledIconStyle = style;
     }
 
-    void ContextManagerWidget::set_new_view_icon_path(const QString& path)
+    void ContextManagerWidget::setNewViewIconPath(const QString& path)
     {
-        m_new_view_icon_path = path;
+        mNewViewIconPath = path;
     }
 
-    void ContextManagerWidget::set_new_view_icon_style(const QString& style)
+    void ContextManagerWidget::setNewViewIconStyle(const QString& style)
     {
-        m_new_view_icon_style = style;
+        mNewViewIconStyle = style;
     }
 
-    void ContextManagerWidget::set_rename_icon_path(const QString& path)
+    void ContextManagerWidget::setRenameIconPath(const QString& path)
     {
-        m_rename_icon_path = path;
+        mRenameIconPath = path;
     }
 
-    void ContextManagerWidget::set_rename_icon_style(const QString& style)
+    void ContextManagerWidget::setRenameIconStyle(const QString& style)
     {
-        m_rename_icon_style = style;
+        mRenameIconStyle = style;
     }
 
-    void ContextManagerWidget::set_duplicate_icon_path(const QString& path)
+    void ContextManagerWidget::setDuplicateIconPath(const QString& path)
     {
-        m_duplicate_icon_path = path;
+        mDuplicateIconPath = path;
     }
 
-    void ContextManagerWidget::set_duplicate_icon_style(const QString& style)
+    void ContextManagerWidget::setDuplicateIconStyle(const QString& style)
     {
-        m_duplicate_icon_style = style;
+        mDuplicateIconStyle = style;
     }
 
-    void ContextManagerWidget::set_delete_icon_path(const QString& path)
+    void ContextManagerWidget::setDeleteIconPath(const QString& path)
     {
-        m_delete_icon_path = path;
+        mDeleteIconPath = path;
     }
 
-    void ContextManagerWidget::set_delete_icon_style(const QString& style)
+    void ContextManagerWidget::setDeleteIconStyle(const QString& style)
     {
-        m_delete_icon_style = style;
+        mDeleteIconStyle = style;
     }
 
-    void ContextManagerWidget::set_open_icon_path(const QString& path)
+    void ContextManagerWidget::setOpenIconPath(const QString& path)
     {
-        m_open_icon_path = path;
+        mOpenIconPath = path;
     }
 
-    void ContextManagerWidget::set_open_icon_style(const QString& style)
+    void ContextManagerWidget::setOpenIconStyle(const QString& style)
     {
-        m_open_icon_style = style;
+        mOpenIconStyle = style;
     }
 
-    void ContextManagerWidget::set_search_icon_path(const QString& path)
+    void ContextManagerWidget::setSearchIconPath(const QString& path)
     {
-        m_search_icon_path = path;
+        mSearchIconPath = path;
     }
 
-    void ContextManagerWidget::set_search_icon_style(const QString& style)
+    void ContextManagerWidget::setSearchIconStyle(const QString& style)
     {
-        m_search_icon_style = style;
+        mSearchIconStyle = style;
     }
 }

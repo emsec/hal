@@ -35,10 +35,10 @@ namespace hal
 {
     namespace GraphicsFactory
     {
-        QStringList graphics_module_types();
-        QStringList graphics_gate_types();
+        QStringList graphicsModuleTypes();
+        QStringList graphicsGateTypes();
 
-        GraphicsModule* create_graphics_module(Module* m, const int type);
-        GraphicsGate* create_graphics_gate(Gate* g, const int type);
+        GraphicsModule* createGraphicsModule(Module* m, const int type);
+        GraphicsGate* createGraphicsGate(Gate* g, const int type);
     }
 }

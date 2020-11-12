@@ -49,54 +49,54 @@ namespace hal
     public:
         GraphContextManager();
 
-        GraphContext* create_new_context(const QString& name);
-        void rename_graph_context(GraphContext* ctx, const QString& new_name);
-        void delete_graph_context(GraphContext* ctx);
-        QVector<GraphContext*> get_contexts() const;
-        bool context_with_name_exists(const QString& name) const;
+        GraphContext* createNewContext(const QString& name);
+        void renameGraphContext(GraphContext* ctx, const QString& new_name);
+        void deleteGraphContext(GraphContext* ctx);
+        QVector<GraphContext*> getContexts() const;
+        bool contextWithNameExists(const QString& name) const;
 
         //void handle_module_created(Module* m) const;
-        void handle_module_removed(Module* m);
-        void handle_module_name_changed(Module* m) const;
-        void handle_module_type_changed(Module* m) const;
-        void handle_module_color_changed(Module* m) const;
+        void handleModuleRemoved(Module* m);
+        void handleModuleNameChanged(Module* m) const;
+        void handleModuleTypeChanged(Module* m) const;
+        void handleModuleColorChanged(Module* m) const;
         //void handle_module_parent_changed(Module* m) const;
-        void handle_module_submodule_added(Module* m, const u32 added_module) const;
-        void handle_module_submodule_removed(Module* m, const u32 removed_module);
-        void handle_module_gate_assigned(Module* m, const u32 inserted_gate) const;
-        void handle_module_gate_removed(Module* m, const u32 removed_gate);
-        void handle_module_input_port_name_changed(Module* m, const u32 net);
-        void handle_module_output_port_name_changed(Module* m, const u32 net);
+        void handleModuleSubmoduleAdded(Module* m, const u32 added_module) const;
+        void handleModuleSubmoduleRemoved(Module* m, const u32 removed_module);
+        void handleModuleGateAssigned(Module* m, const u32 inserted_gate) const;
+        void handleModuleGateRemoved(Module* m, const u32 removed_gate);
+        void handleModuleInputPortNameChanged(Module* m, const u32 net);
+        void handleModuleOutputPortNameChanged(Module* m, const u32 net);
 
         //void handle_gate_created(Gate* g) const;
-        //void handle_gate_removed(Gate* g) const;
-        void handle_gate_name_changed(Gate* g) const;
+        //void handleGateRemoved(Gate* g) const;
+        void handleGateNameChanged(Gate* g) const;
 
-        void handle_net_created(Net* n) const;
-        void handle_net_removed(Net* n) const;
-        void handle_net_name_changed(Net* n) const;
-        void handle_net_source_added(Net* n, const u32 src_gate_id) const;
-        void handle_net_source_removed(Net* n, const u32 src_gate_id) const;
-        void handle_net_destination_added(Net* n, const u32 dst_gate_id) const;
-        void handle_net_destination_removed(Net* n, const u32 dst_gate_id) const;
-        void handle_marked_global_input(u32 net_id);
-        void handle_marked_global_output(u32 net_id);
-        void handle_unmarked_global_input(u32 net_id);
-        void handle_unmarked_global_output(u32 net_id);
+        void handleNetCreated(Net* n) const;
+        void handleNetRemoved(Net* n) const;
+        void handleNetNameChanged(Net* n) const;
+        void handleNetSourceAdded(Net* n, const u32 src_gate_id) const;
+        void handleNetSourceRemoved(Net* n, const u32 src_gate_id) const;
+        void handleNetDestinationAdded(Net* n, const u32 dst_gate_id) const;
+        void handleNetDestinationRemoved(Net* n, const u32 dst_gate_id) const;
+        void handleMarkedGlobalInput(u32 mNetId);
+        void handleMarkedGlobalOutput(u32 mNetId);
+        void handleUnmarkedGlobalInput(u32 mNetId);
+        void handleUnmarkedGlobalOutput(u32 mNetId);
 
-        GraphLayouter* get_default_layouter(GraphContext* const context) const;
-        GraphShader* get_default_shader(GraphContext* const context) const;
+        GraphLayouter* getDefaultLayouter(GraphContext* const context) const;
+        GraphShader* getDefaultShader(GraphContext* const context) const;
 
-        ContextTableModel* get_context_table_model() const;
+        ContextTableModel* getContextTableModel() const;
 
     Q_SIGNALS:
-        void context_created(GraphContext* context);
-        void context_renamed(GraphContext* context);
-        void deleting_context(GraphContext* context);
+        void contextCreated(GraphContext* context);
+        void contextRenamed(GraphContext* context);
+        void deletingContext(GraphContext* context);
 
     private:
-        QVector<GraphContext*> m_graph_contexts;
+        QVector<GraphContext*> mGraphContexts;
 
-        ContextTableModel* m_context_table_model;
+        ContextTableModel* mContextTableModel;
     };
 }

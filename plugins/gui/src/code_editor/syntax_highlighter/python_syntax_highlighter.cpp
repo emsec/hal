@@ -4,90 +4,90 @@
 namespace hal
 {
     PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
-        : QSyntaxHighlighter(parent), m_multi_line_comment_delimiter("('''|\"\"\")"), m_tripple_single_quote("'''"), m_tripple_double_quote("\"\"\"")
-    //      //m_keyword_color(177, 240, 0),
-    //      //m_keyword_color("#ffd200"),
-    //      m_keyword_color("#CC7832"),
-    //      //m_keyword_color("#6419E6"),
-    //      //m_keyword_color("#9019E6"),
-    //      //m_operator_color("#0A81FF"),
-    //      m_operator_color("#A9B7C6"), m_brace_color("#A9B7C6"), m_defclass_color("#A9B7C6"),
-    //      //m_single_quoted_string_color("#17de4c"),
-    //      //m_double_quoted_string_color("#17de4c"),
-    //      m_single_quoted_string_color("#A5C25C"), m_double_quoted_string_color("#A5C25C"),
-    //      m_self_color("#A9B7C6"),
-    //      //m_number_color(236, 118, 0),
-    //      //m_number_color("#DB8000"),
-    //      //m_number_color("#89F406"),
-    //      //m_number_color("#F4EC06"),
-    //      m_number_color("#6897BB"),
-    //      //m_comment_color("#6F7B7B")
-    //      //m_comment_color(222, 233, 175)
-    //      //m_comment_color("#556062")
-    //      //m_comment_color("#30474B") //2.0
-    //      //m_comment_color("#3A565A") //2.5
-    //      m_comment_color("#629755")    //2.98
+        : QSyntaxHighlighter(parent), mMultiLineCommentDelimiter("('''|\"\"\")"), mTrippleSingleQuote("'''"), mTrippleDoubleQuote("\"\"\"")
+    //      //mKeywordColor(177, 240, 0),
+    //      //mKeywordColor("#ffd200"),
+    //      mKeywordColor("#CC7832"),
+    //      //mKeywordColor("#6419E6"),
+    //      //mKeywordColor("#9019E6"),
+    //      //mOperatorColor("#0A81FF"),
+    //      mOperatorColor("#A9B7C6"), mBraceColor("#A9B7C6"), mDefclassColor("#A9B7C6"),
+    //      //mSingleQuotedStringColor("#17de4c"),
+    //      //mDoubleQuotedStringColor("#17de4c"),
+    //      mSingleQuotedStringColor("#A5C25C"), mDoubleQuotedStringColor("#A5C25C"),
+    //      mSelfColor("#A9B7C6"),
+    //      //mNumberColor(236, 118, 0),
+    //      //mNumberColor("#DB8000"),
+    //      //mNumberColor("#89F406"),
+    //      //mNumberColor("#F4EC06"),
+    //      mNumberColor("#6897BB"),
+    //      //mCommentColor("#6F7B7B")
+    //      //mCommentColor(222, 233, 175)
+    //      //mCommentColor("#556062")
+    //      //mCommentColor("#30474B") //2.0
+    //      //mCommentColor("#3A565A") //2.5
+    //      mCommentColor("#629755")    //2.98
     {
-        highlighting_rule rule;
+        HighlightingRule rule;
 
-        rule.pattern = QRegularExpression("\\b(and|as|assert|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|"
+        rule.mPattern = QRegularExpression("\\b(and|as|assert|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|"
                                           "nonlocal|not|or|pass|raise|return|try|while|with|yield|False|None|True)\\b");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_keyword_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->mKeywordFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("=|==|!=|<|<=|>|>=|\\+|-|\\*|/|//|%|\\*\\*|\\+=|-=|\\*=|/=|%=|\\^|\\||&|~|>>|<<");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_operator_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("=|==|!=|<|<=|>|>=|\\+|-|\\*|/|//|%|\\*\\*|\\+=|-=|\\*=|/=|%=|\\^|\\||&|~|>>|<<");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->mOperatorFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("{|}|\\(|\\)|\\[|]");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_brace_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("{|}|\\(|\\)|\\[|]");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->mBraceFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("'[^']*'");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_single_quoted_string_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("'[^']*'");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->mSingleQuotedStringFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("\"[^\"]*\"");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_double_quoted_string_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("\"[^\"]*\"");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->mDoubleQuotedStringFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("\\bself\\b");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_self_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("\\bself\\b");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->mSelfFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("(\\b([1-9][0-9]*|0)\\.[0-9]*[eE][+-]?[0-9]+\\b)|"    // Exponent float
+        rule.mPattern = QRegularExpression("(\\b([1-9][0-9]*|0)\\.[0-9]*[eE][+-]?[0-9]+\\b)|"    // Exponent float
                                           "(\\b([1-9][0-9]*|0)\\.[0-9]*)|"                      // Point float
                                           "(\\b0[xX][0-9A-Fa-f]+[lL]?\\b)|"                     // Hexadecimal integer
                                           "(\\b0[0-7]+[lL]?\\b)|"                               // Octal integer
                                           "(\\b([1-9][0-9]*|0)[lL]?\\b)");                      // Decimal integer
 
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_number_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->mNumberFormat;
+        mHighlightingRules.append(rule);
 
-        rule.pattern = QRegularExpression("#[^\\n]*");
-        rule.pattern.optimize();
-        rule.format = PythonQssAdapter::instance()->m_comment_format;
-        m_highlighting_rules.append(rule);
+        rule.mPattern = QRegularExpression("#[^\\n]*");
+        rule.mPattern.optimize();
+        rule.mFormat = PythonQssAdapter::instance()->mCommentFormat;
+        mHighlightingRules.append(rule);
     }
 
     void PythonSyntaxHighlighter::highlightBlock(const QString& text)
     {
-        for (const highlighting_rule& rule : m_highlighting_rules)
+        for (const HighlightingRule& rule : mHighlightingRules)
         {
-            QRegularExpressionMatchIterator it = rule.pattern.globalMatch(text);
+            QRegularExpressionMatchIterator it = rule.mPattern.globalMatch(text);
             while (it.hasNext())
             {
                 QRegularExpressionMatch match = it.next();
                 int index                     = match.capturedStart();
                 int length                    = match.capturedLength();
-                setFormat(index, length, rule.format);
+                setFormat(index, length, rule.mFormat);
             }
         }
 
@@ -99,7 +99,7 @@ namespace hal
 
         if (previousBlockState() == 1)
         {
-            current_index = close_multiline_comment(text, m_tripple_single_quote);
+            current_index = closeMultilineComment(text, mTrippleSingleQuote);
 
             if (current_index < 0)
             {
@@ -110,7 +110,7 @@ namespace hal
 
         if (previousBlockState() == 2)
         {
-            current_index = close_multiline_comment(text, m_tripple_double_quote);
+            current_index = closeMultilineComment(text, mTrippleDoubleQuote);
 
             if (current_index < 0)
             {
@@ -119,7 +119,7 @@ namespace hal
             }
         }
 
-        QRegularExpressionMatch match = m_multi_line_comment_delimiter.match(text, current_index);
+        QRegularExpressionMatch match = mMultiLineCommentDelimiter.match(text, current_index);
 
         while (match.hasMatch())
         {
@@ -133,36 +133,36 @@ namespace hal
 
             if (comment_type == '\'')
             {
-                QRegularExpressionMatch single_match = m_tripple_single_quote.match(text, comment_start_index + 3);
+                QRegularExpressionMatch single_match = mTrippleSingleQuote.match(text, comment_start_index + 3);
                 int single_match_index               = single_match.capturedStart();
 
                 if (single_match_index < 0)
                 {
                     setCurrentBlockState(1);
-                    setFormat(comment_start_index, text.length() - comment_start_index, PythonQssAdapter::instance()->m_comment_format);
+                    setFormat(comment_start_index, text.length() - comment_start_index, PythonQssAdapter::instance()->mCommentFormat);
                     return;
                 }
                 else
                 {
-                    setFormat(comment_start_index, comment_start_index - single_match_index + 3, PythonQssAdapter::instance()->m_comment_format);
-                    match = m_multi_line_comment_delimiter.match(text, single_match_index + 3);
+                    setFormat(comment_start_index, comment_start_index - single_match_index + 3, PythonQssAdapter::instance()->mCommentFormat);
+                    match = mMultiLineCommentDelimiter.match(text, single_match_index + 3);
                 }
             }
             else
             {
-                QRegularExpressionMatch double_match = m_tripple_double_quote.match(text, comment_start_index + 3);
+                QRegularExpressionMatch double_match = mTrippleDoubleQuote.match(text, comment_start_index + 3);
                 int double_match_index               = double_match.capturedStart();
 
                 if (double_match_index < 0)
                 {
                     setCurrentBlockState(2);
-                    setFormat(comment_start_index, text.length() - comment_start_index, PythonQssAdapter::instance()->m_comment_format);
+                    setFormat(comment_start_index, text.length() - comment_start_index, PythonQssAdapter::instance()->mCommentFormat);
                     return;
                 }
                 else
                 {
-                    setFormat(comment_start_index, comment_start_index - double_match_index + 3, PythonQssAdapter::instance()->m_comment_format);
-                    match = m_multi_line_comment_delimiter.match(text, double_match_index + 3);
+                    setFormat(comment_start_index, comment_start_index - double_match_index + 3, PythonQssAdapter::instance()->mCommentFormat);
+                    match = mMultiLineCommentDelimiter.match(text, double_match_index + 3);
                 }
             }
         }
@@ -170,15 +170,15 @@ namespace hal
         return;
     }
 
-    int PythonSyntaxHighlighter::close_multiline_comment(const QString& text, const QRegularExpression& delimiter, const int offset)
+    int PythonSyntaxHighlighter::closeMultilineComment(const QString& text, const QRegularExpression& delimiter, const int offset)
     {
         QRegularExpressionMatch match = delimiter.match(text, offset);
         int index                     = match.capturedEnd();
 
         if (index < 0)
-            setFormat(offset, text.length() - offset, PythonQssAdapter::instance()->m_comment_format);
+            setFormat(offset, text.length() - offset, PythonQssAdapter::instance()->mCommentFormat);
         else
-            setFormat(offset, index - offset, PythonQssAdapter::instance()->m_comment_format);
+            setFormat(offset, index - offset, PythonQssAdapter::instance()->mCommentFormat);
 
         return index;
     }

@@ -34,15 +34,15 @@ namespace hal
         Q_OBJECT
 
     public:
-        CheckboxSetting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget* parent = 0);
+        CheckboxSetting(const QString& key, const QString& title, const QString& text, const QString& mDescription, QWidget* parent = 0);
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;
         //virtual void rollback() Q_DECL_OVERRIDE;
 
     private:
-        QCheckBox* m_check_box;
-        void on_state_changed(bool checked);
+        QCheckBox* mCheckBox;
+        void onStateChanged(bool mChecked);
 
     };
 }

@@ -11,29 +11,29 @@
 
 namespace hal
 {
-    QPen NodeDragShadow::s_pen;
-    qreal NodeDragShadow::s_lod;
+    QPen NodeDragShadow::sPen;
+    qreal NodeDragShadow::sLod;
 
-    QColor NodeDragShadow::s_color_pen[3];
-    QColor NodeDragShadow::s_color_solid[3];
-    QColor NodeDragShadow::s_color_translucent[3];
+    QColor NodeDragShadow::sColorPen[3];
+    QColor NodeDragShadow::sColorSolid[3];
+    QColor NodeDragShadow::sColorTranslucent[3];
 
-    void NodeDragShadow::load_settings()
+    void NodeDragShadow::loadSettings()
     {
-        s_color_pen[static_cast<int>(drag_cue::rejected)] = QColor(166, 31, 31, 255);
-        s_color_pen[static_cast<int>(drag_cue::movable)] = QColor(48, 172, 79, 255);
-        s_color_pen[static_cast<int>(drag_cue::swappable)] = QColor(37, 97, 176, 255);
+        sColorPen[static_cast<int>(DragCue::Rejected)] = QColor(166, 31, 31, 255);
+        sColorPen[static_cast<int>(DragCue::Movable)] = QColor(48, 172, 79, 255);
+        sColorPen[static_cast<int>(DragCue::Swappable)] = QColor(37, 97, 176, 255);
 
-        s_color_solid[static_cast<int>(drag_cue::rejected)] = QColor(166, 31, 31, 200);
-        s_color_solid[static_cast<int>(drag_cue::movable)] = QColor(48, 172, 79, 200);
-        s_color_solid[static_cast<int>(drag_cue::swappable)] = QColor(37, 97, 176, 200);
+        sColorSolid[static_cast<int>(DragCue::Rejected)] = QColor(166, 31, 31, 200);
+        sColorSolid[static_cast<int>(DragCue::Movable)] = QColor(48, 172, 79, 200);
+        sColorSolid[static_cast<int>(DragCue::Swappable)] = QColor(37, 97, 176, 200);
 
-        s_color_translucent[static_cast<int>(drag_cue::rejected)] = QColor(166, 31, 31, 150);
-        s_color_translucent[static_cast<int>(drag_cue::movable)] = QColor(48, 172, 79, 150);
-        s_color_translucent[static_cast<int>(drag_cue::swappable)] = QColor(37, 97, 176, 150);
+        sColorTranslucent[static_cast<int>(DragCue::Rejected)] = QColor(166, 31, 31, 150);
+        sColorTranslucent[static_cast<int>(DragCue::Movable)] = QColor(48, 172, 79, 150);
+        sColorTranslucent[static_cast<int>(DragCue::Swappable)] = QColor(37, 97, 176, 150);
 
-        s_pen.setCosmetic(true);
-        s_pen.setJoinStyle(Qt::MiterJoin);
+        sPen.setCosmetic(true);
+        sPen.setJoinStyle(Qt::MiterJoin);
     }
 
     NodeDragShadow::NodeDragShadow() : QGraphicsObject()
@@ -41,15 +41,15 @@ namespace hal
         hide();
 
         setAcceptedMouseButtons(0);
-        m_width = 100;
-        m_height = 100;
+        mWidth = 100;
+        mHeight = 100;
     }
 
     void NodeDragShadow::start(const QPointF& posF, const QSizeF& sizeF)
     {
         setPos(posF);
-        set_width(sizeF.width());
-        set_height(sizeF.height());
+        setWidth(sizeF.width());
+        setHeight(sizeF.height());
         setZValue(1);
         show();
     }
@@ -61,37 +61,37 @@ namespace hal
 
     qreal NodeDragShadow::width() const
     {
-        return m_width;
+        return mWidth;
     }
 
     qreal NodeDragShadow::height() const
     {
-        return m_height;
+        return mHeight;
     }
 
     QSizeF NodeDragShadow::size() const
     {
-        return QSizeF(m_width, m_height);
+        return QSizeF(mWidth, mHeight);
     }
 
-    void NodeDragShadow::set_width(const qreal width)
+    void NodeDragShadow::setWidth(const qreal width)
     {
-        m_width = width;
+        mWidth = width;
     }
 
-    void NodeDragShadow::set_height(const qreal height)
+    void NodeDragShadow::setHeight(const qreal height)
     {
-        m_height = height;
+        mHeight = height;
     }
 
-    void NodeDragShadow::set_lod(const qreal lod)
+    void NodeDragShadow::setLod(const qreal lod)
     {
-        s_lod = lod;
+        sLod = lod;
     }
 
-    void NodeDragShadow::set_visual_cue(const drag_cue cue)
+    void NodeDragShadow::setVisualCue(const DragCue cue)
     {
-        m_cue = cue;
+        mCue = cue;
         update();
     }
 
@@ -100,33 +100,33 @@ namespace hal
         Q_UNUSED(option)
         Q_UNUSED(widget)
 
-        int color_index = static_cast<int>(m_cue);
+        int color_index = static_cast<int>(mCue);
         assert(color_index <= 3);
 
-        s_pen.setColor(s_color_pen[color_index]);
-        painter->setPen(s_pen);
+        sPen.setColor(sColorPen[color_index]);
+        painter->setPen(sPen);
 
-        if (s_lod < 0.5)
+        if (sLod < 0.5)
         {
-            painter->fillRect(QRectF(0, 0, m_width, m_height), s_color_solid[color_index]);
+            painter->fillRect(QRectF(0, 0, mWidth, mHeight), sColorSolid[color_index]);
         }
         else
         {
-            QRectF rect = QRectF(0, 0, m_width, m_height);
+            QRectF rect = QRectF(0, 0, mWidth, mHeight);
             painter->drawRect(rect);
-            painter->fillRect(rect, s_color_translucent[color_index]);
+            painter->fillRect(rect, sColorTranslucent[color_index]);
         }
     }
 
     QRectF NodeDragShadow::boundingRect() const
     {
-        return QRectF(0, 0, m_width, m_height);
+        return QRectF(0, 0, mWidth, mHeight);
     }
 
     QPainterPath NodeDragShadow::shape() const
     {
         QPainterPath path;
-        path.addRect(QRectF(0, 0, m_width, m_height));
+        path.addRect(QRectF(0, 0, mWidth, mHeight));
         return path;
     }
 }

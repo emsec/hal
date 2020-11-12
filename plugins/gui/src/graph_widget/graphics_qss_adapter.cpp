@@ -5,14 +5,14 @@
 namespace hal
 {
     GraphicsQssAdapter::GraphicsQssAdapter(QWidget* parent) : QWidget(parent),
-        m_gate_base_color(255, 200, 0),
-        m_net_base_color(255, 200, 0),
-        m_gate_selection_color(255, 200, 0),
-        m_net_selection_color(255, 200, 0),
-        m_grid_base_line_color(255, 200, 0),
-        m_grid_cluster_line_color(255, 200, 0),
-        m_grid_base_dot_color(255, 200, 0),
-        m_grid_cluster_dot_color(255, 200, 0)
+        mGateBaseColor(255, 200, 0),
+        mNetBaseColor(255, 200, 0),
+        mGateSelectionColor(255, 200, 0),
+        mNetSelectionColor(255, 200, 0),
+        mGridBaseLineColor(255, 200, 0),
+        mGridClusterLineColor(255, 200, 0),
+        mGridBaseDotColor(255, 200, 0),
+        mGridClusterDotColor(255, 200, 0)
     {
         ensurePolished();
     }
@@ -27,123 +27,123 @@ namespace hal
         // SET STATICS OR ADRESS ADAPTER MEMBERS DIRECTLY
     }
 
-    QColor GraphicsQssAdapter::gate_base_color() const
+    QColor GraphicsQssAdapter::gateBaseColor() const
     {
-        return m_gate_base_color;
+        return mGateBaseColor;
     }
 
-    QColor GraphicsQssAdapter::net_base_color() const
+    QColor GraphicsQssAdapter::netBaseColor() const
     {
-        return m_net_base_color;
+        return mNetBaseColor;
     }
 
-    QColor GraphicsQssAdapter::gate_selection_color() const
+    QColor GraphicsQssAdapter::gateSelectionColor() const
     {
-        return m_gate_selection_color;
+        return mGateSelectionColor;
     }
 
-    QColor GraphicsQssAdapter::net_selection_color() const
+    QColor GraphicsQssAdapter::netSelectionColor() const
     {
-        return m_net_selection_color;
+        return mNetSelectionColor;
     }
 
-    QFont GraphicsQssAdapter::gate_name_font() const
+    QFont GraphicsQssAdapter::gateNameFont() const
     {
-        return m_gate_name_font;
+        return mGateNameFont;
     }
 
-    QFont GraphicsQssAdapter::gate_type_font() const
+    QFont GraphicsQssAdapter::gateTypeFont() const
     {
-        return m_gate_type_font;
+        return mGateTypeFont;
     }
 
-    QFont GraphicsQssAdapter::gate_pin_font() const
+    QFont GraphicsQssAdapter::gatePinFont() const
     {
-        return m_gate_pin_font;
+        return mGatePinFont;
     }
 
-    QFont GraphicsQssAdapter::net_font() const
+    QFont GraphicsQssAdapter::netFont() const
     {
-        return m_net_font;
+        return mNetFont;
     }
 
-    QColor GraphicsQssAdapter::grid_base_line_color() const
+    QColor GraphicsQssAdapter::gridBaseLineColor() const
     {
-        return m_grid_base_line_color;
+        return mGridBaseLineColor;
     }
 
-    QColor GraphicsQssAdapter::grid_cluster_line_color() const
+    QColor GraphicsQssAdapter::gridClusterLineColor() const
     {
-        return m_grid_cluster_line_color;
+        return mGridClusterLineColor;
     }
 
-    QColor GraphicsQssAdapter::grid_base_dot_color() const
+    QColor GraphicsQssAdapter::gridBaseDotColor() const
     {
-        return m_grid_base_dot_color;
+        return mGridBaseDotColor;
     }
 
-    QColor GraphicsQssAdapter::grid_cluster_dot_color() const
+    QColor GraphicsQssAdapter::gridClusterDotColor() const
     {
-        return m_grid_cluster_dot_color;
+        return mGridClusterDotColor;
     }
 
-    void GraphicsQssAdapter::set_gate_base_color(const QColor& color)
+    void GraphicsQssAdapter::setGateBaseColor(const QColor& color)
     {
-        m_gate_base_color = color;
+        mGateBaseColor = color;
     }
 
-    void GraphicsQssAdapter::set_net_base_color(const QColor& color)
+    void GraphicsQssAdapter::setNetBaseColor(const QColor& color)
     {
-        m_net_base_color = color;
+        mNetBaseColor = color;
     }
 
-    void GraphicsQssAdapter::set_gate_selection_color(const QColor& color)
+    void GraphicsQssAdapter::setGateSelectionColor(const QColor& color)
     {
-        m_gate_selection_color = color;
+        mGateSelectionColor = color;
     }
 
-    void GraphicsQssAdapter::set_net_selection_color(const QColor& color)
+    void GraphicsQssAdapter::setNetSelectionColor(const QColor& color)
     {
-        m_net_selection_color = color;
+        mNetSelectionColor = color;
     }
 
-    void GraphicsQssAdapter::set_gate_name_font(const QFont& font)
+    void GraphicsQssAdapter::setGateNameFont(const QFont& font)
     {
-        m_gate_name_font = font;
+        mGateNameFont = font;
     }
 
-    void GraphicsQssAdapter::set_gate_type_font(const QFont& font)
+    void GraphicsQssAdapter::setGateTypeFont(const QFont& font)
     {
-        m_gate_type_font = font;
+        mGateTypeFont = font;
     }
 
-    void GraphicsQssAdapter::set_gate_pin_font(const QFont& font)
+    void GraphicsQssAdapter::setGatePinFont(const QFont& font)
     {
-        m_gate_pin_font = font;
+        mGatePinFont = font;
     }
 
-    void GraphicsQssAdapter::set_net_font(const QFont& font)
+    void GraphicsQssAdapter::setNetFont(const QFont& font)
     {
-        m_net_font = font;
+        mNetFont = font;
     }
 
-    void GraphicsQssAdapter::set_grid_base_line_color(const QColor& color)
+    void GraphicsQssAdapter::setGridBaseLineColor(const QColor& color)
     {
-        m_grid_base_line_color = color;
+        mGridBaseLineColor = color;
     }
 
-    void GraphicsQssAdapter::set_grid_cluster_line_color(const QColor& color)
+    void GraphicsQssAdapter::setGridClusterLineColor(const QColor& color)
     {
-        m_grid_cluster_line_color = color;
+        mGridClusterLineColor = color;
     }
 
-    void GraphicsQssAdapter::set_grid_base_dot_color(const QColor& color)
+    void GraphicsQssAdapter::setGridBaseDotColor(const QColor& color)
     {
-        m_grid_base_dot_color = color;
+        mGridBaseDotColor = color;
     }
 
-    void GraphicsQssAdapter::set_grid_cluster_dot_color(const QColor& color)
+    void GraphicsQssAdapter::setGridClusterDotColor(const QColor& color)
     {
-        m_grid_cluster_dot_color = color;
+        mGridClusterDotColor = color;
     }
 }

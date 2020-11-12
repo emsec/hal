@@ -41,9 +41,9 @@ namespace hal
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
     private Q_SLOTS:
-        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
-        gui_utility::sort_mechanism m_sort_mechanism;
+        gui_utility::mSortMechanism mSortMechanism;
     };
 }

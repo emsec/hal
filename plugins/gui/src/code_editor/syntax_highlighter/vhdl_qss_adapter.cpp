@@ -16,20 +16,20 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        m_keyword_format.setForeground(m_keyword_color);
-        m_keyword_format.setFontItalic(false);
+        mKeywordFormat.setForeground(mKeywordColor);
+        mKeywordFormat.setFontItalic(false);
 
-        m_type_format.setForeground(m_type_color);
-        m_type_format.setFontItalic(false);
+        mTypeFormat.setForeground(mTypeColor);
+        mTypeFormat.setFontItalic(false);
 
-        m_number_format.setForeground(m_number_color);
-        m_number_format.setFontItalic(false);
+        mNumberFormat.setForeground(mNumberColor);
+        mNumberFormat.setFontItalic(false);
 
-        m_string_format.setForeground(m_string_color);
-        m_string_format.setFontItalic(false);
+        mStringFormat.setForeground(mStringColor);
+        mStringFormat.setFontItalic(false);
 
-        m_comment_format.setForeground(m_comment_color);
-        m_comment_format.setFontItalic(false);
+        mCommentFormat.setForeground(mCommentColor);
+        mCommentFormat.setFontItalic(false);
     }
 
     VhdlQssAdapter* VhdlQssAdapter::instance()
@@ -43,63 +43,63 @@ namespace hal
         return instance;
     }
 
-    QColor VhdlQssAdapter::text_color() const
+    QColor VhdlQssAdapter::textColor() const
     {
-        return m_text_color;
+        return mTextColor;
     }
 
-    QColor VhdlQssAdapter::keyword_color() const
+    QColor VhdlQssAdapter::keywordColor() const
     {
-        return m_keyword_color;
+        return mKeywordColor;
     }
 
-    QColor VhdlQssAdapter::type_color() const
+    QColor VhdlQssAdapter::typeColor() const
     {
-        return m_type_color;
+        return mTypeColor;
     }
 
-    QColor VhdlQssAdapter::number_color() const
+    QColor VhdlQssAdapter::numberColor() const
     {
-        return m_number_color;
+        return mNumberColor;
     }
 
-    QColor VhdlQssAdapter::string_color() const
+    QColor VhdlQssAdapter::stringColor() const
     {
-        return m_string_color;
+        return mStringColor;
     }
 
-    QColor VhdlQssAdapter::comment_color() const
+    QColor VhdlQssAdapter::commentColor() const
     {
-        return m_comment_color;
+        return mCommentColor;
     }
 
-    void VhdlQssAdapter::set_text_color(const QColor& color)
+    void VhdlQssAdapter::setTextColor(const QColor& color)
     {
-        m_text_color = color;
+        mTextColor = color;
     }
 
-    void VhdlQssAdapter::set_keyword_color(const QColor& color)
+    void VhdlQssAdapter::setKeywordColor(const QColor& color)
     {
-        m_keyword_color = color;
+        mKeywordColor = color;
     }
 
-    void VhdlQssAdapter::set_type_color(const QColor& color)
+    void VhdlQssAdapter::setTypeColor(const QColor& color)
     {
-        m_type_color = color;
+        mTypeColor = color;
     }
 
-    void VhdlQssAdapter::set_number_color(const QColor& color)
+    void VhdlQssAdapter::setNumberColor(const QColor& color)
     {
-        m_number_color = color;
+        mNumberColor = color;
     }
 
-    void VhdlQssAdapter::set_string_color(const QColor& color)
+    void VhdlQssAdapter::setStringColor(const QColor& color)
     {
-        m_string_color = color;
+        mStringColor = color;
     }
 
-    void VhdlQssAdapter::set_comment_color(const QColor& color)
+    void VhdlQssAdapter::setCommentColor(const QColor& color)
     {
-        m_comment_color = color;
+        mCommentColor = color;
     }
 }

@@ -47,32 +47,32 @@ namespace hal
         void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;
         void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
 
-        void insert_plugin(const QString& name);
+        void insertPlugin(const QString& name);
 
     Q_SIGNALS:
-        void plugin_added(QString plugin, int index);
-        void plugin_moved(int from, int to);
-        void plugin_removed(int index);
+        void pluginAdded(QString plugin, int index);
+        void pluginMoved(int from, int to);
+        void pluginRemoved(int index);
 
-        void plugin_selected(int index);
+        void pluginSelected(int index);
 
-        void no_scheduled_plugins();
+        void noScheduledPlugins();
 
     public Q_SLOTS:
-        void handle_item_clicked(ScheduledPluginItem* item);
-        void handle_item_drag_started(ScheduledPluginItem* item);
-        void handle_item_removed(ScheduledPluginItem* item);
+        void handleItemClicked(ScheduledPluginItem* item);
+        void handleItemDragStarted(ScheduledPluginItem* item);
+        void handleItemRemoved(ScheduledPluginItem* item);
 
     private:
-        QVBoxLayout* m_layout;
-        QFrame* m_spacer;
+        QVBoxLayout* mLayout;
+        QFrame* mSpacer;
 
-        QVector<int> m_y_values;
-        QList<QPair<ScheduledPluginItem*, DropMarker*>> m_list;
+        QVector<int> mYValues;
+        QList<QPair<ScheduledPluginItem*, DropMarker*>> mList;
 
-        DropMarker* m_active_marker;
+        DropMarker* mActiveMarker;
 
-        bool m_internal_drag_active;
-        int m_drag_index;
+        bool mInternalDragActive;
+        int mDragIndex;
     };
 }

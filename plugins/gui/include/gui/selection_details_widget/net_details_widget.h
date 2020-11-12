@@ -56,30 +56,30 @@ namespace hal
         NetDetailsWidget(QWidget* parent = 0);
         ~NetDetailsWidget();
 
-        void update(u32 net_id);
+        void update(u32 mNetId);
 
     public Q_SLOTS:
 
-        void handle_net_removed(Net* n);
-        void handle_net_name_changed(Net* n);
-        void handle_net_source_added(Net* n, const u32 src_gate_id);
-        void handle_net_source_removed(Net* n, const u32 src_gate_id);
-        void handle_net_destination_added(Net* n, const u32 dst_gate_id);
-        void handle_net_destination_removed(Net* n, const u32 dst_gate_id);
-        void handle_gate_name_changed(Gate* g);
+        void handleNetRemoved(Net* n);
+        void handleNetNameChanged(Net* n);
+        void handleNetSourceAdded(Net* n, const u32 src_gate_id);
+        void handleNetSourceRemoved(Net* n, const u32 src_gate_id);
+        void handleNetDestinationAdded(Net* n, const u32 dst_gate_id);
+        void handleNetDestinationRemoved(Net* n, const u32 dst_gate_id);
+        void handleGateNameChanged(Gate* g);
 
     private:
         //utility objects to encapsulate the sections together to make it scrollable
-        QScrollArea* m_scroll_area;
-        QWidget* m_top_lvl_container;
-        QVBoxLayout* m_top_lvl_layout;
-        QVBoxLayout* m_content_layout;
+        QScrollArea* mScrollArea;
+        QWidget* mTopLvlContainer;
+        QVBoxLayout* mTopLvlLayout;
+        QVBoxLayout* mContentLayout;
 
         //buttons to fold/unfold the corresponding sections
-        QPushButton* m_general_info_button;
-        DetailsSectionWidget* m_sourcePinsSection;
-        DetailsSectionWidget* m_destinationPinsSection;
-        DetailsSectionWidget* m_dataFieldsSection;
+        QPushButton* mGeneralInfoButton;
+        DetailsSectionWidget* mSourcePinsSection;
+        DetailsSectionWidget* mDestinationPinsSection;
+        DetailsSectionWidget* mDataFieldsSection;
 
         //the sections to unfold
         //(1) general information section
@@ -87,19 +87,19 @@ namespace hal
         DetailsGeneralModel* mGeneralModel;
 
         //(2) source_pins section
-        QTableWidget* m_source_pins_table;
+        QTableWidget* mSourcePinsTable;
 
         //(3) destination_pins section
-        QTableWidget* m_destination_pins_table;
+        QTableWidget* mDestinationPinsTable;
 
         //(4) data-fields section
-        DataFieldsTable* m_dataFieldsTable;
+        DataFieldsTable* mDataFieldsTable;
 
         //function section
-        void handle_table_item_clicked(QTableWidgetItem* item);
+        void handleTableItemClicked(QTableWidgetItem* item);
 
         //straightforward context menu handlers
-        void handle_sources_table_menu_requeted(const QPoint& pos);
-        void handle_destinations_table_menu_requeted(const QPoint& pos);
+        void handleSourcesTableMenuRequeted(const QPoint& pos);
+        void handleDestinationsTableMenuRequeted(const QPoint& pos);
     };
 }    // namespace hal

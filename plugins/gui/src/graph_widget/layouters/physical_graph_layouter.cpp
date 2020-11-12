@@ -8,8 +8,8 @@
 namespace hal
 {
     PhysicalGraphLayouter::PhysicalGraphLayouter(const GraphContext* const context) : GraphLayouter(context),
-        m_min_x_distance(std::numeric_limits<float>::max()),
-        m_min_y_distance(std::numeric_limits<float>::max())
+        mMinXDistance(std::numeric_limits<float>::max()),
+        mMinYDistance(std::numeric_limits<float>::max())
     {
     }
 
@@ -18,12 +18,12 @@ namespace hal
         return "Physical Layouter";
     }
 
-    QString PhysicalGraphLayouter::description() const
+    QString PhysicalGraphLayouter::mDescription() const
     {
         return "<p>PLACEHOLDER</p>";
     }
 
-    void PhysicalGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement)
+    void PhysicalGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, PlacementHint placement)
     {
         Q_UNUSED(modules)
         Q_UNUSED(gates)
@@ -39,7 +39,7 @@ namespace hal
 
         for (u32 id : gates)
         {
-            Gate* g = g_netlist->get_gate_by_id(id);
+            Gate* g = gNetlist->get_gate_by_id(id);
             assert(g);
 
             if (g->has_location())
@@ -55,8 +55,8 @@ namespace hal
                 {
                     float x_distance = std::abs(x1 - x2);
 
-                    if (x_distance < m_min_x_distance)
-                        m_min_x_distance = x_distance;
+                    if (x_distance < mMinXDistance)
+                        mMinXDistance = x_distance;
                 }
 
         for (float y1 : y_coordinates)
@@ -65,8 +65,8 @@ namespace hal
                 {
                     float y_distance = std::abs(y1 - y2);
 
-                    if (y_distance < m_min_y_distance)
-                        m_min_y_distance = y_distance;
+                    if (y_distance < mMinYDistance)
+                        mMinYDistance = y_distance;
                 }
     }
 
@@ -77,9 +77,9 @@ namespace hal
         Q_UNUSED(nets)
 
         for (u32 id : modules)
-            remove_node_from_maps({hal::node_type::module, id});
+            removeNodeFromMaps(Node(id,Node::Module));
 
         for (u32 id : gates)
-            remove_node_from_maps({hal::node_type::gate, id});
+            removeNodeFromMaps(Node(id,Node::Gate));
     }
 }

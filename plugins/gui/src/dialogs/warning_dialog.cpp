@@ -6,67 +6,67 @@
 namespace hal
 {
     WarningDialog::WarningDialog(QWidget* parent, bool animate) : Dialog(parent),
-        m_line_animation(new QPropertyAnimation(this, "line_offset", this)),
-        m_line_offset(0),
-        m_bar_height(16),
-        m_line_width(10),
-        m_line_gradient(10),
-        m_line_spacing(10),
-        m_animate(animate),
-        m_direction(direction::right)
+        mLineAnimation(new QPropertyAnimation(this, "lineOffset", this)),
+        mLineOffset(0),
+        mBarHeight(16),
+        mLineWidth(10),
+        mLineGradient(10),
+        mLineSpacing(10),
+        mAnimate(animate),
+        mDirection(direction::right)
     {
-        m_line_animation->setDuration(700);
-        m_line_animation->setStartValue(0);
-        m_line_animation->setEndValue(m_line_width + m_line_spacing);
-        m_line_animation->setLoopCount(-1);
-        m_line_animation->setEasingCurve(QEasingCurve::Linear);
+        mLineAnimation->setDuration(700);
+        mLineAnimation->setStartValue(0);
+        mLineAnimation->setEndValue(mLineWidth + mLineSpacing);
+        mLineAnimation->setLoopCount(-1);
+        mLineAnimation->setEasingCurve(QEasingCurve::Linear);
 
-        QPointF point(m_line_width, 0);
+        QPointF point(mLineWidth, 0);
 
-        m_left_leaning_line.lineTo(point);
-        point.setX(m_line_width + m_line_gradient);
-        point.setY(m_bar_height);
-        m_left_leaning_line.lineTo(point);
-        point.setX(m_line_gradient);
-        m_left_leaning_line.lineTo(point);
-        m_left_leaning_line.closeSubpath();
+        mLeftLeaningLine.lineTo(point);
+        point.setX(mLineWidth + mLineGradient);
+        point.setY(mBarHeight);
+        mLeftLeaningLine.lineTo(point);
+        point.setX(mLineGradient);
+        mLeftLeaningLine.lineTo(point);
+        mLeftLeaningLine.closeSubpath();
 
-        point.setX(m_line_width);
+        point.setX(mLineWidth);
         point.setY(0);
 
-        m_right_leaning_line.lineTo(point);
-        point.setX(m_line_width - m_line_gradient);
-        point.setY(m_bar_height);
-        m_right_leaning_line.lineTo(point);
-        point.setX(-m_line_gradient);
-        m_right_leaning_line.lineTo(point);
-        m_right_leaning_line.closeSubpath();
+        mRightLeaningLine.lineTo(point);
+        point.setX(mLineWidth - mLineGradient);
+        point.setY(mBarHeight);
+        mRightLeaningLine.lineTo(point);
+        point.setX(-mLineGradient);
+        mRightLeaningLine.lineTo(point);
+        mRightLeaningLine.closeSubpath();
     }
 
-    void WarningDialog::fade_in_started()
+    void WarningDialog::fadeInStarted()
     {
-        if (m_animate)
-            m_line_animation->start();
+        if (mAnimate)
+            mLineAnimation->start();
     }
 
-    void WarningDialog::fade_in_finished()
+    void WarningDialog::fadeInFinished()
     {
         // DELETE AFTER TESTING
     }
 
-    void WarningDialog::set_direction(const direction d)
+    void WarningDialog::setDirection(const direction d)
     {
-        m_direction = d;
+        mDirection = d;
     }
 
-    int WarningDialog::line_offset() const
+    int WarningDialog::lineOffset() const
     {
-        return m_line_offset;
+        return mLineOffset;
     }
 
-    void WarningDialog::set_line_offset(const int offset)
+    void WarningDialog::setLineOffset(const int offset)
     {
-        m_line_offset = offset;
+        mLineOffset = offset;
         update();
     }
 
@@ -109,25 +109,25 @@ namespace hal
 
         painter.translate(0, 75);
 
-        const int stride = m_line_width + m_line_spacing;
+        const int stride = mLineWidth + mLineSpacing;
 
-        if (m_direction == direction::left)
+        if (mDirection == direction::left)
         {
-            painter.translate(-m_line_offset, 0);
+            painter.translate(-mLineOffset, 0);
 
             for (int x = 0; x <= width(); x += stride)
             {
-                painter.fillPath(m_left_leaning_line, QColor(255, 230, 0));
+                painter.fillPath(mLeftLeaningLine, QColor(255, 230, 0));
                 painter.translate(stride, 0);
             }
         }
         else
         {
-            painter.translate(m_line_offset - m_line_width, 0);
+            painter.translate(mLineOffset - mLineWidth, 0);
 
             for (int x = 0; x <= width(); x += stride)
             {
-                painter.fillPath(m_right_leaning_line, QColor(255, 230, 0));
+                painter.fillPath(mRightLeaningLine, QColor(255, 230, 0));
                 painter.translate(stride, 0);
             }
         }

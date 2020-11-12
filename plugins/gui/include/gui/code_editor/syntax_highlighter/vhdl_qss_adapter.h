@@ -31,11 +31,11 @@ namespace hal
     class VhdlQssAdapter : public QWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QColor keyword_color READ keyword_color WRITE set_keyword_color)
-        Q_PROPERTY(QColor type_color READ type_color WRITE set_type_color)
-        Q_PROPERTY(QColor number_color READ number_color WRITE set_number_color)
-        Q_PROPERTY(QColor string_color READ string_color WRITE set_string_color)
-        Q_PROPERTY(QColor comment_color READ comment_color WRITE set_comment_color)
+        Q_PROPERTY(QColor keywordColor READ keywordColor WRITE setKeywordColor)
+        Q_PROPERTY(QColor typeColor READ typeColor WRITE setTypeColor)
+        Q_PROPERTY(QColor numberColor READ numberColor WRITE setNumberColor)
+        Q_PROPERTY(QColor stringColor READ stringColor WRITE setStringColor)
+        Q_PROPERTY(QColor commentColor READ commentColor WRITE setCommentColor)
 
     public:
         explicit VhdlQssAdapter(QWidget* parent = nullptr);
@@ -43,33 +43,33 @@ namespace hal
 
         void repolish();
 
-        QColor text_color() const;
-        QColor keyword_color() const;
-        QColor type_color() const;
-        QColor number_color() const;
-        QColor string_color() const;
-        QColor comment_color() const;
+        QColor textColor() const;
+        QColor keywordColor() const;
+        QColor typeColor() const;
+        QColor numberColor() const;
+        QColor stringColor() const;
+        QColor commentColor() const;
 
-        void set_text_color(const QColor& color);
-        void set_keyword_color(const QColor& color);
-        void set_type_color(const QColor& color);
-        void set_number_color(const QColor& color);
-        void set_string_color(const QColor& color);
-        void set_comment_color(const QColor& color);
+        void setTextColor(const QColor& color);
+        void setKeywordColor(const QColor& color);
+        void setTypeColor(const QColor& color);
+        void setNumberColor(const QColor& color);
+        void setStringColor(const QColor& color);
+        void setCommentColor(const QColor& color);
 
         // LEFT PUBLIC INTENTIONALLY
-        QTextCharFormat m_keyword_format;
-        QTextCharFormat m_type_format;
-        QTextCharFormat m_number_format;
-        QTextCharFormat m_string_format;
-        QTextCharFormat m_comment_format;
+        QTextCharFormat mKeywordFormat;
+        QTextCharFormat mTypeFormat;
+        QTextCharFormat mNumberFormat;
+        QTextCharFormat mStringFormat;
+        QTextCharFormat mCommentFormat;
 
     private:
-        QColor m_text_color;
-        QColor m_keyword_color;
-        QColor m_type_color;
-        QColor m_number_color;
-        QColor m_string_color;
-        QColor m_comment_color;
+        QColor mTextColor;
+        QColor mKeywordColor;
+        QColor mTypeColor;
+        QColor mNumberColor;
+        QColor mStringColor;
+        QColor mCommentColor;
     };
 }

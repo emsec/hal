@@ -34,7 +34,7 @@ namespace hal
     public:
         Toolbar(QWidget* parent = nullptr);
 
-        void add_spacer();
+        void addSpacer();
 
         void repolish();
     };

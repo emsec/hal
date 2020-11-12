@@ -36,16 +36,16 @@ namespace hal
     class SelectionTreeItem
     {
     public:
-        enum itemType_t
+        enum TreeItemType
         {
             NullItem, ModuleItem, GateItem, NetItem, MaxItem
         };
 
-        SelectionTreeItem(itemType_t t = NullItem, u32 id_ = 0);
+        SelectionTreeItem(TreeItemType t = NullItem, u32 id_ = 0);
         virtual ~SelectionTreeItem();
 
         //information access
-        itemType_t itemType() const;
+        TreeItemType itemType() const;
         u32 id() const;
         SelectionTreeItem* parent() const;
         void setParent(SelectionTreeItem* p);
@@ -60,7 +60,7 @@ namespace hal
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const = 0;
     protected:
-        itemType_t mItemType;
+        TreeItemType mItemType;
         u32 mId;
         SelectionTreeItem* mParent;
     };

@@ -33,12 +33,12 @@ namespace hal
 
     public:
         static ContentDragRelay* instance();
-        void relay_drag_start();
-        void relay_drag_end();
+        void relayDragStart();
+        void relayDragEnd();
 
     Q_SIGNALS:
-        void drag_start();
-        void drag_end();
+        void dragStart();
+        void dragEnd();
 
     private:
         ContentDragRelay(QObject* parent = 0);

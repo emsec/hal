@@ -31,56 +31,56 @@ namespace hal
     class StandardGraphicsModule final : public GraphicsModule
     {
     public:
-        static void load_settings();
-        static void update_alpha();
+        static void loadSettings();
+        static void updateAlpha();
 
         explicit StandardGraphicsModule(Module* m, bool adjust_size_to_grid = true);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
-        QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const override;
-        QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const override;
+        QPointF getInputScenePosition(const u32 mNetId, const QString& pin_type) const override;
+        QPointF getOutputScenePosition(const u32 mNetId, const QString& pin_type) const override;
         QPointF endpointPositionByIndex(int index, bool isInput) const override;
         float   yEndpointDistance() const override;
         float   yTopPinDistance() const override;
 
     private:
-        static qreal s_alpha;
+        static qreal sAlpha;
 
-        static QPen s_pen;
+        static QPen sPen;
 
-        static QColor s_text_color;
+        static QColor sTextColor;
 
         static QFont sTextFont[3];
-        static QFont s_pin_font;
+        static QFont sPinFont;
 
         static qreal sTextFontHeight[3];
 
-        static qreal s_color_bar_height;
+        static qreal sColorBarHeight;
 
-        static qreal s_pin_inner_horizontal_spacing;
-        static qreal s_pin_outer_horizontal_spacing;
+        static qreal sPinInnerHorizontalSpacing;
+        static qreal sPinOuterHorizontalSpacing;
 
-        static qreal s_pin_inner_vertical_spacing;
-        static qreal s_pin_outer_vertical_spacing;
-        static qreal s_pin_upper_vertical_spacing;
-        static qreal s_pin_lower_vertical_spacing;
+        static qreal sPinInnerVerticalSpacing;
+        static qreal sPinOuterVerticalSpacing;
+        static qreal sPinUpperVerticalSpacing;
+        static qreal sPinLowerVerticalSpacing;
 
-        static qreal s_pin_font_height;
-        static qreal s_pin_font_ascent;
-        static qreal s_pin_font_descent;
-        static qreal s_pin_font_baseline;
+        static qreal sPinFontHeight;
+        static qreal sPinFontAscent;
+        static qreal sPinFontDescent;
+        static qreal sPinFontBaseline;
 
-        static qreal s_inner_name_type_spacing;
-        static qreal s_outer_name_type_spacing;
+        static qreal sInnerNameTypeSpacing;
+        static qreal sOuterNameTypeSpacing;
 
         void format(const bool& adjust_size_to_grid);
 
         QPointF mTextPosition[3];
 
-        QVector<QPointF> m_output_pin_positions;
-        static const int ICON_PADDING;
-        static const QSize ICON_SIZE;
+        QVector<QPointF> mOutputPinPositions;
+        static const int sIconPadding;
+        static const QSize sIconSize;
 
         static QPixmap* sIconInstance;
         static const QPixmap& iconPixmap();

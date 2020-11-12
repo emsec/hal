@@ -13,7 +13,7 @@ namespace hal
     {
         Q_UNUSED(parent)
 
-        return m_context_list->size();
+        return mContextList->size();
     }
 
     int ContextTableModel::columnCount(const QModelIndex& parent) const
@@ -28,10 +28,10 @@ namespace hal
         if(!index.isValid())
             return QVariant();
 
-        if(index.row() >= m_context_list->size() || index.row() < 0)
+        if(index.row() >= mContextList->size() || index.row() < 0)
             return QVariant();
 
-        const GraphContext* context = m_context_list->at(index.row());
+        const GraphContext* context = mContextList->at(index.row());
 
         if(!context)
             return QVariant();
@@ -41,7 +41,7 @@ namespace hal
             switch(index.column())
             {
                 case 0: return context->name(); break;
-                case 1: return context->get_timestamp().toString(Qt::SystemLocaleShortDate); break;
+                case 1: return context->getTimestamp().toString(Qt::SystemLocaleShortDate); break;
                 default: return QVariant();
             }
         }
@@ -51,7 +51,7 @@ namespace hal
             switch(index.column())
             {
                 case 0: return context->name(); break;
-                case 1: return context->get_timestamp(); break;
+                case 1: return context->getTimestamp(); break;
                 default: return QVariant();
             }
         }
@@ -81,41 +81,41 @@ namespace hal
         return QVariant();
     }
 
-    void ContextTableModel::begin_insert_context(GraphContext* context)
+    void ContextTableModel::beginInsertContext(GraphContext* context)
     {
         Q_UNUSED(context)
 
-        beginInsertRows(QModelIndex(), m_context_list->size(), m_context_list->size());
+        beginInsertRows(QModelIndex(), mContextList->size(), mContextList->size());
     }
 
-    void ContextTableModel::end_insert_context()
+    void ContextTableModel::endInsertContext()
     {
         endInsertRows();
     }
 
-    void ContextTableModel::begin_remove_context(GraphContext* context)
+    void ContextTableModel::beginRemoveContext(GraphContext* context)
     {
-        const int row = m_context_list->indexOf(context);
+        const int row = mContextList->indexOf(context);
         beginRemoveRows(QModelIndex(), row, row);
     }
 
-    void ContextTableModel::end_remove_context()
+    void ContextTableModel::endRemoveContext()
     {
         endRemoveRows();
     }
 
     void ContextTableModel::update(QVector<GraphContext*>* pointer)
     {
-        m_context_list = pointer;
+        mContextList = pointer;
     }
 
-    GraphContext* ContextTableModel::get_context(const QModelIndex& index) const
+    GraphContext* ContextTableModel::getContext(const QModelIndex& index) const
     {
-        return (*m_context_list)[index.row()];
+        return (*mContextList)[index.row()];
     }
 
-    QModelIndex ContextTableModel::get_index(GraphContext* context) const
+    QModelIndex ContextTableModel::getIndex(GraphContext* context) const
     {
-        return createIndex(m_context_list->indexOf(context), 0);
+        return createIndex(mContextList->indexOf(context), 0);
     }
 }

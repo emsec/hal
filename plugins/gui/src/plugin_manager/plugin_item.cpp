@@ -6,26 +6,26 @@ namespace hal
 {
     namespace __plugin_item_impl
     {
-        QVector<QPair<QString, PluginItem::column_t>> column_desc = {{{QObject::tr("Name"), PluginItem::column_t::name}, {QObject::tr("Path"), PluginItem::column_t::path}}};
+        QVector<QPair<QString, PluginItem::ColumnType>> column_desc = {{{QObject::tr("Name"), PluginItem::ColumnType::Name},
+                                                                        {QObject::tr("Path"), PluginItem::ColumnType::Path}}};
     }
 
-    PluginItem::PluginItem() : name(""), path("")
-    {
-    }
+    PluginItem::PluginItem()
+    {;}
 
-    PluginItem::PluginItem(QString plugin_name, QString plugin_path) : name(plugin_name), path(plugin_path)
-    {
-    }
+    PluginItem::PluginItem(const QString& plugin_name, const QString& plugin_path)
+        : mName(plugin_name), mPath(plugin_path)
+    {;}
 
-    bool PluginItem::is_valid()
+    bool PluginItem::isValid()
     {
-        if (name.compare("") != 0 && path.compare("") != 0)
+        if (!mName.isEmpty() && !mPath.isEmpty())
             return true;
         else
             return false;
     }
 
-    QVector<QPair<QString, PluginItem::column_t>> PluginItem::get_column_description()
+    QVector<QPair<QString, PluginItem::ColumnType>> PluginItem::getColumnDescription()
     {
         return __plugin_item_impl::column_desc;
     }

@@ -6,8 +6,8 @@ namespace hal
 {
     GroupingProxyModel::GroupingProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
     {
-        m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager->get("navigation/sort_mechanism").toInt());
-        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &GroupingProxyModel::handle_global_setting_changed);
+        mSortMechanism = gui_utility::mSortMechanism(gSettingsManager->get("navigation/mSortMechanism").toInt());
+        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GroupingProxyModel::handleGlobalSettingChanged);
     }
 
     bool GroupingProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
@@ -47,19 +47,19 @@ namespace hal
                 name_right = name_right.toLower();
             }
 
-            return gui_utility::compare(m_sort_mechanism, name_left, name_right);
+            return gui_utility::compare(mSortMechanism, name_left, name_right);
         }
         else
             return source_left.data().toInt() < source_right.data().toInt();
 
     }
 
-    void GroupingProxyModel::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void GroupingProxyModel::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
-        if (key == "navigation/sort_mechanism")
+        if (key == "navigation/mSortMechanism")
         {
-            m_sort_mechanism = gui_utility::sort_mechanism(value.toInt());
+            mSortMechanism = gui_utility::mSortMechanism(value.toInt());
             // force re-sort
             invalidate();
         }

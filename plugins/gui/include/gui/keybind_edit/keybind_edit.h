@@ -33,23 +33,23 @@ namespace hal
     class KeybindEdit : public QKeySequenceEdit
     {
     Q_OBJECT
-    Q_PROPERTY(bool validated READ validated WRITE set_validated)
+    Q_PROPERTY(bool validated READ validated WRITE setValidated)
     public:
         KeybindEdit(QWidget* parent = nullptr);
-        void add_validator(Validator* v);
-        void set_validated(bool validated);
+        void addValidator(Validator* v);
+        void setValidated(bool validated);
         bool validated();
         void revalidate();
 
     Q_SIGNALS:
-        void edit_rejected();
+        void editRejected();
 
     protected:
         bool event(QEvent* e) Q_DECL_OVERRIDE;
 
     private:
-        StackedValidator m_validator;
-        QKeySequence m_old_sequence;
-        bool m_validated = true;
+        StackedValidator mValidator;
+        QKeySequence mOldSequence;
+        bool mValidated = true;
     };
 }

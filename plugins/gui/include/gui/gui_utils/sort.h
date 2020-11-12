@@ -33,26 +33,26 @@ namespace hal
         class NumeratedString : public QString
         {
         public:
-            QString remainder;
-            QList<int> numList;
+            QString mRemainder;
+            QList<int> mNumList;
             NumeratedString(const QString& s);
         };
 
-        enum sort_mechanism
+        enum mSortMechanism
         {
             lexical = 0,
             natural = 1,
             numerated = 2
         };
 
-        bool natural_order_compare(const QString& a, const QString& b);
-        bool lexical_order_compare(const QString& a, const QString& b);
-        bool numerated_order_compare(const QString& a, const QString& b);
+        bool naturalOrderCompare(const QString& a, const QString& b);
+        bool lexicalOrderCompare(const QString& a, const QString& b);
+        bool numeratedOrderCompare(const QString& a, const QString& b);
 
-        int numeric_string_compare(QString a_num, QString b_num);
+        int numericStringCompare(QString a_num, QString b_num);
 
         // convenience method to select an algoritm
-        int compare(sort_mechanism mechanism, QString a, QString b);
+        int compare(mSortMechanism mechanism, QString a, QString b);
 
     } // namespace gui_utility
 }

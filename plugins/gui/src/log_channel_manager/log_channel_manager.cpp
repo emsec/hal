@@ -4,10 +4,10 @@ namespace hal
 {
     LogChannelManager::LogChannelManager()
     {
-        //LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&LogChannelManager::logmanager_callback, this, std::placeholders::_1));
+        //LogManager::get_instance().get_gui_callback().add_callback("gui", std::bind(&LogChannelManager::logmanagerCallback, this, std::placeholders::_1));
     }
 
-    void LogChannelManager::logmanager_callback(const spdlog::details::log_msg& msg)
+    void LogChannelManager::logmanagerCallback(const spdlog::details::log_msg& msg)
     {
         Q_UNUSED(msg);
         //    spdlog::level::level_enum t = msg.level;
@@ -16,7 +16,7 @@ namespace hal
 
         //    ChannelItem* all_channel = nullptr;
         //    ChannelItem* item        = nullptr;
-        //    for (auto element : m_permanent_items)
+        //    for (auto element : mPermanentItems)
         //    {
         //        if (element->name().toStdString() == ALL_CHANNEL)
         //        {
@@ -29,7 +29,7 @@ namespace hal
         //    }
         //    if (item == nullptr || all_channel == nullptr)
         //    {
-        //        for (auto element : m_temporary_items)
+        //        for (auto element : mTemporaryItems)
         //        {
         //            if (element->name().toStdString() == ALL_CHANNEL)
         //            {
@@ -49,8 +49,8 @@ namespace hal
         //    {
         //        item = add_channel(QString::fromStdString(channel_name));
         //    }
-        //    all_channel->append_entry(new channel_entry(msg_text, t));
-        //    item->append_entry(new channel_entry(msg_text, t));
+        //    all_channel->appendEntry(new ChannelEntry(msg_text, t));
+        //    item->appendEntry(new ChannelEntry(msg_text, t));
         //    Q_EMIT updated(t, ALL_CHANNEL, msg_text);
         //    Q_EMIT updated(t, channel_name, msg_text);
     }

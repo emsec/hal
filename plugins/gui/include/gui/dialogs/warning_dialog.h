@@ -9,7 +9,7 @@ namespace hal
     class WarningDialog : public Dialog
     {
         Q_OBJECT
-        Q_PROPERTY(qreal line_offset READ line_offset WRITE set_line_offset)
+        Q_PROPERTY(qreal lineOffset READ lineOffset WRITE setLineOffset)
 
     public:
         enum class direction
@@ -20,33 +20,33 @@ namespace hal
 
         explicit WarningDialog(QWidget* parent = nullptr, bool animate = true);
 
-        void fade_in_started() override;
-        void fade_in_finished() override;
+        void fadeInStarted() override;
+        void fadeInFinished() override;
 
-        void set_direction(const direction direction);
+        void setDirection(const direction direction);
 
-        int line_offset() const;
-        void set_line_offset(const int offset);
+        int lineOffset() const;
+        void setLineOffset(const int offset);
 
     protected:
         void paintEvent(QPaintEvent* event) override;
         QSize sizeHint() const override;
 
     private:
-        QPropertyAnimation* m_line_animation;
+        QPropertyAnimation* mLineAnimation;
 
-        QPainterPath m_left_leaning_line;
-        QPainterPath m_right_leaning_line;
+        QPainterPath mLeftLeaningLine;
+        QPainterPath mRightLeaningLine;
 
-        int m_line_offset;
+        int mLineOffset;
 
-        int m_bar_height;
-        int m_line_width;
-        int m_line_gradient;
-        int m_line_spacing;
+        int mBarHeight;
+        int mLineWidth;
+        int mLineGradient;
+        int mLineSpacing;
 
-        bool m_animate;
+        bool mAnimate;
 
-        direction m_direction;
+        direction mDirection;
     };
 }

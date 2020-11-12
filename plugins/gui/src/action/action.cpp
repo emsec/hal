@@ -2,17 +2,17 @@
 
 namespace hal
 {
-    Action::Action(QObject* parent) : QAction(parent), m_tooltip_modified(false)
+    Action::Action(QObject* parent) : QAction(parent), mTooltipModified(false)
     {
 
     }
 
-    Action::Action(const QString& text, QObject* parent) : QAction(parent), m_tooltip_modified(false)
+    Action::Action(const QString& text, QObject* parent) : QAction(parent), mTooltipModified(false)
     {
         setText(text);
     }
 
-    Action::Action(const QIcon& icon, const QString& text, QObject* parent) : QAction(parent), m_tooltip_modified(false)
+    Action::Action(const QIcon& icon, const QString& text, QObject* parent) : QAction(parent), mTooltipModified(false)
     {
         setText(text);
         setIcon(icon);
@@ -21,25 +21,25 @@ namespace hal
     void Action::setText(const QString& text)
     {
         QAction::setText(text);
-        update_tooltip(shortcut());
+        updateTooltip(shortcut());
     }
 
     void Action::setShortcut(const QKeySequence& seq)
     {
         QAction::setShortcut(seq);
-        update_tooltip(seq);
+        updateTooltip(seq);
     }
 
     void Action::setToolTip(const QString& tooltip)
     {
         // calling this method will disable automatic tooltips
-        m_tooltip_modified = true;
+        mTooltipModified = true;
         QAction::setToolTip(tooltip);
     }
 
-    void Action::update_tooltip(const QKeySequence& seq)
+    void Action::updateTooltip(const QKeySequence& seq)
     {
-        if (m_tooltip_modified)
+        if (mTooltipModified)
             return;
 
         // automatically add the keyboard shortcut to the tooltip

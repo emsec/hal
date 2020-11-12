@@ -9,20 +9,20 @@ namespace hal
 
     }
 
-    void Worker::assign_task(Task* const t)
+    void Worker::assignTask(Task* const t)
     {
         assert(t);
 
         t->moveToThread(this);
-        m_task = t;
+        mTask = t;
     }
 
     void Worker::run()
     {
-        assert(m_task);
+        assert(mTask);
 
-        m_task->execute();
-        Q_EMIT m_task->finished();
-        m_task->deleteLater();
+        mTask->execute();
+        Q_EMIT mTask->finished();
+        mTask->deleteLater();
     }
 }

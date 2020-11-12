@@ -35,39 +35,39 @@ namespace hal
     public:
         PythonCodeEditor(QWidget* parent = nullptr);
 
-        QString get_file_name();
+        QString getFileName();
         void set_file_name(const QString name);
 
-        void set_base_file_modified(bool base_file_modified);
-        bool is_base_file_modified();
+        void setBaseFileModified(bool base_file_modified);
+        bool isBaseFileModified();
 
-        QUuid get_uuid() const;
+        QUuid getUuid() const;
 
     Q_SIGNALS:
-        void key_pressed(QKeyEvent* e);
+        void keyPressed(QKeyEvent* e);
 
     private:
         void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-        void handle_tab_key_pressed();
-        void handle_shift_tab_key_pressed();
-        void handle_return_key_pressed();
-        void handle_backspace_key_pressed(QKeyEvent* e);
-        void handle_delete_key_pressed(QKeyEvent* e);
-        void handle_insert_key_pressed();
+        void handleTabKeyPressed();
+        void handleShiftTabKeyPressed();
+        void handleReturnKeyPressed();
+        void handleBackspaceKeyPressed(QKeyEvent* e);
+        void handleDeleteKeyPressed(QKeyEvent* e);
+        void handleInsertKeyPressed();
 
-        void handle_redo_requested();
+        void handleRedoRequested();
 
-        void indent_selection(bool indentUnindent);
-        int next_indent(bool indentUnindent, int current_indent);
+        void indentSelection(bool indentUnindent);
+        int nextIndent(bool indentUnindent, int current_indent);
 
-        void handle_autocomplete();
-        void perform_code_completion(std::tuple<std::string, std::string> completion);
+        void handleAutocomplete();
+        void performCodeCompletion(std::tuple<std::string, std::string> completion);
 
-        QString m_file_name;
-        QString m_text_state;
+        QString mFileName;
+        QString mTextState;
 
-        bool m_base_file_modified;
+        bool mBaseFileModified;
 
-        QUuid m_uuid;
+        QUuid mUuid;
     };
 }

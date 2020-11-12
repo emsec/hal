@@ -8,77 +8,77 @@
 namespace hal
 {
     Dialog::Dialog(QWidget* parent) : QFrame(parent),
-        m_effect(new QGraphicsOpacityEffect(this)), // SEEMS TO WORK MORE RELIABLY THAN WINDOWOPACITY
-        m_x_animation(new QPropertyAnimation(this, "x_offset", this)),
-        m_y_animation(new QPropertyAnimation(this, "y_offset", this)),
-        m_opacity_animation(new QPropertyAnimation(m_effect, "opacity", this)),
-        m_animation_group(new QParallelAnimationGroup(this))
+        mEffect(new QGraphicsOpacityEffect(this)), // SEEMS TO WORK MORE RELIABLY THAN WINDOWOPACITY
+        mXAnimation(new QPropertyAnimation(this, "xOffset", this)),
+        mYAnimation(new QPropertyAnimation(this, "yOffset", this)),
+        mOpacityAnimation(new QPropertyAnimation(mEffect, "opacity", this)),
+        mAnimationGroup(new QParallelAnimationGroup(this))
     {
         hide();
 
-        m_effect->setOpacity(0);
-        setGraphicsEffect(m_effect);
+        mEffect->setOpacity(0);
+        setGraphicsEffect(mEffect);
 
-        m_x_animation->setDuration(200);
-        m_x_animation->setStartValue(0);
-        m_x_animation->setEndValue(0);
-        m_x_animation->setEasingCurve(QEasingCurve::OutQuad);
+        mXAnimation->setDuration(200);
+        mXAnimation->setStartValue(0);
+        mXAnimation->setEndValue(0);
+        mXAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
-        m_y_animation->setDuration(200);
-        m_y_animation->setStartValue(-30);
-        m_y_animation->setEndValue(0);
-        m_y_animation->setEasingCurve(QEasingCurve::OutQuad);
+        mYAnimation->setDuration(200);
+        mYAnimation->setStartValue(-30);
+        mYAnimation->setEndValue(0);
+        mYAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
-        m_opacity_animation->setDuration(300);
-        m_opacity_animation->setStartValue(0);
-        m_opacity_animation->setEndValue(1);
-        m_opacity_animation->setEasingCurve(QEasingCurve::InQuad);
+        mOpacityAnimation->setDuration(300);
+        mOpacityAnimation->setStartValue(0);
+        mOpacityAnimation->setEndValue(1);
+        mOpacityAnimation->setEasingCurve(QEasingCurve::InQuad);
 
-        m_animation_group->addAnimation(m_x_animation);
-        m_animation_group->addAnimation(m_y_animation);
-        m_animation_group->addAnimation(m_opacity_animation);
+        mAnimationGroup->addAnimation(mXAnimation);
+        mAnimationGroup->addAnimation(mYAnimation);
+        mAnimationGroup->addAnimation(mOpacityAnimation);
 
-        connect(m_animation_group, &QParallelAnimationGroup::finished, this, &Dialog::fade_in_finished);
+        connect(mAnimationGroup, &QParallelAnimationGroup::finished, this, &Dialog::fadeInFinished);
     }
 
-    void Dialog::fade_in()
+    void Dialog::fadeIn()
     {
         show();
-        m_animation_group->start();
+        mAnimationGroup->start();
 
-        fade_in_started();
+        fadeInStarted();
     }
 
-    int Dialog::x_offset() const
+    int Dialog::xOffset() const
     {
-        return m_x_offset;
+        return mXOffset;
     }
 
-    int Dialog::y_offset() const
+    int Dialog::yOffset() const
     {
-        return m_y_offset;
+        return mYOffset;
     }
 
-    void Dialog::set_x_offset(const int offset)
+    void Dialog::setXOffset(const int offset)
     {
-        m_x_offset = offset;
+        mXOffset = offset;
 
-        Q_EMIT offset_changed();
+        Q_EMIT offsetChanged();
     }
 
-    void Dialog::set_y_offset(const int offset)
+    void Dialog::setYOffset(const int offset)
     {
-        m_y_offset = offset;
+        mYOffset = offset;
 
-        Q_EMIT offset_changed();
+        Q_EMIT offsetChanged();
     }
 
-    void Dialog::fade_in_started()
+    void Dialog::fadeInStarted()
     {
         // INTENTIONALLY EMPTY
     }
 
-    void Dialog::fade_in_finished()
+    void Dialog::fadeInFinished()
     {
         // INTENTIONALLY EMPTY
     }

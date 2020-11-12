@@ -25,7 +25,7 @@ namespace hal
 {
     namespace style
     {
-        QString default_stylesheet()
+        QString defaultStylesheet()
         {
             QString stylesheet;
             QFile file(":/style/hal");
@@ -41,30 +41,30 @@ namespace hal
             return stylesheet;
         }
 
-        QString get_stylesheet()
+        QString getStylesheet()
         {
             QString stylesheet;
             {
-                QString path = g_settings_manager->get("stylesheet/base").toString();
+                QString path = gSettingsManager->get("stylesheet/base").toString();
                 QFile file(path);
 
                 if (!file.exists())
                 {
                     log_error("gui", "Specified stylesheet '{}' does not exist, proceeding with default style", path.toStdString());
-                    return default_stylesheet();
+                    return defaultStylesheet();
                 }
 
                 if (!file.open(QFile::ReadOnly))
                 {
                     log_error("gui", "Unable to open specified stylesheet '{}', proceeding with default style", path.toStdString());
-                    return default_stylesheet();
+                    return defaultStylesheet();
                 }
 
                 stylesheet = QString(file.readAll());
                 file.close();
             }
 
-            QString path = g_settings_manager->get("stylesheet/definitions").toString();
+            QString path = gSettingsManager->get("stylesheet/definitions").toString();
 
             if (path.isEmpty())
                 return stylesheet;
@@ -78,13 +78,13 @@ namespace hal
                 if (!file.exists())
                 {
                     log_error("gui", "Specified stylesheet definitions file '{}' does not exist, proceeding with default style", path.toStdString());
-                    return default_stylesheet();
+                    return defaultStylesheet();
                 }
 
                 if (!file.open(QFile::ReadOnly))
                 {
                     log_error("gui", "Unable to open specified stylesheet definitions file '{}', proceeding with default style", path.toStdString());
-                    return default_stylesheet();
+                    return defaultStylesheet();
                 }
 
                 QRegularExpression value_regex("^\\s*(?<value>\\S[^;]*);");
@@ -137,7 +137,7 @@ namespace hal
             return stylesheet;
         }
 
-        QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path)
+        QIcon getStyledSvgIcon(const QString& from_to_colors, const QString& svg_path)
         {
             QString svg_data;
             QFile file(svg_path);
@@ -194,22 +194,22 @@ namespace hal
             return QIcon(new SvgIconEngine(svg_data.toStdString()));
         }
 
-        void debug_update()
+        void debugUpdate()
         {
-            GraphicsItem::load_settings();
+            GraphicsItem::loadSettings();
 
-            StandardGraphicsModule::load_settings();
+            StandardGraphicsModule::loadSettings();
 
-            StandardGraphicsGate::load_settings();
+            StandardGraphicsGate::loadSettings();
 
-            GraphicsNet::load_settings();
-            StandardGraphicsNet::load_settings();
-            SeparatedGraphicsNet::load_settings();
-            ArrowSeparatedNet::load_settings();
-            CircleSeparatedNet::load_settings();
-            LabeledSeparatedNet::load_settings();
+            GraphicsNet::loadSettings();
+            StandardGraphicsNet::loadSettings();
+            SeparatedGraphicsNet::loadSettings();
+            ArrowSeparatedNet::loadSettings();
+            CircleSeparatedNet::loadSettings();
+            LabeledSeparatedNet::loadSettings();
 
-            NodeDragShadow::load_settings();
+            NodeDragShadow::loadSettings();
         }
 
     } // namespace style

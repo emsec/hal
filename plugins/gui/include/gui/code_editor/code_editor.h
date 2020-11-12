@@ -41,84 +41,84 @@ namespace hal
     class CodeEditor : public QPlainTextEdit
     {
         Q_OBJECT
-        Q_PROPERTY(QFont line_number_font READ line_number_font WRITE set_line_number_font)
-        Q_PROPERTY(QColor line_number_color READ line_number_color WRITE set_line_number_color)
-        Q_PROPERTY(QColor line_number_background READ line_number_background WRITE set_line_number_background)
-        Q_PROPERTY(QColor line_number_highlight_color READ line_number_highlight_color WRITE set_line_number_highlight_color)
-        Q_PROPERTY(QColor line_number_highlight_background READ line_number_highlight_background WRITE set_line_number_highlight_background)
-        Q_PROPERTY(QColor current_line_background READ current_line_background WRITE set_current_line_background)
+        Q_PROPERTY(QFont lineNumberFont READ lineNumberFont WRITE setLineNumberFont)
+        Q_PROPERTY(QColor lineNumberColor READ lineNumberColor WRITE setLineNumberColor)
+        Q_PROPERTY(QColor lineNumberBackground READ lineNumberBackground WRITE setLineNumberBackground)
+        Q_PROPERTY(QColor lineNumberHighlightColor READ lineNumberHighlightColor WRITE setLineNumberHighlightColor)
+        Q_PROPERTY(QColor lineNumberHighlightBackground READ lineNumberHighlightBackground WRITE setLineNumberHighlightBackground)
+        Q_PROPERTY(QColor currentLineBackground READ currentLineBackground WRITE setCurrentLineBackground)
 
     public:
         explicit CodeEditor(QWidget* parent = nullptr);
 
         virtual bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
 
-        void line_number_area_paint_event(QPaintEvent* event);
-        void minimap_paint_event(QPaintEvent* event);
+        void lineNumberAreaPaintEvent(QPaintEvent* event);
+        void minimapPaintEvent(QPaintEvent* event);
 
-        int line_number_area_width();
-        int minimap_width();
+        int lineNumberAreaWidth();
+        int minimapWidth();
 
         int first_visible_block();
-        int visible_block_count();
+        int visibleBlockCount();
 
-        void center_on_line(const int number);
+        void centerOnLine(const int number);
 
-        void handle_wheel_event(QWheelEvent* event);
+        void handleWheelEvent(QWheelEvent* event);
 
         CodeEditorMinimap* minimap();
 
-        QFont line_number_font() const;
-        QColor line_number_color() const;
-        QColor line_number_background() const;
-        QColor line_number_highlight_color() const;
-        QColor line_number_highlight_background() const;
-        QColor current_line_background() const;
+        QFont lineNumberFont() const;
+        QColor lineNumberColor() const;
+        QColor lineNumberBackground() const;
+        QColor lineNumberHighlightColor() const;
+        QColor lineNumberHighlightBackground() const;
+        QColor currentLineBackground() const;
 
-        void set_line_number_font(QFont& font);
-        void set_line_number_color(QColor& color);
-        void set_line_number_background(QColor& color);
-        void set_line_number_highlight_color(QColor& color);
-        void set_line_number_highlight_background(QColor& color);
-        void set_current_line_background(QColor& color);
+        void setLineNumberFont(QFont& font);
+        void setLineNumberColor(QColor& color);
+        void setLineNumberBackground(QColor& color);
+        void setLineNumberHighlightColor(QColor& color);
+        void setLineNumberHighlightBackground(QColor& color);
+        void setCurrentLineBackground(QColor& color);
 
     public Q_SLOTS:
         void search(const QString& string);
 
-        void toggle_line_numbers();
-        void toggle_minimap();
+        void toggleLineNumbers();
+        void toggleMinimap();
 
     protected:
         virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
-        void highlight_current_line();
-        void handle_block_count_changed(int new_block_count);
-        void update_line_number_area(const QRect& rect, int dy);
-        void update_minimap(const QRect& rect, int dy);
-        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+        void highlightCurrentLine();
+        void handleBlockCountChanged(int new_block_count);
+        void updateLineNumberArea(const QRect& rect, int dy);
+        void updateMinimap(const QRect& rect, int dy);
+        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
-        void update_layout();
-        void clear_line_highlight();
+        void updateLayout();
+        void clearLineHighlight();
 
-        CodeEditorScrollbar* m_scrollbar;
+        CodeEditorScrollbar* mScrollbar;
 
-        LineNumberArea* m_line_number_area;
-        CodeEditorMinimap* m_minimap;
+        LineNumberArea* mLineNumberArea;
+        CodeEditorMinimap* mMinimap;
 
-        QPropertyAnimation* m_animation;
+        QPropertyAnimation* mAnimation;
 
-        bool m_line_numbers_enabled;
-        bool m_line_highlight_enabled;
-        bool m_minimap_enabled;
-        bool m_line_wrap_enabled;
+        bool mLineNumbersEnabled;
+        bool mLineHighlightEnabled;
+        bool mMinimapEnabled;
+        bool mLineWrapEnabled;
 
-        QFont m_line_number_font;
-        QColor m_line_number_color;
-        QColor m_line_number_background;
-        QColor m_line_number_highlight_color;
-        QColor m_line_number_highlight_background;
-        QColor m_current_line_background;
+        QFont mLineNumberFont;
+        QColor mLineNumberColor;
+        QColor mLineNumberBackground;
+        QColor mLineNumberHighlightColor;
+        QColor mLineNumberHighlightBackground;
+        QColor mCurrentLineBackground;
     };
 }

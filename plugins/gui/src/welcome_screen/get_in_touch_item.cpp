@@ -12,32 +12,32 @@
 
 namespace hal
 {
-    GetInTouchItem::GetInTouchItem(const QString& title, const QString& description, QWidget* parent)
-        : QFrame(parent), m_horizontal_layout(new QHBoxLayout()), m_icon_label(new QLabel()), m_vertical_layout(new QVBoxLayout()), m_title_label(new QLabel()), m_description_label(new QLabel()),
-          m_animation(new QPropertyAnimation(this)), m_hover(false)
+    GetInTouchItem::GetInTouchItem(const QString& title, const QString& mDescription, QWidget* parent)
+        : QFrame(parent), mHorizontalLayout(new QHBoxLayout()), mIconLabel(new QLabel()), mVerticalLayout(new QVBoxLayout()), mTitleLabel(new QLabel()), mDescriptionLabel(new QLabel()),
+          mAnimation(new QPropertyAnimation(this)), mHover(false)
     {
-        m_horizontal_layout->setContentsMargins(0, 0, 0, 0);
-        m_horizontal_layout->setSpacing(0);
+        mHorizontalLayout->setContentsMargins(0, 0, 0, 0);
+        mHorizontalLayout->setSpacing(0);
 
-        m_icon_label->setObjectName("icon-label");
-        m_icon_label->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+        mIconLabel->setObjectName("icon-label");
+        mIconLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-        m_vertical_layout->setContentsMargins(0, 0, 0, 0);
-        m_vertical_layout->setSpacing(0);
+        mVerticalLayout->setContentsMargins(0, 0, 0, 0);
+        mVerticalLayout->setSpacing(0);
 
-        m_title_label->setObjectName("title-label");
-        m_title_label->setText(title);
+        mTitleLabel->setObjectName("title-label");
+        mTitleLabel->setText(title);
 
-        m_description_label->setObjectName("description-label");
-        m_description_label->setText(description);
-        m_description_label->setWordWrap(true);
+        mDescriptionLabel->setObjectName("mDescription-label");
+        mDescriptionLabel->setText(mDescription);
+        mDescriptionLabel->setWordWrap(true);
 
-        setLayout(m_horizontal_layout);
-        m_horizontal_layout->addWidget(m_icon_label);
-        m_horizontal_layout->setAlignment(m_icon_label, Qt::AlignTop);
-        m_horizontal_layout->addLayout(m_vertical_layout);
-        m_vertical_layout->addWidget(m_title_label);
-        m_vertical_layout->addWidget(m_description_label);
+        setLayout(mHorizontalLayout);
+        mHorizontalLayout->addWidget(mIconLabel);
+        mHorizontalLayout->setAlignment(mIconLabel, Qt::AlignTop);
+        mHorizontalLayout->addLayout(mVerticalLayout);
+        mVerticalLayout->addWidget(mTitleLabel);
+        mVerticalLayout->addWidget(mDescriptionLabel);
 
         ensurePolished();
         repolish();
@@ -47,7 +47,7 @@ namespace hal
     {
         Q_UNUSED(event)
 
-        m_hover = true;
+        mHover = true;
         repolish();
     }
 
@@ -55,7 +55,7 @@ namespace hal
     {
         Q_UNUSED(event)
 
-        m_hover = false;
+        mHover = false;
         repolish();
     }
 
@@ -74,46 +74,46 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        s->unpolish(m_icon_label);
-        s->polish(m_icon_label);
+        s->unpolish(mIconLabel);
+        s->polish(mIconLabel);
 
-        s->unpolish(m_title_label);
-        s->polish(m_title_label);
+        s->unpolish(mTitleLabel);
+        s->polish(mTitleLabel);
 
-        s->unpolish(m_description_label);
-        s->polish(m_description_label);
+        s->unpolish(mDescriptionLabel);
+        s->polish(mDescriptionLabel);
 
-        if (!m_icon_path.isEmpty())
-            m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(17, 17)));
+        if (!mIconPath.isEmpty())
+            mIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mIconStyle, mIconPath).pixmap(QSize(17, 17)));
     }
 
     bool GetInTouchItem::hover()
     {
-        return m_hover;
+        return mHover;
     }
 
-    QString GetInTouchItem::icon_path()
+    QString GetInTouchItem::iconPath()
     {
-        return m_icon_path;
+        return mIconPath;
     }
 
-    QString GetInTouchItem::icon_style()
+    QString GetInTouchItem::iconStyle()
     {
-        return m_icon_style;
+        return mIconStyle;
     }
 
-    void GetInTouchItem::set_hover_active(bool active)
+    void GetInTouchItem::setHoverActive(bool active)
     {
-        m_hover = active;
+        mHover = active;
     }
 
-    void GetInTouchItem::set_icon_path(const QString& path)
+    void GetInTouchItem::setIconPath(const QString& path)
     {
-        m_icon_path = path;
+        mIconPath = path;
     }
 
-    void GetInTouchItem::set_icon_style(const QString& style)
+    void GetInTouchItem::setIconStyle(const QString& style)
     {
-        m_icon_style = style;
+        mIconStyle = style;
     }
 }

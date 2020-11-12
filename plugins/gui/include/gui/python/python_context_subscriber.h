@@ -29,8 +29,8 @@ namespace hal
     class PythonContextSubscriber
     {
     public:
-        virtual void handle_stdout(const QString& output) = 0;
-        virtual void handle_error(const QString& output)  = 0;
+        virtual void handleStdout(const QString& output) = 0;
+        virtual void handleError(const QString& output)  = 0;
         virtual void clear()                              = 0;
     };
 }

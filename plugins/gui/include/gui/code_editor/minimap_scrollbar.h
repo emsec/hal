@@ -41,16 +41,16 @@ namespace hal
         int minimum() const;
         int maximum() const;
         int value() const;
-        int slider_height() const;
-        int slider_position() const;
+        int sliderHeight() const;
+        int sliderPosition() const;
 
         //    void set_minimum(const int minimum);
         //    void set_maximum(const int maximum);
-        void set_range(const int minimum, const int maximum);
-        void set_value(const int value);
-        void set_slider_height(const int height);
+        void setRange(const int minimum, const int maximum);
+        void setValue(const int value);
+        void setSliderHeight(const int height);
 
-        void set_scrollbar(QScrollBar* scrollbar);
+        void setScrollbar(QScrollBar* scrollbar);
 
     protected:
         void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
@@ -62,20 +62,20 @@ namespace hal
         void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
 
     private:
-        void adjust_slider_to_value();
+        void adjustSliderToValue();
 
-        QFrame* m_slider;
+        QFrame* mSlider;
 
-        int m_minimum;
-        int m_maximum;
-        int m_value;
+        int mMinimum;
+        int mMaximum;
+        int mValue;
 
-        int m_handle_length;
-        int m_handle_position;
+        int mHandleLength;
+        int mHandlePosition;
 
-        bool m_mouse_pressed;
-        int m_drag_offset;
+        bool mMousePressed;
+        int mDragOffset;
 
-        QScrollBar* m_scrollbar;
+        QScrollBar* mScrollbar;
     };
 }

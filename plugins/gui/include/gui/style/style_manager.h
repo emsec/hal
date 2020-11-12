@@ -47,21 +47,21 @@ namespace hal
         StyleManager(StyleManager const&) = delete;
         void operator=(StyleManager const&) = delete;
 
-        void update_style();
+        void updateStyle();
 
-        const SharedPropertiesQssAdapter* shared_properties() const;
+        const SharedPropertiesQssAdapter* sharedProperties() const;
         const NotificationManagerQssAdapter* NotificationManager() const;
         const PythonQssAdapter* PythonSyntaxHighlighter() const;
         const VhdlQssAdapter* VhdlSyntaxHighlighter() const;
 
     private:
         explicit StyleManager(QObject* parent = nullptr);
-        void set_default(QApplication* app);
+        void setDefault(QApplication* app);
 
-        GraphicsQssAdapter* m_graphics_qss_adapter;
-        SharedPropertiesQssAdapter* m_shared_properties;
-        NotificationManagerQssAdapter* m_NotificationManager;
-        PythonQssAdapter* m_python_syntax_highlighter;
-        VhdlQssAdapter* m_vhdl_syntax_highlighter;
+        GraphicsQssAdapter* mGraphicsQssAdapter;
+        SharedPropertiesQssAdapter* mSharedProperties;
+        NotificationManagerQssAdapter* mNotificationManager;
+        PythonQssAdapter* mPythonSyntaxHighlighter;
+        VhdlQssAdapter* mVhdlSyntaxHighlighter;
     };
 }

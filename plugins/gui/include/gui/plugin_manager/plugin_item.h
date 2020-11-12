@@ -33,18 +33,18 @@ namespace hal
     class PluginItem
     {
     public:
-        enum class column_t
+        enum class ColumnType
         {
-            name = 0,
-            path = 1
+            Name = 0,
+            Path = 1
         };
 
-        using column_utype = std::underlying_type<column_t>::type;
-        static QVector<QPair<QString, column_t>> get_column_description();
+        using column_utype = std::underlying_type<ColumnType>::type;
+        static QVector<QPair<QString, ColumnType>> getColumnDescription();
         explicit PluginItem();
-        explicit PluginItem(QString plugin_name, QString plugin_path);
-        QString name;
-        QString path;
-        bool is_valid();
+        explicit PluginItem(const QString &plugin_name, const QString &plugin_path);
+        QString mName;
+        QString mPath;
+        bool isValid();
     };
 }

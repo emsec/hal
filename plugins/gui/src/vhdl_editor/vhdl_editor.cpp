@@ -11,31 +11,31 @@
 
 namespace hal
 {
-    VhdlEditor::VhdlEditor() : ContentWidget("Source"), m_code_editor(new CodeEditor()), m_searchbar(new Searchbar())
+    VhdlEditor::VhdlEditor() : ContentWidget("Source"), mCodeEditor(new CodeEditor()), mSearchbar(new Searchbar())
     {
-        connect(m_searchbar, &Searchbar::text_edited, m_code_editor, &CodeEditor::search);
+        connect(mSearchbar, &Searchbar::textEdited, mCodeEditor, &CodeEditor::search);
 
-        m_code_editor->setReadOnly(true);
-        m_searchbar->hide();
+        mCodeEditor->setReadOnly(true);
+        mSearchbar->hide();
 
-        new VhdlSyntaxHighlighter(m_code_editor->document());
-        new VhdlSyntaxHighlighter(m_code_editor->minimap()->document());
+        new VhdlSyntaxHighlighter(mCodeEditor->document());
+        new VhdlSyntaxHighlighter(mCodeEditor->minimap()->document());
 
         std::stringstream stream;
-        hdl_writer_manager::write(g_netlist, ".vhd", stream);
+        hdl_writer_manager::write(gNetlist, ".vhd", stream);
         QString string = QString::fromStdString(stream.str());
-        m_code_editor->setPlainText(string);
+        mCodeEditor->setPlainText(string);
 
-        m_content_layout->addWidget(m_code_editor);
-        m_content_layout->addWidget(m_searchbar);
+        mContentLayout->addWidget(mCodeEditor);
+        mContentLayout->addWidget(mSearchbar);
     }
 
-    void VhdlEditor::setup_toolbar(Toolbar* Toolbar){Q_UNUSED(Toolbar)}
+    void VhdlEditor::setupToolbar(Toolbar* Toolbar){Q_UNUSED(Toolbar)}
 
-    QList<QShortcut*> VhdlEditor::create_shortcuts()
+    QList<QShortcut*> VhdlEditor::createShortcuts()
     {
         QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"), this);
-        connect(search_shortcut, &QShortcut::activated, this, &VhdlEditor::toggle_searchbar);
+        connect(search_shortcut, &QShortcut::activated, this, &VhdlEditor::toggleSearchbar);
 
         QList<QShortcut*> list;
         list.append(search_shortcut);
@@ -43,11 +43,11 @@ namespace hal
         return list;
     }
 
-    void VhdlEditor::toggle_searchbar()
+    void VhdlEditor::toggleSearchbar()
     {
-        if (m_searchbar->isHidden())
-            m_searchbar->show();
+        if (mSearchbar->isHidden())
+            mSearchbar->show();
         else
-            m_searchbar->hide();
+            mSearchbar->hide();
     }
 }

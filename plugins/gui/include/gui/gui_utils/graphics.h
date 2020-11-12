@@ -32,12 +32,11 @@ namespace hal
 {
     namespace gui_utility
     {
-        extern QString get_svg_data(const QString& svg_path);
-        extern void change_svg_color(QString& svg_data, const QColor& from, const QColor& to);
-        extern void change_all_svg_colors(QString& svg_data, const QColor& to);
-        extern QIcon get_icon_from_svg_data(const QString& svg_data);
-        extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
-        extern QPixmap get_colored_pixmap(const QString& imagePath, const QColor& color, const QSize& size);
-        extern QColor get_random_color();
+        extern QString getSvgData(const QString& svg_path);
+        extern void changeSvgColor(QString& svg_data, const QColor& from, const QColor& to);
+        extern void changeAllSvgColors(QString& svg_data, const QColor& to);
+        extern QIcon getIconFromSvgData(const QString& svg_data);
+        extern QIcon getStyledSvgIcon(const QString& from_to_colors, const QString& svg_path);
+        extern QColor getRandomColor();
     }
 }

@@ -43,14 +43,14 @@ namespace hal
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
     public Q_SLOTS:
-        void handle_filter_text_changed(const QString& filter_text);
+        void handleFilterTextChanged(const QString& filter_text);
 
     private Q_SLOTS:
-        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
-        gui_utility::sort_mechanism m_sort_mechanism;
-        QRegularExpression m_filter_expression;
+        gui_utility::mSortMechanism mSortMechanism;
+        QRegularExpression mFilterExpression;
         int mGraphicsBusy;
     };
 }

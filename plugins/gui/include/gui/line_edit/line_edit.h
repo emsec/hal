@@ -36,6 +36,6 @@ namespace hal
         LineEdit(const QString& contents, QWidget* parent = 0);
 
     public Q_SLOTS:
-        void handle_text_changed(const QString& text);
+        void handleTextChanged(const QString& text);
     };
 }

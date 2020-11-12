@@ -11,40 +11,40 @@ namespace hal
     class Dialog : public QFrame
     {
         Q_OBJECT
-        Q_PROPERTY(int x_offset READ x_offset WRITE set_x_offset)
-        Q_PROPERTY(int y_offset READ y_offset WRITE set_y_offset)
+        Q_PROPERTY(int xOffset READ xOffset WRITE setXOffset)
+        Q_PROPERTY(int yOffset READ yOffset WRITE setYOffset)
 
     public:
         explicit Dialog(QWidget* parent = nullptr);
 
-        void fade_in();
+        void fadeIn();
 
-        int x_offset() const;
-        int y_offset() const;
+        int xOffset() const;
+        int yOffset() const;
 
-        void set_x_offset(const int offset);
-        void set_y_offset(const int offset);
+        void setXOffset(const int offset);
+        void setYOffset(const int offset);
 
         //void add_accept_button(const QString& text);
         //void add_reject_button(const QString& text);
 
     Q_SIGNALS:
-        void offset_changed();
+        void offsetChanged();
 
     protected:
-        virtual void fade_in_started();
-        virtual void fade_in_finished();
+        virtual void fadeInStarted();
+        virtual void fadeInFinished();
 
     private:
-        QGraphicsOpacityEffect* m_effect;
+        QGraphicsOpacityEffect* mEffect;
 
-        QPropertyAnimation* m_x_animation;
-        QPropertyAnimation* m_y_animation;
-        QPropertyAnimation* m_opacity_animation;
+        QPropertyAnimation* mXAnimation;
+        QPropertyAnimation* mYAnimation;
+        QPropertyAnimation* mOpacityAnimation;
 
-        QParallelAnimationGroup* m_animation_group;
+        QParallelAnimationGroup* mAnimationGroup;
 
-        int m_x_offset;
-        int m_y_offset;
+        int mXOffset;
+        int mYOffset;
     };
 }

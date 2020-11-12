@@ -44,21 +44,21 @@ namespace hal
         ContentWidget* content();
 
     public Q_SLOTS:
-        void detach_widget();
-        void reattach_widget();
-        void handle_name_changed(const QString& name);
+        void detachWidget();
+        void reattachWidget();
+        void handleNameChanged(const QString& name);
 
     private:
         void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 
-        QVBoxLayout* m_vertical_layout;
-        QHBoxLayout* m_horizontal_layout;
-        Toolbar* m_left_toolbar;
-        Toolbar* m_right_toolbar;
-        ContentWidget* m_widget;
-        QLabel* m_name_label;
+        QVBoxLayout* mVerticalLayout;
+        QHBoxLayout* mHorizontalLayout;
+        Toolbar* mLeftToolbar;
+        Toolbar* mRightToolbar;
+        ContentWidget* mWidget;
+        QLabel* mNameLabel;
 
-        QString m_detach_icon_path;
-        QString m_detach_icon_style;
+        QString mDetachIconPath;
+        QString mDetachIconStyle;
     };
 }

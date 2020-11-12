@@ -15,57 +15,57 @@
 
 namespace hal
 {
-    static const qreal baseline = 1;
+    static const qreal sBaseline = 1;
 
-    qreal StandardGraphicsModule::s_alpha;
+    qreal StandardGraphicsModule::sAlpha;
 
-    QPen StandardGraphicsModule::s_pen;
+    QPen StandardGraphicsModule::sPen;
 
-    QColor StandardGraphicsModule::s_text_color;
+    QColor StandardGraphicsModule::sTextColor;
 
     QFont StandardGraphicsModule::sTextFont[3];
-    QFont StandardGraphicsModule::s_pin_font;
+    QFont StandardGraphicsModule::sPinFont;
 
     qreal StandardGraphicsModule::sTextFontHeight[3] = {0, 0, 0};
 
-    qreal StandardGraphicsModule::s_color_bar_height = 30;
+    qreal StandardGraphicsModule::sColorBarHeight = 30;
 
-    qreal StandardGraphicsModule::s_pin_inner_horizontal_spacing = 12;
-    qreal StandardGraphicsModule::s_pin_outer_horizontal_spacing = 2.4;
+    qreal StandardGraphicsModule::sPinInnerHorizontalSpacing = 12;
+    qreal StandardGraphicsModule::sPinOuterHorizontalSpacing = 2.4;
 
-    qreal StandardGraphicsModule::s_pin_inner_vertical_spacing = 1.2;
-    qreal StandardGraphicsModule::s_pin_outer_vertical_spacing = 0.6;
-    qreal StandardGraphicsModule::s_pin_upper_vertical_spacing = 0.6;
-    qreal StandardGraphicsModule::s_pin_lower_vertical_spacing = 1.8;
+    qreal StandardGraphicsModule::sPinInnerVerticalSpacing = 1.2;
+    qreal StandardGraphicsModule::sPinOuterVerticalSpacing = 0.6;
+    qreal StandardGraphicsModule::sPinUpperVerticalSpacing = 0.6;
+    qreal StandardGraphicsModule::sPinLowerVerticalSpacing = 1.8;
 
-    qreal StandardGraphicsModule::s_pin_font_height;
-    qreal StandardGraphicsModule::s_pin_font_ascent;
-    qreal StandardGraphicsModule::s_pin_font_descent;
-    qreal StandardGraphicsModule::s_pin_font_baseline;
+    qreal StandardGraphicsModule::sPinFontHeight;
+    qreal StandardGraphicsModule::sPinFontAscent;
+    qreal StandardGraphicsModule::sPinFontDescent;
+    qreal StandardGraphicsModule::sPinFontBaseline;
 
-    qreal StandardGraphicsModule::s_inner_name_type_spacing = 1.2;
-    qreal StandardGraphicsModule::s_outer_name_type_spacing = 3;
+    qreal StandardGraphicsModule::sInnerNameTypeSpacing = 1.2;
+    qreal StandardGraphicsModule::sOuterNameTypeSpacing = 3;
 
-    const int StandardGraphicsModule::ICON_PADDING = 3;
-    const QSize StandardGraphicsModule::ICON_SIZE(s_color_bar_height - 2 * ICON_PADDING, s_color_bar_height - 2 * ICON_PADDING);
+    const int StandardGraphicsModule::sIconPadding = 3;
+    const QSize StandardGraphicsModule::sIconSize(sColorBarHeight - 2 * sIconPadding, sColorBarHeight - 2 * sIconPadding);
     QPixmap* StandardGraphicsModule::sIconInstance = nullptr;
 
     const QPixmap& StandardGraphicsModule::iconPixmap()
     {
         if (!sIconInstance)
-            sIconInstance = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_module").scaled(ICON_SIZE)));
+            sIconInstance = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_module").scaled(sIconSize)));
         return *sIconInstance;
     }
 
-    void StandardGraphicsModule::load_settings()
+    void StandardGraphicsModule::loadSettings()
     {
-        s_pen.setCosmetic(true);
-        s_pen.setJoinStyle(Qt::MiterJoin);
+        sPen.setCosmetic(true);
+        sPen.setJoinStyle(Qt::MiterJoin);
 
-        s_text_color = QColor(160, 160, 160);
+        sTextColor = QColor(160, 160, 160);
 
         QFont font = QFont("Iosevka");
-        font.setPixelSize(graph_widget_constants::font_size);
+        font.setPixelSize(graph_widget_constants::sFontSize);
 
         for (int iline = 0; iline < 3; iline++)
         {
@@ -74,24 +74,24 @@ namespace hal
             sTextFontHeight[iline] = fmf.height();
         }
 
-        s_pin_font = font;
+        sPinFont = font;
 
-        QFontMetricsF pin_fm(s_pin_font);
-        s_pin_font_height   = pin_fm.height();
-        s_pin_font_ascent   = pin_fm.ascent();
-        s_pin_font_descent  = pin_fm.descent();
-        s_pin_font_baseline = 1;
+        QFontMetricsF pin_fm(sPinFont);
+        sPinFontHeight   = pin_fm.height();
+        sPinFontAscent   = pin_fm.ascent();
+        sPinFontDescent  = pin_fm.descent();
+        sPinFontBaseline = 1;
 
-        s_selectionColor = QColor(240, 173, 0);
-        s_highlightColor = QColor(40, 200, 240);
+        sSelectionColor = QColor(240, 173, 0);
+        sHighlightColor = QColor(40, 200, 240);
     }
 
-    void StandardGraphicsModule::update_alpha()
+    void StandardGraphicsModule::updateAlpha()
     {
-        if (s_lod <= graph_widget_constants::gate_max_lod)
-            s_alpha = 1 - (s_lod - graph_widget_constants::gate_min_lod) / (graph_widget_constants::gate_max_lod - graph_widget_constants::gate_min_lod);
+        if (sLod <= graph_widget_constants::sGateMaxLod)
+            sAlpha = 1 - (sLod - graph_widget_constants::sGateMinLod) / (graph_widget_constants::sGateMaxLod - graph_widget_constants::sGateMinLod);
         else
-            s_alpha = 0;
+            sAlpha = 0;
     }
 
     StandardGraphicsModule::StandardGraphicsModule(Module* m, bool adjust_size_to_grid) : GraphicsModule(m)
@@ -103,23 +103,23 @@ namespace hal
     {
         Q_UNUSED(widget);
 
-        if (s_lod < graph_widget_constants::gate_min_lod)
+        if (sLod < graph_widget_constants::sGateMinLod)
         {
-            painter->fillRect(QRectF(0, 0, m_width, m_height), penColor(option->state));
+            painter->fillRect(QRectF(0, 0, mWidth, mHeight), penColor(option->state));
             return;
         }
         else
         {
             // draw box and icon
-            painter->fillRect(QRectF(0, 0, m_width, s_color_bar_height), m_color);
-            painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), QColor(0, 0, 0, 200));
-            //            QRectF iconRect(ICON_PADDING,ICON_PADDING,ICON_SIZE.width(),ICON_SIZE.height());
+            painter->fillRect(QRectF(0, 0, mWidth, sColorBarHeight), mColor);
+            painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), QColor(0, 0, 0, 200));
+            //            QRectF iconRect(sIconPadding,sIconPadding,sIconSize.width(),sIconSize.height());
             //            painter->fillRect(iconRect,Qt::black);
-            //            painter->drawPixmap(QPoint(ICON_PADDING,ICON_PADDING), iconPixmap());
+            //            painter->drawPixmap(QPoint(sIconPadding,sIconPadding), iconPixmap());
 
             // draw center text
-            s_pen.setColor(penColor(option->state, s_text_color));
-            painter->setPen(s_pen);
+            sPen.setColor(penColor(option->state, sTextColor));
+            painter->setPen(sPen);
 
             for (int iline = 0; iline < 3; iline++)
             {
@@ -129,52 +129,52 @@ namespace hal
                 painter->drawText(mTextPosition[iline], mNodeText[iline]);
             }
 
-            bool moduleHasFocus = g_selection_relay->m_focus_type == SelectionRelay::item_type::module && g_selection_relay->m_focus_id == m_id;
-            int subFocusIndex   = static_cast<int>(g_selection_relay->m_subfocus_index);
+            bool moduleHasFocus = gSelectionRelay->mFocusType == SelectionRelay::ItemType::Module && gSelectionRelay->mFocusId == mId;
+            int subFocusIndex   = static_cast<int>(gSelectionRelay->mSubfocusIndex);
 
-            painter->setFont(s_pin_font);
-            QPointF text_pos(s_pin_outer_horizontal_spacing, s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_ascent + baseline);
+            painter->setFont(sPinFont);
+            QPointF text_pos(sPinOuterHorizontalSpacing, sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline);
 
-            for (int i = 0; i < m_input_pins.size(); ++i)
+            for (int i = 0; i < mInputPins.size(); ++i)
             {
                 if (moduleHasFocus)
-                    if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::left && i == subFocusIndex)
-                        s_pen.setColor(selectionColor());
+                    if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Left && i == subFocusIndex)
+                        sPen.setColor(selectionColor());
                     else
-                        s_pen.setColor(s_text_color);
+                        sPen.setColor(sTextColor);
                 else
-                    s_pen.setColor(penColor(option->state, s_text_color));
-                painter->setPen(s_pen);
-                painter->drawText(text_pos, m_input_pins.at(i).name);
-                text_pos.setY(text_pos.y() + s_pin_font_height + s_pin_inner_vertical_spacing);
+                    sPen.setColor(penColor(option->state, sTextColor));
+                painter->setPen(sPen);
+                painter->drawText(text_pos, mInputPins.at(i).name);
+                text_pos.setY(text_pos.y() + sPinFontHeight + sPinInnerVerticalSpacing);
             }
 
-            for (int i = 0; i < m_output_pins.size(); ++i)
+            for (int i = 0; i < mOutputPins.size(); ++i)
             {
                 if (moduleHasFocus)
-                    if (g_selection_relay->m_subfocus == SelectionRelay::subfocus::right && i == subFocusIndex)
-                        s_pen.setColor(selectionColor());
+                    if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Right && i == subFocusIndex)
+                        sPen.setColor(selectionColor());
                     else
-                        s_pen.setColor(s_text_color);
+                        sPen.setColor(sTextColor);
                 else
-                    s_pen.setColor(penColor(option->state, s_text_color));
-                painter->setPen(s_pen);
-                painter->drawText(m_output_pin_positions.at(i), m_output_pins.at(i).name);
+                    sPen.setColor(penColor(option->state, sTextColor));
+                painter->setPen(sPen);
+                painter->drawText(mOutputPinPositions.at(i), mOutputPins.at(i).name);
             }
 
-            if (s_lod < graph_widget_constants::gate_max_lod)
+            if (sLod < graph_widget_constants::sGateMaxLod)
             {
-                QColor fade = m_color;
-                fade.setAlphaF(s_alpha);
-                painter->fillRect(QRectF(0, s_color_bar_height, m_width, m_height - s_color_bar_height), fade);
+                QColor fade = mColor;
+                fade.setAlphaF(sAlpha);
+                painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), fade);
             }
 
             if (option->state & QStyle::State_Selected)
             {
-                s_pen.setColor(selectionColor());
-                s_pen.setCosmetic(true);
-                painter->setPen(s_pen);
-                s_pen.setCosmetic(false);
+                sPen.setColor(selectionColor());
+                sPen.setCosmetic(true);
+                painter->setPen(sPen);
+                sPen.setCosmetic(false);
                 bool original_antialiasing_value = painter->renderHints().testFlag(QPainter::Antialiasing);
                 painter->setRenderHint(QPainter::Antialiasing, true);
                 painter->setBrush(QBrush());
@@ -194,50 +194,50 @@ namespace hal
         }
     }
 
-    QPointF StandardGraphicsModule::get_input_scene_position(const u32 net_id, const QString& pin_type) const
+    QPointF StandardGraphicsModule::getInputScenePosition(const u32 mNetId, const QString& pin_type) const
     {
         Q_UNUSED(pin_type)
 
         int index = 0;
 
-        for (; index < m_input_pins.size(); ++index)
-            if (m_input_pins.at(index).net_id == net_id)
+        for (; index < mInputPins.size(); ++index)
+            if (mInputPins.at(index).mNetId == mNetId)
                 break;
 
-        assert(index < m_input_pins.size());
+        assert(index < mInputPins.size());
 
         return endpointPositionByIndex(index,true);
     }
 
-    QPointF StandardGraphicsModule::get_output_scene_position(const u32 net_id, const QString& pin_type) const
+    QPointF StandardGraphicsModule::getOutputScenePosition(const u32 mNetId, const QString& pin_type) const
     {
         Q_UNUSED(pin_type)
 
         int index = 0;
 
-        for (; index < m_output_pins.size(); ++index)
-            if (m_output_pins.at(index).net_id == net_id)
+        for (; index < mOutputPins.size(); ++index)
+            if (mOutputPins.at(index).mNetId == mNetId)
                 break;
 
-        assert(index < m_output_pins.size());
+        assert(index < mOutputPins.size());
 
         return endpointPositionByIndex(index,false);
     }
 
     float StandardGraphicsModule::yEndpointDistance() const
     {
-        return (s_pin_font_height + s_pin_inner_vertical_spacing);
+        return (sPinFontHeight + sPinInnerVerticalSpacing);
     }
 
     float StandardGraphicsModule::yTopPinDistance() const
     {
-        return (s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_height / 2);
+        return (sColorBarHeight + sPinUpperVerticalSpacing + sPinFontHeight / 2);
     }
 
     QPointF StandardGraphicsModule::endpointPositionByIndex(int index, bool isInput) const
     {
         qreal y = yTopPinDistance() + index * yEndpointDistance();
-        return mapToScene(QPointF(isInput ? 0 : m_width, y));
+        return mapToScene(QPointF(isInput ? 0 : mWidth, y));
     }
 
     void StandardGraphicsModule::format(const bool& adjust_size_to_grid)
@@ -249,17 +249,17 @@ namespace hal
             textWidth[iline] = fmf.width(mNodeText[iline]);
         }
 
-        QFontMetricsF pin_fm(s_pin_font);
+        QFontMetricsF pin_fm(sPinFont);
         qreal max_pin_width = 0;
 
-        for (const module_pin& input_pin : m_input_pins)
+        for (const ModulePin& input_pin : mInputPins)
         {
             qreal width = pin_fm.width(input_pin.name);
             if (width > max_pin_width)
                 max_pin_width = width;
         }
 
-        for (const module_pin& output_pin : m_output_pins)
+        for (const ModulePin& output_pin : mOutputPins)
         {
             qreal width = pin_fm.width(output_pin.name);
             if (width > max_pin_width)
@@ -268,17 +268,17 @@ namespace hal
 
         qreal total_input_pin_height = 0;
 
-        if (!m_input_pins.isEmpty())
-            total_input_pin_height = m_input_pins.size() * s_pin_font_height + (m_input_pins.size() - 1) * s_pin_inner_vertical_spacing + s_pin_upper_vertical_spacing + s_pin_lower_vertical_spacing;
+        if (!mInputPins.isEmpty())
+            total_input_pin_height = mInputPins.size() * sPinFontHeight + (mInputPins.size() - 1) * sPinInnerVerticalSpacing + sPinUpperVerticalSpacing + sPinLowerVerticalSpacing;
 
         qreal total_output_pin_height = 0;
 
-        if (!m_output_pins.isEmpty())
+        if (!mOutputPins.isEmpty())
             total_output_pin_height =
-                m_output_pins.size() * s_pin_font_height + (m_output_pins.size() - 1) * s_pin_inner_vertical_spacing + s_pin_upper_vertical_spacing + s_pin_lower_vertical_spacing;
+                mOutputPins.size() * sPinFontHeight + (mOutputPins.size() - 1) * sPinInnerVerticalSpacing + sPinUpperVerticalSpacing + sPinLowerVerticalSpacing;
 
         qreal max_pin_height  = std::max(total_input_pin_height, total_output_pin_height);
-        qreal min_body_height = s_inner_name_type_spacing + 2 * s_outer_name_type_spacing;
+        qreal min_body_height = sInnerNameTypeSpacing + 2 * sOuterNameTypeSpacing;
         qreal maxTextWidth    = 0;
         for (int iline = 0; iline < 3; iline++)
         {
@@ -288,41 +288,41 @@ namespace hal
                 maxTextWidth = textWidth[iline];
         }
 
-        m_width  = max_pin_width * 2 + s_pin_inner_horizontal_spacing * 2 + s_pin_outer_horizontal_spacing * 2 + maxTextWidth;
-        m_height = std::max(max_pin_height, min_body_height) + s_color_bar_height;
+        mWidth  = max_pin_width * 2 + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + maxTextWidth;
+        mHeight = std::max(max_pin_height, min_body_height) + sColorBarHeight;
 
         if (adjust_size_to_grid)
         {
-            int floored_width = static_cast<int>(m_width);
-            int quotient      = floored_width / graph_widget_constants::grid_size;
+            int floored_width = static_cast<int>(mWidth);
+            int quotient      = floored_width / graph_widget_constants::sGridSize;
 
-            if (m_width > quotient * graph_widget_constants::grid_size)
-                m_width = (quotient + 1) * graph_widget_constants::grid_size;
+            if (mWidth > quotient * graph_widget_constants::sGridSize)
+                mWidth = (quotient + 1) * graph_widget_constants::sGridSize;
 
-            int floored_height = static_cast<int>(m_height);
-            quotient           = floored_height / graph_widget_constants::grid_size;
+            int floored_height = static_cast<int>(mHeight);
+            quotient           = floored_height / graph_widget_constants::sGridSize;
 
-            if (m_height > quotient * graph_widget_constants::grid_size)
-                m_height = (quotient + 1) * graph_widget_constants::grid_size;
+            if (mHeight > quotient * graph_widget_constants::sGridSize)
+                mHeight = (quotient + 1) * graph_widget_constants::sGridSize;
         }
 
-        qreal ytext = std::max(m_height / 2 - sTextFontHeight[0] * 3 / 2 - s_inner_name_type_spacing / 2, s_color_bar_height + s_outer_name_type_spacing);
+        qreal ytext = std::max(mHeight / 2 - sTextFontHeight[0] * 3 / 2 - sInnerNameTypeSpacing / 2, sColorBarHeight + sOuterNameTypeSpacing);
 
         for (int iline = 0; iline < 3; iline++)
         {
             ytext += sTextFontHeight[iline];
-            mTextPosition[iline].setX(m_width / 2 - textWidth[iline] / 2);
+            mTextPosition[iline].setX(mWidth / 2 - textWidth[iline] / 2);
             mTextPosition[iline].setY(ytext);
-            ytext += s_inner_name_type_spacing / 2;
+            ytext += sInnerNameTypeSpacing / 2;
         }
 
-        qreal y = s_color_bar_height + s_pin_upper_vertical_spacing + s_pin_font_ascent + baseline;
+        qreal y = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 
-        for (const module_pin& output_pin : m_output_pins)
+        for (const ModulePin& output_pin : mOutputPins)
         {
-            qreal x = m_width - (pin_fm.size(0, output_pin.name).rwidth() + s_pin_outer_horizontal_spacing);
-            m_output_pin_positions.append(QPointF(x, y));
-            y += (s_pin_font_height + s_pin_inner_vertical_spacing);
+            qreal x = mWidth - (pin_fm.size(0, output_pin.name).rwidth() + sPinOuterHorizontalSpacing);
+            mOutputPinPositions.append(QPointF(x, y));
+            y += (sPinFontHeight + sPinInnerVerticalSpacing);
         }
     }
 }    // namespace hal

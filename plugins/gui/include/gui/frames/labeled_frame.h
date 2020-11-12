@@ -38,14 +38,14 @@ namespace hal
     public:
         LabeledFrame(QWidget* parent = nullptr);
 
-        void add_content(QWidget* content);
+        void addContent(QWidget* content);
 
     protected:
-        QVBoxLayout* m_layout;
-        QFrame* m_header;
-        QHBoxLayout* m_header_layout;
-        QFrame* m_left_spacer;
-        QLabel* m_label;
-        QFrame* m_right_spacer;
+        QVBoxLayout* mLayout;
+        QFrame* mHeader;
+        QHBoxLayout* mHeaderLayout;
+        QFrame* mLeftSpacer;
+        QLabel* mLabel;
+        QFrame* mRightSpacer;
     };
 }

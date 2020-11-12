@@ -46,94 +46,94 @@ namespace hal
         explicit NetlistRelay(QObject* parent = nullptr);
         ~NetlistRelay();
 
-        void register_callbacks();
+        void registerCallbacks();
 
-        QColor get_module_color(const u32 id);
+        QColor getModuleColor(const u32 id);
 
-        ModuleModel* get_ModuleModel();
+        ModuleModel* getModuleModel();
 
-        void debug_change_module_name(const u32 id);
-        void debug_change_module_type(const u32 id);
-        void debug_change_module_color(const u32 id);
-        void debug_add_selection_to_module(const u32 id);
-        void debug_add_child_module(const u32 id);
-        void debug_delete_module(const u32 id);
+        void debugChangeModuleName(const u32 id);
+        void debugChangeModuleType(const u32 id);
+        void debugChangeModuleColor(const u32 id);
+        void debugAddSelectionToModule(const u32 id);
+        void debugAddChildModule(const u32 id);
+        void debugDeleteModule(const u32 id);
 
     Q_SIGNALS:
         // PROBABLY OBSOLETE
-        void netlist_event(netlist_event_handler::event ev, Netlist* object, u32 associated_data) const;
-        void module_event(module_event_handler::event ev, Module* object, u32 associated_data) const;
-        void gate_event(gate_event_handler::event ev, Gate* object, u32 associated_data) const;
-        void net_event(net_event_handler::event ev, Net* object, u32 associated_data) const;
+        void netlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data) const;
+        void moduleEvent(module_event_handler::event ev, Module* object, u32 associated_data) const;
+        void gateEvent(gate_event_handler::event ev, Gate* object, u32 associated_data) const;
+        void netEvent(net_event_handler::event ev, Net* object, u32 associated_data) const;
 
-        void netlist_id_changed(Netlist* n, const u32 associated_data) const;
-        void netlist_input_filename_changed(Netlist* n) const;
-        void netlist_design_name_changed(Netlist* n) const;
-        void netlist_device_name_changed(Netlist* n) const;
-        void netlist_marked_global_vcc(Netlist* n, const u32 associated_data) const;
-        void netlist_marked_global_gnd(Netlist* n, const u32 associated_data) const;
-        void netlist_unmarked_global_vcc(Netlist* n, const u32 associated_data) const;
-        void netlist_unmarked_global_gnd(Netlist* n, const u32 associated_data) const;
-        void netlist_marked_global_input(Netlist* n, const u32 associated_data) const;
-        void netlist_marked_global_output(Netlist* n, const u32 associated_data) const;
-        void netlist_marked_global_inout(Netlist* n, const u32 associated_data) const;
-        void netlist_unmarked_global_input(Netlist* n, const u32 associated_data) const;
-        void netlist_unmarked_global_output(Netlist* n, const u32 associated_data) const;
-        void netlist_unmarked_global_inout(Netlist* n, const u32 associated_data) const;
+        void netlistIdChanged(Netlist* n, const u32 associated_data) const;
+        void netlistInputFilenameChanged(Netlist* n) const;
+        void netlistDesignNameChanged(Netlist* n) const;
+        void netlistDeviceNameChanged(Netlist* n) const;
+        void netlistMarkedGlobalVcc(Netlist* n, const u32 associated_data) const;
+        void netlistMarkedGlobalGnd(Netlist* n, const u32 associated_data) const;
+        void netlistUnmarkedGlobalVcc(Netlist* n, const u32 associated_data) const;
+        void netlistUnmarkedGlobalGnd(Netlist* n, const u32 associated_data) const;
+        void netlistMarkedGlobalInput(Netlist* n, const u32 associated_data) const;
+        void netlistMarkedGlobalOutput(Netlist* n, const u32 associated_data) const;
+        void netlistMarkedGlobalInout(Netlist* n, const u32 associated_data) const;
+        void netlistUnmarkedGlobalInput(Netlist* n, const u32 associated_data) const;
+        void netlistUnmarkedGlobalOutput(Netlist* n, const u32 associated_data) const;
+        void netlistUnmarkedGlobalInout(Netlist* n, const u32 associated_data) const;
 
-        void module_created(Module* m) const;
+        void moduleCreated(Module* m) const;
         void module_removed(Module* m) const;
-        void module_name_changed(Module* m) const;
-        void module_parent_changed(Module* m) const;
-        void module_submodule_added(Module* m, const u32 added_module) const;
-        void module_submodule_removed(Module* m, const u32 removed_module) const;
-        void module_gate_assigned(Module* m, const u32 assigned_gate) const;
-        void module_gate_removed(Module* m, const u32 removed_gate) const;
-        void module_input_port_name_changed(Module* m, const u32 respective_net) const;
-        void module_output_port_name_changed(Module* m, const u32 respective_net) const;
-        void module_type_changed(Module* m) const;
+        void moduleNameChanged(Module* m) const;
+        void moduleParentChanged(Module* m) const;
+        void moduleSubmoduleAdded(Module* m, const u32 added_module) const;
+        void moduleSubmoduleRemoved(Module* m, const u32 removed_module) const;
+        void moduleGateAssigned(Module* m, const u32 assigned_gate) const;
+        void moduleGateRemoved(Module* m, const u32 removed_gate) const;
+        void moduleInputPortNameChanged(Module* m, const u32 respective_net) const;
+        void moduleOutputPortNameChanged(Module* m, const u32 respective_net) const;
+        void moduleTypeChanged(Module* m) const;
 
-        void gate_created(Gate* g) const;
+        void gateCreated(Gate* g) const;
         void gate_removed(Gate* g) const;
-        void gate_name_changed(Gate* g) const;
+        void gateNameChanged(Gate* g) const;
 
-        void net_created(Net* n) const;
+        void netCreated(Net* n) const;
         void net_removed(Net* n) const;
-        void net_name_changed(Net* n) const;
-        void net_source_added(Net* n, const u32 dst_gate_id) const;
-        void net_source_removed(Net* n, const u32 dst_gate_id) const;
-        void net_destination_added(Net* n, const u32 dst_gate_id) const;
-        void net_destination_removed(Net* n, const u32 dst_gate_id) const;
+        void netNameChanged(Net* n) const;
+        void netSourceAdded(Net* n, const u32 dst_gate_id) const;
+        void netSourceRemoved(Net* n, const u32 dst_gate_id) const;
+        void netDestinationAdded(Net* n, const u32 dst_gate_id) const;
+        void netDestinationRemoved(Net* n, const u32 dst_gate_id) const;
 
-        void grouping_created(Grouping* grp) const;
-        void grouping_removed(Grouping* grp) const;
-        void grouping_nameChanged(Grouping* grp) const;
-        void grouping_gate_assigned(Grouping* grp, u32 id) const;
-        void grouping_gate_removed(Grouping* grp, u32 id) const;
-        void grouping_net_assigned(Grouping* grp, u32 id) const;
-        void grouping_net_removed(Grouping* grp, u32 id) const;
-        void grouping_module_assigned(Grouping* grp, u32 id) const;
-        void grouping_module_removed(Grouping* grp, u32 id) const;
+        void groupingCreated(Grouping* grp) const;
+        void groupingRemoved(Grouping* grp) const;
+        void groupingNameChanged(Grouping* grp) const;
+        void groupingGateAssigned(Grouping* grp, u32 id) const;
+        void groupingGateRemoved(Grouping* grp, u32 id) const;
+        void groupingNetAssigned(Grouping* grp, u32 id) const;
+        void groupingNetRemoved(Grouping* grp, u32 id) const;
+        void groupingModuleAssigned(Grouping* grp, u32 id) const;
+        void groupingModuleRemoved(Grouping* grp, u32 id) const;
 
         // GUI
-        void module_color_changed(Module* m) const;
+        void moduleColorChanged(Module* m) const;
 
     private Q_SLOTS:
-        void debug_handle_file_opened();
-        void debug_handle_file_closed();
+        void debugHandleFileOpened();
+        void debugHandleFileClosed();
 
     private:
-        void relay_netlist_event(netlist_event_handler::event ev, Netlist* object, u32 associated_data);
-        void relay_module_event(module_event_handler::event ev, Module* object, u32 associated_data);
-        void relay_gate_event(gate_event_handler::event ev, Gate* object, u32 associated_data);
-        void relay_net_event(net_event_handler::event ev, Net* object, u32 associated_data);
-        void relay_grouping_event(grouping_event_handler::event ev, Grouping* object, u32 associated_data);
+        void relayNetlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data);
+        void relayModuleEvent(module_event_handler::event ev, Module* object, u32 associated_data);
+        void relayGateEvent(gate_event_handler::event ev, Gate* object, u32 associated_data);
+        void relayNetEvent(net_event_handler::event ev, Net* object, u32 associated_data);
+        void relayGroupingEvent(grouping_event_handler::event ev, Grouping* object, u32 associated_data);
 
-        QMap<u32, QColor> m_module_colors;
+        QMap<u32, QColor> mModuleColors;
 
-        QMap<u32, QString> m_gate_aliases;
-        QMap<u32, QString> m_net_aliases;
+        QMap<u32, QString> mGateAliases;
+        QMap<u32, QString> mNetAliases;
 
-        ModuleModel* m_ModuleModel;
+        ModuleModel* mModuleModel;
     };
 }

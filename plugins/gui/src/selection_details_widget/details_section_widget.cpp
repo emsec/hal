@@ -7,14 +7,14 @@
 namespace hal {
 
     DetailsSectionWidget::DetailsSectionWidget(QWidget* content, const QString &txt, QWidget *parent)
-        : QWidget(parent), m_body(content), m_table(nullptr)
+        : QWidget(parent), mBody(content), mTable(nullptr)
     {
         constructor(txt);
-        m_layout->addWidget(m_body);
+        mLayout->addWidget(mBody);
     }
 
     DetailsSectionWidget::DetailsSectionWidget(const QString &txt, QTableWidget* tab, QWidget *parent)
-        : QWidget(parent), m_body(tab), m_table(tab)
+        : QWidget(parent), mBody(tab), mTable(tab)
     {
         Q_ASSERT (tab != nullptr);
 
@@ -25,39 +25,39 @@ namespace hal {
         hlayout->setSpacing(10);
         hlayout->addWidget(tab);
         hlayout->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        m_layout->addLayout(hlayout);
-        m_layout->addSpacerItem(new QSpacerItem(0,7, QSizePolicy::Expanding, QSizePolicy::Fixed));
+        mLayout->addLayout(hlayout);
+        mLayout->addSpacerItem(new QSpacerItem(0,7, QSizePolicy::Expanding, QSizePolicy::Fixed));
 
-        DetailsTableUtilities::setDefaultTableStyle(m_table);
+        DetailsTableUtilities::setDefaultTableStyle(mTable);
     }
 
     void DetailsSectionWidget::constructor(const QString &txt)
     {
-        Q_ASSERT (m_body != nullptr);
+        Q_ASSERT (mBody != nullptr);
 
-        m_rows        = 0;
-        m_bodyVisible = true;
-        m_headerText  = txt;
-        m_hideEmpty   = g_settings_manager->get("selection_details/hide_empty_sections", false).toBool();
-        m_layout      = new QVBoxLayout(this);
+        mRows        = 0;
+        mBodyVisible = true;
+        mHeaderText  = txt;
+        mHideEmpty   = gSettingsManager->get("selection_details/hide_empty_sections", false).toBool();
+        mLayout      = new QVBoxLayout(this);
 
         // remove placeholder text from initial view
-        m_header      = new QPushButton(txt.endsWith(" (%1)") ? txt.mid(0,txt.size()-5) : txt,this);
-        m_layout->setMargin(0);
-        m_layout->addWidget(m_header);
+        mHeader      = new QPushButton(txt.endsWith(" (%1)") ? txt.mid(0,txt.size()-5) : txt,this);
+        mLayout->setMargin(0);
+        mLayout->addWidget(mHeader);
 
-        connect(m_header,&QPushButton::clicked,this,&DetailsSectionWidget::toggleBodyVisible);
-        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &DetailsSectionWidget::handleGlobalSettingsChanged);
+        connect(mHeader,&QPushButton::clicked,this,&DetailsSectionWidget::toggleBodyVisible);
+        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &DetailsSectionWidget::handleGlobalSettingsChanged);
     }
 
     QTableWidget* DetailsSectionWidget::table() const
     {
-        return m_table;
+        return mTable;
     }
 
     void DetailsSectionWidget::hideEmpty()
     {
-        if (m_hideEmpty && m_rows == 0)
+        if (mHideEmpty && mRows == 0)
             hide();
         else
         {
@@ -71,32 +71,32 @@ namespace hal {
         Q_UNUSED(sender)
         if(key == "selection_details/hide_empty_sections")
         {
-            m_hideEmpty = value.toBool();
+            mHideEmpty = value.toBool();
             hideEmpty();
         }
     }
 
     void DetailsSectionWidget::setRowCount(int rc)
     {
-        m_bodyVisible = true; // show body after each update
-        m_rows = rc;
-        if (m_headerText.contains("%1"))
-            m_header->setText(QString(m_headerText).arg(m_rows));
+        mBodyVisible = true; // show body after each update
+        mRows = rc;
+        if (mHeaderText.contains("%1"))
+            mHeader->setText(QString(mHeaderText).arg(mRows));
         hideEmpty();
     }
 
     void DetailsSectionWidget::toggleBodyVisible()
     {
-        m_bodyVisible = ! m_bodyVisible;
+        mBodyVisible = ! mBodyVisible;
         bodyVisible();
     }
 
     void DetailsSectionWidget::bodyVisible()
     {
-        if (m_bodyVisible)
-            m_body->show();
+        if (mBodyVisible)
+            mBody->show();
         else
-            m_body->hide();
+            mBody->hide();
     }
 
 }

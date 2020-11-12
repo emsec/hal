@@ -45,14 +45,14 @@ namespace hal
 
     public Q_SLOTS:
 
-        void append_log(spdlog::level::level_enum log_type, QString const& msg, FilterItem* filter);
+        void appendLog(spdlog::level::level_enum log_type, QString const& msg, FilterItem* filter);
 
-        void highlight_current_line();
+        void highlightCurrentLine();
 
     private:
-        int m_max_line_count;
+        int mMaxLineCount;
 
         //will be deleted within the logger_widgets destrcutor (is the parent of the textedit)
-        QPlainTextEdit* m_edit;
+        QPlainTextEdit* mEdit;
     };
 }

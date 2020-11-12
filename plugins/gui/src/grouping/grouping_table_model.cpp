@@ -6,13 +6,13 @@ namespace hal {
     GroupingTableEntry::GroupingTableEntry(const QString& n, const QColor &c)
         : mGrouping(nullptr), mColor(c)
     {
-        mGrouping = g_netlist->create_grouping(n.toStdString());
+        mGrouping = gNetlist->create_grouping(n.toStdString());
     }
 
     GroupingTableEntry::GroupingTableEntry(u32 existingId, const QColor& c)
         : mGrouping(nullptr), mColor(c)
     {
-        mGrouping = g_netlist->get_grouping_by_id(existingId);
+        mGrouping = gNetlist->get_grouping_by_id(existingId);
     }
 
     u32 GroupingTableEntry::id() const
@@ -38,7 +38,7 @@ namespace hal {
         : QAbstractTableModel(parent), mDisableEvents(false)
     {
         //on creation load all already existing groupings from the netlist into the model
-        for(auto grp : g_netlist->get_groupings())
+        for(auto grp : gNetlist->get_groupings())
         {
             mDisableEvents = true;
             Q_EMIT layoutAboutToBeChanged();
@@ -52,9 +52,9 @@ namespace hal {
             Q_EMIT newEntryAdded(inx);
         }
 
-        connect(g_netlist_relay, &NetlistRelay::grouping_created, this, &GroupingTableModel::createGroupingEvent);
-        connect(g_netlist_relay, &NetlistRelay::grouping_removed, this, &GroupingTableModel::deleteGroupingEvent);
-        connect(g_netlist_relay, &NetlistRelay::grouping_nameChanged, this, &GroupingTableModel::groupingNameChangedEvent);
+        connect(gNetlistRelay, &NetlistRelay::groupingCreated, this, &GroupingTableModel::createGroupingEvent);
+        connect(gNetlistRelay, &NetlistRelay::groupingRemoved, this, &GroupingTableModel::deleteGroupingEvent);
+        connect(gNetlistRelay, &NetlistRelay::groupingNameChanged, this, &GroupingTableModel::groupingNameChangedEvent);
     }
 
     int GroupingTableModel::columnCount(const QModelIndex &parent) const
@@ -142,7 +142,7 @@ namespace hal {
             grp->remove_gate(g);
         for (Net* n : grp->get_nets())
             grp->remove_net(n);
-        g_netlist->delete_grouping(grp);
+        gNetlist->delete_grouping(grp);
         Q_EMIT layoutAboutToBeChanged();
         mGroupings.removeAt(row);
         Q_EMIT layoutChanged();
@@ -260,24 +260,26 @@ namespace hal {
         return retval;
     }
 
-    QColor GroupingTableModel::colorForItem(item_type itemType, u32 itemId) const
+    QColor GroupingTableModel::colorForItem(ItemType itemType, u32 itemId) const
     {
         Grouping* itemGrouping = nullptr;
         const Module* m = nullptr;
         const Gate* g = nullptr;
         const Net* n = nullptr;
         switch (itemType) {
-        case item_type::module:
-            m = g_netlist->get_module_by_id(itemId);
+        case ItemType::Module:
+            m = gNetlist->get_module_by_id(itemId);
             if (m) itemGrouping = m->get_grouping();
             break;
-        case item_type::gate:
-            g = g_netlist->get_gate_by_id(itemId);
+        case ItemType::Gate:
+            g = gNetlist->get_gate_by_id(itemId);
             if (g) itemGrouping = g->get_grouping();
             break;
-        case item_type::net:
-            n = g_netlist->get_net_by_id(itemId);
+        case ItemType::Net:
+            n = gNetlist->get_net_by_id(itemId);
             if (n) itemGrouping = n->get_grouping();
+            break;
+        default:
             break;
         }
         if (itemGrouping)

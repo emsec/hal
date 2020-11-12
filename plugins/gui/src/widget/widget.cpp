@@ -19,7 +19,7 @@ namespace hal
     void Widget::setParent(QWidget* parent)
     {
         QWidget::setParent(parent);
-        Q_EMIT parent_set_to(parent);
+        Q_EMIT parentSetTo(parent);
     }
 
     void Widget::hide()

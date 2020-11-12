@@ -21,18 +21,17 @@
 
 namespace hal
 {
-    FileManager::FileManager(QObject* parent) : QObject(parent), m_file_watcher(new QFileSystemWatcher(this)), m_file_open(false)
+    FileManager::FileManager(QObject* parent) : QObject(parent), mFileWatcher(new QFileSystemWatcher(this)), mFileOpen(false)
     {
-        m_autosave_enabled  = g_settings_manager->get("advanced/autosave").toBool();
-        m_autosave_interval = g_settings_manager->get("advanced/autosave_interval").toInt();
-        if (m_autosave_interval < 30)    // failsafe in case somebody sets "0" in the .ini
-            m_autosave_interval = 30;
-        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &FileManager::handle_global_setting_changed);
+        mAutosaveEnabled  = gSettingsManager->get("advanced/autosave").toBool();
+        mAutosaveInterval = gSettingsManager->get("advanced/autosave_interval").toInt();
+        if (mAutosaveInterval < 30)    // failsafe in case somebody sets "0" in the .ini
+            mAutosaveInterval = 30;
 
-        connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &FileManager::handle_file_changed);
-        connect(m_file_watcher, &QFileSystemWatcher::directoryChanged, this, &FileManager::handle_directory_changed);
-        m_timer = new QTimer(this);
-        connect(m_timer, &QTimer::timeout, this, &FileManager::autosave);
+        connect(mFileWatcher, &QFileSystemWatcher::fileChanged, this, &FileManager::handleFileChanged);
+        connect(mFileWatcher, &QFileSystemWatcher::directoryChanged, this, &FileManager::handleDirectoryChanged);
+        mTimer = new QTimer(this);
+        connect(mTimer, &QTimer::timeout, this, &FileManager::autosave);
     }
 
     FileManager* FileManager::get_instance()
@@ -41,86 +40,86 @@ namespace hal
         return &manager;
     }
 
-    void FileManager::handle_program_arguments(const ProgramArguments& args)
+    void FileManager::handleProgramArguments(const ProgramArguments& args)
     {
         if (args.is_option_set("--input-file"))
         {
-            auto file_name = std::filesystem::path(args.get_parameter("--input-file"));
-            log_info("gui", "GUI started with file {}.", file_name.string());
-            open_file(QString::fromStdString(file_name.string()));
+            auto fileName = std::filesystem::path(args.get_parameter("--input-file"));
+            log_info("gui", "GUI started with file {}.", fileName.string());
+            openFile(QString::fromStdString(fileName.string()));
         }
     }
 
-    bool FileManager::file_open() const
+    bool FileManager::fileOpen() const
     {
-        return m_file_open;
+        return mFileOpen;
     }
 
     void FileManager::autosave()
     {
-        if (!m_shadow_file_name.isEmpty() && m_autosave_enabled)
+        if (!mShadowFileName.isEmpty() && mAutosaveEnabled)
         {
             log_info("gui", "saving a backup in case something goes wrong...");
-            netlist_serializer::serialize_to_file(g_netlist, m_shadow_file_name.toStdString());
+            netlist_serializer::serialize_to_file(gNetlist, mShadowFileName.toStdString());
         }
     }
 
-    QString FileManager::file_name() const
+    QString FileManager::fileName() const
     {
-        if (m_file_open)
-            return m_file_name;
+        if (mFileOpen)
+            return mFileName;
 
         return QString();
     }
 
-    void FileManager::watch_file(const QString& file_name)
+    void FileManager::watchFile(const QString& fileName)
     {
-        if (file_name == m_file_name)
+        if (fileName == mFileName)
         {
             return;
         }
 
-        if (!m_file_name.isEmpty())
+        if (!mFileName.isEmpty())
         {
-            m_file_watcher->removePath(m_file_name);
-            remove_shadow_file();
+            mFileWatcher->removePath(mFileName);
+            removeShadowFile();
         }
 
-        m_timer->stop();
+        mTimer->stop();
 
-        if (!file_name.isEmpty())
+        if (!fileName.isEmpty())
         {
-            log_info("gui", "watching current file '{}'", file_name.toStdString());
+            log_info("gui", "watching current file '{}'", fileName.toStdString());
 
             // autosave periodically
             // (we also start the timer if autosave is disabled since it's way
             // easier to just do nothing when the timer fires instead of messing
             // with complicated start/stop conditions)
-            m_timer->start(m_autosave_interval * 1000);
+            mTimer->start(mAutosaveInterval * 1000);
 
-            m_file_name        = file_name;
-            m_shadow_file_name = get_shadow_file(file_name);
-            m_file_watcher->addPath(m_file_name);
-            m_file_open = true;
-            update_recent_files(m_file_name);
+            mFileName        = fileName;
+            mShadowFileName = getShadowFile(fileName);
+            mFileWatcher->addPath(mFileName);
+            mFileOpen = true;
+            updateRecentFiles(mFileName);
         }
     }
 
-    void FileManager::file_successfully_loaded(QString file_name)
+    void FileManager::fileSuccessfullyLoaded(QString fileName)
     {
-        watch_file(file_name);
-        Q_EMIT file_opened(m_file_name);
+        watchFile(fileName);
+        Q_EMIT fileOpened(mFileName);
     }
 
-    void FileManager::remove_shadow_file()
+    void FileManager::removeShadowFile()
     {
-        if (QFileInfo::exists(m_shadow_file_name) && QFileInfo(m_shadow_file_name).isFile())
+        if (QFileInfo::exists(mShadowFileName) && QFileInfo(mShadowFileName).isFile())
         {
-            QFile(m_shadow_file_name).remove();
+            QFile(mShadowFileName).remove();
         }
     }
 
-    QString FileManager::get_shadow_file(QString file)
+    QString FileManager::getShadowFile(QString file)
     {
         QString shadow_file_name;
         if (file.contains('/'))
@@ -134,28 +133,28 @@ namespace hal
         return shadow_file_name.left(shadow_file_name.lastIndexOf('.')) + ".hal";
     }
 
-    void FileManager::open_file(QString file_name)
+    void FileManager::openFile(QString fileName)
     {
-        QString logical_file_name = file_name;
+        QString logical_file_name = fileName;
 
-        if (g_netlist)
+        if (gNetlist)
         {
             // ADD ERROR MESSAGE
             return;
         }
 
-        if (file_name.isEmpty())
+        if (fileName.isEmpty())
         {
             std::string error_message("Unable to open file. File name is empty");
             log_error("gui", "{}", error_message);
-            display_error_message(QString::fromStdString(error_message));
+            displayErrorMessage(QString::fromStdString(error_message));
             return;
         }
 
-        if (!file_name.endsWith(".hal"))
+        if (!fileName.endsWith(".hal"))
         {
-            QString hal_file_name = file_name.left(file_name.lastIndexOf('.')) + ".hal";
-            QString extension     = file_name.right(file_name.size() - file_name.lastIndexOf('.'));
+            QString hal_file_name = fileName.left(fileName.lastIndexOf('.')) + ".hal";
+            QString extension     = fileName.right(fileName.size() - fileName.lastIndexOf('.'));
 
             if (QFileInfo::exists(hal_file_name) && QFileInfo(hal_file_name).isFile())
             {
@@ -175,7 +174,7 @@ namespace hal
 
                 if (msgBox.clickedButton() == (QAbstractButton*)parse_hal_btn)
                 {
-                    file_name         = hal_file_name;
+                    fileName         = hal_file_name;
                     logical_file_name = hal_file_name;
                 }
                 else if (msgBox.clickedButton() != (QAbstractButton*)parse_hdl_btn)
@@ -186,12 +185,12 @@ namespace hal
         }
 
         LogManager& lm                 = LogManager::get_instance();
-        std::filesystem::path log_path = file_name.toStdString();
+        std::filesystem::path log_path = fileName.toStdString();
         lm.set_file_name(std::filesystem::path(log_path.replace_extension(".log")));
 
-        if (file_name.endsWith(".hal"))
+        if (fileName.endsWith(".hal"))
         {
-            QString shadow_file_name = get_shadow_file(file_name);
+            QString shadow_file_name = getShadowFile(fileName);
 
             if (QFileInfo::exists(shadow_file_name) && QFileInfo(shadow_file_name).isFile())
             {
@@ -200,56 +199,56 @@ namespace hal
                 if (QMessageBox::question(nullptr, "HAL did not exit cleanly", message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
                 {
                     // logical_file_name is not changed
-                    file_name = shadow_file_name;
+                    fileName = shadow_file_name;
                 }
             }
         }
 
-        QFile file(file_name);
+        QFile file(fileName);
 
         if (!file.open(QFile::ReadOnly))
         {
-            std::string error_message("Unable to open file" + file_name.toStdString());
+            std::string error_message("Unable to open file" + fileName.toStdString());
             log_error("gui", "Unable to open file '{}'", error_message);
-            display_error_message(QString::fromStdString(error_message));
+            displayErrorMessage(QString::fromStdString(error_message));
             return;
         }
 
-        if (file_name.endsWith(".hal"))
+        if (fileName.endsWith(".hal"))
         {
             event_controls::enable_all(false);
-            auto netlist = netlist_factory::load_netlist(file_name.toStdString());
+            auto netlist = netlist_factory::load_netlist(fileName.toStdString());
             event_controls::enable_all(true);
             if (netlist)
             {
-                g_netlist_owner = std::move(netlist);
-                g_netlist       = g_netlist_owner.get();
-                file_successfully_loaded(logical_file_name);
+                gNetlistOwner = std::move(netlist);
+                gNetlist       = gNetlistOwner.get();
+                fileSuccessfullyLoaded(logical_file_name);
             }
             else
             {
                 std::string error_message("Failed to create netlist from .hal file");
                 log_error("gui", "{}", error_message);
-                display_error_message(QString::fromStdString(error_message));
+                displayErrorMessage(QString::fromStdString(error_message));
             }
 
             return;
         }
 
-        QString lib_file_name = file_name.left(file_name.lastIndexOf('.')) + ".lib";
+        QString lib_file_name = fileName.left(fileName.lastIndexOf('.')) + ".lib";
         if (QFileInfo::exists(lib_file_name) && QFileInfo(lib_file_name).isFile())
         {
             log_info("gui", "Trying to use gate library {}.", lib_file_name.toStdString());
 
             event_controls::enable_all(false);
-            auto netlist = netlist_factory::load_netlist(file_name.toStdString(), lib_file_name.toStdString());
+            auto netlist = netlist_factory::load_netlist(fileName.toStdString(), lib_file_name.toStdString());
             event_controls::enable_all(true);
 
             if (netlist)
             {
-                g_netlist_owner = std::move(netlist);
-                g_netlist       = g_netlist_owner.get();
-                file_successfully_loaded(logical_file_name);
+                gNetlistOwner = std::move(netlist);
+                gNetlist       = gNetlistOwner.get();
+                fileSuccessfullyLoaded(logical_file_name);
                 return;
             }
             else
@@ -261,21 +260,21 @@ namespace hal
         log_info("gui", "Searching for (other) compatible netlists.");
 
         event_controls::enable_all(false);
-        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(file_name.toStdString());
+        std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(fileName.toStdString());
         event_controls::enable_all(true);
 
         if (netlists.empty())
         {
             std::string error_message("Unable to find a compatible gate library. Deserialization failed!");
             log_error("gui", "{}", error_message);
-            display_error_message(QString::fromStdString(error_message));
+            displayErrorMessage(QString::fromStdString(error_message));
             return;
         }
         else if (netlists.size() == 1)
         {
             log_info("gui", "One compatible gate library found.");
-            g_netlist_owner = std::move(netlists.at(0));
-            g_netlist       = g_netlist_owner.get();
+            gNetlistOwner = std::move(netlists.at(0));
+            gNetlist       = gNetlistOwner.get();
         }
         else
         {
@@ -301,8 +300,8 @@ namespace hal
                 {
                     if (n->get_gate_library()->get_name() == selection)
                     {
-                        g_netlist_owner = std::move(n);
-                        g_netlist       = g_netlist_owner.get();
+                        gNetlistOwner = std::move(n);
+                        gNetlist       = gNetlistOwner.get();
                     }
                 }
             }
@@ -312,76 +311,76 @@ namespace hal
             }
         }
 
-        file_successfully_loaded(logical_file_name);
+        fileSuccessfullyLoaded(logical_file_name);
     }
 
-    void FileManager::close_file()
+    void FileManager::closeFile()
     {
-        if (!m_file_open)
+        if (!mFileOpen)
             return;
 
-        m_timer->stop();
+        mTimer->stop();
 
         // CHECK DIRTY AND TRIGGER SAVE ROUTINE
 
-        m_file_watcher->removePath(m_file_name);
-        m_file_name = "";
-        m_file_open = false;
+        mFileWatcher->removePath(mFileName);
+        mFileName = "";
+        mFileOpen = false;
 
-        remove_shadow_file();
+        removeShadowFile();
 
-        Q_EMIT file_closed();
+        Q_EMIT fileClosed();
     }
 
-    void FileManager::handle_file_changed(const QString& path)
+    void FileManager::handleFileChanged(const QString& path)
     {
-        Q_EMIT file_changed(path);
+        Q_EMIT fileChanged(path);
     }
 
-    void FileManager::handle_directory_changed(const QString& path)
+    void FileManager::handleDirectoryChanged(const QString& path)
     {
-        Q_EMIT file_directory_changed(path);
+        Q_EMIT fileDirectoryChanged(path);
     }
 
-    void FileManager::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void FileManager::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
         if (key == "advanced/autosave")
         {
-            m_autosave_enabled = value.toBool();
-            if (m_timer->isActive())
+            mAutosaveEnabled = value.toBool();
+            if (mTimer->isActive())
             {
                 // restart timer so the interval starts NOW
-                m_timer->start(m_autosave_interval * 1000);
+                mTimer->start(mAutosaveInterval * 1000);
             }
         }
         else if (key == "advanced/autosave_interval")
         {
-            m_autosave_interval = value.toInt();
-            if (m_timer->isActive())
+            mAutosaveInterval = value.toInt();
+            if (mTimer->isActive())
             {
                 // restart timer with new interval
-                m_timer->start(m_autosave_interval * 1000);
+                mTimer->start(mAutosaveInterval * 1000);
             }
         }
     }
 
-    void FileManager::update_recent_files(const QString& file) const
+    void FileManager::updateRecentFiles(const QString& file) const
     {
         QStringList list;
 
-        g_gui_state->beginReadArray("recent_files");
+        gGuiState->beginReadArray("recent_files");
         for (int i = 0; i < 14; ++i)
         {
-            g_gui_state->setArrayIndex(i);
-            QString state_file = g_gui_state->value("file").toString();
+            gGuiState->setArrayIndex(i);
+            QString state_file = gGuiState->value("file").toString();
 
             if (state_file.isEmpty())
                 continue;
 
-            list.append(g_gui_state->value("file").toString());
+            list.append(gGuiState->value("file").toString());
         }
-        g_gui_state->endArray();
+        gGuiState->endArray();
 
         int index = list.indexOf(file);
         if (index == -1)
@@ -389,11 +388,11 @@ namespace hal
         else
             list.move(index, 0);
 
-        g_gui_state->beginGroup("recent_files");
-        g_gui_state->remove("");
-        g_gui_state->endGroup();
+        gGuiState->beginGroup("recent_files");
+        gGuiState->remove("");
+        gGuiState->endGroup();
 
-        g_gui_state->beginWriteArray("recent_files");
+        gGuiState->beginWriteArray("recent_files");
         int i = 0;
         std::vector<std::filesystem::path> files;
         for (QString& string : list)
@@ -410,17 +409,17 @@ namespace hal
             }
             if (!skip)
             {
-                g_gui_state->setArrayIndex(i);
-                g_gui_state->setValue("file", string);
+                gGuiState->setArrayIndex(i);
+                gGuiState->setValue("file", string);
                 ++i;
                 if (i == 14)
                     break;
             }
         }
-        g_gui_state->endArray();
+        gGuiState->endArray();
     }
 
-    void FileManager::display_error_message(QString error_message)
+    void FileManager::displayErrorMessage(QString error_message)
     {
         QMessageBox msgBox;
         msgBox.setText("Error");

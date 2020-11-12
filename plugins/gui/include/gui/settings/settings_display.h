@@ -34,12 +34,12 @@ namespace hal
     public:
         SettingsDisplay(QWidget* parent = 0);
 
-        void add_widget(QWidget* widget);
+        void addWidget(QWidget* widget);
 
     private:
-        QFrame* m_content;
-        QVBoxLayout* m_content_layout;
-        QFrame* m_sub_content;
-        QVBoxLayout* m_sub_content_layout;
+        QFrame* mContent;
+        QVBoxLayout* mContentLayout;
+        QFrame* mSubContent;
+        QVBoxLayout* mSubContentLayout;
     };
 }

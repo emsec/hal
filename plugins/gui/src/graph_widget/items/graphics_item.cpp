@@ -5,56 +5,56 @@
 
 namespace hal
 {
-    qreal GraphicsItem::s_lod;
-    QColor GraphicsItem::s_selectionColor;
-    QColor GraphicsItem::s_highlightColor;
+    qreal GraphicsItem::sLod;
+    QColor GraphicsItem::sSelectionColor;
+    QColor GraphicsItem::sHighlightColor;
 
-    void GraphicsItem::load_settings()
+    void GraphicsItem::loadSettings()
     {
-        s_selectionColor = QColor(240, 173, 0);
-        s_highlightColor = QColor(40, 200, 240);
+        sSelectionColor = QColor(240, 173, 0);
+        sHighlightColor = QColor(40, 200, 240);
     }
 
-    void GraphicsItem::set_lod(const qreal lod)
+    void GraphicsItem::setLod(const qreal lod)
     {
-        s_lod = lod;
+        sLod = lod;
     }
 
-    GraphicsItem::GraphicsItem(const hal::item_type type, const u32 id) :
-        m_item_type(type),
-        m_highlight(false),
-        m_id(id),
-        m_color(255, 0, 255)
+    GraphicsItem::GraphicsItem(const ItemType type, const u32 id) :
+        mItemType(type),
+        mHighlight(false),
+        mId(id),
+        mColor(255, 0, 255)
     {
         setFlags(ItemIsSelectable);
     }
 
-    hal::item_type GraphicsItem::item_type() const
+    ItemType GraphicsItem::itemType() const
     {
-        return m_item_type;
+        return mItemType;
     }
 
     u32 GraphicsItem::id() const
     {
-        return m_id;
+        return mId;
     }
 
     void GraphicsItem::setHightlight(bool hl)
     {
-        if (hl==m_highlight) return;  // nothing to do
-        m_highlight = hl;
+        if (hl==mHighlight) return;  // nothing to do
+        mHighlight = hl;
         update();
     }
 
     QColor GraphicsItem::selectionColor() const
     {
-        if (m_highlight) return s_highlightColor;
-        return s_selectionColor;
+        if (mHighlight) return sHighlightColor;
+        return sSelectionColor;
     }
 
     QColor GraphicsItem::groupingColor() const
     {
-        return g_content_manager->getGroupingManagerWidget()->getModel()->colorForItem(m_item_type,m_id);
+        return gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(mItemType,mId);
     }
 
     QColor GraphicsItem::penColor(QStyle::State state, const QColor& colorHint) const
@@ -63,6 +63,6 @@ namespace hal
         QColor gcol = groupingColor();
         if (gcol.isValid()) return gcol;
         if (colorHint.isValid()) return colorHint;
-        return m_color;
+        return mColor;
     }
 }

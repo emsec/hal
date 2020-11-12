@@ -37,6 +37,6 @@ namespace hal
         void update() override;
 
     private:
-        bool m_color_gates;
+        bool mColorGates;
     };
 }

@@ -39,29 +39,29 @@ namespace hal
     class ContentWidget : public Widget
     {
         Q_OBJECT
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
+        Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
+        Q_PROPERTY(QString iconPath READ iconPath WRITE setIconPath)
 
     public:
         explicit ContentWidget(QString name, QWidget* parent = nullptr);
 
-        virtual void setup_toolbar(Toolbar* Toolbar);
-        virtual QList<QShortcut*> create_shortcuts();
+        virtual void setupToolbar(Toolbar* Toolbar);
+        virtual QList<QShortcut*> createShortcuts();
 
         void repolish();
 
         QString name();
         QIcon icon();
 
-        void set_anchor(ContentAnchor* anchor);
-        void set_icon(QIcon icon);
+        void setAnchor(ContentAnchor* anchor);
+        void setIcon(QIcon icon);
         void set_name(const QString& name);
 
-        QString icon_style();
-        QString icon_path();
+        QString iconStyle();
+        QString iconPath();
 
-        void set_icon_style(const QString& style);
-        void set_icon_path(const QString& path);
+        void setIconStyle(const QString& style);
+        void setIconPath(const QString& path);
 
     Q_SIGNALS:
         void removed();
@@ -81,15 +81,15 @@ namespace hal
     private:
         void closeEvent(QCloseEvent* event);
 
-        QString m_name;
-        QIcon m_icon;
-        ContentAnchor* m_anchor = nullptr;
-        int m_index_priority         = 0;
+        QString mName;
+        QIcon mIcon;
+        ContentAnchor* mAnchor = nullptr;
+        int mIndexPriority         = 0;
 
-        QString m_icon_style;
-        QString m_icon_path;
+        QString mIconStyle;
+        QString mIconPath;
 
     protected:
-        QVBoxLayout* m_content_layout;
+        QVBoxLayout* mContentLayout;
     };
 }

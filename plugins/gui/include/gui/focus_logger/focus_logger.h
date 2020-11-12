@@ -35,7 +35,7 @@ namespace hal
         FocusLogger(QApplication* app, QObject* parent = nullptr);
 
     public Q_SLOTS:
-        void handle_focus_change(QWidget* old, QWidget* new_obj);
+        void handleFocusChange(QWidget* old, QWidget* new_obj);
 
     };
 }

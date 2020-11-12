@@ -41,7 +41,7 @@ namespace hal
 
     void SpecialLogContentManager::safe_screenshot()
     {
-        QString hal_file_name = FileManager::get_instance()->file_name();
+        QString hal_file_name = FileManager::get_instance()->fileName();
 
         if(hal_file_name.isEmpty() || qGuiApp->topLevelWindows().isEmpty())
             return;
@@ -97,7 +97,7 @@ namespace hal
 
     void SpecialLogContentManager::safe_python_editor()
     {
-        QString hal_file_name = FileManager::get_instance()->file_name();
+        QString hal_file_name = FileManager::get_instance()->fileName();
 
         if(!m_python_editor || !m_python_editor->get_tab_widget() || hal_file_name.isEmpty())
             return;

@@ -3,14 +3,14 @@
 namespace hal
 {
     ChannelItem::ChannelItem(QString name)
-        : m_name(name), m_log_entries(1000){Q_UNUSED(m_observer) Q_UNUSED(m_unread) Q_UNUSED(m_unread_warnings) Q_UNUSED(m_unread_errors) Q_UNUSED(m_unread_successes)}
+        : mName(name), mLogEntries(1000){Q_UNUSED(mObserver) Q_UNUSED(mUnread) Q_UNUSED(mUnreadWarnings) Q_UNUSED(mUnreadErrors) Q_UNUSED(mUnreadSuccesses)}
 
           QVariant ChannelItem::data(int column) const
     {
         switch (column)
         {
             case 0:
-                return m_name;
+                return mName;
             default:
                 return QVariant();
         }
@@ -18,21 +18,21 @@ namespace hal
 
     const QString ChannelItem::name() const
     {
-        return m_name;
+        return mName;
     }
 
-    const boost::circular_buffer<channel_entry *> *ChannelItem::get_buffer() const
+    const boost::circular_buffer<ChannelEntry *> *ChannelItem::getBuffer() const
     {
-        return &m_log_entries;
+        return &mLogEntries;
     }
 
-    QReadWriteLock* ChannelItem::get_lock()
+    QReadWriteLock* ChannelItem::getLock()
     {
-        return &m_lock;
+        return &mLock;
     }
 
-    void ChannelItem::append_entry(channel_entry* entry)
+    void ChannelItem::appendEntry(ChannelEntry* entry)
     {
-        m_log_entries.push_back(entry);
+        mLogEntries.push_back(entry);
     }
 }

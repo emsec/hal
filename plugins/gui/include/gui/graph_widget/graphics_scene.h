@@ -54,49 +54,49 @@ namespace hal
         Q_OBJECT
 
     public:
-        static void set_lod(const qreal& lod);
-        static void set_grid_enabled(const bool& value);
-        static void set_grid_clusters_enabled(const bool& value);
-        static void set_grid_type(const graph_widget_constants::grid_type& grid_type);
+        static void setLod(const qreal& lod);
+        static void setGridEnabled(const bool& value);
+        static void setGridClustersEnabled(const bool& value);
+        static void setGridType(const graph_widget_constants::grid_type& grid_type);
 
-        static void set_grid_base_line_color(const QColor& color);
-        static void set_grid_cluster_line_color(const QColor& color);
-        static void set_grid_base_dot_color(const QColor& color);
-        static void set_grid_cluster_dot_color(const QColor& color);
+        static void setGridBaseLineColor(const QColor& color);
+        static void setGridClusterLineColor(const QColor& color);
+        static void setGridBaseDotColor(const QColor& color);
+        static void setGridClusterDotColor(const QColor& color);
 
-        static QPointF snap_to_grid(const QPointF& pos) Q_DECL_DEPRECATED;
+        static QPointF snapToGrid(const QPointF& pos) Q_DECL_DEPRECATED;
 
         GraphicsScene(QObject* parent = nullptr);
 
-        void start_drag_shadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::drag_cue cue);
-        void move_drag_shadow(const QPointF& posF, const NodeDragShadow::drag_cue cue);
-        void stop_drag_shadow();
-        QPointF drop_target();
+        void startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue);
+        void moveDragShadow(const QPointF& posF, const NodeDragShadow::DragCue cue);
+        void stopDragShadow();
+        QPointF dropTarget();
 
-        void add_item(GraphicsItem* item);
-        void remove_item(GraphicsItem* item);
+        void addGraphItem(GraphicsItem* item);
+        void removeGraphItem(GraphicsItem* item);
 
-        void delete_all_items();
+        void deleteAllItems();
 
-        void connect_all();
-        void disconnect_all();
+        void connectAll();
+        void disconnectAll();
 
-        void update_visuals(const GraphShader::shading& s);
+        void updateVisuals(const GraphShader::Shading& s);
 
-        void move_nets_to_background();
+        void moveNetsToBackground();
 
-        const GraphicsGate* get_gate_item(const u32 id) const;
-        const GraphicsNet* get_net_item(const u32 id) const;
-        const GraphicsModule* get_ModuleItem(const u32 id) const;
+        const GraphicsGate* getGateItem(const u32 id) const;
+        const GraphicsNet* getNetItem(const u32 id) const;
+        const GraphicsModule* getModuleItem(const u32 id) const;
 
         #ifdef GUI_DEBUG_GRID
-        void debug_set_layouter_grid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
+        void debugSetLayouterGrid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
         #endif
 
     public Q_SLOTS:
-        void handle_intern_selection_changed();
-        void handle_extern_selection_changed(void* sender);
-        void handle_extern_subfocus_changed(void* sender);
+        void handleInternSelectionChanged();
+        void handleExternSelectionChanged(void* sender);
+        void handleExternSubfocusChanged(void* sender);
         void handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems);
         void handleGroupingAssignModule(Grouping* grp, u32 id);
         void handleGroupingAssignGate(Grouping* grp, u32 id);
@@ -107,41 +107,41 @@ namespace hal
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
     private Q_SLOTS:
-        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
-        struct module_data
+        struct ModuleData
         {
-            u32 id;
-            GraphicsModule* item;
+            u32 mId;
+            GraphicsModule* mItem;
         };
 
-        struct gate_data
+        struct GateData
         {
-            u32 id;
-            GraphicsGate* item;
+            u32 mId;
+            GraphicsGate* mItem;
         };
 
-        struct net_data
+        struct NetData
         {
-            u32 id;
-            GraphicsNet* item;
+            u32 mId;
+            GraphicsNet* mItem;
         };
 
-        static qreal s_lod;
+        static qreal sLod;
 
-        static const qreal s_grid_fade_start;
-        static const qreal s_grid_fade_end;
+        static const qreal sGridFadeStart;
+        static const qreal sGridFadeEnd;
 
-        static bool s_grid_enabled;
-        static bool s_grid_clusters_enabled;
-        static graph_widget_constants::grid_type s_grid_type;
+        static bool sGridEnabled;
+        static bool sGridClustersEnabled;
+        static graph_widget_constants::grid_type sGridType;
 
-        static QColor s_grid_base_line_color;
-        static QColor s_grid_cluster_line_color;
+        static QColor sGridBaseLineColor;
+        static QColor sGridClusterLineColor;
 
-        static QColor s_grid_base_dot_color;
-        static QColor s_grid_cluster_dot_color;
+        static QColor sGridBaseDotColor;
+        static QColor sGridClusterDotColor;
 
         using QGraphicsScene::addItem;
         using QGraphicsScene::removeItem;
@@ -149,19 +149,19 @@ namespace hal
 
         void drawBackground(QPainter* painter, const QRectF& rect) override;
 
-        NodeDragShadow* m_drag_shadow_gate;
+        NodeDragShadow* mDragShadowGate;
 
-        QVector<module_data> m_ModuleItems;
-        QVector<gate_data> m_gate_items;
-        QVector<net_data> m_net_items;
+        QVector<ModuleData> mModuleItems;
+        QVector<GateData> mGateItems;
+        QVector<NetData> mNetItems;
 
         #ifdef GUI_DEBUG_GRID
-        void debug_draw_layouter_grid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to);
-        QVector<qreal> m_debug_x_lines;
-        QVector<qreal> m_debug_y_lines;
-        qreal m_debug_default_width;
-        qreal m_debug_default_height;
-        bool m_debug_grid_enable;
+        void debugDrawLayouterGrid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to);
+        QVector<qreal> mDebugXLines;
+        QVector<qreal> mDebugYLines;
+        qreal mDebugDefaultWidth;
+        qreal mDebugDefaultHeight;
+        bool mDebugGridEnable;
         #endif
     };
 }

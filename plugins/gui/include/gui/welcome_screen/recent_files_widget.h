@@ -41,15 +41,15 @@ namespace hal
         void repolish();
 
     public Q_SLOTS:
-        void handle_file_opened(const QString& file_name);
-        void handle_remove_requested(RecentFileItem* item);
+        void handleFileOpened(const QString& fileName);
+        void handleRemoveRequested(RecentFileItem* item);
 
     private:
-        void read_settings();
-        void update_settings();
+        void readSettings();
+        void updateSettings();
 
-        QVBoxLayout* m_layout;
+        QVBoxLayout* mLayout;
 
-        QList<RecentFileItem*> m_items;
+        QList<RecentFileItem*> mItems;
     };
 }

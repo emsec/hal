@@ -36,7 +36,7 @@ namespace hal
     public:
         explicit PluginModel(QObject* parent = 0);
         ~PluginModel();
-        bool is_valid_index(const QModelIndex& idx);
+        bool isValidIndex(const QModelIndex& idx);
         virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
         virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
         virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
@@ -48,24 +48,24 @@ namespace hal
         virtual Qt::DropActions supportedDropActions() const;
         virtual Qt::ItemFlags flags(const QModelIndex& index) const;
         virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
-        void plugin_manager_callback(bool is_load, std::string const& plugin_name, std::string const& plugin_path);
-        void request_load_plugin(const QString& name, const QString& path);
-        void request_unload_plugin(QModelIndexList idx);
-        const QList<PluginItem> get_plugin_list();
+        void pluginManagerCallback(bool is_load, std::string const& plugin_name, std::string const& plugin_path);
+        void requestLoadPlugin(const QString& name, const QString& path);
+        void requestUnloadPlugin(QModelIndexList idx);
+        const QList<PluginItem> getPluginList();
 
     Q_SIGNALS:
-        void load_plugin(QString name, QString path);
-        void unload_plugin(QString name, QString path);
-        void run_plugin(const QString& name);
+        void loadPlugin(QString name, QString path);
+        void unloadPlugin(QString name, QString path);
+        void runPlugin(const QString& name);
 
     public Q_SLOTS:
-        void handle_load_plugin(QString name, QString path);
-        void handle_unload_plugin(QString name, QString path);
-        void handle_run_plugin_triggered(const QModelIndex& index);
+        void handleLoadPlugin(QString name, QString path);
+        void handleUnloadPlugin(QString name, QString path);
+        void handleRunPluginTriggered(const QModelIndex& index);
 
     private:
-        QStringList m_columns;
-        QList<PluginItem> m_items;
-        u64 m_model_changed_callback_id;
+        QStringList mColumns;
+        QList<PluginItem> mItems;
+        u64 mModelChangedCallbackId;
     };
 }

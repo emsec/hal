@@ -10,67 +10,67 @@
 namespace hal
 {
     SettingsManager::SettingsManager(QObject* parent) : QObject(parent),
-        m_settings(new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat)),
-        m_defaults(new QSettings(QString::fromStdString((utils::get_config_directory() / "guidefaults.ini").string()), QSettings::IniFormat))
+        mSettings(new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat)),
+        mDefaults(new QSettings(QString::fromStdString((utils::get_config_directory() / "guidefaults.ini").string()), QSettings::IniFormat))
     {
-        //g_settings_relay->register_sender(this, name());
-        if (m_settings->status() != QSettings::NoError) {
+        //gSettingsRelay->registerSender(this, name());
+        if (mSettings->status() != QSettings::NoError) {
             qDebug() << "Failed to load guisettings.ini";
         }
-        if (m_defaults->status() != QSettings::NoError) {
+        if (mDefaults->status() != QSettings::NoError) {
             qDebug() << "Failed to load guidefaults.ini";
         }
     }
 
     SettingsManager::~SettingsManager()
     {
-        //g_settings_relay->remove_sender(this);
+        //gSettingsRelay->removeSender(this);
     }
 
     QVariant SettingsManager::get(const QString& key)
     {
-        return this->get(key, get_default(key));
+        return this->get(key, getDefault(key));
     }
 
     QVariant SettingsManager::get(const QString& key, const QVariant& defaultVal)
     {
-        return m_settings->value(key, defaultVal);
+        return mSettings->value(key, defaultVal);
     }
 
-    QVariant SettingsManager::get_default(const QString& key)
+    QVariant SettingsManager::getDefault(const QString& key)
     {
-        return m_defaults->value(key);
+        return mDefaults->value(key);
     }
 
     QVariant SettingsManager::reset(const QString& key)
     {
-        QVariant value = this->get_default(key);
-        m_settings->remove(key);
-        g_settings_relay->relay_setting_changed(this, key, value);
+        QVariant value = this->getDefault(key);
+        mSettings->remove(key);
+        gSettingsRelay->relaySettingChanged(this, key, value);
         return value;
     }
 
     void SettingsManager::update(const QString& key, const QVariant& value)
     {
         QVariant current = this->get(key, QVariant(QVariant::Invalid));
-        if (m_defaults->value(key) == value)
+        if (mDefaults->value(key) == value)
         {
             // if the user sets something to default, remove it from the settings file
-            m_settings->remove(key);
+            mSettings->remove(key);
         }
         else
         {
-            m_settings->setValue(key, value);
+            mSettings->setValue(key, value);
         }
 
         if (current != value)
         {
-            g_settings_relay->relay_setting_changed(this, key, value);
+            gSettingsRelay->relaySettingChanged(this, key, value);
         }
     }
 
     void SettingsManager::sync()
     {
-        m_settings->sync();
+        mSettings->sync();
     }
 }

@@ -11,88 +11,88 @@
 
 namespace hal
 {
-    qreal StandardGraphicsNet::s_alpha;
+    qreal StandardGraphicsNet::sAlpha;
 
-    qreal StandardGraphicsNet::s_wire_length;
-    qreal StandardGraphicsNet::s_left_arrow_offset;
-    qreal StandardGraphicsNet::s_right_arrow_offset;
-    qreal StandardGraphicsNet::s_arrow_left_x_shift;
-    qreal StandardGraphicsNet::s_arrow_right_x_shift;
-    qreal StandardGraphicsNet::s_arrow_side_length;
-    qreal StandardGraphicsNet::s_arrow_width;
-    qreal StandardGraphicsNet::s_arrow_height;
+    qreal StandardGraphicsNet::sWireLength;
+    qreal StandardGraphicsNet::sLeftArrowOffset;
+    qreal StandardGraphicsNet::sRightArrowOffset;
+    qreal StandardGraphicsNet::sArrowLeftXShift;
+    qreal StandardGraphicsNet::sArrowRightXShift;
+    qreal StandardGraphicsNet::sArrowSideLength;
+    qreal StandardGraphicsNet::sArrowWidth;
+    qreal StandardGraphicsNet::sArrowHeight;
 
-    QPainterPath StandardGraphicsNet::s_arrow;
+    QPainterPath StandardGraphicsNet::sArrow;
 
-    qreal StandardGraphicsNet::s_split_radius;
+    qreal StandardGraphicsNet::sSplitRadius;
 
-    void StandardGraphicsNet::load_settings()
+    void StandardGraphicsNet::loadSettings()
     {
-        s_wire_length = 26;
+        sWireLength = 26;
 
-        s_left_arrow_offset  = 3;
-        s_right_arrow_offset = 3;
+        sLeftArrowOffset  = 3;
+        sRightArrowOffset = 3;
 
-        s_arrow_left_x_shift  = 0;
-        s_arrow_right_x_shift = 3;
-        s_arrow_side_length   = 12;
+        sArrowLeftXShift  = 0;
+        sArrowRightXShift = 3;
+        sArrowSideLength   = 12;
 
-        s_arrow_height = 6;
-        s_arrow_width  = s_arrow_left_x_shift + s_arrow_side_length + s_arrow_right_x_shift;
+        sArrowHeight = 6;
+        sArrowWidth  = sArrowLeftXShift + sArrowSideLength + sArrowRightXShift;
 
-        QPointF point(s_arrow_left_x_shift, -s_arrow_height / 2);
+        QPointF point(sArrowLeftXShift, -sArrowHeight / 2);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
         // only available in Qt >= 5.13.0
-        s_arrow.clear();
+        sArrow.clear();
 #else
         // low-performance fallback for older Qt
-        s_arrow = QPainterPath();
+        sArrow = QPainterPath();
 #endif
-        s_arrow.lineTo(point);
-        point.setX(point.x() + s_arrow_side_length);
-        s_arrow.lineTo(point);
-        point.setX(point.x() + s_arrow_right_x_shift);
+        sArrow.lineTo(point);
+        point.setX(point.x() + sArrowSideLength);
+        sArrow.lineTo(point);
+        point.setX(point.x() + sArrowRightXShift);
         point.setY(0);
-        s_arrow.lineTo(point);
-        point.setX(point.x() - s_arrow_right_x_shift);
-        point.setY(s_arrow_height / 2);
-        s_arrow.lineTo(point);
-        point.setX(point.x() - s_arrow_side_length);
-        s_arrow.lineTo(point);
-        s_arrow.closeSubpath();
+        sArrow.lineTo(point);
+        point.setX(point.x() - sArrowRightXShift);
+        point.setY(sArrowHeight / 2);
+        sArrow.lineTo(point);
+        point.setX(point.x() - sArrowSideLength);
+        sArrow.lineTo(point);
+        sArrow.closeSubpath();
 
-        s_split_radius = 3;
+        sSplitRadius = 3;
     }
 
-    void StandardGraphicsNet::update_alpha()
+    void StandardGraphicsNet::updateAlpha()
     {
-        if (s_lod >= graph_widget_constants::net_fade_in_lod && s_lod <= graph_widget_constants::net_fade_out_lod)
-            s_alpha = (s_lod - graph_widget_constants::net_fade_in_lod) / (graph_widget_constants::net_fade_out_lod - graph_widget_constants::net_fade_in_lod);
+        if (sLod >= graph_widget_constants::sNetFadeInLod && sLod <= graph_widget_constants::sNetFadeOutLod)
+            sAlpha = (sLod - graph_widget_constants::sNetFadeInLod) / (graph_widget_constants::sNetFadeOutLod - graph_widget_constants::sNetFadeInLod);
         else
-            s_alpha = 1;
+            sAlpha = 1;
     }
 
-    StandardGraphicsNet::StandardGraphicsNet(Net* n, const lines& l) : GraphicsNet(n)
+    StandardGraphicsNet::StandardGraphicsNet(Net* n, const Lines& l) : GraphicsNet(n)
     {
-        for (const h_line& h : l.h_lines)
+        for (const HLine& h : l.mHLines)
         {
-            for (const v_line& v : l.v_lines)
+            for (const VLine& v : l.mVLines)
             {
-                if (h.small_x <= v.x && v.x <= h.big_x)
-                    if (v.small_y < h.y && h.y < v.big_y)
+                if (h.mSmallX <= v.x && v.x <= h.mBigX)
+                    if (v.mSmallY < h.y && h.y < v.mBigY)
                     {
                         QPointF point(v.x, h.y);
-                        m_splits.append(point);
-                        m_shape.addEllipse(point, s_split_radius, s_split_radius);
+                        mSplits.append(point);
+                        mShape.addEllipse(point, sSplitRadius, sSplitRadius);
                     }
 
-                if (v.small_y <= h.y && h.y <= v.big_y)
-                    if (h.small_x < v.x && v.x < h.big_x)
+                if (v.mSmallY <= h.y && h.y <= v.mBigY)
+                    if (h.mSmallX < v.x && v.x < h.mBigX)
                     {
                         QPointF point(v.x, h.y);
-                        m_splits.append(point);
-                        m_shape.addEllipse(point, s_split_radius, s_split_radius);
+                        mSplits.append(point);
+                        mShape.addEllipse(point, sSplitRadius, sSplitRadius);
                     }
             }
         }
@@ -103,47 +103,47 @@ namespace hal
         qreal smallest_y = std::numeric_limits<qreal>::max();
         qreal biggest_y  = std::numeric_limits<qreal>::min();
 
-        for (const h_line& h : l.h_lines)
+        for (const HLine& h : l.mHLines)
         {
-            if (h.small_x < smallest_x)
-                smallest_x = h.small_x;
+            if (h.mSmallX < smallest_x)
+                smallest_x = h.mSmallX;
 
-            if (h.big_x > biggest_x)
-                biggest_x = h.big_x;
+            if (h.mBigX > biggest_x)
+                biggest_x = h.mBigX;
 
             if (h.y < smallest_y)
                 smallest_y = h.y;
             if (h.y > biggest_y)
                 biggest_y = h.y;
 
-            QLineF line(h.small_x, h.y, h.big_x, h.y);
-            m_lines.append(line);
-            QRectF rect(h.small_x - s_shape_width / 2, h.y - s_shape_width / 2, h.big_x - h.small_x + s_shape_width, s_shape_width);
-            m_shape.addRect(rect);
+            QLineF line(h.mSmallX, h.y, h.mBigX, h.y);
+            mLines.append(line);
+            QRectF rect(h.mSmallX - sShapeWidth / 2, h.y - sShapeWidth / 2, h.mBigX - h.mSmallX + sShapeWidth, sShapeWidth);
+            mShape.addRect(rect);
         }
 
-        for (const v_line& v : l.v_lines)
+        for (const VLine& v : l.mVLines)
         {
             if (v.x < smallest_x)
                 smallest_x = v.x;
             else if (v.x > biggest_x)
                 biggest_x = v.x;
 
-            if (v.small_y < smallest_y)
-                smallest_y = v.small_y;
+            if (v.mSmallY < smallest_y)
+                smallest_y = v.mSmallY;
 
-            if (v.big_y > biggest_y)
-                biggest_y = v.big_y;
+            if (v.mBigY > biggest_y)
+                biggest_y = v.mBigY;
 
-            QLineF line(v.x, v.small_y, v.x, v.big_y);
-            m_lines.append(line);
-            QRectF rect(v.x - s_shape_width / 2, v.small_y - s_shape_width / 2, s_shape_width, v.big_y - v.small_y + s_shape_width);
-            m_shape.addRect(rect);
+            QLineF line(v.x, v.mSmallY, v.x, v.mBigY);
+            mLines.append(line);
+            QRectF rect(v.x - sShapeWidth / 2, v.mSmallY - sShapeWidth / 2, sShapeWidth, v.mBigY - v.mSmallY + sShapeWidth);
+            mShape.addRect(rect);
         }
 
-        const qreal padding = s_split_radius + s_shape_width;
+        const qreal padding = sSplitRadius + sShapeWidth;
 
-        m_rect = QRectF(smallest_x - padding, smallest_y - padding, biggest_x - smallest_x + padding, biggest_y - smallest_y + padding);
+        mRect = QRectF(smallest_x - padding, smallest_y - padding, biggest_x - smallest_x + padding, biggest_y - smallest_y + padding);
     }
 
     void StandardGraphicsNet::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -151,73 +151,73 @@ namespace hal
         Q_UNUSED(widget);
 
         QColor color = penColor(option->state);
-        s_pen.setColor(color);
-        s_pen.setStyle(m_pen_style);
+        sPen.setColor(color);
+        sPen.setStyle(mPenStyle);
 
-        painter->setPen(s_pen);
-        painter->drawLines(m_lines);
+        painter->setPen(sPen);
+        painter->drawLines(mLines);
 
-        if (s_lod > graph_widget_constants::net_fade_in_lod)
+        if (sLod > graph_widget_constants::sNetFadeInLod)
         {
-            color.setAlphaF(s_alpha);
+            color.setAlphaF(sAlpha);
 
-            s_pen.setColor(color);
-            s_pen.setStyle(Qt::SolidLine);
-            painter->setPen(s_pen);
+            sPen.setColor(color);
+            sPen.setStyle(Qt::SolidLine);
+            painter->setPen(sPen);
 
-            s_brush.setColor(color);
-            s_brush.setStyle(Qt::SolidPattern);
-            painter->setBrush(s_brush);
+            sBrush.setColor(color);
+            sBrush.setStyle(Qt::SolidPattern);
+            painter->setBrush(sBrush);
 
             const bool original_antialiasing = painter->renderHints().testFlag(QPainter::Antialiasing);
             painter->setRenderHint(QPainter::Antialiasing, true);
 
-            for (const QPointF& point : m_splits)
-                painter->drawEllipse(point, s_split_radius, s_split_radius);
+            for (const QPointF& point : mSplits)
+                painter->drawEllipse(point, sSplitRadius, sSplitRadius);
 
             painter->setRenderHint(QPainter::Antialiasing, original_antialiasing);
         }
 
-        s_brush.setStyle(Qt::NoBrush);
-        painter->setBrush(s_brush);
+        sBrush.setStyle(Qt::NoBrush);
+        painter->setBrush(sBrush);
 
 #ifdef HAL_DEBUG_GUI_GRAPH_WIDGET
-        s_pen.setColor(Qt::green);
-        const bool original_cosmetic = s_pen.isCosmetic();
-        s_pen.setCosmetic(true);
-        painter->setPen(s_pen);
-        painter->drawPath(m_shape);
-        s_pen.setCosmetic(original_cosmetic);
+        sPen.setColor(Qt::green);
+        const bool original_cosmetic = sPen.isCosmetic();
+        sPen.setCosmetic(true);
+        painter->setPen(sPen);
+        painter->drawPath(mShape);
+        sPen.setCosmetic(original_cosmetic);
 #endif
     }
 
-    void StandardGraphicsNet::lines::append_h_line(const qreal small_x, const qreal big_x, const qreal y)
+    void StandardGraphicsNet::Lines::appendHLine(const qreal mSmallX, const qreal mBigX, const qreal y)
     {
-        assert(small_x < big_x);
+        assert(mSmallX < mBigX);
 
-        h_lines.append(h_line{small_x, big_x, y});
+        mHLines.append(HLine{mSmallX, mBigX, y});
     }
 
-    void StandardGraphicsNet::lines::append_v_line(const qreal x, const qreal small_y, const qreal big_y)
+    void StandardGraphicsNet::Lines::appendVLine(const qreal x, const qreal mSmallY, const qreal mBigY)
     {
-        assert(small_y < big_y);
+        assert(mSmallY < mBigY);
 
-        v_lines.append(v_line{x, small_y, big_y});
+        mVLines.append(VLine{x, mSmallY, mBigY});
     }
 
-    void StandardGraphicsNet::lines::merge_lines()
+    void StandardGraphicsNet::Lines::mergeLines()
     {
-        QVector<h_line> merged_h_lines;
-        QVector<v_line> merged_v_lines;
+        QVector<HLine> merged_h_lines;
+        QVector<VLine> merged_v_lines;
 
-        for (const h_line& h : h_lines)
+        for (const HLine& h : mHLines)
         {
             QVector<int> overlaps;
 
             for (int i = 0; i < merged_h_lines.size(); ++i)
                 if (h.y == merged_h_lines.at(i).y)
                 {
-                    if (h.big_x < merged_h_lines.at(i).small_x || merged_h_lines.at(i).big_x < h.small_x)
+                    if (h.mBigX < merged_h_lines.at(i).mSmallX || merged_h_lines.at(i).mBigX < h.mSmallX)
                         continue;
 
                     overlaps.append(i);
@@ -227,34 +227,34 @@ namespace hal
                 merged_h_lines.append(h);
             else
             {
-                qreal smallest_x = h.small_x;
-                qreal biggest_x  = h.big_x;
+                qreal smallest_x = h.mSmallX;
+                qreal biggest_x  = h.mBigX;
 
                 for (int i = 0; i < overlaps.size(); ++i)
                 {
                     int index = overlaps.at(i) - i;
 
-                    if (merged_h_lines.at(index).small_x < smallest_x)
-                        smallest_x = merged_h_lines.at(index).small_x;
+                    if (merged_h_lines.at(index).mSmallX < smallest_x)
+                        smallest_x = merged_h_lines.at(index).mSmallX;
 
-                    if (merged_h_lines.at(index).big_x > biggest_x)
-                        biggest_x = merged_h_lines.at(index).big_x;
+                    if (merged_h_lines.at(index).mBigX > biggest_x)
+                        biggest_x = merged_h_lines.at(index).mBigX;
 
                     merged_h_lines.remove(index);
                 }
 
-                merged_h_lines.append(h_line{smallest_x, biggest_x, h.y});
+                merged_h_lines.append(HLine{smallest_x, biggest_x, h.y});
             }
         }
 
-        for (const v_line& v : v_lines)
+        for (const VLine& v : mVLines)
         {
             QVector<int> overlaps;
 
             for (int i = 0; i < merged_v_lines.size(); ++i)
                 if (v.x == merged_v_lines.at(i).x)
                 {
-                    if (v.big_y < merged_v_lines.at(i).small_y || merged_v_lines.at(i).big_y < v.small_y)
+                    if (v.mBigY < merged_v_lines.at(i).mSmallY || merged_v_lines.at(i).mBigY < v.mSmallY)
                         continue;
 
                     overlaps.append(i);
@@ -264,27 +264,27 @@ namespace hal
                 merged_v_lines.append(v);
             else
             {
-                qreal smallest_y = v.small_y;
-                qreal biggest_y  = v.big_y;
+                qreal smallest_y = v.mSmallY;
+                qreal biggest_y  = v.mBigY;
 
                 for (int i = 0; i < overlaps.size(); ++i)
                 {
                     int index = overlaps.at(i) - i;
 
-                    if (merged_v_lines.at(index).small_y < smallest_y)
-                        smallest_y = merged_v_lines.at(index).small_y;
+                    if (merged_v_lines.at(index).mSmallY < smallest_y)
+                        smallest_y = merged_v_lines.at(index).mSmallY;
 
-                    if (merged_v_lines.at(index).big_y > biggest_y)
-                        biggest_y = merged_v_lines.at(index).big_y;
+                    if (merged_v_lines.at(index).mBigY > biggest_y)
+                        biggest_y = merged_v_lines.at(index).mBigY;
 
                     merged_v_lines.remove(index);
                 }
 
-                merged_v_lines.append(v_line{v.x, smallest_y, biggest_y});
+                merged_v_lines.append(VLine{v.x, smallest_y, biggest_y});
             }
         }
 
-        h_lines = merged_h_lines;
-        v_lines = merged_v_lines;
+        mHLines = merged_h_lines;
+        mVLines = merged_v_lines;
     }
 }    // namespace hal

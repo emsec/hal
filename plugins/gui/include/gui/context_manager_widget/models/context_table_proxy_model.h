@@ -39,12 +39,12 @@ namespace hal
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
     public Q_SLOTS:
-        void handle_filter_text_changed(const QString& filter_text);
+        void handleFilterTextChanged(const QString& filter_text);
 
     protected:
         bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
     private:
-        QRegularExpression m_filter_expression;
+        QRegularExpression mFilterExpression;
     };
 }    // namespace hal

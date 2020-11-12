@@ -16,48 +16,48 @@ namespace hal
     PythonEditorCodeCompletionDialog::PythonEditorCodeCompletionDialog(QWidget* parent, std::vector<std::tuple<std::string, std::string>> completions) : QDialog(parent), m_completions(completions)
     {
         //the parent has to be a layouter_view, needs a rework, for now its sufficient
-        m_table = new QTableWidget(this);
-        m_table->setParent(this);
-        m_table->setShowGrid(false);
-        m_table->verticalHeader()->setVisible(false);
-        m_table->horizontalHeader()->setVisible(false);
-        m_table->setSelectionBehavior(QAbstractItemView::SelectRows);
-        m_table->setColumnCount(1);
-        m_table->setRowCount(completions.size());
-        m_table->setStyleSheet("QTableView {background-color: black; color: white; selection-background-color: grey;};");
-        m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        mTable = new QTableWidget(this);
+        mTable->setParent(this);
+        mTable->setShowGrid(false);
+        mTable->verticalHeader()->setVisible(false);
+        mTable->horizontalHeader()->setVisible(false);
+        mTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+        mTable->setColumnCount(1);
+        mTable->setRowCount(completions.size());
+        mTable->setStyleSheet("QTableView {background-color: black; color: white; selection-background-color: grey;};");
+        mTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
         int counter = 0;
         for (const auto& tup : completions)
         {
             auto full_text = std::get<0>(tup);
-            m_table->setItem(counter, 0, new QTableWidgetItem(QString::fromStdString(full_text)));
+            mTable->setItem(counter, 0, new QTableWidgetItem(QString::fromStdString(full_text)));
             counter++;
         }
 
-        m_table->selectRow(0);
-        m_table->resizeColumnsToContents();
-        m_table->resizeRowsToContents();
+        mTable->selectRow(0);
+        mTable->resizeColumnsToContents();
+        mTable->resizeRowsToContents();
 
         //check if the calculated minimum size is bigger than the predefined maximum size, if yes, set the minimum size = the predefined maximum size, otherwise set the minimum size
         //to the calculated size
-        QSize calculatedSize = table_widget_size(m_table);
+        QSize calculatedSize = tableWidgetSize(mTable);
         if (calculatedSize.width() > 400)
-            m_table->setMinimumWidth(400);
+            mTable->setMinimumWidth(400);
         else
-            m_table->setMinimumWidth(calculatedSize.width());
+            mTable->setMinimumWidth(calculatedSize.width());
 
         if (calculatedSize.height() > 600)
-            m_table->setMinimumHeight(600);
+            mTable->setMinimumHeight(600);
         else
-            m_table->setMinimumHeight(calculatedSize.height());
+            mTable->setMinimumHeight(calculatedSize.height());
 
-        //m_table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        //m_table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        //mTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        //mTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
         this->adjustSize();
-        this->setFocusProxy(m_table);
-        m_table->adjustSize();
+        this->setFocusProxy(mTable);
+        mTable->adjustSize();
         this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
         this->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -72,7 +72,7 @@ namespace hal
     {
         if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
         {
-            auto index = m_table->currentRow();
+            auto index = mTable->currentRow();
             Q_EMIT completionSelected(m_completions.at(index));
             this->close();
         }
@@ -83,7 +83,7 @@ namespace hal
         }
     }
 
-    QSize PythonEditorCodeCompletionDialog::table_widget_size(QTableWidget* table)
+    QSize PythonEditorCodeCompletionDialog::tableWidgetSize(QTableWidget* table)
     {
         int width = 4;
         for (int i = 0; i < table->columnCount(); i++)

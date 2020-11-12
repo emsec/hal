@@ -6,29 +6,29 @@
 #include <QStyleOption>
 namespace hal
 {
-    LineNumberArea::LineNumberArea(CodeEditor* editor) : QWidget(editor), m_editor(editor)
+    LineNumberArea::LineNumberArea(CodeEditor* editor) : QWidget(editor), mEditor(editor)
     {
         repolish();
     }
 
-    int LineNumberArea::left_offset() const
+    int LineNumberArea::leftOffset() const
     {
-        return m_left_offset;
+        return mLeftOffset;
     }
 
-    int LineNumberArea::right_offset() const
+    int LineNumberArea::rightOffset() const
     {
-        return m_right_offset;
+        return mRightOffset;
     }
 
-    void LineNumberArea::set_left_offset(const int offset)
+    void LineNumberArea::setLeftOffset(const int offset)
     {
-        m_left_offset = offset;
+        mLeftOffset = offset;
     }
 
-    void LineNumberArea::set_right_offset(const int offset)
+    void LineNumberArea::setRightOffset(const int offset)
     {
-        m_right_offset = offset;
+        mRightOffset = offset;
     }
 
     void LineNumberArea::repolish()
@@ -45,11 +45,11 @@ namespace hal
         opt.init(this);
         QPainter p(this);
         style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-        m_editor->line_number_area_paint_event(event);
+        mEditor->lineNumberAreaPaintEvent(event);
     }
 
     void LineNumberArea::wheelEvent(QWheelEvent* event)
     {
-        m_editor->handle_wheel_event(event);
+        mEditor->handleWheelEvent(event);
     }
 }

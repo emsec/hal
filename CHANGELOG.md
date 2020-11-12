@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.3] - 2020-11-12 17:15:00+02:00 (urgency: medium)
+* GUI code refactoring
+* fix crash which occurs sometimes when invoking context menu from gate
+	
 ## [3.1.2] - 2020-11-09 20:00:00+02:00 (urgency: medium)
 * updated existing Python decorators and added new ones for the GUI API
 * fix `get_subgraph_function` crashing when `output_net` is a nullptr
@@ -375,7 +379,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.1...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.3...HEAD
+[3.1.3]: https://github.com/emsec/hal/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/emsec/hal/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/emsec/hal/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/emsec/hal/compare/v3.0.2...v3.1.0
