@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* GUI code refactoring
 
 ## [3.1.2] - 2020-11-09 20:00:00+02:00 (urgency: medium)
 * updated existing Python decorators and added new ones for the GUI API
