@@ -37,16 +37,16 @@ namespace hal
         Q_OBJECT
 
     public:
-        KeybindSetting(const QString& key, const QString& title, const QString& description, QWidget *parent = nullptr);
+        KeybindSetting(const QString& key, const QString& title, const QString& mDescription, QWidget *parent = nullptr);
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;
         //virtual void rollback() Q_DECL_OVERRIDE;
 
     private:
-        KeybindEdit* m_KeybindEdit;
-        void on_keybind_changed();
-        void on_KeybindEdit_rejected();
+        KeybindEdit* mKeybindEdit;
+        void onKeybindChanged();
+        void onKeybindEditRejected();
 
     };
 }

@@ -47,22 +47,22 @@ namespace hal
         void subscribe(GraphContextSubscriber* const subscriber);
         void unsubscribe(GraphContextSubscriber* const subscriber);
 
-        void begin_change();
-        void end_change();
+        void beginChange();
+        void endChange();
 
-        void add(const QSet<u32>& modules, const QSet<u32>& gates, hal::placement_hint placement = hal::placement_hint{hal::placement_mode::standard, hal::node()});
+        void add(const QSet<u32>& modules, const QSet<u32>& gates, PlacementHint placement = PlacementHint());
         void remove(const QSet<u32>& modules, const QSet<u32>& gates);
         void clear();
 
-        void fold_module_of_gate(const u32 id);
-        void unfold_module(const u32 id);
+        void foldModuleOfGate(const u32 id);
+        void unfoldModule(const u32 id);
 
         bool empty() const;
-        bool is_showing_module(const u32 id) const;
-        bool is_showing_module(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
+        bool isShowingModule(const u32 id) const;
+        bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
-        bool is_showing_net_source(const u32 net_id) const;
-        bool is_showing_net_destination(const u32 net_id) const;
+        bool isShowingNetSource(const u32 mNetId) const;
+        bool isShowingNetDestination(const u32 mNetId) const;
 
         const QSet<u32>& modules() const;
         const QSet<u32>& gates() const;
@@ -72,56 +72,56 @@ namespace hal
 
         QString name() const;
 
-        void set_layouter(GraphLayouter* layouter);
-        void set_shader(GraphShader* shader);
+        void setLayouter(GraphLayouter* layouter);
+        void setShader(GraphShader* shader);
 
-        bool scene_update_in_progress() const;
+        bool sceneUpdateInProgress() const;
 
-        void schedule_scene_update();
+        void scheduleSceneUpdate();
 
-        bool node_for_gate(hal::node& node, const u32 id) const;
+        Node nodeForGate(const u32 id) const;
 
-        GraphLayouter* debug_get_layouter() const;
+        GraphLayouter* debugGetLayouter() const;
 
-        QDateTime get_timestamp() const;
+        QDateTime getTimestamp() const;
 
     private Q_SLOTS:
-        void handle_layouter_update(const int percent);
-        void handle_layouter_update(const QString& message);
-        void handle_layouter_finished();
+        void handleLayouterUpdate(const int percent);
+        void handleLayouterUpdate(const QString& message);
+        void handleLayouterFinished();
 
     private:
-        void evaluate_changes();
+        void evaluateChanges();
         void update();
-        void apply_changes();
-        void start_scene_update();
+        void applyChanges();
+        void startSceneUpdate();
 
-        QList<GraphContextSubscriber*> m_subscribers;
+        QList<GraphContextSubscriber*> mSubscribers;
 
-        QString m_name;
+        QString mName;
 
-        GraphLayouter* m_layouter;
-        GraphShader* m_shader;
+        GraphLayouter* mLayouter;
+        GraphShader* mShader;
 
-        QSet<u32> m_modules;
-        QSet<u32> m_gates;
-        QSet<u32> m_nets;
+        QSet<u32> mModules;
+        QSet<u32> mGates;
+        QSet<u32> mNets;
 
-        QSet<u32> m_added_modules;
-        QSet<u32> m_added_gates;
+        QSet<u32> mAddedModules;
+        QSet<u32> mAddedGates;
 
-        QMultiMap<hal::placement_hint, u32> m_module_hints;
-        QMultiMap<hal::placement_hint, u32> m_gate_hints;
+        QMultiMap<PlacementHint, u32> mModuleHints;
+        QMultiMap<PlacementHint, u32> mGateHints;
 
-        QSet<u32> m_removed_modules;
-        QSet<u32> m_removed_gates;
+        QSet<u32> mRemovedModules;
+        QSet<u32> mRemovedGates;
 
-        u32 m_user_update_count;
+        u32 mUserUpdateCount;
 
-        bool m_unapplied_changes;
-        bool m_scene_update_required;
-        bool m_scene_update_in_progress;
+        bool mUnappliedChanges;
+        bool mSceneUpdateRequired;
+        bool mSceneUpdateInProgress;
 
-        QDateTime m_timestamp;
+        QDateTime mTimestamp;
     };
 }

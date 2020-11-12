@@ -10,28 +10,28 @@
 
 namespace hal
 {
-    LoadedPluginsWidget::LoadedPluginsWidget(QWidget* parent) : QScrollArea(parent), m_container(new QFrame()), m_layout(new QVBoxLayout()), m_spacer(new QFrame())
+    LoadedPluginsWidget::LoadedPluginsWidget(QWidget* parent) : QScrollArea(parent), mContainer(new QFrame()), mLayout(new QVBoxLayout()), mSpacer(new QFrame())
     {
-        connect(g_plugin_relay, &PluginRelay::plugin_loaded, this, &LoadedPluginsWidget::handle_plugin_loaded);
-        connect(g_plugin_relay, &PluginRelay::plugin_unloaded, this, &LoadedPluginsWidget::handle_plugin_unloaded);
+        connect(gPluginRelay, &PluginRelay::pluginLoaded, this, &LoadedPluginsWidget::handlePluginLoaded);
+        connect(gPluginRelay, &PluginRelay::pluginUnloaded, this, &LoadedPluginsWidget::handlePluginUnloaded);
 
-        m_container->setObjectName("container");
+        mContainer->setObjectName("container");
 
-        m_layout->setContentsMargins(0, 0, 0, 0);
-        m_layout->setSpacing(0);
-        m_layout->setAlignment(Qt::AlignTop);
+        mLayout->setContentsMargins(0, 0, 0, 0);
+        mLayout->setSpacing(0);
+        mLayout->setAlignment(Qt::AlignTop);
 
-        m_spacer->setObjectName("spacer");
+        mSpacer->setObjectName("spacer");
 
-        m_container->setLayout(m_layout);
-        m_layout->addWidget(m_spacer);
+        mContainer->setLayout(mLayout);
+        mLayout->addWidget(mSpacer);
 
         setFrameStyle(QFrame::NoFrame);
         setWidgetResizable(true);
-        setWidget(m_container);
+        setWidget(mContainer);
     }
 
-    void LoadedPluginsWidget::handle_plugin_loaded(const QString& name, const QString& path)
+    void LoadedPluginsWidget::handlePluginLoaded(const QString& name, const QString& path)
     {
         Q_UNUSED(path)
 
@@ -40,14 +40,14 @@ namespace hal
             return;
         }
 
-        m_layout->addWidget(new LoadedPluginItem(name, this));
+        mLayout->addWidget(new LoadedPluginItem(name, this));
     }
 
-    void LoadedPluginsWidget::handle_plugin_unloaded(const QString& name, const QString& path)
+    void LoadedPluginsWidget::handlePluginUnloaded(const QString& name, const QString& path)
     {
         Q_UNUSED(path)
 
-        for (QObject* child : m_layout->children())
+        for (QObject* child : mLayout->children())
         {
             LoadedPluginItem* item = static_cast<LoadedPluginItem*>(child);
 

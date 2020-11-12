@@ -48,48 +48,48 @@ namespace hal
     public:
         explicit GraphWidget(GraphContext* context, QWidget* parent = nullptr);
 
-        GraphContext* get_context() const;
+        GraphContext* getContext() const;
 
-        void handle_scene_available() override;
-        void handle_scene_unavailable() override;
-        void handle_context_about_to_be_deleted() override;
+        void handleSceneAvailable() override;
+        void handleSceneUnavailable() override;
+        void handleContextAboutToBeDeleted() override;
 
-        void handle_status_update(const int percent) override;
-        void handle_status_update(const QString& message) override;
+        void handleStatusUpdate(const int percent) override;
+        void handleStatusUpdate(const QString& message) override;
 
         GraphGraphicsView* view();
 
-        void ensure_selection_visible();
+        void ensureSelectionVisible();
 
     protected:
         void keyPressEvent(QKeyEvent* event) override;
 
     private Q_SLOTS:
-        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
-        void handle_module_double_clicked(const u32 id);
-        void reset_focus();
+        void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void handleModuleDoubleClicked(const u32 id);
+        void resetFocus();
 
     private:
-        void handle_navigation_left_request();
-        void handle_navigation_right_request();
-        void handle_navigation_up_request();
-        void handle_navigation_down_request();
+        void handleNavigationLeftRequest();
+        void handleNavigationRightRequest();
+        void handleNavigationUpRequest();
+        void handleNavigationDownRequest();
 
-        void substitute_by_visible_modules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
+        void substituteByVisibleModules(const QSet<u32>& gates, const QSet<u32>& modules, QSet<u32>& insert_gates, QSet<u32>& insert_modules,
                                            QSet<u32>& remove_gates, QSet<u32>& remove_modules) const;
-        void set_modified_if_module();
+        void setModifiedIfModule();
 
-        void handle_enter_module_requested(const u32 id);
+        void handleEnterModuleRequested(const u32 id);
 
-        void ensure_items_visible(const QSet<u32>& gates, const QSet<u32>& modules);
+        void ensureItemsVisible(const QSet<u32>& gates, const QSet<u32>& modules);
 
-        GraphGraphicsView* m_view;
-        GraphContext* m_context;
+        GraphGraphicsView* mView;
+        GraphContext* mContext;
 
-        WidgetOverlay* m_overlay;
-        GraphNavigationWidgetV2* m_navigation_widget_v2;
-        GraphLayoutSpinnerWidget* m_spinner_widget;
+        WidgetOverlay* mOverlay;
+        GraphNavigationWidgetV2* mNavigationWidgetV2;
+        GraphLayoutSpinnerWidget* mSpinnerWidget;
 
-        u32 m_current_expansion;
+        u32 mCurrentExpansion;
     };
 }

@@ -13,35 +13,35 @@
 
 namespace hal
 {
-    TextSetting::TextSetting(const QString& key, const QString& title, const QString& description, const QString& placeholder, QWidget *parent) : SettingsWidget(key, parent)
+    TextSetting::TextSetting(const QString& key, const QString& title, const QString& mDescription, const QString& placeholder, QWidget *parent) : SettingsWidget(key, parent)
     {
-        m_labels.append(QPair<QLabel*, QString>(m_name, title));
+        mLabels.append(QPair<QLabel*, QString>(mName, title));
 
         QHBoxLayout* layout = new QHBoxLayout();
-        m_container->addLayout(layout);
+        mContainer->addLayout(layout);
 
-        m_textfield = new QLineEdit(this);
-        m_textfield->setPlaceholderText(placeholder);
-        m_textfield->setStyleSheet("QLineEdit{width: 200px;}");
-        connect(m_textfield, &QLineEdit::textChanged, this, &TextSetting::on_text_changed);
+        mTextfield = new QLineEdit(this);
+        mTextfield->setPlaceholderText(placeholder);
+        mTextfield->setStyleSheet("QLineEdit{width: 200px;}");
+        connect(mTextfield, &QLineEdit::textChanged, this, &TextSetting::onTextChanged);
 
 
-        layout->addWidget(m_textfield);
+        layout->addWidget(mTextfield);
 
         QLabel* label = new QLabel();
         layout->addWidget(label);
 
-        m_labels.append(QPair<QLabel*, QString>(label, description));
+        mLabels.append(QPair<QLabel*, QString>(label, mDescription));
     }
 
     void TextSetting::load(const QVariant& value)
     {
-        m_textfield->setText(value.toString());
+        mTextfield->setText(value.toString());
     }
 
     QVariant TextSetting::value()
     {
-        return QVariant(m_textfield->text());
+        return QVariant(mTextfield->text());
     }
 
     // void DropdownSetting::rollback()
@@ -49,8 +49,8 @@ namespace hal
 
     // }
 
-    void TextSetting::on_text_changed()
+    void TextSetting::onTextChanged()
     {
-        this->trigger_setting_updated();
+        this->triggerSettingUpdated();
     }
 }

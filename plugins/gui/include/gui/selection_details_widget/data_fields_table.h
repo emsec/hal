@@ -46,6 +46,6 @@ namespace hal
     private:
         u32 m_itemId;
         QString m_pythonType;
-        QFont m_keyFont;
+        QFont mKeyFont;
     };
 }    // namespace hal

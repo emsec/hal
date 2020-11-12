@@ -42,48 +42,48 @@ namespace hal
         void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
         void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
-        virtual void handle_stdout(const QString& output) Q_DECL_OVERRIDE;
-        virtual void handle_error(const QString& output) Q_DECL_OVERRIDE;
+        virtual void handleStdout(const QString& output) Q_DECL_OVERRIDE;
+        virtual void handleError(const QString& output) Q_DECL_OVERRIDE;
         virtual void clear() Q_DECL_OVERRIDE;
 
-        void display_prompt();
+        void displayPrompt();
 
-        void interpret_command();
-        QString get_current_command();
-        void replace_current_command(const QString& new_command);
-        void append_to_current_command(const QString& new_command);
+        void interpretCommand();
+        QString getCurrentCommand();
+        void replaceCurrentCommand(const QString& new_command);
+        void appendToCurrentCommand(const QString& new_command);
 
-        bool selection_editable();
+        bool selectionEditable();
 
-        void handle_up_key_pressed();
-        void handle_down_key_pressed();
+        void handleUpKeyPressed();
+        void handleDownKeyPressed();
 
-        void handle_tab_key_pressed();
+        void handleTabKeyPressed();
 
         void insertAtEnd(const QString& text, QColor textColor);
 
     private:
-        QColor m_prompt_color;
-        QColor m_standard_color;
-        QColor m_error_color;
+        QColor mPromptColor;
+        QColor mStandardColor;
+        QColor mErrorColor;
 
-        QString m_standard_prompt;
-        QString m_compound_prompt;
+        QString mStandardPrompt;
+        QString mCompoundPrompt;
 
-        int m_prompt_block_number;
-        int m_prompt_length;
-        int m_prompt_end_position;
-        int m_compound_prompt_end_position;
+        int mPromptBlockNumber;
+        int mPromptLength;
+        int mPromptEndPosition;
+        int mCompoundPromptEndPosition;
 
-        bool m_in_compound_prompt;
-        bool m_in_completion;
+        bool mInCompoundPrompt;
+        bool mInCompletion;
 
-        QString m_current_compound_input;
-        QString m_current_input;
+        QString mCurrentCompoundInput;
+        QString mCurrentInput;
 
-        int m_current_history_index;
-        int m_current_completer_index;
+        int mCurrentHistoryIndex;
+        int mCurrentCompleterIndex;
 
-        std::shared_ptr<PythonConsoleHistory> m_history;
+        std::shared_ptr<PythonConsoleHistory> mHistory;
     };
 }

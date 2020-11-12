@@ -34,16 +34,16 @@ namespace hal
         Q_OBJECT
 
     public:
-        DropdownSetting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& description, QWidget* parent = 0);
+        DropdownSetting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& mDescription, QWidget* parent = 0);
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;
         //virtual void rollback() Q_DECL_OVERRIDE;
 
     private:
-        QMap<QString, QVariant> m_options;
-        QComboBox* m_combo_box;
-        void on_index_changed(QString text);
+        QMap<QString, QVariant> mOptions;
+        QComboBox* mComboBox;
+        void onIndexChanged(QString text);
 
     };
 }

@@ -20,153 +20,153 @@ namespace hal
         return instance;
     }
 
-    QColor LoggerQssAdapter::trace_color() const
+    QColor LoggerQssAdapter::traceColor() const
     {
-        return m_trace_color;
+        return mTraceColor;
     }
 
-    QColor LoggerQssAdapter::debug_color() const
+    QColor LoggerQssAdapter::debugColor() const
     {
-        return m_debug_color;
+        return mDebugColor;
     }
 
-    QColor LoggerQssAdapter::info_color() const
+    QColor LoggerQssAdapter::infoColor() const
     {
-        return m_info_color;
+        return mInfoColor;
     }
 
-    QColor LoggerQssAdapter::warning_color() const
+    QColor LoggerQssAdapter::warningColor() const
     {
-        return m_warning_color;
+        return mWarningColor;
     }
 
-    QColor LoggerQssAdapter::error_color() const
+    QColor LoggerQssAdapter::errorColor() const
     {
-        return m_error_color;
+        return mErrorColor;
     }
 
-    QColor LoggerQssAdapter::critical_color() const
+    QColor LoggerQssAdapter::criticalColor() const
     {
-        return m_critical_color;
+        return mCriticalColor;
     }
 
-    QColor LoggerQssAdapter::default_color() const
+    QColor LoggerQssAdapter::defaultColor() const
     {
-        return m_default_color;
+        return mDefaultColor;
     }
 
-    QColor LoggerQssAdapter::marker_color() const
+    QColor LoggerQssAdapter::markerColor() const
     {
-        return m_marker_color;
+        return mMarkerColor;
     }
 
-    QColor LoggerQssAdapter::trace_highlight() const
+    QColor LoggerQssAdapter::traceHighlight() const
     {
-        return m_trace_highlight;
+        return mTraceHighlight;
     }
 
-    QColor LoggerQssAdapter::debug_highlight() const
+    QColor LoggerQssAdapter::debugHighlight() const
     {
-        return m_debug_highlight;
+        return mDebugHighlight;
     }
 
-    QColor LoggerQssAdapter::info_highlight() const
+    QColor LoggerQssAdapter::infoHighlight() const
     {
-        return m_info_highlight;
+        return mInfoHighlight;
     }
 
-    QColor LoggerQssAdapter::warning_highlight() const
+    QColor LoggerQssAdapter::warningHighlight() const
     {
-        return m_warning_highlight;
+        return mWarningHighlight;
     }
 
-    QColor LoggerQssAdapter::error_highlight() const
+    QColor LoggerQssAdapter::errorHighlight() const
     {
-        return m_error_highlight;
+        return mErrorHighlight;
     }
 
-    QColor LoggerQssAdapter::critical_highlight() const
+    QColor LoggerQssAdapter::criticalHighlight() const
     {
-        return m_critical_highlight;
+        return mCriticalHighlight;
     }
 
-    QColor LoggerQssAdapter::default_highlight() const
+    QColor LoggerQssAdapter::defaultHighlight() const
     {
-        return m_default_highlight;
+        return mDefaultHighlight;
     }
 
-    void LoggerQssAdapter::set_trace_color(const QColor &color)
+    void LoggerQssAdapter::setTraceColor(const QColor &color)
     {
-        m_trace_color = color;
+        mTraceColor = color;
     }
 
-    void LoggerQssAdapter::set_debug_color(const QColor &color)
+    void LoggerQssAdapter::setDebugColor(const QColor &color)
     {
-        m_debug_color = color;
+        mDebugColor = color;
     }
 
-    void LoggerQssAdapter::set_info_color(const QColor &color)
+    void LoggerQssAdapter::setInfoColor(const QColor &color)
     {
-        m_info_color = color;
+        mInfoColor = color;
     }
 
-    void LoggerQssAdapter::set_warning_color(const QColor &color)
+    void LoggerQssAdapter::setWarningColor(const QColor &color)
     {
-        m_warning_color = color;
+        mWarningColor = color;
     }
 
-    void LoggerQssAdapter::set_error_color(const QColor &color)
+    void LoggerQssAdapter::setErrorColor(const QColor &color)
     {
-        m_error_color = color;
+        mErrorColor = color;
     }
 
-    void LoggerQssAdapter::set_critical_color(const QColor &color)
+    void LoggerQssAdapter::setCriticalColor(const QColor &color)
     {
-        m_critical_color = color;
+        mCriticalColor = color;
     }
 
-    void LoggerQssAdapter::set_default_color(const QColor &color)
+    void LoggerQssAdapter::setDefaultColor(const QColor &color)
     {
-        m_default_color = color;
+        mDefaultColor = color;
     }
 
-    void LoggerQssAdapter::set_marker_color(const QColor &color)
+    void LoggerQssAdapter::setMarkerColor(const QColor &color)
     {
-        m_marker_color = color;
+        mMarkerColor = color;
     }
 
-    void LoggerQssAdapter::set_trace_highlight(const QColor &color)
+    void LoggerQssAdapter::setTraceHighlight(const QColor &color)
     {
-        m_trace_highlight = color;
+        mTraceHighlight = color;
     }
 
-    void LoggerQssAdapter::set_debug_highlight(const QColor &color)
+    void LoggerQssAdapter::setDebugHighlight(const QColor &color)
     {
-        m_debug_highlight = color;
+        mDebugHighlight = color;
     }
 
-    void LoggerQssAdapter::set_info_highlight(const QColor &color)
+    void LoggerQssAdapter::setInfoHighlight(const QColor &color)
     {
-        m_info_highlight = color;
+        mInfoHighlight = color;
     }
 
-    void LoggerQssAdapter::set_warning_highlight(const QColor &color)
+    void LoggerQssAdapter::setWarningHighlight(const QColor &color)
     {
-        m_warning_highlight = color;
+        mWarningHighlight = color;
     }
 
-    void LoggerQssAdapter::set_error_highlight(const QColor &color)
+    void LoggerQssAdapter::setErrorHighlight(const QColor &color)
     {
-        m_error_highlight = color;
+        mErrorHighlight = color;
     }
 
-    void LoggerQssAdapter::set_critical_highlight(const QColor &color)
+    void LoggerQssAdapter::setCriticalHighlight(const QColor &color)
     {
-        m_critical_highlight = color;
+        mCriticalHighlight = color;
     }
 
-    void LoggerQssAdapter::set_default_highlight(const QColor &color)
+    void LoggerQssAdapter::setDefaultHighlight(const QColor &color)
     {
-        m_default_highlight = color;
+        mDefaultHighlight = color;
     }
 }

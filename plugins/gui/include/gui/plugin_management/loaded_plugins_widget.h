@@ -38,12 +38,12 @@ namespace hal
         explicit LoadedPluginsWidget(QWidget* parent = nullptr);
 
     public Q_SLOTS:
-        void handle_plugin_loaded(const QString& name, const QString& path);
-        void handle_plugin_unloaded(const QString& name, const QString& path);
+        void handlePluginLoaded(const QString& name, const QString& path);
+        void handlePluginUnloaded(const QString& name, const QString& path);
 
     private:
-        QFrame* m_container;
-        QVBoxLayout* m_layout;
-        QFrame* m_spacer;
+        QFrame* mContainer;
+        QVBoxLayout* mLayout;
+        QFrame* mSpacer;
     };
 }

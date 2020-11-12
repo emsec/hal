@@ -43,13 +43,13 @@ namespace hal
 
         void addNewFilter(QString name, FilterItem* item);
 
-        FilterItem* get_current_filter();
+        FilterItem* getCurrentFilter();
 
     private:
-        QToolButton m_button;
+        QToolButton mButton;
 
-        QList<FilterItem*> m_filter_items;
+        QList<FilterItem*> mFilterItems;
 
-        FilterDialog m_dialog;
+        FilterDialog mDialog;
     };
 }

@@ -48,35 +48,35 @@ namespace hal
         GraphGraphicsView(GraphWidget* parent);
 
         //zooms into the mouse position
-        void gentle_zoom(const qreal factor);
+        void gentleZoom(const qreal factor);
         //zooms into the center of the viewport
-        void viewport_center_zoom(const qreal factor);
+        void viewportCenterZoom(const qreal factor);
 
     Q_SIGNALS:
-        void module_double_clicked(u32 id);
+        void moduleDoubleClicked(u32 id);
 
     private Q_SLOTS:
-        void conditional_update();
-        void handle_change_color_action();
-        void handle_isolation_view_action();
-        void handle_move_action(QAction* action);
-        void handle_move_new_action();
-        void handle_rename_action();
-        void handle_change_type_action();
-        void adjust_min_scale();
+        void conditionalUpdate();
+        void handleChangeColorAction();
+        void handleIsolationViewAction();
+        void handleMoveAction(QAction* action);
+        void handleMoveNewAction();
+        void handleRenameAction();
+        void handleChangeTypeAction();
+        void adjustMinScale();
 
-        void handle_fold_single_action();
-        void handle_fold_all_action();
-        void handle_unfold_single_action();
-        void handle_unfold_all_action();
+        void handleFoldSingleAction();
+        void handleFoldAllAction();
+        void handleUnfoldSingleAction();
+        void handleUnfoldAllAction();
 
-        void handle_select_outputs();
-        void handle_select_inputs();
+        void handleSelectOutputs();
+        void handleSelectInputs();
         void handleGroupingUnassign();
         void handleGroupingAssignNew();
         void handleGroupingAssingExisting();
 
-        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         void paintEvent(QPaintEvent* event) override;
@@ -93,59 +93,61 @@ namespace hal
         void keyReleaseEvent(QKeyEvent* event) override;
         void resizeEvent(QResizeEvent* event) override;
 
-        void initialize_settings();
+        void initializeSettings();
 
-        void show_context_menu(const QPoint& pos);
+        void showContextMenu(const QPoint& pos);
 
-        void update_matrix(const int delta);
+        void updateMatrix(const int delta);
 
-        void toggle_antialiasing();
+        void toggleAntialiasing();
 
-        bool item_draggable(GraphicsItem* item);
+        bool itemDraggable(GraphicsItem* item);
         void groupingAssignInternal(Grouping* grp);
 
-        struct layouter_point
+        struct LayouterPoint
         {
-            int index;
-            qreal pos;
+            int mIndex;
+            qreal mPos;
         };
-        QVector<QPoint> closest_layouter_pos(const QPointF& scene_pos) const;
-        layouter_point closest_layouter_point(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const;
+        QVector<QPoint> closestLayouterPos(const QPointF& scene_pos) const;
+        LayouterPoint closestLayouterPoint(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const;
 
         #ifdef GUI_DEBUG_GRID
-        void debug_show_layouter_gridpos(const QPoint& mouse_pos);
-        void debug_draw_layouter_gridpos(QPainter* painter);
+        void debugShowLayouterGridpos(const QPoint& mouse_pos);
+        void debugDrawLayouterGridpos(QPainter* painter);
         QPoint m_debug_gridpos = QPoint(0,0);
-        bool m_debug_gridpos_enable;
+        bool mDebugGridposEnable;
         #endif
 
-        GraphWidget* m_graph_widget;
+        GraphWidget* mGraphWidget;
 
-        GraphicsItem* m_item;
+        GraphicsItem* mItem;
 
-        bool m_minimap_enabled;
+        bool mMinimapEnabled;
 
-        bool m_grid_enabled;
-        bool m_grid_clusters_enabled;
-        graph_widget_constants::grid_type m_grid_type;
+        bool mGridEnabled;
+        bool mGridClustersEnabled;
+        graph_widget_constants::grid_type mGridType;
 
-        QPoint m_drag_mousedown_position;
-        QPoint m_drag_start_gridpos;
-        GraphicsGate* m_drag_item;
-        QPoint m_drag_current_gridpos;
-        bool m_drag_current_modifier;
-        bool m_drop_allowed;
+        QPoint mDragMousedownPosition;
+        QPoint mDragStartGridpos;
+        GraphicsGate* mDragItem;
+        QPoint mDragCurrentGridpos;
+        bool mDragCurrentModifier;
+        bool mDropAllowed;
 
-        Qt::KeyboardModifier m_drag_modifier;
+        Qt::KeyboardModifier mDragModifier;
 
-        QPoint m_move_position;
-        Qt::KeyboardModifier m_move_modifier;
+        QPoint mMovePosition;
+        Qt::KeyboardModifier mMoveModifier;
 
-        Qt::KeyboardModifier m_zoom_modifier;
-        qreal m_zoom_factor_base;
-        QPointF m_target_scene_pos;
-        QPointF m_target_viewport_pos;
+        Qt::KeyboardModifier mZoomModifier;
+        qreal mZoomFactorBase;
+        QPointF mTargetScenePos;
+        QPointF mTargetViewportPos;
 
-        qreal m_min_scale;
+        qreal mMinScale;
+
+        static const QString sAssignToGrouping;
     };
 }

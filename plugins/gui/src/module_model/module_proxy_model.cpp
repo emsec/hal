@@ -13,8 +13,8 @@ namespace hal
         // EVERY TIME FILTER CHANGES / ITEM GETS ADDED MODIFY LOCAL DATA STRUCTURE TO REFLECT CURRENT ITEM VISUALS
         // STYLED DELEGATES USE THAT DATA STRUCTURE TO DRAW THEMSELVES
 
-        m_sort_mechanism = gui_utility::sort_mechanism(g_settings_manager->get("navigation/sort_mechanism").toInt());
-        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &ModuleProxyModel::handle_global_setting_changed);
+        mSortMechanism = gui_utility::mSortMechanism(gSettingsManager->get("navigation/mSortMechanism").toInt());
+        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &ModuleProxyModel::handleGlobalSettingChanged);
     }
 
     bool ModuleProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
@@ -27,18 +27,18 @@ namespace hal
             {
                 if (sourceModel()->data(source_index, filterRole()).toString().contains(filterRegExp()))
                 {
-                    static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->set_highlighted(true);
+                    static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->setHighlighted(true);
                     return true;
                 }
                 else
                 {
-                    static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->set_highlighted(false);
+                    static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->setHighlighted(false);
                     return false;
                 }
             }
         }
 
-        static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->set_highlighted(false);
+        static_cast<ModuleItem*>(sourceModel()->index(sourceRow, 0, sourceParent).internalPointer())->setHighlighted(false);
         return true;
         //return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
     }
@@ -53,15 +53,15 @@ namespace hal
             name_right = name_right.toLower();
         }
 
-        return gui_utility::compare(m_sort_mechanism, name_left, name_right);
+        return gui_utility::compare(mSortMechanism, name_left, name_right);
     }
 
-    void ModuleProxyModel::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void ModuleProxyModel::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
-        if (key == "navigation/sort_mechanism")
+        if (key == "navigation/mSortMechanism")
         {
-            m_sort_mechanism = gui_utility::sort_mechanism(value.toInt());
+            mSortMechanism = gui_utility::mSortMechanism(value.toInt());
             // force re-sort
             invalidate();
         }

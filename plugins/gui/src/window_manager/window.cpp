@@ -17,58 +17,58 @@
 namespace hal
 {
     Window::Window(QWidget* parent) : QFrame(parent),
-        m_window_layout(new QVBoxLayout(this)),
-        m_effect_layer(new WindowEffectLayer(this)),
-        m_effect_layer_layout(new QVBoxLayout(m_effect_layer)),
-        m_toolbar(nullptr),
-        m_toolbar_extension(new QFrame(this)),
-        m_workspace(new Workspace(this)),
-        m_overlay(nullptr),
-        m_effect(nullptr)
+        mWindowLayout(new QVBoxLayout(this)),
+        mEffectLayer(new WindowEffectLayer(this)),
+        mEffectLayerLayout(new QVBoxLayout(mEffectLayer)),
+        mToolbar(nullptr),
+        mToolbarExtension(new QFrame(this)),
+        mWorkspace(new Workspace(this)),
+        mOverlay(nullptr),
+        mEffect(nullptr)
     {
-        m_window_layout->setContentsMargins(0, 0, 0, 0);
-        m_window_layout->setSpacing(0);
+        mWindowLayout->setContentsMargins(0, 0, 0, 0);
+        mWindowLayout->setSpacing(0);
 
-        m_effect_layer_layout->setContentsMargins(0, 0, 0, 0);
-        m_effect_layer_layout->setSpacing(0);
+        mEffectLayerLayout->setContentsMargins(0, 0, 0, 0);
+        mEffectLayerLayout->setSpacing(0);
 
-        m_toolbar_extension->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        m_workspace->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        mToolbarExtension->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        mWorkspace->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
-        m_effect_layer_layout->addWidget(m_toolbar_extension);
-        m_effect_layer_layout->addWidget(m_workspace);
+        mEffectLayerLayout->addWidget(mToolbarExtension);
+        mEffectLayerLayout->addWidget(mWorkspace);
 
-        m_window_layout->addWidget(m_effect_layer);
+        mWindowLayout->addWidget(mEffectLayer);
     }
 
-    void Window::show_toolbar(WindowToolbar* toolbar)
+    void Window::showToolbar(WindowToolbar* toolbar)
     {
         assert(toolbar);
 
-        m_effect_layer_layout->insertWidget(0, toolbar);
+        mEffectLayerLayout->insertWidget(0, toolbar);
     }
 
-    void Window::hide_toolbar_extension()
+    void Window::hideToolbarExtension()
     {
-        m_toolbar_extension->hide();
+        mToolbarExtension->hide();
     }
 
-    void Window::show_toolbar_extension()
+    void Window::showToolbarExtension()
     {
-        m_toolbar_extension->show();
+        mToolbarExtension->show();
     }
 
-    void Window::show_workspace()
+    void Window::showWorkspace()
     {
-        m_workspace->show();
+        mWorkspace->show();
     }
 
-    void Window::show_special_screen(QWidget* widget)
+    void Window::showSpecialScreen(QWidget* widget)
     {
         assert(widget);
 
-        m_workspace->hide();
-        m_effect_layer_layout->addWidget(widget);
+        mWorkspace->hide();
+        mEffectLayerLayout->addWidget(widget);
         widget->show();
     }
 
@@ -76,31 +76,31 @@ namespace hal
     {
         assert(overlay);
 
-        if (!m_overlay)
+        if (!mOverlay)
         {
-            m_effect_layer->setEnabled(false);
+            mEffectLayer->setEnabled(false);
 
-            m_effect = GraphicsEffectFactory::get_effect();
-            m_effect_layer->setGraphicsEffect(m_effect);
+            mEffect = GraphicsEffectFactory::getEffect();
+            mEffectLayer->setGraphicsEffect(mEffect);
 
-            m_overlay = overlay;
-            m_overlay->setParent(this);
-            m_overlay->show();
-            connect(m_overlay, &Overlay::clicked, g_window_manager, &WindowManager::handle_overlay_clicked);
+            mOverlay = overlay;
+            mOverlay->setParent(this);
+            mOverlay->show();
+            connect(mOverlay, &Overlay::clicked, gWindowManager, &WindowManager::handleOverlayClicked);
         }
     }
 
     void Window::unlock()
     {
-        if (m_overlay)
+        if (mOverlay)
         {
-            m_effect_layer->setEnabled(true);
+            mEffectLayer->setEnabled(true);
 
-            delete m_overlay;
-            delete m_effect;
+            delete mOverlay;
+            delete mEffect;
 
-            m_overlay = nullptr;
-            m_effect = nullptr;
+            mOverlay = nullptr;
+            mEffect = nullptr;
         }
     }
 
@@ -111,15 +111,15 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        m_toolbar->repolish();
-        m_workspace->repolish();
+        mToolbar->repolish();
+        mWorkspace->repolish();
 
         // REPOLISH CONTENT THROUGH CONTENT MANAGER
     }
 
     void Window::closeEvent(QCloseEvent* event)
     {
-        g_window_manager->handle_window_close_request(this);
+        gWindowManager->handleWindowCloseRequest(this);
         event->ignore();
     }
 }

@@ -14,22 +14,22 @@
 namespace hal
 {
     PythonConsole::PythonConsole(QWidget* parent)
-        : QTextEdit(parent), m_standard_prompt(">>> "), m_compound_prompt("... "), m_prompt_block_number(0), m_prompt_length(0), m_prompt_end_position(0), m_compound_prompt_end_position(0),
-          m_in_compound_prompt(false), m_in_completion(false), m_current_compound_input(""), m_current_input(""), m_current_history_index(-1), m_current_completer_index(0),
-          m_history(std::make_shared<PythonConsoleHistory>())
+        : QTextEdit(parent), mStandardPrompt(">>> "), mCompoundPrompt("... "), mPromptBlockNumber(0), mPromptLength(0), mPromptEndPosition(0), mCompoundPromptEndPosition(0),
+          mInCompoundPrompt(false), mInCompletion(false), mCurrentCompoundInput(""), mCurrentInput(""), mCurrentHistoryIndex(-1), mCurrentCompleterIndex(0),
+          mHistory(std::make_shared<PythonConsoleHistory>())
     {
         this->document()->setMaximumBlockCount(1000);
         setFrameStyle(QFrame::NoFrame);
         setUndoRedoEnabled(false);
         ensureCursorVisible();
 
-        m_standard_color = PythonConsoleQssAdapter::instance()->standard_color();
-        m_error_color = PythonConsoleQssAdapter::instance()->error_color();
-        m_prompt_color = PythonConsoleQssAdapter::instance()->promt_color();
-        g_python_context->set_console(this);
-        g_python_context->interpret("print(\"Python \" + sys.version)", false);
-        g_python_context->interpret("print(sys.executable + \" on \" + sys.platform)", false);
-        display_prompt();
+        mStandardColor = PythonConsoleQssAdapter::instance()->standardColor();
+        mErrorColor = PythonConsoleQssAdapter::instance()->errorColor();
+        mPromptColor = PythonConsoleQssAdapter::instance()->promtColor();
+        gPythonContext->setConsole(this);
+        gPythonContext->interpret("print(\"Python \" + sys.version)", false);
+        gPythonContext->interpret("print(sys.executable + \" on \" + sys.platform)", false);
+        displayPrompt();
     }
 
     void PythonConsole::keyPressEvent(QKeyEvent* e)
@@ -59,14 +59,14 @@ namespace hal
             case Qt::Key_Return:
             case Qt::Key_Enter:
                 moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-                interpret_command();
-                m_current_history_index = -1;
+                interpretCommand();
+                mCurrentHistoryIndex = -1;
                 return;
 
             case Qt::Key_Backspace:
                 if (textCursor().hasSelection())
                 {
-                    if (textCursor().selectionStart() >= m_prompt_end_position)
+                    if (textCursor().selectionStart() >= mPromptEndPosition)
                     {
                         break;
                     }
@@ -77,7 +77,7 @@ namespace hal
                 }
                 else
                 {
-                    if (textCursor().selectionStart() > m_prompt_end_position)
+                    if (textCursor().selectionStart() > mPromptEndPosition)
                     {
                         break;
                     }
@@ -88,23 +88,23 @@ namespace hal
                 }
 
             case Qt::Key_Up:
-                handle_up_key_pressed();
+                handleUpKeyPressed();
                 return;
 
             case Qt::Key_Down:
-                handle_down_key_pressed();
+                handleDownKeyPressed();
                 return;
 
             case Qt::Key_Left:
                 if (e->modifiers() & Qt::ControlModifier)    // Needed for macOS
                 {
-                    cursor.setPosition(m_prompt_end_position);
+                    cursor.setPosition(mPromptEndPosition);
                     setTextCursor(cursor);
                     return;
                 }
                 if (textCursor().hasSelection())
                 {
-                    if (textCursor().selectionStart() >= m_prompt_end_position)
+                    if (textCursor().selectionStart() >= mPromptEndPosition)
                     {
                         break;
                     }
@@ -115,7 +115,7 @@ namespace hal
                 }
                 else
                 {
-                    if (textCursor().selectionStart() > m_prompt_end_position)
+                    if (textCursor().selectionStart() > mPromptEndPosition)
                     {
                         break;
                     }
@@ -125,7 +125,7 @@ namespace hal
                     }
                 }
             case Qt::Key_Home:
-                cursor.setPosition(m_prompt_end_position);
+                cursor.setPosition(mPromptEndPosition);
                 setTextCursor(cursor);
                 return;
             case Qt::Key_End:
@@ -142,16 +142,16 @@ namespace hal
                 break;
 
             case Qt::Key_Tab:
-                handle_tab_key_pressed();
+                handleTabKeyPressed();
                 return;
 
             default:
-                if (textCursor().selectionStart() < m_prompt_end_position)
+                if (textCursor().selectionStart() < mPromptEndPosition)
                 {
                     moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
                 }
-                m_in_completion         = false;
-                m_current_history_index = -1;
+                mInCompletion         = false;
+                mCurrentHistoryIndex = -1;
         }
         QTextEdit::keyPressEvent(e);
     }
@@ -178,17 +178,17 @@ namespace hal
         insertPlainText(QString(text));
     }
 
-    void PythonConsole::handle_stdout(const QString& output)
+    void PythonConsole::handleStdout(const QString& output)
     {
-        insertAtEnd(output, m_standard_color);
+        insertAtEnd(output, mStandardColor);
     }
 
-    void PythonConsole::handle_error(const QString& output)
+    void PythonConsole::handleError(const QString& output)
     {
         QString append_out = output;
         if (!append_out.endsWith("\n"))
             append_out += "\n";
-        insertAtEnd(append_out, m_error_color);
+        insertAtEnd(append_out, mErrorColor);
     }
 
     void PythonConsole::clear()
@@ -196,77 +196,77 @@ namespace hal
         QTextEdit::clear();
     }
 
-    void PythonConsole::display_prompt()
+    void PythonConsole::displayPrompt()
     {
         //QTextCursor cursor = textCursor();
         QTextCursor cursor(document());
         cursor.movePosition(QTextCursor::End);
         //DEBUG SAVE FORMATS AS MEMBERS
         QTextCharFormat format;
-        format.setForeground(m_prompt_color);
+        format.setForeground(mPromptColor);
         cursor.setCharFormat(format);
-        if (m_in_compound_prompt)
+        if (mInCompoundPrompt)
         {
-            cursor.insertText(m_compound_prompt);
-            if (m_compound_prompt_end_position < 0)
+            cursor.insertText(mCompoundPrompt);
+            if (mCompoundPromptEndPosition < 0)
             {
-                m_compound_prompt_end_position = m_prompt_end_position;
+                mCompoundPromptEndPosition = mPromptEndPosition;
             }
         }
         else
         {
-            cursor.insertText(m_standard_prompt);
-            m_compound_prompt_end_position = -1;
+            cursor.insertText(mStandardPrompt);
+            mCompoundPromptEndPosition = -1;
         }
         cursor.movePosition(QTextCursor::EndOfLine);
         setTextCursor(cursor);
 
-        //    m_prompt_block_number = textCursor().blockNumber();
-        m_prompt_length       = m_standard_prompt.length();
-        m_prompt_end_position = textCursor().position();
+        //    mPromptBlockNumber = textCursor().blockNumber();
+        mPromptLength       = mStandardPrompt.length();
+        mPromptEndPosition = textCursor().position();
     }
 
-    void PythonConsole::interpret_command()
+    void PythonConsole::interpretCommand()
     {
-        QString input      = get_current_command();
+        QString input      = getCurrentCommand();
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::End);
         cursor.insertText("\n");
         if (!input.isEmpty())
         {
-            //        g_python_context->add_history(input);
-            m_history->add_history(input.toStdString());
+            //        gPythonContext->addHistory(input);
+            mHistory->addHistory(input.toStdString());
         }
-        if ((!m_in_compound_prompt && g_python_context->check_complete_statement(input) != 0) || (m_in_compound_prompt && input.isEmpty() && g_python_context->check_complete_statement(input) != 0))
+        if ((!mInCompoundPrompt && gPythonContext->checkCompleteStatement(input) != 0) || (mInCompoundPrompt && input.isEmpty() && gPythonContext->checkCompleteStatement(input) != 0))
         {
-            m_current_compound_input += input;
-            if (m_in_compound_prompt)
+            mCurrentCompoundInput += input;
+            if (mInCompoundPrompt)
             {
-                g_python_context->interpret(m_current_compound_input, true);
+                gPythonContext->interpret(mCurrentCompoundInput, true);
             }
             else
             {
-                g_python_context->interpret(input, false);
+                gPythonContext->interpret(input, false);
             }
-            m_in_compound_prompt     = false;
-            m_current_compound_input = "";
-            display_prompt();
+            mInCompoundPrompt     = false;
+            mCurrentCompoundInput = "";
+            displayPrompt();
         }
         else
         {
-            m_current_compound_input += input + "\n";
-            m_in_compound_prompt = true;
-            display_prompt();
+            mCurrentCompoundInput += input + "\n";
+            mInCompoundPrompt = true;
+            displayPrompt();
         }
-        m_history->update_from_file();
-        //qDebug() << m_current_compound_input;
+        mHistory->updateFromFile();
+        //qDebug() << mCurrentCompoundInput;
     }
 
-    QString PythonConsole::get_current_command()
+    QString PythonConsole::getCurrentCommand()
     {
         QTextCursor cursor = textCursor();
 
-        cursor.setPosition(m_prompt_end_position);
+        cursor.setPosition(mPromptEndPosition);
         cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
 
         QString command = cursor.selectedText();
@@ -274,97 +274,97 @@ namespace hal
         return command;
     }
 
-    void PythonConsole::replace_current_command(const QString& new_command)
+    void PythonConsole::replaceCurrentCommand(const QString& new_command)
     {
         QTextCursor cursor = textCursor();
-        cursor.setPosition(m_prompt_end_position);
+        cursor.setPosition(mPromptEndPosition);
         cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
         cursor.insertText(new_command);
     }
 
-    void PythonConsole::append_to_current_command(const QString& appendix)
+    void PythonConsole::appendToCurrentCommand(const QString& appendix)
     {
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::End);
         cursor.insertText(appendix);
     }
 
-    bool PythonConsole::selection_editable()
+    bool PythonConsole::selectionEditable()
     {
         QTextCursor cursor(document());
         cursor.setPosition(textCursor().selectionStart());
         return false;
     }
 
-    void PythonConsole::handle_up_key_pressed()
+    void PythonConsole::handleUpKeyPressed()
     {
-        auto length = m_history->size() - 1;
+        auto length = mHistory->size() - 1;
 
-        if (m_current_history_index == -1)
+        if (mCurrentHistoryIndex == -1)
         {
-            m_current_input         = get_current_command();
-            m_current_history_index = length;
-            replace_current_command(QString::fromStdString(m_history->get_history_item(m_current_history_index)));
+            mCurrentInput         = getCurrentCommand();
+            mCurrentHistoryIndex = length;
+            replaceCurrentCommand(QString::fromStdString(mHistory->getHistoryItem(mCurrentHistoryIndex)));
         }
         else
         {
-            if (m_current_history_index == 0)
+            if (mCurrentHistoryIndex == 0)
             {
                 return;
             }
 
-            m_current_history_index--;
-            replace_current_command(QString::fromStdString(m_history->get_history_item(m_current_history_index)));
+            mCurrentHistoryIndex--;
+            replaceCurrentCommand(QString::fromStdString(mHistory->getHistoryItem(mCurrentHistoryIndex)));
         }
     }
 
-    void PythonConsole::handle_down_key_pressed()
+    void PythonConsole::handleDownKeyPressed()
     {
-        auto length = m_history->size() - 1;
+        auto length = mHistory->size() - 1;
 
-        if (m_current_history_index == -1)
+        if (mCurrentHistoryIndex == -1)
         {
             return;
         }
 
-        if (m_current_history_index == length)
+        if (mCurrentHistoryIndex == length)
         {
-            m_current_history_index = -1;
-            replace_current_command(m_current_input);
+            mCurrentHistoryIndex = -1;
+            replaceCurrentCommand(mCurrentInput);
         }
         else
         {
-            m_current_history_index++;
-            replace_current_command(QString::fromStdString(m_history->get_history_item(m_current_history_index)));
+            mCurrentHistoryIndex++;
+            replaceCurrentCommand(QString::fromStdString(mHistory->getHistoryItem(mCurrentHistoryIndex)));
         }
     }
 
-    void PythonConsole::handle_tab_key_pressed()
+    void PythonConsole::handleTabKeyPressed()
     {
-        if (m_in_compound_prompt)
+        if (mInCompoundPrompt)
         {
-            m_current_input = m_current_compound_input + get_current_command();
+            mCurrentInput = mCurrentCompoundInput + getCurrentCommand();
         }
         else
         {
-            m_current_input = get_current_command();
+            mCurrentInput = getCurrentCommand();
         }
-        QString current_line = get_current_command();
+        QString current_line = getCurrentCommand();
         if (current_line.isEmpty())
         {
             insertPlainText("\t");
         }
         else
         {
-            log_info("python", "completing: '{}'", m_current_input.toStdString());
-            auto r = g_python_context->complete(m_current_input, true);
+            log_info("python", "completing: '{}'", mCurrentInput.toStdString());
+            auto r = gPythonContext->complete(mCurrentInput, true);
             if (r.size() == 1)
             {
-                append_to_current_command(QString::fromStdString(std::get<1>(r.at(0))));
+                appendToCurrentCommand(QString::fromStdString(std::get<1>(r.at(0))));
             }
             else if (r.size() > 1)
             {
-                m_in_completion         = true;
+                mInCompletion         = true;
                 QString candidates      = "\n";
                 QString matching_prefix = QString::fromStdString(std::get<1>(r[0]));
                 for (auto& tup : r)
@@ -381,9 +381,9 @@ namespace hal
                     }
                 }
                 candidates += "\n";
-                handle_stdout(candidates);
-                display_prompt();
-                replace_current_command(current_line + matching_prefix);
+                handleStdout(candidates);
+                displayPrompt();
+                replaceCurrentCommand(current_line + matching_prefix);
             }
         }
     }

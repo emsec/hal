@@ -11,160 +11,160 @@ namespace hal
 {
     LoggerWidget::LoggerWidget(QWidget* parent) : ContentWidget("Log", parent)
     {
-        m_plain_text_edit = new QPlainTextEdit(this);
-        m_plain_text_edit->setReadOnly(true);
-        m_plain_text_edit->setFrameStyle(QFrame::NoFrame);
+        mPlainTextEdit = new QPlainTextEdit(this);
+        mPlainTextEdit->setReadOnly(true);
+        mPlainTextEdit->setFrameStyle(QFrame::NoFrame);
 
-        m_plain_text_edit_scrollbar = m_plain_text_edit->verticalScrollBar();
-        scroll_to_bottom();
-        m_user_interacted_with_scrollbar = false;
+        mPlainTextEditScrollbar = mPlainTextEdit->verticalScrollBar();
+        scrollToBottom();
+        mUserInteractedWithScrollbar = false;
 
-        m_tab_bar      = new FilterTabBar();
-        m_log_marshall = new LoggerMarshall(m_plain_text_edit);
-        m_content_layout->addWidget(m_plain_text_edit);
+        mTabBar      = new FilterTabBar();
+        mLogMarshall = new LoggerMarshall(mPlainTextEdit);
+        mContentLayout->addWidget(mPlainTextEdit);
 
-        m_plain_text_edit->setContextMenuPolicy(Qt::CustomContextMenu);
+        mPlainTextEdit->setContextMenuPolicy(Qt::CustomContextMenu);
 
-        m_selector = new ChannelSelector();
+        mSelector = new ChannelSelector();
 
-        connect(m_plain_text_edit, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(show_text_edit_context_menu(const QPoint&)));
-        connect(m_tab_bar, SIGNAL(currentChanged(int)), this, SLOT(filter_item_clicked(int)));
-        connect(m_selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handle_current_channel_changed(int)));
-        connect(m_plain_text_edit_scrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handle_first_user_interaction);
+        connect(mPlainTextEdit, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showTextEditContextMenu(const QPoint&)));
+        connect(mTabBar, SIGNAL(currentChanged(int)), this, SLOT(filterItemClicked(int)));
+        connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
+        connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
 
         ChannelModel* model = ChannelModel::get_instance();
-        connect(model, SIGNAL(updated(spdlog::level::level_enum, std::string, std::string)), this, SLOT(handle_channel_updated(spdlog::level::level_enum, std::string, std::string)));
+        connect(model, SIGNAL(updated(spdlog::level::level_enum, std::string, std::string)), this, SLOT(handleChannelUpdated(spdlog::level::level_enum, std::string, std::string)));
     }
 
     LoggerWidget::~LoggerWidget()
     {
         //cant set the parent correct, so just delete them in the constructor
-        delete m_tab_bar;
-        delete m_selector;
+        delete mTabBar;
+        delete mSelector;
     }
 
-    void LoggerWidget::setup_toolbar(Toolbar* Toolbar)
+    void LoggerWidget::setupToolbar(Toolbar* Toolbar)
     {
-        //Toolbar->add_widget(m_selector);
+        //Toolbar->addWidget(mSelector);
 
         //selector will be deleted within the toolbars destructor
         ChannelSelector* selector = new ChannelSelector();
-        connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handle_current_channel_changed(int)));
+        connect(selector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentChannelChanged(int)));
         Toolbar->addWidget(selector);
     }
 
-    QPlainTextEdit* LoggerWidget::get_plain_text_edit()
+    QPlainTextEdit* LoggerWidget::getPlainTextEdit()
     {
-        return m_plain_text_edit;
+        return mPlainTextEdit;
     }
 
-    FilterTabBar* LoggerWidget::get_tab_bar()
+    FilterTabBar* LoggerWidget::getTabBar()
     {
-        return m_tab_bar;
+        return mTabBar;
     }
 
-    void LoggerWidget::show_text_edit_context_menu(const QPoint& point)
+    void LoggerWidget::showTextEditContextMenu(const QPoint& point)
     {
         Q_UNUSED(point)
     }
 
-    void LoggerWidget::filter_item_clicked(const int& index)
+    void LoggerWidget::filterItemClicked(const int& index)
     {
         Q_UNUSED(index)
-        //reload_log_content();
+        //reloadLogContent();
     }
 
-    void LoggerWidget::reload_log_content()
+    void LoggerWidget::reloadLogContent()
     {
         //    hal_task_status_item *item = static_cast<hal_task_status_item*>(m_task_manager->get_tree_view()->currentIndex().internalPointer());
-        //    FilterItem *filter = m_tab_bar->get_current_filter();
+        //    FilterItem *filter = mTabBar->getCurrentFilter();
 
-        //        m_plain_text_edit->clear();
-        //        QWriteLocker item_locker(item->get_lock());
-        //        boost::circular_buffer<hal_task_log_entry*> *buffer = item->get_buffer();
+        //        mPlainTextEdit->clear();
+        //        QWriteLocker item_locker(item->getLock());
+        //        boost::circular_buffer<hal_task_log_entry*> *buffer = item->getBuffer();
         //        boost::circular_buffer<hal_task_log_entry*>::iterator itBegin = buffer->begin();
         //        boost::circular_buffer<hal_task_log_entry*>::iterator itEnd = buffer->end();
         //        for(; itBegin != itEnd; ++itBegin)
         //        {
         //            hal_task_log_entry *entry = *itBegin;
-        //            m_log_marshall->append_log(entry->m_msg_type, QString::fromStdString(entry->m_msg), filter);
+        //            mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg), filter);
         //        }
     }    // item_locker scope
 
-    //void LoggerWidget::handle_current_channel_changed(hal_channel_item* item)
+    //void LoggerWidget::handleCurrentChannelChanged(hal_channel_item* item)
     //{
-    //    FilterItem* filter = m_tab_bar->get_current_filter();
+    //    FilterItem* filter = mTabBar->getCurrentFilter();
 
-    //    m_plain_text_edit->clear();
-    //    QWriteLocker item_locker(item->get_lock());
-    //    boost::circular_buffer<hal_channel_entry*>* buffer           = item->get_buffer();
-    //    boost::circular_buffer<hal_channel_entry*>::iterator itBegin = buffer->begin();
-    //    boost::circular_buffer<hal_channel_entry*>::iterator itEnd   = buffer->end();
+    //    mPlainTextEdit->clear();
+    //    QWriteLocker item_locker(item->getLock());
+    //    boost::circular_buffer<hal_ChannelEntry*>* buffer           = item->getBuffer();
+    //    boost::circular_buffer<hal_ChannelEntry*>::iterator itBegin = buffer->begin();
+    //    boost::circular_buffer<hal_ChannelEntry*>::iterator itEnd   = buffer->end();
     //    for (; itBegin != itEnd; ++itBegin)
     //    {
-    //        hal_channel_entry* entry = *itBegin;
-    //        m_log_marshall->append_log(entry->m_msg_type, QString::fromStdString(entry->m_msg), filter);
+    //        hal_ChannelEntry* entry = *itBegin;
+    //        mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg), filter);
     //    }
     //}    // item_locker scope
 
-    void LoggerWidget::handle_current_channel_updated(spdlog::level::level_enum t, const QString& msg)
+    void LoggerWidget::handleCurrentChannelUpdated(spdlog::level::level_enum t, const QString& msg)
     {
-        FilterItem* filter = m_tab_bar->get_current_filter();
-        m_log_marshall->append_log(t, msg, filter);
+        FilterItem* filter = mTabBar->getCurrentFilter();
+        mLogMarshall->appendLog(t, msg, filter);
     }
 
-    void LoggerWidget::handle_channel_updated(spdlog::level::level_enum t, const std::string& logger_name, const std::string& msg)
+    void LoggerWidget::handleChannelUpdated(spdlog::level::level_enum t, const std::string& logger_name, const std::string& msg)
     {
-        if (m_current_channel == "")
+        if (mCurrentChannel == "")
         {
-            handle_current_channel_changed(0);
+            handleCurrentChannelChanged(0);
         }
-        if (logger_name != m_current_channel)
+        if (logger_name != mCurrentChannel)
             return;
 
-        FilterItem* filter = m_tab_bar->get_current_filter();
-        m_log_marshall->append_log(t, QString::fromStdString(msg), filter);
+        FilterItem* filter = mTabBar->getCurrentFilter();
+        mLogMarshall->appendLog(t, QString::fromStdString(msg), filter);
     }
 
-    void LoggerWidget::handle_current_channel_changed(int index)
+    void LoggerWidget::handleCurrentChannelChanged(int index)
     {
         ChannelModel* model = ChannelModel::get_instance();
         ChannelItem* item   = static_cast<ChannelItem*>((model->index(index, 0, QModelIndex())).internalPointer());
 
-        m_current_channel = item->name().toStdString();
+        mCurrentChannel = item->name().toStdString();
 
-        FilterItem* filter = m_tab_bar->get_current_filter();
+        FilterItem* filter = mTabBar->getCurrentFilter();
 
-        m_plain_text_edit->clear();
-        QWriteLocker item_locker(item->get_lock());
-        const boost::circular_buffer<channel_entry*>* buffer           = item->get_buffer();
-        boost::circular_buffer<channel_entry*>::const_iterator itBegin = buffer->begin();
-        boost::circular_buffer<channel_entry*>::const_iterator itEnd   = buffer->end();
+        mPlainTextEdit->clear();
+        QWriteLocker item_locker(item->getLock());
+        const boost::circular_buffer<ChannelEntry*>* buffer           = item->getBuffer();
+        boost::circular_buffer<ChannelEntry*>::const_iterator itBegin = buffer->begin();
+        boost::circular_buffer<ChannelEntry*>::const_iterator itEnd   = buffer->end();
         for (; itBegin != itEnd; ++itBegin)
         {
-            channel_entry* entry = *itBegin;
-            m_log_marshall->append_log(entry->m_msg_type, QString::fromStdString(entry->m_msg), filter);
+            ChannelEntry* entry = *itBegin;
+            mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg), filter);
         }
     }
 
-    void LoggerWidget::handle_first_user_interaction(int value)
+    void LoggerWidget::handleFirstUserInteraction(int value)
     {
         Q_UNUSED(value);
 
-        if (!m_user_interacted_with_scrollbar)
-            m_user_interacted_with_scrollbar = true;
+        if (!mUserInteractedWithScrollbar)
+            mUserInteractedWithScrollbar = true;
     }
 
     void LoggerWidget::resizeEvent(QResizeEvent* event)
     {
         Q_UNUSED(event)
 
-        if (!m_user_interacted_with_scrollbar)
-            scroll_to_bottom();
+        if (!mUserInteractedWithScrollbar)
+            scrollToBottom();
     }
 
-    void LoggerWidget::scroll_to_bottom()
+    void LoggerWidget::scrollToBottom()
     {
-        m_plain_text_edit_scrollbar->setValue(m_plain_text_edit_scrollbar->maximum());
+        mPlainTextEditScrollbar->setValue(mPlainTextEditScrollbar->maximum());
     }
 }

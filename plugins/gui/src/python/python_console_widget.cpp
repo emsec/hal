@@ -6,17 +6,17 @@
 
 namespace hal
 {
-    PythonConsoleWidget::PythonConsoleWidget(QWidget* parent) : ContentWidget("Python Console", parent), m_console(new PythonConsole())
+    PythonConsoleWidget::PythonConsoleWidget(QWidget* parent) : ContentWidget("Python Console", parent), mConsole(new PythonConsole())
     {
-        m_content_layout->addWidget(m_console);
+        mContentLayout->addWidget(mConsole);
     }
 
-    void PythonConsoleWidget::setup_toolbar(Toolbar* Toolbar)
+    void PythonConsoleWidget::setupToolbar(Toolbar* Toolbar)
     {
         Q_UNUSED(Toolbar);
     }
 
-    QList<QShortcut*> PythonConsoleWidget::create_shortcuts()
+    QList<QShortcut*> PythonConsoleWidget::createShortcuts()
     {
         QList<QShortcut*> list;
         return list;

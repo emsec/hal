@@ -6,8 +6,8 @@ namespace hal
 {
     class PositionGenerator
     {
-        int n;  // size of square
-        int k;  // position on square edge
+        int mN;  // size of square
+        int mK;  // position on square edge
     public:
         PositionGenerator();
 

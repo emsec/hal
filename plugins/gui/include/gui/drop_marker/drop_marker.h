@@ -32,19 +32,19 @@ namespace hal
     class DropMarker : public QFrame
     {
         Q_OBJECT
-        Q_PROPERTY(int fixed_width READ fixed_width WRITE set_fixed_width)
-        Q_PROPERTY(int fixed_height READ fixed_height WRITE set_fixed_height)
+        Q_PROPERTY(int fixedWidth READ fixedWidth WRITE setFixedWidth)
+        Q_PROPERTY(int fixedHeight READ fixedHeight WRITE setFixedHeight)
 
     public:
         DropMarker(Qt::Orientation orientation, QWidget* parent = nullptr);
 
-        int fixed_width();
-        int fixed_height();
+        int fixedWidth();
+        int fixedHeight();
 
-        void set_fixed_width(int width);
-        void set_fixed_height(int height);
+        void setFixedWidth(int width);
+        void setFixedHeight(int height);
 
-        void set_end_value(int value);
+        void setEndValue(int value);
 
         void expand();
         void collapse();
@@ -52,11 +52,11 @@ namespace hal
         void reset();
 
     private:
-        QPropertyAnimation* m_animation;
+        QPropertyAnimation* mAnimation;
 
-        Qt::Orientation m_orientation;
+        Qt::Orientation mOrientation;
 
-        int m_fixed_width;
-        int m_fixed_height;
+        int mFixedWidth;
+        int mFixedHeight;
     };
 }

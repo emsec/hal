@@ -73,7 +73,7 @@ namespace hal {
     void DetailsGeneralModel::additionalInformation(Gate* g)
     {
         const Module* parentMod = nullptr;
-        for (const Module* m : g_netlist->get_modules())
+        for (const Module* m : gNetlist->get_modules())
         {
             if (m->contains_gate(g))
             {
@@ -137,7 +137,7 @@ namespace hal {
         InputDialog ipd("Change "+dgme.lcLabel(), "New "+dgme.lcLabel(), dgme.textValue());
         if (ipd.exec() == QDialog::Accepted)
         {
-            mContent.at(mContextIndex).setValue(ipd.text_value());
+            mContent.at(mContextIndex).setValue(ipd.textValue());
             Q_EMIT requireUpdate(mId);
         }
     }
@@ -151,9 +151,9 @@ namespace hal {
             if (!mGetParentModule) return;
             Module* parMod = mGetParentModule();
             if (!parMod) return;
-            g_selection_relay->clear();
-            g_selection_relay->m_selected_modules.insert(parMod->get_id());
-            g_selection_relay->relay_selection_changed(this);
+            gSelectionRelay->clear();
+            gSelectionRelay->mSelectedModules.insert(parMod->get_id());
+            gSelectionRelay->relaySelectionChanged(this);
         }
     }
 

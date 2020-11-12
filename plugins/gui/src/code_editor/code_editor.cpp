@@ -13,40 +13,40 @@ namespace hal
 {
 
     CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent),
-          m_scrollbar(new CodeEditorScrollbar(this)),
-          m_line_number_area(new LineNumberArea(this)),
-          m_minimap(new CodeEditorMinimap(this)),
-          m_animation(new QPropertyAnimation(m_scrollbar, "value", this))
+          mScrollbar(new CodeEditorScrollbar(this)),
+          mLineNumberArea(new LineNumberArea(this)),
+          mMinimap(new CodeEditorMinimap(this)),
+          mAnimation(new QPropertyAnimation(mScrollbar, "value", this))
     {
-        connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::handle_block_count_changed);
-        connect(this, &CodeEditor::updateRequest, this, &CodeEditor::update_line_number_area);
-        connect(this, &CodeEditor::updateRequest, this, &CodeEditor::update_minimap);
+        connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::handleBlockCountChanged);
+        connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumberArea);
+        connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateMinimap);
 
-        m_line_highlight_enabled = g_settings_manager->get("python/highlight_current_line").toBool();
-        if (m_line_highlight_enabled)
+        mLineHighlightEnabled = gSettingsManager->get("python/highlightCurrentLine").toBool();
+        if (mLineHighlightEnabled)
         {
-            connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlight_current_line);
+            connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
         }
-        m_line_numbers_enabled = g_settings_manager->get("python/line_numbers").toBool();
-        m_line_wrap_enabled = g_settings_manager->get("python/line_wrap").toBool();
-        m_minimap_enabled = g_settings_manager->get("python/minimap").toBool();
+        mLineNumbersEnabled = gSettingsManager->get("python/line_numbers").toBool();
+        mLineWrapEnabled = gSettingsManager->get("python/line_wrap").toBool();
+        mMinimapEnabled = gSettingsManager->get("python/minimap").toBool();
 
-        connect(g_settings_relay, &SettingsRelay::setting_changed, this, &CodeEditor::handle_global_setting_changed);
+        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &CodeEditor::handleGlobalSettingChanged);
 
-        setVerticalScrollBar(m_scrollbar);
-        m_scrollbar->set_minimap_scrollbar(m_minimap->scrollbar());
-        m_minimap->scrollbar()->set_scrollbar(m_scrollbar);
+        setVerticalScrollBar(mScrollbar);
+        mScrollbar->setMinimapScrollbar(mMinimap->scrollbar());
+        mMinimap->scrollbar()->setScrollbar(mScrollbar);
 
-        m_scrollbar->setContextMenuPolicy(Qt::NoContextMenu);
+        mScrollbar->setContextMenuPolicy(Qt::NoContextMenu);
         horizontalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
-        m_animation->setDuration(200);
+        mAnimation->setDuration(200);
 
-        setLineWrapMode(m_line_wrap_enabled ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+        setLineWrapMode(mLineWrapEnabled ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
         setFrameStyle(QFrame::NoFrame);
 
         ensurePolished();
-        update_layout();
+        updateLayout();
 
         //installEventFilter(this);
 
@@ -73,19 +73,19 @@ namespace hal
         return false;
     }
 
-    void CodeEditor::line_number_area_paint_event(QPaintEvent* event)
+    void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
     {
-        QPainter painter(m_line_number_area);
-        painter.setFont(m_line_number_font);
+        QPainter painter(mLineNumberArea);
+        painter.setFont(mLineNumberFont);
         QPen pen;
-        pen.setColor(m_line_number_color);
+        pen.setColor(mLineNumberColor);
         painter.setPen(pen);
 
         QTextBlock block = firstVisibleBlock();
         int block_number = block.blockNumber();
         qreal top        = blockBoundingGeometry(block).translated(contentOffset()).top();
         int bottom       = event->rect().bottom();
-        int width        = m_line_number_area->width() - m_line_number_area->right_offset();
+        int width        = mLineNumberArea->width() - mLineNumberArea->rightOffset();
 
         while (block.isValid() && top <= bottom)
         {
@@ -102,22 +102,22 @@ namespace hal
         }
     }
 
-    void CodeEditor::minimap_paint_event(QPaintEvent* event)
+    void CodeEditor::minimapPaintEvent(QPaintEvent* event)
     {
         Q_UNUSED(event)
 
         // MIGHT BE NEEDED LATER
     }
 
-    int CodeEditor::line_number_area_width()
+    int CodeEditor::lineNumberAreaWidth()
     {
         // ADD MID SPACE FOR COLOR INDICATORS ?
         // WARNING FUNCTION ONLY RETURNS CORRECT VALUES FOR MONOSPACE FONTS !
-        QFontMetrics fm(m_line_number_font);
-        return m_line_number_area->left_offset() + fm.width(QString::number(blockCount())) + m_line_number_area->right_offset();
+        QFontMetrics fm(mLineNumberFont);
+        return mLineNumberArea->leftOffset() + fm.width(QString::number(blockCount())) + mLineNumberArea->rightOffset();
     }
 
-    int CodeEditor::minimap_width()
+    int CodeEditor::minimapWidth()
     {
         // SET VIA STYLESHEET OR DYNAMICALLY ?
         return 160;
@@ -125,7 +125,7 @@ namespace hal
 
     void CodeEditor::resizeEvent(QResizeEvent* event)
     {
-        update_layout();
+        updateLayout();
 
         //    QTextBlock block = firstVisibleBlock();
         //    int first_visible_block = block.blockNumber();
@@ -145,21 +145,21 @@ namespace hal
         //    }
 
         //    // ADJUST TO PERCENTAGE OF LAST BLOCK ?
-        //    m_minimap->adjust_slider_height(first_visible_block, first_visible_block + additional_blocks);
+        //    mMinimap->adjustSliderHeight(first_visible_block, first_visible_block + additional_blocks);
 
         qreal ratio = viewport()->height() / blockBoundingGeometry(document()->firstBlock()).height();
-        m_minimap->adjust_slider_height(ratio);
+        mMinimap->adjustSliderHeight(ratio);
 
         QPlainTextEdit::resizeEvent(event);
     }
 
-    void CodeEditor::clear_line_highlight()
+    void CodeEditor::clearLineHighlight()
     {
         QList<QTextEdit::ExtraSelection> no_selections;
         setExtraSelections(no_selections);
     }
 
-    void CodeEditor::highlight_current_line()
+    void CodeEditor::highlightCurrentLine()
     {
         /*
          * Qt doesn't want to highlight blocks in line-wrap mode (even if the docs
@@ -178,7 +178,7 @@ namespace hal
         {
             QTextEdit::ExtraSelection selection;
 
-            selection.format.setBackground(m_current_line_background);
+            selection.format.setBackground(mCurrentLineBackground);
             selection.format.setProperty(QTextFormat::FullWidthSelection, true);
             selection.cursor = cursor;
             extra_selections.append(selection);
@@ -191,66 +191,66 @@ namespace hal
         setExtraSelections(extra_selections);
     }
 
-    void CodeEditor::handle_block_count_changed(int new_block_count)
+    void CodeEditor::handleBlockCountChanged(int new_block_count)
     {
         Q_UNUSED(new_block_count);
 
-        update_layout();
+        updateLayout();
 
         qreal ratio = viewport()->height() / blockBoundingGeometry(document()->firstBlock()).height();
-        m_minimap->adjust_slider_height(ratio);
+        mMinimap->adjustSliderHeight(ratio);
     }
 
-    void CodeEditor::update_line_number_area(const QRect& rect, int dy)
+    void CodeEditor::updateLineNumberArea(const QRect& rect, int dy)
     {
         Q_UNUSED(rect)
         Q_UNUSED(dy)
 
-        m_line_number_area->update();
+        mLineNumberArea->update();
     }
 
-    void CodeEditor::update_minimap(const QRect& rect, int dy)
+    void CodeEditor::updateMinimap(const QRect& rect, int dy)
     {
         Q_UNUSED(rect)
         Q_UNUSED(dy)
 
-        m_minimap->update();
+        mMinimap->update();
     }
 
-    void CodeEditor::handle_global_setting_changed(void* sender, const QString& key, const QVariant& value)
+    void CodeEditor::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
     {
         Q_UNUSED(sender);
-        if (key == "python/highlight_current_line")
+        if (key == "python/highlightCurrentLine")
         {
             bool enable = value.toBool();
-            if (enable == m_line_highlight_enabled)
+            if (enable == mLineHighlightEnabled)
                 return;
-            m_line_highlight_enabled = enable;
+            mLineHighlightEnabled = enable;
             if (enable)
             {
-                connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlight_current_line);
-                highlight_current_line();
+                connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+                highlightCurrentLine();
             }
             else
             {
-                disconnect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlight_current_line);
-                clear_line_highlight();
+                disconnect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+                clearLineHighlight();
             }
         }
         else if (key == "python/line_numbers")
         {
-            m_line_numbers_enabled = value.toBool();
-            update_layout();
+            mLineNumbersEnabled = value.toBool();
+            updateLayout();
         }
         else if (key == "python/line_wrap")
         {
-            m_line_wrap_enabled = value.toBool();
-            setLineWrapMode(m_line_wrap_enabled ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+            mLineWrapEnabled = value.toBool();
+            setLineWrapMode(mLineWrapEnabled ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
         }
         else if (key == "python/minimap")
         {
-            m_minimap_enabled = value.toBool();
-            update_layout();
+            mMinimapEnabled = value.toBool();
+            updateLayout();
         }
     }
 
@@ -262,29 +262,29 @@ namespace hal
         moveCursor(QTextCursor::Start);
         // SET COLORS VIA STYLESHEET ?
         QColor color            = QColor(12, 15, 19);
-        QColor background_color = QColor(255, 255, 0);
+        QColor mBackgroundColor = QColor(255, 255, 0);
 
         while (find(string))
         {
             QTextEdit::ExtraSelection extra;
             extra.format.setForeground(QBrush(color));
-            extra.format.setBackground(background_color);
+            extra.format.setBackground(mBackgroundColor);
             extra.cursor = textCursor();
             extraSelections.append(extra);
         }
         setExtraSelections(extraSelections);
     }
 
-    void CodeEditor::toggle_line_numbers()
+    void CodeEditor::toggleLineNumbers()
     {
-        m_line_numbers_enabled = !m_line_numbers_enabled;
-        update_layout();
+        mLineNumbersEnabled = !mLineNumbersEnabled;
+        updateLayout();
     }
 
-    void CodeEditor::toggle_minimap()
+    void CodeEditor::toggleMinimap()
     {
-        m_minimap_enabled = !m_minimap_enabled;
-        update_layout();
+        mMinimapEnabled = !mMinimapEnabled;
+        updateLayout();
     }
 
     int CodeEditor::first_visible_block()
@@ -292,13 +292,13 @@ namespace hal
         return firstVisibleBlock().blockNumber();
     }
 
-    int CodeEditor::visible_block_count()
+    int CodeEditor::visibleBlockCount()
     {
         // MIGHT BE NEEDED LATER, ADDED RETURN VALUE TO AVOID WARNING
         return 0;
     }
 
-    void CodeEditor::center_on_line(const int number)
+    void CodeEditor::centerOnLine(const int number)
     {
         int total = document()->lineCount();
 
@@ -306,9 +306,9 @@ namespace hal
             return;
 
         //    int hidden = verticalScrollBar()->maximum() - verticalScrollBar()->minimum();
-        //    int visible = total - hidden;
+        //    int mVisible = total - hidden;
 
-        //    int value = number - (visible / 2);
+        //    int value = number - (mVisible / 2);
 
         //    if (value < 0)
         //        value = 0;
@@ -318,108 +318,108 @@ namespace hal
 
         //verticalScrollBar()->setValue(number); // CENTER ?
 
-        if (m_animation->state() == QPropertyAnimation::Running)
-            m_animation->stop();
+        if (mAnimation->state() == QPropertyAnimation::Running)
+            mAnimation->stop();
 
-        m_animation->setStartValue(verticalScrollBar()->value());
-        m_animation->setEndValue(number);
-        m_animation->start();
+        mAnimation->setStartValue(verticalScrollBar()->value());
+        mAnimation->setEndValue(number);
+        mAnimation->start();
     }
 
-    void CodeEditor::handle_wheel_event(QWheelEvent* event)
+    void CodeEditor::handleWheelEvent(QWheelEvent* event)
     {
         QPlainTextEdit::wheelEvent(event);
     }
 
     CodeEditorMinimap* CodeEditor::minimap()
     {
-        return m_minimap;
+        return mMinimap;
     }
 
-    QFont CodeEditor::line_number_font() const
+    QFont CodeEditor::lineNumberFont() const
     {
-        return m_line_number_font;
+        return mLineNumberFont;
     }
 
-    QColor CodeEditor::line_number_color() const
+    QColor CodeEditor::lineNumberColor() const
     {
-        return m_line_number_color;
+        return mLineNumberColor;
     }
 
-    QColor CodeEditor::line_number_background() const
+    QColor CodeEditor::lineNumberBackground() const
     {
-        return m_line_number_background;
+        return mLineNumberBackground;
     }
 
-    QColor CodeEditor::line_number_highlight_color() const
+    QColor CodeEditor::lineNumberHighlightColor() const
     {
-        return m_line_number_highlight_color;
+        return mLineNumberHighlightColor;
     }
 
-    QColor CodeEditor::line_number_highlight_background() const
+    QColor CodeEditor::lineNumberHighlightBackground() const
     {
-        return m_line_number_highlight_background;
+        return mLineNumberHighlightBackground;
     }
 
-    QColor CodeEditor::current_line_background() const
+    QColor CodeEditor::currentLineBackground() const
     {
-        return m_current_line_background;
+        return mCurrentLineBackground;
     }
 
-    void CodeEditor::set_line_number_font(QFont& font)
+    void CodeEditor::setLineNumberFont(QFont& font)
     {
-        m_line_number_font = font;
+        mLineNumberFont = font;
     }
 
-    void CodeEditor::set_line_number_color(QColor& color)
+    void CodeEditor::setLineNumberColor(QColor& color)
     {
-        m_line_number_color = color;
+        mLineNumberColor = color;
     }
 
-    void CodeEditor::set_line_number_background(QColor& color)
+    void CodeEditor::setLineNumberBackground(QColor& color)
     {
-        m_line_number_background = color;
+        mLineNumberBackground = color;
     }
 
-    void CodeEditor::set_line_number_highlight_color(QColor& color)
+    void CodeEditor::setLineNumberHighlightColor(QColor& color)
     {
-        m_line_number_highlight_color = color;
+        mLineNumberHighlightColor = color;
     }
 
-    void CodeEditor::set_line_number_highlight_background(QColor& color)
+    void CodeEditor::setLineNumberHighlightBackground(QColor& color)
     {
-        m_line_number_highlight_background = color;
+        mLineNumberHighlightBackground = color;
     }
 
-    void CodeEditor::set_current_line_background(QColor& color)
+    void CodeEditor::setCurrentLineBackground(QColor& color)
     {
-        m_current_line_background = color;
+        mCurrentLineBackground = color;
     }
 
-    void CodeEditor::update_layout()
+    void CodeEditor::updateLayout()
     {
         int left_margin = 0;
         int right_margin = 0;
 
         QRect cr = contentsRect();
 
-        if (m_line_numbers_enabled)
+        if (mLineNumbersEnabled)
         {
-            left_margin = line_number_area_width();
-            m_line_number_area->setGeometry(QRect(cr.left(), cr.top(), line_number_area_width(), viewport()->height()));
-            m_line_number_area->show();
+            left_margin = lineNumberAreaWidth();
+            mLineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), viewport()->height()));
+            mLineNumberArea->show();
         }
         else
-            m_line_number_area->hide();
+            mLineNumberArea->hide();
 
-        if (m_minimap_enabled)
+        if (mMinimapEnabled)
         {
-            right_margin = minimap_width();
-            m_minimap->setGeometry(QRect(cr.right() - minimap_width(), cr.top(), minimap_width(), viewport()->height()));
-            m_minimap->show();
+            right_margin = minimapWidth();
+            mMinimap->setGeometry(QRect(cr.right() - minimapWidth(), cr.top(), minimapWidth(), viewport()->height()));
+            mMinimap->show();
         }
         else
-            m_minimap->hide();
+            mMinimap->hide();
 
         setViewportMargins(left_margin, 0, right_margin, 0);
     }

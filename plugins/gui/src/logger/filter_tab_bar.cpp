@@ -4,19 +4,19 @@
 
 namespace hal
 {
-    FilterTabBar::FilterTabBar() : m_dialog(this)
+    FilterTabBar::FilterTabBar() : mDialog(this)
     {
-        m_button.setText("+");
-        m_button.setAutoRaise(true);
-        connect(&m_button, SIGNAL(clicked()), &m_dialog, SLOT(exec()));
+        mButton.setText("+");
+        mButton.setAutoRaise(true);
+        connect(&mButton, SIGNAL(clicked()), &mDialog, SLOT(exec()));
 
         setExpanding(false);
         //setTabsClosable(true);
         addTab("Unfiltered");
-        m_filter_items.append(nullptr);
+        mFilterItems.append(nullptr);
         addTab("New Filter");
         setTabEnabled(1, false);
-        setTabButton(1, QTabBar::RightSide, &m_button);
+        setTabButton(1, QTabBar::RightSide, &mButton);
     }
 
     FilterTabBar::~FilterTabBar()
@@ -26,11 +26,11 @@ namespace hal
     void FilterTabBar::addNewFilter(QString name, FilterItem* item)
     {
         insertTab(count() - 1, name);
-        m_filter_items.append(item);
+        mFilterItems.append(item);
     }
 
-    FilterItem* FilterTabBar::get_current_filter()
+    FilterItem* FilterTabBar::getCurrentFilter()
     {
-        return m_filter_items.value(this->currentIndex());
+        return mFilterItems.value(this->currentIndex());
     }
 }

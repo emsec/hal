@@ -35,13 +35,13 @@ namespace hal
         ~SettingsManager();
         QVariant get(const QString& key);
         QVariant get(const QString& key, const QVariant& defaultVal);
-        QVariant get_default(const QString& key);
+        QVariant getDefault(const QString& key);
         QVariant reset(const QString& key);
         void update(const QString& key, const QVariant& value);
         void sync();
 
     private:
-        QSettings* m_settings;
-        QSettings* m_defaults;
+        QSettings* mSettings;
+        QSettings* mDefaults;
     };
 }

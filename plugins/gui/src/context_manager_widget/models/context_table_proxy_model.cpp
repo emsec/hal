@@ -8,7 +8,7 @@ namespace hal
 {
     ContextTableProxyModel::ContextTableProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
     {
-        m_filter_expression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+        mFilterExpression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
     }
 
     bool ContextTableProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
@@ -19,7 +19,7 @@ namespace hal
         const QString& context_name = context_name_index.data().toString();
         const QString& context_date = context_date_index.data().toString();
 
-        if(m_filter_expression.match(context_name).hasMatch() || m_filter_expression.match(context_date).hasMatch())
+        if(mFilterExpression.match(context_name).hasMatch() || mFilterExpression.match(context_date).hasMatch())
             return true;
         else
             return false;
@@ -33,12 +33,12 @@ namespace hal
         if(leftData.userType() == QMetaType::QDateTime)
             return leftData.toDateTime() > rightData.toDateTime();
         else
-            return !(gui_utility::compare(gui_utility::sort_mechanism::natural, leftData.toString(), rightData.toString()));
+            return !(gui_utility::compare(gui_utility::mSortMechanism::natural, leftData.toString(), rightData.toString()));
     }
 
-    void ContextTableProxyModel::handle_filter_text_changed(const QString& filter_text)
+    void ContextTableProxyModel::handleFilterTextChanged(const QString& filter_text)
     {
-        m_filter_expression.setPattern(filter_text);
+        mFilterExpression.setPattern(filter_text);
         invalidateFilter();
     }
 }

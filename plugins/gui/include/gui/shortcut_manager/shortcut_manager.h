@@ -36,8 +36,8 @@ namespace hal
         explicit ShortcutManager(QObject* parent = nullptr);
 
     private:
-        QShortcut* m_open_file;
-        QShortcut* m_close_file;
-        QShortcut* m_save;
+        QShortcut* mOpenFile;
+        QShortcut* mCloseFile;
+        QShortcut* mSave;
     };
 }

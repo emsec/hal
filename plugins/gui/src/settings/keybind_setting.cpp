@@ -15,46 +15,46 @@
 
 namespace hal
 {
-    KeybindSetting::KeybindSetting(const QString& key, const QString& title, const QString& description, QWidget *parent) : SettingsWidget(key, parent)
+    KeybindSetting::KeybindSetting(const QString& key, const QString& title, const QString& mDescription, QWidget *parent) : SettingsWidget(key, parent)
     {
-        m_labels.append(QPair<QLabel*, QString>(m_name, title));
+        mLabels.append(QPair<QLabel*, QString>(mName, title));
 
         QVBoxLayout* layout = new QVBoxLayout();
-        m_container->addLayout(layout);
+        mContainer->addLayout(layout);
 
         QLabel* label = new QLabel();
         layout->addWidget(label);
 
-        m_KeybindEdit = new KeybindEdit(this);
+        mKeybindEdit = new KeybindEdit(this);
         //UniqueStringValidator* v = new UniqueStringValidator(); // TODO
-        //m_KeybindEdit->add_validator(v);
-        connect(m_KeybindEdit, &KeybindEdit::editingFinished, this, &KeybindSetting::on_keybind_changed);
-        connect(m_KeybindEdit, &KeybindEdit::edit_rejected, this, &KeybindSetting::on_KeybindEdit_rejected);
-        layout->addWidget(m_KeybindEdit);
+        //mKeybindEdit->addValidator(v);
+        connect(mKeybindEdit, &KeybindEdit::editingFinished, this, &KeybindSetting::onKeybindChanged);
+        connect(mKeybindEdit, &KeybindEdit::editRejected, this, &KeybindSetting::onKeybindEditRejected);
+        layout->addWidget(mKeybindEdit);
 
-        m_labels.append(QPair<QLabel*, QString>(label, description));
+        mLabels.append(QPair<QLabel*, QString>(label, mDescription));
     }
 
     void KeybindSetting::load(const QVariant& value)
     {
-        m_KeybindEdit->setKeySequence(value.toString()); // auto-cast
+        mKeybindEdit->setKeySequence(value.toString()); // auto-cast
     }
 
     QVariant KeybindSetting::value()
     {
-        QKeySequence seq = m_KeybindEdit->keySequence();
+        QKeySequence seq = mKeybindEdit->keySequence();
         if (seq.isEmpty())
             return QVariant(QVariant::Invalid);
         return QVariant(seq); // auto-cast
     }
 
-    void KeybindSetting::on_keybind_changed()
+    void KeybindSetting::onKeybindChanged()
     {
-       this->trigger_setting_updated();
+       this->triggerSettingUpdated();
     }
 
-    void KeybindSetting::on_KeybindEdit_rejected()
+    void KeybindSetting::onKeybindEditRejected()
     {
-        this->set_dirty(false);
+        this->setDirty(false);
     }
 }

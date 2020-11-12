@@ -34,10 +34,10 @@ NetLayoutDirection::NetLayoutDirection(int idir)
     : mDir(numberToDirection(idir))
 {;}
 
-NetLayoutDirection::dir_t NetLayoutDirection::numberToDirection(int idir)
+NetLayoutDirection::DirectionType NetLayoutDirection::numberToDirection(int idir)
 {
     if (idir < Left || idir > MaxDir) return Undefined;
-    return static_cast<dir_t>(idir);
+    return static_cast<DirectionType>(idir);
 }
 
 NetLayoutDirection NetLayoutDirection::operator++(int)
@@ -208,7 +208,7 @@ QGraphicsLineItem* NetLayoutWire::graphicsFactory() const
     return retval;
 }
 
-NetLayoutPoint NetLayoutWire::endPoint(point_t pnt) const
+NetLayoutPoint NetLayoutWire::endPoint(WirePointType pnt) const
 {
     if (pnt == SourcePoint) return mPoint;
     return NetLayoutPoint(static_cast<QPoint>(mPoint)+mDir.step(!mIsEndpoint));

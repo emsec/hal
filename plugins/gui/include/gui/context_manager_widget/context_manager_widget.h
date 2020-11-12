@@ -47,111 +47,111 @@ namespace hal
     class ContextManagerWidget : public ContentWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QString disabled_icon_style READ disabled_icon_style WRITE set_disabled_icon_style)
-        Q_PROPERTY(QString new_view_icon_path READ new_view_icon_path WRITE set_new_view_icon_path)
-        Q_PROPERTY(QString new_view_icon_style READ new_view_icon_style WRITE set_new_view_icon_style)
-        Q_PROPERTY(QString rename_icon_path READ rename_icon_path WRITE set_rename_icon_path)
-        Q_PROPERTY(QString rename_icon_style READ rename_icon_style WRITE set_rename_icon_style)
-        Q_PROPERTY(QString delete_icon_path READ delete_icon_path WRITE set_delete_icon_path)
-        Q_PROPERTY(QString delete_icon_style READ delete_icon_style WRITE set_delete_icon_style)
-        Q_PROPERTY(QString duplicate_icon_path READ duplicate_icon_path WRITE set_duplicate_icon_path)
-        Q_PROPERTY(QString duplicate_icon_style READ duplicate_icon_style WRITE set_duplicate_icon_style)
-        Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
-        Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
-        Q_PROPERTY(QString search_icon_path READ search_icon_path WRITE set_search_icon_path)
-        Q_PROPERTY(QString search_icon_style READ search_icon_style WRITE set_search_icon_style)
+        Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString newViewIconPath READ newViewIconPath WRITE setNewViewIconPath)
+        Q_PROPERTY(QString newViewIconStyle READ newViewIconStyle WRITE setNewViewIconStyle)
+        Q_PROPERTY(QString renameIconPath READ renameIconPath WRITE setRenameIconPath)
+        Q_PROPERTY(QString renameIconStyle READ renameIconStyle WRITE setRenameIconStyle)
+        Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath)
+        Q_PROPERTY(QString deleteIconStyle READ deleteIconStyle WRITE setDeleteIconStyle)
+        Q_PROPERTY(QString duplicateIconPath READ duplicateIconPath WRITE setDuplicateIconPath)
+        Q_PROPERTY(QString duplicateIconStyle READ duplicateIconStyle WRITE setDuplicateIconStyle)
+        Q_PROPERTY(QString openIconPath READ openIconPath WRITE setOpenIconPath)
+        Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
+        Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
 
     public:
         ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
-        void select_view_context(GraphContext* context);
+        void selectViewContext(GraphContext* context);
 
-        virtual void setup_toolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual void setupToolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
 
-        QString disabled_icon_style() const;
-        QString new_view_icon_path() const;
-        QString new_view_icon_style() const;
-        QString rename_icon_path() const;
-        QString rename_icon_style() const;
-        QString delete_icon_path() const;
-        QString delete_icon_style() const;
-        QString duplicate_icon_path() const;
-        QString duplicate_icon_style() const;
-        QString open_icon_path() const;
-        QString open_icon_style() const;
-        QString search_icon_path() const;
-        QString search_icon_style() const;
+        QString disabledIconStyle() const;
+        QString newViewIconPath() const;
+        QString newViewIconStyle() const;
+        QString renameIconPath() const;
+        QString renameIconStyle() const;
+        QString deleteIconPath() const;
+        QString deleteIconStyle() const;
+        QString duplicateIconPath() const;
+        QString duplicateIconStyle() const;
+        QString openIconPath() const;
+        QString openIconStyle() const;
+        QString searchIconPath() const;
+        QString searchIconStyle() const;
 
-        void set_disabled_icon_style(const QString &path);
-        void set_new_view_icon_path(const QString &path);
-        void set_new_view_icon_style(const QString &style);
-        void set_rename_icon_path(const QString &path);
-        void set_rename_icon_style(const QString &style);
-        void set_delete_icon_path(const QString &path);
-        void set_delete_icon_style(const QString &style);
-        void set_duplicate_icon_path(const QString &path);
-        void set_duplicate_icon_style(const QString &style);
-        void set_open_icon_path(const QString &path);
-        void set_open_icon_style(const QString &style);
-        void set_search_icon_path(const QString &path);
-        void set_search_icon_style(const QString &style);
+        void setDisabledIconStyle(const QString &path);
+        void setNewViewIconPath(const QString &path);
+        void setNewViewIconStyle(const QString &style);
+        void setRenameIconPath(const QString &path);
+        void setRenameIconStyle(const QString &style);
+        void setDeleteIconPath(const QString &path);
+        void setDeleteIconStyle(const QString &style);
+        void setDuplicateIconPath(const QString &path);
+        void setDuplicateIconStyle(const QString &style);
+        void setOpenIconPath(const QString &path);
+        void setOpenIconStyle(const QString &style);
+        void setSearchIconPath(const QString &path);
+        void setSearchIconStyle(const QString &style);
 
     public Q_SLOTS:
-        //void handle_context_created(GraphContext* context);
-        //void handle_context_renamed(GraphContext* context);
-        //void handle_context_removed(GraphContext* context);
+        //void handleContextCreated(GraphContext* context);
+        //void handleContextRenamed(GraphContext* context);
+        //void handleContextRemoved(GraphContext* context);
 
     private:
-        GraphTabWidget* m_tab_view;
+        GraphTabWidget* mTabView;
 
-        QTableView* m_context_table_view;
-        ContextTableModel* m_context_table_model;
-        ContextTableProxyModel* m_context_table_proxy_model;
+        QTableView* mContextTableView;
+        ContextTableModel* mContextTableModel;
+        ContextTableProxyModel* mContextTableProxyModel;
 
-        Searchbar m_searchbar;
+        Searchbar mSearchbar;
 
-        QString m_disabled_icon_style;
+        QString mDisabledIconStyle;
 
-        QAction* m_new_view_action;
-        QString m_new_view_icon_path;
-        QString m_new_view_icon_style;
+        QAction* mNewViewAction;
+        QString mNewViewIconPath;
+        QString mNewViewIconStyle;
 
-        QAction* m_rename_action;
-        QString m_rename_icon_path;
-        QString m_rename_icon_style;
+        QAction* mRenameAction;
+        QString mRenameIconPath;
+        QString mRenameIconStyle;
 
-        QAction* m_duplicate_action;
-        QString m_duplicate_icon_path;
-        QString m_duplicate_icon_style;
+        QAction* mDuplicateAction;
+        QString mDuplicateIconPath;
+        QString mDuplicateIconStyle;
 
-        QAction* m_delete_action;
-        QString m_delete_icon_path;
-        QString m_delete_icon_style;
+        QAction* mDeleteAction;
+        QString mDeleteIconPath;
+        QString mDeleteIconStyle;
 
-        QAction* m_open_action;
-        QString m_open_icon_path;
-        QString m_open_icon_style;
+        QAction* mOpenAction;
+        QString mOpenIconPath;
+        QString mOpenIconStyle;
 
-        QAction* m_search_action;
-        QString m_search_icon_path;
-        QString m_search_icon_style;
+        QAction* mSearchAction;
+        QString mSearchIconPath;
+        QString mSearchIconStyle;
 
-        void handle_create_context_clicked();
-        void handle_open_context_clicked();
-        void handle_rename_context_clicked();
-        void handle_duplicate_context_clicked();
-        void handle_delete_context_clicked();
+        void handleCreateContextClicked();
+        void handleOpenContextClicked();
+        void handleRenameContextClicked();
+        void handleDuplicateContextClicked();
+        void handleDeleteContextClicked();
 
-        void handle_context_menu_request(const QPoint& point);
-        void handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected);
-        void handle_filter_text_changed(const QString& filter_text);
+        void handleContextMenuRequest(const QPoint& point);
+        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+        void handleFilterTextChanged(const QString& filter_text);
 
-        void set_toolbar_buttons_enabled(bool enabled);
+        void setToolbarButtonsEnabled(bool enabled);
 
-        void toggle_searchbar();
+        void toggleSearchbar();
 
-        GraphContext* get_current_context();
+        GraphContext* getCurrentContext();
 
-        QList<QShortcut*> create_shortcuts() override;
+        QList<QShortcut*> createShortcuts() override;
     };
 }

@@ -22,32 +22,32 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        m_keyword_format.setForeground(m_keyword_color);
-        m_keyword_format.setFontItalic(false);
+        mKeywordFormat.setForeground(mKeywordColor);
+        mKeywordFormat.setFontItalic(false);
 
-        m_operator_format.setForeground(m_operator_color);
-        m_operator_format.setFontItalic(false);
+        mOperatorFormat.setForeground(mOperatorColor);
+        mOperatorFormat.setFontItalic(false);
 
-        m_brace_format.setForeground(m_brace_color);
-        m_brace_format.setFontItalic(false);
+        mBraceFormat.setForeground(mBraceColor);
+        mBraceFormat.setFontItalic(false);
 
-        m_defclass_format.setForeground(m_defclass_color);
-        m_defclass_format.setFontItalic(false);
+        mDefclassFormat.setForeground(mDefclassColor);
+        mDefclassFormat.setFontItalic(false);
 
-        m_self_format.setForeground(m_self_color);
-        m_self_format.setFontItalic(false);
+        mSelfFormat.setForeground(mSelfColor);
+        mSelfFormat.setFontItalic(false);
 
-        m_number_format.setForeground(m_number_color);
-        m_number_format.setFontItalic(false);
+        mNumberFormat.setForeground(mNumberColor);
+        mNumberFormat.setFontItalic(false);
 
-        m_single_quoted_string_format.setForeground(m_single_quoted_string_color);
-        m_single_quoted_string_format.setFontItalic(false);
+        mSingleQuotedStringFormat.setForeground(mSingleQuotedStringColor);
+        mSingleQuotedStringFormat.setFontItalic(false);
 
-        m_double_quoted_string_format.setForeground(m_double_quoted_string_color);
-        m_double_quoted_string_format.setFontItalic(false);
+        mDoubleQuotedStringFormat.setForeground(mDoubleQuotedStringColor);
+        mDoubleQuotedStringFormat.setFontItalic(false);
 
-        m_comment_format.setForeground(m_comment_color);
-        m_comment_format.setFontItalic(false);
+        mCommentFormat.setForeground(mCommentColor);
+        mCommentFormat.setFontItalic(false);
     }
 
     PythonQssAdapter* PythonQssAdapter::instance()
@@ -61,103 +61,103 @@ namespace hal
         return instance;
     }
 
-    QColor PythonQssAdapter::text_color() const
+    QColor PythonQssAdapter::textColor() const
     {
-        return m_text_color;
+        return mTextColor;
     }
 
-    QColor PythonQssAdapter::keyword_color() const
+    QColor PythonQssAdapter::keywordColor() const
     {
-        return m_keyword_color;
+        return mKeywordColor;
     }
 
     QColor PythonQssAdapter::operator_color() const
     {
-        return m_operator_color;
+        return mOperatorColor;
     }
 
-    QColor PythonQssAdapter::brace_color() const
+    QColor PythonQssAdapter::braceColor() const
     {
-        return m_brace_color;
+        return mBraceColor;
     }
 
-    QColor PythonQssAdapter::defclass_color() const
+    QColor PythonQssAdapter::defclassColor() const
     {
-        return m_defclass_color;
+        return mDefclassColor;
     }
 
-    QColor PythonQssAdapter::self_color() const
+    QColor PythonQssAdapter::selfColor() const
     {
-        return m_self_color;
+        return mSelfColor;
     }
 
-    QColor PythonQssAdapter::number_color() const
+    QColor PythonQssAdapter::numberColor() const
     {
-        return m_number_color;
+        return mNumberColor;
     }
 
-    QColor PythonQssAdapter::single_quoted_string_color() const
+    QColor PythonQssAdapter::singleQuotedStringColor() const
     {
-        return m_single_quoted_string_color;
+        return mSingleQuotedStringColor;
     }
 
-    QColor PythonQssAdapter::double_quoted_string_color() const
+    QColor PythonQssAdapter::doubleQuotedStringColor() const
     {
-        return m_double_quoted_string_color;
+        return mDoubleQuotedStringColor;
     }
 
-    QColor PythonQssAdapter::comment_color() const
+    QColor PythonQssAdapter::commentColor() const
     {
-        return m_comment_color;
+        return mCommentColor;
     }
 
-    void PythonQssAdapter::set_text_color(const QColor& color)
+    void PythonQssAdapter::setTextColor(const QColor& color)
     {
-        m_text_color = color;
+        mTextColor = color;
     }
 
-    void PythonQssAdapter::set_keyword_color(const QColor& color)
+    void PythonQssAdapter::setKeywordColor(const QColor& color)
     {
-        m_keyword_color = color;
+        mKeywordColor = color;
     }
 
-    void PythonQssAdapter::set_operator_color(const QColor& color)
+    void PythonQssAdapter::setOperatorColor(const QColor& color)
     {
-        m_operator_color = color;
+        mOperatorColor = color;
     }
 
-    void PythonQssAdapter::set_brace_color(const QColor& color)
+    void PythonQssAdapter::setBraceColor(const QColor& color)
     {
-        m_brace_color = color;
+        mBraceColor = color;
     }
 
-    void PythonQssAdapter::set_defclass_color(const QColor& color)
+    void PythonQssAdapter::setDefclassColor(const QColor& color)
     {
-        m_defclass_color = color;
+        mDefclassColor = color;
     }
 
-    void PythonQssAdapter::set_self_color(const QColor& color)
+    void PythonQssAdapter::setSelfColor(const QColor& color)
     {
-        m_self_color = color;
+        mSelfColor = color;
     }
 
-    void PythonQssAdapter::set_number_color(const QColor& color)
+    void PythonQssAdapter::setNumberColor(const QColor& color)
     {
-        m_number_color = color;
+        mNumberColor = color;
     }
 
-    void PythonQssAdapter::set_single_quoted_string_color(const QColor& color)
+    void PythonQssAdapter::setSingleQuotedStringColor(const QColor& color)
     {
-        m_single_quoted_string_color = color;
+        mSingleQuotedStringColor = color;
     }
 
-    void PythonQssAdapter::set_double_quoted_string_color(const QColor& color)
+    void PythonQssAdapter::setDoubleQuotedStringColor(const QColor& color)
     {
-        m_double_quoted_string_color = color;
+        mDoubleQuotedStringColor = color;
     }
 
-    void PythonQssAdapter::set_comment_color(const QColor& color)
+    void PythonQssAdapter::setCommentColor(const QColor& color)
     {
-        m_comment_color = color;
+        mCommentColor = color;
     }
 }

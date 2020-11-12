@@ -15,36 +15,36 @@
 
 namespace hal
 {
-    bool LoadedPluginItem::s_drag_in_progress = false;
-    QPoint LoadedPluginItem::s_drag_start_position;
+    bool LoadedPluginItem::sDragInProgress = false;
+    QPoint LoadedPluginItem::sDragStartPosition;
 
     LoadedPluginItem::LoadedPluginItem(const QString& name, QWidget* parent)
-        : QFrame(parent), m_horizontal_layout(new QHBoxLayout()), m_icon_label(new QLabel()), m_vertical_layout(new QVBoxLayout()), m_name_label(new QLabel()), m_description_label(new QLabel()),
-          m_animation(new QPropertyAnimation()), m_hover(false)
+        : QFrame(parent), mHorizontalLayout(new QHBoxLayout()), mIconLabel(new QLabel()), mVerticalLayout(new QVBoxLayout()), mNameLabel(new QLabel()), mDescriptionLabel(new QLabel()),
+          mAnimation(new QPropertyAnimation()), mHover(false)
     {
-        m_name = name;
+        mName = name;
         //    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-        m_horizontal_layout->setContentsMargins(0, 0, 0, 0);
-        m_horizontal_layout->setSpacing(0);
+        mHorizontalLayout->setContentsMargins(0, 0, 0, 0);
+        mHorizontalLayout->setSpacing(0);
 
-        //    m_icon_label->setObjectName("icon-label");
-        //    m_icon_label->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-        //    m_horizontal_layout->addWidget(m_icon_label);
-        //    m_horizontal_layout->setAlignment(m_icon_label, Qt::AlignTop);
+        //    mIconLabel->setObjectName("icon-label");
+        //    mIconLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+        //    mHorizontalLayout->addWidget(mIconLabel);
+        //    mHorizontalLayout->setAlignment(mIconLabel, Qt::AlignTop);
 
-        //    m_vertical_layout->setContentsMargins(0, 0, 0, 0);
-        //    m_vertical_layout->setSpacing(0);
+        //    mVerticalLayout->setContentsMargins(0, 0, 0, 0);
+        //    mVerticalLayout->setSpacing(0);
 
-        m_name_label->setObjectName("name-label");
-        m_name_label->setText(name);
-        //    m_description_label->setObjectName("description-label");
-        //    m_description_label->setText(description);
-        //    m_description_label->setWordWrap(true);
-        //    m_vertical_layout->addWidget(m_description_label);
+        mNameLabel->setObjectName("name-label");
+        mNameLabel->setText(name);
+        //    mDescriptionLabel->setObjectName("mDescription-label");
+        //    mDescriptionLabel->setText(mDescription);
+        //    mDescriptionLabel->setWordWrap(true);
+        //    mVerticalLayout->addWidget(mDescriptionLabel);
 
-        setLayout(m_horizontal_layout);
-        m_horizontal_layout->addWidget(m_name_label);
+        setLayout(mHorizontalLayout);
+        mHorizontalLayout->addWidget(mNameLabel);
 
         repolish();
     }
@@ -53,7 +53,7 @@ namespace hal
     {
         if (event->type() == QEvent::Enter)
         {
-            m_hover = true;
+            mHover = true;
             repolish();
         }
     }
@@ -62,32 +62,32 @@ namespace hal
     {
         if (event->type() == QEvent::Leave)
         {
-            if (s_drag_in_progress)
-                exec_drag();
+            if (sDragInProgress)
+                execDrag();
 
-            m_hover = false;
+            mHover = false;
             repolish();
         }
     }
 
     void LoadedPluginItem::mouseMoveEvent(QMouseEvent* event)
     {
-        if (!s_drag_in_progress)
+        if (!sDragInProgress)
             return;
         if (!(event->buttons() & Qt::LeftButton))
             return;
-        if ((event->pos() - s_drag_start_position).manhattanLength() < QApplication::startDragDistance())
+        if ((event->pos() - sDragStartPosition).manhattanLength() < QApplication::startDragDistance())
             return;
 
-        exec_drag();
+        execDrag();
     }
 
     void LoadedPluginItem::mousePressEvent(QMouseEvent* event)
     {
         if (event->button() == Qt::LeftButton)
         {
-            s_drag_in_progress    = true;
-            s_drag_start_position = event->pos();
+            sDragInProgress    = true;
+            sDragStartPosition = event->pos();
         }
         // SIGNAL CLICKED
         event->accept();
@@ -96,7 +96,7 @@ namespace hal
     void LoadedPluginItem::mouseReleaseEvent(QMouseEvent* event)
     {
         if (event->button() == Qt::LeftButton)
-            s_drag_in_progress = false;
+            sDragInProgress = false;
 
         // SIGNAL CLICKED
         event->accept();
@@ -109,69 +109,69 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        s->unpolish(m_icon_label);
-        s->polish(m_icon_label);
+        s->unpolish(mIconLabel);
+        s->polish(mIconLabel);
 
-        s->unpolish(m_name_label);
-        s->polish(m_name_label);
+        s->unpolish(mNameLabel);
+        s->polish(mNameLabel);
 
-        s->unpolish(m_description_label);
-        s->polish(m_description_label);
+        s->unpolish(mDescriptionLabel);
+        s->polish(mDescriptionLabel);
 
-        if (!m_icon_path.isEmpty())
-            m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(17, 17)));
+        if (!mIconPath.isEmpty())
+            mIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mIconStyle, mIconPath).pixmap(QSize(17, 17)));
     }
 
-    void LoadedPluginItem::exec_drag()
+    void LoadedPluginItem::execDrag()
     {
-        s_drag_in_progress   = false;
+        sDragInProgress   = false;
         QDrag* drag          = new QDrag(this);
         QMimeData* mime_data = new QMimeData();
-        mime_data->setData("hal/plugin_name", m_name_label->text().toUtf8());
+        mime_data->setData("hal/plugin_name", mNameLabel->text().toUtf8());
         mime_data->setData("hal/item_height", QString::number(height()).toUtf8());
         drag->setMimeData(mime_data);
         drag->setPixmap(grab());
         drag->setHotSpot(QPoint(drag->pixmap().width() / 2, drag->pixmap().height() / 2));
 
-        m_hover = false;
-        m_name_label->setText("");
+        mHover = false;
+        mNameLabel->setText("");
         repolish();
         drag->exec();
-        m_name_label->setText(m_name);
+        mNameLabel->setText(mName);
     }
 
     bool LoadedPluginItem::hover()
     {
-        return m_hover;
+        return mHover;
     }
 
-    QString LoadedPluginItem::icon_path()
+    QString LoadedPluginItem::iconPath()
     {
-        return m_icon_path;
+        return mIconPath;
     }
 
-    QString LoadedPluginItem::icon_style()
+    QString LoadedPluginItem::iconStyle()
     {
-        return m_icon_style;
+        return mIconStyle;
     }
 
     QString LoadedPluginItem::name()
     {
-        return m_name_label->text();
+        return mNameLabel->text();
     }
 
-    void LoadedPluginItem::set_hover_active(bool active)
+    void LoadedPluginItem::setHoverActive(bool active)
     {
-        m_hover = active;
+        mHover = active;
     }
 
-    void LoadedPluginItem::set_icon_path(const QString& path)
+    void LoadedPluginItem::setIconPath(const QString& path)
     {
-        m_icon_path = path;
+        mIconPath = path;
     }
 
-    void LoadedPluginItem::set_icon_style(const QString& style)
+    void LoadedPluginItem::setIconStyle(const QString& style)
     {
-        m_icon_style = style;
+        mIconStyle = style;
     }
 }

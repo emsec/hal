@@ -42,29 +42,29 @@ namespace hal
 
         //    bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
 
-        void append_item(ExpandingListButton* button, ExpandingListButton* parent_button = 0);
-        void select_button(ExpandingListButton* button);
-        void select_item(int index);
+        void appendItem(ExpandingListButton* button, ExpandingListButton* parentButton = 0);
+        void selectButton(ExpandingListButton* button);
+        void selectItem(int index);
 
         void repolish();
 
     Q_SIGNALS:
-        void button_selected(ExpandingListButton* button);
+        void buttonSelected(ExpandingListButton* button);
 
     public Q_SLOTS:
-        void handle_clicked();
+        void handleClicked();
 
     private:
-        QFrame* m_content;
-        QVBoxLayout* m_content_layout;
-        QFrame* m_spacer;
+        QFrame* mContent;
+        QVBoxLayout* mContentLayout;
+        QFrame* mSpacer;
 
-        QList<ExpandingListItem*> m_items;
+        QList<ExpandingListItem*> mItems;
 
-        ExpandingListButton* m_selected_button;
-        ExpandingListItem* m_extended_item;
+        ExpandingListButton* mSelectedButton;
+        ExpandingListItem* mExtendedItem;
 
-        int m_item_width;
-        int m_offset;
+        int mItemWidth;
+        int mOffset;
     };
 }

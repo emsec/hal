@@ -13,38 +13,38 @@
 
 namespace hal
 {
-    SliderSetting::SliderSetting(const QString& key, const QString& title, const int min, const int max, const QString& description, QWidget* parent) : SettingsWidget(key, parent)
+    SliderSetting::SliderSetting(const QString& key, const QString& title, const int min, const int max, const QString& mDescription, QWidget* parent) : SettingsWidget(key, parent)
     {
-        m_labels.append(QPair<QLabel*, QString>(m_name, title));
+        mLabels.append(QPair<QLabel*, QString>(mName, title));
 
         QHBoxLayout* layout = new QHBoxLayout();
-        m_container->addLayout(layout);
+        mContainer->addLayout(layout);
 
-        m_slider = new QSlider(Qt::Orientation::Horizontal, this);
-        m_slider->setMinimum(min);
-        m_slider->setMaximum(max);
-        connect(m_slider, &QSlider::valueChanged, this, &SliderSetting::on_slider_value_changed);
+        mSlider = new QSlider(Qt::Orientation::Horizontal, this);
+        mSlider->setMinimum(min);
+        mSlider->setMaximum(max);
+        connect(mSlider, &QSlider::valueChanged, this, &SliderSetting::onSliderValueChanged);
 
-        layout->addWidget(m_slider);
+        layout->addWidget(mSlider);
 
-        m_number = new QLabel(this);
-        layout ->addWidget(m_number);
+        mNumber = new QLabel(this);
+        layout ->addWidget(mNumber);
 
         QLabel* label = new QLabel();
         layout->addWidget(label);
 
-        m_labels.append(QPair<QLabel*, QString>(label, description));
+        mLabels.append(QPair<QLabel*, QString>(label, mDescription));
     }
 
     void SliderSetting::load(const QVariant& value)
     {
-        m_slider->setValue(value.toInt());
-        m_number->setText(value.toString());
+        mSlider->setValue(value.toInt());
+        mNumber->setText(value.toString());
     }
 
     QVariant SliderSetting::value()
     {
-        return QVariant(m_slider->value());
+        return QVariant(mSlider->value());
     }
 
     // void DropdownSetting::rollback()
@@ -52,9 +52,9 @@ namespace hal
 
     // }
 
-    void SliderSetting::on_slider_value_changed()
+    void SliderSetting::onSliderValueChanged()
     {
-        this->trigger_setting_updated();
-        m_number->setText(value().toString());
+        this->triggerSettingUpdated();
+        mNumber->setText(value().toString());
     }
 }

@@ -46,23 +46,23 @@ namespace hal
         explicit PluginScheduleWidget(QWidget* parent = nullptr);
 
     public Q_SLOTS:
-        void debug_stuff();
-        void handle_no_scheduled_plugins();
+        void debugStuff();
+        void handleNoScheduledPlugins();
 
     private:
-        QVBoxLayout* m_vertical_layout;
-        QFrame* m_searchbar_container;
-        QHBoxLayout* m_container_layout;
-        Searchbar* m_searchbar;
-        QHBoxLayout* m_horizontal_layout;
-        LabeledFrame* m_plugin_frame;
-        LabeledFrame* m_schedule_frame;
-        QWidget* m_schedule_frame_layout_container;
-        QHBoxLayout* m_horizontal_schedule_frame_layout;
-        QVBoxLayout* m_vertical_schedule_frame_layout;
-        NoScheduledPluginsWidget* m_NoScheduledPluginsWidget;
-        PluginArgumentsWidget* m_PluginArgumentsWidget;
-        ScheduledPluginsWidget* m_ScheduledPluginsWidget;
-        LoadedPluginsWidget* m_LoadedPluginsWidget;
+        QVBoxLayout* mVerticalLayout;
+        QFrame* mSearchbarContainer;
+        QHBoxLayout* mContainerLayout;
+        Searchbar* mSearchbar;
+        QHBoxLayout* mHorizontalLayout;
+        LabeledFrame* mPluginFrame;
+        LabeledFrame* mScheduleFrame;
+        QWidget* mScheduleFrameLayoutContainer;
+        QHBoxLayout* mHorizontalScheduleFrameLayout;
+        QVBoxLayout* mVerticalScheduleFrameLayout;
+        NoScheduledPluginsWidget* mNoScheduledPluginsWidget;
+        PluginArgumentsWidget* mPluginArgumentsWidget;
+        ScheduledPluginsWidget* mScheduledPluginsWidget;
+        LoadedPluginsWidget* mLoadedPluginsWidget;
     };
 }

@@ -54,25 +54,25 @@ namespace hal
         Qt::ItemFlags flags(const QModelIndex& index) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-        ModuleItem* get_item(const QModelIndex& index) const;
-        QModelIndex get_index(const ModuleItem* const item) const;
-        ModuleItem* get_item(const u32 module_id) const;
+        ModuleItem* getItem(const QModelIndex& index) const;
+        QModelIndex getIndex(const ModuleItem* const item) const;
+        ModuleItem* getItem(const u32 module_id) const;
 
         void init();
         void clear();
 
-        void add_module(const u32 id, const u32 parent_module);
-        void add_recursively(const std::vector<Module*>& modules);
+        void addModule(const u32 id, const u32 parent_module);
+        void addRecursively(const std::vector<Module*>& modules);
         void remove_module(const u32 id);
-        void update_module(const u32 id);
+        void updateModule(const u32 id);
 
-        bool is_modifying();
+        bool isModifying();
 
     private:
-        ModuleItem* m_top_ModuleItem;
+        ModuleItem* mTopModuleItem;
 
-        QMap<u32, ModuleItem*> m_ModuleItems;
+        QMap<u32, ModuleItem*> mModuleItems;
 
-        bool m_is_modifying;
+        bool mIsModifying;
     };
 }    // namespace hal

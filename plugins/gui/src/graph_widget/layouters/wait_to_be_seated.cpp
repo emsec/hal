@@ -7,9 +7,9 @@
 
 namespace hal
 {
-   WaitToBeSeatedEntry::WaitToBeSeatedEntry(node_type t, u32 id)
+   WaitToBeSeatedEntry::WaitToBeSeatedEntry(Node::NodeType t, u32 id)
    {
-       mNode = node{t,id};
+       mNode = Node(id,t);
    }
 
    void WaitToBeSeatedEntry::setPredecessorIds(const QMap<u32, WaitToBeSeatedEntry *>& gateMap)
@@ -19,13 +19,13 @@ namespace hal
        std::vector<Net*> inputNets;
        if (isModule())
        {
-           const Module* m = g_netlist->get_module_by_id(getId());
+           const Module* m = gNetlist->get_module_by_id(getId());
            if (m)
                inputNets  = m->get_input_nets();
        }
        else
        {
-           const Gate* g = g_netlist->get_gate_by_id(getId());
+           const Gate* g = gNetlist->get_gate_by_id(getId());
            if (g)
                inputNets  = g->get_fan_in_nets();
        }
@@ -51,7 +51,7 @@ namespace hal
 
    bool WaitToBeSeatedEntry::isModule() const
    {
-       return mNode.type == node_type::module && mNode.id > 0;
+       return mNode.isModule() && mNode.id() > 0;
    }
 
    //---------------------------------------------------
@@ -138,7 +138,7 @@ namespace hal
        append(wtse);
        if (wtse->isModule())
        {
-           const Module* m = g_netlist->get_module_by_id(wtse->getId());
+           const Module* m = gNetlist->get_module_by_id(wtse->getId());
            if (m)
            {
                for (const Gate* g : m->get_gates(nullptr,true))

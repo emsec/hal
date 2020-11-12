@@ -59,58 +59,58 @@ namespace hal
 
     public Q_SLOTS:
 
-        void handle_netlist_marked_global_input(Netlist* netlist, u32 associated_data);
-        void handle_netlist_marked_global_output(Netlist* netlist, u32 associated_data);
-        void handle_netlist_marked_global_inout(Netlist* netlist, u32 associated_data);
-        void handle_netlist_unmarked_global_input(Netlist* netlist, u32 associated_data);
-        void handle_netlist_unmarked_global_output(Netlist* netlist, u32 associated_data);
-        void handle_netlist_unmarked_global_inout(Netlist* netlist, u32 associated_data);
+        void handleNetlistMarkedGlobalInput(Netlist* netlist, u32 associated_data);
+        void handleNetlistMarkedGlobalOutput(Netlist* netlist, u32 associated_data);
+        void handleNetlistMarkedGlobalInout(Netlist* netlist, u32 associated_data);
+        void handleNetlistUnmarkedGlobalInput(Netlist* netlist, u32 associated_data);
+        void handleNetlistUnmarkedGlobalOutput(Netlist* netlist, u32 associated_data);
+        void handleNetlistUnmarkedGlobalInout(Netlist* netlist, u32 associated_data);
 
-        void handle_module_name_changed(Module* module);
-        void handle_submodule_added(Module* module, u32 associated_data);
-        void handle_submodule_removed(Module* module, u32 associated_data);
-        void handle_module_gate_assigned(Module* module, u32 associated_data);
-        void handle_module_gate_removed(Module* module, u32 associated_data);
-        void handle_module_input_port_name_changed(Module* module, u32 associated_data);
-        void handle_module_output_port_name_changed(Module* module, u32 associated_data);
-        void handle_module_type_changed(Module* module);
+        void handleModuleNameChanged(Module* module);
+        void handleSubmoduleAdded(Module* module, u32 associated_data);
+        void handleSubmoduleRemoved(Module* module, u32 associated_data);
+        void handleModuleGateAssigned(Module* module, u32 associated_data);
+        void handleModuleGateRemoved(Module* module, u32 associated_data);
+        void handleModuleInputPortNameChanged(Module* module, u32 associated_data);
+        void handleModuleOutputPortNameChanged(Module* module, u32 associated_data);
+        void handleModuleTypeChanged(Module* module);
 
-        void handle_net_name_changed(Net* net);
-        void handle_net_source_added(Net* net, const u32 src_gate_id);
-        void handle_net_source_removed(Net* net, const u32 src_gate_id);
-        void handle_net_destination_added(Net* net, const u32 dst_gate_id);
-        void handle_net_destination_removed(Net* net, const u32 dst_gate_id);
+        void handleNetNameChanged(Net* net);
+        void handleNetSourceAdded(Net* net, const u32 src_gate_id);
+        void handleNetSourceRemoved(Net* net, const u32 src_gate_id);
+        void handleNetDestinationAdded(Net* net, const u32 dst_gate_id);
+        void handleNetDestinationRemoved(Net* net, const u32 dst_gate_id);
 
     private:
-        GraphNavigationWidget* m_navigation_table;
+        GraphNavigationWidget* mNavigationTable;
 
-        QScrollArea* m_scroll_area;
-        QWidget* m_top_lvl_container;
-        QVBoxLayout* m_top_lvl_layout;
-        QVBoxLayout* m_content_layout;
+        QScrollArea* mScrollArea;
+        QWidget* mTopLvlContainer;
+        QVBoxLayout* mTopLvlLayout;
+        QVBoxLayout* mContentLayout;
 
-        QPushButton* m_general_info_button;
-        DetailsSectionWidget* m_inputPortsSection;
-        DetailsSectionWidget* m_outputPortsSection;
-        DetailsSectionWidget* m_dataFieldsSection;
+        QPushButton* mGeneralInfoButton;
+        DetailsSectionWidget* mInputPortsSection;
+        DetailsSectionWidget* mOutputPortsSection;
+        DetailsSectionWidget* mDataFieldsSection;
 
         QTableView* mGeneralView;
         DetailsGeneralModel* mGeneralModel;
 
-        QTableWidget* m_input_ports_table;
+        QTableWidget* mInputPortsTable;
 
-        QTableWidget* m_output_ports_table;
+        QTableWidget* mOutputPortsTable;
 
-        DataFieldsTable* m_dataFieldsTable;
+        DataFieldsTable* mDataFieldsTable;
 
         //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
-        void handle_input_ports_table_menu_requested(const QPoint& pos);
-        void handle_output_ports_table_menu_requested(const QPoint& pos);
+        void handleInputPortsTableMenuRequested(const QPoint& pos);
+        void handleOutputPortsTableMenuRequested(const QPoint& pos);
 
         //jump logic
-        void handle_output_net_item_clicked(const QTableWidgetItem* item);
-        void handle_input_net_item_clicked(const QTableWidgetItem* item);
-        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+        void handleOutputNetItemClicked(const QTableWidgetItem* item);
+        void handleInputNetItemClicked(const QTableWidgetItem* item);
+        void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates);
 
     };
 }    // namespace hal

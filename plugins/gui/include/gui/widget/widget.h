@@ -39,7 +39,7 @@ namespace hal
         void setParent(QWidget* parent);
 
     Q_SIGNALS:
-        void parent_set_to(QWidget* parent);
+        void parentSetTo(QWidget* parent);
         void hidden();
         void shown();
 

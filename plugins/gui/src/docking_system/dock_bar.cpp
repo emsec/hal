@@ -17,14 +17,14 @@
 
 namespace hal
 {
-    QPoint DockBar::s_drag_start_position;
-    DockButton* DockBar::s_drag_button = nullptr;
-    int DockBar::s_begin_drop_range     = 0;
-    int DockBar::s_end_drop_range       = 0;
-    int DockBar::s_drop_spacing         = 0;
-    DockButton* DockBar::s_move_marker = nullptr;
+    QPoint DockBar::sDragStartPosition;
+    DockButton* DockBar::sDragButton = nullptr;
+    int DockBar::sBeginDropRange     = 0;
+    int DockBar::sEndDropRange       = 0;
+    int DockBar::sDropSpacing         = 0;
+    DockButton* DockBar::sMoveMarker = nullptr;
 
-    DockBar::DockBar(Qt::Orientation orientation, button_orientation b_orientation, QWidget* parent) : QFrame(parent), m_button_orientation(b_orientation)
+    DockBar::DockBar(Qt::Orientation orientation, button_orientation b_orientation, QWidget* parent) : QFrame(parent), mButtonOrientation(b_orientation)
     {
         Q_UNUSED(orientation)
 
@@ -37,33 +37,33 @@ namespace hal
     {
         if (!(event->buttons() & Qt::LeftButton))
             return;
-        if (!s_drag_button)
+        if (!sDragButton)
             return;
-        if ((event->pos() - s_drag_start_position).manhattanLength() < QApplication::startDragDistance())
+        if ((event->pos() - sDragStartPosition).manhattanLength() < QApplication::startDragDistance())
             return;
 
         QDrag* drag              = new QDrag(this);
-        DockMimeData* mimeData = new DockMimeData(s_drag_button->widget());
-        drag->setPixmap(s_drag_button->grab());
+        DockMimeData* mimeData = new DockMimeData(sDragButton->widget());
+        drag->setPixmap(sDragButton->grab());
         drag->setHotSpot(QPoint(drag->pixmap().width() / 2, drag->pixmap().height() / 2));
-        s_drag_button->hide();
-        s_drag_button->setChecked(false);
-        s_drag_button->widget()->close();
-        s_drag_button->set_available(false);
-        s_drop_spacing = s_drag_button->relative_width();
+        sDragButton->hide();
+        sDragButton->setChecked(false);
+        sDragButton->widget()->close();
+        sDragButton->setAvailable(false);
+        sDropSpacing = sDragButton->relativeWidth();
         drag->setMimeData(mimeData);
-        collapse_buttons();
-        ContentDragRelay::instance()->relay_drag_start();
+        collapseButtons();
+        ContentDragRelay::instance()->relayDragStart();
         Qt::DropAction dropAction = drag->exec(Qt::MoveAction);
         if (!(dropAction & Qt::MoveAction))
         {
-            Q_EMIT stop_animations();
-            s_drag_button->set_available(true);
-            rearrange_buttons();
-            s_drag_button->show();
+            Q_EMIT stopAnimations();
+            sDragButton->setAvailable(true);
+            rearrangeButtons();
+            sDragButton->show();
         }
-        ContentDragRelay::instance()->relay_drag_end();
-        s_drag_button = nullptr;
+        ContentDragRelay::instance()->relayDragEnd();
+        sDragButton = nullptr;
     }
 
     void DockBar::dragEnterEvent(QDragEnterEvent* event)
@@ -72,35 +72,35 @@ namespace hal
         if (mime_data)
         {
             event->acceptProposedAction();
-            s_begin_drop_range = 0;
-            s_end_drop_range   = 0;
-            s_move_marker      = nullptr;
+            sBeginDropRange = 0;
+            sEndDropRange   = 0;
+            sMoveMarker      = nullptr;
         }
     }
 
     void DockBar::dragMoveEvent(QDragMoveEvent* event)
     {
         int cursor_position;
-        if (m_button_orientation == button_orientation::horizontal)
+        if (mButtonOrientation == button_orientation::horizontal)
             cursor_position = event->pos().x();
         else
             cursor_position = event->pos().y();
 
-        if (cursor_position < s_begin_drop_range || cursor_position > s_end_drop_range)
+        if (cursor_position < sBeginDropRange || cursor_position > sEndDropRange)
         {
-            int button_position = m_button_offset;
+            int button_position = mButtonOffset;
             QList<DockButton*>::iterator button_iterator;
             QList<QPropertyAnimation*> animations;
             bool already_executed    = false;
             bool move_marker_reached = false;
 
-            for (button_iterator = m_buttons.begin(); button_iterator != m_buttons.end(); ++button_iterator)
+            for (button_iterator = mButtons.begin(); button_iterator != mButtons.end(); ++button_iterator)
             {
                 if ((*button_iterator)->available())
                 {
-                    if (button_position + (*button_iterator)->relative_width() < cursor_position)
+                    if (button_position + (*button_iterator)->relativeWidth() < cursor_position)
                     {
-                        if (*button_iterator == s_move_marker)
+                        if (*button_iterator == sMoveMarker)
                             move_marker_reached = true;    //executed once at max
 
                         if (move_marker_reached)
@@ -108,7 +108,7 @@ namespace hal
                             QPropertyAnimation* animation = new QPropertyAnimation(*button_iterator, "pos");
                             animation->setDuration(200);
                             animation->setStartValue((*button_iterator)->pos());
-                            if (m_button_orientation == button_orientation::horizontal)
+                            if (mButtonOrientation == button_orientation::horizontal)
                             {
                                 animation->setEndValue(QPoint(button_position, 0));
                             }
@@ -123,9 +123,9 @@ namespace hal
                     {
                         if (!already_executed)
                         {
-                            s_begin_drop_range = button_position;
-                            s_end_drop_range   = button_position + (*button_iterator)->relative_width();
-                            s_move_marker      = *button_iterator;
+                            sBeginDropRange = button_position;
+                            sEndDropRange   = button_position + (*button_iterator)->relativeWidth();
+                            sMoveMarker      = *button_iterator;
                             already_executed   = true;
                         }
 
@@ -133,17 +133,17 @@ namespace hal
                         animation->setDuration(200);
                         animation->setStartValue((*button_iterator)->pos());
 
-                        if (m_button_orientation == button_orientation::horizontal)
+                        if (mButtonOrientation == button_orientation::horizontal)
                         {
-                            animation->setEndValue(QPoint(button_position + s_drop_spacing, 0));
+                            animation->setEndValue(QPoint(button_position + sDropSpacing, 0));
                         }
                         else
                         {
-                            animation->setEndValue(QPoint(0, button_position + s_drop_spacing));
+                            animation->setEndValue(QPoint(0, button_position + sDropSpacing));
                         }
                         animations.append(animation);
                     }
-                    button_position += (*button_iterator)->relative_width() + m_button_spacing;
+                    button_position += (*button_iterator)->relativeWidth() + mButtonSpacing;
                 }
             }
             for (QPropertyAnimation* animation : animations)
@@ -152,16 +152,16 @@ namespace hal
             }
             if (already_executed)
                 return;
-            s_begin_drop_range = 0;
-            s_end_drop_range   = 0;
-            s_move_marker      = nullptr;
+            sBeginDropRange = 0;
+            sEndDropRange   = 0;
+            sMoveMarker      = nullptr;
         }
     }
 
     void DockBar::dragLeaveEvent(QDragLeaveEvent* event)
     {
         Q_UNUSED(event)
-        collapse_buttons();
+        collapseButtons();
     }
 
     void DockBar::dropEvent(QDropEvent* event)
@@ -173,18 +173,18 @@ namespace hal
             ContentWidget* widget = mimedata->widget();
             widget->remove();
 
-            if (s_move_marker == nullptr)
+            if (sMoveMarker == nullptr)
             {
-                m_anchor->add(widget, count());
+                mAnchor->add(widget, count());
                 return;
             }
 
             int index = 0;
-            for (DockButton* button : m_buttons)
+            for (DockButton* button : mButtons)
             {
-                if (button == s_move_marker)
+                if (button == sMoveMarker)
                 {
-                    m_anchor->add(widget, index);
+                    mAnchor->add(widget, index);
                     return;
                 }
                 index++;
@@ -199,8 +199,8 @@ namespace hal
             QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
             if (mouseEvent->buttons() & Qt::LeftButton)
             {
-                s_drag_start_position = mapFromGlobal(mouseEvent->globalPos());
-                s_drag_button         = static_cast<DockButton*>(watched);
+                sDragStartPosition = mapFromGlobal(mouseEvent->globalPos());
+                sDragButton         = static_cast<DockButton*>(watched);
             }
         }
         return false;
@@ -209,10 +209,10 @@ namespace hal
     QSize DockBar::sizeHint() const
     {
         int width = 0;
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
             width += button->width();
 
-        width += m_buttons.size() * m_button_spacing;    //+ m_button_offset
+        width += mButtons.size() * mButtonSpacing;    //+ mButtonOffset
 
         return QSize(width, height());
     }
@@ -220,28 +220,28 @@ namespace hal
     QSize DockBar::minimumSizeHint() const
     {
         int width = 0;
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
             width += button->width();
 
-        width += m_buttons.size() * m_button_spacing;    //+ m_button_offset
+        width += mButtons.size() * mButtonSpacing;    //+ mButtonOffset
 
         return QSize(width, height());
     }
 
-    void DockBar::set_anchor(ContentAnchor* anchor)
+    void DockBar::setAnchor(ContentAnchor* anchor)
     {
-        m_anchor = anchor;
+        mAnchor = anchor;
     }
 
-    void DockBar::set_autohide(bool autohide)
+    void DockBar::setAutohide(bool autohide)
     {
-        m_autohide = autohide;
+        mAutohide = autohide;
     }
 
     bool DockBar::unused()
     {
         bool no_button_visible = true;
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
         {
             if (!button->hidden())
             {
@@ -256,13 +256,13 @@ namespace hal
 
     int DockBar::count()
     {
-        return m_buttons.length();
+        return mButtons.length();
     }
 
     int DockBar::index(ContentWidget* widget)
     {
         int index = 0;
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
         {
             if (button->widget() == widget)
                 return index;
@@ -271,31 +271,31 @@ namespace hal
         return -1;
     }
 
-    void DockBar::rearrange_buttons()
+    void DockBar::rearrangeButtons()
     {
-        int position = m_button_offset;
-        for (DockButton* button : m_buttons)
+        int position = mButtonOffset;
+        for (DockButton* button : mButtons)
         {
             if (button->available())
             {
-                if (m_button_orientation == button_orientation::horizontal)
+                if (mButtonOrientation == button_orientation::horizontal)
                 {
                     button->move(position, 0);
-                    position += button->relative_width() + m_button_spacing;
+                    position += button->relativeWidth() + mButtonSpacing;
                 }
                 else
                 {
                     button->move(0, position);
-                    position += button->relative_width() + m_button_spacing;
+                    position += button->relativeWidth() + mButtonSpacing;
                 }
             }
         }
     }
 
-    void DockBar::collapse_buttons()
+    void DockBar::collapseButtons()
     {
-        int position = m_button_offset;
-        for (DockButton* button : m_buttons)
+        int position = mButtonOffset;
+        for (DockButton* button : mButtons)
         {
             if (button->available())
             {
@@ -303,7 +303,7 @@ namespace hal
                 animation->setDuration(200);
                 animation->setStartValue(button->pos());
 
-                if (m_button_orientation == button_orientation::horizontal)
+                if (mButtonOrientation == button_orientation::horizontal)
                 {
                     animation->setEndValue(QPoint(position, 0));
                 }
@@ -311,41 +311,41 @@ namespace hal
                 {
                     animation->setEndValue(QPoint(0, position));
                 }
-                position += button->relative_width() + m_button_spacing;
-                connect(this, SIGNAL(stop_animations()), animation, SLOT(stop()));
+                position += button->relativeWidth() + mButtonSpacing;
+                connect(this, SIGNAL(stopAnimations()), animation, SLOT(stop()));
                 animation->start(QAbstractAnimation::DeleteWhenStopped);
             }
         }
     }
 
-    void DockBar::add_button(ContentWidget* widget, int index)
+    void DockBar::addButton(ContentWidget* widget, int index)
     {
-        DockButton* button = new DockButton(widget, m_button_orientation, this, nullptr);
-        if (m_button_orientation == button_orientation::horizontal)
-            button->set_relative_height(height());
+        DockButton* button = new DockButton(widget, mButtonOrientation, this, nullptr);
+        if (mButtonOrientation == button_orientation::horizontal)
+            button->setRelativeHeight(height());
         else
-            button->set_relative_height(width());
+            button->setRelativeHeight(width());
 
-        m_buttons.insert(index, button);
-        rearrange_buttons();
+        mButtons.insert(index, button);
+        rearrangeButtons();
         button->setParent(this);
         button->show();
         show();
         updateGeometry();
     }
 
-    bool DockBar::remove_button(ContentWidget* widget)
+    bool DockBar::removeButton(ContentWidget* widget)
     {
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
         {
             if (button->widget() == widget)
             {
-                m_buttons.removeOne(button);
+                mButtons.removeOne(button);
                 button->hide();
-                rearrange_buttons();
+                rearrangeButtons();
                 delete button;
 
-                if (m_autohide && unused())
+                if (mAutohide && unused())
                     hide();
                 return true;
             }
@@ -353,48 +353,48 @@ namespace hal
         return false;
     }
 
-    bool DockBar::remove_button(int index)
+    bool DockBar::removeButton(int index)
     {
-        if (0 <= index && index < m_buttons.size())
+        if (0 <= index && index < mButtons.size())
         {
-            DockButton* button = m_buttons.at(index);
+            DockButton* button = mButtons.at(index);
             button->hide();
-            m_buttons.removeAt(index);
+            mButtons.removeAt(index);
             button->close();
-            rearrange_buttons();
-            if (m_autohide && unused())
+            rearrangeButtons();
+            if (mAutohide && unused())
                 hide();
             return true;
         }
         return false;
     }
 
-    void DockBar::detach_button(ContentWidget* widget)
+    void DockBar::detachButton(ContentWidget* widget)
     {
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
         {
             if (button->widget() == widget)
             {
                 button->hide();
-                button->set_available(false);
+                button->setAvailable(false);
                 button->setChecked(false);
-                rearrange_buttons();
+                rearrangeButtons();
 
-                if (m_autohide && unused())
+                if (mAutohide && unused())
                     hide();
                 break;
             }
         }
     }
 
-    void DockBar::reattach_button(ContentWidget* widget)
+    void DockBar::reattachButton(ContentWidget* widget)
     {
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
         {
             if (button->widget() == widget)
             {
-                button->set_available(true);
-                rearrange_buttons();
+                button->setAvailable(true);
+                rearrangeButtons();
                 button->show();
                 show();
                 break;
@@ -402,9 +402,9 @@ namespace hal
         }
     }
 
-    void DockBar::check_button(ContentWidget* widget)
+    void DockBar::checkButton(ContentWidget* widget)
     {
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
         {
             if (button->widget() == widget)
             {
@@ -414,9 +414,9 @@ namespace hal
         }
     }
 
-    void DockBar::uncheck_button(ContentWidget* widget)
+    void DockBar::uncheckButton(ContentWidget* widget)
     {
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
         {
             if (button->widget() == widget)
             {
@@ -426,28 +426,28 @@ namespace hal
         }
     }
 
-    ContentWidget* DockBar::widget_at(int index)
+    ContentWidget* DockBar::widgetAt(int index)
     {
-        if (0 <= index && index < m_buttons.size())
-            return m_buttons.at(index)->widget();
+        if (0 <= index && index < mButtons.size())
+            return mButtons.at(index)->widget();
         return nullptr;
     }
 
-    ContentWidget* DockBar::next_available_widget(int index)
+    ContentWidget* DockBar::nextAvailableWidget(int index)
     {
         if (index < 0)
         {
-            for (DockButton* button : m_buttons)
+            for (DockButton* button : mButtons)
             {
                 if (!button->hidden())
                     return button->widget();
             }
             return nullptr;
         }
-        if (index >= m_buttons.size())
+        if (index >= mButtons.size())
         {
             ContentWidget* widget = nullptr;
-            for (DockButton* button : m_buttons)
+            for (DockButton* button : mButtons)
             {
                 if (!button->hidden())
                     widget = button->widget();
@@ -456,7 +456,7 @@ namespace hal
         }
         int current_index      = 0;
         ContentWidget* widget = nullptr;
-        for (DockButton* button : m_buttons)
+        for (DockButton* button : mButtons)
         {
             if (!button->hidden())
             {
@@ -469,14 +469,14 @@ namespace hal
         return widget;
     }
 
-    void DockBar::handle_drag_start()
+    void DockBar::handleDragStart()
     {
         show();
     }
 
-    void DockBar::handle_drag_end()
+    void DockBar::handleDragEnd()
     {
-        if (m_autohide && unused())
+        if (mAutohide && unused())
             hide();
     }
 }

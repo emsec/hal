@@ -10,41 +10,41 @@
 
 namespace hal
 {
-    ReminderOverlay::ReminderOverlay(QWidget* parent) : Overlay(parent), m_layout(new QVBoxLayout()), m_image_label(new QLabel()), m_text_label(new QLabel()), m_button(new QPushButton())
+    ReminderOverlay::ReminderOverlay(QWidget* parent) : Overlay(parent), mLayout(new QVBoxLayout()), mImageLabel(new QLabel()), mTextLabel(new QLabel()), mButton(new QPushButton())
     {
-        connect(m_button, &QPushButton::clicked, this, &ReminderOverlay::self_destruct);
+        connect(mButton, &QPushButton::clicked, this, &ReminderOverlay::selfDestruct);
 
-        m_layout->setContentsMargins(0, 0, 0, 0);
-        m_layout->setSpacing(0);
-        m_layout->setAlignment(Qt::AlignHCenter);
+        mLayout->setContentsMargins(0, 0, 0, 0);
+        mLayout->setSpacing(0);
+        mLayout->setAlignment(Qt::AlignHCenter);
 
-        m_image_label->setObjectName("image-label");
+        mImageLabel->setObjectName("image-label");
 
-        m_text_label->setObjectName("text-label");
-        m_text_label->setAlignment(Qt::AlignCenter);
-        m_text_label->setText("Please turn on screen capturing now");
-        m_text_label->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+        mTextLabel->setObjectName("text-label");
+        mTextLabel->setAlignment(Qt::AlignCenter);
+        mTextLabel->setText("Please turn on screen capturing now");
+        mTextLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-        m_button->setObjectName("button");
-        m_button->setText("Done");
+        mButton->setObjectName("button");
+        mButton->setText("Done");
 
-        setLayout(m_layout);
-        m_layout->addWidget(m_image_label);
-        m_layout->setAlignment(m_image_label, Qt::AlignHCenter);
-        m_layout->addWidget(m_text_label);
-        m_layout->addWidget(m_button);
-        m_layout->setAlignment(m_button, Qt::AlignRight);
+        setLayout(mLayout);
+        mLayout->addWidget(mImageLabel);
+        mLayout->setAlignment(mImageLabel, Qt::AlignHCenter);
+        mLayout->addWidget(mTextLabel);
+        mLayout->addWidget(mButton);
+        mLayout->setAlignment(mButton, Qt::AlignRight);
 
-        m_image_label->ensurePolished();
-        m_image_label->setPixmap(QPixmap(":/images/hal").scaled(m_image_label->width(), m_image_label->height()));
+        mImageLabel->ensurePolished();
+        mImageLabel->setPixmap(QPixmap(":/images/hal").scaled(mImageLabel->width(), mImageLabel->height()));
     }
 
-    void ReminderOverlay::self_destruct()
+    void ReminderOverlay::selfDestruct()
     {
-        m_button->setEnabled(false);
+        mButton->setEnabled(false);
 
         QGraphicsOpacityEffect* eff1 = new QGraphicsOpacityEffect(this);
-        m_image_label->setGraphicsEffect(eff1);
+        mImageLabel->setGraphicsEffect(eff1);
         QPropertyAnimation* a1 = new QPropertyAnimation(eff1, "opacity", this);
         a1->setDuration(400);
         a1->setStartValue(1);
@@ -53,7 +53,7 @@ namespace hal
         a1->start();
 
         QGraphicsOpacityEffect* eff2 = new QGraphicsOpacityEffect(this);
-        m_text_label->setGraphicsEffect(eff2);
+        mTextLabel->setGraphicsEffect(eff2);
         QPropertyAnimation* a2 = new QPropertyAnimation(eff2, "opacity", this);
         a2->setDuration(400);
         a2->setStartValue(1);
@@ -62,7 +62,7 @@ namespace hal
         a2->start();
 
         QGraphicsOpacityEffect* eff3 = new QGraphicsOpacityEffect(this);
-        m_button->setGraphicsEffect(eff3);
+        mButton->setGraphicsEffect(eff3);
         QPropertyAnimation* a3 = new QPropertyAnimation(eff3, "opacity", this);
         a3->setDuration(400);
         a3->setStartValue(1);

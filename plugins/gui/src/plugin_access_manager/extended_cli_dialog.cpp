@@ -9,38 +9,38 @@ namespace hal
 {
     ExtendedCliDialog::ExtendedCliDialog(QString plugin_name, QWidget* parent) : QDialog(parent)
     {
-        m_content_layout = new QVBoxLayout(this);
-        m_form_layout    = new QFormLayout();
-        m_status_message = new QLabel(this);
-        m_button_box     = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+        mContentLayout = new QVBoxLayout(this);
+        mFormLayout    = new QFormLayout();
+        mStatusMessage = new QLabel(this);
+        mButtonBox     = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
         setWindowTitle(plugin_name + " arguments");
         setSizeGripEnabled(true);
         setMinimumWidth(600);
-        setLayout(m_content_layout);
-        m_content_layout->addLayout(m_form_layout);
+        setLayout(mContentLayout);
+        mContentLayout->addLayout(mFormLayout);
 
-        m_status_message->setStyleSheet("QLabel { background-color: rgba(64, 64, 64, 1);color: rgba(255, 0, 0, 1);border: 1px solid rgba(255, 0, 0, 1)}");
-        m_status_message->setText("Argument list invalid");
-        m_status_message->setAlignment(Qt::AlignCenter);
-        m_status_message->setMinimumHeight(90);
-        m_status_message->hide();
-        m_content_layout->addWidget(m_status_message);
-        m_content_layout->addWidget(m_button_box, Qt::AlignBottom);
+        mStatusMessage->setStyleSheet("QLabel { background-color: rgba(64, 64, 64, 1);color: rgba(255, 0, 0, 1);border: 1px solid rgba(255, 0, 0, 1)}");
+        mStatusMessage->setText("Argument list invalid");
+        mStatusMessage->setAlignment(Qt::AlignCenter);
+        mStatusMessage->setMinimumHeight(90);
+        mStatusMessage->hide();
+        mContentLayout->addWidget(mStatusMessage);
+        mContentLayout->addWidget(mButtonBox, Qt::AlignBottom);
 
-        connect(m_button_box, SIGNAL(accepted()), this, SLOT(parse_arguments()));
-        connect(m_button_box, SIGNAL(rejected()), this, SLOT(reject()));
+        connect(mButtonBox, SIGNAL(accepted()), this, SLOT(parseArguments()));
+        connect(mButtonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-        m_argv = nullptr;
+        mArgv = nullptr;
         setup(plugin_name.toStdString());
     }
 
-    ProgramArguments ExtendedCliDialog::get_args()
+    ProgramArguments ExtendedCliDialog::getArgs()
     {
-        return m_args;
+        return mArgs;
     }
 
-    void ExtendedCliDialog::parse_arguments()
+    void ExtendedCliDialog::parseArguments()
     {
         std::vector<char*> temp_vector;
 
@@ -50,7 +50,7 @@ namespace hal
         cstring[string.size()] = '\0';
         temp_vector.push_back(cstring);
 
-        for (auto pair : m_vector)
+        for (auto pair : mVector)
         {
             if (std::get<0>(pair)->isChecked())
             {
@@ -87,18 +87,18 @@ namespace hal
         //        printf("argv[%d]: %s\n", i, argv[i]);
         //    }
 
-        auto options = m_plugin->get_cli_options();
-        m_args       = options.parse(argc, const_cast<const char**>(argv));
+        auto options = mPlugin->get_cli_options();
+        mArgs       = options.parse(argc, const_cast<const char**>(argv));
         //    try
         //    {
         //        .
-        //        boost::ProgramOptions::store(boost::ProgramOptions::parse_command_line(argc, argv, (std::get<1>(m_plugin->get_cli_options()))), *m_map);
-        //        boost::ProgramOptions::notify(*m_map);
+        //        boost::ProgramOptions::store(boost::ProgramOptions::parse_command_line(argc, argv, (std::get<1>(mPlugin->get_cli_options()))), *mMap);
+        //        boost::ProgramOptions::notify(*mMap);
         //
         //        //        ProgramOptions plugin_options;
-        //        //        plugin_options.add(*(std::get<1>(m_plugin->get_cli_options())));
-        //        //        boost::ProgramOptions::store(boost::ProgramOptions::command_line_parser(argc, argv).options(plugin_options).run(), *m_map);
-        //        //        boost::ProgramOptions::notify(*m_map);
+        //        //        plugin_options.add(*(std::get<1>(mPlugin->get_cli_options())));
+        //        //        boost::ProgramOptions::store(boost::ProgramOptions::command_line_parser(argc, argv).options(plugin_options).run(), *mMap);
+        //        //        boost::ProgramOptions::notify(*mMap);
         //    }
         //    catch (const std::exception& e)
         //    {
@@ -107,37 +107,37 @@ namespace hal
         //            delete[] argv[i];
         //
         //        delete[] argv;
-        //        delete m_map;
-        //        m_map = nullptr;
+        //        delete mMap;
+        //        mMap = nullptr;
         //        return;
         //    }
         for (int i = 0; i < argc; ++i)
             delete[] argv[i];
 
         delete[] argv;
-        m_status_message->hide();
+        mStatusMessage->hide();
         accept();
     }
 
     void ExtendedCliDialog::setup(std::string plugin_name)
     {
-        m_plugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin_name, false);
-        if (m_plugin == nullptr)
+        mPlugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin_name, false);
+        if (mPlugin == nullptr)
         {
             return;
         }
 
-        for (auto option_tupel : m_plugin->get_cli_options().get_options())
+        for (auto option_tupel : mPlugin->get_cli_options().get_options())
         {
-            QString flag        = QString::fromStdString(*std::get<0>(option_tupel).begin());
-            QString description = QString::fromStdString(std::get<1>(option_tupel));
-            QPushButton* button = new QPushButton(flag, this);
-            button->setStyleSheet("QPushButton:checked { background-color: rgba(114, 114, 0, 1); }");
+            QString mFlag        = QString::fromStdString(*std::get<0>(option_tupel).begin());
+            QString mDescription = QString::fromStdString(std::get<1>(option_tupel));
+            QPushButton* button = new QPushButton(mFlag, this);
+            button->setStyleSheet("QPushButton:mChecked { background-color: rgba(114, 114, 0, 1); }");
             QLineEdit* LineEdit = new QLineEdit(this);
-            button->setToolTip(description);
+            button->setToolTip(mDescription);
             button->setCheckable(true);
-            m_vector.push_back(std::make_pair(button, LineEdit));
-            m_form_layout->addRow(button, LineEdit);
+            mVector.push_back(std::make_pair(button, LineEdit));
+            mFormLayout->addRow(button, LineEdit);
         }
     }
 }

@@ -3,25 +3,25 @@
 namespace hal
 {
    PositionGenerator::PositionGenerator()
-       : n(0), k(0)
+       : mN(0), mK(0)
    {;}
 
    QPoint PositionGenerator::position() const
    {
-       if (k < n)
-           return QPoint(n,k); // right edge
-       if (k < 2*n)
-           return QPoint(k-n,n); // lower edge
-       return QPoint(n,n);
+       if (mK < mN)
+           return QPoint(mN,mK); // right edge
+       if (mK < 2*mN)
+           return QPoint(mK-mN,mN); // lower edge
+       return QPoint(mN,mN);
    }
 
    QPoint PositionGenerator::next()
    {
-       if (k < 2*n) ++k;
+       if (mK < 2*mN) ++mK;
        else
        {
-           k = 0;
-           ++n;
+           mK = 0;
+           ++mN;
        }
        return position();
    }

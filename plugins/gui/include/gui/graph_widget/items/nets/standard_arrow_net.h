@@ -9,10 +9,10 @@ namespace hal {
     {
         ArrowSeparatedNet mArrowNet;
     public:
-        StandardArrowNet(Net* n, const lines& l);
+        StandardArrowNet(Net* n, const Lines& l);
         void setInputPosition(const QPointF &pos);
         void setOutputPosition(const QPointF &pos);
-        virtual void set_visuals(const visuals& v);
+        virtual void setVisuals(const Visuals& v);
         void paint(QPainter* painter,
                    const QStyleOptionGraphicsItem* option,
                    QWidget* widget) override;

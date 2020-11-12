@@ -7,18 +7,18 @@ namespace hal
     SharedPropertiesQssAdapter::SharedPropertiesQssAdapter(QWidget* parent) : QWidget(parent)
     {
         //DEFAULT VALUES
-        m_open_icon_path = ":/icons/folder";
-        m_open_icon_style = "all->#D3C68A";
-        m_save_icon_path = ":/icons/folder-down";
-        m_save_icon_style = "all->#D3C68A";
-        m_schedule_icon_path = ":/icons/list";
-        m_schedule_icon_style = "all->#00FF00";
-        m_run_icon_path = ":/icons/run";
-        m_run_icon_style = "all->#00FF00";
-        m_content_icon_path = ":/icons/content";
-        m_content_icon_style = "all->#969696";
-        m_settings_icon_path = ":/icons/settings";
-        m_settings_icon_style = "all->#969696";
+        mOpenIconPath = ":/icons/folder";
+        mOpenIconStyle = "all->#D3C68A";
+        mSaveIconPath = ":/icons/folder-down";
+        mSaveIconStyle = "all->#D3C68A";
+        mScheduleIconPath = ":/icons/list";
+        mScheduleIconStyle = "all->#00FF00";
+        mRunIconPath = ":/icons/run";
+        mRunIconStyle = "all->#00FF00";
+        mContentIconPath = ":/icons/content";
+        mContentIconStyle = "all->#969696";
+        mSettingsIconPath = ":/icons/settings";
+        mSettingsIconStyle = "all->#969696";
 
         repolish();
     }
@@ -41,123 +41,123 @@ namespace hal
         s->polish(this);
     }
 
-    QString SharedPropertiesQssAdapter::open_icon_path() const
+    QString SharedPropertiesQssAdapter::openIconPath() const
     {
-        return m_open_icon_path;
+        return mOpenIconPath;
     }
 
-    QString SharedPropertiesQssAdapter::open_icon_style() const
+    QString SharedPropertiesQssAdapter::openIconStyle() const
     {
-        return m_open_icon_style;
+        return mOpenIconStyle;
     }
 
-    QString SharedPropertiesQssAdapter::save_icon_path() const
+    QString SharedPropertiesQssAdapter::saveIconPath() const
     {
-        return m_save_icon_path;
+        return mSaveIconPath;
     }
 
-    QString SharedPropertiesQssAdapter::save_icon_style() const
+    QString SharedPropertiesQssAdapter::saveIconStyle() const
     {
-        return m_save_icon_style;
+        return mSaveIconStyle;
     }
 
-    QString SharedPropertiesQssAdapter::schedule_icon_path() const
+    QString SharedPropertiesQssAdapter::scheduleIconPath() const
     {
-        return m_schedule_icon_path;
+        return mScheduleIconPath;
     }
 
-    QString SharedPropertiesQssAdapter::schedule_icon_style() const
+    QString SharedPropertiesQssAdapter::scheduleIconStyle() const
     {
-        return m_schedule_icon_style;
+        return mScheduleIconStyle;
     }
 
-    QString SharedPropertiesQssAdapter::run_icon_path() const
+    QString SharedPropertiesQssAdapter::runIconPath() const
     {
-        return m_run_icon_path;
+        return mRunIconPath;
     }
 
-    QString SharedPropertiesQssAdapter::run_icon_style() const
+    QString SharedPropertiesQssAdapter::runIconStyle() const
     {
-        return m_run_icon_style;
+        return mRunIconStyle;
     }
 
-    QString SharedPropertiesQssAdapter::content_icon_path() const
+    QString SharedPropertiesQssAdapter::contentIconPath() const
     {
-        return m_content_icon_path;
+        return mContentIconPath;
     }
 
-    QString SharedPropertiesQssAdapter::content_icon_style() const
+    QString SharedPropertiesQssAdapter::contentIconStyle() const
     {
-        return m_content_icon_style;
+        return mContentIconStyle;
     }
 
-    QString SharedPropertiesQssAdapter::settings_icon_path() const
+    QString SharedPropertiesQssAdapter::settingsIconPath() const
     {
-        return m_settings_icon_path;
+        return mSettingsIconPath;
     }
 
-    QString SharedPropertiesQssAdapter::settings_icon_style() const
+    QString SharedPropertiesQssAdapter::settingsIconStyle() const
     {
-        return m_settings_icon_style;
+        return mSettingsIconStyle;
     }
 
-    void SharedPropertiesQssAdapter::set_open_icon_path(const QString& path)
+    void SharedPropertiesQssAdapter::setOpenIconPath(const QString& path)
     {
-        m_open_icon_path = path;
+        mOpenIconPath = path;
     }
 
-    void SharedPropertiesQssAdapter::set_open_icon_style(const QString& style)
+    void SharedPropertiesQssAdapter::setOpenIconStyle(const QString& style)
     {
-        m_open_icon_style = style;
+        mOpenIconStyle = style;
     }
 
-    void SharedPropertiesQssAdapter::set_save_icon_path(const QString& path)
+    void SharedPropertiesQssAdapter::setSaveIconPath(const QString& path)
     {
-        m_save_icon_path = path;
+        mSaveIconPath = path;
     }
 
-    void SharedPropertiesQssAdapter::set_save_icon_style(const QString& style)
+    void SharedPropertiesQssAdapter::setSaveIconStyle(const QString& style)
     {
-        m_save_icon_style = style;
+        mSaveIconStyle = style;
     }
 
-    void SharedPropertiesQssAdapter::set_schedule_icon_path(const QString& path)
+    void SharedPropertiesQssAdapter::setScheduleIconPath(const QString& path)
     {
-        m_schedule_icon_path = path;
+        mScheduleIconPath = path;
     }
 
-    void SharedPropertiesQssAdapter::set_schedule_icon_style(const QString& style)
+    void SharedPropertiesQssAdapter::setScheduleIconStyle(const QString& style)
     {
-        m_schedule_icon_style = style;
+        mScheduleIconStyle = style;
     }
 
-    void SharedPropertiesQssAdapter::set_run_icon_path(const QString& path)
+    void SharedPropertiesQssAdapter::setRunIconPath(const QString& path)
     {
-        m_run_icon_path = path;
+        mRunIconPath = path;
     }
 
-    void SharedPropertiesQssAdapter::set_run_icon_style(const QString& style)
+    void SharedPropertiesQssAdapter::setRunIconStyle(const QString& style)
     {
-        m_run_icon_style = style;
+        mRunIconStyle = style;
     }
 
-    void SharedPropertiesQssAdapter::set_content_icon_path(const QString& path)
+    void SharedPropertiesQssAdapter::setContentIconPath(const QString& path)
     {
-        m_content_icon_path = path;
+        mContentIconPath = path;
     }
 
-    void SharedPropertiesQssAdapter::set_content_icon_style(const QString& style)
+    void SharedPropertiesQssAdapter::setContentIconStyle(const QString& style)
     {
-        m_content_icon_style = style;
+        mContentIconStyle = style;
     }
 
-    void SharedPropertiesQssAdapter::set_settings_icon_path(const QString& path)
+    void SharedPropertiesQssAdapter::setSettingsIconPath(const QString& path)
     {
-        m_settings_icon_path = path;
+        mSettingsIconPath = path;
     }
 
-    void SharedPropertiesQssAdapter::set_settings_icon_style(const QString& style)
+    void SharedPropertiesQssAdapter::setSettingsIconStyle(const QString& style)
     {
-        m_settings_icon_style = style;
+        mSettingsIconStyle = style;
     }
 }

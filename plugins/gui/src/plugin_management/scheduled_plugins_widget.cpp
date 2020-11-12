@@ -4,21 +4,21 @@
 
 namespace hal
 {
-    ScheduledPluginsWidget::ScheduledPluginsWidget(QWidget* parent) : QScrollArea(parent), m_area(new ScheduledPluginItemArea())
+    ScheduledPluginsWidget::ScheduledPluginsWidget(QWidget* parent) : QScrollArea(parent), mArea(new ScheduledPluginItemArea())
     {
         setFrameStyle(QFrame::NoFrame);
         setWidgetResizable(true);
-        setWidget(m_area);
+        setWidget(mArea);
     }
 
     ScheduledPluginItemArea* ScheduledPluginsWidget::area()
     {
-        return m_area;
+        return mArea;
     }
 
-    void ScheduledPluginsWidget::append_plugin(const QString& name)
+    void ScheduledPluginsWidget::appendPlugin(const QString& name)
     {
-        m_area->insert_plugin(name);
+        mArea->insertPlugin(name);
         show();
     }
 }

@@ -6,43 +6,43 @@
 
 namespace hal
 {
-    qreal GraphicsNet::s_line_width;
-    qreal GraphicsNet::s_shape_width;
+    qreal GraphicsNet::sLineWidth;
+    qreal GraphicsNet::sShapeWidth;
 
-    QPen GraphicsNet::s_pen;
-    QBrush GraphicsNet::s_brush;
+    QPen GraphicsNet::sPen;
+    QBrush GraphicsNet::sBrush;
 
-    void GraphicsNet::load_settings()
+    void GraphicsNet::loadSettings()
     {
-        s_line_width = 1.8;
-        s_shape_width = 5;
+        sLineWidth = 1.8;
+        sShapeWidth = 5;
 
-        s_pen.setWidthF(s_line_width);
-        s_pen.setJoinStyle(Qt::MiterJoin);
+        sPen.setWidthF(sLineWidth);
+        sPen.setJoinStyle(Qt::MiterJoin);
     }
 
-    GraphicsNet::GraphicsNet(Net* n) : GraphicsItem(hal::item_type::net, n->get_id())
+    GraphicsNet::GraphicsNet(Net* n) : GraphicsItem(ItemType::Net, n->get_id())
     {
     }
 
     QRectF GraphicsNet::boundingRect() const
     {
-        return m_rect;
+        return mRect;
     }
 
     QPainterPath GraphicsNet::shape() const
     {
-        return m_shape;
+        return mShape;
     }
 
-    void GraphicsNet::set_visuals(const GraphicsNet::visuals& v)
+    void GraphicsNet::setVisuals(const GraphicsNet::Visuals& v)
     {
-        setVisible(v.visible);
+        setVisible(v.mVisible);
 
-        m_color = v.color;
-        m_pen_style = v.pen_style;
-        m_fill_icon = v.fill_icon;
-        m_fill_color = v.fill_color;
-        m_brush_style = v.brush_style;
+        mColor = v.color;
+        mPenStyle = v.mPenStyle;
+        mFillIcon = v.mFillIcon;
+        mFillColor = v.mFillColor;
+        mBrushStyle = v.mBrushStyle;
     }
 }

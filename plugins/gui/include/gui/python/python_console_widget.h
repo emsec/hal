@@ -34,10 +34,10 @@ namespace hal
     public:
         PythonConsoleWidget(QWidget* parent = nullptr);
 
-        virtual void setup_toolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
-        virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+        virtual void setupToolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
+        virtual QList<QShortcut*> createShortcuts() Q_DECL_OVERRIDE;
 
     private:
-        PythonConsole* m_console;
+        PythonConsole* mConsole;
     };
 }

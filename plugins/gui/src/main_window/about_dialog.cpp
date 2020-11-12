@@ -3,14 +3,14 @@
 
 namespace hal
 {
-    AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent), m_placeholder("about gui"), m_licenses_label("Open Source licenses:"), m_textedit()
+    AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent), mPlaceholder("about gui"), mLicensesLabel("Open Source licenses:"), mTextedit()
     {
-        setLayout(&m_content_layout);
-        m_placeholder.setText(QString("Compiled with Qt Version ") + QString(QT_VERSION_STR));
-        m_textedit.setPlainText(QString::fromStdString(utils::get_open_source_licenses()));
-        m_textedit.setReadOnly(true);
-        m_content_layout.addWidget(&m_placeholder);
-        m_content_layout.addWidget(&m_licenses_label);
-        m_content_layout.addWidget(&m_textedit);
+        setLayout(&mContentLayout);
+        mPlaceholder.setText(QString("Compiled with Qt Version ") + QString(QT_VERSION_STR));
+        mTextedit.setPlainText(QString::fromStdString(utils::get_open_source_licenses()));
+        mTextedit.setReadOnly(true);
+        mContentLayout.addWidget(&mPlaceholder);
+        mContentLayout.addWidget(&mLicensesLabel);
+        mContentLayout.addWidget(&mTextedit);
     }
 }

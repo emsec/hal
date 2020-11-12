@@ -37,8 +37,8 @@ namespace hal
     public:
         explicit WindowToolbar(QWidget* parent = nullptr);
 
-        void add_widget(QWidget* widget);
-        void add_spacer();
+        void addWidget(QWidget* widget);
+        void addSpacer();
         void clear();
 
         void repolish();
@@ -47,6 +47,6 @@ namespace hal
         void actionEvent(QActionEvent* event) override;
 
     private:
-        QHBoxLayout* m_layout;
+        QHBoxLayout* mLayout;
     };
 }

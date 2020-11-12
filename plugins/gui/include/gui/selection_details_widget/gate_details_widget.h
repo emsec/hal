@@ -71,39 +71,39 @@ namespace hal
 
     public Q_SLOTS:
 
-        void handle_gate_name_changed(Gate* gate);
-        void handle_gate_removed(Gate* gate);
+        void handleGateNameChanged(Gate* gate);
+        void handleGateRemoved(Gate* gate);
 
-        void handle_module_name_changed(Module* module);
-        void handle_module_removed(Module* module);
-        void handle_module_gate_assigned(Module* module, u32 associated_data);
-        void handle_module_gate_removed(Module* module, u32 associated_data);
+        void handleModuleNameChanged(Module* module);
+        void handleModuleRemoved(Module* module);
+        void handleModuleGateAssigned(Module* module, u32 associated_data);
+        void handleModuleGateRemoved(Module* module, u32 associated_data);
 
-        void handle_net_name_changed(Net* net);
-        void handle_net_source_added(Net* net, const u32 src_gate_id);
-        void handle_net_source_removed(Net* net, const u32 src_gate_id);
-        void handle_net_destination_added(Net* net, const u32 dst_gate_id);
-        void handle_net_destination_removed(Net* net, const u32 dst_gate_id);
+        void handleNetNameChanged(Net* net);
+        void handleNetSourceAdded(Net* net, const u32 src_gate_id);
+        void handleNetSourceRemoved(Net* net, const u32 src_gate_id);
+        void handleNetDestinationAdded(Net* net, const u32 dst_gate_id);
+        void handleNetDestinationRemoved(Net* net, const u32 dst_gate_id);
 
     private:
         //general
         //used to set the boolean function container to its appropriate size, width "must be"
         //extracted from the stylesheet
-        int m_scrollbar_width;
-        GraphNavigationWidget* m_navigation_table;
+        int mScrollbarWidth;
+        GraphNavigationWidget* mNavigationTable;
 
         //All sections together are encapsulated in a container to make it scrollable
-        QScrollArea* m_scroll_area;
-        QWidget* m_top_lvl_container;
-        QVBoxLayout* m_top_lvl_layout;
-        QVBoxLayout* m_content_layout;
+        QScrollArea* mScrollArea;
+        QWidget* mTopLvlContainer;
+        QVBoxLayout* mTopLvlLayout;
+        QVBoxLayout* mContentLayout;
 
         // buttons to fold/unfold corresponding sections
-        QPushButton* m_general_info_button;//(1)
-        DetailsSectionWidget* m_inputPinsSection;//(2)
-        DetailsSectionWidget* m_outputPinsSection;//(3)
-        DetailsSectionWidget* m_dataFieldsSection;//(4)
-        DetailsSectionWidget* m_booleanFunctionsSection;//(5)
+        QPushButton* mGeneralInfoButton;//(1)
+        DetailsSectionWidget* mInputPinsSection;//(2)
+        DetailsSectionWidget* mOutputPinsSection;//(3)
+        DetailsSectionWidget* mDataFieldsSection;//(4)
+        DetailsSectionWidget* mBooleanFunctionsSection;//(5)
 
         // widgets / sections to be unfold (not all structures are sections in itself, it may be a container necessary)
 
@@ -112,27 +112,27 @@ namespace hal
         DetailsGeneralModel* mGeneralModel;
 
         //(2) input-pins section
-        QTableWidget* m_input_pins_table;
+        QTableWidget* mInputPinsTable;
 
         //(3) output-pins section
-        QTableWidget* m_output_pins_table;
+        QTableWidget* mOutputPinsTable;
 
         //(4) data-fields section
-        DataFieldsTable* m_dataFieldsTable;
+        DataFieldsTable* mDataFieldsTable;
 
         //(5) boolean-function section (consisting of a container that encapsulates multiple labels and design structures)
-        QWidget* m_boolean_functions_container;
-        QVBoxLayout* m_boolean_functions_container_layout;
+        QWidget* mBooleanFunctionsContainer;
+        QVBoxLayout* mBooleanFunctionsContainerLayout;
 
         //function section
-        void handle_navigation_jump_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates);
+        void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates);
 
-        void handle_input_pin_item_clicked(const QTableWidgetItem* item);
-        void handle_output_pin_item_clicked(const QTableWidgetItem* item);
+        void handleInputPinItemClicked(const QTableWidgetItem* item);
+        void handleOutputPinItemClicked(const QTableWidgetItem* item);
 
         //most straightforward and basic custom-context implementation (maybe need to be more dynamic)
-        void handle_input_pin_table_menu_requested(const QPoint &pos);
-        void handle_output_pin_table_menu_requested(const QPoint &pos);
-        void handle_data_table_menu_requested(const QPoint &pos);
+        void handleInputPinTableMenuRequested(const QPoint &pos);
+        void handleOutputPinTableMenuRequested(const QPoint &pos);
+        void handleDataTableMenuRequested(const QPoint &pos);
     };
 }

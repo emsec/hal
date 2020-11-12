@@ -39,12 +39,12 @@ namespace hal
         ReminderOverlay(QWidget* parent = nullptr);
 
     private Q_SLOTS:
-        void self_destruct();
+        void selfDestruct();
 
     private:
-        QVBoxLayout* m_layout;
-        QLabel* m_image_label;
-        QLabel* m_text_label;
-        QPushButton* m_button;
+        QVBoxLayout* mLayout;
+        QLabel* mImageLabel;
+        QLabel* mTextLabel;
+        QPushButton* mButton;
     };
 }

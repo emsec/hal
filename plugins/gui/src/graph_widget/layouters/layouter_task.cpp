@@ -7,15 +7,15 @@
 namespace hal
 {
     LayouterTask::LayouterTask(GraphLayouter* const layouter) :
-        m_layouter(layouter)
+        mLayouter(layouter)
     {
-        m_layouter->setParent(this);
+        mLayouter->setParent(this);
     }
 
     void LayouterTask::execute()
     {
-        m_layouter->layout();
-        m_layouter->setParent(nullptr);
-        m_layouter->moveToThread(QApplication::instance()->thread());
+        mLayouter->layout();
+        mLayouter->setParent(nullptr);
+        mLayouter->moveToThread(QApplication::instance()->thread());
     }
 }

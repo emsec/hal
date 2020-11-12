@@ -8,14 +8,14 @@ namespace hal
         return &instance;
     }
 
-    void ContentDragRelay::relay_drag_start()
+    void ContentDragRelay::relayDragStart()
     {
-        Q_EMIT drag_start();
+        Q_EMIT dragStart();
     }
 
-    void ContentDragRelay::relay_drag_end()
+    void ContentDragRelay::relayDragEnd()
     {
-        Q_EMIT drag_end();
+        Q_EMIT dragEnd();
     }
 
     ContentDragRelay::ContentDragRelay(QObject *parent) : QObject(parent)

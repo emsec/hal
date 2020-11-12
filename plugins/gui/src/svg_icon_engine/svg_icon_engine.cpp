@@ -7,7 +7,7 @@ namespace hal
 {
     SvgIconEngine::SvgIconEngine(const std::string& svg_data)
     {
-        m_data = QByteArray::fromStdString(svg_data);
+        mData = QByteArray::fromStdString(svg_data);
     }
 
     void SvgIconEngine::paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state)
@@ -15,7 +15,7 @@ namespace hal
         Q_UNUSED(mode)
         Q_UNUSED(state)
 
-        QSvgRenderer renderer(m_data);
+        QSvgRenderer renderer(mData);
         renderer.render(painter, rect);
     }
 

@@ -6,14 +6,14 @@
 
 namespace hal
 {
-    qreal SeparatedGraphicsNet::s_alpha;
+    qreal SeparatedGraphicsNet::sAlpha;
 
-    void SeparatedGraphicsNet::update_alpha()
+    void SeparatedGraphicsNet::updateAlpha()
     {
-        if (s_lod >= graph_widget_constants::net_fade_in_lod && s_lod <= graph_widget_constants::net_fade_out_lod)
-            s_alpha = (s_lod - graph_widget_constants::net_fade_in_lod) / (graph_widget_constants::net_fade_out_lod - graph_widget_constants::net_fade_in_lod);
+        if (sLod >= graph_widget_constants::sNetFadeInLod && sLod <= graph_widget_constants::sNetFadeOutLod)
+            sAlpha = (sLod - graph_widget_constants::sNetFadeInLod) / (graph_widget_constants::sNetFadeOutLod - graph_widget_constants::sNetFadeInLod);
         else
-            s_alpha = 1;
+            sAlpha = 1;
     }
 
     SeparatedGraphicsNet::SeparatedGraphicsNet(Net* n) : GraphicsNet(n)
@@ -23,7 +23,7 @@ namespace hal
     void SeparatedGraphicsNet::finalize()
     {
         // RECT INTENTIONALLY SET SLIGHTLY TOO BIG
-        m_rect = m_shape.boundingRect();
-        m_rect.adjust(-s_line_width, -s_line_width, s_line_width, s_line_width);
+        mRect = mShape.boundingRect();
+        mRect.adjust(-sLineWidth, -sLineWidth, sLineWidth, sLineWidth);
     }
 }

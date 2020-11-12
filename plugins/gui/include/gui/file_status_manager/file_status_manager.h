@@ -39,22 +39,22 @@ namespace hal
         FileStatusManager(QObject* parent = 0);
         ~FileStatusManager();
 
-        bool modified_files_existing() const;
+        bool modifiedFilesExisting() const;
 
-        void file_changed(const QUuid uuid, const QString& descriptor);
-        void file_saved(const QUuid uuid);
+        void fileChanged(const QUuid uuid, const QString& descriptor);
+        void fileSaved(const QUuid uuid);
 
-        void netlist_changed();
-        void netlist_saved();
+        void netlistChanged();
+        void netlistSaved();
 
-        void flush_unsaved_changes();
+        void flushUnsavedChanges();
 
-        QList<QString> get_unsaved_change_descriptors() const;
+        QList<QString> getUnsavedChangeDescriptors() const;
 
     private:
-        QSet<QUuid> m_modified_files_uuid;
-        QMap<QUuid, QString> m_modified_files_descriptors;
+        QSet<QUuid> mModifiedFilesUuid;
+        QMap<QUuid, QString> mModifiedFilesDescriptors;
 
-        bool m_netlist_modified;
+        bool mNetlistModified;
     };
 }

@@ -19,15 +19,15 @@ namespace hal {
     class NetLayoutDirection
     {
     public:
-        enum dir_t {Undefined = -1, Left = 0, Right = 1, Up = 2, Down = 3, MaxDir = 4};
-        NetLayoutDirection(dir_t dir = Undefined) : mDir(dir) {;}
+        enum DirectionType {Undefined = -1, Left = 0, Right = 1, Up = 2, Down = 3, MaxDir = 4};
+        NetLayoutDirection(DirectionType dir = Undefined) : mDir(dir) {;}
         NetLayoutDirection(int idir);
         bool isHorizontal() const { return mDir == Left || mDir == Right; }
         int iHorizontal() const { return index()/2; }
         bool isVertical() const { return mDir == Up || mDir == Down; }
         bool isNull() const { return mDir == Undefined; }
         QPoint step(bool omitEndpoint=false) const;
-        dir_t direction() const { return mDir; }
+        DirectionType direction() const { return mDir; }
         u32 toPattern() const { return  1 << mDir; }
         NetLayoutDirection operator++(int);
         NetLayoutDirection operator++();
@@ -37,8 +37,8 @@ namespace hal {
         bool isMax()  const { return mDir==MaxDir; }
         bool operator==(const NetLayoutDirection& other) const { return mDir == other.mDir; }
     private:
-        static dir_t numberToDirection(int idir);
-        dir_t mDir;
+        static DirectionType numberToDirection(int idir);
+        DirectionType mDir;
     };
 
     class NetLayoutPoint : public QPoint
@@ -59,11 +59,11 @@ namespace hal {
     class NetLayoutWire
     {
     public:
-        enum point_t {SourcePoint, DestinationPoint};
+        enum WirePointType {SourcePoint, DestinationPoint};
         NetLayoutWire(const NetLayoutPoint& p, const NetLayoutDirection& dir, bool isEnd);
         QGraphicsLineItem* graphicsFactory() const;
 
-        NetLayoutPoint endPoint(point_t pnt) const;
+        NetLayoutPoint endPoint(WirePointType pnt) const;
         bool isEndpoint() const { return mIsEndpoint; }
         bool isHorizontal() const { return mDir.isHorizontal(); }
         bool operator==(const NetLayoutWire& other) const;

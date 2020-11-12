@@ -10,21 +10,21 @@
 namespace hal
 {
     SelectionTreeModel::SelectionTreeModel(QObject* parent)
-        : QAbstractItemModel(parent), m_doNotDisturb(0)
+        : QAbstractItemModel(parent), mDoNotDisturb(0)
     {
-        m_rootItem = new SelectionTreeItemRoot();
+        mRootItem = new SelectionTreeItemRoot();
         // root item has no parent
     }
 
     SelectionTreeModel::~SelectionTreeModel()
     {
-        delete m_rootItem;
+        delete mRootItem;
     }
 
     bool SelectionTreeModel::doNotDisturb(const QModelIndex& inx) const
     {
         Q_UNUSED(inx); // could do some tests for debugging
-        return (m_doNotDisturb != 0);
+        return (mDoNotDisturb != 0);
     }
 
     QVariant SelectionTreeModel::data(const QModelIndex& index, int role) const
@@ -34,27 +34,27 @@ namespace hal
 
         // UserRole is mapped to "is a structure element?"
     //        if (role == Qt::UserRole)
-     //       return get_item(index)->get_type() == SelectionTreeItem::item_type::structure;
+     //       return getItem(index)->get_type() == SelectionTreeItem::itemType::structure;
 
-     //   if (get_item(index)->get_type() == SelectionTreeItem::item_type::structure && index.column() == 0)
+     //   if (getItem(index)->get_type() == SelectionTreeItem::itemType::structure && index.column() == 0)
      //   {
      //       if (role == Qt::FontRole)
      //           return m_structured_font;
 
-    //        if(get_item(index) == m_gates_item && role == Qt::DecorationRole)
+    //        if(getItem(index) == m_gates_item && role == Qt::DecorationRole)
     //            return m_design_icon; }
         SelectionTreeItem* item = itemFromIndex(index);
         if (!item) return QVariant();
 
         switch (role) {
             case Qt::DecorationRole:
-                return index.column() == NAME_COLUMN
+                return index.column() == sNameColumn
                         ? QVariant(item->icon())
                         : QVariant();
             case Qt::DisplayRole:
                 return item->data(index.column());
             case Qt::TextAlignmentRole:
-                return index.column() == ID_COLUMN
+                return index.column() == sIdColumn
                         ? Qt::AlignRight
                         : Qt::AlignLeft;
             default:
@@ -79,8 +79,8 @@ namespace hal
     {
         if (doNotDisturb()) return QModelIndex();
 
-        if (!m_rootItem->childCount()) return QModelIndex();
-        SelectionTreeItem* sti = m_rootItem->child(0);
+        if (!mRootItem->childCount()) return QModelIndex();
+        SelectionTreeItem* sti = mRootItem->child(0);
         return createIndex(0,0,sti);
     }
 */
@@ -93,7 +93,7 @@ namespace hal
 
         SelectionTreeItem* parentItem = parent.isValid()
                 ? itemFromIndex(parent)
-                : m_rootItem;
+                : mRootItem;
 
         SelectionTreeItem* childItem  = parentItem->child(row);
         if (childItem)
@@ -114,7 +114,7 @@ namespace hal
         SelectionTreeItem* parentItem   = currentItem->parent();
 
         // toplevel entries dont reveal their parent
-        if (parentItem == m_rootItem) return QModelIndex();
+        if (parentItem == mRootItem) return QModelIndex();
 
         return indexFromItem(parentItem);
     }
@@ -130,14 +130,14 @@ namespace hal
 
         SelectionTreeItem* item = parent.isValid()
                 ? itemFromIndex(parent)
-                : m_rootItem;
+                : mRootItem;
         return item->childCount();
     }
 
     int SelectionTreeModel::columnCount(const QModelIndex& parent) const
     {
         Q_UNUSED(parent)
-        return MAX_COLUMN;
+        return sMaxColumn;
     }
 
     void SelectionTreeModel::fetchSelection(bool hasEntries)
@@ -147,29 +147,29 @@ namespace hal
 
         if (hasEntries)
         {
-            for(u32 id : g_selection_relay->m_selected_modules)
+            for(u32 id : gSelectionRelay->mSelectedModules)
             {
                 SelectionTreeItemModule* stim = new SelectionTreeItemModule(id);
                 moduleRecursion(stim);
                 nextRootItem->addChild(stim);
             }
 
-            for(u32 id : g_selection_relay->m_selected_gates)
+            for(u32 id : gSelectionRelay->mSelectedGates)
                 nextRootItem->addChild(new SelectionTreeItemGate(id));
 
-            for(u32 id : g_selection_relay->m_selected_nets)
+            for(u32 id : gSelectionRelay->mSelectedNets)
                 nextRootItem->addChild(new SelectionTreeItemNet(id));
         }
 
         beginResetModel();
 
-        ++m_doNotDisturb;
+        ++mDoNotDisturb;
         // delay disposal of old entries
         //    until all clients are notified that indexes are not valid any more
-        SelectionTreeModelDisposer* disposer = new SelectionTreeModelDisposer(m_rootItem,this);
-        m_rootItem = nextRootItem;
+        SelectionTreeModelDisposer* disposer = new SelectionTreeModelDisposer(mRootItem,this);
+        mRootItem = nextRootItem;
         QTimer::singleShot(50,disposer,&SelectionTreeModelDisposer::dispose);
-        --m_doNotDisturb;
+        --mDoNotDisturb;
 
         endResetModel();
     }
@@ -177,7 +177,7 @@ namespace hal
     void SelectionTreeModel::moduleRecursion(SelectionTreeItemModule* modItem)
     {
         if (modItem->isRoot()) return;
-        Module* mod = g_netlist->get_module_by_id(modItem->id());
+        Module* mod = gNetlist->get_module_by_id(modItem->id());
         if (!mod) return;
         for (Module* m : mod->get_submodules() )
         {
@@ -208,7 +208,7 @@ namespace hal
         SelectionTreeItem* parentItem = item->parent();
 
         if (!parentItem) // must be root
-            return createIndex(0,0,m_rootItem);
+            return createIndex(0,0,mRootItem);
 
         int n = parentItem->childCount();
         for (int irow=0; irow<n; irow++)
@@ -224,17 +224,17 @@ namespace hal
     void SelectionTreeModel::suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                 const QRegularExpression& regex) const
     {
-        if (!m_rootItem) return;
-        m_rootItem->suppressedByFilterRecursion(modIds, gatIds, netIds, regex);
+        if (!mRootItem) return;
+        mRootItem->suppressedByFilterRecursion(modIds, gatIds, netIds, regex);
     }
 
     SelectionTreeModelDisposer::SelectionTreeModelDisposer(SelectionTreeItemRoot *stim, QObject* parent)
-        : QObject(parent), m_rootItem(stim)
+        : QObject(parent), mRootItem(stim)
     {;}
 
     void SelectionTreeModelDisposer::dispose()
     {
-        delete m_rootItem;
+        delete mRootItem;
         deleteLater();
     }
 }

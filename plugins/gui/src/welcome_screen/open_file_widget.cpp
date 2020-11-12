@@ -11,23 +11,23 @@
 
 namespace hal
 {
-    OpenFileWidget::OpenFileWidget(QWidget* parent) : QFrame(parent), m_layout(new QVBoxLayout()), m_text_label(new QLabel()), m_icon_label(new QLabel()), m_drag_active(false)
+    OpenFileWidget::OpenFileWidget(QWidget* parent) : QFrame(parent), mLayout(new QVBoxLayout()), mTextLabel(new QLabel()), mIconLabel(new QLabel()), mDragActive(false)
     {
         setAcceptDrops(true);
 
-        m_text_label->setObjectName("text-label");
-        m_text_label->setText("Open a new file using the toolbar or simply drag & drop one here");
-        m_text_label->setWordWrap(true);
+        mTextLabel->setObjectName("text-label");
+        mTextLabel->setText("Open a new file using the toolbar or simply drag & drop one here");
+        mTextLabel->setWordWrap(true);
 
-        m_icon_label->setObjectName("icon-label");
-        m_icon_label->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-        m_icon_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        mIconLabel->setObjectName("icon-label");
+        mIconLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+        mIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-        setLayout(m_layout);
-        m_layout->setContentsMargins(0, 0, 0, 0);
-        m_layout->setSpacing(0);
-        m_layout->addWidget(m_text_label);
-        m_layout->addWidget(m_icon_label);
+        setLayout(mLayout);
+        mLayout->setContentsMargins(0, 0, 0, 0);
+        mLayout->setSpacing(0);
+        mLayout->addWidget(mTextLabel);
+        mLayout->addWidget(mIconLabel);
     }
 
     void OpenFileWidget::dragEnterEvent(QDragEnterEvent* event)
@@ -36,7 +36,7 @@ namespace hal
         if (mime_data->hasUrls())
         {
             event->acceptProposedAction();
-            m_drag_active = true;
+            mDragActive = true;
             repolish();
         }
     }
@@ -45,7 +45,7 @@ namespace hal
     {
         Q_UNUSED(event)
 
-        m_drag_active = false;
+        mDragActive = false;
         repolish();
     }
 
@@ -63,7 +63,7 @@ namespace hal
             //            return;
 
             QString file = mime_data->urls().at(0).toLocalFile();
-            FileManager::get_instance()->open_file(file);
+            FileManager::get_instance()->openFile(file);
 
             //        for (int i = 0; i < url_list.size() && i < 32; ++i)
             //        {
@@ -71,34 +71,34 @@ namespace hal
             //        }
 
             event->acceptProposedAction();
-            m_drag_active = false;
+            mDragActive = false;
             repolish();
         }
     }
 
-    bool OpenFileWidget::drag_active()
+    bool OpenFileWidget::dragActive()
     {
-        return m_drag_active;
+        return mDragActive;
     }
 
-    QString OpenFileWidget::icon_style()
+    QString OpenFileWidget::iconStyle()
     {
-        return m_icon_style;
+        return mIconStyle;
     }
 
-    QString OpenFileWidget::icon_path()
+    QString OpenFileWidget::iconPath()
     {
-        return m_icon_path;
+        return mIconPath;
     }
 
-    void OpenFileWidget::set_icon_style(const QString& style)
+    void OpenFileWidget::setIconStyle(const QString& style)
     {
-        m_icon_style = style;
+        mIconStyle = style;
     }
 
-    void OpenFileWidget::set_icon_path(const QString& path)
+    void OpenFileWidget::setIconPath(const QString& path)
     {
-        m_icon_path = path;
+        mIconPath = path;
     }
 
     void OpenFileWidget::repolish()
@@ -108,7 +108,7 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        if (!m_icon_path.isEmpty())
-            m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(120, 120)));
+        if (!mIconPath.isEmpty())
+            mIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mIconStyle, mIconPath).pixmap(QSize(120, 120)));
     }
 }

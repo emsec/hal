@@ -45,11 +45,11 @@ namespace hal
 
         ~FilterDialog();
 
-        void append_filter_item(QString name, FilterItem* item);
+        void appendFilterItem(QString name, FilterItem* item);
 
     Q_SIGNALS:
 
-        void input_valid();
+        void inputValid();
 
     public Q_SLOTS:
 
@@ -58,44 +58,44 @@ namespace hal
         void reset(int);
 
     private:
-        class filter_combo_box : public QComboBox
+        class FilterComboBox : public QComboBox
         {
         public:
-            filter_combo_box(QWidget* parent = 0);
+            FilterComboBox(QWidget* parent = 0);
 
-            FilterItem::rule get_data();
+            FilterItem::Rule get_data();
         };
 
-        FilterTabBar* m_caller;
+        FilterTabBar* mCaller;
 
-        QVBoxLayout m_content_layout;
+        QVBoxLayout mContentLayout;
 
-        QFormLayout m_form_layout;
+        QFormLayout mFormLayout;
 
-        QGridLayout m_grid_layout;
+        QGridLayout mGridLayout;
 
-        QLineEdit m_name;
+        QLineEdit mName;
 
-        QLineEdit m_keywords;
+        QLineEdit mKeywords;
 
-        QLineEdit m_regex;
+        QLineEdit mRegex;
 
-        QLabel m_status_message;
+        QLabel mStatusMessage;
 
-        filter_combo_box m_trace_box;
+        FilterComboBox mTraceBox;
 
-        filter_combo_box m_debug_box;
+        FilterComboBox mDebugBox;
 
-        filter_combo_box m_info_box;
+        FilterComboBox mInfoBox;
 
-        filter_combo_box m_warning_box;
+        FilterComboBox mWarningBox;
 
-        filter_combo_box m_error_box;
+        FilterComboBox mErrorBox;
 
-        filter_combo_box m_critical_box;
+        FilterComboBox mCriticalBox;
 
-        filter_combo_box m_default_box;
+        FilterComboBox mDefaultBox;
 
-        QDialogButtonBox m_button_box;
+        QDialogButtonBox mButtonBox;
     };
 }

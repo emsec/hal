@@ -16,123 +16,123 @@ namespace hal
         init();
 
         setWindowTitle(window_title);
-        set_info_text(info_text);
-        set_input_text(input_text);
+        setInfoText(info_text);
+        setInputText(input_text);
     }
 
     void InputDialog::init()
     {
-        m_label_info_text = new QLabel();
-        m_label_warning_text = new QLabel();
-        m_input_text_edit = new QLineEdit();
+        mLabelInfoText = new QLabel();
+        mLabelWarningText = new QLabel();
+        mInputTextEdit = new QLineEdit();
 
         QDialogButtonBox* button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-        m_ok_button = button_box->button(QDialogButtonBox::Ok);
+        mOkButton = button_box->button(QDialogButtonBox::Ok);
 
-        m_layout = new QVBoxLayout(this);
-        m_layout->addWidget(m_label_info_text);
-        m_layout->addWidget(m_input_text_edit);
-        m_layout->addWidget(m_label_warning_text);
-        m_layout->addWidget(button_box);
-
-
-        m_label_info_text->setStyleSheet("font-weight: bold");
-        m_label_info_text->setContentsMargins(0, 0, 0, 15);
-
-        m_ok_button->setDisabled(true);
-
-        m_label_warning_text->setStyleSheet("color: red");
-        m_label_warning_text->setAlignment(Qt::AlignHCenter);
-        m_label_warning_text->setContentsMargins(0, 0, 0, 3);
-
-        m_layout->setContentsMargins(15, 15, 15, 10);
+        mLayout = new QVBoxLayout(this);
+        mLayout->addWidget(mLabelInfoText);
+        mLayout->addWidget(mInputTextEdit);
+        mLayout->addWidget(mLabelWarningText);
+        mLayout->addWidget(button_box);
 
 
-        m_validator = StackedValidator();
+        mLabelInfoText->setStyleSheet("font-weight: bold");
+        mLabelInfoText->setContentsMargins(0, 0, 0, 15);
 
-        connect(button_box, &QDialogButtonBox::accepted, this, &InputDialog::handle_ok_clicked);
-        connect(button_box, &QDialogButtonBox::rejected, this, &InputDialog::handle_cancel_clicked);
-        connect(m_input_text_edit, &QLineEdit::textChanged, this, &InputDialog::handle_text_changed);
+        mOkButton->setDisabled(true);
+
+        mLabelWarningText->setStyleSheet("color: red");
+        mLabelWarningText->setAlignment(Qt::AlignHCenter);
+        mLabelWarningText->setContentsMargins(0, 0, 0, 3);
+
+        mLayout->setContentsMargins(15, 15, 15, 10);
+
+
+        mValidator = StackedValidator();
+
+        connect(button_box, &QDialogButtonBox::accepted, this, &InputDialog::handleOkClicked);
+        connect(button_box, &QDialogButtonBox::rejected, this, &InputDialog::handleCancelClicked);
+        connect(mInputTextEdit, &QLineEdit::textChanged, this, &InputDialog::handleTextChanged);
     }
 
-    void InputDialog::set_window_title(const QString& title)
+    void InputDialog::setWindowTitle(const QString& title)
     {
         setWindowTitle(title);
     }
 
-    void InputDialog::set_info_text(const QString& text)
+    void InputDialog::setInfoText(const QString& text)
     {
-        m_label_info_text->setText(text);
+        mLabelInfoText->setText(text);
     }
 
-    void InputDialog::set_input_text(const QString& text)
+    void InputDialog::setInputText(const QString& text)
     {
-        m_input_text_edit->setText(text.trimmed());
-        m_input_text_edit->selectAll();
+        mInputTextEdit->setText(text.trimmed());
+        mInputTextEdit->selectAll();
     }
 
-    void InputDialog::set_warning_text(const QString& text)
+    void InputDialog::setWarningText(const QString& text)
     {
-        m_warning_text = text;
+        mWarningText = text;
     }
 
-    void InputDialog::show_warning_text()
+    void InputDialog::showWarningText()
     {
-        m_label_warning_text->setText(m_warning_text);
+        mLabelWarningText->setText(mWarningText);
     }
 
-    void InputDialog::hide_warning_text()
+    void InputDialog::hideWarningText()
     {
-        m_label_warning_text->setText("");
+        mLabelWarningText->setText("");
     }
 
-    void InputDialog::enable_progression()
+    void InputDialog::enableProgression()
     {
-        m_ok_button->setDisabled(false);
-        hide_warning_text();
+        mOkButton->setDisabled(false);
+        hideWarningText();
     }
 
-    void InputDialog::disable_progression()
+    void InputDialog::disableProgression()
     {
-        set_warning_text(m_validator.fail_text());
-        m_ok_button->setDisabled(true);
-        show_warning_text();
+        setWarningText(mValidator.failText());
+        mOkButton->setDisabled(true);
+        showWarningText();
     }
 
-    void InputDialog::add_validator(Validator* Validator)
+    void InputDialog::addValidator(Validator* Validator)
     {
-        m_validator.add_validator(Validator);
+        mValidator.addValidator(Validator);
     }
 
-    void InputDialog::remove_validator(Validator* Validator)
+    void InputDialog::removeValidator(Validator* Validator)
     {
-        m_validator.remove_validator(Validator);
+        mValidator.removeValidator(Validator);
     }
 
-    void InputDialog::clear_validators()
+    void InputDialog::clearValidators()
     {
-        m_validator.clear_validators();
+        mValidator.clearValidators();
     }
 
-    QString InputDialog::text_value() const
+    QString InputDialog::textValue() const
     {
-        return m_input_text_edit->text().trimmed();
+        return mInputTextEdit->text().trimmed();
     }
 
-    void InputDialog::handle_text_changed(const QString& text)
+    void InputDialog::handleTextChanged(const QString& text)
     {
-        if(!m_validator.validate(text.trimmed()))
-            disable_progression();
+        if(!mValidator.validate(text.trimmed()))
+            disableProgression();
         else
-            enable_progression();
+            enableProgression();
     }
 
-    void InputDialog::handle_ok_clicked()
+    void InputDialog::handleOkClicked()
     {
         done(QDialog::Accepted);
     }
 
-    void InputDialog::handle_cancel_clicked()
+    void InputDialog::handleCancelClicked()
     {
         done(QDialog::Rejected);
     }

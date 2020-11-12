@@ -45,26 +45,26 @@ namespace hal
 
         // right = true
         void setup(bool direction);
-        void setup(hal::node origin, Net* via_net, bool direction);
-        void hide_when_focus_lost(bool hide);
+        void setup(Node origin, Net* via_net, bool direction);
+        void hideWhenFocusLost(bool hide);
 
     Q_SIGNALS:
-        void navigation_requested(const hal::node origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
-        void close_requested();
-        void reset_focus();
+        void navigationRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+        void closeRequested();
+        void resetFocus();
 
     protected:
         void focusOutEvent(QFocusEvent* event) override;
         void keyPressEvent(QKeyEvent* event) override;
 
     private:
-        void fill_table(Net* n, bool direction);
-        void handle_item_double_clicked(QTableWidgetItem* item);
-        void commit_selection();
+        void fillTable(Net* n, bool direction);
+        void handleItemDoubleClicked(QTableWidgetItem* item);
+        void commitSelection();
 
-        GraphGraphicsView* m_view;
-        u32 m_via_net;
-        hal::node m_origin;
-        bool m_hide_when_focus_lost;
+        GraphGraphicsView* mView;
+        u32 mViaNet;
+        Node mOrigin;
+        bool mHideWhenFocusLost;
     };
 }

@@ -30,27 +30,27 @@ namespace hal
     class LabeledSeparatedNet : public SeparatedGraphicsNet
     {
     public:
-        static void load_settings();
+        static void loadSettings();
 
         LabeledSeparatedNet(Net* n, const QString& text);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
-        void add_input(const QPointF& scene_position) override;
-        void add_output(const QPointF& scene_position) override;
+        void addInput(const QPointF& scene_position) override;
+        void addOutput(const QPointF& scene_position) override;
 
-        qreal input_width() const override;
-        qreal output_width() const override;
+        qreal inputWidth() const override;
+        qreal outputWidth() const override;
 
     private:
-        static qreal s_wire_length;
-        static qreal s_text_offset;
+        static qreal sWireLength;
+        static qreal sTextOffset;
 
-        static QFont s_font;
-        static qreal s_font_height;
-        static qreal s_font_ascend;
+        static QFont sFont;
+        static qreal sFontHeight;
+        static qreal sFontAscend;
 
-        QString m_text;
-        qreal m_text_width;
+        QString mText;
+        qreal mTextWidth;
     };
 }

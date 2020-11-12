@@ -1,4 +1,5 @@
 #include "gui/settings/settings_relay.h"
+#include "gui/file_manager/file_manager.h"
 #include <QDebug>
 
 namespace hal
@@ -6,7 +7,11 @@ namespace hal
     SettingsRelay::SettingsRelay(QObject* parent) : QObject(parent)
     {
         // DEBUG print the changed setting to stdout
-        connect(this, &SettingsRelay::setting_changed, this, &SettingsRelay::debug);
+        connect(this, &SettingsRelay::settingChanged, this, &SettingsRelay::debug);
+
+        // connect statement moved here since FileManager singleton might get
+        // created prior to SettingsRelay
+        connect(this, &SettingsRelay::settingChanged, FileManager::get_instance(), &FileManager::handleGlobalSettingChanged);
     }
 
     void SettingsRelay::debug(void* sender, const QString& key, const QVariant& val)
@@ -15,22 +20,22 @@ namespace hal
         qDebug() << "Setting updated: " << key << " = " << val;
     }
 
-    // void SettingsRelay::register_sender(void* sender, QString name)
+    // void SettingsRelay::registerSender(void* sender, QString name)
     // {
-    //     m_sender_register.append(QPair<void*, QString>(sender, name));
+    //     mSenderRegister.append(QPair<void*, QString>(sender, name));
     // }
 
-    // void SettingsRelay::remove_sender(void* sender)
+    // void SettingsRelay::removeSender(void* sender)
     // {
-    //     for (QPair<void*, QString> pair : m_sender_register)
+    //     for (QPair<void*, QString> pair : mSenderRegister)
     //     {
     //         if (pair.first == sender)
-    //             m_sender_register.removeOne(pair);
+    //             mSenderRegister.removeOne(pair);
     //     }
     // }
 
-    void SettingsRelay::relay_setting_changed(void* sender, const QString& key, const QVariant& val)
+    void SettingsRelay::relaySettingChanged(void* sender, const QString& key, const QVariant& val)
     {
-        Q_EMIT setting_changed(sender, key, val);
+        Q_EMIT settingChanged(sender, key, val);
     }
 }

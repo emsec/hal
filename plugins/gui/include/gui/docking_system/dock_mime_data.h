@@ -39,6 +39,6 @@ namespace hal
         ContentWidget* widget() const;
 
     private:
-        ContentWidget* m_widget;
+        ContentWidget* mWidget;
     };
 }

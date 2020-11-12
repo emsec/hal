@@ -12,30 +12,30 @@
 
 namespace hal
 {
-    PluginArgumentsWidget::PluginArgumentsWidget(QWidget* parent) : QFrame(parent), m_form_layout(new QFormLayout())
+    PluginArgumentsWidget::PluginArgumentsWidget(QWidget* parent) : QFrame(parent), mFormLayout(new QFormLayout())
     {
-        setLayout(m_form_layout);
+        setLayout(mFormLayout);
     }
 
-    ProgramArguments PluginArgumentsWidget::get_args()
+    ProgramArguments PluginArgumentsWidget::getArgs()
     {
         std::vector<char*> temp_vector;
 
         QString string = "hal";
-        temp_vector.push_back(to_heap_cstring(string));
+        temp_vector.push_back(toHeapCstring(string));
 
-        for (QPair<QPushButton*, QLineEdit*> pair : m_vector)
+        for (QPair<QPushButton*, QLineEdit*> pair : mVector)
         {
             if (pair.first->isChecked())
             {
                 string = pair.first->text();
                 string.prepend("--");
-                temp_vector.push_back(to_heap_cstring(string));
+                temp_vector.push_back(toHeapCstring(string));
 
                 if (!pair.second->text().isEmpty())
                 {
                     string = pair.second->text();
-                    temp_vector.push_back(to_heap_cstring(string));
+                    temp_vector.push_back(toHeapCstring(string));
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace hal
         //        printf("argv[%d]: %s\n", i, argv[i]);
         //    }
 
-        ProgramOptions options     = m_plugin->get_cli_options();
+        ProgramOptions options     = mPlugin->get_cli_options();
         ProgramArguments arguments = options.parse(argc, const_cast<const char**>(argv));
 
         for (int i = 0; i < argc; ++i)
@@ -65,18 +65,18 @@ namespace hal
         return arguments;
     }
 
-    //void PluginArgumentsWidget::setup_plugin_layout(const QString& plugin)
+    //void PluginArgumentsWidget::setupPluginLayout(const QString& plugin)
     //{
-    //    for (QPair<QPushButton*, QLineEdit*>& pair : m_vector)
+    //    for (QPair<QPushButton*, QLineEdit*>& pair : mVector)
     //    {
     //        pair.first->hide();
     //        pair.second->hide();
-    //        m_form_layout->removeWidget(pair.first);
-    //        m_form_layout->removeWidget(pair.second);
+    //        mFormLayout->removeWidget(pair.first);
+    //        mFormLayout->removeWidget(pair.second);
     //        pair.first->deleteLater();
     //        pair.second->deleteLater();
     //    }
-    //    m_vector.clear();
+    //    mVector.clear();
 
     //    //USE EXECUTION MANAGER
 
@@ -87,8 +87,8 @@ namespace hal
     //        return;
     //    }
 
-    //    m_plugin = std::dynamic_pointer_cast<CLIPluginInterface>(factory_ptr->query_interface(PluginInterfaceType::cli));
-    //    if (!m_plugin)
+    //    mPlugin = std::dynamic_pointer_cast<CLIPluginInterface>(factory_ptr->query_interface(PluginInterfaceType::cli));
+    //    if (!mPlugin)
     //    {
     //        //log_msg(l_warning, "Plugin %s is not castable to CLIPluginInterface!\n", plugin_name.c_str());
     //        return;
@@ -96,16 +96,16 @@ namespace hal
 
     //    // END
 
-    //    for (auto option_tupel : m_plugin->get_cli_options().get_options())
+    //    for (auto option_tupel : mPlugin->get_cli_options().get_options())
     //    {
     //        QString name = QString::fromStdString(std::get<0>(option_tupel).at(0));
-    //        QString description = QString::fromStdString(std::get<1>(option_tupel));
+    //        QString mDescription = QString::fromStdString(std::get<1>(option_tupel));
     //        QPushButton* button = new QPushButton(name, this);
-    //        button->setToolTip(description);
+    //        button->setToolTip(mDescription);
     //        button->setCheckable(true);
     //        QLineEdit* LineEdit = new QLineEdit(this);
-    //        m_vector.append(QPair<QPushButton*, QLineEdit*>(button, LineEdit));
-    //        m_form_layout->addRow(button, LineEdit);
+    //        mVector.append(QPair<QPushButton*, QLineEdit*>(button, LineEdit));
+    //        mFormLayout->addRow(button, LineEdit);
     //        LineEdit->setDisabled(true);
     //        connect(button, &QPushButton::toggled, LineEdit, &QLineEdit::setEnabled);
     //    }
@@ -113,30 +113,30 @@ namespace hal
 
     void PluginArgumentsWidget::setup(const QString& plugin_name)
     {
-        for (QPair<QPushButton*, QLineEdit*> pair : m_vector)
+        for (QPair<QPushButton*, QLineEdit*> pair : mVector)
         {
             pair.first->deleteLater();
             pair.second->deleteLater();
         }
-        m_vector.clear();
+        mVector.clear();
 
-        m_plugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin_name.toStdString(), false);
-        if (!m_plugin)
+        mPlugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin_name.toStdString(), false);
+        if (!mPlugin)
         {
             //log_msg(l_warning, "Plugin %s is not castable to CLIPluginInterface!\n", plugin_name.c_str());
             return;
         }
 
-        for (auto option_tupel : m_plugin->get_cli_options().get_options())
+        for (auto option_tupel : mPlugin->get_cli_options().get_options())
         {
             QString name        = QString::fromStdString(*std::get<0>(option_tupel).begin());
-            QString description = QString::fromStdString(std::get<1>(option_tupel));
+            QString mDescription = QString::fromStdString(std::get<1>(option_tupel));
             QPushButton* button = new QPushButton(name, this);
-            button->setToolTip(description);
+            button->setToolTip(mDescription);
             button->setCheckable(true);
             QLineEdit* LineEdit = new QLineEdit(this);
-            m_vector.append(QPair<QPushButton*, QLineEdit*>(button, LineEdit));
-            m_form_layout->addRow(button, LineEdit);
+            mVector.append(QPair<QPushButton*, QLineEdit*>(button, LineEdit));
+            mFormLayout->addRow(button, LineEdit);
             LineEdit->setDisabled(true);
             connect(button, &QPushButton::toggled, LineEdit, &QLineEdit::setEnabled);
             /*LineEdit->hide();
@@ -144,74 +144,74 @@ namespace hal
         }
     }
 
-    void PluginArgumentsWidget::handle_plugin_selected(int index)
+    void PluginArgumentsWidget::handlePluginSelected(int index)
     {
-        for (QPair<QPushButton*, QLineEdit*>& pair : m_vector)
+        for (QPair<QPushButton*, QLineEdit*>& pair : mVector)
         {
             pair.first->hide();
             pair.second->hide();
-            m_form_layout->removeWidget(pair.first);
-            m_form_layout->removeWidget(pair.second);
+            mFormLayout->removeWidget(pair.first);
+            mFormLayout->removeWidget(pair.second);
             pair.first->deleteLater();
             pair.second->deleteLater();
         }
-        m_vector.clear();
+        mVector.clear();
 
-        for (auto arg : PluginScheduleManager::get_instance()->get_schedule()->at(index).second)
+        for (auto arg : PluginScheduleManager::get_instance()->getSchedule()->at(index).second)
         {
-            QPushButton* button = new QPushButton(arg.flag, this);
-            button->setToolTip(arg.description);
+            QPushButton* button = new QPushButton(arg.mFlag, this);
+            button->setToolTip(arg.mDescription);
             button->setCheckable(true);
-            button->setChecked(arg.checked);
+            button->setChecked(arg.mChecked);
             QLineEdit* LineEdit = new QLineEdit(arg.value, this);
-            LineEdit->setEnabled(arg.checked);
-            m_vector.append(QPair<QPushButton*, QLineEdit*>(button, LineEdit));
-            m_form_layout->addRow(button, LineEdit);
+            LineEdit->setEnabled(arg.mChecked);
+            mVector.append(QPair<QPushButton*, QLineEdit*>(button, LineEdit));
+            mFormLayout->addRow(button, LineEdit);
             connect(button, &QPushButton::toggled, LineEdit, &QLineEdit::setEnabled);
 
-            connect(button, &QPushButton::clicked, this, &PluginArgumentsWidget::handle_button_clicked);
-            connect(LineEdit, &QLineEdit::textEdited, this, &PluginArgumentsWidget::handle_text_edited);
+            connect(button, &QPushButton::clicked, this, &PluginArgumentsWidget::handleButtonClicked);
+            connect(LineEdit, &QLineEdit::textEdited, this, &PluginArgumentsWidget::handleTextEdited);
         }
     }
 
-    void PluginArgumentsWidget::handle_button_clicked(bool checked)
+    void PluginArgumentsWidget::handleButtonClicked(bool mChecked)
     {
         QObject* sender     = QObject::sender();
         QPushButton* button = static_cast<QPushButton*>(sender);
-        QString flag        = button->text();
+        QString mFlag        = button->text();
 
-        int current_index                     = PluginScheduleManager::get_instance()->get_current_index();
-        QPair<QString, QList<argument>>& pair = (*PluginScheduleManager::get_instance()->get_schedule())[current_index];
-        for (argument& arg : pair.second)
+        int current_index                     = PluginScheduleManager::get_instance()->getCurrentIndex();
+        QPair<QString, QList<Argument>>& pair = (*PluginScheduleManager::get_instance()->getSchedule())[current_index];
+        for (Argument& arg : pair.second)
         {
-            if (arg.flag == flag)
+            if (arg.mFlag == mFlag)
             {
-                arg.checked = checked;
+                arg.mChecked = mChecked;
                 return;
             }
         }
     }
 
-    void PluginArgumentsWidget::handle_text_edited(const QString& text)
+    void PluginArgumentsWidget::handleTextEdited(const QString& text)
     {
         QObject* sender      = QObject::sender();
         QLineEdit* LineEdit = static_cast<QLineEdit*>(sender);
         //QString value = LineEdit->text();
 
-        QString flag = "";
-        for (auto& pair : m_vector)
+        QString mFlag = "";
+        for (auto& pair : mVector)
         {
             if (pair.second == LineEdit)
             {
-                flag = pair.first->text();
+                mFlag = pair.first->text();
                 break;
             }
         }
 
-        QPair<QString, QList<argument>>& pair = (*PluginScheduleManager::get_instance()->get_schedule())[m_current_index];
-        for (argument& arg : pair.second)
+        QPair<QString, QList<Argument>>& pair = (*PluginScheduleManager::get_instance()->getSchedule())[mCurrentIndex];
+        for (Argument& arg : pair.second)
         {
-            if (arg.flag == flag)
+            if (arg.mFlag == mFlag)
             {
                 //arg.value = value;
                 arg.value = text;
@@ -220,7 +220,7 @@ namespace hal
         }
     }
 
-    char* PluginArgumentsWidget::to_heap_cstring(const QString& string)
+    char* PluginArgumentsWidget::toHeapCstring(const QString& string)
     {
         std::string std_string = string.toStdString();
         char* cstring          = new char[std_string.size() + 1];

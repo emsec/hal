@@ -3,14 +3,14 @@
 
 namespace hal
 {
-    SelectionTreeItem::SelectionTreeItem(SelectionTreeItem::itemType_t t, u32 id_)
+    SelectionTreeItem::SelectionTreeItem(SelectionTreeItem::TreeItemType t, u32 id_)
         : mItemType(t), mId(id_), mParent(0)
     {;}
 
     SelectionTreeItem::~SelectionTreeItem()
     {;}
 
-    SelectionTreeItem::itemType_t SelectionTreeItem::itemType() const
+    SelectionTreeItem::TreeItemType SelectionTreeItem::itemType() const
     {
         return mItemType;
     }
@@ -100,7 +100,7 @@ namespace hal
 
     QVariant SelectionTreeItemModule::name() const
     {
-        Module* module = g_netlist->get_module_by_id(mId);
+        Module* module = gNetlist->get_module_by_id(mId);
         if(!module) return QVariant();
         return QString::fromStdString(module->get_name());
     }
@@ -139,7 +139,7 @@ namespace hal
 
     QVariant SelectionTreeItemGate::name() const
     {
-        Gate* gate = g_netlist->get_gate_by_id(mId);
+        Gate* gate = gNetlist->get_gate_by_id(mId);
         if(!gate) return QVariant();
         return QString::fromStdString(gate->get_name());
     }
@@ -151,7 +151,7 @@ namespace hal
 
     QVariant SelectionTreeItemGate::gateType() const
     {
-        Gate* gate = g_netlist->get_gate_by_id(mId);
+        Gate* gate = gNetlist->get_gate_by_id(mId);
         if(!gate) return QVariant();
         return QString::fromStdString(gate->get_type()->get_name());
     }
@@ -171,7 +171,7 @@ namespace hal
 
     QVariant SelectionTreeItemNet::name() const
     {
-        Net* net = g_netlist->get_net_by_id(mId);
+        Net* net = gNetlist->get_net_by_id(mId);
         if(!net) return QVariant();
         return QString::fromStdString(net->get_name());
     }

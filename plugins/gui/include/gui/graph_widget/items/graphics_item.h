@@ -36,27 +36,27 @@ namespace hal
     class GraphicsItem : public QGraphicsItem
     {
     public:
-        static void load_settings();
-        static void set_lod(const qreal lod);
+        static void loadSettings();
+        static void setLod(const qreal lod);
 
-        GraphicsItem(const hal::item_type type, const u32 id);
+        GraphicsItem(const ItemType type, const u32 id);
 
-        hal::item_type item_type() const;
+        ItemType itemType() const;
         u32 id() const;
         void setHightlight(bool hl);
 
     protected:
-        static qreal s_lod;
-        static QColor s_selectionColor;
-        static QColor s_highlightColor;
+        static qreal sLod;
+        static QColor sSelectionColor;
+        static QColor sHighlightColor;
 
         QColor penColor(QStyle::State state, const QColor& colorHint=QColor()) const;
         QColor selectionColor() const;
         QColor groupingColor() const;
 
-        hal::item_type m_item_type; // USE QT ITEM TYPE SYSTEM INSTEAD ???
-        bool m_highlight;  // paint with hightlight color
-        u32 m_id;
-        QColor m_color;
+        ItemType mItemType; // USE QT ITEM TYPE SYSTEM INSTEAD ???
+        bool mHighlight;  // paint with hightlight color
+        u32 mId;
+        QColor mColor;
     };
 }

@@ -2,13 +2,13 @@
 
 namespace hal
 {
-    void Validator::set_fail_text(const QString& text)
+    void Validator::setFailText(const QString& text)
     {
-        m_fail_text = text;
+        mFailText = text;
     }
 
-    QString Validator::fail_text() const
+    QString Validator::failText() const
     {
-        return m_fail_text;
+        return mFailText;
     }
 }

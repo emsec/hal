@@ -51,7 +51,7 @@ namespace hal {
         GroupingTableEntry groupingAt(int irow) const { return mGroupings.at(irow); }
         Grouping* addDefaultEntry();
         Grouping* groupingByName(const QString& name) const;
-        QColor colorForItem(item_type itemType, u32 itemId) const;
+        QColor colorForItem(ItemType itemType, u32 itemId) const;
         void renameGrouping(int irow, const QString& groupingName);
         QStringList groupingNames() const;
 

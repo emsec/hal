@@ -39,13 +39,13 @@ namespace hal
     public:
         explicit ThreadPool(QObject* parent = nullptr);
 
-        void queue_task(Task* const t);
+        void queueTask(Task* const t);
 
     private Q_SLOTS:
-        void handle_worker_finished();
+        void handleWorkerFinished();
 
     private:
-        QStack<Worker*> m_free_threads;
-        QQueue<Task*> m_tasks;
+        QStack<Worker*> mFreeThreads;
+        QQueue<Task*> mTasks;
     };
 }

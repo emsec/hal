@@ -80,14 +80,14 @@ namespace hal {
                  for (const NetLayoutJunctionRange& rng : itOcc.value())
                  {
                      NetLayoutJunctionWire w = rng.toWire(ihoriz,iroad);
-                     if (w.mFirst == NetLayoutJunctionRange::MinInf)
+                     if (w.mFirst == NetLayoutJunctionRange::sMinInf)
                      {
                          if (w.mHorizontal==0)
                              w.mFirst = x0-1;
                          else
                              w.mFirst = y0-1;
                      }
-                     if (w.mLast == NetLayoutJunctionRange::MaxInf)
+                     if (w.mLast == NetLayoutJunctionRange::sMaxInf)
                      {
                          if (w.mHorizontal==0)
                              w.mLast = x1;
@@ -278,7 +278,7 @@ namespace hal {
         int iJump = 1-iMain;
         if (iroadIn == iroadOut)
         {
-            NetLayoutJunctionRange rng(netId,NetLayoutJunctionRange::MinInf, NetLayoutJunctionRange::MaxInf);
+            NetLayoutJunctionRange rng(netId,NetLayoutJunctionRange::sMinInf, NetLayoutJunctionRange::sMaxInf);
             place(iMain,iroadIn,rng);
             return;
         }
@@ -303,12 +303,12 @@ namespace hal {
                 return;
             }
             NetLayoutJunctionRange rngIn(netId,
-                                                 NetLayoutJunctionRange::MinInf,
+                                                 NetLayoutJunctionRange::sMinInf,
                                                  iroadJump);
             NetLayoutJunctionRange rngJump(netId, iroadLo, iroadHi);
             NetLayoutJunctionRange rngOut(netId,
                                                   iroadJump,
-                                                  NetLayoutJunctionRange::MaxInf);
+                                                  NetLayoutJunctionRange::sMaxInf);
 
             if (!conflict(iJump,iroadJump,rngJump) &&
                     !conflict(iMain,iroadOut,rngOut) &&
@@ -437,7 +437,7 @@ namespace hal {
     }
 
     void NetLayoutJunctionNet::setJunctionPoint(const NetLayoutJunctionWireIntersection& jp,
-            NetLayoutJunctionWireIntersection::placement_t placement)
+            NetLayoutJunctionWireIntersection::PlacementType placement)
     {
         bool found = false;
 
@@ -497,9 +497,9 @@ namespace hal {
 
     QGraphicsEllipseItem* NetLayoutJunctionWireIntersection::graphicsFactory(u32 netId) const
     {
-        float dd = DELTA / 2.;
-        float x0 = FIRST + x() * DELTA - dd/2;
-        float y0 = FIRST + y() * DELTA - dd/2;
+        float dd = NetLayoutJunctionRange::sSceneDelta / 2.;
+        float x0 = NetLayoutJunctionRange::sSceneFirst + x() * NetLayoutJunctionRange::sSceneDelta - dd/2;
+        float y0 = NetLayoutJunctionRange::sSceneFirst + y() * NetLayoutJunctionRange::sSceneDelta - dd/2;
         QGraphicsEllipseItem* retval = new QGraphicsEllipseItem(x0,y0,dd,dd);
         retval->setBrush(colorFromId(netId));
         return retval;
@@ -518,8 +518,8 @@ namespace hal {
 
     NetLayoutJunctionRange NetLayoutJunctionRange::entryRange(NetLayoutDirection dir, int iroad, u32 netId)
     {
-        const int first[4] = { MinInf, iroad, MinInf, iroad };
-        const int last[4]  = { iroad, MaxInf, iroad, MaxInf };
+        const int first[4] = { sMinInf, iroad, sMinInf, iroad };
+        const int last[4]  = { iroad, sMaxInf, iroad, sMaxInf };
         return NetLayoutJunctionRange(netId, first[dir.index()], last[dir.index()]);
     }
 
@@ -536,14 +536,14 @@ namespace hal {
 
     int NetLayoutJunctionRange::graphFirst() const
     {
-        if (mFirst == MinInf) return FIRST-GAP;
-        return mFirst * DELTA + FIRST;
+        if (mFirst == sMinInf) return sSceneFirst - sSceneGap;
+        return mFirst * sSceneDelta + sSceneFirst;
     }
 
     int NetLayoutJunctionRange::graphLast() const
     {
-        if (mLast == MaxInf) return 1000 + GAP - FIRST;
-        return mLast * DELTA + FIRST;
+        if (mLast == sMaxInf) return 1000 + sSceneGap - sSceneFirst;
+        return mLast * sSceneDelta + sSceneFirst;
     }
 
     bool NetLayoutJunctionRange::conflict(const NetLayoutJunctionRange& other) const
@@ -575,15 +575,15 @@ namespace hal {
 
     int NetLayoutJunctionWire::centralEnd() const
     {
-        if (mFirst==NetLayoutJunctionRange::MinInf)
+        if (mFirst==NetLayoutJunctionRange::sMinInf)
             return mLast;
         return mFirst;
     }
 
     bool NetLayoutJunctionWire::isEntry() const
     {
-        return mFirst == NetLayoutJunctionRange::MinInf
-                || mLast == NetLayoutJunctionRange::MaxInf;
+        return mFirst == NetLayoutJunctionRange::sMinInf
+                || mLast == NetLayoutJunctionRange::sMaxInf;
     }
 
     NetLayoutJunctionWireIntersection NetLayoutJunctionWire::intersection(const NetLayoutJunctionWire &other) const

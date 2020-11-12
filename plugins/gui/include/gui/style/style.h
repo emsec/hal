@@ -31,9 +31,9 @@ namespace hal
 {
     namespace style
     {
-        extern QString get_stylesheet();
-        extern QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path);
+        extern QString getStylesheet();
+        extern QIcon getStyledSvgIcon(const QString& from_to_colors, const QString& svg_path);
 
-        extern void debug_update(); // PLACEHOLDER
+        extern void debugUpdate(); // PLACEHOLDER
     }    // namespace style
 }

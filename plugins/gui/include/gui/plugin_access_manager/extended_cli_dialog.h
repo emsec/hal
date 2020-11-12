@@ -46,23 +46,23 @@ namespace hal
     public:
         ExtendedCliDialog(QString plugin_name, QWidget* parent = 0);
 
-        ProgramArguments get_args();
+        ProgramArguments getArgs();
 
     private Q_SLOTS:
-        void parse_arguments();
+        void parseArguments();
 
     private:
         void setup(std::string plugin_name);
-        QVBoxLayout* m_content_layout;
-        QFormLayout* m_form_layout;
-        QLabel* m_status_message;
-        QDialogButtonBox* m_button_box;
+        QVBoxLayout* mContentLayout;
+        QFormLayout* mFormLayout;
+        QLabel* mStatusMessage;
+        QDialogButtonBox* mButtonBox;
 
-        ProgramArguments m_args;
-        CLIPluginInterface* m_plugin;
+        ProgramArguments mArgs;
+        CLIPluginInterface* mPlugin;
 
-        std::vector<std::pair<QPushButton*, QLineEdit*>> m_vector;
+        std::vector<std::pair<QPushButton*, QLineEdit*>> mVector;
 
-        char** m_argv;
+        char** mArgv;
     };
 }

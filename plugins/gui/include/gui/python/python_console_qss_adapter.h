@@ -31,26 +31,26 @@ namespace hal
     class PythonConsoleQssAdapter : public QWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QColor standard_color READ standard_color WRITE set_standard_color)
-        Q_PROPERTY(QColor error_color READ error_color WRITE set_error_color)
-        Q_PROPERTY(QColor promt_color READ promt_color WRITE set_promt_color)
+        Q_PROPERTY(QColor standardColor READ standardColor WRITE setStandardColor)
+        Q_PROPERTY(QColor errorColor READ errorColor WRITE setErrorColor)
+        Q_PROPERTY(QColor promtColor READ promtColor WRITE setPromtColor)
 
     public:
         static PythonConsoleQssAdapter* instance();
 
-        QColor standard_color() const;
-        QColor error_color() const;
-        QColor promt_color() const;
+        QColor standardColor() const;
+        QColor errorColor() const;
+        QColor promtColor() const;
 
-        void set_standard_color(const QColor& color);
-        void set_error_color(const QColor& color);
-        void set_promt_color(const QColor& color);
+        void setStandardColor(const QColor& color);
+        void setErrorColor(const QColor& color);
+        void setPromtColor(const QColor& color);
 
     private:
         explicit PythonConsoleQssAdapter(QWidget* parent = nullptr);
 
-        QColor m_standard_color;
-        QColor m_error_color;
-        QColor m_promt_color;
+        QColor mStandardColor;
+        QColor mErrorColor;
+        QColor mPromtColor;
     };
 }    // namespace hal

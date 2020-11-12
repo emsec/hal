@@ -39,44 +39,44 @@ namespace hal
     public:
         static FileManager* get_instance();
 
-        void handle_program_arguments(const ProgramArguments& args);
+        void handleProgramArguments(const ProgramArguments& args);
 
-        QString file_name() const;
-        bool file_open() const;
+        QString fileName() const;
+        bool fileOpen() const;
 
-        void watch_file(const QString& file_name);
+        void watchFile(const QString& fileName);
 
 
     Q_SIGNALS:
-        void file_opened(const QString& file_name);
-        void file_changed(const QString& path);
-        void file_directory_changed(const QString& path);
-        void file_closed();
+        void fileOpened(const QString& fileName);
+        void fileChanged(const QString& path);
+        void fileDirectoryChanged(const QString& path);
+        void fileClosed();
 
     public Q_SLOTS:
-        void open_file(QString file_name);
-        void close_file();
+        void openFile(QString fileName);
+        void closeFile();
         void autosave();
+        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private Q_SLOTS:
-        void handle_file_changed(const QString& path);
-        void handle_directory_changed(const QString& path);
-        void handle_global_setting_changed(void* sender, const QString& key, const QVariant& value);
+        void handleFileChanged(const QString& path);
+        void handleDirectoryChanged(const QString& path);
 
     private:
         FileManager(QObject* parent = nullptr);
-        void file_successfully_loaded(QString file_name);
-        void update_recent_files(const QString& file) const;
-        void display_error_message(QString error_message);
-        QString get_shadow_file(QString file);
-        void remove_shadow_file();
+        void fileSuccessfullyLoaded(QString fileName);
+        void updateRecentFiles(const QString& file) const;
+        void displayErrorMessage(QString error_message);
+        QString getShadowFile(QString file);
+        void removeShadowFile();
 
-        QString m_file_name;
-        QString m_shadow_file_name;
-        QFileSystemWatcher* m_file_watcher;
-        bool m_file_open;
-        QTimer* m_timer;
-        bool m_autosave_enabled;
-        int m_autosave_interval;
+        QString mFileName;
+        QString mShadowFileName;
+        QFileSystemWatcher* mFileWatcher;
+        bool mFileOpen;
+        QTimer* mTimer;
+        bool mAutosaveEnabled;
+        int mAutosaveInterval;
     };
 }

@@ -32,28 +32,27 @@ namespace hal
     class GraphicsNode : public GraphicsItem
     {
     public:
-        struct visuals
+        struct Visuals
         {
-            bool visible;
+            bool mVisible;
 
-            QColor main_color;
-            QColor name_color;
-            QColor type_color;
-            QColor pin_color;
-            QColor background_color;
-            QColor border_color;
-            QColor highlight_color;
+            QColor mMainColor;
+            QColor mNameColor;
+            QColor mTypeColor;
+            QColor mPinColor;
+            QColor mBackgroundColor;
+            QColor mHighlightColor;
 
             // DRAW TYPE ENUM
         };
 
-        GraphicsNode(const hal::item_type type, const u32 id, const QString& name);
+        GraphicsNode(const ItemType type, const u32 id, const QString& name);
 
         virtual QRectF boundingRect() const override;
         virtual QPainterPath shape() const override;
 
-        virtual QPointF get_input_scene_position(const u32 net_id, const QString& pin_type) const = 0;
-        virtual QPointF get_output_scene_position(const u32 net_id, const QString& pin_type) const = 0;
+        virtual QPointF getInputScenePosition(const u32 mNetId, const QString& pin_type) const = 0;
+        virtual QPointF getOutputScenePosition(const u32 mNetId, const QString& pin_type) const = 0;
         virtual QPointF endpointPositionByIndex(int index, bool isInput) const = 0;
         virtual float   yEndpointDistance() const = 0;
         virtual float   yTopPinDistance() const = 0;
@@ -66,23 +65,23 @@ namespace hal
     //    virtual std::string get_input_pin_type_at_position(const size_t pos) const = 0;
     //    virtual std::string get_output_pin_type_at_position(const size_t pos) const = 0;
 
-        virtual void set_visuals(const visuals& v);
+        virtual void setVisuals(const Visuals& v);
 
         qreal width() const;
         qreal height() const;
 
         void set_name(const QString& name);
 
-    //    qreal x_offset() const;
-    //    qreal y_offset() const;
+    //    qreal xOffset() const;
+    //    qreal yOffset() const;
 
     protected:
         QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
         QString mNodeText[3];
 
-        qreal m_width;
-        qreal m_height;
+        qreal mWidth;
+        qreal mHeight;
 
         // pin by net number
         // (multiple) pins not assigned to network are stored with id=0

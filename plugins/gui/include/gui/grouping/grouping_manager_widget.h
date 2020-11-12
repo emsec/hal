@@ -47,64 +47,64 @@ namespace hal
     class GroupingManagerWidget : public ContentWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QString disabled_icon_style READ disabled_icon_style WRITE set_disabled_icon_style)
-        Q_PROPERTY(QString new_grouping_icon_path READ new_grouping_icon_path WRITE set_new_grouping_icon_path)
-        Q_PROPERTY(QString new_grouping_icon_style READ new_grouping_icon_style WRITE set_new_grouping_icon_style)
-        Q_PROPERTY(QString rename_grouping_icon_path READ rename_grouping_icon_path WRITE set_rename_grouping_icon_path)
-        Q_PROPERTY(QString rename_grouping_icon_style READ rename_grouping_icon_style WRITE set_rename_grouping_icon_style)
-        Q_PROPERTY(QString delete_icon_path READ delete_icon_path WRITE set_delete_icon_path)
-        Q_PROPERTY(QString delete_icon_style READ delete_icon_style WRITE set_delete_icon_style)
-        // Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
-        // Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
-        Q_PROPERTY(QString color_select_icon_path READ color_select_icon_path WRITE set_color_select_icon_path)
-        Q_PROPERTY(QString color_select_icon_style READ color_select_icon_style WRITE set_color_select_icon_style)
-        Q_PROPERTY(QString to_selection_icon_path READ to_selection_icon_path WRITE set_to_selection_icon_path)
-        Q_PROPERTY(QString to_selection_icon_style READ to_selection_icon_style WRITE set_to_selection_icon_style)
+        Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString newGroupingIconPath READ newGroupingIconPath WRITE setNewGroupingIconPath)
+        Q_PROPERTY(QString newGroupingIconStyle READ newGroupingIconStyle WRITE setNewGroupingIconStyle)
+        Q_PROPERTY(QString renameGroupingIconPath READ renameGroupingIconPath WRITE setRenameGroupingIconPath)
+        Q_PROPERTY(QString renameGroupingIconStyle READ renameGroupingIconStyle WRITE setRenameGroupingIconStyle)
+        Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath)
+        Q_PROPERTY(QString deleteIconStyle READ deleteIconStyle WRITE setDeleteIconStyle)
+        // Q_PROPERTY(QString openIconPath READ openIconPath WRITE setOpenIconPath)
+        // Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
+        Q_PROPERTY(QString colorSelectIconPath READ colorSelectIconPath WRITE setColorSelectIconPath)
+        Q_PROPERTY(QString colorSelectIconStyle READ colorSelectIconStyle WRITE setColorSelectIconStyle)
+        Q_PROPERTY(QString toSelectionIconPath READ toSelectionIconPath WRITE setToSelectionIconPath)
+        Q_PROPERTY(QString toSelectionIconStyle READ toSelectionIconStyle WRITE setToSelectionIconStyle)
 
     public:
         GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
-        virtual void setup_toolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
-        virtual QList<QShortcut*> create_shortcuts() override;
+        virtual void setupToolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual QList<QShortcut*> createShortcuts() override;
 
-        QString new_grouping_icon_path() const;
-        QString new_grouping_icon_style() const;
-        QString rename_grouping_icon_path() const;
-        QString rename_grouping_icon_style() const;
-        QString delete_icon_path() const;
-        QString delete_icon_style() const;
-        // QString open_icon_path() const;
-        // QString open_icon_style() const;
-        QString color_select_icon_path() const;
-        QString color_select_icon_style() const;
-        QString to_selection_icon_path() const;
-        QString to_selection_icon_style() const;
-        QString disabled_icon_style() const;
+        QString newGroupingIconPath() const;
+        QString newGroupingIconStyle() const;
+        QString renameGroupingIconPath() const;
+        QString renameGroupingIconStyle() const;
+        QString deleteIconPath() const;
+        QString deleteIconStyle() const;
+        // QString openIconPath() const;
+        // QString openIconStyle() const;
+        QString colorSelectIconPath() const;
+        QString colorSelectIconStyle() const;
+        QString toSelectionIconPath() const;
+        QString toSelectionIconStyle() const;
+        QString disabledIconStyle() const;
 
-        void set_disabled_icon_style(const QString &style);
-        void set_new_grouping_icon_path(const QString &path);
-        void set_new_grouping_icon_style(const QString &style);
-        void set_rename_grouping_icon_path(const QString &path);
-        void set_rename_grouping_icon_style(const QString &style);
-        void set_delete_icon_path(const QString &path);
-        void set_delete_icon_style(const QString &style);
-        // void set_open_icon_path(const QString &path);
-        // void set_open_icon_style(const QString &style);
-        void set_color_select_icon_path(const QString &path);
-        void set_color_select_icon_style(const QString &style);
-        void set_to_selection_icon_path(const QString &path);
-        void set_to_selection_icon_style(const QString &style);
+        void setDisabledIconStyle(const QString &style);
+        void setNewGroupingIconPath(const QString &path);
+        void setNewGroupingIconStyle(const QString &style);
+        void setRenameGroupingIconPath(const QString &path);
+        void setRenameGroupingIconStyle(const QString &style);
+        void setDeleteIconPath(const QString &path);
+        void setDeleteIconStyle(const QString &style);
+        // void setOpenIconPath(const QString &path);
+        // void setOpenIconStyle(const QString &style);
+        void setColorSelectIconPath(const QString &path);
+        void setColorSelectIconStyle(const QString &style);
+        void setToSelectionIconPath(const QString &path);
+        void setToSelectionIconStyle(const QString &style);
 
         GroupingTableModel* getModel() const { return mGroupingTableModel; }
 
     public Q_SLOTS:
         void handleLastEntryDeleted();
         void handleNewEntryAdded(const QModelIndex& modelIndex);
-        void handle_selection_changed(const QItemSelection &selected, const QItemSelection &deselected);
+        void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
         void handleCurrentChanged(const QModelIndex &current = QModelIndex(), const QModelIndex &previous = QModelIndex());
 
     private Q_SLOTS:
-        void toggle_searchbar();
+        void toggleSearchbar();
         void filter(const QString& text);
         void handleCreateGroupingClicked();
         void handleRenameGroupingClicked();
@@ -112,38 +112,38 @@ namespace hal
         void handleToSelectionClicked();
         void handleDeleteGroupingClicked();
 
-        void handle_context_menu_request(const QPoint& point);
+        void handleContextMenuRequest(const QPoint& point);
 
     private:
-        GraphTabWidget* m_tab_view;
+        GraphTabWidget* mTabView;
         QTableView* mGroupingTableView;
         GroupingTableModel* mGroupingTableModel;
-        GroupingProxyModel* m_proxy_model;
-        Searchbar* m_searchbar;
+        GroupingProxyModel* mProxyModel;
+        Searchbar* mSearchbar;
 
-        QAction* m_new_grouping_action;
-        QString m_new_grouping_icon_path;
-        QString m_new_grouping_icon_style;
+        QAction* mNewGroupingAction;
+        QString mNewGroupingIconPath;
+        QString mNewGroupingIconStyle;
 
-        QAction* m_rename_action;
-        QString m_rename_grouping_icon_path;
-        QString m_rename_grouping_icon_style;
+        QAction* mRenameAction;
+        QString mRenameGroupingIconPath;
+        QString mRenameGroupingIconStyle;
 
-        QAction* m_color_select_action;
-        QString m_color_select_icon_path;
-        QString m_color_select_icon_style;
+        QAction* mColorSelectAction;
+        QString mColorSelectIconPath;
+        QString mColorSelectIconStyle;
 
-        QAction* m_delete_action;
-        QString m_delete_icon_path;
-        QString m_delete_icon_style;
+        QAction* mDeleteAction;
+        QString mDeleteIconPath;
+        QString mDeleteIconStyle;
 
-        QAction* m_to_selection_action;
-        QString m_to_selection_icon_path;
-        QString m_to_selection_icon_style;
+        QAction* mToSelectionAction;
+        QString mToSelectionIconPath;
+        QString mToSelectionIconStyle;
 
-        QString m_disabled_icon_style;
+        QString mDisabledIconStyle;
 
-        void set_toolbar_buttons_enabled(bool enabled);
+        void setToolbarButtonsEnabled(bool enabled);
 
         GroupingTableEntry getCurrentGrouping();
     };

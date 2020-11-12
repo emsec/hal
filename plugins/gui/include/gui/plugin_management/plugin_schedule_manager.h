@@ -30,45 +30,45 @@ namespace hal
     class PluginArgumentsWidget;
     class ProgramArguments;
 
-    struct argument
+    struct Argument
     {
-        QString flag;
-        QString description;
+        QString mFlag;
+        QString mDescription;
         QString value;
-        bool checked;
+        bool mChecked;
     };
 
     class PluginScheduleManager : public QObject
     {
-        using schedule = QList<QPair<QString, QList<argument>>>;
+        using schedule = QList<QPair<QString, QList<Argument>>>;
 
         Q_OBJECT
 
     public:
         static PluginScheduleManager* get_instance();
 
-        schedule* get_schedule();
-        ProgramArguments get_program_arguments(int index);
-        int get_current_index();
+        schedule* getSchedule();
+        ProgramArguments getProgramArguments(int index);
+        int getCurrentIndex();
 
-        void set_current_index(int index);
+        void setCurrentIndex(int index);
 
-        void add_plugin(const QString& plugin, int index);
-        void move_plugin(int from, int to);
-        void remove_plugin(int index);
+        void addPlugin(const QString& plugin, int index);
+        void movePlugin(int from, int to);
+        void removePlugin(int index);
 
-        void save_schedule(const QString& name);
-        void load_schedule(const QString& name);
-        void delete_schedule(const QString& name);
+        void saveSchedule(const QString& name);
+        void loadSchedule(const QString& name);
+        void deleteSchedule(const QString& name);
 
-        void run_schedule();
+        void runSchedule();
 
     private:
         explicit PluginScheduleManager(QObject* parent = nullptr);
 
-        schedule m_schedule;
-        QList<QPair<QString, schedule*>> m_saved_schedules;
+        schedule mSchedule;
+        QList<QPair<QString, schedule*>> mSavedSchedules;
 
-        int m_current_index;
+        int mCurrentIndex;
     };
 }

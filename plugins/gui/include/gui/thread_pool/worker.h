@@ -36,11 +36,11 @@ namespace hal
     public:
         Worker(QObject* parent = nullptr);
 
-        void assign_task(Task* const t);
+        void assignTask(Task* const t);
 
         void run() Q_DECL_OVERRIDE;
 
     private:
-        Task* m_task;
+        Task* mTask;
     };
 }

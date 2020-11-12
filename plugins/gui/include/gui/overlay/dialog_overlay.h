@@ -37,16 +37,16 @@ namespace hal
     public:
         DialogOverlay(QWidget* parent = nullptr);
 
-        void set_dialog(Dialog* dialog);
+        void setDialog(Dialog* dialog);
 
     protected:
         void resizeEvent(QResizeEvent* event) override;
 
     private Q_SLOTS:
-        void position_dialog();
+        void positionDialog();
 
     private:
-        QVBoxLayout* m_layout;
-        Dialog* m_dialog;
+        QVBoxLayout* mLayout;
+        Dialog* mDialog;
     };
 }

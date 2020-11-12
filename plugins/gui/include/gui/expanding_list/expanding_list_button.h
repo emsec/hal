@@ -39,7 +39,7 @@ namespace hal
         Q_PROPERTY(bool hover READ hover)
         Q_PROPERTY(bool selected READ selected)
         Q_PROPERTY(QString type READ type)
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
+        Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
         ExpandingListButton(QWidget* parent = 0);
@@ -51,14 +51,14 @@ namespace hal
         bool hover();
         bool selected();
         QString type();
-        QString icon_style();
+        QString iconStyle();
 
-        void set_selected(bool selected);
+        void setSelected(bool selected);
         void set_type(const QString& type);
-        void set_icon_style(const QString& style);
+        void setIconStyle(const QString& style);
 
-        void set_icon_path(const QString& path);
-        void set_text(const QString& text);
+        void setIconPath(const QString& path);
+        void setText(const QString& text);
 
         void repolish();
 
@@ -66,16 +66,16 @@ namespace hal
         void clicked();
 
     private:
-        QHBoxLayout* m_layout;
-        QFrame* m_left_border;
-        QLabel* m_icon_label;
-        QLabel* m_text_label;
-        QFrame* m_right_border;
+        QHBoxLayout* mLayout;
+        QFrame* mLeftBorder;
+        QLabel* mIconLabel;
+        QLabel* mTextLabel;
+        QFrame* mRightBorder;
 
-        bool m_hover;
-        bool m_selected;
-        QString m_type;
-        QString m_icon_style;
-        QString m_icon_path;
+        bool mHover;
+        bool mSelected;
+        QString mType;
+        QString mIconStyle;
+        QString mIconPath;
     };
 }
