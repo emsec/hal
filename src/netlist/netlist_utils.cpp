@@ -207,7 +207,7 @@ namespace hal
                 for (const Gate* gate : grouping->get_gates())
                 {
                     const u32 gate_id = gate->get_id();
-                    c_grouping->assign_net_by_id(gate_id);
+                    c_grouping->assign_gate_by_id(gate_id);
                 }
             }
 
