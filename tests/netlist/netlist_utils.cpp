@@ -18,6 +18,153 @@ namespace hal {
     };
 
     /**
+     * Testing the get_subgraph_function
+     *
+     * Functions: get_subgraph_function
+     */
+    TEST_F(NetlistUtilsTest, check_get_subgraph_function) {
+        TEST_START
+            // Use the example netlist, that is filled with boolean functions for this test
+            // (3) becomes a NOT gate, (0) an AND gate, (7) a NOT gate
+            std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
+
+            // -- Set the boolean functions for these gates
+            Gate* gate_3 = test_nl->get_gate_by_id(MIN_GATE_ID+3);
+            Gate* gate_0 = test_nl->get_gate_by_id(MIN_GATE_ID+0);
+            Gate* gate_7 = test_nl->get_gate_by_id(MIN_GATE_ID+7);
+            gate_3->add_boolean_function("O",
+                BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
+            gate_0->add_boolean_function("O",
+                BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
+            gate_7->add_boolean_function("O",
+                BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
+            // -- Get the names of the connected nets
+            std::string net_13_name = std::to_string(MIN_NET_ID+13);
+            std::string net_20_name = std::to_string(MIN_NET_ID+20);
+            std::string net_78_name = std::to_string(MIN_NET_ID+78);
+            std::string net_30_name = std::to_string(MIN_NET_ID+30);
+
+            {
+                // Get the boolean function of a normal sub-graph
+                const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
+                const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID+045);
+                BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
+
+                BooleanFunction expected_bf = BooleanFunction::from_string(("!"+net_13_name+" & "+net_20_name),
+                    std::vector<std::string>({net_13_name, net_20_name}));
+
+                EXPECT_EQ(sub_graph_bf, expected_bf);
+            }
+            // NEGATIVE
+            {
+                // No subgraph gates are passed
+                const std::vector<const Gate*> subgraph_gates({});
+                const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID+045);
+                BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
+
+                EXPECT_TRUE(sub_graph_bf.is_empty());
+            }
+            {
+                // One of the gates is a nullptr
+                const std::vector<const Gate*> subgraph_gates({gate_0, nullptr, gate_3});
+                const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID+045);
+                BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
+
+                EXPECT_TRUE(sub_graph_bf.is_empty());
+            }
+            {
+                // The output net is a nullptr
+                const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
+                const Net* output_net = nullptr;
+                BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
+
+                EXPECT_TRUE(sub_graph_bf.is_empty());
+            }
+            {
+                // The output net has multiple sources
+                // -- create such a net
+                Net* multi_src_net = test_nl->create_net("muli_src_net");
+                multi_src_net->add_source(test_nl->get_gate_by_id(MIN_GATE_ID+4), "O");
+                multi_src_net->add_source(test_nl->get_gate_by_id(MIN_GATE_ID+5), "O");
+
+                const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
+                const Net* output_net = multi_src_net;
+                BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
+
+                EXPECT_TRUE(sub_graph_bf.is_empty());
+                // -- remove the net
+                test_nl->delete_net(multi_src_net);
+            }
+            {
+                // The output net has no source
+                // -- create such a net
+                Net* no_src_net = test_nl->create_net("muli_src_net");
+
+                const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
+                const Net* output_net = no_src_net;
+                BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
+
+                EXPECT_TRUE(sub_graph_bf.is_empty());
+                // -- remove the net
+                test_nl->delete_net(no_src_net);
+            }
+            {
+                // A net in between has multiple sources (expansion should stop in this direction)
+                // -- add a source to net 30 temporarily
+                test_nl->get_net_by_id(MIN_NET_ID+30)->add_source(test_nl->get_gate_by_id(MIN_GATE_ID+8),"O");
+
+                const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
+                const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID+045);
+                BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
+
+                BooleanFunction expected_bf = BooleanFunction::from_string((net_30_name+" & "+net_20_name),
+                                                                           std::vector<std::string>({net_30_name, net_20_name}));
+
+                EXPECT_EQ(sub_graph_bf, expected_bf);
+            }
+            // ISSUE: Endless Loop
+            if(test_utils::known_issue_tests_active())
+            {
+                // The netlist contains a cycle
+                // -- create such a netlist:
+                 /*   .-=|gate_0|=----.
+                 *    '------------.  |
+                 *    .-=|gate_1|=-'  |
+                 *    '---------------'
+                 */
+                std::unique_ptr<Netlist> cyclic_nl = test_utils::create_empty_netlist();
+                Gate* cy_gate_0 = cyclic_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_0");
+                Gate* cy_gate_1 = cyclic_nl->create_gate(test_utils::get_gate_type_by_name("gate_1_to_1"), "gate_1");
+                cy_gate_0->add_boolean_function("O",BooleanFunction::from_string("O",{"I"}));
+                cy_gate_1->add_boolean_function("O",BooleanFunction::from_string("O",{"I"}));
+
+                Net* cy_net_0 = cyclic_nl->create_net("net_0");
+                Net* cy_net_1 = cyclic_nl->create_net("net_1");
+                cy_net_0->add_source(cy_gate_0, "O");
+                cy_net_0->add_destination(cy_gate_1, "I");
+                cy_net_1->add_source(cy_gate_1, "O");
+                cy_net_1->add_destination(cy_gate_0, "I");
+
+                const std::vector<const Gate*> subgraph_gates({cy_gate_0, cy_gate_1});
+                const Net* output_net = cy_net_0;
+                BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
+
+                EXPECT_TRUE(sub_graph_bf.is_empty());
+            }
+            // ISSUE: SIGSEGV in l.35 src/.../netlist_utils.cpp
+            if(test_utils::known_issue_tests_active())
+            {
+                // A gate of the subgraph has unconnected input pins
+                const std::vector<const Gate*> subgraph_gates({gate_7});
+                const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID+78);
+                BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
+
+                EXPECT_TRUE(sub_graph_bf.is_empty());
+            }
+        TEST_END
+    }
+
+    /**
      * Testing the deep copying of netlists
      *
      * Functions: copy_netlist
