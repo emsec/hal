@@ -40,21 +40,20 @@ namespace hal
         Q_OBJECT
     public:
         SpecialLogContentManager(QObject* parent = nullptr);
-        SpecialLogContentManager(MainWindow* parent, PythonEditor* python_editor);
+        SpecialLogContentManager(QObject* parent = nullptr, PythonEditor* python_editor = nullptr);
         ~SpecialLogContentManager();
 
-        void safe_screenshot();
-        void safe_python_editor();
+        void safeScreenshot();
+        void safePythonEditor();
 
-        void start_logging(int msec);
+        void startLogging(int msec);
 
     private:
-        QTimer* m_timer;
-        MainWindow* m_main_window;
-        PythonEditor* m_python_editor;
+        QTimer* mTimer;
+        PythonEditor* mPythonEditor;
         //either save it in the same directory (eg. /SpecialLogs) or split it into something
         //like (SpecialLogs/Screenshots and SpecialLogs/PyhthonContent)
-        QString m_screenshot_sub_path;
-        QString m_python_content_sub_path;
+        QString mScreenshotSubPath;
+        QString mPythonContentSubPath;
     };
 }

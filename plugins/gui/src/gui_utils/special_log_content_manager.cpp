@@ -19,19 +19,19 @@
 
 namespace hal
 {
-    SpecialLogContentManager::SpecialLogContentManager(QObject* parent) : QObject(parent), m_timer(new QTimer(this))
+    SpecialLogContentManager::SpecialLogContentManager(QObject* parent) : QObject(parent), mTimer(new QTimer(this))
     {
 
     }
 
-    SpecialLogContentManager::SpecialLogContentManager(MainWindow *parent, PythonEditor *python_editor) : QObject(parent), m_main_window(parent),
-       m_timer(new QTimer(this)), m_python_editor(python_editor)
+    SpecialLogContentManager::SpecialLogContentManager(QObject *parent, PythonEditor *python_editor) : QObject(parent),
+       mTimer(new QTimer(this)), mPythonEditor(python_editor)
     {
-        m_screenshot_sub_path = "/screenshots";
-        m_python_content_sub_path = "/pythoneditors";
+        mScreenshotSubPath = "/screenshots";
+        mPythonContentSubPath = "/pythoneditors";
 
-        connect(m_timer, &QTimer::timeout, this, &SpecialLogContentManager::safe_screenshot);
-        connect(m_timer, &QTimer::timeout, this, &SpecialLogContentManager::safe_python_editor);
+        connect(mTimer, &QTimer::timeout, this, &SpecialLogContentManager::safeScreenshot);
+        connect(mTimer, &QTimer::timeout, this, &SpecialLogContentManager::safePythonEditor);
     }
 
     SpecialLogContentManager::~SpecialLogContentManager()
@@ -39,31 +39,31 @@ namespace hal
 
     }
 
-    void SpecialLogContentManager::safe_screenshot()
+    void SpecialLogContentManager::safeScreenshot()
     {
-        QString hal_file_name = FileManager::get_instance()->fileName();
+        QString halFileName = FileManager::get_instance()->fileName();
 
-        if(hal_file_name.isEmpty() || qGuiApp->topLevelWindows().isEmpty())
+        if(halFileName.isEmpty() || qGuiApp->topLevelWindows().isEmpty())
             return;
 
-        QDir hal_file_dir = QFileInfo(hal_file_name).absoluteDir();
-        QString hal_file_name_sub_path = "/" + QFileInfo(hal_file_name).baseName();
-        QString screenshot_path = hal_file_dir.path() + hal_file_name_sub_path + m_screenshot_sub_path;
-        if(!hal_file_dir.exists(screenshot_path))
+        QDir halFileDir = QFileInfo(halFileName).absoluteDir();
+        QString halFileNameSubPath = "/" + QFileInfo(halFileName).baseName();
+        QString screenshotPath = halFileDir.path() + halFileNameSubPath + mScreenshotSubPath;
+        if(!halFileDir.exists(screenshotPath))
         {
-            if(!hal_file_dir.mkpath(screenshot_path))
+            if(!halFileDir.mkpath(screenshotPath))
             {
                 qDebug() << "Failed to create screenshots directory.";
                 return;
             }
         }
 
-        QString file_name = "Screenshot_" +QString::number(QDateTime::currentDateTime().toTime_t());
-        QString file_type = "png";
+        QString fileName = "Screenshot_" +QString::number(QDateTime::currentDateTime().toTime_t());
+        QString fileType = "png";
 
-        QList<QPixmap> pixmap_list;
-        int total_width = 0;
-        int max_height = 0;
+        QList<QPixmap> pixmapList;
+        int totalWidth = 0;
+        int maxHeight = 0;
         for(int i = 0; i < qGuiApp->topLevelWindows().size(); i++)
         {
             QWidget* found_wid = QWidget::find(qGuiApp->topLevelWindows().at(i)->winId());
@@ -71,53 +71,53 @@ namespace hal
             {
                 QPixmap p(found_wid->size());
                 found_wid->render(&p);
-                total_width += p.width();
-                max_height = (max_height > p.height()) ? max_height : p.height();
-                pixmap_list.append(p);
+                totalWidth += p.width();
+                maxHeight = (maxHeight > p.height()) ? maxHeight : p.height();
+                pixmapList.append(p);
 
             }
             else
                 qDebug() << "Could not find any top level widget to screenshot.";
         }
 
-        QImage image(total_width, max_height, QImage::Format_RGB32);
+        QImage image(totalWidth, maxHeight, QImage::Format_RGB32);
         QPainter painter(&image);
         int curr_x = 0;
-        for(int i = 0; i < pixmap_list.size(); i++)
+        for(int i = 0; i < pixmapList.size(); i++)
         {
-            QPixmap curr_pixmap = pixmap_list.at(i);
-            painter.drawPixmap(curr_x, 0, curr_pixmap);
-            painter.fillRect(curr_x, curr_pixmap.height(), curr_pixmap.width(), max_height-curr_pixmap.height(),Qt::white);
-            curr_x += curr_pixmap.width();
+            QPixmap currPixmap = pixmapList.at(i);
+            painter.drawPixmap(curr_x, 0, currPixmap);
+            painter.fillRect(curr_x, currPixmap.height(), currPixmap.width(), maxHeight-currPixmap.height(),Qt::white);
+            curr_x += currPixmap.width();
         }
 
-        if(!image.save(screenshot_path + "/" + file_name + "." + file_type))
+        if(!image.save(screenshotPath + "/" + fileName + "." + fileType))
             qDebug() << "Could not save image!";
     }
 
-    void SpecialLogContentManager::safe_python_editor()
+    void SpecialLogContentManager::safePythonEditor()
     {
-        QString hal_file_name = FileManager::get_instance()->fileName();
+        QString halFileName = FileManager::get_instance()->fileName();
 
-        if(!m_python_editor || !m_python_editor->get_tab_widget() || hal_file_name.isEmpty())
+        if(!mPythonEditor || !mPythonEditor->getTabWidget() || halFileName.isEmpty())
             return;
 
-        QDir hal_file_dir = QFileInfo(hal_file_name).absoluteDir();
-        QString hal_file_name_sub_path = "/" + QFileInfo(hal_file_name).baseName();
-        QString python_editor_content_dumb_path = hal_file_dir.path() + hal_file_name_sub_path + m_python_content_sub_path;
-        if(!hal_file_dir.exists(python_editor_content_dumb_path))
+        QDir halFileDir = QFileInfo(halFileName).absoluteDir();
+        QString halFileNameSubPath = "/" + QFileInfo(halFileName).baseName();
+        QString pythonEditorDumpPath = halFileDir.path() + halFileNameSubPath + mPythonContentSubPath;
+        if(!halFileDir.exists(pythonEditorDumpPath))
         {
-            if(!hal_file_dir.mkpath(python_editor_content_dumb_path))
+            if(!halFileDir.mkpath(pythonEditorDumpPath))
             {
                 qDebug() << "Failed to create python editor dumb directory.";
                 return;
             }
         }
 
-        QTabWidget* python_tab_widget = m_python_editor->get_tab_widget();
-        QString file_name = "Pythoncodeeditors_" + QString::number(QDateTime::currentDateTime().toTime_t());
-        QString file_type = "txt";
-        QFile file(python_editor_content_dumb_path + "/" + file_name + "." + file_type);
+        QTabWidget* pythonTabWidget = mPythonEditor->getTabWidget();
+        QString fileName = "Pythoncodeeditors_" + QString::number(QDateTime::currentDateTime().toTime_t());
+        QString fileType = "txt";
+        QFile file(pythonEditorDumpPath + "/" + fileName + "." + fileType);
 
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
@@ -125,12 +125,12 @@ namespace hal
             return;
         }
 
-        QTextStream ds(&file);
-        ds << "Number of tabs: " << QString::number(python_tab_widget->count()) << "\n";
+        QTextStream textStream(&file);
+        textStream << "Number of tabs: " << QString::number(pythonTabWidget->count()) << "\n";
 
-        for(int i = 0; i < python_tab_widget->count(); i++)
+        for(int i = 0; i < pythonTabWidget->count(); i++)
         {
-            QPlainTextEdit* python_editor = dynamic_cast<QPlainTextEdit*>(python_tab_widget->widget(i));
+            QPlainTextEdit* python_editor = dynamic_cast<QPlainTextEdit*>(pythonTabWidget->widget(i));
             QString content = "";
 
             if(python_editor)
@@ -138,16 +138,16 @@ namespace hal
             else
                 content = "Could not get python code editor content.";
 
-            ds << "---------------------Start of new tab------------------------\nTabnumber: " << i
-               << "\nName: "<< python_tab_widget->tabText(i) << "\nContent:\n" << content << "\n";
+            textStream << "---------------------Start of new tab------------------------\nTabnumber: " << i
+                       << "\nName: "<< pythonTabWidget->tabText(i) << "\nContent:\n" << content << "\n";
 
         }
         file.close();
     }
 
-    void SpecialLogContentManager::start_logging(int msec)
+    void SpecialLogContentManager::startLogging(int msec)
     {
-        m_timer->start(msec);
+        mTimer->start(msec);
     }
 
 }

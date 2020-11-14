@@ -95,6 +95,6 @@ namespace hal
 
         SelectionDetailsWidget* mSelectionDetailsWidget;
 
-        SpecialLogContentManager* m_special_log_content_manager;
+        SpecialLogContentManager* mSpecialLogContentManager;
     };
 }

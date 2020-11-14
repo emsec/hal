@@ -53,7 +53,7 @@ namespace hal
     void SelectionRelay::relaySelectionChanged(void* sender)
     {
 #ifdef HAL_STUDY
-        evaluate_selection_changed(sender);
+        evaluateSelectionChanged(sender);
 #endif
         Q_EMIT selectionChanged(sender);
     }
@@ -626,7 +626,7 @@ namespace hal
         Q_EMIT subfocusChanged(nullptr);
     }
 #ifdef HAL_STUDY
-    void SelectionRelay::evaluate_selection_changed(void *sender)
+    void SelectionRelay::evaluateSelectionChanged(void *sender)
     {
         QString method = "unknown";
         for(const auto pair : mSenderRegister)
@@ -638,7 +638,7 @@ namespace hal
             }
         }
 
-        auto create_substring = [](std::string first_part, QSet<u32> ids){
+        auto createSubstring = [](std::string first_part, QSet<u32> ids){
 
             std::string final_string = first_part;
             for(const auto &i : ids)
@@ -650,10 +650,10 @@ namespace hal
             return final_string + "}";
         };
 
-        std::string gate_ids_substring = create_substring("Gate-Ids: {", mSelectedGates);
-        std::string net_ids_substring = create_substring("Net-Ids: {", mSelectedNets);
-        std::string module_ids_substring = create_substring("Module-Ids: {", mSelectedModules);
-        log_info("UserStudy", "Selection changed, Method: {}, New Sel.: {}, {}, {}", method.toStdString(), gate_ids_substring, net_ids_substring, module_ids_substring);
+        std::string gateIdsSubstring = createSubstring("Gate-Ids: {", mSelectedGates);
+        std::string netIdsSubstring = createSubstring("Net-Ids: {", mSelectedNets);
+        std::string moduleIdsSubstring = createSubstring("Module-Ids: {", mSelectedModules);
+        log_info("UserStudy", "Selection changed, Method: {}, New Sel.: {}, {}, {}", method.toStdString(), gateIdsSubstring, netIdsSubstring, moduleIdsSubstring);
 
 
     }

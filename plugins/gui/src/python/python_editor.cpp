@@ -446,7 +446,7 @@ namespace hal
         mTabWidget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
     }
 
-    QTabWidget *PythonEditor::get_tab_widget()
+    QTabWidget *PythonEditor::getTabWidget()
     {
         return mTabWidget;
     }

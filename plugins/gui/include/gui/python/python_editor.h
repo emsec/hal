@@ -89,7 +89,7 @@ namespace hal
         void tabLoadFile(u32 index, QString fileName);
 
         //added so that the speciallogcontentmanager has access to all the code editors
-        QTabWidget* get_tab_widget();
+        QTabWidget* getTabWidget();
 
         void saveFile(const bool ask_path, int index = -1);
 

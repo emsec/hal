@@ -171,8 +171,8 @@ namespace hal
 
 #ifdef HAL_STUDY
         //log_info("gui", "HAL_STUDY activated");
-        m_special_log_content_manager = new SpecialLogContentManager(mMainWindow, mPythonWidget);
-        m_special_log_content_manager->start_logging(60000);
+        mSpecialLogContentManager = new SpecialLogContentManager(mMainWindow, mPythonWidget);
+        mSpecialLogContentManager->startLogging(60000);
 #endif
         mNetlistWatcher = new NetlistWatcher(this);
     }

@@ -139,7 +139,7 @@ namespace hal
 
 
 #ifdef HAL_STUDY
-        void evaluate_selection_changed(void* sender);
+        void evaluateSelectionChanged(void* sender);
 #endif
         void subfocusNone();
         void subfocusLeft();
