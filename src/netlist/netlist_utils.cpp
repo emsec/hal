@@ -8,6 +8,7 @@
 #include "hal_core/utilities/log.h"
 
 #include <queue>
+#include <unordered_set>
 
 namespace hal
 {
@@ -29,10 +30,18 @@ namespace hal
                 else
                 {
                     BooleanFunction bf = gate->get_boolean_function();
+
                     for (const std::string& input_pin : gate->get_input_pins())
                     {
                         const Net* const input_net = gate->get_fan_in_net(input_pin);
-                        bf                         = bf.substitute(input_pin, std::to_string(input_net->get_id()));
+                        if (input_net == nullptr)
+                        {
+                            // if no net is connected, the input pin name cannot be replaced
+                            log_warning("netlist", "not net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", input_pin, gate->get_id());
+                            return bf;
+                        }
+
+                        bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
                     }
                     _cache.functions.emplace(gate->get_id(), bf);
                     return bf;
@@ -78,18 +87,27 @@ namespace hal
                 q.push(n);
             }
 
+            std::unordered_set<const Net*> visited_nets;
+
             while (!q.empty())
             {
                 const Net* n = q.front();
                 q.pop();
+
+                if (visited_nets.find(n) != visited_nets.end())
+                {
+                    log_error("netlist", "detected infinite loop at net with ID {}, cannot determine Boolean function of the subgraph.", n->get_id());
+                    return BooleanFunction();
+                }
+                visited_nets.insert(n);
+
                 if (n->get_num_of_sources() > 1)
                 {
-                    log_error("verification", "net with ID {} has more than one source source, cannot expand Boolean function in this direction.", n->get_id());
+                    log_error("netlist", "net with ID {} has more than one source, cannot expand Boolean function in this direction.", n->get_id());
                     continue;
                 }
                 else if (n->get_num_of_sources() == 0)
                 {
-                    //log_error("verification", "net with ID {} has no sources cannot expand Boolean function in this direction.", n->get_id());
                     continue;
                 }
 
@@ -253,6 +271,28 @@ namespace hal
             c_netlist->set_next_grouping_id(nl->get_next_grouping_id());
             c_netlist->set_used_grouping_ids(nl->get_used_grouping_ids());
             c_netlist->set_free_grouping_ids(nl->get_free_grouping_ids());
+
+            // copy module port names
+            for (const Module* module : nl->get_modules())
+            {
+                const u32 module_id = module->get_id();
+                Module* c_module    = c_netlist->get_module_by_id(module_id);
+
+                for (const auto& [net, port_name] : module->get_input_port_names())
+                {
+                    u32 net_id = net->get_id();
+                    c_module->set_input_port_name(c_netlist->get_net_by_id(net_id), port_name);
+                }
+
+                for (const auto& [net, port_name] : module->get_output_port_names())
+                {
+                    u32 net_id = net->get_id();
+                    c_module->set_output_port_name(c_netlist->get_net_by_id(net_id), port_name);
+                }
+
+                c_module->set_next_input_port_id(module->get_next_input_port_id());
+                c_module->set_next_output_port_id(module->get_next_output_port_id());
+            }
 
             return c_netlist;
         }

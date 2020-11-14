@@ -122,8 +122,6 @@ namespace hal {
 
                 EXPECT_EQ(sub_graph_bf, expected_bf);
             }
-            // ISSUE: Endless Loop
-            if(test_utils::known_issue_tests_active())
             {
                 // The netlist contains a cycle
                 // -- create such a netlist:
@@ -151,15 +149,13 @@ namespace hal {
 
                 EXPECT_TRUE(sub_graph_bf.is_empty());
             }
-            // ISSUE: SIGSEGV in l.35 src/.../netlist_utils.cpp
-            if(test_utils::known_issue_tests_active())
             {
                 // A gate of the subgraph has unconnected input pins
                 const std::vector<const Gate*> subgraph_gates({gate_7});
                 const Net* output_net = test_nl->get_net_by_id(MIN_NET_ID+78);
                 BooleanFunction sub_graph_bf = netlist_utils::get_subgraph_function(subgraph_gates, output_net);
 
-                EXPECT_TRUE(sub_graph_bf.is_empty());
+                EXPECT_EQ(sub_graph_bf, gate_7->get_boolean_function("O"));
             }
         TEST_END
     }
