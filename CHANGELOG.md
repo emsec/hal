@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added tests for `netlist_utils`
+* fix crash when creating invalid module when using `netlist::create_module`
+* fix assign nets instead of gates when copying netlist using `netlist_utils::copy_netlist`
 
 ## [3.1.3] - 2020-11-12 17:15:00+02:00 (urgency: medium)
 * GUI code refactoring
