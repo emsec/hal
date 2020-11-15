@@ -166,7 +166,6 @@ namespace hal
         forwardStdout("\n");
         forwardStdout("<Execute Python Editor content>");
         forwardStdout("\n");
-        log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
         try
         {
             py::eval<py::eval_statements>(input.toStdString(), tmp_context, tmp_context);
