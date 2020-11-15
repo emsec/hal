@@ -197,6 +197,20 @@ namespace hal
         const std::map<Net*, std::string>& get_input_port_names() const;
 
         /**
+         * Set the next free input port ID to the given value.
+         * 
+         * @param[in] id - The next input port ID. 
+         */
+        void set_next_input_port_id(u32 id);
+
+        /**
+         * Get the next free input port ID.
+         * 
+         * @returns The next input port ID.
+         */
+        u32 get_next_input_port_id() const;
+
+        /**
          * Set the name of the port corresponding to the specified output net.
          *
          * @param[in] output_net - The output net.
@@ -226,6 +240,20 @@ namespace hal
          * @returns The map from output net to port name.
          */
         const std::map<Net*, std::string>& get_output_port_names() const;
+
+        /**
+         * Set the next free output port ID to the given value.
+         * 
+         * @param[in] id - The next output port ID. 
+         */
+        void set_next_output_port_id(u32 id);
+
+        /**
+         * Get the next free output port ID.
+         * 
+         * @returns The next output port ID.
+         */
+        u32 get_next_output_port_id() const;
 
         /*
          * ################################################################

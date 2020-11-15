@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added tests for `netlist_utils`
+* fixed crash when creating invalid module when using `netlist::create_module`
+* fixed assign nets instead of gates when copying netlist using `netlist_utils::copy_netlist`
+* fixed `netlist_utils::copy_netlist` not copying port names
+* fixed `netlist_utils::get_subgraph_function` crashing on unconnected input pin
+* fixed infinite loop within `netlist_utils::get_subgraph_function` if the combinational logic contains a feedback path
 
 ## [3.1.3] - 2020-11-12 17:15:00+02:00 (urgency: medium)
 * GUI code refactoring
