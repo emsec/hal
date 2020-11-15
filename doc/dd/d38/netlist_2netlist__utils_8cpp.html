@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="../../hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">hal
-   &#160;<span id="projectnumber">3.1.2.</span>
+   &#160;<span id="projectnumber">3.1.3.</span>
    </div>
   </td>
  </tr>
@@ -82,54 +82,55 @@ $(function() {
 <code>#include &quot;<a class="el" href="../../d0/d0a/netlist__factory_8h_source.html">hal_core/netlist/netlist_factory.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="../../d7/d7f/log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
 <code>#include &lt;queue&gt;</code><br />
+<code>#include &lt;unordered_set&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for netlist_utils.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d35/netlist_2netlist__utils_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2src_2netlist_2netlist__utils_8cpp" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2src_2netlist_2netlist__utils_8cpp" id="_2home_2runner_2work_2hal_2hal_2src_2netlist_2netlist__utils_8cpp">
-<area shape="rect" title=" " alt="" coords="1825,5,1994,61"/>
-<area shape="rect" href="../../dc/d47/netlist__utils_8h.html" title=" " alt="" coords="229,109,395,151"/>
-<area shape="rect" href="../../d4/db6/gate_8h.html" title=" " alt="" coords="706,295,873,322"/>
-<area shape="rect" href="../../d2/d8d/grouping_8h.html" title=" " alt="" coords="4085,295,4280,322"/>
-<area shape="rect" href="../../d5/d16/module_8h.html" title=" " alt="" coords="1897,206,2084,233"/>
-<area shape="rect" href="../../d7/d97/net_8h.html" title=" " alt="" coords="1242,295,1401,322"/>
-<area shape="rect" href="../../d0/d0a/netlist__factory_8h.html" title=" " alt="" coords="1697,199,1863,240"/>
-<area shape="rect" href="../../d7/d7f/log_8h.html" title=" " alt="" coords="3215,288,3345,329"/>
-<area shape="rect" title=" " alt="" coords="2210,117,2273,143"/>
-<area shape="rect" href="../../d8/db0/defines_8h.html" title=" " alt="" coords="1417,571,1557,597"/>
-<area shape="rect" href="../../dc/d6d/boolean__function_8h.html" title=" " alt="" coords="147,481,325,523"/>
+<area shape="rect" title=" " alt="" coords="1571,5,1741,61"/>
+<area shape="rect" href="../../dc/d47/netlist__utils_8h.html" title=" " alt="" coords="194,109,361,151"/>
 <area shape="rect" title=" " alt="" coords="5,571,120,597"/>
-<area shape="rect" href="../../df/d5f/netlist_8h.html" title=" " alt="" coords="948,206,1127,233"/>
-<area shape="rect" title=" " alt="" coords="1272,645,1363,672"/>
-<area shape="rect" title=" " alt="" coords="1387,645,1474,672"/>
-<area shape="rect" title=" " alt="" coords="1498,645,1585,672"/>
-<area shape="rect" title=" " alt="" coords="1609,645,1679,672"/>
-<area shape="rect" title=" " alt="" coords="144,571,229,597"/>
-<area shape="rect" title=" " alt="" coords="253,571,323,597"/>
-<area shape="rect" title=" " alt="" coords="347,571,423,597"/>
-<area shape="rect" title=" " alt="" coords="447,571,571,597"/>
-<area shape="rect" title=" " alt="" coords="1918,571,1981,597"/>
-<area shape="rect" href="../../de/d88/gate__library_8h.html" title=" " alt="" coords="1695,288,1857,329"/>
-<area shape="rect" title=" " alt="" coords="2613,489,2672,515"/>
-<area shape="rect" title=" " alt="" coords="3199,489,3286,515"/>
-<area shape="rect" title=" " alt="" coords="1780,489,1857,515"/>
-<area shape="rect" title=" " alt="" coords="1882,489,1937,515"/>
-<area shape="rect" title=" " alt="" coords="1527,295,1619,322"/>
-<area shape="rect" href="../../db/dd6/gate__type_8h.html" title=" " alt="" coords="1279,377,1452,433"/>
-<area shape="rect" title=" " alt="" coords="2017,489,2068,515"/>
-<area shape="rect" title=" " alt="" coords="2799,489,2841,515"/>
-<area shape="rect" href="../../d1/df3/data__container_8h.html" title=" " alt="" coords="1100,385,1255,426"/>
-<area shape="rect" href="../../d5/d97/endpoint_8h.html" title=" " alt="" coords="603,489,797,515"/>
-<area shape="rect" href="../../d7/de4/netlist__internal__manager_8h.html" title=" " alt="" coords="4221,385,4387,426"/>
-<area shape="rect" href="../../d5/d5e/program__options_8h.html" title=" " alt="" coords="2135,385,2283,426"/>
-<area shape="rect" title=" " alt="" coords="2194,489,2305,515"/>
-<area shape="rect" href="../../d8/db4/callback__hook_8h.html" title=" " alt="" coords="2959,385,3089,426"/>
-<area shape="rect" href="../../d0/dae/program__arguments_8h.html" title=" " alt="" coords="2308,385,2479,426"/>
-<area shape="rect" href="../../d5/d60/utils_8h.html" title=" " alt="" coords="4015,385,4145,426"/>
-<area shape="rect" title=" " alt="" coords="3367,392,3431,419"/>
-<area shape="rect" title=" " alt="" coords="3455,392,3639,419"/>
-<area shape="rect" title=" " alt="" coords="3663,392,3787,419"/>
-<area shape="rect" title=" " alt="" coords="4041,489,4116,515"/>
+<area shape="rect" href="../../d4/db6/gate_8h.html" title=" " alt="" coords="819,295,986,322"/>
+<area shape="rect" href="../../d2/d8d/grouping_8h.html" title=" " alt="" coords="4127,295,4321,322"/>
+<area shape="rect" href="../../d5/d16/module_8h.html" title=" " alt="" coords="1764,206,1951,233"/>
+<area shape="rect" href="../../d7/d97/net_8h.html" title=" " alt="" coords="1154,295,1313,322"/>
+<area shape="rect" href="../../d0/d0a/netlist__factory_8h.html" title=" " alt="" coords="1573,199,1739,240"/>
+<area shape="rect" href="../../d7/d7f/log_8h.html" title=" " alt="" coords="2921,288,3052,329"/>
+<area shape="rect" title=" " alt="" coords="2077,117,2139,143"/>
+<area shape="rect" href="../../d8/db0/defines_8h.html" title=" " alt="" coords="1049,571,1189,597"/>
+<area shape="rect" href="../../dc/d6d/boolean__function_8h.html" title=" " alt="" coords="151,481,329,523"/>
+<area shape="rect" href="../../df/d5f/netlist_8h.html" title=" " alt="" coords="939,206,1117,233"/>
+<area shape="rect" title=" " alt="" coords="904,645,995,672"/>
+<area shape="rect" title=" " alt="" coords="1019,645,1106,672"/>
+<area shape="rect" title=" " alt="" coords="1130,645,1217,672"/>
+<area shape="rect" title=" " alt="" coords="1241,645,1311,672"/>
+<area shape="rect" title=" " alt="" coords="339,571,424,597"/>
+<area shape="rect" title=" " alt="" coords="144,571,213,597"/>
+<area shape="rect" title=" " alt="" coords="238,571,314,597"/>
+<area shape="rect" title=" " alt="" coords="449,571,573,597"/>
+<area shape="rect" title=" " alt="" coords="1794,571,1857,597"/>
+<area shape="rect" href="../../de/d88/gate__library_8h.html" title=" " alt="" coords="1607,288,1769,329"/>
+<area shape="rect" title=" " alt="" coords="2576,489,2635,515"/>
+<area shape="rect" title=" " alt="" coords="3570,489,3657,515"/>
+<area shape="rect" title=" " alt="" coords="1717,489,1795,515"/>
+<area shape="rect" title=" " alt="" coords="1830,489,1885,515"/>
+<area shape="rect" title=" " alt="" coords="1439,295,1531,322"/>
+<area shape="rect" href="../../db/dd6/gate__type_8h.html" title=" " alt="" coords="1241,377,1415,433"/>
+<area shape="rect" title=" " alt="" coords="1933,489,1984,515"/>
+<area shape="rect" title=" " alt="" coords="2761,489,2804,515"/>
+<area shape="rect" href="../../d1/df3/data__container_8h.html" title=" " alt="" coords="1063,385,1217,426"/>
+<area shape="rect" href="../../d5/d97/endpoint_8h.html" title=" " alt="" coords="607,489,801,515"/>
+<area shape="rect" href="../../d7/de4/netlist__internal__manager_8h.html" title=" " alt="" coords="3279,385,3446,426"/>
+<area shape="rect" href="../../d5/d5e/program__options_8h.html" title=" " alt="" coords="2098,385,2246,426"/>
+<area shape="rect" title=" " alt="" coords="2147,489,2258,515"/>
+<area shape="rect" href="../../d8/db4/callback__hook_8h.html" title=" " alt="" coords="2972,385,3103,426"/>
+<area shape="rect" href="../../d0/dae/program__arguments_8h.html" title=" " alt="" coords="2271,385,2441,426"/>
+<area shape="rect" href="../../d5/d60/utils_8h.html" title=" " alt="" coords="4220,385,4351,426"/>
+<area shape="rect" title=" " alt="" coords="3623,392,3687,419"/>
+<area shape="rect" title=" " alt="" coords="3711,392,3895,419"/>
+<area shape="rect" title=" " alt="" coords="3919,392,4043,419"/>
+<area shape="rect" title=" " alt="" coords="4248,489,4323,515"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -167,7 +168,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Nov 12 2020 16:12:27 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Nov 15 2020 13:08:08 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
