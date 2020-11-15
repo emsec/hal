@@ -24,7 +24,7 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "gui/vhdl_editor/vhdl_editor.h"
 #include "gui/gui_utils/special_log_content_manager.h"
-#include "hal_config.h"
+//#include "hal_config.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
