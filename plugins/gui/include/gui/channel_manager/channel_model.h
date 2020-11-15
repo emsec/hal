@@ -62,7 +62,7 @@ namespace hal
     private:
         explicit ChannelModel(QObject* parent = 0);
 
-        QList<QString> m_channel_to_ignore;
+        QList<QString> mChannelToIgnore;
         QList<ChannelItem*> mPermanentItems;
         boost::circular_buffer<ChannelItem*> mTemporaryItems;
 
