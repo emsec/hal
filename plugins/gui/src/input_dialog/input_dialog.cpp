@@ -54,12 +54,7 @@ namespace hal
         connect(button_box, &QDialogButtonBox::rejected, this, &InputDialog::handleCancelClicked);
         connect(mInputTextEdit, &QLineEdit::textChanged, this, &InputDialog::handleTextChanged);
     }
-
-    void InputDialog::setWindowTitle(const QString& title)
-    {
-        setWindowTitle(title);
-    }
-
+  
     void InputDialog::setInfoText(const QString& text)
     {
         mLabelInfoText->setText(text);
