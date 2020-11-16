@@ -65,6 +65,7 @@ namespace hal
         ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
         void selectViewContext(GraphContext* context);
+        GraphContext* getCurrentContext();
 
         virtual void setupToolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
 
@@ -149,8 +150,6 @@ namespace hal
         void setToolbarButtonsEnabled(bool enabled);
 
         void toggleSearchbar();
-
-        GraphContext* getCurrentContext();
 
         QList<QShortcut*> createShortcuts() override;
     };

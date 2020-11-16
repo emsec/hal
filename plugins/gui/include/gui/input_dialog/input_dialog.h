@@ -39,8 +39,6 @@ namespace hal
             InputDialog(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
             InputDialog(const QString& window_title, const QString& info_text, const QString& input_text, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
-            void setWindowTitle(const QString& title);
-
             void setInfoText(const QString& text);
             void setInputText(const QString& text);
 

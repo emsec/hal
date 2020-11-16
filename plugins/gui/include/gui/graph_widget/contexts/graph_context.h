@@ -75,6 +75,8 @@ namespace hal
         void setLayouter(GraphLayouter* layouter);
         void setShader(GraphShader* shader);
 
+        const GraphLayouter* getLayouter() const { return mLayouter; }
+
         bool sceneUpdateInProgress() const;
 
         void scheduleSceneUpdate();

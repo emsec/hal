@@ -33,6 +33,7 @@
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/layouters/net_layout_point.h"
 #include "gui/graph_widget/layouters/net_layout_junction.h"
+#include "gui/graph_widget/layouters/node_box.h"
 #include "gui/netlist_relay/netlist_relay.h"
 
 #include <QObject>
@@ -129,36 +130,6 @@ namespace hal
             SeparatedNetWidth() : mInputSpace(0), mOutputSpace(0) {;}
             void requireInputSpace(float spc);
             void requireOutputSpace(float spc);
-        };
-
-        class NodeBox
-        {
-            Node mNode;
-            GraphicsNode* mItem;
-
-            int mX;
-            int mY;
-
-            qreal mInputPadding;
-            qreal mOutputPadding;
-        public:
-            NodeBox(const Node& n, int px, int py);
-            Node getNode() const { return mNode; }
-            Node::NodeType type() const { return mNode.type(); }
-            u32 id() const { return mNode.id(); }
-            int x() const { return mX; }
-            int y() const { return mY; }
-            void setItem(GraphicsNode* item_) { mItem = item_; }
-            void setItemPosition(qreal xpos, qreal ypos);
-            GraphicsNode* item() const { return mItem; }
-            qreal inputPadding() const { return mInputPadding; }
-            qreal outputPadding() const { return mOutputPadding; }
-        };
-
-        class NodeBoxForGate : public QHash<Gate*,const NodeBox*>
-        {
-        public:
-            void insertNode(const NodeBox* nb);
         };
 
         struct Road
@@ -268,6 +239,7 @@ namespace hal
         qreal defaultGridWidth() const;
         qreal defaultGridHeight() const;
 
+        const NodeBoxes& boxes() const { return mBoxes; }
     Q_SIGNALS:
         void statusUpdate(const int percent);
         void statusUpdate(const QString& message);
@@ -344,11 +316,7 @@ namespace hal
         void commitUsedPaths(const UsedPaths& used);
         static bool isConstNet(const Net* n);
 
-        NodeBoxForGate           mNodeBoxForGate;
-        QVector<NodeBox*>        mBoxes;
-        QHash<QPoint,NodeBox*>   mBoxPosition;
-        QHash<Node,NodeBox*>     mBoxNode;
-        QHash<GraphicsNode*,NodeBox*> mBoxGraphItem;
+        NodeBoxes                mBoxes;
 
         QHash<QPoint,Road*> mHRoads;
         QHash<QPoint,Road*> mVRoads;
