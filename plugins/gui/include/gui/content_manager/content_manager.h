@@ -28,6 +28,8 @@
 #include <QStringList>
 
 #include "gui/netlist_watcher/netlist_watcher.h"
+#include "gui/gui_utils/special_log_content_manager.h"
+#include "hal_config.h"
 
 namespace hal
 {
@@ -93,5 +95,8 @@ namespace hal
         GroupingManagerWidget* mGroupingManagerWidget;
 
         SelectionDetailsWidget* mSelectionDetailsWidget;
+#ifdef HAL_STUDY
+        SpecialLogContentManager* mSpecialLogContentManager;
+#endif
     };
 }

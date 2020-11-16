@@ -9,6 +9,7 @@ namespace hal
 
     ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent), mTemporaryItems(30)
     {
+        mChannelToIgnore = {"UserStudy"};
         LogManager::get_instance().get_gui_callback().add_callback("gui",
                                                                    std::bind(&ChannelModel::handleLogmanagerCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
@@ -117,6 +118,9 @@ namespace hal
 
     void ChannelModel::handleLogmanagerCallback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text)
     {
+        if(mChannelToIgnore.contains(QString::fromStdString(channel_name)))
+            return;
+
         ChannelItem* all_channel = nullptr;
         ChannelItem* item        = nullptr;
         for (auto element : mPermanentItems)
