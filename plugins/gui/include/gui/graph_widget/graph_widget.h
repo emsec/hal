@@ -39,7 +39,7 @@ namespace hal
     class GraphGraphicsView;
     class GraphLayoutSpinnerWidget;
     class GraphNavigationWidget;
-    class GraphNavigationWidgetV2;
+    class GraphNavigationWidgetV3;
 
     class GraphWidget : public ContentWidget, public GraphContextSubscriber
     {
@@ -87,7 +87,7 @@ namespace hal
         GraphContext* mContext;
 
         WidgetOverlay* mOverlay;
-        GraphNavigationWidgetV2* mNavigationWidgetV2;
+        GraphNavigationWidgetV3* mNavigationWidgetV3;
         GraphLayoutSpinnerWidget* mSpinnerWidget;
 
         u32 mCurrentExpansion;
