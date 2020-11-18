@@ -104,6 +104,7 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::netDestinationRemoved, this, &NetDetailsWidget::handleNetDestinationRemoved);
         connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &NetDetailsWidget::handleGateNameChanged);
         connect(mGeneralModel, &DetailsGeneralModel::requireUpdate, this, &NetDetailsWidget::update);
+        gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
     }
 
     NetDetailsWidget::~NetDetailsWidget()

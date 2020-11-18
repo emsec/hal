@@ -112,6 +112,8 @@ namespace hal
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
         //mScene.setBspTreeDepth(10);
 
+
+        gSelectionRelay->registerSender(this, "GraphView");
         connectAll();
 
         QGraphicsScene::addItem(mDragShadowGate);
@@ -460,7 +462,10 @@ namespace hal
         gSelectionRelay->mSubfocus = SelectionRelay::Subfocus::None;
         // END OF TEST CODE
 
+        //LOG MANUAL SELECTION CHANGED:
+        //log_info("gui", "Selection changed through manual interaction with a view to: insert here..");
         gSelectionRelay->relaySelectionChanged(this);
+
     }
 
     void GraphicsScene::handleGroupingAssignModule(Grouping *grp, u32 id)

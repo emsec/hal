@@ -1,6 +1,4 @@
 
-configure_file(${CMAKE_SOURCE_DIR}/include/hal_core/hal_version.h.in ${CMAKE_BINARY_DIR}/hal_version.h @ONLY)
-
 add_subdirectory(utilities)
 add_subdirectory(netlist)
 add_subdirectory(plugin_system)

@@ -23,6 +23,8 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "gui/vhdl_editor/vhdl_editor.h"
+#include "gui/gui_utils/special_log_content_manager.h"
+//#include "hal_config.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -166,6 +168,12 @@ namespace hal
         PythonConsoleWidget* PythonConsole = new PythonConsoleWidget();
         mMainWindow->addContent(PythonConsole, 5, content_anchor::bottom);
         PythonConsole->open();
+
+#ifdef HAL_STUDY
+        //log_info("gui", "HAL_STUDY activated");
+        mSpecialLogContentManager = new SpecialLogContentManager(mMainWindow, mPythonWidget);
+        mSpecialLogContentManager->startLogging(60000);
+#endif
         mNetlistWatcher = new NetlistWatcher(this);
     }
 

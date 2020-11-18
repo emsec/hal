@@ -41,6 +41,7 @@ namespace hal {
         if (!parentView) return;
         connect(parentView, &QTableView::customContextMenuRequested, this, &DetailsGeneralModel::contextMenuRequested);
         connect(parentView, &QAbstractItemView::doubleClicked, this, &DetailsGeneralModel::handleDoubleClick);
+        gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
     }
 
     void DetailsGeneralModel::additionalInformation(Module* m)

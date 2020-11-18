@@ -125,6 +125,7 @@ namespace hal
         mSelectionToGrouping->setDisabled(true);
         mSelectionToModule->setDisabled(true);
 
+        gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
         connect(mRestoreLastSelection, &QAction::triggered, this, &SelectionDetailsWidget::restoreLastSelection);
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
         connect(mSelectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleMenu);

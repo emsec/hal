@@ -21,7 +21,39 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-/* hal_config.h.in */
+#pragma once
 
-/* use Study Config for build */
-#cmakedefine HAL_STUDY 0
+#include <QObject>
+
+//forward declaration
+class QTimer;
+class QTabWidget;
+
+namespace hal
+{
+    class MainWindow;
+    class PythonEditor;
+    class PythonCodeEditor;
+
+    class SpecialLogContentManager : public QObject
+    {
+        Q_OBJECT
+    public:
+        SpecialLogContentManager(QObject* parent = nullptr);
+        SpecialLogContentManager(QObject* parent = nullptr, PythonEditor* python_editor = nullptr);
+        ~SpecialLogContentManager();
+
+        void safeScreenshot();
+        void safePythonEditor();
+
+        void startLogging(int msec);
+
+    private:
+        QTimer* mTimer;
+        PythonEditor* mPythonEditor;
+        //either save it in the same directory (eg. /SpecialLogs) or split it into something
+        //like (SpecialLogs/Screenshots and SpecialLogs/PyhthonContent)
+        QString mScreenshotSubPath;
+        QString mPythonContentSubPath;
+    };
+}
