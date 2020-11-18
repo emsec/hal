@@ -117,11 +117,13 @@ namespace hal
             {
                 val.AddMember("path", tab->getFileName().toStdString(), allocator);
             }
+            // TODO: generate snapshot files...
 
+            /*
             if (tab->document()->isModified())
             {
                 val.AddMember("script", tab->toPlainText().toStdString(), allocator);
-            }
+            }*/
 
             tabs.PushBack(val, allocator);
         }
@@ -159,18 +161,52 @@ namespace hal
 
                 auto val = it->GetObject();
 
+
                 if (val.HasMember("path"))
                 {
-                    tabLoadFile(cnt - 1, val["path"].GetString());
+                    // Search for a snapshot of this file
+                    QFileInfo path(val["path"].GetString());
+                    QFileInfo snapshot_path(path.path() + "/~" + path.fileName());
+
+                    // Decide whether the snapshot file or the original should be loaded
+                    bool load_snapshot = false;
+                    if(snapshot_path.exists()){
+                        if(path.exists()){
+                            // Ask user whether the original file or the snapshot should be loaded
+                            load_snapshot = askLoadSnapshot(snapshot_path);
+                        }
+                        else{
+                            load_snapshot = true;
+                        }
+                    }
+                    else{
+                        if(path.exists()){
+                            load_snapshot = false;
+                        }
+                        else{
+                            // Neither the original nor a snapshot was found
+                            continue;
+                            // TODO: warning? test...
+                        }
+                    }
+
+                    if(load_snapshot){
+                        // TODO: loaded snapshot file should be named and stored in the original file path
+                        tabLoadFile(cnt - 1, snapshot_path.filePath());
+                    }
+                    else{
+                        tabLoadFile(cnt - 1, path.filePath());
+                    }
+
                 }
 
-                if (val.HasMember("script"))
+                /*if (val.HasMember("script"))
                 {
                     auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(cnt - 1));
                     tab->setPlainText(val["script"].GetString());
                     tab->document()->setModified(true);
                     mTabWidget->setTabText(cnt - 1, mTabWidget->tabText(cnt - 1) + "*");
-                }
+                }*/
             }
 
             if (root.HasMember("selected_tab"))
@@ -690,6 +726,29 @@ namespace hal
         }
         // otherwise honor default filter
         return QObject::eventFilter(obj, event);
+    }
+
+    bool PythonEditor::askLoadSnapshot(QFileInfo file)
+    {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Question);
+        msgBox.setWindowTitle("Python snapshot file detected");
+        msgBox.setText("A snapshot file ("+file.filePath()+") was found! This may happen due to a recent crash.\n"
+                            "Do you want to load the snapshot file or the (maybe unsaved) original file?" );
+        auto load_snapshot_btn = msgBox.addButton("Load Snapshot", QMessageBox::ActionRole);
+        msgBox.addButton("Load Original", QMessageBox::ActionRole);
+
+        QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        QGridLayout* layout           = (QGridLayout*)msgBox.layout();
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == (QAbstractButton*)load_snapshot_btn)
+        {
+            return true;
+        }
+        return false;
     }
 
     QString PythonEditor::openIconPath() const

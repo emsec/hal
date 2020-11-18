@@ -34,6 +34,7 @@
 #include <QFileSystemWatcher>
 #include <QMap>
 #include <QPushButton>
+#include <QtCore/QFileInfo>
 
 class QVBoxLayout;
 class QTabWidget;
@@ -155,6 +156,14 @@ namespace hal
         bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
 
     private:
+        /**
+         * Ask the user with a message box whether the snapshot file or the original file should be loaded
+         *
+         * @param file - the snapshot file
+         * @return true if the snapshot file should be loaded
+         */
+        bool askLoadSnapshot(QFileInfo file);
+
         QVBoxLayout* mLayout;
         Toolbar* mToolbar;
         Splitter* mSplitter;
