@@ -482,6 +482,7 @@ namespace hal
     // ADD SOUND OR ERROR MESSAGE TO FAILED NAVIGATION ATTEMPTS
     void GraphWidget::handleNavigationLeftRequest()
     {
+        const SelectionRelay::Subfocus navigateLeft = SelectionRelay::Subfocus::Left;
         switch (gSelectionRelay->mFocusType)
         {
         case SelectionRelay::ItemType::None: {
@@ -515,7 +516,7 @@ namespace hal
                     }
                     else
                     {
-                        mNavigationWidgetV3->setup(gSelectionRelay->mSubfocus);
+                        mNavigationWidgetV3->setup(navigateLeft);
                         mNavigationWidgetV3->setFocus();
                         mOverlay->show();
                     }
@@ -545,7 +546,7 @@ namespace hal
                 }
                 else
                 {
-                    mNavigationWidgetV3->setup(gSelectionRelay->mSubfocus);
+                    mNavigationWidgetV3->setup(navigateLeft);
                     mNavigationWidgetV3->setFocus();
                     mOverlay->show();
                 }
@@ -586,7 +587,7 @@ namespace hal
                     }
                     else
                     {
-                        mNavigationWidgetV3->setup(gSelectionRelay->mSubfocus);
+                        mNavigationWidgetV3->setup(navigateLeft);
                         mNavigationWidgetV3->setFocus();
                         mOverlay->show();
                     }
@@ -606,6 +607,7 @@ namespace hal
 
     void GraphWidget::handleNavigationRightRequest()
     {
+        const SelectionRelay::Subfocus navigateRight = SelectionRelay::Subfocus::Right;
         switch (gSelectionRelay->mFocusType)
         {
         case SelectionRelay::ItemType::None:
@@ -636,7 +638,7 @@ namespace hal
                     }
                     else
                     {
-                        mNavigationWidgetV3->setup(gSelectionRelay->mSubfocus);
+                        mNavigationWidgetV3->setup(navigateRight);
                         mNavigationWidgetV3->setFocus();
                         mOverlay->show();
                     }
@@ -667,7 +669,7 @@ namespace hal
                 }
                 else
                 {
-                    mNavigationWidgetV3->setup(gSelectionRelay->mSubfocus);
+                    mNavigationWidgetV3->setup(navigateRight);
                     mNavigationWidgetV3->setFocus();
                     mOverlay->show();
                 }
@@ -708,7 +710,7 @@ namespace hal
                     }
                     else
                     {
-                        mNavigationWidgetV3->setup(gSelectionRelay->mSubfocus);
+                        mNavigationWidgetV3->setup(navigateRight);
                         mNavigationWidgetV3->setFocus();
                         mOverlay->show();
                     }
