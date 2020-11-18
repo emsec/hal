@@ -38,13 +38,49 @@
 
 namespace hal {
 
+    class GraphNavigationWidgetV3;
+
+    class GraphNavigationTableWidget : public QTableWidget
+    {
+        GraphNavigationWidgetV3* mNavigationWidget;
+    protected:
+        void keyPressEvent(QKeyEvent *event) override;
+        void focusInEvent(QFocusEvent* event) override;
+    public:
+        GraphNavigationTableWidget(GraphNavigationWidgetV3* nav, QWidget* parent = nullptr)
+            : QTableWidget(parent), mNavigationWidget(nav) {;}
+    };
+
+    class GraphNavigationTreeWidget : public QTreeWidget
+    {
+        GraphNavigationWidgetV3* mNavigationWidget;
+        QList<QTreeWidgetItem*> selectedItemRecursion(QTreeWidgetItem* item) const;
+    protected:
+        void keyPressEvent(QKeyEvent *event) override;
+        void focusInEvent(QFocusEvent* event) override;
+        bool event(QEvent *ev) override;
+    public:
+        GraphNavigationTreeWidget(GraphNavigationWidgetV3* nav, QWidget* parent = nullptr)
+            : QTreeWidget(parent), mNavigationWidget(nav) {;}
+        QList<QTreeWidgetItem*> selectedItems() const;
+        QModelIndex firstIndex() const;
+    };
+
     class GraphNavigationWidgetV3 : public QWidget
     {
         Q_OBJECT
+
+        friend class GraphNavigationTableWidget;
+        friend class GraphNavigationTreeWidget;
     public:
-        GraphNavigationWidgetV3(QWidget* parent = nullptr);
+        GraphNavigationWidgetV3(bool onlyNavigate, QWidget* parent = nullptr);
         void setup(SelectionRelay::Subfocus direction);
-        void setup(Node origin, Net* via_net, SelectionRelay::Subfocus direction);
+        void setup(Node origin, Net* via_net, SelectionRelay::Subfocus dir);
+        SelectionRelay::Subfocus direction() const { return mDirection; }
+        void closeRequest();
+        bool isEmpty() const;
+        bool hasBothWidgets() const;
+        void toggleWidget();
 
     Q_SIGNALS:
         void navigationRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
@@ -53,22 +89,28 @@ namespace hal {
 
     private Q_SLOTS:
         void handleNavigateSelected(int irow, int icol);
-        void handleSelectionChanged();
+        void handleAddToViewSelected(QTreeWidgetItem* item, int icol);
 
     protected:
-        void keyPressEvent(QKeyEvent* event) override;
+        void keyPressEvent(QKeyEvent *event) override;
+        void focusInEvent(QFocusEvent* event) override;
 
     private:
+        bool mOnlyNavigate;
         QFrame*       mNavigateFrame;
         QFrame*       mAddToViewFrame;
-        QTableWidget* mNavigateWidget;
-        QTreeWidget*  mAddToViewWidget;
+        GraphNavigationTableWidget* mNavigateWidget;
+        GraphNavigationTreeWidget*  mAddToViewWidget;
+
+        bool mNavigateVisible;
+        bool mAddToViewVisible;
 
         Node mOrigin;
         Net* mViaNet;
         SelectionRelay::Subfocus mDirection;
 
         QList<Node> mNavigateNodes;
+        QHash<QTreeWidgetItem*,Node> mAddToViewNodes;
 
         /// module visible in view (might be implicitly as parent of gate or module)
         QSet<Module*> mModulesInView;
@@ -86,10 +128,13 @@ namespace hal {
         bool addNavigateItem(Endpoint* ep);
         bool addToViewItem(Endpoint* ep);
 
+        QTreeWidgetItem* itemFactory(const QStringList& fields, const Node& nd);
         QStringList gateEntry(Gate* g, Endpoint* ep);
         QStringList moduleEntry(Module* m, Endpoint* ep);
 
         static const int sDefaultColumnWidth[];
+        static const int sMaxHeight = 550;
+        static const int sLabelHeight = 24;
     };
 
 }

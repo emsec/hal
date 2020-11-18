@@ -34,7 +34,7 @@ namespace hal
 {
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
         : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
-          mNavigationWidgetV3(new GraphNavigationWidgetV3),
+          mNavigationWidgetV3(new GraphNavigationWidgetV3(false)),
           mSpinnerWidget(new GraphLayoutSpinnerWidget(this)), mCurrentExpansion(0)
     {
         connect(mNavigationWidgetV3, &GraphNavigationWidgetV3::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);

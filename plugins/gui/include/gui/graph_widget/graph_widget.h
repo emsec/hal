@@ -38,7 +38,6 @@ namespace hal
     class GraphContext;
     class GraphGraphicsView;
     class GraphLayoutSpinnerWidget;
-    class GraphNavigationWidget;
     class GraphNavigationWidgetV3;
 
     class GraphWidget : public ContentWidget, public GraphContextSubscriber

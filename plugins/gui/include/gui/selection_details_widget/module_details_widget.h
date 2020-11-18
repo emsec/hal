@@ -43,7 +43,7 @@ class QPushButton;
 namespace hal
 {
     /*forward declaration*/
-    class GraphNavigationWidget;
+    class GraphNavigationWidgetV3;
     class DataFieldsTable;
     class DetailsSectionWidget;
     class DetailsGeneralModel;
@@ -82,7 +82,7 @@ namespace hal
         void handleNetDestinationRemoved(Net* net, const u32 dst_gate_id);
 
     private:
-        GraphNavigationWidget* mNavigationTable;
+        GraphNavigationWidgetV3* mNavigationTable;
 
         QScrollArea* mScrollArea;
         QWidget* mTopLvlContainer;
@@ -111,6 +111,6 @@ namespace hal
         void handleOutputNetItemClicked(const QTableWidgetItem* item);
         void handleInputNetItemClicked(const QTableWidgetItem* item);
         void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates);
-
+        void handleNavigationCloseRequested();
     };
 }    // namespace hal

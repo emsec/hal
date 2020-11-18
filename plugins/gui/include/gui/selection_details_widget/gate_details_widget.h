@@ -44,7 +44,7 @@ class QPushButton;
 namespace hal
 {
     /* forward declaration */
-    class GraphNavigationWidget;
+    class GraphNavigationWidgetV3;
     class DataFieldsTable;
     class DetailsSectionWidget;
     class DetailsGeneralModel;
@@ -90,7 +90,7 @@ namespace hal
         //used to set the boolean function container to its appropriate size, width "must be"
         //extracted from the stylesheet
         int mScrollbarWidth;
-        GraphNavigationWidget* mNavigationTable;
+        GraphNavigationWidgetV3* mNavigationTable;
 
         //All sections together are encapsulated in a container to make it scrollable
         QScrollArea* mScrollArea;
@@ -126,6 +126,7 @@ namespace hal
 
         //function section
         void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates);
+        void handleNavigationCloseRequested();
 
         void handleInputPinItemClicked(const QTableWidgetItem* item);
         void handleOutputPinItemClicked(const QTableWidgetItem* item);

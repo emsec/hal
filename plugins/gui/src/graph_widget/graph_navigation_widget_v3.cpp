@@ -6,25 +6,138 @@
 #include <QHeaderView>
 #include <QScrollBar>
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QLabel>
 
 namespace hal {
 
+    void GraphNavigationTableWidget::keyPressEvent(QKeyEvent* event)
+    {
+        Q_ASSERT(mNavigationWidget);
+
+        if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return ||
+                (event->key() == Qt::Key_Right && mNavigationWidget->direction() == SelectionRelay::Subfocus::Right) ||
+                (event->key() == Qt::Key_Left  && mNavigationWidget->direction() == SelectionRelay::Subfocus::Left))
+        {
+            Q_EMIT cellDoubleClicked(currentRow(),0);
+            return;
+        }
+
+        if (event->key() == Qt::Key_Escape ||
+                (event->key() == Qt::Key_Left  && mNavigationWidget->direction() == SelectionRelay::Subfocus::Right) ||
+                (event->key() == Qt::Key_Right && mNavigationWidget->direction() == SelectionRelay::Subfocus::Left))
+        {
+            mNavigationWidget->closeRequest();
+            return;
+        }
+
+        if (event->key() == Qt::Key_Tab && mNavigationWidget->hasBothWidgets())
+        {
+            mNavigationWidget->toggleWidget();
+            return;
+        }
+
+        QTableWidget::keyPressEvent(event);
+    }
+
+    void GraphNavigationTableWidget::focusInEvent(QFocusEvent *event)
+    {
+        mNavigationWidget->mAddToViewWidget->clearSelection();
+        QTableWidget::focusInEvent(event);
+    }
+
+    bool GraphNavigationTreeWidget::event(QEvent *ev)
+    {
+        if (ev->type() == QEvent::KeyPress)
+        {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent*>(ev);
+            if (keyEvent->key() == Qt::Key_Tab)
+            {
+                mNavigationWidget->toggleWidget();
+                return true;
+            }
+        }
+        return QTreeWidget::event(ev);
+    }
+
+    void GraphNavigationTreeWidget::focusInEvent(QFocusEvent *ev)
+    {
+        mNavigationWidget->mNavigateWidget->clearSelection();
+        QTreeWidget::focusInEvent(ev);
+    }
+
+    void GraphNavigationTreeWidget::keyPressEvent(QKeyEvent* ev)
+    {
+        Q_ASSERT(mNavigationWidget);
+
+        if (ev->key() == Qt::Key_Enter || ev->key() == Qt::Key_Return ||
+                (ev->key() == Qt::Key_Right && mNavigationWidget->direction() == SelectionRelay::Subfocus::Right) ||
+                (ev->key() == Qt::Key_Left  && mNavigationWidget->direction() == SelectionRelay::Subfocus::Left))
+        {
+            Q_EMIT itemDoubleClicked(currentItem(),0);
+            return;
+        }
+
+        if (ev->key() == Qt::Key_Escape ||
+                (ev->key() == Qt::Key_Left  && mNavigationWidget->direction() == SelectionRelay::Subfocus::Right) ||
+                (ev->key() == Qt::Key_Right && mNavigationWidget->direction() == SelectionRelay::Subfocus::Left))
+        {
+            mNavigationWidget->closeRequest();
+            return;
+        }
+
+        if (ev->key() == Qt::Key_Tab && mNavigationWidget->hasBothWidgets())
+        {
+            mNavigationWidget->toggleWidget();
+            return;
+        }
+
+        QTreeWidget::keyPressEvent(ev);
+    }
+
+    QModelIndex GraphNavigationTreeWidget::firstIndex() const
+    {
+        if (topLevelItemCount() < 1) return QModelIndex();
+        return indexFromItem(topLevelItem(0),0);
+    }
+
+    QList<QTreeWidgetItem*> GraphNavigationTreeWidget::selectedItemRecursion(QTreeWidgetItem* item) const
+    {
+        QList<QTreeWidgetItem*> retval;
+        if (item->isSelected()) retval.append(item);
+        else
+            for (int ichild=0; ichild < item->childCount(); ichild++)
+                retval.append(selectedItemRecursion(item->child(ichild)));
+        return retval;
+    }
+
+    QList<QTreeWidgetItem*> GraphNavigationTreeWidget::selectedItems() const
+    {
+        QList<QTreeWidgetItem*> retval;
+        int n = topLevelItemCount();
+        for (int i=0; i<n; i++)
+            retval += selectedItemRecursion(topLevelItem(i));
+        return retval;
+    }
+
     const int GraphNavigationWidgetV3::sDefaultColumnWidth[] = {250, 50, 100, 80, 250};
 
-    GraphNavigationWidgetV3::GraphNavigationWidgetV3(QWidget *parent)
-        : QWidget(parent), mViaNet(nullptr),
-          mDirection(SelectionRelay::Subfocus::None)
+    GraphNavigationWidgetV3::GraphNavigationWidgetV3(bool onlyNavigate, QWidget *parent)
+        : QWidget(parent), mOnlyNavigate(onlyNavigate),
+          mNavigateVisible(false), mAddToViewVisible(false),
+          mViaNet(nullptr), mDirection(SelectionRelay::Subfocus::None)
     {
         QStringList headerLabels;
         headerLabels << "Name" << "ID" << "Type" << "Pin" << "Parent Module";
 
-        QVBoxLayout* layTop = new QVBoxLayout(this);
+        QGridLayout* layTop = new QGridLayout(this);
         mNavigateFrame = new QFrame(this);
         mNavigateFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
         QVBoxLayout* layNavigateView = new QVBoxLayout(mNavigateFrame);
-        layNavigateView->addWidget(new QLabel("Navigate to ...", mNavigateFrame));
-        mNavigateWidget = new QTableWidget(mNavigateFrame);
+        QLabel* labNavigate = new QLabel("Navigate to …", mNavigateFrame);
+        labNavigate->setFixedHeight(sLabelHeight);
+        layNavigateView->addWidget(labNavigate);
+        mNavigateWidget = new GraphNavigationTableWidget(this,mNavigateFrame);
         mNavigateWidget->setSelectionMode(QAbstractItemView::SingleSelection);
         mNavigateWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
         mNavigateWidget->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
@@ -32,24 +145,37 @@ namespace hal {
         mNavigateWidget->verticalHeader()->hide();
         mNavigateWidget->setColumnCount(5);
         mNavigateWidget->setHorizontalHeaderLabels(headerLabels);
-        connect(mNavigateWidget,&QTableWidget::cellDoubleClicked,this,&GraphNavigationWidgetV3::handleSelectionChanged);
+        mNavigateWidget->setShowGrid(false);
+        connect(mNavigateWidget,&QTableWidget::cellDoubleClicked,this,&GraphNavigationWidgetV3::handleNavigateSelected);
         layNavigateView->addWidget(mNavigateWidget);
         layTop->addWidget(mNavigateFrame);
 
         mAddToViewFrame = new QFrame(this);
         mAddToViewFrame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
         QVBoxLayout* layAddtoView = new QVBoxLayout(mAddToViewFrame);
-        layAddtoView->addWidget(new QLabel("Add to view ...", mAddToViewFrame));
-        mAddToViewWidget = new QTreeWidget(mAddToViewFrame);
-        mAddToViewWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+        QLabel* labAddToView = new QLabel("Add to view …", mAddToViewFrame);
+        labAddToView->setFixedHeight(sLabelHeight);
+        layAddtoView->addWidget(labAddToView);
+        mAddToViewWidget = new GraphNavigationTreeWidget(this,mAddToViewFrame);
+        mAddToViewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mAddToViewWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
         mAddToViewWidget->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
         mAddToViewWidget->header()->setStretchLastSection(false);
         mAddToViewWidget->setColumnCount(5);
         mAddToViewWidget->setHeaderLabels(headerLabels);
-        mAddToViewWidget->setAllColumnsShowFocus(true);
+       // mAddToViewWidget->setAllColumnsShowFocus(true);
+        connect(mAddToViewWidget,&QTreeWidget::itemDoubleClicked,this,&GraphNavigationWidgetV3::handleAddToViewSelected);
         layAddtoView->addWidget(mAddToViewWidget);
         layTop->addWidget(mAddToViewFrame);
+    }
+
+    void GraphNavigationWidgetV3::closeRequest()
+    {
+        Q_EMIT closeRequested();
+        Q_EMIT resetFocus();
+        mViaNet = nullptr;
+        mOrigin = Node();
+        mDirection = SelectionRelay::Subfocus::None;
     }
 
     void GraphNavigationWidgetV3::viaNetByNode()
@@ -106,13 +232,26 @@ namespace hal {
                 << QString::fromStdString(g->get_module()->get_name());
     }
 
+    QTreeWidgetItem* GraphNavigationWidgetV3::itemFactory(const QStringList& fields, const Node& nd)
+    {
+        QTreeWidgetItem* retval = new QTreeWidgetItem(fields);
+        for (int i=0; i<fields.size(); i++)
+        {
+            if (i==1) retval->setTextAlignment(i,Qt::AlignRight | Qt::AlignVCenter);
+            else      retval->setTextAlignment(i,Qt::AlignLeft  | Qt::AlignVCenter);
+        }
+        mAddToViewNodes.insert(retval,nd);
+        return retval;
+    }
+
     bool GraphNavigationWidgetV3::addToViewItem(Endpoint *ep)
     {
         Gate* g = ep->get_gate();
         if (!g) return false;
 
         QStringList fields = gateEntry(g,ep);
-        QTreeWidgetItem* item = new QTreeWidgetItem(fields);
+        QTreeWidgetItem* item = itemFactory(fields,Node(g->get_id(),Node::Gate));
+
         Module* pm = g->get_module();
         while (pm && !mModulesInView.contains(pm))
         {
@@ -124,7 +263,7 @@ namespace hal {
                 return true;
             }
             fields = moduleEntry(pm,ep);
-            QTreeWidgetItem* parentItem = new QTreeWidgetItem(fields);
+            QTreeWidgetItem* parentItem = itemFactory(fields,Node(pm->get_id(),Node::Module));
             parentItem->addChild(item);
             mListedModules.insert(pm, parentItem);
             item = parentItem;
@@ -164,15 +303,20 @@ namespace hal {
         mNavigateNodes.append(nbox->getNode());
         mNavigateWidget->insertRow(n);
         for (int icol=0; icol < fields.size(); icol++)
-            mNavigateWidget->setItem(n,icol, new QTableWidgetItem(fields.at(icol)));
+        {
+            QTableWidgetItem* cell = new QTableWidgetItem(fields.at(icol));
+            if (icol == 1) cell->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+            else cell->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+            mNavigateWidget->setItem(n,icol, cell);
+        }
         return true;
     }
 
-    void GraphNavigationWidgetV3::setup(Node origin, Net* via_net, SelectionRelay::Subfocus direction)
+    void GraphNavigationWidgetV3::setup(Node origin, Net* via_net, SelectionRelay::Subfocus dir)
     {
         mOrigin = origin;
         mViaNet = via_net;
-        mDirection = direction;
+        mDirection = dir;
         fillTable();
     }
 
@@ -233,6 +377,34 @@ namespace hal {
         }
     }
 
+    bool GraphNavigationWidgetV3::hasBothWidgets() const
+    {
+        return mNavigateVisible && mAddToViewVisible;
+    }
+
+    void GraphNavigationWidgetV3::toggleWidget()
+    {
+        if (!hasBothWidgets()) return;
+        if (mNavigateWidget->hasFocus())
+        {
+            mAddToViewWidget->setFocus();
+            mAddToViewWidget->setCurrentIndex(mAddToViewWidget->firstIndex());
+            mNavigateWidget->clearSelection();
+        }
+        else
+        {
+            mNavigateWidget->setFocus();
+            mNavigateWidget->setCurrentCell(0,0);
+            mNavigateWidget->selectRow(0);
+            mAddToViewWidget->clearSelection();
+        }
+    }
+
+    bool GraphNavigationWidgetV3::isEmpty() const
+    {
+        return !mNavigateVisible && !mAddToViewVisible;
+    }
+
     void GraphNavigationWidgetV3::setModuleInView(Module* m)
     {
         if (!m) return;
@@ -247,47 +419,52 @@ namespace hal {
         mNavigateWidget->setRowCount(0);
         mNavigateNodes.clear();
         mAddToViewWidget->clear();
+        mAddToViewNodes.clear();
         mModulesInView.clear();
         mEndpointNotInView.clear();
         mListedModules.clear();
 
         if (!mViaNet || mDirection == SelectionRelay::Subfocus::None) return;
         setModulesInView();
-        bool hasNavigateEntries = false;
+        mNavigateVisible = false;
 
         for (Endpoint* ep : (mDirection == SelectionRelay::Subfocus::Left)
              ? mViaNet->get_sources()
              : mViaNet->get_destinations())
         {
             if (addNavigateItem(ep))
-            {
-                hasNavigateEntries = true;
-                mNavigateWidget->setCurrentCell(0,0);
-                mNavigateWidget->selectRow(0);
-            }
+                mNavigateVisible = true;
             else
                 mEndpointNotInView.append(ep);
         }
 
-        if (hasNavigateEntries)
+        if (mNavigateVisible)
+        {
             mNavigateFrame->show();
+            mNavigateWidget->setCurrentCell(0,0);
+            mNavigateWidget->selectRow(0);
+            mNavigateWidget->setFocus();
+        }
         else
             mNavigateFrame->hide();
 
-        bool hasToViewEntries = false;
-        if (!mEndpointNotInView.isEmpty())
+        mAddToViewVisible = false;
+        if (!mEndpointNotInView.isEmpty() && !mOnlyNavigate)
         {
             for (Endpoint* ep : mEndpointNotInView)
             {
                 if (addToViewItem(ep))
-                    hasToViewEntries = true;
+                    mAddToViewVisible = true;
             }
         }
 
-        if (hasToViewEntries)
+        if (mAddToViewVisible)
         {
-            mAddToViewWidget->expandAll();
             mAddToViewFrame->show();
+            mAddToViewWidget->expandAll();
+            mAddToViewWidget->setCurrentIndex(mAddToViewWidget->firstIndex());
+            if (!mNavigateVisible)
+                mAddToViewWidget->setFocus();
         }
         else
             mAddToViewFrame->hide();
@@ -297,7 +474,7 @@ namespace hal {
 
     void GraphNavigationWidgetV3::resizeToFit()
     {
-        if (mNavigateFrame->isVisible())
+        if (mNavigateVisible)
         {
             mNavigateWidget->resizeColumnsToContents();
 
@@ -307,72 +484,52 @@ namespace hal {
                 mNavigateWidget->setColumnWidth(i, sDefaultColumnWidth[i]);
                 width += sDefaultColumnWidth[i];
             }
-            int height = 24;
+            int height = 28;
+            mNavigateWidget->horizontalHeader()->setMaximumHeight(24);
             for (int i=0; i<mNavigateWidget->rowCount(); i++)
-                height += 24;
-
+            {
+                height += mNavigateWidget->verticalHeader()->sectionSize(i);
+            }
+            if (height > sMaxHeight) height = sMaxHeight;
             mNavigateWidget->setFixedSize(width,height);
         }
-            /*
-        int width = 2;
-        if (mNavigateFrame->isVisible())
+
+        if (mAddToViewVisible)
         {
-            for (int i=0; i<mNavigateWidget->columnCount(); i++)
+            int width = 4;
+            for (int i=0; i<mAddToViewWidget->columnCount(); i++)
             {
-                mNavigateWidget->resizeColumnToContents(i);
-                width += mNavigateWidget->columnWidth(i);
+                mAddToViewWidget->setColumnWidth(i, sDefaultColumnWidth[i]);
+                width += sDefaultColumnWidth[i];
             }
+            mAddToViewWidget->setFixedWidth(width);
+            mAddToViewWidget->setMaximumHeight(sMaxHeight);
         }
-
-        // Qt apparently needs these 2 pixels extra, otherwise you get scollbars
-
-
-        int width = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 2;
-        for (int i = 0; i < columnCount(); i++)
-        {
-            resizeColumnToContents(i);
-            width += columnWidth(i);
-        }
-
-        int height = header()->height() + 2;
-        height += sumRowHeights(this->invisibleRootItem());
-
-        int MAXIMUM_ALLOWED_HEIGHT = std::min(500, static_cast<QWidget*>(parent())->height());
-        int MAXIMUM_ALLOWED_WIDTH = std::min(700, static_cast<QWidget*>(parent())->width());
-        setFixedWidth((width > MAXIMUM_ALLOWED_WIDTH) ? MAXIMUM_ALLOWED_WIDTH : width);
-        setFixedHeight((height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height);
-        */
     }
 
-    void GraphNavigationWidgetV3::keyPressEvent(QKeyEvent* event)
+    void GraphNavigationWidgetV3::keyPressEvent(QKeyEvent *ev)
     {
-        if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return ||
-                (event->key() == Qt::Key_Right && mDirection == SelectionRelay::Subfocus::Right) ||
-                (event->key() == Qt::Key_Left && mDirection == SelectionRelay::Subfocus::Left))
+        if (ev->key() == Qt::Key_Tab)
         {
-            bool navigationHasFocus = true;
-            if (!mAddToViewFrame->isVisible())     navigationHasFocus = true;
-            else if (!mNavigateFrame->isVisible()) navigationHasFocus = false;
-            else if (mNavigateWidget->hasFocus())  navigationHasFocus = true;
-            else if (mAddToViewWidget->hasFocus()) navigationHasFocus = false;
-
-            if (navigationHasFocus)
-                handleNavigateSelected(mNavigateWidget->currentRow(),0);
-            else
-            {
-
-            }
-        }
-
-        if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Left)
-        {
-            Q_EMIT closeRequested();
-            Q_EMIT resetFocus();
-            mViaNet = nullptr;
+            toggleWidget();
             return;
         }
+        QWidget::keyPressEvent(ev);
+    }
 
-        return QWidget::keyPressEvent(event);
+    void GraphNavigationWidgetV3::focusInEvent(QFocusEvent *ev)
+    {
+        Q_UNUSED(ev);
+        if (mNavigateVisible)
+        {
+            mNavigateWidget->setFocus();
+            mAddToViewWidget->clearSelection();
+        }
+        else if (mAddToViewVisible)
+        {
+            mAddToViewWidget->setFocus();
+            mNavigateWidget->clearSelection();
+        }
     }
 
     void GraphNavigationWidgetV3::handleNavigateSelected(int irow, int icol)
@@ -393,4 +550,29 @@ namespace hal {
         }
         Q_EMIT navigationRequested(mOrigin, mViaNet->get_id(), navigateGates, navigateModules);
     }
+
+    void GraphNavigationWidgetV3::handleAddToViewSelected(QTreeWidgetItem* item, int icol)
+    {
+        Q_UNUSED(icol);
+        Q_UNUSED(item);
+        QSet<u32> addGates;
+        QSet<u32> addModules;
+
+        for (QTreeWidgetItem* selItem : mAddToViewWidget->selectedItems())
+        {
+            Node nd = mAddToViewNodes.value(selItem);
+            switch (nd.type()) {
+            case Node::Module:
+                addModules.insert(nd.id());
+                break;
+            case Node::Gate:
+                addGates.insert(nd.id());
+                break;
+            default:
+                continue;
+            }
+        }
+        Q_EMIT navigationRequested(mOrigin, mViaNet->get_id(), addGates, addModules);
+    }
+
 }
