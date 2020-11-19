@@ -45,34 +45,18 @@ template<class T>
 class RawPtrWrapper
 {
 public:
-    /**
-     * Construct an empty wrapper.
-     */
-    RawPtrWrapper() : m_ptr(nullptr)
+    RawPtrWrapper() = default;
+
+    RawPtrWrapper(T* ptr) : RawPtrWrapper()
     {
+        m_ptr = ptr;
     }
 
-    /**
-     * Construct a wrapper from a raw pointer.
-     * 
-     * @param[in] ptr - The raw pointer.
-     */
-    RawPtrWrapper(T* ptr) : m_ptr(ptr)
-    {
-    }
-
-    /**
-     * Construct a wrapper from another one (i.e., copy constructor).
-     * 
-     * @param[in] other - The other wrapper to copy.
-     */
-    RawPtrWrapper(const RawPtrWrapper& other) : m_ptr(other.m_ptr)
-    {
-    }
+    ~RawPtrWrapper() = default;
 
     /**
      * Get the raw pointer from the wrapper.
-     * 
+     *
      * @returns The raw pointer.
      */
     T* get() const
@@ -81,7 +65,7 @@ public:
     }
 
 private:
-    T* m_ptr;
+    T* m_ptr = nullptr;
 };
 PYBIND11_DECLARE_HOLDER_TYPE(T, RawPtrWrapper<T>, true)
 
@@ -90,7 +74,7 @@ namespace hal
     namespace py = pybind11;
     /**
      * TODO move into own namespace
-     * 
+     *
      * @ingroup pybind
      * @{
      */
