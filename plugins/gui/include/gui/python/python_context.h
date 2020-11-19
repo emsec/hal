@@ -31,10 +31,10 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #include "pybind11/embed.h"
 #include "pybind11/eval.h"
+#include "pybind11/functional.h"
 #include "pybind11/operators.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
-#include "pybind11/functional.h"
 #pragma GCC diagnostic pop
 
 namespace hal
@@ -86,6 +86,9 @@ namespace hal
         // these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault
         // only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()
         py::dict* mContext;
+        std::unordered_map<py::dict*, py::object> mNetlistPointers;
+
+        void regainNetlistOwnership(py::dict& ctx);
 
         PythonContextSubscriber* mSender;
 
@@ -94,4 +97,4 @@ namespace hal
         PythonConsole* mConsole;
         bool mTriggerReset = false;
     };
-}
+}    // namespace hal

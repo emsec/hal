@@ -29,15 +29,12 @@ namespace hal
     // problem: c++ code owns (via unique_ptr) and pybind owns internally --> double free
     // solution: manually request ownership back from pybind when we are done
     //
-    static void regainNetlistOwnership(py::dict& ctx)
+    void PythonContext::regainNetlistOwnership(py::dict& ctx)
     {
-        if (ctx.contains("netlist"))
+        if (auto it = mNetlistPointers.find(&ctx); it != mNetlistPointers.end())
         {
-            // explicitely obtain the internally-reference-counted pyobject
-            py::object o = ctx["netlist"];
-
-            // release ownership from python back to cpp (we do nothing here as we already track ownership via unique_ptr)
-            o.release();
+            it->second.release();
+            mNetlistPointers.erase(it);
         }
     }
 
@@ -92,7 +89,8 @@ namespace hal
 
         py::exec(command, *context, *context);
 
-        (*context)["netlist"] = RawPtrWrapper<Netlist>(gNetlist);
+        (*context)["netlist"]     = RawPtrWrapper<Netlist>(gNetlist);
+        mNetlistPointers[context] = (*context)["netlist"];
 
         if (gGuiApi)
         {
