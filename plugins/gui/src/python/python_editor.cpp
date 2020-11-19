@@ -2,6 +2,7 @@
 
 #include "gui/code_editor/syntax_highlighter/python_syntax_highlighter.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
@@ -107,6 +108,19 @@ namespace hal
         rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
         rapidjson::Value tabs(rapidjson::kArrayType);
 
+        // Create a path, where snapshots of unstored tabs are stored
+        // TODO: maybe change directory
+        QDir unstored_snapshot_path(QString::fromStdString(hal::utils::get_base_directory().string()));
+        QDir tmp_dir(unstored_snapshot_path);
+        // Clear all old snapshots in the tmp path
+        if(tmp_dir.cd(".tmp/"))
+        {
+            tmp_dir.removeRecursively();
+        }
+        bool unstored_tab_found = false;
+
+        int unstored_snapshot_idx = 0;
+
         for (int i = 0; i < mTabWidget->count(); i++)
         {
             rapidjson::Value val(rapidjson::kObjectType);
@@ -115,15 +129,64 @@ namespace hal
 
             if (!tab->getFileName().isEmpty())
             {
+                // Handle an already stored file
                 val.AddMember("path", tab->getFileName().toStdString(), allocator);
+                QFileInfo original_path(tab->getFileName());
+                QFileInfo snapshot_path(original_path.path() + "/~" + original_path.fileName());
+                QFile snapshot_file(snapshot_path.filePath());
+                if (tab->document()->isModified())
+                {
+                    if(!snapshot_file.open(QIODevice::WriteOnly)){
+                        log_error("gui", "Cannot access snapshot file \"{}\".", snapshot_path.path().toStdString());
+                    }
+                    else
+                    {
+                        snapshot_file.write(tab->toPlainText().toUtf8());
+                    }
+                }
+                else
+                {
+                    // If the file is not modified, there is no need for a snapshot. Remove an existing snapshot then.
+                    if(snapshot_file.exists()){
+                        if(!snapshot_file.remove())
+                        {
+                            log_error("gui", "Cannot clean outdated snapshot file.");
+                        }
+                    }
+                }
             }
-            // TODO: generate snapshot files...
-
-            /*
-            if (tab->document()->isModified())
+            else
             {
-                val.AddMember("script", tab->toPlainText().toStdString(), allocator);
-            }*/
+                // Handle an unsaved file
+                if(!unstored_tab_found)
+                {
+                    // Create a temp directory to store snapshots of unstored tabs
+                    unstored_tab_found = true;
+                    if(!unstored_snapshot_path.mkpath(".tmp/")){
+                        log_error("gui", "Snapshot folder can not be created! ");
+                    }
+
+                    unstored_snapshot_path.cd(".tmp/");
+                }
+
+                QString snapshot_path = unstored_snapshot_path.absoluteFilePath("~temp"+QString::number(unstored_snapshot_idx)+".py");
+                unstored_snapshot_idx++;
+                val.AddMember("snapshot", snapshot_path.toStdString(), allocator);
+
+                if (tab->document()->isModified())
+                {
+                    QFile snapshot_file(snapshot_path);
+
+                    if(!snapshot_file.open(QIODevice::WriteOnly)){
+                        log_error("gui", "Cannot access snapshot file \"{}\"", snapshot_path.toStdString());
+                    }
+                    else
+                    {
+                        snapshot_file.write(tab->toPlainText().toUtf8());
+                    }
+                }
+
+            }
 
             tabs.PushBack(val, allocator);
         }
@@ -165,13 +228,13 @@ namespace hal
                 if (val.HasMember("path"))
                 {
                     // Search for a snapshot of this file
-                    QFileInfo path(val["path"].GetString());
-                    QFileInfo snapshot_path(path.path() + "/~" + path.fileName());
+                    QFileInfo original_path(val["path"].GetString());
+                    QFileInfo snapshot_path(original_path.path() + "/~" + original_path.fileName());
 
                     // Decide whether the snapshot file or the original should be loaded
                     bool load_snapshot = false;
                     if(snapshot_path.exists()){
-                        if(path.exists()){
+                        if(original_path.exists()){
                             // Ask user whether the original file or the snapshot should be loaded
                             load_snapshot = askLoadSnapshot(snapshot_path);
                         }
@@ -180,7 +243,7 @@ namespace hal
                         }
                     }
                     else{
-                        if(path.exists()){
+                        if(original_path.exists()){
                             load_snapshot = false;
                         }
                         else{
@@ -191,22 +254,49 @@ namespace hal
                     }
 
                     if(load_snapshot){
-                        // TODO: loaded snapshot file should be named and stored in the original file path
-                        tabLoadFile(cnt - 1, snapshot_path.filePath());
+                        int tab_idx = cnt - 1;
+                        // Read the content of the snapshot file
+                        QFile snapshot_file(snapshot_path.filePath());
+                        if(!snapshot_file.open(QIODevice::ReadOnly))
+                        {
+                            log_error("gui","Cannot open snapshot file!");
+                            // TODO: Error?
+                        }
+
+                        tabLoadFile(tab_idx, original_path.filePath());
+
+                        // Set the tabs content to the text of the snapshot
+                        QString snapshot_content = QString::fromStdString(snapshot_file.readAll().toStdString());
+                        log_info("gui", snapshot_content.toStdString());
+                        mPathEditorMap[original_path.filePath()]->setPlainText(snapshot_content);
+
+                        // The original is only overwritten after the first save
+                        mPathEditorMap[original_path.filePath()]->document()->setModified(true);
+                        mTabWidget->setTabText(tab_idx, mTabWidget->tabText(tab_idx).append("*"));
+
                     }
-                    else{
-                        tabLoadFile(cnt - 1, path.filePath());
+                    else
+                    {
+                        tabLoadFile(cnt - 1, original_path.filePath());
+                    }
+                }
+                if(val.HasMember("snapshot")){
+                    // Handle snapshots of unstored new tabs
+                    QFile snapshot_file(val["snapshot"].GetString());
+                    if(snapshot_file.open(QIODevice::ReadOnly))
+                    {
+                        QString snapshot_content = QString::fromStdString(snapshot_file.readAll().toStdString());
+                        auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(cnt - 1));
+                        tab->setPlainText(snapshot_content);
+                        tab->document()->setModified(true);
+                        mTabWidget->setTabText(cnt - 1, mTabWidget->tabText(cnt - 1) + "*");
+                    }
+                    else
+                    {
+                        log_error("gui", "Cannot open snapshot file \"{}\". ", val["snapshot"].GetString());
                     }
 
                 }
-
-                /*if (val.HasMember("script"))
-                {
-                    auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(cnt - 1));
-                    tab->setPlainText(val["script"].GetString());
-                    tab->document()->setModified(true);
-                    mTabWidget->setTabText(cnt - 1, mTabWidget->tabText(cnt - 1) + "*");
-                }*/
             }
 
             if (root.HasMember("selected_tab"))
