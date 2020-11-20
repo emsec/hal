@@ -29,6 +29,8 @@ namespace hal
 
         gate_library_init(m);
 
+        gate_library_manager_init(m);
+
         endpoint_init(m);
 
         netlist_init(m);
