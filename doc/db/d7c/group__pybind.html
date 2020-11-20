@@ -98,6 +98,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:ga23445061a41678f413471f3459e241d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3e97835fd6fda5f038f92cefbcdcf57b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:ga3e97835fd6fda5f038f92cefbcdcf57b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacd94e2b9ac19cb0a128446c71673aabf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d7c/group__pybind.html#gacd94e2b9ac19cb0a128446c71673aabf">hal::gate_library_manager_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:gacd94e2b9ac19cb0a128446c71673aabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6d7aa3afc74611d7f65294808436eac9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:ga6d7aa3afc74611d7f65294808436eac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa10fb860bfd6cbdbe95ab96e78c8cb1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init</a> (py::module &amp;m)</td></tr>
@@ -339,6 +341,35 @@ template&lt;class T &gt; </div>
 </dl>
 
 <p class="reference">References <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a8a704f948603b277844a8f8bb20fa6a9">hal::GateLibrary::add_include()</a>, <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#acb40159f6ad605ef063aecdad4607139">hal::GateLibrary::contains_gate_type()</a>, <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#af244ebe63555e8ee771e3d0dca62095b">hal::GateLibrary::get_gate_types()</a>, <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a7d66afe693bdd824761470bd3311cc31">hal::GateLibrary::get_gnd_gate_types()</a>, <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a955208e223376a19c808f83d486311d2">hal::GateLibrary::get_includes()</a>, <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#aef64b8371779e27c778227552deb3a6d">hal::GateLibrary::get_name()</a>, and <a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#ab5186e691271b4d42cbd632fd02e3195">hal::GateLibrary::get_vcc_gate_types()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a034467b937d9c580d84c198167d00929">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
+<a id="gacd94e2b9ac19cb0a128446c71673aabf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacd94e2b9ac19cb0a128446c71673aabf">&#9670;&nbsp;</a></span>gate_library_manager_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::gate_library_manager_init </td>
+          <td>(</td>
+          <td class="paramtype">py::module &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Initializes Python bindings for the HAL gate library manager in a python module.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>- the python module </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a3ae6558acfeccd85000402340cd57874">hal::gate_library_manager::get_gate_libraries()</a>, <a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a6bea3d7f340d955467aa5b31934b9f6c">hal::gate_library_manager::get_gate_library()</a>, <a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a6c1b0915537d0f6c835cb3bf5d1445b8">hal::gate_library_manager::get_gate_library_by_name()</a>, <a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a4867606adb5e71f94d337face0b0b949">hal::gate_library_manager::load_all()</a>, and <a class="el" href="../../de/d78/namespacehal_1_1gate__library__manager.html#a73ae5e426dd92db0800fadbb7fff250c">hal::gate_library_manager::load_file()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a034467b937d9c580d84c198167d00929">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -695,7 +726,7 @@ template&lt;class T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 20 2020 11:58:10 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 20 2020 12:32:08 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
