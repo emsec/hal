@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 * fixed netlist parsers wrongly handling escapings within strings
 * fixed netlist pybind bug causing errors on netlist creation
+* fixed segfault in `BooleanFunction::from_string` when providing partial variable names
 
 ## [3.1.5] - 2020-11-16 14:30:00+02:00 (urgency: medium)
 * fixed and expanded Python decorators for logging in study environment to additionally cover the GUI
