@@ -407,6 +407,10 @@ namespace hal {
                 auto bf = BooleanFunction::from_string(f_str, {"X"});
                 EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"A", "B", "C", "D"}));
             }
+            {
+                auto bf = BooleanFunction::from_string("!(A1 | A2)", {"A", "B"});
+                EXPECT_EQ(bf.get_variables(), std::vector<std::string>({"2", "A"}));
+            }
 
         TEST_END
     }

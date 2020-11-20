@@ -58,6 +58,7 @@ namespace hal
         }
         // NEGATIVE
         {
+            NO_COUT_BLOCK;
             // No subgraph gates are passed
             const std::vector<const Gate*> subgraph_gates({});
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
@@ -66,6 +67,7 @@ namespace hal
             EXPECT_TRUE(sub_graph_bf.is_empty());
         }
         {
+            NO_COUT_BLOCK;
             // One of the gates is a nullptr
             const std::vector<const Gate*> subgraph_gates({gate_0, nullptr, gate_3});
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 045);
@@ -74,6 +76,7 @@ namespace hal
             EXPECT_TRUE(sub_graph_bf.is_empty());
         }
         {
+            NO_COUT_BLOCK;
             // The output net is a nullptr
             const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
             const Net* output_net        = nullptr;
@@ -82,6 +85,7 @@ namespace hal
             EXPECT_TRUE(sub_graph_bf.is_empty());
         }
         {
+            NO_COUT_BLOCK;
             // The output net has multiple sources
             // -- create such a net
             Net* multi_src_net = test_nl->create_net("muli_src_net");
@@ -97,6 +101,7 @@ namespace hal
             test_nl->delete_net(multi_src_net);
         }
         {
+            NO_COUT_BLOCK;
             // The output net has no source
             // -- create such a net
             Net* no_src_net = test_nl->create_net("muli_src_net");
@@ -110,6 +115,7 @@ namespace hal
             test_nl->delete_net(no_src_net);
         }
         {
+            NO_COUT_BLOCK;
             // A net in between has multiple sources (expansion should stop in this direction)
             // -- add a source to net 30 temporarily
             test_nl->get_net_by_id(MIN_NET_ID + 30)->add_source(test_nl->get_gate_by_id(MIN_GATE_ID + 8), "O");
@@ -123,6 +129,7 @@ namespace hal
             EXPECT_EQ(sub_graph_bf, expected_bf);
         }
         {
+            NO_COUT_BLOCK;
             // The netlist contains a cycle
             // -- create such a netlist:
             /*   .-=|gate_0|=----.
@@ -150,6 +157,7 @@ namespace hal
             EXPECT_TRUE(sub_graph_bf.is_empty());
         }
         {
+            NO_COUT_BLOCK;
             // A gate of the subgraph has unconnected input pins
             const std::vector<const Gate*> subgraph_gates({gate_7});
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 78);
@@ -170,8 +178,6 @@ namespace hal
         TEST_START
         // Create an example netlist that should be copied
         std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
-
-        test_nl->get_gate_by_id(MIN_GATE_ID + 2)->set_data("a", "b", "c", "d");
 
         // -- Add some modules to the example netlist
         Module* mod_0 = test_nl->create_module(test_utils::MIN_MODULE_ID + 0,
@@ -222,7 +228,9 @@ namespace hal
     }
 
     /**
-     * Testing the get_next_sequential_gates variants
+     * Testing the get_next_sequential_gates variants.
+     * Testing only the gate functions for now as they call the net functions.
+     * TODO: test both variants
      *
      * Functions: get_next_sequential_gates
      */
@@ -230,38 +238,88 @@ namespace hal
     {
         TEST_START
         // Create an example netlist that should be copied
-        std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
+        std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist(1);
+        GateLibrary* gl             = test_utils::get_testing_gate_library();
 
-        auto gate = test_nl->get_gate_by_id(MIN_GATE_ID + 1);
+        Gate* gate_0     = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types().at("gnd"), "gate_0");
+        Gate* gate_1     = nl->create_gate(MIN_GATE_ID + 1, gl->get_gate_types().at("vcc"), "gate_1");
+        Gate* gate_2     = nl->create_gate(MIN_GATE_ID + 2, gl->get_gate_types().at("gate_1_to_1"), "gate_2");
+        Gate* gate_3     = nl->create_gate(MIN_GATE_ID + 3, gl->get_gate_types().at("gate_2_to_1"), "gate_3");
+        Gate* gate_4_seq = nl->create_gate(MIN_GATE_ID + 4, gl->get_gate_types().at("gate_2_to_1_sequential"), "gate_4_seq");
+        Gate* gate_5_seq = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_types().at("gate_2_to_1_sequential"), "gate_5_seq");
+        Gate* gate_6     = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_types().at("gate_2_to_1"), "gate_6");
 
+        auto connect = [&](Gate* src, std::string src_pin, Gate* dst, std::string dst_pin) {
+            if (auto n = src->get_fan_out_net(src_pin); n != nullptr)
+            {
+                n->add_destination(dst, dst_pin);
+            }
+            else if (auto n = dst->get_fan_in_net(dst_pin); n != nullptr)
+            {
+                n->add_source(src, src_pin);
+            }
+            else
+            {
+                n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
+                n->add_source(src, src_pin);
+                n->add_destination(dst, dst_pin);
+            }
+        };
+
+        connect(gate_0, "O", gate_2, "I");
+        connect(gate_0, "O", gate_3, "I1");
+        connect(gate_1, "O", gate_3, "I0");
+        connect(gate_3, "O", gate_4_seq, "I0");
+        connect(gate_4_seq, "O", gate_4_seq, "I1");
+        connect(gate_4_seq, "O", gate_5_seq, "I0");
+        connect(gate_0, "O", gate_5_seq, "I1");
+        connect(gate_4_seq, "O", gate_6, "I0");
+        connect(gate_5_seq, "O", gate_6, "I1");
+
+        std::map<Gate*, std::vector<Gate*>> test_successors = {
+            {gate_0, {gate_4_seq, gate_5_seq}},
+            {gate_1, {gate_4_seq}},
+            {gate_2, {}},
+            {gate_3, {gate_4_seq}},
+            {gate_4_seq, {gate_4_seq, gate_5_seq}},
+            {gate_5_seq, {}},
+            {gate_6, {}},
+        };
+
+        std::map<Gate*, std::vector<Gate*>> test_predecessors = {
+            {gate_0, {}},
+            {gate_1, {}},
+            {gate_2, {}},
+            {gate_3, {}},
+            {gate_4_seq, {gate_4_seq}},
+            {gate_5_seq, {gate_4_seq}},
+            {gate_6, {gate_5_seq, gate_4_seq}},
+        };
+
+        for (auto [start, expected] : test_successors)
         {
-            auto successors = netlist_utils::get_next_sequential_gates(gate, true);
-            std::unordered_map<u32, std::vector<Gate*>> successor_cache;
-            auto successors_cached = netlist_utils::get_next_sequential_gates(gate, true, successor_cache);
+            auto successors = netlist_utils::get_next_sequential_gates(start, true);
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            auto successors_cached = netlist_utils::get_next_sequential_gates(start, true, cache);
             EXPECT_EQ(successors, successors_cached);
+            EXPECT_TRUE(test_utils::vectors_have_same_content(successors, expected));
+
+            // std::cout << "successors of: " << start->get_name() << std::endl;
+            // std::cout << "computed: " << utils::join(", ", successors, [](auto x) { return x->get_name(); }) << std::endl;
+            // std::cout << "expected: " << utils::join(", ", expected, [](auto x) { return x->get_name(); }) << std::endl;
         }
 
+        for (auto [start, expected] : test_predecessors)
         {
-            auto predecessors = netlist_utils::get_next_sequential_gates(gate, false);
-            std::unordered_map<u32, std::vector<Gate*>> successor_cache;
-            auto predecessors_cached = netlist_utils::get_next_sequential_gates(gate, false, successor_cache);
+            auto predecessors = netlist_utils::get_next_sequential_gates(start, false);
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            auto predecessors_cached = netlist_utils::get_next_sequential_gates(start, false, cache);
             EXPECT_EQ(predecessors, predecessors_cached);
-        }
+            EXPECT_TRUE(test_utils::vectors_have_same_content(predecessors, expected));
 
-        auto net = gate->get_fan_out_net("O");
-
-        {
-            auto successors = netlist_utils::get_next_sequential_gates(net, true);
-            std::unordered_map<u32, std::vector<Gate*>> successor_cache;
-            auto successors_cached = netlist_utils::get_next_sequential_gates(net, true, successor_cache);
-            EXPECT_EQ(successors, successors_cached);
-        }
-
-        {
-            auto predecessors = netlist_utils::get_next_sequential_gates(net, false);
-            std::unordered_map<u32, std::vector<Gate*>> successor_cache;
-            auto predecessors_cached = netlist_utils::get_next_sequential_gates(net, false, successor_cache);
-            EXPECT_EQ(predecessors, predecessors_cached);
+            // std::cout << "predecessors of: " << start->get_name() << std::endl;
+            // std::cout << "computed: " << utils::join(", ", predecessors, [](auto x) { return x->get_name(); }) << std::endl;
+            // std::cout << "expected: " << utils::join(", ", expected, [](auto x) { return x->get_name(); }) << std::endl;
         }
 
         TEST_END

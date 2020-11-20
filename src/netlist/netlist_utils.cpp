@@ -350,7 +350,7 @@ namespace hal
         std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache)
         {
             std::vector<Gate*> found_ffs;
-            for (const auto& n : gate->get_fan_out_nets())
+            for (const auto& n : get_successors ? gate->get_fan_out_nets() : gate->get_fan_in_nets())
             {
                 auto suc = get_next_sequential_gates(n, get_successors, cache);
                 found_ffs.insert(found_ffs.end(), suc.begin(), suc.end());
