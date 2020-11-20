@@ -71,7 +71,7 @@ namespace hal
          * @param[in] net - The net to start from
          * @param[in] get_successors - If true, sequential successors are returned, else sequential predecessors are returned
          * @param[inout] cache - Cache to speed up computations. The cache is filled by this function. You must use different caches for different values of get_successors.
-         * @returns All sequential successors or predecessors of the gate.
+         * @returns All sequential successors or predecessors of the net.
          */
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
@@ -94,7 +94,7 @@ namespace hal
          *
          * @param[in] net - The net to start from
          * @param[in] get_successors - If true, sequential successors are returned, else sequential predecessors are returned
-         * @returns All sequential successors or predecessors of the gate.
+         * @returns All sequential successors or predecessors of the net.
          */
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors);
     }    // namespace netlist_utils
