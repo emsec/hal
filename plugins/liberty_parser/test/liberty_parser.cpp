@@ -53,9 +53,10 @@ namespace hal {
                 EXPECT_EQ(gl->get_name(), "TEST_GATE_LIBRARY");
 
                 // Check that the Gate type was created
-                ASSERT_EQ(gl->get_gate_types().size(), 1);
-                auto gt_it = gl->get_gate_types().find("TEST_GATE_TYPE");
-                ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+                auto gate_types = gl->get_gate_types();
+                ASSERT_EQ(gate_types.size(), 1);
+                auto gt_it = gate_types.find("TEST_GATE_TYPE");
+                ASSERT_TRUE(gt_it != gate_types.end());
                 const GateType* gt = gt_it->second;
 
                 // Check the content of the created Gate type
@@ -128,9 +129,10 @@ namespace hal {
                 ASSERT_NE(gl, nullptr);
 
                 // Check that the Gate type was created
-                ASSERT_EQ(gl->get_gate_types().size(), 1);
-                auto gt_it = gl->get_gate_types().find("TEST_LUT");
-                ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+                auto gate_types = gl->get_gate_types();
+                ASSERT_EQ(gate_types.size(), 1);
+                auto gt_it = gate_types.find("TEST_LUT");
+                ASSERT_TRUE(gt_it != gate_types.end());
                 const GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::lut);
                 const GateTypeLut* gt_lut = dynamic_cast<const GateTypeLut*>(gt);
@@ -176,9 +178,10 @@ namespace hal {
                 ASSERT_NE(gl, nullptr);
 
                 // Check that the Gate type was created
-                ASSERT_EQ(gl->get_gate_types().size(), 1);
-                auto gt_it = gl->get_gate_types().find("TEST_LUT");
-                ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+                auto gate_types = gl->get_gate_types();
+                ASSERT_EQ(gate_types.size(), 1);
+                auto gt_it = gate_types.find("TEST_LUT");
+                ASSERT_TRUE(gt_it != gate_types.end());
                 const GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::lut);
                 const GateTypeLut* gt_lut = dynamic_cast<const GateTypeLut*>(gt);
@@ -253,9 +256,10 @@ namespace hal {
                 ASSERT_NE(gl, nullptr);
 
                 // Check that the Gate type was created
-                ASSERT_EQ(gl->get_gate_types().size(), 1);
-                auto gt_it = gl->get_gate_types().find("TEST_FF");
-                ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+                auto gate_types = gl->get_gate_types();
+                ASSERT_EQ(gate_types.size(), 1);
+                auto gt_it = gate_types.find("TEST_FF");
+                ASSERT_TRUE(gt_it != gate_types.end());
                 const GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::ff);
                 const GateTypeSequential* gt_ff = dynamic_cast<const GateTypeSequential*>(gt);
@@ -346,9 +350,10 @@ namespace hal {
                 ASSERT_NE(gl, nullptr);
 
                 // Check that the Gate type was created
-                ASSERT_EQ(gl->get_gate_types().size(), 1);
-                auto gt_it = gl->get_gate_types().find("TEST_LATCH");
-                ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+                auto gate_types = gl->get_gate_types();
+                ASSERT_EQ(gate_types.size(), 1);
+                auto gt_it = gate_types.find("TEST_LATCH");
+                ASSERT_TRUE(gt_it != gate_types.end());
                 const GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::latch);
                 const GateTypeSequential* gt_latch = dynamic_cast<const GateTypeSequential*>(gt);
@@ -420,9 +425,10 @@ namespace hal {
 
                 ASSERT_NE(gl, nullptr);
                 // Check that the Gate type was created
-                ASSERT_EQ(gl->get_gate_types().size(), 1);
-                auto gt_it = gl->get_gate_types().find("TEST_GATE_TYPE");
-                ASSERT_TRUE(gt_it != gl->get_gate_types().end());
+                auto gate_types = gl->get_gate_types();
+                ASSERT_EQ(gate_types.size(), 1);
+                auto gt_it = gate_types.find("TEST_GATE_TYPE");
+                ASSERT_TRUE(gt_it != gate_types.end());
                 const GateType* gt = gt_it->second;
 
                 // Check that only the pins outside the comments are created
@@ -683,8 +689,9 @@ namespace hal {
 
                 ASSERT_NE(gl, nullptr);
 
-                ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
-                EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(),
+                auto gate_types = gl->get_gate_types();
+                ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
                           GateType::BaseType::combinatorial);
             }
             {
@@ -764,10 +771,11 @@ namespace hal {
 
                 ASSERT_NE(gl, nullptr);
 
-                ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
-                EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(),
+                auto gate_types = gl->get_gate_types();
+                ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
                           GateType::BaseType::combinatorial);
-                EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_input_pins().size(), 1);
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_input_pins().size(), 1);
 
             }
             {
@@ -790,10 +798,11 @@ namespace hal {
 
                 ASSERT_NE(gl, nullptr);
 
-                ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
-                EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(),
+                auto gate_types = gl->get_gate_types();
+                ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
                           GateType::BaseType::combinatorial);
-                EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1);
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_output_pins().size(), 1);
 
             }
             if(test_utils::known_issue_tests_active())
@@ -818,10 +827,11 @@ namespace hal {
 
                 ASSERT_NE(gl, nullptr);
 
-                ASSERT_TRUE(gl->get_gate_types().find("TEST_GATE_TYPE") != gl->get_gate_types().end());
-                EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_base_type(),
+                auto gate_types = gl->get_gate_types();
+                ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
                           GateType::BaseType::combinatorial);
-                EXPECT_EQ(gl->get_gate_types().at("TEST_GATE_TYPE")->get_output_pins().size(), 1); // ISSUE: fails
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_output_pins().size(), 1); // ISSUE: fails
             }
             {
                 // Test empty pin names
