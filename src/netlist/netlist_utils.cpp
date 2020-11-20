@@ -16,14 +16,9 @@ namespace hal
     {
         namespace
         {
-            struct
+            static BooleanFunction get_function_of_gate(const Gate* const gate, std::unordered_map<u32, BooleanFunction>& cache)
             {
-                std::unordered_map<u32, BooleanFunction> functions;
-            } _cache;
-
-            static BooleanFunction get_function_of_gate(const Gate* const gate)
-            {
-                if (auto it = _cache.functions.find(gate->get_id()); it != _cache.functions.end())
+                if (auto it = cache.find(gate->get_id()); it != cache.end())
                 {
                     return it->second;
                 }
@@ -43,13 +38,13 @@ namespace hal
 
                         bf = bf.substitute(input_pin, std::to_string(input_net->get_id()));
                     }
-                    _cache.functions.emplace(gate->get_id(), bf);
+                    cache.emplace(gate->get_id(), bf);
                     return bf;
                 }
             }
         }    // namespace
 
-        BooleanFunction get_subgraph_function(const std::vector<const Gate*>& subgraph_gates, const Net* output_net)
+        BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache)
         {
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
@@ -62,24 +57,24 @@ namespace hal
                 log_error("netlist", "set of gates contains a nullptr.");
                 return BooleanFunction();
             }
-            else if (output_net == nullptr)
+            else if (net == nullptr)
             {
                 log_error("netlist", "nullptr given for target net.");
                 return BooleanFunction();
             }
-            else if (output_net->get_num_of_sources() > 1)
+            else if (net->get_num_of_sources() > 1)
             {
-                log_error("netlist", "target net with ID {} has more than one source.", output_net->get_id());
+                log_error("netlist", "target net with ID {} has more than one source.", net->get_id());
                 return BooleanFunction();
             }
-            else if (output_net->get_num_of_sources() == 0)
+            else if (net->get_num_of_sources() == 0)
             {
-                log_error("netlist", "target net with ID {} has no sources.", output_net->get_id());
+                log_error("netlist", "target net with ID {} has no sources.", net->get_id());
                 return BooleanFunction();
             }
 
-            const Gate* start_gate = output_net->get_sources()[0]->get_gate();
-            BooleanFunction result = get_function_of_gate(start_gate);
+            const Gate* start_gate = net->get_sources()[0]->get_gate();
+            BooleanFunction result = get_function_of_gate(start_gate, cache);
 
             std::queue<const Net*> q;
             for (const Net* n : start_gate->get_fan_in_nets())
@@ -115,7 +110,7 @@ namespace hal
 
                 if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
                 {
-                    result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate));
+                    result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate, cache));
 
                     for (const Net* sn : src_gate->get_fan_in_nets())
                     {
@@ -125,6 +120,12 @@ namespace hal
             }
 
             return result;
+        }
+
+        BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates)
+        {
+            std::unordered_map<u32, BooleanFunction> cache;
+            return get_subgraph_function(net, subgraph_gates, cache);
         }
 
         std::unique_ptr<Netlist> copy_netlist(const Netlist* nl)
@@ -301,5 +302,83 @@ namespace hal
 
             return c_netlist;
         }
+
+        namespace
+        {
+            std::vector<Gate*> get_next_sequential_gates_internal(const Net* start_net, bool forward, std::unordered_set<u32>& seen, std::unordered_map<u32, std::vector<Gate*>>& cache)
+            {
+                if (auto it = cache.find(start_net->get_id()); it != cache.end())
+                {
+                    return it->second;
+                }
+
+                if (seen.find(start_net->get_id()) != seen.end())
+                {
+                    return {};
+                }
+
+                seen.insert(start_net->get_id());
+
+                std::vector<Gate*> found_ffs;
+
+                for (auto endpoint : forward ? start_net->get_destinations() : start_net->get_sources())
+                {
+                    auto next_gate = endpoint->get_gate();
+
+                    if (next_gate->get_type()->get_base_type() == GateType::BaseType::ff)
+                    {
+                        found_ffs.push_back(next_gate);
+                    }
+                    else
+                    {
+                        for (auto n : forward ? next_gate->get_fan_out_nets() : next_gate->get_fan_in_nets())
+                        {
+                            auto next_gates = get_next_sequential_gates_internal(n, forward, seen, cache);
+                            found_ffs.insert(found_ffs.end(), next_gates.begin(), next_gates.end());
+                        }
+                    }
+                }
+
+                std::sort(found_ffs.begin(), found_ffs.end());
+                found_ffs.erase(std::unique(found_ffs.begin(), found_ffs.end()), found_ffs.end());
+
+                cache.emplace(start_net->get_id(), found_ffs);
+                return found_ffs;
+            }
+        }    // namespace
+
+        std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::vector<Gate*> found_ffs;
+            for (const auto& n : gate->get_fan_out_nets())
+            {
+                auto suc = get_next_sequential_gates(n, get_successors, cache);
+                found_ffs.insert(found_ffs.end(), suc.begin(), suc.end());
+            }
+
+            std::sort(found_ffs.begin(), found_ffs.end());
+            found_ffs.erase(std::unique(found_ffs.begin(), found_ffs.end()), found_ffs.end());
+
+            return found_ffs;
+        }
+
+        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::unordered_set<u32> seen;
+            return get_next_sequential_gates_internal(net, get_successors, seen, cache);
+        }
+
+        std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_next_sequential_gates(gate, get_successors, cache);
+        }
+
+        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_next_sequential_gates(net, get_successors, cache);
+        }
+
     }    // namespace netlist_utils
 }    // namespace hal
