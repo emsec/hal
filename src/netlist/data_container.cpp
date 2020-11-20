@@ -59,12 +59,17 @@ namespace hal
         return true;
     }
 
-    std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> DataContainer::get_data() const
+    std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> DataContainer::get_data_map() const
     {
         return m_data;
     }
 
-    std::tuple<std::string, std::string> DataContainer::get_data_by_key(const std::string& category, const std::string& key) const
+    void DataContainer::set_data_map(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& map)
+    {
+        m_data = map;
+    }
+
+    std::tuple<std::string, std::string> DataContainer::get_data(const std::string& category, const std::string& key) const
     {
         if (category.empty() || key.empty())
         {
@@ -81,13 +86,4 @@ namespace hal
         return it->second;
     }
 
-    std::vector<std::tuple<std::string, std::string>> DataContainer::get_data_keys() const
-    {
-        std::vector<std::tuple<std::string, std::string>> keys;
-        for (const auto& it : m_data)
-        {
-            keys.push_back(it.first);
-        }
-        return keys;
-    }
 }    // namespace hal

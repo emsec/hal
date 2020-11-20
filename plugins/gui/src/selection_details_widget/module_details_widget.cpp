@@ -205,8 +205,8 @@ namespace hal
         mOutputPortsTable->setFixedWidth(DetailsTableUtilities::tableWidgetSize(mOutputPortsTable).width());
 
         //update data fields table
-        mDataFieldsSection->setRowCount(m->get_data().size());
-        mDataFieldsTable->updateData(module_id, m->get_data());
+        mDataFieldsSection->setRowCount(m->get_data_map().size());
+        mDataFieldsTable->updateData(module_id, m->get_data_map());
     }
 
     void ModuleDetailsWidget::handleNetlistMarkedGlobalInput(Netlist* netlist, u32 associated_data)
