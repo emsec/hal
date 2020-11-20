@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * fixed netlist parsers wrongly handling escapings within strings
-* fixed netlist pybind bug causing errors on netlist creation
+* fixed netlist pybind handling of netlists that occasionally led to double-free segfaults
 
 ## [3.1.5] - 2020-11-16 14:30:00+02:00 (urgency: medium)
 * fixed and expanded Python decorators for logging in study environment to additionally cover the GUI
@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.1.3] - 2020-11-12 17:15:00+02:00 (urgency: medium)
 * GUI code refactoring
 * fix crash which occurs sometimes when invoking context menu from gate
-	
+
 ## [3.1.2] - 2020-11-09 20:00:00+02:00 (urgency: medium)
 * updated existing Python decorators and added new ones for the GUI API
 * fix `get_subgraph_function` crashing when `output_net` is a nullptr
@@ -63,7 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * shows additional details for the item selected in the hierarchical view
     * sections can be collapsed and expanded
     * right-click context menu allows to copy strings or Python code to the clipboard and change module name, type, and port names
-    * added number of gates, nets, and submodules to module details widget  
+    * added number of gates, nets, and submodules to module details widget
 * new view manager widget
   * now presented in a table view additionally containing information about the time of creation of the view
   * views can be sorted by name and date
@@ -82,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * new graph view features
   * Python GUI API to control the graph view
   * zoom level of graph view can now be controlled by shortcuts
-* netlist utilities 
+* netlist utilities
   * added function to deep copy a netlist
   * added function to get the Boolean function of a subgraph
 * state-of-the-art suite of benchmark netlists
