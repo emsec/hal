@@ -136,18 +136,18 @@ namespace hal
             // copy nets
             for (const Net* net : nl->get_nets())
             {
-                auto new_net = c_netlist->create_net(net->get_id(), net->get_name());
+                Net* new_net = c_netlist->create_net(net->get_id(), net->get_name());
                 new_net->set_data_map(net->get_data_map());
             }
 
             // copy gates
             for (const Gate* gate : nl->get_gates())
             {
-                Gate* c_gate = c_netlist->create_gate(gate->get_id(), gate->get_type(), gate->get_name(), gate->get_location_x(), gate->get_location_y());
+                Gate* new_gate = c_netlist->create_gate(gate->get_id(), gate->get_type(), gate->get_name(), gate->get_location_x(), gate->get_location_y());
 
                 for (const auto& [name, func] : gate->get_boolean_functions(true))
                 {
-                    c_gate->add_boolean_function(name, func);
+                    new_gate->add_boolean_function(name, func);
                 }
 
                 for (const Endpoint* in_point : gate->get_fan_in_endpoints())
@@ -155,7 +155,7 @@ namespace hal
                     const auto net_id = in_point->get_net()->get_id();
                     auto c_net        = c_netlist->get_net_by_id(net_id);
 
-                    c_net->add_destination(c_gate, in_point->get_pin());
+                    c_net->add_destination(new_gate, in_point->get_pin());
                 }
 
                 for (const Endpoint* out_point : gate->get_fan_out_endpoints())
@@ -163,8 +163,10 @@ namespace hal
                     const auto net_id = out_point->get_net()->get_id();
                     auto c_net        = c_netlist->get_net_by_id(net_id);
 
-                    c_net->add_source(c_gate, out_point->get_pin());
+                    c_net->add_source(new_gate, out_point->get_pin());
                 }
+
+                new_gate->set_data_map(gate->get_data_map());
             }
 
             // copy modules
@@ -185,7 +187,9 @@ namespace hal
                 }
 
                 // create all modules with the top module as parent module and update later
-                c_netlist->create_module(module->get_id(), module->get_name(), c_netlist->get_top_module(), c_gates);
+                Module* new_module = c_netlist->create_module(module->get_id(), module->get_name(), c_netlist->get_top_module(), c_gates);
+
+                new_module->set_data_map(module->get_data_map());
             }
 
             // update parent_module in modules
