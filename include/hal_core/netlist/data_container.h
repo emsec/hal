@@ -39,7 +39,7 @@ namespace hal
     class NETLIST_API DataContainer
     {
     public:
-        /** 
+        /**
          * Construct a new data container.
          */
         DataContainer() = default;
@@ -60,6 +60,15 @@ namespace hal
         bool set_data(const std::string& category, const std::string& key, const std::string& data_type, const std::string& value, const bool log_with_info_level = false);
 
         /**
+         * Get the data entry specified by the given category and key.
+         *
+         * @param[in] category - The data category.
+         * @param[in] key - The data key.
+         * @returns The tuple ((1) type, (2) value).
+         */
+        std::tuple<std::string, std::string> get_data(const std::string& category, const std::string& key) const;
+
+        /**
          * Delete a data entry.
          *
          * @param[in] category - The data category.
@@ -74,23 +83,14 @@ namespace hal
          *
          * @returns The stored data as a map.
          */
-        std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> get_data() const;
+        std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> get_data_map() const;
 
         /**
-         * Get the data entry specified by the given category and key.
+         * Overwrite the existing data with a new map from ((1) category, (2) key) to ((1) type, (2) value).
          *
-         * @param[in] category - The data category.
-         * @param[in] key - The data key.
-         * @returns The tuple ((1) type, (2) value).
+         * @param[in] map - The new data map.
          */
-        std::tuple<std::string, std::string> get_data_by_key(const std::string& category, const std::string& key) const;
-
-        /**
-         * Return all data keys as a vector of tuples ((1) category, (2) key).
-         *
-         * @returns The data keys.
-         */
-        std::vector<std::tuple<std::string, std::string>> get_data_keys() const;
+        void set_data_map(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& map);
 
     protected:
         std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> m_data;

@@ -296,7 +296,7 @@ namespace hal
     {
         // Map init value
         bool first_generic = true;
-        for (const auto& d : n->get_data())
+        for (const auto& d : n->get_data_map())
         {
             if (std::get<0>(d.first) != "generic")
                 continue;

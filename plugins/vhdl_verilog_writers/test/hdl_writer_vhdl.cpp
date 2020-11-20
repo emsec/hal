@@ -262,33 +262,33 @@ namespace hal {
                 // Check if the data is written/parsed correctly
                 Gate* p_test_gate_0 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_0");
                 ASSERT_NE(p_test_gate_0, nullptr);
-                EXPECT_EQ(p_test_gate_0->get_data(), test_gate_0->get_data());
+                EXPECT_EQ(p_test_gate_0->get_data_map(), test_gate_0->get_data_map());
 
                 Gate* p_test_gate_1 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_1");
                 ASSERT_NE(p_test_gate_1, nullptr);
-                EXPECT_EQ(p_test_gate_1->get_data(), test_gate_1->get_data());
+                EXPECT_EQ(p_test_gate_1->get_data_map(), test_gate_1->get_data_map());
 
                 Gate* p_test_gate_2 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_2");
                 ASSERT_NE(p_test_gate_2, nullptr);
-                EXPECT_EQ(p_test_gate_2->get_data(), test_gate_2->get_data());
+                EXPECT_EQ(p_test_gate_2->get_data_map(), test_gate_2->get_data_map());
 
                 Gate* p_test_gate_3 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_3");
                 ASSERT_NE(p_test_gate_3, nullptr);
-                EXPECT_EQ(p_test_gate_3->get_data(), test_gate_3->get_data());
+                EXPECT_EQ(p_test_gate_3->get_data_map(), test_gate_3->get_data_map());
 
                 Gate* p_test_gate_4 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_4");
                 ASSERT_NE(p_test_gate_4, nullptr);
-                // EXPECT_EQ(p_test_gate_4->get_data(), test_gate_4->get_data()); //ISSUE: generic, time can't be used
+                // EXPECT_EQ(p_test_gate_4->get_data_map(), test_gate_4->get_data_map()); //ISSUE: generic, time can't be used
 
                 Gate* p_test_gate_5 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_5");
                 ASSERT_NE(p_test_gate_5, nullptr);
-                auto test_gate_5_data_without_invalid = test_gate_5->get_data();
+                auto test_gate_5_data_without_invalid = test_gate_5->get_data_map();
                 test_gate_5_data_without_invalid.erase(std::make_tuple("generic", "0_key_invalid"));
-                EXPECT_EQ(p_test_gate_5->get_data(), test_gate_5_data_without_invalid);
+                EXPECT_EQ(p_test_gate_5->get_data_map(), test_gate_5_data_without_invalid);
 
                 Gate* p_test_gate_6 = test_utils::get_gate_by_subname(parsed_nl.get(), "test_gate_6");
                 ASSERT_NE(p_test_gate_6, nullptr);
-                //EXPECT_EQ(p_test_gate_6->get_data(), test_gate_6->get_data()); // ISSUE: bit_values are not stored correctly?
+                //EXPECT_EQ(p_test_gate_6->get_data_map(), test_gate_6->get_data_map()); // ISSUE: bit_values are not stored correctly?
             }
         TEST_END
     }

@@ -136,7 +136,8 @@ namespace hal
             // copy nets
             for (const Net* net : nl->get_nets())
             {
-                c_netlist->create_net(net->get_id(), net->get_name());
+                auto new_net = c_netlist->create_net(net->get_id(), net->get_name());
+                new_net->set_data_map(net->get_data_map());
             }
 
             // copy gates

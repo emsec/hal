@@ -538,7 +538,7 @@ namespace hal
                 return false;
             }
         }
-        if (n0->get_data() != n1->get_data()) {
+        if (n0->get_data_map() != n1->get_data_map()) {
             log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: The stored data is different.");
             return false;
         }
@@ -577,7 +577,7 @@ namespace hal
             log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: Gates types are different (\"{}\" vs \"{}\")", g0->get_type()->get_name(),g1->get_type()->get_name());
             return false;
         }
-        if (g0->get_data() != g1->get_data()) {
+        if (g0->get_data_map() != g1->get_data_map()) {
             log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: The stored data is different.");
             return false;
         }
@@ -626,7 +626,7 @@ namespace hal
             return false;
         }
         // The stored data should be equal
-        if (m_0->get_data() != m_1->get_data()) {
+        if (m_0->get_data_map() != m_1->get_data_map()) {
             log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The stored data is different.");
             return false;
         }
@@ -814,8 +814,8 @@ namespace hal
                     log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Gates with name \"{}\" are not equal.", gate_0->get_name());
                     return false;
                 }
-            } 
-            else 
+            }
+            else
             {
                 Gate* gate_1 = g_1->get_netlist()->get_gate_by_id(gate_0->get_id());
                 if (!gates_are_equal(gate_0, gate_1, ignore_id, ignore_name)) {
@@ -851,8 +851,8 @@ namespace hal
                     log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Nets with name \"{}\" are not equal.", net_0->get_name());
                     return false;
                 }
-            } 
-            else 
+            }
+            else
             {
                 Net* net_1 = g_1->get_netlist()->get_net_by_id(net_0->get_id());
                 if (!nets_are_equal(net_0, net_1, ignore_id, ignore_name)) {
@@ -888,8 +888,8 @@ namespace hal
                     log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: Modules with name \"{}\" are not equal.", module_0->get_name());
                     return false;
                 }
-            } 
-            else 
+            }
+            else
             {
                 Module* module_1 = g_1->get_netlist()->get_module_by_id(module_0->get_id());
                 if (!modules_are_equal(module_0, module_1, ignore_id, ignore_name)) {

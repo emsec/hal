@@ -497,8 +497,8 @@ namespace hal
         mOutputPinsTable->setFixedWidth(DetailsTableUtilities::tableWidgetSize(mOutputPinsTable).width());
 
         //update(4) data fields section
-        mDataFieldsSection->setRowCount(g->get_data().size());
-        mDataFieldsTable->updateData(gate_id,g->get_data());
+        mDataFieldsSection->setRowCount(g->get_data_map().size());
+        mDataFieldsTable->updateData(gate_id,g->get_data_map());
 
         //update(5) boolean functions section
         //clear container layout
