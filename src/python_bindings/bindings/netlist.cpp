@@ -4,7 +4,7 @@ namespace hal
 {
     void netlist_init(py::module& m)
     {
-        py::class_<Netlist> py_netlist(m, "Netlist", R"(
+        py::class_<Netlist, std::shared_ptr<Netlist>> py_netlist(m, "Netlist", R"(
             Netlist class containing information about the netlist including its gates, modules, nets, and groupings as well as the underlying gate library.
         )");
 
@@ -95,14 +95,14 @@ namespace hal
         )");
 
         py_netlist.def_property_readonly(
-            "GateLibrary", [](Netlist* nl) { return RawPtrWrapper(nl->get_gate_library()); }, R"(
+            "GateLibrary", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
             The gate library associated with the netlist.
 
             :type: hal_py.GateLibrary
         )");
 
         py_netlist.def(
-            "get_gate_library", [](Netlist* nl) { return RawPtrWrapper(nl->get_gate_library()); }, R"(
+            "get_gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
             Get the gate library associated with the netlist.
 
             :returns: The gate library.

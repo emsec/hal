@@ -36,42 +36,18 @@
 
 #pragma GCC diagnostic pop
 
-/**
- * Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL.
- *
- * @ingroup pybind
- */
-template<class T>
-class RawPtrWrapper
-{
-public:
-    RawPtrWrapper() = default;
-
-    RawPtrWrapper(T* ptr) : RawPtrWrapper()
-    {
-        m_ptr = ptr;
-    }
-
-    ~RawPtrWrapper() = default;
-
-    /**
-     * Get the raw pointer from the wrapper.
-     *
-     * @returns The raw pointer.
-     */
-    T* get() const
-    {
-        return m_ptr;
-    }
-
-private:
-    T* m_ptr = nullptr;
-};
-PYBIND11_DECLARE_HOLDER_TYPE(T, RawPtrWrapper<T>, true)
-
 namespace hal
 {
     namespace py = pybind11;
+
+    /**
+     * Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL.
+     *
+     * @ingroup pybind
+     */
+    template<class T>
+    using RawPtrWrapper = std::unique_ptr<T, py::nodelete>;
+
     /**
      * TODO move into own namespace
      *

@@ -24,20 +24,6 @@ extern grammar _PyParser_Grammar;
 
 namespace hal
 {
-    //
-    // pybind automatically takes ownership of our netlist, whether we like it or not.
-    // problem: c++ code owns (via unique_ptr) and pybind owns internally --> double free
-    // solution: manually request ownership back from pybind when we are done
-    //
-    void PythonContext::regainNetlistOwnership(py::dict& ctx)
-    {
-        if (auto it = mNetlistPointers.find(&ctx); it != mNetlistPointers.end())
-        {
-            it->second.release();
-            mNetlistPointers.erase(it);
-        }
-    }
-
     PythonContext::PythonContext()
     {
         Q_UNUSED(mSender)
@@ -89,8 +75,7 @@ namespace hal
 
         py::exec(command, *context, *context);
 
-        (*context)["netlist"]     = RawPtrWrapper<Netlist>(gNetlist);
-        mNetlistPointers[context] = (*context)["netlist"];
+        (*context)["netlist"] = gNetlistOwner;    // assign the shared_ptr here, not the raw ptr
 
         if (gGuiApi)
         {
@@ -112,7 +97,6 @@ namespace hal
 
     void PythonContext::closePython()
     {
-        regainNetlistOwnership(*mContext);
         delete mContext;
         mContext = nullptr;
     }
@@ -203,8 +187,6 @@ namespace hal
         {
             mConsole->displayPrompt();
         }
-
-        regainNetlistOwnership(tmp_context);
     }
 
     void PythonContext::forwardStdout(const QString& output)
@@ -272,7 +254,7 @@ namespace hal
             e.restore();
             PyErr_Clear();
         }
-        regainNetlistOwnership(tmp_context);
+
         return ret_val;
     }
 
@@ -313,7 +295,6 @@ namespace hal
 
     void PythonContext::updateNetlist()
     {
-        regainNetlistOwnership(*mContext);
-        (*mContext)["netlist"] = RawPtrWrapper<Netlist>(gNetlist);
+        (*mContext)["netlist"] = gNetlistOwner;    // assign the shared_ptr here, not the raw ptr
     }
 }    // namespace hal

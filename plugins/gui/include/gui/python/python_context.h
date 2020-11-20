@@ -86,9 +86,6 @@ namespace hal
         // these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault
         // only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()
         py::dict* mContext;
-        std::unordered_map<py::dict*, py::object> mNetlistPointers;
-
-        void regainNetlistOwnership(py::dict& ctx);
 
         PythonContextSubscriber* mSender;
 
