@@ -81,7 +81,7 @@ Collaboration diagram for hal::DataContainer:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/df0/classhal_1_1DataContainer__coll__graph.png" border="0" usemap="#hal_1_1DataContainer_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1DataContainer_coll__map" id="hal_1_1DataContainer_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,163,171"/>
+<area shape="rect" title=" " alt="" coords="5,5,157,171"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -93,14 +93,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af25d5d4fc6a9ff420e8d37aef4b3daad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5cb9be187148a5be1f9ee9e558df2c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#ab5cb9be187148a5be1f9ee9e558df2c9">set_data</a> (const std::string &amp;category, const std::string &amp;key, const std::string &amp;data_type, const std::string &amp;value, const bool log_with_info_level=false)</td></tr>
 <tr class="separator:ab5cb9be187148a5be1f9ee9e558df2c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15ddfdb9e6d693c4e29d535ad2be215b"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a15ddfdb9e6d693c4e29d535ad2be215b">get_data</a> (const std::string &amp;category, const std::string &amp;key) const</td></tr>
+<tr class="separator:a15ddfdb9e6d693c4e29d535ad2be215b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad982665a18a25310ea22abf141dd9b65"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#ad982665a18a25310ea22abf141dd9b65">delete_data</a> (const std::string &amp;category, const std::string &amp;key, const bool log_with_info_level=false)</td></tr>
 <tr class="separator:ad982665a18a25310ea22abf141dd9b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63285acfb387b56dea0651afd5503dc0"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a63285acfb387b56dea0651afd5503dc0">get_data</a> () const</td></tr>
-<tr class="separator:a63285acfb387b56dea0651afd5503dc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d12a6336bf5662cd00ad27970bea0d6"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a7d12a6336bf5662cd00ad27970bea0d6">get_data_by_key</a> (const std::string &amp;category, const std::string &amp;key) const</td></tr>
-<tr class="separator:a7d12a6336bf5662cd00ad27970bea0d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c2da0be8eead17fa03f5b8b8e89b878"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#a5c2da0be8eead17fa03f5b8b8e89b878">get_data_keys</a> () const</td></tr>
-<tr class="separator:a5c2da0be8eead17fa03f5b8b8e89b878"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8011dbbba5f9fcd99f76f8834d4d396"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#ad8011dbbba5f9fcd99f76f8834d4d396">get_data_map</a> () const</td></tr>
+<tr class="separator:ad8011dbbba5f9fcd99f76f8834d4d396"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc65cb7d330fb44e2c9cf92523832b5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#adc65cb7d330fb44e2c9cf92523832b5e">set_data_map</a> (const std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt;&gt; &amp;map)</td></tr>
+<tr class="separator:adc65cb7d330fb44e2c9cf92523832b5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Container to hold data that is associated with an entity. </p>
@@ -220,6 +220,47 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a15ddfdb9e6d693c4e29d535ad2be215b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15ddfdb9e6d693c4e29d535ad2be215b">&#9670;&nbsp;</a></span>get_data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::tuple&lt; std::string, std::string &gt; hal::DataContainer::get_data </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>category</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the data entry specified by the given category and key.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">category</td><td>- The data category. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>- The data key. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The tuple ((1) type, (2) value). </dd></dl>
+
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">hal::data_container_init()</a>.</p>
+
+</div>
+</div>
 <a id="ad982665a18a25310ea22abf141dd9b65"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad982665a18a25310ea22abf141dd9b65">&#9670;&nbsp;</a></span>delete_data()</h2>
 
@@ -268,14 +309,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a63285acfb387b56dea0651afd5503dc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63285acfb387b56dea0651afd5503dc0">&#9670;&nbsp;</a></span>get_data()</h2>
+<a id="ad8011dbbba5f9fcd99f76f8834d4d396"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8011dbbba5f9fcd99f76f8834d4d396">&#9670;&nbsp;</a></span>get_data_map()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt; &gt; hal::DataContainer::get_data </td>
+          <td class="memname">std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt; &gt; hal::DataContainer::get_data_map </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -289,65 +330,30 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7d12a6336bf5662cd00ad27970bea0d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d12a6336bf5662cd00ad27970bea0d6">&#9670;&nbsp;</a></span>get_data_by_key()</h2>
+<a id="adc65cb7d330fb44e2c9cf92523832b5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc65cb7d330fb44e2c9cf92523832b5e">&#9670;&nbsp;</a></span>set_data_map()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::tuple&lt; std::string, std::string &gt; hal::DataContainer::get_data_by_key </td>
+          <td class="memname">void hal::DataContainer::set_data_map </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>category</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>map</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>key</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the data entry specified by the given category and key.</p>
+<p>Overwrite the existing data with a new map from ((1) category, (2) key) to ((1) type, (2) value).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">category</td><td>- The data category. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>- The data key. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">map</td><td>- The new data map. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The tuple ((1) type, (2) value). </dd></dl>
 
-<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>, and <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">hal::data_container_init()</a>.</p>
-
-</div>
-</div>
-<a id="a5c2da0be8eead17fa03f5b8b8e89b878"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c2da0be8eead17fa03f5b8b8e89b878">&#9670;&nbsp;</a></span>get_data_keys()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; hal::DataContainer::get_data_keys </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Return all data keys as a vector of tuples ((1) category, (2) key).</p>
-<dl class="section return"><dt>Returns</dt><dd>The data keys. </dd></dl>
-
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">hal::data_container_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a5e81261c6bc8c9602a2e53bf0f0c9b90">hal::netlist_utils::copy_netlist()</a>.</p>
 
 </div>
 </div>
@@ -358,7 +364,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Nov 20 2020 12:32:08 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Nov 20 2020 15:41:30 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

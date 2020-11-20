@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.1.5-21-g1a2498dab documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.1.5-31-g6fc923de8 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.1.5-21-g1a2498dab
+                v3.1.5-31-g6fc923de8
               </div>
             
           
@@ -198,18 +198,70 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="hal_py.NetlistUtils.get_next_sequential_gates">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_next_sequential_gates</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistUtils.get_next_sequential_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_next_sequential_gates(gate: hal::Gate, get_successors: bool) -&gt; List[hal::Gate]</p>
+<blockquote>
+<div><p>Find all sequential predecessors or successors of a specific gate.
+Traverses combinational logic of all input or output nets until sequential gates are found.
+This may include the gate itself.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate to start from</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param bool:</th><td class="field-body">If true, sequential successors are returned, else sequential predecessors are returned</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All sequential successors or predecessors of the gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_next_sequential_gates(net: hal::Net, get_successors: bool) -&gt; List[hal::Gate]</p>
+<blockquote>
+<div><p>Find all sequential predecessors or successors of a specific net.
+Traverses combinational logic logic until sequential gates are found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net to start from</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param bool:</th><td class="field-body">If true, sequential successors are returned, else sequential predecessors are returned</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All sequential successors or predecessors of the net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Net]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
 <dt id="hal_py.NetlistUtils.get_subgraph_function">
-<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_subgraph_function</code><span class="sig-paren">(</span><em>subgraph_gates: List[hal::Gate], output_net: hal::Net</em><span class="sig-paren">)</span> &#x2192; hal::BooleanFunction<a class="headerlink" href="#hal_py.NetlistUtils.get_subgraph_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the combined Boolean function of a subgraph of the netlist that is defined by a list of gates and an output net.
-The gates within the list should be connected and the given output net should represent the targeted output of the subgraph.
-The resulting Boolean function uses the net IDs of the automatically identified input nets as variables.</p>
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_subgraph_function</code><span class="sig-paren">(</span><em>net: hal::Net, subgraph_gates: List[hal::Gate]</em><span class="sig-paren">)</span> &#x2192; hal::BooleanFunction<a class="headerlink" href="#hal_py.NetlistUtils.get_subgraph_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the combined Boolean function of a specific net, considering an entire subgraph.&lt;br&gt;
+In other words, the Boolean functions of the subgraph gates that influence the target net are combined to one function.&lt;br&gt;
+The variables of the resulting Boolean function are the net IDs of the nets that influence the output.
+If this function is used extensively, consider using the above variant with a cache.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The output net for which to generate the Boolean function.</li>
 <li><strong>subgraph_gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates making up the subgraph.</li>
-<li><strong>output_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The output net for which to generate the Boolean function.</li>
 </ul>
 </td>
 </tr>
