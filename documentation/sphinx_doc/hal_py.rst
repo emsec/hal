@@ -7,6 +7,7 @@ HAL Core Documentation
    core_utils
    data_container
    gate_library
+   gate_library_manager
    endpoint
    netlist
    netlist_utils
