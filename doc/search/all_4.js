@@ -7,7 +7,7 @@ var searchData=
   ['endpoint_112',['Endpoint',['../d9/df8/classhal_1_1Endpoint.html',1,'hal']]],
   ['endpoint_2ecpp_113',['endpoint.cpp',['../d1/d5d/netlist_2endpoint_8cpp.html',1,'(Global Namespace)'],['../d1/d80/python__bindings_2bindings_2endpoint_8cpp.html',1,'(Global Namespace)']]],
   ['endpoint_2eh_114',['endpoint.h',['../d5/d97/endpoint_8h.html',1,'']]],
-  ['endpoint_5finit_115',['endpoint_init',['../d0/d7f/namespacehal.html#a6d7aa3afc74611d7f65294808436eac9',1,'hal']]],
+  ['endpoint_5finit_115',['endpoint_init',['../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9',1,'hal']]],
   ['ends_5fwith_116',['ends_with',['../d4/dd6/namespacehal_1_1utils.html#a0de77a47a2551c69619fd6e3fce84674',1,'hal::utils']]],
   ['eq_117',['eq',['../df/def/structhal_1_1core__strings_1_1CaseInsensitiveCharTraits.html#a124accec84aacdbb2c4d2ee0dcaa28a0',1,'hal::core_strings::CaseInsensitiveCharTraits']]],
   ['error_5fcode_118',['error_code',['../d0/d7f/namespacehal.html#a12b4c436625fa7f009bc4e5015e5e01c',1,'hal']]],
