@@ -20,14 +20,14 @@ namespace hal
 )");
 
         py_gate.def_property_readonly(
-            "netlist", [](Gate* g) { return RawPtrWrapper(g->get_netlist()); }, R"(
+            "netlist", [](Gate* g) { return RawPtrWrapper<Netlist>(g->get_netlist()); }, R"(
         The netlist this gate is associated with.
 
         :type: hal_py.Netlist
 )");
 
         py_gate.def(
-            "get_netlist", [](Gate* g) { return RawPtrWrapper(g->get_netlist()); }, R"(
+            "get_netlist", [](Gate* g) { return RawPtrWrapper<Netlist>(g->get_netlist()); }, R"(
         Get the netlist this gate is associated with.
 
         :returns: The netlist.
