@@ -5,16 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-* fixed netlist parsers wrongly handling escapings within strings
+* added `netlist_utilities::get_subgraph_function` variants with and without cache
+* added `netlist_utilities::get_next_sequential_gates` variants with and without cache
+* added tests for `netlist_utilities::get_next_sequential_gates`
+* added python bindings for gate_library_manager
 * cleaned up `DataContainer`
-* fixed: `netlist_utilities::copy_netlist` did not copy `DataContainer` contents
 * removed hidden internal cache from `netlist_utilities::get_subgraph_function`
-* added: `netlist_utilities::get_subgraph_function` variants with and without cache
-* added: `netlist_utilities::get_next_sequential_gates` variants with and without cache
-* added: tests for `netlist_utilities::get_next_sequential_gates`
+* fixed netlist parsers wrongly handling escapings within strings
+* fixed `netlist_utilities::copy_netlist` did not copy `DataContainer` contents
 * fixed netlist pybind handling of netlists that occasionally led to double-free segfaults
 * fixed segfault in `BooleanFunction::from_string` when providing partial variable names
-* added python bindings for gate_library_manager
 
 ## [3.1.5] - 2020-11-16 14:30:00+02:00 (urgency: medium)
 * fixed and expanded Python decorators for logging in study environment to additionally cover the GUI
