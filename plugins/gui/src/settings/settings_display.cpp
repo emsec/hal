@@ -6,31 +6,31 @@
 namespace hal
 {
     SettingsDisplay::SettingsDisplay(QWidget* parent)
-        : QScrollArea(parent), m_content(new QFrame), m_content_layout(new QVBoxLayout()), m_sub_content(new QFrame()), m_sub_content_layout(new QVBoxLayout())
+        : QScrollArea(parent), mContent(new QFrame), mContentLayout(new QVBoxLayout()), mSubContent(new QFrame()), mSubContentLayout(new QVBoxLayout())
     {
-        m_content->setFrameStyle(QFrame::NoFrame);
+        mContent->setFrameStyle(QFrame::NoFrame);
 
-        m_content_layout->setAlignment(Qt::AlignCenter);
-        m_content_layout->setContentsMargins(0, 0, 0, 0);
-        m_content_layout->setSpacing(0);
-        m_content->setLayout(m_content_layout);
+        mContentLayout->setAlignment(Qt::AlignCenter);
+        mContentLayout->setContentsMargins(0, 0, 0, 0);
+        mContentLayout->setSpacing(0);
+        mContent->setLayout(mContentLayout);
 
-        m_sub_content->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        m_sub_content->setFrameStyle(QFrame::NoFrame);
-        m_content_layout->addWidget(m_sub_content);
+        mSubContent->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        mSubContent->setFrameStyle(QFrame::NoFrame);
+        mContentLayout->addWidget(mSubContent);
 
-        m_sub_content_layout->setAlignment(Qt::AlignLeft);
-        m_sub_content_layout->setContentsMargins(0, 0, 0, 0);
-        m_sub_content_layout->setSpacing(0);
-        m_sub_content->setLayout(m_sub_content_layout);
+        mSubContentLayout->setAlignment(Qt::AlignLeft);
+        mSubContentLayout->setContentsMargins(0, 0, 0, 0);
+        mSubContentLayout->setSpacing(0);
+        mSubContent->setLayout(mSubContentLayout);
 
-        setWidget(m_content);
+        setWidget(mContent);
     }
 
-    void SettingsDisplay::add_widget(QWidget* widget)
+    void SettingsDisplay::addWidget(QWidget* widget)
     {
         //widget->hide();
-        //m_sub_content_layout->addWidget(widget);
+        //mSubContentLayout->addWidget(widget);
         widget->setParent(0);
         widget->show();
     }

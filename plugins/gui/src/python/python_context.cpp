@@ -10,13 +10,14 @@
 #include <fstream>
 #include <gui/python/python_context.h>
 
-// Following is needed for PythonContext::check_complete_statement
+// Following is needed for PythonContext::checkCompleteStatement
 #include <Python.h>
 #include <compile.h>
 #include <errcode.h>
 #include <grammar.h>
 #include <node.h>
 #include <parsetok.h>
+#include "hal_config.h"
 
 extern grammar _PyParser_Grammar;
 
@@ -24,24 +25,24 @@ namespace hal
 {
     PythonContext::PythonContext()
     {
-        Q_UNUSED(m_sender)
-        m_context = nullptr;
+        Q_UNUSED(mSender)
+        mContext = nullptr;
         py::initialize_interpreter();
-        init_python();
+        initPython();
     }
 
     PythonContext::~PythonContext()
     {
-        close_python();
+        closePython();
         py::finalize_interpreter();
     }
 
-    void PythonContext::set_console(PythonConsole* c)
+    void PythonContext::setConsole(PythonConsole* c)
     {
-        m_console = c;
+        mConsole = c;
     }
 
-    void PythonContext::initialize_context(py::dict* context)
+    void PythonContext::initializeContext(py::dict* context)
     {
         std::string command = "import __main__\n"
                               "import io, sys\n";
@@ -73,28 +74,28 @@ namespace hal
 
         py::exec(command, *context, *context);
 
-        (*context)["netlist"] = RawPtrWrapper(g_netlist);
+        (*context)["netlist"] = RawPtrWrapper(gNetlist);
 
-        if (g_gui_api)
-            (*context)["gui"] = g_gui_api;
+        if (gGuiApi)
+            (*context)["gui"] = gGuiApi;
     }
 
-    void PythonContext::init_python()
+    void PythonContext::initPython()
     {
         //    using namespace py::literals;
 
         new py::dict();
-        m_context = new py::dict(**py::globals());
+        mContext = new py::dict(**py::globals());
 
-        initialize_context(m_context);
-        (*m_context)["console"] = py::module::import("hal_gui.console");
-        (*m_context)["hal_gui"] = py::module::import("hal_gui");
+        initializeContext(mContext);
+        (*mContext)["console"] = py::module::import("hal_gui.console");
+        (*mContext)["hal_gui"] = py::module::import("hal_gui");
     }
 
-    void PythonContext::close_python()
+    void PythonContext::closePython()
     {
-        delete m_context;
-        m_context = nullptr;
+        delete mContext;
+        mContext = nullptr;
     }
 
     void PythonContext::interpret(const QString& input, bool multiple_expressions)
@@ -106,19 +107,19 @@ namespace hal
 
         if (input == "quit()")
         {
-            forward_error("quit() cannot be used in this interpreter. Use console.reset() to restart it.\n");
+            forwardError("quit() cannot be used in this interpreter. Use console.reset() to restart it.\n");
             return;
         }
 
         if (input == "help()")
         {
-            forward_error("help() cannot be used in this interpreter.\n");
+            forwardError("help() cannot be used in this interpreter.\n");
             return;
         }
 
         if (input == "license()")
         {
-            forward_error("license() cannot be used in this interpreter.\n");
+            forwardError("license() cannot be used in this interpreter.\n");
             return;
         }
         log_info("python", "Python console execute: \"{}\".", input.toStdString());
@@ -127,87 +128,91 @@ namespace hal
             pybind11::object rc;
             if (multiple_expressions)
             {
-                rc = py::eval<py::eval_statements>(input.toStdString(), *m_context, *m_context);
+                rc = py::eval<py::eval_statements>(input.toStdString(), *mContext, *mContext);
             }
             else
             {
-                rc = py::eval<py::eval_single_statement>(input.toStdString(), *m_context, *m_context);
+                rc = py::eval<py::eval_single_statement>(input.toStdString(), *mContext, *mContext);
             }
             if (!rc.is_none())
             {
-                forward_stdout(QString::fromStdString(py::str(rc).cast<std::string>()));
+                forwardStdout(QString::fromStdString(py::str(rc).cast<std::string>()));
             }
-            handle_reset();
+            handleReset();
         }
         catch (py::error_already_set& e)
         {
-            forward_error(QString::fromStdString(std::string(e.what())));
+            forwardError(QString::fromStdString(std::string(e.what())));
             e.restore();
             PyErr_Clear();
         }
         catch (std::exception& e)
         {
-            forward_error(QString::fromStdString(std::string(e.what())));
+            forwardError(QString::fromStdString(std::string(e.what())));
         }
     }
 
-    void PythonContext::interpret_script(const QString& input)
+    void PythonContext::interpretScript(const QString& input)
     {
         // py::print(py::globals());
         py::dict tmp_context(py::globals());
-        initialize_context(&tmp_context);
+        initializeContext(&tmp_context);
 
-        forward_stdout("\n");
-        forward_stdout("<Execute Python Editor content>");
-        forward_stdout("\n");
-        log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
+
+        //log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
+#ifdef HAL_STUDY
+        log_info("UserStudy", "Python editor execute script:\n{}\n", input.toStdString());
+#endif
+        forwardStdout("\n");
+        forwardStdout("<Execute Python Editor content>");
+        forwardStdout("\n");
         try
         {
             py::eval<py::eval_statements>(input.toStdString(), tmp_context, tmp_context);
         }
         catch (py::error_already_set& e)
         {
-            forward_error(QString::fromStdString(std::string(e.what()) + "\n"));
+            forwardError(QString::fromStdString(std::string(e.what()) + "\n"));
             e.restore();
             PyErr_Clear();
         }
         catch (std::exception& e)
         {
-            forward_error(QString::fromStdString(std::string(e.what()) + "#\n"));
+            forwardError(QString::fromStdString(std::string(e.what()) + "#\n"));
         }
 
-        if (m_console)
+        if (mConsole)
         {
-            m_console->display_prompt();
+            mConsole->displayPrompt();
         }
     }
 
-    void PythonContext::forward_stdout(const QString& output)
+    void PythonContext::forwardStdout(const QString& output)
     {
         if (output != "\n")
         {
             log_info("python", "{}", utils::rtrim(output.toStdString(), "\r\n"));
         }
-        if (m_console)
+        if (mConsole)
         {
-            m_console->handle_stdout(output);
+            mConsole->handleStdout(output);
         }
     }
 
-    void PythonContext::forward_error(const QString& output)
+    void PythonContext::forwardError(const QString& output)
     {
         log_error("python", "{}", output.toStdString());
-        if (m_console)
+        if (mConsole)
         {
-            m_console->handle_error(output);
+            mConsole->handleError(output);
         }
     }
 
-    void PythonContext::forward_clear()
+    void PythonContext::forwardClear()
     {
-        if (m_console)
+        if (mConsole)
         {
-            m_console->clear();
+            mConsole->clear();
         }
     }
 
@@ -219,13 +224,13 @@ namespace hal
             auto namespaces = py::list();
             if (use_console_context)
             {
-                namespaces.append(*m_context);
-                namespaces.append(*m_context);
+                namespaces.append(*mContext);
+                namespaces.append(*mContext);
             }
             else
             {
                 py::dict tmp_context(py::globals());
-                initialize_context(&tmp_context);
+                initializeContext(&tmp_context);
                 namespaces.append(tmp_context);
                 namespaces.append(tmp_context);
             }
@@ -242,14 +247,14 @@ namespace hal
         }
         catch (py::error_already_set& e)
         {
-            forward_error(QString::fromStdString(std::string(e.what()) + "\n"));
+            forwardError(QString::fromStdString(std::string(e.what()) + "\n"));
             e.restore();
             PyErr_Clear();
         }
         return ret_val;
     }
 
-    int PythonContext::check_complete_statement(const QString& text)
+    int PythonContext::checkCompleteStatement(const QString& text)
     {
         node* n;
         perrdetail e;
@@ -268,24 +273,24 @@ namespace hal
         return 1;
     }
 
-    void PythonContext::handle_reset()
+    void PythonContext::handleReset()
     {
-        if (m_trigger_reset)
+        if (mTriggerReset)
         {
-            close_python();
-            init_python();
-            forward_clear();
-            m_trigger_reset = false;
+            closePython();
+            initPython();
+            forwardClear();
+            mTriggerReset = false;
         }
     }
 
-    void PythonContext::forward_reset()
+    void PythonContext::forwardReset()
     {
-        m_trigger_reset = true;
+        mTriggerReset = true;
     }
 
-    void PythonContext::update_netlist()
+    void PythonContext::updateNetlist()
     {
-        (*m_context)["netlist"] = RawPtrWrapper(g_netlist);
+        (*mContext)["netlist"] = RawPtrWrapper(gNetlist);
     }
 }    // namespace hal

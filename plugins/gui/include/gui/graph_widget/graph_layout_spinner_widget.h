@@ -39,13 +39,13 @@ namespace hal
         void stop();
 
     private Q_SLOTS:
-        void handle_repaint_needed();
+        void handleRepaintNeeded();
 
     protected:
         void paintEvent(QPaintEvent* event) override;
         QSize sizeHint() const override;
 
     private:
-        QSvgRenderer* m_renderer;
+        QSvgRenderer* mRenderer;
     };
 }

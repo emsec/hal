@@ -35,6 +35,7 @@ class QLabel;
 
 namespace hal
 {
+    class Grouping;
     class Searchbar;
     class SelectionTreeView;
     class ModuleDetailsWidget;
@@ -45,63 +46,118 @@ namespace hal
     class SelectionDetailsWidget : public ContentWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QString search_icon_path READ search_icon_path WRITE set_search_icon_path)
-        Q_PROPERTY(QString search_icon_style READ search_icon_style WRITE set_search_icon_style)
+        Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
+        Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
+        Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
+        Q_PROPERTY(QString restoreIconPath READ restoreIconPath WRITE setRestoreIconPath)
+        Q_PROPERTY(QString restoreIconStyle READ restoreIconStyle WRITE setRestoreIconStyle)
+        Q_PROPERTY(QString toGroupingIconPath READ toGroupingIconPath WRITE setToGroupingIconPath)
+        Q_PROPERTY(QString toGroupingIconStyle READ toGroupingIconStyle WRITE setToGroupingIconStyle)
+        Q_PROPERTY(QString toModuleIconPath READ toModuleIconPath WRITE setToModuleIconPath)
+        Q_PROPERTY(QString toModuleIconStyle READ toModuleIconStyle WRITE setToModuleIconStyle)
 
     public:
         SelectionDetailsWidget(QWidget* parent = 0);
         void clear();
 
-        virtual void setup_toolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual void setupToolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
 
-        QString search_icon_path() const;
-        QString search_icon_style() const;
+        QString disabledIconStyle() const;
 
-        void set_search_icon_path(const QString &path);
-        void set_search_icon_style(const QString &style);
+        QString searchIconPath() const;
+        QString searchIconStyle() const;
+        QString searchActiveIconStyle() const;
+
+        QString restoreIconPath() const;
+        QString restoreIconStyle() const;
+
+        QString toGroupingIconPath() const;
+        QString toGroupingIconStyle() const;
+
+        QString toModuleIconPath() const;
+        QString toModuleIconStyle() const;
+                
+        void setDisabledIconStyle(const QString &style);
+
+        void setSearchIconPath(const QString &path);
+        void setSearchIconStyle(const QString &style);
+        void setSearchActiveIconStyle(const QString &style);
+
+        void setRestoreIconPath(const QString &path);
+        void setRestoreIconStyle(const QString &style);
+
+        void setToGroupingIconPath(const QString &path);
+        void setToGroupingIconStyle(const QString &style);
+        
+        void setToModuleIconPath(const QString &path);
+        void setToModuleIconStyle(const QString &style);
+        
+        void selectionToGroupingInternal(Grouping* grp);
 
     Q_SIGNALS:
         void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
 
     public Q_SLOTS:
-        void handle_selection_update(void* sender);
+        void handleSelectionUpdate(void* sender);
         void handleTreeSelection(const SelectionTreeItem* sti);
-        QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+        QList<QShortcut*> createShortcuts() Q_DECL_OVERRIDE;
 
 
     private Q_SLOTS:
         void restoreLastSelection();
-        void toggle_searchbar();
+        void selectionToGrouping();
+        void selectionToModuleMenu();
+        void toggleSearchbar();
+        void selectionToNewGrouping();
+        void selectionToExistingGrouping();
+        void selectionToModuleAction();
 
     private:
         void singleSelectionInternal(const SelectionTreeItem* sti);
 
-        QSplitter*           m_splitter;
-        SelectionTreeView*   m_selectionTreeView;
-        QWidget*             m_selectionDetails;
-        unsigned int         m_numberSelectedItems;
+        QSplitter*           mSplitter;
+        SelectionTreeView*   mSelectionTreeView;
+        QWidget*             mSelectionDetails;
+        unsigned int         mNumberSelectedItems;
 
-        QStackedWidget* m_stacked_widget;
+        QStackedWidget* mStackedWidget;
 
-        GateDetailsWidget* m_gate_details;
-        NetDetailsWidget* m_net_details;
-        ModuleDetailsWidget* m_module_details;
-        QLabel* m_item_deleted_label;
-        QLabel* m_no_selection_label;
+        GateDetailsWidget* mGateDetails;
+        NetDetailsWidget* mNetDetails;
+        ModuleDetailsWidget* mModuleDetails;
+        QLabel* mItemDeletedLabel;
+        QLabel* mNoSelectionLabel;
 
-        Searchbar* m_searchbar;
+        Searchbar* mSearchbar;
 
-        QAction* m_restoreLastSelection;
-        QAction* m_search_action;
-        QString m_search_icon_path;
-        QString m_search_icon_style;
+        QAction* mRestoreLastSelection;
+        QAction* mSelectionToGrouping;
+        QAction* mSelectionToModule;
+        QAction* mSearchAction;
 
-        SelectionHistoryNavigator* m_history;
+        QString mDisabledIconStyle;
 
-        void handle_filter_text_changed(const QString& filter_text);
+        QString mSearchIconPath;
+        QString mSearchIconStyle;
+        QString mSearchActiveIconStyle;
+
+        QString mRestoreIconPath;
+        QString mRestoreIconStyle;
+
+        QString mToGroupingIconPath;
+        QString mToGroupingIconStyle;
+        
+        QString mToModuleIconPath;
+        QString mToModuleIconStyle;
+        
+        SelectionHistoryNavigator* mHistory;
+
+        void handleFilterTextChanged(const QString& filter_text);
         void canRestoreSelection();
+        void canMoveToModule(int nodes);
         void enableSearchbar(bool enable);
 
-        static const QString disableIconStyle;
+        static const QString sAddToGrouping;
     };
 }

@@ -3,12 +3,13 @@
 #include "gui/svg_icon_engine/svg_icon_engine.h"
 
 #include <QFile>
+#include <QImage>
 
 namespace hal
 {
     namespace gui_utility
     {
-        QString get_svg_data(const QString& svg_path)
+        QString getSvgData(const QString& svg_path)
         {
             QFile file(svg_path);
             file.open(QFile::ReadOnly);
@@ -16,26 +17,26 @@ namespace hal
             return string;
         }
 
-        void change_svg_color(QString& svg_data, const QColor& from, const QColor& to)
+        void changeSvgColor(QString& svg_data, const QColor& from, const QColor& to)
         {
             QRegExp regex(from.name());
             svg_data.replace(regex, to.name().toUtf8());
         }
 
-        void change_all_svg_colors(QString& svg_data, const QColor& to)
+        void changeAllSvgColors(QString& svg_data, const QColor& to)
         {
             QRegExp regex("#[0-9a-f]{6}", Qt::CaseInsensitive);
             svg_data.replace(regex, to.name().toUtf8());
         }
 
-        QIcon get_icon_from_svg_data(const QString& svg_data)
+        QIcon getIconFromSvgData(const QString& svg_data)
         {
             return QIcon(new SvgIconEngine(svg_data.toStdString()));
         }
 
-        QIcon get_styled_svg_icon(const QString& from_to_colors, const QString& svg_path)
+        QIcon getStyledSvgIcon(const QString& from_to_colors, const QString& svg_path)
         {
-            QString svg_data = get_svg_data(svg_path);
+            QString svg_data = getSvgData(svg_path);
             if (svg_data.isEmpty())
             {
                 //print error
@@ -77,10 +78,10 @@ namespace hal
                 }
             }
 
-            return get_icon_from_svg_data(svg_data);
+            return getIconFromSvgData(svg_data);
         }
 
-        QColor get_random_color()
+        QColor getRandomColor()
         {
             static qreal h = 0.5;
 

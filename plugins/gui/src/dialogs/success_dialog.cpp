@@ -6,68 +6,68 @@
 namespace hal
 {
     SuccessDialog::SuccessDialog(QWidget* parent) : Dialog(parent),
-        m_arrow_animation(new QPropertyAnimation(this, "arrow_offset", this)),
-        m_arrow_offset(0),
-        m_bar_height(30),
-        m_arrow_width(10),
-        m_arrow_length(30),
-        m_direction(direction::left)
+        mArrowAnimation(new QPropertyAnimation(this, "arrowOffset", this)),
+        mArrowOffset(0),
+        mBarHeight(30),
+        mArrowWidth(10),
+        mArrowLength(30),
+        mDirection(direction::left)
     {
-        m_arrow_animation->setDuration(700);
-        m_arrow_animation->setStartValue(0);
-        m_arrow_animation->setEndValue(100);
-        m_arrow_animation->setLoopCount(-1);
-        m_arrow_animation->setEasingCurve(QEasingCurve::Linear);
+        mArrowAnimation->setDuration(700);
+        mArrowAnimation->setStartValue(0);
+        mArrowAnimation->setEndValue(100);
+        mArrowAnimation->setLoopCount(-1);
+        mArrowAnimation->setEasingCurve(QEasingCurve::Linear);
 
-        m_arrow_left.lineTo(QPointF(-(m_arrow_length - m_arrow_width), (m_bar_height / 2)));
-        m_arrow_left.lineTo(QPointF(0, m_bar_height));
-        m_arrow_left.lineTo(QPointF(-m_arrow_width, m_bar_height));
-        m_arrow_left.lineTo(QPointF(-m_arrow_length, (m_bar_height / 2)));
-        m_arrow_left.lineTo(QPointF(-m_arrow_width, 0));
-        m_arrow_left.closeSubpath();
+        mArrowLeft.lineTo(QPointF(-(mArrowLength - mArrowWidth), (mBarHeight / 2)));
+        mArrowLeft.lineTo(QPointF(0, mBarHeight));
+        mArrowLeft.lineTo(QPointF(-mArrowWidth, mBarHeight));
+        mArrowLeft.lineTo(QPointF(-mArrowLength, (mBarHeight / 2)));
+        mArrowLeft.lineTo(QPointF(-mArrowWidth, 0));
+        mArrowLeft.closeSubpath();
 
-        m_arrow_right.lineTo(QPointF((m_arrow_length - m_arrow_width), (m_bar_height / 2)));
-        m_arrow_right.lineTo(QPointF(0, m_bar_height));
-        m_arrow_right.lineTo(QPointF(m_arrow_width, m_bar_height));
-        m_arrow_right.lineTo(QPointF(m_arrow_length, (m_bar_height / 2)));
-        m_arrow_right.lineTo(QPointF(m_arrow_width, 0));
-        m_arrow_right.closeSubpath();
+        mArrowRight.lineTo(QPointF((mArrowLength - mArrowWidth), (mBarHeight / 2)));
+        mArrowRight.lineTo(QPointF(0, mBarHeight));
+        mArrowRight.lineTo(QPointF(mArrowWidth, mBarHeight));
+        mArrowRight.lineTo(QPointF(mArrowLength, (mBarHeight / 2)));
+        mArrowRight.lineTo(QPointF(mArrowWidth, 0));
+        mArrowRight.closeSubpath();
     }
 
-    void SuccessDialog::fade_in_started()
+    void SuccessDialog::fadeInStarted()
     {
         start();
     }
 
-    void SuccessDialog::fade_in_finished()
+    void SuccessDialog::fadeInFinished()
     {
         // DELETE AFTER TESTING
     }
 
     void SuccessDialog::start()
     {
-        m_arrow_animation->start();
+        mArrowAnimation->start();
     }
 
     void SuccessDialog::stop()
     {
         hide();
-        m_arrow_animation->stop();
+        mArrowAnimation->stop();
     }
 
-    void SuccessDialog::set_direction(const direction d)
+    void SuccessDialog::setDirection(const direction d)
     {
-        m_direction = d;
+        mDirection = d;
     }
 
-    int SuccessDialog::arrow_offset() const
+    int SuccessDialog::arrowOffset() const
     {
-        return m_arrow_offset;
+        return mArrowOffset;
     }
 
-    void SuccessDialog::set_arrow_offset(const int offset)
+    void SuccessDialog::setArrowOffset(const int offset)
     {
-        m_arrow_offset = offset;
+        mArrowOffset = offset;
         update();
     }
 
@@ -87,28 +87,28 @@ namespace hal
         painter.setClipRect(QRect(0, 0, width(), height()));
         painter.setRenderHint(QPainter::Antialiasing, true);
 
-        //painter.drawText(QRectF(10, 40, 50, 50), QString::number(m_arrow_offset));
+        //painter.drawText(QRectF(10, 40, 50, 50), QString::number(mArrowOffset));
 
-        if (m_direction == direction::left)
+        if (mDirection == direction::left)
         {
-            qreal value = (40.0 / 100.0) * m_arrow_offset;
+            qreal value = (40.0 / 100.0) * mArrowOffset;
             painter.translate(-value, 0);
 
             for (int x = 0; x < width(); x += 10)
             {
-                painter.fillPath(m_arrow_left, QColor(85, 255, 0));
+                painter.fillPath(mArrowLeft, QColor(85, 255, 0));
                 painter.translate(20, 0);
             }
         }
         else
         {
-            qreal value = (40.0 / 100.0) * m_arrow_offset;
+            qreal value = (40.0 / 100.0) * mArrowOffset;
             painter.translate(-40, 0);
             painter.translate(value, 0);
 
             for (int x = 0; x < width(); x += 10)
             {
-                painter.fillPath(m_arrow_right, QColor(85, 255, 0));
+                painter.fillPath(mArrowRight, QColor(85, 255, 0));
                 painter.translate(20, 0);
             }
         }

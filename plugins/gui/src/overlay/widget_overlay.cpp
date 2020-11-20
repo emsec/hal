@@ -5,31 +5,31 @@
 namespace hal
 {
     WidgetOverlay::WidgetOverlay(QWidget* parent) : Overlay(parent),
-        m_layout(new QVBoxLayout(this)),
-        m_widget(nullptr)
+        mLayout(new QVBoxLayout(this)),
+        mWidget(nullptr)
     {
 
     }
 
-    void WidgetOverlay::set_widget(QWidget* widget)
+    void WidgetOverlay::setWidget(QWidget* widget)
     {
-        if (m_widget)
+        if (mWidget)
         {
-            m_widget->hide();
-            m_widget->setParent(nullptr);
+            mWidget->hide();
+            mWidget->setParent(nullptr);
         }
 
-        m_widget = widget;
+        mWidget = widget;
 
         widget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        m_layout->addWidget(widget, Qt::AlignCenter);
-        m_layout->setAlignment(widget, Qt::AlignCenter);
+        mLayout->addWidget(widget, Qt::AlignCenter);
+        mLayout->setAlignment(widget, Qt::AlignCenter);
 
-        m_widget->show();
+        mWidget->show();
 
         // OLD
-        //    m_widget->setParent(this);
-        //    m_widget->resize(m_widget->sizeHint());
+        //    mWidget->setParent(this);
+        //    mWidget->resize(mWidget->sizeHint());
     }
 }
 

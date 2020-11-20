@@ -32,18 +32,18 @@ namespace hal
     class Notification : public QFrame
     {
         Q_OBJECT
-        Q_PROPERTY(qreal opacity READ get_opacity WRITE set_opacity)
+        Q_PROPERTY(qreal opacity READ getOpacity WRITE setOpacity)
 
     public:
         Notification(QWidget* parent = 0);
 
-        qreal get_opacity();
-        void set_opacity(qreal opacity);
+        qreal getOpacity();
+        void setOpacity(qreal opacity);
 
         void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
-        void fade_in();
-        void fade_out();
+        void fadeIn();
+        void fadeOut();
 
     Q_SIGNALS:
         void clicked();
@@ -54,6 +54,6 @@ namespace hal
         void cleanup();
 
     private:
-        QPropertyAnimation* m_animation;
+        QPropertyAnimation* mAnimation;
     };
 }

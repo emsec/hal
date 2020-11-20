@@ -15,8 +15,8 @@
 namespace hal
 {
     StyleManager::StyleManager(QObject* parent)
-        : QObject(parent), m_graphics_qss_adapter(new GraphicsQssAdapter()), m_shared_properties(new SharedPropertiesQssAdapter()),
-          m_NotificationManager(new NotificationManagerQssAdapter()), m_python_syntax_highlighter(new PythonQssAdapter()), m_vhdl_syntax_highlighter(new VhdlQssAdapter())
+        : QObject(parent), mGraphicsQssAdapter(new GraphicsQssAdapter()), mSharedProperties(new SharedPropertiesQssAdapter()),
+          mNotificationManager(new NotificationManagerQssAdapter()), mPythonSyntaxHighlighter(new PythonQssAdapter()), mVhdlSyntaxHighlighter(new VhdlQssAdapter())
     {
     }
 
@@ -32,7 +32,7 @@ namespace hal
         // POSSIBLY USEFUL TO ENSURE DESTRUCTION ORDER
     }
 
-    void StyleManager::update_style()
+    void StyleManager::updateStyle()
     {
         QCoreApplication* core = QApplication::instance();
         QApplication* app      = qobject_cast<QApplication*>(core);
@@ -40,24 +40,24 @@ namespace hal
         if (!app)
             return;
 
-        QString path = g_settings_manager->get("stylesheet/base").toString();
+        QString path = gSettingsManager->get("stylesheet/base").toString();
         QFile stylesheet(path);
 
         if (!stylesheet.exists())
         {
             log_error("gui", "Specified stylesheet '{}' does not exist, proceeding with default style", path.toStdString());
-            set_default(app);
+            setDefault(app);
             return;
         }
 
         if (!stylesheet.open(QFile::ReadOnly))
         {
             log_error("gui", "Unable to open specified stylesheet '{}', proceeding with default style", path.toStdString());
-            set_default(app);
+            setDefault(app);
             return;
         }
 
-        path = g_settings_manager->get("stylesheet/definitions").toString();
+        path = gSettingsManager->get("stylesheet/definitions").toString();
 
         if (path.isEmpty())
         {
@@ -71,41 +71,41 @@ namespace hal
         if (!definitions.exists())
         {
             log_error("gui", "Specified stylesheet definitions file '{}' does not exist, proceeding with default style", path.toStdString());
-            set_default(app);
+            setDefault(app);
             return;
         }
 
         if (!definitions.open(QFile::ReadOnly))
         {
             log_error("gui", "Unable to open specified stylesheet definitions file '{}', proceeding with default style", path.toStdString());
-            set_default(app);
+            setDefault(app);
             return;
         }
 
         // COMBINE BASE AND DEFINITIONS INTO FINAL STYLESHEET
     }
 
-    const SharedPropertiesQssAdapter* StyleManager::shared_properties() const
+    const SharedPropertiesQssAdapter* StyleManager::sharedProperties() const
     {
-        return m_shared_properties;
+        return mSharedProperties;
     }
 
     const NotificationManagerQssAdapter* StyleManager::NotificationManager() const
     {
-        return m_NotificationManager;
+        return mNotificationManager;
     }
 
     const PythonQssAdapter* StyleManager::PythonSyntaxHighlighter() const
     {
-        return m_python_syntax_highlighter;
+        return mPythonSyntaxHighlighter;
     }
 
     const VhdlQssAdapter* StyleManager::VhdlSyntaxHighlighter() const
     {
-        return m_vhdl_syntax_highlighter;
+        return mVhdlSyntaxHighlighter;
     }
 
-    void StyleManager::set_default(QApplication* app)
+    void StyleManager::setDefault(QApplication* app)
     {
         QFile fallback(":/style/hal");
         fallback.open(QFile::ReadOnly);

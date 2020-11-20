@@ -28,8 +28,8 @@ namespace hal
         setHeaderLabels({"Name", "ID", "Type", "Pin", "Parent Module"});
         setAllColumnsShowFocus(true);
 
-        connect(this, &GraphNavigationWidgetV2::itemSelectionChanged, this, &GraphNavigationWidgetV2::handle_selection_changed);
-        connect(this, &GraphNavigationWidgetV2::itemDoubleClicked, this, &GraphNavigationWidgetV2::handle_item_double_clicked);
+        connect(this, &GraphNavigationWidgetV2::itemSelectionChanged, this, &GraphNavigationWidgetV2::handleSelectionChanged);
+        connect(this, &GraphNavigationWidgetV2::itemDoubleClicked, this, &GraphNavigationWidgetV2::handleItemDoubleClicked);
 
         // FIXME for some reason, arrow key navigation does not work on MacOS
     }
@@ -38,47 +38,47 @@ namespace hal
     {
         clear();
 
-        switch (g_selection_relay->m_focus_type)
+        switch (gSelectionRelay->mFocusType)
         {
-            case SelectionRelay::item_type::none:
+        case SelectionRelay::ItemType::None:
             {
                 return;
             }
-            case SelectionRelay::item_type::gate:
+        case SelectionRelay::ItemType::Gate:
             {
-                Gate* g = g_netlist->get_gate_by_id(g_selection_relay->m_focus_id);
+                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->mFocusId);
 
                 assert(g);
 
-                std::string pin        = (direction ? g->get_output_pins() : g->get_input_pins())[g_selection_relay->m_subfocus_index];
+                std::string pin        = (direction ? g->get_output_pins() : g->get_input_pins())[gSelectionRelay->mSubfocusIndex];
                 Net* n = (direction ? g->get_fan_out_net(pin) : g->get_fan_in_net(pin));
 
                 assert(n);
 
-                m_origin = hal::node{hal::node_type::gate, g->get_id()};
-                m_via_net = n;
+                mOrigin = Node(g->get_id(), Node::Gate);
+                mViaNet = n;
 
-                fill_table(direction);
+                fillTable(direction);
 
                 return;
             }
-            case SelectionRelay::item_type::net:
+        case SelectionRelay::ItemType::Net:
             {
-                Net* n = g_netlist->get_net_by_id(g_selection_relay->m_focus_id);
+                Net* n = gNetlist->get_net_by_id(gSelectionRelay->mFocusId);
 
                 assert(n);
                 assert(direction ? n->get_num_of_destinations() : n->get_num_of_sources());
 
-                m_origin = hal::node{hal::node_type::gate, 0};
-                m_via_net = n;
+                mOrigin = Node();
+                mViaNet = n;
 
-                fill_table(direction);
+                fillTable(direction);
 
                 return;
             }
-            case SelectionRelay::item_type::module:
+        case SelectionRelay::ItemType::Module:
             {
-                Module* m = g_netlist->get_module_by_id(g_selection_relay->m_focus_id);
+                Module* m = gNetlist->get_module_by_id(gSelectionRelay->mFocusId);
 
                 assert(m);
 
@@ -92,28 +92,28 @@ namespace hal
 
                 std::vector<Net*> nets = m->get_output_nets();
                 auto it = nets.begin();
-                if (g_selection_relay->m_subfocus_index > 0)
-                    std::advance(it, g_selection_relay->m_subfocus_index);
+                if (gSelectionRelay->mSubfocusIndex > 0)
+                    std::advance(it, gSelectionRelay->mSubfocusIndex);
                 auto n = *it;
 
                 assert(n);
 
-                m_origin = hal::node{hal::node_type::module, m->get_id()};
-                m_via_net = n;
+                mOrigin = Node(m->get_id(),Node::Module);
+                mViaNet = n;
 
-                fill_table(direction);
+                fillTable(direction);
                 return;
 
             }
         }
     }
 
-    void GraphNavigationWidgetV2::setup(hal::node origin, Net* via_net, bool direction)
+    void GraphNavigationWidgetV2::setup(Node origin, Net* via_net, bool direction)
     {
         clear();
-        fill_table(direction);
-        m_via_net = via_net;
-        m_origin = origin;
+        fillTable(direction);
+        mViaNet = via_net;
+        mOrigin = origin;
     }
 
     void GraphNavigationWidgetV2::keyPressEvent(QKeyEvent* event)
@@ -121,29 +121,29 @@ namespace hal
         // qDebug() << "KeyDebug:" << "dn:" << (event->key() == Qt::Key_Down) << "/ up:" << (event->key() == Qt::Key_Up);
         if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Right)
         {
-            commit_selection();
-            m_via_net = nullptr;
+            commitSelection();
+            mViaNet = nullptr;
             return;
         }
 
         if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Left)
         {
-            Q_EMIT close_requested();
-            Q_EMIT reset_focus();
-            m_via_net = nullptr;
+            Q_EMIT closeRequested();
+            Q_EMIT resetFocus();
+            mViaNet = nullptr;
             return;
         }
 
         return QTreeWidget::keyPressEvent(event);
     }
 
-    void GraphNavigationWidgetV2::fill_table(bool direction)
+    void GraphNavigationWidgetV2::fillTable(bool direction)
     {
         int row = 0;
         QMap<u32, QTreeWidgetItem*> created_parents;
 
         // iterate over all sources, respective destinations, of the via net
-        for (Endpoint* e : (direction ? m_via_net->get_destinations() : m_via_net->get_sources()))
+        for (Endpoint* e : (direction ? mViaNet->get_destinations() : mViaNet->get_sources()))
         {
             Gate* g = e->get_gate();
             if (!g)
@@ -157,10 +157,10 @@ namespace hal
             // gate, then we don't want to offer navigating to that module or any
             // modules further up the hierarchy)
             Module* common_ancestor = nullptr; //fixes uninit warning
-            if (m_origin.id == 0)
+            if (mOrigin.id() == 0)
             {
                 // we're navigating from a net
-                if (m_via_net->is_global_input_net() || m_via_net->is_global_output_net())
+                if (mViaNet->is_global_input_net() || mViaNet->is_global_output_net())
                 {
                     // in this special case, the net is actually _outside_ the
                     // top module, so we can't do the common ancestor approach
@@ -171,27 +171,27 @@ namespace hal
                     // in this case we don't really know how to limit our view,
                     // so we look for the common ancestor of all sources and sinks of
                     // this net and use that
-                    auto net_sources = m_via_net->get_sources();
-                    auto net_destinations = m_via_net->get_destinations();
+                    auto net_sources = mViaNet->get_sources();
+                    auto net_destinations = mViaNet->get_destinations();
                     std::unordered_set<Gate*> net_gates;
                     for (auto ep : net_sources)
                         net_gates.insert(ep->get_gate());
                     for (auto ep : net_destinations)
                         net_gates.insert(ep->get_gate());
-                    common_ancestor = gui_utility::first_common_ancestor({}, net_gates);
+                    common_ancestor = gui_utility::firstCommonAncestor({}, net_gates);
                 }
             }
-            else if (m_origin.type == hal::node_type::gate)
+            else if (mOrigin.type() == Node::Gate)
             {
-                Gate* origin = g_netlist->get_gate_by_id(m_origin.id);
+                Gate* origin = gNetlist->get_gate_by_id(mOrigin.id());
                 assert(origin);
-                common_ancestor = gui_utility::first_common_ancestor({}, {origin, g});
+                common_ancestor = gui_utility::firstCommonAncestor({}, {origin, g});
             }
-            else if (m_origin.type == hal::node_type::module)
+            else if (mOrigin.type() == Node::Module)
             {
-                Module* origin = g_netlist->get_module_by_id(m_origin.id);
+                Module* origin = gNetlist->get_module_by_id(mOrigin.id());
                 assert(origin);
-                common_ancestor = gui_utility::first_common_ancestor({origin}, {g});
+                common_ancestor = gui_utility::firstCommonAncestor({origin}, {g});
             }
             else
             {
@@ -231,8 +231,8 @@ namespace hal
                 else
                 {
                     QString portname = QString::fromStdString(direction ?
-                        parent->get_input_port_name(m_via_net) :
-                        parent->get_output_port_name(m_via_net)
+                        parent->get_input_port_name(mViaNet) :
+                        parent->get_output_port_name(mViaNet)
                     );
                     QString type = QString::fromStdString(parent->get_type());
                     if (type.isEmpty())
@@ -271,10 +271,10 @@ namespace hal
             }
         }
         expandAll();
-        resize_to_fit();
+        resizeToFit();
     }
 
-    void GraphNavigationWidgetV2::resize_to_fit()
+    void GraphNavigationWidgetV2::resizeToFit()
     {
         // Qt apparently needs these 2 pixels extra, otherwise you get scollbars
 
@@ -286,7 +286,7 @@ namespace hal
         }
 
         int height = header()->height() + 2;
-        height += sum_row_heights(this->invisibleRootItem());
+        height += sumRowHeights(this->invisibleRootItem());
 
         int MAXIMUM_ALLOWED_HEIGHT = std::min(500, static_cast<QWidget*>(parent())->height());
         int MAXIMUM_ALLOWED_WIDTH = std::min(700, static_cast<QWidget*>(parent())->width());
@@ -294,23 +294,23 @@ namespace hal
         setFixedHeight((height > MAXIMUM_ALLOWED_HEIGHT) ? MAXIMUM_ALLOWED_HEIGHT : height);
     }
 
-    int GraphNavigationWidgetV2::sum_row_heights(const QTreeWidgetItem *itm, bool top)
+    int GraphNavigationWidgetV2::sumRowHeights(const QTreeWidgetItem *itm, bool top)
     {
         int row_heights = 0;
         if (!top)
              row_heights = visualItemRect(itm).height();
         for(int i = 0; i < itm->childCount(); i++)
-            row_heights += sum_row_heights(itm->child(i), false);
+            row_heights += sumRowHeights(itm->child(i), false);
         return row_heights;
     }
 
-    void GraphNavigationWidgetV2::handle_item_double_clicked(QTreeWidgetItem* item)
+    void GraphNavigationWidgetV2::handleItemDoubleClicked(QTreeWidgetItem* item)
     {
         Q_UNUSED(item)
-        commit_selection();
+        commitSelection();
     }
 
-    void GraphNavigationWidgetV2::commit_selection()
+    void GraphNavigationWidgetV2::commitSelection()
     {
         if (selectedItems().isEmpty())
         {
@@ -338,14 +338,14 @@ namespace hal
             }
         }
 
-        Q_EMIT navigation_requested(m_origin, m_via_net->get_id(), target_gates, target_modules);
+        Q_EMIT navigationRequested(mOrigin, mViaNet->get_id(), target_gates, target_modules);
     }
 
-    void GraphNavigationWidgetV2::handle_selection_changed()
+    void GraphNavigationWidgetV2::handleSelectionChanged()
     {
         auto new_selection = selectedItems().toSet();
-        auto deselected = m_previous_selection - new_selection;
-        auto selected = new_selection - m_previous_selection;
+        auto deselected = mPreviousSelection - new_selection;
+        auto selected = new_selection - mPreviousSelection;
         for (auto& itm : deselected)
         {
             int count = itm->childCount();
@@ -364,6 +364,6 @@ namespace hal
                 itm->child(i)->setSelected(false);
             }
         }
-        m_previous_selection = new_selection;
+        mPreviousSelection = new_selection;
     }
 }

@@ -50,14 +50,14 @@ namespace hal
         virtual void close(ContentWidget* widget) override;
 
         int count();
-        void remove_content();
+        void removeContent();
 
     Q_SIGNALS:
-        void content_changed();
+        void contentChanged();
 
     private:
-        DockBar* m_dock_bar;
-        Splitter* m_splitter;
-        QList<ContentFrame*> m_detached_frames;
+        DockBar* mDockBar;
+        Splitter* mSplitter;
+        QList<ContentFrame*> mDetachedFrames;
     };
 }

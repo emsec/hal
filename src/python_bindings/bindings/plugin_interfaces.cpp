@@ -2,6 +2,7 @@
 
 namespace hal
 {
+
     class Pyi_base : public BasePluginInterface
     {
     public:
@@ -9,16 +10,16 @@ namespace hal
 
         std::string get_name() const override
         {
-            PYBIND11_OVERLOAD_PURE(std::string, /* Return type */
-                                   BasePluginInterface,      /* Parent class */
+            PYBIND11_OVERLOAD_PURE(std::string,         /* Return type */
+                                   BasePluginInterface, /* Parent class */
                                    get_name,
                                    NULL); /* Name of function in C++ (must match Python name) */
         }
 
         std::string get_version() const override
         {
-            PYBIND11_OVERLOAD_PURE(std::string, /* Return type */
-                                   BasePluginInterface,      /* Parent class */
+            PYBIND11_OVERLOAD_PURE(std::string,         /* Return type */
+                                   BasePluginInterface, /* Parent class */
                                    get_version,
                                    NULL); /* Name of function in C++ (must match Python name) */
         }
@@ -31,16 +32,16 @@ namespace hal
 
         bool exec(Netlist* g) override
         {
-            PYBIND11_OVERLOAD_PURE(bool,  /* Return type */
+            PYBIND11_OVERLOAD_PURE(bool,               /* Return type */
                                    GUIPluginInterface, /* Parent class */
-                                   exec,  /* Name of function in C++ (must match Python name) */
+                                   exec,               /* Name of function in C++ (must match Python name) */
                                    RawPtrWrapper(g));
         }
     };
 
     void plugin_interfaces_init(py::module& m)
     {
-        py::class_<BasePluginInterface, RawPtrWrapper<BasePluginInterface>, Pyi_base> py_i_base(m, "i_base");
+        py::class_<BasePluginInterface, RawPtrWrapper<BasePluginInterface>, Pyi_base> py_i_base(m, "BasePluginInterface");
 
         py_i_base.def_property_readonly("name", &BasePluginInterface::get_name, R"(
         The name of the plugin.

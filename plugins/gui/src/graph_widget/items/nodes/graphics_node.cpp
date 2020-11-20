@@ -6,9 +6,10 @@
 
 namespace hal
 {
-    GraphicsNode::GraphicsNode(const hal::item_type type, const u32 id, const QString& name) : GraphicsItem(type, id),
-        m_name(name)
+    GraphicsNode::GraphicsNode(const ItemType type, const u32 id, const QString& name)
+        : GraphicsItem(type, id)
     {
+        mNodeText[0] = name;
         setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
         //setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges | ItemIsFocusable);
         //setAcceptHoverEvents(true);
@@ -16,36 +17,72 @@ namespace hal
 
     QRectF GraphicsNode::boundingRect() const
     {
-        return QRectF(0, 0, m_width, m_height);
+        return QRectF(0, 0, mWidth, mHeight);
     }
 
     QPainterPath GraphicsNode::shape() const
     {
         QPainterPath path;
-        path.addRect(QRectF(0, 0, m_width, m_height));
+        path.addRect(QRectF(0, 0, mWidth, mHeight));
         return path;
     }
 
-    void GraphicsNode::set_visuals(const GraphicsNode::visuals& v)
+    void GraphicsNode::setVisuals(const GraphicsNode::Visuals& v)
     {
-        setVisible(v.visible);
+        setVisible(v.mVisible);
 
-        m_color = v.main_color;
+        mColor = v.mMainColor;
     }
 
     qreal GraphicsNode::width() const
     {
-        return m_width;
+        return mWidth;
     }
 
     qreal GraphicsNode::height() const
     {
-        return m_height;
+        return mHeight;
     }
 
-    void GraphicsNode::set_name(QString name)
+    QList<u32> GraphicsNode::inputNets() const
     {
-        m_name = name;
+        if (mInputByNet.isEmpty()) return QList<u32>();
+        int n = mInputByNet.size();
+        QVector<u32> retval(n);
+        for (auto it=mInputByNet.constBegin(); it!=mInputByNet.constEnd(); ++it)
+        {
+            Q_ASSERT(it.value() < n);
+            retval[it.value()] = it.key();
+        }
+        return retval.toList();
+    }
+
+    QList<u32> GraphicsNode::outputNets() const
+    {
+        if (mOutputByNet.isEmpty()) return QList<u32>();
+        int n = mOutputByNet.size();
+        QVector<u32> retval(n);
+        for (auto it=mOutputByNet.constBegin(); it!=mOutputByNet.constEnd(); ++it)
+        {
+            Q_ASSERT(it.value() < n);
+            retval[it.value()] = it.key();
+        }
+        return retval.toList();
+    }
+
+    int GraphicsNode::inputByNet(u32 netId) const
+    {
+        return mInputByNet.value(netId,-1);
+    }
+
+    int GraphicsNode::outputByNet(u32 netId) const
+    {
+        return mOutputByNet.value(netId,-1);
+    }
+
+    void GraphicsNode::set_name(const QString &name)
+    {
+        mNodeText[0] = name;
     }
 
     QVariant GraphicsNode::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
@@ -57,8 +94,8 @@ namespace hal
         //     if(QApplication::mouseButtons() == Qt::LeftButton)
         //     {
         //         QPointF new_position = value.toPointF();
-        //         int adjusted_x = qRound(new_position.x() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
-        //         int adjusted_y = qRound(new_position.y() / graph_widget_constants::grid_size) * graph_widget_constants::grid_size;
+        //         int adjusted_x = qRound(new_position.x() / graph_widget_constants::sGridSize) * graph_widget_constants::sGridSize;
+        //         int adjusted_y = qRound(new_position.y() / graph_widget_constants::sGridSize) * graph_widget_constants::sGridSize;
         //         return QPoint(adjusted_x, adjusted_y);
         //     }
         //     else

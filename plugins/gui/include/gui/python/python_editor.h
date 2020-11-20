@@ -50,154 +50,157 @@ namespace hal
     class PythonEditor : public ContentWidget, public PythonContextSubscriber
     {
         Q_OBJECT
-        Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
-        Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
-        Q_PROPERTY(QString save_icon_path READ save_icon_path WRITE set_save_icon_path)
-        Q_PROPERTY(QString save_icon_style READ save_icon_style WRITE set_save_icon_style)
-        Q_PROPERTY(QString save_as_icon_path READ save_as_icon_path WRITE set_save_as_icon_path)
-        Q_PROPERTY(QString save_as_icon_style READ save_as_icon_style WRITE set_save_as_icon_style)
-        Q_PROPERTY(QString run_icon_path READ run_icon_path WRITE set_run_icon_path)
-        Q_PROPERTY(QString run_icon_style READ run_icon_style WRITE set_run_icon_style)
-        Q_PROPERTY(QString new_file_icon_path READ new_file_icon_path WRITE set_new_file_icon_path)
-        Q_PROPERTY(QString new_file_icon_style READ new_file_icon_style WRITE set_new_file_icon_style)
-        Q_PROPERTY(QString toggle_minimap_icon_path READ toggle_minimap_icon_path WRITE set_toggle_minimap_icon_path)
-        Q_PROPERTY(QString toggle_minimap_icon_style READ toggle_minimap_icon_style WRITE set_toggle_minimap_icon_style)
+        Q_PROPERTY(QString openIconPath READ openIconPath WRITE setOpenIconPath)
+        Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
+        Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
+        Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
+        Q_PROPERTY(QString saveAsIconPath READ saveAsIconPath WRITE setSaveAsIconPath)
+        Q_PROPERTY(QString saveAsIconStyle READ saveAsIconStyle WRITE setSaveAsIconStyle)
+        Q_PROPERTY(QString runIconPath READ runIconPath WRITE setRunIconPath)
+        Q_PROPERTY(QString runIconStyle READ runIconStyle WRITE setRunIconStyle)
+        Q_PROPERTY(QString newFileIconPath READ newFileIconPath WRITE setNewFileIconPath)
+        Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
+        Q_PROPERTY(QString toggleMinimapIconPath READ toggleMinimapIconPath WRITE setToggleMinimapIconPath)
+        Q_PROPERTY(QString toggleMinimapIconStyle READ toggleMinimapIconStyle WRITE setToggleMinimapIconStyle)
 
     public:
         explicit PythonEditor(QWidget* parent = nullptr);
         ~PythonEditor();
 
-        virtual void setup_toolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
-        virtual QList<QShortcut*> create_shortcuts() Q_DECL_OVERRIDE;
+        virtual void setupToolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
+        virtual QList<QShortcut*> createShortcuts() Q_DECL_OVERRIDE;
 
-        virtual void handle_stdout(const QString& output) Q_DECL_OVERRIDE;
-        virtual void handle_error(const QString& output) Q_DECL_OVERRIDE;
+        virtual void handleStdout(const QString& output) Q_DECL_OVERRIDE;
+        virtual void handleError(const QString& output) Q_DECL_OVERRIDE;
         virtual void clear() Q_DECL_OVERRIDE;
 
-        void handle_action_open_file();
-        void handle_action_save_file();
-        void handle_action_save_file_as();
-        void handle_action_run();
-        void handle_action_new_tab();
-        void handle_action_tab_menu();
-        void handle_action_close_tab();
-        void handle_action_close_all_tabs();
-        void handle_action_close_other_tabs();
-        void handle_action_close_left_tabs();
-        void handle_action_close_right_tabs();
-        void handle_action_show_file();
-        void tab_load_file(u32 index, QString file_name);
+        void handleActionOpenFile();
+        void handleActionSaveFile();
+        void handleActionSaveFileAs();
+        void handleActionRun();
+        void handleActionNewTab();
+        void handleActionTabMenu();
+        void handleActionCloseTab();
+        void handleActionCloseAllTabs();
+        void handleActionCloseOtherTabs();
+        void handleActionCloseLeftTabs();
+        void handleActionCloseRightTabs();
+        void handleActionShowFile();
+        void tabLoadFile(u32 index, QString fileName);
 
-        void save_file(const bool ask_path, int index = -1);
+        //added so that the speciallogcontentmanager has access to all the code editors
+        QTabWidget* getTabWidget();
 
-        void discard_tab(int index);
-        bool confirm_discard_for_range(int start, int end, int exclude = -1);
+        void saveFile(const bool ask_path, int index = -1);
 
-        QString open_icon_path() const;
-        QString open_icon_style() const;
+        void discardTab(int index);
+        bool confirmDiscardForRange(int start, int end, int exclude = -1);
 
-        QString save_icon_path() const;
-        QString save_icon_style() const;
+        QString openIconPath() const;
+        QString openIconStyle() const;
 
-        QString save_as_icon_path() const;
-        QString save_as_icon_style() const;
+        QString saveIconPath() const;
+        QString saveIconStyle() const;
 
-        QString run_icon_path() const;
-        QString run_icon_style() const;
+        QString saveAsIconPath() const;
+        QString saveAsIconStyle() const;
 
-        QString new_file_icon_path() const;
-        QString new_file_icon_style() const;
+        QString runIconPath() const;
+        QString runIconStyle() const;
 
-        QString toggle_minimap_icon_path() const;
-        QString toggle_minimap_icon_style() const;
+        QString newFileIconPath() const;
+        QString newFileIconStyle() const;
 
-        void set_open_icon_path(const QString& path);
-        void set_open_icon_style(const QString& style);
+        QString toggleMinimapIconPath() const;
+        QString toggleMinimapIconStyle() const;
 
-        void set_save_icon_path(const QString& path);
-        void set_save_icon_style(const QString& style);
+        void setOpenIconPath(const QString& path);
+        void setOpenIconStyle(const QString& style);
 
-        void set_save_as_icon_path(const QString& path);
-        void set_save_as_icon_style(const QString& style);
+        void setSaveIconPath(const QString& path);
+        void setSaveIconStyle(const QString& style);
 
-        void set_run_icon_path(const QString& path);
-        void set_run_icon_style(const QString& style);
+        void setSaveAsIconPath(const QString& path);
+        void setSaveAsIconStyle(const QString& style);
 
-        void set_new_file_icon_path(const QString& path);
-        void set_new_file_icon_style(const QString& style);
+        void setRunIconPath(const QString& path);
+        void setRunIconStyle(const QString& style);
 
-        void set_toggle_minimap_icon_path(const QString& path);
-        void set_toggle_minimap_icon_style(const QString& style);
+        void setNewFileIconPath(const QString& path);
+        void setNewFileIconStyle(const QString& style);
 
-        bool handle_serialization_to_hal_file(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
-        bool handle_deserialization_from_hal_file(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
+        void setToggleMinimapIconPath(const QString& path);
+        void setToggleMinimapIconStyle(const QString& style);
+
+        bool handleSerializationToHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
+        bool handleDeserializationFromHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
 
     Q_SIGNALS:
-        void forward_stdout(const QString& output);
-        void forward_error(const QString& output);
+        void forwardStdout(const QString& output);
+        void forwardError(const QString& output);
 
     public Q_SLOTS:
-        void toggle_searchbar();
-        void handle_tab_close_requested(int index);
-        void handle_action_toggle_minimap();
-        void handle_modification_changed(bool changed);
-        void handle_key_pressed();
-        void handle_text_changed();
-        void handle_searchbar_text_edited(const QString& text);
-        void handle_current_tab_changed(int index);
-        void handle_tab_file_changed(QString path);
+        void toggleSearchbar();
+        void handleTabCloseRequested(int index);
+        void handleActionToggleMinimap();
+        void handleModificationChanged(bool changed);
+        void handleKeyPressed();
+        void handleTextChanged();
+        void handleSearchbarTextEdited(const QString& text);
+        void handleCurrentTabChanged(int index);
+        void handleTabFileChanged(QString path);
 
-        void handle_base_file_modified_reload();
-        void handle_base_file_modified_ignore();
-        void handle_base_file_modified_ok();
+        void handleBaseFileModifiedReload();
+        void handleBaseFileModifiedIgnore();
+        void handleBaseFileModifiedOk();
 
     protected:
         bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
 
     private:
-        QVBoxLayout* m_layout;
-        Toolbar* m_toolbar;
-        Splitter* m_splitter;
+        QVBoxLayout* mLayout;
+        Toolbar* mToolbar;
+        Splitter* mSplitter;
 
-        Searchbar* m_searchbar;
+        Searchbar* mSearchbar;
 
-        Action* m_action_open_file;
-        Action* m_action_run;
-        Action* m_action_save;
-        Action* m_action_save_as;
-        Action* m_action_toggle_minimap;
-        Action* m_action_new_file;
+        Action* mActionOpenFile;
+        Action* mActionRun;
+        Action* mActionSave;
+        Action* mActionSaveAs;
+        Action* mActionToggleMinimap;
+        Action* mActionNewFile;
 
-        QString m_open_icon_style;
-        QString m_open_icon_path;
+        QString mOpenIconStyle;
+        QString mOpenIconPath;
 
-        QString m_save_icon_style;
-        QString m_save_icon_path;
+        QString mSaveIconStyle;
+        QString mSaveIconPath;
 
-        QString m_save_as_icon_style;
-        QString m_save_as_icon_path;
+        QString mSaveAsIconStyle;
+        QString mSaveAsIconPath;
 
-        QString m_run_icon_style;
-        QString m_run_icon_path;
+        QString mRunIconStyle;
+        QString mRunIconPath;
 
-        QString m_new_file_icon_style;
-        QString m_new_file_icon_path;
+        QString mNewFileIconStyle;
+        QString mNewFileIconPath;
 
-        QString m_toggle_minimap_icon_style;
-        QString m_toggle_minimap_icon_path;
+        QString mToggleMinimapIconStyle;
+        QString mToggleMinimapIconPath;
 
-        QTabWidget* m_tab_widget;
-        int m_tab_rightclicked = -1;
+        QTabWidget* mTabWidget;
+        int mTabRightclicked = -1;
 
-        QFileSystemWatcher* m_file_watcher;
-        QMap<QString, PythonCodeEditor*> m_path_editor_map;
+        QFileSystemWatcher* mFileWatcher;
+        QMap<QString, PythonCodeEditor*> mPathEditorMap;
 
-        FileModifiedBar* m_file_modified_bar;
+        FileModifiedBar* mFileModifiedBar;
 
-        int m_new_file_counter;
+        int mNewFileCounter;
 
-        long m_last_click_time;
+        long mLastClickTime;
 
-        QString m_last_opened_path;
+        QString mLastOpenedPath;
     };
 }

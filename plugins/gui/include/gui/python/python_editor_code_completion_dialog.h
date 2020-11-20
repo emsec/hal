@@ -50,7 +50,7 @@ namespace hal
         /*
          * private members
          */
-        QTableWidget* m_table;
+        QTableWidget* mTable;
         std::vector<std::tuple<std::string, std::string>> m_completions;
 
         /*
@@ -58,6 +58,6 @@ namespace hal
          */
 
         /*calculated the "biggest" size of the table*/
-        QSize table_widget_size(QTableWidget* table);
+        QSize tableWidgetSize(QTableWidget* table);
     };
 }

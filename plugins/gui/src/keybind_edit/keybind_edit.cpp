@@ -6,30 +6,30 @@
 
 namespace hal
 {
-    KeybindEdit::KeybindEdit(QWidget* parent): QKeySequenceEdit(parent), m_validator(StackedValidator()), m_old_sequence(QKeySequence())
+    KeybindEdit::KeybindEdit(QWidget* parent): QKeySequenceEdit(parent), mValidator(StackedValidator()), mOldSequence(QKeySequence())
     {
         // do nothing
     }
 
-    void KeybindEdit::add_validator(Validator* v)
+    void KeybindEdit::addValidator(Validator* v)
     {
-        m_validator.add_validator(v);
+        mValidator.addValidator(v);
     }
 
-    void KeybindEdit::set_validated(bool validated)
+    void KeybindEdit::setValidated(bool validated)
     {
         qDebug() << validated;
-        m_validated = validated;
+        mValidated = validated;
     }
 
     bool KeybindEdit::validated()
     {
-        return m_validated;
+        return mValidated;
     }
 
     void KeybindEdit::revalidate()
     {
-        set_validated(m_validator.validate(keySequence().toString()));
+        setValidated(mValidator.validate(keySequence().toString()));
     }
 
     bool KeybindEdit::event(QEvent* e)
@@ -51,15 +51,15 @@ namespace hal
             case QEvent::FocusOut:
                 // FIXME this messes with the API. Better define a Validator that
                 // can actually handle QVariants and thus QKeySequences.
-                if (!m_validator.validate(keySequence().toString()))
+                if (!mValidator.validate(keySequence().toString()))
                 {
                     // revert
-                    setKeySequence(m_old_sequence);
-                    Q_EMIT(edit_rejected());
+                    setKeySequence(mOldSequence);
+                    Q_EMIT(editRejected());
                 }
                 else
                 {
-                    m_old_sequence = keySequence();
+                    mOldSequence = keySequence();
                 }
                 releaseKeyboard();
                 recognized = true;

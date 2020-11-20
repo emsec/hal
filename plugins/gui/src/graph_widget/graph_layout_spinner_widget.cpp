@@ -5,15 +5,15 @@
 namespace hal
 {
     GraphLayoutSpinnerWidget::GraphLayoutSpinnerWidget(QWidget* parent) : QWidget(parent),
-        m_renderer(new QSvgRenderer())
+        mRenderer(new QSvgRenderer())
     {
         const QString string(":/images/spinner");
-        m_renderer->load(string);
-        m_renderer->setFramesPerSecond(10);
-        connect(m_renderer, &QSvgRenderer::repaintNeeded, this, &GraphLayoutSpinnerWidget::handle_repaint_needed);
+        mRenderer->load(string);
+        mRenderer->setFramesPerSecond(10);
+        connect(mRenderer, &QSvgRenderer::repaintNeeded, this, &GraphLayoutSpinnerWidget::handleRepaintNeeded);
     }
 
-    void GraphLayoutSpinnerWidget::handle_repaint_needed()
+    void GraphLayoutSpinnerWidget::handleRepaintNeeded()
     {
         update();
     }
@@ -24,7 +24,7 @@ namespace hal
 
         QPainter painter(this);
 
-        m_renderer->render(&painter, rect());
+        mRenderer->render(&painter, rect());
     }
 
     QSize GraphLayoutSpinnerWidget::sizeHint() const
@@ -35,11 +35,11 @@ namespace hal
 
     void GraphLayoutSpinnerWidget::start()
     {
-        m_renderer->setFramesPerSecond(10);
+        mRenderer->setFramesPerSecond(10);
     }
 
     void GraphLayoutSpinnerWidget::stop()
     {
-        m_renderer->setFramesPerSecond(0);
+        mRenderer->setFramesPerSecond(0);
     }
 }

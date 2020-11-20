@@ -158,9 +158,25 @@ namespace hal
         this->set_level_of_channel(channel_name, "info");
     }
 
+    void LogManager::activate_all_channels()
+    {
+        for (const auto& channel : m_logger)
+        {
+            set_level_of_channel(channel.first, "info");
+        }
+    }
+
     void LogManager::deactivate_channel(const std::string& channel_name)
     {
         this->set_level_of_channel(channel_name, "off");
+    }
+
+    void LogManager::deactivate_all_channels()
+    {
+        for (const auto& channel : m_logger)
+        {
+            set_level_of_channel(channel.first, "off");
+        }
     }
 
     std::shared_ptr<LogManager::log_sink> LogManager::create_stdout_sink(const bool colored)

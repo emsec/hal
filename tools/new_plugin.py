@@ -103,6 +103,9 @@ namespace py = pybind11;
 namespace hal
 {
 
+    // the name in PYBIND11_MODULE/PYBIND11_PLUGIN *MUST* match the filename of the output library (without extension),
+    // otherwise you will get "ImportError: dynamic module does not define module export function" when importing the module
+
     #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(##LOWER##, m)
     {
@@ -113,7 +116,7 @@ namespace hal
         py::module m("##LOWER##", "hal ##CLASSNAME##Plugin python bindings");
     #endif    // ifdef PYBIND11_MODULE
 
-        py::class_<##CLASSNAME##Plugin, BasePluginInterface>(m, "##LOWER##")
+        py::class_<##CLASSNAME##Plugin, RawPtrWrapper<##CLASSNAME##Plugin>, BasePluginInterface>(m, "##CLASSNAME##Plugin")
             .def_property_readonly("name", &##CLASSNAME##Plugin::get_name)
             .def("get_name", &##CLASSNAME##Plugin::get_name)
             .def_property_readonly("version", &##CLASSNAME##Plugin::get_version)

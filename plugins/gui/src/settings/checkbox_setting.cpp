@@ -13,34 +13,34 @@
 
 namespace hal
 {
-    CheckboxSetting::CheckboxSetting(const QString& key, const QString& title, const QString& text, const QString& description, QWidget *parent) : SettingsWidget(key, parent)
+    CheckboxSetting::CheckboxSetting(const QString& key, const QString& title, const QString& text, const QString& mDescription, QWidget *parent) : SettingsWidget(key, parent)
     {
-        m_labels.append(QPair<QLabel*, QString>(m_name, title));
+        mLabels.append(QPair<QLabel*, QString>(mName, title));
 
         QHBoxLayout* layout = new QHBoxLayout();
-        m_container->addLayout(layout);
+        mContainer->addLayout(layout);
 
-        m_check_box = new QCheckBox(text, this);
-        // m_check_box->setStyleSheet("QComboBox{width: 150px;}");
-        connect(m_check_box, &QCheckBox::clicked, this, &CheckboxSetting::on_state_changed);
+        mCheckBox = new QCheckBox(text, this);
+        // mCheckBox->setStyleSheet("QComboBox{width: 150px;}");
+        connect(mCheckBox, &QCheckBox::clicked, this, &CheckboxSetting::onStateChanged);
 
 
-        layout->addWidget(m_check_box);
+        layout->addWidget(mCheckBox);
 
         QLabel* label = new QLabel();
         layout->addWidget(label);
 
-        m_labels.append(QPair<QLabel*, QString>(label, description));
+        mLabels.append(QPair<QLabel*, QString>(label, mDescription));
     }
 
     void CheckboxSetting::load(const QVariant& value)
     {
-        m_check_box->setChecked(value.toBool());
+        mCheckBox->setChecked(value.toBool());
     }
 
     QVariant CheckboxSetting::value()
     {
-        return QVariant(m_check_box->isChecked());
+        return QVariant(mCheckBox->isChecked());
     }
 
     // void DropdownSetting::rollback()
@@ -48,9 +48,9 @@ namespace hal
 
     // }
 
-    void CheckboxSetting::on_state_changed(bool checked)
+    void CheckboxSetting::onStateChanged(bool mChecked)
     {
-        Q_UNUSED(checked);
-        this->trigger_setting_updated();
+        Q_UNUSED(mChecked);
+        this->triggerSettingUpdated();
     }
 }

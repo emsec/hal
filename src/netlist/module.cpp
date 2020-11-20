@@ -1,11 +1,12 @@
 #include "hal_core/netlist/module.h"
 
-#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/event_system/module_event_handler.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
@@ -31,7 +32,7 @@ namespace hal
     {
         if (utils::trim(name).empty())
         {
-            log_error("module", "empty name is not allowed");
+            log_error("module", "empty name is not allowed.");
             return;
         }
         if (name != m_name)
@@ -55,6 +56,11 @@ namespace hal
 
             module_event_handler::notify(module_event_handler::event::type_changed, this);
         }
+    }
+
+    Grouping* Module::get_grouping() const
+    {
+        return m_grouping;
     }
 
     Module* Module::get_parent_module() const
@@ -555,5 +561,25 @@ namespace hal
         }
 
         return m_output_net_to_port_name;
+    }
+
+    void Module::set_next_input_port_id(u32 id)
+    {
+        m_next_input_port_id = id;
+    }
+
+    u32 Module::get_next_input_port_id() const
+    {
+        return m_next_input_port_id;
+    }
+
+    void Module::set_next_output_port_id(u32 id)
+    {
+        m_next_output_port_id = id;
+    }
+
+    u32 Module::get_next_output_port_id() const
+    {
+        return m_next_output_port_id;
     }
 }    // namespace hal

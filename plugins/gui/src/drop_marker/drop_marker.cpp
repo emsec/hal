@@ -4,74 +4,74 @@
 
 namespace hal
 {
-    DropMarker::DropMarker(Qt::Orientation orientation, QWidget* parent) : QFrame(parent), m_animation(new QPropertyAnimation(this)), m_orientation(orientation), m_fixed_width(0), m_fixed_height(0)
+    DropMarker::DropMarker(Qt::Orientation orientation, QWidget* parent) : QFrame(parent), mAnimation(new QPropertyAnimation(this)), mOrientation(orientation), mFixedWidth(0), mFixedHeight(0)
     {
-        m_animation->setTargetObject(this);
-        m_animation->setDuration(200);
-        m_animation->setStartValue(0);
-        m_animation->setEndValue(0);
+        mAnimation->setTargetObject(this);
+        mAnimation->setDuration(200);
+        mAnimation->setStartValue(0);
+        mAnimation->setEndValue(0);
 
-        if (m_orientation == Qt::Horizontal)
-            m_animation->setPropertyName("fixed_width");
-        if (m_orientation == Qt::Vertical)
-            m_animation->setPropertyName("fixed_height");
+        if (mOrientation == Qt::Horizontal)
+            mAnimation->setPropertyName("fixedWidth");
+        if (mOrientation == Qt::Vertical)
+            mAnimation->setPropertyName("fixedHeight");
     }
 
-    int DropMarker::fixed_width()
+    int DropMarker::fixedWidth()
     {
-        return m_fixed_width;
+        return mFixedWidth;
     }
 
-    int DropMarker::fixed_height()
+    int DropMarker::fixedHeight()
     {
-        return m_fixed_height;
+        return mFixedHeight;
     }
 
-    void DropMarker::set_fixed_width(int width)
+    void DropMarker::setFixedWidth(int width)
     {
-        m_fixed_width = width;
+        mFixedWidth = width;
 
         setMinimumWidth(width);
         setMaximumWidth(width);
     }
 
-    void DropMarker::set_fixed_height(int height)
+    void DropMarker::setFixedHeight(int height)
     {
-        m_fixed_height = height;
+        mFixedHeight = height;
 
         setMinimumHeight(height);
         setMaximumHeight(height);
     }
 
-    void DropMarker::set_end_value(int value)
+    void DropMarker::setEndValue(int value)
     {
-        m_animation->setEndValue(value);
+        mAnimation->setEndValue(value);
     }
 
     void DropMarker::expand()
     {
-        m_animation->setDirection(QPropertyAnimation::Forward);
+        mAnimation->setDirection(QPropertyAnimation::Forward);
 
-        if (m_animation->state() == QAbstractAnimation::Stopped)
-            m_animation->start();
+        if (mAnimation->state() == QAbstractAnimation::Stopped)
+            mAnimation->start();
     }
 
     void DropMarker::collapse()
     {
-        m_animation->setDirection(QPropertyAnimation::Backward);
+        mAnimation->setDirection(QPropertyAnimation::Backward);
 
-        if (m_animation->state() == QAbstractAnimation::Stopped)
-            m_animation->start();
+        if (mAnimation->state() == QAbstractAnimation::Stopped)
+            mAnimation->start();
     }
 
     void DropMarker::reset()
     {
-        if (m_animation->state() == QAbstractAnimation::Running)
-            m_animation->stop();
+        if (mAnimation->state() == QAbstractAnimation::Running)
+            mAnimation->stop();
 
-        if (m_orientation == Qt::Horizontal)
-            set_fixed_width(0);
-        if (m_orientation == Qt::Vertical)
-            set_fixed_height(0);
+        if (mOrientation == Qt::Horizontal)
+            setFixedWidth(0);
+        if (mOrientation == Qt::Vertical)
+            setFixedHeight(0);
     }
 }

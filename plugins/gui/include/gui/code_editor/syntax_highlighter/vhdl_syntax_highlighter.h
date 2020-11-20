@@ -45,35 +45,35 @@ namespace hal
         //    QRegularExpression::MatchOptions m_match_options;
         //    QStringList m_valid_identifier;
         //    QStringList m_types;
-        //    QStringList m_keywords;
+        //    QStringList mKeywords;
         //    QHash<QString, QTextCharFormat> m_formatters;
         //
         //    QString m_current_state;
         //    QStack<QString> m_stack;
         //
-        //    struct highlighting_rule
+        //    struct HighlightingRule
         //    {
         //        QRegularExpression expression;
         //        QStringList list;
         //        QString state;
         //    };
         //
-        //    highlighting_rule make_rule(QString expression, QStringList list, QString state);
+        //    HighlightingRule make_rule(QString expression, QStringList list, QString state);
         //
-        //    highlighting_rule m_keyword_rule;
-        //    highlighting_rule m_type_rule;
-        //    QHash<QString, QList<highlighting_rule>> m_rules;
+        //    HighlightingRule m_keyword_rule;
+        //    HighlightingRule m_type_rule;
+        //    QHash<QString, QList<HighlightingRule>> m_rules;
 
-        struct highlighting_rule
+        struct HighlightingRule
         {
-            QRegularExpression pattern;
-            QTextCharFormat format;
+            QRegularExpression mPattern;
+            QTextCharFormat mFormat;
         };
 
-        QVector<highlighting_rule> m_highlighting_rules;
+        QVector<HighlightingRule> mHighlightingRules;
 
-        QRegularExpression m_single_line_comment_expression;
-        QRegularExpression m_comment_start_expression;
-        QRegularExpression m_comment_end_expression;
+        QRegularExpression mSingleLineCommentExpression;
+        QRegularExpression mCommentStartExpression;
+        QRegularExpression mCommentEndExpression;
     };
 }

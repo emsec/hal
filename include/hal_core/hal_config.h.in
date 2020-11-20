@@ -21,10 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-/* config.h.in */
+/* hal_config.h.in */
 
-/* spdlog >= 1.3.1 */
-#cmakedefine SPDLOG_1_3_1_OR_HIGHER 1
-
-/* spdlog <= 0.17.0 */
-#cmakedefine SPDLOG_0_17_0_OR_LOWER 1
+/* use Study Config for build */
+#cmakedefine HAL_STUDY 0

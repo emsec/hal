@@ -167,6 +167,8 @@ if(UNIX)
 
     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+    #set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=address")
+
 
     # SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fsanitize=address")
     # SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
@@ -192,6 +194,8 @@ endif(${CMAKE_BUILD_TYPE} EQUAL "Debug" AND APPLE AND CMAKE_HOST_APPLE)
 #####   Setup main target to hold all build definitions and options
 ####################################################################
 
+# Sphinx-doc build dir
+set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx-build")
 
 ################################
 #####   Enable Testing
@@ -224,6 +228,17 @@ if(BUILD_TESTS)
 endif()
 
 ##################################
+#####   Configure Define Files
+##################################
+
+#Configure Version file
+configure_file(${CMAKE_SOURCE_DIR}/include/hal_core/hal_version.h.in ${CMAKE_BINARY_DIR}/hal_version.h @ONLY)
+
+# Declare Study Config in hal_config.h
+option(HAL_STUDY "Enable Study Config" OFF)
+configure_file(${CMAKE_SOURCE_DIR}/include/hal_core/hal_config.h.in ${CMAKE_BINARY_DIR}/hal_config.h @ONLY)
+
+##################################
 #####   Include Code Directories
 ##################################
 add_subdirectory("src")
@@ -245,6 +260,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hal.pc.in ${CMAKE_BINARY_DIR}/hal.pc 
 
 set(HAL_CMAKECONFIG_INSTALL_DIR "share/cmake/${PROJECT_NAME}" CACHE STRING "install path for halConfig.cmake")
 
+install(FILES ${CMAKE_BINARY_DIR}/hal_version.h DESTINATION ${INCLUDE_INSTALL_DIRECTORY}/hal_core/)
+install(FILES ${CMAKE_BINARY_DIR}/hal_config.h DESTINATION ${INCLUDE_INSTALL_DIRECTORY}/hal_core/)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${INCLUDE_INSTALL_DIRECTORY})
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.json")
 install(DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries DESTINATION ${SHARE_INSTALL_DIRECTORY} PATTERN "*.lib")

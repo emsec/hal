@@ -41,56 +41,56 @@ namespace hal
         return std::make_unique<PluginGui>();
     }
 
-    SettingsManager* g_settings_manager             = nullptr;    // this relay MUST be initialized before everything else since other components need to connect() to it when initializing
-    QSettings* g_settings                           = nullptr;
-    QSettings* g_gui_state                          = nullptr;
-    SettingsRelay* g_settings_relay                 = nullptr;
-    KeybindManager* g_keybind_manager               = nullptr;
-    WindowManager* g_window_manager                 = nullptr;
-    NotificationManager* g_notification_manager     = nullptr;
-    ContentManager* g_content_manager               = nullptr;
-    std::unique_ptr<Netlist> g_netlist_owner        = nullptr;
-    Netlist* g_netlist                              = nullptr;
-    NetlistRelay* g_netlist_relay                   = nullptr;
-    PluginRelay* g_plugin_relay                     = nullptr;
-    SelectionRelay* g_selection_relay               = nullptr;
-    FileStatusManager* g_file_status_manager        = nullptr;
-    ThreadPool* g_thread_pool                       = nullptr;
-    GraphContextManager* g_graph_context_manager    = nullptr;
-    GuiApi* g_gui_api                               = nullptr;
-    std::unique_ptr<PythonContext> g_python_context = nullptr;
+    SettingsManager* gSettingsManager             = nullptr;    // this relay MUST be initialized before everything else since other components need to connect() to it when initializing
+    QSettings* mGSettings                           = nullptr;
+    QSettings* gGuiState                          = nullptr;
+    SettingsRelay* gSettingsRelay                 = nullptr;
+    KeybindManager* gKeybindManager               = nullptr;
+    WindowManager* gWindowManager                 = nullptr;
+    NotificationManager* gNotificationManager     = nullptr;
+    ContentManager* gContentManager               = nullptr;
+    std::unique_ptr<Netlist> gNetlistOwner        = nullptr;
+    Netlist* gNetlist                              = nullptr;
+    NetlistRelay* gNetlistRelay                   = nullptr;
+    PluginRelay* gPluginRelay                     = nullptr;
+    SelectionRelay* gSelectionRelay               = nullptr;
+    FileStatusManager* gFileStatusManager        = nullptr;
+    ThreadPool* gThreadPool                       = nullptr;
+    GraphContextManager* gGraphContextManager    = nullptr;
+    GuiApi* gGuiApi                               = nullptr;
+    std::unique_ptr<PythonContext> gPythonContext = nullptr;
 
     // NOTE
     // ORDER = LOGGER -> SETTINGS -> (STYLE / RELAYS / OTHER STUFF) -> MAINWINDOW (= EVERYTHING ELSE & DATA)
     // USE POINTERS FOR EVERYTHING ?
 
-    static void handle_program_arguments(const ProgramArguments& args)
+    static void handleProgramArguments(const ProgramArguments& args)
     {
         if (args.is_option_set("--input-file"))
         {
-            auto file_name = std::filesystem::path(args.get_parameter("--input-file"));
-            log_info("gui", "GUI started with file {}.", file_name.string());
-            FileManager::get_instance()->open_file(QString::fromStdString(file_name.string()));
+            auto fileName = std::filesystem::path(args.get_parameter("--input-file"));
+            log_info("gui", "GUI started with file {}.", fileName.string());
+            FileManager::get_instance()->openFile(QString::fromStdString(fileName.string()));
         }
     }
 
     static void cleanup()
     {
-        delete g_settings_manager;
-        delete g_settings;
-        delete g_gui_state;
-        delete g_keybind_manager;
-        delete g_file_status_manager;
-        delete g_graph_context_manager;
-        delete g_netlist_relay;
-        delete g_plugin_relay;
-        delete g_selection_relay;
-        delete g_settings_relay;
-        delete g_notification_manager;
-        //    delete g_window_manager;
+        delete gSettingsManager;
+        delete mGSettings;
+        delete gGuiState;
+        delete gKeybindManager;
+        delete gFileStatusManager;
+        delete gGraphContextManager;
+        delete gNetlistRelay;
+        delete gPluginRelay;
+        delete gSelectionRelay;
+        delete gSettingsRelay;
+        delete gNotificationManager;
+        //    delete gWindowManager;
     }
 
-    static void m_cleanup(int sig)
+    static void mCleanup(int sig)
     {
         if (sig == SIGINT)
         {
@@ -105,7 +105,7 @@ namespace hal
         const char** argv;
         args.get_original_arguments(&argc, &argv);
         QApplication a(argc, const_cast<char**>(argv));
-        FocusLogger focusLogger(&a);
+        //FocusLogger focusLogger(&a);
 
         QObject::connect(&a, &QApplication::aboutToQuit, cleanup);
 
@@ -147,12 +147,12 @@ namespace hal
         gate_library_manager::load_all();
 
         // TEST
-        //    g_settings->setValue("stylesheet/base", ":/style/test base");
-        //    g_settings->setValue("stylesheet/definitions", ":/style/test definitions2");
-        //    a.setStyleSheet(style::get_stylesheet());
+        //    mGSettings->setValue("stylesheet/base", ":/style/test base");
+        //    mGSettings->setValue("stylesheet/definitions", ":/style/test definitions2");
+        //    a.setStyleSheet(style::getStylesheet());
 
         //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
-        //this settingsobject is currently neccessary to read from the settings from here, because the g_settings are not yet initialized(?)
+        //this settingsobject is currently neccessary to read from the settings from here, because the mGSettings are not yet initialized(?)
         QSettings tempsettings_to_read_from(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
         QString stylesheet_to_open = ":/style/darcula";    //default style
 
@@ -167,32 +167,32 @@ namespace hal
         stylesheet.close();
         //##############END OF TEMPORARY TESTING TO SWITCH BETWEEN STYLESHEETS
 
-        style::debug_update();
+        style::debugUpdate();
 
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
-        g_settings_manager      = new SettingsManager();
-        g_settings              = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
-        g_gui_state             = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
-        g_netlist_relay         = new NetlistRelay();
-        g_plugin_relay          = new PluginRelay();
-        g_selection_relay       = new SelectionRelay();
-        g_settings_relay        = new SettingsRelay();
-        g_keybind_manager       = new KeybindManager();
-        g_file_status_manager   = new FileStatusManager();
-        g_graph_context_manager = new GraphContextManager();
+        gSettingsManager      = new SettingsManager();
+        mGSettings              = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
+        gGuiState             = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
+        gNetlistRelay         = new NetlistRelay();
+        gPluginRelay          = new PluginRelay();
+        gSelectionRelay       = new SelectionRelay();
+        gSettingsRelay        = new SettingsRelay();
+        gKeybindManager       = new KeybindManager();
+        gFileStatusManager   = new FileStatusManager();
+        gGraphContextManager = new GraphContextManager();
 
-        //g_window_manager       = new WindowManager();
-        g_notification_manager = new NotificationManager();
+        //gWindowManager       = new WindowManager();
+        gNotificationManager = new NotificationManager();
 
-        g_thread_pool = new ThreadPool();
+        gThreadPool = new ThreadPool();
 
-        g_gui_api = new GuiApi();
+        gGuiApi = new GuiApi();
 
-        signal(SIGINT, m_cleanup);
+        signal(SIGINT, mCleanup);
 
         MainWindow w;
-        handle_program_arguments(args);
+        handleProgramArguments(args);
         w.show();
         auto ret = a.exec();
         return ret;
@@ -214,15 +214,16 @@ namespace hal
         l.add_channel("user", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         l.add_channel("gui", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         l.add_channel("python", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+        l.add_channel("UserStudy", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
 
     ProgramOptions PluginGui::get_cli_options() const
     {
-        ProgramOptions description;
+        ProgramOptions mDescription;
 
-        description.add({"--gui", "-g"}, "start graphical user interface");
+        mDescription.add({"--gui", "-g"}, "start graphical user interface");
 
-        return description;
+        return mDescription;
     }
 
 }    // namespace hal

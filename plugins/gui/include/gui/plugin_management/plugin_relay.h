@@ -37,13 +37,13 @@ namespace hal
         explicit PluginRelay(QObject* parent = nullptr);
         ~PluginRelay();
 
-        void plugin_manager_callback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
+        void pluginManagerCallback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
 
     Q_SIGNALS:
-        void plugin_loaded(const QString& name, const QString& path);
-        void plugin_unloaded(const QString& name, const QString& path);
+        void pluginLoaded(const QString& name, const QString& path);
+        void pluginUnloaded(const QString& name, const QString& path);
 
     private:
-        u64 m_callback_id;
+        u64 mCallbackId;
     };
 }

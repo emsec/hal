@@ -5,12 +5,12 @@
 
 namespace hal
 {
-    ModuleRelay::ModuleRelay(QObject* parent) : QObject(parent), m_model(new ModuleModel())
+    ModuleRelay::ModuleRelay(QObject* parent) : QObject(parent), mModel(new ModuleModel())
     {
-        connect(g_netlist_relay, &NetlistRelay::module_event, this, &ModuleRelay::handle_module_event);
+        connect(gNetlistRelay, &NetlistRelay::moduleEvent, this, &ModuleRelay::handleModuleEvent);
     }
 
-    void ModuleRelay::set_module_color(const u32 id, const QColor& color)
+    void ModuleRelay::setModuleColor(const u32 id, const QColor& color)
     {
         Q_UNUSED(id);
         Q_UNUSED(color);
@@ -23,20 +23,20 @@ namespace hal
         // MANUAL UPDATE OF SUBSCRIBERS
     }
 
-    void ModuleRelay::set_module_compressed(const u32 id, const bool compressed)
+    void ModuleRelay::setModuleCompressed(const u32 id, const bool mCompressed)
     {
         Q_UNUSED(id);
-        Q_UNUSED(compressed);
+        Q_UNUSED(mCompressed);
         //    if (!m_module_extensions.contains(id))
         //        return;
 
-        //    m_module_extensions.value(id)->compressed = compressed;
+        //    m_module_extensions.value(id)->mCompressed = mCompressed;
 
         // SIGNAL OR
         // MANUAL UPDATE OF SUBSCRIBERS
     }
 
-    void ModuleRelay::set_module_hidden(const u32 id, const bool hidden)
+    void ModuleRelay::setModuleHidden(const u32 id, const bool hidden)
     {
         Q_UNUSED(id);
         Q_UNUSED(hidden);
@@ -49,7 +49,7 @@ namespace hal
         // MANUAL UPDATE OF SUBSCRIBERS
     }
 
-    void ModuleRelay::handle_module_event(module_event_handler::event ev, Module* object, u32 associated_data)
+    void ModuleRelay::handleModuleEvent(module_event_handler::event ev, Module* object, u32 associated_data)
     {
         Q_UNUSED(associated_data);
         switch (ev)
@@ -57,7 +57,7 @@ namespace hal
             case module_event_handler::event::created: {
                 //< no associated_data
 
-                ModuleItem* parent_item = m_ModuleItems.value(object->get_parent_module()->get_id());
+                ModuleItem* parent_item = mModuleItems.value(object->get_parent_module()->get_id());
 
                 if (!parent_item)
                     return;    // SHOULD NOT BE POSSIBLE

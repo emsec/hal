@@ -31,10 +31,10 @@ namespace hal
         public:
             virtual bool validate(const QString &input) = 0;
 
-            void set_fail_text(const QString& text);
-            QString fail_text() const;
+            void setFailText(const QString& text);
+            QString failText() const;
 
         protected:
-            QString m_fail_text = "Choosen input is not allowed.";
+            QString mFailText = "Choosen input is not allowed.";
     };
 }

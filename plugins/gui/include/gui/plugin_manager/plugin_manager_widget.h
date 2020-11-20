@@ -38,17 +38,17 @@ namespace hal
 
     public:
         explicit PluginManagerWidget(QWidget* parent = 0);
-        void set_plugin_model(PluginModel* m_plugin_model);
-        virtual void setup_toolbar(Toolbar* Toolbar);
+        void setPluginModel(PluginModel* mPluginModel);
+        virtual void setupToolbar(Toolbar* Toolbar);
 
     private Q_SLOTS:
-        void on_action_add_triggered();
-        void on_action_remove_triggered();
+        void onActionAddTriggered();
+        void onActionRemoveTriggered();
 
     private:
-        PluginModel* m_model;
-        QAction* m_add_action;
-        QAction* m_remove_action;
-        QTableView m_table_view;
+        PluginModel* mModel;
+        QAction* mAddAction;
+        QAction* mRemoveAction;
+        QTableView mTableView;
     };
 }

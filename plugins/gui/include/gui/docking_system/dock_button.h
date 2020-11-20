@@ -45,33 +45,33 @@ namespace hal
 
         void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
 
-        void adjust_size();
-        int relative_width();
+        void adjustSize();
+        int relativeWidth();
         ContentWidget* widget();
         bool hidden();
         bool available();
-        void set_available(bool available);
-        void set_relative_height(int height);
+        void setAvailable(bool available);
+        void setRelativeHeight(int height);
 
         //overshadowed functions
         void hide();
         void show();
 
     public Q_SLOTS:
-        void handle_clicked(bool checked);
+        void handleClicked(bool mChecked);
 
     private:
-        ContentWidget* m_widget;
-        button_orientation m_orientation;
-        int m_width;
-        int m_height;
-        int m_relative_width;
-        int m_relative_height;
-        int m_icon_size;
-        int m_text_offset;
-        int m_width_padding;
-        int m_height_padding;
-        bool m_hidden;
-        bool m_available = true;
+        ContentWidget* mWidget;
+        button_orientation mOrientation;
+        int mWidth;
+        int mHeight;
+        int mRelativeWidth;
+        int mRelativeHeight;
+        int mIconSize;
+        int mTextOffset;
+        int mWidthPadding;
+        int mHeightPadding;
+        bool mHidden;
+        bool mAvailable = true;
     };
 }

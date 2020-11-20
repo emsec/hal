@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_config.h"
 
 #include <QObject>
 #include <QPair>
@@ -41,19 +42,19 @@ namespace hal
         Q_OBJECT
 
     public:
-        enum class item_type
+        enum class ItemType
         {
-            none   = 0,
-            gate   = 1,
-            net    = 2,
-            module = 3
+            None   = 0,
+            Gate   = 1,
+            Net    = 2,
+            Module = 3
         };
 
-        enum class subfocus
+        enum class Subfocus
         {
-            none  = 0,
-            left  = 1,
-            right = 2
+            None  = 0,
+            Left  = 1,
+            Right = 2
             //        up     = 3,
             //        down   = 4,
             //        center = 5,
@@ -61,32 +62,32 @@ namespace hal
 
         enum class Mode
         {
-            override = 0,
-            add      = 1,
-            remove   = 2
+            Override = 0,
+            Add      = 1,
+            Remove   = 2
         };
 
         explicit SelectionRelay(QObject* parent = nullptr);
 
         void clear(); // does not emit the "update" signal!
-        void clear_and_update();
+        void clearAndUpdate();
 
-        void register_sender(void* sender, QString name);
-        void remove_sender(void* sender);
+        void registerSender(void* sender, QString name);
+        void removeSender(void* sender);
 
         // TEST METHOD
         // USE RELAY METHODS OR ACCESS SIGNALS DIRECTLY ???
-        void relay_selection_changed(void* sender);
-        void relay_subfocus_changed(void* sender);
+        void relaySelectionChanged(void* sender);
+        void relaySubfocusChanged(void* sender);
 
-        void navigate_up();
-        void navigate_down();
-        void navigate_left();
-        void navigate_right();
+        void navigateUp();
+        void navigateDown();
+        void navigateLeft();
+        void navigateRight();
 
-        void handle_module_removed(const u32 id);
-        void handle_gate_removed(const u32 id);
-        void handle_net_removed(const u32 id);
+        void handleModuleRemoved(const u32 id);
+        void handleGateRemoved(const u32 id);
+        void handleNetRemoved(const u32 id);
 
         bool isModuleSelected(u32 id) const;
         bool isGateSelected(u32 id) const;
@@ -100,51 +101,56 @@ namespace hal
         // TEST SIGNAL
         // ADD ADDITIONAL INFORMATION (LIKE PREVIOUS FOCUS) OR LEAVE THAT TO SUBSCRIBERS ???
         // USE SEPARATE OR COMBINED SIGNALS ??? MEANING DOES A SELECTION CAHNGE FIRE A SUBSELECTION CHANGED SIGNAL OR IS THAT IMPLICIT
-        void selection_changed(void* sender);
+        void selectionChanged(void* sender);
         //void focus_changed(void* sender); // UNCERTAIN
-        void subfocus_changed(void* sender);
+        void subfocusChanged(void* sender);
 
     public:
-        QSet<u32> m_selected_gates;
-        QSet<u32> m_selected_nets;
-        QSet<u32> m_selected_modules;
+        QSet<u32> mSelectedGates;
+        QSet<u32> mSelectedNets;
+        QSet<u32> mSelectedModules;
 
         // MAYBE UNNECESSARY
-        item_type m_current_type;
-        u32 m_current_id;
+        ItemType mCurrentType;
+        u32 mCurrentId;
 
         // USE ARRAY[0] INSTEAD OF MEMBER ???
-        item_type m_focus_type;
-        u32 m_focus_id;
+        ItemType mFocusType;
+        u32 mFocusId;
 
-        subfocus m_subfocus;
-        u32 m_subfocus_index;    // HANDLE VIA INT OR STRING ?? INDEX HAS TO BE KNOWN ANYWAY TO FIND NEXT / PREVIOUS BOTH OPTIONS KIND OF BAD
+        Subfocus mSubfocus;
+        u32 mSubfocusIndex;    // HANDLE VIA INT OR STRING ?? INDEX HAS TO BE KNOWN ANYWAY TO FIND NEXT / PREVIOUS BOTH OPTIONS KIND OF BAD
 
     private:
         QSet<u32> mModulesSuppressedByFilter;
         QSet<u32> mGatesSuppressedByFilter;
         QSet<u32> mNetsSuppressedByFilter;
 
-        static bool s_navigation_skips_enabled;    // DOES THIS HAVE ANY USE ???
+        static bool sNavigationSkipsEnabled;    // DOES THIS HAVE ANY USE ???
 
         // RENAME THESE METHODS ???
-        void follow_gate_input_pin(Gate* g, u32 input_pin_index);
-        void follow_gate_output_pin(Gate* g, u32 output_pin_index);
-        void follow_module_input_pin(Module* m, u32 input_pin_index);
-        void follow_module_output_pin(Module* m, u32 output_pin_index);
+        void followGateInputPin(Gate* g, u32 input_pin_index);
+        void followGateOutputPin(Gate* g, u32 output_pin_index);
+        void followModuleInputPin(Module* m, u32 input_pin_index);
+        void followModuleOutputPin(Module* m, u32 output_pin_index);
 
-        void follow_net_to_source(Net* n);
-        void follow_net_to_destination(Net* n, u32 dst_index);
+        void followNetToSource(Net* n);
+        void followNetToDestination(Net* n, u32 dst_index);
 
-        void subfocus_none();
-        void subfocus_left();
-        void subfocus_right();
+
+#ifdef HAL_STUDY
+        void evaluateSelectionChanged(void* sender);
+#endif
+        void subfocusNone();
+        void subfocusLeft();
+        void subfocusRight();
+
 
         //    bool try_subfocus_left();
         //    bool try_subfocus_right();
         //    bool try_subfocus_up();
         //    bool try_subfocus_down();
 
-        QVector<QPair<void*, QString>> m_sender_register;
+        QVector<QPair<void*, QString>> mSenderRegister;
     };
 }

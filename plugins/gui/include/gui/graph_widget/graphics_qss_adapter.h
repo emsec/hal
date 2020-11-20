@@ -31,86 +31,86 @@ namespace hal
     {
         Q_OBJECT
 
-        Q_PROPERTY(QColor gate_base_color READ gate_base_color WRITE set_gate_base_color)
-        Q_PROPERTY(QColor net_base_color READ net_base_color WRITE set_net_base_color)
+        Q_PROPERTY(QColor gateBaseColor READ gateBaseColor WRITE setGateBaseColor)
+        Q_PROPERTY(QColor netBaseColor READ netBaseColor WRITE setNetBaseColor)
 
-        Q_PROPERTY(QColor gate_selection_color READ gate_selection_color WRITE set_gate_selection_color)
-        Q_PROPERTY(QColor net_selection_color READ net_selection_color WRITE set_net_selection_color)
+        Q_PROPERTY(QColor gateSelectionColor READ gateSelectionColor WRITE setGateSelectionColor)
+        Q_PROPERTY(QColor netSelectionColor READ netSelectionColor WRITE setNetSelectionColor)
 
-        Q_PROPERTY(QFont gate_name_font READ gate_name_font WRITE set_gate_name_font)
-        Q_PROPERTY(QFont gate_type_font READ gate_type_font WRITE set_gate_type_font)
-        Q_PROPERTY(QFont gate_pin_font READ gate_pin_font WRITE set_gate_pin_font)
+        Q_PROPERTY(QFont gateNameFont READ gateNameFont WRITE setGateNameFont)
+        Q_PROPERTY(QFont gateTypeFont READ gateTypeFont WRITE setGateTypeFont)
+        Q_PROPERTY(QFont gatePinFont READ gatePinFont WRITE setGatePinFont)
 
-        Q_PROPERTY(QFont net_font READ net_font WRITE set_net_font)
+        Q_PROPERTY(QFont netFont READ netFont WRITE setNetFont)
 
-        Q_PROPERTY(QColor grid_base_line_color READ grid_base_line_color WRITE set_grid_base_line_color)
-        Q_PROPERTY(QColor grid_cluster_line_color READ grid_cluster_line_color WRITE set_grid_cluster_line_color)
+        Q_PROPERTY(QColor gridBaseLineColor READ gridBaseLineColor WRITE setGridBaseLineColor)
+        Q_PROPERTY(QColor gridClusterLineColor READ gridClusterLineColor WRITE setGridClusterLineColor)
 
-        Q_PROPERTY(QColor grid_base_dot_color READ grid_base_dot_color WRITE set_grid_base_dot_color)
-        Q_PROPERTY(QColor grid_cluster_dot_color READ grid_cluster_dot_color WRITE set_grid_cluster_dot_color)
+        Q_PROPERTY(QColor gridBaseDotColor READ gridBaseDotColor WRITE setGridBaseDotColor)
+        Q_PROPERTY(QColor gridClusterDotColor READ gridClusterDotColor WRITE setGridClusterDotColor)
 
     public:
         explicit GraphicsQssAdapter(QWidget* parent = nullptr);
 
         void repolish();
 
-        QColor gate_base_color() const;
-        QColor net_base_color() const;
+        QColor gateBaseColor() const;
+        QColor netBaseColor() const;
 
         // GATE BACKGROUND COLOR
         // GATE OUTLINE COLOR
         // ...
 
-        QColor gate_selection_color() const;
-        QColor net_selection_color() const;
+        QColor gateSelectionColor() const;
+        QColor netSelectionColor() const;
 
-        QFont gate_name_font() const;
-        QFont gate_type_font() const;
-        QFont gate_pin_font() const;
+        QFont gateNameFont() const;
+        QFont gateTypeFont() const;
+        QFont gatePinFont() const;
 
-        QFont net_font() const;
+        QFont netFont() const;
 
-        QColor grid_base_line_color() const;
-        QColor grid_cluster_line_color() const;
+        QColor gridBaseLineColor() const;
+        QColor gridClusterLineColor() const;
 
-        QColor grid_base_dot_color() const;
-        QColor grid_cluster_dot_color() const;
+        QColor gridBaseDotColor() const;
+        QColor gridClusterDotColor() const;
 
-        void set_gate_base_color(const QColor& color);
-        void set_net_base_color(const QColor& color);
+        void setGateBaseColor(const QColor& color);
+        void setNetBaseColor(const QColor& color);
 
-        void set_gate_selection_color(const QColor& color);
-        void set_net_selection_color(const QColor& color);
+        void setGateSelectionColor(const QColor& color);
+        void setNetSelectionColor(const QColor& color);
 
-        void set_gate_name_font(const QFont& font);
-        void set_gate_type_font(const QFont& font);
-        void set_gate_pin_font(const QFont& font);
+        void setGateNameFont(const QFont& font);
+        void setGateTypeFont(const QFont& font);
+        void setGatePinFont(const QFont& font);
 
-        void set_net_font(const QFont& font);
+        void setNetFont(const QFont& font);
 
-        void set_grid_base_line_color(const QColor& color);
-        void set_grid_cluster_line_color(const QColor& color);
+        void setGridBaseLineColor(const QColor& color);
+        void setGridClusterLineColor(const QColor& color);
 
-        void set_grid_base_dot_color(const QColor& color);
-        void set_grid_cluster_dot_color(const QColor& color);
+        void setGridBaseDotColor(const QColor& color);
+        void setGridClusterDotColor(const QColor& color);
 
     private:
-        QColor m_gate_base_color;
-        QColor m_net_base_color;
+        QColor mGateBaseColor;
+        QColor mNetBaseColor;
 
-        QColor m_gate_selection_color;
-        QColor m_net_selection_color;
+        QColor mGateSelectionColor;
+        QColor mNetSelectionColor;
 
-        QFont m_gate_name_font;
-        QFont m_gate_type_font;
-        QFont m_gate_pin_font;
+        QFont mGateNameFont;
+        QFont mGateTypeFont;
+        QFont mGatePinFont;
 
-        QFont m_net_font;
+        QFont mNetFont;
 
-        QColor m_grid_base_line_color;
-        QColor m_grid_cluster_line_color;
+        QColor mGridBaseLineColor;
+        QColor mGridClusterLineColor;
 
-        QColor m_grid_base_dot_color;
-        QColor m_grid_cluster_dot_color;
+        QColor mGridBaseDotColor;
+        QColor mGridClusterDotColor;
     };
 }

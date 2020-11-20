@@ -20,124 +20,124 @@
 namespace hal
 {
     WindowManager::WindowManager(QObject* parent) : QObject(parent),
-        m_main_window           (nullptr),
-        m_toolbar               (new WindowToolbar(nullptr)),
-        m_action_open_file      (new QAction("Open File", this)),
-        m_action_close_file     (new QAction("Close File", this)),
-        m_action_save           (new QAction("Save", this)),
-        m_action_schedule       (new QAction("Schedule", this)),
-        m_action_run_schedule   (new QAction("Run Schedule", this)),
-        m_action_content        (new QAction("Content", this)),
-        m_action_settings       (new QAction("Settings", this)),
-        m_action_about          (new QAction("About", this)),
-        m_welcome_screen        (new WelcomeScreen()),
-        m_plugin_schedule_widget(new PluginScheduleWidget()),
-        m_main_settings_widget  (new MainSettingsWidget())
+        mMainWindow           (nullptr),
+        mToolbar               (new WindowToolbar(nullptr)),
+        mActionOpenFile      (new QAction("Open File", this)),
+        mActionCloseFile     (new QAction("Close File", this)),
+        mActionSave           (new QAction("Save", this)),
+        mActionSchedule       (new QAction("Schedule", this)),
+        mActionRunSchedule   (new QAction("Run Schedule", this)),
+        mActionContent        (new QAction("Content", this)),
+        mActionSettings       (new QAction("Settings", this)),
+        mActionAbout          (new QAction("About", this)),
+        mWelcomeScreen        (new WelcomeScreen()),
+        mPluginScheduleWidget(new PluginScheduleWidget()),
+        mMainSettingsWidget  (new MainSettingsWidget())
     {
-        connect(m_action_open_file,    &QAction::triggered, this, &WindowManager::handle_action_open);
-        connect(m_action_close_file,   &QAction::triggered, this, &WindowManager::handle_action_close);
-        connect(m_action_save,         &QAction::triggered, this, &WindowManager::handle_action_save);
-        connect(m_action_schedule,     &QAction::triggered, this, &WindowManager::handle_action_schedule);
-        connect(m_action_run_schedule, &QAction::triggered, this, &WindowManager::handle_action_run_schedule);
-        connect(m_action_content,      &QAction::triggered, this, &WindowManager::handle_action_content);
-        connect(m_action_settings,     &QAction::triggered, this, &WindowManager::handle_action_settings);
-        connect(m_action_about,        &QAction::triggered, this, &WindowManager::handle_action_about);
+        connect(mActionOpenFile,    &QAction::triggered, this, &WindowManager::handleActionOpen);
+        connect(mActionCloseFile,   &QAction::triggered, this, &WindowManager::handleActionClose);
+        connect(mActionSave,         &QAction::triggered, this, &WindowManager::handleActionSave);
+        connect(mActionSchedule,     &QAction::triggered, this, &WindowManager::handleActionSchedule);
+        connect(mActionRunSchedule, &QAction::triggered, this, &WindowManager::handleActionRunSchedule);
+        connect(mActionContent,      &QAction::triggered, this, &WindowManager::handleActionContent);
+        connect(mActionSettings,     &QAction::triggered, this, &WindowManager::handleActionSettings);
+        connect(mActionAbout,        &QAction::triggered, this, &WindowManager::handleActionAbout);
 
         repolish();
 
-        m_toolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        mToolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
-        m_toolbar->addAction(m_action_open_file);
-        m_toolbar->addAction(m_action_save);
-        m_toolbar->addAction(m_action_schedule);
-        m_toolbar->addAction(m_action_run_schedule);
-        m_toolbar->addAction(m_action_content);
-        m_toolbar->add_spacer();
-        m_toolbar->addAction(m_action_settings);
+        mToolbar->addAction(mActionOpenFile);
+        mToolbar->addAction(mActionSave);
+        mToolbar->addAction(mActionSchedule);
+        mToolbar->addAction(mActionRunSchedule);
+        mToolbar->addAction(mActionContent);
+        mToolbar->addSpacer();
+        mToolbar->addAction(mActionSettings);
 
         // LOAD ALL LAYOUTS
         // RESTORE SELECTED LAYOUT OR USE DEFAULT LAYOUT
 
         // DEBUG CODE
-        add_window();
-        add_window();
+        addWindow();
+        addWindow();
 
         // CHECK IF SHORTCUTS WORK AS EXPECTED
-        m_action_open_file->setShortcut(QKeySequence("Ctrl+O"));
-        m_action_save->setShortcut(QKeySequence("Ctrl+S"));
-        m_action_run_schedule->setShortcut(QKeySequence("Ctrl+Shift+R"));
+        mActionOpenFile->setShortcut(QKeySequence("Ctrl+O"));
+        mActionSave->setShortcut(QKeySequence("Ctrl+S"));
+        mActionRunSchedule->setShortcut(QKeySequence("Ctrl+Shift+R"));
 
-        m_main_window->show_special_screen(m_welcome_screen);
+        mMainWindow->showSpecialScreen(mWelcomeScreen);
 
         // THIS WORKS, COMPARE TO HARDCODED EVENT LISTENER
-        QShortcut* shortcut = new QShortcut(QKeySequence("F1"), m_windows.at(0));
+        QShortcut* shortcut = new QShortcut(QKeySequence("F1"), mWindows.at(0));
         shortcut->setContext(Qt::ApplicationShortcut);
-        connect(shortcut, &QShortcut::activated, this, &WindowManager::handle_action_close);
+        connect(shortcut, &QShortcut::activated, this, &WindowManager::handleActionClose);
     }
 
-    void WindowManager::add_window()
+    void WindowManager::addWindow()
     {
         Window* window = new Window(nullptr);
-        m_windows.append(window);
+        mWindows.append(window);
 
-        if (!m_main_window)
-            set_main_window(window);
+        if (!mMainWindow)
+            setMainWindow(window);
 
         window->show();
     }
 
-    void WindowManager::remove_window(Window* window)
+    void WindowManager::removeWindow(Window* window)
     {
         assert(window);
 
-        if (m_windows.removeOne(window))
+        if (mWindows.removeOne(window))
         {
-            if (window == m_main_window)
+            if (window == mMainWindow)
             {
-                if (!m_windows.empty())
-                    set_main_window(m_windows[0]);
+                if (!mWindows.empty())
+                    setMainWindow(mWindows[0]);
                 else
-                    m_main_window = nullptr;
+                    mMainWindow = nullptr;
             }
             window->deleteLater();
         }
     }
 
-    void WindowManager::set_main_window(Window* window)
+    void WindowManager::setMainWindow(Window* window)
     {
         assert(window);
 
-        if (m_main_window)
-            m_main_window->show_toolbar_extension(); // USE SETTING HERE
+        if (mMainWindow)
+            mMainWindow->showToolbarExtension(); // USE SETTING HERE
 
-        m_main_window = window;
-        m_main_window->show_toolbar(m_toolbar);
-        m_main_window->hide_toolbar_extension();
+        mMainWindow = window;
+        mMainWindow->showToolbar(mToolbar);
+        mMainWindow->hideToolbarExtension();
     }
 
-    void WindowManager::lock_all()
+    void WindowManager::lockAll()
     {
-        for (Window*& window : m_windows)
+        for (Window*& window : mWindows)
         {
             //Overlay* overlay = new Overlay();
             DialogOverlay* overlay = new DialogOverlay();
             WarningDialog* dialog = new WarningDialog();
-            overlay->set_dialog(dialog);
-            dialog->fade_in();
+            overlay->setDialog(dialog);
+            dialog->fadeIn();
             window->lock(overlay);
         }
     }
 
-    void WindowManager::unlock_all()
+    void WindowManager::unlockAll()
     {
-        for (Window*& window : m_windows)
+        for (Window*& window : mWindows)
             window->unlock();
     }
 
-    void WindowManager::handle_window_close_request(Window* window)
+    void WindowManager::handleWindowCloseRequest(Window* window)
     {
         Q_UNUSED(window);
-        if (m_static_windows)
+        if (mStaticWindows)
         {
             // ASK FOR CONFIRMATION / FORWARD TO WINDOW MANAGER WIDGET
         }
@@ -151,62 +151,62 @@ namespace hal
     {
         const SharedPropertiesQssAdapter* a = SharedPropertiesQssAdapter::instance();
 
-        m_action_open_file   ->setIcon(style::get_styled_svg_icon(a->m_open_icon_style, a->m_open_icon_path));
-        //m_action_close_file  ->setIcon(style::get_styled_svg_icon(a->m_close_icon_style, a->m_close_icon_path));
-        m_action_save        ->setIcon(style::get_styled_svg_icon(a->m_save_icon_style, a->m_save_icon_path));
-        m_action_schedule    ->setIcon(style::get_styled_svg_icon(a->m_schedule_icon_style, a->m_schedule_icon_path));
-        m_action_run_schedule->setIcon(style::get_styled_svg_icon(a->m_run_icon_style, a->m_run_icon_path));
-        m_action_content     ->setIcon(style::get_styled_svg_icon(a->m_content_icon_style, a->m_content_icon_path));
-        m_action_settings    ->setIcon(style::get_styled_svg_icon(a->m_settings_icon_style, a->m_settings_icon_path));
-        //m_action_about       ->setIcon(style::get_styled_svg_icon(a->m_about_icon_style, a->m_about_icon_path));
+        mActionOpenFile   ->setIcon(style::getStyledSvgIcon(a->mOpenIconStyle, a->mOpenIconPath));
+        //mActionCloseFile  ->setIcon(style::getStyledSvgIcon(a->m_close_icon_style, a->m_close_icon_path));
+        mActionSave        ->setIcon(style::getStyledSvgIcon(a->mSaveIconStyle, a->mSaveIconPath));
+        mActionSchedule    ->setIcon(style::getStyledSvgIcon(a->mScheduleIconStyle, a->mScheduleIconPath));
+        mActionRunSchedule->setIcon(style::getStyledSvgIcon(a->mRunIconStyle, a->mRunIconPath));
+        mActionContent     ->setIcon(style::getStyledSvgIcon(a->mContentIconStyle, a->mContentIconPath));
+        mActionSettings    ->setIcon(style::getStyledSvgIcon(a->mSettingsIconStyle, a->mSettingsIconPath));
+        //mActionAbout       ->setIcon(style::getStyledSvgIcon(a->m_about_icon_style, a->m_about_icon_path));
 
-        for (Window*& window : m_windows)
+        for (Window*& window : mWindows)
             window->repolish();
     }
 
-    void WindowManager::handle_overlay_clicked()
+    void WindowManager::handleOverlayClicked()
     {
-        unlock_all();
+        unlockAll();
     }
 
-    void WindowManager::handle_action_open()
+    void WindowManager::handleActionOpen()
     {
         qDebug() << "handle action open called";
-        lock_all();
+        lockAll();
     }
 
-    void WindowManager::handle_action_close()
+    void WindowManager::handleActionClose()
     {
         qDebug() << "handle action close called";
-        unlock_all();
+        unlockAll();
     }
 
-    void WindowManager::handle_action_save()
+    void WindowManager::handleActionSave()
     {
 
     }
 
-    void WindowManager::handle_action_schedule()
+    void WindowManager::handleActionSchedule()
     {
 
     }
 
-    void WindowManager::handle_action_run_schedule()
+    void WindowManager::handleActionRunSchedule()
     {
 
     }
 
-    void WindowManager::handle_action_content()
+    void WindowManager::handleActionContent()
     {
 
     }
 
-    void WindowManager::handle_action_settings()
+    void WindowManager::handleActionSettings()
     {
 
     }
 
-    void WindowManager::handle_action_about()
+    void WindowManager::handleActionAbout()
     {
 
     }

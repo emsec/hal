@@ -38,17 +38,18 @@ namespace hal
         ModuleItem(const u32 id);
         ModuleItem(const QString& name, const u32 id);
 
-        void insert_child(int row, ModuleItem* child);
-        void remove_child(ModuleItem* child);
+        void insertChild(int row, ModuleItem* child);
+        void removeChild(ModuleItem* child);
 
-        void append_child(ModuleItem* child);
-        void prepend_child(ModuleItem* child);
+        void appendChild(ModuleItem* child);
+        void appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap);
+        void prependChild(ModuleItem* child);
 
         ModuleItem* parent();
         ModuleItem* child(int row);
 
-        const ModuleItem* const_parent() const;
-        const ModuleItem* const_child(int row) const;
+        const ModuleItem* constParent() const;
+        const ModuleItem* constChild(int row) const;
 
         int childCount() const;
         QVariant data(int column) const;
@@ -59,19 +60,19 @@ namespace hal
         QColor color() const;
         bool highlighted() const;
 
-        void set_parent(ModuleItem* parent);
+        void setParent(ModuleItem* parent);
         void set_name(const QString& name);
-        void set_color(const QColor& color);
-        void set_highlighted(const bool highlighted);
+        void setColor(const QColor& color);
+        void setHighlighted(const bool highlighted);
 
     private:
-        ModuleItem* m_parent;
-        QList<ModuleItem*> m_child_items;
+        ModuleItem* mParent;
+        QList<ModuleItem*> mChildItems;
 
-        u32 m_id;
-        QString m_name;
+        u32 mId;
+        QString mName;
 
-        QColor m_color;
-        bool m_highlighted;
+        QColor mColor;
+        bool mHighlighted;
     };
 }

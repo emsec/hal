@@ -20,33 +20,33 @@ namespace hal
         return instance;
     }
 
-    QColor PythonConsoleQssAdapter::standard_color() const
+    QColor PythonConsoleQssAdapter::standardColor() const
     {
-        return m_standard_color;
+        return mStandardColor;
     }
 
-    QColor PythonConsoleQssAdapter::error_color() const
+    QColor PythonConsoleQssAdapter::errorColor() const
     {
-        return m_error_color;
+        return mErrorColor;
     }
 
-    QColor PythonConsoleQssAdapter::promt_color() const
+    QColor PythonConsoleQssAdapter::promtColor() const
     {
-        return m_promt_color;
+        return mPromtColor;
     }
 
-    void PythonConsoleQssAdapter::set_standard_color(const QColor &color)
+    void PythonConsoleQssAdapter::setStandardColor(const QColor &color)
     {
-        m_standard_color = color;
+        mStandardColor = color;
     }
 
-    void PythonConsoleQssAdapter::set_error_color(const QColor &color)
+    void PythonConsoleQssAdapter::setErrorColor(const QColor &color)
     {
-        m_error_color = color;
+        mErrorColor = color;
     }
 
-    void PythonConsoleQssAdapter::set_promt_color(const QColor &color)
+    void PythonConsoleQssAdapter::setPromtColor(const QColor &color)
     {
-        m_promt_color = color;
+        mPromtColor = color;
     }
 }

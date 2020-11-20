@@ -38,6 +38,6 @@ namespace hal
         virtual void update(const QVariant& value) = 0;
 
     protected:
-        QLayout* m_layout;
+        QLayout* mLayout;
     };
 }

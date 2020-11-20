@@ -7,10 +7,11 @@ namespace hal
 {
 
 
-    ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent), m_temporary_items(30)
+    ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent), mTemporaryItems(30)
     {
+        mChannelToIgnore = {"UserStudy"};
         LogManager::get_instance().get_gui_callback().add_callback("gui",
-                                                                   std::bind(&ChannelModel::handle_logmanager_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+                                                                   std::bind(&ChannelModel::handleLogmanagerCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
     ChannelModel::~ChannelModel()
@@ -66,15 +67,15 @@ namespace hal
             return QModelIndex();
         else
         {
-            if (!m_permanent_items.empty())
+            if (!mPermanentItems.empty())
             {
-                if (row <= m_permanent_items.size() - 1)
-                    return createIndex(row, column, m_permanent_items.at(row));
+                if (row <= mPermanentItems.size() - 1)
+                    return createIndex(row, column, mPermanentItems.at(row));
             }
-            if (!m_temporary_items.empty())
+            if (!mTemporaryItems.empty())
             {
-                if ((unsigned long)row <= m_permanent_items.size() + m_temporary_items.size() - 1)
-                    return createIndex(row, column, m_temporary_items.at(row - m_permanent_items.size()));
+                if ((unsigned long)row <= mPermanentItems.size() + mTemporaryItems.size() - 1)
+                    return createIndex(row, column, mTemporaryItems.at(row - mPermanentItems.size()));
             }
             return QModelIndex();
         }
@@ -85,7 +86,7 @@ namespace hal
         if (parent.isValid())
             return 0;
         else
-            return m_permanent_items.size() + m_temporary_items.size();
+            return mPermanentItems.size() + mTemporaryItems.size();
     }
 
     int ChannelModel::columnCount(const QModelIndex& parent) const
@@ -98,28 +99,31 @@ namespace hal
 
     ChannelItem* ChannelModel::add_channel(const QString name)
     {
-        int offset = m_permanent_items.size() + m_temporary_items.size();
+        int offset = mPermanentItems.size() + mTemporaryItems.size();
 
-        if (m_temporary_items.full())
+        if (mTemporaryItems.full())
         {
-            int index = offset + m_temporary_items.size();
+            int index = offset + mTemporaryItems.size();
             beginRemoveRows(QModelIndex(), index - 1, index - 1);
-            delete m_temporary_items.back();
+            delete mTemporaryItems.back();
             endRemoveRows();
         }
         ChannelItem* item = new ChannelItem(name);
 
         beginInsertRows(QModelIndex(), offset, offset);
-        m_temporary_items.push_back(item);
+        mTemporaryItems.push_back(item);
         endInsertRows();
         return item;
     }
 
-    void ChannelModel::handle_logmanager_callback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text)
+    void ChannelModel::handleLogmanagerCallback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text)
     {
+        if(mChannelToIgnore.contains(QString::fromStdString(channel_name)))
+            return;
+
         ChannelItem* all_channel = nullptr;
         ChannelItem* item        = nullptr;
-        for (auto element : m_permanent_items)
+        for (auto element : mPermanentItems)
         {
             if (element->name().toStdString() == ALL_CHANNEL)
             {
@@ -132,7 +136,7 @@ namespace hal
         }
         if (item == nullptr || all_channel == nullptr)
         {
-            for (auto element : m_temporary_items)
+            for (auto element : mTemporaryItems)
             {
                 if (element->name().toStdString() == ALL_CHANNEL)
                 {
@@ -153,8 +157,8 @@ namespace hal
             item = add_channel(QString::fromStdString(channel_name));
         }
 
-        all_channel->append_entry(new channel_entry(msg_text, t));
-        item->append_entry(new channel_entry(msg_text, t));
+        all_channel->appendEntry(new ChannelEntry(msg_text, t));
+        item->appendEntry(new ChannelEntry(msg_text, t));
         Q_EMIT updated(t, ALL_CHANNEL, msg_text);
         Q_EMIT updated(t, channel_name, msg_text);
     }

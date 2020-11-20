@@ -26,6 +26,7 @@
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <memory>
+#include "gui/gui_utils/sort.h"
 
 namespace hal
 {
@@ -37,18 +38,23 @@ namespace hal
         explicit GraphicsModule(Module* m);
 
     protected:
-        struct module_pin
+        struct ModulePin
         {
             QString name;
-            u32 net_id;
+            u32 mNetId;
 
-            bool operator==(const module_pin& rhs) const
+            bool operator==(const ModulePin& rhs) const
             {
-                return this->name == rhs.name && this->net_id == rhs.net_id;
+                return this->name == rhs.name && this->mNetId == rhs.mNetId;
+            }
+
+            bool operator<(const ModulePin& rhs) const
+            {
+                return gui_utility::numeratedOrderCompare(this->name, rhs.name);
             }
         };
 
-        QVector<module_pin> m_input_pins;
-        QVector<module_pin> m_output_pins;
+        QVector<ModulePin> mInputPins;
+        QVector<ModulePin> mOutputPins;
     };
 }    // namespace hal

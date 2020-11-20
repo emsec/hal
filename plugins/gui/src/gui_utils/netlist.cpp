@@ -12,7 +12,7 @@ namespace hal
 {
     namespace gui_utility
     {
-        Module* first_common_ancestor(Module* m1, Module* m2)
+        Module* firstCommonAncestor(Module* m1, Module* m2)
         {
             std::unordered_set<u32> parents_m1;
             while (m1 != nullptr)
@@ -31,7 +31,7 @@ namespace hal
             return nullptr;
         }
 
-        Module* first_common_ancestor(std::unordered_set<Module*> modules, const std::unordered_set<Gate*>& gates)
+        Module* firstCommonAncestor(std::unordered_set<Module*> modules, const std::unordered_set<Gate*>& gates)
         {
             if (modules.empty() && gates.empty())
             {
@@ -64,13 +64,13 @@ namespace hal
                 {
                     break;
                 }
-                result = first_common_ancestor(result, module_list[i]);
+                result = firstCommonAncestor(result, module_list[i]);
             }
             // the final module is the first common ancestor of all elements
             return result;
         }
 
-        QSet<u32> parent_modules(Module* m)
+        QSet<u32> parentModules(Module* m)
         {
             assert(m);
             QSet<u32> parents;
@@ -81,11 +81,11 @@ namespace hal
             return parents;
         }
 
-        QSet<u32> parent_modules(Gate* g)
+        QSet<u32> parentModules(Gate* g)
         {
             assert(g);
             Module* m = g->get_module();
-            QSet<u32> parents = parent_modules(m);
+            QSet<u32> parents = parentModules(m);
             parents.insert(m->get_id());
             return parents;
         }

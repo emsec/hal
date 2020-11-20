@@ -41,18 +41,18 @@ namespace hal
         QVariant data(const QModelIndex& inddex, int role = Qt::DisplayRole) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-        GraphContext* get_context(const QModelIndex& index) const;
-        QModelIndex get_index(GraphContext* context) const;
+        GraphContext* getContext(const QModelIndex& index) const;
+        QModelIndex getIndex(GraphContext* context) const;
 
-        void begin_insert_context(GraphContext* context);
-        void end_insert_context();
+        void beginInsertContext(GraphContext* context);
+        void endInsertContext();
 
-        void begin_remove_context(GraphContext* context);
-        void end_remove_context();
+        void beginRemoveContext(GraphContext* context);
+        void endRemoveContext();
 
         void update(QVector<GraphContext*>* pointer);
 
     private:
-        QVector<GraphContext*>* m_context_list;
+        QVector<GraphContext*>* mContextList;
     };
 }    // namespace hal

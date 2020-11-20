@@ -36,11 +36,11 @@ namespace hal
     {
         Q_OBJECT
         Q_PROPERTY(bool hover READ hover)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
+        Q_PROPERTY(QString iconPath READ iconPath WRITE setIconPath)
+        Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
-        explicit GetInTouchItem(const QString& title, const QString& description, QWidget* parent = nullptr);
+        explicit GetInTouchItem(const QString& title, const QString& mDescription, QWidget* parent = nullptr);
 
         void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
         void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
@@ -49,27 +49,27 @@ namespace hal
         void repolish();
 
         bool hover();
-        QString icon_path();
-        QString icon_style();
+        QString iconPath();
+        QString iconStyle();
 
-        void set_hover_active(bool active);
-        void set_icon_path(const QString& path);
-        void set_icon_style(const QString& style);
+        void setHoverActive(bool active);
+        void setIconPath(const QString& path);
+        void setIconStyle(const QString& style);
 
     Q_SIGNALS:
         void clicked();
 
     private:
-        QHBoxLayout* m_horizontal_layout;
-        QLabel* m_icon_label;
-        QVBoxLayout* m_vertical_layout;
-        QLabel* m_title_label;
-        QLabel* m_description_label;
-        QPropertyAnimation* m_animation;
+        QHBoxLayout* mHorizontalLayout;
+        QLabel* mIconLabel;
+        QVBoxLayout* mVerticalLayout;
+        QLabel* mTitleLabel;
+        QLabel* mDescriptionLabel;
+        QPropertyAnimation* mAnimation;
 
-        bool m_hover;
+        bool mHover;
 
-        QString m_icon_path;
-        QString m_icon_style;
+        QString mIconPath;
+        QString mIconStyle;
     };
 }

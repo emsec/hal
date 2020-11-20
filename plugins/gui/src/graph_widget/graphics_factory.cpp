@@ -7,7 +7,7 @@ namespace hal
 {
     namespace GraphicsFactory
     {
-        QStringList graphics_module_types()
+        QStringList graphicsModuleTypes()
         {
             return QStringList
             {
@@ -15,7 +15,7 @@ namespace hal
             };
         }
 
-        QStringList graphics_gate_types()
+        QStringList graphicsGateTypes()
         {
             return QStringList
             {
@@ -23,7 +23,7 @@ namespace hal
             };
         }
 
-        GraphicsModule* create_graphics_module(Module* m, const int type)
+        GraphicsModule* createGraphicsModule(Module* m, const int type)
         {
             assert(m);
 
@@ -34,7 +34,7 @@ namespace hal
             }
         }
 
-        GraphicsGate* create_graphics_gate(Gate* g, const int type)
+        GraphicsGate* createGraphicsGate(Gate* g, const int type)
         {
             assert(g);
 

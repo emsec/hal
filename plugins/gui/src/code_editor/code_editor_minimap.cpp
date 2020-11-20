@@ -14,74 +14,74 @@
 namespace hal
 {
     CodeEditorMinimap::CodeEditorMinimap(CodeEditor* editor)
-        : QWidget(editor), m_editor(editor), m_document(new QTextDocument()), m_scrollbar(new MinimapScrollbar(this)), m_document_height(0), m_offset(0)
+        : QWidget(editor), mEditor(editor), mDocument(new QTextDocument()), mScrollbar(new MinimapScrollbar(this)), mDocumentHeight(0), mOffset(0)
     {
-        connect(m_editor->document(), &QTextDocument::contentsChange, this, &CodeEditorMinimap::handle_contents_change);
-        connect(m_document->documentLayout(), &QAbstractTextDocumentLayout::documentSizeChanged, this, &CodeEditorMinimap::handle_document_size_changed);
+        connect(mEditor->document(), &QTextDocument::contentsChange, this, &CodeEditorMinimap::handleContentsChange);
+        connect(mDocument->documentLayout(), &QAbstractTextDocumentLayout::documentSizeChanged, this, &CodeEditorMinimap::handleDocumentSizeChanged);
 
-        m_document->setDocumentMargin(0);
-        m_scrollbar->show();
+        mDocument->setDocumentMargin(0);
+        mScrollbar->show();
 
         repolish();
     }
 
     MinimapScrollbar* CodeEditorMinimap::scrollbar()
     {
-        return m_scrollbar;
+        return mScrollbar;
     }
 
     QTextDocument* CodeEditorMinimap::document()
     {
-        return m_document;
+        return mDocument;
     }
 
-    void CodeEditorMinimap::adjust_slider_height(int viewport_height)
+    void CodeEditorMinimap::adjustSliderHeight(int viewport_height)
     {
-        //m_scrollbar->set_slider_height(viewport_height * 0.25f);
+        //mScrollbar->setSliderHeight(viewport_height * 0.25f);
 
-        //    qreal doc_height = m_editor->document()->documentLayout()->documentSize().height();
-        //    qreal ratio = doc_height / m_editor->viewport()->contentsRect().height();
+        //    qreal doc_height = mEditor->document()->documentLayout()->documentSize().height();
+        //    qreal ratio = doc_height / mEditor->viewport()->contentsRect().height();
 
-        //    doc_height = m_document->documentLayout()->documentSize().height();
-        //    m_scrollbar->set_slider_height(std::round(doc_height / ratio));
+        //    doc_height = mDocument->documentLayout()->documentSize().height();
+        //    mScrollbar->setSliderHeight(std::round(doc_height / ratio));
         Q_UNUSED(viewport_height);
-        qDebug() << "editor " << m_editor->document()->documentLayout()->documentSize().height();
-        qDebug() << "mini " << m_document->documentLayout()->documentSize().height();
+        qDebug() << "editor " << mEditor->document()->documentLayout()->documentSize().height();
+        qDebug() << "mini " << mDocument->documentLayout()->documentSize().height();
 
-        qreal ratio = m_editor->document()->documentLayout()->documentSize().height() / m_document->documentLayout()->documentSize().height();    // UNEXPECTED RESULT, MAKES NO SENSE
+        qreal ratio = mEditor->document()->documentLayout()->documentSize().height() / mDocument->documentLayout()->documentSize().height();    // UNEXPECTED RESULT, MAKES NO SENSE
 
-        m_scrollbar->set_slider_height(std::round(m_editor->viewport()->contentsRect().height() * ratio));
+        mScrollbar->setSliderHeight(std::round(mEditor->viewport()->contentsRect().height() * ratio));
     }
 
-    void CodeEditorMinimap::adjust_slider_height(qreal ratio)
+    void CodeEditorMinimap::adjustSliderHeight(qreal ratio)
     {
-        m_scrollbar->set_slider_height(std::round(ratio * m_document->documentLayout()->blockBoundingRect(m_document->firstBlock()).height()));
-        resize_scrollbar();
+        mScrollbar->setSliderHeight(std::round(ratio * mDocument->documentLayout()->blockBoundingRect(mDocument->firstBlock()).height()));
+        resizeScrollbar();
     }
 
-    void CodeEditorMinimap::adjust_slider_height(int first_visible_block, int last_visible_block)
+    void CodeEditorMinimap::adjustSliderHeight(int first_visible_block, int last_visible_block)
     {
         qDebug() << "first block: " + QString::number(first_visible_block);
         qDebug() << "last block: " + QString::number(last_visible_block);
 
-        qreal top    = m_document->documentLayout()->blockBoundingRect(m_document->findBlockByNumber(first_visible_block)).top();
-        qreal bottom = m_document->documentLayout()->blockBoundingRect(m_document->findBlockByNumber(last_visible_block)).bottom();
+        qreal top    = mDocument->documentLayout()->blockBoundingRect(mDocument->findBlockByNumber(first_visible_block)).top();
+        qreal bottom = mDocument->documentLayout()->blockBoundingRect(mDocument->findBlockByNumber(last_visible_block)).bottom();
 
         qDebug() << "top: " + QString::number(top);
         qDebug() << "bottom: " + QString::number(bottom);
 
-        m_scrollbar->set_slider_height(std::round(bottom - top));
+        mScrollbar->setSliderHeight(std::round(bottom - top));
     }
 
-    void CodeEditorMinimap::handle_document_size_changed(const QSizeF& new_size)
+    void CodeEditorMinimap::handleDocumentSizeChanged(const QSizeF& new_size)
     {
-        m_document_height = std::ceil(new_size.height());
-        resize_scrollbar();
+        mDocumentHeight = std::ceil(new_size.height());
+        resizeScrollbar();
     }
 
-    void CodeEditorMinimap::handle_contents_change(int position, int chars_removed, int chars_added)
+    void CodeEditorMinimap::handleContentsChange(int position, int chars_removed, int chars_added)
     {
-        QTextCursor cursor = QTextCursor(m_document);
+        QTextCursor cursor = QTextCursor(mDocument);
         cursor.setPosition(position);
 
         if (chars_removed)
@@ -91,7 +91,7 @@ namespace hal
         }
 
         if (chars_added)
-            cursor.insertText(m_editor->document()->toPlainText().mid(position, chars_added));
+            cursor.insertText(mEditor->document()->toPlainText().mid(position, chars_added));
     }
 
     void CodeEditorMinimap::paintEvent(QPaintEvent* event)
@@ -106,59 +106,59 @@ namespace hal
         painter.setClipping(true);      // UNCERTAIN IF NECESSARY
         painter.setClipRect(rect());    // UNCERTAIN IF NECESSARY
 
-        //    int block_number = m_editor->first_visible_block();
-        //    int slider_position = m_scrollbar->slider_position();
-        //    qreal offset = m_document->documentLayout()->blockBoundingRect(m_document->findBlockByNumber(block_number)).top() - slider_position;
+        //    int block_number = mEditor->first_visible_block();
+        //    int sliderPosition = mScrollbar->sliderPosition();
+        //    qreal offset = mDocument->documentLayout()->blockBoundingRect(mDocument->findBlockByNumber(block_number)).top() - sliderPosition;
         //    painter.translate(0, -offset);
 
         //    QAbstractTextDocumentLayout::PaintContext ctx;
         //    ctx.palette.setColor(QPalette::Text, QColor("yellow")); // USE STYLESHEET COLOR ?
         //    ctx.clip = QRectF(0, offset, width(), height());
 
-        //    m_document->documentLayout()->draw(&painter, ctx);
+        //    mDocument->documentLayout()->draw(&painter, ctx);
 
         QAbstractTextDocumentLayout::PaintContext ctx;
         ctx.palette.setColor(QPalette::Text, palette().text().color());
 
-        if (m_document_height > height())
+        if (mDocumentHeight > height())
         {
-            int block_number    = m_editor->first_visible_block();
-            int slider_position = m_scrollbar->slider_position();
-            m_offset            = m_document->documentLayout()->blockBoundingRect(m_document->findBlockByNumber(block_number)).top() - slider_position;
-            painter.translate(0, -m_offset);
+            int block_number    = mEditor->first_visible_block();
+            int sliderPosition = mScrollbar->sliderPosition();
+            mOffset            = mDocument->documentLayout()->blockBoundingRect(mDocument->findBlockByNumber(block_number)).top() - sliderPosition;
+            painter.translate(0, -mOffset);
 
-            ctx.clip = QRectF(0, m_offset, width(), height());
+            ctx.clip = QRectF(0, mOffset, width(), height());
         }
 
-        m_document->documentLayout()->draw(&painter, ctx);
+        mDocument->documentLayout()->draw(&painter, ctx);
     }
 
     void CodeEditorMinimap::resizeEvent(QResizeEvent* event)
     {
         Q_UNUSED(event)
 
-        resize_scrollbar();
+        resizeScrollbar();
     }
 
     void CodeEditorMinimap::mousePressEvent(QMouseEvent* event)
     {
-        int position = m_document->documentLayout()->hitTest(QPointF(event->pos().x(), event->pos().y() + m_offset), Qt::FuzzyHit);
-        QTextCursor cursor(m_document);
+        int position = mDocument->documentLayout()->hitTest(QPointF(event->pos().x(), event->pos().y() + mOffset), Qt::FuzzyHit);
+        QTextCursor cursor(mDocument);
         cursor.setPosition(position);
-        m_editor->center_on_line(cursor.blockNumber());
+        mEditor->centerOnLine(cursor.blockNumber());
     }
 
     void CodeEditorMinimap::wheelEvent(QWheelEvent* event)
     {
-        m_editor->handle_wheel_event(event);
+        mEditor->handleWheelEvent(event);
     }
 
-    void CodeEditorMinimap::resize_scrollbar()
+    void CodeEditorMinimap::resizeScrollbar()
     {
-        if (m_document_height < height())
-            m_scrollbar->resize(width(), std::max(m_scrollbar->slider_height(), m_document_height));
+        if (mDocumentHeight < height())
+            mScrollbar->resize(width(), std::max(mScrollbar->sliderHeight(), mDocumentHeight));
         else
-            m_scrollbar->resize(width(), height());
+            mScrollbar->resize(width(), height());
     }
 
     void CodeEditorMinimap::repolish()
@@ -168,6 +168,6 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        m_document->setDefaultFont(font());
+        mDocument->setDefaultFont(font());
     }
 }

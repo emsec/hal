@@ -16,80 +16,80 @@ namespace hal
         // IMPLEMENT INDEX UPDATES (OR CHANGE ARCHITECTURE)
     }
 
-    PluginScheduleManager::schedule* PluginScheduleManager::get_schedule()
+    PluginScheduleManager::schedule* PluginScheduleManager::getSchedule()
     {
-        return &m_schedule;
+        return &mSchedule;
     }
 
-    ProgramArguments PluginScheduleManager::get_program_arguments(int index)
+    ProgramArguments PluginScheduleManager::getProgramArguments(int index)
     {
         ProgramArguments args;
 
-        for (argument arg : m_schedule.at(index).second)
+        for (Argument arg : mSchedule.at(index).second)
         {
             std::vector<std::string> vector;
 
             for (QString& qstring : arg.value.split(QRegExp("[\\s,;]*"), QString::SkipEmptyParts))
                 vector.push_back(qstring.toStdString());
 
-            if (arg.checked)
-                args.set_option(arg.flag.toStdString(), vector);
+            if (arg.mChecked)
+                args.set_option(arg.mFlag.toStdString(), vector);
         }
         return args;
     }
 
-    int PluginScheduleManager::get_current_index()
+    int PluginScheduleManager::getCurrentIndex()
     {
-        return m_current_index;
+        return mCurrentIndex;
     }
 
-    void PluginScheduleManager::set_current_index(int index)
+    void PluginScheduleManager::setCurrentIndex(int index)
     {
-        m_current_index = index;
+        mCurrentIndex = index;
     }
 
-    void PluginScheduleManager::add_plugin(const QString& plugin, int index)
+    void PluginScheduleManager::addPlugin(const QString& plugin, int index)
     {
         auto cli = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin.toStdString(), false);
 
         if (!cli)
             return;
 
-        QList<argument> list;
+        QList<Argument> list;
 
         for (auto option_tupel : cli->get_cli_options().get_options())
         {
-            argument arg;
-            arg.flag        = QString::fromStdString(*std::get<0>(option_tupel).begin());
-            arg.description = QString::fromStdString(std::get<1>(option_tupel));
+            Argument arg;
+            arg.mFlag        = QString::fromStdString(*std::get<0>(option_tupel).begin());
+            arg.mDescription = QString::fromStdString(std::get<1>(option_tupel));
             arg.value       = "";
-            arg.checked     = false;
+            arg.mChecked     = false;
             list.append(arg);
         }
 
-        m_schedule.insert(index, QPair<QString, QList<argument>>(plugin, list));
+        mSchedule.insert(index, QPair<QString, QList<Argument>>(plugin, list));
     }
 
-    void PluginScheduleManager::move_plugin(int from, int to)
+    void PluginScheduleManager::movePlugin(int from, int to)
     {
-        m_schedule.move(from, to);
+        mSchedule.move(from, to);
     }
 
-    void PluginScheduleManager::remove_plugin(int index)
+    void PluginScheduleManager::removePlugin(int index)
     {
-        m_schedule.removeAt(index);
+        mSchedule.removeAt(index);
     }
 
-    void PluginScheduleManager::run_schedule()
+    void PluginScheduleManager::runSchedule()
     {
-        for (int i = 0; i < m_schedule.length(); i++)
+        for (int i = 0; i < mSchedule.length(); i++)
         {
-            ProgramArguments args = get_program_arguments(i);
-            plugin_access_manager::run_plugin(m_schedule.at(i).first.toStdString(), &args);
+            ProgramArguments args = getProgramArguments(i);
+            plugin_access_manager::runPlugin(mSchedule.at(i).first.toStdString(), &args);
         }
     }
 
-    PluginScheduleManager::PluginScheduleManager(QObject* parent) : QObject(parent), m_current_index(0)
+    PluginScheduleManager::PluginScheduleManager(QObject* parent) : QObject(parent), mCurrentIndex(0)
     {
     }
 }

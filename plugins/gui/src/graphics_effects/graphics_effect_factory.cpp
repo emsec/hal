@@ -4,7 +4,7 @@ namespace hal
 {
     namespace GraphicsEffectFactory
     {
-        QGraphicsEffect* get_effect()
+        QGraphicsEffect* getEffect()
         {
             QGraphicsBlurEffect* effect = new QGraphicsBlurEffect(nullptr);
             effect->setBlurHints(QGraphicsBlurEffect::QualityHint);

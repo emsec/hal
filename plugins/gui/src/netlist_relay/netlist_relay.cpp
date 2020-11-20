@@ -5,6 +5,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/grouping.h"
 
 #include "gui/module_model/module_item.h"
 #include "gui/module_model/module_model.h"
@@ -21,10 +22,10 @@
 
 namespace hal
 {
-    NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), m_ModuleModel(new ModuleModel(this))
+    NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), mModuleModel(new ModuleModel(this))
     {
-        connect(FileManager::get_instance(), &FileManager::file_opened, this, &NetlistRelay::debug_handle_file_opened);    // DEBUG LINE
-        register_callbacks();
+        connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
+        registerCallbacks();
         log_info("test", "register callbacks");
     }
 
@@ -37,40 +38,44 @@ namespace hal
         module_event_handler::unregister_callback("relay");
     }
 
-    void NetlistRelay::register_callbacks()
+    void NetlistRelay::registerCallbacks()
     {
         netlist_event_handler::register_callback("relay",
                                                  std::function<void(netlist_event_handler::event, Netlist*, u32)>(
-                                                     std::bind(&NetlistRelay::relay_netlist_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+                                                     std::bind(&NetlistRelay::relayNetlistEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         net_event_handler::register_callback("relay",
                                              std::function<void(net_event_handler::event, Net*, u32)>(
-                                                 std::bind(&NetlistRelay::relay_net_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+                                                 std::bind(&NetlistRelay::relayNetEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         gate_event_handler::register_callback("relay",
                                               std::function<void(gate_event_handler::event, Gate*, u32)>(
-                                                  std::bind(&NetlistRelay::relay_gate_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+                                                  std::bind(&NetlistRelay::relayGateEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
         module_event_handler::register_callback("relay",
                                                 std::function<void(module_event_handler::event, Module*, u32)>(
-                                                    std::bind(&NetlistRelay::relay_module_event, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+                                                    std::bind(&NetlistRelay::relayModuleEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+
+        grouping_event_handler::register_callback("relay",
+                                                std::function<void(grouping_event_handler::event, Grouping*, u32)>(
+                                                    std::bind(&NetlistRelay::relayGroupingEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
     }
 
-    QColor NetlistRelay::get_module_color(const u32 id)
+    QColor NetlistRelay::getModuleColor(const u32 id)
     {
-        return m_module_colors.value(id);
+        return mModuleColors.value(id);
     }
 
-    ModuleModel* NetlistRelay::get_ModuleModel()
+    ModuleModel* NetlistRelay::getModuleModel()
     {
-        return m_ModuleModel;
+        return mModuleModel;
     }
 
-    void NetlistRelay::debug_change_module_name(const u32 id)
+    void NetlistRelay::debugChangeModuleName(const u32 id)
     {
         // NOT THREADSAFE
 
-        Module* m = g_netlist->get_module_by_id(id);
+        Module* m = gNetlist->get_module_by_id(id);
         assert(m);
 
         bool ok;
@@ -80,11 +85,11 @@ namespace hal
             m->set_name(text.toStdString());
     }
 
-    void NetlistRelay::debug_change_module_type(const u32 id)
+    void NetlistRelay::debugChangeModuleType(const u32 id)
     {
         // NOT THREADSAFE
 
-        Module* m = g_netlist->get_module_by_id(id);
+        Module* m = gNetlist->get_module_by_id(id);
         assert(m);
 
         bool ok;
@@ -94,11 +99,11 @@ namespace hal
             m->set_type(text.toStdString());
     }
 
-    void NetlistRelay::debug_change_module_color(const u32 id)
+    void NetlistRelay::debugChangeModuleColor(const u32 id)
     {
         // NOT THREADSAFE
 
-        Module* m = g_netlist->get_module_by_id(id);
+        Module* m = gNetlist->get_module_by_id(id);
         assert(m);
 
         QColor color = QColorDialog::getColor();
@@ -106,35 +111,35 @@ namespace hal
         if (!color.isValid())
             return;
 
-        m_module_colors.insert(id, color);
-        m_ModuleModel->update_module(id);
+        mModuleColors.insert(id, color);
+        mModuleModel->updateModule(id);
 
         // Since color is our Overlay over the netlist data, no event is
         // automatically fired. We need to take care of that ourselves here.
-        g_graph_context_manager->handle_module_color_changed(m);
+        gGraphContextManager->handleModuleColorChanged(m);
 
-        Q_EMIT module_color_changed(m);
+        Q_EMIT moduleColorChanged(m);
     }
 
-    void NetlistRelay::debug_add_selection_to_module(const u32 id)
+    void NetlistRelay::debugAddSelectionToModule(const u32 id)
     {
         // NOT THREADSAFE
         // DECIDE HOW TO HANDLE MODULES
 
-        Module* m = g_netlist->get_module_by_id(id);
+        Module* m = gNetlist->get_module_by_id(id);
 
         assert(m);
 
-        for (auto sel_id : g_selection_relay->m_selected_gates)
+        for (auto sel_id : gSelectionRelay->mSelectedGates)
         {
-            Gate* g = g_netlist->get_gate_by_id(sel_id);
+            Gate* g = gNetlist->get_gate_by_id(sel_id);
 
             if (g)
                 m->assign_gate(g);
         }
     }
 
-    void NetlistRelay::debug_add_child_module(const u32 id)
+    void NetlistRelay::debugAddChildModule(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -144,395 +149,439 @@ namespace hal
         if (!ok || name.isEmpty())
             return;
 
-        Module* m = g_netlist->get_module_by_id(id);
+        Module* m = gNetlist->get_module_by_id(id);
 
         if (!m)
             return;
 
-        //Module* s = g_netlist->create_module(g_netlist->get_unique_module_id(), name.toStdString(), m);
+        gNetlist->create_module(gNetlist->get_unique_module_id(), name.toStdString(), m);
     }
 
-    void NetlistRelay::debug_delete_module(const u32 id)
+    void NetlistRelay::debugDeleteModule(const u32 id)
     {
-        Module* m = g_netlist->get_module_by_id(id);
+        Module* m = gNetlist->get_module_by_id(id);
         assert(m);
 
-        g_netlist->delete_module(m);
+        gNetlist->delete_module(m);
     }
 
-    void NetlistRelay::relay_netlist_event(netlist_event_handler::event ev, Netlist* object, u32 associated_data)
+    void NetlistRelay::relayNetlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data)
     {
         if (!object)
             return;    // SHOULD NEVER BE REACHED
 
-        //qDebug() << "relay_netlist_event called: event ID =" << ev << "for object at" << object.get();
-        //Q_EMIT netlist_event(ev, object, associated_data);
+        //qDebug() << "relayNetlistEvent called: event ID =" << ev << "for object at" << object.get();
+        //Q_EMIT netlistEvent(ev, object, associated_data);
 
         switch (ev)
         {
-            case netlist_event_handler::event::id_changed:
-            {
-                ///< associated_data = old id
+        case netlist_event_handler::event::id_changed:
+        {
+            ///< associated_data = old id
 
-                Q_EMIT netlist_id_changed(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::input_filename_changed:
-            {
-                ///< no associated_data
+            Q_EMIT netlistIdChanged(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::input_filename_changed:
+        {
+            ///< no associated_data
 
-                Q_EMIT netlist_input_filename_changed(object);
-                break;
-            }
-            case netlist_event_handler::event::design_name_changed:
-            {
-                ///< no associated_data
+            Q_EMIT netlistInputFilenameChanged(object);
+            break;
+        }
+        case netlist_event_handler::event::design_name_changed:
+        {
+            ///< no associated_data
 
-                Q_EMIT netlist_design_name_changed(object);
-                break;
-            }
-            case netlist_event_handler::event::device_name_changed:
-            {
-                ///< no associated_data
+            Q_EMIT netlistDesignNameChanged(object);
+            break;
+        }
+        case netlist_event_handler::event::device_name_changed:
+        {
+            ///< no associated_data
 
-                Q_EMIT netlist_device_name_changed(object);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_vcc:
-            {
-                ///< associated_data = id of gate
+            Q_EMIT netlistDeviceNameChanged(object);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_vcc:
+        {
+            ///< associated_data = id of gate
 
-                Q_EMIT netlist_marked_global_vcc(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_gnd:
-            {
-                ///< associated_data = id of gate
+            Q_EMIT netlistMarkedGlobalVcc(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_gnd:
+        {
+            ///< associated_data = id of gate
 
-                Q_EMIT netlist_marked_global_gnd(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_vcc:
-            {
-                ///< associated_data = id of gate
+            Q_EMIT netlistMarkedGlobalGnd(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_vcc:
+        {
+            ///< associated_data = id of gate
 
-                Q_EMIT netlist_unmarked_global_vcc(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_gnd:
-            {
-                ///< associated_data = id of gate
+            Q_EMIT netlistUnmarkedGlobalVcc(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_gnd:
+        {
+            ///< associated_data = id of gate
 
-                Q_EMIT netlist_unmarked_global_gnd(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_input:
-            {
-                ///< associated_data = id of net
-                g_graph_context_manager->handle_marked_global_input(associated_data);
+            Q_EMIT netlistUnmarkedGlobalGnd(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_input:
+        {
+            ///< associated_data = id of net
+            gGraphContextManager->handleMarkedGlobalInput(associated_data);
 
-                Q_EMIT netlist_marked_global_input(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_output:
-            {
-                ///< associated_data = id of net
-                g_graph_context_manager->handle_marked_global_output(associated_data);
+            Q_EMIT netlistMarkedGlobalInput(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_output:
+        {
+            ///< associated_data = id of net
+            gGraphContextManager->handleMarkedGlobalOutput(associated_data);
 
-                Q_EMIT netlist_marked_global_output(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::marked_global_inout:
-            {
-                ///< associated_data = id of net
+            Q_EMIT netlistMarkedGlobalOutput(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::marked_global_inout:
+        {
+            ///< associated_data = id of net
 
-                Q_EMIT netlist_marked_global_inout(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_input:
-            {
-                ///< associated_data = id of net
-                g_graph_context_manager->handle_unmarked_global_input(associated_data);
+            Q_EMIT netlistMarkedGlobalInout(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_input:
+        {
+            ///< associated_data = id of net
+            gGraphContextManager->handleUnmarkedGlobalInput(associated_data);
 
-                Q_EMIT netlist_unmarked_global_input(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_output:
-            {
-                ///< associated_data = id of net
-                g_graph_context_manager->handle_unmarked_global_output(associated_data);
+            Q_EMIT netlistUnmarkedGlobalInput(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_output:
+        {
+            ///< associated_data = id of net
+            gGraphContextManager->handleUnmarkedGlobalOutput(associated_data);
 
-                Q_EMIT netlist_unmarked_global_output(object, associated_data);
-                break;
-            }
-            case netlist_event_handler::event::unmarked_global_inout:
-            {
-                ///< associated_data = id of net
+            Q_EMIT netlistUnmarkedGlobalOutput(object, associated_data);
+            break;
+        }
+        case netlist_event_handler::event::unmarked_global_inout:
+        {
+            ///< associated_data = id of net
 
-                Q_EMIT netlist_unmarked_global_inout(object, associated_data);
-                break;
-            }
+            Q_EMIT netlistUnmarkedGlobalInout(object, associated_data);
+            break;
+        }
         }
     }
 
-    void NetlistRelay::relay_module_event(module_event_handler::event ev, Module* object, u32 associated_data)
+    void NetlistRelay::relayGroupingEvent(grouping_event_handler::event ev, Grouping *object, u32 associated_data)
+    {
+
+        if (!object)
+            return;    // SHOULD NEVER BE REACHED
+
+        switch (ev)
+        {
+        case grouping_event_handler::event::created:
+            Q_EMIT groupingCreated(object);
+            break;
+        case grouping_event_handler::event::removed:
+            Q_EMIT groupingRemoved(object);
+            break;
+        case grouping_event_handler::name_changed:
+            Q_EMIT groupingNameChanged(object);
+            break;
+        case grouping_event_handler::event::gate_assigned:
+            Q_EMIT groupingGateAssigned(object,associated_data);
+            break;
+        case grouping_event_handler::event::gate_removed:
+            Q_EMIT groupingGateRemoved(object,associated_data);
+            break;
+        case grouping_event_handler::event::net_assigned:
+            Q_EMIT groupingNetAssigned(object,associated_data);
+            break;
+        case grouping_event_handler::event::net_removed:
+            Q_EMIT groupingNetRemoved(object,associated_data);
+            break;
+        case grouping_event_handler::event::module_assigned:
+            Q_EMIT groupingModuleAssigned(object,associated_data);
+            break;
+        case grouping_event_handler::event::module_removed:
+            Q_EMIT groupingModuleRemoved(object,associated_data);
+            break;
+        }
+    }
+
+    void NetlistRelay::relayModuleEvent(module_event_handler::event ev, Module* object, u32 associated_data)
     {
         if (!object)
             return;    // SHOULD NEVER BE REACHED
 
-        //qDebug() << "relay_module_event called: event ID =" << ev << "for object at" << object.get();
-        //Q_EMIT module_event(ev, object, associated_data);
+        //qDebug() << "relayModuleEvent called: event ID =" << ev << "for object at" << object.get();
+        //Q_EMIT moduleEvent(ev, object, associated_data);
 
         switch (ev)
         {
-            case module_event_handler::event::created:
+        case module_event_handler::event::created:
+        {
+            //< no associated_data
+
+            // suppress actions if we receive this for the top module
+            if (object->get_parent_module() != nullptr)
             {
-                //< no associated_data
-
-                // suppress actions if we receive this for the top module
-                if (object->get_parent_module() != nullptr)
-                {
-                    m_module_colors.insert(object->get_id(), gui_utility::get_random_color());
-                }
-
-                Q_EMIT module_created(object);
-                break;
+                mModuleColors.insert(object->get_id(), gui_utility::getRandomColor());
             }
-            case module_event_handler::event::removed:
-            {
-                //< no associated_data
 
-                m_module_colors.remove(object->get_id());
+            Q_EMIT moduleCreated(object);
+            break;
+        }
+        case module_event_handler::event::removed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_module_removed(object);
-                g_selection_relay->handle_module_removed(object->get_id());
+            mModuleColors.remove(object->get_id());
 
-                Q_EMIT module_removed(object);
-                break;
-            }
-            case module_event_handler::event::name_changed:
-            {
-                //< no associated_data
+            gGraphContextManager->handleModuleRemoved(object);
+            gSelectionRelay->handleModuleRemoved(object->get_id());
 
-                m_ModuleModel->update_module(object->get_id());
+            Q_EMIT module_removed(object);
+            break;
+        }
+        case module_event_handler::event::name_changed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_module_name_changed(object);
+            mModuleModel->updateModule(object->get_id());
 
-                Q_EMIT module_name_changed(object);
-                break;
-            }
-            case module_event_handler::event::parent_changed:
-            {
-                //< no associated_data
+            gGraphContextManager->handleModuleNameChanged(object);
 
-                Q_EMIT module_parent_changed(object);
-                break;
-            }
-            case module_event_handler::event::submodule_added:
-            {
-                //< associated_data = id of added module
+            Q_EMIT moduleNameChanged(object);
+            break;
+        }
+        case module_event_handler::event::parent_changed:
+        {
+            //< no associated_data
 
-                m_ModuleModel->add_module(associated_data, object->get_id());
+            Q_EMIT moduleParentChanged(object);
+            break;
+        }
+        case module_event_handler::event::submodule_added:
+        {
+            //< associated_data = id of added module
 
-                g_graph_context_manager->handle_module_submodule_added(object, associated_data);
+            mModuleModel->addModule(associated_data, object->get_id());
 
-                Q_EMIT module_submodule_added(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::submodule_removed:
-            {
-                //< associated_data = id of removed module
+            gGraphContextManager->handleModuleSubmoduleAdded(object, associated_data);
 
-                m_ModuleModel->remove_module(associated_data);
+            Q_EMIT moduleSubmoduleAdded(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::submodule_removed:
+        {
+            //< associated_data = id of removed module
 
-                g_graph_context_manager->handle_module_submodule_removed(object, associated_data);
+            mModuleModel->remove_module(associated_data);
 
-                Q_EMIT module_submodule_removed(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::gate_assigned:
-            {
-                //< associated_data = id of inserted gate
+            gGraphContextManager->handleModuleSubmoduleRemoved(object, associated_data);
 
-                g_graph_context_manager->handle_module_gate_assigned(object, associated_data);
+            Q_EMIT moduleSubmoduleRemoved(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::gate_assigned:
+        {
+            //< associated_data = id of inserted gate
 
-                Q_EMIT module_gate_assigned(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::gate_removed:
-            {
-                //< associated_data = id of removed gate
+            gGraphContextManager->handleModuleGateAssigned(object, associated_data);
 
-                g_graph_context_manager->handle_module_gate_removed(object, associated_data);
+            Q_EMIT moduleGateAssigned(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::gate_removed:
+        {
+            //< associated_data = id of removed gate
 
-                Q_EMIT module_gate_removed(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::input_port_name_changed:
-            {
-                //< associated data = respective net
+            gGraphContextManager->handleModuleGateRemoved(object, associated_data);
 
-                Q_EMIT module_input_port_name_changed(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::output_port_name_changed:
-            {
-                //< associated data = respective net
+            Q_EMIT moduleGateRemoved(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::input_port_name_changed:
+        {
+            //< associated data = respective net
 
-                Q_EMIT module_output_port_name_changed(object, associated_data);
-                break;
-            }
-            case module_event_handler::event::type_changed:
-            {
-                //< no associated_data
+            gGraphContextManager->handleModuleInputPortNameChanged(object, associated_data);
 
-                Q_EMIT module_type_changed(object);
-                break;
-            }
+            Q_EMIT moduleInputPortNameChanged(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::output_port_name_changed:
+        {
+            //< associated data = respective net
+
+            gGraphContextManager->handleModuleOutputPortNameChanged(object, associated_data);
+
+            Q_EMIT moduleOutputPortNameChanged(object, associated_data);
+            break;
+        }
+        case module_event_handler::event::type_changed:
+        {
+            //< no associated_data
+
+            gGraphContextManager->handleModuleTypeChanged(object);
+
+            Q_EMIT moduleTypeChanged(object);
+            break;
+        }
         }
     }
 
-    void NetlistRelay::relay_gate_event(gate_event_handler::event ev, Gate* object, u32 associated_data)
+    void NetlistRelay::relayGateEvent(gate_event_handler::event ev, Gate* object, u32 associated_data)
     {
         UNUSED(associated_data);
         if (!object)
             return;    // SHOULD NEVER BE REACHED
 
-        //qDebug() << "relay_gate_event called: event ID =" << ev << "for object at" << object.get();
-        //Q_EMIT gate_event(ev, object, associated_data);
+        //qDebug() << "relayGateEvent called: event ID =" << ev << "for object at" << object.get();
+        //Q_EMIT gateEvent(ev, object, associated_data);
 
         switch (ev)
         {
-            case gate_event_handler::event::created:
-            {
-                //< no associated_data
+        case gate_event_handler::event::created:
+        {
+            //< no associated_data
 
-                Q_EMIT gate_created(object);
-                break;
-            }
-            case gate_event_handler::removed:
-            {
-                //< no associated_data
+            Q_EMIT gateCreated(object);
+            break;
+        }
+        case gate_event_handler::removed:
+        {
+            //< no associated_data
 
-                g_selection_relay->handle_gate_removed(object->get_id());
+            gSelectionRelay->handleGateRemoved(object->get_id());
 
-                Q_EMIT gate_removed(object);
-                break;
-            }
-            case gate_event_handler::name_changed:
-            {
-                //< no associated_data
+            Q_EMIT gate_removed(object);
+            break;
+        }
+        case gate_event_handler::name_changed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_gate_name_changed(object);
+            gGraphContextManager->handleGateNameChanged(object);
 
-                Q_EMIT gate_name_changed(object);
-                break;
-            }
-            default:
-                break;
+            Q_EMIT gateNameChanged(object);
+            break;
+        }
+        default:
+            break;
         }
     }
 
-    void NetlistRelay::relay_net_event(net_event_handler::event ev, Net* object, u32 associated_data)
+    void NetlistRelay::relayNetEvent(net_event_handler::event ev, Net* object, u32 associated_data)
     {
         if (!object)
             return;    // SHOULD NEVER BE REACHED
 
-        //qDebug() << "relay_net_event called: event ID =" << ev << "for object at" << object.get();
-        //Q_EMIT net_event(ev, object, associated_data);
+        //qDebug() << "relayNetEvent called: event ID =" << ev << "for object at" << object.get();
+        //Q_EMIT netEvent(ev, object, associated_data);
 
         switch (ev)
         {
-            case net_event_handler::event::created:
-            {
-                //< no associated_data
+        case net_event_handler::event::created:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_net_created(object);
+            gGraphContextManager->handleNetCreated(object);
 
-                Q_EMIT net_created(object);
-                break;
-            }
-            case net_event_handler::event::removed:
-            {
-                //< no associated_data
+            Q_EMIT netCreated(object);
+            break;
+        }
+        case net_event_handler::event::removed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_net_removed(object);
-                g_selection_relay->handle_net_removed(object->get_id());
+            gGraphContextManager->handleNetRemoved(object);
+            gSelectionRelay->handleNetRemoved(object->get_id());
 
-                Q_EMIT net_removed(object);
-                break;
-            }
-            case net_event_handler::event::name_changed:
-            {
-                //< no associated_data
+            Q_EMIT net_removed(object);
+            break;
+        }
+        case net_event_handler::event::name_changed:
+        {
+            //< no associated_data
 
-                g_graph_context_manager->handle_net_name_changed(object);
+            gGraphContextManager->handleNetNameChanged(object);
 
-                Q_EMIT net_name_changed(object);
-                break;
-            }
+            Q_EMIT netNameChanged(object);
+            break;
+        }
             // FIXME add src_added, src_removed
             // case net_event_handler::event::src_changed:
             // {
             //     //< no associated_data
 
-            //     g_graph_context_manager->handle_net_source_changed(object);
+            //     gGraphContextManager->handle_net_source_changed(object);
 
             //     Q_EMIT net_source_changed(object);
             //     break;
             // }
-            case net_event_handler::event::src_added:
-            {
-                //< associated_data = id of src gate
+        case net_event_handler::event::src_added:
+        {
+            //< associated_data = id of src gate
 
-                g_graph_context_manager->handle_net_source_added(object, associated_data);
+            gGraphContextManager->handleNetSourceAdded(object, associated_data);
 
-                Q_EMIT net_source_added(object, associated_data);
-                break;
-            }
-            case net_event_handler::event::src_removed:
-            {
-                //< associated_data = id of src gate
+            Q_EMIT netSourceAdded(object, associated_data);
+            break;
+        }
+        case net_event_handler::event::src_removed:
+        {
+            //< associated_data = id of src gate
 
-                g_graph_context_manager->handle_net_source_removed(object, associated_data);
+            gGraphContextManager->handleNetSourceRemoved(object, associated_data);
 
-                Q_EMIT net_source_removed(object, associated_data);
-                break;
-            }
-            case net_event_handler::event::dst_added:
-            {
-                //< associated_data = id of dst gate
+            Q_EMIT netSourceRemoved(object, associated_data);
+            break;
+        }
+        case net_event_handler::event::dst_added:
+        {
+            //< associated_data = id of dst gate
 
-                g_graph_context_manager->handle_net_destination_added(object, associated_data);
+            gGraphContextManager->handleNetDestinationAdded(object, associated_data);
 
-                Q_EMIT net_destination_added(object, associated_data);
-                break;
-            }
-            case net_event_handler::event::dst_removed:
-            {
-                //< associated_data = id of dst gate
+            Q_EMIT netDestinationAdded(object, associated_data);
+            break;
+        }
+        case net_event_handler::event::dst_removed:
+        {
+            //< associated_data = id of dst gate
 
-                g_graph_context_manager->handle_net_destination_removed(object, associated_data);
+            gGraphContextManager->handleNetDestinationRemoved(object, associated_data);
 
-                Q_EMIT net_destination_removed(object, associated_data);
-                break;
-            }
+            Q_EMIT netDestinationRemoved(object, associated_data);
+            break;
+        }
         }
     }
 
-    void NetlistRelay::debug_handle_file_opened()
+    void NetlistRelay::debugHandleFileOpened()
     {
-        for (Module* m : g_netlist->get_modules())
-            m_module_colors.insert(m->get_id(), gui_utility::get_random_color());
+        for (Module* m : gNetlist->get_modules())
+            mModuleColors.insert(m->get_id(), gui_utility::getRandomColor());
 
-        m_module_colors.insert(1, QColor(96, 110, 112));
+        mModuleColors.insert(1, QColor(96, 110, 112));
 
-        m_ModuleModel->init();
+        mModuleModel->init();
     }
 
-    void NetlistRelay::debug_handle_file_closed()
+    void NetlistRelay::debugHandleFileClosed()
     {
-        m_ModuleModel->clear();
-        m_module_colors.clear();
+        mModuleModel->clear();
+        mModuleColors.clear();
     }
 }

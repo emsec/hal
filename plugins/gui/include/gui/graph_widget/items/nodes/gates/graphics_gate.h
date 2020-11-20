@@ -26,6 +26,7 @@
 #include "gui/graph_widget/items/nodes/graphics_node.h"
 
 #include <memory>
+#include <QHash>
 
 namespace hal
 {
@@ -37,9 +38,9 @@ namespace hal
         GraphicsGate(Gate* g);
 
     protected:
-        QString m_type;
+        QString mType;
 
-        QVector<QString> m_input_pins;
-        QVector<QString> m_output_pins;
+        QVector<QString> mInputPins;
+        QVector<QString> mOutputPins;
     };
 }

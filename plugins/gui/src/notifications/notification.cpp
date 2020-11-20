@@ -21,21 +21,21 @@ namespace hal
         QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(this);
         effect->setOpacity(0);
         setGraphicsEffect(effect);
-        m_animation = new QPropertyAnimation(effect, "opacity", this);
+        mAnimation = new QPropertyAnimation(effect, "opacity", this);
         //setWindowOpacity(0);
-        //m_animation = new QPropertyAnimation(this, "opacity", this);
-        m_animation->setDuration(1000);
-        m_animation->setStartValue(0);
-        m_animation->setEndValue(1);
-        m_animation->setEasingCurve(QEasingCurve::Linear);
+        //mAnimation = new QPropertyAnimation(this, "opacity", this);
+        mAnimation->setDuration(1000);
+        mAnimation->setStartValue(0);
+        mAnimation->setEndValue(1);
+        mAnimation->setEasingCurve(QEasingCurve::Linear);
     }
 
-    qreal Notification::get_opacity()
+    qreal Notification::getOpacity()
     {
         return windowOpacity();
     }
 
-    void Notification::set_opacity(qreal opacity)
+    void Notification::setOpacity(qreal opacity)
     {
         setWindowOpacity(opacity);
     }
@@ -46,28 +46,28 @@ namespace hal
 
         event->accept();
         Q_EMIT clicked();
-        //fade_out();
+        //fadeOut();
         cleanup();
     }
 
-    void Notification::fade_in()
+    void Notification::fadeIn()
     {
         show();
         QApplication::beep();
-        m_animation->start();
+        mAnimation->start();
     }
 
-    void Notification::fade_out()
+    void Notification::fadeOut()
     {
-        m_animation->setDirection(QPropertyAnimation::Backward);
-        connect(m_animation, &QPropertyAnimation::finished, this, &Notification::cleanup);
+        mAnimation->setDirection(QPropertyAnimation::Backward);
+        connect(mAnimation, &QPropertyAnimation::finished, this, &Notification::cleanup);
 
-        if (m_animation->state() != QPropertyAnimation::Running)
-            m_animation->start();
+        if (mAnimation->state() != QPropertyAnimation::Running)
+            mAnimation->start();
     }
 
     void Notification::cleanup()
     {
-        g_notification_manager->remove(this);
+        gNotificationManager->remove(this);
     }
 }

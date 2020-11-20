@@ -8,45 +8,45 @@ namespace hal
 {
     NotificationManager::NotificationManager(QObject* parent) : QObject(parent)
     {
-        m_width_offset  = 20;
-        m_height_offset = 20;
+        mWidthOffset  = 20;
+        mHeightOffset = 20;
 
-        m_spacing = 10;
+        mSpacing = 10;
     }
 
     void NotificationManager::remove(Notification* n)
     {
-        if (m_list.removeOne(n))
+        if (mList.removeOne(n))
         {
             n->hide();
             n->deleteLater();
         }
-        rearrange_Notifications();
+        rearrangeNotifications();
     }
 
-    void NotificationManager::debug_add_Notification()
+    void NotificationManager::debugAddNotification()
     {
         Notification* n = new Notification(nullptr);
-        m_list.append(n);
-        rearrange_Notifications();
+        mList.append(n);
+        rearrangeNotifications();
     }
 
-    void NotificationManager::rearrange_Notifications()
+    void NotificationManager::rearrangeNotifications()
     {
         //QRect rec = QApplication::desktop()->availableGeometry();
         QRect rec        = QApplication::desktop()->screenGeometry();
-        m_desktop_width  = rec.width();
-        m_desktop_height = rec.height();
+        mDesktopWidth  = rec.width();
+        mDesktopHeight = rec.height();
 
-        int y = m_height_offset;
+        int y = mHeightOffset;
 
-        for (auto& element : m_list)
+        for (auto& element : mList)
         {
             y += element->height();
-            element->move(m_desktop_width - m_width_offset - element->width(), m_desktop_height - y);
-            y += m_spacing;
+            element->move(mDesktopWidth - mWidthOffset - element->width(), mDesktopHeight - y);
+            y += mSpacing;
             element->show();
-            element->fade_in();
+            element->fadeIn();
         }
     }
 }

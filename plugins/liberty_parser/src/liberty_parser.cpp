@@ -337,7 +337,7 @@ namespace hal
 
         if (pin_names_str.size() == 0)
         {
-            log_error("liberty_parser", "no pin name given near line {}", pin_names_str.peek().number);
+            log_error("liberty_parser", "no pin name given near line {}", pin.line_number);
             return std::nullopt;
         }
 
@@ -346,7 +346,7 @@ namespace hal
             std::string name = pin_names_str.consume().string;
             if (!external_pin_name.empty() && name != external_pin_name)
             {
-                log_error("liberty_parser", "invalid pin name '{}' near line {}", name, pin_names_str.peek().number);
+                log_error("liberty_parser", "invalid pin name '{}' near line {}", name, pin.line_number);
                 return std::nullopt;
             }
 
@@ -428,7 +428,7 @@ namespace hal
                 }
                 else
                 {
-                    log_warning("liberty_parser", "could not handle pin direction '{}' near line {}, ignoring pin", direction_str, pin_str.peek().number);
+                    log_warning("liberty_parser", "could not handle pin direction '{}' near line {}, ignoring pin", direction_str, pin.line_number);
                 }
                 pin_str.consume(";", true);
             }
@@ -487,7 +487,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid bus type '{}' near line {}", bus_type_str, bus_str.peek().number);
+                    log_error("liberty_parser", "invalid bus type '{}' near line {}", bus_type_str, bus.line_number);
                     return std::nullopt;
                 }
                 bus_str.consume(";", true);
@@ -510,7 +510,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid pin direction '{}' near line {}", direction_str, bus_str.peek().number);
+                    log_error("liberty_parser", "invalid pin direction '{}' near line {}", direction_str, bus.line_number);
                     return std::nullopt;
                 }
                 bus_str.consume(";", true);

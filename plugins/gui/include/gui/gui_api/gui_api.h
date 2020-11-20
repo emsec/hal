@@ -42,30 +42,30 @@ namespace hal
     public:
         GuiApi();
 
-        std::vector<u32> get_selected_gate_ids();
-        std::vector<u32> get_selected_net_ids();
-        std::vector<u32> get_selected_module_ids();
-        std::tuple<std::vector<u32>, std::vector<u32>, std::vector<u32>> get_selected_item_ids();
+        std::vector<u32> getSelectedGateIds();
+        std::vector<u32> getSelectedNetIds();
+        std::vector<u32> getSelectedModuleIds();
+        std::tuple<std::vector<u32>, std::vector<u32>, std::vector<u32>> getSelectedItemIds();
 
-        std::vector<Gate*> get_selected_gates();
-        std::vector<Net*> get_selected_nets();
-        std::vector<Module*> get_selected_modules();
-        std::tuple<std::vector<Gate*>, std::vector<Net*>, std::vector<Module*>> get_selected_items();
+        std::vector<Gate*> getSelectedGates();
+        std::vector<Net*> getSelectedNets();
+        std::vector<Module*> getSelectedModules();
+        std::tuple<std::vector<Gate*>, std::vector<Net*>, std::vector<Module*>> getSelectedItems();
 
-        void select_gate(u32 gate_id, bool clear_current_selection = true, bool navigate_to_selection = true);
-        void select_gate(const std::vector<u32>& gate_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
-        void select_gate(Gate* gate, bool clear_current_selection = true, bool navigate_to_selection = true);
-        void select_gate(const std::vector<Gate*>& gates, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectGate(u32 gate_id, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectGate(const std::vector<u32>& gate_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectGate(Gate* gate, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectGate(const std::vector<Gate*>& gates, bool clear_current_selection = true, bool navigate_to_selection = true);
 
-        void select_net(u32 net_id, bool clear_current_selection = true, bool navigate_to_selection = true);
-        void select_net(const std::vector<u32>& net_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
-        void select_net(Net* net, bool clear_current_selection = true, bool navigate_to_selection = true);
-        void select_net(const std::vector<Net*>& nets, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectNet(u32 mNetId, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectNet(const std::vector<u32>& net_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectNet(Net* net, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectNet(const std::vector<Net*>& nets, bool clear_current_selection = true, bool navigate_to_selection = true);
 
-        void select_module(u32 module_id, bool clear_current_selection = true, bool navigate_to_selection = true);
-        void select_module(const std::vector<u32>& module_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
-        void select_module(Module* module, bool clear_current_selection = true, bool navigate_to_selection = true);
-        void select_module(const std::vector<Module*>& modules, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectModule(u32 module_id, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectModule(const std::vector<u32>& module_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectModule(Module* module, bool clear_current_selection = true, bool navigate_to_selection = true);
+        void selectModule(const std::vector<Module*>& modules, bool clear_current_selection = true, bool navigate_to_selection = true);
 
         void select(Gate* gate, bool clear_current_selection = true, bool navigate_to_selection = true);
         void select(Net* net, bool clear_current_selection = true, bool navigate_to_selection = true);
@@ -76,22 +76,22 @@ namespace hal
         void select(const std::vector<u32>& gate_ids, const std::vector<u32>& net_ids, const std::vector<u32>& module_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
         void select(const std::vector<Gate*>& gates, const std::vector<Net*>& nets, const std::vector<Module*>& modules, bool clear_current_selection = true, bool navigate_to_selection = true);
 
-        void deselect_gate(u32 gate_id);
-        void deselect_gate(const std::vector<u32>& gate_ids);
-        void deselect_gate(Gate* gate);
-        void deselect_gate(const std::vector<Gate*>& gates);
+        void deselectGate(u32 gate_id);
+        void deselectGate(const std::vector<u32>& gate_ids);
+        void deselectGate(Gate* gate);
+        void deselectGate(const std::vector<Gate*>& gates);
 
-        void deselect_net(u32 net_id);
-        void deselect_net(const std::vector<u32>& net_ids);
-        void deselect_net(Net* net);
-        void deselect_net(const std::vector<Net*>& nets);
+        void deselectNet(u32 mNetId);
+        void deselectNet(const std::vector<u32>& net_ids);
+        void deselectNet(Net* net);
+        void deselectNet(const std::vector<Net*>& nets);
 
-        void deselect_module(u32 module_id);
-        void deselect_module(const std::vector<u32>& module_ids);
-        void deselect_module(Module* module);
-        void deselect_module(const std::vector<Module*>& modules);
+        void deselectModule(u32 module_id);
+        void deselectModule(const std::vector<u32>& module_ids);
+        void deselectModule(Module* module);
+        void deselectModule(const std::vector<Module*>& modules);
 
-        void deselect_all_items();
+        void deselectAllItems();
         void deselect(Gate* gate);
         void deselect(Net* net);
         void deselect(Module* module);
@@ -102,6 +102,6 @@ namespace hal
         void deselect(const std::vector<Gate*>& gates, const std::vector<Net*>& nets, const std::vector<Module*>& modules);
 
     Q_SIGNALS:
-        void navigation_requested();
+        void navigationRequested();
     };
 }

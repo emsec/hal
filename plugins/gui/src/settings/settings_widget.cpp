@@ -11,65 +11,65 @@
 namespace hal
 {
     SettingsWidget::SettingsWidget(const QString& key, QWidget* parent)
-        : QFrame(parent), m_layout(new QVBoxLayout()), m_container(new QBoxLayout(QBoxLayout::TopToBottom)), m_top_bar(new QHBoxLayout()), m_name(new QLabel()), m_revert(new QToolButton()),
-          m_default(new QToolButton()), m_highlight_color(52, 56, 57), m_key(key)
+        : QFrame(parent), mLayout(new QVBoxLayout()), mContainer(new QBoxLayout(QBoxLayout::TopToBottom)), mTopBar(new QHBoxLayout()), mName(new QLabel()), mRevert(new QToolButton()),
+          mDefault(new QToolButton()), mHighlightColor(52, 56, 57), mKey(key)
     {
         setFrameStyle(QFrame::NoFrame);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        m_layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-        m_layout->setContentsMargins(0, 0, 0, 0);
-        m_layout->setSpacing(0);
+        mLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+        mLayout->setContentsMargins(0, 0, 0, 0);
+        mLayout->setSpacing(0);
 
-        m_name->setObjectName("name-label");
+        mName->setObjectName("name-label");
 
-        setLayout(m_layout);
+        setLayout(mLayout);
 
-        m_revert->setText("Undo");
-        m_revert->setToolTip("Revert your last change");
-        //m_revert->setMaximumWidth(20);
-        m_revert->setVisible(false);
-        m_revert->setEnabled(false);
-        QSizePolicy sp_revert = m_revert->sizePolicy();
+        mRevert->setText("Undo");
+        mRevert->setToolTip("Revert your last change");
+        //mRevert->setMaximumWidth(20);
+        mRevert->setVisible(false);
+        mRevert->setEnabled(false);
+        QSizePolicy sp_revert = mRevert->sizePolicy();
         sp_revert.setRetainSizeWhenHidden(true);
-        m_revert->setSizePolicy(sp_revert);
-        connect(m_revert, &QToolButton::clicked, this, &SettingsWidget::handle_rollback);
-        m_default->setText("Default");
-        m_default->setToolTip("Load the default value");
-        //m_default->setMaximumWidth(20);
-        m_default->setVisible(false);
-        m_default->setEnabled(false);
-        QSizePolicy sp_default = m_default->sizePolicy();
+        mRevert->setSizePolicy(sp_revert);
+        connect(mRevert, &QToolButton::clicked, this, &SettingsWidget::handleRollback);
+        mDefault->setText("Default");
+        mDefault->setToolTip("Load the default value");
+        //mDefault->setMaximumWidth(20);
+        mDefault->setVisible(false);
+        mDefault->setEnabled(false);
+        QSizePolicy sp_default = mDefault->sizePolicy();
         sp_default.setRetainSizeWhenHidden(true);
-        m_default->setSizePolicy(sp_default);
-        connect(m_default, &QToolButton::clicked, this, &SettingsWidget::handle_reset);
-        m_top_bar->addWidget(m_name);
-        m_top_bar->addStretch();
-        m_top_bar->addWidget(m_revert);
-        m_top_bar->addWidget(m_default);
-        m_layout->addLayout(m_top_bar);
-        m_layout->addLayout(m_container);
+        mDefault->setSizePolicy(sp_default);
+        connect(mDefault, &QToolButton::clicked, this, &SettingsWidget::handleReset);
+        mTopBar->addWidget(mName);
+        mTopBar->addStretch();
+        mTopBar->addWidget(mRevert);
+        mTopBar->addWidget(mDefault);
+        mLayout->addLayout(mTopBar);
+        mLayout->addLayout(mContainer);
 
         hide();
     }
 
-    QColor SettingsWidget::highlight_color()
+    QColor SettingsWidget::highlightColor()
     {
-        return m_highlight_color;
+        return mHighlightColor;
     }
 
     QString SettingsWidget::key()
     {
-        return m_key;
+        return mKey;
     }
 
-    void SettingsWidget::set_highlight_color(const QColor& color)
+    void SettingsWidget::setHighlightColor(const QColor& color)
     {
-        m_highlight_color = color;
+        mHighlightColor = color;
     }
 
-    void SettingsWidget::reset_labels()
+    void SettingsWidget::resetLabels()
     {
-        for (QPair<QLabel*, QString>& pair : m_labels)
+        for (QPair<QLabel*, QString>& pair : mLabels)
         {
             pair.first->setText(pair.second);
             if (pair.second.isEmpty())
@@ -83,19 +83,19 @@ namespace hal
         }
     }
 
-    bool SettingsWidget::match_labels(const QString& string)
+    bool SettingsWidget::matchLabels(const QString& string)
     {
         bool match_found = false;
 
         if (!string.isEmpty())
         {
-            QString color        = m_highlight_color.name();
+            QString color        = mHighlightColor.name();
             QString opening_html = "<span style=\"background-color:" + color + "\">";
             QString closing_html = "</span>";
             int string_length    = string.length();
             int html_lenght      = opening_html.length() + string_length + closing_html.length();
 
-            for (QPair<QLabel*, QString>& pair : m_labels)
+            for (QPair<QLabel*, QString>& pair : mLabels)
             {
                 int index = pair.second.indexOf(string, 0, Qt::CaseInsensitive);
                 if (index != -1)
@@ -119,46 +119,46 @@ namespace hal
         return match_found;
     }
 
-    void SettingsWidget::trigger_setting_updated()
+    void SettingsWidget::triggerSettingUpdated()
     {
         QVariant val = value();
         if (m_preview)
         {
             m_preview->update(val);
         }
-        if (m_signals_enabled)
+        if (mSignalsEnabled)
         {
-            Q_EMIT setting_updated(this, key(), val);
+            Q_EMIT settingUpdated(this, key(), val);
         }
         #ifndef SETTINGS_UPDATE_IMMEDIATELY
-        set_dirty(m_loaded_value != val);
+        setDirty(mLoadedValue != val);
         #endif
-        m_default->setEnabled(m_default_value != val);
+        mDefault->setEnabled(mDefaultValue != val);
     }
 
-    void SettingsWidget::handle_reset()
+    void SettingsWidget::handleReset()
     {
-        if (m_prepared)
+        if (mPrepared)
         {
-            load(m_default_value);
-            trigger_setting_updated();
+            load(mDefaultValue);
+            triggerSettingUpdated();
         }
     }
 
-    void SettingsWidget::handle_rollback()
+    void SettingsWidget::handleRollback()
     {
-        if (m_prepared)
+        if (mPrepared)
         {
-            load(m_loaded_value);
-            trigger_setting_updated();
+            load(mLoadedValue);
+            triggerSettingUpdated();
         }
     }
 
-    void SettingsWidget::set_dirty(bool dirty)
+    void SettingsWidget::setDirty(bool dirty)
     {
-        m_dirty   = dirty;
+        mDirty   = dirty;
 
-        m_revert->setEnabled(dirty);
+        mRevert->setEnabled(dirty);
 
         QStyle* s = style();
         s->unpolish(this);
@@ -167,30 +167,30 @@ namespace hal
 
     bool SettingsWidget::dirty() const
     {
-        return m_dirty;
+        return mDirty;
     }
 
     void SettingsWidget::prepare(const QVariant& value, const QVariant& default_value)
     {
-        m_signals_enabled = false;
+        mSignalsEnabled = false;
         load(value);
-        m_loaded_value    = value;
-        m_default_value   = default_value;
-        m_signals_enabled = true;
-        m_prepared        = true;
-        set_dirty(false);
-        m_default->setEnabled(m_default_value != m_loaded_value);
+        mLoadedValue    = value;
+        mDefaultValue   = default_value;
+        mSignalsEnabled = true;
+        mPrepared        = true;
+        setDirty(false);
+        mDefault->setEnabled(mDefaultValue != mLoadedValue);
     }
 
-    void SettingsWidget::mark_saved()
+    void SettingsWidget::markSaved()
     {
-        set_dirty(false);
-        m_loaded_value = value();
+        setDirty(false);
+        mLoadedValue = value();
     }
 
-    void SettingsWidget::set_conflicts(bool conflicts)
+    void SettingsWidget::setConflicts(bool conflicts)
     {
-        m_conflicts = conflicts;
+        mConflicts = conflicts;
         QStyle* s   = style();
         s->unpolish(this);
         s->polish(this);
@@ -198,24 +198,24 @@ namespace hal
 
     bool SettingsWidget::conflicts() const
     {
-        return m_conflicts;
+        return mConflicts;
     }
 
-    void SettingsWidget::set_preview_widget(PreviewWidget* widget)
+    void SettingsWidget::setPreviewWidget(PreviewWidget* widget)
     {
         if (m_preview)
         {
-            m_container->removeWidget(m_preview);
+            mContainer->removeWidget(m_preview);
         }
         m_preview = widget;
-        m_container->addWidget(m_preview);
-        if (m_prepared)
+        mContainer->addWidget(m_preview);
+        if (mPrepared)
         {
             m_preview->update(value());
         }
     }
 
-    void SettingsWidget::set_preview_position(preview_position position)
+    void SettingsWidget::setPreviewPosition(preview_position position)
     {
         QBoxLayout::Direction direction;
         switch (position)
@@ -229,20 +229,20 @@ namespace hal
             default:
                 return;
         }
-        m_container->setDirection(direction);
+        mContainer->setDirection(direction);
     }
 
     void SettingsWidget::enterEvent(QEvent* event)
     {
         Q_UNUSED(event);
-        m_revert->setVisible(true);
-        m_default->setVisible(true);
+        mRevert->setVisible(true);
+        mDefault->setVisible(true);
     }
 
     void SettingsWidget::leaveEvent(QEvent* event)
     {
         Q_UNUSED(event);
-        m_revert->setVisible(false);
-        m_default->setVisible(false);
+        mRevert->setVisible(false);
+        mDefault->setVisible(false);
     }
 }

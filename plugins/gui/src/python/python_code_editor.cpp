@@ -13,17 +13,17 @@
 
 namespace hal
 {
-    PythonCodeEditor::PythonCodeEditor(QWidget *parent) : CodeEditor(parent), m_uuid(QUuid::createUuid())
+    PythonCodeEditor::PythonCodeEditor(QWidget *parent) : CodeEditor(parent), mUuid(QUuid::createUuid())
     {
         QShortcut* redo_shortcut = new QShortcut(QKeySequence(tr("Ctrl+y")), this);
-        connect(redo_shortcut, &QShortcut::activated, this, &PythonCodeEditor::handle_redo_requested);
+        connect(redo_shortcut, &QShortcut::activated, this, &PythonCodeEditor::handleRedoRequested);
 
-        m_base_file_modified = false;
+        mBaseFileModified = false;
     }
 
     void PythonCodeEditor::keyPressEvent(QKeyEvent* e)
     {
-        Q_EMIT key_pressed(e);
+        Q_EMIT keyPressed(e);
         if (textCursor().hasSelection() && !(e->key() == Qt::Key_Tab || e->key() == Qt::Key_Backtab))
         {
             QPlainTextEdit::keyPressEvent(e);
@@ -32,28 +32,28 @@ namespace hal
         {
             switch(e->key())
             {
-                case Qt::Key_Tab:       handle_tab_key_pressed();               break;
-                case Qt::Key_Backtab:   handle_shift_tab_key_pressed();         break;
-                case Qt::Key_Return:    handle_return_key_pressed();            break;
-                case Qt::Key_Backspace: handle_backspace_key_pressed(e);        break;
-                case Qt::Key_Delete:    handle_delete_key_pressed(e);           break;
-                case Qt::Key_Insert:    handle_insert_key_pressed();            break;
+                case Qt::Key_Tab:       handleTabKeyPressed();               break;
+                case Qt::Key_Backtab:   handleShiftTabKeyPressed();         break;
+                case Qt::Key_Return:    handleReturnKeyPressed();            break;
+                case Qt::Key_Backspace: handleBackspaceKeyPressed(e);        break;
+                case Qt::Key_Delete:    handleDeleteKeyPressed(e);           break;
+                case Qt::Key_Insert:    handleInsertKeyPressed();            break;
                 default:                QPlainTextEdit::keyPressEvent(e);
             }
         }
     }
 
-    void PythonCodeEditor::handle_shift_tab_key_pressed()
+    void PythonCodeEditor::handleShiftTabKeyPressed()
     {
-        PythonCodeEditor::indent_selection(false);
+        PythonCodeEditor::indentSelection(false);
     }
 
-    void PythonCodeEditor::handle_tab_key_pressed()
+    void PythonCodeEditor::handleTabKeyPressed()
     {
-        PythonCodeEditor::indent_selection(true);
+        PythonCodeEditor::indentSelection(true);
     }
 
-    void PythonCodeEditor::handle_return_key_pressed()
+    void PythonCodeEditor::handleReturnKeyPressed()
     {
         QString current_line;
         {
@@ -86,7 +86,7 @@ namespace hal
         ensureCursorVisible();
     }
 
-    void PythonCodeEditor::handle_backspace_key_pressed(QKeyEvent* e)
+    void PythonCodeEditor::handleBackspaceKeyPressed(QKeyEvent* e)
     {
         QString current_line;
         {
@@ -107,7 +107,7 @@ namespace hal
         QPlainTextEdit::keyPressEvent(e);
     }
 
-    void PythonCodeEditor::handle_delete_key_pressed(QKeyEvent* e)
+    void PythonCodeEditor::handleDeleteKeyPressed(QKeyEvent* e)
     {
         auto cursor = textCursor();
         if (cursor.positionInBlock() % 4 == 0)
@@ -123,24 +123,24 @@ namespace hal
         QPlainTextEdit::keyPressEvent(e);
     }
 
-    void PythonCodeEditor::handle_insert_key_pressed()
+    void PythonCodeEditor::handleInsertKeyPressed()
     {
         setOverwriteMode(!overwriteMode());
     }
 
-    void PythonCodeEditor::handle_redo_requested()
+    void PythonCodeEditor::handleRedoRequested()
     {
         redo();
     }
 
-    void PythonCodeEditor::handle_autocomplete()
+    void PythonCodeEditor::handleAutocomplete()
     {
         auto cursor = textCursor();
             // auto row    = cursor.blockNumber();
             // auto col    = cursor.positionInBlock();
             cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
             auto text       = cursor.selectedText().replace(QChar(0x2029), '\n');
-            auto candidates = g_python_context->complete(text, false);
+            auto candidates = gPythonContext->complete(text, false);
 
             if (candidates.size() == 1)
             {
@@ -149,7 +149,7 @@ namespace hal
             else if (candidates.size() > 1)
             {
                 auto dialog = new PythonEditorCodeCompletionDialog(this, candidates);
-                connect(dialog, &PythonEditorCodeCompletionDialog::completionSelected, this, &PythonCodeEditor::perform_code_completion);
+                connect(dialog, &PythonEditorCodeCompletionDialog::completionSelected, this, &PythonCodeEditor::performCodeCompletion);
                 auto menu_width  = dialog->width();
                 auto menu_height = dialog->height();
 
@@ -176,25 +176,25 @@ namespace hal
             }
     }
 
-    int PythonCodeEditor::next_indent(bool indentUnindent, int current_indent)
+    int PythonCodeEditor::nextIndent(bool indentUnindent, int current_indent)
     {
-        int next_indent;
+        int nextIndent;
         if (indentUnindent)
         {
-            next_indent = 4 - (current_indent % 4);
+            nextIndent = 4 - (current_indent % 4);
         }
         else
         {
-            next_indent = current_indent % 4;
-            if (next_indent == 0)
+            nextIndent = current_indent % 4;
+            if (nextIndent == 0)
             {
-                next_indent = 4;
+                nextIndent = 4;
             }
         }
-        return next_indent;
+        return nextIndent;
     }
 
-    void PythonCodeEditor::indent_selection(bool indent)
+    void PythonCodeEditor::indentSelection(bool indent)
     {
         auto cursor = textCursor();
         bool preSelected = cursor.hasSelection();
@@ -225,7 +225,7 @@ namespace hal
             {
                 // if the cursor is in a word without a selection, show autocompletion menu
                 // (skip this if we are un-indenting, meaning Shift+Tab has been pressed)
-                handle_autocomplete();
+                handleAutocomplete();
                 return;
             }
             // select whole line (to count total spaces)
@@ -252,8 +252,8 @@ namespace hal
             }
         }
         // calculate indent to use for all selected lines based on the amount of
-        // spaces needed to align the first line to the next_indent 4-block
-        const int constant_indent = next_indent(indent, n_spaces);
+        // spaces needed to align the first line to the nextIndent 4-block
+        const int constant_indent = nextIndent(indent, n_spaces);
 
         // (un)indent all selected lines
         const int size = selected_lines.size();
@@ -298,34 +298,34 @@ namespace hal
         cursor.setPosition(end, QTextCursor::KeepAnchor);
     }
 
-    void PythonCodeEditor::perform_code_completion(std::tuple<std::string, std::string> completion)
+    void PythonCodeEditor::performCodeCompletion(std::tuple<std::string, std::string> completion)
     {
         textCursor().insertText(QString::fromStdString(std::get<1>(completion)));
     }
 
-    QString PythonCodeEditor::get_file_name()
+    QString PythonCodeEditor::getFileName()
     {
-        return m_file_name;
+        return mFileName;
     }
 
     void PythonCodeEditor::set_file_name(const QString name)
     {
-        m_file_name = name;
+        mFileName = name;
     }
 
-    void PythonCodeEditor::set_base_file_modified(bool base_file_modified)
+    void PythonCodeEditor::setBaseFileModified(bool base_file_modified)
     {
-        m_base_file_modified = base_file_modified;
+        mBaseFileModified = base_file_modified;
     }
 
-    bool PythonCodeEditor::is_base_file_modified()
+    bool PythonCodeEditor::isBaseFileModified()
     {
-        return m_base_file_modified;
+        return mBaseFileModified;
 
     }
 
-    QUuid PythonCodeEditor::get_uuid() const
+    QUuid PythonCodeEditor::getUuid() const
     {
-        return m_uuid;
+        return mUuid;
     }
 }

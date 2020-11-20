@@ -33,9 +33,9 @@ namespace hal
     class NoScheduledPluginsWidget : public QFrame
     {
         Q_OBJECT
-        Q_PROPERTY(bool drag_active READ drag_active)
-        Q_PROPERTY(QString icon_path READ icon_path WRITE set_icon_path)
-        Q_PROPERTY(QString icon_style READ icon_style WRITE set_icon_style)
+        Q_PROPERTY(bool dragActive READ dragActive)
+        Q_PROPERTY(QString iconPath READ iconPath WRITE setIconPath)
+        Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
         explicit NoScheduledPluginsWidget(QWidget* parent = nullptr);
@@ -44,26 +44,26 @@ namespace hal
         void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;
         void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
 
-        bool drag_active();
-        QString icon_path();
-        QString icon_style();
+        bool dragActive();
+        QString iconPath();
+        QString iconStyle();
 
-        void set_icon_path(const QString& path);
-        void set_icon_style(const QString& style);
+        void setIconPath(const QString& path);
+        void setIconStyle(const QString& style);
 
         void repolish();
 
     Q_SIGNALS:
-        void append_plugin(const QString& name);
+        void appendPlugin(const QString& name);
 
     private:
-        QVBoxLayout* m_layout;
-        QLabel* m_text_label;
-        QLabel* m_icon_label;
+        QVBoxLayout* mLayout;
+        QLabel* mTextLabel;
+        QLabel* mIconLabel;
 
-        QString m_icon_path;
-        QString m_icon_style;
+        QString mIconPath;
+        QString mIconStyle;
 
-        bool m_drag_active;
+        bool mDragActive;
     };
 }

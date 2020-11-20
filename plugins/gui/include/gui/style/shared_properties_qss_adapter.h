@@ -30,23 +30,23 @@ namespace hal
     class SharedPropertiesQssAdapter : public QWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QString open_icon_path READ open_icon_path WRITE set_open_icon_path)
-        Q_PROPERTY(QString open_icon_style READ open_icon_style WRITE set_open_icon_style)
+        Q_PROPERTY(QString openIconPath READ openIconPath WRITE setOpenIconPath)
+        Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
 
-        Q_PROPERTY(QString save_icon_path READ save_icon_path WRITE set_save_icon_path)
-        Q_PROPERTY(QString save_icon_style READ save_icon_style WRITE set_save_icon_style)
+        Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
+        Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
 
-        Q_PROPERTY(QString schedule_icon_path READ schedule_icon_path WRITE set_schedule_icon_path)
-        Q_PROPERTY(QString schedule_icon_style READ schedule_icon_style WRITE set_schedule_icon_style)
+        Q_PROPERTY(QString scheduleIconPath READ scheduleIconPath WRITE setScheduleIconPath)
+        Q_PROPERTY(QString scheduleIconStyle READ scheduleIconStyle WRITE setScheduleIconStyle)
 
-        Q_PROPERTY(QString run_icon_path READ run_icon_path WRITE set_run_icon_path)
-        Q_PROPERTY(QString run_icon_style READ run_icon_style WRITE set_run_icon_style)
+        Q_PROPERTY(QString runIconPath READ runIconPath WRITE setRunIconPath)
+        Q_PROPERTY(QString runIconStyle READ runIconStyle WRITE setRunIconStyle)
 
-        Q_PROPERTY(QString content_icon_path READ content_icon_path WRITE set_content_icon_path)
-        Q_PROPERTY(QString content_icon_style READ content_icon_style WRITE set_content_icon_style)
+        Q_PROPERTY(QString contentIconPath READ contentIconPath WRITE setContentIconPath)
+        Q_PROPERTY(QString contentIconStyle READ contentIconStyle WRITE setContentIconStyle)
 
-        Q_PROPERTY(QString settings_icon_path READ settings_icon_path WRITE set_settings_icon_path)
-        Q_PROPERTY(QString settings_icon_style READ settings_icon_style WRITE set_settings_icon_style)
+        Q_PROPERTY(QString settingsIconPath READ settingsIconPath WRITE setSettingsIconPath)
+        Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
 
     public:
         explicit SharedPropertiesQssAdapter(QWidget* parent = nullptr);
@@ -54,59 +54,59 @@ namespace hal
 
         void repolish();
 
-        QString open_icon_path() const;
-        QString open_icon_style() const;
+        QString openIconPath() const;
+        QString openIconStyle() const;
 
-        QString save_icon_path() const;
-        QString save_icon_style() const;
+        QString saveIconPath() const;
+        QString saveIconStyle() const;
 
-        QString schedule_icon_path() const;
-        QString schedule_icon_style() const;
+        QString scheduleIconPath() const;
+        QString scheduleIconStyle() const;
 
-        QString run_icon_path() const;
-        QString run_icon_style() const;
+        QString runIconPath() const;
+        QString runIconStyle() const;
 
-        QString content_icon_path() const;
-        QString content_icon_style() const;
+        QString contentIconPath() const;
+        QString contentIconStyle() const;
 
-        QString settings_icon_path() const;
-        QString settings_icon_style() const;
+        QString settingsIconPath() const;
+        QString settingsIconStyle() const;
 
-        void set_open_icon_path(const QString& path);
-        void set_open_icon_style(const QString& style);
+        void setOpenIconPath(const QString& path);
+        void setOpenIconStyle(const QString& style);
 
-        void set_save_icon_path(const QString& path);
-        void set_save_icon_style(const QString& style);
+        void setSaveIconPath(const QString& path);
+        void setSaveIconStyle(const QString& style);
 
-        void set_schedule_icon_path(const QString& path);
-        void set_schedule_icon_style(const QString& style);
+        void setScheduleIconPath(const QString& path);
+        void setScheduleIconStyle(const QString& style);
 
-        void set_run_icon_path(const QString& path);
-        void set_run_icon_style(const QString& style);
+        void setRunIconPath(const QString& path);
+        void setRunIconStyle(const QString& style);
 
-        void set_content_icon_path(const QString& path);
-        void set_content_icon_style(const QString& style);
+        void setContentIconPath(const QString& path);
+        void setContentIconStyle(const QString& style);
 
-        void set_settings_icon_path(const QString& path);
-        void set_settings_icon_style(const QString& style);
+        void setSettingsIconPath(const QString& path);
+        void setSettingsIconStyle(const QString& style);
 
         // LEFT PUBLIC INTENTIONALLY
-        QString m_open_icon_path;
-        QString m_open_icon_style;
+        QString mOpenIconPath;
+        QString mOpenIconStyle;
 
-        QString m_save_icon_path;
-        QString m_save_icon_style;
+        QString mSaveIconPath;
+        QString mSaveIconStyle;
 
-        QString m_schedule_icon_path;
-        QString m_schedule_icon_style;
+        QString mScheduleIconPath;
+        QString mScheduleIconStyle;
 
-        QString m_run_icon_path;
-        QString m_run_icon_style;
+        QString mRunIconPath;
+        QString mRunIconStyle;
 
-        QString m_content_icon_path;
-        QString m_content_icon_style;
+        QString mContentIconPath;
+        QString mContentIconStyle;
 
-        QString m_settings_icon_path;
-        QString m_settings_icon_style;
+        QString mSettingsIconPath;
+        QString mSettingsIconStyle;
     };
 }

@@ -34,39 +34,39 @@ namespace hal
     class GraphicsNet : public GraphicsItem
     {
     public:
-        struct visuals
+        struct Visuals
         {
-            bool visible;
+            bool mVisible;
             QColor color;
-            Qt::PenStyle pen_style;
-            bool fill_icon;
-            QColor fill_color;
-            Qt::BrushStyle brush_style;
+            Qt::PenStyle mPenStyle;
+            bool mFillIcon;
+            QColor mFillColor;
+            Qt::BrushStyle mBrushStyle;
         };
 
-        static void load_settings();
+        static void loadSettings();
 
         GraphicsNet(Net* n);
 
         QRectF boundingRect() const override;
         QPainterPath shape() const override;
 
-        virtual void set_visuals(const visuals& v);
+        virtual void setVisuals(const Visuals& v);
 
     protected:
-        static qreal s_line_width;
-        static qreal s_shape_width;
+        static qreal sLineWidth;
+        static qreal sShapeWidth;
 
-        static QPen s_pen;
-        static QBrush s_brush;
+        static QPen sPen;
+        static QBrush sBrush;
 
-        QRectF m_rect;
-        QPainterPath m_shape;
+        QRectF mRect;
+        QPainterPath mShape;
 
-        Qt::PenStyle m_pen_style;
+        Qt::PenStyle mPenStyle;
 
-        bool m_fill_icon;
-        QColor m_fill_color;
-        Qt::BrushStyle m_brush_style;
+        bool mFillIcon;
+        QColor mFillColor;
+        Qt::BrushStyle mBrushStyle;
     };
 }

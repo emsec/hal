@@ -30,34 +30,34 @@ namespace hal
     class ArrowSeparatedNet : public SeparatedGraphicsNet
     {
     public:
-        static void load_settings();
+        static void loadSettings();
 
         ArrowSeparatedNet(Net* n);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
-        void add_input(const QPointF& scene_position) override;
-        void add_output(const QPointF& scene_position) override;
+        void addInput(const QPointF& scene_position) override;
+        void addOutput(const QPointF& scene_position) override;
 
-        qreal input_width() const override;
-        qreal output_width() const override;
+        qreal inputWidth() const override;
+        qreal outputWidth() const override;
 
     private:
-        static qreal s_wire_length;
+        static qreal sWireLength;
 
-        static qreal s_input_arrow_offset;
-        static qreal s_output_arrow_offset;
+        static qreal sInputArrowOffset;
+        static qreal sOutputArrowOffset;
 
-        static qreal s_arrow_left_x_shift;
-        static qreal s_arrow_right_x_shift;
-        static qreal s_arrow_side_length;
+        static qreal sArrowLeftXShift;
+        static qreal sArrowRightXShift;
+        static qreal sArrowSideLength;
 
-        static qreal s_arrow_width;
-        static qreal s_arrow_height;
+        static qreal sArrowWidth;
+        static qreal sArrowHeight;
 
-        static qreal s_input_width;
-        static qreal s_output_width;
+        static qreal sInputWidth;
+        static qreal sOutputWidth;
 
-        static QPainterPath s_arrow;
+        static QPainterPath sArrow;
     };
 }

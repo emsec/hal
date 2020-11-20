@@ -2,16 +2,13 @@
 
 #include "dataflow_analysis/common/grouping.h"
 #include "dataflow_analysis/common/netlist_abstraction.h"
-#include "hal_core/utilities/log.h"
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "dataflow_analysis/evaluation/configuration.h"
 #include "dataflow_analysis/evaluation/context.h"
 #include "dataflow_analysis/evaluation/evaluation.h"
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/netlist.h"
 #include "dataflow_analysis/output_generation/dot_graph.h"
 #include "dataflow_analysis/output_generation/json.hpp"
 #include "dataflow_analysis/output_generation/json_output.h"
+#include "dataflow_analysis/output_generation/state_to_module.h"
 #include "dataflow_analysis/output_generation/svg_output.h"
 #include "dataflow_analysis/output_generation/textual_output.h"
 #include "dataflow_analysis/pre_processing/pre_processing.h"
@@ -19,8 +16,12 @@
 #include "dataflow_analysis/processing/processing.h"
 #include "dataflow_analysis/utils/timing_utils.h"
 #include "dataflow_analysis/utils/utils.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_utils.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
 
-#include <thread>
 #include <chrono>
 #include <fstream>
 #include <iomanip>
@@ -28,6 +29,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <thread>
 
 namespace hal
 {
@@ -176,13 +178,13 @@ namespace hal
         double total_time = 0;
         auto begin_time   = std::chrono::high_resolution_clock::now();
 
-        processing::Configuration config;
+        dataflow::processing::Configuration config;
         config.pass_layers = layer;
         config.num_threads = std::thread::hardware_concurrency();
 
-        evaluation::Context eval_ctx;
+        dataflow::evaluation::Context eval_ctx;
 
-        evaluation::Configuration eval_config;
+        dataflow::evaluation::Configuration eval_config;
         eval_config.prioritized_sizes = sizes;
 
         if (!eval_config.prioritized_sizes.empty())
@@ -191,10 +193,11 @@ namespace hal
             log_info("dataflow", "");
         }
 
-        auto netlist_abstr = pre_processing::run(nl);
+        auto nl_copy       = netlist_utils::copy_netlist(nl);
+        auto netlist_abstr = dataflow::pre_processing::run(nl_copy.get());
 
         auto initial_grouping = netlist_abstr.utils->create_initial_grouping(netlist_abstr);
-        std::shared_ptr<Grouping> final_grouping;
+        std::shared_ptr<dataflow::Grouping> final_grouping;
 
         total_time += (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000;
 
@@ -212,15 +215,15 @@ namespace hal
 
             begin_time = std::chrono::high_resolution_clock::now();
 
-            auto processing_result = processing::run(config, initial_grouping);
-            auto eval_result       = evaluation::run(eval_config, eval_ctx, initial_grouping, processing_result);
+            auto processing_result = dataflow::processing::run(config, initial_grouping);
+            auto eval_result       = dataflow::evaluation::run(eval_config, eval_ctx, initial_grouping, processing_result);
 
             total_time += (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000;
 
             std::string file_name = "result" + std::to_string(iteration) + ".txt";
-            textual_output::write_register_output(eval_result.merged_result, output_path, file_name);
+            dataflow::textual_output::write_register_output(eval_result.merged_result, output_path, file_name);
 
-            json_output::save_state_to_json(iteration, netlist_abstr, processing_result, eval_result, false, output_json);
+            dataflow::json_output::save_state_to_json(iteration, netlist_abstr, processing_result, eval_result, false, output_json);
 
             // end of analysis(?)
 
@@ -250,6 +253,8 @@ namespace hal
         // dot_graph::create_graph(final_grouping, output_path + "result_", {"pdf"});
 
         log("dataflow processing finished in {:3.2f}s", total_time);
+
+        dataflow::state_to_module::create_modules(nl, final_grouping);
 
         return true;
     }

@@ -10,34 +10,34 @@
 namespace hal
 {
     ExpandingListButton::ExpandingListButton(QWidget* parent)
-        : QFrame(parent), m_layout(new QHBoxLayout()), m_left_border(new QFrame()), m_icon_label(new QLabel()), m_text_label(new QLabel()), m_right_border(new QFrame()), m_hover(false), m_selected(false),
-          m_type(""), m_icon_style(""), m_icon_path("")
+        : QFrame(parent), mLayout(new QHBoxLayout()), mLeftBorder(new QFrame()), mIconLabel(new QLabel()), mTextLabel(new QLabel()), mRightBorder(new QFrame()), mHover(false), mSelected(false),
+          mType(""), mIconStyle(""), mIconPath("")
     {
-        setLayout(m_layout);
-        m_layout->setContentsMargins(0, 0, 0, 0);
-        m_layout->setSpacing(0);
+        setLayout(mLayout);
+        mLayout->setContentsMargins(0, 0, 0, 0);
+        mLayout->setSpacing(0);
 
-        m_left_border->setObjectName("left-border");
-        m_left_border->setFrameStyle(QFrame::NoFrame);
-        m_layout->addWidget(m_left_border);
+        mLeftBorder->setObjectName("left-border");
+        mLeftBorder->setFrameStyle(QFrame::NoFrame);
+        mLayout->addWidget(mLeftBorder);
 
-        m_icon_label->setObjectName("icon-label");
-        m_icon_label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-        m_layout->addWidget(m_icon_label);
+        mIconLabel->setObjectName("icon-label");
+        mIconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+        mLayout->addWidget(mIconLabel);
 
-        m_text_label->setObjectName("text-label");
-        m_layout->addWidget(m_text_label);
+        mTextLabel->setObjectName("text-label");
+        mLayout->addWidget(mTextLabel);
 
-        m_right_border->setObjectName("right-border");
-        m_right_border->setFrameStyle(QFrame::NoFrame);
-        m_layout->addWidget(m_right_border);
+        mRightBorder->setObjectName("right-border");
+        mRightBorder->setFrameStyle(QFrame::NoFrame);
+        mLayout->addWidget(mRightBorder);
     }
 
     void ExpandingListButton::enterEvent(QEvent* event)
     {
         Q_UNUSED(event)
 
-        m_hover = true;
+        mHover = true;
         repolish();
     }
 
@@ -45,7 +45,7 @@ namespace hal
     {
         Q_UNUSED(event)
 
-        m_hover = false;
+        mHover = false;
         repolish();
     }
 
@@ -59,63 +59,63 @@ namespace hal
 
     bool ExpandingListButton::hover()
     {
-        return m_hover;
+        return mHover;
     }
 
     bool ExpandingListButton::selected()
     {
-        return m_selected;
+        return mSelected;
     }
 
     QString ExpandingListButton::type()
     {
-        return m_type;
+        return mType;
     }
 
-    QString ExpandingListButton::icon_style()
+    QString ExpandingListButton::iconStyle()
     {
-        return m_icon_style;
+        return mIconStyle;
     }
 
-    void ExpandingListButton::set_selected(bool selected)
+    void ExpandingListButton::setSelected(bool selected)
     {
-        if (m_selected == selected)
+        if (mSelected == selected)
             return;
 
-        m_selected = selected;
+        mSelected = selected;
         repolish();
     }
 
     void ExpandingListButton::set_type(const QString& type)
     {
-        if (m_type == type)
+        if (mType == type)
             return;
 
-        m_type = type;
+        mType = type;
         repolish();
     }
 
-    void ExpandingListButton::set_icon_style(const QString& style)
+    void ExpandingListButton::setIconStyle(const QString& style)
     {
-        if (m_icon_style == style)
+        if (mIconStyle == style)
             return;
 
-        m_icon_style = style;
+        mIconStyle = style;
         repolish();
     }
 
-    void ExpandingListButton::set_icon_path(const QString& path)
+    void ExpandingListButton::setIconPath(const QString& path)
     {
-        if (m_icon_path == path)
+        if (mIconPath == path)
             return;
 
-        m_icon_path = path;
+        mIconPath = path;
         repolish();
     }
 
-    void ExpandingListButton::set_text(const QString& text)
+    void ExpandingListButton::setText(const QString& text)
     {
-        m_text_label->setText(text);
+        mTextLabel->setText(text);
     }
 
     void ExpandingListButton::repolish()
@@ -125,19 +125,19 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        s->unpolish(m_left_border);
-        s->polish(m_left_border);
+        s->unpolish(mLeftBorder);
+        s->polish(mLeftBorder);
 
-        s->unpolish(m_icon_label);
-        s->polish(m_icon_label);
+        s->unpolish(mIconLabel);
+        s->polish(mIconLabel);
 
-        s->unpolish(m_text_label);
-        s->polish(m_text_label);
+        s->unpolish(mTextLabel);
+        s->polish(mTextLabel);
 
-        s->unpolish(m_right_border);
-        s->polish(m_right_border);
+        s->unpolish(mRightBorder);
+        s->polish(mRightBorder);
 
-        if (!m_icon_path.isEmpty())
-            m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(20, 20)));
+        if (!mIconPath.isEmpty())
+            mIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mIconStyle, mIconPath).pixmap(QSize(20, 20)));
     }
 }

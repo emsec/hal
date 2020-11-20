@@ -6,15 +6,15 @@ namespace hal
 {
     LineEdit::LineEdit(QWidget* parent) : QLineEdit(parent)
     {
-        connect(this, &LineEdit::textChanged, this, &LineEdit::handle_text_changed);
+        connect(this, &LineEdit::textChanged, this, &LineEdit::handleTextChanged);
     }
 
     LineEdit::LineEdit(const QString& contents, QWidget* parent) : QLineEdit(contents, parent)
     {
-        connect(this, &LineEdit::textChanged, this, &LineEdit::handle_text_changed);
+        connect(this, &LineEdit::textChanged, this, &LineEdit::handleTextChanged);
     }
 
-    void LineEdit::handle_text_changed(const QString& text)
+    void LineEdit::handleTextChanged(const QString& text)
     {
         Q_UNUSED(text)
 

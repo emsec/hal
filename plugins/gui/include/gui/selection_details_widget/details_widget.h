@@ -34,23 +34,23 @@ namespace hal
     {
         Q_OBJECT
     public:
-        enum detailsType_t
+        enum DetailsType
         {
             ModuleDetails,
             GateDetails,
             NetDetails
         };
 
-        explicit DetailsWidget(detailsType_t tp, QWidget* parent = nullptr);
+        explicit DetailsWidget(DetailsType tp, QWidget* parent = nullptr);
 
         QFont keyFont() const;
         u32 currentId() const;
         QString detailsTypeName() const;
 
     protected:
-        detailsType_t m_detailsType;
-        u32 m_currentId;
-        QFont m_keyFont;
-        bool m_hideEmptySections;
+        DetailsType mDetailsType;
+        u32 mCurrentId;
+        QFont mKeyFont;
+        bool mHideEmptySections;
     };
 }    // namespace hal

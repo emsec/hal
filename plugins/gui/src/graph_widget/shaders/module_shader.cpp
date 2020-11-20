@@ -8,7 +8,7 @@
 namespace hal
 {
     ModuleShader::ModuleShader(const GraphContext* const context) : GraphShader(context),
-        m_color_gates(true) // INITIALIZE WITH DEFAULT VALUE FROM SETTINGS
+        mColorGates(true) // INITIALIZE WITH DEFAULT VALUE FROM SETTINGS
     {
     }
 
@@ -28,40 +28,40 @@ namespace hal
 
     void ModuleShader::update()
     {
-        m_shading.module_visuals.clear();
-        m_shading.gate_visuals.clear();
-        m_shading.net_visuals.clear();
+        mShading.mOduleVisuals.clear();
+        mShading.mGateVisuals.clear();
+        mShading.mNetVisuals.clear();
 
-        for (const u32& id : m_context->modules())
+        for (const u32& id : mContext->modules())
         {
-            GraphicsNode::visuals v;
-            v.main_color = g_netlist_relay->get_module_color(id);
-            v.visible = true;
-            m_shading.module_visuals.insert(id, v);
+            GraphicsNode::Visuals v;
+            v.mMainColor = gNetlistRelay->getModuleColor(id);
+            v.mVisible = true;
+            mShading.mOduleVisuals.insert(id, v);
         }
 
-        if (m_color_gates)
+        if (mColorGates)
         {
-            for (const u32& id : m_context->gates())
+            for (const u32& id : mContext->gates())
             {
-                Gate* g = g_netlist->get_gate_by_id(id);
+                Gate* g = gNetlist->get_gate_by_id(id);
                 assert(g);
 
                 Module* m = g->get_module();
                 assert(m);
 
-                GraphicsNode::visuals v;
-                v.main_color = g_netlist_relay->get_module_color(m->get_id());
-                v.visible = true;
-                m_shading.gate_visuals.insert(id, v);
+                GraphicsNode::Visuals v;
+                v.mMainColor = gNetlistRelay->getModuleColor(m->get_id());
+                v.mVisible = true;
+                mShading.mGateVisuals.insert(id, v);
             }
         }
 
         // DEBUG CODE
-        for (const u32& id : m_context->nets())
+        for (const u32& id : mContext->nets())
         {
-            GraphicsNet::visuals v{true, QColor(200, 200, 200), Qt::SolidLine, true, QColor(100, 100, 100), Qt::SolidPattern};
-            m_shading.net_visuals.insert(id, v);
+            GraphicsNet::Visuals v{true, QColor(200, 200, 200), Qt::SolidLine, true, QColor(100, 100, 100), Qt::SolidPattern};
+            mShading.mNetVisuals.insert(id, v);
         }
     }
 }

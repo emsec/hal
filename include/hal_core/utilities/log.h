@@ -23,11 +23,11 @@
 
 #pragma once
 
+#include "hal_core/defines.h"
 #include "hal_core/utilities/callback_hook.h"
 #include "hal_core/utilities/program_arguments.h"
 #include "hal_core/utilities/program_options.h"
 #include "hal_core/utilities/utils.h"
-#include "hal_core/defines.h"
 
 #include <functional>
 #include <map>
@@ -53,7 +53,7 @@ namespace hal
 #define LOG_CHANNEL(channel) LogManager::get_instance().get_channel(channel)
 
 /**
- * @ingroup core
+ * @ingroup utilities
  * @{
  */
 
@@ -78,7 +78,7 @@ namespace hal
 ///@}
 
 /**
- * @ingroup core
+ * @ingroup utilities
  */
 
 /**
@@ -95,6 +95,9 @@ namespace hal
         exit(1);                                                                               \
     } while (0);
 
+    /**
+     * @ingroup utilities 
+     */
     class CORE_API LogManager
     {
     public:
@@ -197,11 +200,21 @@ namespace hal
         void activate_channel(const std::string& channel_name);
 
         /**
+         * Activate all logging channels.
+         */
+        void activate_all_channels();
+
+        /**
          * Deactivate a channel suppressing all output.
          *
          * @param[in] channel_name - The name of the channel.
          */
         void deactivate_channel(const std::string& channel_name);
+
+        /**
+         * Deactivate all logging channels.
+         */
+        void deactivate_all_channels();
 
         /**
          * Get the GUI callback hook for displaying log messages inside the GUI.

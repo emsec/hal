@@ -3,6 +3,7 @@
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_system/gate_event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -130,6 +131,11 @@ namespace hal
     Module* Gate::get_module() const
     {
         return m_module;
+    }
+
+    Grouping* Gate::get_grouping() const
+    {
+        return m_grouping;
     }
 
     BooleanFunction Gate::get_boolean_function(std::string name) const
@@ -284,7 +290,7 @@ namespace hal
                     }
                     else
                     {
-                        clause &= !BooleanFunction(input);
+                        clause &= ~BooleanFunction(input);
                     }
                     input_values >>= 1;
                 }

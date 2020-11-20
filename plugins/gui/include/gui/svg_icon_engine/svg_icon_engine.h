@@ -37,6 +37,6 @@ namespace hal
         QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
 
     private:
-        QByteArray m_data;
+        QByteArray mData;
     };
 }

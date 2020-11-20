@@ -5,12 +5,25 @@
 
 namespace hal
 {
-    GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(hal::item_type::module, m->get_id(), QString::fromStdString(m->get_name()))
+    GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(ItemType::Module, m->get_id(), QString::fromStdString(m->get_name()))
     {
+        mNodeText[1]                              = QString::fromStdString(m->get_type());
+        mNodeText[mNodeText[1].isEmpty() ? 1 : 2] = "Module";
+
         for (Net* n : m->get_input_nets())
-            m_input_pins.append(module_pin{QString::fromStdString(m->get_input_port_name(n)), n->get_id()});
+            mInputPins.append(ModulePin{QString::fromStdString(m->get_input_port_name(n)), n->get_id()});
 
         for (Net* n : m->get_output_nets())
-            m_output_pins.append(module_pin{QString::fromStdString(m->get_output_port_name(n)), n->get_id()});
+            mOutputPins.append(ModulePin{QString::fromStdString(m->get_output_port_name(n)), n->get_id()});
+
+        if (mInputPins.size() > 1)
+            std::sort(mInputPins.begin(), mInputPins.end());
+        if (mOutputPins.size() > 1)
+            std::sort(mOutputPins.begin(), mOutputPins.end());
+        for (int inp=0; inp<mInputPins.size(); inp++)
+            mInputByNet.insert(mInputPins.at(inp).mNetId,inp);
+
+        for (int outp=0; outp<mOutputPins.size(); outp++)
+            mOutputByNet.insert(mOutputPins.at(outp).mNetId,outp);
     }
-}
+}    // namespace hal

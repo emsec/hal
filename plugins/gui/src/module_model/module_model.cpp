@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    ModuleModel::ModuleModel(QObject* parent) : QAbstractItemModel(parent), m_top_ModuleItem(nullptr)
+    ModuleModel::ModuleModel(QObject* parent) : QAbstractItemModel(parent), mTopModuleItem(nullptr)
     {
     }
 
@@ -22,8 +22,8 @@ namespace hal
 
         if (!parent.isValid())
         {
-            if (row == 0 && column == 0 && m_top_ModuleItem)
-                return createIndex(0, 0, m_top_ModuleItem);
+            if (row == 0 && column == 0 && mTopModuleItem)
+                return createIndex(0, 0, mTopModuleItem);
             else
                 return QModelIndex();
         }
@@ -31,7 +31,7 @@ namespace hal
         if (column != 0 || parent.column() != 0)
             return QModelIndex();
 
-        ModuleItem* parent_item = get_item(parent);
+        ModuleItem* parent_item = getItem(parent);
 
         ModuleItem* child_item = static_cast<ModuleItem*>(parent_item)->child(row);
         assert(child_item);
@@ -46,7 +46,7 @@ namespace hal
         //    if (parent.isValid() && parent.column() != 0)
         //        return QModelIndex();
 
-        //    ModuleItem* parent_item = get_item(parent);
+        //    ModuleItem* parent_item = getItem(parent);
         //    ModuleItem* child_item = parent_item->child(row);
 
         //    if (child_item)
@@ -60,9 +60,9 @@ namespace hal
         if (!index.isValid())
             return QModelIndex();
 
-        ModuleItem* item = get_item(index);
+        ModuleItem* item = getItem(index);
 
-        if (item == m_top_ModuleItem)
+        if (item == mTopModuleItem)
             return QModelIndex();
 
         ModuleItem* parent_item = item->parent();
@@ -71,7 +71,7 @@ namespace hal
         //    if (!index.isValid())
         //        return QModelIndex();
 
-        //    ModuleItem* child_item  = get_item(index);
+        //    ModuleItem* child_item  = getItem(index);
         //    ModuleItem* parent_item = child_item->parent();
 
         //    if (parent_item == m_root_item)
@@ -88,7 +88,7 @@ namespace hal
         if (parent.column() != 0)
             return 0;
 
-        ModuleItem* parent_item = get_item(parent);
+        ModuleItem* parent_item = getItem(parent);
 
         return parent_item->childCount();
     }
@@ -116,10 +116,10 @@ namespace hal
             {
                 if (index.column() == 0)
                 {
-                    QString run_icon_style = "all->" + item->color().name();
-                    QString run_icon_path  = ":/icons/filled-circle";
+                    QString runIconStyle = "all->" + item->color().name();
+                    QString runIconPath  = ":/icons/filled-circle";
 
-                    return gui_utility::get_styled_svg_icon(run_icon_style, run_icon_path);
+                    return gui_utility::getStyledSvgIcon(runIconStyle, runIconPath);
                 }
                 break;
             }
@@ -157,7 +157,7 @@ namespace hal
         return QVariant();
     }
 
-    ModuleItem* ModuleModel::get_item(const QModelIndex& index) const
+    ModuleItem* ModuleModel::getItem(const QModelIndex& index) const
     {
         if (index.isValid())
             return static_cast<ModuleItem*>(index.internalPointer());
@@ -165,17 +165,17 @@ namespace hal
             return nullptr;
     }
 
-    QModelIndex ModuleModel::get_index(const ModuleItem* const item) const
+    QModelIndex ModuleModel::getIndex(const ModuleItem* const item) const
     {
         assert(item);
 
         QVector<int> row_numbers;
         const ModuleItem* current_item = item;
 
-        while (current_item != m_top_ModuleItem)
+        while (current_item != mTopModuleItem)
         {
             row_numbers.append(current_item->row());
-            current_item = current_item->const_parent();
+            current_item = current_item->constParent();
         }
 
         QModelIndex model_index = index(0, 0, QModelIndex());
@@ -190,118 +190,119 @@ namespace hal
     {
         ModuleItem* item = new ModuleItem(1);
 
-        m_ModuleItems.insert(1, item);
+        mModuleItems.insert(1, item);
 
         beginInsertRows(index(0, 0, QModelIndex()), 0, 0);
-        m_top_ModuleItem = item;
+        mTopModuleItem = item;
         endInsertRows();
 
         // This is broken because it can attempt to insert a child before its parent
         // which will cause an assertion failure and then crash
 
-        // std::set<Module*> s = g_netlist->get_modules();
-        // s.erase(g_netlist->get_top_module());
+        // std::set<Module*> s = gNetlist->get_modules();
+        // s.erase(gNetlist->get_top_module());
         // for (Module* m : s)
-        //     add_module(m->get_id(), m->get_parent_module()->get_id());
+        //     addModule(m->get_id(), m->get_parent_module()->get_id());
 
         // This works
 
         // recursively insert modules
-        Module* m = g_netlist->get_top_module();
-        add_recursively(m->get_submodules());
+        Module* m = gNetlist->get_top_module();
+        addRecursively(m->get_submodules());
     }
 
     void ModuleModel::clear()
     {
         beginResetModel();
 
-        m_top_ModuleItem = nullptr;
+        mTopModuleItem = nullptr;
 
-        for (ModuleItem* m : m_ModuleItems)
+        for (ModuleItem* m : mModuleItems)
             delete m;
 
         endResetModel();
     }
 
-    void ModuleModel::add_module(const u32 id, const u32 parent_module)
+    void ModuleModel::addModule(const u32 id, const u32 parent_module)
     {
-        assert(g_netlist->get_module_by_id(id));
-        assert(g_netlist->get_module_by_id(parent_module));
-        assert(!m_ModuleItems.contains(id));
-        assert(m_ModuleItems.contains(parent_module));
+        assert(gNetlist->get_module_by_id(id));
+        assert(gNetlist->get_module_by_id(parent_module));
+        assert(!mModuleItems.contains(id));
+        assert(mModuleItems.contains(parent_module));
 
         ModuleItem* item   = new ModuleItem(id);
-        ModuleItem* parent = m_ModuleItems.value(parent_module);
+        item->appendExistingChildIfAny(mModuleItems);
+        ModuleItem* parent = mModuleItems.value(parent_module);
 
-        item->set_parent(parent);
-        m_ModuleItems.insert(id, item);
+        item->setParent(parent);
+        mModuleItems.insert(id, item);
 
-        QModelIndex index = get_index(parent);
+        QModelIndex index = getIndex(parent);
 
         int row = parent->childCount();
-        m_is_modifying = true;
+        mIsModifying = true;
         beginInsertRows(index, row, row);
-        parent->insert_child(row, item);
-        m_is_modifying = false;
+        parent->insertChild(row, item);
+        mIsModifying = false;
         endInsertRows();
     }
 
-    void ModuleModel::add_recursively(const std::vector<Module*>& modules)
+    void ModuleModel::addRecursively(const std::vector<Module*>& modules)
     {
         for (auto &m : modules)
         {
-            add_module(m->get_id(), m->get_parent_module()->get_id());
-            add_recursively(m->get_submodules());
+            addModule(m->get_id(), m->get_parent_module()->get_id());
+            addRecursively(m->get_submodules());
         }
     }
 
     void ModuleModel::remove_module(const u32 id)
     {
         assert(id != 1);
-        assert(g_netlist->get_module_by_id(id));
-        assert(m_ModuleItems.contains(id));
+        assert(gNetlist->get_module_by_id(id));
+        assert(mModuleItems.contains(id));
 
-        ModuleItem* item   = m_ModuleItems.value(id);
+        ModuleItem* item   = mModuleItems.value(id);
         ModuleItem* parent = item->parent();
         assert(item);
         assert(parent);
 
-        QModelIndex index = get_index(parent);
+        QModelIndex index = getIndex(parent);
 
         int row = item->row();
 
-        m_is_modifying = true;
+        mIsModifying = true;
         beginRemoveRows(index, row, row);
-        parent->remove_child(item);
-        m_is_modifying = false;
+        parent->removeChild(item);
+        mIsModifying = false;
         endRemoveRows();
 
-        m_ModuleItems.remove(id);
+        mModuleItems.remove(id);
         delete item;
     }
 
-    void ModuleModel::update_module(const u32 id)    // SPLIT ???
+    void ModuleModel::updateModule(const u32 id)    // SPLIT ???
     {
-        assert(g_netlist->get_module_by_id(id));
-        assert(m_ModuleItems.contains(id));
+        assert(gNetlist->get_module_by_id(id));
+        assert(mModuleItems.contains(id));
 
-        ModuleItem* item = m_ModuleItems.value(id);
+        ModuleItem* item = mModuleItems.value(id);
         assert(item);
 
-        item->set_name(QString::fromStdString(g_netlist->get_module_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
-        item->set_color(g_netlist_relay->get_module_color(id));
+        item->set_name(QString::fromStdString(gNetlist->get_module_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
+        item->setColor(gNetlistRelay->getModuleColor(id));
 
-        QModelIndex index = get_index(item);
+        QModelIndex index = getIndex(item);
         Q_EMIT dataChanged(index, index);
     }
 
-    ModuleItem* ModuleModel::get_item(const u32 module_id) const
+    ModuleItem* ModuleModel::getItem(const u32 module_id) const
     {
-        return m_ModuleItems.value(module_id);
+        return mModuleItems.value(module_id);
     }
 
-    bool ModuleModel::is_modifying()
+    bool ModuleModel::isModifying()
     {
-        return m_is_modifying;
+        return mIsModifying;
     }
 }

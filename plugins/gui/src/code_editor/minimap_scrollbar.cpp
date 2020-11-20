@@ -11,106 +11,106 @@
 namespace hal
 {
     MinimapScrollbar::MinimapScrollbar(QWidget* parent) : QWidget(parent),
-          m_slider(new QFrame(this)),
-          m_minimum(0),
-          m_maximum(100),
-          m_value(0),
-          m_handle_length(0),
-          m_handle_position(0),
-          m_mouse_pressed(false),
-          m_drag_offset(0),
-          m_scrollbar(nullptr)
+          mSlider(new QFrame(this)),
+          mMinimum(0),
+          mMaximum(100),
+          mValue(0),
+          mHandleLength(0),
+          mHandlePosition(0),
+          mMousePressed(false),
+          mDragOffset(0),
+          mScrollbar(nullptr)
     {
-        m_slider->setObjectName("slider");
-        m_slider->show();
+        mSlider->setObjectName("slider");
+        mSlider->show();
     }
 
     int MinimapScrollbar::minimum() const
     {
-        return m_minimum;
+        return mMinimum;
     }
 
     int MinimapScrollbar::maximum() const
     {
-        return m_maximum;
+        return mMaximum;
     }
 
     int MinimapScrollbar::value() const
     {
-        return m_value;
+        return mValue;
     }
 
-    int MinimapScrollbar::slider_height() const
+    int MinimapScrollbar::sliderHeight() const
     {
-        return m_slider->height();
+        return mSlider->height();
     }
 
-    int MinimapScrollbar::slider_position() const
+    int MinimapScrollbar::sliderPosition() const
     {
-        return m_slider->pos().y();
+        return mSlider->pos().y();
     }
 
     //void MinimapScrollbar::set_minimum(const int minimum)
     //{
-    //    m_minimum = minimum;
+    //    mMinimum = minimum;
 
-    //    if (m_value < minimum)
-    //        m_value = minimum;
+    //    if (mValue < minimum)
+    //        mValue = minimum;
 
-    //    adjust_slider_to_value();
+    //    adjustSliderToValue();
     //}
 
     //void MinimapScrollbar::set_maximum(const int maximum)
     //{
-    //    m_maximum = maximum;
+    //    mMaximum = maximum;
 
-    //    if (m_value > maximum)
-    //        m_value = maximum;
+    //    if (mValue > maximum)
+    //        mValue = maximum;
 
-    //    adjust_slider_to_value();
+    //    adjustSliderToValue();
     //}
 
-    void MinimapScrollbar::set_range(const int minimum, const int maximum)
+    void MinimapScrollbar::setRange(const int minimum, const int maximum)
     {
-        m_minimum = minimum;
-        m_maximum = maximum;
+        mMinimum = minimum;
+        mMaximum = maximum;
 
         // MAYBE REDUNDANT, LEFT FOR COMPLETENESS
-        if (m_value < minimum)
-            m_value = minimum;
+        if (mValue < minimum)
+            mValue = minimum;
 
-        else if (m_value > maximum)
-            m_value = maximum;
+        else if (mValue > maximum)
+            mValue = maximum;
 
-        adjust_slider_to_value();
+        adjustSliderToValue();
     }
 
-    void MinimapScrollbar::set_value(const int value)
+    void MinimapScrollbar::setValue(const int value)
     {
-        if (m_value != value)
+        if (mValue != value)
         {
-            if (value < m_minimum)
-                m_value = m_minimum;
+            if (value < mMinimum)
+                mValue = mMinimum;
 
-            else if (value > m_maximum)
-                m_value = m_maximum;
+            else if (value > mMaximum)
+                mValue = mMaximum;
 
             else
-                m_value = value;
+                mValue = value;
 
-            adjust_slider_to_value();
+            adjustSliderToValue();
         }
     }
 
-    void MinimapScrollbar::set_slider_height(int height)
+    void MinimapScrollbar::setSliderHeight(int height)
     {
-        m_slider->resize(m_slider->width(), height);
-        adjust_slider_to_value();
+        mSlider->resize(mSlider->width(), height);
+        adjustSliderToValue();
     }
 
-    void MinimapScrollbar::set_scrollbar(QScrollBar* scrollbar)
+    void MinimapScrollbar::setScrollbar(QScrollBar* scrollbar)
     {
-        m_scrollbar = scrollbar;
+        mScrollbar = scrollbar;
     }
 
     void MinimapScrollbar::paintEvent(QPaintEvent* event)
@@ -124,16 +124,16 @@ namespace hal
         //QWidget::resizeEvent(event); // UNNECESSARY ?
         Q_UNUSED(event)
 
-        m_slider->resize(width(), m_slider->height());
-        adjust_slider_to_value();
+        mSlider->resize(width(), mSlider->height());
+        adjustSliderToValue();
     }
 
     void MinimapScrollbar::mousePressEvent(QMouseEvent* event)
     {
-        if (m_slider->geometry().contains(event->pos()))
+        if (mSlider->geometry().contains(event->pos()))
         {
-            m_mouse_pressed = true;
-            m_drag_offset   = event->pos().y() - m_slider->geometry().top();
+            mMousePressed = true;
+            mDragOffset   = event->pos().y() - mSlider->geometry().top();
             event->accept();
             return;
         }
@@ -143,66 +143,66 @@ namespace hal
 
     void MinimapScrollbar::mouseMoveEvent(QMouseEvent* event)
     {
-        if (!m_scrollbar)
+        if (!mScrollbar)
             return;
 
-        if (m_mouse_pressed)
+        if (mMousePressed)
         {
             event->accept();    // UNSURE
 
-            int y = event->pos().y() - m_drag_offset;
+            int y = event->pos().y() - mDragOffset;
 
             if (y < 0)
-                m_scrollbar->setValue(m_minimum);
+                mScrollbar->setValue(mMinimum);
 
-            else if (y > height() - m_slider->height())
-                m_scrollbar->setValue(m_maximum);
+            else if (y > height() - mSlider->height())
+                mScrollbar->setValue(mMaximum);
 
             else
             {
-                int available_pixel = height() - m_slider->height();
+                int available_pixel = height() - mSlider->height();
                 if (available_pixel <= 0)
                     return;
 
-                int value_range = m_maximum - m_minimum;
+                int value_range = mMaximum - mMinimum;
                 if (value_range <= 0)
                     return;
 
                 double pixel_per_value = double(available_pixel) / double(value_range);
-                m_scrollbar->setValue(std::round(y / pixel_per_value));
+                mScrollbar->setValue(std::round(y / pixel_per_value));
             }
         }
     }
 
     void MinimapScrollbar::mouseReleaseEvent(QMouseEvent* event)
     {
-        m_mouse_pressed = false;
+        mMousePressed = false;
         event->accept();
     }
 
     void MinimapScrollbar::leaveEvent(QEvent* event)
     {
-        m_mouse_pressed = false;
+        mMousePressed = false;
         QWidget::leaveEvent(event);
     }
 
-    void MinimapScrollbar::adjust_slider_to_value()
+    void MinimapScrollbar::adjustSliderToValue()
     {
-        int available_pixel = height() - m_slider->height();
+        int available_pixel = height() - mSlider->height();
         if (available_pixel <= 0)
             return;
 
-        int value_range = m_maximum - m_minimum;
+        int value_range = mMaximum - mMinimum;
         if (value_range <= 0)
             return;
 
         double pixel_per_value = double(available_pixel) / double(value_range);
-        int y                  = std::round(pixel_per_value * m_value);
+        int y                  = std::round(pixel_per_value * mValue);
 
-        int max = height() - m_slider->height();
+        int max = height() - mSlider->height();
         if (y > max)
             y = max;
 
-        m_slider->move(0, y);
+        mSlider->move(0, y);
     }
 }

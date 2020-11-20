@@ -30,76 +30,76 @@
 namespace hal
 {
     PythonEditor::PythonEditor(QWidget* parent)
-        : ContentWidget("Python Editor", parent), PythonContextSubscriber(), m_searchbar(new Searchbar()), m_action_open_file(new Action(this)), m_action_run(new Action(this)),
-          m_action_save(new Action(this)), m_action_save_as(new Action(this)), m_action_toggle_minimap(new Action(this)), m_action_new_file(new Action(this))
+        : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar()), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
+          mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this))
     {
         ensurePolished();
-        m_new_file_counter = 0;
-        m_last_click_time  = 0;
+        mNewFileCounter = 0;
+        mLastClickTime  = 0;
 
-        m_last_opened_path = QDir::currentPath();
+        mLastOpenedPath = QDir::currentPath();
 
-        m_tab_widget = new QTabWidget(this);
-        m_tab_widget->setTabsClosable(true);
-        m_tab_widget->setMovable(true);
+        mTabWidget = new QTabWidget(this);
+        mTabWidget->setTabsClosable(true);
+        mTabWidget->setMovable(true);
         // we need to grab mouse events from the tab bar
-        m_tab_widget->tabBar()->installEventFilter(this);
-        m_content_layout->addWidget(m_tab_widget);
-        connect(m_tab_widget, &QTabWidget::tabCloseRequested, this, &PythonEditor::handle_tab_close_requested);
-        m_content_layout->addWidget(m_searchbar);
-        m_searchbar->hide();
+        mTabWidget->tabBar()->installEventFilter(this);
+        mContentLayout->addWidget(mTabWidget);
+        connect(mTabWidget, &QTabWidget::tabCloseRequested, this, &PythonEditor::handleTabCloseRequested);
+        mContentLayout->addWidget(mSearchbar);
+        mSearchbar->hide();
 
-        m_action_open_file->setIcon(gui_utility::get_styled_svg_icon(m_open_icon_style, m_open_icon_path));
-        m_action_save->setIcon(gui_utility::get_styled_svg_icon(m_save_icon_style, m_save_icon_path));
-        m_action_save_as->setIcon(gui_utility::get_styled_svg_icon(m_save_as_icon_style, m_save_as_icon_path));
-        m_action_run->setIcon(gui_utility::get_styled_svg_icon(m_run_icon_style, m_run_icon_path));
-        m_action_toggle_minimap->setIcon(gui_utility::get_styled_svg_icon(m_toggle_minimap_icon_style, m_toggle_minimap_icon_path));
-        m_action_new_file->setIcon(gui_utility::get_styled_svg_icon(m_new_file_icon_style, m_new_file_icon_path));
+        mActionOpenFile->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
+        mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
+        mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
+        mActionRun->setIcon(gui_utility::getStyledSvgIcon(mRunIconStyle, mRunIconPath));
+        mActionToggleMinimap->setIcon(gui_utility::getStyledSvgIcon(mToggleMinimapIconStyle, mToggleMinimapIconPath));
+        mActionNewFile->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
 
-        g_keybind_manager->bind(m_action_open_file, "keybinds/python_open_file");
-        g_keybind_manager->bind(m_action_save, "keybinds/python_save_file");
-        g_keybind_manager->bind(m_action_save_as, "keybinds/python_save_file_as");
-        g_keybind_manager->bind(m_action_run, "keybinds/python_run_file");
-        g_keybind_manager->bind(m_action_new_file, "keybinds/python_create_file");
+        gKeybindManager->bind(mActionOpenFile, "keybinds/python_open_file");
+        gKeybindManager->bind(mActionSave, "keybinds/python_save_file");
+        gKeybindManager->bind(mActionSaveAs, "keybinds/python_save_file_as");
+        gKeybindManager->bind(mActionRun, "keybinds/python_run_file");
+        gKeybindManager->bind(mActionNewFile, "keybinds/python_create_file");
 
-        m_action_open_file->setText("Open Script");
-        m_action_save->setText("Save");
-        m_action_save_as->setText("Save as");
-        m_action_run->setText("Execute Script");
-        m_action_new_file->setText("New File");
-        m_action_toggle_minimap->setText("Toggle Minimap");
+        mActionOpenFile->setText("Open Script");
+        mActionSave->setText("Save");
+        mActionSaveAs->setText("Save as");
+        mActionRun->setText("Execute Script");
+        mActionNewFile->setText("New File");
+        mActionToggleMinimap->setText("Toggle Minimap");
 
-        connect(m_action_open_file, &Action::triggered, this, &PythonEditor::handle_action_open_file);
-        connect(m_action_save, &Action::triggered, this, &PythonEditor::handle_action_save_file);
-        connect(m_action_save_as, &Action::triggered, this, &PythonEditor::handle_action_save_file_as);
-        connect(m_action_run, &Action::triggered, this, &PythonEditor::handle_action_run);
-        connect(m_action_new_file, &Action::triggered, this, &PythonEditor::handle_action_new_tab);
-        connect(m_action_toggle_minimap, &Action::triggered, this, &PythonEditor::handle_action_toggle_minimap);
+        connect(mActionOpenFile, &Action::triggered, this, &PythonEditor::handleActionOpenFile);
+        connect(mActionSave, &Action::triggered, this, &PythonEditor::handleActionSaveFile);
+        connect(mActionSaveAs, &Action::triggered, this, &PythonEditor::handleActionSaveFileAs);
+        connect(mActionRun, &Action::triggered, this, &PythonEditor::handleActionRun);
+        connect(mActionNewFile, &Action::triggered, this, &PythonEditor::handleActionNewTab);
+        connect(mActionToggleMinimap, &Action::triggered, this, &PythonEditor::handleActionToggleMinimap);
 
-        connect(m_searchbar, &Searchbar::text_edited, this, &PythonEditor::handle_searchbar_text_edited);
-        connect(m_tab_widget, &QTabWidget::currentChanged, this, &PythonEditor::handle_current_tab_changed);
+        connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::handleSearchbarTextEdited);
+        connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
 
-        m_path_editor_map = QMap<QString, PythonCodeEditor*>();
+        mPathEditorMap = QMap<QString, PythonCodeEditor*>();
 
-        m_file_modified_bar = new FileModifiedBar();
-        m_file_modified_bar->setHidden(true);
-        m_content_layout->addWidget(m_file_modified_bar);
-        connect(m_file_modified_bar, &FileModifiedBar::reload_clicked, this, &PythonEditor::handle_base_file_modified_reload);
-        connect(m_file_modified_bar, &FileModifiedBar::ignore_clicked, this, &PythonEditor::handle_base_file_modified_ignore);
-        connect(m_file_modified_bar, &FileModifiedBar::ok_clicked, this, &PythonEditor::handle_base_file_modified_ok);
+        mFileModifiedBar = new FileModifiedBar();
+        mFileModifiedBar->setHidden(true);
+        mContentLayout->addWidget(mFileModifiedBar);
+        connect(mFileModifiedBar, &FileModifiedBar::reloadClicked, this, &PythonEditor::handleBaseFileModifiedReload);
+        connect(mFileModifiedBar, &FileModifiedBar::ignoreClicked, this, &PythonEditor::handleBaseFileModifiedIgnore);
+        connect(mFileModifiedBar, &FileModifiedBar::okClicked, this, &PythonEditor::handleBaseFileModifiedOk);
 
-        m_file_watcher = new QFileSystemWatcher(this);
-        connect(m_file_watcher, &QFileSystemWatcher::fileChanged, this, &PythonEditor::handle_tab_file_changed);
-        connect(m_file_watcher, &QFileSystemWatcher::fileChanged, m_file_modified_bar, &FileModifiedBar::handle_file_changed);
+        mFileWatcher = new QFileSystemWatcher(this);
+        connect(mFileWatcher, &QFileSystemWatcher::fileChanged, this, &PythonEditor::handleTabFileChanged);
+        connect(mFileWatcher, &QFileSystemWatcher::fileChanged, mFileModifiedBar, &FileModifiedBar::handleFileChanged);
 
-        handle_action_new_tab();
+        handleActionNewTab();
 
         using namespace std::placeholders;
-        hal_file_manager::register_on_serialize_callback("PythonEditor", std::bind(&PythonEditor::handle_serialization_to_hal_file, this, _1, _2, _3));
-        hal_file_manager::register_on_deserialize_callback("PythonEditor", std::bind(&PythonEditor::handle_deserialization_from_hal_file, this, _1, _2, _3));
+        hal_file_manager::register_on_serialize_callback("PythonEditor", std::bind(&PythonEditor::handleSerializationToHalFile, this, _1, _2, _3));
+        hal_file_manager::register_on_deserialize_callback("PythonEditor", std::bind(&PythonEditor::handleDeserializationFromHalFile, this, _1, _2, _3));
     }
 
-    bool PythonEditor::handle_serialization_to_hal_file(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document)
+    bool PythonEditor::handleSerializationToHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document)
     {
         UNUSED(path);
         UNUSED(netlist);
@@ -107,15 +107,15 @@ namespace hal
         rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
         rapidjson::Value tabs(rapidjson::kArrayType);
 
-        for (int i = 0; i < m_tab_widget->count(); i++)
+        for (int i = 0; i < mTabWidget->count(); i++)
         {
             rapidjson::Value val(rapidjson::kObjectType);
 
-            auto tab = dynamic_cast<PythonCodeEditor*>(m_tab_widget->widget(i));
+            auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(i));
 
-            if (!tab->get_file_name().isEmpty())
+            if (!tab->getFileName().isEmpty())
             {
-                val.AddMember("path", tab->get_file_name().toStdString(), allocator);
+                val.AddMember("path", tab->getFileName().toStdString(), allocator);
             }
 
             if (tab->document()->isModified())
@@ -130,16 +130,16 @@ namespace hal
         {
             rapidjson::Value root(rapidjson::kObjectType);
             root.AddMember("tabs", tabs, allocator);
-            if (m_tab_widget->currentIndex() != -1)
+            if (mTabWidget->currentIndex() != -1)
             {
-                root.AddMember("selected_tab", rapidjson::Value(m_tab_widget->currentIndex()), allocator);
+                root.AddMember("selected_tab", rapidjson::Value(mTabWidget->currentIndex()), allocator);
             }
             document.AddMember("PythonEditor", root, allocator);
         }
         return true;
     }
 
-    bool PythonEditor::handle_deserialization_from_hal_file(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document)
+    bool PythonEditor::handleDeserializationFromHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document)
     {
         UNUSED(path);
         UNUSED(netlist);
@@ -152,43 +152,43 @@ namespace hal
             for (auto it = array.Begin(); it != array.End(); ++it)
             {
                 cnt++;
-                if (m_tab_widget->count() < cnt)
+                if (mTabWidget->count() < cnt)
                 {
-                    handle_action_new_tab();
+                    handleActionNewTab();
                 }
 
                 auto val = it->GetObject();
 
                 if (val.HasMember("path"))
                 {
-                    tab_load_file(cnt - 1, val["path"].GetString());
+                    tabLoadFile(cnt - 1, val["path"].GetString());
                 }
 
                 if (val.HasMember("script"))
                 {
-                    auto tab = dynamic_cast<PythonCodeEditor*>(m_tab_widget->widget(cnt - 1));
+                    auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(cnt - 1));
                     tab->setPlainText(val["script"].GetString());
                     tab->document()->setModified(true);
-                    m_tab_widget->setTabText(cnt - 1, m_tab_widget->tabText(cnt - 1) + "*");
+                    mTabWidget->setTabText(cnt - 1, mTabWidget->tabText(cnt - 1) + "*");
                 }
             }
 
             if (root.HasMember("selected_tab"))
             {
-                m_tab_widget->setCurrentIndex(root["selected_tab"].GetInt());
+                mTabWidget->setCurrentIndex(root["selected_tab"].GetInt());
             }
         }
         return true;
     }
 
-    void PythonEditor::handle_tab_close_requested(int index)
+    void PythonEditor::handleTabCloseRequested(int index)
     {
-        PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->widget(index));
+        PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
         if (editor->document()->isModified())
         {
             QMessageBox msgBox;
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");
-            msgBox.setText(m_tab_widget->tabText(index).append(" has been modified."));
+            msgBox.setText(mTabWidget->tabText(index).append(" has been modified."));
             msgBox.setInformativeText("Do you want to save your changes?");
             msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
             msgBox.setDefaultButton(QMessageBox::Save);
@@ -198,86 +198,86 @@ namespace hal
                 return;
 
             // discard is not handled specially, we just treat the document
-            // as if it did not require saving and call discard_tab on it
+            // as if it did not require saving and call discardTab on it
 
             if (ret == QMessageBox::Save)
             {
-                if (editor->get_file_name().isEmpty())
-                    save_file(true, index);
+                if (editor->getFileName().isEmpty())
+                    saveFile(true, index);
                 else
-                    save_file(false, index);
+                    saveFile(false, index);
 
-                m_tab_widget->removeTab(index);
+                mTabWidget->removeTab(index);
                 return;
             }
         }
 
-        this->discard_tab(index);
+        this->discardTab(index);
     }
 
-    void PythonEditor::handle_action_toggle_minimap()
+    void PythonEditor::handleActionToggleMinimap()
     {
-        if (m_tab_widget->currentWidget())
-            dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget())->toggle_minimap();
+        if (mTabWidget->currentWidget())
+            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->toggleMinimap();
     }
 
-    void PythonEditor::handle_modification_changed(bool changed)
+    void PythonEditor::handleModificationChanged(bool changed)
     {
-        if (changed && !(m_tab_widget->tabText(m_tab_widget->currentIndex()).endsWith("*")))
+        if (changed && !(mTabWidget->tabText(mTabWidget->currentIndex()).endsWith("*")))
         {
-            m_tab_widget->setTabText(m_tab_widget->currentIndex(), m_tab_widget->tabText(m_tab_widget->currentIndex()).append("*"));
+            mTabWidget->setTabText(mTabWidget->currentIndex(), mTabWidget->tabText(mTabWidget->currentIndex()).append("*"));
         }
-        if (!changed && (m_tab_widget->tabText(m_tab_widget->currentIndex()).endsWith("*")))
+        if (!changed && (mTabWidget->tabText(mTabWidget->currentIndex()).endsWith("*")))
         {
-            m_tab_widget->setTabText(m_tab_widget->currentIndex(), m_tab_widget->tabText(m_tab_widget->currentIndex()).remove('*'));
+            mTabWidget->setTabText(mTabWidget->currentIndex(), mTabWidget->tabText(mTabWidget->currentIndex()).remove('*'));
         }
     }
 
-    void PythonEditor::handle_key_pressed()
+    void PythonEditor::handleKeyPressed()
     {
-        m_last_click_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        mLastClickTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     }
 
-    void PythonEditor::handle_text_changed()
+    void PythonEditor::handleTextChanged()
     {
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - 100 < m_last_click_time)
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - 100 < mLastClickTime)
         {
-            PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget());
+            PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
-            QString tab_name = m_tab_widget->tabText(m_tab_widget->indexOf(current_editor));
+            QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(current_editor));
 
             if (current_editor)
-                g_file_status_manager->file_changed(current_editor->get_uuid(), "Python tab: " + tab_name);
+                gFileStatusManager->fileChanged(current_editor->getUuid(), "Python tab: " + tab_name);
 
             if (!tab_name.endsWith("*"))
-                m_tab_widget->setTabText(m_tab_widget->indexOf(current_editor), tab_name + "*");
+                mTabWidget->setTabText(mTabWidget->indexOf(current_editor), tab_name + "*");
         }
     }
 
-    void PythonEditor::handle_searchbar_text_edited(const QString& text)
+    void PythonEditor::handleSearchbarTextEdited(const QString& text)
     {
-        if (m_tab_widget->count() > 0)
-            dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget())->search(text);
+        if (mTabWidget->count() > 0)
+            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text);
     }
 
-    void PythonEditor::handle_current_tab_changed(int index)
+    void PythonEditor::handleCurrentTabChanged(int index)
     {
         Q_UNUSED(index)
 
-        if (!m_tab_widget->currentWidget())
+        if (!mTabWidget->currentWidget())
             return;
 
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget());
+        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
-        if (!m_searchbar->isHidden())
-            current_editor->search(m_searchbar->get_current_text());
+        if (!mSearchbar->isHidden())
+            current_editor->search(mSearchbar->getCurrentText());
         else if (!current_editor->extraSelections().isEmpty())
             current_editor->search("");
 
-        if (current_editor->is_base_file_modified())
-            m_file_modified_bar->setHidden(false);
+        if (current_editor->isBaseFileModified())
+            mFileModifiedBar->setHidden(false);
         else
-            m_file_modified_bar->setHidden(true);
+            mFileModifiedBar->setHidden(true);
     }
 
     PythonEditor::~PythonEditor()
@@ -286,20 +286,20 @@ namespace hal
         hal_file_manager::unregister_on_deserialize_callback("PythonEditor");
     }
 
-    void PythonEditor::setup_toolbar(Toolbar* Toolbar)
+    void PythonEditor::setupToolbar(Toolbar* Toolbar)
     {
-        Toolbar->addAction(m_action_new_file);
-        Toolbar->addAction(m_action_open_file);
-        Toolbar->addAction(m_action_save);
-        Toolbar->addAction(m_action_save_as);
-        Toolbar->addAction(m_action_run);
-        Toolbar->addAction(m_action_toggle_minimap);
+        Toolbar->addAction(mActionNewFile);
+        Toolbar->addAction(mActionOpenFile);
+        Toolbar->addAction(mActionSave);
+        Toolbar->addAction(mActionSaveAs);
+        Toolbar->addAction(mActionRun);
+        Toolbar->addAction(mActionToggleMinimap);
     }
 
-    QList<QShortcut*> PythonEditor::create_shortcuts()
+    QList<QShortcut*> PythonEditor::createShortcuts()
     {
         QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"), this);
-        connect(search_shortcut, &QShortcut::activated, this, &PythonEditor::toggle_searchbar);
+        connect(search_shortcut, &QShortcut::activated, this, &PythonEditor::toggleSearchbar);
 
         QList<QShortcut*> list;
         list.append(search_shortcut);
@@ -307,64 +307,64 @@ namespace hal
         return list;
     }
 
-    void PythonEditor::handle_stdout(const QString& output)
+    void PythonEditor::handleStdout(const QString& output)
     {
-        Q_EMIT forward_stdout(output);
+        Q_EMIT forwardStdout(output);
     }
 
-    void PythonEditor::handle_error(const QString& output)
+    void PythonEditor::handleError(const QString& output)
     {
-        Q_EMIT forward_error(output);
+        Q_EMIT forwardError(output);
     }
 
     void PythonEditor::clear()
     {
     }
 
-    void PythonEditor::handle_action_open_file()
+    void PythonEditor::handleActionOpenFile()
     {
         QString title = "Open File";
         QString text  = "Python Scripts(*.py)";
 
         // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-        QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, m_last_opened_path, text, nullptr);
+        QStringList file_names = QFileDialog::getOpenFileNames(nullptr, title, mLastOpenedPath, text, nullptr);
 
         if (file_names.isEmpty())
         {
             return;
         }
 
-        for (auto file_name : file_names)
+        for (auto fileName : file_names)
         {
-            for (int i = 0; i < m_tab_widget->count(); ++i)
+            for (int i = 0; i < mTabWidget->count(); ++i)
             {
-                auto editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->widget(i));
-                if (editor->get_file_name() == file_name)
+                auto editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(i));
+                if (editor->getFileName() == fileName)
                 {
-                    m_tab_widget->setCurrentIndex(i);
+                    mTabWidget->setCurrentIndex(i);
 
                     if (editor->document()->isModified())
                     {
                         if (QMessageBox::question(editor, "Script has unsaved changes", "Do you want to reload the file from disk? Unsaved changes are lost.", QMessageBox::Yes | QMessageBox::No)
                             == QMessageBox::Yes)
                         {
-                            tab_load_file(i, file_name);
+                            tabLoadFile(i, fileName);
                         }
                     }
                     return;
                 }
             }
 
-            handle_action_new_tab();
-            tab_load_file(m_tab_widget->count() - 1, file_name);
+            handleActionNewTab();
+            tabLoadFile(mTabWidget->count() - 1, fileName);
         }
 
-        m_last_opened_path = QFileInfo(file_names.last()).absolutePath();
+        mLastOpenedPath = QFileInfo(file_names.last()).absolutePath();
     }
 
-    void PythonEditor::tab_load_file(u32 index, QString file_name)
+    void PythonEditor::tabLoadFile(u32 index, QString fileName)
     {
-        std::ifstream file(file_name.toStdString(), std::ios::in);
+        std::ifstream file(fileName.toStdString(), std::ios::in);
 
         if (!file.is_open())
         {
@@ -372,24 +372,24 @@ namespace hal
         }
 
         std::string f((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-        QFileInfo info(file_name);
+        QFileInfo info(fileName);
 
-        auto tab = dynamic_cast<PythonCodeEditor*>(m_tab_widget->widget(index));
+        auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
 
         tab->setPlainText(QString::fromStdString(f));
-        tab->set_file_name(file_name);
+        tab->set_file_name(fileName);
         tab->document()->setModified(false);
-        //m_tab_widget->setTabText(m_tab_widget->count() - 1, info.completeBaseName() + "." + info.completeSuffix());
-        m_tab_widget->setTabText(m_tab_widget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
-        m_new_file_counter--;
+        //mTabWidget->setTabText(mTabWidget->count() - 1, info.completeBaseName() + "." + info.completeSuffix());
+        mTabWidget->setTabText(mTabWidget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
+        mNewFileCounter--;
 
-        m_path_editor_map.insert(file_name, tab);
-        m_file_watcher->addPath(file_name);
+        mPathEditorMap.insert(fileName, tab);
+        mFileWatcher->addPath(fileName);
 
-        g_file_status_manager->file_saved(tab->get_uuid());
+        gFileStatusManager->fileSaved(tab->getUuid());
     }
 
-    void PythonEditor::save_file(const bool ask_path, int index)
+    void PythonEditor::saveFile(const bool ask_path, int index)
     {
         QString title = "Save File";
         QString text  = "Python Scripts(*.py)";
@@ -398,17 +398,17 @@ namespace hal
 
         if (index == -1)
         {
-            index = m_tab_widget->currentIndex();
+            index = mTabWidget->currentIndex();
         }
 
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->widget(index));
+        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
 
         if (!current_editor)
             return;
 
-        if (ask_path || current_editor->get_file_name().isEmpty())
+        if (ask_path || current_editor->getFileName().isEmpty())
         {
-            selected_file_name = QFileDialog::getSaveFileName(nullptr, title, m_last_opened_path, text, nullptr, QFileDialog::DontUseNativeDialog);
+            selected_file_name = QFileDialog::getSaveFileName(nullptr, title, mLastOpenedPath, text, nullptr, QFileDialog::DontUseNativeDialog);
             if (selected_file_name.isEmpty())
                 return;
 
@@ -416,15 +416,15 @@ namespace hal
                 selected_file_name.append(".py");
 
             current_editor->set_file_name(selected_file_name);
-            m_last_opened_path = selected_file_name;
+            mLastOpenedPath = selected_file_name;
         }
         else
         {
-            selected_file_name = current_editor->get_file_name();
+            selected_file_name = current_editor->getFileName();
         }
 
-        m_file_watcher->removePath(current_editor->get_file_name());
-        m_path_editor_map.remove(current_editor->get_file_name());
+        mFileWatcher->removePath(current_editor->getFileName());
+        mPathEditorMap.remove(current_editor->getFileName());
 
         std::ofstream out(selected_file_name.toStdString(), std::ios::out);
 
@@ -437,32 +437,38 @@ namespace hal
         out.close();
         current_editor->document()->setModified(false);
 
-        g_file_status_manager->file_saved(current_editor->get_uuid());
+        gFileStatusManager->fileSaved(current_editor->getUuid());
 
-        m_path_editor_map.insert(selected_file_name, current_editor);
-        m_file_watcher->addPath(selected_file_name);
+        mPathEditorMap.insert(selected_file_name, current_editor);
+        mFileWatcher->addPath(selected_file_name);
 
         QFileInfo info(selected_file_name);
-        m_tab_widget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
+        mTabWidget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
     }
 
-    void PythonEditor::discard_tab(int index)
+    QTabWidget *PythonEditor::getTabWidget()
     {
-        PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->widget(index));
-        QString s                  = editor->get_file_name();
+        return mTabWidget;
+    }
+
+
+    void PythonEditor::discardTab(int index)
+    {
+        PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
+        QString s                  = editor->getFileName();
         if (!s.isEmpty())
         {
-            m_file_watcher->removePath(s);
-            m_path_editor_map.remove(s);
+            mFileWatcher->removePath(s);
+            mPathEditorMap.remove(s);
         }
         if (editor->document()->isModified())
         {
-            g_file_status_manager->file_saved(editor->get_uuid());
+            gFileStatusManager->fileSaved(editor->getUuid());
         }
-        m_tab_widget->removeTab(index);
+        mTabWidget->removeTab(index);
     }
 
-    bool PythonEditor::confirm_discard_for_range(int start, int end, int exclude)
+    bool PythonEditor::confirmDiscardForRange(int start, int end, int exclude)
     {
         QString changedFiles = "The following files have not been saved yet:\n";
         int unsaved          = 0;
@@ -473,10 +479,10 @@ namespace hal
             if (t == exclude)
                 continue;
 
-            PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->widget(t));
+            PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(t));
             if (editor->document()->isModified())
             {
-                QString fileName = m_tab_widget->tabText(t);
+                QString fileName = mTabWidget->tabText(t);
                 fileName.chop(1);    // removes asterisk
                 changedFiles.append("   ->  " + fileName + "\n");
                 unsaved++;
@@ -502,189 +508,189 @@ namespace hal
         return true;
     }
 
-    void PythonEditor::handle_action_save_file()
+    void PythonEditor::handleActionSaveFile()
     {
-        this->save_file(false);
+        this->saveFile(false);
     }
 
-    void PythonEditor::handle_action_save_file_as()
+    void PythonEditor::handleActionSaveFileAs()
     {
-        this->save_file(true);
+        this->saveFile(true);
     }
 
-    void PythonEditor::handle_action_run()
+    void PythonEditor::handleActionRun()
     {
-        for (const auto& ctx : g_graph_context_manager->get_contexts())
+        for (const auto& ctx : gGraphContextManager->getContexts())
         {
-            ctx->begin_change();
+            ctx->beginChange();
         }
 
-        g_python_context->interpret_script(dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget())->toPlainText());
+        gPythonContext->interpretScript(dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->toPlainText());
 
-        for (const auto& ctx : g_graph_context_manager->get_contexts())
+        for (const auto& ctx : gGraphContextManager->getContexts())
         {
-            ctx->end_change();
+            ctx->endChange();
         }
     }
 
-    void PythonEditor::handle_action_new_tab()
+    void PythonEditor::handleActionNewTab()
     {
         PythonCodeEditor* editor = new PythonCodeEditor();
         new PythonSyntaxHighlighter(editor->document());
         new PythonSyntaxHighlighter(editor->minimap()->document());
-        m_tab_widget->addTab(editor, QString("New File ").append(QString::number(++m_new_file_counter)));
-        m_tab_widget->setCurrentIndex(m_tab_widget->count() - 1);
+        mTabWidget->addTab(editor, QString("New File ").append(QString::number(++mNewFileCounter)));
+        mTabWidget->setCurrentIndex(mTabWidget->count() - 1);
         editor->document()->setModified(false);
-        //connect(editor, &PythonCodeEditor::modificationChanged, this, &PythonEditor::handle_modification_changed);
-        connect(editor, &PythonCodeEditor::key_pressed, this, &PythonEditor::handle_key_pressed);
-        connect(editor, &PythonCodeEditor::textChanged, this, &PythonEditor::handle_text_changed);
+        //connect(editor, &PythonCodeEditor::modificationChanged, this, &PythonEditor::handleModificationChanged);
+        connect(editor, &PythonCodeEditor::keyPressed, this, &PythonEditor::handleKeyPressed);
+        connect(editor, &PythonCodeEditor::textChanged, this, &PythonEditor::handleTextChanged);
     }
 
-    void PythonEditor::handle_action_tab_menu()
+    void PythonEditor::handleActionTabMenu()
     {
         QMenu context_menu(this);
         QAction* action = context_menu.addAction("Close");
 
         context_menu.addSeparator();
-        connect(action, &QAction::triggered, this, &PythonEditor::handle_action_close_tab);
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionCloseTab);
         action = context_menu.addAction("Close all");
-        connect(action, &QAction::triggered, this, &PythonEditor::handle_action_close_all_tabs);
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionCloseAllTabs);
         action = context_menu.addAction("Close all others");
-        connect(action, &QAction::triggered, this, &PythonEditor::handle_action_close_other_tabs);
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionCloseOtherTabs);
         action = context_menu.addAction("Close all right");
-        connect(action, &QAction::triggered, this, &PythonEditor::handle_action_close_right_tabs);
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionCloseRightTabs);
         action = context_menu.addAction("Close all left");
-        connect(action, &QAction::triggered, this, &PythonEditor::handle_action_close_left_tabs);
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionCloseLeftTabs);
 
         context_menu.addSeparator();
         action                     = context_menu.addAction("Show in system explorer");
-        PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->widget(m_tab_rightclicked));
-        QString s                  = editor->get_file_name();
+        PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(mTabRightclicked));
+        QString s                  = editor->getFileName();
         action->setDisabled(s.isEmpty());
-        connect(action, &QAction::triggered, this, &PythonEditor::handle_action_show_file);
+        connect(action, &QAction::triggered, this, &PythonEditor::handleActionShowFile);
 
         context_menu.exec(QCursor::pos());
     }
 
-    void PythonEditor::handle_action_close_tab()
+    void PythonEditor::handleActionCloseTab()
     {
-        assert(m_tab_rightclicked != -1);
-        this->handle_tab_close_requested(m_tab_rightclicked);
+        assert(mTabRightclicked != -1);
+        this->handleTabCloseRequested(mTabRightclicked);
     }
 
-    void PythonEditor::handle_action_close_all_tabs()
+    void PythonEditor::handleActionCloseAllTabs()
     {
-        assert(m_tab_rightclicked != -1);
-        int tabs = m_tab_widget->count();
-        if (!this->confirm_discard_for_range(0, tabs))
+        assert(mTabRightclicked != -1);
+        int tabs = mTabWidget->count();
+        if (!this->confirmDiscardForRange(0, tabs))
             return;
         for (int t = 0; t < tabs; t++)
         {
-            this->discard_tab(0);
+            this->discardTab(0);
         }
     }
 
-    void PythonEditor::handle_action_close_other_tabs()
+    void PythonEditor::handleActionCloseOtherTabs()
     {
-        assert(m_tab_rightclicked != -1);
-        int tabs = m_tab_widget->count();
-        if (!this->confirm_discard_for_range(0, tabs, m_tab_rightclicked))
+        assert(mTabRightclicked != -1);
+        int tabs = mTabWidget->count();
+        if (!this->confirmDiscardForRange(0, tabs, mTabRightclicked))
             return;
         int discard_id = 0;    // keeps track of IDs shifting during deletion
         for (int t = 0; t < tabs; t++)
         {
             // don't close the right-clicked tab
-            if (t == m_tab_rightclicked)
+            if (t == mTabRightclicked)
             {
                 discard_id++;
                 continue;
             }
-            this->discard_tab(discard_id);
+            this->discardTab(discard_id);
         }
     }
 
-    void PythonEditor::handle_action_close_left_tabs()
+    void PythonEditor::handleActionCloseLeftTabs()
     {
-        assert(m_tab_rightclicked != -1);
-        if (!this->confirm_discard_for_range(0, m_tab_rightclicked, -1))
+        assert(mTabRightclicked != -1);
+        if (!this->confirmDiscardForRange(0, mTabRightclicked, -1))
             return;
-        for (int t = 0; t < m_tab_rightclicked; t++)
+        for (int t = 0; t < mTabRightclicked; t++)
         {
             // IDs shift downwards during deletion
-            this->discard_tab(0);
+            this->discardTab(0);
         }
     }
 
-    void PythonEditor::handle_action_close_right_tabs()
+    void PythonEditor::handleActionCloseRightTabs()
     {
-        assert(m_tab_rightclicked != -1);
-        int tabs = m_tab_widget->count();
-        if (!this->confirm_discard_for_range(m_tab_rightclicked + 1, tabs, -1))
+        assert(mTabRightclicked != -1);
+        int tabs = mTabWidget->count();
+        if (!this->confirmDiscardForRange(mTabRightclicked + 1, tabs, -1))
             return;
-        for (int t = m_tab_rightclicked + 1; t < tabs; t++)
+        for (int t = mTabRightclicked + 1; t < tabs; t++)
         {
             // IDs shift downwards during deletion
-            this->discard_tab(m_tab_rightclicked + 1);
+            this->discardTab(mTabRightclicked + 1);
         }
     }
 
-    void PythonEditor::handle_action_show_file()
+    void PythonEditor::handleActionShowFile()
     {
     }
 
-    void PythonEditor::handle_tab_file_changed(QString path)
+    void PythonEditor::handleTabFileChanged(QString path)
     {
-        PythonCodeEditor* editor_with_modified_base_file = m_path_editor_map.value(path);
-        editor_with_modified_base_file->set_base_file_modified(true);
-        QString tab_name = m_tab_widget->tabText(m_tab_widget->indexOf(editor_with_modified_base_file));
+        PythonCodeEditor* editor_with_modified_base_file = mPathEditorMap.value(path);
+        editor_with_modified_base_file->setBaseFileModified(true);
+        QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(editor_with_modified_base_file));
 
         if (!tab_name.endsWith("*"))
-            m_tab_widget->setTabText(m_tab_widget->indexOf(editor_with_modified_base_file), tab_name + "*");
+            mTabWidget->setTabText(mTabWidget->indexOf(editor_with_modified_base_file), tab_name + "*");
 
-        g_file_status_manager->file_changed(editor_with_modified_base_file->get_uuid(), "Python tab: " + tab_name);
+        gFileStatusManager->fileChanged(editor_with_modified_base_file->getUuid(), "Python tab: " + tab_name);
 
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget());
+        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
         if (editor_with_modified_base_file == current_editor)
-            m_file_modified_bar->setHidden(false);
+            mFileModifiedBar->setHidden(false);
 
-        m_file_watcher->addPath(path);
+        mFileWatcher->addPath(path);
     }
 
-    void PythonEditor::handle_base_file_modified_reload()
+    void PythonEditor::handleBaseFileModifiedReload()
     {
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget());
-        m_new_file_counter++;
-        //tab_load_file(current_editor, current_editor->get_file_name());
-        tab_load_file(m_tab_widget->indexOf(current_editor), current_editor->get_file_name());
-        current_editor->set_base_file_modified(false);
-        m_file_modified_bar->setHidden(true);
+        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
+        mNewFileCounter++;
+        //tabLoadFile(current_editor, current_editor->getFileName());
+        tabLoadFile(mTabWidget->indexOf(current_editor), current_editor->getFileName());
+        current_editor->setBaseFileModified(false);
+        mFileModifiedBar->setHidden(true);
     }
 
-    void PythonEditor::handle_base_file_modified_ignore()
+    void PythonEditor::handleBaseFileModifiedIgnore()
     {
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget());
-        current_editor->set_base_file_modified(false);
-        m_file_modified_bar->setHidden(true);
+        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
+        current_editor->setBaseFileModified(false);
+        mFileModifiedBar->setHidden(true);
     }
 
-    void PythonEditor::handle_base_file_modified_ok()
+    void PythonEditor::handleBaseFileModifiedOk()
     {
-        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget());
-        current_editor->set_base_file_modified(false);
-        m_file_modified_bar->setHidden(true);
+        PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
+        current_editor->setBaseFileModified(false);
+        mFileModifiedBar->setHidden(true);
     }
 
     bool PythonEditor::eventFilter(QObject* obj, QEvent* event)
     {
-        if (obj == m_tab_widget->tabBar() && event->type() == QEvent::MouseButtonPress)
+        if (obj == mTabWidget->tabBar() && event->type() == QEvent::MouseButtonPress)
         {
             QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
             // filter for right-mouse-button-pressed events
             if (mouseEvent->button() == Qt::MouseButton::RightButton)
             {
-                m_tab_rightclicked = m_tab_widget->tabBar()->tabAt(mouseEvent->pos());
-                this->handle_action_tab_menu();
+                mTabRightclicked = mTabWidget->tabBar()->tabAt(mouseEvent->pos());
+                this->handleActionTabMenu();
                 return true;
             }
         }
@@ -692,142 +698,142 @@ namespace hal
         return QObject::eventFilter(obj, event);
     }
 
-    QString PythonEditor::open_icon_path() const
+    QString PythonEditor::openIconPath() const
     {
-        return m_open_icon_path;
+        return mOpenIconPath;
     }
 
-    QString PythonEditor::open_icon_style() const
+    QString PythonEditor::openIconStyle() const
     {
-        return m_open_icon_style;
+        return mOpenIconStyle;
     }
 
-    QString PythonEditor::save_icon_path() const
+    QString PythonEditor::saveIconPath() const
     {
-        return m_save_icon_path;
+        return mSaveIconPath;
     }
 
-    QString PythonEditor::save_icon_style() const
+    QString PythonEditor::saveIconStyle() const
     {
-        return m_save_icon_style;
+        return mSaveIconStyle;
     }
 
-    QString PythonEditor::save_as_icon_path() const
+    QString PythonEditor::saveAsIconPath() const
     {
-        return m_save_as_icon_path;
+        return mSaveAsIconPath;
     }
 
-    QString PythonEditor::save_as_icon_style() const
+    QString PythonEditor::saveAsIconStyle() const
     {
-        return m_save_as_icon_style;
+        return mSaveAsIconStyle;
     }
 
-    QString PythonEditor::run_icon_path() const
+    QString PythonEditor::runIconPath() const
     {
-        return m_run_icon_path;
+        return mRunIconPath;
     }
 
-    QString PythonEditor::run_icon_style() const
+    QString PythonEditor::runIconStyle() const
     {
-        return m_run_icon_style;
+        return mRunIconStyle;
     }
 
-    QString PythonEditor::new_file_icon_path() const
+    QString PythonEditor::newFileIconPath() const
     {
-        return m_new_file_icon_path;
+        return mNewFileIconPath;
     }
 
-    QString PythonEditor::new_file_icon_style() const
+    QString PythonEditor::newFileIconStyle() const
     {
-        return m_new_file_icon_style;
+        return mNewFileIconStyle;
     }
 
-    QString PythonEditor::toggle_minimap_icon_path() const
+    QString PythonEditor::toggleMinimapIconPath() const
     {
-        return m_toggle_minimap_icon_path;
+        return mToggleMinimapIconPath;
     }
 
-    QString PythonEditor::toggle_minimap_icon_style() const
+    QString PythonEditor::toggleMinimapIconStyle() const
     {
-        return m_toggle_minimap_icon_style;
+        return mToggleMinimapIconStyle;
     }
 
-    void PythonEditor::set_open_icon_path(const QString& path)
+    void PythonEditor::setOpenIconPath(const QString& path)
     {
-        m_open_icon_path = path;
+        mOpenIconPath = path;
     }
 
-    void PythonEditor::set_open_icon_style(const QString& style)
+    void PythonEditor::setOpenIconStyle(const QString& style)
     {
-        m_open_icon_style = style;
+        mOpenIconStyle = style;
     }
 
-    void PythonEditor::set_save_icon_path(const QString& path)
+    void PythonEditor::setSaveIconPath(const QString& path)
     {
-        m_save_icon_path = path;
+        mSaveIconPath = path;
     }
 
-    void PythonEditor::set_save_icon_style(const QString& style)
+    void PythonEditor::setSaveIconStyle(const QString& style)
     {
-        m_save_icon_style = style;
+        mSaveIconStyle = style;
     }
 
-    void PythonEditor::set_save_as_icon_path(const QString& path)
+    void PythonEditor::setSaveAsIconPath(const QString& path)
     {
-        m_save_as_icon_path = path;
+        mSaveAsIconPath = path;
     }
 
-    void PythonEditor::set_save_as_icon_style(const QString& style)
+    void PythonEditor::setSaveAsIconStyle(const QString& style)
     {
-        m_save_as_icon_style = style;
+        mSaveAsIconStyle = style;
     }
 
-    void PythonEditor::set_run_icon_path(const QString& path)
+    void PythonEditor::setRunIconPath(const QString& path)
     {
-        m_run_icon_path = path;
+        mRunIconPath = path;
     }
 
-    void PythonEditor::set_run_icon_style(const QString& style)
+    void PythonEditor::setRunIconStyle(const QString& style)
     {
-        m_run_icon_style = style;
+        mRunIconStyle = style;
     }
 
-    void PythonEditor::set_new_file_icon_path(const QString& path)
+    void PythonEditor::setNewFileIconPath(const QString& path)
     {
-        m_new_file_icon_path = path;
+        mNewFileIconPath = path;
     }
 
-    void PythonEditor::set_new_file_icon_style(const QString& style)
+    void PythonEditor::setNewFileIconStyle(const QString& style)
     {
-        m_new_file_icon_style = style;
+        mNewFileIconStyle = style;
     }
 
-    void PythonEditor::set_toggle_minimap_icon_path(const QString& path)
+    void PythonEditor::setToggleMinimapIconPath(const QString& path)
     {
-        m_toggle_minimap_icon_path = path;
+        mToggleMinimapIconPath = path;
     }
 
-    void PythonEditor::set_toggle_minimap_icon_style(const QString& style)
+    void PythonEditor::setToggleMinimapIconStyle(const QString& style)
     {
-        m_toggle_minimap_icon_style = style;
+        mToggleMinimapIconStyle = style;
     }
 
-    void PythonEditor::toggle_searchbar()
+    void PythonEditor::toggleSearchbar()
     {
-        if (m_searchbar->isHidden())
+        if (mSearchbar->isHidden())
         {
-            m_searchbar->show();
-            if (m_tab_widget->currentWidget())
-                dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget())->search(m_searchbar->get_current_text());
-            m_searchbar->setFocus();
+            mSearchbar->show();
+            if (mTabWidget->currentWidget())
+                dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(mSearchbar->getCurrentText());
+            mSearchbar->setFocus();
         }
         else
         {
-            m_searchbar->hide();
-            if (m_tab_widget->currentWidget())
+            mSearchbar->hide();
+            if (mTabWidget->currentWidget())
             {
-                dynamic_cast<PythonCodeEditor*>(m_tab_widget->currentWidget())->search("");
-                m_tab_widget->currentWidget()->setFocus();
+                dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search("");
+                mTabWidget->currentWidget()->setFocus();
             }
             else
                 this->setFocus();

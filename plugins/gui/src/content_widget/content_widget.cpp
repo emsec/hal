@@ -10,62 +10,62 @@
 
 namespace hal
 {
-    ContentWidget::ContentWidget(QString name, QWidget* parent) : Widget(parent), m_name(name), m_content_layout(new QVBoxLayout())
+    ContentWidget::ContentWidget(QString name, QWidget* parent) : Widget(parent), mName(name), mContentLayout(new QVBoxLayout())
     {
-        m_content_layout->setContentsMargins(0, 0, 0, 0);
-        m_content_layout->setSpacing(0);
+        mContentLayout->setContentsMargins(0, 0, 0, 0);
+        mContentLayout->setSpacing(0);
         setMinimumSize(100, 100);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         setWindowTitle(name);
 
-        setLayout(m_content_layout);
+        setLayout(mContentLayout);
         //debug code, delete later
         QIcon temp;
         temp.addFile(QStringLiteral(":/icons/start"), QSize(), QIcon::Normal, QIcon::Off);
-        set_icon(temp);
+        setIcon(temp);
     }
 
     void ContentWidget::remove()
     {
-        if (m_anchor)
+        if (mAnchor)
         {
-            m_anchor->remove(this);
+            mAnchor->remove(this);
             Q_EMIT removed();
         }
     }
 
     void ContentWidget::detach()
     {
-        if (m_anchor)
+        if (mAnchor)
         {
-            m_anchor->detach(this);
+            mAnchor->detach(this);
             Q_EMIT detached();
         }
     }
 
     void ContentWidget::reattach()
     {
-        if (m_anchor)
+        if (mAnchor)
         {
-            m_anchor->reattach(this);
+            mAnchor->reattach(this);
             Q_EMIT reattached();
         }
     }
 
     void ContentWidget::open()
     {
-        if (m_anchor)
+        if (mAnchor)
         {
-            m_anchor->open(this);
+            mAnchor->open(this);
             Q_EMIT opened();
         }
     }
 
     void ContentWidget::close()
     {
-        if (m_anchor)
+        if (mAnchor)
         {
-            m_anchor->close(this);
+            mAnchor->close(this);
             Q_EMIT closed();
         }
     }
@@ -74,33 +74,33 @@ namespace hal
 
     QString ContentWidget::name()
     {
-        return m_name;
+        return mName;
     }
 
     QIcon ContentWidget::icon()
     {
-        return m_icon;
+        return mIcon;
     }
 
-    void ContentWidget::set_anchor(ContentAnchor* anchor)
+    void ContentWidget::setAnchor(ContentAnchor* anchor)
     {
-        m_anchor = anchor;
+        mAnchor = anchor;
     }
 
-    void ContentWidget::set_icon(QIcon icon)
+    void ContentWidget::setIcon(QIcon icon)
     {
-        m_icon = icon;
+        mIcon = icon;
     }
 
     void ContentWidget::set_name(const QString &name)
     {
-        m_name = name;
+        mName = name;
         Q_EMIT name_changed(name);
     }
 
-    void ContentWidget::setup_toolbar(Toolbar* Toolbar){Q_UNUSED(Toolbar)}
+    void ContentWidget::setupToolbar(Toolbar* Toolbar){Q_UNUSED(Toolbar)}
 
-    QList<QShortcut*> ContentWidget::create_shortcuts()
+    QList<QShortcut*> ContentWidget::createShortcuts()
     {
         return QList<QShortcut*>();
     }
@@ -112,35 +112,35 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        //    if (!m_icon_path.isEmpty())
-        //        m_icon_label->setPixmap(gui_utility::get_styled_svg_icon(m_icon_style, m_icon_path).pixmap(QSize(20, 20)));
+        //    if (!mIconPath.isEmpty())
+        //        mIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mIconStyle, mIconPath).pixmap(QSize(20, 20)));
     }
 
-    QString ContentWidget::icon_style()
+    QString ContentWidget::iconStyle()
     {
-        return m_icon_style;
+        return mIconStyle;
     }
 
-    QString ContentWidget::icon_path()
+    QString ContentWidget::iconPath()
     {
-        return m_icon_path;
+        return mIconPath;
     }
 
-    void ContentWidget::set_icon_style(const QString& style)
+    void ContentWidget::setIconStyle(const QString& style)
     {
-        if (m_icon_style == style)
+        if (mIconStyle == style)
             return;
 
-        m_icon_style = style;
+        mIconStyle = style;
         repolish();
     }
 
-    void ContentWidget::set_icon_path(const QString& path)
+    void ContentWidget::setIconPath(const QString& path)
     {
-        if (m_icon_path == path)
+        if (mIconPath == path)
             return;
 
-        m_icon_path = path;
+        mIconPath = path;
         repolish();
     }
 }

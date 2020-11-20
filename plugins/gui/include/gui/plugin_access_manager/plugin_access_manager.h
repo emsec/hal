@@ -32,7 +32,7 @@ namespace hal
 {
     namespace plugin_access_manager
     {
-        ProgramArguments request_arguments(const std::string plugin_name);
-        int run_plugin(const std::string plugin_name, ProgramArguments* args);
+        ProgramArguments requestArguments(const std::string plugin_name);
+        int runPlugin(const std::string plugin_name, ProgramArguments* args);
     }    // namespace plugin_access_manager
 }

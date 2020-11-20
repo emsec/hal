@@ -31,12 +31,16 @@
 #include "gui/gui_def.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
+#include "gui/graph_widget/layouters/net_layout_point.h"
+#include "gui/graph_widget/layouters/net_layout_junction.h"
 #include "gui/netlist_relay/netlist_relay.h"
 
 #include <QObject>
 #include <QPoint>
 #include <QSet>
+#include <QMap>
 #include <QVector>
+#include <QRect>
 
 namespace hal
 {
@@ -49,252 +53,366 @@ namespace hal
     class SeparatedGraphicsNet;
     class StandardGraphicsNet;
 
+    class NetLayoutJunctionHash;
+    class NetLayoutJunctionEntries;
+
     class GraphLayouter : public QObject
     {
         Q_OBJECT
 
-        struct node_level
+        class SceneCoordinate
         {
-            hal::node node;
-            int level;
+            int mInLane;
+            int maxLane;
+            float mOffset;
+            float mPadding;
+        public:
+            SceneCoordinate() : mInLane(0), maxLane(0), mOffset(0), mPadding(0) {;}
+            void testMinMax(int ilane);
+            void setOffset(float off) { mOffset = off; }
+            void setPadding(float pad) { mPadding = pad; }
+            void setOffsetYje(const SceneCoordinate& previous, float minimumJunction);
+            void setOffsetYej(const SceneCoordinate& previous, float maximumBlock, float minimumJunction);
+            void setOffsetX(const SceneCoordinate& previous, float maximumBlock, float sepOut, float sepInp);
+            float lanePosition(int ilane) const;
+            int preLanes() const { return -mInLane; }
+            float junctionEntry() const { return lanePosition(mInLane); }
+            float junctionExit() const { return lanePosition(maxLane-1); }
+            float xBoxOffset() const;
         };
 
-        struct node_box
+        class EndpointCoordinate
         {
-            hal::node node;
-            GraphicsNode* item;
-
-            int x;
-            int y;
-
-            qreal input_padding;
-            qreal output_padding;
+            float mYoffset;
+            float mXoutput;
+            float mXinput;
+            float mPinDistance;
+            float mTopPin;
+            int   mNumberPins;
+            QHash<u32,int> mInputHash;
+            QHash<u32,int> mOutputHash;
+        public:
+            EndpointCoordinate();
+            void setInputPosition(QPointF p0pos);
+            void setOutputPosition(QPointF p0pos);
+            float lanePosition(int ilane, bool absolute) const;
+            float xInput() const { return mXinput; }
+            float xOutput() const { return mXoutput; }
+            void setInputPins(const QList<u32>& pinList, float p0dist, float pdist);
+            void setOutputPins(const QList<u32>& pinList, float p0dist, float pdist);
+            int numberPins() const;
+            int inputPinIndex(u32 id) const;
+            int outputPinIndex(u32 id) const;
         };
 
-        struct road
+        class EndpointList : public QList<NetLayoutPoint>
         {
-            road(const int x_coordinate, const int y_coordinate) :
+        public:
+            enum EndpointType { NoEndpoint = 0, SingleSource = 1, SingleDestination = 2, SourceAndDestination = 3,
+                                 ConstantLevel = 4, MultipleSource = 5, MultipleDestination = 6};
+            EndpointList() : mNetType(NoEndpoint) {;}
+            void addSource(const NetLayoutPoint& pnt);
+            void addDestination(const NetLayoutPoint& pnt);
+            void setNetType(EndpointType tp) { mNetType = tp; }
+            EndpointType netType() const { return mNetType; }
+            bool isInput(int index) const {return mPointIsInput.at(index); }
+        private:
+            EndpointType mNetType;
+            QList<bool> mPointIsInput;
+        };
+
+        class SeparatedNetWidth
+        {
+        public:
+            float mInputSpace;
+            float mOutputSpace;
+            SeparatedNetWidth() : mInputSpace(0), mOutputSpace(0) {;}
+            void requireInputSpace(float spc);
+            void requireOutputSpace(float spc);
+        };
+
+        class NodeBox
+        {
+            Node mNode;
+            GraphicsNode* mItem;
+
+            int mX;
+            int mY;
+
+            qreal mInputPadding;
+            qreal mOutputPadding;
+        public:
+            NodeBox(const Node& n, int px, int py);
+            Node getNode() const { return mNode; }
+            Node::NodeType type() const { return mNode.type(); }
+            u32 id() const { return mNode.id(); }
+            int x() const { return mX; }
+            int y() const { return mY; }
+            void setItem(GraphicsNode* item_) { mItem = item_; }
+            void setItemPosition(qreal xpos, qreal ypos);
+            GraphicsNode* item() const { return mItem; }
+            qreal inputPadding() const { return mInputPadding; }
+            qreal outputPadding() const { return mOutputPadding; }
+        };
+
+        class NodeBoxForGate : public QHash<Gate*,const NodeBox*>
+        {
+        public:
+            void insertNode(const NodeBox* nb);
+        };
+
+        struct Road
+        {
+            Road(const int x_coordinate, const int y_coordinate) :
                 x(x_coordinate),
                 y(y_coordinate),
-                lanes(0)
+                mLanes(0)
             {}
 
             int x;
             int y;
 
-            unsigned int lanes = 0;
+            unsigned int mLanes = 0;
 
-            qreal vertical_width() const;
-            qreal horizontal_height() const;
         };
 
-        struct junction
+        struct Junction
         {
-            junction(const int x_coordinate, const int y_coordinate) :
+            Junction(const int x_coordinate, const int y_coordinate) :
                 x(x_coordinate),
                 y(y_coordinate),
-                h_lanes(0),
-                v_lanes(0),
-                close_left_lane_changes(0),
-                close_right_lane_changes(0),
-                close_top_lane_changes(0),
-                close_bottom_lane_changes(0),
-                far_left_lane_changes(0),
-                far_right_lane_changes(0),
-                far_top_lane_changes(0),
-                far_bottom_lane_changes(0)
+                mHLanes(0),
+                mVLanes(0),
+                mCloseLeftLaneChanges(0),
+                mCloseRightLaneChanges(0),
+                mCloseTopLaneChanges(0),
+                mCloseBottomLaneChanges(0),
+                mFarLeftLaneChanges(0),
+                mFarRightLaneChanges(0),
+                mFarTopLaneChanges(0),
+                mFarBottomLaneChanges(0)
             {}
 
             int x;
             int y;
 
-            unsigned int h_lanes = 0;
-            unsigned int v_lanes = 0;
+            unsigned int mHLanes = 0;
+            unsigned int mVLanes = 0;
 
-            unsigned int close_left_lane_changes = 0;
-            unsigned int close_right_lane_changes = 0;
-            unsigned int close_top_lane_changes = 0;
-            unsigned int close_bottom_lane_changes = 0;
+            unsigned int mCloseLeftLaneChanges = 0;
+            unsigned int mCloseRightLaneChanges = 0;
+            unsigned int mCloseTopLaneChanges = 0;
+            unsigned int mCloseBottomLaneChanges = 0;
 
-            unsigned int far_left_lane_changes = 0;
-            unsigned int far_right_lane_changes = 0;
-            unsigned int far_top_lane_changes = 0;
-            unsigned int far_bottom_lane_changes = 0;
+            unsigned int mFarLeftLaneChanges = 0;
+            unsigned int mFarRightLaneChanges = 0;
+            unsigned int mFarTopLaneChanges = 0;
+            unsigned int mFarBottomLaneChanges = 0;
 
-            qreal width() const;
-            qreal height() const;
         };
 
-        struct used_paths
+        struct UsedPaths
         {
-            QSet<road*> h_roads;
-            QSet<road*> v_roads;
+            QSet<Road*> mHRoads;
+            QSet<Road*> mVRoads;
 
-            QSet<junction*> h_junctions;
-            QSet<junction*> v_junctions;
+            QSet<Junction*> mHJunctions;
+            QSet<Junction*> mVJunctions;
 
-            QSet<junction*> close_left_junctions;
-            QSet<junction*> close_right_junctions;
-            QSet<junction*> close_top_junctions;
-            QSet<junction*> close_bottom_junctions;
+            QSet<Junction*> mCloseLeftJunctions;
+            QSet<Junction*> mCloseRightJunctions;
+            QSet<Junction*> mCloseTopJunctions;
+            QSet<Junction*> mCloseBottomJunctions;
 
-            QSet<junction*> far_left_junctions;
-            QSet<junction*> far_right_junctions;
-            QSet<junction*> far_top_junctions;
-            QSet<junction*> far_bottom_junctions;
+            QSet<Junction*> mFarLeftJunctions;
+            QSet<Junction*> mFarRightJunctions;
+            QSet<Junction*> mFarTopJunctions;
+            QSet<Junction*> mFarBottomJunctions;
         };
 
     public:
         explicit GraphLayouter(const GraphContext* const context, QObject* parent = nullptr);
 
         virtual QString name() const        = 0;
-        virtual QString description() const = 0;
+        virtual QString mDescription() const = 0;
 
-        virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, hal::placement_hint placement = hal::placement_hint{hal::placement_mode::standard, hal::node()})    = 0;
+        virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, PlacementHint placement = PlacementHint())    = 0;
         virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
 
         void layout();
+        void alternateLayout();
 
         GraphicsScene* scene() const;
 
-        const QMap<hal::node, QPoint> node_to_position_map() const;
-        const QMap<QPoint, hal::node> position_to_node_map() const;
+        const QMap<Node, QPoint> nodeToPositionMap() const;
+        const QMap<QPoint, Node> positionToNodeMap() const;
+        QPoint gridPointByItem(GraphicsNode* item) const;
 
-        void set_node_position(const hal::node& n, const QPoint& p);
-        void swap_node_positions(const hal::node& n1, const hal::node& n2);
-        void remove_node_from_maps(const hal::node& n);
+        void dumpNodePositions(const QPoint &search) const;
 
-        int min_x_index() const;
-        int min_y_index() const;
+        void setNodePosition(const Node& n, const QPoint& p);
+        void swapNodePositions(const Node& n1, const Node& n2);
+        void removeNodeFromMaps(const Node& n);
+
+        int minXIndex() const;
+        int minYIndex() const;
 
         bool done() const;
 
-        QVector<qreal> x_values() const;
-        QVector<qreal> y_values() const;
+        QVector<qreal> xValues() const;
+        QVector<qreal> yValues() const;
 
-        qreal max_node_width() const;
-        qreal max_node_height() const;
+        qreal maxNodeWidth() const;
+        qreal maxNodeHeight() const;
 
-        qreal default_grid_width() const;
-        qreal default_grid_height() const;
+        qreal defaultGridWidth() const;
+        qreal defaultGridHeight() const;
 
     Q_SIGNALS:
-        void status_update(const int percent);
-        void status_update(const QString& message);
+        void statusUpdate(const int percent);
+        void statusUpdate(const QString& message);
 
     protected:
-        GraphicsScene* m_scene;
-        const GraphContext* const m_context;
+        GraphicsScene* mScene;
+        const GraphContext* const mContext;
 
     private:
-        void clear_layout_data();
-        void create_boxes();
-        void calculate_nets();
-        void find_max_box_dimensions();
-        void find_max_channel_lanes();
-        void calculate_max_channel_dimensions();
-        void calculate_gate_offsets();
-        void place_gates();
-        void reset_roads_and_junctions();
-        void draw_nets();
-        void update_scene_rect();
+        void clearLayoutData();
+        void createBoxes();
+        void calculateNets();
+        void getWireHash();
+        void findMaxBoxDimensions();
+        void alternateMaxChannelLanes();
+        void findMaxChannelLanes();
+        void calculateMaxChannelDimensions();
+        void calculateJunctionMinDistance();
+        void alternateGateOffsets();
+        void calculateGateOffsets();
+        void alternatePlaceGates();
+        void placeGates();
+        void resetRoadsAndJunctions();
+        void drawNets();
+        void alternateDrawNets();
+        void drawNetsJunction(StandardGraphicsNet::Lines &lines, u32 id);
+        void drawNetsEndpoint(StandardGraphicsNet::Lines &lines, u32 id);
+        void drawNetsIsolated(u32 id, Net *n, const EndpointList& epl);
+        void updateSceneRect();
+        static bool verifyModulePort(const Net *n, const Node& modNode, bool isModInput);
 
-        node_box create_box(const hal::node& node, const int x, const int y) const;
+        bool boxExists(const int x, const int y) const;
 
-        bool box_exists(const int x, const int y) const;
+        bool hRoadJumpPossible(const int x, const int y1, const int y2) const;
+        bool hRoadJumpPossible(const Road* const r1, const Road* const r2) const;
 
-        bool h_road_jump_possible(const int x, const int y1, const int y2) const;
-        bool h_road_jump_possible(const road* const r1, const road* const r2) const;
+        bool vRoadJumpPossible(const int x1, const int x2, const int y) const;
+        bool vRoadJumpPossible(const Road* const r1, const Road* const r2) const;
 
-        bool v_road_jump_possible(const int x1, const int x2, const int y) const;
-        bool v_road_jump_possible(const road* const r1, const road* const r2) const;
+        Road* getHRoad(const int x, const int y);
+        Road* getVRoad(const int x, const int y);
+        Junction* getJunction(const int x, const int y);
 
-        road* get_h_road(const int x, const int y);
-        road* get_v_road(const int x, const int y);
-        junction* get_junction(const int x, const int y);
+        qreal hRoadHeight(const unsigned int mLanes) const;
+        qreal vRoadWidth(const unsigned int mLanes) const;
 
-        qreal h_road_height(const unsigned int lanes) const;
-        qreal v_road_width(const unsigned int lanes) const;
+        qreal sceneYForHChannelLane(const int y, const unsigned int lane) const;
+        qreal sceneXForVChannelLane(const int x, const unsigned int lane) const;
 
-        qreal scene_y_for_h_channel_lane(const int y, const unsigned int lane) const;
-        qreal scene_x_for_v_channel_lane(const int x, const unsigned int lane) const;
+        qreal sceneXForCloseLeftLaneChange(const int channel_x, unsigned int lane_change) const;
+        qreal sceneXForFarLeftLaneChange(const int channel_x, unsigned int lane_change) const;
 
-        qreal scene_x_for_close_left_lane_change(const int channel_x, unsigned int lane_change) const;
-        qreal scene_x_for_far_left_lane_change(const int channel_x, unsigned int lane_change) const;
+        qreal sceneXForCloseRightLaneChange(const int channel_x, unsigned int lane_change) const;
+        qreal sceneXForFarRightLaneChange(const int channel_x, unsigned int lane_change) const;
 
-        qreal scene_x_for_close_right_lane_change(const int channel_x, unsigned int lane_change) const;
-        qreal scene_x_for_far_right_lane_change(const int channel_x, unsigned int lane_change) const;
+        qreal sceneYForCloseTopLaneChange(const int channel_y, unsigned int lane_change) const;
+        qreal sceneYForFarTopLaneChange(const int channel_y, unsigned int lane_change) const;
 
-        qreal scene_y_for_close_top_lane_change(const int channel_y, unsigned int lane_change) const;
-        qreal scene_y_for_far_top_lane_change(const int channel_y, unsigned int lane_change) const;
+        qreal sceneYForCloseBottomLaneChange(const int channel_y, unsigned int lane_change) const;
+        qreal sceneYForFarBottomLaneChange(const int channel_y, unsigned int lane_change) const;
 
-        qreal scene_y_for_close_bottom_lane_change(const int channel_y, unsigned int lane_change) const;
-        qreal scene_y_for_far_bottom_lane_change(const int channel_y, unsigned int lane_change) const;
+        qreal sceneXForCloseLeftLaneChange(const Junction* const j) const;
+        qreal sceneXForFarLeftLaneChange(const Junction* const j) const;
 
-        qreal scene_x_for_close_left_lane_change(const junction* const j) const;
-        qreal scene_x_for_far_left_lane_change(const junction* const j) const;
+        qreal sceneXForCloseRightLaneChange(const Junction* const j) const;
+        qreal sceneXForFarRightLaneChange(const Junction* const j) const;
 
-        qreal scene_x_for_close_right_lane_change(const junction* const j) const;
-        qreal scene_x_for_far_right_lane_change(const junction* const j) const;
+        qreal sceneYForCloseTopLaneChange(const Junction* const j) const;
+        qreal sceneYForFarTopLaneChange(const Junction* const j) const;
 
-        qreal scene_y_for_close_top_lane_change(const junction* const j) const;
-        qreal scene_y_for_far_top_lane_change(const junction* const j) const;
+        qreal sceneYForCloseBottomLaneChange(const Junction* const j) const;
+        qreal sceneYForFarBottomLaneChange(const Junction* const j) const;
 
-        qreal scene_y_for_close_bottom_lane_change(const junction* const j) const;
-        qreal scene_y_for_far_bottom_lane_change(const junction* const j) const;
+        void commitUsedPaths(const UsedPaths& used);
+        static bool isConstNet(const Net* n);
 
-        void commit_used_paths(const used_paths& used);
+        NodeBoxForGate           mNodeBoxForGate;
+        QVector<NodeBox*>        mBoxes;
+        QHash<QPoint,NodeBox*>   mBoxPosition;
+        QHash<Node,NodeBox*>     mBoxNode;
+        QHash<GraphicsNode*,NodeBox*> mBoxGraphItem;
 
-        void append_non_zero_h_line(StandardGraphicsNet::lines& lines, const qreal small_x, const qreal big_x, const qreal y);
-        void append_non_zero_v_line(StandardGraphicsNet::lines& lines, const qreal x, const qreal small_y, const qreal big_y);
+        QHash<QPoint,Road*> mHRoads;
+        QHash<QPoint,Road*> mVRoads;
+        QHash<QPoint,Junction*> mJunctions;
 
-        QVector<node_box> m_boxes;
+        QMap<int, qreal> mMaxNodeWidthForX;
+        QMap<int, qreal> mMaxNodeHeightForY;
 
-        QVector<road*> m_h_roads;
-        QVector<road*> m_v_roads;
-        QVector<junction*> m_junctions;
+        QMap<int, unsigned int> mMaxVChannelLanesForX;
+        QMap<int, unsigned int> mMaxHChannelLanesForY;
 
-        QMap<int, qreal> m_max_node_width_for_x;
-        QMap<int, qreal> m_max_node_height_for_y;
+        QMap<int, qreal> mMaxVChannelLeftSpacingForX;
+        QMap<int, qreal> mMaxVChannelRightSpacingForX;
+        QMap<int, qreal> mMaxHChannelTopSpacingForY;
+        QMap<int, qreal> mMaxHChannelBottomSpacingForY;
 
-        QMap<int, unsigned int> m_max_v_channel_lanes_for_x;
-        QMap<int, unsigned int> m_max_h_channel_lanes_for_y;
+        QMap<int, qreal> mMaxVChannelWidthForX;
+        QMap<int, qreal> mMaxHChannelHeightForY;
 
-        QMap<int, qreal> m_max_v_channel_left_spacing_for_x;
-        QMap<int, qreal> m_max_v_channel_right_spacing_for_x;
-        QMap<int, qreal> m_max_h_channel_top_spacing_for_y;
-        QMap<int, qreal> m_max_h_channel_bottom_spacing_for_y;
+        QMap<int, qreal> mNodeOffsetForX;
+        QMap<int, qreal> mNodeOffsetForY;
 
-        QMap<int, qreal> m_max_v_channel_width_for_x;
-        QMap<int, qreal> m_max_h_channel_height_for_y;
+        QMap<int, qreal> mMaxLeftJunctionSpacingForX;
+        QMap<int, qreal> mMaxRightJunctionSpacingForX;
 
-        QMap<int, qreal> m_node_offset_for_x;
-        QMap<int, qreal> m_node_offset_for_y;
+        QMap<int, qreal> mMaxTopJunctionSpacingForY;
+        QMap<int, qreal> mMaxBottomJunctionSpacingForY;
 
-        QMap<int, qreal> m_max_left_junction_spacing_for_x;
-        QMap<int, qreal> m_max_right_junction_spacing_for_x;
+        QMap<int, qreal> mMaxLeftIoPaddingForChannelX;
+        QMap<int, qreal> mMaxRightIoPaddingForChannelX;
 
-        QMap<int, qreal> m_max_top_junction_spacing_for_y;
-        QMap<int, qreal> m_max_bottom_junction_spacing_for_y;
+        QMap<Node, QPoint> mNodeToPositionMap;
+        QMap<QPoint, Node> mPositionToNodeMap;
 
-        QMap<int, qreal> m_max_left_io_padding_for_channel_x;
-        QMap<int, qreal> m_max_right_io_padding_for_channel_x;
+        int mMinXIndex;
+        int mMinYIndex;
 
-        QMap<hal::node, QPoint> m_node_to_position_map;
-        QMap<QPoint, hal::node> m_position_to_node_map;
+        int mMaxXIndex;
+        int mMaxYIndex;
 
-        int m_min_x_index;
-        int m_min_y_index;
+        QVector<qreal> mXValues;
+        QVector<qreal> mYValues;
 
-        int m_max_x_index;
-        int m_max_y_index;
+        qreal mMaxNodeWidth;
+        qreal mMaxNodeHeight;
 
-        QVector<qreal> m_x_values;
-        QVector<qreal> m_y_values;
+        bool mDone;
 
-        qreal m_max_node_width;
-        qreal m_max_node_height;
-
-        bool m_done;
+        QRect mNodeBoundingBox;
+        NetLayoutConnectionMetric mConnectionMetric;
+        QHash<NetLayoutWire,QList<u32>> mWireHash;
+        QHash<NetLayoutPoint,NetLayoutJunctionEntries> mJunctionEntries;
+        QHash<NetLayoutPoint,EndpointCoordinate> mEndpointHash;
+        QHash<NetLayoutPoint,SeparatedNetWidth> mSeparatedWidth;
+        QHash<NetLayoutPoint,float> mSpaceSeparatedOutputs;
+        NetLayoutJunctionHash mJunctionHash;
+        QMap<int,SceneCoordinate> mCoordX;
+        QMap<int,SceneCoordinate> mCoordY;
+        QMap<int,float> mJunctionMinDistanceY;
+        QHash<u32,EndpointList> mWireEndpoint;
+        QHash<u32,int> mGlobalInputHash;
+        QHash<u32,int> mGlobalOutputHash;
     };
+
+    uint qHash(const Node& n);
 }
+

@@ -27,7 +27,7 @@ namespace hal
 {
     namespace LogChannelManager_constants
     {
-        static const int max_channels = 50;
-        static const int max_entries = 1000;
+        static const int sMaxChannels = 50;
+        static const int sMaxEntries = 1000;
     }
 }

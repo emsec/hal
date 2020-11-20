@@ -54,16 +54,18 @@ namespace hal
         int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
         ChannelItem* add_channel(const QString name);
-        void handle_logmanager_callback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text);
+        void handleLogmanagerCallback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text);
 
     Q_SIGNALS:
         void updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
 
     private:
         explicit ChannelModel(QObject* parent = 0);
-        QList<ChannelItem*> m_permanent_items;
-        boost::circular_buffer<ChannelItem*> m_temporary_items;
 
-        u64 m_gui_callback_id;
+        QList<QString> mChannelToIgnore;
+        QList<ChannelItem*> mPermanentItems;
+        boost::circular_buffer<ChannelItem*> mTemporaryItems;
+
+        u64 mGuiCallbackId;
     };
 }

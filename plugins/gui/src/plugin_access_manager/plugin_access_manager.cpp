@@ -8,7 +8,7 @@
 
 namespace hal
 {
-    ProgramArguments plugin_access_manager::request_arguments(const std::string plugin_name)
+    ProgramArguments plugin_access_manager::requestArguments(const std::string plugin_name)
     {
         auto pl = plugin_manager::get_plugin_instance<BasePluginInterface>(plugin_name, false);
         if (!pl)
@@ -42,7 +42,7 @@ namespace hal
             plugin->initialize();
             ExtendedCliDialog dialog(QString::fromStdString(plugin_name));
             dialog.exec();
-            return dialog.get_args();
+            return dialog.getArgs();
         }
         else if (selection == PluginInterfaceType::gui)
         {
@@ -56,7 +56,7 @@ namespace hal
         return ProgramArguments();
     }
 
-    int plugin_access_manager::run_plugin(const std::string plugin_name, ProgramArguments* args)
+    int plugin_access_manager::runPlugin(const std::string plugin_name, ProgramArguments* args)
     {
         if (args == nullptr)
         {
@@ -69,6 +69,6 @@ namespace hal
             return 0;
 
         log_info("gui", "Running plugin {}", plugin_name);
-        return plugin->handle_cli_call(g_netlist, *args);
+        return plugin->handle_cli_call(gNetlist, *args);
     }
 }
