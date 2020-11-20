@@ -52,7 +52,7 @@ namespace hal
     extern WindowManager* gWindowManager;
     extern NotificationManager* gNotificationManager;
     extern ContentManager* gContentManager;
-    extern std::unique_ptr<Netlist> gNetlistOwner;
+    extern std::shared_ptr<Netlist> gNetlistOwner;
     extern Netlist* gNetlist;
     extern NetlistRelay* gNetlistRelay;
     extern PluginRelay* gPluginRelay;

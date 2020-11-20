@@ -121,14 +121,14 @@ namespace hal
         )");
 
         py_module.def_property_readonly(
-            "netlist", [](Module* module) { return RawPtrWrapper(module->get_netlist()); }, R"(
+            "netlist", [](Module* module) { return RawPtrWrapper<Netlist>(module->get_netlist()); }, R"(
             The netlist this module is associated with.
 
             :type: hal_py.Netlist
         )");
 
         py_module.def(
-            "get_netlist", [](Module* module) { return RawPtrWrapper(module->get_netlist()); }, R"(
+            "get_netlist", [](Module* module) { return RawPtrWrapper<Netlist>(module->get_netlist()); }, R"(
             Get the netlist this module is associated with.
 
             :returns: The netlist.
@@ -258,15 +258,15 @@ namespace hal
 
         py_module.def("get_next_input_port_id", &Module::get_next_input_port_id, R"(
             Get the next free input port ID.
-         
-            :returns: The next input port ID. 
-            :rtype: int    
+
+            :returns: The next input port ID.
+            :rtype: int
         )");
 
         py_module.def("set_next_input_port_id", &Module::set_next_input_port_id, py::arg("id"), R"(
             Set the next free input port ID to the given value.
-        
-            :param int id: The next input port ID. 
+
+            :param int id: The next input port ID.
         )");
 
         py_module.def_property("next_output_port_id", &Module::get_next_output_port_id, &Module::set_next_output_port_id, R"(
@@ -275,15 +275,15 @@ namespace hal
 
         py_module.def("get_next_output_port_id", &Module::get_next_output_port_id, R"(
             Get the next free output port ID.
-         
-            :returns: The next output port ID. 
-            :rtype: int    
+
+            :returns: The next output port ID.
+            :rtype: int
         )");
 
         py_module.def("set_next_output_port_id", &Module::set_next_output_port_id, py::arg("id"), R"(
             Set the next free output port ID to the given value.
-        
-            :param int id: The next output port ID. 
+
+            :param int id: The next output port ID.
         )");
 
         py_module.def("assign_gate", &Module::assign_gate, py::arg("gate"), R"(

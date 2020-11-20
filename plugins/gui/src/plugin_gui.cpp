@@ -49,7 +49,7 @@ namespace hal
     WindowManager* gWindowManager                 = nullptr;
     NotificationManager* gNotificationManager     = nullptr;
     ContentManager* gContentManager               = nullptr;
-    std::unique_ptr<Netlist> gNetlistOwner        = nullptr;
+    std::shared_ptr<Netlist> gNetlistOwner        = nullptr;
     Netlist* gNetlist                              = nullptr;
     NetlistRelay* gNetlistRelay                   = nullptr;
     PluginRelay* gPluginRelay                     = nullptr;

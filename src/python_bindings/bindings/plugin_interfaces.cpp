@@ -35,7 +35,7 @@ namespace hal
             PYBIND11_OVERLOAD_PURE(bool,               /* Return type */
                                    GUIPluginInterface, /* Parent class */
                                    exec,               /* Name of function in C++ (must match Python name) */
-                                   RawPtrWrapper(g));
+                                   RawPtrWrapper<Netlist>(g));
         }
     };
 
