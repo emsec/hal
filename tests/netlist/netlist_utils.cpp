@@ -171,6 +171,8 @@ namespace hal
         // Create an example netlist that should be copied
         std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
 
+        test_nl->get_gate_by_id(MIN_GATE_ID + 2)->set_data("a", "b", "c", "d");
+
         // -- Add some modules to the example netlist
         Module* mod_0 = test_nl->create_module(test_utils::MIN_MODULE_ID + 0,
                                                "mod_0",
@@ -216,6 +218,52 @@ namespace hal
         std::unique_ptr<Netlist> test_nl_copy = netlist_utils::copy_netlist(test_nl.get());
 
         EXPECT_TRUE(test_utils::netlists_are_equal(test_nl.get(), test_nl_copy.get()));
+        TEST_END
+    }
+
+    /**
+     * Testing the get_next_sequential_gates variants
+     *
+     * Functions: get_next_sequential_gates
+     */
+    TEST_F(NetlistUtilsTest, check_get_next_sequential_gates)
+    {
+        TEST_START
+        // Create an example netlist that should be copied
+        std::unique_ptr<Netlist> test_nl = test_utils::create_example_netlist();
+
+        auto gate = test_nl->get_gate_by_id(MIN_GATE_ID + 1);
+
+        {
+            auto successors = netlist_utils::get_next_sequential_gates(gate, true);
+            std::unordered_map<u32, std::vector<Gate*>> successor_cache;
+            auto successors_cached = netlist_utils::get_next_sequential_gates(gate, true, successor_cache);
+            EXPECT_EQ(successors, successors_cached);
+        }
+
+        {
+            auto predecessors = netlist_utils::get_next_sequential_gates(gate, false);
+            std::unordered_map<u32, std::vector<Gate*>> successor_cache;
+            auto predecessors_cached = netlist_utils::get_next_sequential_gates(gate, false, successor_cache);
+            EXPECT_EQ(predecessors, predecessors_cached);
+        }
+
+        auto net = gate->get_fan_out_net("O");
+
+        {
+            auto successors = netlist_utils::get_next_sequential_gates(net, true);
+            std::unordered_map<u32, std::vector<Gate*>> successor_cache;
+            auto successors_cached = netlist_utils::get_next_sequential_gates(net, true, successor_cache);
+            EXPECT_EQ(successors, successors_cached);
+        }
+
+        {
+            auto predecessors = netlist_utils::get_next_sequential_gates(net, false);
+            std::unordered_map<u32, std::vector<Gate*>> successor_cache;
+            auto predecessors_cached = netlist_utils::get_next_sequential_gates(net, false, successor_cache);
+            EXPECT_EQ(predecessors, predecessors_cached);
+        }
+
         TEST_END
     }
 
