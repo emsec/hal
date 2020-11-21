@@ -83,6 +83,7 @@ namespace hal
         int mButtonOffset  = 0;
         int mButtonSpacing = 1;
         bool mAutohide      = true;
+        Qt::Orientation mOrientation;
 
         static QPoint sDragStartPosition;
         static DockButton* sDragButton;
