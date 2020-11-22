@@ -370,6 +370,7 @@ namespace hal
 
                 if (mAutohide && unused())
                     hide();
+                updateGeometry();
                 return true;
             }
         }
@@ -387,6 +388,7 @@ namespace hal
             rearrangeButtons();
             if (mAutohide && unused())
                 hide();
+            updateGeometry();
             return true;
         }
         return false;
