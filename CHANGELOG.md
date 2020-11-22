@@ -5,12 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.1.6] - 2020-11-22 19:30:00+02:00 (urgency: medium)
 * added `netlist_utilities::get_subgraph_function` variants with and without cache
 * added `netlist_utilities::get_next_sequential_gates` variants with and without cache
 * added tests for `netlist_utilities::get_next_sequential_gates`
 * added python bindings for gate_library_manager
 * cleaned up `DataContainer`
 * removed hidden internal cache from `netlist_utilities::get_subgraph_function`
+* removed `netlist_utilities::get_subgraph_function` cycle detection due to unintended behavior
 * fixed netlist parsers wrongly handling escapings within strings
 * fixed `netlist_utilities::copy_netlist` did not copy `DataContainer` contents
 * fixed netlist pybind handling of netlists that occasionally led to double-free segfaults
@@ -401,7 +404,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.5...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.6...HEAD
+[3.1.6]: https://github.com/emsec/hal/compare/v3.1.5...v3.1.6
 [3.1.5]: https://github.com/emsec/hal/compare/v3.1.4...v3.1.5
 [3.1.4]: https://github.com/emsec/hal/compare/v3.1.3...v3.1.4
 [3.1.3]: https://github.com/emsec/hal/compare/v3.1.2...v3.1.3
