@@ -128,6 +128,7 @@ namespace hal
 
             EXPECT_EQ(sub_graph_bf, expected_bf);
         }
+        if (test_utils::known_issue_tests_active())
         {
             NO_COUT_BLOCK;
             // The netlist contains a cycle

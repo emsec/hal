@@ -82,19 +82,19 @@ namespace hal
                 q.push(n);
             }
 
-            std::unordered_set<const Net*> visited_nets;
+            std::unordered_set<const Gate*> visited_gates;
 
             while (!q.empty())
             {
                 const Net* n = q.front();
                 q.pop();
 
-                if (visited_nets.find(n) != visited_nets.end())
-                {
-                    log_error("netlist", "detected infinite loop at net with ID {}, cannot determine Boolean function of the subgraph.", n->get_id());
-                    return BooleanFunction();
-                }
-                visited_nets.insert(n);
+                // if (visited_nets.find(n) != visited_nets.end())
+                // {
+                //     log_error("netlist", "detected infinite loop at net with ID {}, cannot determine Boolean function of the subgraph.", n->get_id());
+                //     return BooleanFunction();
+                // }
+                // visited_nets.insert(n);
 
                 if (n->get_num_of_sources() > 1)
                 {
