@@ -32,7 +32,7 @@ namespace hal
                         if (input_net == nullptr)
                         {
                             // if no net is connected, the input pin name cannot be replaced
-                            log_warning("netlist", "not net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", input_pin, gate->get_id());
+                            log_warning("netlist utils", "not net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", input_pin, gate->get_id());
                             return bf;
                         }
 
@@ -42,6 +42,40 @@ namespace hal
                     return bf;
                 }
             }
+
+            void subgraph_function_bfs(Net* n, BooleanFunction& result, std::vector<Net*> stack, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache)
+            {
+                if (n->get_num_of_sources() > 1)
+                {
+                    log_error("netlist utils", "net with ID {} has more than one source, cannot expand Boolean function in this direction.", n->get_id());
+                    return;
+                }
+                else if (n->get_num_of_sources() == 0)
+                {
+                    return;
+                }
+
+                if (auto it = std::find(stack.begin(), stack.end(), n); it != stack.end())
+                {
+                    log_error("netlist utils", "subgraph contains a cycle: {} -> {}", utils::join(" -> ", it, stack.end(), [](auto n) { return n->get_name(); }), n->get_name());
+                    result = BooleanFunction();
+                    return;
+                }
+
+                stack.push_back(n);
+
+                Gate* src_gate = n->get_sources()[0]->get_gate();
+
+                if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
+                {
+                    result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate, cache));
+
+                    for (Net* sn : src_gate->get_fan_in_nets())
+                    {
+                        subgraph_function_bfs(sn, result, stack, subgraph_gates, cache);
+                    }
+                }
+            };
         }    // namespace
 
         BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache)
@@ -49,74 +83,36 @@ namespace hal
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
             {
-                log_error("netlist", "no gates given to determine the Boolean function of.");
+                log_error("netlist utils", "no gates given to determine the Boolean function of.");
                 return BooleanFunction();
             }
             else if (std::any_of(subgraph_gates.begin(), subgraph_gates.end(), [](const Gate* g) { return g == nullptr; }))
             {
-                log_error("netlist", "set of gates contains a nullptr.");
+                log_error("netlist utils", "set of gates contains a nullptr.");
                 return BooleanFunction();
             }
             else if (net == nullptr)
             {
-                log_error("netlist", "nullptr given for target net.");
+                log_error("netlist utils", "nullptr given for target net.");
                 return BooleanFunction();
             }
             else if (net->get_num_of_sources() > 1)
             {
-                log_error("netlist", "target net with ID {} has more than one source.", net->get_id());
+                log_error("netlist utils", "target net with ID {} has more than one source.", net->get_id());
                 return BooleanFunction();
             }
             else if (net->get_num_of_sources() == 0)
             {
-                log_error("netlist", "target net with ID {} has no sources.", net->get_id());
+                log_error("netlist utils", "target net with ID {} has no sources.", net->get_id());
                 return BooleanFunction();
             }
 
             const Gate* start_gate = net->get_sources()[0]->get_gate();
             BooleanFunction result = get_function_of_gate(start_gate, cache);
 
-            std::queue<const Net*> q;
-            for (const Net* n : start_gate->get_fan_in_nets())
+            for (Net* n : start_gate->get_fan_in_nets())
             {
-                q.push(n);
-            }
-
-            std::unordered_set<const Gate*> visited_gates;
-
-            while (!q.empty())
-            {
-                const Net* n = q.front();
-                q.pop();
-
-                // if (visited_nets.find(n) != visited_nets.end())
-                // {
-                //     log_error("netlist", "detected infinite loop at net with ID {}, cannot determine Boolean function of the subgraph.", n->get_id());
-                //     return BooleanFunction();
-                // }
-                // visited_nets.insert(n);
-
-                if (n->get_num_of_sources() > 1)
-                {
-                    log_error("netlist", "net with ID {} has more than one source, cannot expand Boolean function in this direction.", n->get_id());
-                    continue;
-                }
-                else if (n->get_num_of_sources() == 0)
-                {
-                    continue;
-                }
-
-                const Gate* src_gate = n->get_sources()[0]->get_gate();
-
-                if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src_gate) != subgraph_gates.end())
-                {
-                    result = result.substitute(std::to_string(n->get_id()), get_function_of_gate(src_gate, cache));
-
-                    for (const Net* sn : src_gate->get_fan_in_nets())
-                    {
-                        q.push(sn);
-                    }
-                }
+                subgraph_function_bfs(n, result, {}, subgraph_gates, cache);
             }
 
             return result;
