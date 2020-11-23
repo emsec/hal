@@ -11,7 +11,7 @@
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/geometry.h"
 
-#include "gui/graph_widget/graph_navigation_widget_v3.h"
+#include "gui/graph_widget/graph_navigation_widget.h"
 #include "hal_core/netlist/module.h"
 
 #include <QApplication>
@@ -113,11 +113,11 @@ namespace hal
 
         //setup the navigation_table ("activated" by clicking on an input / output pin in the 2 tables)
         //delete the table manually so its not necessarry to add a property for the stylesheet(otherwise this table is styled like the others)
-        mNavigationTable = new GraphNavigationWidgetV3(true);
+        mNavigationTable = new GraphNavigationWidget(true);
         mNavigationTable->setWindowFlags(Qt::CustomizeWindowHint);
         mNavigationTable->hide();
-        connect(mNavigationTable, &GraphNavigationWidgetV3::navigationRequested, this, &GateDetailsWidget::handleNavigationJumpRequested);
-        connect(mNavigationTable, &GraphNavigationWidgetV3::closeRequested, this, &GateDetailsWidget::handleNavigationCloseRequested);
+        connect(mNavigationTable, &GraphNavigationWidget::navigationRequested, this, &GateDetailsWidget::handleNavigationJumpRequested);
+        connect(mNavigationTable, &GraphNavigationWidget::closeRequested, this, &GateDetailsWidget::handleNavigationCloseRequested);
 
         connect(mInputPinsTable, &QTableWidget::itemDoubleClicked, this, &GateDetailsWidget::handleInputPinItemClicked);
         connect(mOutputPinsTable, &QTableWidget::itemDoubleClicked, this, &GateDetailsWidget::handleOutputPinItemClicked);

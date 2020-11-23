@@ -1,6 +1,6 @@
 #include "gui/selection_details_widget/module_details_widget.h"
 
-#include "gui/graph_widget/graph_navigation_widget_v3.h"
+#include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/input_dialog.h"
 #include "hal_core/netlist/gate.h"
@@ -85,12 +85,12 @@ namespace hal
 
         //setup the navigation_table ("activated" by clicking on an input / output pin in the 2 tables)
         //delete the table manually so its not necessarry to add a property for the stylesheet(otherwise this table is styled like the others)
-        mNavigationTable = new GraphNavigationWidgetV3(true);
+        mNavigationTable = new GraphNavigationWidget(true);
         mNavigationTable->setWindowFlags(Qt::CustomizeWindowHint);
         mNavigationTable->hide();
 
-        connect(mNavigationTable, &GraphNavigationWidgetV3::navigationRequested, this, &ModuleDetailsWidget::handleNavigationJumpRequested);
-        connect(mNavigationTable, &GraphNavigationWidgetV3::closeRequested, this, &ModuleDetailsWidget::handleNavigationCloseRequested);
+        connect(mNavigationTable, &GraphNavigationWidget::navigationRequested, this, &ModuleDetailsWidget::handleNavigationJumpRequested);
+        connect(mNavigationTable, &GraphNavigationWidget::closeRequested, this, &ModuleDetailsWidget::handleNavigationCloseRequested);
 
         connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInput, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalInput);
         connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalOutput, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalOutput);

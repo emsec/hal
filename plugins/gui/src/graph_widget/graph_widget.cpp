@@ -6,7 +6,7 @@
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_layout_spinner_widget.h"
-#include "gui/graph_widget/graph_navigation_widget_v3.h"
+#include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
@@ -34,12 +34,12 @@ namespace hal
 {
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
         : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
-          mNavigationWidgetV3(new GraphNavigationWidgetV3(false)),
+          mNavigationWidgetV3(new GraphNavigationWidget(false)),
           mSpinnerWidget(new GraphLayoutSpinnerWidget(this)), mCurrentExpansion(0)
     {
-        connect(mNavigationWidgetV3, &GraphNavigationWidgetV3::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
-        connect(mNavigationWidgetV3, &GraphNavigationWidgetV3::closeRequested, mOverlay, &WidgetOverlay::hide);
-        connect(mNavigationWidgetV3, &GraphNavigationWidgetV3::closeRequested, this, &GraphWidget::resetFocus);
+        connect(mNavigationWidgetV3, &GraphNavigationWidget::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
+        connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, mOverlay, &WidgetOverlay::hide);
+        connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, this, &GraphWidget::resetFocus);
 
         connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
 

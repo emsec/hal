@@ -23,48 +23,118 @@
 
 #pragma once
 
+#include <QTreeWidget>
+#include <QTableWidget>
+#include <QFrame>
+#include <QHash>
+#include <QStringList>
 #include "hal_core/defines.h"
 
 #include "hal_core/netlist/net.h"
-#include "hal_core/netlist/net.h"
-
+#include "hal_core/netlist/endpoint.h"
 #include "gui/gui_def.h"
+#include "gui/selection_relay/selection_relay.h"
+#include "gui/graph_widget/layouters/node_box.h"
 
-#include <QTableWidget>
+namespace hal {
 
-namespace hal
-{
-    class GraphGraphicsView;
+    class GraphNavigationWidget;
 
-    class GraphNavigationWidget : public QTableWidget
+    class GraphNavigationTableWidget : public QTableWidget
+    {
+        GraphNavigationWidget* mNavigationWidget;
+    protected:
+        void keyPressEvent(QKeyEvent *event) override;
+        void focusInEvent(QFocusEvent* event) override;
+    public:
+        GraphNavigationTableWidget(GraphNavigationWidget* nav, QWidget* parent = nullptr)
+            : QTableWidget(parent), mNavigationWidget(nav) {;}
+    };
+
+    class GraphNavigationTreeWidget : public QTreeWidget
+    {
+        GraphNavigationWidget* mNavigationWidget;
+        QList<QTreeWidgetItem*> selectedItemRecursion(QTreeWidgetItem* item) const;
+    protected:
+        void keyPressEvent(QKeyEvent *event) override;
+        void focusInEvent(QFocusEvent* event) override;
+        bool event(QEvent *ev) override;
+    public:
+        GraphNavigationTreeWidget(GraphNavigationWidget* nav, QWidget* parent = nullptr)
+            : QTreeWidget(parent), mNavigationWidget(nav) {;}
+        QList<QTreeWidgetItem*> selectedItems() const;
+        QModelIndex firstIndex() const;
+    };
+
+    class GraphNavigationWidget : public QWidget
     {
         Q_OBJECT
 
+        friend class GraphNavigationTableWidget;
+        friend class GraphNavigationTreeWidget;
     public:
-        explicit GraphNavigationWidget(QWidget *parent = nullptr);
-
-        // right = true
-        void setup(bool direction);
-        void setup(Node origin, Net* via_net, bool direction);
-        void hideWhenFocusLost(bool hide);
+        GraphNavigationWidget(bool onlyNavigate, QWidget* parent = nullptr);
+        void setup(SelectionRelay::Subfocus direction);
+        void setup(Node origin, Net* via_net, SelectionRelay::Subfocus dir);
+        SelectionRelay::Subfocus direction() const { return mDirection; }
+        void closeRequest();
+        bool isEmpty() const;
+        bool hasBothWidgets() const;
+        void toggleWidget();
 
     Q_SIGNALS:
         void navigationRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
         void closeRequested();
         void resetFocus();
 
+    private Q_SLOTS:
+        void handleNavigateSelected(int irow, int icol);
+        void handleAddToViewSelected(QTreeWidgetItem* item, int icol);
+
     protected:
-        void focusOutEvent(QFocusEvent* event) override;
-        void keyPressEvent(QKeyEvent* event) override;
+        void keyPressEvent(QKeyEvent *event) override;
+        void focusInEvent(QFocusEvent* event) override;
 
     private:
-        void fillTable(Net* n, bool direction);
-        void handleItemDoubleClicked(QTableWidgetItem* item);
-        void commitSelection();
+        bool mOnlyNavigate;
+        QFrame*       mNavigateFrame;
+        QFrame*       mAddToViewFrame;
+        GraphNavigationTableWidget* mNavigateWidget;
+        GraphNavigationTreeWidget*  mAddToViewWidget;
 
-        GraphGraphicsView* mView;
-        u32 mViaNet;
+        bool mNavigateVisible;
+        bool mAddToViewVisible;
+
         Node mOrigin;
-        bool mHideWhenFocusLost;
+        Net* mViaNet;
+        SelectionRelay::Subfocus mDirection;
+
+        QList<Node> mNavigateNodes;
+        QHash<QTreeWidgetItem*,Node> mAddToViewNodes;
+
+        /// module visible in view (might be implicitly as parent of gate or module)
+        QSet<Module*> mModulesInView;
+
+        /// gates or modulues connected with endpoint not shown in current view
+        QList<Endpoint*> mEndpointNotInView;
+
+        QHash<Module*, QTreeWidgetItem*> mListedModules;
+
+        void viaNetByNode();
+        void fillTable();
+        void resizeToFit();
+        void setModulesInView();
+        void setModuleInView(Module* m);
+        bool addNavigateItem(Endpoint* ep);
+        bool addToViewItem(Endpoint* ep);
+
+        QTreeWidgetItem* itemFactory(const QStringList& fields, const Node& nd);
+        QStringList gateEntry(Gate* g, Endpoint* ep);
+        QStringList moduleEntry(Module* m, Endpoint* ep);
+
+        static const int sDefaultColumnWidth[];
+        static const int sMaxHeight = 550;
+        static const int sLabelHeight = 24;
     };
+
 }
