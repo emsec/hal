@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * added cycle detection to `netlist_utilities::get_subgraph_function` again
-* improved Python plugin, added command line option `--python-script` and `--python_args`
+* improved Python plugin, added command line option `--python-script` and `--python-args`
 * fixed log output got incorrectly supressed in case command line arguments were solely directed at plugins
 
 ## [3.1.6] - 2020-11-22 19:30:00+02:00 (urgency: medium)
