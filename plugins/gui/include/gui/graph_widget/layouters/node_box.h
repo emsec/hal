@@ -36,6 +36,15 @@ namespace hal {
 
     class GraphicsNode;
 
+    /**
+     * @brief The NodeBox class represents a node placed at a grid position within a hal view.
+     *
+     * @ingroup gui
+     *
+     * The constructur of NodeBox should only be called
+     * actual placement in the graphics scene is done by layouter and can be retrieved from
+     * GraphicsNode properties.
+     */
     class NodeBox
     {
         Node mNode;
