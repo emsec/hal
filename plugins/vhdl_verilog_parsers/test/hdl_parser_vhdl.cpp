@@ -315,27 +315,27 @@ namespace hal {
                 Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("gate_1_to_1", "gate_0")).begin();
 
                 // Integers are stored in their hex representation
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_integer"), std::make_tuple("integer", "1234"));
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_floating_point"),
+                EXPECT_EQ(gate_0->get_data("generic", "key_integer"), std::make_tuple("integer", "1234"));
+                EXPECT_EQ(gate_0->get_data("generic", "key_floating_point"),
                           std::make_tuple("floating_point", "1.234"));
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_string"), std::make_tuple("string", "test_string"));
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_bit_vector_hex"),
+                EXPECT_EQ(gate_0->get_data("generic", "key_string"), std::make_tuple("string", "test_string"));
+                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_hex"),
                           std::make_tuple("bit_vector", "abc"));
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_bit_vector_dec"),
+                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"),
                           std::make_tuple("bit_vector", "abc"));
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_bit_vector_oct"),
+                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"),
                           std::make_tuple("bit_vector", "abc"));
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_bit_vector_bin"),
+                EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"),
                           std::make_tuple("bit_vector", "abc"));
                 // Special Characters
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_negative_comma_string"),
+                EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"),
                           std::make_tuple("string", "test,1,2,3"));
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_negative_float_string"),
+                EXPECT_EQ(gate_0->get_data("generic", "key_negative_float_string"),
                           std::make_tuple("string", "1.234"));
                 // -- VHDL specific Data Types:
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_boolean"), std::make_tuple("boolean", "true"));
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_time"), std::make_tuple("time", "1.234sec"));
-                EXPECT_EQ(gate_0->get_data_by_key("generic", "key_bit_value"), std::make_tuple("bit_value", "1"));
+                EXPECT_EQ(gate_0->get_data("generic", "key_boolean"), std::make_tuple("boolean", "true"));
+                EXPECT_EQ(gate_0->get_data("generic", "key_time"), std::make_tuple("time", "1.234sec"));
+                EXPECT_EQ(gate_0->get_data("generic", "key_bit_value"), std::make_tuple("bit_value", "1"));
             }
         TEST_END
     }
@@ -799,7 +799,7 @@ namespace hal {
                 EXPECT_EQ(gate_1_child->get_fan_in_net("I"), net_0_child);
                 EXPECT_EQ(gate_1_child->get_fan_out_net("O"), net_1);
                 // Check that the attributes of the child entities port are inherit correctly to the connecting Net
-                EXPECT_EQ(net_0->get_data_by_key("attribute", "child_net_attri"),
+                EXPECT_EQ(net_0->get_data("attribute", "child_net_attri"),
                           std::make_tuple("string", "child_net_attribute"));
 
                 // Test that the modules are created and assigned correctly
@@ -809,7 +809,7 @@ namespace hal {
                 EXPECT_EQ(child_mod->get_name(), "child_mod");
                 EXPECT_EQ(top_mod->get_gates(), std::vector<Gate*>({gate_0, gate_1}));
                 EXPECT_EQ(child_mod->get_gates(), std::vector<Gate*>({gate_0_child, gate_1_child}));
-                EXPECT_EQ(child_mod->get_data_by_key("attribute", "child_attri"),
+                EXPECT_EQ(child_mod->get_data("attribute", "child_attri"),
                           std::make_tuple("string", "child_attribute"));
             }
             {
@@ -1302,13 +1302,13 @@ namespace hal {
                 EXPECT_TRUE(net_master->is_global_input_net());
 
                 // VHDL specific: Check the Net attribute propagation
-                EXPECT_EQ(net_master->get_data_by_key("attribute", "master_attr"),
+                EXPECT_EQ(net_master->get_data("attribute", "master_attr"),
                           std::make_tuple("string", "master_attr"));
-                EXPECT_EQ(net_master->get_data_by_key("attribute", "slave_0_attr"),
+                EXPECT_EQ(net_master->get_data("attribute", "slave_0_attr"),
                           std::make_tuple("string", "slave_0_attr"));
-                EXPECT_EQ(net_master->get_data_by_key("attribute", "slave_1_attr"),
+                EXPECT_EQ(net_master->get_data("attribute", "slave_1_attr"),
                           std::make_tuple("string", "slave_1_attr"));
-                EXPECT_EQ(net_master->get_data_by_key("attribute", "slave_2_attr"),
+                EXPECT_EQ(net_master->get_data("attribute", "slave_2_attr"),
                           std::make_tuple("string", "slave_2_attr"));
             }
             {
@@ -1595,16 +1595,16 @@ namespace hal {
 
                 // Test that the comments did not removed other parts (all no_comment_n generics should be created)
                 for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2"})) {
-                    EXPECT_NE(test_gate->get_data_by_key("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data_by_key("generic", key) == std::make_tuple("", "")) {
+                    EXPECT_NE(test_gate->get_data("generic", key), std::make_tuple("", ""));
+                    if (test_gate->get_data("generic", key) == std::make_tuple("", "")) {
                         std::cout << "comment test failed for: " << key << std::endl;
                     }
                 }
 
                 // Test that the comments are not interpreted (all comment_n generics shouldn't be created)
                 for (std::string key : std::set<std::string>({"comment_0", "comment_1", "comment_2"})) {
-                    EXPECT_EQ(test_gate->get_data_by_key("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data_by_key("generic", key) != std::make_tuple("", "")) {
+                    EXPECT_EQ(test_gate->get_data("generic", key), std::make_tuple("", ""));
+                    if (test_gate->get_data("generic", key) != std::make_tuple("", "")) {
                         std::cout << "comment failed for: " << key << std::endl;
                     }
                 }
@@ -1645,7 +1645,7 @@ namespace hal {
                 ASSERT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
                 Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
-                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "attri_name"),
+                EXPECT_EQ(attri_gate->get_data("attribute", "attri_name"),
                           std::make_tuple("attri_type", "attri_value"));
             }
             {
@@ -1680,7 +1680,7 @@ namespace hal {
                 ASSERT_EQ(nl->get_nets(test_utils::net_name_filter("net_0")).size(), 1);
                 Net* attri_net = *nl->get_nets(test_utils::net_name_filter("net_0")).begin();
                 EXPECT_NE(attri_net, nullptr);
-                EXPECT_EQ(attri_net->get_data_by_key("attribute", "attri_name"),
+                EXPECT_EQ(attri_net->get_data("attribute", "attri_name"),
                           std::make_tuple("attri_type", "attri_value"));
             }
             {
@@ -1722,9 +1722,9 @@ namespace hal {
                 Gate* attri_gate = *nl->get_gates(test_utils::gate_name_filter("gate_0")).begin();
 
                 // Check the attributes
-                EXPECT_EQ(attri_net->get_data_by_key("attribute", "attri_comma_string"),
+                EXPECT_EQ(attri_net->get_data("attribute", "attri_comma_string"),
                           std::make_tuple("attri_type_0", "test, 1, 2, 3"));
-                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "attri_float_string"),
+                EXPECT_EQ(attri_gate->get_data("attribute", "attri_float_string"),
                           std::make_tuple("attri_type_1", "1.234"));
             }
         TEST_END
@@ -2085,7 +2085,7 @@ namespace hal {
                 EXPECT_NE(nl, nullptr);
                 ASSERT_EQ(nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).size(), 1);
                 Gate* attri_gate = *nl->get_gates(test_utils::gate_type_filter("gate_1_to_1")).begin();
-                EXPECT_EQ(attri_gate->get_data_by_key("attribute", "attri_name"),
+                EXPECT_EQ(attri_gate->get_data("attribute", "attri_name"),
                           std::make_tuple("unknown", "attri_value"));
             }
             {

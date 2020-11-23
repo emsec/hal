@@ -94,7 +94,7 @@ namespace hal
                 val.AddMember("id", g->get_id(), allocator);
                 val.AddMember("name", g->get_name(), allocator);
                 val.AddMember("type", g->get_type()->get_name(), allocator);
-                auto data_val = serialize(g->get_data(), allocator);
+                auto data_val = serialize(g->get_data_map(), allocator);
                 if (!data_val.Empty())
                 {
                     val.AddMember("data", data_val, allocator);
@@ -181,7 +181,7 @@ namespace hal
                     }
                 }
 
-                auto data_val = serialize(n->get_data(), allocator);
+                auto data_val = serialize(n->get_data_map(), allocator);
                 if (!data_val.Empty())
                 {
                     val.AddMember("data", data_val, allocator);
@@ -308,7 +308,7 @@ namespace hal
                     }
                 }
 
-                auto data_val = serialize(m->get_data(), allocator);
+                auto data_val = serialize(m->get_data_map(), allocator);
                 if (!data_val.Empty())
                 {
                     val.AddMember("data", data_val, allocator);
@@ -612,7 +612,7 @@ namespace hal
                     }
                 }
 
-                if (root.HasMember("groupings")) 
+                if (root.HasMember("groupings"))
                 {
                     for (auto& grouping_node : root["groupings"].GetArray())
                     {

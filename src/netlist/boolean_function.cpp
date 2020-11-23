@@ -3,6 +3,7 @@
 #include "hal_core/utilities/utils.h"
 
 #include <algorithm>
+#include <iostream>
 
 namespace hal
 {
@@ -271,7 +272,7 @@ namespace hal
             auto pos = expression.find(sorted_variable_names[i]);
             while (pos != std::string::npos)
             {
-                expression.replace(pos, sorted_variable_names[i].size(), "__v_" + std::to_string(i));
+                expression.replace(pos, sorted_variable_names[i].size(), "__v_" + std::to_string(i)+" ");
                 pos = expression.find(sorted_variable_names[i], pos + sorted_variable_names[i].size());
             }
         }

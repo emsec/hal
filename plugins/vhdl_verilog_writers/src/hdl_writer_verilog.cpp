@@ -343,7 +343,7 @@ namespace hal
     void HDLWriterVerilog::print_generic_map_verilog(Gate* n)
     {
         // Map init value
-        auto data          = n->get_data();
+        auto data          = n->get_data_map();
         bool first_generic = true;
         for (auto d : data)
         {
