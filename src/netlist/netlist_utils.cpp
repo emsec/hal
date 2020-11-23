@@ -57,7 +57,7 @@ namespace hal
 
                 if (auto it = std::find(stack.begin(), stack.end(), n); it != stack.end())
                 {
-                    log_error("netlist utils", "subgraph contains a cycle: {} -> {}", utils::join(" -> ", it, stack.end(), [](auto n) { return n->get_name(); }), n->get_name());
+                    log_error("netlist utils", "subgraph contains a cycle: {} -> {}", utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name(); }), n->get_name());
                     result = BooleanFunction();
                     return;
                 }
@@ -75,7 +75,7 @@ namespace hal
                         subgraph_function_bfs(sn, result, stack, subgraph_gates, cache);
                     }
                 }
-            };
+            }
         }    // namespace
 
         BooleanFunction get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::unordered_map<u32, BooleanFunction>& cache)
