@@ -2631,9 +2631,7 @@ namespace hal
 
     int GraphLayouter::EndpointCoordinate::numberPins() const
     {
-        int nInp = mInputHash.size();
-        int nOut = mOutputHash.size();
-        return nInp > nOut ? nInp : nOut;
+        return mNumberPins;
     }
 
     void GraphLayouter::EndpointCoordinate::setInputPosition(QPointF p0pos)
@@ -2661,7 +2659,9 @@ namespace hal
 
     void GraphLayouter::EndpointCoordinate::setInputPins(const QList<u32> &pinList, float p0dist, float pdist)
     {
-        for (int i=0; i<pinList.size(); i++)
+        int n = pinList.size();
+        if (n > mNumberPins) mNumberPins = n;
+        for (int i=0; i<n; i++)
         {
             u32 id = pinList.at(i);
             if (id) mInputHash.insert(id,i);
@@ -2672,7 +2672,9 @@ namespace hal
 
     void GraphLayouter::EndpointCoordinate::setOutputPins(const QList<u32>& pinList, float p0dist, float pdist)
     {
-        for (int i=0; i<pinList.size(); i++)
+        int n = pinList.size();
+        if (n > mNumberPins) mNumberPins = n;
+        for (int i=0; i<n; i++)
         {
             u32 id = pinList.at(i);
             if (id) mOutputHash.insert(id,i);
