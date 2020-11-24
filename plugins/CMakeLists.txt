@@ -8,7 +8,6 @@ endforeach()
 include_directories(${include_directories}
                     ${CMAKE_SOURCE_DIR}/include
                     ${CMAKE_SOURCE_DIR}/hal_plugins
-                    SYSTEM ${Boost_INCLUDE_DIR}
                    )
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib/hal_plugins/)
