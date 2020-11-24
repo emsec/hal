@@ -111,6 +111,6 @@ namespace hal
         void handleOutputNetItemClicked(const QTableWidgetItem* item);
         void handleInputNetItemClicked(const QTableWidgetItem* item);
         void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates);
-
+        void handleNavigationCloseRequested();
     };
 }    // namespace hal

@@ -85,12 +85,12 @@ namespace hal
 
         //setup the navigation_table ("activated" by clicking on an input / output pin in the 2 tables)
         //delete the table manually so its not necessarry to add a property for the stylesheet(otherwise this table is styled like the others)
-        mNavigationTable = new GraphNavigationWidget();
+        mNavigationTable = new GraphNavigationWidget(true);
         mNavigationTable->setWindowFlags(Qt::CustomizeWindowHint);
-        mNavigationTable->hideWhenFocusLost(true);
         mNavigationTable->hide();
 
         connect(mNavigationTable, &GraphNavigationWidget::navigationRequested, this, &ModuleDetailsWidget::handleNavigationJumpRequested);
+        connect(mNavigationTable, &GraphNavigationWidget::closeRequested, this, &ModuleDetailsWidget::handleNavigationCloseRequested);
 
         connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalInput, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalInput);
         connect(gNetlistRelay, &NetlistRelay::netlistMarkedGlobalOutput, this, &ModuleDetailsWidget::handleNetlistMarkedGlobalOutput);
@@ -622,10 +622,15 @@ namespace hal
         }
         else
         {
-            mNavigationTable->setup(Node(), clicked_net, true);
-            mNavigationTable->move(QCursor::pos());
-            mNavigationTable->show();
-            mNavigationTable->setFocus();
+            mNavigationTable->setup(Node(), clicked_net, SelectionRelay::Subfocus::Right);
+            if (mNavigationTable->isEmpty())
+                mNavigationTable->closeRequest();
+            else
+            {
+                mNavigationTable->move(QCursor::pos());
+                mNavigationTable->show();
+                mNavigationTable->setFocus();
+            }
         }
     }
 
@@ -665,11 +670,21 @@ namespace hal
         }
         else
         {
-            mNavigationTable->setup(Node(), net, false);
-            mNavigationTable->move(QCursor::pos());
-            mNavigationTable->show();
-            mNavigationTable->setFocus();
+            mNavigationTable->setup(Node(), net, SelectionRelay::Subfocus::Left);
+            if (mNavigationTable->isEmpty())
+                mNavigationTable->closeRequest();
+            else
+            {
+                mNavigationTable->move(QCursor::pos());
+                mNavigationTable->show();
+                mNavigationTable->setFocus();
+            }
         }
+    }
+
+    void ModuleDetailsWidget::handleNavigationCloseRequested()
+    {
+        mNavigationTable->hide();
     }
 
     void ModuleDetailsWidget::handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates)
