@@ -511,10 +511,17 @@ namespace hal
         QString text  = "All Files(*.vhd *.vhdl *.v *.hal);;VHDL Files (*.vhd *.vhdl);;Verilog Files (*.v);;HAL Progress Files (*.hal)";
 
         // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
-        QString fileName = QFileDialog::getOpenFileName(nullptr, title, QDir::currentPath(), text, nullptr);
+        QString path = QDir::currentPath();
+
+        if (gGuiState->contains("FileDialog/Path/MainWindow"))
+            path = gGuiState->value("FileDialog/Path/MainWindow").toString();
+
+        QString fileName = QFileDialog::getOpenFileName(nullptr, title, path, text, nullptr);
 
         if (!fileName.isNull())
         {
+            gGuiState->setValue("FileDialog/Path/MainWindow", fileName);
+
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(false);
             FileManager::get_instance()->openFile(fileName);
