@@ -5,7 +5,7 @@ namespace hal
     void grouping_init(py::module& m)
     {
         py::class_<Grouping, RawPtrWrapper<Grouping>> py_grouping(m, "Grouping", R"(
-            A grouping is an unstructured collection of gates, nets, and modules that do not need to be connected in any way. 
+            A grouping is an unstructured collection of gates, nets, and modules that do not need to be connected in any way.
             It is designed to act as a container to temporarily store related entities during netlist exploration.
             In contrast to a module, it does not allow for hierarchization.
             Each gate, net, or module within the netlist may only be assigned to a single grouping.
@@ -44,14 +44,14 @@ namespace hal
         )");
 
         py_grouping.def_property_readonly(
-            "netlist", [](Grouping* grouping) { return RawPtrWrapper(grouping->get_netlist()); }, R"(
+            "netlist", [](Grouping* grouping) { return RawPtrWrapper<Netlist>(grouping->get_netlist()); }, R"(
             The netlist this grouping is associated with.
 
             :type: hal_py.Netlist
         )");
 
         py_grouping.def(
-            "get_netlist", [](Grouping* grouping) { return RawPtrWrapper(grouping->get_netlist()); }, R"(
+            "get_netlist", [](Grouping* grouping) { return RawPtrWrapper<Netlist>(grouping->get_netlist()); }, R"(
             Get the netlist this grouping is associated with.
 
             :returns: The netlist.

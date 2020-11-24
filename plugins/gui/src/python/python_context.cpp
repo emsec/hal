@@ -1,23 +1,24 @@
 #include "gui/python/python_context.h"
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/utilities/utils.h"
 #include "gui/gui_globals.h"
 #include "gui/python/python_context_subscriber.h"
 #include "hal_core/python_bindings/python_bindings.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 
 #include <QDir>
 #include <fstream>
 #include <gui/python/python_context.h>
 
 // Following is needed for PythonContext::checkCompleteStatement
+#include "hal_config.h"
+
 #include <Python.h>
 #include <compile.h>
 #include <errcode.h>
 #include <grammar.h>
 #include <node.h>
 #include <parsetok.h>
-#include "hal_config.h"
 
 extern grammar _PyParser_Grammar;
 
@@ -74,10 +75,12 @@ namespace hal
 
         py::exec(command, *context, *context);
 
-        (*context)["netlist"] = RawPtrWrapper(gNetlist);
+        (*context)["netlist"] = gNetlistOwner;    // assign the shared_ptr here, not the raw ptr
 
         if (gGuiApi)
+        {
             (*context)["gui"] = gGuiApi;
+        }
     }
 
     void PythonContext::initPython()
@@ -158,7 +161,6 @@ namespace hal
         py::dict tmp_context(py::globals());
         initializeContext(&tmp_context);
 
-
         //log_info("python", "Python editor execute script:\n{}\n", input.toStdString());
 #ifdef HAL_STUDY
         log_info("UserStudy", "Python editor execute script:\n{}\n", input.toStdString());
@@ -219,6 +221,7 @@ namespace hal
     std::vector<std::tuple<std::string, std::string>> PythonContext::complete(const QString& text, bool use_console_context)
     {
         std::vector<std::tuple<std::string, std::string>> ret_val;
+        py::dict tmp_context;
         try
         {
             auto namespaces = py::list();
@@ -229,7 +232,7 @@ namespace hal
             }
             else
             {
-                py::dict tmp_context(py::globals());
+                tmp_context = py::globals();
                 initializeContext(&tmp_context);
                 namespaces.append(tmp_context);
                 namespaces.append(tmp_context);
@@ -251,6 +254,7 @@ namespace hal
             e.restore();
             PyErr_Clear();
         }
+
         return ret_val;
     }
 
@@ -291,6 +295,6 @@ namespace hal
 
     void PythonContext::updateNetlist()
     {
-        (*mContext)["netlist"] = RawPtrWrapper(gNetlist);
+        (*mContext)["netlist"] = gNetlistOwner;    // assign the shared_ptr here, not the raw ptr
     }
 }    // namespace hal

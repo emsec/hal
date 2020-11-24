@@ -25,11 +25,11 @@
 
 #include "hal_core/utilities/log.h"
 
+#include <QList>
 #include <QReadWriteLock>
 #include <QString>
 #include <QVariant>
 
-#include <boost/circular_buffer.hpp>
 namespace hal
 {
 
@@ -71,14 +71,14 @@ namespace hal
 
         QVariant data(int column) const;
         const QString name() const;
-        const boost::circular_buffer<ChannelEntry*>* getBuffer() const;
+        const QList<ChannelEntry*>* getList() const;
         QReadWriteLock* getLock();
 
         void appendEntry(ChannelEntry* entry);
 
     private:
         const QString mName;
-        boost::circular_buffer<ChannelEntry*> mLogEntries;
+        QList<ChannelEntry*> mLogEntries;
         QReadWriteLock mLock;
 
         int mObserver;

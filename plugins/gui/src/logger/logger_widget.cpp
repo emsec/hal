@@ -71,41 +71,7 @@ namespace hal
     void LoggerWidget::filterItemClicked(const int& index)
     {
         Q_UNUSED(index)
-        //reloadLogContent();
     }
-
-    void LoggerWidget::reloadLogContent()
-    {
-        //    hal_task_status_item *item = static_cast<hal_task_status_item*>(m_task_manager->get_tree_view()->currentIndex().internalPointer());
-        //    FilterItem *filter = mTabBar->getCurrentFilter();
-
-        //        mPlainTextEdit->clear();
-        //        QWriteLocker item_locker(item->getLock());
-        //        boost::circular_buffer<hal_task_log_entry*> *buffer = item->getBuffer();
-        //        boost::circular_buffer<hal_task_log_entry*>::iterator itBegin = buffer->begin();
-        //        boost::circular_buffer<hal_task_log_entry*>::iterator itEnd = buffer->end();
-        //        for(; itBegin != itEnd; ++itBegin)
-        //        {
-        //            hal_task_log_entry *entry = *itBegin;
-        //            mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg), filter);
-        //        }
-    }    // item_locker scope
-
-    //void LoggerWidget::handleCurrentChannelChanged(hal_channel_item* item)
-    //{
-    //    FilterItem* filter = mTabBar->getCurrentFilter();
-
-    //    mPlainTextEdit->clear();
-    //    QWriteLocker item_locker(item->getLock());
-    //    boost::circular_buffer<hal_ChannelEntry*>* buffer           = item->getBuffer();
-    //    boost::circular_buffer<hal_ChannelEntry*>::iterator itBegin = buffer->begin();
-    //    boost::circular_buffer<hal_ChannelEntry*>::iterator itEnd   = buffer->end();
-    //    for (; itBegin != itEnd; ++itBegin)
-    //    {
-    //        hal_ChannelEntry* entry = *itBegin;
-    //        mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg), filter);
-    //    }
-    //}    // item_locker scope
 
     void LoggerWidget::handleCurrentChannelUpdated(spdlog::level::level_enum t, const QString& msg)
     {
@@ -137,12 +103,8 @@ namespace hal
 
         mPlainTextEdit->clear();
         QWriteLocker item_locker(item->getLock());
-        const boost::circular_buffer<ChannelEntry*>* buffer           = item->getBuffer();
-        boost::circular_buffer<ChannelEntry*>::const_iterator itBegin = buffer->begin();
-        boost::circular_buffer<ChannelEntry*>::const_iterator itEnd   = buffer->end();
-        for (; itBegin != itEnd; ++itBegin)
+        for (ChannelEntry* entry : *(item->getList()))
         {
-            ChannelEntry* entry = *itBegin;
             mLogMarshall->appendLog(entry->mMsgType, QString::fromStdString(entry->mMsg), filter);
         }
     }

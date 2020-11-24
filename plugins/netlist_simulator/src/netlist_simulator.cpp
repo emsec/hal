@@ -98,7 +98,7 @@ namespace hal
             {
                 // extract init string
                 auto gate_type = dynamic_cast<const GateTypeSequential*>(gate->get_type());
-                auto init_str  = std::get<1>(gate->get_data_by_key(gate_type->get_init_data_category(), gate_type->get_init_data_identifier()));
+                auto init_str  = std::get<1>(gate->get_data(gate_type->get_init_data_category(), gate_type->get_init_data_identifier()));
 
                 if (!init_str.empty())
                 {

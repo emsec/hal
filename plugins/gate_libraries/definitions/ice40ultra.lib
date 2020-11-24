@@ -1,0 +1,634 @@
+library (ICE40ULTRA) {
+    type (bus11) {
+        base_type : array;
+        data_type : bit;
+        bit_width : 11;
+        bit_from  : 0;
+        bit_to    : 10;
+    }
+    type (bus16) {
+        base_type : array;
+        data_type : bit;
+        bit_width : 16;
+        bit_from  : 0;
+        bit_to    : 15;
+    }
+    cell(SB_CARRY) {
+        pin(CI) {
+            direction: input;
+        }
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(CO) {
+            direction: output;
+            function: "(I0 & I1) | ((I0 | I1) & CI)";
+        }
+    }
+
+    cell(SB_DFF) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "C";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFE) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "(E & C)";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(E) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFSR) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D & !R";
+            clocked_on          : "C";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFR) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D & !R";
+            clocked_on          : "C";
+            preset              : "R";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFSS) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D | S";
+            clocked_on          : "C";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFS) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D | S";
+            clocked_on          : "C";
+            clear               : "S";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFESR) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D & !R";
+            clocked_on          : "(E & C)";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFER) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D & !R";
+            clocked_on          : "(E & C)";
+            preset              : "R";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(E) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFESS) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D | S";
+            clocked_on          : "(E & C)";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(E) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFES) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D | S";
+            clocked_on          : "(E & C)";
+            clear               : "S";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(E) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFN) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "!C";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFNE) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D";
+            clocked_on          : "(E & !C)";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(E) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFNSR) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D & !R";
+            clocked_on          : "!C";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFNR) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D & !R";
+            clocked_on          : "!C";
+            preset              : "R";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFNSS) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D | S";
+            clocked_on          : "!C";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFNS) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D | S";
+            clocked_on          : "!C";
+            clear               : "S";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFNESR) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D & !R";
+            clocked_on          : "(E & !C)";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFNER) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D & !R";
+            clocked_on          : "(E & !C)";
+            preset              : "R";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(R) {
+            direction: input;
+        }
+        pin(E) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFNESS) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D | S";
+            clocked_on          : "(E & !C)";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(E) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_DFFNES) {
+        ff ("IQ" , "IQN") {
+            next_state          : "D | S";
+            clocked_on          : "(E & !C)";
+            clear               : "S";
+            data_category       : "generic";
+            data_key            : "INIT";
+        }
+        pin(C) {
+            direction: input;
+            clock: true;
+        }
+        pin(S) {
+            direction: input;
+        }
+        pin(E) {
+            direction: input;
+        }
+        pin(D) {
+            direction: input;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+
+    cell(SB_LUT4) {
+        lut ("lut_out") {
+            data_category     : "generic";
+            data_identifier   : "INIT";
+            bit_order         : "ascending";
+        }
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(I2) {
+            direction: input;
+        }
+        pin(I3) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "lut_out";
+        }
+    }
+
+    cell(SB_RAM40_4K) {
+        pin(WE) { direction: input; }
+        pin(WCLK) { direction: input; }
+        pin(WCLKE) { direction: input; }
+        pin(RE) { direction: input; }
+        pin(RCLKE) { direction: input; }
+        pin(RCLK) { direction: input; }
+        bus(WADDR){
+            bus_type: bus11;
+            direction: input;
+            pin(WADDR[0]) {  }
+            pin(WADDR[1]) {  }
+            pin(WADDR[2]) {  }
+            pin(WADDR[3]) {  }
+            pin(WADDR[4]) {  }
+            pin(WADDR[5]) {  }
+            pin(WADDR[6]) {  }
+            pin(WADDR[7]) {  }
+            pin(WADDR[8]) {  }
+            pin(WADDR[9]) {  }
+            pin(WADDR[10]) {  }
+        }
+        bus(RADDR){
+            bus_type: bus11;
+            direction: input;
+            pin(RADDR[0]) {  }
+            pin(RADDR[1]) {  }
+            pin(RADDR[2]) {  }
+            pin(RADDR[3]) {  }
+            pin(RADDR[4]) {  }
+            pin(RADDR[5]) {  }
+            pin(RADDR[6]) {  }
+            pin(RADDR[7]) {  }
+            pin(RADDR[8]) {  }
+            pin(RADDR[9]) {  }
+            pin(RADDR[10]) {  }
+        }
+        bus(MASK){
+            bus_type: bus16;
+            direction: input;
+            pin(MASK[0]) {  }
+            pin(MASK[1]) {  }
+            pin(MASK[2]) {  }
+            pin(MASK[3]) {  }
+            pin(MASK[4]) {  }
+            pin(MASK[5]) {  }
+            pin(MASK[6]) {  }
+            pin(MASK[7]) {  }
+            pin(MASK[8]) {  }
+            pin(MASK[9]) {  }
+            pin(MASK[10]) {  }
+            pin(MASK[11]) {  }
+            pin(MASK[12]) {  }
+            pin(MASK[13]) {  }
+            pin(MASK[14]) {  }
+            pin(MASK[15]) {  }
+        }
+        bus(WDATA){
+            bus_type: bus16;
+            direction: input;
+            pin(WDATA[0]) {  }
+            pin(WDATA[1]) {  }
+            pin(WDATA[2]) {  }
+            pin(WDATA[3]) {  }
+            pin(WDATA[4]) {  }
+            pin(WDATA[5]) {  }
+            pin(WDATA[6]) {  }
+            pin(WDATA[7]) {  }
+            pin(WDATA[8]) {  }
+            pin(WDATA[9]) {  }
+            pin(WDATA[10]) {  }
+            pin(WDATA[11]) {  }
+            pin(WDATA[12]) {  }
+            pin(WDATA[13]) {  }
+            pin(WDATA[14]) {  }
+            pin(WDATA[15]) {  }
+        }
+        bus(RDATA){
+            bus_type: bus16;
+            direction: output;
+            pin(RDATA[0]) {  }
+            pin(RDATA[1]) {  }
+            pin(RDATA[2]) {  }
+            pin(RDATA[3]) {  }
+            pin(RDATA[4]) {  }
+            pin(RDATA[5]) {  }
+            pin(RDATA[6]) {  }
+            pin(RDATA[7]) {  }
+            pin(RDATA[8]) {  }
+            pin(RDATA[9]) {  }
+            pin(RDATA[10]) {  }
+            pin(RDATA[11]) {  }
+            pin(RDATA[12]) {  }
+            pin(RDATA[13]) {  }
+            pin(RDATA[14]) {  }
+            pin(RDATA[15]) {  }
+        }
+    }
+}

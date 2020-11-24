@@ -51,7 +51,7 @@ if [[ "$platform" == 'macOS' ]]; then
        exit 255
     fi
 elif [[ "$platform" == 'linux' ]]; then
-    if [[ "$distribution" == 'Ubuntu' ]]; then
+    if [ "$distribution" == 'Ubuntu' ] || [ "$distribution" == 'LinuxMint' ]; then
         sudo apt-get update && sudo apt-get install -y build-essential lsb-release git cmake pkgconf libboost-all-dev qt5-default \
         libpython3-dev ccache autoconf autotools-dev libsodium-dev libigraph0-dev \
         libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx doxygen python3-sphinx-rtd-theme python3-jedi python3-pip pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev \
