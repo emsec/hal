@@ -859,6 +859,28 @@ namespace hal
             mCoordY[pnt.y()].testMinMax(rect.top());
             mCoordY[pnt.y()].testMinMax(rect.bottom());
         }
+
+        // fill gaps in coordinate system if any
+        if (!mCoordX.isEmpty())
+        {
+            auto itx0 = mCoordX.begin();
+            for (auto itx1 = itx0+1; itx1 != mCoordX.end(); ++itx1)
+            {
+                for (int x = itx0.key()+1; x<itx1.key(); x++)
+                    mCoordX[x].testMinMax(0);
+                itx0 = itx1;
+            }
+        }
+        if (!mCoordY.isEmpty())
+        {
+            auto ity0 = mCoordY.begin();
+            for (auto ity1 = ity0+1; ity1 != mCoordY.end(); ++ity1)
+            {
+                for (int y = ity0.key()+1; y<ity1.key(); y++)
+                    mCoordY[y].testMinMax(0);
+                ity0 = ity1;
+            }
+        }
     }
 
     void GraphLayouter::findMaxChannelLanes()

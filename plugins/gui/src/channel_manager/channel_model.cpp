@@ -76,7 +76,7 @@ namespace hal
             }
             if (!mTemporaryItems.empty())
             {
-                if ((unsigned long)row <= mPermanentItems.size() + mTemporaryItems.size() - 1)
+                if ((unsigned long)row <= (unsigned long)(mPermanentItems.size() + mTemporaryItems.size() - 1))
                     return createIndex(row, column, mTemporaryItems.at(row - mPermanentItems.size()));
             }
             return QModelIndex();
