@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added cycle detection to `netlist_utilities::get_subgraph_function` again
 * added Lattice ICE gate library
 * improved Python plugin, added command line option `--python-script` and `--python-args`
+* removed all Boost and Kyoto references
 * fixed log output got incorrectly supressed in case command line arguments were solely directed at plugins
 * fixed wrong layouting of endpoints in GUI in the presence of unconnected pins/ports
 
