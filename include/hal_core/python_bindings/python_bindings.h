@@ -4,9 +4,11 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_library_parser.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 #include "hal_core/netlist/module.h"
@@ -36,61 +38,21 @@
 
 #pragma GCC diagnostic pop
 
-/**
- * Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL.
- *
- * @ingroup pybind
- */
-template<class T>
-class RawPtrWrapper
-{
-public:
-    /**
-     * Construct an empty wrapper.
-     */
-    RawPtrWrapper() : m_ptr(nullptr)
-    {
-    }
-
-    /**
-     * Construct a wrapper from a raw pointer.
-     * 
-     * @param[in] ptr - The raw pointer.
-     */
-    RawPtrWrapper(T* ptr) : m_ptr(ptr)
-    {
-    }
-
-    /**
-     * Construct a wrapper from another one (i.e., copy constructor).
-     * 
-     * @param[in] other - The other wrapper to copy.
-     */
-    RawPtrWrapper(const RawPtrWrapper& other) : m_ptr(other.m_ptr)
-    {
-    }
-
-    /**
-     * Get the raw pointer from the wrapper.
-     * 
-     * @returns The raw pointer.
-     */
-    T* get() const
-    {
-        return m_ptr;
-    }
-
-private:
-    T* m_ptr;
-};
-PYBIND11_DECLARE_HOLDER_TYPE(T, RawPtrWrapper<T>, true)
-
 namespace hal
 {
     namespace py = pybind11;
+
+    /**
+     * Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL.
+     *
+     * @ingroup pybind
+     */
+    template<class T>
+    using RawPtrWrapper = std::unique_ptr<T, py::nodelete>;
+
     /**
      * TODO move into own namespace
-     * 
+     *
      * @ingroup pybind
      * @{
      */
@@ -143,6 +105,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void gate_library_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL gate library manager in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void gate_library_manager_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL endpoint in a python module.

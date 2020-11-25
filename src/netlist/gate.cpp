@@ -208,7 +208,7 @@ namespace hal
 
         std::string category   = lut_type->get_config_data_category();
         std::string key        = lut_type->get_config_data_identifier();
-        std::string config_str = std::get<1>(get_data_by_key(category, key));
+        std::string config_str = std::get<1>(get_data(category, key));
         auto is_ascending      = lut_type->is_config_data_ascending_order();
         auto inputs            = get_input_pins();
 

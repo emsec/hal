@@ -183,8 +183,8 @@ namespace hal
         mDestinationPinsTable->resizeColumnsToContents();
         mDestinationPinsTable->setFixedWidth(DetailsTableUtilities::tableWidgetSize(mDestinationPinsTable).width());
 
-        mDataFieldsSection->setRowCount(n->get_data().size());
-        mDataFieldsTable->updateData(mNetId,  n->get_data());
+        mDataFieldsSection->setRowCount(n->get_data_map().size());
+        mDataFieldsTable->updateData(mNetId,  n->get_data_map());
 
         //to prevent any updating(render) erros that can occur, manually tell the tables to update
         mGeneralView->update();

@@ -3,15 +3,17 @@
 #include "hal_core/utilities/log.h"
 
 #define ALL_CHANNEL "all"
+#define MAX_TEMP_CHANNELS 30
+
 namespace hal
 {
 
 
-    ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent), mTemporaryItems(30)
+    ChannelModel::ChannelModel(QObject* parent) : QAbstractTableModel(parent)
     {
         mChannelToIgnore = {"UserStudy"};
         LogManager::get_instance().get_gui_callback().add_callback("gui",
-                                                                   std::bind(&ChannelModel::handleLogmanagerCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+            std::bind(&ChannelModel::handleLogmanagerCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
     ChannelModel::~ChannelModel()
@@ -74,7 +76,7 @@ namespace hal
             }
             if (!mTemporaryItems.empty())
             {
-                if ((unsigned long)row <= mPermanentItems.size() + mTemporaryItems.size() - 1)
+                if ((unsigned long)row <= (unsigned long)(mPermanentItems.size() + mTemporaryItems.size() - 1))
                     return createIndex(row, column, mTemporaryItems.at(row - mPermanentItems.size()));
             }
             return QModelIndex();
@@ -101,17 +103,17 @@ namespace hal
     {
         int offset = mPermanentItems.size() + mTemporaryItems.size();
 
-        if (mTemporaryItems.full())
+        if (mTemporaryItems.size() == MAX_TEMP_CHANNELS)
         {
-            int index = offset + mTemporaryItems.size();
-            beginRemoveRows(QModelIndex(), index - 1, index - 1);
-            delete mTemporaryItems.back();
+            beginRemoveRows(QModelIndex(), offset - 1, offset - 1);
+            delete mTemporaryItems.last();
+            mTemporaryItems.removeLast();
             endRemoveRows();
         }
         ChannelItem* item = new ChannelItem(name);
 
         beginInsertRows(QModelIndex(), offset, offset);
-        mTemporaryItems.push_back(item);
+        mTemporaryItems.prepend(item);
         endInsertRows();
         return item;
     }

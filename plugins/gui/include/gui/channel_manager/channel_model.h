@@ -23,12 +23,14 @@
 
 #pragma once
 
-#include "gui/channel_manager/channel_item.h"
 #include "hal_core/utilities/log.h"
+
+#include "gui/channel_manager/channel_item.h"
+
 #include <QAbstractTableModel>
 #include <QModelIndex>
 #include <QVariant>
-#include <boost/circular_buffer.hpp>
+
 namespace hal
 {
     class ChannelModel : public QAbstractTableModel
@@ -44,14 +46,14 @@ namespace hal
 
     public:
         static ChannelModel* get_instance();
-        ~ChannelModel();
+        ~ChannelModel() override;
 
-        QVariant data(const QModelIndex& index, int role) const Q_DECL_OVERRIDE;
-        Qt::ItemFlags flags(const QModelIndex& index) const Q_DECL_OVERRIDE;
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-        int rowCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-        int columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+        QVariant data(const QModelIndex& index, int role) const override;
+        Qt::ItemFlags flags(const QModelIndex& index) const override;
+        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+        int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
         ChannelItem* add_channel(const QString name);
         void handleLogmanagerCallback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text);
@@ -60,11 +62,11 @@ namespace hal
         void updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
 
     private:
-        explicit ChannelModel(QObject* parent = 0);
+        explicit ChannelModel(QObject* parent = nullptr);
 
         QList<QString> mChannelToIgnore;
         QList<ChannelItem*> mPermanentItems;
-        boost::circular_buffer<ChannelItem*> mTemporaryItems;
+        QList<ChannelItem*> mTemporaryItems;
 
         u64 mGuiCallbackId;
     };

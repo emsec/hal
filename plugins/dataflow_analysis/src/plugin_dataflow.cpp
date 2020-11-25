@@ -250,11 +250,11 @@ namespace hal
 
         // dot_graph::create_graph(final_grouping, output_path + "result_", {"png", "pdf"});
         // dot_graph::create_graph(final_grouping, output_path + "result_", {"png"});
-        // dot_graph::create_graph(final_grouping, output_path + "result_", {"pdf"});
+        dataflow::dot_graph::create_graph(final_grouping, output_path + "result_", {"pdf"});
 
         log("dataflow processing finished in {:3.2f}s", total_time);
 
-        dataflow::state_to_module::create_modules(nl, final_grouping);
+        //dataflow::state_to_module::create_modules(nl, final_grouping);
 
         return true;
     }

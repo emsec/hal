@@ -3,6 +3,7 @@
 #include "dataflow_analysis/utils/utils.h"
 #include "dataflow_analysis/utils/utils_lsi_10k.h"
 #include "dataflow_analysis/utils/utils_nangate.h"
+#include "dataflow_analysis/utils/utils_ice40ultra.h"
 #include "dataflow_analysis/utils/utils_xilinx_simprim.h"
 #include "dataflow_analysis/utils/utils_xilinx_unisim.h"
 #include "hal_core/netlist/netlist.h"
@@ -31,6 +32,10 @@ namespace hal
             else if (nl->get_gate_library()->get_name() == "XILINX_SIMPRIM")
             {
                 utils = std::make_shared<dataflow_utils::UtilsXilinxSimprim>();
+            }
+            else if (nl->get_gate_library()->get_name() == "ICE40ULTRA")
+            {
+                utils = std::make_shared<dataflow_utils::UtilsiCE40Ultra>();
             }
             else
             {

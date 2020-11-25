@@ -81,36 +81,9 @@ namespace hal
         }
         argv[argc] = nullptr;
 
-        //    int i;
-        //    printf("argc: %d\n", argc);
-        //    for(i=0; i < argc; i++) {
-        //        printf("argv[%d]: %s\n", i, argv[i]);
-        //    }
-
         auto options = mPlugin->get_cli_options();
         mArgs       = options.parse(argc, const_cast<const char**>(argv));
-        //    try
-        //    {
-        //        .
-        //        boost::ProgramOptions::store(boost::ProgramOptions::parse_command_line(argc, argv, (std::get<1>(mPlugin->get_cli_options()))), *mMap);
-        //        boost::ProgramOptions::notify(*mMap);
-        //
-        //        //        ProgramOptions plugin_options;
-        //        //        plugin_options.add(*(std::get<1>(mPlugin->get_cli_options())));
-        //        //        boost::ProgramOptions::store(boost::ProgramOptions::command_line_parser(argc, argv).options(plugin_options).run(), *mMap);
-        //        //        boost::ProgramOptions::notify(*mMap);
-        //    }
-        //    catch (const std::exception& e)
-        //    {
-        //        std::cout << e.what() << std::endl;
-        //        for (int i = 0; i < argc; ++i)
-        //            delete[] argv[i];
-        //
-        //        delete[] argv;
-        //        delete mMap;
-        //        mMap = nullptr;
-        //        return;
-        //    }
+        // ProgramOptions Stuff
         for (int i = 0; i < argc; ++i)
             delete[] argv[i];
 

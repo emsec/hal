@@ -1208,7 +1208,7 @@ namespace hal
                         }
 
                         // merge generics and attributes
-                        for (const auto it : slave_net->get_data())
+                        for (const auto it : slave_net->get_data_map())
                         {
                             if (!master_net->set_data(std::get<0>(it.first), std::get<1>(it.first), std::get<0>(it.second), std::get<1>(it.second)))
                             {
