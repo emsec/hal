@@ -9,13 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added Lattice ICE gate library
 * improved access to layout class NodeBox for GUI C++ developer
 * improved Python plugin, added command line option `--python-script` and `--python-args`
+* improved appearance and programmcode for arrow-key navigation
 * removed all Boost and Kyoto references
 * fixed crashes due to missing entries in coordinate system in views with unconnected boxes
 * fixed crashes when navigating from global inputs connected to multiple boxes
 * fixed bad alignment between net endpoint and port label for gates with ports not connected to nets
 * fixed log output got incorrectly supressed in case command line arguments were solely directed at plugins
 * fixed wrong layouting of endpoints in GUI in the presence of unconnected pins/ports
-* unify appearance and programmcode for arrow-key navigation
 
 ## [3.1.6] - 2020-11-22 19:30:00+02:00 (urgency: medium)
 * added `netlist_utilities::get_subgraph_function` variants with and without cache
