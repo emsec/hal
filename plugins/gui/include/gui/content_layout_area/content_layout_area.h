@@ -61,6 +61,10 @@ namespace hal
         void updateRightDockBar();
         void updateBottomDockBar();
 
+        //needed to fix a bug where the bottom dockbar does not reappear after dragging every widget out of it
+        void handleDragStart();
+        void handleDragEnd();
+
     private:
         QVBoxLayout* mTopLevelLayout;
         QHBoxLayout* mSecondLevelLayout;
@@ -89,5 +93,7 @@ namespace hal
         SplitterAnchor* mBottomAnchor;
 
         TabWidget* mTabWidget;
+
+        bool mWasBottomContainerHidden;
     };
 }
