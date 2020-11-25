@@ -25,6 +25,15 @@ namespace hal
             :rtype: bool
         )");
 
+        py_data_container.def("get_data", &DataContainer::get_data, py::arg("category"), py::arg("key"), R"(
+            Get the data entry specified by the given category and key.
+
+            :param str category: The data key category.
+            :param str key: The data key.
+            :returns: The tuple ((1) type, (2) value).
+            :rtype: tuple(str,str)
+        )");
+
         py_data_container.def("delete_data", &DataContainer::delete_data, py::arg("category"), py::arg("key"), py::arg("log_with_info_level") = false, R"(
             Delete a data entry.
 
@@ -35,39 +44,17 @@ namespace hal
             :rtype: bool
         )");
 
-        py_data_container.def_property_readonly("data", &DataContainer::get_data, R"(
+        py_data_container.def_property_readonly("data", &DataContainer::get_data_map, R"(
             A dict from ((1) category, (2) key) to ((1) type, (2) value) containing all stored data entries.
 
             :type: dict[tuple(str,str),tuple(str,str)]
         )");
 
-        py_data_container.def("get_data", &DataContainer::get_data, R"(
+        py_data_container.def("get_data_map", &DataContainer::get_data_map, R"(
             Get a dict from ((1) category, (2) key) to ((1) type, (2) value) containing all stored data entries.
 
             :returns: The stored data as a dict.
             :rtype: dict[tuple(str,str),tuple(str,str)]
-        )");
-
-        py_data_container.def("get_data_by_key", &DataContainer::get_data_by_key, py::arg("category"), py::arg("key"), R"(
-            Get the data entry specified by the given category and key.
-
-            :param str category: The data key category.
-            :param str key: The data key.
-            :returns: The tuple ((1) type, (2) value).
-            :rtype: tuple(str,str)
-        )");
-
-        py_data_container.def_property_readonly("data_keys", &DataContainer::get_data_keys, R"(
-            All data keys as a list of tuples ((1) category, (2) key).
-
-            :type: list[tuple(str,str)]
-        )");
-
-        py_data_container.def("get_data_keys", &DataContainer::get_data_keys, R"(
-            Return all data keys as a vector of tuples ((1) category, (2) key).
-
-            :returns: The data keys.
-            :rtype: list[tuple(str,str)]
         )");
     }
 }    // namespace hal

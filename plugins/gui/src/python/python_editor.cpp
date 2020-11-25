@@ -572,6 +572,12 @@ namespace hal
         mTabWidget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
     }
 
+    QTabWidget *PythonEditor::getTabWidget()
+    {
+        return mTabWidget;
+    }
+
+
     void PythonEditor::discardTab(int index)
     {
         PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));

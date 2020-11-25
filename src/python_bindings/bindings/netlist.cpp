@@ -4,13 +4,13 @@ namespace hal
 {
     void netlist_init(py::module& m)
     {
-        py::class_<Netlist, RawPtrWrapper<Netlist>> py_netlist(m, "Netlist", R"(
+        py::class_<Netlist, std::shared_ptr<Netlist>> py_netlist(m, "Netlist", R"(
             Netlist class containing information about the netlist including its gates, modules, nets, and groupings as well as the underlying gate library.
         )");
 
         py_netlist.def(py::init<GateLibrary*>(), py::arg("gate_library"), R"(
             Construct a new netlist for the specified gate library.
-            
+
             Warning: Use the netlist_factory to create instances!
 
             :param hal_py.GateLibrary gate_library: The gate library.
@@ -95,14 +95,14 @@ namespace hal
         )");
 
         py_netlist.def_property_readonly(
-            "GateLibrary", [](Netlist* nl) { return RawPtrWrapper(nl->get_gate_library()); }, R"(
+            "GateLibrary", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
             The gate library associated with the netlist.
 
             :type: hal_py.GateLibrary
         )");
 
         py_netlist.def(
-            "get_gate_library", [](Netlist* nl) { return RawPtrWrapper(nl->get_gate_library()); }, R"(
+            "get_gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
             Get the gate library associated with the netlist.
 
             :returns: The gate library.
@@ -544,7 +544,7 @@ namespace hal
 
         py_netlist.def("delete_grouping", &Netlist::delete_grouping, py::arg("grouping"), R"(
             Remove a grouping from the netlist.
- 
+
             :param hal_py.Grouping grouping: The grouping.
             :returns: True on success, false otherwise.
             :rtype: bool
@@ -569,7 +569,7 @@ namespace hal
         py_netlist.def_property_readonly(
             "groupings", [](Netlist* n) { return n->get_groupings(); }, R"(
             All groupings contained within the netlist.
-        
+
             :rtype: list[hal_py.Grouping]
         )");
 

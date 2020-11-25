@@ -20,14 +20,14 @@ namespace hal
 )");
 
         py_net.def_property_readonly(
-            "netlist", [](Net* net) { return RawPtrWrapper(net->get_netlist()); }, R"(
+            "netlist", [](Net* net) { return RawPtrWrapper<Netlist>(net->get_netlist()); }, R"(
         The netlist this net is associated with.
 
         :type: hal_py.Netlist
 )");
 
         py_net.def(
-            "get_netlist", [](Net* net) { return RawPtrWrapper(net->get_netlist()); }, R"(
+            "get_netlist", [](Net* net) { return RawPtrWrapper<Netlist>(net->get_netlist()); }, R"(
         Get the netlist this net is associated with.
 
         :returns: The netlist.

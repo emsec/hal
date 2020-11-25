@@ -20,7 +20,7 @@ namespace hal
         {
             if (net->get_sources().size() > 1)
             {
-                log_error("multi-driven nets not yet supported! aborting");
+                log_error("graph_algorithm", "multi-driven nets not yet supported! aborting");
                 return std::map<int, Gate*>();
             }
 

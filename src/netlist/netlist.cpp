@@ -115,6 +115,10 @@ namespace hal
     Module* Netlist::create_module(const u32 id, const std::string& name, Module* parent, const std::vector<Gate*>& gates)
     {
         auto m = m_manager->create_module(id, parent, name);
+        if (m == nullptr)
+        {
+            return nullptr;
+        }
         for (auto g : gates)
         {
             m->assign_gate(g);
@@ -370,11 +374,6 @@ namespace hal
             log_debug("netlist", "net '{}' (id = {:08x}) is already registered as global input net in netlist.", n->get_name(), n->get_id());
             return true;
         }
-        // if (n->get_num_of_sources() != 0)
-        // {
-        //     log_error("netlist", "net '{}' (id = {:08x}) has a source, so it cannot be marked as a global input net.", n->get_name(), n->get_id());
-        //     return false;
-        // }
         m_global_input_nets.push_back(n);
 
         netlist_event_handler::notify(netlist_event_handler::event::marked_global_input, this, n->get_id());
@@ -392,11 +391,6 @@ namespace hal
             log_debug("netlist", "net '{}' (id = {:08x}) is already registered as global output net in netlist", n->get_name(), n->get_id());
             return true;
         }
-        // if (n->get_num_of_destinations() != 0)
-        // {
-        //     log_error("netlist", "net '{}' (id = {:08x}) has destinations, so it cannot be marked as a global output net.", n->get_name(), n->get_id());
-        //     return false;
-        // }
         m_global_output_nets.push_back(n);
 
         netlist_event_handler::notify(netlist_event_handler::event::marked_global_output, this, n->get_id());

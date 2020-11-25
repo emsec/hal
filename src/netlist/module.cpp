@@ -562,4 +562,24 @@ namespace hal
 
         return m_output_net_to_port_name;
     }
+
+    void Module::set_next_input_port_id(u32 id)
+    {
+        m_next_input_port_id = id;
+    }
+
+    u32 Module::get_next_input_port_id() const
+    {
+        return m_next_input_port_id;
+    }
+
+    void Module::set_next_output_port_id(u32 id)
+    {
+        m_next_output_port_id = id;
+    }
+
+    u32 Module::get_next_output_port_id() const
+    {
+        return m_next_output_port_id;
+    }
 }    // namespace hal

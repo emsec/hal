@@ -342,20 +342,21 @@ namespace hal
         }
 
         /**
-         * v
+         * Join all elements of a iterator range with a joiner-string.
          * A transformation is applied to all elements of the collections before joining.
          *
          * @param[in] joiner - The string joining the elements.
-         * @param[in] items - The collection of elements to join.
+         * @param[in] begin - The start iterator.
+         * @param[in] end - The end iterator.
          * @param[in] transform - The transformation function.
          * @returns The joined string.
          */
-        template<typename T, class Transform>
-        CORE_API std::string join(const std::string& joiner, const T& items, const Transform& transform)
+        template<typename Iterator, class Transform>
+        CORE_API std::string join(const std::string& joiner, const Iterator& begin, const Iterator& end, const Transform& transform)
         {
             std::stringstream ss;
             bool first = true;
-            for (auto it = items.begin(); it != items.end(); ++it)
+            for (auto it = begin; it != end; ++it)
             {
                 if (!first)
                 {
@@ -369,6 +370,21 @@ namespace hal
 
         /**
          * Join all elements of a collection with a joiner-string.
+         * A transformation is applied to all elements of the collections before joining.
+         *
+         * @param[in] joiner - The string joining the elements.
+         * @param[in] items - The collection of elements to join.
+         * @param[in] transform - The transformation function.
+         * @returns The joined string.
+         */
+        template<typename T, class Transform>
+        CORE_API std::string join(const std::string& joiner, const T& items, const Transform& transform)
+        {
+            return join(joiner, items.begin(), items.end(), transform);
+        }
+
+        /**
+         * Join all elements of a collection with a joiner-string.
          *
          * @param[in] joiner - The string joining the elements.
          * @param[in] items - The collection of elements to join.
@@ -377,7 +393,7 @@ namespace hal
         template<typename T>
         CORE_API std::string join(const std::string& joiner, const T& items)
         {
-            return join(joiner, items, [](const auto& v) { return v; });
+            return join(joiner, items.begin(), items.end(), [](const auto& v) { return v; });
         }
 
         /**
@@ -579,7 +595,7 @@ namespace hal
 
             /**
              * Construct a recursive directory range from a top level directory.
-             * 
+             *
              * @param[in] path - The path to the top level directory.
              */
             RecursiveDirectoryRange(std::filesystem::path path) : p_(path)
@@ -621,7 +637,7 @@ namespace hal
 
             /**
              * Construct a directory range from a top level directory.
-             * 
+             *
              * @param[in] path - The top level directory.
              */
             DirectoryRange(std::filesystem::path path) : p_(path)

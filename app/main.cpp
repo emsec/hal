@@ -98,7 +98,7 @@ int main(int argc, const char* argv[])
     plugin_manager::add_existing_options_description(cli_options);
 
     // suppress output
-    if (args.is_option_set("--help") || args.is_option_set("--licenses") || args.is_option_set("--version") || args.get_set_options().size() == 0)
+    if (args.is_option_set("--help") || args.is_option_set("--licenses") || args.is_option_set("--version") || argc == 1)
     {
         lm.deactivate_all_channels();
     }

@@ -6,7 +6,7 @@
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_layout_spinner_widget.h"
-#include "gui/graph_widget/graph_navigation_widget_v2.h"
+#include "gui/graph_widget/graph_navigation_widget.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
@@ -34,19 +34,19 @@ namespace hal
 {
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
         : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
-          mNavigationWidgetV2(new GraphNavigationWidgetV2(nullptr)),
+          mNavigationWidgetV3(new GraphNavigationWidget(false)),
           mSpinnerWidget(new GraphLayoutSpinnerWidget(this)), mCurrentExpansion(0)
     {
-        connect(mNavigationWidgetV2, &GraphNavigationWidgetV2::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
-        connect(mNavigationWidgetV2, &GraphNavigationWidgetV2::closeRequested, mOverlay, &WidgetOverlay::hide);
-        connect(mNavigationWidgetV2, &GraphNavigationWidgetV2::closeRequested, this, &GraphWidget::resetFocus);
+        connect(mNavigationWidgetV3, &GraphNavigationWidget::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
+        connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, mOverlay, &WidgetOverlay::hide);
+        connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, this, &GraphWidget::resetFocus);
 
         connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
 
         connect(mView, &GraphGraphicsView::moduleDoubleClicked, this, &GraphWidget::handleModuleDoubleClicked);
 
         mOverlay->hide();
-        mOverlay->setWidget(mNavigationWidgetV2);
+        mOverlay->setWidget(mNavigationWidgetV3);
         mSpinnerWidget->hide();
         mContentLayout->addWidget(mView);
 
@@ -77,7 +77,7 @@ namespace hal
 
         mOverlay->hide();
         mSpinnerWidget->hide();
-        mOverlay->setWidget(mNavigationWidgetV2);
+        mOverlay->setWidget(mNavigationWidgetV3);
 
         if (hasFocus())
             mView->setFocus();
@@ -482,6 +482,7 @@ namespace hal
     // ADD SOUND OR ERROR MESSAGE TO FAILED NAVIGATION ATTEMPTS
     void GraphWidget::handleNavigationLeftRequest()
     {
+        const SelectionRelay::Subfocus navigateLeft = SelectionRelay::Subfocus::Left;
         switch (gSelectionRelay->mFocusType)
         {
         case SelectionRelay::ItemType::None: {
@@ -515,8 +516,8 @@ namespace hal
                     }
                     else
                     {
-                        mNavigationWidgetV2->setup(false);
-                        mNavigationWidgetV2->setFocus();
+                        mNavigationWidgetV3->setup(navigateLeft);
+                        mNavigationWidgetV3->setFocus();
                         mOverlay->show();
                     }
                 }
@@ -545,8 +546,8 @@ namespace hal
                 }
                 else
                 {
-                    mNavigationWidgetV2->setup(false);
-                    mNavigationWidgetV2->setFocus();
+                    mNavigationWidgetV3->setup(navigateLeft);
+                    mNavigationWidgetV3->setFocus();
                     mOverlay->show();
                 }
 
@@ -586,8 +587,8 @@ namespace hal
                     }
                     else
                     {
-                        mNavigationWidgetV2->setup(false);
-                        mNavigationWidgetV2->setFocus();
+                        mNavigationWidgetV3->setup(navigateLeft);
+                        mNavigationWidgetV3->setFocus();
                         mOverlay->show();
                     }
                 }
@@ -606,6 +607,7 @@ namespace hal
 
     void GraphWidget::handleNavigationRightRequest()
     {
+        const SelectionRelay::Subfocus navigateRight = SelectionRelay::Subfocus::Right;
         switch (gSelectionRelay->mFocusType)
         {
         case SelectionRelay::ItemType::None:
@@ -636,8 +638,8 @@ namespace hal
                     }
                     else
                     {
-                        mNavigationWidgetV2->setup(true);
-                        mNavigationWidgetV2->setFocus();
+                        mNavigationWidgetV3->setup(navigateRight);
+                        mNavigationWidgetV3->setFocus();
                         mOverlay->show();
                     }
                 }
@@ -667,8 +669,8 @@ namespace hal
                 }
                 else
                 {
-                    mNavigationWidgetV2->setup(true);
-                    mNavigationWidgetV2->setFocus();
+                    mNavigationWidgetV3->setup(navigateRight);
+                    mNavigationWidgetV3->setFocus();
                     mOverlay->show();
                 }
 
@@ -708,8 +710,8 @@ namespace hal
                     }
                     else
                     {
-                        mNavigationWidgetV2->setup(true);
-                        mNavigationWidgetV2->setFocus();
+                        mNavigationWidgetV3->setup(navigateRight);
+                        mNavigationWidgetV3->setFocus();
                         mOverlay->show();
                     }
                 }

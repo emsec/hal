@@ -672,7 +672,7 @@ namespace hal
                         // && don't allow a module to be moved into itself
                         // (either check automatically passes if g respective m is nullptr, so we
                         // don't have to create two loops)
-                        if (!module->contains_gate(g) && !module->contains_module(m) && module != m && !m->contains_module(module))
+                        if (!module->contains_gate(g) && !module->contains_module(m) && module != m && (!m || !m->contains_module(module)))
                         {
                             QString mod_name = QString::fromStdString(module->get_name());
                             const u32 mod_id = module->get_id();

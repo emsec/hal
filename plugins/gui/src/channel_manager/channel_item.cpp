@@ -1,11 +1,15 @@
 #include "gui/channel_manager/channel_item.h"
 
+#define MAX_CHANNEL_ENTIRES 1000
+
 namespace hal
 {
     ChannelItem::ChannelItem(QString name)
-        : mName(name), mLogEntries(1000){Q_UNUSED(mObserver) Q_UNUSED(mUnread) Q_UNUSED(mUnreadWarnings) Q_UNUSED(mUnreadErrors) Q_UNUSED(mUnreadSuccesses)}
+        : mName(name)
+    {
+    }
 
-          QVariant ChannelItem::data(int column) const
+    QVariant ChannelItem::data(int column) const
     {
         switch (column)
         {
@@ -21,7 +25,7 @@ namespace hal
         return mName;
     }
 
-    const boost::circular_buffer<ChannelEntry *> *ChannelItem::getBuffer() const
+    const QList<ChannelEntry*>* ChannelItem::getList() const
     {
         return &mLogEntries;
     }
@@ -33,6 +37,9 @@ namespace hal
 
     void ChannelItem::appendEntry(ChannelEntry* entry)
     {
-        mLogEntries.push_back(entry);
+        if (mLogEntries.size() == MAX_CHANNEL_ENTIRES)
+            mLogEntries.removeFirst();
+
+        mLogEntries.append(entry);
     }
 }

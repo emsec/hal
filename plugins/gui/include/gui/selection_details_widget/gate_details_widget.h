@@ -126,6 +126,7 @@ namespace hal
 
         //function section
         void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates);
+        void handleNavigationCloseRequested();
 
         void handleInputPinItemClicked(const QTableWidgetItem* item);
         void handleOutputPinItemClicked(const QTableWidgetItem* item);

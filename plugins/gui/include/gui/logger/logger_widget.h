@@ -39,11 +39,8 @@
 namespace hal
 {
     class FilterTabBar;
-
     class LoggerMarshall;
-
     struct FilterItem;
-
     class ChannelSelector;
 
     class LoggerWidget : public ContentWidget
@@ -51,16 +48,14 @@ namespace hal
         Q_OBJECT
 
     public:
-        LoggerWidget(QWidget* parent = 0);
-        ~LoggerWidget();
+        LoggerWidget(QWidget* parent = nullptr);
+        ~LoggerWidget() override;
 
-        virtual void setupToolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
+        virtual void setupToolbar(Toolbar* Toolbar) override;
 
         QPlainTextEdit* getPlainTextEdit();
 
         FilterTabBar* getTabBar();
-
-        void reloadLogContent();
 
         void resizeEvent(QResizeEvent* event) override;
 
@@ -68,33 +63,23 @@ namespace hal
         void queueLogUpdate(spdlog::level::level_enum t, QString const& msg, FilterItem* filter);
 
     public Q_SLOTS:
-
-        //void handleCurrentChannelChanged(hal_channel_item* item);
         void handleCurrentChannelUpdated(spdlog::level::level_enum t, QString const& msg);
         void handleChannelUpdated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
         void handleCurrentChannelChanged(int index);
         void showTextEditContextMenu(const QPoint& point);
         void filterItemClicked(const int& index);
         void handleFirstUserInteraction(int value);
-        //    void queue_log_update_adapter(spdlog::level::level_enum t, QString const &msg);
 
     private:
-        FilterTabBar* mTabBar;
-
-        QPlainTextEdit* mPlainTextEdit;
-
-        ChannelSelector* mSelector;
-
-        LoggerMarshall* mLogMarshall;
-
-        std::string mCurrentChannel;
-
-        QReadWriteLock mLock;
-
-        QScrollBar* mPlainTextEditScrollbar;
-
-        bool mUserInteractedWithScrollbar;
-
         void scrollToBottom();
+
+        FilterTabBar* mTabBar;
+        QPlainTextEdit* mPlainTextEdit;
+        ChannelSelector* mSelector;
+        LoggerMarshall* mLogMarshall;
+        std::string mCurrentChannel;
+        QReadWriteLock mLock;
+        QScrollBar* mPlainTextEditScrollbar;
+        bool mUserInteractedWithScrollbar;
     };
 }

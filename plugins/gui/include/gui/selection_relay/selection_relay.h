@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_config.h"
 
 #include <QObject>
 #include <QPair>
@@ -136,9 +137,14 @@ namespace hal
         void followNetToSource(Net* n);
         void followNetToDestination(Net* n, u32 dst_index);
 
+
+#ifdef HAL_STUDY
+        void evaluateSelectionChanged(void* sender);
+#endif
         void subfocusNone();
         void subfocusLeft();
         void subfocusRight();
+
 
         //    bool try_subfocus_left();
         //    bool try_subfocus_right();

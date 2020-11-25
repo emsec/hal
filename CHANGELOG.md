@@ -5,7 +5,46 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added cycle detection to `netlist_utilities::get_subgraph_function` again
+* added Lattice ICE gate library
+* improved access to layout class NodeBox for GUI C++ developer
+* improved Python plugin, added command line option `--python-script` and `--python-args`
+* improved appearance and programmcode for arrow-key navigation
+* removed all Boost and Kyoto references
+* fixed crashes due to missing entries in coordinate system in views with unconnected boxes
+* fixed crashes when navigating from global inputs connected to multiple boxes
+* fixed bad alignment between net endpoint and port label for gates with ports not connected to nets
+* fixed log output got incorrectly supressed in case command line arguments were solely directed at plugins
+* fixed wrong layouting of endpoints in GUI in the presence of unconnected pins/ports
+
+## [3.1.6] - 2020-11-22 19:30:00+02:00 (urgency: medium)
+* added `netlist_utilities::get_subgraph_function` variants with and without cache
+* added `netlist_utilities::get_next_sequential_gates` variants with and without cache
+* added tests for `netlist_utilities::get_next_sequential_gates`
+* added python bindings for gate_library_manager
+* cleaned up `DataContainer`
+* removed hidden internal cache from `netlist_utilities::get_subgraph_function`
+* removed `netlist_utilities::get_subgraph_function` cycle detection due to unintended behavior
+* fixed netlist parsers wrongly handling escapings within strings
+* fixed `netlist_utilities::copy_netlist` did not copy `DataContainer` contents
+* fixed netlist pybind handling of netlists that occasionally led to double-free segfaults
+* fixed segfault in `BooleanFunction::from_string` when providing partial variable names
+
+## [3.1.5] - 2020-11-16 14:30:00+02:00 (urgency: medium)
+* fixed and expanded Python decorators for logging in study environment to additionally cover the GUI
+* fixed infinite loop when renaming groupings using the GUI
+
+## [3.1.4] - 2020-11-15 14:00:00+02:00 (urgency: medium)
+* added tests for `netlist_utils`
+* fixed crash when creating invalid module when using `netlist::create_module`
+* fixed assigning nets instead of gates when copying netlist using `netlist_utils::copy_netlist`
+* fixed `netlist_utils::copy_netlist` not copying port names
+* fixed `netlist_utils::get_subgraph_function` crashing on unconnected input pin
+* fixed infinite loop within `netlist_utils::get_subgraph_function` if the combinational logic contains a feedback path
+
+## [3.1.3] - 2020-11-12 17:15:00+02:00 (urgency: medium)
 * GUI code refactoring
+* fix crash which occurs sometimes when invoking context menu from gate
 
 ## [3.1.2] - 2020-11-09 20:00:00+02:00 (urgency: medium)
 * updated existing Python decorators and added new ones for the GUI API
@@ -46,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * shows additional details for the item selected in the hierarchical view
     * sections can be collapsed and expanded
     * right-click context menu allows to copy strings or Python code to the clipboard and change module name, type, and port names
-    * added number of gates, nets, and submodules to module details widget  
+    * added number of gates, nets, and submodules to module details widget
 * new view manager widget
   * now presented in a table view additionally containing information about the time of creation of the view
   * views can be sorted by name and date
@@ -65,7 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * new graph view features
   * Python GUI API to control the graph view
   * zoom level of graph view can now be controlled by shortcuts
-* netlist utilities 
+* netlist utilities
   * added function to deep copy a netlist
   * added function to get the Boolean function of a subgraph
 * state-of-the-art suite of benchmark netlists
@@ -376,7 +415,11 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.1...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.6...HEAD
+[3.1.6]: https://github.com/emsec/hal/compare/v3.1.5...v3.1.6
+[3.1.5]: https://github.com/emsec/hal/compare/v3.1.4...v3.1.5
+[3.1.4]: https://github.com/emsec/hal/compare/v3.1.3...v3.1.4
+[3.1.3]: https://github.com/emsec/hal/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/emsec/hal/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/emsec/hal/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/emsec/hal/compare/v3.0.2...v3.1.0
