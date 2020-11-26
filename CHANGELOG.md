@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * fixed mistakes in `module` Python documentation
+* fixed missing include in `graph_navigation_widget.cpp`
 
 ## [3.1.7] - 2020-11-26 14:30:00+02:00 (urgency: medium)
 * **WARNING:** the function signature of `netlist_utilities::get_subgraph_function` has changed
