@@ -176,7 +176,7 @@ namespace hal
         /**
          * Get the name of the port corresponding to the specified input net.
          *
-         * @param[in] net - The input net.
+         * @param[in] input_net - The input net.
          * @returns The input port name.
          */
         std::string get_input_port_name(Net* input_net);
@@ -221,7 +221,7 @@ namespace hal
         /**
          * Get the name of the port corresponding to the specified output net.
          *
-         * @param[in] net - The output net.
+         * @param[in] output_net - The output net.
          * @returns The output port name.
          */
         std::string get_output_port_name(Net* output_net);
