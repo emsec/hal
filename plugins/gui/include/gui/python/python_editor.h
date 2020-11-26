@@ -35,6 +35,7 @@
 #include <QMap>
 #include <QPushButton>
 #include <QtCore/QFileInfo>
+#include <QMessageBox>
 
 class QVBoxLayout;
 class QTabWidget;
@@ -89,10 +90,25 @@ namespace hal
         void handleActionShowFile();
         void tabLoadFile(u32 index, QString fileName);
 
+        /**
+         * Used to forcefully save all python scripts on closing the main window. By manipulating the QCloseEvent
+         * the closing of the main window can be aborted by the user.
+         *
+         * @param event - The QCloseEvent from the (!!!) MainWindow Object.
+         */
+        void handleMainWindowClose(QCloseEvent* event);
+
         //added so that the speciallogcontentmanager has access to all the code editors
         QTabWidget* getTabWidget();
 
-        void saveFile(const bool ask_path, int index = -1);
+        /**
+         * Saves a tab given by its index. If ask_path is true, the user is ask for a new save location.
+         *
+         * @param ask_path - ask the user for a new save location
+         * @param index - the tab index
+         * @returns true if the tab was saved
+         */
+        bool saveFile(const bool ask_path, int index = -1);
 
         void discardTab(int index);
         bool confirmDiscardForRange(int start, int end, int exclude = -1);
@@ -136,6 +152,8 @@ namespace hal
         bool handleSerializationToHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
         bool handleDeserializationFromHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
 
+
+
     Q_SIGNALS:
         void forwardStdout(const QString& output);
         void forwardError(const QString& output);
@@ -165,7 +183,34 @@ namespace hal
          * @param file - the snapshot file
          * @return true if the snapshot file should be loaded
          */
-        bool askLoadSnapshot(QFileInfo file);
+        bool askLoadSnapshot(const QFileInfo original_path, const QFileInfo snapshot_path) const;
+
+        /**
+         * Ask the user with a message box whether to save the tab, discard the changes or cancel the request.
+         *
+         * @param tab_index - the index of the closed tab
+         * @return QMessageBox::Save if 'Save' was clicked, QMessageBox::Discard if 'Discard' was clicked or
+         *         QMessageBox::Cancel if 'Cancel' was clicked
+         */
+        QMessageBox::StandardButton askSaveTab(const int tab_index) const;
+
+        /**
+         * Ask the user with a message box whether to save the tab, or cancel the request. The user is not allowed to
+         * discard changes. This request is used to forcefully save all tabs while closing hal.
+         *
+         * @param tab_index - the index of the closed tab
+         * @return QMessageBox::Save if 'Save' was clicked or QMessageBox::Cancel if 'Cancel' was clicked
+         */
+        QMessageBox::StandardButton askForceSaveTab(const int tab_index) const;
+
+        /**
+         * Remove a snapshot file for a given file path. If there is not such snapshot, do nothing.
+         *
+         * @param original_path
+         */
+        void removeSnapshotFile(const QFileInfo original_path) const;
+
+
 
         QVBoxLayout* mLayout;
         Toolbar* mToolbar;

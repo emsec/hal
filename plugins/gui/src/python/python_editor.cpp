@@ -18,7 +18,6 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMenu>
-#include <QMessageBox>
 #include <QShortcut>
 #include <QTabBar>
 #include <QTextDocumentFragment>
@@ -109,7 +108,6 @@ namespace hal
         rapidjson::Value tabs(rapidjson::kArrayType);
 
         // Create a path, where snapshots of unstored tabs are stored
-        // TODO: maybe change directory
         QDir unstored_snapshot_path(QString::fromStdString(hal::utils::get_base_directory().string()));
         QDir tmp_dir(unstored_snapshot_path);
         // Clear all old snapshots in the tmp path
@@ -132,7 +130,7 @@ namespace hal
                 // Handle an already stored file
                 val.AddMember("path", tab->getFileName().toStdString(), allocator);
                 QFileInfo original_path(tab->getFileName());
-                QFileInfo snapshot_path(original_path.path() + "/~" + original_path.fileName());
+                QFileInfo snapshot_path(original_path.path() + "/~" + original_path.fileName() + ".tmp");
                 QFile snapshot_file(snapshot_path.filePath());
                 if (tab->document()->isModified())
                 {
@@ -169,7 +167,7 @@ namespace hal
                     unstored_snapshot_path.cd(".tmp/");
                 }
 
-                QString snapshot_path = unstored_snapshot_path.absoluteFilePath("~temp"+QString::number(unstored_snapshot_idx)+".py");
+                QString snapshot_path = unstored_snapshot_path.absoluteFilePath("~temp"+QString::number(unstored_snapshot_idx)+".py.tmp");
                 unstored_snapshot_idx++;
                 val.AddMember("snapshot", snapshot_path.toStdString(), allocator);
 
@@ -229,14 +227,14 @@ namespace hal
                 {
                     // Search for a snapshot of this file
                     QFileInfo original_path(val["path"].GetString());
-                    QFileInfo snapshot_path(original_path.path() + "/~" + original_path.fileName());
+                    QFileInfo snapshot_path(original_path.path() + "/~" + original_path.fileName() + ".tmp");
 
                     // Decide whether the snapshot file or the original should be loaded
                     bool load_snapshot = false;
                     if(snapshot_path.exists()){
                         if(original_path.exists()){
                             // Ask user whether the original file or the snapshot should be loaded
-                            load_snapshot = askLoadSnapshot(snapshot_path);
+                            load_snapshot = askLoadSnapshot(original_path, snapshot_path);
                         }
                         else{
                             load_snapshot = true;
@@ -260,7 +258,6 @@ namespace hal
                         if(!snapshot_file.open(QIODevice::ReadOnly))
                         {
                             log_error("gui","Cannot open snapshot file!");
-                            // TODO: Error?
                         }
 
                         tabLoadFile(tab_idx, original_path.filePath());
@@ -310,15 +307,10 @@ namespace hal
     void PythonEditor::handleTabCloseRequested(int index)
     {
         PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
+        QString file_name = editor->getFileName();
         if (editor->document()->isModified())
         {
-            QMessageBox msgBox;
-            msgBox.setStyleSheet("QLabel{min-width: 600px;}");
-            msgBox.setText(mTabWidget->tabText(index).append(" has been modified."));
-            msgBox.setInformativeText("Do you want to save your changes?");
-            msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-            msgBox.setDefaultButton(QMessageBox::Save);
-            int ret = msgBox.exec();
+            QMessageBox::StandardButton ret = askSaveTab(index);
 
             if (ret == QMessageBox::Cancel)
                 return;
@@ -328,17 +320,28 @@ namespace hal
 
             if (ret == QMessageBox::Save)
             {
-                if (editor->getFileName().isEmpty())
-                    saveFile(true, index);
+                if (file_name.isEmpty())
+                {
+                    bool suc = saveFile(true, index);
+                    if(!suc)
+                        return;
+                }
                 else
                     saveFile(false, index);
 
-                mTabWidget->removeTab(index);
-                return;
             }
-        }
+            this->discardTab(index);
 
-        this->discardTab(index);
+        }
+        else
+        {
+            this->discardTab(index);
+        }
+        // Remove existing snapshots
+        // If the tab was not stored already, its snapshot is removed automatically after the next .hal save
+        if(!file_name.isEmpty()){
+            removeSnapshotFile(QFileInfo(file_name));
+        }
     }
 
     void PythonEditor::handleActionToggleMinimap()
@@ -515,7 +518,7 @@ namespace hal
         gFileStatusManager->fileSaved(tab->getUuid());
     }
 
-    void PythonEditor::saveFile(const bool ask_path, int index)
+    bool PythonEditor::saveFile(const bool ask_path, int index)
     {
         QString title = "Save File";
         QString text  = "Python Scripts(*.py)";
@@ -530,13 +533,14 @@ namespace hal
         PythonCodeEditor* current_editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
 
         if (!current_editor)
-            return;
+            return false;
 
         if (ask_path || current_editor->getFileName().isEmpty())
         {
             selected_file_name = QFileDialog::getSaveFileName(nullptr, title, mLastOpenedPath, text, nullptr, QFileDialog::DontUseNativeDialog);
             if (selected_file_name.isEmpty())
-                return;
+                return false;
+            removeSnapshotFile(QFileInfo(current_editor->getFileName()));
 
             if (!selected_file_name.endsWith(".py"))
                 selected_file_name.append(".py");
@@ -547,6 +551,7 @@ namespace hal
         else
         {
             selected_file_name = current_editor->getFileName();
+            removeSnapshotFile(QFileInfo(current_editor->getFileName()));
         }
 
         mFileWatcher->removePath(current_editor->getFileName());
@@ -557,7 +562,7 @@ namespace hal
         if (!out.is_open())
         {
             log_error("gui", "could not open file path");
-            return;
+            return false;
         }
         out << current_editor->toPlainText().toStdString();
         out.close();
@@ -570,6 +575,7 @@ namespace hal
 
         QFileInfo info(selected_file_name);
         mTabWidget->setTabText(index, info.completeBaseName() + "." + info.completeSuffix());
+        return true;
     }
 
     QTabWidget *PythonEditor::getTabWidget()
@@ -824,15 +830,48 @@ namespace hal
         return QObject::eventFilter(obj, event);
     }
 
-    bool PythonEditor::askLoadSnapshot(QFileInfo file)
+    bool PythonEditor::askLoadSnapshot(const QFileInfo original_path, const QFileInfo snapshot_path) const
     {
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Question);
         msgBox.setWindowTitle("Python snapshot file detected");
-        msgBox.setText("A snapshot file ("+file.filePath()+") was found! This may happen due to a recent crash.\n"
-                            "Do you want to load the snapshot file or the (maybe unsaved) original file?" );
+        msgBox.setText("A snapshot file (for "+original_path.filePath()+ ") was found! This may happen due to a recent crash.\n"
+                            "Do you want to load the snapshot file or the (unsaved) original file?" );
         auto load_snapshot_btn = msgBox.addButton("Load Snapshot", QMessageBox::ActionRole);
         msgBox.addButton("Load Original", QMessageBox::ActionRole);
+
+        // Details
+        QString detailed_text = "";
+        QString original_content;
+        QString snapshot_content;
+        QFile original_file(original_path.filePath());
+        QFile snapshot_file(snapshot_path.filePath());
+
+        if(original_file.open(QIODevice::ReadOnly))
+        {
+            original_content = QString::fromStdString(original_file.readAll().toStdString());
+        }
+        else
+        {
+            original_content = "Cannot load original file...";
+        }
+        if(snapshot_file.open(QIODevice::ReadOnly))
+        {
+            snapshot_content = QString::fromStdString(snapshot_file.readAll().toStdString());
+        }
+        else
+        {
+            snapshot_content = "Cannot load snapshot file...";
+        }
+        detailed_text = "=== Original File ("+original_path.filePath()+") ===\n"
+                      + original_content
+                      + "\n=== Snapshot File ("+snapshot_path.filePath()+") ===\n"
+                      + snapshot_content;
+
+        msgBox.setDetailedText(detailed_text);
+
+
+        // Details end
 
         QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
         QGridLayout* layout           = (QGridLayout*)msgBox.layout();
@@ -845,6 +884,73 @@ namespace hal
             return true;
         }
         return false;
+    }
+
+    QMessageBox::StandardButton PythonEditor::askSaveTab(const int tab_index) const
+    {
+        QMessageBox msgBox;
+        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+        msgBox.setText(mTabWidget->tabText(tab_index).append(" has been modified."));
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        return static_cast<QMessageBox::StandardButton>(msgBox.exec());
+    }
+
+    QMessageBox::StandardButton PythonEditor::askForceSaveTab(const int tab_index) const
+    {
+        QMessageBox msgBox;
+        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
+        msgBox.setText(mTabWidget->tabText(tab_index).append(" has been modified."));
+        msgBox.setInformativeText("Please save your changes before quitting the program.");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        return static_cast<QMessageBox::StandardButton>(msgBox.exec());
+    }
+
+    void PythonEditor::removeSnapshotFile(const QFileInfo original_path) const
+    {
+        QFileInfo snapshot_path(original_path.path() + "/~" + original_path.fileName() + ".tmp");
+        if(snapshot_path.exists()){
+            QFile snapshot_file(snapshot_path.filePath());
+            snapshot_file.remove();
+        }
+    }
+
+    void PythonEditor::handleMainWindowClose(QCloseEvent* event)
+    {
+        if(!event->isAccepted())
+        {
+            return;
+        }
+
+        int tabs = mTabWidget->count();
+
+        // For each unsaved tab: Ask the user to save it
+        for(int index = 0; index < tabs; index++){
+            PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
+            QString file_name = editor->getFileName();
+            if (editor->document()->isModified())
+            {
+                QMessageBox::StandardButton ret = askForceSaveTab(index);
+
+                if (ret == QMessageBox::Cancel)
+                {
+                    event->ignore();
+                    return;
+                }
+
+                if (ret == QMessageBox::Save)
+                {
+                    bool save_success = saveFile(file_name.isEmpty(), index);
+                    if(!save_success){
+                        event->ignore();
+                        return;
+                    }
+                }
+            }
+        }
+
     }
 
     QString PythonEditor::openIconPath() const

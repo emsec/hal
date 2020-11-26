@@ -585,6 +585,14 @@ namespace hal
 
     void MainWindow::closeEvent(QCloseEvent* event)
     {
+        // Call the close event on certain childs to prepare the end of the program
+        gContentManager->getPythonEditorWidget()->handleMainWindowClose(event);
+
+        if(!event->isAccepted())
+        {
+            return;
+        }
+
         //check for unsaved changes and show confirmation dialog
         if (gFileStatusManager->modifiedFilesExisting())
         {
@@ -619,9 +627,10 @@ namespace hal
                 return;
             }
         }
+        // Serialize the content once at the end
+        handleSaveTriggered();
 
         FileManager::get_instance()->closeFile();
-
         saveState();
         event->accept();
         // hack, remove later
