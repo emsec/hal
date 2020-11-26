@@ -187,20 +187,20 @@ namespace hal
             :param str port_name: The input port name.
         )");
 
-        py_module.def("get_input_port_name", &Module::get_input_port_name, py::arg("port_name"), R"(
+        py_module.def("get_input_port_name", &Module::get_input_port_name, py::arg("input_net"), R"(
             Get the name of the port corresponding to the specified input net.
-
-            :param net port_name: The input port name.
-            :returns: The input net.
-            :rtype: hal_py.Net
-        )");
-
-        py_module.def("get_input_port_net", &Module::get_input_port_net, py::arg("input_net"), R"(
-            Get the input net of the port corresponding to the specified port name.
 
             :param hal_py.Net input_net: The input net.
             :returns: The input port name.
             :rtype: str
+        )");
+
+        py_module.def("get_input_port_net", &Module::get_input_port_net, py::arg("port_name"), R"(
+            Get the input net of the port corresponding to the specified port name.
+
+            :param str port_name: The input port name.
+            :returns: The input net.
+            :rtype: hal_py.Net or None
         )");
 
         py_module.def_property_readonly("input_port_names", &Module::get_input_port_names, R"(
@@ -231,12 +231,12 @@ namespace hal
             :rtype: str
         )");
 
-        py_module.def("get_output_port_net", &Module::get_output_port_net, py::arg("output_net"), R"(
+        py_module.def("get_output_port_net", &Module::get_output_port_net, py::arg("port_name"), R"(
             Get the output net of the port corresponding to the specified port name.
 
-            :param hal_py.Net output_net: The output net.
-            :returns: The output port name.
-            :rtype: str
+            :param str port_name: The output port name.
+            :returns: The output net.
+            :rtype: hal_py.Net or None
         )");
 
         py_module.def_property_readonly("output_port_names", &Module::get_output_port_names, R"(
