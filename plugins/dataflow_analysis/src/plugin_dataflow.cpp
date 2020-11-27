@@ -254,7 +254,7 @@ namespace hal
 
         log("dataflow processing finished in {:3.2f}s", total_time);
 
-        //dataflow::state_to_module::create_modules(nl, final_grouping);
+        dataflow::state_to_module::create_modules(nl, final_grouping);
 
         return true;
     }
