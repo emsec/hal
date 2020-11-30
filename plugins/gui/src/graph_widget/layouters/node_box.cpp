@@ -46,6 +46,10 @@ namespace hal
         for (NodeBox* nb : *this)
             delete nb;
         clear();
+        mGateHash.clear();
+        mPointHash.clear();
+        mNodeHash.clear();
+        mItemHash.clear();
     }
 
     void NodeBoxes::addBox(const Node &nd, int px, int py)
