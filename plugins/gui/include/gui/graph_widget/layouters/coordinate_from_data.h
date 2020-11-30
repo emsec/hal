@@ -2,6 +2,7 @@
 
 #include <QPoint>
 #include <QHash>
+#include <QSet>
 #include <map>
 #include <limits.h>
 #include "hal_core/defines.h"
@@ -28,12 +29,19 @@ namespace hal {
     {
     public:
         CoordinateFromDataMap(const QSet<u32>& modules, const QSet<u32>& gates);
-        bool good() const { return mUndefCount == 0 && mDoubleCount == 0; }
+        bool good() const;
         void simplify();
+        bool isPlacementComplete() const;
+        const QSet<u32>& placedGates() const { return mPlacedGates; }
+        const QSet<u32>& placedModules() const { return mPlacedModules; }
     private:
         int mUndefCount;
+        int mPlacedCount;
         int mDoubleCount;
         QHash<QPoint,int> mPositionHash;
         void insertNode(const hal::Node& nd, const CoordinateFromData& cfd);
+
+        QSet<u32> mPlacedGates;
+        QSet<u32> mPlacedModules;
     };
 }

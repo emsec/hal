@@ -46,27 +46,33 @@ namespace hal
     {
         Q_UNUSED(nets)
 
+        CoordinateFromDataMap cfdMap(modules,gates);
         if (gSettingsManager->get("graph_view/layout_parse").toBool() &&
-                !gFileStatusManager->modifiedFilesExisting())
+                !gFileStatusManager->modifiedFilesExisting() &&
+                cfdMap.good())
         {
-            CoordinateFromDataMap cfdMap(modules,gates);
-            if (cfdMap.good())
-            {
-                cfdMap.simplify();
-                for (auto it = cfdMap.begin(); it != cfdMap.end(); ++it)
-                    setNodePosition(it.key(),it.value());
-                return;
-            }
+            cfdMap.simplify();
+            for (auto it = cfdMap.begin(); it != cfdMap.end(); ++it)
+                setNodePosition(it.key(),it.value());
+            if (cfdMap.isPlacementComplete()) return;
         }
 
         WaitToBeSeatedList wtbsl;
         for (QSet<u32>::const_iterator it = modules.constBegin();
              it != modules.constEnd(); ++it)
+        {
+            if (cfdMap.good() && cfdMap.placedModules().contains(*it))
+                continue; // already placed
             wtbsl.add(new WaitToBeSeatedEntry(Node::Module, *it));
+        }
 
         for (QSet<u32>::const_iterator it = gates.constBegin();
              it != gates.constEnd(); ++it)
+        {
+            if (cfdMap.good() && cfdMap.placedGates().contains(*it))
+                continue; // already placed
             wtbsl.add(new WaitToBeSeatedEntry(Node::Gate, *it));
+        }
 
         wtbsl.setLinks();
 

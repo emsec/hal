@@ -63,27 +63,40 @@ namespace hal {
         for (u32 mid : modules)
         {
             hal::Node nd(mid, hal::Node::Module);
-            insertNode(nd, CoordinateFromData::fromNode(nd));
+            CoordinateFromData cfd = CoordinateFromData::fromNode(nd);
+            if (cfd.isUndefined())
+                mUndefCount++;
+            else
+            {
+                insertNode(nd, cfd);
+                mPlacedModules.insert(mid);
+            }
         }
         for (u32 gid : gates)
         {
             hal::Node nd(gid, hal::Node::Gate);
-            insertNode(nd, CoordinateFromData::fromNode(nd));
+            CoordinateFromData cfd = CoordinateFromData::fromNode(nd);
+            if (cfd.isUndefined())
+                mUndefCount++;
+            else
+            {
+                insertNode(nd, cfd);
+                mPlacedGates.insert(gid);
+            }
         }
     }
 
     void CoordinateFromDataMap::insertNode(const hal::Node& nd, const CoordinateFromData& cfd)
     {
-        if (cfd.isUndefined())
-        {
-            ++ mUndefCount;
-            return;
-        }
-
         insert(nd,cfd);
         int n = mPositionHash[cfd]++;
 
         if (n) ++ mDoubleCount;
+    }
+
+    bool CoordinateFromDataMap::isPlacementComplete() const
+    {
+        return mUndefCount == 0;
     }
 
     void CoordinateFromDataMap::simplify()
@@ -110,5 +123,11 @@ namespace hal {
             int py = yGrid.value(it.value().y());
             *it = CoordinateFromData(px,py);
         }
+    }
+
+    bool CoordinateFromDataMap::good() const
+    {
+        return (!mPlacedGates.isEmpty() || !mPlacedModules.isEmpty())
+                && mDoubleCount == 0;
     }
 }
