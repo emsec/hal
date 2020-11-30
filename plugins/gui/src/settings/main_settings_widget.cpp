@@ -160,6 +160,9 @@ namespace hal
         registerWidget("graphview-item", graph_movescene_settings);
         assignExclusiveGroup("kbdmodifiers", graph_movescene_settings);
 
+        CheckboxSetting* graph_layout_parse = new CheckboxSetting("graph_view/layout_parse", "Apply parsed position", "enabled", "<--- use parsed verilog coordinates if any", this);
+        registerWidget("graphview-item", graph_layout_parse);
+
         CheckboxSetting* graph_layout_boxes = new CheckboxSetting("graph_view/layout_boxes", "Optimize box layout", "enabled", "<--- fast random placement if disabled", this);
         registerWidget("graphview-item", graph_layout_boxes);
 

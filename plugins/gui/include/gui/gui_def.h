@@ -125,6 +125,9 @@ namespace hal
         NodeType mType;
     };
 
+
+    uint qHash(const Node &n);
+
     /**
      * @brief The PlacementHint class object provides hints for the layouter how new box objects
      * are placed on a view. In standard mode placement is done using the most compact squere-like
@@ -189,4 +192,5 @@ namespace hal
         PlacementModeType mMode;
         Node mPreferredOrigin;
     };
+
 }

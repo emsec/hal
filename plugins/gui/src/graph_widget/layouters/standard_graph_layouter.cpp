@@ -4,6 +4,8 @@
 #include "gui/graph_widget/layouters/position_generator.h"
 #include "gui/graph_widget/layouters/wait_to_be_seated.h"
 #include "gui/gui_globals.h"
+#include "gui/graph_widget/layouters/coordinate_from_data.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -44,6 +46,19 @@ namespace hal
     {
         Q_UNUSED(nets)
 
+        if (gSettingsManager->get("graph_view/layout_parse").toBool() &&
+                !gFileStatusManager->modifiedFilesExisting())
+        {
+            CoordinateFromDataMap cfdMap(modules,gates);
+            if (cfdMap.good())
+            {
+                cfdMap.simplify();
+                for (auto it = cfdMap.begin(); it != cfdMap.end(); ++it)
+                    setNodePosition(it.key(),it.value());
+                return;
+            }
+        }
+
         WaitToBeSeatedList wtbsl;
         for (QSet<u32>::const_iterator it = modules.constBegin();
              it != modules.constEnd(); ++it)
@@ -64,7 +79,8 @@ namespace hal
                 p = pg.next();
             const WaitToBeSeatedEntry* wtbse = wtbsl.nextPlacement(p);
             if (! wtbse) return;
-            setNodePosition(wtbse->getNode(), p);
+            Node pNode = wtbse->getNode();
+            setNodePosition(pNode, p);
         }
     }
 

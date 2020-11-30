@@ -32,8 +32,6 @@
 uint qHash(const QPoint& p);
 
 namespace hal {
-    uint qHash(const Node &n);
-
     class GraphicsNode;
 
     /**
