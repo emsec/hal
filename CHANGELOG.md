@@ -5,10 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-* added optional placement of gates and modules according to COORDINATE info parsed from verilog
+* added optional placement of gates and modules according to COORDINATE info parsed from netlist file
 * fixed crash caused by NodeBoxes hash not completely emptied on clear
 * fixed mistakes in `module` Python documentation
 * fixed missing include in `graph_navigation_widget.cpp`
+* fixed missing initialization in `NetlistSimulator::generate_vcd`
 
 ## [3.1.7] - 2020-11-26 14:30:00+02:00 (urgency: medium)
 * **WARNING:** the function signature of `netlist_utilities::get_subgraph_function` has changed

@@ -783,14 +783,15 @@ namespace hal
         for (const auto& simulated_net : simulated_nets)
         {
             std::vector<Event> net_events = event_tracker.at(simulated_net);
-            SignalValue initial_value;
-            u32 initial_time = 0;
+            SignalValue initial_value     = SignalValue::X;
+            u32 initial_time              = 0;
+
             for (const auto& event_it : net_events)
             {
                 u32 event_time = event_it.time;
                 if (initial_time == event_time || ((event_time > initial_time) && (event_time < start_time)))
                 {
-                    initial_time = event_time;
+                    initial_time  = event_time;
                     initial_value = event_it.new_value;
                 }
                 if (event_time > start_time && event_time < end_time)
@@ -798,8 +799,8 @@ namespace hal
                     time_to_changes_map[event_it.time][simulated_net] = event_it.new_value;
                 }
             }
-            time_to_changes_map[start_time][simulated_net] = initial_value;
 
+            time_to_changes_map[start_time][simulated_net] = initial_value;
         }
 
         u32 traces_count = 0;
@@ -826,12 +827,12 @@ namespace hal
                 }
                 else if (value == SignalValue::Z)
                 {
-                    log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", net->get_id(), time);
+                    log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", net->get_id(), event_time);
                     return false;
                 }
                 else
                 {
-                    log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", net->get_id(), time);
+                    log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", net->get_id(), event_time);
                     return false;
                 }
             }
