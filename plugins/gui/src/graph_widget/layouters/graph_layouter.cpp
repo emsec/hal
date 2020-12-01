@@ -1020,7 +1020,6 @@ namespace hal
             if (xout > xOutputPadding[ix]) xOutputPadding[ix] = xout;
         }
 
-
         int ix0 = mNodeBoundingBox.x();
 
         float x0 = mCoordX[ix0].preLanes() * sLaneSpacing + sHRoadPadding;
@@ -1312,13 +1311,28 @@ namespace hal
             bool isInput = epl.isInput(ipnt++);
             auto itPnt = mEndpointHash.find(pnt);
             Q_ASSERT(itPnt != mEndpointHash.constEnd());
-            int inx = isInput ? itPnt.value().inputPinIndex(id) : itPnt.value().outputPinIndex(id);
-            float x = isInput ? itPnt.value().xInput() : itPnt.value().xOutput();
-            QPointF scenePnt(x,itPnt.value().lanePosition(inx,true));
             if (isInput)
-                net_item->addInput(scenePnt);
+            {
+                // gack hack : separated net might be connected to several ports
+                const NodeBox* nbox = mBoxes.boxForPoint(pnt.gridPoint());
+                Q_ASSERT(nbox);
+                QList<u32> inpList = nbox->item()->inputNets();
+                for (int jnx=0; jnx<inpList.size(); jnx++)
+                {
+                    u32 inpNetId = inpList.at(jnx);
+                    if (inpNetId!=id) continue;
+                    QPointF inpPnt(itPnt.value().xInput(),
+                                   itPnt.value().lanePosition(jnx,true));
+                    net_item->addInput(inpPnt);
+                }
+            }
             else
-                net_item->addOutput(scenePnt);
+            {
+                int inx = itPnt.value().outputPinIndex(id);
+                QPointF outPnt(itPnt.value().xOutput(),
+                               itPnt.value().lanePosition(inx,true));
+                net_item->addOutput(outPnt);
+            }
         }
         net_item->finalize();
         mScene->addGraphItem(net_item);
@@ -1341,7 +1355,13 @@ namespace hal
             if (inpInx>=0)
             {
                 if (xjRight >= epc.xInput())
-                    qDebug() << "cannot connect input pin" << id << it.key().x() << it.key().y()/2 << xjRight << epc.xInput();
+                {
+                    // don't complain if "input" is in fact global output pin
+                    auto ityOut = mGlobalOutputHash.find(id);
+                    if (ityOut == mGlobalOutputHash.constEnd() ||
+                            QPoint(mNodeBoundingBox.right()+1, 2*ityOut.value()) != it.key())
+                        qDebug() << "cannot connect input pin" << id << it.key().x() << it.key().y()/2 << xjRight << epc.xInput();
+                }
                 else
                     lines.appendHLine(xjRight, epc.xInput(), epc.lanePosition(inpInx,true));
             }
@@ -2548,7 +2568,7 @@ namespace hal
 
     void GraphLayouter::SceneCoordinate::testMinMax(int ilane)
     {
-        if (ilane  < mInLane) mInLane = ilane;
+        if (ilane  < minLane) minLane = ilane;
         if (ilane+1> maxLane) maxLane = ilane+1;
     }
 
@@ -2556,7 +2576,7 @@ namespace hal
     {
         float delta =  maximumBlock;
         if (delta < sepOut) delta = sepOut;
-        mOffset = previous.xBoxOffset() + (1 - mInLane) * sLaneSpacing  + delta;
+        mOffset = previous.xBoxOffset() + (1 - minLane) * sLaneSpacing  + delta;
         float xDefaultBoxPadding = maxLane * sLaneSpacing;
         if (xDefaultBoxPadding < sepInp)
             mPadding = sepInp - xDefaultBoxPadding;
@@ -2571,7 +2591,7 @@ namespace hal
 
     void GraphLayouter::SceneCoordinate::setOffsetYej(const SceneCoordinate& previous, float maximumBlock, float minimumJunction)
     {
-        float delta = (-mInLane - 1) * sLaneSpacing + maximumBlock + sVRoadPadding;
+        float delta = (-minLane - 1) * sLaneSpacing + maximumBlock + sVRoadPadding;
         if (delta < minimumJunction) delta = minimumJunction;
         mOffset = previous.mOffset + delta;
     }
