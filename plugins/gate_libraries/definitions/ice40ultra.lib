@@ -640,16 +640,16 @@ library (ICE40ULTRA) {
     }
 
     cell(SB_IO) {
-        pin(PACKAGE_PIN) { direction: input; }
+        pin(PACKAGE_PIN) { direction: inout; }
         pin(LATCH_INPUT_VALUE) { direction: input; }
         pin(CLOCK_ENABLE) { direction: input; }
         pin(INPUT_CLK) { direction: input; }
-        pin(OUTPUT_CLK) { direction: output; }
-        pin(OUTPUT_ENABLE) { direction: output; }
-        pin(D_OUT_0) { direction: output; }
-        pin(D_OUT_1) { direction: output; }
-        pin(D_IN_0) { direction: input; }
-        pin(D_IN_1) { direction: input; }
+        pin(OUTPUT_CLK) { direction: input; }
+        pin(OUTPUT_ENABLE) { direction: input; }
+        pin(D_OUT_0) { direction: input; }
+        pin(D_OUT_1) { direction: input; }
+        pin(D_IN_0) { direction: output; }
+        pin(D_IN_1) { direction: output; }
     }
 
     cell(SB_MAC16) {

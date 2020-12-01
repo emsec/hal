@@ -380,7 +380,5 @@ namespace hal
         QHash<u32,int> mGlobalInputHash;
         QHash<u32,int> mGlobalOutputHash;
     };
-
-    uint qHash(const Node& n);
 }
 

@@ -12,12 +12,6 @@ uint qHash(const QPoint& p)
 
 namespace hal
 {
-    uint qHash(const Node &n)
-    {
-        uint retval = ( n.id() << 1);
-        if (n.type() == Node::Module) ++retval;
-        return retval;
-    }
 
     NodeBox::NodeBox(const Node &n, int px, int py)
         : mNode(n), mX(px), mY(py),
@@ -79,4 +73,12 @@ namespace hal
                 if (ig) mGateHash.insert(ig,nbox);
         }
     }
+
+    uint qHash(const Node &n)
+    {
+        uint retval = ( n.id() << 1);
+        if (n.type() == Node::Module) ++retval;
+        return retval;
+    }
+
 }
