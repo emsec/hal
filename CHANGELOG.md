@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added optional placement of gates and modules according to COORDINATE info parsed from verilog
+* fixed crash caused by NodeBoxes hash not completely emptied on clear
 * fixed mistakes in `module` Python documentation
 * fixed missing include in `graph_navigation_widget.cpp`
 
