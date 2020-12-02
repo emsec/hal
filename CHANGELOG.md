@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.1.8] - 2020-12-02 10:00:00+02:00 (urgency: medium)
 * added optional placement of gates and modules according to COORDINATE info parsed from netlist file
 * fixed crash caused by NodeBoxes hash not completely emptied on clear
 * fixed mistakes in `module` Python documentation
@@ -426,7 +428,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.7...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.8...HEAD
+[3.1.8]: https://github.com/emsec/hal/compare/v3.1.7...v3.1.8
 [3.1.7]: https://github.com/emsec/hal/compare/v3.1.6...v3.1.7
 [3.1.6]: https://github.com/emsec/hal/compare/v3.1.5...v3.1.6
 [3.1.5]: https://github.com/emsec/hal/compare/v3.1.4...v3.1.5
