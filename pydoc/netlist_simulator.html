@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Simulator &mdash; hal_py v3.1.8 documentation</title>
+  <title>Netlist Simulator &mdash; hal_py v3.1.8-3-g885ffc963 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v3.1.8
+                v3.1.8-3-g885ffc963
               </div>
             
           
@@ -403,10 +403,23 @@ Only elements in the simulation set are considered during simulation.</p>
 
 <dl class="method">
 <dt id="netlist_simulator.NetlistSimulator.load_initial_values">
-<code class="descname">load_initial_values</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.load_initial_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load the initial values for all sequential elements into the current state.
-For example, a Flip Flop may be initialized with HIGH output in FPGAs.
-This is not done automatically!</p>
+<code class="descname">load_initial_values</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>value: hal::SignalValue</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.load_initial_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the specified initial value into the current state of all sequential elements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference internal" href="#netlist_simulator.SignalValue" title="netlist_simulator.SignalValue"><em>netlist_simulator.SignalValue</em></a>) – The initial value to load.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="netlist_simulator.NetlistSimulator.load_initial_values_from_netlist">
+<code class="descname">load_initial_values_from_netlist</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator.NetlistSimulator.load_initial_values_from_netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the initial value specified within the netlist file into the current state of all sequential elements.
+This is especially relevant for FPGA netlists, since these may provide initial values to load on startup.</p>
 </dd></dl>
 
 <dl class="method">
