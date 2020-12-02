@@ -5,8 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.1.9] - 2020-12-02 13:00:00+02:00 (urgency: medium)
 * added `NetlistSimulator::load_initial_value_from_netlist` to load the initial value from the netlist
 * changed `NetlistSimulator::load_initial_values` to load a user-specified value instead of reading it from the netlist
+* fixed layouter not showing gates within modules for netlists with coordinates
 
 ## [3.1.8] - 2020-12-02 10:00:00+02:00 (urgency: medium)
 * added optional placement of gates and modules according to COORDINATE info parsed from netlist file
@@ -431,7 +434,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.8...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.9...HEAD
+[3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9
 [3.1.8]: https://github.com/emsec/hal/compare/v3.1.7...v3.1.8
 [3.1.7]: https://github.com/emsec/hal/compare/v3.1.6...v3.1.7
 [3.1.6]: https://github.com/emsec/hal/compare/v3.1.5...v3.1.6
