@@ -30,7 +30,6 @@ namespace hal {
         return CoordinateFromData();
     }
 
-
     CoordinateFromData CoordinateFromData::fromData(const std::map<std::tuple<std::string, std::string>,
                                                     std::tuple<std::string, std::string> >& dc)
     {
@@ -92,6 +91,16 @@ namespace hal {
         int n = mPositionHash[cfd]++;
 
         if (n) ++ mDoubleCount;
+    }
+
+    void CoordinateFromDataMap::clear()
+    {
+        mUndefCount  = 0;
+        mPlacedCount = 0;
+        mDoubleCount = 0;
+        mPositionHash.clear();
+        mPlacedGates.clear();
+        mPlacedModules.clear();
     }
 
     bool CoordinateFromDataMap::isPlacementComplete() const

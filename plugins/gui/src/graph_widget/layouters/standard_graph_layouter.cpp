@@ -56,6 +56,8 @@ namespace hal
                 setNodePosition(it.key(),it.value());
             if (cfdMap.isPlacementComplete()) return;
         }
+        else
+            cfdMap.clear();
 
         WaitToBeSeatedList wtbsl;
         for (QSet<u32>::const_iterator it = modules.constBegin();

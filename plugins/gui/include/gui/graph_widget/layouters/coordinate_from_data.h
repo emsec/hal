@@ -31,6 +31,7 @@ namespace hal {
         CoordinateFromDataMap(const QSet<u32>& modules, const QSet<u32>& gates);
         bool good() const;
         void simplify();
+        void clear();
         bool isPlacementComplete() const;
         const QSet<u32>& placedGates() const { return mPlacedGates; }
         const QSet<u32>& placedModules() const { return mPlacedModules; }
