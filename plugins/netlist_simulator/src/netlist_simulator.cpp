@@ -87,7 +87,41 @@ namespace hal
         m_event_queue.push_back(e);
     }
 
-    void NetlistSimulator::load_initial_values()
+    void NetlistSimulator::load_initial_values(SignalValue value)
+    {
+        // has to work even if the simulation was not started, i.e., initialize was not called yet
+        // so we cannot use the SimulationGateFF type
+
+        for (auto gate : m_simulation_set)
+        {
+            if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
+            {
+                auto gate_type = dynamic_cast<const GateTypeSequential*>(gate->get_type());
+
+                SignalValue inv_value = toggle(value);
+
+                // generate events
+                for (const auto& pin : gate_type->get_state_output_pins())
+                {
+                    Event e;
+                    e.affected_net = gate->get_fan_out_net(pin);
+                    e.new_value    = value;
+                    e.time         = m_current_time;
+                    m_event_queue.push_back(e);
+                }
+                for (const auto& pin : gate_type->get_inverted_state_output_pins())
+                {
+                    Event e;
+                    e.affected_net = gate->get_fan_out_net(pin);
+                    e.new_value    = inv_value;
+                    e.time         = m_current_time;
+                    m_event_queue.push_back(e);
+                }
+            }
+        }
+    }
+
+    void NetlistSimulator::load_initial_values_from_netlist()
     {
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type

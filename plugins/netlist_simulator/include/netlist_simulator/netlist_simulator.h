@@ -69,11 +69,17 @@ namespace hal
         void set_input(Net* net, SignalValue value);
 
         /**
-         * Load the initial values for all sequential elements into the current state.
-         * For example, a Flip Flop may be initialized with HIGH output in FPGAs.
-         * This is not done automatically!
+         * Load the specified initial value into the current state of all sequential elements.
+         * 
+         * @param[in] value - The initial value to load.
          */
-        void load_initial_values();
+        void load_initial_values(SignalValue value);
+
+        /**
+         * Load the initial value specified within the netlist file into the current state of all sequential elements.
+         * This is especially relevant for FPGA netlists, since these may provide initial values to load on startup.
+         */
+        void load_initial_values_from_netlist();
 
         /**
          * Simulate for a specific period, advancing the internal state.
