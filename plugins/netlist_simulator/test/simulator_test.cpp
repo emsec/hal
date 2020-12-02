@@ -453,7 +453,7 @@ namespace hal
 
         //prepare simulation
         sim->add_gates(nl->get_gates());
-        sim->load_initial_values();
+        sim->load_initial_values_from_netlist();
         auto A = *(nl->get_nets([](auto net) { return net->get_name() == "A"; }).begin());
         auto B = *(nl->get_nets([](auto net) { return net->get_name() == "B"; }).begin());
 
@@ -523,7 +523,7 @@ namespace hal
 
         //prepare simulation
         sim->add_gates(nl->get_gates());
-        sim->load_initial_values();
+        sim->load_initial_values_from_netlist();
 
         // retrieve nets
         auto reset          = *(nl->get_nets([](auto net) { return net->get_name() == "Reset"; }).begin());
@@ -608,7 +608,7 @@ namespace hal
 
         //prepare simulation
         sim->add_gates(nl->get_gates());
-        sim->load_initial_values();
+        sim->load_initial_values_from_netlist();
 
         // retrieve nets
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "CLK"; }).begin());
@@ -752,7 +752,7 @@ namespace hal
 
         //prepare simulation
         sim->add_gates(nl->get_gates());
-        sim->load_initial_values();
+        sim->load_initial_values_from_netlist();
 
         // retrieve nets
         auto clk = *(nl->get_nets([](auto net) { return net->get_name() == "clk"; }).begin());
