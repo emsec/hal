@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * added optional placement of gates and modules according to COORDINATE info parsed from netlist file
+* fixed bug in recently introduced placement according to parsed coordinates, map needs clear if unused
 * fixed crash caused by NodeBoxes hash not completely emptied on clear
 * fixed mistakes in `module` Python documentation
 * fixed missing include in `graph_navigation_widget.cpp`
