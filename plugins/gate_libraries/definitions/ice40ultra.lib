@@ -652,6 +652,18 @@ library (ICE40ULTRA) {
         pin(D_IN_1) { direction: output; }
     }
 
+    cell(SB_HFOSC) {
+        pin(CLKHFEN) { direction: input; }
+        pin(CLKHFPU) { direction: input; }
+        pin(CLKHF) { direction: output; }
+    }
+
+    cell(SB_LFOSC) {
+        pin(CLKLFEN) { direction: input; }
+        pin(CLKLFPU) { direction: input; }
+        pin(CLKLF) { direction: output; }
+    }
+
     cell(SB_MAC16) {
         pin(CLK) { direction: input; }
         pin(CE) { direction: input; }
