@@ -90,14 +90,6 @@ namespace hal
         void handleActionShowFile();
         void tabLoadFile(u32 index, QString fileName);
 
-        /**
-         * Used to forcefully save all python scripts on closing the main window. By manipulating the QCloseEvent
-         * the closing of the main window can be aborted by the user.
-         *
-         * @param event - The QCloseEvent from the (!!!) MainWindow Object.
-         */
-        void handleMainWindowClose(QCloseEvent* event);
-
         //added so that the speciallogcontentmanager has access to all the code editors
         QTabWidget* getTabWidget();
 
@@ -178,12 +170,66 @@ namespace hal
 
     private:
         /**
+         * Parse a snapshot file
+         *
+         * @param snapshot_file_path - The path of the snapshot file
+         * @returns a pair <original file path, snapshot content>
+         */
+        QPair<QString, QString> readSnapshotFile(QFileInfo snapshot_file_path) const;
+
+        /**
+         * Parse all found and store them in a single map
+         *
+         * @param snapshot_file_path - The path of the snapshot file
+         * @returns a pair which contains all snapshots:
+         *          fist: contains a map: original file path -> snapshot content
+         *          second: a vector with snapshots with no original file path (unsaved tabs)
+         */
+        QPair<QMap<QString, QString>, QVector<QString>> loadAllSnapshots(QString netlist_name);
+
+        /**
+         * Writes a snapshot file
+         *
+         * @param snapshot_file_path - The path of the snapshot file
+         * @param original_file_path  - The original file, the snapshot is made for
+         * @param content - The content to write
+         * @returns true on success
+         */
+        bool writeSnapshotFile(QFileInfo snapshot_file_path, QString original_file_path , QString content) const;
+
+        /**
+         * Get the path to the directory where the snapshots for this netlist are stored
+         *
+         * @param create_if_non_existent if true, the directory will be created if not already existent.
+         * @returns the snapshot directory. If the directory does not exist (with create_if_non_existent = false) or
+         *          cannot be created, an empty string is returned
+         */
+        QString getSnapshotDirectory(const bool create_if_non_existent = true) const;
+
+        /**
+         * Updates the snapshots for all open tabs
+         *
+         * @param create_if_non_existent
+         */
+        void updateSnapshots();
+
+        /**
+         * Clear all snapshots
+         *
+         * @param remove_dir - If the parent directory (i.e. "<netlist_name>/") should be removed as well.
+         *                     Used only at the end of the program
+         */
+        void clearAllSnapshots(bool remove_dir = false);
+
+        /**
          * Ask the user with a message box whether the snapshot file or the original file should be loaded
          *
-         * @param file - the snapshot file
+         * @param original_path - the path of the original file
+         * @param original_content - the content of the original file
+         * @param snapshot_content - the content of the snapshot file
          * @return true if the snapshot file should be loaded
          */
-        bool askLoadSnapshot(const QFileInfo original_path, const QFileInfo snapshot_path) const;
+        bool askLoadSnapshot(const QString original_path, const QString original_content, const QString snapshot_content) const;
 
         /**
          * Ask the user with a message box whether to save the tab, discard the changes or cancel the request.
@@ -208,7 +254,7 @@ namespace hal
          *
          * @param original_path
          */
-        void removeSnapshotFile(const QFileInfo original_path) const;
+        void removeSnapshotFile(PythonCodeEditor* editor) const;
 
 
 
@@ -256,5 +302,13 @@ namespace hal
         long mLastClickTime;
 
         QString mLastOpenedPath;
+
+        /**
+         * Stores where the snapshots for the tabs are located
+         * Map: tab -> snapshot path
+         */
+        QMap<PythonCodeEditor*, QString> mTabToSnapshotPath;
+
+        QString mNetlistSubFolderName;
     };
 }
