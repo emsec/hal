@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* fixed parsing of bit order for INIT strings in FPGA gate libraries
 
 ## [3.1.9] - 2020-12-02 13:00:00+02:00 (urgency: medium)
 * added `NetlistSimulator::load_initial_value_from_netlist` to load the initial value from the netlist
