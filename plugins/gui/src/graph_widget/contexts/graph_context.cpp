@@ -318,7 +318,8 @@ namespace hal
             if (mSubscribers.empty())
                 return;
 
-        update();
+        if(mUserUpdateCount == 0)
+            update();
     }
 
     Node GraphContext::nodeForGate(const u32 id) const
