@@ -4,6 +4,8 @@
 #include "gui/graph_widget/layouters/position_generator.h"
 #include "gui/graph_widget/layouters/wait_to_be_seated.h"
 #include "gui/gui_globals.h"
+#include "gui/graph_widget/layouters/coordinate_from_data.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -44,14 +46,35 @@ namespace hal
     {
         Q_UNUSED(nets)
 
+        CoordinateFromDataMap cfdMap(modules,gates);
+        if (gSettingsManager->get("graph_view/layout_parse").toBool() &&
+                !gFileStatusManager->modifiedFilesExisting() &&
+                cfdMap.good())
+        {
+            cfdMap.simplify();
+            for (auto it = cfdMap.begin(); it != cfdMap.end(); ++it)
+                setNodePosition(it.key(),it.value());
+            if (cfdMap.isPlacementComplete()) return;
+        }
+        else
+            cfdMap.clear();
+
         WaitToBeSeatedList wtbsl;
         for (QSet<u32>::const_iterator it = modules.constBegin();
              it != modules.constEnd(); ++it)
+        {
+            if (cfdMap.good() && cfdMap.placedModules().contains(*it))
+                continue; // already placed
             wtbsl.add(new WaitToBeSeatedEntry(Node::Module, *it));
+        }
 
         for (QSet<u32>::const_iterator it = gates.constBegin();
              it != gates.constEnd(); ++it)
+        {
+            if (cfdMap.good() && cfdMap.placedGates().contains(*it))
+                continue; // already placed
             wtbsl.add(new WaitToBeSeatedEntry(Node::Gate, *it));
+        }
 
         wtbsl.setLinks();
 
@@ -64,7 +87,8 @@ namespace hal
                 p = pg.next();
             const WaitToBeSeatedEntry* wtbse = wtbsl.nextPlacement(p);
             if (! wtbse) return;
-            setNodePosition(wtbse->getNode(), p);
+            Node pNode = wtbse->getNode();
+            setNodePosition(pNode, p);
         }
     }
 

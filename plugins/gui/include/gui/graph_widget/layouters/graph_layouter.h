@@ -63,12 +63,12 @@ namespace hal
 
         class SceneCoordinate
         {
-            int mInLane;
+            int minLane;
             int maxLane;
             float mOffset;
             float mPadding;
         public:
-            SceneCoordinate() : mInLane(0), maxLane(0), mOffset(0), mPadding(0) {;}
+            SceneCoordinate() : minLane(0), maxLane(0), mOffset(0), mPadding(0) {;}
             void testMinMax(int ilane);
             void setOffset(float off) { mOffset = off; }
             void setPadding(float pad) { mPadding = pad; }
@@ -76,8 +76,8 @@ namespace hal
             void setOffsetYej(const SceneCoordinate& previous, float maximumBlock, float minimumJunction);
             void setOffsetX(const SceneCoordinate& previous, float maximumBlock, float sepOut, float sepInp);
             float lanePosition(int ilane) const;
-            int preLanes() const { return -mInLane; }
-            float junctionEntry() const { return lanePosition(mInLane); }
+            int preLanes() const { return -minLane; }
+            float junctionEntry() const { return lanePosition(minLane); }
             float junctionExit() const { return lanePosition(maxLane-1); }
             float xBoxOffset() const;
         };
@@ -380,7 +380,5 @@ namespace hal
         QHash<u32,int> mGlobalInputHash;
         QHash<u32,int> mGlobalOutputHash;
     };
-
-    uint qHash(const Node& n);
 }
 

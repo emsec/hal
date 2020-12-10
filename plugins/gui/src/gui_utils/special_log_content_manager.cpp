@@ -74,10 +74,7 @@ namespace hal
                 totalWidth += p.width();
                 maxHeight = (maxHeight > p.height()) ? maxHeight : p.height();
                 pixmapList.append(p);
-
             }
-            else
-                qDebug() << "Could not find any top level widget to screenshot.";
         }
 
         QImage image(totalWidth, maxHeight, QImage::Format_RGB32);

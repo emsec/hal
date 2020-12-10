@@ -49,6 +49,7 @@ namespace hal {
         QGraphicsEllipseItem* graphicsFactory(float r) const;
         int distanceTo(const NetLayoutPoint& other) const;
         int yGrid() const { return (y() + 1) / 2; }
+        QPoint gridPoint() const { return QPoint(x(),yGrid()); }
         bool isEndpoint() const;
         bool isUndefined() const { return x()==INT_MIN || y()==INT_MIN; }
         NetLayoutPoint nextPoint(const NetLayoutDirection& dir, bool omitEndpoint=false) const;

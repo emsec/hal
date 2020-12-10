@@ -723,7 +723,7 @@ namespace hal
                 lut.data_identifier = lut_str.consume();
                 lut_str.consume(";", true);
             }
-            else if (next_token == "direction")
+            else if (next_token == "bit_order")
             {
                 lut_str.consume(":", true);
                 auto direction = lut_str.consume();

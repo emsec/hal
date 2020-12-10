@@ -87,7 +87,41 @@ namespace hal
         m_event_queue.push_back(e);
     }
 
-    void NetlistSimulator::load_initial_values()
+    void NetlistSimulator::load_initial_values(SignalValue value)
+    {
+        // has to work even if the simulation was not started, i.e., initialize was not called yet
+        // so we cannot use the SimulationGateFF type
+
+        for (auto gate : m_simulation_set)
+        {
+            if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
+            {
+                auto gate_type = dynamic_cast<const GateTypeSequential*>(gate->get_type());
+
+                SignalValue inv_value = toggle(value);
+
+                // generate events
+                for (const auto& pin : gate_type->get_state_output_pins())
+                {
+                    Event e;
+                    e.affected_net = gate->get_fan_out_net(pin);
+                    e.new_value    = value;
+                    e.time         = m_current_time;
+                    m_event_queue.push_back(e);
+                }
+                for (const auto& pin : gate_type->get_inverted_state_output_pins())
+                {
+                    Event e;
+                    e.affected_net = gate->get_fan_out_net(pin);
+                    e.new_value    = inv_value;
+                    e.time         = m_current_time;
+                    m_event_queue.push_back(e);
+                }
+            }
+        }
+    }
+
+    void NetlistSimulator::load_initial_values_from_netlist()
     {
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type
@@ -783,14 +817,15 @@ namespace hal
         for (const auto& simulated_net : simulated_nets)
         {
             std::vector<Event> net_events = event_tracker.at(simulated_net);
-            SignalValue initial_value;
-            u32 initial_time = 0;
+            SignalValue initial_value     = SignalValue::X;
+            u32 initial_time              = 0;
+
             for (const auto& event_it : net_events)
             {
                 u32 event_time = event_it.time;
                 if (initial_time == event_time || ((event_time > initial_time) && (event_time < start_time)))
                 {
-                    initial_time = event_time;
+                    initial_time  = event_time;
                     initial_value = event_it.new_value;
                 }
                 if (event_time > start_time && event_time < end_time)
@@ -798,8 +833,8 @@ namespace hal
                     time_to_changes_map[event_it.time][simulated_net] = event_it.new_value;
                 }
             }
-            time_to_changes_map[start_time][simulated_net] = initial_value;
 
+            time_to_changes_map[start_time][simulated_net] = initial_value;
         }
 
         u32 traces_count = 0;
@@ -826,12 +861,12 @@ namespace hal
                 }
                 else if (value == SignalValue::Z)
                 {
-                    log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", net->get_id(), time);
+                    log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", net->get_id(), event_time);
                     return false;
                 }
                 else
                 {
-                    log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", net->get_id(), time);
+                    log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", net->get_id(), event_time);
                     return false;
                 }
             }

@@ -13,6 +13,13 @@ library (ICE40ULTRA) {
         bit_from  : 0;
         bit_to    : 15;
     }
+    type (bus32) {
+        base_type : array;
+        data_type : bit;
+        bit_width : 32;
+        bit_from  : 0;
+        bit_to    : 31;
+    }
     cell(SB_CARRY) {
         pin(CI) {
             direction: input;
@@ -630,5 +637,261 @@ library (ICE40ULTRA) {
             pin(RDATA[14]) {  }
             pin(RDATA[15]) {  }
         }
+    }
+
+    cell(SB_IO) {
+        pin(PACKAGE_PIN) { direction: inout; }
+        pin(LATCH_INPUT_VALUE) { direction: input; }
+        pin(CLOCK_ENABLE) { direction: input; }
+        pin(INPUT_CLK) { direction: input; }
+        pin(OUTPUT_CLK) { direction: input; }
+        pin(OUTPUT_ENABLE) { direction: input; }
+        pin(D_OUT_0) { direction: input; }
+        pin(D_OUT_1) { direction: input; }
+        pin(D_IN_0) { direction: output; }
+        pin(D_IN_1) { direction: output; }
+    }
+
+    cell(SB_HFOSC) {
+        pin(CLKHFEN) { direction: input; }
+        pin(CLKHFPU) { direction: input; }
+        pin(CLKHF) { direction: output; }
+    }
+
+    cell(SB_LFOSC) {
+        pin(CLKLFEN) { direction: input; }
+        pin(CLKLFPU) { direction: input; }
+        pin(CLKLF) { direction: output; }
+    }
+
+    cell(SB_MAC16) {
+        pin(CLK) { direction: input; }
+        pin(CE) { direction: input; }
+        pin(IRSTTOP) { direction: input; }
+        pin(IRSTBOT) { direction: input; }
+        pin(ORSTTOP) { direction: input; }
+        pin(ORSTBOT) { direction: input; }
+        pin(AHOLD) { direction: input; }
+        pin(BHOLD) { direction: input; }
+        pin(CHOLD) { direction: input; }
+        pin(DHOLD) { direction: input; }
+        pin(OHOLDTOP) { direction: input; }
+        pin(OHOLDBOT) { direction: input; }
+        pin(OLOADTOP) { direction: input; }
+        pin(OLOADBOT) { direction: input; }
+        pin(ADDSUBTOP) { direction: input; }
+        pin(ADDSUBBOT) { direction: input; }
+        pin(CO) { direction: input; }
+        pin(CI) { direction: input; }
+        pin(ACCUMCI) { direction: input; }
+        pin(ACCUMCO) { direction: input; }
+        pin(SIGNEXTIN) { direction: input; }
+        pin(SIGNEXTOUT) { direction: input; }
+        bus(A) {
+            bus_type: bus16;
+            direction: input;
+            pin(A[0]) {  }
+            pin(A[1]) {  }
+            pin(A[2]) {  }
+            pin(A[3]) {  }
+            pin(A[4]) {  }
+            pin(A[5]) {  }
+            pin(A[6]) {  }
+            pin(A[7]) {  }
+            pin(A[8]) {  }
+            pin(A[9]) {  }
+            pin(A[10]) {  }
+            pin(A[11]) {  }
+            pin(A[12]) {  }
+            pin(A[13]) {  }
+            pin(A[14]) {  }
+            pin(A[15]) {  }
+        }
+        bus(B) {
+            bus_type: bus16;
+            direction: input;
+            pin(B[0]) {  }
+            pin(B[1]) {  }
+            pin(B[2]) {  }
+            pin(B[3]) {  }
+            pin(B[4]) {  }
+            pin(B[5]) {  }
+            pin(B[6]) {  }
+            pin(B[7]) {  }
+            pin(B[8]) {  }
+            pin(B[9]) {  }
+            pin(B[10]) {  }
+            pin(B[11]) {  }
+            pin(B[12]) {  }
+            pin(B[13]) {  }
+            pin(B[14]) {  }
+            pin(B[15]) {  }
+        }
+        bus(C) {
+            bus_type: bus16;
+            direction: input;
+            pin(C[0]) {  }
+            pin(C[1]) {  }
+            pin(C[2]) {  }
+            pin(C[3]) {  }
+            pin(C[4]) {  }
+            pin(C[5]) {  }
+            pin(C[6]) {  }
+            pin(C[7]) {  }
+            pin(C[8]) {  }
+            pin(C[9]) {  }
+            pin(C[10]) {  }
+            pin(C[11]) {  }
+            pin(C[12]) {  }
+            pin(C[13]) {  }
+            pin(C[14]) {  }
+            pin(C[15]) {  }
+        }
+        bus(D) {
+            bus_type: bus16;
+            direction: input;
+            pin(D[0]) {  }
+            pin(D[1]) {  }
+            pin(D[2]) {  }
+            pin(D[3]) {  }
+            pin(D[4]) {  }
+            pin(D[5]) {  }
+            pin(D[6]) {  }
+            pin(D[7]) {  }
+            pin(D[8]) {  }
+            pin(D[9]) {  }
+            pin(D[10]) {  }
+            pin(D[11]) {  }
+            pin(D[12]) {  }
+            pin(D[13]) {  }
+            pin(D[14]) {  }
+            pin(D[15]) {  }
+        }
+        bus(O) {
+            bus_type: bus32;
+            direction: output;
+            pin(O[0]) {  }
+            pin(O[1]) {  }
+            pin(O[2]) {  }
+            pin(O[3]) {  }
+            pin(O[4]) {  }
+            pin(O[5]) {  }
+            pin(O[6]) {  }
+            pin(O[7]) {  }
+            pin(O[8]) {  }
+            pin(O[9]) {  }
+            pin(O[10]) {  }
+            pin(O[11]) {  }
+            pin(O[12]) {  }
+            pin(O[13]) {  }
+            pin(O[14]) {  }
+            pin(O[15]) {  }
+            pin(O[16]) {  }
+            pin(O[17]) {  }
+            pin(O[18]) {  }
+            pin(O[19]) {  }
+            pin(O[20]) {  }
+            pin(O[21]) {  }
+            pin(O[22]) {  }
+            pin(O[23]) {  }
+            pin(O[24]) {  }
+            pin(O[25]) {  }
+            pin(O[26]) {  }
+            pin(O[27]) {  }
+            pin(O[28]) {  }
+            pin(O[29]) {  }
+            pin(O[30]) {  }
+            pin(O[31]) {  }
+        }
+    }
+
+    cell(SB_I2C) {
+        pin(SBCLKI) { direction: input; }
+        pin(SBRWI) { direction: input; }
+        pin(SBSTBI) { direction: input; }
+        pin(SBADRI0) { direction: input; }
+        pin(SBADRI1) { direction: input; }
+        pin(SBADRI2) { direction: input; }
+        pin(SBADRI3) { direction: input; }
+        pin(SBADRI4) { direction: input; }
+        pin(SBADRI5) { direction: input; }
+        pin(SBADRI6) { direction: input; }
+        pin(SBADRI7) { direction: input; }
+        pin(SBDATI0) { direction: input; }
+        pin(SBDATI1) { direction: input; }
+        pin(SBDATI2) { direction: input; }
+        pin(SBDATI3) { direction: input; }
+        pin(SBDATI4) { direction: input; }
+        pin(SBDATI5) { direction: input; }
+        pin(SBDATI6) { direction: input; }
+        pin(SBDATI7) { direction: input; }
+        pin(SBDATO0) { direction: output; }
+        pin(SBDATO1) { direction: output; }
+        pin(SBDATO2) { direction: output; }
+        pin(SBDATO3) { direction: output; }
+        pin(SBDATO4) { direction: output; }
+        pin(SBDATO5) { direction: output; }
+        pin(SBDATO6) { direction: output; }
+        pin(SBDATO7) { direction: output; }
+        pin(SBACKO) { direction: output; }
+        pin(I2CIRQ) { direction: output; }
+        pin(I2CWKUP) { direction: output; }
+        pin(SCLI) { direction: input; }
+        pin(SCLO) { direction: output; }
+        pin(SCLOE) { direction: output; }
+        pin(SDAI) { direction: input; }
+        pin(SDAO) { direction: output; }
+        pin(SDAOE) { direction: output; }
+    }
+
+    cell(SB_SPI) {
+        pin(SBCLKI) { direction: input; }
+        pin(SBRWI) { direction: input; }
+        pin(SBSTBI) { direction: input; }
+        pin(SBADRI0) { direction: input; }
+        pin(SBADRI1) { direction: input; }
+        pin(SBADRI2) { direction: input; }
+        pin(SBADRI3) { direction: input; }
+        pin(SBADRI4) { direction: input; }
+        pin(SBADRI5) { direction: input; }
+        pin(SBADRI6) { direction: input; }
+        pin(SBADRI7) { direction: input; }
+        pin(SBDATI0) { direction: input; }
+        pin(SBDATI1) { direction: input; }
+        pin(SBDATI2) { direction: input; }
+        pin(SBDATI3) { direction: input; }
+        pin(SBDATI4) { direction: input; }
+        pin(SBDATI5) { direction: input; }
+        pin(SBDATI6) { direction: input; }
+        pin(SBDATI7) { direction: input; }
+        pin(SBDATO0) { direction: output; }
+        pin(SBDATO1) { direction: output; }
+        pin(SBDATO2) { direction: output; }
+        pin(SBDATO3) { direction: output; }
+        pin(SBDATO4) { direction: output; }
+        pin(SBDATO5) { direction: output; }
+        pin(SBDATO6) { direction: output; }
+        pin(SBDATO7) { direction: output; }
+        pin(SBACKO) { direction: output; }
+        pin(SPIIRQ) { direction: output; }
+        pin(SPIWKUP) { direction: output; }
+        pin(MI) { direction: input; }
+        pin(SO) { direction: output; }
+        pin(SOE) { direction: output; }
+        pin(SI) { direction: input; }
+        pin(MO) { direction: output; }
+        pin(MOE) { direction: output; }
+        pin(SCKI) { direction: input; }
+        pin(SCKO) { direction: output; }
+        pin(SCKOE) { direction: output; }
+        pin(SCSNI) { direction: input; }
+        pin(MCSNO0) { direction: input; }
+        pin(MCSNO1) { direction: input; }
+        pin(MCSNO2) { direction: input; }
+        pin(MCSNO3) { direction: input; }
+        pin(MCSNOE0) { direction: input; }
+        pin(MCSNOE1) { direction: input; }
+        pin(MCSNOE2) { direction: input; }
+        pin(MCSNOE3) { direction: input; }
     }
 }

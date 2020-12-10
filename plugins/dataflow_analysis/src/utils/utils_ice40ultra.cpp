@@ -16,6 +16,7 @@ namespace hal
             {
                 static std::unordered_set<std::string> supported = {"SB_DFF",  "SB_DFFE",  "SB_DFFSR",  "SB_DFFR",  "SB_DFFSS",  "SB_DFFS",  "SB_DFFESR",  "SB_DFFER",  "SB_DFFESS",  "SB_DFFES",
                                                                     "SB_DFFN", "SB_DFFNE", "SB_DFFNSR", "SB_DFFNR", "SB_DFFNSS", "SB_DFFNS", "SB_DFFNESR", "SB_DFFNER", "SB_DFFNESS", "SB_DFFNES"};
+                                                                    //"SB_RAM40_4K"};
 
                 if (supported.find(sg->get_type()->get_name()) != supported.end())
                 {
@@ -74,6 +75,7 @@ namespace hal
                     gate_to_clock_ports["SB_DFFNER"] = {"C"};
                     gate_to_clock_ports["SB_DFFNESS"] = {"C"};
                     gate_to_clock_ports["SB_DFFNES"] = {"C"};
+                    //gate_to_clock_ports["SB_RAM40_4K"] = {"RCLK", "WCLK"};
                 }
 
                 return gate_to_clock_ports.at(sg->get_type()->get_name());
@@ -110,6 +112,7 @@ namespace hal
                     gate_to_enable_ports["SB_DFFNER"] = {"E"};
                     gate_to_enable_ports["SB_DFFNESS"] = {"E"};
                     gate_to_enable_ports["SB_DFFNES"] = {"E"};
+                    //gate_to_enable_ports["SB_RAM40_4K"] = {};// {"RE", "RCLKE", "WE", "WCLKE"};
                 }
 
                 return gate_to_enable_ports.at(sg->get_type()->get_name());
@@ -146,6 +149,7 @@ namespace hal
                     gate_to_reset_ports["SB_DFFNER"] = {"R"};
                     gate_to_reset_ports["SB_DFFNESS"] = {};
                     gate_to_reset_ports["SB_DFFNES"] = {};
+                    //gate_to_reset_ports["SB_RAM40_4K"] = {};
                 }
 
                 return gate_to_reset_ports.at(sg->get_type()->get_name());
@@ -182,6 +186,11 @@ namespace hal
                     gate_to_data_ports["SB_DFFNER"] = {"D"};
                     gate_to_data_ports["SB_DFFNESS"] = {"D", "S"};
                     gate_to_data_ports["SB_DFFNES"] = {"D", "S"};
+                    //gate_to_data_ports["SB_RAM40_4K"] = {"WDATA(0)", "WDATA(1)", "WDATA(2)", "WDATA(3)", "WDATA(4)", "WDATA(5)", "WDATA(6)", "WDATA(7)", "WDATA(8)", "WDATA(9)", "WDATA(10)", "WDATA(11)", "WDATA(12)", "WDATA(13)", "WDATA(14)", "WDATA(15)",
+                    //                                     "MASK(0)", "MASK(1)", "MASK(2)", "MASK(3)", "MASK(4)", "MASK(5)", "MASK(6)", "MASK(7)", "MASK(8)", "MASK(9)", "MASK(10)", "MASK(11)", "MASK(12)", "MASK(13)", "MASK(14)", "MASK(15)",
+                    //                                     "WADDR(0)", "WADDR(1)", "WADDR(2)", "WADDR(3)", "WADDR(4)", "WADDR(5)", "WADDR(6)", "WADDR(7)",
+                    //                                     "RDATA(0)", "RDATA(1)", "RDATA(2)", "RDATA(3)", "RDATA(4)", "RDATA(5)", "RDATA(6)", "RDATA(7)", "RDATA(8)", "RDATA(9)", "RDATA(10)", "RDATA(11)", "RDATA(12)", "RDATA(13)", "RDATA(14)", "RDATA(15)",
+                    //                                     "RADDR(0)", "RADDR(1)", "RADDR(2)", "RADDR(3)", "RADDR(4)", "RADDR(5)", "RADDR(6)", "RADDR(7)",};
                 }
 
                 return gate_to_data_ports.at(sg->get_type()->get_name());

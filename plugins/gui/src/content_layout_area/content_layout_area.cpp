@@ -4,9 +4,11 @@
 #include "gui/docking_system/splitter_anchor.h"
 #include "gui/docking_system/tab_widget.h"
 #include "gui/splitter/splitter.h"
+#include "gui/docking_system/content_drag_relay.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+
 
 namespace hal
 {
@@ -30,6 +32,11 @@ namespace hal
         connect(mLeftAnchor, &SplitterAnchor::contentChanged, this, &ContentLayoutArea::updateLeftDockBar);
         connect(mRightAnchor, &SplitterAnchor::contentChanged, this, &ContentLayoutArea::updateRightDockBar);
         connect(mBottomAnchor, &SplitterAnchor::contentChanged, this, &ContentLayoutArea::updateBottomDockBar);
+
+
+        //needed to fix a bug where the bottom dockbar does not reappear after dragging every widget out of it
+        connect(ContentDragRelay::instance(), &ContentDragRelay::dragStart, this, &ContentLayoutArea::handleDragStart);
+        connect(ContentDragRelay::instance(), &ContentDragRelay::dragEnd, this, &ContentLayoutArea::handleDragEnd);
 
         mLeftDock->setObjectName("left-dock-bar");
         mRightDock->setObjectName("right-dock-bar");
@@ -169,6 +176,19 @@ namespace hal
         if (mBottomDock->count())
             mBottomContainer->show();
         else
+            mBottomContainer->hide();
+    }
+
+    void ContentLayoutArea::handleDragStart()
+    {
+        mWasBottomContainerHidden = mBottomContainer->isHidden();
+        mBottomContainer->show();
+
+    }
+
+    void ContentLayoutArea::handleDragEnd()
+    {
+        if(mWasBottomContainerHidden && mBottomDock->count() == 0)
             mBottomContainer->hide();
     }
 }

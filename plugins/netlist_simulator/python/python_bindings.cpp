@@ -107,10 +107,15 @@ namespace hal
                 :param netlist_simulator.SignalValue value: The value to set.
             )")
 
-            .def("load_initial_values", &NetlistSimulator::load_initial_values, R"(
-                Load the initial values for all sequential elements into the current state.
-                For example, a Flip Flop may be initialized with HIGH output in FPGAs.
-                This is not done automatically!
+            .def("load_initial_values", &NetlistSimulator::load_initial_values, py::arg("value"), R"(
+                Load the specified initial value into the current state of all sequential elements.
+
+                :param netlist_simulator.SignalValue value: The initial value to load.
+            )")
+
+            .def("load_initial_values_from_netlist", &NetlistSimulator::load_initial_values_from_netlist, R"(
+                Load the initial value specified within the netlist file into the current state of all sequential elements.
+                This is especially relevant for FPGA netlists, since these may provide initial values to load on startup.
             )")
 
             .def("simulate", &NetlistSimulator::simulate, py::arg("picoseconds"), R"(

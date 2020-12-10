@@ -5,6 +5,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* fixed parsing of bit order for INIT strings in FPGA gate libraries
+
+## [3.1.9] - 2020-12-02 13:00:00+02:00 (urgency: medium)
+* added `NetlistSimulator::load_initial_value_from_netlist` to load the initial value from the netlist
+* changed `NetlistSimulator::load_initial_values` to load a user-specified value instead of reading it from the netlist
+* fixed layouter not showing gates within modules for netlists with coordinates
+
+## [3.1.8] - 2020-12-02 10:00:00+02:00 (urgency: medium)
+* added optional placement of gates and modules according to COORDINATE info parsed from netlist file
+* fixed bug in recently introduced placement according to parsed coordinates, map needs clear if unused
+* fixed crash caused by NodeBoxes hash not completely emptied on clear
+* fixed mistakes in `module` Python documentation
+* fixed missing include in `graph_navigation_widget.cpp`
+* fixed missing initialization in `NetlistSimulator::generate_vcd`
+* fixed missing input label when separated net is connected to more than one port
+
+## [3.1.7] - 2020-11-26 14:30:00+02:00 (urgency: medium)
+* **WARNING:** the function signature of `netlist_utilities::get_subgraph_function` has changed
 * added cycle detection to `netlist_utilities::get_subgraph_function` again
 * added Lattice ICE gate library
 * improved access to layout class NodeBox for GUI C++ developer
@@ -16,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * fixed bad alignment between net endpoint and port label for gates with ports not connected to nets
 * fixed log output got incorrectly supressed in case command line arguments were solely directed at plugins
 * fixed wrong layouting of endpoints in GUI in the presence of unconnected pins/ports
+* fixed wrong calculation of minimum size of the dockbars
+* fixed bottom dockbar not reappearing when dragging removing every widget from it
 
 ## [3.1.6] - 2020-11-22 19:30:00+02:00 (urgency: medium)
 * added `netlist_utilities::get_subgraph_function` variants with and without cache
@@ -415,7 +435,10 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.6...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.9...HEAD
+[3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9
+[3.1.8]: https://github.com/emsec/hal/compare/v3.1.7...v3.1.8
+[3.1.7]: https://github.com/emsec/hal/compare/v3.1.6...v3.1.7
 [3.1.6]: https://github.com/emsec/hal/compare/v3.1.5...v3.1.6
 [3.1.5]: https://github.com/emsec/hal/compare/v3.1.4...v3.1.5
 [3.1.4]: https://github.com/emsec/hal/compare/v3.1.3...v3.1.4

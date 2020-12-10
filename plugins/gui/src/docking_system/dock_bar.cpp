@@ -26,7 +26,7 @@ namespace hal
 
     DockBar::DockBar(Qt::Orientation orientation, button_orientation b_orientation, QWidget* parent) : QFrame(parent), mButtonOrientation(b_orientation)
     {
-        Q_UNUSED(orientation)
+        mOrientation = orientation;
 
         setAcceptDrops(true);
 
@@ -208,24 +208,47 @@ namespace hal
 
     QSize DockBar::sizeHint() const
     {
-        int width = 0;
-        for (DockButton* button : mButtons)
-            width += button->width();
+        if(mOrientation == Qt::Horizontal)
+        {
+            int width = 0;
+            for (DockButton* button : mButtons)
+                width += button->width();
 
-        width += mButtons.size() * mButtonSpacing;    //+ mButtonOffset
+            width += mButtons.size() * mButtonSpacing;    //+ mButtonOffset
+            return QSize(width, height());
+        }
+        else
+        {
+            int height = 0;
+            for (DockButton* button : mButtons)
+                height += button->height();
 
-        return QSize(width, height());
+            height += mButtons.size() * mButtonSpacing;    //+ mButtonOffset
+            return QSize(width(), height);
+
+        }
     }
 
     QSize DockBar::minimumSizeHint() const
     {
-        int width = 0;
-        for (DockButton* button : mButtons)
-            width += button->width();
+        if(mOrientation == Qt::Horizontal)
+        {
+            int width = 0;
+            for (DockButton* button : mButtons)
+                width += button->width();
 
-        width += mButtons.size() * mButtonSpacing;    //+ mButtonOffset
+            width += mButtons.size() * mButtonSpacing;    //+ mButtonOffset
+            return QSize(width, height());
+        }
+        else
+        {
+            int height = 0;
+            for (DockButton* button : mButtons)
+                height += button->height();
 
-        return QSize(width, height());
+            height += mButtons.size() * mButtonSpacing;    //+ mButtonOffset
+            return QSize(width(), height);
+        }
     }
 
     void DockBar::setAnchor(ContentAnchor* anchor)
@@ -347,6 +370,7 @@ namespace hal
 
                 if (mAutohide && unused())
                     hide();
+                updateGeometry();
                 return true;
             }
         }
@@ -364,6 +388,7 @@ namespace hal
             rearrangeButtons();
             if (mAutohide && unused())
                 hide();
+            updateGeometry();
             return true;
         }
         return false;
