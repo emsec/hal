@@ -170,6 +170,8 @@ namespace hal
         if (!object)
             return;    // SHOULD NEVER BE REACHED
 
+        if(object != gNetlist)
+            return;
         //qDebug() << "relayNetlistEvent called: event ID =" << ev << "for object at" << object.get();
         //Q_EMIT netlistEvent(ev, object, associated_data);
 
@@ -286,6 +288,9 @@ namespace hal
         if (!object)
             return;    // SHOULD NEVER BE REACHED
 
+        if(object->get_netlist() != gNetlist)
+            return;
+
         switch (ev)
         {
         case grouping_event_handler::event::created:
@@ -322,6 +327,9 @@ namespace hal
     {
         if (!object)
             return;    // SHOULD NEVER BE REACHED
+
+        if(object->get_netlist() != gNetlist)
+            return;
 
         //qDebug() << "relayModuleEvent called: event ID =" << ev << "for object at" << object.get();
         //Q_EMIT moduleEvent(ev, object, associated_data);
@@ -447,6 +455,9 @@ namespace hal
         if (!object)
             return;    // SHOULD NEVER BE REACHED
 
+        if(object->get_netlist() != gNetlist)
+            return;
+
         //qDebug() << "relayGateEvent called: event ID =" << ev << "for object at" << object.get();
         //Q_EMIT gateEvent(ev, object, associated_data);
 
@@ -486,6 +497,9 @@ namespace hal
     {
         if (!object)
             return;    // SHOULD NEVER BE REACHED
+
+        if(object->get_netlist() != gNetlist)
+            return;
 
         //qDebug() << "relayNetEvent called: event ID =" << ev << "for object at" << object.get();
         //Q_EMIT netEvent(ev, object, associated_data);
