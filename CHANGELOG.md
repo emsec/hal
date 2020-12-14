@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * fixed parsing of bit order for INIT strings in FPGA gate libraries
+* improved performance of selection details widget
 
 ## [3.1.9] - 2020-12-02 13:00:00+02:00 (urgency: medium)
 * added `NetlistSimulator::load_initial_value_from_netlist` to load the initial value from the netlist
