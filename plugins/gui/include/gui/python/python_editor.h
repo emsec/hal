@@ -191,7 +191,7 @@ namespace hal
          * Writes a snapshot file
          *
          * @param snapshot_file_path - The path of the snapshot file
-         * @param original_file_path  - The original file, the snapshot is made for
+         * @param original_file_path  - The original file the snapshot is made for
          * @param content - The content to write
          * @returns true on success
          */
@@ -310,5 +310,6 @@ namespace hal
         QMap<PythonCodeEditor*, QString> mTabToSnapshotPath;
 
         QString mNetlistSubFolderName;
+        const QString mSnapshotPathPrefix = ".tmp/snapshots_";
     };
 }

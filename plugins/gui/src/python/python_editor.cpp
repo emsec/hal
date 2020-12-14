@@ -26,6 +26,7 @@
 #include <QVBoxLayout>
 #include <chrono>
 #include <fstream>
+#include <QDesktopServices>
 
 namespace hal
 {
@@ -206,7 +207,6 @@ namespace hal
 
                         // Set the tabs content to the text of the snapshot
                         QString snapshot_content = saved_snapshots[original_path.absoluteFilePath()];
-                        log_info("gui", snapshot_content.toStdString());
                         mPathEditorMap[original_path.filePath()]->setPlainText(snapshot_content);
 
                         // The original is only overwritten after the first save. Therefore mark the tab as changed.
@@ -499,10 +499,12 @@ namespace hal
             // Remove an existing snapshot and update its location
             removeSnapshotFile(current_editor);
             QString new_snapshot_path = this->getSnapshotDirectory(true) + "/" + selected_file_name + ".tmp";
-            if(mTabToSnapshotPath.contains(current_editor)){
+            if(mTabToSnapshotPath.contains(current_editor))
+            {
                 mTabToSnapshotPath[current_editor] = new_snapshot_path;
             }
-            else{
+            else
+            {
                 mTabToSnapshotPath.insert(current_editor, new_snapshot_path);
             }
         }
@@ -660,6 +662,7 @@ namespace hal
         action                     = context_menu.addAction("Show in system explorer");
         PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(mTabRightclicked));
         QString s                  = editor->getFileName();
+        action->setData(s);
         action->setDisabled(s.isEmpty());
         connect(action, &QAction::triggered, this, &PythonEditor::handleActionShowFile);
 
@@ -730,6 +733,22 @@ namespace hal
 
     void PythonEditor::handleActionShowFile()
     {
+        QAction* action = dynamic_cast<QAction*>(sender());
+        if(!action)
+        {
+            log_error("gui", "could not cast sender into QAction.");
+            return;
+        }
+
+        //the data is set in the handleActionTabMenu (the path of the underlying file)
+        QFileInfo info(action->data().toString());
+        if(!info.exists())
+        {
+            log_error("gui", "File does not exist.");
+            return;
+        }
+
+        QDesktopServices::openUrl(QUrl(info.absolutePath(), QUrl::TolerantMode));
     }
 
     void PythonEditor::handleTabFileChanged(QString path)
@@ -809,10 +828,12 @@ namespace hal
         return QPair<QString, QString>(original_file_path,snapshot_content);
     }
 
-    QPair<QMap<QString, QString>, QVector<QString>> PythonEditor::loadAllSnapshots(QString netlist_name) {
-        mNetlistSubFolderName = ".tmp/snapshots_" + netlist_name;
+    QPair<QMap<QString, QString>, QVector<QString>> PythonEditor::loadAllSnapshots(QString netlist_name)
+    {
+        mNetlistSubFolderName = mSnapshotPathPrefix + netlist_name;
         QString snapshot_path = this->getSnapshotDirectory(false);
-        if(snapshot_path.isEmpty()){
+        if(snapshot_path.isEmpty())
+        {
             return QPair<QMap<QString, QString>, QVector<QString>>();
         }
         QMap<QString, QString> stored_snapshot_map;
@@ -821,20 +842,19 @@ namespace hal
 
         QStringList snapshot_files = snapshot_dir.entryList(QStringList() << "*.tmp", QDir::Files);
 
-        log_info("gui", "SN dir: '{}'", snapshot_dir.absolutePath().toStdString());
-
         for(QString snapshot_file_name : snapshot_files)
         {
             QString snapshot_file_path = snapshot_dir.absoluteFilePath(snapshot_file_name);
-            log_info("gui", "Try to load '{}'...", snapshot_file_path.toStdString());
             QPair<QString, QString> original_path_and_content = this->readSnapshotFile(snapshot_file_path);
             QString original_path = original_path_and_content.first;
             std::string debug_val = original_path.toStdString();
-            if(original_path.isEmpty() || (!QFileInfo(original_path).exists())){
+            if(original_path.isEmpty() || (!QFileInfo(original_path).exists()))
+            {
                 // Original File does not exist
                 unstored_snapshots.append(original_path_and_content.second);
             }
-            else{
+            else
+            {
                 // An original file exists
                 stored_snapshot_map.insert(original_path_and_content.first, original_path_and_content.second);
             }
@@ -856,6 +876,7 @@ namespace hal
         snapshot_file.write(original_file_path.toUtf8());
         snapshot_file.write("\n");
         snapshot_file.write(content.toUtf8());
+        snapshot_file.close();
 
         return true;
     }
@@ -872,13 +893,13 @@ namespace hal
                     log_error("gui", "Snapshot folder \"{}\" can not be created! ", mNetlistSubFolderName.toStdString());
                     return "";
                 }
-                else
+
+                if(!snapshot_path.cd(mNetlistSubFolderName))
                 {
-                    if(!snapshot_path.cd(mNetlistSubFolderName))
-                    {
-                        log_error("gui", "Snapshot folder \"{}\" can not be entered! ", mNetlistSubFolderName.toStdString());
-                    }
+                    log_error("gui", "Snapshot folder \"{}\" can not be entered! ", mNetlistSubFolderName.toStdString());
+                    return "";
                 }
+
             }
             else
             {
@@ -887,7 +908,6 @@ namespace hal
             }
         }
 
-        log_info("gui", "Snapshot Dir: '{}'", snapshot_path.absolutePath().toStdString());
         return snapshot_path.absolutePath();
     }
 
@@ -902,11 +922,13 @@ namespace hal
         for(int index = 0; index < tabs; index++){
             PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
             QString snapshot_file_name = "~";
-            if(editor->getFileName().isEmpty()){
+            if(editor->getFileName().isEmpty())
+            {
                 // The Tab is unstored
                 snapshot_file_name += "unsaved_tab";
             }
-            else{
+            else
+            {
                 // An original file exists
                 QFileInfo original_file_name(editor->getFileName());
                 snapshot_file_name += original_file_name.fileName();
@@ -928,17 +950,20 @@ namespace hal
     void PythonEditor::clearAllSnapshots(bool remove_dir)
     {
         QString snapshot_dir_path = this->getSnapshotDirectory(false);
-        if(snapshot_dir_path == ""){
+        if(snapshot_dir_path == "")
+        {
             // The directory does not exist. Nothing to do then
             return;
         }
         QDir snapshot_dir(snapshot_dir_path);
 
-        if(remove_dir){
+        if(remove_dir)
+        {
             // Remove the directory
             snapshot_dir.removeRecursively();
         }
-        else{
+        else
+        {
             // Remove all files in the directory
             for(QString dirFile : snapshot_dir.entryList())
             {
@@ -1006,12 +1031,14 @@ namespace hal
 
     void PythonEditor::removeSnapshotFile(PythonCodeEditor* editor) const
     {
-        if(!mTabToSnapshotPath.contains(editor)){
+        if(!mTabToSnapshotPath.contains(editor))
+        {
             return;
         }
 
         QFileInfo snapshot_path(mTabToSnapshotPath[editor]);
-        if(snapshot_path.exists()){
+        if(snapshot_path.exists())
+        {
             QFile snapshot_file(snapshot_path.filePath());
             snapshot_file.remove();
         }
