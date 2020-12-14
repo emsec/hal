@@ -27,12 +27,13 @@
 #include <chrono>
 #include <fstream>
 #include <QDesktopServices>
+#include "gui/file_manager/file_manager.h"
 
 namespace hal
 {
     PythonEditor::PythonEditor(QWidget* parent)
         : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar()), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
-          mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this))
+          mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this)), mCachedSnapshotDir("")
     {
         ensurePolished();
         mNewFileCounter = 0;
@@ -832,6 +833,7 @@ namespace hal
     {
         mNetlistSubFolderName = mSnapshotPathPrefix + netlist_name;
         QString snapshot_path = this->getSnapshotDirectory(false);
+        qDebug() << "IN LOADALLSNAPSHOTS: " << snapshot_path;
         if(snapshot_path.isEmpty())
         {
             return QPair<QMap<QString, QString>, QVector<QString>>();
@@ -881,34 +883,58 @@ namespace hal
         return true;
     }
 
-    QString PythonEditor::getSnapshotDirectory(const bool create_if_non_existent) const
+    QString PythonEditor::getSnapshotDirectory(const bool create_if_non_existent)
     {
-        QDir snapshot_path(QString::fromStdString(hal::utils::get_base_directory().string()));
-        if(!snapshot_path.cd(mNetlistSubFolderName))
+        //QDir snapshot_path(QString::fromStdString(hal::utils::get_base_directory().string()));
+        QFileInfo info(FileManager::get_instance()->fileName());
+        if(mCachedSnapshotDir.isEmpty() && !FileManager::get_instance()->fileName().isEmpty())
         {
-            if(create_if_non_existent)
+            QDir snapshot_dir = info.absoluteDir();
+            QString completePath = snapshot_dir.absolutePath() + "/~" + info.baseName();
+            if(!snapshot_dir.exists(completePath))
             {
-                if(!snapshot_path.mkpath(mNetlistSubFolderName))
+                if(create_if_non_existent)
                 {
-                    log_error("gui", "Snapshot folder \"{}\" can not be created! ", mNetlistSubFolderName.toStdString());
-                    return "";
+                    if(!snapshot_dir.mkpath(completePath))
+                    {
+                        log_error("gui", "Failed to create screenshots directory.");
+                        return "";
+                    }
                 }
-
-                if(!snapshot_path.cd(mNetlistSubFolderName))
-                {
-                    log_error("gui", "Snapshot folder \"{}\" can not be entered! ", mNetlistSubFolderName.toStdString());
+                else
                     return "";
-                }
 
             }
-            else
-            {
-                // The snapshot does not exist and should not be created
-                return "";
-            }
+            mCachedSnapshotDir = completePath;
         }
 
-        return snapshot_path.absolutePath();
+        return mCachedSnapshotDir;
+
+//        if(!snapshot_path.cd(mNetlistSubFolderName))
+//        {
+//            if(create_if_non_existent)
+//            {
+//                if(!snapshot_path.mkpath(mNetlistSubFolderName))
+//                {
+//                    log_error("gui", "Snapshot folder \"{}\" can not be created! ", mNetlistSubFolderName.toStdString());
+//                    return "";
+//                }
+
+//                if(!snapshot_path.cd(mNetlistSubFolderName))
+//                {
+//                    log_error("gui", "Snapshot folder \"{}\" can not be entered! ", mNetlistSubFolderName.toStdString());
+//                    return "";
+//                }
+
+//            }
+//            else
+//            {
+//                // The snapshot does not exist and should not be created
+//                return "";
+//            }
+//        }
+
+//        return snapshot_path.absolutePath();
     }
 
     void PythonEditor::updateSnapshots()
@@ -917,6 +943,7 @@ namespace hal
         mTabToSnapshotPath.clear();
 
         QDir snapshot_dir = this->getSnapshotDirectory(true);
+
 
         int tabs = mTabWidget->count();
         for(int index = 0; index < tabs; index++){
@@ -950,6 +977,7 @@ namespace hal
     void PythonEditor::clearAllSnapshots(bool remove_dir)
     {
         QString snapshot_dir_path = this->getSnapshotDirectory(false);
+        qDebug() << "Removing files in: " << snapshot_dir_path;
         if(snapshot_dir_path == "")
         {
             // The directory does not exist. Nothing to do then

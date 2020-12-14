@@ -204,7 +204,7 @@ namespace hal
          * @returns the snapshot directory. If the directory does not exist (with create_if_non_existent = false) or
          *          cannot be created, an empty string is returned
          */
-        QString getSnapshotDirectory(const bool create_if_non_existent = true) const;
+        QString getSnapshotDirectory(const bool create_if_non_existent = true);
 
         /**
          * Updates the snapshots for all open tabs
@@ -311,5 +311,6 @@ namespace hal
 
         QString mNetlistSubFolderName;
         const QString mSnapshotPathPrefix = ".tmp/snapshots_";
+        QString mCachedSnapshotDir;
     };
 }
