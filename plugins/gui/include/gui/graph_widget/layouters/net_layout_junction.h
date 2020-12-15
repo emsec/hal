@@ -127,6 +127,7 @@ namespace hal {
         void routeAllStraight(NetLayoutDirection dirFrom, NetLayoutDirection dirTo);
         void routeAllCorner(NetLayoutDirection dirHoriz, NetLayoutDirection dirVertic);
         void routeSingleStraight(u32 netId, int iMain, int iroadIn, int iroadOut);
+        void routeSingleSwap(u32 netId, int iMain, int iroadIn, int iroadOut);
         void routeSingleCorner(u32 netId, NetLayoutDirection dirHoriz, NetLayoutDirection dirVertic);
         void calculateRect();
         bool conflict(int ihoriz, int iroad, const NetLayoutJunctionRange& testRng) const;
