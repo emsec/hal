@@ -81,6 +81,8 @@ namespace hal
         connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::handleSearchbarTextEdited);
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
 
+        connect(FileManager::get_instance(), &FileManager::fileOpened, this, &PythonEditor::handleFileOpened);
+
         mPathEditorMap = QMap<QString, PythonCodeEditor*>();
 
         mFileModifiedBar = new FileModifiedBar();
@@ -148,10 +150,6 @@ namespace hal
         netlist_name.replace( "/", "-" );
         netlist_name.replace( "\\", "-" );
 
-        QPair<QMap<QString, QString>, QVector<QString>> snapshots = this->loadAllSnapshots(netlist_name);
-        QMap<QString, QString> saved_snapshots = snapshots.first;
-        QVector<QString> unsaved_snapshots = snapshots.second;
-
         int cnt    = 0;
         if (document.HasMember("PythonEditor"))
         {
@@ -169,61 +167,9 @@ namespace hal
 
                 if (val.HasMember("path"))
                 {
-                    // Search for a snapshot of this file
                     QFileInfo original_path(val["path"].GetString());
 
-                    // Decide whether the snapshot file or the original should be loaded
-                    bool load_snapshot = false;
-                    if(saved_snapshots.contains(original_path.absoluteFilePath())){
-                        if(original_path.exists()){
-                            // Ask user whether the original file or the snapshot should be loaded
-                            QString original_content;
-                            QFile original_file(original_path.absoluteFilePath());
-                            if(!original_file.open(QIODevice::ReadOnly)){
-                                original_content = "Cannot open original file...";
-                            }
-                            else{
-                                original_content = QString::fromStdString(original_file.readAll().toStdString());
-                            }
-                            load_snapshot = askLoadSnapshot(original_path.absoluteFilePath(), original_content, saved_snapshots[original_path.absoluteFilePath()]);
-                        }
-                        else{
-                            load_snapshot = true;
-                        }
-                    }
-                    else{
-                        if(original_path.exists()){
-                            load_snapshot = false;
-                        }
-                        else{
-                            // Neither the original nor a snapshot was found
-                            continue;
-                        }
-                    }
-
-                    if(load_snapshot){
-                        int tab_idx = cnt - 1;
-
-                        tabLoadFile(tab_idx, original_path.filePath());
-
-                        // Set the tabs content to the text of the snapshot
-                        QString snapshot_content = saved_snapshots[original_path.absoluteFilePath()];
-                        mPathEditorMap[original_path.filePath()]->setPlainText(snapshot_content);
-
-                        // The original is only overwritten after the first save. Therefore mark the tab as changed.
-                        mPathEditorMap[original_path.filePath()]->document()->setModified(true);
-                        mTabWidget->setTabText(tab_idx, mTabWidget->tabText(tab_idx).append("*"));
-
-                        QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(mPathEditorMap[original_path.filePath()]));
-                        gFileStatusManager->fileChanged(mPathEditorMap[original_path.filePath()]->getUuid(), "Python tab: " + tab_name);
-
-                    }
-                    else
-                    {
-                        tabLoadFile(cnt - 1, original_path.filePath());
-                    }
-                    saved_snapshots.remove(original_path.absoluteFilePath());
-
+                    tabLoadFile(cnt - 1, original_path.filePath());
                 }
             }
             if (root.HasMember("selected_tab"))
@@ -231,24 +177,6 @@ namespace hal
                 mTabWidget->setCurrentIndex(root["selected_tab"].GetInt());
             }
         }
-        // Add the snapshots of all unstored tabs in the end
-        // Handle snapshots of unstored new tabs
-        for(auto k : saved_snapshots.keys()){
-            unsaved_snapshots.push_back(saved_snapshots.value(k));
-        }
-
-        for(QString snapshot_content : unsaved_snapshots)
-        {
-            cnt++;
-            this->handleActionNewTab();
-            auto tab = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(cnt - 1));
-            tab->setPlainText(snapshot_content);
-            tab->document()->setModified(true);
-            mTabWidget->setTabText(cnt - 1, mTabWidget->tabText(cnt - 1) + "*");
-            QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(tab));
-            gFileStatusManager->fileChanged(tab->getUuid(), "Python tab: " + tab_name);
-        }
-
 
         return true;
     }
@@ -359,8 +287,6 @@ namespace hal
 
     PythonEditor::~PythonEditor()
     {
-        // TODO: Remove snapshots
-        clearAllSnapshots(true);
         hal_file_manager::unregister_on_serialize_callback("PythonEditor");
         hal_file_manager::unregister_on_deserialize_callback("PythonEditor");
     }
@@ -795,6 +721,159 @@ namespace hal
         mFileModifiedBar->setHidden(true);
     }
 
+    void PythonEditor::handleFileOpened(QString fileName)
+    {
+        // Check for snapshots and load them if available
+        QPair<QMap<QString, QString>, QVector<QString>> snapshots = this->loadAllSnapshots();
+        QMap<QString, QString> saved_snapshots = snapshots.first;
+        QVector<QString> unsaved_snapshots = snapshots.second;
+
+        if(saved_snapshots.isEmpty() && unsaved_snapshots.isEmpty())
+        {
+            // No snapshots found. Nothing to do.
+            return;
+        }
+
+        if(!fileName.endsWith(".hal"))
+        {
+            // The .v/.vhdl file was parsed again.
+            bool deleteSnapshots = askDeleteSnapshots(snapshots);
+            if(deleteSnapshots)
+            {
+                // Delete and ignore all snapshots
+                clearAllSnapshots(true);
+                return;
+            }
+            else
+            {
+                // The empty tab is closed to open all unstored snapshots
+                if(mTabWidget->count() == 1)
+                {
+                    this->discardTab(0);
+                }
+            }
+        }
+
+        int tabs = mTabWidget->count();
+        // Handle the tabs that were already opened (by the infos from the .hal file)
+        for (int idx = 0; idx < tabs; idx++)
+        {
+            PythonCodeEditor *editor = dynamic_cast<PythonCodeEditor *>(mTabWidget->widget(idx));
+            QFileInfo original_path(editor->getFileName());
+
+            // Decide whether the snapshot file or the original should be loaded
+            bool load_snapshot = false;
+            if (saved_snapshots.contains(original_path.absoluteFilePath()))
+            {
+                if (original_path.exists())
+                {
+                    // Ask user whether the original file or the snapshot should be loaded
+                    QString original_content;
+                    QFile original_file(original_path.absoluteFilePath());
+                    if (!original_file.open(QIODevice::ReadOnly))
+                    {
+                        original_content = "Cannot open original file...";
+                    }
+                    else
+                    {
+                        original_content = QString::fromStdString(original_file.readAll().toStdString());
+                    }
+                    load_snapshot = askLoadSnapshot(original_path.absoluteFilePath(),
+                                                    original_content,
+                                                    saved_snapshots[original_path.absoluteFilePath()]);
+                }
+                else
+                {
+                    load_snapshot = true;
+                }
+            }
+
+            if(load_snapshot)
+            {
+                int tab_idx = mTabWidget->indexOf(editor);
+
+                // Set the tabs content to the text of the snapshot
+                QString snapshot_content = saved_snapshots[original_path.absoluteFilePath()];
+                editor->setPlainText(snapshot_content);
+
+                // The original is only overwritten after the first save. Therefore mark the tab as changed.
+                editor->document()->setModified(true);
+                mTabWidget->setTabText(tab_idx, mTabWidget->tabText(tab_idx).append("*"));
+
+                QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(editor));
+                gFileStatusManager->fileChanged(editor->getUuid(), "Python tab: " + tab_name);
+            }
+            saved_snapshots.remove(original_path.absoluteFilePath());
+        }
+
+        // Handle paths that did not appear int the .hal file
+        for (auto snapshot_original_path : saved_snapshots.keys())
+        {
+            QFileInfo original_path(snapshot_original_path);
+            bool load_snapshot = false;
+            if (original_path.exists())
+            {
+                // Ask user whether the original file or the snapshot should be loaded
+                QString original_content;
+                QFile original_file(original_path.absoluteFilePath());
+                if (!original_file.open(QIODevice::ReadOnly))
+                {
+                    original_content = "Cannot open original file...";
+                }
+                else
+                {
+                    original_content = QString::fromStdString(original_file.readAll().toStdString());
+                }
+                load_snapshot = askLoadSnapshot(original_path.absoluteFilePath(),
+                                                original_content,
+                                                saved_snapshots[snapshot_original_path]);
+            }
+            else
+            {
+                load_snapshot = true;
+            }
+
+            handleActionNewTab();
+            int tab_idx = mTabWidget->count() - 1;
+            tabLoadFile(tab_idx, original_path.filePath());
+            if(load_snapshot)
+            {
+                PythonCodeEditor *editor = dynamic_cast<PythonCodeEditor *>(mTabWidget->widget(tab_idx));
+
+                // Set the tabs content to the text of the snapshot
+                QString snapshot_content = saved_snapshots[snapshot_original_path];
+                editor->setPlainText(snapshot_content);
+
+                // The original is only overwritten after the first save. Therefore mark the tab as changed.
+                editor->document()->setModified(true);
+                mTabWidget->setTabText(tab_idx, mTabWidget->tabText(tab_idx).append("*"));
+
+                QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(editor));
+                gFileStatusManager->fileChanged(editor->getUuid(), "Python tab: " + tab_name);
+            }
+
+        }
+
+        for (QString snapshot_content : unsaved_snapshots)
+        {
+            this->handleActionNewTab();
+            int idx = mTabWidget->count() - 1;
+            auto tab = dynamic_cast<PythonCodeEditor *>(mTabWidget->widget(idx));
+            tab->setPlainText(snapshot_content);
+            tab->document()->setModified(true);
+            mTabWidget->setTabText(idx, mTabWidget->tabText(idx) + "*");
+            QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(tab));
+            gFileStatusManager->fileChanged(tab->getUuid(), "Python tab: " + tab_name);
+        }
+
+    }
+
+    void PythonEditor::handleFileClosed()
+    {
+        clearAllSnapshots(true);
+        mCachedSnapshotDir = "";
+    }
+
     bool PythonEditor::eventFilter(QObject* obj, QEvent* event)
     {
         if (obj == mTabWidget->tabBar() && event->type() == QEvent::MouseButtonPress)
@@ -829,11 +908,10 @@ namespace hal
         return QPair<QString, QString>(original_file_path,snapshot_content);
     }
 
-    QPair<QMap<QString, QString>, QVector<QString>> PythonEditor::loadAllSnapshots(QString netlist_name)
+    QPair<QMap<QString, QString>, QVector<QString>> PythonEditor::loadAllSnapshots()
     {
-        mNetlistSubFolderName = mSnapshotPathPrefix + netlist_name;
         QString snapshot_path = this->getSnapshotDirectory(false);
-        qDebug() << "IN LOADALLSNAPSHOTS: " << snapshot_path;
+
         if(snapshot_path.isEmpty())
         {
             return QPair<QMap<QString, QString>, QVector<QString>>();
@@ -885,7 +963,7 @@ namespace hal
 
     QString PythonEditor::getSnapshotDirectory(const bool create_if_non_existent)
     {
-        //QDir snapshot_path(QString::fromStdString(hal::utils::get_base_directory().string()));
+
         QFileInfo info(FileManager::get_instance()->fileName());
         if(mCachedSnapshotDir.isEmpty() && !FileManager::get_instance()->fileName().isEmpty())
         {
@@ -897,7 +975,7 @@ namespace hal
                 {
                     if(!snapshot_dir.mkpath(completePath))
                     {
-                        log_error("gui", "Failed to create screenshots directory.");
+                        log_error("gui", "Failed to create snapshot directory.");
                         return "";
                     }
                 }
@@ -909,32 +987,6 @@ namespace hal
         }
 
         return mCachedSnapshotDir;
-
-//        if(!snapshot_path.cd(mNetlistSubFolderName))
-//        {
-//            if(create_if_non_existent)
-//            {
-//                if(!snapshot_path.mkpath(mNetlistSubFolderName))
-//                {
-//                    log_error("gui", "Snapshot folder \"{}\" can not be created! ", mNetlistSubFolderName.toStdString());
-//                    return "";
-//                }
-
-//                if(!snapshot_path.cd(mNetlistSubFolderName))
-//                {
-//                    log_error("gui", "Snapshot folder \"{}\" can not be entered! ", mNetlistSubFolderName.toStdString());
-//                    return "";
-//                }
-
-//            }
-//            else
-//            {
-//                // The snapshot does not exist and should not be created
-//                return "";
-//            }
-//        }
-
-//        return snapshot_path.absolutePath();
     }
 
     void PythonEditor::updateSnapshots()
@@ -960,7 +1012,7 @@ namespace hal
                 QFileInfo original_file_name(editor->getFileName());
                 snapshot_file_name += original_file_name.fileName();
             }
-            snapshot_file_name += "(" + QString::number(index) + ").tmp"; // TODO: remove.py
+            snapshot_file_name += "(" + QString::number(index) + ").tmp";
 
             QString snapshot_file_path = snapshot_dir.absoluteFilePath(snapshot_file_name);
 
@@ -974,10 +1026,40 @@ namespace hal
         }
     }
 
+    bool PythonEditor::decideLoadSnapshot(const QString original_path, const QString snapshot_path, const QString snapshot_content)
+    {
+        /*bool load_snapshot = false;
+        if (saved_snapshots.contains(original_path.absoluteFilePath()))
+        {
+            if (original_path.exists())
+            {
+                // Ask user whether the original file or the snapshot should be loaded
+                QString original_content;
+                QFile original_file(original_path.absoluteFilePath());
+                if (!original_file.open(QIODevice::ReadOnly))
+                {
+                    original_content = "Cannot open original file...";
+                }
+                else
+                {
+                    original_content = QString::fromStdString(original_file.readAll().toStdString());
+                }
+                load_snapshot = askLoadSnapshot(original_path.absoluteFilePath(),
+                                                original_content,
+                                                saved_snapshots[original_path.absoluteFilePath()]);
+            }
+            else
+            {
+                load_snapshot = true;
+            }
+        }*/
+        return false;
+    }
+
     void PythonEditor::clearAllSnapshots(bool remove_dir)
     {
         QString snapshot_dir_path = this->getSnapshotDirectory(false);
-        qDebug() << "Removing files in: " << snapshot_dir_path;
+
         if(snapshot_dir_path == "")
         {
             // The directory does not exist. Nothing to do then
@@ -988,11 +1070,21 @@ namespace hal
         if(remove_dir)
         {
             // Remove the directory
-            snapshot_dir.removeRecursively();
+            // Make sure the directory is a snapshot directory (additional protection)
+            if(snapshot_dir.dirName().startsWith('~'))
+            {
+                snapshot_dir.removeRecursively();
+            }
+            else
+            {
+                log_error("gui", "Can not delete directory: '{}' is not a snapshot directory!", snapshot_dir.absolutePath().toStdString());
+            }
         }
         else
         {
-            // Remove all files in the directory
+            // Remove all .tmp files in the directory
+            snapshot_dir.setNameFilters(QStringList() << "*.tmp");
+            snapshot_dir.setFilter(QDir::Files);
             for(QString dirFile : snapshot_dir.entryList())
             {
                 snapshot_dir.remove(dirFile);
@@ -1033,6 +1125,47 @@ namespace hal
             return true;
         }
         return false;
+    }
+
+    bool PythonEditor::askDeleteSnapshots(const QPair<QMap<QString, QString>, QVector<QString>>& snapshots) const
+    {
+        QMessageBox msgBox((QWidget *) nullptr);
+        msgBox.setIcon(QMessageBox::Question);
+        msgBox.setWindowTitle("Python snapshot file detected");
+        msgBox.setText("You have just parsed an hdl file but there are still old snapshot files left. This may happen due to a recent crash. "
+                            "Do you want to ignore and delete all old snapshot files and stay with their last saved state? "
+                            "Or do you want to open the old python scripts to save them properly?" );
+        auto delete_snapshots_btn = msgBox.addButton("Delete and Ignore Snapshots", QMessageBox::ActionRole);
+        msgBox.addButton("Open Old Scripts", QMessageBox::ActionRole);
+
+        // Details
+        QString detailed_text = "";
+
+        detailed_text = "Snapshot files of the following paths were found:";
+        for(auto origPath : snapshots.first.keys())
+        {
+            detailed_text += "\n'" + origPath + "'";
+        }
+        if(!snapshots.second.isEmpty())
+        {
+            detailed_text += "\n+ " + QString::number(snapshots.second.size()) + " unsaved tabs";
+        }
+
+        msgBox.setDetailedText(detailed_text);
+
+
+        QSpacerItem* horizontalSpacer = new QSpacerItem(800, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        QGridLayout* layout           = (QGridLayout*)msgBox.layout();
+        layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == (QAbstractButton*)delete_snapshots_btn)
+        {
+            return true;
+        }
+        return false;
+
     }
 
     QMessageBox::StandardButton PythonEditor::askSaveTab(const int tab_index) const

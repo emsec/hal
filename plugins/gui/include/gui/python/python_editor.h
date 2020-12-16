@@ -165,6 +165,19 @@ namespace hal
         void handleBaseFileModifiedIgnore();
         void handleBaseFileModifiedOk();
 
+        /**
+         * Slot called after a .hal file (or a .v/.vhdl is parsed) (emitted by FileManager). Used to check for
+         * existing snapshots.
+         *
+         * @param fileName - the opened file
+         */
+        void handleFileOpened(QString fileName);
+
+        /**
+         * Slot called after a file was closed.
+         */
+        void handleFileClosed();
+
     protected:
         bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
 
@@ -185,7 +198,7 @@ namespace hal
          *          fist: contains a map: original file path -> snapshot content
          *          second: a vector with snapshots with no original file path (unsaved tabs)
          */
-        QPair<QMap<QString, QString>, QVector<QString>> loadAllSnapshots(QString netlist_name);
+        QPair<QMap<QString, QString>, QVector<QString>> loadAllSnapshots();
 
         /**
          * Writes a snapshot file
@@ -221,6 +234,8 @@ namespace hal
          */
         void clearAllSnapshots(bool remove_dir = false);
 
+        bool decideLoadSnapshot(const QString original_path, const QString snapshot_path, const QString snapshot_content);
+
         /**
          * Ask the user with a message box whether the snapshot file or the original file should be loaded
          *
@@ -230,6 +245,15 @@ namespace hal
          * @return true if the snapshot file should be loaded
          */
         bool askLoadSnapshot(const QString original_path, const QString original_content, const QString snapshot_content) const;
+
+        /**
+         * Ask the user with a message box whether the snapshot files should be ignored and deleted or not.
+         * This box appers if the user reparses a .v/.vhdl file, but there are still snapshots
+         *
+         * @param original_path - the found snapshots
+         * @return true if the snapshot file should be ignored and deleted. False if the snapshots should be loaded.
+         */
+        bool askDeleteSnapshots(const QPair<QMap<QString, QString>, QVector<QString>>& snapshots) const;
 
         /**
          * Ask the user with a message box whether to save the tab, discard the changes or cancel the request.
@@ -309,8 +333,6 @@ namespace hal
          */
         QMap<PythonCodeEditor*, QString> mTabToSnapshotPath;
 
-        QString mNetlistSubFolderName;
-        const QString mSnapshotPathPrefix = ".tmp/snapshots_";
         QString mCachedSnapshotDir;
     };
 }
