@@ -330,7 +330,7 @@ namespace hal
         for (const u32 id : mContext->nets())
         {
             Net* n = gNetlist->get_net_by_id(id);
-            Q_ASSERT(n);
+            if (!n) continue;
 
             QSet<NetLayoutPoint> srcPoints;
             QSet<NetLayoutPoint> dstPoints;
@@ -1171,6 +1171,7 @@ namespace hal
         for (const u32 id : mContext->nets())
         {
             Net* n = gNetlist->get_net_by_id(id);
+            if (!n) continue;
 
             const EndpointList& epl = mWireEndpoint.value(id);
             bool regularNet = false;
