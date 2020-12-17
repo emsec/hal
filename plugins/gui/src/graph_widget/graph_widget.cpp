@@ -823,24 +823,9 @@ namespace hal
         // FIXME This breaks as soon as the layouter call that preceded the call to this function
         // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
         // and the animation jumps to (0,0) before moving to the correct target.
-        auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();    // this has incorrect coordinates
-
-        auto centerFix = targetRect.center();
-        targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
-        targetRect.setHeight(std::max(targetRect.height(), currentRect.height()));
-        targetRect.moveCenter(centerFix);
-
-        //qDebug() << currentRect;
-
-        auto anim = new QVariantAnimation();
-        anim->setDuration(1000);
-        anim->setStartValue(currentRect);
-        anim->setEndValue(targetRect);
-        // FIXME fitInView miscalculates the scale required to actually fit the rect into the viewport,
-        // so that every time fitInView is called this will cause the scene to scale down by a very tiny amount.
-        connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { mView->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
-
-        anim->start(QAbstractAnimation::DeleteWhenStopped);
+        auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();    // this has incorrect coordinates //does it though? drawn rec seems to be in the right place
+        
+        focusRect(targetRect, true);
     }
 
     void GraphWidget::ensureSelectionVisible()
@@ -894,22 +879,43 @@ namespace hal
         // and the animation jumps to (0,0) before moving to the correct target.
         auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();    // this has incorrect coordinates
 
-        auto centerFix = targetRect.center();
-        targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
-        targetRect.setHeight(std::max(targetRect.height(), currentRect.height()));
-        targetRect.moveCenter(centerFix);
+        focusRect(targetRect, true);
+    }
 
-        //qDebug() << currentRect;
+    void GraphWidget::focusRect(QRectF targetRect, bool applyCenterFix)
+    {
+        auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
 
-        auto anim = new QVariantAnimation();
-        anim->setDuration(1000);
-        anim->setStartValue(currentRect);
-        anim->setEndValue(targetRect);
-        // FIXME fitInView miscalculates the scale required to actually fit the rect into the viewport,
-        // so that every time fitInView is called this will cause the scene to scale down by a very tiny amount.
-        connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) { mView->fitInView(value.toRectF(), Qt::KeepAspectRatio); });
+        //check prevents jitter bug / resizing bug occuring due to error in 'fitToView'
+        //only happens when current and target are the same as on last usage
+        //solution -> just disable the focus alltogether if current and target are the same as last time, no need to fire animation again
+        if(!(targetRect == mLastTargetRect && currentRect == mRectAfterFocus))
+        {
+            mLastTargetRect = targetRect;
 
-        anim->start(QAbstractAnimation::DeleteWhenStopped);
+            if(applyCenterFix)
+            {
+                auto centerFix = targetRect.center();
+                targetRect.setWidth(std::max(targetRect.width(), currentRect.width()));
+                targetRect.setHeight(std::max(targetRect.height(), currentRect.height()));
+                targetRect.moveCenter(centerFix);
+            }
+
+            auto anim = new QVariantAnimation();
+            anim->setDuration(1000);
+            anim->setStartValue(currentRect);
+            anim->setEndValue(targetRect);
+
+            connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
+                mView->fitInView(value.toRectF(), Qt::KeepAspectRatio);
+            });
+
+            connect(anim, &QVariantAnimation::finished, [this](){
+                mRectAfterFocus = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+            });
+
+            anim->start(QAbstractAnimation::DeleteWhenStopped);
+        }
     }
 
     void GraphWidget::resetFocus()

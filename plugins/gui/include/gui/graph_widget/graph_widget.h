@@ -82,6 +82,8 @@ namespace hal
 
         void ensureItemsVisible(const QSet<u32>& gates, const QSet<u32>& modules);
 
+        void focusRect(QRectF targetRect, bool applyCenterFix);
+
         GraphGraphicsView* mView;
         GraphContext* mContext;
 
@@ -90,5 +92,8 @@ namespace hal
         GraphLayoutSpinnerWidget* mSpinnerWidget;
 
         u32 mCurrentExpansion;
+
+        QRectF mRectAfterFocus;
+        QRectF mLastTargetRect;
     };
 }
