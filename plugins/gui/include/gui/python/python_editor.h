@@ -174,7 +174,7 @@ namespace hal
         void handleFileOpened(QString fileName);
 
         /**
-         * Slot called after a file was closed.
+         * Slot called after a file was closed. (emitted by FileManager). Used to remove snapshots.
          */
         void handleFileClosed();
 
@@ -182,6 +182,17 @@ namespace hal
         bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
 
     private:
+        /**
+         * Ask the user with a message box whether to save the tab, discard the changes or cancel the request.
+         *
+         * @param tab_index - the index of the closed tab
+         * @return QMessageBox::Save if 'Save' was clicked, QMessageBox::Discard if 'Discard' was clicked or
+         *         QMessageBox::Cancel if 'Cancel' was clicked
+         */
+        QMessageBox::StandardButton askSaveTab(const int tab_index) const;
+
+        // ============ FUNCTIONS FOR SNAPSHOT HANDLING ============
+
         /**
          * Parse a snapshot file
          *
@@ -234,7 +245,23 @@ namespace hal
          */
         void clearAllSnapshots(bool remove_dir = false);
 
-        bool decideLoadSnapshot(const QString original_path, const QString snapshot_path, const QString snapshot_content);
+        /**
+         * Decide whether the snapshot should be loaded/inserted or the original file should be used.
+         * If both the original file and the snapshot file exist, the user decides which version should be loaded.
+         *
+         * @param saved_snapshots - The map (original_path -> content) of saved snapshots (snapshots of non empty paths)
+         * @param original_path - The path of the original version
+         * @return true if the snapshot file should be loaded/inserted
+         */
+        bool decideLoadSnapshot(const QMap<QString, QString>& saved_snapshots, const QFileInfo original_path) const;
+
+        /**
+         * Set the content of a Python editor to the content of a snapshot. The tab is marked as modified afterwards.
+         *
+         * @param idx - The index of the python editor, the snapshots should be loaded in
+         * @param snapshot_content - The content of the snapshot
+         */
+        void setSnapshotContent(const int idx, const QString snapshot_content);
 
         /**
          * Ask the user with a message box whether the snapshot file or the original file should be loaded
@@ -254,24 +281,6 @@ namespace hal
          * @return true if the snapshot file should be ignored and deleted. False if the snapshots should be loaded.
          */
         bool askDeleteSnapshots(const QPair<QMap<QString, QString>, QVector<QString>>& snapshots) const;
-
-        /**
-         * Ask the user with a message box whether to save the tab, discard the changes or cancel the request.
-         *
-         * @param tab_index - the index of the closed tab
-         * @return QMessageBox::Save if 'Save' was clicked, QMessageBox::Discard if 'Discard' was clicked or
-         *         QMessageBox::Cancel if 'Cancel' was clicked
-         */
-        QMessageBox::StandardButton askSaveTab(const int tab_index) const;
-
-        /**
-         * Ask the user with a message box whether to save the tab, or cancel the request. The user is not allowed to
-         * discard changes. This request is used to forcefully save all tabs while closing hal.
-         *
-         * @param tab_index - the index of the closed tab
-         * @return QMessageBox::Save if 'Save' was clicked or QMessageBox::Cancel if 'Cancel' was clicked
-         */
-        QMessageBox::StandardButton askForceSaveTab(const int tab_index) const;
 
         /**
          * Remove a snapshot file for a given file path. If there is not such snapshot, do nothing.

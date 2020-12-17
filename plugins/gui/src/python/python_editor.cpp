@@ -82,6 +82,7 @@ namespace hal
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
 
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &PythonEditor::handleFileOpened);
+        connect(FileManager::get_instance(), &FileManager::fileClosed, this, &PythonEditor::handleFileClosed);
 
         mPathEditorMap = QMap<QString, PythonCodeEditor*>();
 
@@ -384,7 +385,6 @@ namespace hal
         tab->setPlainText(QString::fromStdString(f));
         tab->set_file_name(fileName);
         tab->document()->setModified(false);
-        //mTabWidget->setTabText(mTabWidget->count() - 1, info.completeBaseName() + "." + info.completeSuffix());
         mTabWidget->setTabText(mTabWidget->indexOf(tab), info.completeBaseName() + "." + info.completeSuffix());
         mNewFileCounter--;
 
@@ -762,46 +762,11 @@ namespace hal
             QFileInfo original_path(editor->getFileName());
 
             // Decide whether the snapshot file or the original should be loaded
-            bool load_snapshot = false;
-            if (saved_snapshots.contains(original_path.absoluteFilePath()))
-            {
-                if (original_path.exists())
-                {
-                    // Ask user whether the original file or the snapshot should be loaded
-                    QString original_content;
-                    QFile original_file(original_path.absoluteFilePath());
-                    if (!original_file.open(QIODevice::ReadOnly))
-                    {
-                        original_content = "Cannot open original file...";
-                    }
-                    else
-                    {
-                        original_content = QString::fromStdString(original_file.readAll().toStdString());
-                    }
-                    load_snapshot = askLoadSnapshot(original_path.absoluteFilePath(),
-                                                    original_content,
-                                                    saved_snapshots[original_path.absoluteFilePath()]);
-                }
-                else
-                {
-                    load_snapshot = true;
-                }
-            }
+            bool load_snapshot = decideLoadSnapshot(saved_snapshots, original_path);
 
             if(load_snapshot)
             {
-                int tab_idx = mTabWidget->indexOf(editor);
-
-                // Set the tabs content to the text of the snapshot
-                QString snapshot_content = saved_snapshots[original_path.absoluteFilePath()];
-                editor->setPlainText(snapshot_content);
-
-                // The original is only overwritten after the first save. Therefore mark the tab as changed.
-                editor->document()->setModified(true);
-                mTabWidget->setTabText(tab_idx, mTabWidget->tabText(tab_idx).append("*"));
-
-                QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(editor));
-                gFileStatusManager->fileChanged(editor->getUuid(), "Python tab: " + tab_name);
+                this->setSnapshotContent(idx, saved_snapshots[original_path.absoluteFilePath()]);
             }
             saved_snapshots.remove(original_path.absoluteFilePath());
         }
@@ -810,61 +775,24 @@ namespace hal
         for (auto snapshot_original_path : saved_snapshots.keys())
         {
             QFileInfo original_path(snapshot_original_path);
-            bool load_snapshot = false;
-            if (original_path.exists())
-            {
-                // Ask user whether the original file or the snapshot should be loaded
-                QString original_content;
-                QFile original_file(original_path.absoluteFilePath());
-                if (!original_file.open(QIODevice::ReadOnly))
-                {
-                    original_content = "Cannot open original file...";
-                }
-                else
-                {
-                    original_content = QString::fromStdString(original_file.readAll().toStdString());
-                }
-                load_snapshot = askLoadSnapshot(original_path.absoluteFilePath(),
-                                                original_content,
-                                                saved_snapshots[snapshot_original_path]);
-            }
-            else
-            {
-                load_snapshot = true;
-            }
-
+            bool load_snapshot = decideLoadSnapshot(saved_snapshots, original_path);
             handleActionNewTab();
             int tab_idx = mTabWidget->count() - 1;
             tabLoadFile(tab_idx, original_path.filePath());
             if(load_snapshot)
             {
-                PythonCodeEditor *editor = dynamic_cast<PythonCodeEditor *>(mTabWidget->widget(tab_idx));
-
-                // Set the tabs content to the text of the snapshot
-                QString snapshot_content = saved_snapshots[snapshot_original_path];
-                editor->setPlainText(snapshot_content);
-
-                // The original is only overwritten after the first save. Therefore mark the tab as changed.
-                editor->document()->setModified(true);
-                mTabWidget->setTabText(tab_idx, mTabWidget->tabText(tab_idx).append("*"));
-
-                QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(editor));
-                gFileStatusManager->fileChanged(editor->getUuid(), "Python tab: " + tab_name);
+                this->setSnapshotContent(tab_idx, saved_snapshots[snapshot_original_path]);
             }
 
         }
 
+        // Load snapshots of unsaved tabs
         for (QString snapshot_content : unsaved_snapshots)
         {
             this->handleActionNewTab();
-            int idx = mTabWidget->count() - 1;
-            auto tab = dynamic_cast<PythonCodeEditor *>(mTabWidget->widget(idx));
-            tab->setPlainText(snapshot_content);
-            tab->document()->setModified(true);
-            mTabWidget->setTabText(idx, mTabWidget->tabText(idx) + "*");
-            QString tab_name = mTabWidget->tabText(mTabWidget->indexOf(tab));
-            gFileStatusManager->fileChanged(tab->getUuid(), "Python tab: " + tab_name);
+            this->setSnapshotContent(mTabWidget->count() - 1, snapshot_content);
         }
+        updateSnapshots();
 
     }
 
@@ -1026,36 +954,6 @@ namespace hal
         }
     }
 
-    bool PythonEditor::decideLoadSnapshot(const QString original_path, const QString snapshot_path, const QString snapshot_content)
-    {
-        /*bool load_snapshot = false;
-        if (saved_snapshots.contains(original_path.absoluteFilePath()))
-        {
-            if (original_path.exists())
-            {
-                // Ask user whether the original file or the snapshot should be loaded
-                QString original_content;
-                QFile original_file(original_path.absoluteFilePath());
-                if (!original_file.open(QIODevice::ReadOnly))
-                {
-                    original_content = "Cannot open original file...";
-                }
-                else
-                {
-                    original_content = QString::fromStdString(original_file.readAll().toStdString());
-                }
-                load_snapshot = askLoadSnapshot(original_path.absoluteFilePath(),
-                                                original_content,
-                                                saved_snapshots[original_path.absoluteFilePath()]);
-            }
-            else
-            {
-                load_snapshot = true;
-            }
-        }*/
-        return false;
-    }
-
     void PythonEditor::clearAllSnapshots(bool remove_dir)
     {
         QString snapshot_dir_path = this->getSnapshotDirectory(false);
@@ -1091,6 +989,56 @@ namespace hal
             }
         }
 
+    }
+
+    bool PythonEditor::decideLoadSnapshot(const QMap<QString, QString>& saved_snapshots, const QFileInfo original_path) const
+    {
+        bool load_snapshot = false;
+        if (saved_snapshots.contains(original_path.absoluteFilePath()))
+        {
+            if (original_path.exists())
+            {
+                // Ask user whether the original file or the snapshot should be loaded
+                QString original_content;
+                QFile original_file(original_path.absoluteFilePath());
+                if (!original_file.open(QIODevice::ReadOnly))
+                {
+                    original_content = "Cannot open original file...";
+                }
+                else
+                {
+                    original_content = QString::fromStdString(original_file.readAll().toStdString());
+                }
+                load_snapshot = askLoadSnapshot(original_path.absoluteFilePath(),
+                                                original_content,
+                                                saved_snapshots[original_path.absoluteFilePath()]);
+            }
+            else
+            {
+                load_snapshot = true;
+            }
+        }
+        return load_snapshot;
+    }
+
+    void PythonEditor::setSnapshotContent(const int idx, const QString snapshot_content)
+    {
+        if(idx < 0 || idx >= mTabWidget->count())
+        {
+            log_error("gui", "Cannot insert snapshot content is tab. Index {} is out of range.", idx);
+        }
+        PythonCodeEditor* tab = dynamic_cast<PythonCodeEditor *>(mTabWidget->widget(idx));
+        // Set the snapshot content
+        tab->setPlainText(snapshot_content);
+        // Mark the tab as modified
+        tab->document()->setModified(true);
+        QString tab_name = mTabWidget->tabText(idx);
+        if(!tab_name.endsWith("*"))
+        {
+            tab_name += "*";
+            mTabWidget->setTabText(idx, tab_name);
+        }
+        gFileStatusManager->fileChanged(tab->getUuid(), "Python tab: " + tab_name);
     }
 
     bool PythonEditor::askLoadSnapshot(const QString original_path, const QString original_content, const QString snapshot_content) const
@@ -1175,17 +1123,6 @@ namespace hal
         msgBox.setText(mTabWidget->tabText(tab_index).append(" has been modified."));
         msgBox.setInformativeText("Do you want to save your changes?");
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        msgBox.setDefaultButton(QMessageBox::Save);
-        return static_cast<QMessageBox::StandardButton>(msgBox.exec());
-    }
-
-    QMessageBox::StandardButton PythonEditor::askForceSaveTab(const int tab_index) const
-    {
-        QMessageBox msgBox;
-        msgBox.setStyleSheet("QLabel{min-width: 600px;}");
-        msgBox.setText(mTabWidget->tabText(tab_index).append(" has been modified."));
-        msgBox.setInformativeText("Please save your changes before quitting the program.");
-        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
         return static_cast<QMessageBox::StandardButton>(msgBox.exec());
     }
