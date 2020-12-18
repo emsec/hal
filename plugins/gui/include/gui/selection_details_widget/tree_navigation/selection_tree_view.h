@@ -38,12 +38,15 @@ namespace hal
 
     Q_SIGNALS:
         void triggerSelection(const SelectionTreeItem* sti);
+        void itemDoubleClicked(const SelectionTreeItem* sti);
+        void focusItemClicked(const SelectionTreeItem* sti);
 
     public Q_SLOTS:
         void handleFilterTextChanged(const QString& filter_text);
  
     protected:
         virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous) Q_DECL_OVERRIDE;
+        virtual void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     public:
         SelectionTreeView(QWidget* parent = nullptr);
@@ -54,6 +57,7 @@ namespace hal
 
     private Q_SLOTS:
         void handleCustomContextMenuRequested(const QPoint& point);
+        void handleIsolationViewAction(const SelectionTreeItem* sti);
 
     private:
         SelectionTreeModel* mSelectionTreeModel;

@@ -47,12 +47,18 @@ namespace hal
         int addTab(QWidget* tab, QString tab_name = "default");
         void showContext(GraphContext* context);
 
+        void ensureSelectionVisible();
+
     public Q_SLOTS:
         void handleContextCreated(GraphContext* context);
         void handleContextRenamed(GraphContext* context);
         void handleContextRemoved(GraphContext* context);
 
         void handleTabChanged(int index);
+
+        void handleGateFocus(u32 gateId);
+        void handleNetFocus(u32 netId);
+        void handleModuleFocus(u32 moduleId);
 
     private:
         QTabWidget* mTabWidget;
@@ -61,8 +67,6 @@ namespace hal
         float mZoomFactor;
 
         QMap<GraphContext*, QWidget*> mContextWidgetMap;
-
-        GraphWidget* mCurrentWidget;
 
         int getContextTabIndex(GraphContext* context) const;
 
