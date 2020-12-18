@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added isolating gates and modules in new views from the selection details widget using the conext menu
 * changed layouter to only be called after fully executing a Python script
 * improved performance of selection details widget
+* fixed layouter flaw that junctions could not be drawn if in- and outgoing wires were swapped
 * fixed parsing of bit order for INIT strings in FPGA gate libraries
 * fixed GUI segfaulting when deleting wires without unfolding the containing module
 * fixed occasional null pointer exceptions on GUI startup
