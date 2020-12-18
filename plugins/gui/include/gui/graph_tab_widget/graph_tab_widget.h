@@ -56,6 +56,10 @@ namespace hal
 
         void handleTabChanged(int index);
 
+        void handleGateFocus(u32 gateId);
+        void handleNetFocus(u32 netId);
+        void handleModuleFocus(u32 moduleId);
+
     private:
         QTabWidget* mTabWidget;
         QVBoxLayout* mLayout;

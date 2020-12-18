@@ -10,7 +10,6 @@
 #include <QVBoxLayout>
 #include <QShortcut>
 #include <QKeySequence>
-#include <QDebug>
 
 namespace hal
 {
@@ -62,7 +61,8 @@ namespace hal
     void GraphTabWidget::ensureSelectionVisible()
     {
         GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
-        currentGraphWidget->ensureSelectionVisible();
+        if(currentGraphWidget)
+            currentGraphWidget->ensureSelectionVisible();
     }
 
     void GraphTabWidget::handleTabCloseRequested(int index)
@@ -101,6 +101,27 @@ namespace hal
     void GraphTabWidget::handleContextRemoved(GraphContext* context)
     {
         handleTabCloseRequested(getContextTabIndex(context));
+    }
+
+    void GraphTabWidget::handleGateFocus(u32 gateId)
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if(currentGraphWidget)
+            currentGraphWidget->focusGate(gateId);
+    }
+
+    void GraphTabWidget::handleNetFocus(u32 netId)
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if(currentGraphWidget)
+            currentGraphWidget->focusNet(netId);
+    }
+
+    void GraphTabWidget::handleModuleFocus(u32 moduleId)
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if(currentGraphWidget)
+            currentGraphWidget->focusModule(moduleId);
     }
 
     void GraphTabWidget::addGraphWidgetTab(GraphContext* context)

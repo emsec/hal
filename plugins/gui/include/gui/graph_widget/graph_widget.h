@@ -60,6 +60,10 @@ namespace hal
 
         void ensureSelectionVisible();
 
+        void focusGate(u32 gateId);
+        void focusNet(u32 netId);
+        void focusModule(u32 moduleId);
+
     protected:
         void keyPressEvent(QKeyEvent* event) override;
 

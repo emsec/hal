@@ -29,7 +29,6 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
-#include <QPushButton>
 
 namespace hal
 {
@@ -63,51 +62,6 @@ namespace hal
             mView->setScene(mContext->scene());
             mView->centerOn(0, 0);
         } 
-
-        QPushButton* button = new QPushButton("D  E  B  U  G");
-        mContentLayout->addWidget(button);
-
-        mRectAfterFocus = QRectF();
-        mLastTargetRect = QRectF();
-
-
-        connect(button, &QPushButton::clicked, [this]()
-        {
-            auto thing = mContext->scene()->getGateItem(3);
-            
-            if(thing)
-            {
-                QRectF targetRect = thing->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
-                focusRect(targetRect, false);
-            }
-
-            /*
-            if(thing)
-            {
-                auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
-                auto targetRect = thing->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
-
-                if(!(targetRect == mLastTargetRect && currentRect == mCurrentAfterRect))
-                {
-                    mLastTargetRect = targetRect;
-
-                    auto anim = new QVariantAnimation();
-                    anim->setDuration(2000);
-                    anim->setStartValue(currentRect);
-                    anim->setEndValue(targetRect);
-
-                    connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
-                        mView->fitInView(value.toRectF(), Qt::KeepAspectRatio);
-                    });
-
-                    connect(anim, &QVariantAnimation::finished, [this](){
-                        mCurrentAfterRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
-                    });
-
-                    anim->start(QAbstractAnimation::DeleteWhenStopped);
-                }
-            }*/
-        });
     }
 
     GraphContext* GraphWidget::getContext() const
@@ -866,11 +820,6 @@ namespace hal
 
         auto targetRect = QRectF(min_x, min_y, max_x - min_x, max_y - min_y).marginsAdded(QMarginsF(20, 20, 20, 20));
 
-        // FIXME This breaks as soon as the layouter call that preceded the call to this function
-        // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
-        // and the animation jumps to (0,0) before moving to the correct target.
-        auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();    // this has incorrect coordinates //does it though? drawn rec seems to be in the right place
-        
         focusRect(targetRect, true);
     }
 
@@ -920,11 +869,6 @@ namespace hal
 
         auto targetRect = QRectF(min_x, min_y, max_x - min_x, max_y - min_y).marginsAdded(QMarginsF(20, 20, 20, 20));
 
-        // FIXME This breaks as soon as the layouter call that preceded the call to this function
-        // changed the scene size. If that happens, mapToScene thinks that the view is looking at (0,0)
-        // and the animation jumps to (0,0) before moving to the correct target.
-        auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();    // this has incorrect coordinates
-
         focusRect(targetRect, true);
     }
 
@@ -961,6 +905,39 @@ namespace hal
             });
 
             anim->start(QAbstractAnimation::DeleteWhenStopped);
+        }
+    }
+
+    void GraphWidget::focusGate(u32 gateId)
+    {
+        const GraphicsGate* gate = mContext->scene()->getGateItem(gateId);
+            
+        if(gate)
+        {
+            QRectF targetRect = gate->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
+            focusRect(targetRect, false);
+        }
+    }
+
+    void GraphWidget::focusNet(u32 netId)
+    {
+        const GraphicsNet* net = mContext->scene()->getNetItem(netId);
+            
+        if(net)
+        {
+            QRectF targetRect = net->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
+            focusRect(targetRect, false);
+        }
+    }
+
+    void GraphWidget::focusModule(u32 moduleId)
+    {
+        const GraphicsModule* module = mContext->scene()->getModuleItem(moduleId);
+            
+        if(module)
+        {
+            QRectF targetRect = module->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
+            focusRect(targetRect, false);
         }
     }
 

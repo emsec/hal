@@ -175,6 +175,10 @@ namespace hal
         mSpecialLogContentManager->startLogging(60000);
 #endif
         mNetlistWatcher = new NetlistWatcher(this);
+
+        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusGateClicked, mGraphTabWid, &GraphTabWidget::handleGateFocus);
+        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWid, &GraphTabWidget::handleNetFocus);
+        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusModuleClicked, mGraphTabWid, &GraphTabWidget::handleModuleFocus);
     }
 
     void ContentManager::handleCloseDocument()
