@@ -40,6 +40,18 @@ namespace hal {
         Q_EMIT triggerSelection(sti);
     }
 
+    void SelectionTreeView::mouseDoubleClickEvent(QMouseEvent *event)
+    {
+        QPoint point = viewport()->mapFromGlobal(event->globalPos());;
+
+        QModelIndex index = indexAt(point);
+
+        if (index.isValid())
+        {
+            SelectionTreeItem* item = itemFromIndex(index);
+            Q_EMIT itemDoubleClicked(item);
+        }
+    }
 
     SelectionTreeItem* SelectionTreeView::itemFromIndex(const QModelIndex& index) const
     {
