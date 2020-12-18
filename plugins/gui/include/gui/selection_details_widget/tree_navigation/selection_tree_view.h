@@ -57,6 +57,7 @@ namespace hal
 
     private Q_SLOTS:
         void handleCustomContextMenuRequested(const QPoint& point);
+        void handleIsolationViewAction(const SelectionTreeItem* sti);
 
     private:
         SelectionTreeModel* mSelectionTreeModel;

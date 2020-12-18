@@ -4,6 +4,8 @@
 #include <QMenu>
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
+#include "gui/gui_globals.h"
+#include "gui/graph_widget/contexts/graph_context.h"
 
 namespace hal {
     SelectionTreeView::SelectionTreeView(QWidget *parent)
@@ -86,11 +88,19 @@ namespace hal {
                         QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
                     });
 
+                    menu.addAction("Isolate In New View", [this, item](){
+                        Q_EMIT handleIsolationViewAction(item);
+                    });
+
                     break;
                 case SelectionTreeItem::TreeItemType::GateItem:
 
                     menu.addAction(QIcon(":/icons/python"), "Extract Gate as python code (copy to clipboard)",[item](){
                         QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");
+                    });
+
+                    menu.addAction("Isolate In New View", [this, item](){
+                        Q_EMIT handleIsolationViewAction(item);
                     });
 
                     break;
@@ -111,6 +121,42 @@ namespace hal {
             });
 
             menu.exec(viewport()->mapToGlobal(point));
+        }
+    }
+
+    void SelectionTreeView::handleIsolationViewAction(const SelectionTreeItem* sti)
+    {
+        u32 id = sti->id();
+        QString name = "";
+        QSet<u32> gateId;
+        QSet<u32> moduleId;
+
+        if(sti->itemType() == SelectionTreeItem::TreeItemType::GateItem)
+        {
+            name = "Isolated Gate(ID: " + QString::number(id) + ")";
+            gateId.insert(id);
+        }
+        else if(sti->itemType() == SelectionTreeItem::TreeItemType::ModuleItem)
+        {
+            name = "Isolated Module(ID: " + QString::number(id) + ")";
+            moduleId.insert(id);
+        }
+        else
+        {
+            return;
+        }
+        
+        u32 cnt = 0;
+        while (true)
+        {
+            ++cnt;
+            QString contextName = name + " " + QString::number(cnt);
+            if (!gGraphContextManager->contextWithNameExists(contextName))
+            {
+                auto context = gGraphContextManager->createNewContext(contextName);
+                context->add(moduleId, gateId);
+                return;
+            }
         }
     }
 
