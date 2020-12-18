@@ -3,7 +3,6 @@
 #include "hal_core/utilities/utils.h"
 
 #include <algorithm>
-#include <iostream>
 
 namespace hal
 {
@@ -272,7 +271,7 @@ namespace hal
             auto pos = expression.find(sorted_variable_names[i]);
             while (pos != std::string::npos)
             {
-                expression.replace(pos, sorted_variable_names[i].size(), "__v_" + std::to_string(i)+" ");
+                expression.replace(pos, sorted_variable_names[i].size(), "__v_" + std::to_string(i) + " ");
                 pos = expression.find(sorted_variable_names[i], pos + sorted_variable_names[i].size());
             }
         }
@@ -815,7 +814,7 @@ namespace hal
 
     BooleanFunction BooleanFunction::expand_ands() const
     {
-        auto primitives = get_primitives();
+        std::vector<BooleanFunction> primitives = get_primitives();
         if (primitives.empty())
         {
             return Value::ZERO;
@@ -1150,8 +1149,8 @@ namespace hal
 
         // result is a OR-chain of *multiple* AND-chains of *only variables*
         std::vector<std::vector<Value>> terms;
-        auto vars_set = get_variables();
-        std::vector<std::string> vars(vars_set.begin(), vars_set.end());
+        std::vector<std::string> vars = get_variables();
+
         for (const auto& or_term : result.m_operands)
         {
             std::vector<Value> term(vars.size(), Value::X);

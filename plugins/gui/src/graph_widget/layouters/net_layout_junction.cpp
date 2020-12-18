@@ -231,6 +231,7 @@ namespace hal {
 
     void NetLayoutJunction::routeAllStraight(NetLayoutDirection dirFrom, NetLayoutDirection dirTo)
     {
+        QHash<int,int> straightConnected;
         u32 searchPattern = dirFrom.toPattern() | dirTo.toPattern();
 
         for (u32 netId : mEntries.mEntries[dirFrom.index()])
@@ -242,7 +243,11 @@ namespace hal {
             {
                 int iroadIn  = itNet.value().roadNumber(dirFrom);
                 int iroadOut = itNet.value().roadNumber(dirTo);
-                routeSingleStraight(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
+                if (straightConnected.value(iroadOut,-1) == iroadIn) // swap detected
+                    routeSingleSwap(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
+                else
+                    routeSingleStraight(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
+                straightConnected[iroadIn] = iroadOut;
                 if (itNet.value().numberEntries() % 2 ==0)
                     itNet->setPlaced();
             }
@@ -271,6 +276,47 @@ namespace hal {
         netIt->addWire(NetLayoutJunctionWire(ihoriz,iroad,
                                              range.endPosition(0),
                                              range.endPosition(1)));
+    }
+
+    void NetLayoutJunction::routeSingleSwap(u32 netId, int iMain, int iroadIn, int iroadOut)
+    {
+        int iJump = 1-iMain;
+        int iroadJump0 = -1;
+        int iroadJump1 = maxRoad[iJump];
+        int iroadDetour = maxRoad[iMain];
+        int maxSearch = std::max(2*(maxRoad[0]+maxRoad[1]),12)*3;
+        int count = 0;
+        while (count++ < maxSearch) // break when route found
+        {
+            NetLayoutJunctionRange rngIn(netId, NetLayoutJunctionRange::sMinInf, iroadJump0);
+            NetLayoutJunctionRange rngJ0(netId, iroadIn, iroadDetour);
+            NetLayoutJunctionRange rngDt(netId, iroadJump0, iroadJump1);
+            NetLayoutJunctionRange rngJ1(netId, iroadOut, iroadDetour);
+            NetLayoutJunctionRange rngOut(netId, iroadJump1, NetLayoutJunctionRange::sMaxInf);
+            if (conflict(iMain,iroadDetour,rngDt))
+            {
+                iroadDetour ++;
+                continue;
+            }
+            if (conflict(iJump,iroadJump1,rngJ1) ||
+                    conflict(iMain,iroadOut,rngOut))
+            {
+                iroadJump1 ++;
+                continue;
+            }
+            if (conflict(iJump,iroadJump0,rngJ0) ||
+                    conflict(iMain,iroadIn,rngIn))
+            {
+                iroadJump0 --;
+                continue;
+            }
+            place(iMain,iroadIn,rngIn);
+            place(iJump,iroadJump0,rngJ0);
+            place(iMain,iroadDetour,rngDt);
+            place(iJump,iroadJump1,rngJ1);
+            place(iMain,iroadOut,rngOut);
+            break;
+        }
     }
 
     void NetLayoutJunction::routeSingleStraight(u32 netId, int iMain, int iroadIn, int iroadOut)

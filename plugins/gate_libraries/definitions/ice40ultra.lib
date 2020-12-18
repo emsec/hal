@@ -652,6 +652,25 @@ library (ICE40ULTRA) {
         pin(D_IN_1) { direction: output; }
     }
 
+    cell(SB_GB_IO) {
+        pin(PACKAGE_PIN) { direction: inout; }
+        pin(LATCH_INPUT_VALUE) { direction: input; }
+        pin(CLOCK_ENABLE) { direction: input; }
+        pin(INPUT_CLK) { direction: input; }
+        pin(OUTPUT_CLK) { direction: input; }
+        pin(OUTPUT_ENABLE) { direction: input; }
+        pin(D_OUT_0) { direction: input; }
+        pin(D_OUT_1) { direction: input; }
+        pin(D_IN_0) { direction: output; }
+        pin(D_IN_1) { direction: output; }
+        pin(GLOBAL_BUFFER_OUTPUT) { direction: output; }
+    }
+
+    cell(SB_GB) {
+        pin(USER_SIGNAL_TO_GLOBAL_BUFFER) { direction: input; }
+        pin(GLOBAL_BUFFER_OUTPUT) { direction: output; }
+    }
+
     cell(SB_HFOSC) {
         pin(CLKHFEN) { direction: input; }
         pin(CLKHFPU) { direction: input; }
