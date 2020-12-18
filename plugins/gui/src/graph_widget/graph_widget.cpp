@@ -29,6 +29,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QVariantAnimation>
+#include <QPushButton>
 
 namespace hal
 {
@@ -61,7 +62,52 @@ namespace hal
         {
             mView->setScene(mContext->scene());
             mView->centerOn(0, 0);
-        }
+        } 
+
+        QPushButton* button = new QPushButton("D  E  B  U  G");
+        mContentLayout->addWidget(button);
+
+        mRectAfterFocus = QRectF();
+        mLastTargetRect = QRectF();
+
+
+        connect(button, &QPushButton::clicked, [this]()
+        {
+            auto thing = mContext->scene()->getGateItem(3);
+            
+            if(thing)
+            {
+                QRectF targetRect = thing->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
+                focusRect(targetRect, false);
+            }
+
+            /*
+            if(thing)
+            {
+                auto currentRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+                auto targetRect = thing->sceneBoundingRect().marginsAdded(QMargins(50,50,50,50));
+
+                if(!(targetRect == mLastTargetRect && currentRect == mCurrentAfterRect))
+                {
+                    mLastTargetRect = targetRect;
+
+                    auto anim = new QVariantAnimation();
+                    anim->setDuration(2000);
+                    anim->setStartValue(currentRect);
+                    anim->setEndValue(targetRect);
+
+                    connect(anim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
+                        mView->fitInView(value.toRectF(), Qt::KeepAspectRatio);
+                    });
+
+                    connect(anim, &QVariantAnimation::finished, [this](){
+                        mCurrentAfterRect = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
+                    });
+
+                    anim->start(QAbstractAnimation::DeleteWhenStopped);
+                }
+            }*/
+        });
     }
 
     GraphContext* GraphWidget::getContext() const

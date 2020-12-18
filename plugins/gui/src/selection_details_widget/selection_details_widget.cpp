@@ -134,6 +134,8 @@ namespace hal
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &SelectionDetailsWidget::handleSelectionUpdate);
         connect(mSearchbar, &Searchbar::textEdited, mSelectionTreeView, &SelectionTreeView::handleFilterTextChanged);
         connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::handleFilterTextChanged);
+        connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
+        connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
     }
 
     void SelectionDetailsWidget::restoreLastSelection()
@@ -492,6 +494,19 @@ namespace hal
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
+    }
+
+    void SelectionDetailsWidget::handleTreeViewItemFocusClicked(const SelectionTreeItem* sti)
+    {
+        u32 itemId = sti->id();
+
+        switch (sti->itemType())
+        {
+            case SelectionTreeItem::TreeItemType::GateItem:     Q_EMIT focusGateClicked(itemId);     break;
+            case SelectionTreeItem::TreeItemType::NetItem:      Q_EMIT focusNetClicked(itemId);      break;
+            case SelectionTreeItem::TreeItemType::ModuleItem:   Q_EMIT focusModuleClicked(itemId);   break;
+            default: break;
+        }
     }
 
     void SelectionDetailsWidget::setupToolbar(Toolbar* toolbar)
