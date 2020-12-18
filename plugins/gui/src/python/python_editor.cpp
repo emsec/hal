@@ -14,7 +14,6 @@
 #include "gui/toolbar/toolbar.h"
 
 #include <QAction>
-#include <QDebug>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMenu>
@@ -33,7 +32,7 @@ namespace hal
 {
     PythonEditor::PythonEditor(QWidget* parent)
         : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar()), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
-          mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this)), mCachedSnapshotDir("")
+          mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this))
     {
         ensurePolished();
         mNewFileCounter = 0;
@@ -82,7 +81,7 @@ namespace hal
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
 
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &PythonEditor::handleFileOpened);
-        connect(FileManager::get_instance(), &FileManager::fileClosed, this, &PythonEditor::handleFileClosed);
+        connect(FileManager::get_instance(), &FileManager::fileAboutToClose, this, &PythonEditor::handleFileAboutToClose);
 
         mPathEditorMap = QMap<QString, PythonCodeEditor*>();
 
@@ -425,14 +424,18 @@ namespace hal
 
             // Remove an existing snapshot and update its location
             removeSnapshotFile(current_editor);
-            QString new_snapshot_path = this->getSnapshotDirectory(true) + "/" + selected_file_name + ".tmp";
-            if(mTabToSnapshotPath.contains(current_editor))
+            QString snapShotDirectory = getSnapshotDirectory(true);
+            if(!snapShotDirectory.isEmpty())
             {
-                mTabToSnapshotPath[current_editor] = new_snapshot_path;
-            }
-            else
-            {
-                mTabToSnapshotPath.insert(current_editor, new_snapshot_path);
+                QString new_snapshot_path = snapShotDirectory + "/" + selected_file_name + ".tmp";
+                if(mTabToSnapshotPath.contains(current_editor))
+                {
+                    mTabToSnapshotPath[current_editor] = new_snapshot_path;
+                }
+                else
+                {
+                    mTabToSnapshotPath.insert(current_editor, new_snapshot_path);
+                }
             }
         }
         else
@@ -783,6 +786,7 @@ namespace hal
             {
                 this->setSnapshotContent(tab_idx, saved_snapshots[snapshot_original_path]);
             }
+            //(load_snapshot) ? tabLoadFile(tab_idx, original_path.filePath()) : setSnapshotContent(tab_idx, saved_snapshots[snapshot_original_path]);
 
         }
 
@@ -796,10 +800,10 @@ namespace hal
 
     }
 
-    void PythonEditor::handleFileClosed()
+    void PythonEditor::handleFileAboutToClose(const QString &fileName)
     {
+        Q_UNUSED(fileName)
         clearAllSnapshots(true);
-        mCachedSnapshotDir = "";
     }
 
     bool PythonEditor::eventFilter(QObject* obj, QEvent* event)
@@ -891,12 +895,12 @@ namespace hal
 
     QString PythonEditor::getSnapshotDirectory(const bool create_if_non_existent)
     {
-
-        QFileInfo info(FileManager::get_instance()->fileName());
-        if(mCachedSnapshotDir.isEmpty() && !FileManager::get_instance()->fileName().isEmpty())
+        if(!FileManager::get_instance()->fileName().isEmpty())
         {
+            QFileInfo info(FileManager::get_instance()->fileName());
             QDir snapshot_dir = info.absoluteDir();
             QString completePath = snapshot_dir.absolutePath() + "/~" + info.baseName();
+
             if(!snapshot_dir.exists(completePath))
             {
                 if(create_if_non_existent)
@@ -911,10 +915,10 @@ namespace hal
                     return "";
 
             }
-            mCachedSnapshotDir = completePath;
+            return completePath;
         }
 
-        return mCachedSnapshotDir;
+        return "";
     }
 
     void PythonEditor::updateSnapshots()
@@ -923,7 +927,6 @@ namespace hal
         mTabToSnapshotPath.clear();
 
         QDir snapshot_dir = this->getSnapshotDirectory(true);
-
 
         int tabs = mTabWidget->count();
         for(int index = 0; index < tabs; index++){
@@ -965,18 +968,16 @@ namespace hal
         }
         QDir snapshot_dir(snapshot_dir_path);
 
+        // Make sure the directory is a snapshot directory (additional protection)
+        if(!snapshot_dir.dirName().startsWith('~'))
+        {
+            log_error("gui", "Can not delete directory: '{}' is not a snapshot directory!", snapshot_dir.absolutePath().toStdString());
+            return;
+        }
+
         if(remove_dir)
         {
-            // Remove the directory
-            // Make sure the directory is a snapshot directory (additional protection)
-            if(snapshot_dir.dirName().startsWith('~'))
-            {
-                snapshot_dir.removeRecursively();
-            }
-            else
-            {
-                log_error("gui", "Can not delete directory: '{}' is not a snapshot directory!", snapshot_dir.absolutePath().toStdString());
-            }
+            snapshot_dir.removeRecursively();
         }
         else
         {
@@ -988,7 +989,6 @@ namespace hal
                 snapshot_dir.remove(dirFile);
             }
         }
-
     }
 
     bool PythonEditor::decideLoadSnapshot(const QMap<QString, QString>& saved_snapshots, const QFileInfo original_path) const

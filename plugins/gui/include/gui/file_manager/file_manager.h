@@ -52,6 +52,8 @@ namespace hal
         void fileChanged(const QString& path);
         void fileDirectoryChanged(const QString& path);
         void fileClosed();
+        //emitted at the start of the routine so that other parts of the programm have the opportunity to get the filename (could also be put together with fileClosed)
+        void fileAboutToClose(const QString& fileName);
 
     public Q_SLOTS:
         void openFile(QString fileName);

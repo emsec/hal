@@ -174,9 +174,9 @@ namespace hal
         void handleFileOpened(QString fileName);
 
         /**
-         * Slot called after a file was closed. (emitted by FileManager). Used to remove snapshots.
+         * Slot called when a file is about to be closed. (emitted by FileManager). Used to remove snapshots.
          */
-        void handleFileClosed();
+        void handleFileAboutToClose(const QString& fileName);
 
     protected:
         bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
@@ -341,7 +341,5 @@ namespace hal
          * Map: tab -> snapshot path
          */
         QMap<PythonCodeEditor*, QString> mTabToSnapshotPath;
-
-        QString mCachedSnapshotDir;
     };
 }
