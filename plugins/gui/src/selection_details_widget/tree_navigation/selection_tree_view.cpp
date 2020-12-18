@@ -106,6 +106,10 @@ namespace hal {
                 }
             }
 
+            menu.addAction("Focus item in Graph View",[this, item](){
+                Q_EMIT focusItemClicked(item);
+            });
+
             menu.exec(viewport()->mapToGlobal(point));
         }
     }

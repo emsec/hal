@@ -39,6 +39,7 @@ namespace hal
     Q_SIGNALS:
         void triggerSelection(const SelectionTreeItem* sti);
         void itemDoubleClicked(const SelectionTreeItem* sti);
+        void focusItemClicked(const SelectionTreeItem* sti);
 
     public Q_SLOTS:
         void handleFilterTextChanged(const QString& filter_text);
