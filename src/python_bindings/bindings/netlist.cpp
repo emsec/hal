@@ -133,7 +133,7 @@ namespace hal
             Create a new gate and add it to the netlist.
 
             :param int gate_id: The unique ID of the gate.
-            :param hal_py.Gate_type gate_type: The gate type.
+            :param hal_py.GateType gate_type: The gate type.
             :param str name: The name of the gate.
             :param float x: The x-coordinate of the gate.
             :param float y: The y-coordinate of the gate.
@@ -151,7 +151,7 @@ namespace hal
             Create a new gate and add it to the netlist.
             The ID of the gate is set automatically.
 
-            :param hal_py.Gate_type gate_type: The gate type.
+            :param hal_py.GateType gate_type: The gate type.
             :param str name: The name of the gate.
             :param float x: The x-coordinate of the gate.
             :param float y: The y-coordinate of the gate.

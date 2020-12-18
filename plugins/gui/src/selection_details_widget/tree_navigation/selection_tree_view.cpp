@@ -1,16 +1,21 @@
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/gui_globals.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
+
 #include <QApplication>
 #include <QClipboard>
 #include <QHeaderView>
 #include <QMenu>
-#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
+#include <QMouseEvent>
 
-namespace hal {
-    SelectionTreeView::SelectionTreeView(QWidget *parent)
-        : QTreeView(parent)
+namespace hal
+{
+    SelectionTreeView::SelectionTreeView(QWidget* parent) : QTreeView(parent)
     {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        mSelectionTreeModel = new SelectionTreeModel(this);
+        mSelectionTreeModel      = new SelectionTreeModel(this);
         mSelectionTreeProxyModel = new SelectionTreeProxyModel(this);
         mSelectionTreeProxyModel->setSourceModel(mSelectionTreeModel);
         setModel(mSelectionTreeProxyModel);
@@ -24,8 +29,8 @@ namespace hal {
     void SelectionTreeView::setDefaultColumnWidth()
     {
         setColumnWidth(SelectionTreeModel::sNameColumn, 160);
-        setColumnWidth(SelectionTreeModel::sIdColumn,    40);
-        setColumnWidth(SelectionTreeModel::sTypeColumn,  80);
+        setColumnWidth(SelectionTreeModel::sIdColumn, 40);
+        setColumnWidth(SelectionTreeModel::sTypeColumn, 80);
         header()->setStretchLastSection(true);
     }
 
@@ -33,22 +38,32 @@ namespace hal {
     {
         Q_UNUSED(previous);
 
-        const SelectionTreeItem* sti = current.isValid()
-                ? itemFromIndex(current)
-                : nullptr;
+        const SelectionTreeItem* sti = current.isValid() ? itemFromIndex(current) : nullptr;
 
         Q_EMIT triggerSelection(sti);
     }
 
+    void SelectionTreeView::mouseDoubleClickEvent(QMouseEvent* event)
+    {
+        QPoint point = viewport()->mapFromGlobal(event->globalPos());
+        ;
+
+        QModelIndex index = indexAt(point);
+
+        if (index.isValid())
+        {
+            SelectionTreeItem* item = itemFromIndex(index);
+            Q_EMIT itemDoubleClicked(item);
+        }
+    }
 
     SelectionTreeItem* SelectionTreeView::itemFromIndex(const QModelIndex& index) const
     {
         // topmost element if no valid index given
-        QModelIndex proxyIndex = index.isValid()
-                ? index
-                : mSelectionTreeProxyModel->index(0,0,rootIndex());
+        QModelIndex proxyIndex = index.isValid() ? index : mSelectionTreeProxyModel->index(0, 0, rootIndex());
 
-        if (!proxyIndex.isValid()) return nullptr;
+        if (!proxyIndex.isValid())
+            return nullptr;
 
         QModelIndex modelIndex = mSelectionTreeProxyModel->mapToSource(proxyIndex);
         return static_cast<SelectionTreeItem*>(modelIndex.internalPointer());
@@ -68,39 +83,82 @@ namespace hal {
             {
                 switch (item->itemType())
                 {
-                case SelectionTreeItem::TreeItemType::ModuleItem:
+                    case SelectionTreeItem::TreeItemType::ModuleItem:
 
-                    menu.addAction(QIcon(":/icons/python"), "Extract Module as python code (copy to clipboard)",[item](){
-                        QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
-                    });
+                        menu.addAction(QIcon(":/icons/python"), "Extract Module as python code (copy to clipboard)", [item]() {
+                            QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
+                        });
 
-                    break;
-                case SelectionTreeItem::TreeItemType::GateItem:
+                        menu.addAction("Isolate In New View", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
 
-                    menu.addAction(QIcon(":/icons/python"), "Extract Gate as python code (copy to clipboard)",[item](){
-                        QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");
-                    });
+                        break;
+                    case SelectionTreeItem::TreeItemType::GateItem:
 
-                    break;
-                case SelectionTreeItem::TreeItemType::NetItem:
+                        menu.addAction(QIcon(":/icons/python"), "Extract Gate as python code (copy to clipboard)", [item]() {
+                            QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");
+                        });
 
-                    menu.addAction(QIcon(":/icons/python"), "Extract Net as python code (copy to clipboard)",[item](){
-                        QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");
-                    });
+                        menu.addAction("Isolate In New View", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
 
-                    break;
-                default: // make compiler happy and handle irrelevant MaxItem, NullItem
-                    break;
+                        break;
+                    case SelectionTreeItem::TreeItemType::NetItem:
+
+                        menu.addAction(QIcon(":/icons/python"), "Extract Net as python code (copy to clipboard)", [item]() {
+                            QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");
+                        });
+
+                        break;
+                    default:    // make compiler happy and handle irrelevant MaxItem, NullItem
+                        break;
                 }
             }
+
+            menu.addAction("Focus item in Graph View", [this, item]() { Q_EMIT focusItemClicked(item); });
 
             menu.exec(viewport()->mapToGlobal(point));
         }
     }
 
+    void SelectionTreeView::handleIsolationViewAction(const SelectionTreeItem* sti)
+    {
+        u32 id       = sti->id();
+        QString name = "";
+        QSet<u32> gateId;
+        QSet<u32> moduleId;
+
+        if (sti->itemType() == SelectionTreeItem::TreeItemType::GateItem)
+        {
+            name = "Isolated Gate(ID: " + QString::number(id) + ")";
+            gateId.insert(id);
+        }
+        else if (sti->itemType() == SelectionTreeItem::TreeItemType::ModuleItem)
+        {
+            name = "Isolated Module(ID: " + QString::number(id) + ")";
+            moduleId.insert(id);
+        }
+        else
+        {
+            return;
+        }
+
+        u32 cnt = 0;
+        while (true)
+        {
+            ++cnt;
+            QString contextName = name + " " + QString::number(cnt);
+            if (!gGraphContextManager->contextWithNameExists(contextName))
+            {
+                auto context = gGraphContextManager->createNewContext(contextName);
+                context->add(moduleId, gateId);
+                return;
+            }
+        }
+    }
+
     void SelectionTreeView::populate(bool mVisible)
     {
-        if (mSelectionTreeProxyModel->isGraphicsBusy()) return;
+        if (mSelectionTreeProxyModel->isGraphicsBusy())
+            return;
         setSelectionMode(QAbstractItemView::NoSelection);
         selectionModel()->clear();
         mSelectionTreeModel->fetchSelection(mVisible);
@@ -108,7 +166,7 @@ namespace hal {
         {
             show();
             setSelectionMode(QAbstractItemView::SingleSelection);
-            QModelIndex defaultSel = mSelectionTreeProxyModel->index(0,0,rootIndex());
+            QModelIndex defaultSel = mSelectionTreeProxyModel->index(0, 0, rootIndex());
             if (defaultSel.isValid())
                 selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         }
@@ -119,8 +177,8 @@ namespace hal {
     void SelectionTreeView::handleFilterTextChanged(const QString& filter_text)
     {
         mSelectionTreeProxyModel->handleFilterTextChanged(filter_text);
-        QModelIndex defaultSel = mSelectionTreeProxyModel->index(0,0,rootIndex());
+        QModelIndex defaultSel = mSelectionTreeProxyModel->index(0, 0, rootIndex());
         if (defaultSel.isValid())
             selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     }
-}
+}    // namespace hal

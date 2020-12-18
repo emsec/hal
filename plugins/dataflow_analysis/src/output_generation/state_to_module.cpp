@@ -8,6 +8,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
+#include <vector>
 namespace hal
 {
     namespace dataflow
@@ -24,18 +25,17 @@ namespace hal
             }
             return true;
         }
-        std::set<std::set<Gate*>> state_to_module::create_sets(Netlist* nl, const std::shared_ptr<const Grouping>& state)
+        std::vector<std::vector<Gate*>> state_to_module::create_sets(Netlist* nl, const std::shared_ptr<const Grouping>& state)
         {
-            std::set<std::set<Gate*>> registers;
-            log_info("dataflow", "found: {}", state->gates_of_group.size());
+            std::vector<std::vector<Gate*>> registers;
             for (const auto& [_, group] : state->gates_of_group)
             {
-                std::set<Gate*> register_set;
+                std::vector<Gate*> register_vector;
                 for (const auto& gateId : group)
                 {
-                    register_set.insert(nl->get_gate_by_id(gateId));
+                    register_vector.push_back(nl->get_gate_by_id(gateId));
                 }
-                registers.insert(register_set);
+                registers.push_back(register_vector);
             }
             return registers;
         }

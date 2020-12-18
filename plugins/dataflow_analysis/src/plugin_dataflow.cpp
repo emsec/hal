@@ -101,17 +101,22 @@ namespace hal
             }
         }
 
-        return execute(nl, path, layer, sizes);
+        if (execute(nl, path, layer, sizes).empty())
+        {
+            return false;
+        }
+
+        return true;
     }
 
-    bool plugin_dataflow::execute(Netlist* nl, std::string output_path, const u32 layer, const std::vector<u32> sizes)
+    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl, std::string output_path, const u32 layer, const std::vector<u32> sizes)
     {
         log("--- starting dataflow analysis ---");
 
         if (nl == nullptr)
         {
             log_error("dataflow", "dataflow can't be initialized (nullptr)");
-            return false;
+            return std::vector<std::vector<Gate*>>();
         }
 
         // manage output
@@ -254,8 +259,7 @@ namespace hal
 
         log("dataflow processing finished in {:3.2f}s", total_time);
 
-        dataflow::state_to_module::create_modules(nl, final_grouping);
 
-        return true;
+        return dataflow::state_to_module::create_sets(nl, final_grouping);
     }
 }    // namespace hal
