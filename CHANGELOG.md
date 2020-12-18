@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.1.10] - 2020-12-18 14:00:00+02:00 (urgency: medium)
 * added `SB_GB_IO`, `SB_GB`, `SB_I2C`, `SB_SPI`, `SB_HFOSC`, and `SB_LFOSC` gate types to `ICE40ULTRA` gate library
 * added jumping to gates, nets, and modules from the selection details widget when double-clicking the respective item in the list or using the context menu
 * added isolating gates and modules in new views from the selection details widget using the conext menu
@@ -445,7 +447,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.9...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.10...HEAD
+[3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10
 [3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9
 [3.1.8]: https://github.com/emsec/hal/compare/v3.1.7...v3.1.8
 [3.1.7]: https://github.com/emsec/hal/compare/v3.1.6...v3.1.7
