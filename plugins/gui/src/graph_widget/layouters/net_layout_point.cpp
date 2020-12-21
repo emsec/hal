@@ -86,6 +86,12 @@ NetLayoutPoint NetLayoutPoint::nextPoint(const NetLayoutDirection& dir, bool omi
     return NetLayoutPoint(p + dir.step(omitEndpoint));
 }
 
+int NetLayoutPoint::yGrid() const
+{
+    if (y()<0)
+        return (y() - 1) / 2;
+    return (y() + 1) / 2;
+}
 
 NetLayoutPoint NetLayoutPoint::fromBox(const QPoint& boxPosition, bool isInput)
 {
