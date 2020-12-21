@@ -30,6 +30,8 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 
+#include "gui/user_action/action_open_netlist_file.h"
+
 #include <QApplication>
 #include <QCloseEvent>
 #include <QDesktopWidget>
@@ -125,6 +127,11 @@ namespace hal
         mActionAbout        = new Action(this);
         //mActionRunSchedule = new Action(this);
         //mActionContent      = new Action(this);
+
+        mActionStartRecording = new Action(this);
+        mActionStopRecording  = new Action(this);
+        mActionPlayMacro      = new Action(this);
+
         mActionSettings = new Action(this);
         mActionClose    = new Action(this);
 
@@ -163,16 +170,22 @@ namespace hal
 
         mMenuFile = new QMenu(mMenuBar);
         mMenuEdit = new QMenu(mMenuBar);
+        mMenuMacro = new QMenu(mMenuBar);
         mMenuHelp = new QMenu(mMenuBar);
 
         mMenuBar->addAction(mMenuFile->menuAction());
         mMenuBar->addAction(mMenuEdit->menuAction());
+        mMenuBar->addAction(mMenuMacro->menuAction());
         mMenuBar->addAction(mMenuHelp->menuAction());
         mMenuFile->addAction(mActionNew);
         mMenuFile->addAction(mActionOpen);
         //mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuEdit->addAction(mActionSettings);
+        mMenuMacro->addAction(mActionStartRecording);
+        mMenuMacro->addAction(mActionStopRecording);
+        mMenuMacro->addSeparator();
+        mMenuMacro->addAction(mActionPlayMacro);
         mMenuHelp->addAction(mActionAbout);
         mLeftToolBar->addAction(mActionNew);
         mLeftToolBar->addAction(mActionOpen);
@@ -190,6 +203,10 @@ namespace hal
         gKeybindManager->bind(mActionSave, "keybinds/project_save_file");
  //       gKeybindManager->bind(mActionRunSchedule, "keybinds/schedule_run");
 
+        mActionStartRecording->setText("Start recording");
+        mActionStopRecording->setText("Stop recording");
+        mActionPlayMacro->setText("Play macro");
+
         setWindowTitle("HAL");
         mActionNew->setText("New Netlist");
         mActionOpen->setText("Open");
@@ -202,6 +219,7 @@ namespace hal
         mActionClose->setText("Close Document");
         mMenuFile->setTitle("File");
         mMenuEdit->setTitle("Edit");
+        mMenuMacro->setTitle("Macro");
         mMenuHelp->setTitle("Help");
 
         mAboutDialog  = new AboutDialog(this);
@@ -221,6 +239,9 @@ namespace hal
         //debug
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionClosed);
 
+        connect(mActionStartRecording, &Action::triggered, this, &MainWindow::handleActionStartRecording);
+        connect(mActionStopRecording, &Action::triggered, this, &MainWindow::handleActionStopRecording);
+        connect(mActionPlayMacro, &Action::triggered, this, &MainWindow::handleActionPlayMacro);
 //        connect(mActionRunSchedule, &Action::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::runSchedule);
 
         connect(this, &MainWindow::saveTriggered, gContentManager, &ContentManager::handleSaveTriggered);
@@ -524,7 +545,8 @@ namespace hal
 
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(false);
-            FileManager::get_instance()->openFile(fileName);
+            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(fileName);
+            actOpenfile->exec();
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(true);
         }
@@ -572,6 +594,21 @@ namespace hal
 
             Q_EMIT saveTriggered();
         }
+    }
+
+    void MainWindow::handleActionStartRecording()
+    {
+
+    }
+
+    void MainWindow::handleActionStopRecording()
+    {
+
+    }
+
+    void MainWindow::handleActionPlayMacro()
+    {
+
     }
 
     void MainWindow::handleActionClosed()

@@ -140,6 +140,10 @@ namespace hal
         void handleSaveTriggered();
         void handleActionClosed();
 
+        void handleActionStartRecording();
+        void handleActionStopRecording();
+        void handleActionPlayMacro();
+
     private:
         void closeEvent(QCloseEvent* event);
         void restoreState();
@@ -165,11 +169,16 @@ namespace hal
    //     Action* mActionSchedule;
    //     Action* mActionRunSchedule;
    //     Action* mActionContent;
+        Action* mActionStartRecording;
+        Action* mActionStopRecording;
+        Action* mActionPlayMacro;
+
         Action* mActionSettings;
         Action* mActionClose;
 
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
+        QMenu* mMenuMacro;
         QMenu* mMenuHelp;
 
         AboutDialog* mAboutDialog;
