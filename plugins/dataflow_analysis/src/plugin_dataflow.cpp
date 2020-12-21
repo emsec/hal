@@ -15,7 +15,6 @@
 #include "dataflow_analysis/processing/passes/group_by_control_signals.h"
 #include "dataflow_analysis/processing/processing.h"
 #include "dataflow_analysis/utils/timing_utils.h"
-#include "dataflow_analysis/utils/utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_utils.h"
@@ -201,7 +200,7 @@ namespace hal
         auto nl_copy       = netlist_utils::copy_netlist(nl);
         auto netlist_abstr = dataflow::pre_processing::run(nl_copy.get());
 
-        auto initial_grouping = netlist_abstr.utils->create_initial_grouping(netlist_abstr);
+        auto initial_grouping = netlist_abstr.create_initial_grouping();
         std::shared_ptr<dataflow::Grouping> final_grouping;
 
         total_time += (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000;

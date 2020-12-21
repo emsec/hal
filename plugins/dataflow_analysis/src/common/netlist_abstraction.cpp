@@ -1,12 +1,9 @@
 #include "dataflow_analysis/common/netlist_abstraction.h"
 
-#include "dataflow_analysis/utils/utils.h"
-#include "dataflow_analysis/utils/utils_lsi_10k.h"
-#include "dataflow_analysis/utils/utils_nangate.h"
-#include "dataflow_analysis/utils/utils_ice40ultra.h"
-#include "dataflow_analysis/utils/utils_xilinx_simprim.h"
-#include "dataflow_analysis/utils/utils_xilinx_unisim.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 
 namespace hal
@@ -15,32 +12,30 @@ namespace hal
     {
         NetlistAbstraction::NetlistAbstraction(Netlist* nl_arg) : nl(nl_arg)
         {
-            std::string library = nl->get_gate_library()->get_name();
+            // Get gate library specific utils
+            auto plugin_gl_utils = dynamic_cast<GateLibrarySpecificUtils*>(plugin_manager::get_plugin_instance("gate_library_specific_utils"));
+            utils = std::shared_ptr<gate_library_specific_utils::Utils>(plugin_gl_utils->get_gl_utils(nl));
+        }
 
-            if (nl->get_gate_library()->get_name() == "XILINX_UNISIM")
+        std::shared_ptr<Grouping> NetlistAbstraction::create_initial_grouping() const
+        {
+            /* create state */
+            auto new_state = std::make_shared<Grouping>(*this);
+
+            /* initialize state */
+            u32 new_id_counter = -1;
+
+            for (auto gate : new_state->netlist_abstr.all_sequential_gates)
             {
-                utils = std::make_shared<dataflow_utils::UtilsXilinxUnisim>();
+                u32 new_group_id = ++new_id_counter;
+
+                new_state->group_control_fingerprint_map[new_group_id] = this->gate_to_fingerprint.at(gate->get_id());
+
+                new_state->gates_of_group[new_group_id].insert(gate->get_id());
+                new_state->parent_group_of_gate[gate->get_id()] = new_group_id;
             }
-            else if (nl->get_gate_library()->get_name() == "NangateOpenCellLibrary")
-            {
-                utils = std::make_shared<dataflow_utils::UtilsNangate>();
-            }
-            else if (nl->get_gate_library()->get_name() == "lsi_10k")
-            {
-                utils = std::make_shared<dataflow_utils::UtilsLSI_10K>();
-            }
-            else if (nl->get_gate_library()->get_name() == "XILINX_SIMPRIM")
-            {
-                utils = std::make_shared<dataflow_utils::UtilsXilinxSimprim>();
-            }
-            else if (nl->get_gate_library()->get_name() == "ICE40ULTRA")
-            {
-                utils = std::make_shared<dataflow_utils::UtilsiCE40Ultra>();
-            }
-            else
-            {
-                log_error("dataflow", "no utils for gate library, you need to create the corresponding utils for this gate-library: {}", nl->get_gate_library()->get_name());
-            }
+
+            return new_state;
         }
     }    // namespace dataflow
 }    // namespace hal

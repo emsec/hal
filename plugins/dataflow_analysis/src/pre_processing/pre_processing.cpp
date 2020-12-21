@@ -6,7 +6,6 @@
 #include "dataflow_analysis/utils/parallel_for_each.h"
 #include "dataflow_analysis/utils/progress_printer.h"
 #include "dataflow_analysis/utils/timing_utils.h"
-#include "dataflow_analysis/utils/utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
