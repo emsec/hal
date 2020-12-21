@@ -131,8 +131,7 @@ namespace hal
             static std::map<std::string, std::unordered_set<std::string>> gate_to_regular_output_ports;
             if (gate_to_regular_output_ports.empty())
             {
-                // TODO
-                gate_to_regular_output_ports["X_FF"] = {};
+                gate_to_regular_output_ports["X_FF"] = {"O"};
             }
 
             return gate_to_regular_output_ports.at(sg->get_type()->get_name());
@@ -149,7 +148,6 @@ namespace hal
             static std::map<std::string, std::unordered_set<std::string>> gate_to_negated_output_ports;
             if (gate_to_negated_output_ports.empty())
             {
-                // TODO
                 gate_to_negated_output_ports["X_FF"] = {};
             }
 

@@ -30,7 +30,10 @@ namespace hal
 
         std::unordered_set<std::string> UtilsiCE40Ultra::get_control_input_pin_types(Gate* sg) const
         {
+            // NOTE We include the set ports because sometimes the synthesizer uses the set ports as data inputs.
             auto data_ports = get_data_ports(sg);
+            auto set_ports = get_set_ports(sg);
+            data_ports.insert(set_ports.begin(), set_ports.end());
             std::unordered_set<std::string> control_input_pin_types;
             for (const auto& pin_type : sg->get_input_pins())
             {

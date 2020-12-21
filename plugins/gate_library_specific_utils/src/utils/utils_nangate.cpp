@@ -44,7 +44,10 @@ namespace hal
 
         std::unordered_set<std::string> UtilsNangate::get_control_input_pin_types(Gate* sg) const
         {
+            // NOTE We include the set ports because sometimes the synthesizer uses the set ports as data inputs.
             auto data_ports = get_data_ports(sg);
+            auto set_ports = get_set_ports(sg);
+            data_ports.insert(set_ports.begin(), set_ports.end());
             std::unordered_set<std::string> control_input_pin_types;
             for (const auto& pin_type : sg->get_input_pins())
             {
@@ -145,9 +148,8 @@ namespace hal
                 gate_to_reset_ports["SDFFR_X2"]  = {"RN"};
                 gate_to_reset_ports["SDFFS_X1"]  = {};
                 gate_to_reset_ports["SDFFS_X2"]  = {};
-                // TODO not sure about the C ports
-                gate_to_reset_ports["SDFF_X1"]   = {"C"};
-                gate_to_reset_ports["SDFF_X2"]   = {"C"};
+                gate_to_reset_ports["SDFF_X1"]   = {};
+                gate_to_reset_ports["SDFF_X2"]   = {};
             }
 
             return gate_to_reset_ports.at(sg->get_type()->get_name());
@@ -204,7 +206,6 @@ namespace hal
                 gate_to_set_ports["SDFFR_X2"]  = {};
                 gate_to_set_ports["SDFFS_X1"]  = {"SN"};
                 gate_to_set_ports["SDFFS_X2"]  = {"SN"};
-                // TODO not sure about the C ports
                 gate_to_set_ports["SDFF_X1"]   = {};
                 gate_to_set_ports["SDFF_X2"]   = {};
             }
@@ -223,23 +224,22 @@ namespace hal
             static std::map<std::string, std::unordered_set<std::string>> gate_to_regular_output_ports;
             if (gate_to_regular_output_ports.empty())
             {
-                // TODO
-                gate_to_regular_output_ports["DFFRS_X1"]  = {};
-                gate_to_regular_output_ports["DFFRS_X2"]  = {};
-                gate_to_regular_output_ports["DFFR_X1"]   = {};
-                gate_to_regular_output_ports["DFFR_X2"]   = {};
-                gate_to_regular_output_ports["DFFS_X1"]   = {};
-                gate_to_regular_output_ports["DFFS_X2"]   = {};
-                gate_to_regular_output_ports["DFF_X1"]    = {};
-                gate_to_regular_output_ports["DFF_X2"]    = {};
-                gate_to_regular_output_ports["SDFFRS_X1"] = {};
-                gate_to_regular_output_ports["SDFFRS_X2"] = {};
-                gate_to_regular_output_ports["SDFFR_X1"]  = {};
-                gate_to_regular_output_ports["SDFFR_X2"]  = {};
-                gate_to_regular_output_ports["SDFFS_X1"]  = {};
-                gate_to_regular_output_ports["SDFFS_X2"]  = {};
-                gate_to_regular_output_ports["SDFF_X1"]   = {};
-                gate_to_regular_output_ports["SDFF_X2"]   = {};
+                gate_to_regular_output_ports["DFFRS_X1"]  = {"Q"};
+                gate_to_regular_output_ports["DFFRS_X2"]  = {"Q"};
+                gate_to_regular_output_ports["DFFR_X1"]   = {"Q"};
+                gate_to_regular_output_ports["DFFR_X2"]   = {"Q"};
+                gate_to_regular_output_ports["DFFS_X1"]   = {"Q"};
+                gate_to_regular_output_ports["DFFS_X2"]   = {"Q"};
+                gate_to_regular_output_ports["DFF_X1"]    = {"Q"};
+                gate_to_regular_output_ports["DFF_X2"]    = {"Q"};
+                gate_to_regular_output_ports["SDFFRS_X1"] = {"Q"};
+                gate_to_regular_output_ports["SDFFRS_X2"] = {"Q"};
+                gate_to_regular_output_ports["SDFFR_X1"]  = {"Q"};
+                gate_to_regular_output_ports["SDFFR_X2"]  = {"Q"};
+                gate_to_regular_output_ports["SDFFS_X1"]  = {"Q"};
+                gate_to_regular_output_ports["SDFFS_X2"]  = {"Q"};
+                gate_to_regular_output_ports["SDFF_X1"]   = {"Q"};
+                gate_to_regular_output_ports["SDFF_X2"]   = {"Q"};
             }
 
             return gate_to_regular_output_ports.at(sg->get_type()->get_name());
@@ -256,23 +256,22 @@ namespace hal
             static std::map<std::string, std::unordered_set<std::string>> gate_to_negated_output_ports;
             if (gate_to_negated_output_ports.empty())
             {
-                // TODO
-                gate_to_negated_output_ports["DFFRS_X1"]  = {};
-                gate_to_negated_output_ports["DFFRS_X2"]  = {};
-                gate_to_negated_output_ports["DFFR_X1"]   = {};
-                gate_to_negated_output_ports["DFFR_X2"]   = {};
-                gate_to_negated_output_ports["DFFS_X1"]   = {};
-                gate_to_negated_output_ports["DFFS_X2"]   = {};
-                gate_to_negated_output_ports["DFF_X1"]    = {};
-                gate_to_negated_output_ports["DFF_X2"]    = {};
-                gate_to_negated_output_ports["SDFFRS_X1"] = {};
-                gate_to_negated_output_ports["SDFFRS_X2"] = {};
-                gate_to_negated_output_ports["SDFFR_X1"]  = {};
-                gate_to_negated_output_ports["SDFFR_X2"]  = {};
-                gate_to_negated_output_ports["SDFFS_X1"]  = {};
-                gate_to_negated_output_ports["SDFFS_X2"]  = {};
-                gate_to_negated_output_ports["SDFF_X1"]   = {};
-                gate_to_negated_output_ports["SDFF_X2"]   = {};
+                gate_to_negated_output_ports["DFFRS_X1"]  = {"QN"};
+                gate_to_negated_output_ports["DFFRS_X2"]  = {"QN"};
+                gate_to_negated_output_ports["DFFR_X1"]   = {"QN"};
+                gate_to_negated_output_ports["DFFR_X2"]   = {"QN"};
+                gate_to_negated_output_ports["DFFS_X1"]   = {"QN"};
+                gate_to_negated_output_ports["DFFS_X2"]   = {"QN"};
+                gate_to_negated_output_ports["DFF_X1"]    = {"QN"};
+                gate_to_negated_output_ports["DFF_X2"]    = {"QN"};
+                gate_to_negated_output_ports["SDFFRS_X1"] = {"QN"};
+                gate_to_negated_output_ports["SDFFRS_X2"] = {"QN"};
+                gate_to_negated_output_ports["SDFFR_X1"]  = {"QN"};
+                gate_to_negated_output_ports["SDFFR_X2"]  = {"QN"};
+                gate_to_negated_output_ports["SDFFS_X1"]  = {"QN"};
+                gate_to_negated_output_ports["SDFFS_X2"]  = {"QN"};
+                gate_to_negated_output_ports["SDFF_X1"]   = {"QN"};
+                gate_to_negated_output_ports["SDFF_X2"]   = {"QN"};
             }
 
             return gate_to_negated_output_ports.at(sg->get_type()->get_name());

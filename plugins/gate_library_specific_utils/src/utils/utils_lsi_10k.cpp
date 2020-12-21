@@ -30,7 +30,10 @@ namespace hal
 
         std::unordered_set<std::string> UtilsLSI_10K::get_control_input_pin_types(Gate* sg) const
         {
+            // NOTE We include the set ports because sometimes the synthesizer uses the set ports as data inputs.
             auto data_ports = get_data_ports(sg);
+            auto set_ports = get_set_ports(sg);
+            data_ports.insert(set_ports.begin(), set_ports.end());
             std::unordered_set<std::string> control_input_pin_types;
             for (const auto& pin_type : sg->get_input_pins())
             {
@@ -262,7 +265,6 @@ namespace hal
             static std::map<std::string, std::unordered_set<std::string>> gate_to_set_ports;
             if (gate_to_set_ports.empty())
             {
-                // TODO
                 gate_to_set_ports["FD1"]    = {};
                 gate_to_set_ports["FD1P"]   = {};
                 gate_to_set_ports["FD1S"]   = {};
@@ -317,45 +319,44 @@ namespace hal
             static std::map<std::string, std::unordered_set<std::string>> gate_to_regular_output_ports;
             if (gate_to_regular_output_ports.empty())
             {
-                // TODO
-                gate_to_regular_output_ports["FD1"]    = {};
-                gate_to_regular_output_ports["FD1P"]   = {};
-                gate_to_regular_output_ports["FD1S"]   = {};
-                gate_to_regular_output_ports["FD1SP"]  = {};
-                gate_to_regular_output_ports["FD2"]    = {};
-                gate_to_regular_output_ports["FD2P"]   = {};
-                gate_to_regular_output_ports["FD2S"]   = {};
-                gate_to_regular_output_ports["FD2SP"]  = {};
-                gate_to_regular_output_ports["FD3"]    = {};
-                gate_to_regular_output_ports["FD3P"]   = {};
-                gate_to_regular_output_ports["FD3S"]   = {};
-                gate_to_regular_output_ports["FD3SP"]  = {};
-                gate_to_regular_output_ports["FD4"]    = {};
-                gate_to_regular_output_ports["FD4P"]   = {};
-                gate_to_regular_output_ports["FD4S"]   = {};
-                gate_to_regular_output_ports["FD4SP"]  = {};
-                gate_to_regular_output_ports["FJK1"]   = {};
-                gate_to_regular_output_ports["FJK1P"]  = {};
-                gate_to_regular_output_ports["FJK1S"]  = {};
-                gate_to_regular_output_ports["FJK1SP"] = {};
-                gate_to_regular_output_ports["FJK2"]   = {};
-                gate_to_regular_output_ports["FJK2P"]  = {};
-                gate_to_regular_output_ports["FJK2S"]  = {};
-                gate_to_regular_output_ports["FJK2SP"] = {};
-                gate_to_regular_output_ports["FJK3"]   = {};
-                gate_to_regular_output_ports["FJK3P"]  = {};
-                gate_to_regular_output_ports["FJK3S"]  = {};
-                gate_to_regular_output_ports["FJK3SP"] = {};
-                gate_to_regular_output_ports["FDS2"]   = {};
-                gate_to_regular_output_ports["FDS2L"]  = {};
-                gate_to_regular_output_ports["FDS2LP"] = {};
-                gate_to_regular_output_ports["FDS2P"]  = {};
-                gate_to_regular_output_ports["FT2"]    = {};
-                gate_to_regular_output_ports["FT2P"]   = {};
-                gate_to_regular_output_ports["FT4"]    = {};
-                gate_to_regular_output_ports["FT4P"]   = {};
-                gate_to_regular_output_ports["FD2TS"]  = {};
-                gate_to_regular_output_ports["FD2TSP"] = {};
+                gate_to_regular_output_ports["FD1"]    = {"Q"};
+                gate_to_regular_output_ports["FD1P"]   = {"Q"};
+                gate_to_regular_output_ports["FD1S"]   = {"Q"};
+                gate_to_regular_output_ports["FD1SP"]  = {"Q"};
+                gate_to_regular_output_ports["FD2"]    = {"Q"};
+                gate_to_regular_output_ports["FD2P"]   = {"Q"};
+                gate_to_regular_output_ports["FD2S"]   = {"Q"};
+                gate_to_regular_output_ports["FD2SP"]  = {"Q"};
+                gate_to_regular_output_ports["FD3"]    = {"Q"};
+                gate_to_regular_output_ports["FD3P"]   = {"Q"};
+                gate_to_regular_output_ports["FD3S"]   = {"Q"};
+                gate_to_regular_output_ports["FD3SP"]  = {"Q"};
+                gate_to_regular_output_ports["FD4"]    = {"Q"};
+                gate_to_regular_output_ports["FD4P"]   = {"Q"};
+                gate_to_regular_output_ports["FD4S"]   = {"Q"};
+                gate_to_regular_output_ports["FD4SP"]  = {"Q"};
+                gate_to_regular_output_ports["FJK1"]   = {"Q"};
+                gate_to_regular_output_ports["FJK1P"]  = {"Q"};
+                gate_to_regular_output_ports["FJK1S"]  = {"Q"};
+                gate_to_regular_output_ports["FJK1SP"] = {"Q"};
+                gate_to_regular_output_ports["FJK2"]   = {"Q"};
+                gate_to_regular_output_ports["FJK2P"]  = {"Q"};
+                gate_to_regular_output_ports["FJK2S"]  = {"Q"};
+                gate_to_regular_output_ports["FJK2SP"] = {"Q"};
+                gate_to_regular_output_ports["FJK3"]   = {"Q"};
+                gate_to_regular_output_ports["FJK3P"]  = {"Q"};
+                gate_to_regular_output_ports["FJK3S"]  = {"Q"};
+                gate_to_regular_output_ports["FJK3SP"] = {"Q"};
+                gate_to_regular_output_ports["FDS2"]   = {"Q"};
+                gate_to_regular_output_ports["FDS2L"]  = {"Q"};
+                gate_to_regular_output_ports["FDS2LP"] = {"Q"};
+                gate_to_regular_output_ports["FDS2P"]  = {"Q"};
+                gate_to_regular_output_ports["FT2"]    = {"Q"};
+                gate_to_regular_output_ports["FT2P"]   = {"Q"};
+                gate_to_regular_output_ports["FT4"]    = {"Q"};
+                gate_to_regular_output_ports["FT4P"]   = {"Q"};
+                gate_to_regular_output_ports["FD2TS"]  = {"Q"};
+                gate_to_regular_output_ports["FD2TSP"] = {"Q"};
             }
 
             return gate_to_regular_output_ports.at(sg->get_type()->get_name());
@@ -372,45 +373,44 @@ namespace hal
             static std::map<std::string, std::unordered_set<std::string>> gate_to_negated_output_ports;
             if (gate_to_negated_output_ports.empty())
             {
-                // TODO
-                gate_to_negated_output_ports["FD1"]    = {};
-                gate_to_negated_output_ports["FD1P"]   = {};
-                gate_to_negated_output_ports["FD1S"]   = {};
-                gate_to_negated_output_ports["FD1SP"]  = {};
-                gate_to_negated_output_ports["FD2"]    = {};
-                gate_to_negated_output_ports["FD2P"]   = {};
-                gate_to_negated_output_ports["FD2S"]   = {};
-                gate_to_negated_output_ports["FD2SP"]  = {};
-                gate_to_negated_output_ports["FD3"]    = {};
-                gate_to_negated_output_ports["FD3P"]   = {};
-                gate_to_negated_output_ports["FD3S"]   = {};
-                gate_to_negated_output_ports["FD3SP"]  = {};
-                gate_to_negated_output_ports["FD4"]    = {};
-                gate_to_negated_output_ports["FD4P"]   = {};
-                gate_to_negated_output_ports["FD4S"]   = {};
-                gate_to_negated_output_ports["FD4SP"]  = {};
-                gate_to_negated_output_ports["FJK1"]   = {};
-                gate_to_negated_output_ports["FJK1P"]  = {};
-                gate_to_negated_output_ports["FJK1S"]  = {};
-                gate_to_negated_output_ports["FJK1SP"] = {};
-                gate_to_negated_output_ports["FJK2"]   = {};
-                gate_to_negated_output_ports["FJK2P"]  = {};
-                gate_to_negated_output_ports["FJK2S"]  = {};
-                gate_to_negated_output_ports["FJK2SP"] = {};
-                gate_to_negated_output_ports["FJK3"]   = {};
-                gate_to_negated_output_ports["FJK3P"]  = {};
-                gate_to_negated_output_ports["FJK3S"]  = {};
-                gate_to_negated_output_ports["FJK3SP"] = {};
-                gate_to_negated_output_ports["FDS2"]   = {};
-                gate_to_negated_output_ports["FDS2L"]  = {};
-                gate_to_negated_output_ports["FDS2LP"] = {};
-                gate_to_negated_output_ports["FDS2P"]  = {};
-                gate_to_negated_output_ports["FT2"]    = {};
-                gate_to_negated_output_ports["FT2P"]   = {};
-                gate_to_negated_output_ports["FT4"]    = {};
-                gate_to_negated_output_ports["FT4P"]   = {};
-                gate_to_negated_output_ports["FD2TS"]  = {};
-                gate_to_negated_output_ports["FD2TSP"] = {};
+                gate_to_negated_output_ports["FD1"]    = {"QN"};
+                gate_to_negated_output_ports["FD1P"]   = {"QN"};
+                gate_to_negated_output_ports["FD1S"]   = {"QN"};
+                gate_to_negated_output_ports["FD1SP"]  = {"QN"};
+                gate_to_negated_output_ports["FD2"]    = {"QN"};
+                gate_to_negated_output_ports["FD2P"]   = {"QN"};
+                gate_to_negated_output_ports["FD2S"]   = {"QN"};
+                gate_to_negated_output_ports["FD2SP"]  = {"QN"};
+                gate_to_negated_output_ports["FD3"]    = {"QN"};
+                gate_to_negated_output_ports["FD3P"]   = {"QN"};
+                gate_to_negated_output_ports["FD3S"]   = {"QN"};
+                gate_to_negated_output_ports["FD3SP"]  = {"QN"};
+                gate_to_negated_output_ports["FD4"]    = {"QN"};
+                gate_to_negated_output_ports["FD4P"]   = {"QN"};
+                gate_to_negated_output_ports["FD4S"]   = {"QN"};
+                gate_to_negated_output_ports["FD4SP"]  = {"QN"};
+                gate_to_negated_output_ports["FJK1"]   = {"QN"};
+                gate_to_negated_output_ports["FJK1P"]  = {"QN"};
+                gate_to_negated_output_ports["FJK1S"]  = {"QN"};
+                gate_to_negated_output_ports["FJK1SP"] = {"QN"};
+                gate_to_negated_output_ports["FJK2"]   = {"QN"};
+                gate_to_negated_output_ports["FJK2P"]  = {"QN"};
+                gate_to_negated_output_ports["FJK2S"]  = {"QN"};
+                gate_to_negated_output_ports["FJK2SP"] = {"QN"};
+                gate_to_negated_output_ports["FJK3"]   = {"QN"};
+                gate_to_negated_output_ports["FJK3P"]  = {"QN"};
+                gate_to_negated_output_ports["FJK3S"]  = {"QN"};
+                gate_to_negated_output_ports["FJK3SP"] = {"QN"};
+                gate_to_negated_output_ports["FDS2"]   = {"QN"};
+                gate_to_negated_output_ports["FDS2L"]  = {"QN"};
+                gate_to_negated_output_ports["FDS2LP"] = {"QN"};
+                gate_to_negated_output_ports["FDS2P"]  = {"QN"};
+                gate_to_negated_output_ports["FT2"]    = {"QN"};
+                gate_to_negated_output_ports["FT2P"]   = {"QN"};
+                gate_to_negated_output_ports["FT4"]    = {"QN"};
+                gate_to_negated_output_ports["FT4P"]   = {"QN"};
+                gate_to_negated_output_ports["FD2TS"]  = {"QN"};
+                gate_to_negated_output_ports["FD2TSP"] = {"QN"};
             }
 
             return gate_to_negated_output_ports.at(sg->get_type()->get_name());

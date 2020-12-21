@@ -173,6 +173,20 @@ std::unordered_set<Gate*> Utils::get_sequential_successors(Net* start_net)
             return reset_nets;
         }
 
+        std::unordered_set<Net*> Utils::get_set_signals_of_gate(Gate* sg)
+        {
+            std::unordered_set<Net*> set_nets;
+
+            for (const auto& pin_type : get_set_ports(sg))
+            {
+                if (sg->get_fan_in_net(pin_type) != nullptr)
+                {
+                    set_nets.insert(sg->get_fan_in_net(pin_type));
+                }
+            }
+            return set_nets;
+        }
+
         std::unordered_set<Net*> Utils::get_data_signals_of_gate(Gate* sg)
         {
             std::unordered_set<Net*> data_nets;

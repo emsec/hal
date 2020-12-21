@@ -245,17 +245,17 @@ namespace hal
             static std::map<std::string, std::unordered_set<std::string>> gate_to_regular_output_ports;
             if (gate_to_regular_output_ports.empty())
             {
-                // TODO
-                gate_to_regular_output_ports["FDRE"] = {};
-                gate_to_regular_output_ports["FDE"]  = {};
-                gate_to_regular_output_ports["FD"]   = {};
-                gate_to_regular_output_ports["FDR"]  = {};
-                gate_to_regular_output_ports["FDCE"] = {};
-                gate_to_regular_output_ports["FDS"]  = {"S"};
-                gate_to_regular_output_ports["FDPE"] = {};
-                gate_to_regular_output_ports["FDSE"] = {"S"};
+                gate_to_regular_output_ports["FDRE"] = {"Q"};
+                gate_to_regular_output_ports["FDE"]  = {"Q"};
+                gate_to_regular_output_ports["FD"]   = {"Q"};
+                gate_to_regular_output_ports["FDR"]  = {"Q"};
+                gate_to_regular_output_ports["FDCE"] = {"Q"};
+                gate_to_regular_output_ports["FDS"]  = {"Q"};
+                gate_to_regular_output_ports["FDPE"] = {"Q"};
+                gate_to_regular_output_ports["FDSE"] = {"Q"};
                 // gate_to_regular_output_ports["LDCE"] = {"D"};
 
+                // TODO
                 gate_to_regular_output_ports["RAMB18E1"] = {};
                 gate_to_regular_output_ports["RAMB36E1"] = {};
                 gate_to_regular_output_ports["RAM32M"] = {};
@@ -276,7 +276,6 @@ namespace hal
             static std::map<std::string, std::unordered_set<std::string>> gate_to_negated_output_ports;
             if (gate_to_negated_output_ports.empty())
             {
-                // TODO
                 gate_to_negated_output_ports["FDRE"] = {};
                 gate_to_negated_output_ports["FDE"]  = {};
                 gate_to_negated_output_ports["FD"]   = {};
@@ -287,6 +286,7 @@ namespace hal
                 gate_to_negated_output_ports["FDSE"] = {};
                 // gate_to_negated_output_ports["LDCE"] = {};
 
+                // TODO
                 gate_to_negated_output_ports["RAMB18E1"] = {};
                 gate_to_negated_output_ports["RAMB36E1"] = {};
                 gate_to_negated_output_ports["RAM32M"] = {};

@@ -198,6 +198,12 @@ namespace hal
                             fingerprint.push_back(net->get_id());
                         }
 
+                        for (auto net : netlist_abstr.utils->get_set_signals_of_gate(sg))
+                        {
+                            netlist_abstr.gate_to_set_signals[id].insert(net->get_id());
+                            fingerprint.push_back(net->get_id());
+                        }
+
                         netlist_abstr.gate_to_fingerprint[id] = fingerprint;
                     }
 

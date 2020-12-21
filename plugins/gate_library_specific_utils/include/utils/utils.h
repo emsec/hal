@@ -39,6 +39,7 @@ namespace hal
             std::unordered_set<Net*> get_clock_signals_of_gate(Gate* sg);
             std::unordered_set<Net*> get_enable_signals_of_gate(Gate* sg);
             std::unordered_set<Net*> get_reset_signals_of_gate(Gate* sg);
+            std::unordered_set<Net*> get_set_signals_of_gate(Gate* sg);
             std::unordered_set<Net*> get_data_signals_of_gate(Gate* sg);
 
         private:
