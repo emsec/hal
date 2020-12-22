@@ -1,6 +1,5 @@
 #pragma once
 
-#include "dataflow_analysis/processing/configuration.h"
 #include "hal_core/plugin_system/plugin_interface_cli.h"
 
 #include <vector>
