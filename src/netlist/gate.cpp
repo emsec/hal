@@ -84,17 +84,17 @@ namespace hal
         return m_type;
     }
 
-    float Gate::get_location_x() const
+    i32 Gate::get_location_x() const
     {
         return m_x;
     }
 
-    float Gate::get_location_y() const
+    i32 Gate::get_location_y() const
     {
         return m_y;
     }
 
-    std::pair<float, float> Gate::get_location() const
+    std::pair<i32, i32> Gate::get_location() const
     {
         return {m_x, m_y};
     }
@@ -104,7 +104,7 @@ namespace hal
         return m_x >= 0 && m_y >= 0;
     }
 
-    void Gate::set_location_x(float x)
+    void Gate::set_location_x(i32 x)
     {
         if (x != m_x)
         {
@@ -113,7 +113,7 @@ namespace hal
         }
     }
 
-    void Gate::set_location_y(float y)
+    void Gate::set_location_y(i32 y)
     {
         if (y != m_y)
         {
@@ -122,7 +122,7 @@ namespace hal
         }
     }
 
-    void Gate::set_location(const std::pair<float, float>& location)
+    void Gate::set_location(const std::pair<i32, i32>& location)
     {
         set_location_x(location.first);
         set_location_y(location.second);
