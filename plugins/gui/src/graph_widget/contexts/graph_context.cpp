@@ -6,7 +6,7 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/layouters/layouter_task.h"
 #include "gui/gui_globals.h"
-
+#include "gui/user_action/user_action_manager.h"
 #include <QVector>
 
 namespace hal
@@ -22,6 +22,7 @@ namespace hal
           mSceneUpdateInProgress(false)
     {
         mTimestamp = QDateTime::currentDateTime();
+        UserActionManager::instance()->clearWaitCount();
     }
 
     void GraphContext::setLayouter(GraphLayouter* layouter)

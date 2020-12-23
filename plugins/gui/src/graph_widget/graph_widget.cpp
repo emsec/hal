@@ -1,6 +1,7 @@
 #include "gui/graph_widget/graph_widget.h"
 
 #include "gui/content_manager/content_manager.h"
+#include "gui/user_action/action_unfold_module.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
@@ -757,6 +758,10 @@ namespace hal
             // contexts can't infer their corresponding module from their contents
         }
 
+        ActionUnfoldModule* act = new ActionUnfoldModule;
+        act->setObjectId(id);
+        act->exec();
+/*
         if (mContext->gates().isEmpty() && mContext->modules() == QSet<u32>({id}))
         {
             mContext->unfoldModule(id);
@@ -785,6 +790,7 @@ namespace hal
 
         auto ctx = gGraphContextManager->createNewContext(QString::fromStdString(m->get_name()));
         ctx->add(module_ids, gate_ids);
+        */
     }
 
     void GraphWidget::ensureItemsVisible(const QSet<u32>& gates, const QSet<u32>& modules)

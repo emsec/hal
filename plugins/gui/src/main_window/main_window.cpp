@@ -207,6 +207,10 @@ namespace hal
         mActionStopRecording->setText("Stop recording");
         mActionPlayMacro->setText("Play macro");
 
+        mActionStartRecording->setEnabled(true);
+        mActionStopRecording->setEnabled(false);
+        mActionPlayMacro->setEnabled(true);
+
         setWindowTitle("HAL");
         mActionNew->setText("New Netlist");
         mActionOpen->setText("Open");
@@ -598,17 +602,34 @@ namespace hal
 
     void MainWindow::handleActionStartRecording()
     {
-
+        mActionStartRecording->setEnabled(false);
+        mActionStopRecording->setEnabled(true);
+        mActionPlayMacro->setEnabled(false);
+        UserActionManager::instance()->setStartRecording();
     }
 
     void MainWindow::handleActionStopRecording()
     {
-
+        mActionStartRecording->setEnabled(true);
+        mActionStopRecording->setEnabled(false);
+        mActionPlayMacro->setEnabled(true);
+        UserActionManager* uam = UserActionManager::instance();
+        QString macroFile;
+        if (uam->hasRecorded())
+        {
+            macroFile = QFileDialog::getSaveFileName(this,"Save macro to file",".");
+            if (!macroFile.isEmpty() && !macroFile.contains(QChar('.')))
+                macroFile += ".xml";
+        }
+        uam->setStopRecording(macroFile);
     }
 
     void MainWindow::handleActionPlayMacro()
     {
-
+        QString macroFile = QFileDialog::getOpenFileName(this, "Load macro file", ".",
+                                                         "Macro files (*.xml);;All files(*)");
+        if (!macroFile.isEmpty())
+            UserActionManager::instance()->playMacro(macroFile);
     }
 
     void MainWindow::handleActionClosed()
