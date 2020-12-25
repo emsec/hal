@@ -4,6 +4,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include <QMap>
+#include <QDebug>
 
 namespace hal {
 
@@ -23,6 +24,13 @@ namespace hal {
         case Node::Gate:
             g = gNetlist->get_gate_by_id(nd.id());
             Q_ASSERT(g);
+            if (g->has_location())
+            {
+                int lx = (int) floor(g->get_location_x()+0.5);
+                int ly = (int) floor(g->get_location_y()+0.5);
+                qDebug() << "g->has_location" << lx << ly;
+                return CoordinateFromData(lx,ly);
+            }
             return fromData(g->get_data_map());
         default:
             break;
