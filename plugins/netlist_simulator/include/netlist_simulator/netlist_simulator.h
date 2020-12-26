@@ -188,8 +188,8 @@ namespace hal
             std::vector<Net*> state_output_nets;
             std::vector<Net*> state_inverted_output_nets;
             std::vector<Net*> clock_nets;
-            GateTypeSequential::SetResetBehavior sr_behavior_out;
-            GateTypeSequential::SetResetBehavior sr_behavior_out_inverted;
+            GateTypeSequential::ClearPresetBehavior sr_behavior_out;
+            GateTypeSequential::ClearPresetBehavior sr_behavior_out_inverted;
             SignalValue output;
             SignalValue inv_output;
         };
@@ -205,6 +205,6 @@ namespace hal
         void prepare_clock_events(u64 nanoseconds);
         void process_events(u64 timeout);
 
-        SignalValue process_set_reset_behavior(GateTypeSequential::SetResetBehavior behavior, SignalValue previous_output);
+        SignalValue process_clear_preset_behavior(GateTypeSequential::ClearPresetBehavior behavior, SignalValue previous_output);
     };
 }    // namespace hal

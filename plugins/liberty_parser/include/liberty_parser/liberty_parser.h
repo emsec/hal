@@ -23,16 +23,16 @@
 
 #pragma once
 
-#include "hal_core/utilities/token_stream.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_library_parser.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/utilities/token_stream.h"
 
 #include <filesystem>
-#include <optional>
 #include <map>
+#include <optional>
 #include <unordered_map>
 
 namespace hal
@@ -110,8 +110,8 @@ namespace hal
             std::string next_state;
             std::string clear;
             std::string preset;
-            GateTypeSequential::SetResetBehavior special_behavior_var1 = GateTypeSequential::SetResetBehavior::U;
-            GateTypeSequential::SetResetBehavior special_behavior_var2 = GateTypeSequential::SetResetBehavior::U;
+            GateTypeSequential::ClearPresetBehavior special_behavior_var1 = GateTypeSequential::ClearPresetBehavior::U;
+            GateTypeSequential::ClearPresetBehavior special_behavior_var2 = GateTypeSequential::ClearPresetBehavior::U;
             std::string data_category;
             std::string data_identifier;
         };
@@ -124,8 +124,8 @@ namespace hal
             std::string data_in;
             std::string clear;
             std::string preset;
-            GateTypeSequential::SetResetBehavior special_behavior_var1 = GateTypeSequential::SetResetBehavior::U;
-            GateTypeSequential::SetResetBehavior special_behavior_var2 = GateTypeSequential::SetResetBehavior::U;
+            GateTypeSequential::ClearPresetBehavior special_behavior_var1 = GateTypeSequential::ClearPresetBehavior::U;
+            GateTypeSequential::ClearPresetBehavior special_behavior_var2 = GateTypeSequential::ClearPresetBehavior::U;
         };
 
         struct lut_group

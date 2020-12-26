@@ -268,44 +268,44 @@ namespace hal {
     // ===== GateTypeSequential tests ====
 
     /**
-     * Testing the usage of state_output pins and inverted_state_output_pins
+     * Testing the usage of state_pin and negated_state_pin
      *
-     * Functions: add_state_output_pins, get_state_output_pins,
-     *           add_inverted_state_output_pin, get_inverted_state_output_pins
+     * Functions: add_state_pins, get_state_pins,
+     *           add_negated_state_pin, get_negated_state_pin
      */
     TEST_F(GateLibraryTest, check_state_output_pins) {
         TEST_START
             {
-                // Add and get some state_output pins
+                // Add and get some state pins
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
                 gts.add_output_pins(std::vector<std::string>({"SO_0", "SO_1"}));
-                gts.add_state_output_pin("SO_0");
-                gts.add_state_output_pin("SO_1");
-                EXPECT_EQ(gts.get_state_output_pins(), std::unordered_set<std::string>({"SO_0", "SO_1"}));
+                gts.add_state_pin("SO_0");
+                gts.add_state_pin("SO_1");
+                EXPECT_EQ(gts.get_state_pins(), std::unordered_set<std::string>({"SO_0", "SO_1"}));
             }
             {
-                // Add and get some inverted_state_output pins
+                // Add and get some negated_state_pin pins
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
                 gts.add_output_pins(std::vector<std::string>({"ISO_0", "ISO_1"}));
-                gts.add_inverted_state_output_pin("ISO_0");
-                gts.add_inverted_state_output_pin("ISO_1");
-                EXPECT_EQ(gts.get_inverted_state_output_pins(), std::unordered_set<std::string>({"ISO_0", "ISO_1"}));
+                gts.add_negated_state_pin("ISO_0");
+                gts.add_negated_state_pin("ISO_1");
+                EXPECT_EQ(gts.get_negated_state_pins(), std::unordered_set<std::string>({"ISO_0", "ISO_1"}));
                 EXPECT_EQ(gts.get_output_pins(), std::vector<std::string>({"ISO_0", "ISO_1"}));
             }
             // Negative
             {
-                // Try to add a state_output_pin that was not registered as an output pin
+                // Try to add a state_pin that was not registered as an output pin
                 NO_COUT_TEST_BLOCK;
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
-                gts.add_state_output_pin("SO_0");
-                EXPECT_EQ(gts.get_state_output_pins(), std::unordered_set<std::string>());
+                gts.add_state_pin("SO_0");
+                EXPECT_EQ(gts.get_state_pins(), std::unordered_set<std::string>());
             }
             {
-                // Try to add an inverted_state_output_pin that was not registered as an output pin
+                // Try to add an negated_state_pin that was not registered as an output pin
                 NO_COUT_TEST_BLOCK;
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
-                gts.add_inverted_state_output_pin("ISO_0");
-                EXPECT_EQ(gts.get_inverted_state_output_pins(), std::unordered_set<std::string>());
+                gts.add_negated_state_pin("ISO_0");
+                EXPECT_EQ(gts.get_negated_state_pins(), std::unordered_set<std::string>());
             }
         TEST_END
     }
@@ -338,7 +338,7 @@ namespace hal {
 
     /**
      * Testing the access on init data fields (init_data_category, init_data_category)
-     * as well as the access on the base type and the set-reset behavior
+     * as well as the access on the base type and the clear-preset behavior
      *
      * Functions: get_base_type, get_config_data_category, set_config_data_category, get_config_data_identifier,
      *            set_config_data_identifier, set_config_data_ascending_order, is_config_data_ascending_order
@@ -361,19 +361,19 @@ namespace hal {
                 EXPECT_EQ(gts.get_init_data_identifier(), "identifier");
             }
             {
-                // Set-Reset Behavior
-                gts.set_set_reset_behavior(GateTypeSequential::SetResetBehavior::L,
-                                           GateTypeSequential::SetResetBehavior::H);
-                EXPECT_EQ(gts.get_set_reset_behavior(),
-                          std::make_pair(GateTypeSequential::SetResetBehavior::L,
-                                         GateTypeSequential::SetResetBehavior::H));
+                // Clear-Preset Behavior
+                gts.set_clear_preset_behavior(GateTypeSequential::ClearPresetBehavior::L,
+                                           GateTypeSequential::ClearPresetBehavior::H);
+                EXPECT_EQ(gts.get_clear_preset_behavior(),
+                          std::make_pair(GateTypeSequential::ClearPresetBehavior::L,
+                                         GateTypeSequential::ClearPresetBehavior::H));
             }
             {
-                // Get uninitialized set-reset behavior
+                // Get uninitialized clear_preset behavior
                 GateTypeSequential gts_2("gtl_name", GateType::BaseType::ff);
-                EXPECT_EQ(gts_2.get_set_reset_behavior(),
-                          std::make_pair(GateTypeSequential::SetResetBehavior::U,
-                                         GateTypeSequential::SetResetBehavior::U));
+                EXPECT_EQ(gts_2.get_clear_preset_behavior(),
+                          std::make_pair(GateTypeSequential::ClearPresetBehavior::U,
+                                         GateTypeSequential::ClearPresetBehavior::U));
             }
         TEST_END
     }

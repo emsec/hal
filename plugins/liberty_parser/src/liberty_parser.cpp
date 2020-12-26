@@ -596,11 +596,11 @@ namespace hal
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        ff.special_behavior_var1 = GateTypeSequential::SetResetBehavior(pos + 1);
+                        ff.special_behavior_var1 = GateTypeSequential::ClearPresetBehavior(pos + 1);
                     }
                     else
                     {
-                        ff.special_behavior_var2 = GateTypeSequential::SetResetBehavior(pos + 1);
+                        ff.special_behavior_var2 = GateTypeSequential::ClearPresetBehavior(pos + 1);
                     }
                 }
                 else
@@ -678,11 +678,11 @@ namespace hal
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        latch.special_behavior_var1 = GateTypeSequential::SetResetBehavior(pos + 1);
+                        latch.special_behavior_var1 = GateTypeSequential::ClearPresetBehavior(pos + 1);
                     }
                     else
                     {
-                        latch.special_behavior_var2 = GateTypeSequential::SetResetBehavior(pos + 1);
+                        latch.special_behavior_var2 = GateTypeSequential::ClearPresetBehavior(pos + 1);
                     }
                 }
                 else
@@ -845,7 +845,7 @@ namespace hal
                 cell.special_functions["clear"] = cell.ff.clear;
             }
 
-            seq_gt->set_set_reset_behavior(cell.ff.special_behavior_var1, cell.ff.special_behavior_var2);
+            seq_gt->set_clear_preset_behavior(cell.ff.special_behavior_var1, cell.ff.special_behavior_var2);
             seq_gt->set_init_data_category(cell.ff.data_category);
             seq_gt->set_init_data_identifier(cell.ff.data_identifier);
 
@@ -855,7 +855,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_state_output_pin(pin_name);
+                        seq_gt->add_state_pin(pin_name);
                     }
 
                     pin.function = "";
@@ -864,7 +864,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_inverted_state_output_pin(pin_name);
+                        seq_gt->add_negated_state_pin(pin_name);
                     }
 
                     pin.function = "";
@@ -887,7 +887,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_state_output_pin(pin_name);
+                            seq_gt->add_state_pin(pin_name);
                         }
 
                         pin.function = "";
@@ -896,7 +896,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_inverted_state_output_pin(pin_name);
+                            seq_gt->add_negated_state_pin(pin_name);
                         }
 
                         pin.function = "";
@@ -941,7 +941,7 @@ namespace hal
                 cell.special_functions["clear"] = cell.latch.clear;
             }
 
-            seq_gt->set_set_reset_behavior(cell.latch.special_behavior_var1, cell.latch.special_behavior_var2);
+            seq_gt->set_clear_preset_behavior(cell.latch.special_behavior_var1, cell.latch.special_behavior_var2);
 
             for (auto& pin : cell.pins)
             {
@@ -949,7 +949,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_state_output_pin(pin_name);
+                        seq_gt->add_state_pin(pin_name);
                     }
 
                     pin.function = "";
@@ -958,7 +958,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_inverted_state_output_pin(pin_name);
+                        seq_gt->add_negated_state_pin(pin_name);
                     }
 
                     pin.function = "";
@@ -981,7 +981,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_state_output_pin(pin_name);
+                            seq_gt->add_state_pin(pin_name);
                         }
 
                         pin.function = "";
@@ -990,7 +990,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_inverted_state_output_pin(pin_name);
+                            seq_gt->add_negated_state_pin(pin_name);
                         }
 
                         pin.function = "";

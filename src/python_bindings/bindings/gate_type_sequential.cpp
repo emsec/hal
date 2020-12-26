@@ -9,15 +9,15 @@ namespace hal
             In addition to the standard gate type functionality, it provides mechanisms to specify outputs that depend on the internal state of the sequential gate as well as clock pins.
         )");
 
-        py::enum_<GateTypeSequential::SetResetBehavior>(py_gate_type_sequential, "SetResetBehavior", R"(
-            Defines the behavior of the gate type in case both set and reset are active at the same time.
+        py::enum_<GateTypeSequential::ClearPresetBehavior>(py_gate_type_sequential, "ClearPresetBehavior", R"(
+            Defines the behavior of the gate type in case both clear and preset are active at the same time.
         )")
-            .value("U", GateTypeSequential::SetResetBehavior::U, R"(Default value when no behavior is specified.)")
-            .value("L", GateTypeSequential::SetResetBehavior::L, R"(Set the internal state to '0'.)")
-            .value("H", GateTypeSequential::SetResetBehavior::H, R"(Set the internal state to '1'.)")
-            .value("N", GateTypeSequential::SetResetBehavior::N, R"(Do not change the internal state.)")
-            .value("T", GateTypeSequential::SetResetBehavior::T, R"(Toggle, i.e., invert the internal state.)")
-            .value("X", GateTypeSequential::SetResetBehavior::X, R"(Set the internal state to 'X'.)")
+            .value("U", GateTypeSequential::ClearPresetBehavior::U, R"(Default value when no behavior is specified.)")
+            .value("L", GateTypeSequential::ClearPresetBehavior::L, R"(Set the internal state to '0'.)")
+            .value("H", GateTypeSequential::ClearPresetBehavior::H, R"(Set the internal state to '1'.)")
+            .value("N", GateTypeSequential::ClearPresetBehavior::N, R"(Do not change the internal state.)")
+            .value("T", GateTypeSequential::ClearPresetBehavior::T, R"(Toggle, i.e., invert the internal state.)")
+            .value("X", GateTypeSequential::ClearPresetBehavior::X, R"(Set the internal state to 'X'.)")
             .export_values();
 
         py_gate_type_sequential.def(py::init<const std::string&, GateType::BaseType>(), py::arg("name"), py::arg("base_type"), R"(
@@ -28,78 +28,158 @@ namespace hal
             :param hal_py.GateType.BaseType base_type: The base type of the sequential gate type.
         )");
 
-        py_gate_type_sequential.def("add_state_output_pin", &GateTypeSequential::add_state_output_pin, py::arg("pin_name"), R"(
+        py_gate_type_sequential.def("add_state_output_pin", &GateTypeSequential::add_state_pin, py::arg("pin_name"), R"(
             Add an existing output pin to the collection of output pins that generate their output from the internal state of the gate.
             The pin has to be declared as an output pin beforehand.
 
             :param str pin_name: The name of the output pin to add.
         )");
 
-        py_gate_type_sequential.def_property_readonly("state_output_pins", &GateTypeSequential::get_state_output_pins, R"(
-            The set of names of the output pins that use the internal state of the gate to generate their output.
+        py_gate_type_sequential.def_property_readonly("state_pins", &GateTypeSequential::get_state_pins, R"(
+            The set of output pins that use the internal state of the gate to generate their output.
 
             :type: set[str]
         )");
 
-        py_gate_type_sequential.def("get_state_output_pins", &GateTypeSequential::get_state_output_pins, R"(
+        py_gate_type_sequential.def("get_state_pins", &GateTypeSequential::get_state_pins, R"(
             Get the output pins that use the internal state of the gate to generate their output.
 
             :returns: The set of output pin names.
             :rtype: set[str]
         )");
 
-        py_gate_type_sequential.def("add_inverted_state_output_pin", &GateTypeSequential::add_inverted_state_output_pin, py::arg("pin_name"), R"(
-            Add an existing output pin to the collection of output pins that generate their output from the inverted internal state of the gate.
+        py_gate_type_sequential.def("add_negated_state_pin", &GateTypeSequential::add_negated_state_pin, py::arg("pin_name"), R"(
+            Add an existing output pin to the collection of output pins that generate their output from the negated internal state of the gate.
             The pin has to be declared as an output pin beforehand.
 
             :param str pin_name: The name of the output pin to add.
         )");
 
-        py_gate_type_sequential.def_property_readonly("inverted_state_output_pins", &GateTypeSequential::get_inverted_state_output_pins, R"(
-            The set of names of the output pins that use the inverted internal state of the gate to generate their output.
+        py_gate_type_sequential.def_property_readonly("negated_state_pins", &GateTypeSequential::get_negated_state_pins, R"(
+            The set of output pins that use the negated internal state of the gate to generate their output.
 
             :type: set[str]
         )");
 
-        py_gate_type_sequential.def("get_inverted_state_output_pins", &GateTypeSequential::get_inverted_state_output_pins, R"(
-            Get the output pins that use the inverted internal state of the gate to generate their output.
+        py_gate_type_sequential.def("get_negated_state_pins", &GateTypeSequential::get_negated_state_pins, R"(
+            Get the output pins that use the negated internal state of the gate to generate their output.
 
             :returns: The set of output pin names.
             :rtype: set[str]
         )");
 
         py_gate_type_sequential.def("add_clock_pin", &GateTypeSequential::add_clock_pin, py::arg("pin_name"), R"(
-            Add an existing input pin to the collection of input pins that are connected to a clock signal.
+            Add an existing input pin to the collection of clock pins.
             The pin has to be declared as an input pin beforehand.
 
             :param str pin_name: The name of the input pin to add.
         )");
 
         py_gate_type_sequential.def_property_readonly("clock_pins", &GateTypeSequential::get_clock_pins, R"(
-            The set of names of the input pins that that are connected to a clock signal.
+            The set of input pins that that are classified as clock pins.
 
             :type: set[str]
         )");
 
         py_gate_type_sequential.def("get_clock_pins", &GateTypeSequential::get_clock_pins, R"(
-            Get the input pins that that are connected to a clock signal.
+            Get all input pins classfied as clock pins.
 
             :returns: The set of input pin names.
             :rtype: set[str]
         )");
 
-        py_gate_type_sequential.def("set_set_reset_behavior", &GateTypeSequential::set_set_reset_behavior, py::arg("sb1"), py::arg("sb2"), R"(
-            Set the behavior that describes the internal state when both set and reset are active at the same time.
+        py_gate_type_sequential.def("add_enable_pin", &GateTypeSequential::add_enable_pin, py::arg("pin_name"), R"(
+            Add an existing input pin to the collection of enable pins.
+            The pin has to be declared as an input pin beforehand.
 
-            :param hal_py.SetResetBehavior sb1: The value specifying the behavior for the internal state.
-            :param hal_py.SetResetBehavior sb2: The value specifying the behavior for the inverted internal state.
+            :param str pin_name: The name of the input pin to add.
         )");
 
-        py_gate_type_sequential.def("get_set_reset_behavior", &GateTypeSequential::get_set_reset_behavior, R"(
-            Get the behavior of the internal state and the inverted internal state when both set and reset are active at the same time.
+        py_gate_type_sequential.def_property_readonly("enable_pins", &GateTypeSequential::get_enable_pins, R"(
+            The set of input pins that that are classified as enable pins.
 
-            :returns: The values specifying the behavior for the internal and inverted internal state.
-            :rytpe: tuple(hal_py.SetResetBehavior, hal_py.SetResetBehavior)
+            :type: set[str]
+        )");
+
+        py_gate_type_sequential.def("get_enable_pins", &GateTypeSequential::get_enable_pins, R"(
+            Get all input pins classfied as enable pins.
+
+            :returns: The set of input pin names.
+            :rtype: set[str]
+        )");
+
+        py_gate_type_sequential.def("add_reset_pin", &GateTypeSequential::add_reset_pin, py::arg("pin_name"), R"(
+            Add an existing input pin to the collection of reset pins.
+            The pin has to be declared as an input pin beforehand.
+
+            :param str pin_name: The name of the input pin to add.
+        )");
+
+        py_gate_type_sequential.def_property_readonly("reset_pins", &GateTypeSequential::get_reset_pins, R"(
+            The set of input pins that that are classified as reset pins.
+
+            :type: set[str]
+        )");
+
+        py_gate_type_sequential.def("get_reset_pins", &GateTypeSequential::get_reset_pins, R"(
+            Get all input pins classfied as reset pins.
+
+            :returns: The set of input pin names.
+            :rtype: set[str]
+        )");
+
+        py_gate_type_sequential.def("add_set_pin", &GateTypeSequential::add_set_pin, py::arg("pin_name"), R"(
+            Add an existing input pin to the collection of set pins.
+            The pin has to be declared as an input pin beforehand.
+
+            :param str pin_name: The name of the input pin to add.
+        )");
+
+        py_gate_type_sequential.def_property_readonly("set_pins", &GateTypeSequential::get_set_pins, R"(
+            The set of input pins that that are classified as set pins.
+
+            :type: set[str]
+        )");
+
+        py_gate_type_sequential.def("get_set_pins", &GateTypeSequential::get_set_pins, R"(
+            Get all input pins classfied as set pins.
+
+            :returns: The set of input pin names.
+            :rtype: set[str]
+        )");
+
+        py_gate_type_sequential.def("add_data_pin", &GateTypeSequential::add_data_pin, py::arg("pin_name"), R"(
+            Add an existing input pin to the collection of data pins.
+            The pin has to be declared as an input pin beforehand.
+
+            :param str pin_name: The name of the input pin to add.
+        )");
+
+        py_gate_type_sequential.def_property_readonly("data_pins", &GateTypeSequential::get_data_pins, R"(
+            The set of input pins that that are classified as data pins.
+
+            :type: set[str]
+        )");
+
+        py_gate_type_sequential.def("get_data_pins", &GateTypeSequential::get_data_pins, R"(
+            Get all input pins classfied as data pins.
+
+            :returns: The set of input pin names.
+            :rtype: set[str]
+        )");
+
+        py_gate_type_sequential.def("set_clear_preset_behavior", &GateTypeSequential::set_clear_preset_behavior, py::arg("cp1"), py::arg("cp2"), R"(
+            Set the behavior that describes the internal state when both clear and preset are active at the same time.
+
+            :param hal_py.ClearPresetBehavior cp1: The value specifying the behavior for the internal state.
+            :param hal_py.ClearPresetBehavior cp2: The value specifying the behavior for the negated internal state.
+        )");
+
+        py_gate_type_sequential.def("get_clear_preset_behavior", &GateTypeSequential::get_clear_preset_behavior, R"(
+            Get the behavior of the internal state and the negated internal state when both clear and preset are active at the same time.
+
+            :returns: The values specifying the behavior for the internal and negated internal state.
+            :rytpe: tuple(hal_py.ClearPresetBehavior, hal_py.ClearPresetBehavior)
         )");
 
         py_gate_type_sequential.def_property("init_data_category", &GateTypeSequential::get_init_data_category, &GateTypeSequential::set_init_data_category, R"(

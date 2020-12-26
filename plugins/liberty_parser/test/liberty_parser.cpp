@@ -284,12 +284,12 @@ namespace hal {
                 EXPECT_EQ(gt_ff->get_boolean_functions().at("clear"),
                           BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
                 // -- Check the output pins
-                EXPECT_EQ(gt_ff->get_state_output_pins(), std::unordered_set<std::string>({"Q"}));
-                EXPECT_EQ(gt_ff->get_inverted_state_output_pins(), std::unordered_set<std::string>({"QN"}));
+                EXPECT_EQ(gt_ff->get_state_pins(), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt_ff->get_negated_state_pins(), std::unordered_set<std::string>({"QN"}));
                 // -- Check the set-reset behaviour
-                EXPECT_EQ(gt_ff->get_set_reset_behavior(),
-                          std::make_pair(GateTypeSequential::SetResetBehavior::L,
-                                         GateTypeSequential::SetResetBehavior::H));
+                EXPECT_EQ(gt_ff->get_clear_preset_behavior(),
+                          std::make_pair(GateTypeSequential::ClearPresetBehavior::L,
+                                         GateTypeSequential::ClearPresetBehavior::H));
             }
         TEST_END
     }
@@ -380,12 +380,12 @@ namespace hal {
                 EXPECT_EQ(gt_latch->get_boolean_functions().at("clear"),
                           BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
                 // -- Check the output pins
-                EXPECT_EQ(gt_latch->get_state_output_pins(), std::unordered_set<std::string>({"Q"}));
-                EXPECT_EQ(gt_latch->get_inverted_state_output_pins(), std::unordered_set<std::string>({"QN"}));
-                // -- Check the set-reset behaviour
-                EXPECT_EQ(gt_latch->get_set_reset_behavior(),
-                          std::make_pair(GateTypeSequential::SetResetBehavior::N,
-                                         GateTypeSequential::SetResetBehavior::T));
+                EXPECT_EQ(gt_latch->get_state_pins(), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt_latch->get_negated_state_pins(), std::unordered_set<std::string>({"QN"}));
+                // -- Check the clear-preset behaviour
+                EXPECT_EQ(gt_latch->get_clear_preset_behavior(),
+                          std::make_pair(GateTypeSequential::ClearPresetBehavior::N,
+                                         GateTypeSequential::ClearPresetBehavior::T));
 
             }
         TEST_END

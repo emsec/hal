@@ -42,9 +42,9 @@ namespace hal
     {
     public:
         /**
-         * Defines the behavior of the gate type in case both set and reset are active at the same time.
+         * Defines the behavior of the gate type in case both clear and preset are active at the same time.
          */
-        enum class SetResetBehavior
+        enum class ClearPresetBehavior
         {
             U = 0, /**< Default value when no behavior is specified. **/
             L = 1, /**< Set the internal state to \p 0. **/
@@ -70,32 +70,32 @@ namespace hal
          *
          * @param[in] pin_name - The name of the output pin to add.
          */
-        void add_state_output_pin(const std::string& pin_name);
+        void add_state_pin(const std::string& pin_name);
 
         /**
          * Get the output pins that use the internal state of the gate to generate their output.
          *
          * @returns The set of output pin names.
          */
-        std::unordered_set<std::string> get_state_output_pins() const;
+        std::unordered_set<std::string> get_state_pins() const;
 
         /**
-         * Add an existing output pin to the collection of output pins that generate their output from the inverted internal state of the gate.<br>
+         * Add an existing output pin to the collection of output pins that generate their output from the negated internal state of the gate.<br>
          * The pin has to be declared as an output pin beforehand.
          *
          * @param[in] pin_name - The name of the output pin to add.
          */
-        void add_inverted_state_output_pin(const std::string& pin_name);
+        void add_negated_state_pin(const std::string& pin_name);
 
         /**
          * Get the output pins that use the inverted internal state of the gate to generate their output.
          *
          * @returns The set of output pin names.
          */
-        std::unordered_set<std::string> get_inverted_state_output_pins() const;
+        std::unordered_set<std::string> get_negated_state_pins() const;
 
         /**
-         * Add an existing input pin to the collection of input pins that are connected to a clock signal.<br>
+         * Add an existing input pin to the collection of clock pins.<br>
          * The pin has to be declared as an input pin beforehand.
          *
          * @param[in] pin_name - The name of the input pin to add.
@@ -103,26 +103,86 @@ namespace hal
         void add_clock_pin(const std::string& pin_name);
 
         /**
-         * Get the input pins that that are connected to a clock signal.
+         * Get all input pins classfied as clock pins.
          *
          * @returns The set of input pin names.
          */
         std::unordered_set<std::string> get_clock_pins() const;
 
         /**
-         * Set the behavior that describes the internal state when both set and reset are active at the same time.
+         * Add an existing input pin to the collection of enable pins.<br>
+         * The pin has to be declared as an input pin beforehand.
          *
-         * @param[in] sb1 - The value specifying the behavior for the internal state.
-         * @param[in] sb2 - The value specifying the behavior for the inverted internal state.
+         * @param[in] pin_name - The name of the input pin to add.
          */
-        void set_set_reset_behavior(SetResetBehavior sb1, SetResetBehavior sb2);
+        void add_enable_pin(const std::string& pin_name);
 
         /**
-         * Get the behavior of the internal state and the inverted internal state when both set and reset are active at the same time.
+         * Get all input pins that declared as enable pins.
          *
-         * @returns The values specifying the behavior for the internal and inverted internal state.
+         * @returns The set of input pin names.
          */
-        std::pair<SetResetBehavior, SetResetBehavior> get_set_reset_behavior() const;
+        std::unordered_set<std::string> get_enable_pins() const;
+
+        /**
+         * Add an existing input pin to the collection of reset pins.<br>
+         * The pin has to be declared as an input pin beforehand.
+         *
+         * @param[in] pin_name - The name of the input pin to add.
+         */
+        void add_reset_pin(const std::string& pin_name);
+
+        /**
+         * Get all input pins that declared as reset pins.
+         *
+         * @returns The set of input pin names.
+         */
+        std::unordered_set<std::string> get_reset_pins() const;
+
+        /**
+         * Add an existing input pin to the collection of set pins.<br>
+         * The pin has to be declared as an input pin beforehand.
+         *
+         * @param[in] pin_name - The name of the input pin to add.
+         */
+        void add_set_pin(const std::string& pin_name);
+
+        /**
+         * Get all input pins that declared as set pins.
+         *
+         * @returns The set of input pin names.
+         */
+        std::unordered_set<std::string> get_set_pins() const;
+
+        /**
+         * Add an existing input pin to the collection of data pins.<br>
+         * The pin has to be declared as an input pin beforehand.
+         *
+         * @param[in] pin_name - The name of the input pin to add.
+         */
+        void add_data_pin(const std::string& pin_name);
+
+        /**
+         * Get all input pins that declared as data pins.
+         *
+         * @returns The set of input pin names.
+         */
+        std::unordered_set<std::string> get_data_pins() const;
+
+        /**
+         * Set the behavior that describes the internal state when both clear and preset are active at the same time.
+         *
+         * @param[in] cp1 - The value specifying the behavior for the internal state.
+         * @param[in] cp2 - The value specifying the behavior for the negated internal state.
+         */
+        void set_clear_preset_behavior(ClearPresetBehavior cp1, ClearPresetBehavior cp2);
+
+        /**
+         * Get the behavior of the internal state and the negated internal state when both clear and preset are active at the same time.
+         *
+         * @returns The values specifying the behavior for the internal and negated internal state.
+         */
+        std::pair<ClearPresetBehavior, ClearPresetBehavior> get_clear_preset_behavior() const;
 
         /**
          * Set the data category in which to find the initialization value.
@@ -155,11 +215,15 @@ namespace hal
     private:
         // set of pins that use the internal state or inverted internal state respectively as output
         std::unordered_set<std::string> m_state_pins;
-        std::unordered_set<std::string> m_inverted_state_pins;
+        std::unordered_set<std::string> m_negated_state_pins;
         std::unordered_set<std::string> m_clock_pins;
+        std::unordered_set<std::string> m_enable_pins;
+        std::unordered_set<std::string> m_reset_pins;
+        std::unordered_set<std::string> m_set_pins;
+        std::unordered_set<std::string> m_data_pins;
 
         // behavior when both set and reset are active
-        std::pair<SetResetBehavior, SetResetBehavior> m_set_reset_behavior;
+        std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior;
 
         std::string m_init_data_category;
         std::string m_init_data_identifier;

@@ -101,7 +101,7 @@ namespace hal
                 SignalValue inv_value = toggle(value);
 
                 // generate events
-                for (const auto& pin : gate_type->get_state_output_pins())
+                for (const auto& pin : gate_type->get_state_pins())
                 {
                     Event e;
                     e.affected_net = gate->get_fan_out_net(pin);
@@ -109,7 +109,7 @@ namespace hal
                     e.time         = m_current_time;
                     m_event_queue.push_back(e);
                 }
-                for (const auto& pin : gate_type->get_inverted_state_output_pins())
+                for (const auto& pin : gate_type->get_negated_state_pins())
                 {
                     Event e;
                     e.affected_net = gate->get_fan_out_net(pin);
@@ -155,7 +155,7 @@ namespace hal
                     SignalValue inv_value = toggle(value);
 
                     // generate events
-                    for (const auto& pin : gate_type->get_state_output_pins())
+                    for (const auto& pin : gate_type->get_state_pins())
                     {
                         Event e;
                         e.affected_net = gate->get_fan_out_net(pin);
@@ -163,7 +163,7 @@ namespace hal
                         e.time         = m_current_time;
                         m_event_queue.push_back(e);
                     }
-                    for (const auto& pin : gate_type->get_inverted_state_output_pins())
+                    for (const auto& pin : gate_type->get_negated_state_pins())
                     {
                         Event e;
                         e.affected_net = gate->get_fan_out_net(pin);
@@ -317,11 +317,11 @@ namespace hal
                 sim_gate->preset_func     = gate->get_boolean_function("preset");
                 sim_gate->clear_func      = gate->get_boolean_function("clear");
                 sim_gate->next_state_func = gate->get_boolean_function("next_state");
-                for (auto pin : gate_type->get_state_output_pins())
+                for (auto pin : gate_type->get_state_pins())
                 {
                     sim_gate->state_output_nets.push_back(gate->get_fan_out_net(pin));
                 }
-                for (auto pin : gate_type->get_inverted_state_output_pins())
+                for (auto pin : gate_type->get_negated_state_pins())
                 {
                     sim_gate->state_inverted_output_nets.push_back(gate->get_fan_out_net(pin));
                 }
@@ -329,7 +329,7 @@ namespace hal
                 {
                     sim_gate->clock_nets.push_back(gate->get_fan_in_net(pin));
                 }
-                auto behavior                      = gate_type->get_set_reset_behavior();
+                auto behavior                      = gate_type->get_clear_preset_behavior();
                 sim_gate->sr_behavior_out          = behavior.first;
                 sim_gate->sr_behavior_out_inverted = behavior.second;
             }
@@ -668,8 +668,8 @@ namespace hal
                                 old_output_inv = it->second.back().new_value;
                             }
                         }
-                        result     = process_set_reset_behavior(ff->sr_behavior_out, old_output);
-                        inv_result = process_set_reset_behavior(ff->sr_behavior_out_inverted, old_output_inv);
+                        result     = process_clear_preset_behavior(ff->sr_behavior_out, old_output);
+                        inv_result = process_clear_preset_behavior(ff->sr_behavior_out_inverted, old_output_inv);
                     }
                     else if (async_set == BooleanFunction::ONE)
                     {
@@ -729,30 +729,30 @@ namespace hal
         }
     }
 
-    SignalValue NetlistSimulator::process_set_reset_behavior(GateTypeSequential::SetResetBehavior behavior, SignalValue previous_output)
+    SignalValue NetlistSimulator::process_clear_preset_behavior(GateTypeSequential::ClearPresetBehavior behavior, SignalValue previous_output)
     {
-        if (behavior == GateTypeSequential::SetResetBehavior::U)
+        if (behavior == GateTypeSequential::ClearPresetBehavior::U)
         {
             log_warning("netlist simulator", "undefined simultaneous set/reset behavior encountered");
             return SignalValue::X;
         }
-        else if (behavior == GateTypeSequential::SetResetBehavior::N)
+        else if (behavior == GateTypeSequential::ClearPresetBehavior::N)
         {
             return previous_output;
         }
-        else if (behavior == GateTypeSequential::SetResetBehavior::X)
+        else if (behavior == GateTypeSequential::ClearPresetBehavior::X)
         {
             return SignalValue::X;
         }
-        else if (behavior == GateTypeSequential::SetResetBehavior::L)
+        else if (behavior == GateTypeSequential::ClearPresetBehavior::L)
         {
             return SignalValue::ZERO;
         }
-        else if (behavior == GateTypeSequential::SetResetBehavior::H)
+        else if (behavior == GateTypeSequential::ClearPresetBehavior::H)
         {
             return SignalValue::ONE;
         }
-        else if (behavior == GateTypeSequential::SetResetBehavior::T)
+        else if (behavior == GateTypeSequential::ClearPresetBehavior::T)
         {
             return toggle(previous_output);
         }

@@ -10,7 +10,7 @@ namespace hal
         assert(m_base_type == BaseType::ff || m_base_type == BaseType::latch);
     }
 
-    void GateTypeSequential::add_state_output_pin(const std::string& pin_name)
+    void GateTypeSequential::add_state_pin(const std::string& pin_name)
     {
         if (std::find(m_output_pins.begin(), m_output_pins.end(), pin_name) == m_output_pins.end())
         {
@@ -21,15 +21,25 @@ namespace hal
         m_state_pins.insert(pin_name);
     }
 
-    void GateTypeSequential::add_inverted_state_output_pin(const std::string& pin_name)
+    std::unordered_set<std::string> GateTypeSequential::get_state_pins() const
+    {
+        return m_state_pins;
+    }
+
+    void GateTypeSequential::add_negated_state_pin(const std::string& pin_name)
     {
         if (std::find(m_output_pins.begin(), m_output_pins.end(), pin_name) == m_output_pins.end())
         {
-            log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring inverted state output pin assignment", pin_name, m_name);
+            log_warning("gate_type", "pin '{}' of gate type '{}' is not an output pin, ignoring negated state output pin assignment", pin_name, m_name);
             return;
         }
 
-        m_inverted_state_pins.insert(pin_name);
+        m_negated_state_pins.insert(pin_name);
+    }
+
+    std::unordered_set<std::string> GateTypeSequential::get_negated_state_pins() const
+    {
+        return m_negated_state_pins;
     }
 
     void GateTypeSequential::add_clock_pin(const std::string& pin_name)
@@ -43,9 +53,83 @@ namespace hal
         m_clock_pins.insert(pin_name);
     }
 
-    void GateTypeSequential::set_set_reset_behavior(SetResetBehavior sb1, SetResetBehavior sb2)
+    std::unordered_set<std::string> GateTypeSequential::get_clock_pins() const
     {
-        m_set_reset_behavior = {sb1, sb2};
+        return m_clock_pins;
+    }
+
+    void GateTypeSequential::add_enable_pin(const std::string& pin_name)
+    {
+        if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
+        {
+            log_warning("gate_type", "pin '{}' of gate type '{}' is not an input pin, ignoring enable input pin assignment", pin_name, m_name);
+            return;
+        }
+
+        m_enable_pins.insert(pin_name);
+    }
+
+    std::unordered_set<std::string> GateTypeSequential::get_enable_pins() const
+    {
+        return m_enable_pins;
+    }
+
+    void GateTypeSequential::add_reset_pin(const std::string& pin_name)
+    {
+        if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
+        {
+            log_warning("gate_type", "pin '{}' of gate type '{}' is not an input pin, ignoring reset input pin assignment", pin_name, m_name);
+            return;
+        }
+
+        m_reset_pins.insert(pin_name);
+    }
+
+    std::unordered_set<std::string> GateTypeSequential::get_reset_pins() const
+    {
+        return m_reset_pins;
+    }
+
+    void GateTypeSequential::add_set_pin(const std::string& pin_name)
+    {
+        if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
+        {
+            log_warning("gate_type", "pin '{}' of gate type '{}' is not an input pin, ignoring set input pin assignment", pin_name, m_name);
+            return;
+        }
+
+        m_set_pins.insert(pin_name);
+    }
+
+    std::unordered_set<std::string> GateTypeSequential::get_set_pins() const
+    {
+        return m_set_pins;
+    }
+
+    void GateTypeSequential::add_data_pin(const std::string& pin_name)
+    {
+        if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
+        {
+            log_warning("gate_type", "pin '{}' of gate type '{}' is not an input pin, ignoring data input pin assignment", pin_name, m_name);
+            return;
+        }
+
+        m_data_pins.insert(pin_name);
+    }
+
+    std::unordered_set<std::string> GateTypeSequential::get_data_pins() const
+    {
+        return m_data_pins;
+    }
+
+    void GateTypeSequential::set_clear_preset_behavior(ClearPresetBehavior cp1, ClearPresetBehavior cp2)
+    {
+        m_clear_preset_behavior = {cp1, cp2};
+    }
+
+    std::pair<GateTypeSequential::ClearPresetBehavior, GateTypeSequential::ClearPresetBehavior> GateTypeSequential::get_clear_preset_behavior() const
+    {
+        return m_clear_preset_behavior;
     }
 
     void GateTypeSequential::set_init_data_category(const std::string& category)
@@ -53,34 +137,14 @@ namespace hal
         m_init_data_category = category;
     }
 
-    void GateTypeSequential::set_init_data_identifier(const std::string& identifier)
-    {
-        m_init_data_identifier = identifier;
-    }
-
-    std::unordered_set<std::string> GateTypeSequential::get_state_output_pins() const
-    {
-        return m_state_pins;
-    }
-
-    std::unordered_set<std::string> GateTypeSequential::get_inverted_state_output_pins() const
-    {
-        return m_inverted_state_pins;
-    }
-
-    std::unordered_set<std::string> GateTypeSequential::get_clock_pins() const
-    {
-        return m_clock_pins;
-    }
-
-    std::pair<GateTypeSequential::SetResetBehavior, GateTypeSequential::SetResetBehavior> GateTypeSequential::get_set_reset_behavior() const
-    {
-        return m_set_reset_behavior;
-    }
-
     std::string GateTypeSequential::get_init_data_category() const
     {
         return m_init_data_category;
+    }
+
+    void GateTypeSequential::set_init_data_identifier(const std::string& identifier)
+    {
+        m_init_data_identifier = identifier;
     }
 
     std::string GateTypeSequential::get_init_data_identifier() const
