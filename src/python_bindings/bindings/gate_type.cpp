@@ -185,6 +185,46 @@ namespace hal
             :rtype: dict[str,dict[int,str]]
         )");
 
+        py_gate_type.def("assign_vdd_pin", &GateType::assign_vdd_pin, py::arg("pin_name"), R"(
+            Add an existing input pin to the collection of VDD pins.
+            The pin has to be declared as an input pin beforehand.
+
+            :param str pin_name: The name of the input pin to add.
+        )");
+
+        py_gate_type.def_property_readonly("vdd_pins", &GateType::get_vdd_pins, R"(
+            The set of input pins that that are classified as VDD pins.
+
+            :type: set[str]
+        )");
+
+        py_gate_type.def("get_vdd_pins", &GateType::get_vdd_pins, R"(
+            Get all input pins classfied as VDD pins.
+
+            :returns: The set of input pin names.
+            :rtype: set[str]
+        )");
+
+        py_gate_type.def("assign_gnd_pin", &GateType::assign_gnd_pin, py::arg("pin_name"), R"(
+            Add an existing input pin to the collection of GND pins.
+            The pin has to be declared as an input pin beforehand.
+
+            :param str pin_name: The name of the input pin to add.
+        )");
+
+        py_gate_type.def_property_readonly("gnd_pins", &GateType::get_gnd_pins, R"(
+            The set of input pins that that are classified as GND pins.
+
+            :type: set[str]
+        )");
+
+        py_gate_type.def("get_gnd_pins", &GateType::get_gnd_pins, R"(
+            Get all input pins classfied as GND pins.
+
+            :returns: The set of input pin names.
+            :rtype: set[str]
+        )");
+
         py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("pin_name"), py::arg("function"), R"(
             Add a Boolean function with the specified name to the gate type.
 

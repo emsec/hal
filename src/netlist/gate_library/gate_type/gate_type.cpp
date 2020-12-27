@@ -122,4 +122,36 @@ namespace hal
     {
         return m_functions;
     }
+
+    void GateType::assign_vdd_pin(const std::string& pin_name)
+    {
+        if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
+        {
+            log_warning("gate_type", "pin '{}' of gate type '{}' is not an input pin, ignoring VDD input pin assignment", pin_name, m_name);
+            return;
+        }
+
+        m_vdd_pins.insert(pin_name);
+    }
+
+    std::unordered_set<std::string> GateType::get_vdd_pins() const
+    {
+        return m_vdd_pins;
+    }
+
+    void GateType::assign_gnd_pin(const std::string& pin_name)
+    {
+        if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
+        {
+            log_warning("gate_type", "pin '{}' of gate type '{}' is not an input pin, ignoring GND input pin assignment", pin_name, m_name);
+            return;
+        }
+
+        m_gnd_pins.insert(pin_name);
+    }
+
+    std::unordered_set<std::string> GateType::get_gnd_pins() const
+    {
+        return m_gnd_pins;
+    }
 }    // namespace hal

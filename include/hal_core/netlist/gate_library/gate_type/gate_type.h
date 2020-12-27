@@ -28,6 +28,7 @@
 #include <map>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace hal
 {
@@ -198,6 +199,36 @@ namespace hal
         std::unordered_map<std::string, std::map<u32, std::string>> get_output_pin_groups() const;
 
         /**
+         * Add an existing input pin to the collection of VDD pins.<br>
+         * The pin has to be declared as an input pin beforehand.
+         *
+         * @param[in] pin_name - The name of the input pin to add.
+         */
+        void assign_vdd_pin(const std::string& pin_name);
+
+        /**
+         * Get all input pins classfied as VDD pins.
+         *
+         * @returns The set of input pin names.
+         */
+        std::unordered_set<std::string> get_vdd_pins() const;
+
+        /**
+         * Add an existing input pin to the collection of GND pins.<br>
+         * The pin has to be declared as an input pin beforehand.
+         *
+         * @param[in] pin_name - The name of the input pin to add.
+         */
+        void assign_gnd_pin(const std::string& pin_name);
+
+        /**
+         * Get all input pins classfied as GND pins.
+         *
+         * @returns The set of input pin names.
+         */
+        std::unordered_set<std::string> get_gnd_pins() const;
+
+        /**
          * Add a Boolean function with the specified name to the gate type.
          *
          * @param[in] name - The name of the Boolean function.
@@ -226,6 +257,9 @@ namespace hal
 
         std::vector<std::string> m_input_pins;
         std::vector<std::string> m_output_pins;
+
+        std::unordered_set<std::string> m_vdd_pins;
+        std::unordered_set<std::string> m_gnd_pins;
 
         std::unordered_map<std::string, std::map<u32, std::string>> m_input_pin_groups;
         std::unordered_map<std::string, std::map<u32, std::string>> m_output_pin_groups;
