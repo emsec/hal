@@ -4,7 +4,7 @@ library (TEST_GATE_LIBRARY) {
         lut ("lut_out") {
             data_category     : "test_category";
             data_identifier   : "test_identifier";
-            bit_order         : "north-east"; //<- invalid
+            bit_order         : "north-east";
         }
         pin(I) {
             direction: input;

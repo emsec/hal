@@ -42,8 +42,10 @@ namespace hal {
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_base_type(), GateType::BaseType::combinatorial);
                 // -- Check the pins
-                EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I"}));
+                EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "I"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
+                EXPECT_EQ(gt->get_vdd_pins(), std::unordered_set<std::string>({"VDD"}));
+                EXPECT_EQ(gt->get_gnd_pins(), std::unordered_set<std::string>({"GND"}));
                 // -- Check the boolean functions
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
@@ -132,6 +134,7 @@ namespace hal {
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt_ff->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
                 EXPECT_EQ(gt_ff->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
+                EXPECT_EQ(gt_ff->get_clock_pins(), std::unordered_set<std::string>({"CLK"}));
                 ASSERT_TRUE(gt_ff->get_boolean_functions().find("O") != gt_ff->get_boolean_functions().end());
                 EXPECT_EQ(gt_ff->get_boolean_functions().at("O"),
                           BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));

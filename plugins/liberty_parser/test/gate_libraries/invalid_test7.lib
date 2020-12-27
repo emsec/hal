@@ -6,7 +6,7 @@ library (TEST_GATE_LIBRARY) {
         }
         pin(O) {
             direction: output;
-            function: "I & WAMBO"; // <- WAMBO is undefined
+            function: "I & WAMBO"; 
         }
     }
 }

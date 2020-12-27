@@ -1,9 +1,17 @@
 library (TEST_GATE_LIBRARY) {
     date : "April 3, 2020" // <- will be ignored
-    revision : 2015.03;      // <- will be ignored
+    revision : 2015.03;
     define(cell);
     cell(TEST_GATE_TYPE) {
-        area : 3;   // <- will be ignored
+        area : 3; 
+        pg_pin(VDD) {
+            voltage_name : VDD;
+            pg_type      : primary_power;
+        }
+        pg_pin(GND) {
+            voltage_name : GND;
+            pg_type      : primary_ground;
+        }
         pin(I) {
             direction: input;
             capacitance : 1;

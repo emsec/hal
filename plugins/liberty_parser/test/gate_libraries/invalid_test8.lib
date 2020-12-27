@@ -1,6 +1,6 @@
 library (TEST_GATE_LIBRARY) {
     define(cell);
-    biological_cell ("A" , "B") { // the parser does not support biological cells
+    biological_cell ("A" , "B") {
         cell_type: eukaryotic; 
         species: dog;   
         has_cell_wall: nope;   
