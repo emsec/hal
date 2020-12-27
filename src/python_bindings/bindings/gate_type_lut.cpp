@@ -15,20 +15,20 @@ namespace hal
             :param str name: The name of the LUT gate type.
         )");
 
-        py_gate_type_lut.def("add_output_from_init_string_pin", &GateTypeLut::add_output_from_init_string_pin, py::arg("output_pin"), R"(
+        py_gate_type_lut.def("assign_lut_pin", &GateTypeLut::assign_lut_pin, py::arg("output_pin"), R"(
             Add an existing output pin to the collection of output pins that generate their output not from a Boolean function but an initialization string.
             The pin has to be declared as an output pin beforehand.
 
             :param str output_pin: The name of the output pin to add.
         )");
 
-        py_gate_type_lut.def_property_readonly("output_from_init_string_pins", &GateTypeLut::get_output_from_init_string_pins, R"(
+        py_gate_type_lut.def_property_readonly("lut_pins", &GateTypeLut::get_lut_pins, R"(
             The set of output pins that generate their output not from a Boolean function but an initialization string.
 
             :type: set[str]
         )");
 
-        py_gate_type_lut.def("get_output_from_init_string_pins", &GateTypeLut::get_output_from_init_string_pins, R"(
+        py_gate_type_lut.def("get_lut_pins", &GateTypeLut::get_lut_pins, R"(
             Get the set of output pins that generate their output not from a Boolean function but an initialization string.
 
             :returns: The set of output pin names.

@@ -211,10 +211,9 @@ namespace hal {
                 // Add and get some output_from_init_string pins
                 GateTypeLut gtl("gtl_name");
                 gtl.add_output_pins(std::vector<std::string>({"O0", "OFIS_0", "OFIS_1"}));
-                gtl.add_output_from_init_string_pin("OFIS_0");
-                gtl.add_output_from_init_string_pin("OFIS_1");
-                EXPECT_EQ(gtl.get_output_from_init_string_pins(),
-                          std::unordered_set<std::string>({"OFIS_0", "OFIS_1"}));
+                gtl.assign_lut_pin("OFIS_0");
+                gtl.assign_lut_pin("OFIS_1");
+                EXPECT_EQ(gtl.get_lut_pins(), std::unordered_set<std::string>({"OFIS_0", "OFIS_1"}));
             }
             // Negative
             if(test_utils::known_issue_tests_active())
@@ -223,9 +222,8 @@ namespace hal {
                 // ISSUE: pin is added anyway, but documentation says it shouldn't.
                 //  It is only checked that the passed pin is no input pin
                 GateTypeLut gtl("gtl_name");
-                gtl.add_output_from_init_string_pin("OFIS_0");
-                EXPECT_EQ(gtl.get_output_from_init_string_pins(),
-                          std::unordered_set<std::string>());
+                gtl.assign_lut_pin("OFIS_0");
+                EXPECT_EQ(gtl.get_lut_pins(), std::unordered_set<std::string>());
             }
         TEST_END
     }
@@ -279,16 +277,16 @@ namespace hal {
                 // Add and get some state pins
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
                 gts.add_output_pins(std::vector<std::string>({"SO_0", "SO_1"}));
-                gts.add_state_pin("SO_0");
-                gts.add_state_pin("SO_1");
+                gts.assign_state_pin("SO_0");
+                gts.assign_state_pin("SO_1");
                 EXPECT_EQ(gts.get_state_pins(), std::unordered_set<std::string>({"SO_0", "SO_1"}));
             }
             {
                 // Add and get some negated_state_pin pins
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
                 gts.add_output_pins(std::vector<std::string>({"ISO_0", "ISO_1"}));
-                gts.add_negated_state_pin("ISO_0");
-                gts.add_negated_state_pin("ISO_1");
+                gts.assign_negated_state_pin("ISO_0");
+                gts.assign_negated_state_pin("ISO_1");
                 EXPECT_EQ(gts.get_negated_state_pins(), std::unordered_set<std::string>({"ISO_0", "ISO_1"}));
                 EXPECT_EQ(gts.get_output_pins(), std::vector<std::string>({"ISO_0", "ISO_1"}));
             }
@@ -297,14 +295,14 @@ namespace hal {
                 // Try to add a state_pin that was not registered as an output pin
                 NO_COUT_TEST_BLOCK;
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
-                gts.add_state_pin("SO_0");
+                gts.assign_state_pin("SO_0");
                 EXPECT_EQ(gts.get_state_pins(), std::unordered_set<std::string>());
             }
             {
                 // Try to add an negated_state_pin that was not registered as an output pin
                 NO_COUT_TEST_BLOCK;
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
-                gts.add_negated_state_pin("ISO_0");
+                gts.assign_negated_state_pin("ISO_0");
                 EXPECT_EQ(gts.get_negated_state_pins(), std::unordered_set<std::string>());
             }
         TEST_END
@@ -321,8 +319,8 @@ namespace hal {
                 // Add and get some clock pins
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
                 gts.add_input_pins(std::vector<std::string>({"C_0", "C_1"}));
-                gts.add_clock_pin("C_0");
-                gts.add_clock_pin("C_1");
+                gts.assign_clock_pin("C_0");
+                gts.assign_clock_pin("C_1");
                 EXPECT_EQ(gts.get_clock_pins(), std::unordered_set<std::string>({"C_0", "C_1"}));
             }
             // Negative
@@ -330,7 +328,7 @@ namespace hal {
                 // Try to add a clock_pin that was not registered as an input pin
                 NO_COUT_TEST_BLOCK;
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
-                gts.add_clock_pin("C_0");
+                gts.assign_clock_pin("C_0");
                 EXPECT_EQ(gts.get_clock_pins(), std::unordered_set<std::string>());
             }
         TEST_END

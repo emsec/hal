@@ -10,7 +10,7 @@ namespace hal
         m_ascending = true;
     }
 
-    void GateTypeLut::add_output_from_init_string_pin(const std::string& pin_name)
+    void GateTypeLut::assign_lut_pin(const std::string& pin_name)
     {
         if (const auto& it = std::find(m_input_pins.begin(), m_input_pins.end(), pin_name); it != m_input_pins.end())
         {
@@ -18,7 +18,7 @@ namespace hal
             return;
         }
 
-        m_output_from_init_string_pins.insert(pin_name);
+        m_lut_pins.insert(pin_name);
     }
 
     void GateTypeLut::set_config_data_category(const std::string& category)
@@ -36,9 +36,9 @@ namespace hal
         m_ascending = ascending;
     }
 
-    std::unordered_set<std::string> GateTypeLut::get_output_from_init_string_pins() const
+    std::unordered_set<std::string> GateTypeLut::get_lut_pins() const
     {
-        return m_output_from_init_string_pins;
+        return m_lut_pins;
     }
 
     std::string GateTypeLut::get_config_data_category() const

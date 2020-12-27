@@ -10,7 +10,7 @@ namespace hal
         assert(m_base_type == BaseType::ff || m_base_type == BaseType::latch);
     }
 
-    void GateTypeSequential::add_state_pin(const std::string& pin_name)
+    void GateTypeSequential::assign_state_pin(const std::string& pin_name)
     {
         if (std::find(m_output_pins.begin(), m_output_pins.end(), pin_name) == m_output_pins.end())
         {
@@ -26,7 +26,7 @@ namespace hal
         return m_state_pins;
     }
 
-    void GateTypeSequential::add_negated_state_pin(const std::string& pin_name)
+    void GateTypeSequential::assign_negated_state_pin(const std::string& pin_name)
     {
         if (std::find(m_output_pins.begin(), m_output_pins.end(), pin_name) == m_output_pins.end())
         {
@@ -42,7 +42,7 @@ namespace hal
         return m_negated_state_pins;
     }
 
-    void GateTypeSequential::add_clock_pin(const std::string& pin_name)
+    void GateTypeSequential::assign_clock_pin(const std::string& pin_name)
     {
         if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
         {
@@ -58,7 +58,7 @@ namespace hal
         return m_clock_pins;
     }
 
-    void GateTypeSequential::add_enable_pin(const std::string& pin_name)
+    void GateTypeSequential::assign_enable_pin(const std::string& pin_name)
     {
         if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
         {
@@ -74,7 +74,7 @@ namespace hal
         return m_enable_pins;
     }
 
-    void GateTypeSequential::add_reset_pin(const std::string& pin_name)
+    void GateTypeSequential::assign_reset_pin(const std::string& pin_name)
     {
         if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
         {
@@ -90,7 +90,7 @@ namespace hal
         return m_reset_pins;
     }
 
-    void GateTypeSequential::add_set_pin(const std::string& pin_name)
+    void GateTypeSequential::assign_set_pin(const std::string& pin_name)
     {
         if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
         {
@@ -106,7 +106,7 @@ namespace hal
         return m_set_pins;
     }
 
-    void GateTypeSequential::add_data_pin(const std::string& pin_name)
+    void GateTypeSequential::assign_data_pin(const std::string& pin_name)
     {
         if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
         {

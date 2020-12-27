@@ -55,14 +55,14 @@ namespace hal
          *
          * @param[in] pin_name - The name of the output pin to add.
          */
-        void add_output_from_init_string_pin(const std::string& pin_name);
+        void assign_lut_pin(const std::string& pin_name);
 
         /**
          * Get the set of output pins that generate their output not from a Boolean function but an initialization string.
          *
          * @returns The set of output pin names.
          */
-        std::unordered_set<std::string> get_output_from_init_string_pins() const;
+        std::unordered_set<std::string> get_lut_pins() const;
 
         /**
          * Set the data category in which to find the initialization string.
@@ -107,7 +107,7 @@ namespace hal
         bool is_config_data_ascending_order() const;
 
     private:
-        std::unordered_set<std::string> m_output_from_init_string_pins;
+        std::unordered_set<std::string> m_lut_pins;
         std::string m_config_data_category;
         std::string m_config_data_identifier;
         bool m_ascending;

@@ -153,7 +153,7 @@ namespace hal
         if (m_type->get_base_type() == GateType::BaseType::lut)
         {
             auto lut_type = static_cast<const GateTypeLut*>(m_type);
-            auto lut_pins = lut_type->get_output_from_init_string_pins();
+            auto lut_pins = lut_type->get_lut_pins();
             if (lut_pins.find(name) != lut_pins.end())
             {
                 return get_lut_function(name);
@@ -191,7 +191,7 @@ namespace hal
         if (!only_custom_functions && m_type->get_base_type() == GateType::BaseType::lut)
         {
             auto lut_type = static_cast<const GateTypeLut*>(m_type);
-            for (auto pin : lut_type->get_output_from_init_string_pins())
+            for (auto pin : lut_type->get_lut_pins())
             {
                 res.emplace(pin, get_lut_function(pin));
             }

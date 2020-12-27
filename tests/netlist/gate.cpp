@@ -881,8 +881,8 @@ namespace hal {
 
             lut->add_input_pins(input_pins);
             lut->add_output_pins(output_pins);
-            lut->add_output_from_init_string_pin("O_LUT");
-            lut->add_output_from_init_string_pin("O_LUT_other");
+            lut->assign_lut_pin("O_LUT");
+            lut->assign_lut_pin("O_LUT_other");
             lut->set_config_data_ascending_order(true);
             lut->set_config_data_identifier("data_identifier");
             lut->set_config_data_category("data_category");

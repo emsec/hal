@@ -28,7 +28,7 @@ namespace hal
             :param hal_py.GateType.BaseType base_type: The base type of the sequential gate type.
         )");
 
-        py_gate_type_sequential.def("add_state_output_pin", &GateTypeSequential::add_state_pin, py::arg("pin_name"), R"(
+        py_gate_type_sequential.def("assign_state_output_pin", &GateTypeSequential::assign_state_pin, py::arg("pin_name"), R"(
             Add an existing output pin to the collection of output pins that generate their output from the internal state of the gate.
             The pin has to be declared as an output pin beforehand.
 
@@ -48,7 +48,7 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py_gate_type_sequential.def("add_negated_state_pin", &GateTypeSequential::add_negated_state_pin, py::arg("pin_name"), R"(
+        py_gate_type_sequential.def("assign_negated_state_pin", &GateTypeSequential::assign_negated_state_pin, py::arg("pin_name"), R"(
             Add an existing output pin to the collection of output pins that generate their output from the negated internal state of the gate.
             The pin has to be declared as an output pin beforehand.
 
@@ -68,7 +68,7 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py_gate_type_sequential.def("add_clock_pin", &GateTypeSequential::add_clock_pin, py::arg("pin_name"), R"(
+        py_gate_type_sequential.def("assign_clock_pin", &GateTypeSequential::assign_clock_pin, py::arg("pin_name"), R"(
             Add an existing input pin to the collection of clock pins.
             The pin has to be declared as an input pin beforehand.
 
@@ -88,7 +88,7 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py_gate_type_sequential.def("add_enable_pin", &GateTypeSequential::add_enable_pin, py::arg("pin_name"), R"(
+        py_gate_type_sequential.def("assign_enable_pin", &GateTypeSequential::assign_enable_pin, py::arg("pin_name"), R"(
             Add an existing input pin to the collection of enable pins.
             The pin has to be declared as an input pin beforehand.
 
@@ -108,7 +108,7 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py_gate_type_sequential.def("add_reset_pin", &GateTypeSequential::add_reset_pin, py::arg("pin_name"), R"(
+        py_gate_type_sequential.def("assign_reset_pin", &GateTypeSequential::assign_reset_pin, py::arg("pin_name"), R"(
             Add an existing input pin to the collection of reset pins.
             The pin has to be declared as an input pin beforehand.
 
@@ -128,7 +128,7 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py_gate_type_sequential.def("add_set_pin", &GateTypeSequential::add_set_pin, py::arg("pin_name"), R"(
+        py_gate_type_sequential.def("assign_set_pin", &GateTypeSequential::assign_set_pin, py::arg("pin_name"), R"(
             Add an existing input pin to the collection of set pins.
             The pin has to be declared as an input pin beforehand.
 
@@ -148,7 +148,7 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py_gate_type_sequential.def("add_data_pin", &GateTypeSequential::add_data_pin, py::arg("pin_name"), R"(
+        py_gate_type_sequential.def("assign_data_pin", &GateTypeSequential::assign_data_pin, py::arg("pin_name"), R"(
             Add an existing input pin to the collection of data pins.
             The pin has to be declared as an input pin beforehand.
 

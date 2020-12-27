@@ -869,7 +869,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_state_pin(pin_name);
+                        seq_gt->assign_state_pin(pin_name);
                     }
 
                     pin.function = "";
@@ -878,7 +878,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_negated_state_pin(pin_name);
+                        seq_gt->assign_negated_state_pin(pin_name);
                     }
 
                     pin.function = "";
@@ -888,7 +888,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_clock_pin(pin_name);
+                        seq_gt->assign_clock_pin(pin_name);
                     }
                 }
             }
@@ -901,7 +901,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_state_pin(pin_name);
+                            seq_gt->assign_state_pin(pin_name);
                         }
 
                         pin.function = "";
@@ -910,7 +910,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_negated_state_pin(pin_name);
+                            seq_gt->assign_negated_state_pin(pin_name);
                         }
 
                         pin.function = "";
@@ -920,7 +920,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_clock_pin(pin_name);
+                            seq_gt->assign_clock_pin(pin_name);
                         }
                     }
                 }
@@ -963,7 +963,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_state_pin(pin_name);
+                        seq_gt->assign_state_pin(pin_name);
                     }
 
                     pin.function = "";
@@ -972,7 +972,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_negated_state_pin(pin_name);
+                        seq_gt->assign_negated_state_pin(pin_name);
                     }
 
                     pin.function = "";
@@ -982,7 +982,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_clock_pin(pin_name);
+                        seq_gt->assign_clock_pin(pin_name);
                     }
                 }
             }
@@ -995,7 +995,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_state_pin(pin_name);
+                            seq_gt->assign_state_pin(pin_name);
                         }
 
                         pin.function = "";
@@ -1004,7 +1004,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_negated_state_pin(pin_name);
+                            seq_gt->assign_negated_state_pin(pin_name);
                         }
 
                         pin.function = "";
@@ -1014,7 +1014,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_clock_pin(pin_name);
+                            seq_gt->assign_clock_pin(pin_name);
                         }
                     }
                 }
@@ -1039,7 +1039,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        lut_gt->add_output_from_init_string_pin(pin_name);
+                        lut_gt->assign_lut_pin(pin_name);
                     }
 
                     pin.function = "";
@@ -1054,7 +1054,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            lut_gt->add_output_from_init_string_pin(pin_name);
+                            lut_gt->assign_lut_pin(pin_name);
                         }
 
                         pin.function = "";

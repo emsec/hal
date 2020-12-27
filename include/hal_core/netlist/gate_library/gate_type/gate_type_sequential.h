@@ -70,7 +70,7 @@ namespace hal
          *
          * @param[in] pin_name - The name of the output pin to add.
          */
-        void add_state_pin(const std::string& pin_name);
+        void assign_state_pin(const std::string& pin_name);
 
         /**
          * Get the output pins that use the internal state of the gate to generate their output.
@@ -85,7 +85,7 @@ namespace hal
          *
          * @param[in] pin_name - The name of the output pin to add.
          */
-        void add_negated_state_pin(const std::string& pin_name);
+        void assign_negated_state_pin(const std::string& pin_name);
 
         /**
          * Get the output pins that use the inverted internal state of the gate to generate their output.
@@ -100,7 +100,7 @@ namespace hal
          *
          * @param[in] pin_name - The name of the input pin to add.
          */
-        void add_clock_pin(const std::string& pin_name);
+        void assign_clock_pin(const std::string& pin_name);
 
         /**
          * Get all input pins classfied as clock pins.
@@ -115,7 +115,7 @@ namespace hal
          *
          * @param[in] pin_name - The name of the input pin to add.
          */
-        void add_enable_pin(const std::string& pin_name);
+        void assign_enable_pin(const std::string& pin_name);
 
         /**
          * Get all input pins that declared as enable pins.
@@ -130,7 +130,7 @@ namespace hal
          *
          * @param[in] pin_name - The name of the input pin to add.
          */
-        void add_reset_pin(const std::string& pin_name);
+        void assign_reset_pin(const std::string& pin_name);
 
         /**
          * Get all input pins that declared as reset pins.
@@ -145,7 +145,7 @@ namespace hal
          *
          * @param[in] pin_name - The name of the input pin to add.
          */
-        void add_set_pin(const std::string& pin_name);
+        void assign_set_pin(const std::string& pin_name);
 
         /**
          * Get all input pins that declared as set pins.
@@ -160,7 +160,7 @@ namespace hal
          *
          * @param[in] pin_name - The name of the input pin to add.
          */
-        void add_data_pin(const std::string& pin_name);
+        void assign_data_pin(const std::string& pin_name);
 
         /**
          * Get all input pins that declared as data pins.
