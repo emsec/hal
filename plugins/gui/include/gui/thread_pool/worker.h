@@ -38,7 +38,7 @@ namespace hal
 
         void assignTask(Task* const t);
 
-        void run() Q_DECL_OVERRIDE;
+        void run() override;
 
     private:
         Task* mTask;

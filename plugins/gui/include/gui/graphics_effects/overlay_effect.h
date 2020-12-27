@@ -32,6 +32,6 @@ namespace hal
     public:
         OverlayEffect(QObject* parent = 0);
 
-        void draw(QPainter* painter) Q_DECL_OVERRIDE;
+        void draw(QPainter* painter) override;
     };
 }

@@ -39,12 +39,12 @@ namespace hal
     public:
         PythonConsole(QWidget* parent = nullptr);
 
-        void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
-        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void keyPressEvent(QKeyEvent* e) override;
+        void mousePressEvent(QMouseEvent* event) override;
 
-        virtual void handleStdout(const QString& output) Q_DECL_OVERRIDE;
-        virtual void handleError(const QString& output) Q_DECL_OVERRIDE;
-        virtual void clear() Q_DECL_OVERRIDE;
+        virtual void handleStdout(const QString& output) override;
+        virtual void handleError(const QString& output) override;
+        virtual void clear() override;
 
         void displayPrompt();
 
