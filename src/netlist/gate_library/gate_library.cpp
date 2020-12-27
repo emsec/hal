@@ -1,5 +1,8 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 
+#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+
 namespace hal
 {
     GateLibrary::GateLibrary(const std::filesystem::path& path, const std::string& name) : m_name(name), m_path(path)
@@ -14,6 +17,31 @@ namespace hal
     std::filesystem::path GateLibrary::get_path() const
     {
         return m_path;
+    }
+
+    GateType* GateLibrary::create_gate_type(const std::string& name, GateType::BaseType type)
+    {
+        std::unique_ptr<GateType> gt;
+
+        switch (type)
+        {
+            case GateType::BaseType::combinatorial:
+                gt = std::make_unique<GateType>(name);
+                break;
+            case GateType::BaseType::lut:
+                gt = std::make_unique<GateTypeLut>(name);
+                break;
+            case GateType::BaseType::ff:
+                gt = std::make_unique<GateTypeSequential>(name, type);
+                break;
+            case GateType::BaseType::latch:
+                gt = std::make_unique<GateTypeSequential>(name, type);
+                break;
+        }
+
+        add_gate_type(std::move(gt));
+
+        return gt.get();
     }
 
     void GateLibrary::add_gate_type(std::unique_ptr<const GateType> gt)
