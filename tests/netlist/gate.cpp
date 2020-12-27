@@ -1,4 +1,3 @@
-#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "netlist_test_utils.h"

@@ -1,5 +1,5 @@
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
@@ -28,7 +28,7 @@ namespace hal
             test_utils::init_log_channels();
             plugin_manager::load_all_plugins();
             m_lib_file_name = "test_lib";
-            m_test_lib_name = "TEST_GATE_LIBRARY_FOR_GATE_LIBRARY_PARSER_MANAGER_TESTS";
+            m_test_lib_name = "TEST_GATE_LIBRARY_FOR_GATE_LIBRARY_MANAGER_TESTS";
             m_test_lib_path = (utils::get_gate_library_directories()[0]) / (m_lib_file_name + ".lib");
         }
 
@@ -93,17 +93,17 @@ namespace hal
     TEST_F(GateLibraryManagerTest, check_get_gate_library)
     {
         TEST_START
-        // NO_COUT_TEST_BLOCK;
+        NO_COUT_TEST_BLOCK;
         create_test_lib();
         // Load the Gate library twice by its filename
-        GateLibrary* test_lib_0 = gate_library_parser_manager::get_gate_library(m_test_lib_path);
-        GateLibrary* test_lib_1 = gate_library_parser_manager::get_gate_library(m_test_lib_path);
+        GateLibrary* test_lib_0 = gate_library_manager::get_gate_library(m_test_lib_path);
+        GateLibrary* test_lib_1 = gate_library_manager::get_gate_library(m_test_lib_path);
         EXPECT_NE(test_lib_0, nullptr);
         EXPECT_NE(test_lib_1, nullptr);
 
         // Check that the test library can be found in the get_gate_libraries vector
         bool found_test_lib = false;
-        for (GateLibrary* gl : gate_library_parser_manager::get_gate_libraries())
+        for (GateLibrary* gl : gate_library_manager::get_gate_libraries())
         {
             if (gl->get_name() == m_test_lib_name)
             {
@@ -127,11 +127,11 @@ namespace hal
         // Check that load_all also loads the test Gate library
         NO_COUT_TEST_BLOCK;
         create_test_lib();
-        gate_library_parser_manager::load_all();
+        gate_library_manager::load_all();
 
         // Check that the test library can be found in the get_gate_libraries vector
         bool found_test_lib = false;
-        for (GateLibrary* gl : gate_library_parser_manager::get_gate_libraries())
+        for (GateLibrary* gl : gate_library_manager::get_gate_libraries())
         {
             if (gl->get_name() == m_test_lib_name)
             {
@@ -161,7 +161,7 @@ namespace hal
                         "}";
 
             test_lib.close();
-            GateLibrary* empty_lib = gate_library_parser_manager::get_gate_library(m_test_lib_path);
+            GateLibrary* empty_lib = gate_library_manager::get_gate_library(m_test_lib_path);
             ASSERT_NE(empty_lib, nullptr);
             auto g_types = empty_lib->get_gate_types();
             // Check the creation of a gnd Gate type
@@ -190,7 +190,7 @@ namespace hal
         {
             // The file path does not exist
             NO_COUT_TEST_BLOCK;
-            GateLibrary* test_lib = gate_library_parser_manager::get_gate_library("/non/existing/path.lib");
+            GateLibrary* test_lib = gate_library_manager::get_gate_library("/non/existing/path.lib");
             EXPECT_EQ(test_lib, nullptr);
         }
         TEST_END

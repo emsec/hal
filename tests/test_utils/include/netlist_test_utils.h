@@ -4,7 +4,6 @@
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"

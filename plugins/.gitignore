@@ -11,8 +11,8 @@
 !gui/**/*
 !liberty_parser*
 !liberty_parser/**/*
-!quine_mccluskey*
-!quine_mccluskey/**/*
+!hgl_parser*
+!hgl_parser/**/*
 !netlist_simulator*
 !netlist_simulator/**/*
 !python_shell*

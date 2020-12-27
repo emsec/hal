@@ -1,7 +1,7 @@
 #include "hal_core/netlist/netlist_factory.h"
 
 #include "hal_core/netlist/event_system/event_controls.h"
-#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
@@ -34,7 +34,7 @@ namespace hal
                 return nullptr;
             }
 
-            GateLibrary* lib = gate_library_parser_manager::load_file(gate_library_file);
+            GateLibrary* lib = gate_library_manager::load(gate_library_file);
             if (!lib)
             {
                 log_critical("netlist", "could not read netlist without gate library.");

@@ -27,7 +27,6 @@ namespace hal
     std::unique_ptr<Netlist> test_utils::create_empty_netlist(const int id)
     {
         NO_COUT_BLOCK;
-        // GateLibrary* gl = gate_library_parser_manager::get_gate_library(g_lib_name);
         std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(get_testing_gate_library());
 
         if (id >= 0)

@@ -4,7 +4,7 @@
 #include "hal_core/utilities/utils.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/plugin_system/plugin_manager.h"
-#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "netlist_test_utils.h"
@@ -56,7 +56,7 @@ namespace hal {
             GateLibrary* gLib;
             {
                 NO_COUT_BLOCK;
-                gLib = gate_library_parser_manager::get_gate_library(test_utils::g_lib_name);
+                gLib = gate_library_manager::get_gate_library(test_utils::g_lib_name);
             }
             if (gLib == nullptr) {
                 if (print_error) {
@@ -153,7 +153,7 @@ namespace hal {
             {// Create a netlist by using a temporary created hal file
                 std::filesystem::path tmp_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
 
-                auto empty_nl = netlist_factory::create_netlist(gate_library_parser_manager::get_gate_library(m_g_lib_path));    //empty netlist
+                auto empty_nl = netlist_factory::create_netlist(gate_library_manager::get_gate_library(m_g_lib_path));    //empty netlist
                 netlist_serializer::serialize_to_file(empty_nl.get(), tmp_hal_file_path);
                 auto nl = netlist_factory::load_netlist(tmp_hal_file_path);
 
@@ -200,7 +200,7 @@ namespace hal {
                 // Create a netlist by passing a .hal file-path via program arguments
                 std::filesystem::path tmp_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");
 
-                auto empty_nl = netlist_factory::create_netlist(gate_library_parser_manager::get_gate_library(m_g_lib_path));    //empty netlist
+                auto empty_nl = netlist_factory::create_netlist(gate_library_manager::get_gate_library(m_g_lib_path));    //empty netlist
                 netlist_serializer::serialize_to_file(empty_nl.get(), tmp_hal_file_path);                                                           // create the .hal file
 
                 ProgramArguments p_args;
@@ -293,8 +293,8 @@ namespace hal {
                                                                      "}";
             std::filesystem::path other_g_lib_path = test_utils::create_sandbox_file("other_test_gate_lib.lib", other_gl_content);
             // Load both gate libraries
-            gate_library_parser_manager::load_file(m_g_lib_path);
-            gate_library_parser_manager::load_file(other_g_lib_path);
+            gate_library_manager::load(m_g_lib_path);
+            gate_library_manager::load(other_g_lib_path);
             {
                 // Get the netlist for a file, that can be parsed with both gate libraries (passing the parser name)
                 std::filesystem::path tmp_hdl_file_path = test_utils::create_sandbox_file("nl_factory_test_file.vhdl",

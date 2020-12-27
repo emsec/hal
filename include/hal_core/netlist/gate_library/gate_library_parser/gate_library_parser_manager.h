@@ -36,6 +36,7 @@ namespace hal
     class GateLibrary;
 
     /**
+     * TODO Python binding & documentation
      * @ingroup gate_lib_parser
      */
     namespace gate_library_parser_manager
@@ -43,8 +44,8 @@ namespace hal
         using ParserFactory = std::function<std::unique_ptr<GateLibraryParser>()>;
 
         /**
-         * Registers a new gate library parser for a selection of file types.
-         * If parsers for some of the extensions already exist, they are not changed, only the new ones are registered.
+         * Registers a new gate library parser for a selection of file types.<br>
+         * If parsers for some of the extensions already exist, they remain changed and only new ones are registered.
          *
          * @param[in] name - The name of the parser.
          * @param[in] parser_factory - A factory function that constructs a new parser instance.
@@ -58,6 +59,14 @@ namespace hal
          * @param[in] name - The name of the parser.
          */
         NETLIST_API void unregister_parser(const std::string& name);
+
+        /**
+         * Parses the gate library file depending on its file extension.
+         * 
+         * @param[in] file_path - The input path.
+         * @returns The gate library.
+         */
+        NETLIST_API std::unique_ptr<GateLibrary> parse(std::filesystem::path file_path);
 
         /**
          * Loads a gate library file.

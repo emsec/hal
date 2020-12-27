@@ -81,16 +81,19 @@ namespace hal
                 return false;
             }
 
-            auto begin_time = std::chrono::high_resolution_clock::now();
-
             auto writer = factory();
+
+            log_info("gate_library_writer", "writing gate library '{}' to file '{}'...", gate_lib->get_name(), file_path.string());
+
+            auto begin_time = std::chrono::high_resolution_clock::now();
             if (!writer->write(gate_lib, file_path))
             {
+                log_error("gate_library_writer", "failed to write gate library '{}' to file '{}'.", gate_lib->get_name(), file_path.string());
                 return false;
             }
 
             log_info("gate_library_writer",
-                     "wrote gate library '{}' to '{}' in {:2.2f} seconds.",
+                     "wrote gate library '{}' to file '{}' in {:2.2f} seconds.",
                      gate_lib->get_name(),
                      file_path.string(),
                      (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);

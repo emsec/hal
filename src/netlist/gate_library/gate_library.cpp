@@ -39,9 +39,9 @@ namespace hal
                 break;
         }
 
+        auto res = gt.get();
         add_gate_type(std::move(gt));
-
-        return gt.get();
+        return res;
     }
 
     void GateLibrary::add_gate_type(std::unique_ptr<const GateType> gt)

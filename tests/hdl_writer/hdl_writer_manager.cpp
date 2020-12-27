@@ -2,6 +2,7 @@
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "netlist_test_utils.h"
 #include "hal_core/plugin_system/plugin_manager.h"
@@ -32,7 +33,7 @@ namespace hal {
             test_utils::create_sandbox_directory();
             plugin_manager::load_all_plugins();
             m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib_for_writer_manager_tests.lib", m_min_gl_content);
-            m_gl         = gate_library_parser_manager::load_file(m_g_lib_path);
+            m_gl         = gate_library_manager::load(m_g_lib_path);
         }
 
         virtual void TearDown() {

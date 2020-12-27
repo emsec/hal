@@ -3,6 +3,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "netlist_test_utils.h"
 #include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 
 #include "gtest/gtest.h"
 #include "hal_core/utilities/program_arguments.h"
@@ -101,7 +102,7 @@ namespace hal {
             // Load a gate library
             {
                 NO_COUT_BLOCK;
-                gate_library_parser_manager::load_file(m_g_lib_path);
+                gate_library_manager::load(m_g_lib_path);
             }
             {
                 // Parse a vhdl and a verilog file by passing no relevant program arguments. The parser should be determined
@@ -185,7 +186,7 @@ namespace hal {
             GateLibrary* min_gl;
             {
                 NO_COUT_BLOCK;
-                min_gl = gate_library_parser_manager::load_file(m_g_lib_path);
+                min_gl = gate_library_manager::load(m_g_lib_path);
             }
             {
                 // Parse a vhdl and a verilog file by GateLibrary

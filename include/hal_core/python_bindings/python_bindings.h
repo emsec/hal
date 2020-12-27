@@ -4,8 +4,9 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
@@ -111,7 +112,7 @@ namespace hal
      *
      * @param[in] m - the python module
      */
-    void gate_library_parser_manager_init(py::module& m);
+    void gate_library_manager_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL endpoint in a python module.

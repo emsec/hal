@@ -12,6 +12,7 @@ namespace hal
     class GateLibraryWriter;
 
     /**
+     * TODO Python binding and documentation
      * @ingroup gate_library_writer
      */
     namespace gate_library_writer_manager
@@ -19,8 +20,8 @@ namespace hal
         using WriterFactory = std::function<std::unique_ptr<GateLibraryWriter>()>;
 
         /**
-         * Registers a new gate library writer for a selection of file types.
-         * If writers for some of the extensions already exist, they are not changed, only the new ones are registered.
+         * Registers a new gate library writer for a selection of file types.<br>
+         * If writers for some of the extensions already exist, they remain changed and only new ones are registered.
          *
          * @param[in] name - The name of the writer.
          * @param[in] writer_factory - A factory function that constructs a new writer instance.
@@ -37,6 +38,7 @@ namespace hal
 
         /**
          * Writes the gate library into a file depending on its file extension.
+         * 
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.
          * @returns True on success.

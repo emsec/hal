@@ -1,6 +1,6 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_log.h"
-#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 #include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 #include "hal_core/netlist/netlist.h"
@@ -75,6 +75,7 @@ int main(int argc, const char* argv[])
     lm.add_channel("core", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("gate_library_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("gate_library_writer", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("gate_library_manager", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("netlist", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("module", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("netlist.internal", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
@@ -253,7 +254,7 @@ int main(int argc, const char* argv[])
 
     if (args.is_option_set("--empty-netlist"))
     {
-        auto lib = gate_library_parser_manager::load_file(args.get_parameter("--gate-library"));
+        auto lib = gate_library_manager::load(args.get_parameter("--gate-library"));
         netlist  = netlist_factory::create_netlist(lib);
     }
     else

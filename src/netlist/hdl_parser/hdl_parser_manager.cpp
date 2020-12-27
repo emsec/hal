@@ -1,7 +1,7 @@
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
@@ -93,9 +93,9 @@ namespace hal
                 else
                 {
                     log_warning("hdl_parser", "no (valid) gate library specified, trying to auto-detect gate library...");
-                    gate_library_parser_manager::load_all();
+                    gate_library_manager::load_all();
 
-                    for (GateLibrary* lib_it : gate_library_parser_manager::get_gate_libraries())
+                    for (GateLibrary* lib_it : gate_library_manager::get_gate_libraries())
                     {
                         begin_time = std::chrono::high_resolution_clock::now();
 
@@ -189,7 +189,7 @@ namespace hal
             if (args.is_option_set("--gate-library"))
             {
                 std::string gate_library_file = args.get_parameter("--gate-library");
-                gate_library                  = gate_library_parser_manager::get_gate_library(gate_library_file);
+                gate_library                  = gate_library_manager::get_gate_library(gate_library_file);
                 if (gate_library == nullptr)
                 {
                     log_error("hdl_parser", "invalid gate library '{}' specified by user.", gate_library_file);
