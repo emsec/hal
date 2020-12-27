@@ -67,6 +67,35 @@ namespace hal {
     }
 
     /**
+     * Testing the usage of power and ground pins
+     *
+     * Functions: assign_vdd_pin, get_vdd_pins, assign_gnd_pin, get_gnd_pins
+     */
+    TEST_F(GateLibraryTest, check_power_ground_pins) {
+        TEST_START
+            {
+                // assign and get some pins
+                GateTypeSequential gts("gts_name", GateType::BaseType::ff);
+                gts.add_input_pins(std::vector<std::string>({"I_0", "I_1"}));
+                gts.assign_vdd_pin("I_0");
+                gts.assign_gnd_pin("I_1");
+                EXPECT_EQ(gts.get_vdd_pins(), std::unordered_set<std::string>({"I_0"}));
+                EXPECT_EQ(gts.get_gnd_pins(), std::unordered_set<std::string>({"I_1"}));
+            }
+            // Negative
+            {
+                // Try to assign pins that were not registered as input pins
+                NO_COUT_TEST_BLOCK;
+                GateTypeSequential gts("gts_name", GateType::BaseType::ff);
+                gts.assign_vdd_pin("I_0");
+                gts.assign_gnd_pin("I_1");
+                EXPECT_EQ(gts.get_vdd_pins(), std::unordered_set<std::string>());
+                EXPECT_EQ(gts.get_gnd_pins(), std::unordered_set<std::string>());
+            }
+        TEST_END
+    }
+
+    /**
      * Testing the usage of Gate types with pin groups
      *
      * Functions: add_input_pin_group, get_input_pin_groups, add_output_pin_groups, get_output_pin_groups
@@ -309,27 +338,42 @@ namespace hal {
     }
 
     /**
-     * Testing the usage of clock_pins
+     * Testing the usage of special pins
      *
-     * Functions: add_clock_pin, get_clock_pins
+     * Functions: assign_clock_pin, get_clock_pins, assign_enable_pin, get_enable_pins, assign_reset_pin, get_reset_pins, assign_set_pin, get_set_pins, assign_data_pin, get_data_pins
      */
-    TEST_F(GateLibraryTest, check_clock_pins) {
+    TEST_F(GateLibraryTest, check_special_pins) {
         TEST_START
             {
-                // Add and get some clock pins
+                // assign and get some pins
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
-                gts.add_input_pins(std::vector<std::string>({"C_0", "C_1"}));
-                gts.assign_clock_pin("C_0");
-                gts.assign_clock_pin("C_1");
-                EXPECT_EQ(gts.get_clock_pins(), std::unordered_set<std::string>({"C_0", "C_1"}));
+                gts.add_input_pins(std::vector<std::string>({"I_0", "I_1", "I_2", "I_3", "I_4"}));
+                gts.assign_clock_pin("I_0");
+                gts.assign_enable_pin("I_1");
+                gts.assign_reset_pin("I_2");
+                gts.assign_set_pin("I_3");
+                gts.assign_data_pin("I_4");
+                EXPECT_EQ(gts.get_clock_pins(), std::unordered_set<std::string>({"I_0"}));
+                EXPECT_EQ(gts.get_enable_pins(), std::unordered_set<std::string>({"I_1"}));
+                EXPECT_EQ(gts.get_reset_pins(), std::unordered_set<std::string>({"I_2"}));
+                EXPECT_EQ(gts.get_set_pins(), std::unordered_set<std::string>({"I_3"}));
+                EXPECT_EQ(gts.get_data_pins(), std::unordered_set<std::string>({"I_4"}));
             }
             // Negative
             {
-                // Try to add a clock_pin that was not registered as an input pin
+                // Try to assign pins that were not registered as input pins
                 NO_COUT_TEST_BLOCK;
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
-                gts.assign_clock_pin("C_0");
+                gts.assign_clock_pin("I_0");
+                gts.assign_enable_pin("I_1");
+                gts.assign_reset_pin("I_2");
+                gts.assign_set_pin("I_3");
+                gts.assign_data_pin("I_4");
                 EXPECT_EQ(gts.get_clock_pins(), std::unordered_set<std::string>());
+                EXPECT_EQ(gts.get_enable_pins(), std::unordered_set<std::string>());
+                EXPECT_EQ(gts.get_reset_pins(), std::unordered_set<std::string>());
+                EXPECT_EQ(gts.get_set_pins(), std::unordered_set<std::string>());
+                EXPECT_EQ(gts.get_data_pins(), std::unordered_set<std::string>());
             }
         TEST_END
     }
