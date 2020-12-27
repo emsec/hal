@@ -1,0 +1,12 @@
+library (TEST_GATE_LIBRARY) {
+    define(cell);
+    cell(TEST_GATE_TYPE) {
+        pin(I) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "I & WAMBO"; // <- WAMBO is undefined
+        }
+    }
+}

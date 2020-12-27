@@ -22,30 +22,10 @@ namespace hal {
      */
     TEST_F(LibertyParserTest, check_combinatorial) {
         TEST_START
-            if(!test_utils::known_issue_tests_active()){
-                SUCCEED();
-                return;
-            }
             {
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    date : \"April 3, 2020\"\n" // <- will be ignored
-                                        "    revision : 2015.03; \n"     // <- will be ignored
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        area : 3; \n"  // <- will be ignored
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "            capacitance : 1;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"I\";\n"
-                                        "            x_function: \"!I\";\n"
-                                        "        }\n"
-                                        "    }\n"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/test1.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_NE(gl, nullptr);
 
@@ -83,116 +63,48 @@ namespace hal {
      */
     TEST_F(LibertyParserTest, check_lut) {
         TEST_START
-            if(!test_utils::known_issue_tests_active()){
-                SUCCEED();
-                return;
-            }
             {
-                // Create a LUT Gate type with two input pins and four output pins
-                // O0 and O2 generate their output by an initializer string.
-                // O1 and O3 are given normal boolean functions.
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_LUT) {\n"
-                                        "        lut (\"lut_out\") {\n"
-                                        "            data_category     : \"test_category\";\n"
-                                        "            data_identifier   : \"test_identifier\";\n"
-                                        "            direction         : \"ascending\";\n"
-                                        "        }\n"
-                                        "        pin(I0) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(I1) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O0) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"lut_out\";\n"
-                                        "        }\n"
-                                        "        pin(O1) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"I0 ^ I1\";\n"
-                                        "        }\n"
-                                        "        pin(O2) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"lut_out\";\n"
-                                        "        }\n"
-                                        "        pin(O3) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"I0 & I1\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/test2.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_NE(gl, nullptr);
 
-                // Check that the Gate type was created
+                // Check that the ascending LUT gate type was created
                 auto gate_types = gl->get_gate_types();
-                ASSERT_EQ(gate_types.size(), 1);
-                auto gt_it = gate_types.find("TEST_LUT");
-                ASSERT_TRUE(gt_it != gate_types.end());
-                const GateType* gt = gt_it->second;
-                ASSERT_EQ(gt->get_base_type(), GateType::BaseType::lut);
-                const GateTypeLut* gt_lut = dynamic_cast<const GateTypeLut*>(gt);
+                ASSERT_EQ(gate_types.size(), 2);
+                auto gt_it_asc = gate_types.find("TEST_LUT_ASC");
+                ASSERT_TRUE(gt_it_asc != gate_types.end());
+                const GateType* gt_asc = gt_it_asc->second;
+                ASSERT_EQ(gt_asc->get_base_type(), GateType::BaseType::lut);
+                const GateTypeLut* gt_lut_asc = dynamic_cast<const GateTypeLut*>(gt_asc);
 
-                // Check the content of the created Gate type
-                EXPECT_EQ(gt_lut->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
-                EXPECT_EQ(gt_lut->get_output_pins(), std::vector<std::string>({"O0", "O1", "O2", "O3"}));
-                ASSERT_TRUE(gt_lut->get_boolean_functions().find("O1") != gt_lut->get_boolean_functions().end());
-                EXPECT_EQ(gt_lut->get_boolean_functions().at("O1"),
+                // Check the content of the created gate type
+                EXPECT_EQ(gt_lut_asc->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
+                EXPECT_EQ(gt_lut_asc->get_output_pins(), std::vector<std::string>({"O0", "O1", "O2", "O3"}));
+                ASSERT_TRUE(gt_lut_asc->get_boolean_functions().find("O1") != gt_lut_asc->get_boolean_functions().end());
+                EXPECT_EQ(gt_lut_asc->get_boolean_functions().at("O1"),
                           BooleanFunction::from_string("I0 ^ I1", std::vector<std::string>({"I0", "I1"})));
-                ASSERT_TRUE(gt_lut->get_boolean_functions().find("O3") != gt_lut->get_boolean_functions().end());
-                EXPECT_EQ(gt_lut->get_boolean_functions().at("O3"),
+                ASSERT_TRUE(gt_lut_asc->get_boolean_functions().find("O3") != gt_lut_asc->get_boolean_functions().end());
+                EXPECT_EQ(gt_lut_asc->get_boolean_functions().at("O3"),
                           BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
-                // -- LUT specific
-                EXPECT_EQ(gt_lut->get_output_from_init_string_pins(), std::unordered_set<std::string>({"O0", "O2"}));
-                EXPECT_EQ(gt_lut->get_config_data_category(), "test_category");
-                EXPECT_EQ(gt_lut->get_config_data_identifier(), "test_identifier");
-                EXPECT_EQ(gt_lut->is_config_data_ascending_order(), true);
+                EXPECT_EQ(gt_lut_asc->get_lut_pins(), std::unordered_set<std::string>({"O0", "O2"}));
+                EXPECT_EQ(gt_lut_asc->get_config_data_category(), "test_category");
+                EXPECT_EQ(gt_lut_asc->get_config_data_identifier(), "test_identifier");
+                EXPECT_EQ(gt_lut_asc->is_config_data_ascending_order(), true);
 
-            }
-            {
-                // Create a simple LUT Gate type with an descending bit order
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_LUT) {\n"
-                                        "        lut (\"lut_out\") {\n"
-                                        "            data_category     : \"test_category\";\n"
-                                        "            data_identifier   : \"test_identifier\";\n"
-                                        "            direction         : \"descending\";\n"
-                                        "        }\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"lut_out\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
-                LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                // Check that the descending LUT gate type was created
+                auto gt_it_desc = gate_types.find("TEST_LUT_DESC");
+                ASSERT_TRUE(gt_it_desc != gate_types.end());
+                const GateType* gt_desc = gt_it_desc->second;
+                ASSERT_EQ(gt_desc->get_base_type(), GateType::BaseType::lut);
+                const GateTypeLut* gt_lut_desc = dynamic_cast<const GateTypeLut*>(gt_desc);
 
-                ASSERT_NE(gl, nullptr);
-
-                // Check that the Gate type was created
-                auto gate_types = gl->get_gate_types();
-                ASSERT_EQ(gate_types.size(), 1);
-                auto gt_it = gate_types.find("TEST_LUT");
-                ASSERT_TRUE(gt_it != gate_types.end());
-                const GateType* gt = gt_it->second;
-                ASSERT_EQ(gt->get_base_type(), GateType::BaseType::lut);
-                const GateTypeLut* gt_lut = dynamic_cast<const GateTypeLut*>(gt);
-
-                // Check the content of the created Gate type
-                EXPECT_EQ(gt_lut->is_config_data_ascending_order(), false);
-
+                // Check the content of the created gate type
+                EXPECT_EQ(gt_lut_desc->is_config_data_ascending_order(), false);
             }
         TEST_END
     }
-
 
     /**
      * Testing the creation of flip-flops
@@ -201,57 +113,10 @@ namespace hal {
      */
     TEST_F(LibertyParserTest, check_flip_flop) {
         TEST_START
-            if(!test_utils::known_issue_tests_active()){
-                SUCCEED();
-                return;
-            }
             {
-                // Create a flip-flop Gate type with two input pins and four output pins
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_FF) {\n"
-                                        "        ff (\"IQ\" , \"IQN\") {\n"
-                                        "            next_state          : \"D\";\n"
-                                        "            clocked_on          : \"CLK\";\n"
-                                        "            clocked_on_also     : \"CLK\";\n"
-                                        "            preset              : \"S\";\n"
-                                        "            clear               : \"R\";\n"
-                                        "            clear_preset_var1   : L;\n"
-                                        "            clear_preset_var2   : H;\n"
-                                        "            direction           : ascending;\n"
-                                        "        }\n"
-                                        "        pin(CLK) {\n"
-                                        "            direction: input;\n"
-                                        "            clock: true;\n"
-                                        "        }\n"
-                                        "        pin(CE) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(D) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(R) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(S) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(Q) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"IQ\";\n"
-                                        "        }\n"
-                                        "        pin(QN) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"IQN\";\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"S & R & D\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/test3.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_NE(gl, nullptr);
 
@@ -301,51 +166,10 @@ namespace hal {
      */
     TEST_F(LibertyParserTest, check_latch) {
         TEST_START
-            if(!test_utils::known_issue_tests_active()){
-                SUCCEED();
-                return;
-            }
             {
-                // Create a flip-flop Gate type with two input pins and four output pins
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_LATCH) {\n"
-                                        "        latch (\"IQ\" , \"IQN\") {\n"
-                                        "            enable              : \"G\";\n"
-                                        "            data_in             : \"D\";\n"
-                                        "            preset              : \"S\";\n"
-                                        "            clear               : \"R\";\n"
-                                        "            clear_preset_var1   : N;\n"
-                                        "            clear_preset_var2   : T;\n"
-                                        "        }\n"
-                                        "        pin(G) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(D) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(S) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(R) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(Q) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"IQ\";\n"
-                                        "        }\n"
-                                        "        pin(QN) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"IQN\";\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"S & R & D\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/test4.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_NE(gl, nullptr);
 
@@ -386,7 +210,6 @@ namespace hal {
                 EXPECT_EQ(gt_latch->get_clear_preset_behavior(),
                           std::make_pair(GateTypeSequential::ClearPresetBehavior::N,
                                          GateTypeSequential::ClearPresetBehavior::T));
-
             }
         TEST_END
     }
@@ -398,30 +221,10 @@ namespace hal {
      */
     TEST_F(LibertyParserTest, check_multiline_comment) {
         TEST_START
-            if(!test_utils::known_issue_tests_active()){
-                SUCCEED();
-                return;
-            }
             {
-                // The output pins O0, O1, O2, O3 should be created, C0, C1, C2, C3 shouldn't
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O0) { direction: output; function: \"I\"; }\n"
-                                        "        pin(O1) { direction: output; function: \"I\"; } /* pin(C0) { direction: output; function: \"I\"; }*/\n"
-                                        "        pin(O2) { direction: output; function: \"I\"; }\n"
-                                        "        /*pin(C1) { direction: output; function: \"I\"; }\n"
-                                        "        pin(C2) { direction: output; function: \"I\"; }\n"
-                                        "        pin(C3) { direction: output; function: \"I\"; }*/\n"
-                                        "        pin(O3) { direction: output; function: \"I\"; }\n"
-                                        "        \n"
-                                        "    }\n"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/test5.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_NE(gl, nullptr);
                 // Check that the Gate type was created
@@ -445,198 +248,66 @@ namespace hal {
      */
     TEST_F(LibertyParserTest, check_invalid_input) {
         TEST_START
-            if(!test_utils::known_issue_tests_active()){
-                SUCCEED();
-                return;
-            }
             {
-                // Pass an empty input stream
+                // Pass an invalid input path
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/test_noexist.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 EXPECT_EQ(gl, nullptr);
             }
             {
                 // For a ff, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_FF) {\n"
-                                        "        ff (\"IQ\" , \"IQN\") {\n"
-                                        "            next_state          : \"P\";\n"
-                                        "            clocked_on          : \"P\";\n"
-                                        "            preset              : \"P\";\n"
-                                        "            clear               : \"P\";\n"
-                                        "            clear_preset_var1   : Z;\n"
-                                        "            clear_preset_var2   : L;\n"
-                                        "        }\n"
-                                        "        pin(P) {\n"
-                                        "            direction: input;\n"
-                                        "            clock: true;\n"
-                                        "        }\n"
-                                        "        pin(Q) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"IQ\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test1.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 EXPECT_EQ(gl, nullptr);
             }
             {
                 // For a ff, use an undefined clear_preset_var2 behaviour (not in {L,H,N,T,X})
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_FF) {\n"
-                                        "        ff (\"IQ\" , \"IQN\") {\n"
-                                        "            next_state          : \"P\";\n"
-                                        "            clocked_on          : \"P\";\n"
-                                        "            preset              : \"P\";\n"
-                                        "            clear               : \"P\";\n"
-                                        "            clear_preset_var1   : L;\n"
-                                        "            clear_preset_var2   : Z;\n"
-                                        "        }\n"
-                                        "        pin(P) {\n"
-                                        "            direction: input;\n"
-                                        "            clock: true;\n"
-                                        "        }\n"
-                                        "        pin(Q) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"IQ\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test2.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 EXPECT_EQ(gl, nullptr);
             }
             {
                 // For a latch, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_LATCH) {\n"
-                                        "        latch (\"IQ\" , \"IQN\") {\n"
-                                        "            enable              : \"P\";\n"
-                                        "            data_in             : \"P\";\n"
-                                        "            preset              : \"P\";\n"
-                                        "            clear               : \"P\";\n"
-                                        "            clear_preset_var1   : Z;\n"
-                                        "            clear_preset_var2   : L;\n"
-                                        "        }\n"
-                                        "        pin(P) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(Q) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"IQ\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test3.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 EXPECT_EQ(gl, nullptr);
             }
             {
                 // For a latch, use an undefined clear_preset_var1 behaviour (not in {L,H,N,T,X})
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_LATCH) {\n"
-                                        "        latch (\"IQ\" , \"IQN\") {\n"
-                                        "            enable              : \"P\";\n"
-                                        "            data_in             : \"P\";\n"
-                                        "            preset              : \"P\";\n"
-                                        "            clear               : \"P\";\n"
-                                        "            clear_preset_var1   : L;\n"
-                                        "            clear_preset_var2   : Z;\n"
-                                        "        }\n"
-                                        "        pin(P) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(Q) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"IQ\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test4.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 EXPECT_EQ(gl, nullptr);
             }
             {
                 // Use an undefined direction in the lut group block (not in {ascending, descending})
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_LUT) {\n"
-                                        "        lut (\"lut_out\") {\n"
-                                        "            data_category     : \"test_category\";\n"
-                                        "            data_identifier   : \"test_identifier\";\n"
-                                        "            direction         : \"north-east\";\n" // <-"north-east" is no valid data direction
-                                        "        }\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"lut_out\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test5.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
-
-                EXPECT_EQ(gl, nullptr);
-            }
-            {
-                // Use an undefined direction in the ff group block (not in {ascending, descending})
-                NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_LUT) {\n"
-                                        "        lut (\"IQ\" , \"IQN\") {\n"
-                                        "            direction         : \"north-east\";\n" // <-"north-east" is no valid data direction
-                                        "        }\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"I\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
-                LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 EXPECT_EQ(gl, nullptr);
             }
             {
                 // Use a pin with an unknown direction (not in {input, output}) as an input pin
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I) {\n"
-                                        "            direction: WAMBO;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"I\";\n"
-                                        "        }\n"
-                                        "    }\n"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test6.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_NE(gl, nullptr); // NOTE: Ok, only 'I' is not parsed
                 auto g_types = gl->get_gate_types();
@@ -647,45 +318,18 @@ namespace hal {
             /*{ // NOTE: Works (is ok?)
                 // Use an unknown variable in a boolean function
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"I & WAMBO\";\n" // <- WAMBO is undefined
-                                        "        }\n"
-                                        "    }\n"
-                                        "}");
-                LibertyParser liberty_parser(input);
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test7.lib";
+                LibertyParser liberty_parser;
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 EXPECT_EQ(gl, nullptr); // NOTE: Ok? BF is parsed anyway with Variable WAMBO
             }*/
             {
                 // Use an unknown cell group (should be filtered out)
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        biological_cell (\"A\" , \"B\") {\n" // the parser does not support biological cells ;)
-                                        "            cell_type: eukaryotic; \n"
-                                        "            species: dog; \n  "
-                                        "            has_cell_wall: nope; \n  "
-                                        "        }\n"
-                                        "        pin(P) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(Q) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"P\";\n"
-                                        "        }\n"
-                                        "    }"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test8.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_NE(gl, nullptr);
 
@@ -697,24 +341,9 @@ namespace hal {
             {
                 // Define a pin twice
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"I\";\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"!I\";\n"
-                                        "        }\n"
-                                        "    }\n"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test9.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 EXPECT_EQ(gl, nullptr);
 
@@ -722,52 +351,18 @@ namespace hal {
             {
                 // Define a Gate type twice
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"!I\";\n"
-                                        "        }\n"
-                                        "    }\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I0) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O0) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"!I0\";\n"
-                                        "        }\n"
-                                        "    }\n"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test10.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 EXPECT_EQ(gl, nullptr);
             }
             {
                 // Pin got no direction (should be ignored)
                 NO_COUT_TEST_BLOCK;
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(I_nodir) {\n"
-                                        "            capacitance : 1.0;"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            direction: output;\n"
-                                        "            function: \"I\";\n"
-                                        "        }\n"
-                                        "    }\n"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test11.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_NE(gl, nullptr);
 
@@ -780,21 +375,9 @@ namespace hal {
             }
             {
                 // Test the usage of complex attributes
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            complex_attr(param1, param2);\n"
-                                        "            direction: output;\n"
-                                        "            function: \"!I\";\n"
-                                        "        }\n"
-                                        "    }\n"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test12.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_NE(gl, nullptr);
 
@@ -805,49 +388,11 @@ namespace hal {
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_output_pins().size(), 1);
 
             }
-            if(test_utils::known_issue_tests_active())
-            { // ISSUE: Interprets backslash as character of attribute name ("direction\")
-                // Test usage of a backslash (\) to continue a statement over multiple lines
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin(O) {\n"
-                                        "            complex_attr(param1, param2);\n"
-                                        "            direction\\\n"
-                                        "            : output;\n"
-                                        "            function: \"!I\";\n"
-                                        "        }\n"
-                                        "    }\n"
-                                        "}");
-                LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
-
-                ASSERT_NE(gl, nullptr);
-
-                auto gate_types = gl->get_gate_types();
-                ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
-                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinatorial);
-                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_output_pins().size(), 1); // ISSUE: fails
-            }
             {
                 // Test empty pin names
-                std::stringstream input("library (TEST_GATE_LIBRARY) {\n"
-                                        "    define(cell);\n"
-                                        "    cell(TEST_GATE_TYPE) {\n"
-                                        "        pin(I) {\n"
-                                        "            direction: input;\n"
-                                        "        }\n"
-                                        "        pin() {\n"
-                                        "            direction: output;\n"
-                                        "        }\n"
-                                        "    }\n"
-                                        "}");
+                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test13.lib";
                 LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse("imaginary_path", input);
+                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
                 ASSERT_EQ(gl, nullptr);
             }

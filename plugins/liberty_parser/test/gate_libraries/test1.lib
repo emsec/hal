@@ -1,0 +1,17 @@
+library (TEST_GATE_LIBRARY) {
+    date : "April 3, 2020" // <- will be ignored
+    revision : 2015.03;      // <- will be ignored
+    define(cell);
+    cell(TEST_GATE_TYPE) {
+        area : 3;   // <- will be ignored
+        pin(I) {
+            direction: input;
+            capacitance : 1;
+        }
+        pin(O) {
+            direction: output;
+            function: "I";
+            x_function: "!I";
+        }
+    }
+}
