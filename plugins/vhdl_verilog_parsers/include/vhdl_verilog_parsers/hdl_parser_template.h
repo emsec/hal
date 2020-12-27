@@ -58,7 +58,7 @@ namespace hal
      * @ingroup hdl_parsers
      */
     template<typename T>
-    class HDL_PARSER_API HDLParserTemplate : public HDLParser
+    class NETLIST_API HDLParserTemplate : public HDLParser
     {
     public:
         /**

@@ -39,7 +39,7 @@ namespace hal
     /**
      * @ingroup hdl_parsers
      */
-    class HDL_PARSER_API HDLParserVHDL : public HDLParserTemplate<core_strings::CaseInsensitiveString>
+    class NETLIST_API HDLParserVHDL : public HDLParserTemplate<core_strings::CaseInsensitiveString>
     {
     public:
         HDLParserVHDL() = default;
