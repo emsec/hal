@@ -17,7 +17,7 @@
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
@@ -144,7 +144,7 @@ namespace hal
         QFontDatabase::addApplicationFont(":/fonts/Source Code Pro/SourceCodePro-Black");
 
         // LOGGER HERE
-        gate_library_manager::load_all();
+        gate_library_parser_manager::load_all();
 
         // TEST
         //    mGSettings->setValue("stylesheet/base", ":/style/test base");

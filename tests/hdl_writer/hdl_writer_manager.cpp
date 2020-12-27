@@ -32,7 +32,7 @@ namespace hal {
             test_utils::create_sandbox_directory();
             plugin_manager::load_all_plugins();
             m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib_for_writer_manager_tests.lib", m_min_gl_content);
-            m_gl = gate_library_manager::load_file(m_g_lib_path);
+            m_gl         = gate_library_parser_manager::load_file(m_g_lib_path);
         }
 
         virtual void TearDown() {

@@ -101,7 +101,7 @@ namespace hal {
             // Load a gate library
             {
                 NO_COUT_BLOCK;
-                gate_library_manager::load_file(m_g_lib_path);
+                gate_library_parser_manager::load_file(m_g_lib_path);
             }
             {
                 // Parse a vhdl and a verilog file by passing no relevant program arguments. The parser should be determined
@@ -185,7 +185,7 @@ namespace hal {
             GateLibrary* min_gl;
             {
                 NO_COUT_BLOCK;
-                min_gl = gate_library_manager::load_file(m_g_lib_path);
+                min_gl = gate_library_parser_manager::load_file(m_g_lib_path);
             }
             {
                 // Parse a vhdl and a verilog file by GateLibrary

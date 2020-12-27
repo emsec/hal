@@ -22,7 +22,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -472,7 +472,7 @@ namespace hal
         QString text  = "Please select a gate library";
 
         QStringList items;
-        auto libraries = gate_library_manager::get_gate_libraries();
+        auto libraries = gate_library_parser_manager::get_gate_libraries();
         for (const auto& lib : libraries)
         {
             items.append(QString::fromStdString(lib->get_name()));

@@ -1,10 +1,11 @@
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "netlist_test_utils.h"
+
 #include "gtest/gtest.h"
 #include <iostream>
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/net.h"
 
 namespace hal {
 

@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_library_parser.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
 
 #include <functional>
 #include <map>
@@ -36,9 +36,9 @@ namespace hal
     class GateLibrary;
 
     /**
-     * @ingroup gate_lib
+     * @ingroup gate_lib_parser
      */
-    namespace gate_library_manager
+    namespace gate_library_parser_manager
     {
         using ParserFactory = std::function<std::unique_ptr<GateLibraryParser>()>;
 
@@ -100,5 +100,5 @@ namespace hal
          */
         NETLIST_API std::vector<GateLibrary*> get_gate_libraries();
 
-    }    // namespace gate_library_manager
+    }    // namespace gate_library_parser_manager
 }    // namespace hal

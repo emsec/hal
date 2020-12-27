@@ -18,7 +18,7 @@ namespace hal
             ifs.open(m_path.string(), std::ifstream::in);
             if (!ifs.is_open())
             {
-                log_error("gate_library_manager", "unable to open '{}'.", m_path.string());
+                log_error("liberty_parser", "unable to open '{}'.", m_path.string());
                 return nullptr;
             }
             m_fs << ifs.rdbuf();

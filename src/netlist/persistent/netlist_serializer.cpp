@@ -3,7 +3,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/event_system/event_controls.h"
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -532,7 +532,7 @@ namespace hal
                 auto root = document["netlist"].GetObject();
                 assert_availablility("gate_library");
 
-                auto lib = gate_library_manager::get_gate_library(root["gate_library"].GetString());
+                auto lib = gate_library_parser_manager::get_gate_library(root["gate_library"].GetString());
                 if (lib == nullptr)
                 {
                     log_critical("netlist.persistent", "error loading gate library '{}'.", root["gate_library"].GetString());

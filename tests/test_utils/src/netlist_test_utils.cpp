@@ -27,7 +27,7 @@ namespace hal
     std::unique_ptr<Netlist> test_utils::create_empty_netlist(const int id)
     {
         NO_COUT_BLOCK;
-        // GateLibrary* gl = gate_library_manager::get_gate_library(g_lib_name);
+        // GateLibrary* gl = gate_library_parser_manager::get_gate_library(g_lib_name);
         std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(get_testing_gate_library());
 
         if (id >= 0)
@@ -47,7 +47,7 @@ namespace hal
         if (!already_init)
         {
             std::vector<std::string> channel_ids = {
-                "core", "gate_library_manager", "liberty_parser", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "hdl_writer", "python_context", "test_utils"};
+                "core", "gate_library_parser", "gate_library_writer", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "hdl_writer", "python_context", "test_utils"};
 
             LogManager& lm = LogManager::get_instance();
             for (std::string ch_id : channel_ids)

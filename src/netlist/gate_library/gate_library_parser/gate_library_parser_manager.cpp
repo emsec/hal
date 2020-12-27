@@ -1,7 +1,6 @@
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
-
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/gate_library/gate_library_parser.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
@@ -10,7 +9,7 @@
 
 namespace hal
 {
-    namespace gate_library_manager
+    namespace gate_library_parser_manager
     {
         namespace
         {
@@ -51,7 +50,7 @@ namespace hal
 
                 if (lib == nullptr)
                 {
-                    log_error("gate_library_manager", "failed to load gate library '{}'.", path.string());
+                    log_error("gate_library_parser", "failed to load gate library '{}'.", path.string());
                 }
 
                 return lib;
@@ -70,14 +69,14 @@ namespace hal
                     }
                     if (types.find(name) != types.end())
                     {
-                        log_error("gate_library_manager", "no GND gate found in parsed library but gate types 'GND' and '{}' already exist.", name);
+                        log_error("gate_library_parser", "no GND gate found in parsed library but gate types 'GND' and '{}' already exist.", name);
                         return false;
                     }
                     auto gt = std::make_unique<GateType>(name);
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ZERO);
                     lib->add_gate_type(std::move(gt));
-                    log_info("gate_library_manager", "gate library did not contain a GND gate, auto-generated type '{}'", name);
+                    log_info("gate_library_parser", "gate library did not contain a GND gate, auto-generated type '{}'", name);
                 }
 
                 if (lib->get_vcc_gate_types().empty())
@@ -89,14 +88,14 @@ namespace hal
                     }
                     if (types.find(name) != types.end())
                     {
-                        log_error("gate_library_manager", "no VCC gate found in parsed library but gate types 'VCC' and '{}' already exist.", name);
+                        log_error("gate_library_parser", "no VCC gate found in parsed library but gate types 'VCC' and '{}' already exist.", name);
                         return false;
                     }
                     auto gt = std::make_unique<GateType>(name);
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ONE);
                     lib->add_gate_type(std::move(gt));
-                    log_info("gate_library_manager", "gate library did not contain a VCC gate, auto-generated type '{}'", name);
+                    log_info("gate_library_parser", "gate library did not contain a VCC gate, auto-generated type '{}'", name);
                 }
 
                 return true;
@@ -114,13 +113,13 @@ namespace hal
                 }
                 if (auto it = m_extension_to_parser.find(ext); it != m_extension_to_parser.end())
                 {
-                    log_warning("gate_library_manager", "file type '{}' already has associated parser '{}', it remains unchanged", ext, it->second.first);
+                    log_warning("gate_library_parser", "file type '{}' already has associated parser '{}', it remains unchanged", ext, it->second.first);
                     continue;
                 }
                 m_extension_to_parser.emplace(ext, std::make_pair(name, parser_factory));
                 m_parser_to_extensions[name].push_back(ext);
 
-                log_info("gate_library_manager", "registered gate library parser '{}' for file type '{}'", name, ext);
+                log_info("gate_library_parser", "registered gate library parser '{}' for file type '{}'", name, ext);
             }
         }
 
@@ -133,7 +132,7 @@ namespace hal
                     if (auto rm_it = m_extension_to_parser.find(ext); rm_it != m_extension_to_parser.end())
                     {
                         m_extension_to_parser.erase(rm_it);
-                        log_info("gate_library_manager", "unregistered gate library parser '{}' which was registered for file type '{}'", name, ext);
+                        log_info("gate_library_parser", "unregistered gate library parser '{}' which was registered for file type '{}'", name, ext);
                     }
                 }
                 m_parser_to_extensions.erase(it);
@@ -144,7 +143,7 @@ namespace hal
         {
             if (!std::filesystem::exists(path))
             {
-                log_error("gate_library_manager", "gate library file '{}' does not exist.", path.string());
+                log_error("gate_library_parser", "gate library file '{}' does not exist.", path.string());
                 return nullptr;
             }
 
@@ -158,7 +157,7 @@ namespace hal
                 auto it = m_gate_libraries.find(path);
                 if (it != m_gate_libraries.end())
                 {
-                    log_info("gate_library_manager", "the gate library file '{}' is already loaded.", path.string());
+                    log_info("gate_library_parser", "the gate library file '{}' is already loaded.", path.string());
                     return it->second.get();
                 }
             }
@@ -167,12 +166,12 @@ namespace hal
             auto begin_time = std::chrono::high_resolution_clock::now();
             if (utils::ends_with(path.string(), std::string(".lib")))
             {
-                log_info("gate_library_manager", "loading file '{}'...", path.string());
+                log_info("gate_library_parser", "loading file '{}'...", path.string());
                 lib = dispatch_parse(path);
             }
             else
             {
-                log_error("gate_library_manager", "no parser found for '{}'.", path.string());
+                log_error("gate_library_parser", "no parser found for '{}'.", path.string());
             }
 
             if (lib == nullptr)
@@ -187,7 +186,7 @@ namespace hal
                 return nullptr;
             }
 
-            log_info("gate_library_manager", "loaded gate library '{}' in {:2.2f} seconds.", lib->get_name(), elapsed);
+            log_info("gate_library_parser", "loaded gate library '{}' in {:2.2f} seconds.", lib->get_name(), elapsed);
 
             auto res                        = lib.get();
             m_gate_libraries[path.string()] = std::move(lib);
@@ -205,7 +204,7 @@ namespace hal
                     continue;
                 }
 
-                log_info("gate_library_manager", "Reading all definitions from {}.", lib_dir.string());
+                log_info("gate_library_parser", "Reading all definitions from {}.", lib_dir.string());
 
                 for (const auto& lib_path : utils::RecursiveDirectoryRange(lib_dir))
                 {
@@ -227,11 +226,11 @@ namespace hal
             {
                 // if a non existing file is queried, search for it in the standard directories
                 auto stripped_name = std::filesystem::path(file_name).filename();
-                log_info("gate_library_manager", "'{}' does not exist, searching for '{}' in standard directories...", file_name, stripped_name.string());
+                log_info("gate_library_parser", "'{}' does not exist, searching for '{}' in standard directories...", file_name, stripped_name.string());
                 auto lib_path = utils::get_file(stripped_name, utils::get_gate_library_directories());
                 if (lib_path.empty())
                 {
-                    log_info("gate_library_manager", "could not find any gate library file named '{}'.", stripped_name.string());
+                    log_info("gate_library_parser", "could not find any gate library file named '{}'.", stripped_name.string());
                     return nullptr;
                 }
                 absolute_path = std::filesystem::absolute(lib_path);
@@ -269,5 +268,5 @@ namespace hal
             }
             return res;
         }
-    }    // namespace gate_library_manager
+    }    // namespace gate_library_parser_manager
 }    // namespace hal

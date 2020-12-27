@@ -1,5 +1,5 @@
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 #include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
 #include "hal_core/netlist/net.h"
@@ -49,7 +49,7 @@ namespace hal
         {
             NO_COUT_BLOCK;
             plugin_manager::load_all_plugins();
-            gate_library_manager::get_gate_library("XILINX_UNISIM.lib");
+            gate_library_parser_manager::get_gate_library("XILINX_UNISIM.lib");
         }
 
         virtual void TearDown()
@@ -426,7 +426,7 @@ namespace hal
         }
 
         //create netlist from path
-        auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+        auto lib = gate_library_parser_manager::get_gate_library_by_name("XILINX_UNISIM");
         if (lib == nullptr)
         {
             FAIL() << "XILINX_UNISIM gate library not found";
@@ -497,7 +497,7 @@ namespace hal
             FAIL() << "netlist for counter-test not found: " << path_netlist;
 
         //create netlist from path
-        auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+        auto lib = gate_library_parser_manager::get_gate_library_by_name("XILINX_UNISIM");
         if (lib == nullptr)
         {
             FAIL() << "XILINX_UNISIM gate library not found";
@@ -582,7 +582,7 @@ namespace hal
             FAIL() << "netlist for toycipher-test not found: " << path_netlist;
 
         //create netlist from path
-        auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+        auto lib = gate_library_parser_manager::get_gate_library_by_name("XILINX_UNISIM");
         if (lib == nullptr)
         {
             FAIL() << "XILINX_UNISIM gate library not found";
@@ -714,7 +714,7 @@ namespace hal
         std::string path_netlist_hal = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/sha256/sha256_flat.hal";
 
         //create netlist from path
-        auto lib = gate_library_manager::get_gate_library_by_name("XILINX_UNISIM");
+        auto lib = gate_library_parser_manager::get_gate_library_by_name("XILINX_UNISIM");
         if (lib == nullptr)
         {
             FAIL() << "XILINX_UNISIM gate library not found";
