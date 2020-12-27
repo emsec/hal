@@ -60,10 +60,9 @@ namespace hal
          * direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
          *
          * @param[in] file_path - Path to the file containing the gate library definition.
-         * @param[in] file_content - The string stream containing the gate library definition.
          * @returns The gate library or a nullptr on error.
          */
-        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream& file_content) override;
+        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path) override;
 
     private:
         enum class pin_direction
@@ -152,7 +151,7 @@ namespace hal
         };
 
         std::unique_ptr<GateLibrary> m_gate_lib;
-        std::stringstream* m_fs;
+        std::stringstream m_fs;
         std::filesystem::path m_path;
 
         TokenStream<std::string> m_token_stream;

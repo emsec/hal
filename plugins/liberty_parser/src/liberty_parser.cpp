@@ -5,12 +5,26 @@
 #include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
 #include "hal_core/utilities/log.h"
 
+#include <fstream>
+
 namespace hal
 {
-    std::unique_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path, std::stringstream& file_content)
+    std::unique_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
-        m_fs   = &file_content;
+
+        {
+            std::ifstream ifs;
+            ifs.open(m_path.string(), std::ifstream::in);
+            if (!ifs.is_open())
+            {
+                log_error("gate_library_manager", "unable to open '{}'.", m_path.string());
+                return nullptr;
+            }
+            m_fs << ifs.rdbuf();
+            ifs.close();
+        }
+
         // tokenize file
         if (!tokenize())
         {
@@ -54,7 +68,7 @@ namespace hal
 
         std::vector<Token<std::string>> parsed_tokens;
 
-        while (std::getline(*m_fs, line))
+        while (std::getline(m_fs, line))
         {
             line_number++;
             this->remove_comments(line, multi_line_comment);

@@ -1,11 +1,10 @@
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/utilities/utils.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_parser.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 
-#include <fstream>
 #include <regex>
 #include <sstream>
 
@@ -47,21 +46,8 @@ namespace hal
                     return nullptr;
                 }
 
-                std::stringstream stream;
-                {
-                    std::ifstream ifs;
-                    ifs.open(path.string().c_str(), std::ifstream::in);
-                    if (!ifs.is_open())
-                    {
-                        log_error("gate_library_manager", "cannot open '{}'", path.string());
-                        return nullptr;
-                    }
-                    stream << ifs.rdbuf();
-                    ifs.close();
-                }
-
                 auto parser = factory();
-                auto lib    = parser->parse(path, stream);
+                auto lib    = parser->parse(path);
 
                 if (lib == nullptr)
                 {
