@@ -97,6 +97,9 @@ namespace hal
 
     Q_SIGNALS:
         void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
+        void focusGateClicked(u32 gateId);
+        void focusNetClicked(u32 netId);
+        void focusModuleClicked(u32 moduleId);
 
     public Q_SLOTS:
         void handleSelectionUpdate(void* sender);
@@ -112,6 +115,8 @@ namespace hal
         void selectionToNewGrouping();
         void selectionToExistingGrouping();
         void selectionToModuleAction();
+
+        void handleTreeViewItemFocusClicked(const SelectionTreeItem* sti);
 
     private:
         void singleSelectionInternal(const SelectionTreeItem* sti);

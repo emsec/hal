@@ -320,6 +320,7 @@ namespace hal
             return;
 
         mTimer->stop();
+        Q_EMIT fileAboutToClose(mFileName);
 
         // CHECK DIRTY AND TRIGGER SAVE ROUTINE
 

@@ -65,6 +65,8 @@ namespace hal
     }
 
     //------- Module ----
+    QIcon* SelectionTreeItemModule::sIconInstance = nullptr;
+
     SelectionTreeItemModule::SelectionTreeItemModule(u32 id_)
         : SelectionTreeItem(SelectionTreeItem::ModuleItem, id_), mIsRoot(false)
     {;}
@@ -105,9 +107,10 @@ namespace hal
         return QString::fromStdString(module->get_name());
     }
 
-    QIcon SelectionTreeItemModule::icon() const
+    const QIcon &SelectionTreeItemModule::icon() const
     {
-        return QIcon(":/icons/sel_module");
+        if (!sIconInstance) sIconInstance = new QIcon(":/icons/sel_module");
+        return *sIconInstance;
     }
 
     void SelectionTreeItemModule::addChild(SelectionTreeItem* cld)
@@ -133,6 +136,8 @@ namespace hal
     }
 
     //------- Gate ------
+    QIcon* SelectionTreeItemGate::sIconInstance = nullptr;
+
     SelectionTreeItemGate::SelectionTreeItemGate(u32 id_)
         : SelectionTreeItem(SelectionTreeItem::GateItem, id_)
     {;}
@@ -144,9 +149,10 @@ namespace hal
         return QString::fromStdString(gate->get_name());
     }
 
-    QIcon SelectionTreeItemGate::icon() const
+    const QIcon &SelectionTreeItemGate::icon() const
     {
-        return QIcon(":/icons/sel_gate");
+        if (!sIconInstance) sIconInstance = new QIcon(":/icons/sel_gate");
+        return *sIconInstance;
     }
 
     QVariant SelectionTreeItemGate::gateType() const
@@ -165,6 +171,8 @@ namespace hal
     }
 
     //------- Net -------
+    QIcon* SelectionTreeItemNet::sIconInstance = nullptr;
+
     SelectionTreeItemNet::SelectionTreeItemNet(u32 id_)
         : SelectionTreeItem(SelectionTreeItem::NetItem, id_)
     {;}
@@ -176,9 +184,10 @@ namespace hal
         return QString::fromStdString(net->get_name());
     }
 
-    QIcon SelectionTreeItemNet::icon() const
+    const QIcon &SelectionTreeItemNet::icon() const
     {
-        return QIcon(":/icons/sel_net");
+        if (!sIconInstance) sIconInstance = new QIcon(":/icons/sel_net");
+        return *sIconInstance;
     }
 
     void SelectionTreeItemNet::suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,

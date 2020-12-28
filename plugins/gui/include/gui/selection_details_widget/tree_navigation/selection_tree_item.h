@@ -54,7 +54,7 @@ namespace hal
         virtual QVariant data(int column) const;
         virtual QVariant name() const = 0; // implemented in subclass
         virtual QVariant gateType() const;
-        virtual QIcon    icon() const = 0;
+        virtual const QIcon& icon() const = 0;
         virtual bool     match(const QRegularExpression& regex) const;
 
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
@@ -73,7 +73,7 @@ namespace hal
         virtual int childCount() const;
         virtual SelectionTreeItem* child(int row) const;
         virtual QVariant name() const;
-        virtual QIcon    icon() const;
+        virtual const QIcon& icon() const;
         virtual bool     match(const QRegularExpression& regex) const;
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const;
@@ -82,6 +82,8 @@ namespace hal
     protected:
         bool mIsRoot;
         QList<SelectionTreeItem*> mChildItem;
+    private:
+        static QIcon* sIconInstance;
     };
 
     class SelectionTreeItemRoot : public SelectionTreeItemModule
@@ -95,10 +97,12 @@ namespace hal
     public:
         SelectionTreeItemGate(u32 id_);
         virtual QVariant name() const;
-        virtual QIcon    icon() const;
+        virtual const QIcon& icon() const;
         virtual QVariant gateType() const;
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const;
+    private:
+        static QIcon* sIconInstance;
     };
 
     class SelectionTreeItemNet : public SelectionTreeItem
@@ -106,9 +110,11 @@ namespace hal
     public:
         SelectionTreeItemNet(u32 id_);
         virtual QVariant name() const;
-        virtual QIcon    icon() const;
+        virtual const QIcon& icon() const;
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const;
+    private:
+        static QIcon* sIconInstance;
     };
 
 }

@@ -10,7 +10,6 @@
 #include <QVBoxLayout>
 #include <QShortcut>
 #include <QKeySequence>
-#include <QDebug>
 
 namespace hal
 {
@@ -25,6 +24,7 @@ namespace hal
         connect(gGraphContextManager, &GraphContextManager::contextCreated, this, &GraphTabWidget::handleContextCreated);
         connect(gGraphContextManager, &GraphContextManager::contextRenamed, this, &GraphTabWidget::handleContextRenamed);
         connect(gGraphContextManager, &GraphContextManager::deletingContext, this, &GraphTabWidget::handleContextRemoved);
+        connect(gGuiApi, &GuiApi::navigationRequested, this, &GraphTabWidget::ensureSelectionVisible);
     }
 
     QList<QShortcut *> GraphTabWidget::createShortcuts()
@@ -55,17 +55,18 @@ namespace hal
         {
             auto ctx = w->getContext();
             gContentManager->getContextManagerWidget()->selectViewContext(ctx);
-
-            disconnect(gGuiApi, &GuiApi::navigationRequested, mCurrentWidget, &GraphWidget::ensureSelectionVisible);
-            connect(gGuiApi, &GuiApi::navigationRequested, w, &GraphWidget::ensureSelectionVisible);
-            mCurrentWidget = w;
         }
+    }
+
+    void GraphTabWidget::ensureSelectionVisible()
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if(currentGraphWidget)
+            currentGraphWidget->ensureSelectionVisible();
     }
 
     void GraphTabWidget::handleTabCloseRequested(int index)
     {
-        auto w = dynamic_cast<GraphWidget*>(mTabWidget->widget(index));
-        disconnect(gGuiApi, &GuiApi::navigationRequested, w, &GraphWidget::ensureSelectionVisible);
         mTabWidget->removeTab(index);
 
         //right way to do it??
@@ -102,16 +103,31 @@ namespace hal
         handleTabCloseRequested(getContextTabIndex(context));
     }
 
+    void GraphTabWidget::handleGateFocus(u32 gateId)
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if(currentGraphWidget)
+            currentGraphWidget->focusGate(gateId);
+    }
+
+    void GraphTabWidget::handleNetFocus(u32 netId)
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if(currentGraphWidget)
+            currentGraphWidget->focusNet(netId);
+    }
+
+    void GraphTabWidget::handleModuleFocus(u32 moduleId)
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if(currentGraphWidget)
+            currentGraphWidget->focusModule(moduleId);
+    }
+
     void GraphTabWidget::addGraphWidgetTab(GraphContext* context)
     {
         GraphWidget* new_graph_widget = new GraphWidget(context);
         //mContextWidgetMap.insert(context, new_graph_widget);
-
-        if(mTabWidget->count() == 0)
-        {
-            connect(gGuiApi, &GuiApi::navigationRequested, new_graph_widget, &GraphWidget::ensureSelectionVisible);
-            mCurrentWidget = new_graph_widget;
-        }
 
         int tab_index = addTab(new_graph_widget, context->name());
         mTabWidget->setCurrentIndex(tab_index);

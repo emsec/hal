@@ -5,7 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* fixed crash when moving top module upward
+* added creation of backups for Python files created within the editor outside of the `.hal` file
+* added user prompt when detecting Python file backups after a crash
+
+## [3.1.10] - 2020-12-18 14:00:00+02:00 (urgency: medium)
+* added `SB_GB_IO`, `SB_GB`, `SB_I2C`, `SB_SPI`, `SB_HFOSC`, and `SB_LFOSC` gate types to `ICE40ULTRA` gate library
+* added jumping to gates, nets, and modules from the selection details widget when double-clicking the respective item in the list or using the context menu
+* added isolating gates and modules in new views from the selection details widget using the conext menu
+* changed layouter to only be called after fully executing a Python script
+* improved performance of selection details widget
+* fixed layouter flaw that junctions could not be drawn if in- and outgoing wires were swapped
 * fixed parsing of bit order for INIT strings in FPGA gate libraries
+* fixed GUI segfaulting when deleting wires without unfolding the containing module
+* fixed occasional null pointer exceptions on GUI startup
+* fixed GUI listening to signals from netlists other than the one loaded within the GUI
+* fixed graph view resizing when navigating using the arrow keys or the GUI API
 
 ## [3.1.9] - 2020-12-02 13:00:00+02:00 (urgency: medium)
 * added `NetlistSimulator::load_initial_value_from_netlist` to load the initial value from the netlist
@@ -435,7 +450,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.9...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.10...HEAD
+[3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10
 [3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9
 [3.1.8]: https://github.com/emsec/hal/compare/v3.1.7...v3.1.8
 [3.1.7]: https://github.com/emsec/hal/compare/v3.1.6...v3.1.7
