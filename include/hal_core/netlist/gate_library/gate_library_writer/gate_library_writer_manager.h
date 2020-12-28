@@ -41,7 +41,7 @@ namespace hal
          * 
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.
-         * @returns True on success.
+         * @returns True on success, false otherwise.
          */
         NETLIST_API bool write(GateLibrary* gate_lib, const std::filesystem::path& file_path);
     }    // namespace gate_library_writer_manager
