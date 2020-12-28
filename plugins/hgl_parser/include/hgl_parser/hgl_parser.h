@@ -96,12 +96,12 @@ namespace hal
 
         static std::unordered_map<std::string, GateTypeSequential::ClearPresetBehavior> m_string_to_behavior;
 
-        bool deserialize_gate_library(const rapidjson::Document& document);
-        bool deserialize_gate_type(const rapidjson::Value& gate_type);
-        bool deserialize_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name);
-        bool deserialize_group(GroupCtx& group_ctx, const rapidjson::Value& group, const std::string& gt_name);
-        bool deserialize_lut_config(GateTypeLut* gt_lut, const rapidjson::Value& lut_config);
-        bool deserialize_ff_config(GateTypeSequential* gt_ff, const rapidjson::Value& ff_config);
-        bool deserialize_latch_config(GateTypeSequential* gt_latch, const rapidjson::Value& latch_config);
+        bool parse_gate_library(const rapidjson::Document& document);
+        bool parse_gate_type(const rapidjson::Value& gate_type);
+        bool parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name);
+        bool parse_group(GroupCtx& group_ctx, const rapidjson::Value& group, const std::string& gt_name);
+        bool parse_lut_config(GateTypeLut* gt_lut, const rapidjson::Value& lut_config);
+        bool parse_ff_config(GateTypeSequential* gt_ff, const rapidjson::Value& ff_config);
+        bool parse_latch_config(GateTypeSequential* gt_latch, const rapidjson::Value& latch_config);
     };
 }    // namespace hal

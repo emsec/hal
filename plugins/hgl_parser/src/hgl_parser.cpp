@@ -32,7 +32,7 @@ namespace hal
             return nullptr;
         }
 
-        if (!deserialize_gate_library(document))
+        if (!parse_gate_library(document))
         {
             return nullptr;
         }
@@ -40,7 +40,7 @@ namespace hal
         return std::move(m_gate_lib);
     }
 
-    bool HGLParser::deserialize_gate_library(const rapidjson::Document& document)
+    bool HGLParser::parse_gate_library(const rapidjson::Document& document)
     {
         if (!document.HasMember("library"))
         {
@@ -58,7 +58,7 @@ namespace hal
 
         for (const auto& gate_type : document["cells"].GetArray())
         {
-            if (!deserialize_gate_type(gate_type))
+            if (!parse_gate_type(gate_type))
             {
                 return false;
             }
@@ -67,7 +67,7 @@ namespace hal
         return true;
     }
 
-    bool HGLParser::deserialize_gate_type(const rapidjson::Value& gate_type)
+    bool HGLParser::parse_gate_type(const rapidjson::Value& gate_type)
     {
         std::string name;
         GateType::BaseType type;
@@ -118,7 +118,7 @@ namespace hal
         {
             for (const auto& pin : gate_type["pins"].GetArray())
             {
-                if (!deserialize_pin(pin_ctx, pin, name))
+                if (!parse_pin(pin_ctx, pin, name))
                 {
                     return false;
                 }
@@ -142,7 +142,7 @@ namespace hal
         {
             for (const auto& group : gate_type["groups"].GetArray())
             {
-                if (!deserialize_group(group_ctx, group, name))
+                if (!parse_group(group_ctx, group, name))
                 {
                     return false;
                 }
@@ -162,7 +162,7 @@ namespace hal
                 return false;
             }
 
-            if (!deserialize_lut_config(gt_lut, gate_type["lut_config"]))
+            if (!parse_lut_config(gt_lut, gate_type["lut_config"]))
             {
                 return false;
             }
@@ -177,7 +177,7 @@ namespace hal
                 return false;
             }
 
-            if (!deserialize_ff_config(gt_ff, gate_type["ff_config"]))
+            if (!parse_ff_config(gt_ff, gate_type["ff_config"]))
             {
                 return false;
             }
@@ -192,7 +192,7 @@ namespace hal
                 return false;
             }
 
-            if (!deserialize_latch_config(gt_latch, gate_type["latch_config"]))
+            if (!parse_latch_config(gt_latch, gate_type["latch_config"]))
             {
                 return false;
             }
@@ -206,7 +206,7 @@ namespace hal
         return false;
     }
 
-    bool HGLParser::deserialize_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name)
+    bool HGLParser::parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name)
     {
         if (!pin.HasMember("name") || !pin["name"].IsString())
         {
@@ -274,7 +274,7 @@ namespace hal
         return true;
     }
 
-    bool HGLParser::deserialize_group(GroupCtx& group_ctx, const rapidjson::Value& group, const std::string& gt_name)
+    bool HGLParser::parse_group(GroupCtx& group_ctx, const rapidjson::Value& group, const std::string& gt_name)
     {
         // read name
         std::string name;
@@ -330,7 +330,7 @@ namespace hal
         return true;
     }
 
-    bool HGLParser::deserialize_lut_config(GateTypeLut* gt_lut, const rapidjson::Value& lut_config)
+    bool HGLParser::parse_lut_config(GateTypeLut* gt_lut, const rapidjson::Value& lut_config)
     {
         if (!lut_config.HasMember("bit_order") || !lut_config["bit_order"].IsString())
         {
@@ -372,7 +372,7 @@ namespace hal
                                                                                                                 {"T", GateTypeSequential::ClearPresetBehavior::T},
                                                                                                                 {"X", GateTypeSequential::ClearPresetBehavior::X}};
 
-    bool HGLParser::deserialize_ff_config(GateTypeSequential* gt_ff, const rapidjson::Value& ff_config)
+    bool HGLParser::parse_ff_config(GateTypeSequential* gt_ff, const rapidjson::Value& ff_config)
     {
         if (ff_config.HasMember("next_state") && ff_config["next_state"].IsString())
         {
@@ -442,7 +442,7 @@ namespace hal
         return true;
     }
 
-    bool HGLParser::deserialize_latch_config(GateTypeSequential* gt_latch, const rapidjson::Value& latch_config)
+    bool HGLParser::parse_latch_config(GateTypeSequential* gt_latch, const rapidjson::Value& latch_config)
     {
         if (latch_config.HasMember("data_in") && latch_config["data_in"].IsString())
         {
