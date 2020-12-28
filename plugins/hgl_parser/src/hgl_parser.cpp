@@ -1,12 +1,11 @@
 #include "hgl_parser/hgl_parser.h"
 
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
 #include "hal_core/utilities/log.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
 
 namespace hal
 {
