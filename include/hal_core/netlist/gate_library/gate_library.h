@@ -65,7 +65,6 @@ namespace hal
         std::filesystem::path get_path() const;
 
         /**
-         * TODO pybind and tests
          * Create a new gate type, add it to the gate library, and return it.
          * 
          * @param[in] name - The name of the gate type.

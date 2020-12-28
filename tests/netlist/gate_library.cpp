@@ -462,12 +462,30 @@ namespace hal {
                 // -- get the Gate types
                 EXPECT_EQ(gl->get_gate_types(),
                           (std::unordered_map<std::string, const GateType*>({{"gt_and", gt_and},
-                                                                                   {"gt_gnd", gt_gnd},
-                                                                                   {"gt_vcc", gt_vcc}})));
+                          {"gt_gnd", gt_gnd},
+                          {"gt_vcc", gt_vcc}})));
                 EXPECT_EQ(gl->get_vcc_gate_types(),
                           (std::unordered_map<std::string, const GateType*>({{"gt_vcc", gt_vcc}})));
                 EXPECT_EQ(gl->get_gnd_gate_types(),
                           (std::unordered_map<std::string, const GateType*>({{"gt_gnd", gt_gnd}})));
+
+                // check creation of gate types
+                auto gt_or = gl->create_gate_type("gt_or", GateType::BaseType::combinatorial);
+                auto gt_ff = gl->create_gate_type("gt_ff", GateType::BaseType::ff);
+                auto gt_latch = gl->create_gate_type("gt_latch", GateType::BaseType::latch);
+                auto gt_lut = gl->create_gate_type("gt_lut", GateType::BaseType::lut);
+                EXPECT_EQ(gl->get_gate_types(),
+                          (std::unordered_map<std::string, const GateType*>({{"gt_and", gt_and},
+                          {"gt_gnd", gt_gnd},
+                          {"gt_vcc", gt_vcc},
+                          {"gt_or", gt_or},
+                          {"gt_ff", gt_ff},
+                          {"gt_latch", gt_latch},
+                          {"gt_lut", gt_lut}})));
+                EXPECT_EQ(gt_or->get_base_type(), GateType::BaseType::combinatorial);
+                EXPECT_EQ(gt_ff->get_base_type(), GateType::BaseType::ff);
+                EXPECT_EQ(gt_latch->get_base_type(), GateType::BaseType::latch);
+                EXPECT_EQ(gt_lut->get_base_type(), GateType::BaseType::lut);
 
                 // Check the addition of includes
                 gl->add_include("in.clu.de");

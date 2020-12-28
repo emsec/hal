@@ -41,7 +41,16 @@ namespace hal
             :rtype: hal_py.hal_path
         )");
 
-        // TODO find a way to enable 'add_gate_type' via Python
+        py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, R"(
+            Create a new gate type, add it to the gate library, and return it.
+
+            :param str name: The name of the gate type.
+            :param hal_py.GateType.BaseType type: The base type of the gate type.
+            :returns: The new gate type instance on success, None otherwise.
+            :rtype: hal_py.GateType
+        )");
+
+        // add_gate_type cannot be accessed via Python as PyBind does not want to pass ownership of the gate type instance
         // py_gate_library.def("add_gate_type", &GateLibrary::add_gate_type, py::arg("gate_type"), R"(
         //     Add a gate type to the gate library.
 
