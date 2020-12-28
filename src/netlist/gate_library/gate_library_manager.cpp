@@ -2,6 +2,7 @@
 
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
@@ -61,7 +62,7 @@ namespace hal
             }
         }    // namespace
 
-        GateLibrary* load(std::filesystem::path file_path, bool reload_if_existing)
+        GateLibrary* load(std::filesystem::path file_path, bool reload)
         {
             if (!std::filesystem::exists(file_path))
             {
@@ -74,7 +75,7 @@ namespace hal
                 file_path = std::filesystem::absolute(file_path);
             }
 
-            if (!reload_if_existing)
+            if (!reload)
             {
                 if (auto it = m_gate_libraries.find(file_path); it != m_gate_libraries.end())
                 {
@@ -99,7 +100,7 @@ namespace hal
             return res;
         }
 
-        void load_all(bool reload_if_existing)
+        void load_all(bool reload)
         {
             std::vector<std::filesystem::path> lib_dirs = utils::get_gate_library_directories();
 
@@ -114,9 +115,32 @@ namespace hal
 
                 for (const auto& lib_path : utils::RecursiveDirectoryRange(lib_dir))
                 {
-                    load(lib_path.path(), reload_if_existing);
+                    load(lib_path.path(), reload);
                 }
             }
+        }
+
+        bool save(std::filesystem::path file_path, GateLibrary* gate_lib, bool overwrite)
+        {
+            if (std::filesystem::exists(file_path))
+            {
+                if (overwrite)
+                {
+                    log_info("gate_library_manager", "gate library file '{}' already exists and will be overwritten.", file_path.string());
+                }
+                else
+                {
+                    log_error("gate_library_manager", "gate library file '{}' already exists, aborting.", file_path.string());
+                    return false;
+                }
+            }
+
+            if (!file_path.is_absolute())
+            {
+                file_path = std::filesystem::absolute(file_path);
+            }
+
+            return gate_library_writer_manager::write(gate_lib, file_path);
         }
 
         GateLibrary* get_gate_library(const std::string& file_path)
