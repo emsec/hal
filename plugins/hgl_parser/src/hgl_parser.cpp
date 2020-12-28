@@ -13,18 +13,18 @@ namespace hal
     {
         m_path = file_path;
 
-        FILE* pFile = fopen(file_path.string().c_str(), "rb");
-        if (pFile == NULL)
+        FILE* fp = fopen(file_path.string().c_str(), "r");
+        if (fp == NULL)
         {
-            log_error("hgl_parser", "unable to open '{}'.", file_path.string());
+            log_error("hgl_parser", "unable to open '{}' for reading.", file_path.string());
             return nullptr;
         }
 
         char buffer[65536];
-        rapidjson::FileReadStream is(pFile, buffer, sizeof(buffer));
+        rapidjson::FileReadStream is(fp, buffer, sizeof(buffer));
         rapidjson::Document document;
         document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(is);
-        fclose(pFile);
+        fclose(fp);
 
         if (document.HasParseError())
         {
