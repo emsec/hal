@@ -12,7 +12,8 @@ namespace hal
     class GateLibraryWriter;
 
     /**
-     * TODO Python binding and documentation
+     * The gate library writer manager keeps track of all gate library writers that are available within HAL. Further, it is used to dispatch writing tasks to the respective writers.
+     * 
      * @ingroup gate_library_writer
      */
     namespace gate_library_writer_manager

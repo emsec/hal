@@ -10,6 +10,8 @@ namespace hal
     class GateLibrary;
 
     /**
+     * The gate library writer is the base class that needs to be inherited from all writers that shall be registered with HAL.
+     * 
      * @ingroup gate_lib_writer
      */
     class NETLIST_API GateLibraryWriter

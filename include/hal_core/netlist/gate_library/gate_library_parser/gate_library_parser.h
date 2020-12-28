@@ -32,6 +32,8 @@
 namespace hal
 {
     /**
+     * The gate library parser is the base class that needs to be inherited from all parsers that shall be registered with HAL.
+     * 
      * @ingroup gate_lib_parser
      */
     class NETLIST_API GateLibraryParser

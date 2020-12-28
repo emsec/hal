@@ -36,7 +36,8 @@ namespace hal
     class GateLibrary;
 
     /**
-     * TODO Python binding & documentation
+     * The gate library parser manager keeps track of all gate library parsers that are available within HAL. Further, it is used to dispatch parsing tasks to the respective parsers.
+     * 
      * @ingroup gate_lib_parser
      */
     namespace gate_library_parser_manager
