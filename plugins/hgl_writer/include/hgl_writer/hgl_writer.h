@@ -24,10 +24,21 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h"
+#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+
+#define RAPIDJSON_HAS_STDSTRING 1
+#include "rapidjson/document.h"
+
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 namespace hal
 {
+    class GateType;
+
     /**
      * @ingroup netlist
      */
@@ -44,9 +55,23 @@ namespace hal
          * @param[in] file_path - The output path.
          * @returns True on success.
          */
-        bool write(GateLibrary* gate_lib, const std::filesystem::path& file_path) override;
+        bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path) override;
 
     private:
-        
+        struct PinCtx
+        {
+            std::string name;
+            std::string direction;
+            std::string type       = "";
+            std::string function   = "";
+            std::string x_function = "";
+            std::string z_function = "";
+        };
+
+        static std::unordered_map<GateTypeSequential::ClearPresetBehavior, std::string> m_behavior_to_string;
+
+        bool write_gate_library(rapidjson::Document& document, const GateLibrary* gate_lib);
+
+        std::vector<PinCtx> get_pins(const GateType* gt, const std::unordered_map<std::string, BooleanFunction>& functions);
     };
 }    // namespace hal

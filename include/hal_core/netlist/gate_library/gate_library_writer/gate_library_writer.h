@@ -27,6 +27,6 @@ namespace hal
          * @param[in] file_path - The output path.
          * @returns True on success.
          */
-        virtual bool write(GateLibrary* gate_lib, const std::filesystem::path& file_path) = 0;
+        virtual bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path) = 0;
     };
 }    // namespace hal
