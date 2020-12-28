@@ -27,6 +27,7 @@
 #include <fstream>
 #include <QDesktopServices>
 #include "gui/file_manager/file_manager.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -928,7 +929,8 @@ namespace hal
         QDir snapshot_dir = this->getSnapshotDirectory(true);
 
         int tabs = mTabWidget->count();
-        for(int index = 0; index < tabs; index++){
+        for(int index = 0; index < tabs; index++)
+        {
             PythonCodeEditor* editor = dynamic_cast<PythonCodeEditor*>(mTabWidget->widget(index));
             QString snapshot_file_name = "~";
             if(editor->getFileName().isEmpty())
@@ -942,7 +944,8 @@ namespace hal
                 QFileInfo original_file_name(editor->getFileName());
                 snapshot_file_name += original_file_name.fileName();
             }
-            snapshot_file_name += "(" + QString::number(index) + ").py";
+            //if the filename ends with .py because it is loaded from (or saved to) a file, insert the tabindex before the file extension, otherwise append the index and extension
+            snapshot_file_name.endsWith(".py") ? snapshot_file_name.insert(snapshot_file_name.length()-3, "__(" + QString::number(index) + ")__") : snapshot_file_name += "__(" + QString::number(index) + ")__.py";
 
             QString snapshot_file_path = snapshot_dir.absoluteFilePath(snapshot_file_name);
 
