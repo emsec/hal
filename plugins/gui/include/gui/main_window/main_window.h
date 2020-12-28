@@ -98,6 +98,9 @@ namespace hal
         // =====================================================================
         //   Q_PROPERTY functions
         // =====================================================================
+        /** @name Q_PROPERTY Functions
+         */
+        ///@{
 
         /**
          * Q_PROPERTY READ function for the hal icon path.
@@ -208,14 +211,12 @@ namespace hal
          * Q_PROPERTY WRITE function for the hal icon path.
          *
          * @param path - the new path
-         * @returns the hal icon path
          */
         void setHalIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the hal icon style.
          *
          * @param style - the new style
-         * @returns the hal icon style
          */
         void setHalIconStyle(const QString &style);
 
@@ -223,14 +224,12 @@ namespace hal
          * Q_PROPERTY WRITE function for the 'New File'-icon path.
          *
          * @param path - the new path
-         * @returns the 'New File'-icon path
          */
         void setNewFileIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'New File'-icon style.
          *
          * @param style - the new style
-         * @returns the 'New File'-icon style
          */
         void setNewFileIconStyle(const QString &style);
 
@@ -238,14 +237,12 @@ namespace hal
         * Q_PROPERTY WRITE function for the 'Open File'-icon path.
          *
          * @param path - the new path
-        * @returns the 'Open File'-icon path
         */
         void setOpenIconPath(const QString& path);
         /**
         * Q_PROPERTY WRITE function for the 'Open File'-icon style.
          *
          * @param style - the new style
-        * @returns the 'Open File'-icon style
         */
         void setOpenIconStyle(const QString& style);
 
@@ -253,14 +250,12 @@ namespace hal
          * Q_PROPERTY WRITE function for the 'Save File'-icon path.
          *
          * @param path - the new path
-         * @returns the 'SaveFile'-icon path
          */
         void setSaveIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Save File'-icon style.
          *
          * @param style - the new style
-         * @returns the 'Save File'-icon style
          */
         void setSaveIconStyle(const QString& style);
 
@@ -268,14 +263,12 @@ namespace hal
          * Q_PROPERTY WRITE function for the 'Schedule'-icon path.
          *
          * @param path - the new path
-         * @returns the 'Schedule'-icon path
          */
         void setScheduleIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Schedule'-icon style.
          *
          * @param style - the new style
-         * @returns the 'Schedule'-icon style
          */
         void setScheduleIconStyle(const QString& style);
 
@@ -283,14 +276,12 @@ namespace hal
          * Q_PROPERTY WRITE function for the 'Run Script'-icon path.
          *
          * @param path - the new path
-         * @returns the 'Run Script'-icon path
          */
         void setRunIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Duplicate'-icon path.
          *
          * @param style - the new style
-         * @returns the 'Duplicate'-icon path
          */
         void setRunIconStyle(const QString& style);
 
@@ -298,14 +289,12 @@ namespace hal
          * Q_PROPERTY WRITE function for the 'Duplicate'-icon path.
          *
          * @param path - the new path
-         * @returns the 'Duplicate'-icon path
          */
         void setContentIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Duplicate'-icon style.
          *
          * @param style - the new style
-         * @returns the 'Duplicate'-icon style
          */
         void setContentIconStyle(const QString& style);
 
@@ -313,16 +302,16 @@ namespace hal
          * Q_PROPERTY WRITE function for the 'Settings'-icon path.
          *
          * @param path - the new path
-         * @returns the 'Settings'-icon path
          */
         void setSettingsIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Settings'-icon style.
          *
          * @param style - the new style
-         * @returns the 'Settings'-icon style
          */
         void setSettingsIconStyle(const QString& style);
+
+        ///@}
 
     Q_SIGNALS:
         /**
