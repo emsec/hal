@@ -123,7 +123,7 @@ namespace hal
         return m_functions;
     }
 
-    void GateType::assign_vdd_pin(const std::string& pin_name)
+    void GateType::assign_power_pin(const std::string& pin_name)
     {
         if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
         {
@@ -131,15 +131,15 @@ namespace hal
             return;
         }
 
-        m_vdd_pins.insert(pin_name);
+        m_power_pins.insert(pin_name);
     }
 
-    std::unordered_set<std::string> GateType::get_vdd_pins() const
+    std::unordered_set<std::string> GateType::get_power_pins() const
     {
-        return m_vdd_pins;
+        return m_power_pins;
     }
 
-    void GateType::assign_gnd_pin(const std::string& pin_name)
+    void GateType::assign_ground_pin(const std::string& pin_name)
     {
         if (std::find(m_input_pins.begin(), m_input_pins.end(), pin_name) == m_input_pins.end())
         {
@@ -147,11 +147,11 @@ namespace hal
             return;
         }
 
-        m_gnd_pins.insert(pin_name);
+        m_ground_pins.insert(pin_name);
     }
 
-    std::unordered_set<std::string> GateType::get_gnd_pins() const
+    std::unordered_set<std::string> GateType::get_ground_pins() const
     {
-        return m_gnd_pins;
+        return m_ground_pins;
     }
 }    // namespace hal

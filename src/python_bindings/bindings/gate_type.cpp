@@ -185,41 +185,41 @@ namespace hal
             :rtype: dict[str,dict[int,str]]
         )");
 
-        py_gate_type.def("assign_vdd_pin", &GateType::assign_vdd_pin, py::arg("pin_name"), R"(
-            Add an existing input pin to the collection of VDD pins.
+        py_gate_type.def("assign_power_pin", &GateType::assign_power_pin, py::arg("pin_name"), R"(
+            Add an existing input pin to the collection of power pins.
             The pin has to be declared as an input pin beforehand.
 
             :param str pin_name: The name of the input pin to add.
         )");
 
-        py_gate_type.def_property_readonly("vdd_pins", &GateType::get_vdd_pins, R"(
-            The set of input pins that that are classified as VDD pins.
+        py_gate_type.def_property_readonly("power_pins", &GateType::get_power_pins, R"(
+            The set of input pins that that are classified as power pins.
 
             :type: set[str]
         )");
 
-        py_gate_type.def("get_vdd_pins", &GateType::get_vdd_pins, R"(
-            Get all input pins classfied as VDD pins.
+        py_gate_type.def("get_power_pins", &GateType::get_power_pins, R"(
+            Get all input pins classfied as power pins.
 
             :returns: The set of input pin names.
             :rtype: set[str]
         )");
 
-        py_gate_type.def("assign_gnd_pin", &GateType::assign_gnd_pin, py::arg("pin_name"), R"(
-            Add an existing input pin to the collection of GND pins.
+        py_gate_type.def("assign_ground_pin", &GateType::assign_ground_pin, py::arg("pin_name"), R"(
+            Add an existing input pin to the collection of ground pins.
             The pin has to be declared as an input pin beforehand.
 
             :param str pin_name: The name of the input pin to add.
         )");
 
-        py_gate_type.def_property_readonly("gnd_pins", &GateType::get_gnd_pins, R"(
-            The set of input pins that that are classified as GND pins.
+        py_gate_type.def_property_readonly("ground_pins", &GateType::get_ground_pins, R"(
+            The set of input pins that that are classified as ground pins.
 
             :type: set[str]
         )");
 
-        py_gate_type.def("get_gnd_pins", &GateType::get_gnd_pins, R"(
-            Get all input pins classfied as GND pins.
+        py_gate_type.def("get_ground_pins", &GateType::get_ground_pins, R"(
+            Get all input pins classfied as ground pins.
 
             :returns: The set of input pin names.
             :rtype: set[str]

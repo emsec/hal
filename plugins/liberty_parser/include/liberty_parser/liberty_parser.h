@@ -89,8 +89,8 @@ namespace hal
             std::string x_function;
             std::string z_function;
             bool clock = false;
-            bool gnd = false;
-            bool vdd = false;
+            bool power = false;
+            bool ground = false;
         };
 
         struct bus_group

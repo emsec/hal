@@ -529,11 +529,11 @@ namespace hal
                 std::string type = pin_str.consume().string;
                 if (type == "primary_power")
                 {
-                    pin.vdd = true;
+                    pin.power = true;
                 }
                 else if (type == "primary_ground")
                 {
-                    pin.gnd = true;
+                    pin.ground = true;
                 }
                 else
                 {
@@ -1139,19 +1139,19 @@ namespace hal
 
         for (const auto& pin : cell.pins)
         {
-            if (pin.vdd == true)
+            if (pin.power == true)
             {
                 for (const auto& pin_name : pin.pin_names)
                 {
-                    gt->assign_vdd_pin(pin_name);
+                    gt->assign_power_pin(pin_name);
                 }
             }
 
-            if (pin.gnd == true)
+            if (pin.ground == true)
             {
                 for (const auto& pin_name : pin.pin_names)
                 {
-                    gt->assign_gnd_pin(pin_name);
+                    gt->assign_ground_pin(pin_name);
                 }
             }
         }

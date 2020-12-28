@@ -69,7 +69,7 @@ namespace hal {
     /**
      * Testing the usage of power and ground pins
      *
-     * Functions: assign_vdd_pin, get_vdd_pins, assign_gnd_pin, get_gnd_pins
+     * Functions: assign_power_pin, get_power_pins, assign_ground_pin, get_ground_pins
      */
     TEST_F(GateLibraryTest, check_power_ground_pins) {
         TEST_START
@@ -77,20 +77,20 @@ namespace hal {
                 // assign and get some pins
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
                 gts.add_input_pins(std::vector<std::string>({"I_0", "I_1"}));
-                gts.assign_vdd_pin("I_0");
-                gts.assign_gnd_pin("I_1");
-                EXPECT_EQ(gts.get_vdd_pins(), std::unordered_set<std::string>({"I_0"}));
-                EXPECT_EQ(gts.get_gnd_pins(), std::unordered_set<std::string>({"I_1"}));
+                gts.assign_power_pin("I_0");
+                gts.assign_ground_pin("I_1");
+                EXPECT_EQ(gts.get_power_pins(), std::unordered_set<std::string>({"I_0"}));
+                EXPECT_EQ(gts.get_ground_pins(), std::unordered_set<std::string>({"I_1"}));
             }
             // Negative
             {
                 // Try to assign pins that were not registered as input pins
                 NO_COUT_TEST_BLOCK;
                 GateTypeSequential gts("gts_name", GateType::BaseType::ff);
-                gts.assign_vdd_pin("I_0");
-                gts.assign_gnd_pin("I_1");
-                EXPECT_EQ(gts.get_vdd_pins(), std::unordered_set<std::string>());
-                EXPECT_EQ(gts.get_gnd_pins(), std::unordered_set<std::string>());
+                gts.assign_power_pin("I_0");
+                gts.assign_ground_pin("I_1");
+                EXPECT_EQ(gts.get_power_pins(), std::unordered_set<std::string>());
+                EXPECT_EQ(gts.get_ground_pins(), std::unordered_set<std::string>());
             }
         TEST_END
     }

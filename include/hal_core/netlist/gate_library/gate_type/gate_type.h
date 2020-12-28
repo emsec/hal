@@ -199,34 +199,34 @@ namespace hal
         std::unordered_map<std::string, std::map<u32, std::string>> get_output_pin_groups() const;
 
         /**
-         * Add an existing input pin to the collection of VDD pins.<br>
+         * Add an existing input pin to the collection of power pins.<br>
          * The pin has to be declared as an input pin beforehand.
          *
          * @param[in] pin_name - The name of the input pin to add.
          */
-        void assign_vdd_pin(const std::string& pin_name);
+        void assign_power_pin(const std::string& pin_name);
 
         /**
-         * Get all input pins classfied as VDD pins.
+         * Get all input pins classfied as power pins.
          *
          * @returns The set of input pin names.
          */
-        std::unordered_set<std::string> get_vdd_pins() const;
+        std::unordered_set<std::string> get_power_pins() const;
 
         /**
-         * Add an existing input pin to the collection of GND pins.<br>
+         * Add an existing input pin to the collection of ground pins.<br>
          * The pin has to be declared as an input pin beforehand.
          *
          * @param[in] pin_name - The name of the input pin to add.
          */
-        void assign_gnd_pin(const std::string& pin_name);
+        void assign_ground_pin(const std::string& pin_name);
 
         /**
-         * Get all input pins classfied as GND pins.
+         * Get all input pins classfied as ground pins.
          *
          * @returns The set of input pin names.
          */
-        std::unordered_set<std::string> get_gnd_pins() const;
+        std::unordered_set<std::string> get_ground_pins() const;
 
         /**
          * Add a Boolean function with the specified name to the gate type.
@@ -258,8 +258,8 @@ namespace hal
         std::vector<std::string> m_input_pins;
         std::vector<std::string> m_output_pins;
 
-        std::unordered_set<std::string> m_vdd_pins;
-        std::unordered_set<std::string> m_gnd_pins;
+        std::unordered_set<std::string> m_power_pins;
+        std::unordered_set<std::string> m_ground_pins;
 
         std::unordered_map<std::string, std::map<u32, std::string>> m_input_pin_groups;
         std::unordered_map<std::string, std::map<u32, std::string>> m_output_pin_groups;

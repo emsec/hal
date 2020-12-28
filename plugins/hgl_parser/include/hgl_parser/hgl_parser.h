@@ -62,8 +62,8 @@ namespace hal
             std::vector<std::string> input_pins;
             std::vector<std::string> output_pins;
             std::unordered_map<std::string, std::string> boolean_functions;
-            std::vector<std::string> vdd_pins;
-            std::vector<std::string> gnd_pins;
+            std::vector<std::string> power_pins;
+            std::vector<std::string> ground_pins;
             std::vector<std::string> lut_pins;
             std::vector<std::string> state_pins;
             std::vector<std::string> neg_state_pins;
@@ -72,8 +72,8 @@ namespace hal
             std::vector<std::string> reset_pins;
             std::vector<std::string> set_pins;
             std::vector<std::string> data_pins;
-            const std::unordered_map<std::string, std::vector<std::string>*> type_to_data = {{"vdd", &vdd_pins},
-                                                                                             {"gnd", &gnd_pins},
+            const std::unordered_map<std::string, std::vector<std::string>*> type_to_data = {{"power", &power_pins},
+                                                                                             {"ground", &ground_pins},
                                                                                              {"lut", &lut_pins},
                                                                                              {"state", &state_pins},
                                                                                              {"neg_state", &neg_state_pins},

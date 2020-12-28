@@ -129,14 +129,14 @@ namespace hal
         gt->add_input_pins(pin_ctx.input_pins);
         gt->add_output_pins(pin_ctx.output_pins);
 
-        for (const auto& p : pin_ctx.vdd_pins)
+        for (const auto& p : pin_ctx.power_pins)
         {
-            gt->assign_vdd_pin(p);
+            gt->assign_power_pin(p);
         }
 
-        for (const auto& p : pin_ctx.gnd_pins)
+        for (const auto& p : pin_ctx.ground_pins)
         {
-            gt->assign_gnd_pin(p);
+            gt->assign_ground_pin(p);
         }
 
         if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())

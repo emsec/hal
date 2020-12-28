@@ -44,8 +44,8 @@ namespace hal {
                 // -- Check the pins
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "I"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
-                EXPECT_EQ(gt->get_vdd_pins(), std::unordered_set<std::string>({"VDD"}));
-                EXPECT_EQ(gt->get_gnd_pins(), std::unordered_set<std::string>({"GND"}));
+                EXPECT_EQ(gt->get_power_pins(), std::unordered_set<std::string>({"VDD"}));
+                EXPECT_EQ(gt->get_ground_pins(), std::unordered_set<std::string>({"GND"}));
                 // -- Check the boolean functions
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
