@@ -427,7 +427,7 @@ namespace hal
             QString snapShotDirectory = getSnapshotDirectory(true);
             if(!snapShotDirectory.isEmpty())
             {
-                QString new_snapshot_path = snapShotDirectory + "/" + selected_file_name + ".tmp";
+                QString new_snapshot_path = snapShotDirectory + "/" + selected_file_name + ".py";
                 if(mTabToSnapshotPath.contains(current_editor))
                 {
                     mTabToSnapshotPath[current_editor] = new_snapshot_path;
@@ -852,14 +852,13 @@ namespace hal
         QVector<QString> unstored_snapshots;
         QDir snapshot_dir(snapshot_path);
 
-        QStringList snapshot_files = snapshot_dir.entryList(QStringList() << "*.tmp", QDir::Files);
+        QStringList snapshot_files = snapshot_dir.entryList(QStringList() << "*.py", QDir::Files);
 
         for(QString snapshot_file_name : snapshot_files)
         {
             QString snapshot_file_path = snapshot_dir.absoluteFilePath(snapshot_file_name);
             QPair<QString, QString> original_path_and_content = this->readSnapshotFile(snapshot_file_path);
             QString original_path = original_path_and_content.first;
-            std::string debug_val = original_path.toStdString();
             if(original_path.isEmpty() || (!QFileInfo(original_path).exists()))
             {
                 // Original File does not exist
@@ -943,7 +942,7 @@ namespace hal
                 QFileInfo original_file_name(editor->getFileName());
                 snapshot_file_name += original_file_name.fileName();
             }
-            snapshot_file_name += "(" + QString::number(index) + ").tmp";
+            snapshot_file_name += "(" + QString::number(index) + ").py";
 
             QString snapshot_file_path = snapshot_dir.absoluteFilePath(snapshot_file_name);
 
@@ -981,8 +980,8 @@ namespace hal
         }
         else
         {
-            // Remove all .tmp files in the directory
-            snapshot_dir.setNameFilters(QStringList() << "*.tmp");
+            // Remove all .py files in the directory
+            snapshot_dir.setNameFilters(QStringList() << "*.py");
             snapshot_dir.setFilter(QDir::Files);
             for(QString dirFile : snapshot_dir.entryList())
             {
