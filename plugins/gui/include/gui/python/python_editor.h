@@ -34,6 +34,8 @@
 #include <QFileSystemWatcher>
 #include <QMap>
 #include <QPushButton>
+#include <QtCore/QFileInfo>
+#include <QMessageBox>
 
 class QVBoxLayout;
 class QTabWidget;
@@ -91,7 +93,14 @@ namespace hal
         //added so that the speciallogcontentmanager has access to all the code editors
         QTabWidget* getTabWidget();
 
-        void saveFile(const bool ask_path, int index = -1);
+        /**
+         * Saves a tab given by its index. If ask_path is true, the user is ask for a new save location.
+         *
+         * @param ask_path - ask the user for a new save location
+         * @param index - the tab index
+         * @returns true if the tab was saved
+         */
+        bool saveFile(const bool ask_path, int index = -1);
 
         void discardTab(int index);
         bool confirmDiscardForRange(int start, int end, int exclude = -1);
@@ -135,6 +144,8 @@ namespace hal
         bool handleSerializationToHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
         bool handleDeserializationFromHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
 
+
+
     Q_SIGNALS:
         void forwardStdout(const QString& output);
         void forwardError(const QString& output);
@@ -154,10 +165,132 @@ namespace hal
         void handleBaseFileModifiedIgnore();
         void handleBaseFileModifiedOk();
 
+        /**
+         * Slot called after a .hal file (or a .v/.vhdl is parsed) (emitted by FileManager). Used to check for
+         * existing snapshots.
+         *
+         * @param fileName - the opened file
+         */
+        void handleFileOpened(QString fileName);
+
+        /**
+         * Slot called when a file is about to be closed. (emitted by FileManager). Used to remove snapshots.
+         */
+        void handleFileAboutToClose(const QString& fileName);
+
     protected:
         bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
 
     private:
+        /**
+         * Ask the user with a message box whether to save the tab, discard the changes or cancel the request.
+         *
+         * @param tab_index - the index of the closed tab
+         * @return QMessageBox::Save if 'Save' was clicked, QMessageBox::Discard if 'Discard' was clicked or
+         *         QMessageBox::Cancel if 'Cancel' was clicked
+         */
+        QMessageBox::StandardButton askSaveTab(const int tab_index) const;
+
+        // ============ FUNCTIONS FOR SNAPSHOT HANDLING ============
+
+        /**
+         * Parse a snapshot file
+         *
+         * @param snapshot_file_path - The path of the snapshot file
+         * @returns a pair <original file path, snapshot content>
+         */
+        QPair<QString, QString> readSnapshotFile(QFileInfo snapshot_file_path) const;
+
+        /**
+         * Parse all found and store them in a single map
+         *
+         * @param snapshot_file_path - The path of the snapshot file
+         * @returns a pair which contains all snapshots:
+         *          fist: contains a map: original file path -> snapshot content
+         *          second: a vector with snapshots with no original file path (unsaved tabs)
+         */
+        QPair<QMap<QString, QString>, QVector<QString>> loadAllSnapshots();
+
+        /**
+         * Writes a snapshot file
+         *
+         * @param snapshot_file_path - The path of the snapshot file
+         * @param original_file_path  - The original file the snapshot is made for
+         * @param content - The content to write
+         * @returns true on success
+         */
+        bool writeSnapshotFile(QFileInfo snapshot_file_path, QString original_file_path , QString content) const;
+
+        /**
+         * Get the path to the directory where the snapshots for this netlist are stored
+         *
+         * @param create_if_non_existent if true, the directory will be created if not already existent.
+         * @returns the snapshot directory. If the directory does not exist (with create_if_non_existent = false) or
+         *          cannot be created, an empty string is returned
+         */
+        QString getSnapshotDirectory(const bool create_if_non_existent = true);
+
+        /**
+         * Updates the snapshots for all open tabs
+         *
+         * @param create_if_non_existent
+         */
+        void updateSnapshots();
+
+        /**
+         * Clear all snapshots
+         *
+         * @param remove_dir - If the parent directory (i.e. "<netlist_name>/") should be removed as well.
+         *                     Used only at the end of the program
+         */
+        void clearAllSnapshots(bool remove_dir = false);
+
+        /**
+         * Decide whether the snapshot should be loaded/inserted or the original file should be used.
+         * If both the original file and the snapshot file exist, the user decides which version should be loaded.
+         *
+         * @param saved_snapshots - The map (original_path -> content) of saved snapshots (snapshots of non empty paths)
+         * @param original_path - The path of the original version
+         * @return true if the snapshot file should be loaded/inserted
+         */
+        bool decideLoadSnapshot(const QMap<QString, QString>& saved_snapshots, const QFileInfo original_path) const;
+
+        /**
+         * Set the content of a Python editor to the content of a snapshot. The tab is marked as modified afterwards.
+         *
+         * @param idx - The index of the python editor, the snapshots should be loaded in
+         * @param snapshot_content - The content of the snapshot
+         */
+        void setSnapshotContent(const int idx, const QString snapshot_content);
+
+        /**
+         * Ask the user with a message box whether the snapshot file or the original file should be loaded
+         *
+         * @param original_path - the path of the original file
+         * @param original_content - the content of the original file
+         * @param snapshot_content - the content of the snapshot file
+         * @return true if the snapshot file should be loaded
+         */
+        bool askLoadSnapshot(const QString original_path, const QString original_content, const QString snapshot_content) const;
+
+        /**
+         * Ask the user with a message box whether the snapshot files should be ignored and deleted or not.
+         * This box appers if the user reparses a .v/.vhdl file, but there are still snapshots
+         *
+         * @param original_path - the found snapshots
+         * @return true if the snapshot file should be ignored and deleted. False if the snapshots should be loaded.
+         */
+        bool askDeleteSnapshots(const QPair<QMap<QString, QString>, QVector<QString>>& snapshots) const;
+
+        /**
+         * Remove a snapshot file for a given file path. If there is not such snapshot, do nothing.
+         *
+         * @param original_path
+         */
+        void removeSnapshotFile(PythonCodeEditor* editor) const;
+
+
+
         QVBoxLayout* mLayout;
         Toolbar* mToolbar;
         Splitter* mSplitter;
@@ -202,5 +335,11 @@ namespace hal
         long mLastClickTime;
 
         QString mLastOpenedPath;
+
+        /**
+         * Stores where the snapshots for the tabs are located
+         * Map: tab -> snapshot path
+         */
+        QMap<PythonCodeEditor*, QString> mTabToSnapshotPath;
     };
 }

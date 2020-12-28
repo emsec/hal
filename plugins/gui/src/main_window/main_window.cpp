@@ -567,7 +567,7 @@ namespace hal
             path.replace_extension(".hal");
             netlist_serializer::serialize_to_file(gNetlist, path);
 
-            gFileStatusManager->flushUnsavedChanges();
+            gFileStatusManager->netlistSaved();
             FileManager::get_instance()->watchFile(QString::fromStdString(path.string()));
 
             Q_EMIT saveTriggered();
@@ -588,7 +588,7 @@ namespace hal
         //check for unsaved changes and show confirmation dialog
         if (gFileStatusManager->modifiedFilesExisting())
         {
-            QMessageBox msgBox;
+            QMessageBox msgBox(this);
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");
             auto cancelButton = msgBox.addButton("Cancel", QMessageBox::RejectRole);
             msgBox.addButton("Close Anyway", QMessageBox::ApplyRole);
@@ -621,7 +621,6 @@ namespace hal
         }
 
         FileManager::get_instance()->closeFile();
-
         saveState();
         event->accept();
         // hack, remove later
