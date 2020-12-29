@@ -40,7 +40,7 @@ namespace hal
     public:
         ExpandingListWidget(QWidget* parent = 0);
 
-        //    bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
+        //    bool eventFilter(QObject* object, QEvent* event) override;
 
         void appendItem(ExpandingListButton* button, ExpandingListButton* parentButton = 0);
         void selectButton(ExpandingListButton* button);

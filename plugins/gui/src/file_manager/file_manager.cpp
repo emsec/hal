@@ -330,6 +330,11 @@ namespace hal
 
         removeShadowFile();
 
+        gNetlistOwner.reset();
+        gNetlist = nullptr;
+
+        gNetlistRelay->debugHandleFileClosed();
+
         Q_EMIT fileClosed();
     }
 

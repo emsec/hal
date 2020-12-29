@@ -36,7 +36,7 @@ namespace hal
         explicit VhdlSyntaxHighlighter(QTextDocument* parent = nullptr);
 
     protected:
-        void highlightBlock(const QString& text) Q_DECL_OVERRIDE;
+        void highlightBlock(const QString& text) override;
         //void run_current_state(const QString &text, int offset = 0);
 
     private:

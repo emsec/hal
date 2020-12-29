@@ -32,9 +32,9 @@ namespace hal
     public:
         explicit SvgIconEngine(const std::string& svg_data);
 
-        void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
-        QIconEngine* clone() const Q_DECL_OVERRIDE;
-        QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) Q_DECL_OVERRIDE;
+        void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override;
+        QIconEngine* clone() const override;
+        QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) override;
 
     private:
         QByteArray mData;

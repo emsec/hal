@@ -44,9 +44,9 @@ namespace hal
     public:
         ExpandingListButton(QWidget* parent = 0);
 
-        void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
-        void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
-        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void enterEvent(QEvent* event) override;
+        void leaveEvent(QEvent* event) override;
+        void mousePressEvent(QMouseEvent* event) override;
 
         bool hover();
         bool selected();

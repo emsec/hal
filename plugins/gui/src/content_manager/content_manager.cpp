@@ -38,7 +38,6 @@ namespace hal
         mPythonWidget = new PythonEditor();
 
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &ContentManager::handleOpenDocument);
-        connect(FileManager::get_instance(), &FileManager::fileClosed, this, &ContentManager::handleCloseDocument);
         connect(FileManager::get_instance(), &FileManager::fileChanged, this, &ContentManager::handleFilsystemDocChanged);
     }
 
@@ -46,10 +45,21 @@ namespace hal
     {
     }
 
-    void ContentManager::hackDeleteContent()
+    void ContentManager::deleteContent()
     {
         for (auto content : mContent)
             delete content;
+
+        mContent.clear();
+
+        delete mNetlistWatcher;
+
+        //m_python_widget = nullptr; DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
+
+        mPythonConsoleWidget = nullptr;
+        mGraphTabWidget = nullptr;
+        mContextManagerWidget = nullptr;
+        mSelectionDetailsWidget = nullptr;
     }
 
     PythonEditor* ContentManager::getPythonEditorWidget()
@@ -59,7 +69,7 @@ namespace hal
 
     GraphTabWidget* ContentManager::getGraphTabWidget()
     {
-        return mGraphTabWid;
+        return mGraphTabWidget;
     }
 
     SelectionDetailsWidget* ContentManager::getSelectionDetailsWidget()
@@ -74,25 +84,23 @@ namespace hal
 
     ContextManagerWidget* ContentManager::getContextManagerWidget()
     {
-        return mContextManagerWid;
+        return mContextManagerWidget;
     }
 
     void ContentManager::handleOpenDocument(const QString& fileName)
     {
-        mGraphTabWid = new GraphTabWidget(nullptr);
-        //    VhdlEditor* code_edit = new VhdlEditor();
-        //    mGraphTabWid->addTab(code_edit, "Source");
-        mMainWindow->addContent(mGraphTabWid, 2, content_anchor::center);
+        mGraphTabWidget = new GraphTabWidget();
+        mMainWindow->addContent(mGraphTabWidget, 2, content_anchor::center);
 
-        ModuleWidget* m = new ModuleWidget();
-        mMainWindow->addContent(m, 0, content_anchor::left);
-        m->open();
+        mModuleWidget = new ModuleWidget();
+        mMainWindow->addContent(mModuleWidget, 0, content_anchor::left);
+        mModuleWidget->open();
 
-        mContextManagerWid = new ContextManagerWidget(mGraphTabWid);
-        mMainWindow->addContent(mContextManagerWid, 1, content_anchor::left);
-        mContextManagerWid->open();
+        mContextManagerWidget = new ContextManagerWidget(mGraphTabWidget);
+        mMainWindow->addContent(mContextManagerWidget, 1, content_anchor::left);
+        mContextManagerWidget->open();
 
-        mGroupingManagerWidget = new GroupingManagerWidget(mGraphTabWid);
+        mGroupingManagerWidget = new GroupingManagerWidget(mGraphTabWidget);
         mMainWindow->addContent(mGroupingManagerWidget, 2, content_anchor::left);
         mGroupingManagerWidget->open();
 
@@ -105,7 +113,7 @@ namespace hal
             new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
             new_context->add({gNetlist->get_top_module()->get_id()}, {});
 
-            mContextManagerWid->selectViewContext(new_context);
+            mContextManagerWidget->selectViewContext(new_context);
         });
 
         //why does this segfault without a timer?
@@ -116,58 +124,36 @@ namespace hal
 
         mSelectionDetailsWidget = new SelectionDetailsWidget();
         mMainWindow->addContent(mSelectionDetailsWidget, 0, content_anchor::bottom);
-
-        LoggerWidget* logger_widget = new LoggerWidget();
-        mMainWindow->addContent(logger_widget, 1, content_anchor::bottom);
-
         mSelectionDetailsWidget->open();
-        //logger_widget->open();
 
-        //mContent.append(code_edit);
-        //mContent.append(navigation);
+        mLoggerWidget = new LoggerWidget();
+        mMainWindow->addContent(mLoggerWidget, 1, content_anchor::bottom);
+
+        mMainWindow->addContent(mPythonWidget, 3, content_anchor::right);
+        mPythonWidget->open();
+
+        mPythonConsoleWidget = new PythonConsoleWidget();
+        mMainWindow->addContent(mPythonConsoleWidget, 5, content_anchor::bottom);
+        mPythonConsoleWidget->open();
+
+        mContent.append(mGraphTabWidget);
+        mContent.append(mModuleWidget);
+        mContent.append(mContextManagerWidget);
+        mContent.append(mGroupingManagerWidget);
         mContent.append(mSelectionDetailsWidget);
-        mContent.append(logger_widget);
+        mContent.append(mLoggerWidget);
+        //mContent.append(mPythonWidget); // DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
+        mContent.append(mPythonConsoleWidget);
 
-        //-------------------------Test Buttons---------------------------
-
-        /*
-        ContentWidget* blue = new ContentWidget("blue");
-        blue->setObjectName("blue");
-        blue->setStyleSheet("* {background-color: #2B3856;}");
-        ContentWidget* venomgreen = new ContentWidget("venomgreen");
-        venomgreen->setObjectName("venomgreen");
-        venomgreen->setStyleSheet("* {background-color: #728C00;}");
-        ContentWidget* jade = new ContentWidget("jade");
-        jade->setObjectName("jade";
-        jade->setStyleSheet("* {background-color: #C3FDB8;}");
-*/
-
-        //    mMainWindow->addContent(blue, content_anchor::left);
-        //    mMainWindow->addContent(venomgreen, content_anchor::left);
-        //    mMainWindow->addContent(jade, content_anchor::left);
-
-        //    hal_netlistics_view *view = new hal_netlistics_view();
-        //    view->setScene(graph_scene);
-        //    view->setDragMode(QGraphicsView::ScrollHandDrag);
-        //    view->show();
-
-        PluginModel* model                  = new PluginModel(this);
+        PluginModel* model                 = new PluginModel(this);
         PluginManagerWidget* plugin_widget = new PluginManagerWidget();
         plugin_widget->setPluginModel(model);
-
-        //    mMainWindow->addContent(plugin_widget, content_anchor::bottom);
+        //mMainWindow->addContent(plugin_widget, content_anchor::bottom);
 
         connect(model, &PluginModel::runPlugin, mMainWindow, &MainWindow::runPluginTriggered);
 
         mWindowTitle = "HAL - " + QString::fromStdString(std::filesystem::path(fileName.toStdString()).stem().string());
         mMainWindow->setWindowTitle(mWindowTitle);
-
-        mMainWindow->addContent(mPythonWidget, 3, content_anchor::right);
-        mPythonWidget->open();
-
-        PythonConsoleWidget* PythonConsole = new PythonConsoleWidget();
-        mMainWindow->addContent(PythonConsole, 5, content_anchor::bottom);
-        PythonConsole->open();
 
 #ifdef HAL_STUDY
         //log_info("gui", "HAL_STUDY activated");
@@ -176,25 +162,9 @@ namespace hal
 #endif
         mNetlistWatcher = new NetlistWatcher(this);
 
-        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusGateClicked, mGraphTabWid, &GraphTabWidget::handleGateFocus);
-        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWid, &GraphTabWidget::handleNetFocus);
-        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusModuleClicked, mGraphTabWid, &GraphTabWidget::handleModuleFocus);
-    }
-
-    void ContentManager::handleCloseDocument()
-    {
-        //(if possible) store state first, then remove all subwindows from main window
-        mWindowTitle = "HAL";
-        mMainWindow->setWindowTitle(mWindowTitle);
-        mMainWindow->onActionCloseDocumentTriggered();
-        //delete all windows here
-        for (auto content : mContent)
-        {
-            mContent.removeOne(content);
-            delete content;
-        }
-
-        FileManager::get_instance()->closeFile();
+        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusGateClicked, mGraphTabWidget, &GraphTabWidget::handleGateFocus);
+        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWidget, &GraphTabWidget::handleNetFocus);
+        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusModuleClicked, mGraphTabWidget, &GraphTabWidget::handleModuleFocus);
     }
 
     void ContentManager::handleFilsystemDocChanged(const QString& fileName)
@@ -204,6 +174,5 @@ namespace hal
 
     void ContentManager::handleSaveTriggered()
     {
-        Q_EMIT saveTriggered();
     }
 }
