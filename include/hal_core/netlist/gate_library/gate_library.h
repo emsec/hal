@@ -127,10 +127,10 @@ namespace hal
         std::string m_name;
         std::filesystem::path m_path;
 
-        std::vector<std::unique_ptr<const GateType>> m_gate_types;
-        std::unordered_map<std::string, const GateType*> m_gate_type_map;
-        std::unordered_map<std::string, const GateType*> m_vcc_gate_types;
-        std::unordered_map<std::string, const GateType*> m_gnd_gate_types;
+        std::vector<std::unique_ptr<GateType>> m_gate_types;
+        std::unordered_map<std::string, GateType*> m_gate_type_map;
+        std::unordered_map<std::string, GateType*> m_vcc_gate_types;
+        std::unordered_map<std::string, GateType*> m_gnd_gate_types;
 
         std::vector<std::string> m_includes;
     };
