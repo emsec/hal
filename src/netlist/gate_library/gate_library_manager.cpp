@@ -33,7 +33,7 @@ namespace hal
                         return false;
                     }
 
-                    GateType* gt = lib->create_gate_type(name, GateType::BaseType::combinatorial);
+                    GateType* gt = lib->create_gate_type(name, GateType::BaseType::combinational);
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ZERO);
                     log_info("gate_library_manager", "gate library did not contain a GND gate, auto-generated type '{}'.", name);
@@ -52,7 +52,7 @@ namespace hal
                         return false;
                     }
 
-                    GateType* gt = lib->create_gate_type(name, GateType::BaseType::combinatorial);
+                    GateType* gt = lib->create_gate_type(name, GateType::BaseType::combinational);
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ONE);
                     log_info("gate_library_manager", "gate library did not contain a VCC gate, auto-generated type '{}'.", name);

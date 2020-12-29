@@ -72,7 +72,7 @@ namespace hal
             GateType::BaseType gt_type = gt->get_base_type();
             switch (gt_type)
             {
-                case GateType::BaseType::combinatorial:
+                case GateType::BaseType::combinational:
                     cell.AddMember("type", "combinational", allocator);
                     break;
                 case GateType::BaseType::ff:

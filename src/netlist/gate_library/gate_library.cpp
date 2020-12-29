@@ -25,7 +25,7 @@ namespace hal
 
         switch (type)
         {
-            case GateType::BaseType::combinatorial:
+            case GateType::BaseType::combinational:
                 gt = std::make_unique<GateType>(name);
                 break;
             case GateType::BaseType::lut:

@@ -897,7 +897,7 @@ namespace hal
             }
         }
 
-        if (cell.type == GateType::BaseType::combinatorial)
+        if (cell.type == GateType::BaseType::combinational)
         {
             gt = std::make_unique<GateType>(cell.name);
 

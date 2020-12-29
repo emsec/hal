@@ -38,7 +38,7 @@ namespace hal {
             std::stringstream ss;
             ss << gt;
             EXPECT_EQ(ss.str(), "gt_name");
-            EXPECT_EQ(gt.get_base_type(), GateType::BaseType::combinatorial);
+            EXPECT_EQ(gt.get_base_type(), GateType::BaseType::combinational);
         TEST_END
     }
 

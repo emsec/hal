@@ -87,7 +87,7 @@ namespace hal
 
             if (type_str == "combinational")
             {
-                type = GateType::BaseType::combinatorial;
+                type = GateType::BaseType::combinational;
             }
             else if (type_str == "lut")
             {
@@ -109,7 +109,7 @@ namespace hal
         }
         else
         {
-            type = GateType::BaseType::combinatorial;
+            type = GateType::BaseType::combinational;
         }
 
         GateType* gt = m_gate_lib->create_gate_type(name, type);

@@ -10,7 +10,7 @@ namespace hal
 
         m_id        = next_id++;
         m_name      = name;
-        m_base_type = BaseType::combinatorial;
+        m_base_type = BaseType::combinational;
     }
 
     u32 GateType::get_id() const

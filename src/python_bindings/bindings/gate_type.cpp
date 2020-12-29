@@ -12,8 +12,8 @@ namespace hal
             Represents the base type of a gate type.
         )")
 
-            .value("combinatorial", GateType::BaseType::combinatorial, R"(Represents a combinatorial gate type.)")
-            .value("lut", GateType::BaseType::lut, R"(Represents a combinatorial LUT gate type.)")
+            .value("combinational", GateType::BaseType::combinational, R"(Represents a combinational gate type.)")
+            .value("lut", GateType::BaseType::lut, R"(Represents a combinational LUT gate type.)")
             .value("ff", GateType::BaseType::ff, R"(Represents a sequential FF gate type.)")
             .value("latch", GateType::BaseType::latch, R"(Represents a sequential latch gate type.)")
             .export_values();

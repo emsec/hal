@@ -40,7 +40,7 @@ namespace hal {
                 GateType* gt = gt_it->second;
 
                 // Check the content of the created Gate type
-                EXPECT_EQ(gt->get_base_type(), GateType::BaseType::combinatorial);
+                EXPECT_EQ(gt->get_base_type(), GateType::BaseType::combinational);
                 // -- Check the pins
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "I"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
@@ -339,7 +339,7 @@ namespace hal {
                 auto gate_types = gl->get_gate_types();
                 ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinatorial);
+                          GateType::BaseType::combinational);
             }
             {
                 // Define a pin twice
@@ -372,7 +372,7 @@ namespace hal {
                 auto gate_types = gl->get_gate_types();
                 ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinatorial);
+                          GateType::BaseType::combinational);
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_input_pins().size(), 1);
 
             }
@@ -387,7 +387,7 @@ namespace hal {
                 auto gate_types = gl->get_gate_types();
                 ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinatorial);
+                          GateType::BaseType::combinational);
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_output_pins().size(), 1);
 
             }

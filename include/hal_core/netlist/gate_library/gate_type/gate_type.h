@@ -45,8 +45,8 @@ namespace hal
          */
         enum class BaseType
         {
-            combinatorial, /**< Represents a combinatorial gate type. **/
-            lut,           /**< Represents a combinatorial LUT gate type. **/
+            combinational, /**< Represents a combinational gate type. **/
+            lut,           /**< Represents a combinational LUT gate type. **/
             ff,            /**< Represents a sequential FF gate type. **/
             latch          /**< Represents a sequential latch gate type. **/
         };
