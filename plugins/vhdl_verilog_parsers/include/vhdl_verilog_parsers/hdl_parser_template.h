@@ -1027,7 +1027,7 @@ namespace hal
         std::unordered_map<T, std::vector<T>> m_nets_to_merge;
 
         // buffer gate types
-        std::unordered_map<T, const GateType*> m_tmp_gate_types;
+        std::unordered_map<T, GateType*> m_tmp_gate_types;
         std::unordered_map<Net*, std::tuple<port_direction, std::string, Module*>> m_module_ports;
 
         bool build_netlist(const T& top_module)
@@ -1410,8 +1410,8 @@ namespace hal
                 m_nets_to_merge[b].push_back(a);
             }
 
-            std::unordered_map<T, const GateType*> vcc_gate_types;
-            std::unordered_map<T, const GateType*> gnd_gate_types;
+            std::unordered_map<T, GateType*> vcc_gate_types;
+            std::unordered_map<T, GateType*> gnd_gate_types;
 
             if constexpr (std::is_same<T, std::string>::value)
             {
