@@ -37,7 +37,7 @@ static u64 bitreverse(u64 n)
 
 namespace hal
 {
-    Gate::Gate(NetlistInternalManager* mgr, const u32 id, const GateType* gt, const std::string& name, float x, float y)
+    Gate::Gate(NetlistInternalManager* mgr, const u32 id, GateType* gt, const std::string& name, float x, float y)
     {
         m_internal_manager = mgr;
         m_id               = id;
@@ -79,7 +79,7 @@ namespace hal
         }
     }
 
-    const GateType* Gate::get_type() const
+    GateType* Gate::get_type() const
     {
         return m_type;
     }

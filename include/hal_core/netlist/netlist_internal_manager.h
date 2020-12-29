@@ -59,9 +59,9 @@ namespace hal
         ~NetlistInternalManager() = default;
 
         // gate functions
-        Gate* create_gate(u32 id, const GateType* gt, const std::string& name, float x, float y);
+        Gate* create_gate(u32 id, GateType* gt, const std::string& name, float x, float y);
         bool delete_gate(Gate* gate);
-        bool is_gate_type_invalid(const GateType* gt) const;
+        bool is_gate_type_invalid(GateType* gt) const;
 
         // net functions
         Net* create_net(u32 id, const std::string& name);

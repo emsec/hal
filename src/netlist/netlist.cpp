@@ -180,12 +180,12 @@ namespace hal
         return m_next_gate_id;
     }
 
-    Gate* Netlist::create_gate(const u32 id, const GateType* gt, const std::string& name, float x, float y)
+    Gate* Netlist::create_gate(const u32 id, GateType* gt, const std::string& name, float x, float y)
     {
         return m_manager->create_gate(id, gt, name, x, y);
     }
 
-    Gate* Netlist::create_gate(const GateType* gt, const std::string& name, float x, float y)
+    Gate* Netlist::create_gate(GateType* gt, const std::string& name, float x, float y)
     {
         return create_gate(get_unique_gate_id(), gt, name, x, y);
     }

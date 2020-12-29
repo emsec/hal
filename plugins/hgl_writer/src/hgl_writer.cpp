@@ -197,7 +197,7 @@ namespace hal
         return true;
     }
 
-    std::vector<HGLWriter::PinCtx> HGLWriter::get_pins(const GateType* gt, const std::unordered_map<std::string, BooleanFunction>& functions)
+    std::vector<HGLWriter::PinCtx> HGLWriter::get_pins(GateType* gt, const std::unordered_map<std::string, BooleanFunction>& functions)
     {
         std::vector<PinCtx> res;
         std::vector<std::string> input_pins  = gt->get_input_pins();

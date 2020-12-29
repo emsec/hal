@@ -118,7 +118,7 @@ namespace hal
         return tt;
     }
 
-    const GateType* test_utils::get_gate_type_by_name(std::string name, GateLibrary* gate_lib)
+    GateType* test_utils::get_gate_type_by_name(std::string name, GateLibrary* gate_lib)
     {
         GateLibrary* gl;
         if (gate_lib == nullptr)

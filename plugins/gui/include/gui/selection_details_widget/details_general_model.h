@@ -50,7 +50,7 @@ namespace hal {
 
         void setTypeName(Gate *g)
         {
-            const GateType* gt = g->get_type();
+            GateType* gt = g->get_type();
             if (gt) mTypeName = QString::fromStdString(gt->get_name());
         }
 

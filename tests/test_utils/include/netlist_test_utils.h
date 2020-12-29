@@ -138,7 +138,7 @@ namespace hal
          * @param gate_library - The Gate library, the GateType can be found in. If empty, the example Gate library (g_lib_name) is taken.
          * @return the GateType pointer if found. If no Gate type matches, return nullptr
          */
-        const GateType* get_gate_type_by_name(std::string name, GateLibrary* gate_library = nullptr);
+        GateType* get_gate_type_by_name(std::string name, GateLibrary* gate_library = nullptr);
 
         /**
          * Given a vector of endpoints. Returns the first Endpoint* that has a certain pin type

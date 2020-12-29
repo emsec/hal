@@ -36,7 +36,7 @@ namespace hal
     //###                      gates                                     ###
     //######################################################################
 
-    Gate* NetlistInternalManager::create_gate(const u32 id, const GateType* gt, const std::string& name, float x, float y)
+    Gate* NetlistInternalManager::create_gate(const u32 id, GateType* gt, const std::string& name, float x, float y)
     {
         if (id == 0)
         {
@@ -146,7 +146,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::is_gate_type_invalid(const GateType* gt) const
+    bool NetlistInternalManager::is_gate_type_invalid(GateType* gt) const
     {
         return !m_netlist->m_gate_library->contains_gate_type(gt);
     }

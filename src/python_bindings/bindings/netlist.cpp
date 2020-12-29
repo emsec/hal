@@ -123,7 +123,7 @@ namespace hal
         )");
 
         py_netlist.def("create_gate",
-                       py::overload_cast<u32, const GateType*, const std::string&, float, float>(&Netlist::create_gate),
+                       py::overload_cast<u32, GateType*, const std::string&, float, float>(&Netlist::create_gate),
                        py::arg("gate_id"),
                        py::arg("gate_type"),
                        py::arg("name"),
@@ -142,7 +142,7 @@ namespace hal
         )");
 
         py_netlist.def("create_gate",
-                       py::overload_cast<const GateType*, const std::string&, float, float>(&Netlist::create_gate),
+                       py::overload_cast<GateType*, const std::string&, float, float>(&Netlist::create_gate),
                        py::arg("gate_type"),
                        py::arg("name"),
                        py::arg("x") = -1,

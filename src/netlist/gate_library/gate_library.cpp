@@ -44,7 +44,7 @@ namespace hal
         return res;
     }
 
-    void GateLibrary::add_gate_type(std::unique_ptr<const GateType> gt)
+    void GateLibrary::add_gate_type(std::unique_ptr<GateType> gt)
     {
         m_gate_type_map.emplace(gt->get_name(), gt.get());
 
@@ -92,7 +92,7 @@ namespace hal
         return m_vcc_gate_types;
     }
 
-    std::unordered_map<std::string, const GateType*> GateLibrary::get_gnd_gate_types() const
+    std::unordered_map<std::string, GateType*> GateLibrary::get_gnd_gate_types() const
     {
         return m_gnd_gate_types;
     }

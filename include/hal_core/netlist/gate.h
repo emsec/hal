@@ -87,7 +87,7 @@ namespace hal
          *
          * @returns The type.
          */
-        const GateType* get_type() const;
+        GateType* get_type() const;
 
         /**
          * Check whether the gate's location in the layout is available.
@@ -376,7 +376,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, float x, float y);
+        Gate(NetlistInternalManager* mgr, u32 id, GateType* gt, const std::string& name, float x, float y);
 
         Gate(const Gate&) = delete;
         Gate(Gate&&)      = delete;
@@ -395,7 +395,7 @@ namespace hal
         std::string m_name;
 
         /* type of the gate */
-        const GateType* m_type;
+        GateType* m_type;
 
         /* location */
         float m_x;

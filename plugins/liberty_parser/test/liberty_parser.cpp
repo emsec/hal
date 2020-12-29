@@ -37,7 +37,7 @@ namespace hal {
                 ASSERT_EQ(gate_types.size(), 1);
                 auto gt_it = gate_types.find("TEST_GATE_TYPE");
                 ASSERT_TRUE(gt_it != gate_types.end());
-                const GateType* gt = gt_it->second;
+                GateType* gt = gt_it->second;
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_base_type(), GateType::BaseType::combinatorial);
@@ -77,9 +77,9 @@ namespace hal {
                 ASSERT_EQ(gate_types.size(), 2);
                 auto gt_it_asc = gate_types.find("TEST_LUT_ASC");
                 ASSERT_TRUE(gt_it_asc != gate_types.end());
-                const GateType* gt_asc = gt_it_asc->second;
+                GateType* gt_asc = gt_it_asc->second;
                 ASSERT_EQ(gt_asc->get_base_type(), GateType::BaseType::lut);
-                const GateTypeLut* gt_lut_asc = dynamic_cast<const GateTypeLut*>(gt_asc);
+                GateTypeLut* gt_lut_asc = static_cast<GateTypeLut*>(gt_asc);
 
                 // Check the content of the created gate type
                 EXPECT_EQ(gt_lut_asc->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
@@ -98,9 +98,9 @@ namespace hal {
                 // Check that the descending LUT gate type was created
                 auto gt_it_desc = gate_types.find("TEST_LUT_DESC");
                 ASSERT_TRUE(gt_it_desc != gate_types.end());
-                const GateType* gt_desc = gt_it_desc->second;
+                GateType* gt_desc = gt_it_desc->second;
                 ASSERT_EQ(gt_desc->get_base_type(), GateType::BaseType::lut);
-                const GateTypeLut* gt_lut_desc = dynamic_cast<const GateTypeLut*>(gt_desc);
+                GateTypeLut* gt_lut_desc = static_cast<GateTypeLut*>(gt_desc);
 
                 // Check the content of the created gate type
                 EXPECT_EQ(gt_lut_desc->is_config_data_ascending_order(), false);
@@ -127,9 +127,9 @@ namespace hal {
                 ASSERT_EQ(gate_types.size(), 1);
                 auto gt_it = gate_types.find("TEST_FF");
                 ASSERT_TRUE(gt_it != gate_types.end());
-                const GateType* gt = gt_it->second;
+                GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::ff);
-                const GateTypeSequential* gt_ff = dynamic_cast<const GateTypeSequential*>(gt);
+                GateTypeSequential* gt_ff = static_cast<GateTypeSequential*>(gt);
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt_ff->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
@@ -181,9 +181,9 @@ namespace hal {
                 ASSERT_EQ(gate_types.size(), 1);
                 auto gt_it = gate_types.find("TEST_LATCH");
                 ASSERT_TRUE(gt_it != gate_types.end());
-                const GateType* gt = gt_it->second;
+                GateType* gt = gt_it->second;
                 ASSERT_EQ(gt->get_base_type(), GateType::BaseType::latch);
-                const GateTypeSequential* gt_latch = dynamic_cast<const GateTypeSequential*>(gt);
+                GateTypeSequential* gt_latch = static_cast<GateTypeSequential*>(gt);
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt_latch->get_input_pins(), std::vector<std::string>({"G", "D", "S", "R"}));
@@ -235,7 +235,7 @@ namespace hal {
                 ASSERT_EQ(gate_types.size(), 1);
                 auto gt_it = gate_types.find("TEST_GATE_TYPE");
                 ASSERT_TRUE(gt_it != gate_types.end());
-                const GateType* gt = gt_it->second;
+                GateType* gt = gt_it->second;
 
                 // Check that only the pins outside the comments are created
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I"}));

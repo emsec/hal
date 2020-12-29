@@ -158,7 +158,7 @@ namespace hal
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr otherwise.
          */
-        Gate* create_gate(const u32 gate_id, const GateType* gate_type, const std::string& name = "", float x = -1, float y = -1);
+        Gate* create_gate(const u32 gate_id, GateType* gate_type, const std::string& name = "", float x = -1, float y = -1);
 
         /**
          * Create a new gate and add it to the netlist.<br>
@@ -170,7 +170,7 @@ namespace hal
          * @param[in] y - The y-coordinate of the gate.
          * @returns The new gate on success, nullptr otherwise.
          */
-        Gate* create_gate(const GateType* gate_type, const std::string& name = "", float x = -1, float y = -1);
+        Gate* create_gate(GateType* gate_type, const std::string& name = "", float x = -1, float y = -1);
 
         /**
          * Remove a gate from the netlist.
@@ -216,7 +216,7 @@ namespace hal
         /**
          * Mark a gate as a global GND gate.
          *
-         * @param[in] gate - The negate.
+         * @param[in] gate - The gate.
          * @returns True on success, false otherwise.
          */
         bool mark_gnd_gate(Gate* gate);
