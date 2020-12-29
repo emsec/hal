@@ -8,6 +8,7 @@
 #include "rapidjson/prettywriter.h"
 
 #include <iostream>
+#include <string>
 
 namespace hal
 {
@@ -152,7 +153,38 @@ namespace hal
             }
             else if (base_type == GateType::BaseType::latch)
             {
-                // TODO latch_config
+                rapidjson::Value latch_config(rapidjson::kObjectType);
+                const GateTypeSequential* gt_latch = static_cast<const GateTypeSequential*>(gt);
+
+                // next_state, clocked_on, clear_on, preset_on
+                if (const auto it = functions.find("data"); it != functions.end())
+                {
+                    latch_config.AddMember("data_in", it->second.to_string(), allocator);
+                }
+                if (const auto it = functions.find("enable"); it != functions.end())
+                {
+                    latch_config.AddMember("enable_on", it->second.to_string(), allocator);
+                }
+                if (const auto it = functions.find("clear"); it != functions.end())
+                {
+                    latch_config.AddMember("clear_on", it->second.to_string(), allocator);
+                }
+                if (const auto it = functions.find("preset"); it != functions.end())
+                {
+                    latch_config.AddMember("preset_on", it->second.to_string(), allocator);
+                }
+
+                std::pair<GateTypeSequential::ClearPresetBehavior, GateTypeSequential::ClearPresetBehavior> cp_behav = gt_latch->get_clear_preset_behavior();
+                if (cp_behav.first != GateTypeSequential::ClearPresetBehavior::U)
+                {
+                    latch_config.AddMember("state_clear_preset", m_behavior_to_string[cp_behav.first], allocator);
+                }
+                if (cp_behav.second != GateTypeSequential::ClearPresetBehavior::U)
+                {
+                    latch_config.AddMember("neg_state_clear_preset", m_behavior_to_string[cp_behav.second], allocator);
+                }
+
+                cell.AddMember("latch_config", latch_config, allocator);
             }
 
             // pins
@@ -187,12 +219,39 @@ namespace hal
 
             cell.AddMember("pins", pins, allocator);
 
+            // groups
+            std::vector<GroupCtx> group_data = get_groups(gt);
+            if (!group_data.empty())
+            {
+                rapidjson::Value groups(rapidjson::kArrayType);
+
+                for (const auto& group_ctx : group_data)
+                {
+                    rapidjson::Value group(rapidjson::kObjectType);
+
+                    group.AddMember("name", group_ctx.name, allocator);
+                    group.AddMember("direction", group_ctx.direction, allocator);
+
+                    rapidjson::Value group_pins(rapidjson::kObjectType);
+                    for (const auto& [index, group_pin] : group_ctx.index_to_pin)
+                    {
+                        std::string s = std::to_string(index);
+                        rapidjson::Value v_index(s.c_str(), s.size(), allocator);
+                        rapidjson::Value v_pin(group_pin.c_str(), group_pin.size(), allocator);
+                        group_pins.AddMember(v_index, v_pin, allocator);
+                    }
+                    group.AddMember("pins", group_pins, allocator);
+
+                    groups.PushBack(group, allocator);
+                }
+
+                cell.AddMember("groups", groups, allocator);
+            }
+
             cells.PushBack(cell, allocator);
         }
 
         document.AddMember("cells", cells, allocator);
-
-        // TODO groups
 
         return true;
     }
@@ -279,5 +338,40 @@ namespace hal
         }
 
         return res;
-    }    // namespace hal
+    }
+
+    std::vector<HGLWriter::GroupCtx> HGLWriter::get_groups(GateType* gt)
+    {
+        std::vector<GroupCtx> res;
+        std::unordered_map<std::string, std::map<u32, std::string>> input_groups  = gt->get_input_pin_groups();
+        std::unordered_map<std::string, std::map<u32, std::string>> output_groups = gt->get_output_pin_groups();
+
+        for (const auto& [in_group, index_to_pin] : input_groups)
+        {
+            GroupCtx res_group;
+            res_group.name         = in_group;
+            res_group.direction    = "input";
+            res_group.index_to_pin = index_to_pin;
+            res.push_back(res_group);
+        }
+
+        for (const auto& [out_group, index_to_pin] : output_groups)
+        {
+            if (auto it = std::find_if(res.begin(), res.end(), [out_group](GroupCtx g) { return g.name == out_group; }); it == res.end())
+            {
+                GroupCtx res_group;
+
+                res_group.name         = out_group;
+                res_group.direction    = "output";
+                res_group.index_to_pin = index_to_pin;
+                res.push_back(res_group);
+            }
+            else
+            {
+                it->direction = "inout";
+            }
+        }
+
+        return res;
+    }
 }    // namespace hal

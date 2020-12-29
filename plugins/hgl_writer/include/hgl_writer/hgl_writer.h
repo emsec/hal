@@ -68,10 +68,18 @@ namespace hal
             std::string z_function = "";
         };
 
+        struct GroupCtx
+        {
+            std::string name;
+            std::string direction;
+            std::map<u32, std::string> index_to_pin;
+        };
+
         static std::unordered_map<GateTypeSequential::ClearPresetBehavior, std::string> m_behavior_to_string;
 
         bool write_gate_library(rapidjson::Document& document, const GateLibrary* gate_lib);
 
-        std::vector<PinCtx> get_pins(const GateType* gt, const std::unordered_map<std::string, BooleanFunction>& functions);
+        std::vector<PinCtx> get_pins(GateType* gt, const std::unordered_map<std::string, BooleanFunction>& functions);
+        std::vector<GroupCtx> get_groups(GateType* gt);
     };
 }    // namespace hal

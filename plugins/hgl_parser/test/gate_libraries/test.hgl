@@ -1,0 +1,224 @@
+{
+    "library": "example_library",
+    "cells": [
+        {
+            "name": "example_combinational",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "vdd"
+                },
+                {
+                    "name": "GND",
+                    "direction": "input",
+                    "type": "gnd"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "function": "A & B",
+                    "z_function": "!A & !B",
+                    "x_function": "!A & B"
+                }
+            ]
+        },
+        {
+            "name": "example_groups",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "type": "vdd"
+                },
+                {
+                    "name": "GND",
+                    "type": "gnd"
+                },
+                {
+                    "name": "A(0)",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(1)",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(0)",
+                    "direction": "inout"
+                },
+                {
+                    "name": "B(1)",
+                    "direction": "inout"
+                },
+                {
+                    "name": "C(0)",
+                    "direction": "output"
+                },
+                {
+                    "name": "C(1)",
+                    "direction": "output"
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "function": "A(1) & B(0)",
+                    "z_function": "!A(1) & !B(1)",
+                    "x_function": "!A(0) & B(0)"
+                }
+            ],
+            "groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "pins": {
+                        "0": "A(0)",
+                        "1": "A(1)"
+                    }
+                },
+                {
+                    "name": "B",
+                    "direction": "inout",
+                    "pins": {
+                        "0": "B(0)",
+                        "1": "B(1)"
+                    }
+                },
+                {
+                    "name": "C",
+                    "direction": "output",
+                    "pins": {
+                        "0": "C(0)",
+                        "1": "C(1)"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "example_lut2",
+            "type": "lut",
+            "lut_config": {
+                "bit_order": "ascending",
+                "data_category": "generic",
+                "data_identifier": "INIT"
+            },
+            "pins": [
+                {
+                    "name": "I1",
+                    "direction": "input"
+                },
+                {
+                    "name": "I2",
+                    "direction": "input"
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "lut"
+                }
+            ]
+        },
+        {
+            "name": "example_ff",
+            "type": "ff",
+            "ff_config": {
+                "next_state": "D",
+                "clocked_on": "CLK & EN",
+                "clear_on": "R",
+                "preset_on": "S",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "H"
+            },
+            "pins": [
+                {
+                    "name": "CLK",
+                    "direction": "input",
+                    "type": "clk"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "EN",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "R",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "S",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "example_latch",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "EN",
+                "clear_on": "R",
+                "preset_on": "S",
+                "state_clear_preset": "N",
+                "neg_state_clear_preset": "T"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "EN",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "R",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "S",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        }
+    ]
+}
