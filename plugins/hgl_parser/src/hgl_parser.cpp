@@ -449,9 +449,9 @@ namespace hal
             gt_latch->add_boolean_function("data", BooleanFunction::from_string(latch_config["data_in"].GetString(), gt_latch->get_input_pins()));
         }
 
-        if (latch_config.HasMember("enable") && latch_config["enable"].IsString())
+        if (latch_config.HasMember("enable_on") && latch_config["enable_on"].IsString())
         {
-            gt_latch->add_boolean_function("enable", BooleanFunction::from_string(latch_config["enable"].GetString(), gt_latch->get_input_pins()));
+            gt_latch->add_boolean_function("enable", BooleanFunction::from_string(latch_config["enable_on"].GetString(), gt_latch->get_input_pins()));
         }
 
         if (latch_config.HasMember("clear_on") && latch_config["clear_on"].IsString())
