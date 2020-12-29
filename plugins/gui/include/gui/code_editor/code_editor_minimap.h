@@ -54,10 +54,10 @@ namespace hal
         void handleContentsChange(int position, int chars_removed, int chars_added);
 
     protected:
-        void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-        void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
-        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-        void wheelEvent(QWheelEvent* event) Q_DECL_OVERRIDE;
+        void paintEvent(QPaintEvent* event) override;
+        void resizeEvent(QResizeEvent* event) override;
+        void mousePressEvent(QMouseEvent* event) override;
+        void wheelEvent(QWheelEvent* event) override;
 
     private:
         void resizeScrollbar();

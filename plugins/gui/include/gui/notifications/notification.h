@@ -40,7 +40,7 @@ namespace hal
         qreal getOpacity();
         void setOpacity(qreal opacity);
 
-        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) override;
 
         void fadeIn();
         void fadeOut();

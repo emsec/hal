@@ -40,9 +40,9 @@ namespace hal
     public:
         explicit NoScheduledPluginsWidget(QWidget* parent = nullptr);
 
-        void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
-        void dragLeaveEvent(QDragLeaveEvent* event) Q_DECL_OVERRIDE;
-        void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
+        void dragEnterEvent(QDragEnterEvent* event) override;
+        void dragLeaveEvent(QDragLeaveEvent* event) override;
+        void dropEvent(QDropEvent* event) override;
 
         bool dragActive();
         QString iconPath();

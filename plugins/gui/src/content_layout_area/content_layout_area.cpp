@@ -128,6 +128,19 @@ namespace hal
         }
     }
 
+    void ContentLayoutArea::removeContent(ContentWidget* widget)
+    {
+        // IMPLEMENT
+    }
+
+    void ContentLayoutArea::clear()
+    {
+        mTabWidget->clear();
+        mLeftAnchor->clear();
+        mRightAnchor->clear();
+        mBottomAnchor->clear();
+    }
+
     void ContentLayoutArea::initSplitterSize(const QSize& size)
     {
         int height = size.height() - 240;

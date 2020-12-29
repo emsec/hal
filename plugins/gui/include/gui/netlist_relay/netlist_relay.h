@@ -118,7 +118,7 @@ namespace hal
         // GUI
         void moduleColorChanged(Module* m) const;
 
-    private Q_SLOTS:
+    public Q_SLOTS:
         void debugHandleFileOpened();
         void debugHandleFileClosed();
 

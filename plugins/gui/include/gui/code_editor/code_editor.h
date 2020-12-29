@@ -51,7 +51,7 @@ namespace hal
     public:
         explicit CodeEditor(QWidget* parent = nullptr);
 
-        virtual bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
+        virtual bool eventFilter(QObject* object, QEvent* event) override;
 
         void lineNumberAreaPaintEvent(QPaintEvent* event);
         void minimapPaintEvent(QPaintEvent* event);
@@ -89,7 +89,7 @@ namespace hal
         void toggleMinimap();
 
     protected:
-        virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        virtual void resizeEvent(QResizeEvent* event) override;
 
     private Q_SLOTS:
         void highlightCurrentLine();

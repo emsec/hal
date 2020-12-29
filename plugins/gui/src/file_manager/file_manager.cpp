@@ -319,6 +319,7 @@ namespace hal
             return;
 
         mTimer->stop();
+        Q_EMIT fileAboutToClose(mFileName);
 
         // CHECK DIRTY AND TRIGGER SAVE ROUTINE
 
@@ -327,6 +328,11 @@ namespace hal
         mFileOpen = false;
 
         removeShadowFile();
+
+        gNetlistOwner.reset();
+        gNetlist = nullptr;
+
+        gNetlistRelay->debugHandleFileClosed();
 
         Q_EMIT fileClosed();
     }

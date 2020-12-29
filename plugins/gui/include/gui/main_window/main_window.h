@@ -72,7 +72,6 @@ namespace hal
 
     public:
         explicit MainWindow(QWidget* parent = nullptr);
-        void addContent(ContentWidget* widget, int index, content_anchor anchor);
 
         QString halIconPath() const;
         QString halIconStyle() const;
@@ -123,6 +122,11 @@ namespace hal
         void setSettingsIconPath(const QString& path);
         void setSettingsIconStyle(const QString& style);
 
+        void addContent(ContentWidget* widget, int index, content_anchor anchor);
+        void removeContent(ContentWidget* widget);
+
+        void clear();
+
     Q_SIGNALS:
         void saveTriggered();
 
@@ -138,10 +142,13 @@ namespace hal
         void handleActionOpen();
         void handleFileOpened(const QString& fileName);
         void handleSaveTriggered();
-        void handleActionClosed();
+        void handleActionCloseFile();
 
     private:
         void closeEvent(QCloseEvent* event);
+
+        bool tryToCloseFile();
+
         void restoreState();
         void saveState();
 
