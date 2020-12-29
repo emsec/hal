@@ -49,24 +49,6 @@ namespace hal
                      << m_test_lib_name
                      << ") {\n"
                         "    define(cell);\n"
-                        "    cell(GATE_A) {\n"
-                        "        pin(I) {\n"
-                        "            direction: input;\n"
-                        "        }\n"
-                        "        pin(O) {\n"
-                        "            direction: output;\n"
-                        "            function: \"I\";\n"
-                        "        }\n"
-                        "    }\n"
-                        "    cell(GATE_B) {\n"
-                        "        pin(I) {\n"
-                        "            direction: input;\n"
-                        "        }\n"
-                        "        pin(O) {\n"
-                        "            direction: output;\n"
-                        "            function: \"!I\";\n"
-                        "        }\n"
-                        "    }\n"
                         "    cell(GND) {\n"
                         "        pin(O) {\n"
                         "            direction: output;\n"
@@ -144,13 +126,36 @@ namespace hal
     }
 
     /**
-     * Testing that a GND/VCC Gate type is added to the Gate library, if the file does not contain any.
+     * Testing whether GND and VCC gate type are marked or even added to the gate library.
      *
      * Functions: get_gate_library, get_gate_libraries
      */
     TEST_F(GateLibraryManagerTest, check_prepare_library)
     {
         TEST_START
+        {
+            // Parse a file that does not contain a GND or VCC Gate type (constant 0 / constant 1)
+            NO_COUT_TEST_BLOCK;
+            create_test_lib();
+            GateLibrary* test_lib = gate_library_manager::get_gate_library(m_test_lib_path);
+            ASSERT_NE(test_lib, nullptr);
+
+            // check GND gate type
+            auto gnd_types = test_lib->get_gnd_gate_types();
+            ASSERT_TRUE(gnd_types.size() == 1);
+            ASSERT_TRUE(gnd_types.find("GND") != gnd_types.end());
+            auto gnd_bf = gnd_types.at("GND")->get_boolean_functions();
+            ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
+            EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
+
+            // check VCC gate type
+            auto vcc_types = test_lib->get_vcc_gate_types();
+            ASSERT_TRUE(vcc_types.size() == 1);
+            ASSERT_TRUE(vcc_types.find("VCC") != vcc_types.end());
+            auto vcc_bf = vcc_types.at("VCC")->get_boolean_functions();
+            ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
+            EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
+        }
         {
             // Parse a file that does not contain a GND or VCC Gate type (constant 0 / constant 1)
             NO_COUT_TEST_BLOCK;
@@ -163,15 +168,20 @@ namespace hal
             test_lib.close();
             GateLibrary* empty_lib = gate_library_manager::get_gate_library(m_test_lib_path);
             ASSERT_NE(empty_lib, nullptr);
-            auto g_types = empty_lib->get_gate_types();
-            // Check the creation of a gnd Gate type
-            ASSERT_TRUE(g_types.find("GND") != g_types.end());
-            auto gnd_bf = g_types.at("GND")->get_boolean_functions();
+
+            // check GND gate type
+            auto gnd_types = empty_lib->get_gnd_gate_types();
+            ASSERT_TRUE(gnd_types.size() == 1);
+            ASSERT_TRUE(gnd_types.find("GND") != gnd_types.end());
+            auto gnd_bf = gnd_types.at("GND")->get_boolean_functions();
             ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
             EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
-            // Check the creation of a vcc Gate type
-            ASSERT_TRUE(g_types.find("VCC") != g_types.end());
-            auto vcc_bf = g_types.at("VCC")->get_boolean_functions();
+
+            // check VCC gate type
+            auto vcc_types = empty_lib->get_vcc_gate_types();
+            ASSERT_TRUE(vcc_types.size() == 1);
+            ASSERT_TRUE(vcc_types.find("VCC") != vcc_types.end());
+            auto vcc_bf = vcc_types.at("VCC")->get_boolean_functions();
             ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
             EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
         }

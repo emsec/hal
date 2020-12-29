@@ -71,43 +71,79 @@ namespace hal
          * @param[in] type - The base type of the gate type.
          * @returns The new gate type instance on success, a nullptr otherwise.
          */
-        GateType* create_gate_type(const std::string& name, GateType::BaseType type);
+        GateType* create_gate_type(const std::string& name, GateType::BaseType type = GateType::BaseType::combinational);
 
         /**
+         * \deprecated
+         * DEPRECATED <br>
          * Add a gate type to the gate library.
          *
          * @param[in] gate_type - The gate type to add.
          */
-        void add_gate_type(std::unique_ptr<const GateType> gate_type);
+        [[deprecated("Use create_gate_type() instead.")]] void add_gate_type(std::unique_ptr<GateType> gate_type);
 
         /**
          * Check whether the given gate type is contained in this library.
          *
-         * @param[in] gate_type - The gate type to check.
+         * @param[in] gate_type - The gate type.
          * @returns True if the gate type is part of this library, false otherwise.
          */
-        bool contains_gate_type(const GateType* gate_type) const;
+        bool contains_gate_type(GateType* gate_type) const;
+
+        /**
+         * TODO pybinds and tests
+         * Check by name whether the given gate type is contained in this library.
+         *
+         * @param[in] name - The name of the gate type.
+         * @returns True if the gate type is part of this library, false otherwise.
+         */
+        bool contains_gate_type_by_name(const std::string& name) const;
+
+        /**
+         * TODO pybinds and tests
+         * Get the gate type corresponding to the given name if contained within the library. In case there is no gate type with that name, a nullptr is returned.
+         *
+         * @param[in] name - The name of the gate type.
+         * @returns The gate type on success, a nullptr otherwise.
+         */
+        GateType* get_gate_type_by_name(const std::string& name) const;
 
         /**
          * Get all gate types of the library.
          *
          * @returns A map from gate type names to gate types.
          */
-        std::unordered_map<std::string, const GateType*> get_gate_types() const;
+        std::unordered_map<std::string, GateType*> get_gate_types() const;
+
+        /**
+         * Mark a gate type as a VCC gate type.
+         *
+         * @param[in] gate_type - The gate type.
+         * @returns True on success, false otherwise.
+         */
+        bool mark_vcc_gate_type(GateType* gate_type);
 
         /**
          * Get all VCC gate types of the library.
          *
          * @returns A map from VCC gate type names to gate type objects.
          */
-        std::unordered_map<std::string, const GateType*> get_vcc_gate_types() const;
+        std::unordered_map<std::string, GateType*> get_vcc_gate_types() const;
+
+        /**
+         * Mark a gate type as a GND gate type.
+         *
+         * @param[in] gate_type - The gate type.
+         * @returns True on success, false otherwise.
+         */
+        bool mark_gnd_gate_type(GateType* gate_type);
 
         /**
          * Get all GND gate types of the library.
          *
          * @returns A map from GND gate type names to gate type objects.
          */
-        std::unordered_map<std::string, const GateType*> get_gnd_gate_types() const;
+        std::unordered_map<std::string, GateType*> get_gnd_gate_types() const;
 
         /**
          * Add an include required for parsing a corresponding netlist, e.g., VHDL libraries.

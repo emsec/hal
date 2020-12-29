@@ -780,12 +780,10 @@ namespace hal {
 
             auto inv_gl_owner = std::make_unique<GateLibrary>("imaginary_path", "TEST_LIB");
             auto inv_gl = inv_gl_owner.get();
-            auto inv_gate_type_owner = std::make_unique<GateType>("gate_1_to_1_inv");
-            auto inv_gate_type = inv_gate_type_owner.get();
+            auto inv_gate_type = inv_gl->create_gate_type("gate_1_to_1_inv");
             inv_gate_type->add_input_pin("I");
             inv_gate_type->add_output_pin("O");
             inv_gate_type->add_boolean_function("O", bf_i_invert);
-            inv_gl->add_gate_type(std::move(inv_gate_type_owner));
 
             {
                 // Access the boolean function of a gate_type
@@ -835,9 +833,7 @@ namespace hal {
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
                 GateLibrary gl("imaginary_path", "TEST_LIB");
-                auto empty_gate_type_owner = std::make_unique<GateType>("EMPTY_GATE");
-                auto empty_gate_type = empty_gate_type_owner.get();
-                gl.add_gate_type(std::move(empty_gate_type_owner));
+                auto empty_gate_type = gl.create_gate_type("EMPTY_GATE");
 
                 Netlist nl(&gl);
                 auto empty_gate = nl.create_gate(MIN_GATE_ID + 0, empty_gate_type, "empty_gate");
@@ -846,10 +842,8 @@ namespace hal {
             {
                 // Call the get_boolean_function function with no parameter, for a Gate with no outputs
                 GateLibrary gl("imaginary_path", "TEST_LIB");
-                auto empty_gate_type_owner = std::make_unique<GateType>("EMPTY_GATE");
-                auto empty_gate_type = empty_gate_type_owner.get();
+                auto empty_gate_type = gl.create_gate_type("EMPTY_GATE");
                 empty_gate_type->add_output_pin("");
-                gl.add_gate_type(std::move(empty_gate_type_owner));
 
                 Netlist nl(&gl);
                 auto empty_gate = nl.create_gate(MIN_GATE_ID + 0, empty_gate_type, "empty_gate");
@@ -872,8 +866,7 @@ namespace hal {
             // Create a custom GateLibrary which contains custom lut gates
             GateLibrary lib("imaginary_path", "TEST_LIB");
             auto gl = &lib;
-            auto lut_owner = std::make_unique<GateTypeLut>("LUT_GATE");
-            auto lut = lut_owner.get();
+            auto lut = static_cast<GateTypeLut*>(gl->create_gate_type("LUT_GATE", GateType::BaseType::lut));
 
             std::vector<std::string> input_pins({"I0", "I1", "I2"});
             std::vector<std::string> output_pins({"O_LUT", "O_normal", "O_LUT_other"});
@@ -885,7 +878,6 @@ namespace hal {
             lut->set_config_data_ascending_order(true);
             lut->set_config_data_identifier("data_identifier");
             lut->set_config_data_category("data_category");
-            gl->add_gate_type(std::move(lut_owner));
             {
                 // Get the boolean function of the lut in different ways
                 // is not taken into account!

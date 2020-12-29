@@ -502,66 +502,6 @@ namespace hal {
     }
 
     /**
-     * Testing the addition of a gnd and vcc gates
-     *
-     * Functions: parse
-     */
-    TEST_F(HDLParserVerilogTest, check_gnd_vcc_gates) {
-        TEST_START
-            {
-                // Add a global_gnd
-                std::stringstream input("module top ("
-                                        "  global_out"
-                                        " ) ;"
-                                        "  output global_out ;"
-                                        "gnd g_gnd_gate ("
-                                        "  .O (global_out )"
-                                        " ) ;"
-                                        "endmodule");
-                test_def::capture_stdout();
-                HDLParserVerilog verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
-                ASSERT_NE(nl, nullptr);
-
-                ASSERT_NE(nl->get_gnd_gates().size(), 0);
-                Gate* global_gnd = *nl->get_gnd_gates().begin();
-                EXPECT_EQ(global_gnd->get_name(), "g_gnd_gate");
-            }
-            {
-                // Add a global_vcc
-                std::stringstream input("module top ("
-                                        "  global_out"
-                                        " ) ;"
-                                        "  output global_out ;"
-                                        "vcc g_vcc_gate ("
-                                        "  .O (global_out )"
-                                        " ) ;"
-                                        "endmodule");
-                test_def::capture_stdout();
-                HDLParserVerilog verilog_parser;
-                std::unique_ptr<Netlist> nl = verilog_parser.parse_and_instantiate(input, m_gl);
-                if (nl == nullptr) {
-                    std::cout << test_def::get_captured_stdout();
-                } else {
-                    test_def::get_captured_stdout();
-                }
-
-                ASSERT_NE(nl, nullptr);
-
-                ASSERT_NE(nl->get_vcc_gates().size(), 0);
-                Gate* global_vcc = *nl->get_vcc_gates().begin();
-                EXPECT_EQ(global_vcc->get_name(), "g_vcc_gate");
-            }
-        TEST_END
-    }
-
-    /**
      * Testing the port assigment of the nets '0' and '1' (by 'b0 and 'b1), that are connected to gnd/vcc gates.
      *
      * Functions: parse

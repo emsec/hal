@@ -242,13 +242,10 @@ namespace hal {
                 // Try to add a Gate with an invalid gate type
                 NO_COUT_TEST_BLOCK;
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
-                // Create a GateType of another gate library
-                std::unique_ptr<GateLibrary> gl = std::make_unique<GateLibrary>("imaginary_path", "OtherLibrary");
-                std::unique_ptr<GateType> not_in_gl_gate_type = std::make_unique<GateType>("not_in_gl_gate");
-                not_in_gl_gate_type->add_output_pins({"O"});
-                gl->add_gate_type(std::move(not_in_gl_gate_type));
+                GateType not_in_gl_gate_type("not_in_gl_gate");
+                not_in_gl_gate_type.add_output_pins({"O"});
 
-                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, gl->get_gate_types()["not_in_gl_gate"], "");
+                auto g_0 = nl->create_gate(MIN_GATE_ID + 0, &not_in_gl_gate_type, "");
                 EXPECT_EQ(g_0, nullptr);
             }
         TEST_END

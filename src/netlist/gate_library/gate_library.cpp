@@ -40,19 +40,64 @@ namespace hal
         }
 
         auto res = gt.get();
-        add_gate_type(std::move(gt));
+        m_gate_type_map.emplace(name, res);
+        m_gate_types.push_back(std::move(gt));
         return res;
     }
 
     void GateLibrary::add_gate_type(std::unique_ptr<GateType> gt)
     {
         m_gate_type_map.emplace(gt->get_name(), gt.get());
+        m_gate_types.push_back(std::move(gt));
+    }
 
-        auto out_pins = gt->get_output_pins();
-
-        if (gt->get_input_pins().empty() && (out_pins.size() == 1))
+    bool GateLibrary::contains_gate_type(GateType* gate_type) const
+    {
+        if (gate_type == nullptr)
         {
-            auto functions = gt->get_boolean_functions();
+            return false;
+        }
+
+        auto it = m_gate_type_map.find(gate_type->get_name());
+        if (it == m_gate_type_map.end())
+        {
+            return false;
+        }
+        return *(it->second) == *gate_type;
+    }
+
+    bool GateLibrary::contains_gate_type_by_name(const std::string& name) const
+    {
+        if (auto it = m_gate_type_map.find(name); it != m_gate_type_map.end())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    GateType* GateLibrary::get_gate_type_by_name(const std::string& name) const
+    {
+        if (auto it = m_gate_type_map.find(name); it != m_gate_type_map.end())
+        {
+            return it->second;
+        }
+
+        return nullptr;
+    }
+
+    std::unordered_map<std::string, GateType*> GateLibrary::get_gate_types() const
+    {
+        return m_gate_type_map;
+    }
+
+    bool GateLibrary::mark_vcc_gate_type(GateType* gate_type)
+    {
+        auto out_pins = gate_type->get_output_pins();
+
+        if (gate_type->get_input_pins().empty() && (out_pins.size() == 1))
+        {
+            auto functions = gate_type->get_boolean_functions();
             auto it        = functions.find(out_pins[0]);
             if (it != functions.end())
             {
@@ -60,36 +105,41 @@ namespace hal
 
                 if (bf.is_constant_one())
                 {
-                    m_vcc_gate_types.emplace(gt->get_name(), gt.get());
-                }
-                else if (bf.is_constant_zero())
-                {
-                    m_gnd_gate_types.emplace(gt->get_name(), gt.get());
+                    m_vcc_gate_types.emplace(gate_type->get_name(), gate_type);
+                    return true;
                 }
             }
         }
 
-        m_gate_types.push_back(std::move(gt));
+        return false;
     }
 
-    bool GateLibrary::contains_gate_type(const GateType* gt) const
-    {
-        auto it = m_gate_type_map.find(gt->get_name());
-        if (it == m_gate_type_map.end())
-        {
-            return false;
-        }
-        return *(it->second) == *gt;
-    }
-
-    std::unordered_map<std::string, const GateType*> GateLibrary::get_gate_types() const
-    {
-        return m_gate_type_map;
-    }
-
-    std::unordered_map<std::string, const GateType*> GateLibrary::get_vcc_gate_types() const
+    std::unordered_map<std::string, GateType*> GateLibrary::get_vcc_gate_types() const
     {
         return m_vcc_gate_types;
+    }
+
+    bool GateLibrary::mark_gnd_gate_type(GateType* gate_type)
+    {
+        auto out_pins = gate_type->get_output_pins();
+
+        if (gate_type->get_input_pins().empty() && (out_pins.size() == 1))
+        {
+            auto functions = gate_type->get_boolean_functions();
+            auto it        = functions.find(out_pins[0]);
+            if (it != functions.end())
+            {
+                auto bf = it->second;
+
+                if (bf.is_constant_zero())
+                {
+                    m_gnd_gate_types.emplace(gate_type->get_name(), gate_type);
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     std::unordered_map<std::string, GateType*> GateLibrary::get_gnd_gate_types() const

@@ -18,16 +18,22 @@ namespace hal
 
             bool prepare_library(const std::unique_ptr<GateLibrary>& lib)
             {
-                auto types = lib->get_gate_types();
+                auto gate_types = lib->get_gate_types();
+
+                for (const auto& [gt_name, gt] : gate_types)
+                {
+                    lib->mark_vcc_gate_type(gt);
+                    lib->mark_gnd_gate_type(gt);
+                }
 
                 if (lib->get_gnd_gate_types().empty())
                 {
                     std::string name = "GND";
-                    if (types.find(name) != types.end())
+                    if (gate_types.find(name) != gate_types.end())
                     {
                         name += "_autogen";
                     }
-                    if (types.find(name) != types.end())
+                    if (gate_types.find(name) != gate_types.end())
                     {
                         log_error("gate_library_manager", "no 'GND' gate type found in gate library, but gate types 'GND' and '{}' already exist.", name);
                         return false;
@@ -36,17 +42,18 @@ namespace hal
                     GateType* gt = lib->create_gate_type(name, GateType::BaseType::combinational);
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ZERO);
+                    lib->mark_gnd_gate_type(gt);
                     log_info("gate_library_manager", "gate library did not contain a GND gate, auto-generated type '{}'.", name);
                 }
 
                 if (lib->get_vcc_gate_types().empty())
                 {
                     std::string name = "VCC";
-                    if (types.find(name) != types.end())
+                    if (gate_types.find(name) != gate_types.end())
                     {
                         name += "_autogen";
                     }
-                    if (types.find(name) != types.end())
+                    if (gate_types.find(name) != gate_types.end())
                     {
                         log_error("gate_library_manager", "no 'VCC' gate found in gate library, but gate types 'VCC' and '{}' already exist.", name);
                         return false;
@@ -55,6 +62,7 @@ namespace hal
                     GateType* gt = lib->create_gate_type(name, GateType::BaseType::combinational);
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ONE);
+                    lib->mark_vcc_gate_type(gt);
                     log_info("gate_library_manager", "gate library did not contain a VCC gate, auto-generated type '{}'.", name);
                 }
 

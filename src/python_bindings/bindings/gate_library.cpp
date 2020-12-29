@@ -50,13 +50,6 @@ namespace hal
             :rtype: hal_py.GateType
         )");
 
-        // add_gate_type cannot be accessed via Python as PyBind does not want to pass ownership of the gate type instance
-        // py_gate_library.def("add_gate_type", &GateLibrary::add_gate_type, py::arg("gate_type"), R"(
-        //     Add a gate type to the gate library.
-
-        //     :param hal_py.GateType gate_type: The gate type to add.
-        // )");
-
         py_gate_library.def("contains_gate_type", &GateLibrary::contains_gate_type, py::arg("gate_type"), R"(
             Check whether the given gate type is contained in this library.
 
@@ -78,6 +71,14 @@ namespace hal
             :rtype: dict[str,hal_py.GateType]
         )");
 
+        py_gate_library.def("mark_vcc_gate_type", &GateLibrary::mark_vcc_gate_type, py::arg("gate_type"), R"(
+            Mark a gate type as a VCC gate type.
+        
+            :param hal_py.GateType gate_type: The gate type.
+            :returns: True on success, false otherwise.
+            :rtype: bool
+        )");
+
         py_gate_library.def_property_readonly("vcc_gate_types", &GateLibrary::get_vcc_gate_types, R"(
             All VCC gate types of the gate library as as dict from gate type names to gate types.
 
@@ -89,6 +90,14 @@ namespace hal
 
             :returns: A dict from VCC gate type names to gate type objects.
             :rtype: dict[str,hal_py.GateType]
+        )");
+
+        py_gate_library.def("mark_gnd_gate_type", &GateLibrary::mark_gnd_gate_type, py::arg("gate_type"), R"(
+            Mark a gate type as a GND gate type.
+        
+            :param hal_py.GateType gate_type: The gate type.
+            :returns: True on success, false otherwise.
+            :rtype: bool
         )");
 
         py_gate_library.def_property_readonly("gnd_gate_types", &GateLibrary::get_vcc_gate_types, R"(

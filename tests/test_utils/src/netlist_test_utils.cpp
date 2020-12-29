@@ -242,166 +242,137 @@ namespace hal
         }
         gl = std::make_unique<GateLibrary>("imaginary_path", "Testing Library");
 
-        std::unique_ptr<GateType> gt;
+        GateType* gt;
 
         // combinational types
 
-        gt = std::make_unique<GateType>("gate_1_to_1");
+        gt = gl->create_gate_type("gate_1_to_1");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_2_to_2");
+        gt = gl->create_gate_type("gate_2_to_2");
         gt->add_input_pins({"I0", "I1"});
         gt->add_output_pins({"O0", "O1"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_2_to_1");
+        gt = gl->create_gate_type("gate_2_to_1");
         gt->add_input_pins({"I0", "I1"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_1_to_2");
+        gt = gl->create_gate_type("gate_1_to_2");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_3_to_3");
+        gt = gl->create_gate_type("gate_3_to_3");
         gt->add_input_pins({"I0", "I1", "I2"});
         gt->add_output_pins({"O0", "O1", "O2"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_3_to_1");
+        gt = gl->create_gate_type("gate_3_to_1");
         gt->add_input_pins({"I0", "I1", "I2"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_1_to_3");
+        gt = gl->create_gate_type("gate_1_to_3");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_4_to_4");
+        gt = gl->create_gate_type("gate_4_to_4");
         gt->add_input_pins({"I0", "I1", "I2", "I3"});
         gt->add_output_pins({"O0", "O1", "O2", "O3"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_4_to_1");
+        gt = gl->create_gate_type("gate_4_to_1");
         gt->add_input_pins({"I0", "I1", "I2", "I3"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_1_to_4");
+        gt = gl->create_gate_type("gate_1_to_4");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2", "O3"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_8_to_8");
+        gt = gl->create_gate_type("gate_8_to_8");
         gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
         gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_8_to_1");
+        gt = gl->create_gate_type("gate_8_to_1");
         gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_1_to_8");
+        gt = gl->create_gate_type("gate_1_to_8");
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gate_2_to_0");
+        gt = gl->create_gate_type("gate_2_to_0");
         gt->add_input_pins({"I0", "I1"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("pin_group_gate_4_to_4");
+        gt = gl->create_gate_type("pin_group_gate_4_to_4");
         gt->add_input_pins({"I(0)", "I(1)", "I(2)", "I(3)"});
         gt->add_output_pins({"O(0)", "O(1)", "O(2)", "O(3)"});
         gt->assign_input_pin_group("I", {{0, "I(0)"}, {1, "I(1)"}, {2, "I(2)"}, {3, "I(3)"}});
         gt->assign_output_pin_group("O", {{0, "O(0)"}, {1, "O(1)"}, {2, "O(2)"}, {3, "O(3)"}});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateType>("gnd");
+        gt = gl->create_gate_type("gnd");
         gt->add_output_pins({"O"});
         gt->add_boolean_function("O", BooleanFunction::from_string("0"));
-        gl->add_gate_type(std::move(gt));
+        gl->mark_gnd_gate_type(gt);
 
-        gt = std::make_unique<GateType>("vcc");
+        gt = gl->create_gate_type("vcc");
         gt->add_output_pins({"O"});
         gt->add_boolean_function("O", BooleanFunction::from_string("1"));
-        gl->add_gate_type(std::move(gt));
+        gl->mark_vcc_gate_type(gt);
 
         // sequential types
 
-        gt = std::make_unique<GateTypeSequential>("gate_1_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_1_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_2_to_2_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_2_to_2_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I0", "I1"});
         gt->add_output_pins({"O0", "O1"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_2_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_2_to_1_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I0", "I1"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_1_to_2_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_2_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_3_to_3_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_3_to_3_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I0", "I1", "I2"});
         gt->add_output_pins({"O0", "O1", "O2"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_3_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_3_to_1_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I0", "I1", "I2"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_1_to_3_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_3_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_4_to_4_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_4_to_4_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I0", "I1", "I2", "I3"});
         gt->add_output_pins({"O0", "O1", "O2", "O3"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_4_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_4_to_1_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I0", "I1", "I2", "I3"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_1_to_4_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_4_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2", "O3"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_8_to_8_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_8_to_8_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
         gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_8_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_8_to_1_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
         gt->add_output_pins({"O"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_1_to_8_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_8_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
-        gl->add_gate_type(std::move(gt));
 
-        gt = std::make_unique<GateTypeSequential>("gate_2_to_0_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_2_to_0_sequential", GateType::BaseType::ff);
         gt->add_input_pins({"I0", "I1"});
-        gl->add_gate_type(std::move(gt));
 
         return gl.get();
     }
