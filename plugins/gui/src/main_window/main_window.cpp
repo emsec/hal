@@ -583,7 +583,7 @@ namespace hal
             path.replace_extension(".hal");
             netlist_serializer::serialize_to_file(gNetlist, path);
 
-            gFileStatusManager->flushUnsavedChanges();
+            gFileStatusManager->netlistSaved();
             FileManager::get_instance()->watchFile(QString::fromStdString(path.string()));
 
             Q_EMIT saveTriggered();
@@ -622,17 +622,19 @@ namespace hal
     {
         if (gFileStatusManager->modifiedFilesExisting())
         {
-            QMessageBox msgBox;
+            QMessageBox msgBox(this);
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");
             auto cancelButton = msgBox.addButton("Cancel", QMessageBox::RejectRole);
             msgBox.addButton("Close Anyway", QMessageBox::ApplyRole);
             msgBox.setDefaultButton(cancelButton);
             msgBox.setInformativeText("Are you sure you want to close the application ?");
+
             msgBox.setText("There are unsaved modifications.");
             QString detailed_text = "The following modifications have not been saved yet:\n";
             for (const auto& s : gFileStatusManager->getUnsavedChangeDescriptors())
                 detailed_text.append("   ->  " + s + "\n");
             msgBox.setDetailedText(detailed_text);
+
             for (const auto& button : msgBox.buttons())
             {
                 // if (button->text() == "Show Details...")
@@ -642,6 +644,7 @@ namespace hal
                     break;
                 }
             }
+
             msgBox.exec();
 
             if (msgBox.clickedButton() == cancelButton)
