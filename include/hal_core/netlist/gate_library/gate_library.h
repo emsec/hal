@@ -91,7 +91,6 @@ namespace hal
         bool contains_gate_type(GateType* gate_type) const;
 
         /**
-         * TODO pybinds and tests
          * Check by name whether the given gate type is contained in this library.
          *
          * @param[in] name - The name of the gate type.
@@ -100,7 +99,6 @@ namespace hal
         bool contains_gate_type_by_name(const std::string& name) const;
 
         /**
-         * TODO pybinds and tests
          * Get the gate type corresponding to the given name if contained within the library. In case there is no gate type with that name, a nullptr is returned.
          *
          * @param[in] name - The name of the gate type.

@@ -499,11 +499,20 @@ namespace hal {
                 EXPECT_EQ(gt_latch->get_base_type(), GateType::BaseType::latch);
                 EXPECT_EQ(gt_lut->get_base_type(), GateType::BaseType::lut);
 
-                // check contains_gate_type
+                // check contains_gate_type and contains_gate_type_by_name
                 EXPECT_TRUE(gl->contains_gate_type(gt_and));
                 EXPECT_FALSE(gl->contains_gate_type(nullptr));
                 GateType gt_nil("not_in_library");
                 EXPECT_FALSE(gl->contains_gate_type(&gt_nil));
+
+                EXPECT_TRUE(gl->contains_gate_type_by_name(gt_and->get_name()));
+                EXPECT_FALSE(gl->contains_gate_type_by_name(""));
+                EXPECT_FALSE(gl->contains_gate_type_by_name("not_in_library"));
+
+                // check get_gate_type_by_name
+                EXPECT_EQ(gl->get_gate_type_by_name("gt_and"), gt_and);
+                EXPECT_EQ(gl->get_gate_type_by_name(""), nullptr);
+                EXPECT_EQ(gl->get_gate_type_by_name("not_in_library"), nullptr);
 
                 // Check the addition of includes
                 gl->add_include("in.clu.de");
