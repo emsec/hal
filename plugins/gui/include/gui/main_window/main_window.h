@@ -50,12 +50,12 @@ namespace hal
     class WelcomeScreen;
 
     /**
-     * One widget to rule them all,
-     *   one widget to create them,
-     * One widget to bring them all
-     *   and in the dark theme bind them.
+     * The top level widget
      *
-     * (The top level widget)
+     * <i>One widget to rule them all, <br>
+     *   one widget to create them, <br>
+     * One widget to bring them all <br>
+     *   and in the dark theme bind them. </i>
      */
     class MainWindow : public QWidget
     {
@@ -202,115 +202,121 @@ namespace hal
         /**
          * Q_PROPERTY WRITE function for the hal icon path.
          *
-         * @param path - the new path
+         * @param path - The new path
          */
         void setHalIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the hal icon style.
          *
-         * @param style - the new style
+         * @param style - The new style
          */
         void setHalIconStyle(const QString &style);
 
         /**
          * Q_PROPERTY WRITE function for the 'New File'-icon path.
          *
-         * @param path - the new path
+         * @param path - The new path
          */
         void setNewFileIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'New File'-icon style.
          *
-         * @param style - the new style
+         * @param style - The new style
          */
         void setNewFileIconStyle(const QString &style);
 
         /**
         * Q_PROPERTY WRITE function for the 'Open File'-icon path.
          *
-         * @param path - the new path
+         * @param path - The new path
         */
         void setOpenIconPath(const QString& path);
         /**
         * Q_PROPERTY WRITE function for the 'Open File'-icon style.
          *
-         * @param style - the new style
+         * @param style - The new style
         */
         void setOpenIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Save File'-icon path.
          *
-         * @param path - the new path
+         * @param path - The new path
          */
         void setSaveIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Save File'-icon style.
          *
-         * @param style - the new style
+         * @param style - The new style
          */
         void setSaveIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Schedule'-icon path.
          *
-         * @param path - the new path
+         * @param path - The new path
          */
         void setScheduleIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Schedule'-icon style.
          *
-         * @param style - the new style
+         * @param style - The new style
          */
         void setScheduleIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Run Script'-icon path.
          *
-         * @param path - the new path
+         * @param path - The new path
          */
         void setRunIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Duplicate'-icon path.
          *
-         * @param style - the new style
+         * @param style - The new style
          */
         void setRunIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Duplicate'-icon path.
          *
-         * @param path - the new path
+         * @param path - The new path
          */
         void setContentIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Duplicate'-icon style.
          *
-         * @param style - the new style
+         * @param style - The new style
          */
         void setContentIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Settings'-icon path.
          *
-         * @param path - the new path
+         * @param path - The new path
          */
         void setSettingsIconPath(const QString& path);
         /**
          * Q_PROPERTY WRITE function for the 'Settings'-icon style.
          *
-         * @param style - the new style
+         * @param style - The new style
          */
         void setSettingsIconStyle(const QString& style);
 
         /**
          * Add a content widget to the layout area.
          *
-         * @param widget - the content widget to add
-         * @param index - the position index within the anchor, the widget should be put in
-         * @param anchor - the anchor, the widget should be assigned to
+         * @param widget - The content widget to add
+         * @param index - The position index within the anchor, the widget should be put in
+         * @param anchor - The anchor, the widget should be assigned to
          */
         void addContent(ContentWidget* widget, int index, content_anchor anchor);
+
+        /**
+         * Remove a content widget from the layout area.
+         *
+         * @param widget - The content widget to remove
+         */
         void removeContent(ContentWidget* widget);
 
         void clear();
@@ -336,7 +342,7 @@ namespace hal
         /**
          * Q_SLOT to run a plugin.
          *
-         * @param name - the name of the plugin
+         * @param name - The name of the plugin
          */
         void runPluginTriggered(const QString& name);
 

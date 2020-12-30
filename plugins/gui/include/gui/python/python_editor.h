@@ -92,7 +92,7 @@ namespace hal
         virtual void clear() override;
 
         /**
-         * Action to open a file. A dialogue will appear where the user can select the .py file he want to open.
+         * Action to open a file. A dialogue will appear where the user can select the .py file he want to open. <br>
          * In case the user opens an already open file the user is ask whether the changes should be overwritten or not.
          */
         void handleActionOpenFile();
@@ -193,8 +193,8 @@ namespace hal
         /**
          * Check for a given index range, if all tabs of these indexes should be discarded. If there are no unsaved
          * changes they can be discarded. Otherwise the user is informed about unsaved tabs an may choose whether to
-         * discard all changes or not.
-         * The range will by passed in python style, e.g. start=1, end=5 includes indices {1,2,3,4}
+         * discard all changes or not. <br>
+         * The range will by passed in python style, e.g. start=1, end=5 includes indices {1,2,3,4} <br>
          * Also the exclude parameter can be used to skip a certain index,
          * e.g. start=1, end=5, exclude=2 includes indices {1,3,4}
          *
@@ -383,7 +383,7 @@ namespace hal
         ///@}
 
         /**
-         * Serialize the necessary information to the .hal file.
+         * Serialize the necessary information to the .hal file. <br>
          * The file paths of the currently opened tabs were stores, as well as the index of the selected tab is saved.
          *
          * @param path - Unused
@@ -449,14 +449,19 @@ namespace hal
         void handleSearchbarTextEdited(const QString& text);
 
         /**
-         * Q_SLOT to handle that the index of a tab changes (e.g. because it was moved with the mouse)
+         * Q_SLOT to handle that the used has selected another tab, so that the index of the current tab has changed.
+         *
+         * @param fileName - The index of the newly selected tab
          */
         void handleCurrentTabChanged(int index);
 
         /**
-         * Q_SLOT to handle that the original file of an opened tab was modified (outside from hal).
-         * A bar will appear that ask the user whether to reload the file or ignore the changes.
+         * Q_SLOT to handle that the original file of an opened tab was modified (outside from hal). <br>
+         * A bar will appear that ask the user whether to reload the file or ignore the changes. <br>
          * If the original file was moved or deleted the user will be informed.
+         *
+         * @param path - The absolute path of the original file that was changed. (If the file was removed or deleted the
+         *               old path is passed)
          */
         void handleTabFileChanged(QString path);
 
@@ -486,6 +491,8 @@ namespace hal
 
         /**
          * Slot called when a file is about to be closed. (emitted by FileManager). Used to remove snapshots.
+         *
+         * @param fileName - the absolute path of the file that is about to be closed
          */
         void handleFileAboutToClose(const QString& fileName);
 
@@ -513,7 +520,7 @@ namespace hal
         // ============ FUNCTIONS FOR SNAPSHOT HANDLING ============
 
         /**
-         * Parse a snapshot file
+         * Parse a snapshot file.
          *
          * @param snapshot_file_path - The path of the snapshot file
          * @returns a pair <original file path, snapshot content>
@@ -521,7 +528,7 @@ namespace hal
         QPair<QString, QString> readSnapshotFile(QFileInfo snapshot_file_path) const;
 
         /**
-         * Parse all found and store them in a single map
+         * Parse all found and store them in a single map.
          *
          * @param snapshot_file_path - The path of the snapshot file
          * @returns a pair which contains all snapshots:
@@ -531,7 +538,7 @@ namespace hal
         QPair<QMap<QString, QString>, QVector<QString>> loadAllSnapshots();
 
         /**
-         * Writes a snapshot file
+         * Writes a snapshot file.
          *
          * @param snapshot_file_path - The path of the snapshot file
          * @param original_file_path  - The original file the snapshot is made for
@@ -541,7 +548,7 @@ namespace hal
         bool writeSnapshotFile(QFileInfo snapshot_file_path, QString original_file_path , QString content) const;
 
         /**
-         * Get the path to the directory where the snapshots for this netlist are stored
+         * Get the path to the directory where the snapshots for this netlist are stored.
          *
          * @param create_if_non_existent if true, the directory will be created if not already existent.
          * @returns the snapshot directory. If the directory does not exist (with create_if_non_existent = false) or
@@ -565,7 +572,7 @@ namespace hal
         void clearAllSnapshots(bool remove_dir = false);
 
         /**
-         * Decide whether the snapshot should be loaded/inserted or the original file should be used.
+         * Decide whether the snapshot should be loaded/inserted or the original file should be used. <br>
          * If both the original file and the snapshot file exist, the user decides which version should be loaded.
          *
          * @param saved_snapshots - The map (original_path -> content) of saved snapshots (snapshots of non empty paths)
@@ -583,7 +590,7 @@ namespace hal
         void setSnapshotContent(const int idx, const QString snapshot_content);
 
         /**
-         * Ask the user with a message box whether the snapshot file or the original file should be loaded
+         * Ask the user with a message box whether the snapshot file or the original file should be loaded.
          *
          * @param original_path - the path of the original file
          * @param original_content - the content of the original file
@@ -593,7 +600,7 @@ namespace hal
         bool askLoadSnapshot(const QString original_path, const QString original_content, const QString snapshot_content) const;
 
         /**
-         * Ask the user with a message box whether the snapshot files should be ignored and deleted or not.
+         * Ask the user with a message box whether the snapshot files should be ignored and deleted or not. <br>
          * This box appers if the user reparses a .v/.vhdl file, but there are still snapshots
          *
          * @param original_path - the found snapshots
