@@ -37,7 +37,7 @@ namespace hal
         explicit PythonSyntaxHighlighter(QTextDocument* parent = nullptr);
 
     protected:
-        void highlightBlock(const QString& text) Q_DECL_OVERRIDE;
+        void highlightBlock(const QString& text) override;
 
     private:
         int closeMultilineComment(const QString& text, const QRegularExpression& delimiter, const int offset = 0);

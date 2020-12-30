@@ -54,7 +54,7 @@ namespace hal
         virtual void close(ContentWidget* widget);
 
         void handleNoCurrentWidget(int index);
-        void removeContent();
+        void clear();
 
     public Q_SLOTS:
         void detachCurrentWidget();

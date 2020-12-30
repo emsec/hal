@@ -47,7 +47,7 @@ namespace hal
         void keyPressed(QKeyEvent* e);
 
     private:
-        void keyPressEvent(QKeyEvent* e) Q_DECL_OVERRIDE;
+        void keyPressEvent(QKeyEvent* e) override;
         void handleTabKeyPressed();
         void handleShiftTabKeyPressed();
         void handleReturnKeyPressed();

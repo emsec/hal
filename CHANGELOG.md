@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * fixed crash when moving top module upward
+* added **highly experimental** way to close and reopen netlists at runtime
 * added creation of backups for Python files created within the editor outside of the `.hal` file
 * added user prompt when detecting Python file backups after a crash
 

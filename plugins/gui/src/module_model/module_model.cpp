@@ -220,6 +220,8 @@ namespace hal
         for (ModuleItem* m : mModuleItems)
             delete m;
 
+        mModuleItems.clear();
+
         endResetModel();
     }
 

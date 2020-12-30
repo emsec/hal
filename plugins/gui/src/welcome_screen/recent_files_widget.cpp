@@ -4,15 +4,13 @@
 #include "gui/gui_globals.h"
 #include "gui/welcome_screen/recent_file_item.h"
 
+#include <QDir>
+#include <QFileDialog>
+#include <QFileInfo>
 #include <QList>
 #include <QSettings>
 #include <QStyle>
 #include <QVBoxLayout>
-
-#include <QDebug>
-#include <QDir>
-#include <QFileDialog>
-#include <QFileInfo>
 
 namespace hal
 {
@@ -26,7 +24,6 @@ namespace hal
         setLayout(mLayout);
         mLayout->setAlignment(Qt::AlignTop);
 
-        //write_settings();
         readSettings();
     }
 
@@ -49,28 +46,34 @@ namespace hal
     void RecentFilesWidget::handleFileOpened(const QString& fileName)
     {
         Q_UNUSED(fileName)
-        for (const auto item : mItems)
-            item->deleteLater();
 
-        mItems.clear();
+        for (const RecentFileItem* item : mItems)
+        {
+            if (item->file() == fileName)
+                return; // DEBUG
+        }
 
-        // FIX !!!!!!!!!!!!!!!!
+        RecentFileItem* item = new RecentFileItem(fileName);
+        mItems.prepend(item);
+        mLayout->insertWidget(0, item);
 
-        //    for (const QString& file : recent_files)
-        //    {
-        //        RecentFileItem* item = new RecentFileItem(file, this);
-        //        mItems.append(item);
-        //        mLayout->addWidget(item);
-        //    }
+        if (mItems.size() > 14)
+        {
+            // HACKY, FIX
+            RecentFileItem* last_item = mItems.last();
+            mItems.removeLast();
+            mLayout->removeWidget(last_item);
+        }
+
+        updateSettings();
     }
 
-    void RecentFilesWidget::handleRemoveRequested(RecentFileItem *item)
+    void RecentFilesWidget::handleRemoveRequested(RecentFileItem* item)
     {
         mLayout->removeWidget(item);
         mItems.removeOne(item);
-        //need to delete item, otherwise the item is buggy and will drawn halfway in the widget
-        //delete item;
-        item->deleteLater();
+
+        delete item;
 
         updateSettings();
     }

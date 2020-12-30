@@ -86,14 +86,6 @@ namespace hal
          */
         explicit MainWindow(QWidget* parent = nullptr);
 
-        /**
-         * Add a content widget to the layout area.
-         *
-         * @param widget - the content widget to add
-         * @param index - the position index within the anchor, the widget should be put in
-         * @param anchor - the anchor, the widget should be assigned to
-         */
-        void addContent(ContentWidget* widget, int index, content_anchor anchor);
 
         // =====================================================================
         //   Q_PROPERTY functions
@@ -311,7 +303,17 @@ namespace hal
          */
         void setSettingsIconStyle(const QString& style);
 
-        ///@}
+        /**
+         * Add a content widget to the layout area.
+         *
+         * @param widget - the content widget to add
+         * @param index - the position index within the anchor, the widget should be put in
+         * @param anchor - the anchor, the widget should be assigned to
+         */
+        void addContent(ContentWidget* widget, int index, content_anchor anchor);
+        void removeContent(ContentWidget* widget);
+
+        void clear();
 
     Q_SIGNALS:
         /**
@@ -380,7 +382,7 @@ namespace hal
         /**
          * Q_SLOT to provide a logic for the close action. (Currently unused)
          */
-        void handleActionClosed();
+        void handleActionCloseFile();
 
     private:
         /**
@@ -390,6 +392,8 @@ namespace hal
          * @param event - Qts close event
          */
         void closeEvent(QCloseEvent* event);
+
+	bool tryToCloseFile();
 
         /**
          * Restores the window geometry of the MainWindow and all its children, configured with saveState().

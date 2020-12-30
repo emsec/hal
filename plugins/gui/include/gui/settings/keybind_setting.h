@@ -39,9 +39,9 @@ namespace hal
     public:
         KeybindSetting(const QString& key, const QString& title, const QString& mDescription, QWidget *parent = nullptr);
 
-        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-        virtual QVariant value() Q_DECL_OVERRIDE;
-        //virtual void rollback() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) override;
+        virtual QVariant value() override;
+        //virtual void rollback() override;
 
     private:
         KeybindEdit* mKeybindEdit;

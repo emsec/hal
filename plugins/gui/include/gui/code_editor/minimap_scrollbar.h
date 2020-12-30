@@ -53,13 +53,13 @@ namespace hal
         void setScrollbar(QScrollBar* scrollbar);
 
     protected:
-        void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
-        void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        void paintEvent(QPaintEvent* event) override;
+        void resizeEvent(QResizeEvent* event) override;
 
-        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-        void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-        void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-        void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent* event) override;
+        void mouseMoveEvent(QMouseEvent* event) override;
+        void mouseReleaseEvent(QMouseEvent* event) override;
+        void leaveEvent(QEvent* event) override;
 
     private:
         void adjustSliderToValue();

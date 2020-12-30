@@ -78,18 +78,18 @@ namespace hal
          *
          * @param Toolbar - The toolbar to set up
          */
-        virtual void setupToolbar(Toolbar* Toolbar) Q_DECL_OVERRIDE;
+        virtual void setupToolbar(Toolbar* Toolbar) override;
 
         /**
          * Create the shortcuts for this content widget. Overwrites the function ContentWidget::createShortcuts.
          *
          * @returns the list of created (and connected) shortcuts
          */
-        virtual QList<QShortcut*> createShortcuts() Q_DECL_OVERRIDE;
+        virtual QList<QShortcut*> createShortcuts() override;
 
-        virtual void handleStdout(const QString& output) Q_DECL_OVERRIDE;
-        virtual void handleError(const QString& output) Q_DECL_OVERRIDE;
-        virtual void clear() Q_DECL_OVERRIDE;
+        virtual void handleStdout(const QString& output) override;
+        virtual void handleError(const QString& output) override;
+        virtual void clear() override;
 
         /**
          * Action to open a file. A dialogue will appear where the user can select the .py file he want to open.
@@ -498,7 +498,7 @@ namespace hal
          * @param event - The event to filter
          * @return
          */
-        bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
+        bool eventFilter(QObject* obj, QEvent* event) override;
 
     private:
         /**

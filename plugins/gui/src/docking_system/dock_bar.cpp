@@ -494,6 +494,25 @@ namespace hal
         return widget;
     }
 
+    void DockBar::clear()
+    {
+        for (DockButton* button : mButtons)
+        {
+            button->widget()->hide();
+            button->widget()->setParent(nullptr);
+
+            button->hide();
+            button->setParent(nullptr);
+            delete button;
+        }
+
+        mButtons.clear();
+
+        rearrangeButtons();
+
+        update();
+    }
+
     void DockBar::handleDragStart()
     {
         show();
