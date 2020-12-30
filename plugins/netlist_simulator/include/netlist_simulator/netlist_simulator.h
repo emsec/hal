@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/net.h"
 #include "netlist_simulator/simulation.h"
 
@@ -188,8 +188,8 @@ namespace hal
             std::vector<Net*> state_output_nets;
             std::vector<Net*> state_inverted_output_nets;
             std::vector<Net*> clock_nets;
-            GateTypeSequential::ClearPresetBehavior sr_behavior_out;
-            GateTypeSequential::ClearPresetBehavior sr_behavior_out_inverted;
+            GateType::ClearPresetBehavior sr_behavior_out;
+            GateType::ClearPresetBehavior sr_behavior_out_inverted;
             SignalValue output;
             SignalValue inv_output;
         };
@@ -205,6 +205,6 @@ namespace hal
         void prepare_clock_events(u64 nanoseconds);
         void process_events(u64 timeout);
 
-        SignalValue process_clear_preset_behavior(GateTypeSequential::ClearPresetBehavior behavior, SignalValue previous_output);
+        SignalValue process_clear_preset_behavior(GateType::ClearPresetBehavior behavior, SignalValue previous_output);
     };
 }    // namespace hal

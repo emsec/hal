@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <map>
 #include <set>
@@ -65,6 +65,7 @@ namespace hal
         std::filesystem::path get_path() const;
 
         /**
+         * TODO prevent creation of multiple with same name
          * Create a new gate type, add it to the gate library, and return it.
          * 
          * @param[in] name - The name of the gate type.

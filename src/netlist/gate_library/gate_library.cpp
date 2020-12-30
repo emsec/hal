@@ -1,7 +1,6 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 
-#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 
 namespace hal
 {
@@ -21,23 +20,7 @@ namespace hal
 
     GateType* GateLibrary::create_gate_type(const std::string& name, GateType::BaseType type)
     {
-        std::unique_ptr<GateType> gt;
-
-        switch (type)
-        {
-            case GateType::BaseType::combinational:
-                gt = std::make_unique<GateType>(name);
-                break;
-            case GateType::BaseType::lut:
-                gt = std::make_unique<GateTypeLut>(name);
-                break;
-            case GateType::BaseType::ff:
-                gt = std::make_unique<GateTypeSequential>(name, type);
-                break;
-            case GateType::BaseType::latch:
-                gt = std::make_unique<GateTypeSequential>(name, type);
-                break;
-        }
+        std::unique_ptr<GateType> gt = std::make_unique<GateType>(name, type);
 
         auto res = gt.get();
         m_gate_type_map.emplace(name, res);

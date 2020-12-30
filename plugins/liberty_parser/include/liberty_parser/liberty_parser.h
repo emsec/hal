@@ -26,8 +26,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/utilities/token_stream.h"
 
 #include <filesystem>
@@ -88,8 +87,8 @@ namespace hal
             std::string function;
             std::string x_function;
             std::string z_function;
-            bool clock = false;
-            bool power = false;
+            bool clock  = false;
+            bool power  = false;
             bool ground = false;
         };
 
@@ -111,8 +110,8 @@ namespace hal
             std::string next_state;
             std::string clear;
             std::string preset;
-            GateTypeSequential::ClearPresetBehavior special_behavior_var1 = GateTypeSequential::ClearPresetBehavior::U;
-            GateTypeSequential::ClearPresetBehavior special_behavior_var2 = GateTypeSequential::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::U;
             std::string data_category;
             std::string data_identifier;
         };
@@ -125,8 +124,8 @@ namespace hal
             std::string data_in;
             std::string clear;
             std::string preset;
-            GateTypeSequential::ClearPresetBehavior special_behavior_var1 = GateTypeSequential::ClearPresetBehavior::U;
-            GateTypeSequential::ClearPresetBehavior special_behavior_var2 = GateTypeSequential::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::U;
         };
 
         struct lut_group

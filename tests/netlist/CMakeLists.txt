@@ -1,6 +1,7 @@
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests)
 
 add_executable(runTest-netlist netlist.cpp)
+add_executable(runTest-gate_type gate_type.cpp)
 add_executable(runTest-gate gate.cpp)
 add_executable(runTest-net net.cpp)
 add_executable(runTest-data_container data_container.cpp)
@@ -15,6 +16,7 @@ add_executable(runTest-gate_library gate_library.cpp)
 add_executable(runTest-netlist_utils netlist_utils.cpp)
 
 target_link_libraries(runTest-netlist    pthread gtest hal::core hal::netlist  test_utils)
+target_link_libraries(runTest-gate_type    pthread gtest hal::core hal::netlist  test_utils)
 target_link_libraries(runTest-gate    pthread gtest hal::core hal::netlist test_utils)
 target_link_libraries(runTest-net    pthread gtest hal::core hal::netlist test_utils)
 target_link_libraries(runTest-data_container    pthread gtest hal::core hal::netlist test_utils)
@@ -29,6 +31,7 @@ target_link_libraries(runTest-gate_library   pthread gtest hal::core hal::netlis
 target_link_libraries(runTest-netlist_utils   pthread gtest hal::core hal::netlist test_utils)
 
 add_test(runTest-netlist ${CMAKE_BINARY_DIR}/bin/runTest-netlist --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
+add_test(runTest-gate_type ${CMAKE_BINARY_DIR}/bin/runTest-gate_type --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-gate ${CMAKE_BINARY_DIR}/bin/runTest-gate --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-net ${CMAKE_BINARY_DIR}/bin/runTest-net --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 add_test(runTest-data_container ${CMAKE_BINARY_DIR}/bin/runTest-data_container --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
@@ -45,6 +48,7 @@ add_test(runTest-netlist_utils ${CMAKE_BINARY_DIR}/bin/runTest-netlist_utils --g
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 add_sanitizers(runTest-netlist)
+add_sanitizers(runTest-gate_type)
 add_sanitizers(runTest-gate)
 add_sanitizers(runTest-net)
 add_sanitizers(runTest-data_container)

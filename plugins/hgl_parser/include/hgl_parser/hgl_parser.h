@@ -25,7 +25,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "rapidjson/document.h"
 
 #include <filesystem>
@@ -35,8 +35,6 @@
 
 namespace hal
 {
-    class GateTypeLut;
-
     /**
      * @ingroup netlist
      */
@@ -94,14 +92,14 @@ namespace hal
 
         std::set<std::string> m_cell_names;
 
-        static std::unordered_map<std::string, GateTypeSequential::ClearPresetBehavior> m_string_to_behavior;
+        static std::unordered_map<std::string, GateType::ClearPresetBehavior> m_string_to_behavior;
 
         bool parse_gate_library(const rapidjson::Document& document);
         bool parse_gate_type(const rapidjson::Value& gate_type);
         bool parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name);
         bool parse_group(GroupCtx& group_ctx, const rapidjson::Value& group, const std::string& gt_name);
-        bool parse_lut_config(GateTypeLut* gt_lut, const rapidjson::Value& lut_config);
-        bool parse_ff_config(GateTypeSequential* gt_ff, const rapidjson::Value& ff_config);
-        bool parse_latch_config(GateTypeSequential* gt_latch, const rapidjson::Value& latch_config);
+        bool parse_lut_config(GateType* gt_lut, const rapidjson::Value& lut_config);
+        bool parse_ff_config(GateType* gt_ff, const rapidjson::Value& ff_config);
+        bool parse_latch_config(GateType* gt_latch, const rapidjson::Value& latch_config);
     };
 }    // namespace hal

@@ -1,8 +1,6 @@
 #include "hgl_writer/hgl_writer.h"
 
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include "hal_core/utilities/log.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/prettywriter.h"
@@ -47,11 +45,11 @@ namespace hal
         return true;
     }
 
-    std::unordered_map<GateTypeSequential::ClearPresetBehavior, std::string> HGLWriter::m_behavior_to_string = {{GateTypeSequential::ClearPresetBehavior::L, "L"},
-                                                                                                                {GateTypeSequential::ClearPresetBehavior::H, "H"},
-                                                                                                                {GateTypeSequential::ClearPresetBehavior::N, "N"},
-                                                                                                                {GateTypeSequential::ClearPresetBehavior::T, "T"},
-                                                                                                                {GateTypeSequential::ClearPresetBehavior::X, "X"}};
+    std::unordered_map<GateType::ClearPresetBehavior, std::string> HGLWriter::m_behavior_to_string = {{GateType::ClearPresetBehavior::L, "L"},
+                                                                                                      {GateType::ClearPresetBehavior::H, "H"},
+                                                                                                      {GateType::ClearPresetBehavior::N, "N"},
+                                                                                                      {GateType::ClearPresetBehavior::T, "T"},
+                                                                                                      {GateType::ClearPresetBehavior::X, "X"}};
 
     bool HGLWriter::write_gate_library(rapidjson::Document& document, const GateLibrary* gate_lib)
     {
@@ -94,10 +92,9 @@ namespace hal
             if (base_type == GateType::BaseType::lut)
             {
                 rapidjson::Value lut_config(rapidjson::kObjectType);
-                const GateTypeLut* gt_lut = static_cast<const GateTypeLut*>(gt);
 
                 // bit_order
-                if (gt_lut->is_config_data_ascending_order())
+                if (gt->is_lut_init_ascending())
                 {
                     lut_config.AddMember("bit_order", "ascending", allocator);
                 }
@@ -107,19 +104,18 @@ namespace hal
                 }
 
                 // data_category and data_identifier
-                lut_config.AddMember("data_category", gt_lut->get_config_data_category(), allocator);
-                lut_config.AddMember("data_identifier", gt_lut->get_config_data_identifier(), allocator);
+                lut_config.AddMember("data_category", gt->get_config_data_category(), allocator);
+                lut_config.AddMember("data_identifier", gt->get_config_data_identifier(), allocator);
 
                 cell.AddMember("lut_config", lut_config, allocator);
             }
             else if (base_type == GateType::BaseType::ff)
             {
                 rapidjson::Value ff_config(rapidjson::kObjectType);
-                const GateTypeSequential* gt_ff = static_cast<const GateTypeSequential*>(gt);
 
                 // data_category, data_identifier
-                ff_config.AddMember("data_category", gt_ff->get_init_data_category(), allocator);
-                ff_config.AddMember("data_identifier", gt_ff->get_init_data_identifier(), allocator);
+                ff_config.AddMember("data_category", gt->get_config_data_category(), allocator);
+                ff_config.AddMember("data_identifier", gt->get_config_data_identifier(), allocator);
 
                 // next_state, clocked_on, clear_on, preset_on
                 if (const auto it = functions.find("next_state"); it != functions.end())
@@ -139,12 +135,12 @@ namespace hal
                     ff_config.AddMember("preset_on", it->second.to_string(), allocator);
                 }
 
-                std::pair<GateTypeSequential::ClearPresetBehavior, GateTypeSequential::ClearPresetBehavior> cp_behav = gt_ff->get_clear_preset_behavior();
-                if (cp_behav.first != GateTypeSequential::ClearPresetBehavior::U)
+                std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
+                if (cp_behav.first != GateType::ClearPresetBehavior::U)
                 {
                     ff_config.AddMember("state_clear_preset", m_behavior_to_string[cp_behav.first], allocator);
                 }
-                if (cp_behav.second != GateTypeSequential::ClearPresetBehavior::U)
+                if (cp_behav.second != GateType::ClearPresetBehavior::U)
                 {
                     ff_config.AddMember("neg_state_clear_preset", m_behavior_to_string[cp_behav.second], allocator);
                 }
@@ -154,7 +150,6 @@ namespace hal
             else if (base_type == GateType::BaseType::latch)
             {
                 rapidjson::Value latch_config(rapidjson::kObjectType);
-                const GateTypeSequential* gt_latch = static_cast<const GateTypeSequential*>(gt);
 
                 // next_state, clocked_on, clear_on, preset_on
                 if (const auto it = functions.find("data"); it != functions.end())
@@ -174,12 +169,12 @@ namespace hal
                     latch_config.AddMember("preset_on", it->second.to_string(), allocator);
                 }
 
-                std::pair<GateTypeSequential::ClearPresetBehavior, GateTypeSequential::ClearPresetBehavior> cp_behav = gt_latch->get_clear_preset_behavior();
-                if (cp_behav.first != GateTypeSequential::ClearPresetBehavior::U)
+                std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
+                if (cp_behav.first != GateType::ClearPresetBehavior::U)
                 {
                     latch_config.AddMember("state_clear_preset", m_behavior_to_string[cp_behav.first], allocator);
                 }
-                if (cp_behav.second != GateTypeSequential::ClearPresetBehavior::U)
+                if (cp_behav.second != GateType::ClearPresetBehavior::U)
                 {
                     latch_config.AddMember("neg_state_clear_preset", m_behavior_to_string[cp_behav.second], allocator);
                 }
@@ -262,28 +257,26 @@ namespace hal
         std::vector<std::string> input_pins  = gt->get_input_pins();
         std::vector<std::string> output_pins = gt->get_output_pins();
 
-        std::unordered_map<std::string, std::unordered_set<std::string>> type_to_pins;
-        type_to_pins["power"]  = gt->get_power_pins();
-        type_to_pins["ground"] = gt->get_ground_pins();
+        std::unordered_map<std::string, std::vector<std::string>> type_to_pins;
+        type_to_pins["power"]  = gt->get_pins_of_type(GateType::PinType::power);
+        type_to_pins["ground"] = gt->get_pins_of_type(GateType::PinType::ground);
 
         GateType::BaseType base_type = gt->get_base_type();
 
         if (base_type == GateType::BaseType::ff || base_type == GateType::BaseType::latch)
         {
-            const GateTypeSequential* gt_seq = static_cast<const GateTypeSequential*>(gt);
-
-            type_to_pins["state"]     = gt_seq->get_state_pins();
-            type_to_pins["neg_state"] = gt_seq->get_negated_state_pins();
-            type_to_pins["clock"]     = gt_seq->get_clock_pins();
-            type_to_pins["enable"]    = gt_seq->get_enable_pins();
-            type_to_pins["reset"]     = gt_seq->get_reset_pins();
-            type_to_pins["set"]       = gt_seq->get_set_pins();
-            type_to_pins["data"]      = gt_seq->get_data_pins();
+            type_to_pins["state"]     = gt->get_pins_of_type(GateType::PinType::state);
+            type_to_pins["neg_state"] = gt->get_pins_of_type(GateType::PinType::neg_state);
+            type_to_pins["clock"]     = gt->get_pins_of_type(GateType::PinType::clock);
+            type_to_pins["enable"]    = gt->get_pins_of_type(GateType::PinType::enable);
+            type_to_pins["reset"]     = gt->get_pins_of_type(GateType::PinType::reset);
+            type_to_pins["set"]       = gt->get_pins_of_type(GateType::PinType::set);
+            type_to_pins["data"]      = gt->get_pins_of_type(GateType::PinType::data);
+            type_to_pins["address"]   = gt->get_pins_of_type(GateType::PinType::address);
         }
         else if (base_type == GateType::BaseType::lut)
         {
-            const GateTypeLut* gt_lut = static_cast<const GateTypeLut*>(gt);
-            type_to_pins["lut"]       = gt_lut->get_lut_pins();
+            type_to_pins["lut"] = gt->get_pins_of_type(GateType::PinType::lut);
         }
 
         for (const auto& in_pin : input_pins)
@@ -329,7 +322,7 @@ namespace hal
         {
             for (const auto& [pin_type, pins] : type_to_pins)
             {
-                if (pins.find(res_pin.name) != pins.end())
+                if (std::find(pins.begin(), pins.end(), res_pin.name) != pins.end())
                 {
                     res_pin.type = pin_type;
                     break;

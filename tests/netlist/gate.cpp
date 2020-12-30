@@ -6,7 +6,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/module.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include <iomanip>
 #include <algorithm>
 #include <cassert>
@@ -866,16 +866,16 @@ namespace hal {
             // Create a custom GateLibrary which contains custom lut gates
             GateLibrary lib("imaginary_path", "TEST_LIB");
             auto gl = &lib;
-            auto lut = static_cast<GateTypeLut*>(gl->create_gate_type("LUT_GATE", GateType::BaseType::lut));
+            auto lut = gl->create_gate_type("LUT_GATE", GateType::BaseType::lut);
 
             std::vector<std::string> input_pins({"I0", "I1", "I2"});
             std::vector<std::string> output_pins({"O_LUT", "O_normal", "O_LUT_other"});
 
             lut->add_input_pins(input_pins);
             lut->add_output_pins(output_pins);
-            lut->assign_lut_pin("O_LUT");
-            lut->assign_lut_pin("O_LUT_other");
-            lut->set_config_data_ascending_order(true);
+            lut->assign_pin_type("O_LUT", GateType::PinType::lut);
+            lut->assign_pin_type("O_LUT_other", GateType::PinType::lut);
+            lut->set_lut_init_ascending(true);
             lut->set_config_data_identifier("data_identifier");
             lut->set_config_data_category("data_category");
             {
@@ -920,7 +920,7 @@ namespace hal {
             }
             {
                 // Access the boolean function of a lut, that is stored in descending order
-                lut->set_config_data_ascending_order(false);
+                lut->set_lut_init_ascending(false);
                 auto nl = std::make_unique<Netlist>(gl);
                 Gate* lut_gate = nl->create_gate(MIN_GATE_ID + 0, lut, "lut");
                 for (int i = 0x0; i <= 0xff; i++) {
@@ -932,7 +932,7 @@ namespace hal {
                     EXPECT_EQ(bf.get_truth_table(input_pins),
                               get_truth_table_from_hex_string(i_to_hex_string(i), 8, true));
                 }
-                lut->set_config_data_ascending_order(true);
+                lut->set_lut_init_ascending(true);
             }
             {
                 // Add a boolean function to a lut pin

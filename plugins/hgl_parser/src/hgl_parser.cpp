@@ -1,8 +1,6 @@
 #include "hgl_parser/hgl_parser.h"
 
 #include "hal_core/netlist/boolean_function.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include "hal_core/utilities/log.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
@@ -130,12 +128,12 @@ namespace hal
 
         for (const auto& p : pin_ctx.power_pins)
         {
-            gt->assign_power_pin(p);
+            gt->assign_pin_type(p, GateType::PinType::power);
         }
 
         for (const auto& p : pin_ctx.ground_pins)
         {
-            gt->assign_ground_pin(p);
+            gt->assign_pin_type(p, GateType::PinType::ground);
         }
 
         if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())
@@ -154,7 +152,7 @@ namespace hal
 
         if (type == GateType::BaseType::lut)
         {
-            GateTypeLut* gt_lut = dynamic_cast<GateTypeLut*>(gt);
+            GateType* gt_lut = gt;
 
             if (!gate_type.HasMember("lut_config") || !gate_type["lut_config"].IsString())
             {
@@ -169,7 +167,7 @@ namespace hal
         }
         else if (type == GateType::BaseType::ff)
         {
-            GateTypeSequential* gt_ff = dynamic_cast<GateTypeSequential*>(gt);
+            GateType* gt_ff = gt;
 
             if (!gate_type.HasMember("ff_config") || !gate_type["ff_config"].IsString())
             {
@@ -184,7 +182,7 @@ namespace hal
         }
         else if (type == GateType::BaseType::latch)
         {
-            GateTypeSequential* gt_latch = dynamic_cast<GateTypeSequential*>(gt);
+            GateType* gt_latch = gt;
 
             if (!gate_type.HasMember("latch_config") || !gate_type["latch_config"].IsString())
             {
@@ -330,7 +328,7 @@ namespace hal
         return true;
     }
 
-    bool HGLParser::parse_lut_config(GateTypeLut* gt_lut, const rapidjson::Value& lut_config)
+    bool HGLParser::parse_lut_config(GateType* gt_lut, const rapidjson::Value& lut_config)
     {
         if (!lut_config.HasMember("bit_order") || !lut_config["bit_order"].IsString())
         {
@@ -340,11 +338,11 @@ namespace hal
 
         if (std::string(lut_config["bit_order"].GetString()) == "ascending")
         {
-            gt_lut->set_config_data_ascending_order(true);
+            gt_lut->set_lut_init_ascending(true);
         }
         else
         {
-            gt_lut->set_config_data_ascending_order(false);
+            gt_lut->set_lut_init_ascending(false);
         }
 
         if (!lut_config.HasMember("data_category") || !lut_config["data_category"].IsString())
@@ -366,13 +364,13 @@ namespace hal
         return true;
     }
 
-    std::unordered_map<std::string, GateTypeSequential::ClearPresetBehavior> HGLParser::m_string_to_behavior = {{"L", GateTypeSequential::ClearPresetBehavior::L},
-                                                                                                                {"H", GateTypeSequential::ClearPresetBehavior::H},
-                                                                                                                {"N", GateTypeSequential::ClearPresetBehavior::N},
-                                                                                                                {"T", GateTypeSequential::ClearPresetBehavior::T},
-                                                                                                                {"X", GateTypeSequential::ClearPresetBehavior::X}};
+    std::unordered_map<std::string, GateType::ClearPresetBehavior> HGLParser::m_string_to_behavior = {{"L", GateType::ClearPresetBehavior::L},
+                                                                                                      {"H", GateType::ClearPresetBehavior::H},
+                                                                                                      {"N", GateType::ClearPresetBehavior::N},
+                                                                                                      {"T", GateType::ClearPresetBehavior::T},
+                                                                                                      {"X", GateType::ClearPresetBehavior::X}};
 
-    bool HGLParser::parse_ff_config(GateTypeSequential* gt_ff, const rapidjson::Value& ff_config)
+    bool HGLParser::parse_ff_config(GateType* gt_ff, const rapidjson::Value& ff_config)
     {
         if (ff_config.HasMember("next_state") && ff_config["next_state"].IsString())
         {
@@ -399,7 +397,7 @@ namespace hal
 
         if (has_state && has_neg_state)
         {
-            GateTypeSequential::ClearPresetBehavior cp1, cp2;
+            GateType::ClearPresetBehavior cp1, cp2;
 
             if (const auto it = m_string_to_behavior.find(ff_config["state_clear_preset"].GetString()); it != m_string_to_behavior.end())
             {
@@ -431,18 +429,18 @@ namespace hal
 
         if (ff_config.HasMember("data_category") && ff_config["data_category"].IsString())
         {
-            gt_ff->set_init_data_category(ff_config["data_category"].GetString());
+            gt_ff->set_config_data_category(ff_config["data_category"].GetString());
         }
 
         if (ff_config.HasMember("data_identifier") && ff_config["data_identifier"].IsString())
         {
-            gt_ff->set_init_data_identifier(ff_config["data_identifier"].GetString());
+            gt_ff->set_config_data_identifier(ff_config["data_identifier"].GetString());
         }
 
         return true;
     }
 
-    bool HGLParser::parse_latch_config(GateTypeSequential* gt_latch, const rapidjson::Value& latch_config)
+    bool HGLParser::parse_latch_config(GateType* gt_latch, const rapidjson::Value& latch_config)
     {
         if (latch_config.HasMember("data_in") && latch_config["data_in"].IsString())
         {
@@ -469,7 +467,7 @@ namespace hal
 
         if (has_state && has_neg_state)
         {
-            GateTypeSequential::ClearPresetBehavior cp1, cp2;
+            GateType::ClearPresetBehavior cp1, cp2;
 
             if (const auto it = m_string_to_behavior.find(latch_config["state_clear_preset"].GetString()); it != m_string_to_behavior.end())
             {

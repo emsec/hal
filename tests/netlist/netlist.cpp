@@ -242,7 +242,7 @@ namespace hal {
                 // Try to add a Gate with an invalid gate type
                 NO_COUT_TEST_BLOCK;
                 std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
-                GateType not_in_gl_gate_type("not_in_gl_gate");
+                GateType not_in_gl_gate_type("not_in_gl_gate", GateType::BaseType::combinational);
                 not_in_gl_gate_type.add_output_pins({"O"});
 
                 auto g_0 = nl->create_gate(MIN_GATE_ID + 0, &not_in_gl_gate_type, "");

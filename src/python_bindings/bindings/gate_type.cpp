@@ -5,11 +5,11 @@ namespace hal
     void gate_type_init(py::module& m)
     {
         py::class_<GateType, RawPtrWrapper<GateType>> py_gate_type(m, "GateType", R"(
-        Gate type class containing information about the internals of a specific gate type.
+        A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
 )");
 
         py::enum_<GateType::BaseType>(py_gate_type, "BaseType", R"(
-            Represents the base type of a gate type.
+            Defines the base type of a gate type.
         )")
 
             .value("combinational", GateType::BaseType::combinational, R"(Represents a combinational gate type.)")
@@ -18,10 +18,46 @@ namespace hal
             .value("latch", GateType::BaseType::latch, R"(Represents a sequential latch gate type.)")
             .export_values();
 
-        py_gate_type.def(py::init<const std::string&>(), py::arg("name"), R"(
-            Construct a new gate type by specifying its name.
+        py::enum_<GateType::PinDirection>(py_gate_type, "PinDirection", R"(
+            Defines the direction of a pin.
+        )")
+            .value("input", GateType::PinDirection::input, R"(Input pin.)")
+            .value("output", GateType::PinDirection::output, R"(Output pin.)")
+            .value("inout", GateType::PinDirection::inout, R"(Inout pin.)")
+            .value("internal", GateType::PinDirection::internal, R"(Internal pin.)")
+            .export_values();
+
+        py::enum_<GateType::PinType>(py_gate_type, "PinType", R"(Defines the type of a pin.)")
+            .value("none", GateType::PinType::none, R"(Default pin.)")
+            .value("power", GateType::PinType::power, R"(Power pin.)")
+            .value("ground", GateType::PinType::ground, R"(Ground pin.)")
+            .value("lut", GateType::PinType::lut, R"(Pin that generates output from LUT initialization string.)")
+            .value("state", GateType::PinType::state, R"(Pin that generates output from internal state.)")
+            .value("neg_state", GateType::PinType::neg_state, R"(Pin that generates output from negated internal state.)")
+            .value("clock", GateType::PinType::clock, R"(Clock pin.)")
+            .value("enable", GateType::PinType::enable, R"(Enable pin.)")
+            .value("set", GateType::PinType::set, R"(Set pin.)")
+            .value("reset", GateType::PinType::reset, R"(Reset pin.)")
+            .value("data", GateType::PinType::data, R"(Data pin.)")
+            .value("address", GateType::PinType::address, R"(Address pin.)")
+            .export_values();
+
+        py::enum_<GateType::ClearPresetBehavior>(py_gate_type, "ClearPresetBehavior", R"(
+            Defines the behavior of the gate type in case both clear and preset are active at the same time.
+        )")
+            .value("U", GateType::ClearPresetBehavior::U, R"(Default value when no behavior is specified.)")
+            .value("L", GateType::ClearPresetBehavior::L, R"(Set the internal state to '0'.)")
+            .value("H", GateType::ClearPresetBehavior::H, R"(Set the internal state to '1'.)")
+            .value("N", GateType::ClearPresetBehavior::N, R"(Do not change the internal state.)")
+            .value("T", GateType::ClearPresetBehavior::T, R"(Toggle, i.e., invert the internal state.)")
+            .value("X", GateType::ClearPresetBehavior::X, R"(Set the internal state to 'X'.)")
+            .export_values();
+
+        py_gate_type.def(py::init<const std::string&, GateType::BaseType>(), py::arg("name"), py::arg("base_type"), R"(
+            Construct a new gate type by specifying its name and base type.
 
             :param str name: The name of the gate type.
+            :param hal_py.GateType.BaseType base_type: The base type.
         )");
 
         py_gate_type.def_property_readonly("id", &GateType::get_id, R"(
@@ -83,16 +119,16 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate_type.def("add_input_pin", &GateType::add_input_pin, py::arg("input_pin"), R"(
+        py_gate_type.def("add_input_pin", &GateType::add_input_pin, py::arg("pin"), R"(
             Add an input pin to the gate type.
 
-            :param str input_pin: The name of the input pin to add.
+            :param str pin: The name of the input pin to add.
         )");
 
-        py_gate_type.def("add_input_pins", &GateType::add_input_pins, py::arg("input_pins"), R"(
+        py_gate_type.def("add_input_pins", &GateType::add_input_pins, py::arg("pins"), R"(
             Add a list of input pins to the gate type.
 
-            :param list[str] input_pins: The list of names of input pins to add.
+            :param list[str] pins: The list of names of input pins to add.
         )");
 
         py_gate_type.def_property_readonly("input_pins", &GateType::get_input_pins, R"(
@@ -108,16 +144,16 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_gate_type.def("add_output_pin", &GateType::add_output_pin, py::arg("output_pin"), R"(
+        py_gate_type.def("add_output_pin", &GateType::add_output_pin, py::arg("pin"), R"(
             Add an output pin to the gate type.
 
-            :param str output_pin: The name of the output pin to add.
+            :param str pin: The name of the output pin to add.
         )");
 
-        py_gate_type.def("add_output_pins", &GateType::add_output_pins, py::arg("output_pins"), R"(
+        py_gate_type.def("add_output_pins", &GateType::add_output_pins, py::arg("pins"), R"(
             Add a list of output pins to the gate type.
 
-            :param list[str] output_pins: The list of names of output pins to add.
+            :param list[str] pins: The list of names of output pins to add.
         )");
 
         py_gate_type.def_property_readonly("output_pins", &GateType::get_output_pins, R"(
@@ -185,44 +221,42 @@ namespace hal
             :rtype: dict[str,dict[int,str]]
         )");
 
-        py_gate_type.def("assign_power_pin", &GateType::assign_power_pin, py::arg("pin_name"), R"(
-            Add an existing input pin to the collection of power pins.
-            The pin has to be declared as an input pin beforehand.
-
-            :param str pin_name: The name of the input pin to add.
+        py_gate_type.def("assign_pin_type", &GateType::assign_pin_type, py::arg("pin"), py::arg("pin_type"), R"(
+            Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.
+    
+            :param str pin: The pin.
+            :param hal_py.GateType.PinType pin_type: The pin type to be assigned.
+            :returns: True on success, false otherwise.
+            :rtype: bool
         )");
 
-        py_gate_type.def_property_readonly("power_pins", &GateType::get_power_pins, R"(
-            The set of input pins that that are classified as power pins.
-
-            :type: set[str]
+        py_gate_type.def("get_pin_type", &GateType::get_pin_type, py::arg("pin"), R"(
+            Get the pin type of the given pin. If the pin does not exist, the default type 'none' will be returned.
+        
+            :param str pin: The pin.
+            :returns: The pin type.
+            :rtype: hal_py.GateType.PinType
         )");
 
-        py_gate_type.def("get_power_pins", &GateType::get_power_pins, R"(
-            Get all input pins classfied as power pins.
-
-            :returns: The set of input pin names.
-            :rtype: set[str]
+        py_gate_type.def("get_pin_types", &GateType::get_pin_types, R"(
+            Get the pin types of all pins as a map.
+         
+            :returns: A dict from pin to pin type.
+            :rtype: dict[str,hal_py.GateType.PinType]
         )");
 
-        py_gate_type.def("assign_ground_pin", &GateType::assign_ground_pin, py::arg("pin_name"), R"(
-            Add an existing input pin to the collection of ground pins.
-            The pin has to be declared as an input pin beforehand.
-
-            :param str pin_name: The name of the input pin to add.
+        py_gate_type.def_property_readonly("pin_types", &GateType::get_pin_types, R"(
+            The pin types of all pins as a map.
+         
+            :type: dict[str,hal_py.GateType.PinType]
         )");
 
-        py_gate_type.def_property_readonly("ground_pins", &GateType::get_ground_pins, R"(
-            The set of input pins that that are classified as ground pins.
-
-            :type: set[str]
-        )");
-
-        py_gate_type.def("get_ground_pins", &GateType::get_ground_pins, R"(
-            Get all input pins classfied as ground pins.
-
-            :returns: The set of input pin names.
-            :rtype: set[str]
+        py_gate_type.def("get_pins_of_type", &GateType::get_pins_of_type, R"(
+            Get all pins of the specified pin type.
+        
+            :param hal_py.GateType.PinType pin_type: The pin type.
+            :returns: A list of pins.
+            :rtype: list[str]
         )");
 
         py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("pin_name"), py::arg("function"), R"(
@@ -249,6 +283,77 @@ namespace hal
 
             :returns: A dict from Boolean function names to Boolean functions.
             :rtype: dict[str,hal_py.BooleanFunction]
+        )");
+
+        py_gate_type.def("set_clear_preset_behavior", &GateType::set_clear_preset_behavior, py::arg("cp1"), py::arg("cp2"), R"(
+            Set the behavior that describes the internal state when both clear and preset are active at the same time.
+
+            :param hal_py.GateType.ClearPresetBehavior cp1: The value specifying the behavior for the internal state.
+            :param hal_py.GateType.ClearPresetBehavior cp2: The value specifying the behavior for the negated internal state.
+        )");
+
+        py_gate_type.def("get_clear_preset_behavior", &GateType::get_clear_preset_behavior, R"(
+            Get the behavior of the internal state and the negated internal state when both clear and preset are active at the same time.
+
+            :returns: The values specifying the behavior for the internal and negated internal state.
+            :rytpe: tuple(hal_py.GateType.ClearPresetBehavior, hal_py.GateType.ClearPresetBehavior)
+        )");
+
+        py_gate_type.def_property("config_data_category", &GateType::get_config_data_category, &GateType::set_config_data_category, R"(
+            The category in which to find the configuration data associated with this gate type.
+
+            :type: str
+        )");
+
+        py_gate_type.def("set_config_data_category", &GateType::set_config_data_category, py::arg("category"), R"(
+            Set the category in which to find the configuration data associated with this gate type.
+
+            :param str category:  The data category.
+        )");
+
+        py_gate_type.def("get_config_data_category", &GateType::get_config_data_category, R"(
+            Get the category in which to find the configuration data associated with this gate type.
+
+            :returns: The data category.
+            :rtype: str
+        )");
+
+        py_gate_type.def_property("config_data_identifier", &GateType::get_config_data_identifier, &GateType::set_config_data_identifier, R"(
+            The identifier used to specify the configuration data associated with this gate type.
+
+            :type: str
+        )");
+
+        py_gate_type.def("set_config_data_identifier", &GateType::set_config_data_identifier, py::arg("identifier"), R"(
+            Set the identifier used to specify the configuration data associated with this gate type.
+
+            :param str identifier: The data identifier.
+        )");
+
+        py_gate_type.def("get_config_data_identifier", &GateType::get_config_data_identifier, R"(
+            Get the identifier used to specify the configuration data associated with this gate type.
+
+            :returns: The data identifier.
+            :rtype: str
+        )");
+
+        py_gate_type.def_property("lut_init_ascending", &GateType::is_lut_init_ascending, &GateType::set_lut_init_ascending, R"(
+            For LUT gate types, defines the bit-order of the initialization string. True if ascending bit-order, false otherwise.
+
+            :type: bool
+        )");
+
+        py_gate_type.def("set_lut_init_ascending", &GateType::set_lut_init_ascending, py::arg("ascending"), R"(
+            For LUT gate types, set the bit-order of the initialization string.
+
+            :param bool ascending: True if ascending bit-order, false otherwise.
+        )");
+
+        py_gate_type.def("is_lut_init_ascending", &GateType::is_lut_init_ascending, R"(
+            For LUT gate types, get the bit-order of the initialization string.
+
+            :returns: True if ascending bit-order, false otherwise.
+            :rtype: bool
         )");
     }
 }    // namespace hal

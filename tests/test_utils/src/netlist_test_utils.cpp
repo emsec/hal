@@ -1,7 +1,7 @@
 
 #include "netlist_test_utils.h"
 
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 
 //using namespace hal;
 //namespace test_utils = hal;

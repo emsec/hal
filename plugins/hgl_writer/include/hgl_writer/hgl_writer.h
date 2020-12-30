@@ -26,7 +26,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 
 #define RAPIDJSON_HAS_STDSTRING 1
 #include "rapidjson/document.h"
@@ -75,7 +75,7 @@ namespace hal
             std::map<u32, std::string> index_to_pin;
         };
 
-        static std::unordered_map<GateTypeSequential::ClearPresetBehavior, std::string> m_behavior_to_string;
+        static std::unordered_map<GateType::ClearPresetBehavior, std::string> m_behavior_to_string;
 
         bool write_gate_library(rapidjson::Document& document, const GateLibrary* gate_lib);
 

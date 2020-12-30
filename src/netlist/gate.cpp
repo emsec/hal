@@ -2,7 +2,7 @@
 
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_system/gate_event_handler.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -152,9 +152,8 @@ namespace hal
 
         if (m_type->get_base_type() == GateType::BaseType::lut)
         {
-            auto lut_type = static_cast<const GateTypeLut*>(m_type);
-            auto lut_pins = lut_type->get_lut_pins();
-            if (lut_pins.find(name) != lut_pins.end())
+            auto lut_pins = m_type->get_pins_of_type(GateType::PinType::lut);
+            if (std::find(lut_pins.begin(), lut_pins.end(), name) != lut_pins.end())
             {
                 return get_lut_function(name);
             }
@@ -190,8 +189,7 @@ namespace hal
 
         if (!only_custom_functions && m_type->get_base_type() == GateType::BaseType::lut)
         {
-            auto lut_type = static_cast<const GateTypeLut*>(m_type);
-            for (auto pin : lut_type->get_lut_pins())
+            for (auto pin : m_type->get_pins_of_type(GateType::PinType::lut))
             {
                 res.emplace(pin, get_lut_function(pin));
             }
@@ -204,12 +202,10 @@ namespace hal
     {
         UNUSED(pin);
 
-        auto lut_type = static_cast<const GateTypeLut*>(m_type);
-
-        std::string category   = lut_type->get_config_data_category();
-        std::string key        = lut_type->get_config_data_identifier();
+        std::string category   = m_type->get_config_data_category();
+        std::string key        = m_type->get_config_data_identifier();
         std::string config_str = std::get<1>(get_data(category, key));
-        auto is_ascending      = lut_type->is_config_data_ascending_order();
+        auto is_ascending      = m_type->is_lut_init_ascending();
         auto inputs            = get_input_pins();
 
         BooleanFunction result = BooleanFunction::ZERO;
@@ -310,11 +306,10 @@ namespace hal
             auto output_pins = m_type->get_output_pins();
             if (!output_pins.empty() && name == output_pins[0])
             {
-                auto lut_type = static_cast<const GateTypeLut*>(m_type);
-                auto tt       = func.get_truth_table(get_input_pins());
+                auto tt = func.get_truth_table(get_input_pins());
 
                 u64 config_value = 0;
-                if (lut_type->is_config_data_ascending_order())
+                if (m_type->is_lut_init_ascending())
                 {
                     std::reverse(tt.begin(), tt.end());
                 }
@@ -329,8 +324,8 @@ namespace hal
                     config_value |= v;
                 }
 
-                std::string category = lut_type->get_config_data_category();
-                std::string key      = lut_type->get_config_data_identifier();
+                std::string category = m_type->get_config_data_category();
+                std::string key      = m_type->get_config_data_identifier();
 
                 std::stringstream stream;
                 stream << std::hex << config_value;

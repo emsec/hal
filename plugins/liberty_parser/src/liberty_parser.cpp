@@ -1,8 +1,6 @@
 #include "liberty_parser/liberty_parser.h"
 
 #include "hal_core/netlist/boolean_function.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
 #include "hal_core/utilities/log.h"
 
 #include <fstream>
@@ -682,11 +680,11 @@ namespace hal
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        ff.special_behavior_var1 = GateTypeSequential::ClearPresetBehavior(pos + 1);
+                        ff.special_behavior_var1 = GateType::ClearPresetBehavior(pos + 1);
                     }
                     else
                     {
-                        ff.special_behavior_var2 = GateTypeSequential::ClearPresetBehavior(pos + 1);
+                        ff.special_behavior_var2 = GateType::ClearPresetBehavior(pos + 1);
                     }
                 }
                 else
@@ -764,11 +762,11 @@ namespace hal
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        latch.special_behavior_var1 = GateTypeSequential::ClearPresetBehavior(pos + 1);
+                        latch.special_behavior_var1 = GateType::ClearPresetBehavior(pos + 1);
                     }
                     else
                     {
-                        latch.special_behavior_var2 = GateTypeSequential::ClearPresetBehavior(pos + 1);
+                        latch.special_behavior_var2 = GateType::ClearPresetBehavior(pos + 1);
                     }
                 }
                 else
@@ -899,17 +897,17 @@ namespace hal
 
         if (cell.type == GateType::BaseType::combinational)
         {
-            gt = std::make_unique<GateType>(cell.name);
+            gt = std::make_unique<GateType>(cell.name, cell.type);
 
             gt->add_input_pins(input_pins);
             gt->add_output_pins(output_pins);
         }
         else if (cell.type == GateType::BaseType::ff)
         {
-            auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
+            gt = std::make_unique<GateType>(cell.name, cell.type);
 
-            seq_gt->add_input_pins(input_pins);
-            seq_gt->add_output_pins(output_pins);
+            gt->add_input_pins(input_pins);
+            gt->add_output_pins(output_pins);
 
             if (!cell.ff.clocked_on.empty())
             {
@@ -931,9 +929,9 @@ namespace hal
                 cell.special_functions["clear"] = cell.ff.clear;
             }
 
-            seq_gt->set_clear_preset_behavior(cell.ff.special_behavior_var1, cell.ff.special_behavior_var2);
-            seq_gt->set_init_data_category(cell.ff.data_category);
-            seq_gt->set_init_data_identifier(cell.ff.data_identifier);
+            gt->set_clear_preset_behavior(cell.ff.special_behavior_var1, cell.ff.special_behavior_var2);
+            gt->set_config_data_category(cell.ff.data_category);
+            gt->set_config_data_identifier(cell.ff.data_identifier);
 
             for (auto& pin : cell.pins)
             {
@@ -941,7 +939,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->assign_state_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::state);
                     }
 
                     pin.function = "";
@@ -950,7 +948,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->assign_negated_state_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
                     }
 
                     pin.function = "";
@@ -960,7 +958,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->assign_clock_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::clock);
                     }
                 }
             }
@@ -973,7 +971,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->assign_state_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::state);
                         }
 
                         pin.function = "";
@@ -982,7 +980,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->assign_negated_state_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
                         }
 
                         pin.function = "";
@@ -992,20 +990,18 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->assign_clock_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::clock);
                         }
                     }
                 }
             }
-
-            gt = std::move(seq_gt);
         }
         else if (cell.type == GateType::BaseType::latch)
         {
-            auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
+            gt = std::make_unique<GateType>(cell.name, cell.type);
 
-            seq_gt->add_input_pins(input_pins);
-            seq_gt->add_output_pins(output_pins);
+            gt->add_input_pins(input_pins);
+            gt->add_output_pins(output_pins);
 
             if (!cell.latch.enable.empty())
             {
@@ -1027,7 +1023,7 @@ namespace hal
                 cell.special_functions["clear"] = cell.latch.clear;
             }
 
-            seq_gt->set_clear_preset_behavior(cell.latch.special_behavior_var1, cell.latch.special_behavior_var2);
+            gt->set_clear_preset_behavior(cell.latch.special_behavior_var1, cell.latch.special_behavior_var2);
 
             for (auto& pin : cell.pins)
             {
@@ -1035,7 +1031,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->assign_state_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::state);
                     }
 
                     pin.function = "";
@@ -1044,7 +1040,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->assign_negated_state_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
                     }
 
                     pin.function = "";
@@ -1054,7 +1050,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->assign_clock_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::clock);
                     }
                 }
             }
@@ -1067,7 +1063,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->assign_state_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::state);
                         }
 
                         pin.function = "";
@@ -1076,7 +1072,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->assign_negated_state_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
                         }
 
                         pin.function = "";
@@ -1086,24 +1082,22 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->assign_clock_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::clock);
                         }
                     }
                 }
             }
-
-            gt = std::move(seq_gt);
         }
         else if (cell.type == GateType::BaseType::lut)
         {
-            auto lut_gt = std::make_unique<GateTypeLut>(cell.name);
+            gt = std::make_unique<GateType>(cell.name, GateType::BaseType::lut);
 
-            lut_gt->add_input_pins(input_pins);
-            lut_gt->add_output_pins(output_pins);
+            gt->add_input_pins(input_pins);
+            gt->add_output_pins(output_pins);
 
-            lut_gt->set_config_data_category(cell.lut.data_category);
-            lut_gt->set_config_data_identifier(cell.lut.data_identifier);
-            lut_gt->set_config_data_ascending_order(cell.lut.data_direction == "ascending");
+            gt->set_config_data_category(cell.lut.data_category);
+            gt->set_config_data_identifier(cell.lut.data_identifier);
+            gt->set_lut_init_ascending(cell.lut.data_direction == "ascending");
 
             for (auto& pin : cell.pins)
             {
@@ -1111,7 +1105,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        lut_gt->assign_lut_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::lut);
                     }
 
                     pin.function = "";
@@ -1126,15 +1120,13 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            lut_gt->assign_lut_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::lut);
                         }
 
                         pin.function = "";
                     }
                 }
             }
-
-            gt = std::move(lut_gt);
         }
 
         for (const auto& pin : cell.pins)
@@ -1143,7 +1135,7 @@ namespace hal
             {
                 for (const auto& pin_name : pin.pin_names)
                 {
-                    gt->assign_power_pin(pin_name);
+                    gt->assign_pin_type(pin_name, GateType::PinType::power);
                 }
             }
 
@@ -1151,7 +1143,7 @@ namespace hal
             {
                 for (const auto& pin_name : pin.pin_names)
                 {
-                    gt->assign_ground_pin(pin_name);
+                    gt->assign_pin_type(pin_name, GateType::PinType::ground);
                 }
             }
         }

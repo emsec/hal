@@ -26,7 +26,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
