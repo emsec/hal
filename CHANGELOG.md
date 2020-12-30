@@ -9,18 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added **highly experimental** way to close and reopen netlists at runtime
 * added creation of backups for Python files created within the editor outside of the `.hal` file
 * added user prompt when detecting Python file backups after a crash
-* added gate library writer interface to enable writing out gate library files
-* separated gate library manager from gate library parser interface
-* extended gate library functionality
+* refactored gate library handling
+  * separated gate library manager from gate library parser interface
+  * added gate library writer interface to enable writing out gate library files
+* extended and refactored gate library functionality
   * added `create_gate_type` to class `GateLibrary` to enable gate type creation from Python
-  * added `power` and `ground` pins to class `GateType`
-  * added `enable`, `reset`, `set`, and `data` pins to class `GateTypeSequential`
+  * added `mark_vcc_gate_type` and `mark_gnd_gate_type` to enable marking gate types as power or ground connections
+  * deprecated `add_gate_type` 
+  * removed `GateTypeSequential` and `GateTypeLut` classes and moved functionality into class `GateType`
+  * added pin types to `GateType` to enable assigning special-purpose pins
   * renamed some functions to have shorter and more understandable names
 * added new gate library format: "HAL Gate Library" (HGL)
-  * supports assignment of `enable`, `set`, `reset`, and `data` pins to sequential gates
+  * supports assignment of enable, set, reset, data, and address pins to gate types
   * added parser for HGL (`.hgl`) files
   * added writer for HGL (`.hgl`) files
-* added parsing of `power` and `ground` pins (`pg_pin`) to Liberty parser
+* added parsing of power and ground pins (`pg_pin`) to Liberty parser
 
 ## [3.1.10] - 2020-12-18 14:00:00+02:00 (urgency: medium)
 * added `SB_GB_IO`, `SB_GB`, `SB_I2C`, `SB_SPI`, `SB_HFOSC`, and `SB_LFOSC` gate types to `ICE40ULTRA` gate library
