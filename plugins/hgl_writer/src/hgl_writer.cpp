@@ -15,7 +15,8 @@ namespace hal
                                                                                                   {GateType::BaseType::latch, "latch"},
                                                                                                   {GateType::BaseType::lut, "lut"},
                                                                                                   {GateType::BaseType::ram, "ram"},
-                                                                                                  {GateType::BaseType::io, "io"}};
+                                                                                                  {GateType::BaseType::io, "io"},
+                                                                                                  {GateType::BaseType::buffer, "buffer"}};
 
     const std::unordered_map<GateType::PinType, std::string> HGLWriter::m_pin_type_to_string = {{GateType::PinType::none, "none"},
                                                                                                 {GateType::PinType::power, "power"},
@@ -73,6 +74,11 @@ namespace hal
 
     bool HGLWriter::write_gate_library(rapidjson::Document& document, const GateLibrary* gate_lib)
     {
+        // TODO remove
+        GateLibrarySpecificUtils pl;
+        m_utils = pl.get_gl_utils(gate_lib);
+        // TODO end remove
+
         rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
 
         // library name
@@ -83,7 +89,10 @@ namespace hal
 
         for (const auto& gt : gate_lib->get_gate_types())
         {
-            gate_types.push_back(gt.second);
+            if ((gt.first != "HAL_GND") && (gt.first != "HAL_VDD"))
+            {
+                gate_types.push_back(gt.second);
+            }
         }
 
         std::sort(gate_types.begin(), gate_types.end(), [](GateType* l, GateType* r) { return l->get_id() < r->get_id(); });
@@ -218,7 +227,7 @@ namespace hal
                 {
                     pin.AddMember("x_function", pin_ctx.x_function, allocator);
                 }
-                if (pin_ctx.function != "")
+                if (pin_ctx.z_function != "")
                 {
                     pin.AddMember("z_function", pin_ctx.z_function, allocator);
                 }
@@ -319,6 +328,41 @@ namespace hal
                 pin_it->z_function = it->second.to_string();
             }
         }
+
+        //TODO remove
+        if (m_utils != nullptr)
+        {
+            std::unordered_set<std::string> clock_pins  = m_utils->get_clock_ports(gt);
+            std::unordered_set<std::string> enable_pins = m_utils->get_enable_ports(gt);
+            std::unordered_set<std::string> set_pins    = m_utils->get_set_ports(gt);
+            std::unordered_set<std::string> reset_pins  = m_utils->get_reset_ports(gt);
+            std::unordered_set<std::string> data_pins   = m_utils->get_data_ports(gt);
+
+            for (auto it = res.begin(); it != res.end(); it++)
+            {
+                if (clock_pins.find(it->name) != clock_pins.end())
+                {
+                    it->type = m_pin_type_to_string.at(GateType::PinType::clock);
+                }
+                else if (enable_pins.find(it->name) != enable_pins.end())
+                {
+                    it->type = m_pin_type_to_string.at(GateType::PinType::enable);
+                }
+                else if (set_pins.find(it->name) != set_pins.end())
+                {
+                    it->type = m_pin_type_to_string.at(GateType::PinType::set);
+                }
+                else if (reset_pins.find(it->name) != reset_pins.end())
+                {
+                    it->type = m_pin_type_to_string.at(GateType::PinType::reset);
+                }
+                else if (data_pins.find(it->name) != data_pins.end())
+                {
+                    it->type = m_pin_type_to_string.at(GateType::PinType::data);
+                }
+            }
+        }
+        // TODO end remove
 
         return res;
     }

@@ -4,8 +4,13 @@
 
 namespace hal
 {
-    const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string =
-        {{BaseType::combinational, "combinational"}, {BaseType::ff, "ff"}, {BaseType::latch, "latch"}, {BaseType::lut, "lut"}, {BaseType::ram, "ram"}, {BaseType::io, "io"}};
+    const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string         = {{BaseType::combinational, "combinational"},
+                                                                                                 {BaseType::ff, "ff"},
+                                                                                                 {BaseType::latch, "latch"},
+                                                                                                 {BaseType::lut, "lut"},
+                                                                                                 {BaseType::ram, "ram"},
+                                                                                                 {BaseType::io, "io"},
+                                                                                                 {BaseType::buffer, "buffer"}};
     const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::input, "input"},
                                                                                                          {PinDirection::output, "output"},
                                                                                                          {PinDirection::inout, "inout"},
@@ -183,6 +188,11 @@ namespace hal
     std::unordered_map<std::string, std::map<u32, std::string>> GateType::get_output_pin_groups() const
     {
         return m_output_pin_groups;
+    }
+
+    std::unordered_map<std::string, GateType::PinDirection> GateType::get_pin_directions() const
+    {
+        return m_pin_to_direction;
     }
 
     bool GateType::assign_pin_type(const std::string& pin, PinType pin_type)

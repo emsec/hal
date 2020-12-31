@@ -52,7 +52,8 @@ namespace hal
             ff,            /**< Represents a sequential FF gate type. **/
             latch,         /**< Represents a sequential latch gate type. **/
             ram,           /**< Represents a sequential RAM gate type. **/
-            io             /**< Represents an IO gate type. **/
+            io,            /**< Represents an IO gate type. **/
+            buffer         /**< Represents a buffer gate type. **/
         };
 
         /**
@@ -271,6 +272,14 @@ namespace hal
          * @returns A map from pin group names to a map from pin indices to pin names.
          */
         std::unordered_map<std::string, std::map<u32, std::string>> get_output_pin_groups() const;
+
+        /**
+         * TODO pybind, test
+         * Get the pin directions of all pins as a map.
+         * 
+         * @returns A map from pin to pin direction.
+         */
+        std::unordered_map<std::string, PinDirection> get_pin_directions() const;
 
         /**
          * Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.

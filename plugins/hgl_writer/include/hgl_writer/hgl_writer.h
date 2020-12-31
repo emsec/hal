@@ -23,6 +23,10 @@
 
 #pragma once
 
+// TODO remove
+#include "gate_library_specific_utils/include/plugin_gate_library_specific_utils.h"
+// TODO end remove
+
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h"
@@ -74,6 +78,10 @@ namespace hal
             std::string direction;
             std::map<u32, std::string> index_to_pin;
         };
+
+        // TODO remove
+        std::unique_ptr<gate_library_specific_utils::Utils> m_utils;
+        // TODO end remove
 
         static const std::unordered_map<GateType::ClearPresetBehavior, std::string> m_behavior_to_string;
         static const std::unordered_map<GateType::BaseType, std::string> m_base_type_to_string;
