@@ -7,6 +7,25 @@
 
 namespace hal
 {
+    const std::unordered_map<std::string, GateType::BaseType> HGLParser::m_string_to_base_type = {{"combinational", GateType::BaseType::combinational},
+                                                                                                  {"ff", GateType::BaseType::ff},
+                                                                                                  {"latch", GateType::BaseType::latch},
+                                                                                                  {"lut", GateType::BaseType::lut},
+                                                                                                  {"ram", GateType::BaseType::ram}};
+
+    const std::unordered_map<std::string, GateType::PinType> HGLParser::m_string_to_pin_type = {{"none", GateType::PinType::none},
+                                                                                                {"power", GateType::PinType::power},
+                                                                                                {"ground", GateType::PinType::ground},
+                                                                                                {"lut", GateType::PinType::lut},
+                                                                                                {"state", GateType::PinType::state},
+                                                                                                {"neg_state", GateType::PinType::neg_state},
+                                                                                                {"clock", GateType::PinType::clock},
+                                                                                                {"enable", GateType::PinType::enable},
+                                                                                                {"set", GateType::PinType::set},
+                                                                                                {"reset", GateType::PinType::reset},
+                                                                                                {"data", GateType::PinType::data},
+                                                                                                {"address", GateType::PinType::address}};
+
     std::unique_ptr<GateLibrary> HGLParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
@@ -82,26 +101,13 @@ namespace hal
         if (gate_type.HasMember("type") && gate_type["type"].IsString())
         {
             std::string type_str = gate_type["type"].GetString();
-
-            if (type_str == "combinational")
+            if (const auto it = m_string_to_base_type.find(type_str); it != m_string_to_base_type.end())
             {
-                type = GateType::BaseType::combinational;
-            }
-            else if (type_str == "lut")
-            {
-                type = GateType::BaseType::lut;
-            }
-            else if (type_str == "ff")
-            {
-                type = GateType::BaseType::ff;
-            }
-            else if (type_str == "latch")
-            {
-                type = GateType::BaseType::latch;
+                type = it->second;
             }
             else
             {
-                log_error("hgl_parser", "invalid base type '{}' given for gate type '{}'.", gate_type["type"].GetString(), name);
+                log_error("hgl_parser", "invalid base type '{}' given for gate type '{}'.", type_str, name);
                 return false;
             }
         }
@@ -126,14 +132,9 @@ namespace hal
         gt->add_input_pins(pin_ctx.input_pins);
         gt->add_output_pins(pin_ctx.output_pins);
 
-        for (const auto& p : pin_ctx.power_pins)
+        for (const auto& [pin, type] : pin_ctx.pin_to_type)
         {
-            gt->assign_pin_type(p, GateType::PinType::power);
-        }
-
-        for (const auto& p : pin_ctx.ground_pins)
-        {
-            gt->assign_pin_type(p, GateType::PinType::ground);
+            gt->assign_pin_type(pin, type);
         }
 
         if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())
@@ -154,7 +155,7 @@ namespace hal
         {
             GateType* gt_lut = gt;
 
-            if (!gate_type.HasMember("lut_config") || !gate_type["lut_config"].IsString())
+            if (!gate_type.HasMember("lut_config") || !gate_type["lut_config"].IsObject())
             {
                 log_error("hgl_parser", "invalid or missing LUT config for gate type '{}'.", name);
                 return false;
@@ -169,7 +170,7 @@ namespace hal
         {
             GateType* gt_ff = gt;
 
-            if (!gate_type.HasMember("ff_config") || !gate_type["ff_config"].IsString())
+            if (!gate_type.HasMember("ff_config") || !gate_type["ff_config"].IsObject())
             {
                 log_error("hgl_parser", "invalid or missing flip-flop config for gate type '{}'.", name);
                 return false;
@@ -184,7 +185,7 @@ namespace hal
         {
             GateType* gt_latch = gt;
 
-            if (!gate_type.HasMember("latch_config") || !gate_type["latch_config"].IsString())
+            if (!gate_type.HasMember("latch_config") || !gate_type["latch_config"].IsObject())
             {
                 log_error("hgl_parser", "invalid or missing latch config for gate type '{}'.", name);
                 return false;
@@ -201,7 +202,7 @@ namespace hal
             gt->add_boolean_function(f_name, BooleanFunction::from_string(func, pin_ctx.input_pins));
         }
 
-        return false;
+        return true;
     }
 
     bool HGLParser::parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name)
@@ -257,14 +258,14 @@ namespace hal
 
         if (pin.HasMember("type") && pin["type"].IsString())
         {
-            std::string type = pin["type"].GetString();
-            if (auto it = pin_ctx.type_to_data.find(type); it != pin_ctx.type_to_data.end())
+            std::string type_str = pin["type"].GetString();
+            if (auto it = m_string_to_pin_type.find(type_str); it != m_string_to_pin_type.end())
             {
-                it->second->push_back(name);
+                pin_ctx.pin_to_type.emplace(name, it->second);
             }
             else
             {
-                log_warning("hgl_parser", "invalid type '{}' given for pin '{}' of gate type '{}'.", type, name, gt_name);
+                log_warning("hgl_parser", "invalid type '{}' given for pin '{}' of gate type '{}'.", type_str, name, gt_name);
                 return false;
             }
         }
@@ -285,7 +286,7 @@ namespace hal
 
         // read index to pin mapping
         std::map<u32, std::string> index_to_pin;
-        if (!group.HasMember("pins") || !group["pins"].IsArray())
+        if (!group.HasMember("pins") || !group["pins"].IsObject())
         {
             log_error("hgl_parser", "no pins given for group '{}' of gate type '{}'.", name, gt_name);
             return false;

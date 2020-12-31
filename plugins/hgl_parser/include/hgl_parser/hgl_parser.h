@@ -58,26 +58,7 @@ namespace hal
             std::vector<std::string> input_pins;
             std::vector<std::string> output_pins;
             std::unordered_map<std::string, std::string> boolean_functions;
-            std::vector<std::string> power_pins;
-            std::vector<std::string> ground_pins;
-            std::vector<std::string> lut_pins;
-            std::vector<std::string> state_pins;
-            std::vector<std::string> neg_state_pins;
-            std::vector<std::string> clock_pins;
-            std::vector<std::string> enable_pins;
-            std::vector<std::string> reset_pins;
-            std::vector<std::string> set_pins;
-            std::vector<std::string> data_pins;
-            const std::unordered_map<std::string, std::vector<std::string>*> type_to_data = {{"power", &power_pins},
-                                                                                             {"ground", &ground_pins},
-                                                                                             {"lut", &lut_pins},
-                                                                                             {"state", &state_pins},
-                                                                                             {"neg_state", &neg_state_pins},
-                                                                                             {"clock", &clock_pins},
-                                                                                             {"enable", &enable_pins},
-                                                                                             {"reset", &reset_pins},
-                                                                                             {"set", &set_pins},
-                                                                                             {"data", &data_pins}};
+            std::unordered_map<std::string, GateType::PinType> pin_to_type;
         };
 
         struct GroupCtx
@@ -93,6 +74,9 @@ namespace hal
         std::set<std::string> m_cell_names;
 
         static std::unordered_map<std::string, GateType::ClearPresetBehavior> m_string_to_behavior;
+
+        static const std::unordered_map<std::string, GateType::BaseType> m_string_to_base_type;
+        static const std::unordered_map<std::string, GateType::PinType> m_string_to_pin_type;
 
         bool parse_gate_library(const rapidjson::Document& document);
         bool parse_gate_type(const rapidjson::Value& gate_type);
