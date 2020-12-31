@@ -48,7 +48,8 @@ namespace hal
             combinational, /**< Represents a combinational gate type. **/
             lut,           /**< Represents a combinational LUT gate type. **/
             ff,            /**< Represents a sequential FF gate type. **/
-            latch          /**< Represents a sequential latch gate type. **/
+            latch,         /**< Represents a sequential latch gate type. **/
+            ram            /**< Represents a sequential RAM gate type. **/
         };
 
         /**
@@ -324,7 +325,6 @@ namespace hal
         std::unordered_map<std::string, BooleanFunction> get_boolean_functions() const;
 
         /**
-         * TODO test
          * Set the behavior that describes the internal state when both clear and preset are active at the same time.
          *
          * @param[in] cp1 - The value specifying the behavior for the internal state.
@@ -333,7 +333,6 @@ namespace hal
         void set_clear_preset_behavior(ClearPresetBehavior cp1, ClearPresetBehavior cp2);
 
         /**
-         * TODO test
          * Get the behavior of the internal state and the negated internal state when both clear and preset are active at the same time.
          *
          * @returns The values specifying the behavior for the internal and negated internal state.
@@ -405,9 +404,9 @@ namespace hal
 
         std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior;
 
-        std::string m_config_data_category;
-        std::string m_config_data_identifier;
-        bool m_ascending;
+        std::string m_config_data_category = "";
+        std::string m_config_data_identifier = "";
+        bool m_ascending = true;
 
         GateType(const GateType&) = delete;               // disable copy-constructor
         GateType& operator=(const GateType&) = delete;    // disable copy-assignment

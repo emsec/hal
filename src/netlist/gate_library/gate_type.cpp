@@ -7,7 +7,8 @@ namespace hal
     const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string         = {{BaseType::combinational, "combinational"},
                                                                                                  {BaseType::ff, "ff"},
                                                                                                  {BaseType::latch, "latch"},
-                                                                                                 {BaseType::lut, "lut"}};
+                                                                                                 {BaseType::lut, "lut"},
+                                                                                                 {BaseType::ram, "ram"}};
     const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::input, "input"},
                                                                                                          {PinDirection::output, "output"},
                                                                                                          {PinDirection::inout, "inout"},
@@ -27,7 +28,7 @@ namespace hal
 
     const std::unordered_map<GateType::PinDirection, std::unordered_set<GateType::PinType>> GateType::m_direction_to_types = {
         {PinDirection::input, {PinType::none, PinType::power, PinType::ground, PinType::clock, PinType::enable, PinType::set, PinType::reset, PinType::data, PinType::address}},
-        {PinDirection::output, {PinType::none, PinType::lut, PinType::state, PinType::neg_state}}};
+        {PinDirection::output, {PinType::none, PinType::lut, PinType::state, PinType::neg_state, PinType::data, PinType::address}}};
 
     GateType::GateType(const std::string& name, BaseType base_type)
     {

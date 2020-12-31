@@ -56,6 +56,12 @@ namespace hal
         EXPECT_EQ(gt4.get_name(), "lut");
         EXPECT_EQ(gt4.get_base_type(), GateType::BaseType::lut);
 
+        // RAM gate type
+        GateType gt5("ram", GateType::BaseType::ram);
+        EXPECT_EQ(gt5.get_id(), 5);
+        EXPECT_EQ(gt5.get_name(), "ram");
+        EXPECT_EQ(gt5.get_base_type(), GateType::BaseType::ram);
+
         TEST_END
     }
 
@@ -256,7 +262,7 @@ namespace hal
      *
      * Functions: assign_pin_type, get_pin_type, get_pin_types, get_pins_of_type
      */
-    TEST_F(GateTypeTest, check_power_ground_pins)
+    TEST_F(GateTypeTest, check_pin_types)
     {
         TEST_START
 
@@ -344,7 +350,7 @@ namespace hal
             std::unordered_map<std::string, GateType::PinType> pin_to_type;
 
             std::vector<std::string> in_pins = {"I0", "I1", "I2", "I3", "I4", "I5", "I6"};
-            std::vector<std::string> out_pins = {"O0", "O1", "O2"};
+            std::vector<std::string> out_pins = {"O0", "O1", "O2", "O3", "O4"};
 
             gt.add_input_pins(in_pins);
             gt.add_output_pins(out_pins);
@@ -368,12 +374,12 @@ namespace hal
             ASSERT_FALSE(gt.assign_pin_type("I6", GateType::PinType::neg_state));
             ASSERT_TRUE(gt.assign_pin_type("O0", GateType::PinType::state));
             ASSERT_TRUE(gt.assign_pin_type("O1", GateType::PinType::neg_state));
-            ASSERT_FALSE(gt.assign_pin_type("O2", GateType::PinType::clock));
-            ASSERT_FALSE(gt.assign_pin_type("O2", GateType::PinType::enable));
-            ASSERT_FALSE(gt.assign_pin_type("O2", GateType::PinType::set));
-            ASSERT_FALSE(gt.assign_pin_type("O2", GateType::PinType::reset));
-            ASSERT_FALSE(gt.assign_pin_type("O2", GateType::PinType::data));
-            ASSERT_FALSE(gt.assign_pin_type("O2", GateType::PinType::address));
+            ASSERT_FALSE(gt.assign_pin_type("O4", GateType::PinType::clock));
+            ASSERT_FALSE(gt.assign_pin_type("O4", GateType::PinType::enable));
+            ASSERT_FALSE(gt.assign_pin_type("O4", GateType::PinType::set));
+            ASSERT_FALSE(gt.assign_pin_type("O4", GateType::PinType::reset));
+            ASSERT_TRUE(gt.assign_pin_type("O2", GateType::PinType::data));
+            ASSERT_TRUE(gt.assign_pin_type("O3", GateType::PinType::address));
 
             pin_to_type = {
                 {"I0", GateType::PinType::clock},
@@ -385,7 +391,9 @@ namespace hal
                 {"I6", GateType::PinType::none},
                 {"O0", GateType::PinType::state},
                 {"O1", GateType::PinType::neg_state},
-                {"O2", GateType::PinType::none}};
+                {"O2", GateType::PinType::data},
+                {"O3", GateType::PinType::address},
+                {"O4", GateType::PinType::none}};
 
             EXPECT_EQ(gt.get_pin_types(), pin_to_type);
         }
