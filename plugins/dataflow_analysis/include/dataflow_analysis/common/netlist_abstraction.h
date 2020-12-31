@@ -2,8 +2,6 @@
 
 #include "hal_core/defines.h"
 
-#include "gate_library_specific_utils/include/plugin_gate_library_specific_utils.h"
-
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -28,7 +26,6 @@ namespace hal
             Netlist* nl;
 
             // utils
-            std::shared_ptr<gate_library_specific_utils::Utils> utils;
             bool yosys;
 
             // all ffs

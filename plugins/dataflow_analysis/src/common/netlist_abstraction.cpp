@@ -12,9 +12,6 @@ namespace hal
     {
         NetlistAbstraction::NetlistAbstraction(Netlist* nl_arg) : nl(nl_arg)
         {
-            // Get gate library specific utils
-            auto plugin_gl_utils = dynamic_cast<GateLibrarySpecificUtils*>(plugin_manager::get_plugin_instance("gate_library_specific_utils"));
-            utils = std::shared_ptr<gate_library_specific_utils::Utils>(plugin_gl_utils->get_gl_utils(nl));
         }
 
         std::shared_ptr<Grouping> NetlistAbstraction::create_initial_grouping() const

@@ -1,14 +1,13 @@
 #pragma once
 
-#include "utils/utils.h"
-
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "utils/utils.h"
 
 namespace hal
 {
     /* forward declaration */
     class Gate;
-    class Netlist;
+    class GateLibrary;
     class Net;
 
     class PLUGIN_API GateLibrarySpecificUtils : public BasePluginInterface
@@ -19,8 +18,8 @@ namespace hal
 
         void initialize() override;
 
-        std::unique_ptr<gate_library_specific_utils::Utils> get_gl_utils(const Netlist* nl);
+        std::unique_ptr<gate_library_specific_utils::Utils> get_gl_utils(const GateLibrary* gate_lib);
+
     private:
-       
     };
 }    // namespace hal

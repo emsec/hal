@@ -33,10 +33,11 @@ namespace hal
     {
     }
 
-    std::unique_ptr<gate_library_specific_utils::Utils> GateLibrarySpecificUtils::get_gl_utils(const Netlist* nl) {
+    std::unique_ptr<gate_library_specific_utils::Utils> GateLibrarySpecificUtils::get_gl_utils(const GateLibrary* gate_lib)
+    {
         std::unique_ptr<gate_library_specific_utils::Utils> ret;
-        
-        std::string library = nl->get_gate_library()->get_name();
+
+        std::string library = gate_lib->get_name();
 
         if (library == "XILINX_UNISIM")
         {
@@ -65,7 +66,5 @@ namespace hal
 
         return ret;
     }
-
-
 
 }    // namespace hal

@@ -10,17 +10,17 @@ namespace hal
 {
     namespace gate_library_specific_utils
     {
-        bool UtilsLSI_10K::is_sequential(Gate* sg) const
+        bool UtilsLSI_10K::is_sequential(GateType* g) const
         {
             static std::unordered_set<std::string> supported = {"FD1",   "FD1P",   "FD1S",  "FD1SP", "FD2",    "FD2P",  "FD2S",   "FD2SP", "FD3",   "FD3P",  "FD3S",   "FD3SP", "FD4",
                                                                 "FD4P",  "FD4S",   "FD4SP", "FJK1",  "FJK1P",  "FJK1S", "FJK1SP", "FJK2",  "FJK2P", "FJK2S", "FJK2SP", "FJK3",  "FJK3P",
                                                                 "FJK3S", "FJK3SP", "FDS2",  "FDS2L", "FDS2LP", "FDS2P", "FT2",    "FT2P",  "FT4",   "FT4P",  "FD2TS",  "FD2TSP"};
-            if (supported.find(sg->get_type()->get_name()) != supported.end())
+            if (supported.find(g->get_name()) != supported.end())
             {
                 return true;
             }
             static std::unordered_set<std::string> unsupported = {};
-            if (supported.find(sg->get_type()->get_name()) != supported.end())
+            if (supported.find(g->get_name()) != supported.end())
             {
                 log_error("gl specifics", "currently not supporting scan chain FFs");
                 return true;
@@ -28,14 +28,14 @@ namespace hal
             return false;
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_control_input_pin_types(Gate* sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_control_input_pin_types(GateType* g) const
         {
             // NOTE We include the set ports because sometimes the synthesizer uses the set ports as data inputs.
-            auto data_ports = get_data_ports(sg);
-            auto set_ports = get_set_ports(sg);
+            auto data_ports = get_data_ports(g);
+            auto set_ports  = get_set_ports(g);
             data_ports.insert(set_ports.begin(), set_ports.end());
             std::unordered_set<std::string> control_input_pin_types;
-            for (const auto& pin_type : sg->get_input_pins())
+            for (const auto& pin_type : g->get_input_pins())
             {
                 if (data_ports.find(pin_type) != data_ports.end())
                     continue;
@@ -45,11 +45,11 @@ namespace hal
             return control_input_pin_types;
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_clock_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_clock_ports(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
             static std::map<std::string, std::unordered_set<std::string>> gate_to_clock_ports;
@@ -96,14 +96,14 @@ namespace hal
                 gate_to_clock_ports["FD2TSP"] = {"CP"};
             }
 
-            return gate_to_clock_ports.at(sg->get_type()->get_name());
+            return gate_to_clock_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_enable_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_enable_ports(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
             static std::map<std::string, std::unordered_set<std::string>> gate_to_enable_ports;
@@ -150,14 +150,14 @@ namespace hal
                 gate_to_enable_ports["FD2TSP"] = {};
             }
 
-            return gate_to_enable_ports.at(sg->get_type()->get_name());
+            return gate_to_enable_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_reset_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_reset_ports(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -204,10 +204,10 @@ namespace hal
                 gate_to_reset_ports["FD2TSP"] = {"CD"};
             }
 
-            return gate_to_reset_ports.at(sg->get_type()->get_name());
+            return gate_to_reset_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_data_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_data_ports(GateType* g) const
         {
             static std::map<std::string, std::unordered_set<std::string>> gate_to_data_ports;
             if (gate_to_data_ports.empty())
@@ -251,14 +251,14 @@ namespace hal
                 gate_to_data_ports["FD2TS"]  = {"D", "RD"};
                 gate_to_data_ports["FD2TSP"] = {"D", "RD"};
             }
-            return gate_to_data_ports.at(sg->get_type()->get_name());
+            return gate_to_data_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_set_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsLSI_10K::get_set_ports(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -305,14 +305,14 @@ namespace hal
                 gate_to_set_ports["FD2TSP"] = {};
             }
 
-            return gate_to_set_ports.at(sg->get_type()->get_name());
+            return gate_to_set_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_regular_outputs(Gate* sg) const 
+        std::unordered_set<std::string> UtilsLSI_10K::get_regular_outputs(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -359,14 +359,14 @@ namespace hal
                 gate_to_regular_output_ports["FD2TSP"] = {"Q"};
             }
 
-            return gate_to_regular_output_ports.at(sg->get_type()->get_name());
+            return gate_to_regular_output_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsLSI_10K::get_negated_outputs(Gate* sg) const 
+        std::unordered_set<std::string> UtilsLSI_10K::get_negated_outputs(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -413,7 +413,7 @@ namespace hal
                 gate_to_negated_output_ports["FD2TSP"] = {"QN"};
             }
 
-            return gate_to_negated_output_ports.at(sg->get_type()->get_name());
+            return gate_to_negated_output_ports.at(g->get_name());
         }
     }    // namespace gate_library_specific_utils
 }    // namespace hal

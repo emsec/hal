@@ -50,9 +50,9 @@ namespace hal
                 auto next_gate = dst->get_gate();
 
                 /* skip if entry to clk */
-                if (is_sequential(next_gate))
+                if (is_sequential(next_gate->get_type()))
                 {
-                    auto clock_ports = get_clock_ports(next_gate);
+                    auto clock_ports = get_clock_ports(next_gate->get_type());
                     if (clock_ports.find(dst->get_pin()) != clock_ports.end())
                     {
                         continue;
@@ -135,7 +135,7 @@ std::unordered_set<Gate*> Utils::get_sequential_successors(Net* start_net)
         {
             std::unordered_set<Net*> clk_nets;
 
-            for (const auto& pin_type : get_clock_ports(sg))
+            for (const auto& pin_type : get_clock_ports(sg->get_type()))
             {
                 if (sg->get_fan_in_net(pin_type) != nullptr)
                 {
@@ -149,7 +149,7 @@ std::unordered_set<Gate*> Utils::get_sequential_successors(Net* start_net)
         {
             std::unordered_set<Net*> enable_nets;
 
-            for (const auto& pin_type : get_enable_ports(sg))
+            for (const auto& pin_type : get_enable_ports(sg->get_type()))
             {
                 if (sg->get_fan_in_net(pin_type) != nullptr)
                 {
@@ -163,7 +163,7 @@ std::unordered_set<Gate*> Utils::get_sequential_successors(Net* start_net)
         {
             std::unordered_set<Net*> reset_nets;
 
-            for (const auto& pin_type : get_reset_ports(sg))
+            for (const auto& pin_type : get_reset_ports(sg->get_type()))
             {
                 if (sg->get_fan_in_net(pin_type) != nullptr)
                 {
@@ -177,7 +177,7 @@ std::unordered_set<Gate*> Utils::get_sequential_successors(Net* start_net)
         {
             std::unordered_set<Net*> set_nets;
 
-            for (const auto& pin_type : get_set_ports(sg))
+            for (const auto& pin_type : get_set_ports(sg->get_type()))
             {
                 if (sg->get_fan_in_net(pin_type) != nullptr)
                 {
@@ -191,7 +191,7 @@ std::unordered_set<Gate*> Utils::get_sequential_successors(Net* start_net)
         {
             std::unordered_set<Net*> data_nets;
 
-            for (const auto& pin_type : get_data_ports(sg))
+            for (const auto& pin_type : get_data_ports(sg->get_type()))
             {
                 if (sg->get_fan_in_net(pin_type) != nullptr)
                 {
@@ -200,5 +200,5 @@ std::unordered_set<Gate*> Utils::get_sequential_successors(Net* start_net)
             }
             return data_nets;
         }
-    }        // namespace dataflow
+    }    // namespace gate_library_specific_utils
 }    // namespace hal

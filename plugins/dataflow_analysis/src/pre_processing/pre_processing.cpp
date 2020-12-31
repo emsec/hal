@@ -9,6 +9,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/utilities/log.h"
 
 #include <algorithm>
@@ -163,8 +164,12 @@ namespace hal
 
                 void identify_all_sequential_gates(NetlistAbstraction& netlist_abstr)
                 {
+                    // TODO currently only accepts FFs
                     log_info("dataflow", "identifying sequential gates");
-                    netlist_abstr.all_sequential_gates = netlist_abstr.nl->get_gates([&](auto g) { return netlist_abstr.utils->is_sequential(g); });
+                    netlist_abstr.all_sequential_gates = netlist_abstr.nl->get_gates([&](auto g) {
+                        auto base_type = g->get_type()->get_base_type();
+                        return base_type == GateType::BaseType::ff;
+                    });
                     std::sort(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end());
                     log_info("dataflow", "  #gates: {}", netlist_abstr.nl->get_gates().size());
                     log_info("dataflow", "  #sequential gates: {}", netlist_abstr.all_sequential_gates.size());
@@ -180,25 +185,25 @@ namespace hal
                         auto id = sg->get_id();
                         sg->get_name();
 
-                        for (auto net : netlist_abstr.utils->get_clock_signals_of_gate(sg))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::clock), true))
                         {
                             netlist_abstr.gate_to_clock_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 
-                        for (auto net : netlist_abstr.utils->get_enable_signals_of_gate(sg))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::enable), true))
                         {
                             netlist_abstr.gate_to_enable_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 
-                        for (auto net : netlist_abstr.utils->get_reset_signals_of_gate(sg))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::reset), true))
                         {
                             netlist_abstr.gate_to_reset_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 
-                        for (auto net : netlist_abstr.utils->get_set_signals_of_gate(sg))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::set), true))
                         {
                             netlist_abstr.gate_to_set_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
@@ -216,6 +221,9 @@ namespace hal
                     log_info("dataflow", "identifying successors and predecessors of sequential gates...");
                     measure_block_time("identifying successors and predecessors of sequential gates") progress_printer progress_bar;
                     float cnt = 0;
+
+                    std::unordered_map<u32, std::vector<Gate*>> cache;
+
                     for (const auto& single_ff : netlist_abstr.all_sequential_gates)
                     {
                         cnt++;
@@ -229,15 +237,13 @@ namespace hal
                         {
                             netlist_abstr.gate_to_predecessors[single_ff->get_id()] = std::unordered_set<u32>();
                         }
-                        for (const auto& suc : netlist_abstr.utils->get_sequential_successors(single_ff))
+                        for (const auto& suc : netlist_utils::get_next_sequential_gates(single_ff, true, cache))
                         {
                             netlist_abstr.gate_to_successors[single_ff->get_id()].insert(suc->get_id());
                             netlist_abstr.gate_to_predecessors[suc->get_id()].insert(single_ff->get_id());
                         }
                     }
                     progress_bar.clear();
-
-                    netlist_abstr.utils->clear_successor_cache();
                 }
             }    // namespace
 

@@ -10,27 +10,27 @@ namespace hal
 {
     namespace gate_library_specific_utils
     {
-        bool UtilsXilinxUnisim::is_sequential(Gate* sg) const
+        bool UtilsXilinxUnisim::is_sequential(GateType* g) const
         {
             static std::unordered_set<std::string> supported = {"FDRE", "FDE", "FD", "FDR", "FDCE", "FDS", "FDPE", "FDSE"};    // , "LDCE"};, "RAMB18E1", "RAMB36E1", "RAM32M", "RAM32X1D"};
 
-            if (supported.find(sg->get_type()->get_name()) != supported.end())
+            if (supported.find(g->get_name()) != supported.end())
             {
                 return true;
             }
 
-            if (sg->get_type()->get_name().find("RAM") != std::string::npos)
+            if (g->get_name().find("RAM") != std::string::npos)
             {
-                //log_error("gl specifics", "need to implement the following gate_type: {} for gate: {}", sg->get_type()->get_name(), sg->get_name());
+                //log_error("gl specifics", "need to implement the following gate_type: {} for gate: {}", g->get_name(), g->get_name());
             }
             return false;
         }
 
-        std::unordered_set<std::string> UtilsXilinxUnisim::get_control_input_pin_types(Gate* sg) const
+        std::unordered_set<std::string> UtilsXilinxUnisim::get_control_input_pin_types(GateType* g) const
         {
-            auto data_ports = get_data_ports(sg);
+            auto data_ports = get_data_ports(g);
             std::unordered_set<std::string> control_input_pin_types;
-            for (const auto& pin_type : sg->get_input_pins())
+            for (const auto& pin_type : g->get_input_pins())
             {
                 if (data_ports.find(pin_type) != data_ports.end())
                     continue;
@@ -40,11 +40,11 @@ namespace hal
             return control_input_pin_types;
         }
 
-        std::unordered_set<std::string> UtilsXilinxUnisim::get_clock_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsXilinxUnisim::get_clock_ports(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -67,14 +67,14 @@ namespace hal
                 gate_to_clock_ports["RAM32X1D"] = {"WCLK"};
             }
 
-            return gate_to_clock_ports.at(sg->get_type()->get_name());
+            return gate_to_clock_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsXilinxUnisim::get_enable_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsXilinxUnisim::get_enable_ports(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -112,14 +112,14 @@ namespace hal
                 gate_to_enable_ports["RAM32X1D"] = {"WE"};
             }
 
-            return gate_to_enable_ports.at(sg->get_type()->get_name());
+            return gate_to_enable_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsXilinxUnisim::get_reset_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsXilinxUnisim::get_reset_ports(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -142,14 +142,14 @@ namespace hal
                 gate_to_reset_ports["RAM32X1D"] = {};
             }
 
-            return gate_to_reset_ports.at(sg->get_type()->get_name());
+            return gate_to_reset_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsXilinxUnisim::get_data_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsXilinxUnisim::get_data_ports(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -166,32 +166,30 @@ namespace hal
                 gate_to_data_ports["FDSE"] = {"D"};
                 // gate_to_data_ports["LDCE"] = {"D"};
 
-                gate_to_data_ports["RAMB18E1"] = {
-                    "ADDRARDADDR(0)",  "ADDRARDADDR(1)",  "ADDRARDADDR(10)", "ADDRARDADDR(11)", "ADDRARDADDR(12)", "ADDRARDADDR(13)", "ADDRARDADDR(2)", "ADDRARDADDR(3)",
-                    "ADDRARDADDR(4)",  "ADDRARDADDR(5)",  "ADDRARDADDR(6)",  "ADDRARDADDR(7)",  "ADDRARDADDR(8)",  "ADDRARDADDR(9)",  "ADDRBWRADDR(0)", "ADDRBWRADDR(1)",
-                    "ADDRBWRADDR(10)", "ADDRBWRADDR(11)", "ADDRBWRADDR(12)", "ADDRBWRADDR(13)", "ADDRBWRADDR(2)",  "ADDRBWRADDR(3)",  "ADDRBWRADDR(4)", "ADDRBWRADDR(5)",
-                    "ADDRBWRADDR(6)",  "ADDRBWRADDR(7)",  "ADDRBWRADDR(8)",  "ADDRBWRADDR(9)",  "DIADI(0)",        "DIADI(1)",        "DIADI(10)",      "DIADI(11)",
-                    "DIADI(12)",       "DIADI(13)",       "DIADI(14)",       "DIADI(15)",       "DIADI(2)",        "DIADI(3)",        "DIADI(4)",       "DIADI(5)",
-                    "DIADI(6)",        "DIADI(7)",        "DIADI(8)",        "DIADI(9)",        "DIBDI(0)",        "DIBDI(1)",        "DIBDI(10)",      "DIBDI(11)",
-                    "DIBDI(12)",       "DIBDI(13)",       "DIBDI(14)",       "DIBDI(15)",       "DIBDI(2)",        "DIBDI(3)",        "DIBDI(4)",       "DIBDI(5)",
-                    "DIBDI(6)",        "DIBDI(7)",        "DIBDI(8)",        "DIBDI(9)",        "DIPADIP(0)",      "DIPADIP(1)",      "DIPBDIP(0)",     "DIPBDIP(1)"};
+                gate_to_data_ports["RAMB18E1"] = {"ADDRARDADDR(0)",  "ADDRARDADDR(1)",  "ADDRARDADDR(10)", "ADDRARDADDR(11)", "ADDRARDADDR(12)", "ADDRARDADDR(13)", "ADDRARDADDR(2)", "ADDRARDADDR(3)",
+                                                  "ADDRARDADDR(4)",  "ADDRARDADDR(5)",  "ADDRARDADDR(6)",  "ADDRARDADDR(7)",  "ADDRARDADDR(8)",  "ADDRARDADDR(9)",  "ADDRBWRADDR(0)", "ADDRBWRADDR(1)",
+                                                  "ADDRBWRADDR(10)", "ADDRBWRADDR(11)", "ADDRBWRADDR(12)", "ADDRBWRADDR(13)", "ADDRBWRADDR(2)",  "ADDRBWRADDR(3)",  "ADDRBWRADDR(4)", "ADDRBWRADDR(5)",
+                                                  "ADDRBWRADDR(6)",  "ADDRBWRADDR(7)",  "ADDRBWRADDR(8)",  "ADDRBWRADDR(9)",  "DIADI(0)",        "DIADI(1)",        "DIADI(10)",      "DIADI(11)",
+                                                  "DIADI(12)",       "DIADI(13)",       "DIADI(14)",       "DIADI(15)",       "DIADI(2)",        "DIADI(3)",        "DIADI(4)",       "DIADI(5)",
+                                                  "DIADI(6)",        "DIADI(7)",        "DIADI(8)",        "DIADI(9)",        "DIBDI(0)",        "DIBDI(1)",        "DIBDI(10)",      "DIBDI(11)",
+                                                  "DIBDI(12)",       "DIBDI(13)",       "DIBDI(14)",       "DIBDI(15)",       "DIBDI(2)",        "DIBDI(3)",        "DIBDI(4)",       "DIBDI(5)",
+                                                  "DIBDI(6)",        "DIBDI(7)",        "DIBDI(8)",        "DIBDI(9)",        "DIPADIP(0)",      "DIPADIP(1)",      "DIPBDIP(0)",     "DIPBDIP(1)"};
 
-                gate_to_data_ports["RAMB36E1"] = {
-                    "ADDRARDADDR(0)", "ADDRARDADDR(1)", "ADDRARDADDR(10)", "ADDRARDADDR(11)", "ADDRARDADDR(12)", "ADDRARDADDR(13)", "ADDRARDADDR(14)", "ADDRARDADDR(15)",
-                    "ADDRARDADDR(2)", "ADDRARDADDR(3)", "ADDRARDADDR(4)",  "ADDRARDADDR(5)",  "ADDRARDADDR(6)",  "ADDRARDADDR(7)",  "ADDRARDADDR(8)",  "ADDRARDADDR(9)",
+                gate_to_data_ports["RAMB36E1"] = {"ADDRARDADDR(0)", "ADDRARDADDR(1)", "ADDRARDADDR(10)", "ADDRARDADDR(11)", "ADDRARDADDR(12)", "ADDRARDADDR(13)", "ADDRARDADDR(14)", "ADDRARDADDR(15)",
+                                                  "ADDRARDADDR(2)", "ADDRARDADDR(3)", "ADDRARDADDR(4)",  "ADDRARDADDR(5)",  "ADDRARDADDR(6)",  "ADDRARDADDR(7)",  "ADDRARDADDR(8)",  "ADDRARDADDR(9)",
 
-                    "ADDRBWRADDR(0)", "ADDRBWRADDR(1)", "ADDRBWRADDR(10)", "ADDRBWRADDR(11)", "ADDRBWRADDR(12)", "ADDRBWRADDR(13)", "ADDRBWRADDR(14)", "ADDRBWRADDR(15)",
-                    "ADDRBWRADDR(2)", "ADDRBWRADDR(3)", "ADDRBWRADDR(4)",  "ADDRBWRADDR(5)",  "ADDRBWRADDR(6)",  "ADDRBWRADDR(7)",  "ADDRBWRADDR(8)",  "ADDRBWRADDR(9)",
+                                                  "ADDRBWRADDR(0)", "ADDRBWRADDR(1)", "ADDRBWRADDR(10)", "ADDRBWRADDR(11)", "ADDRBWRADDR(12)", "ADDRBWRADDR(13)", "ADDRBWRADDR(14)", "ADDRBWRADDR(15)",
+                                                  "ADDRBWRADDR(2)", "ADDRBWRADDR(3)", "ADDRBWRADDR(4)",  "ADDRBWRADDR(5)",  "ADDRBWRADDR(6)",  "ADDRBWRADDR(7)",  "ADDRBWRADDR(8)",  "ADDRBWRADDR(9)",
 
-                    "DIADI(0)",       "DIADI(1)",       "DIADI(10)",       "DIADI(11)",       "DIADI(12)",       "DIADI(13)",       "DIADI(14)",       "DIADI(15)",
-                    "DIADI(16)",      "DIADI(17)",      "DIADI(18)",       "DIADI(19)",       "DIADI(2)",        "DIADI(20)",       "DIADI(21)",       "DIADI(22)",
-                    "DIADI(23)",      "DIADI(24)",      "DIADI(25)",       "DIADI(26)",       "DIADI(27)",       "DIADI(28)",       "DIADI(29)",       "DIADI(3)",
-                    "DIADI(30)",      "DIADI(31)",      "DIADI(4)",        "DIADI(5)",        "DIADI(6)",        "DIADI(7)",        "DIADI(8)",
+                                                  "DIADI(0)",       "DIADI(1)",       "DIADI(10)",       "DIADI(11)",       "DIADI(12)",       "DIADI(13)",       "DIADI(14)",       "DIADI(15)",
+                                                  "DIADI(16)",      "DIADI(17)",      "DIADI(18)",       "DIADI(19)",       "DIADI(2)",        "DIADI(20)",       "DIADI(21)",       "DIADI(22)",
+                                                  "DIADI(23)",      "DIADI(24)",      "DIADI(25)",       "DIADI(26)",       "DIADI(27)",       "DIADI(28)",       "DIADI(29)",       "DIADI(3)",
+                                                  "DIADI(30)",      "DIADI(31)",      "DIADI(4)",        "DIADI(5)",        "DIADI(6)",        "DIADI(7)",        "DIADI(8)",
 
-                    "DIBDI(0)",       "DIBDI(1)",       "DIBDI(10)",       "DIBDI(11)",       "DIBDI(12)",       "DIBDI(13)",       "DIBDI(14)",       "DIBDI(15)",
-                    "DIBDI(16)",      "DIBDI(17)",      "DIBDI(18)",       "DIBDI(19)",       "DIBDI(2)",        "DIBDI(20)",       "DIBDI(21)",       "DIBDI(22)",
-                    "DIBDI(23)",      "DIBDI(24)",      "DIBDI(25)",       "DIBDI(26)",       "DIBDI(27)",       "DIBDI(28)",       "DIBDI(29)",       "DIBDI(3)",
-                    "DIBDI(30)",      "DIBDI(31)",      "DIBDI(4)",        "DIBDI(5)",        "DIBDI(6)",        "DIBDI(7)",        "DIBDI(8)"};
+                                                  "DIBDI(0)",       "DIBDI(1)",       "DIBDI(10)",       "DIBDI(11)",       "DIBDI(12)",       "DIBDI(13)",       "DIBDI(14)",       "DIBDI(15)",
+                                                  "DIBDI(16)",      "DIBDI(17)",      "DIBDI(18)",       "DIBDI(19)",       "DIBDI(2)",        "DIBDI(20)",       "DIBDI(21)",       "DIBDI(22)",
+                                                  "DIBDI(23)",      "DIBDI(24)",      "DIBDI(25)",       "DIBDI(26)",       "DIBDI(27)",       "DIBDI(28)",       "DIBDI(29)",       "DIBDI(3)",
+                                                  "DIBDI(30)",      "DIBDI(31)",      "DIBDI(4)",        "DIBDI(5)",        "DIBDI(6)",        "DIBDI(7)",        "DIBDI(8)"};
 
                 gate_to_data_ports["RAM32M"] = {"ADDRA(0)", "ADDRA(1)", "ADDRA(2)", "ADDRA(3)", "ADDRA(4)", "ADDRB(0)", "ADDRB(1)", "ADDRB(2)", "ADDRB(3)", "ADDRB(4)",
                                                 "ADDRC(0)", "ADDRC(1)", "ADDRC(2)", "ADDRC(3)", "ADDRC(4)", "ADDRD(0)", "ADDRD(1)", "ADDRD(2)", "ADDRD(3)", "ADDRD(4)",
@@ -200,14 +198,14 @@ namespace hal
                 gate_to_data_ports["RAM32X1D"] = {"A0", "A1", "A2", "A3", "A4", "D", "DPRA0", "DPRA1", "DPRA2", "DPRA3", "DPRA4"};
             }
 
-            return gate_to_data_ports.at(sg->get_type()->get_name());
+            return gate_to_data_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsXilinxUnisim::get_set_ports(Gate* sg) const
+        std::unordered_set<std::string> UtilsXilinxUnisim::get_set_ports(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -227,18 +225,18 @@ namespace hal
                 // TODO mot sure if RAM has any
                 gate_to_set_ports["RAMB18E1"] = {};
                 gate_to_set_ports["RAMB36E1"] = {};
-                gate_to_set_ports["RAM32M"] = {};
+                gate_to_set_ports["RAM32M"]   = {};
                 gate_to_set_ports["RAM32X1D"] = {};
             }
 
-            return gate_to_set_ports.at(sg->get_type()->get_name());
+            return gate_to_set_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsXilinxUnisim::get_regular_outputs(Gate* sg) const 
+        std::unordered_set<std::string> UtilsXilinxUnisim::get_regular_outputs(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -258,18 +256,18 @@ namespace hal
                 // TODO
                 gate_to_regular_output_ports["RAMB18E1"] = {};
                 gate_to_regular_output_ports["RAMB36E1"] = {};
-                gate_to_regular_output_ports["RAM32M"] = {};
+                gate_to_regular_output_ports["RAM32M"]   = {};
                 gate_to_regular_output_ports["RAM32X1D"] = {};
             }
 
-            return gate_to_regular_output_ports.at(sg->get_type()->get_name());
+            return gate_to_regular_output_ports.at(g->get_name());
         }
 
-        std::unordered_set<std::string> UtilsXilinxUnisim::get_negated_outputs(Gate* sg) const 
+        std::unordered_set<std::string> UtilsXilinxUnisim::get_negated_outputs(GateType* g) const
         {
-            if (!is_sequential(sg))
+            if (!is_sequential(g))
             {
-                log_error("gl specifics", "gate is not sequential: {}, type: {}", sg->get_name(), sg->get_type()->get_name());
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
                 return std::unordered_set<std::string>();
             }
 
@@ -289,11 +287,11 @@ namespace hal
                 // TODO
                 gate_to_negated_output_ports["RAMB18E1"] = {};
                 gate_to_negated_output_ports["RAMB36E1"] = {};
-                gate_to_negated_output_ports["RAM32M"] = {};
+                gate_to_negated_output_ports["RAM32M"]   = {};
                 gate_to_negated_output_ports["RAM32X1D"] = {};
             }
 
-            return gate_to_negated_output_ports.at(sg->get_type()->get_name());
+            return gate_to_negated_output_ports.at(g->get_name());
         }
 
     }    // namespace gate_library_specific_utils
