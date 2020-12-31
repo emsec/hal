@@ -5,6 +5,9 @@
 
 #include <fstream>
 
+// TODO add buffer type detection
+// TODO remove LUT parsing
+
 namespace hal
 {
     std::unique_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path)
