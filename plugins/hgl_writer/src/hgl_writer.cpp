@@ -59,13 +59,22 @@ namespace hal
         document.AddMember("library", gate_lib->get_name(), allocator);
 
         // gate types
+        std::vector<GateType*> gate_types;
+
+        for (const auto& gt : gate_lib->get_gate_types())
+        {
+            gate_types.push_back(gt.second);
+        }
+
+        std::sort(gate_types.begin(), gate_types.end(), [](GateType* l, GateType* r) { return l->get_id() < r->get_id(); });
+
         rapidjson::Value cells(rapidjson::kArrayType);
-        for (const auto& [gt_name, gt] : gate_lib->get_gate_types())
+        for (const auto gt : gate_types)
         {
             rapidjson::Value cell(rapidjson::kObjectType);
 
             // name
-            cell.AddMember("name", gt_name, allocator);
+            cell.AddMember("name", gt->get_name(), allocator);
 
             // base type
             GateType::BaseType gt_type = gt->get_base_type();
@@ -82,6 +91,9 @@ namespace hal
                     break;
                 case GateType::BaseType::lut:
                     cell.AddMember("type", "lut", allocator);
+                    break;
+                case GateType::BaseType::ram:
+                    cell.AddMember("type", "ram", allocator);
                     break;
             }
 
@@ -257,45 +269,33 @@ namespace hal
         std::vector<std::string> input_pins  = gt->get_input_pins();
         std::vector<std::string> output_pins = gt->get_output_pins();
 
-        std::unordered_map<std::string, std::vector<std::string>> type_to_pins;
-        type_to_pins["power"]  = gt->get_pins_of_type(GateType::PinType::power);
-        type_to_pins["ground"] = gt->get_pins_of_type(GateType::PinType::ground);
-
-        GateType::BaseType base_type = gt->get_base_type();
-
-        if (base_type == GateType::BaseType::ff || base_type == GateType::BaseType::latch)
-        {
-            type_to_pins["state"]     = gt->get_pins_of_type(GateType::PinType::state);
-            type_to_pins["neg_state"] = gt->get_pins_of_type(GateType::PinType::neg_state);
-            type_to_pins["clock"]     = gt->get_pins_of_type(GateType::PinType::clock);
-            type_to_pins["enable"]    = gt->get_pins_of_type(GateType::PinType::enable);
-            type_to_pins["reset"]     = gt->get_pins_of_type(GateType::PinType::reset);
-            type_to_pins["set"]       = gt->get_pins_of_type(GateType::PinType::set);
-            type_to_pins["data"]      = gt->get_pins_of_type(GateType::PinType::data);
-            type_to_pins["address"]   = gt->get_pins_of_type(GateType::PinType::address);
-        }
-        else if (base_type == GateType::BaseType::lut)
-        {
-            type_to_pins["lut"] = gt->get_pins_of_type(GateType::PinType::lut);
-        }
-
         for (const auto& in_pin : input_pins)
         {
             PinCtx res_pin;
-            res_pin.name      = in_pin;
+            res_pin.name = in_pin;
+            if (GateType::PinType pin_type = gt->get_pin_type(in_pin); pin_type != GateType::PinType::none)
+            {
+                res_pin.type = m_pin_type_to_string.at(pin_type);
+            }
             res_pin.direction = "input";
             res.push_back(res_pin);
         }
 
         for (const auto& out_pin : output_pins)
         {
-            PinCtx res_pin;
+            std::vector<PinCtx>::iterator pin_it;
 
             if (auto it = std::find_if(res.begin(), res.end(), [out_pin](PinCtx p) { return p.name == out_pin; }); it == res.end())
             {
-                res_pin.name      = out_pin;
+                PinCtx res_pin;
+                res_pin.name = out_pin;
+                if (GateType::PinType pin_type = gt->get_pin_type(out_pin); pin_type != GateType::PinType::none)
+                {
+                    res_pin.type = m_pin_type_to_string.at(pin_type);
+                }
                 res_pin.direction = "output";
                 res.push_back(res_pin);
+                pin_it = res.end() - 1;
             }
             else
             {
@@ -304,29 +304,17 @@ namespace hal
 
             if (const auto it = functions.find(out_pin); it != functions.end())
             {
-                res_pin.function = it->second.to_string();
+                pin_it->function = it->second.to_string();
             }
 
             if (const auto it = functions.find(out_pin + "_undefined"); it != functions.end())
             {
-                res_pin.x_function = it->second.to_string();
+                pin_it->x_function = it->second.to_string();
             }
 
             if (const auto it = functions.find(out_pin + "_tristate"); it != functions.end())
             {
-                res_pin.z_function = it->second.to_string();
-            }
-        }
-
-        for (auto& res_pin : res)
-        {
-            for (const auto& [pin_type, pins] : type_to_pins)
-            {
-                if (std::find(pins.begin(), pins.end(), res_pin.name) != pins.end())
-                {
-                    res_pin.type = pin_type;
-                    break;
-                }
+                pin_it->z_function = it->second.to_string();
             }
         }
 

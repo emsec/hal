@@ -76,6 +76,7 @@ namespace hal
         };
 
         static std::unordered_map<GateType::ClearPresetBehavior, std::string> m_behavior_to_string;
+        static const std::unordered_map<GateType::PinType, std::string> m_pin_type_to_string;
 
         bool write_gate_library(rapidjson::Document& document, const GateLibrary* gate_lib);
 

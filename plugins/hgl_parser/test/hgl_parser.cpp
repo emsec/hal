@@ -22,7 +22,8 @@ namespace hal
      *
      * Functions: parse
      */
-    TEST_F(HGLParserTest, check_library) {
+    TEST_F(HGLParserTest, check_library) 
+    {
         TEST_START
             {
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/hgl_parser/test.hgl";

@@ -168,5 +168,8 @@ namespace hal
         std::unordered_map<std::string, GateType*> m_gnd_gate_types;
 
         std::vector<std::string> m_includes;
+
+        GateLibrary(const GateLibrary&) = delete;               // disable copy-constructor
+        GateLibrary& operator=(const GateLibrary&) = delete;    // disable copy-assignment
     };
 }    // namespace hal
