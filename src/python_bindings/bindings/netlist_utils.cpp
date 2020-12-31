@@ -49,5 +49,21 @@ namespace hal
             :returns: All sequential successors or predecessors of the net.
             :rtype: list[hal_py.Net]
         )");
+
+        py_netlist_utils.def("get_nets_at_pins", netlist_utils::get_nets_at_pins, py::arg("gate"), py::arg("pins"), py::arg("is_inputs"), R"(
+            Get the nets that are connected to a subset of pins of the specified gate.
+        
+            :param hal_py.Gate gate: The gate.
+            :param list[str] pins: The targeted pins.
+            :param bool is_input: True to look for fan-in nets, false for fan-out.
+            :returns: The set of nets connected to the pins.
+            :rtype: set[hal_py.Net]
+        )");
+
+        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), R"(
+            Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
+
+            :param hal_py.Netlist netlist: The target netlist.
+        )");
     }
 }    // namespace hal

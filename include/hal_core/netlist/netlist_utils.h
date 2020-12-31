@@ -51,6 +51,7 @@ namespace hal
         CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
 
         /**
+         * TODO pybind
          * Find all sequential predecessors or successors of a specific gate.
          * Traverses combinational logic of all input or output nets until sequential gates are found.
          * This may include the gate itself.
@@ -64,6 +65,7 @@ namespace hal
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
+         * TODO pybind
          * Find all sequential predecessors or successors of a specific net.
          * Traverses combinational logic until sequential gates are found.
          * For improved performance when making extensive use of this function the same cache should be provided.
@@ -97,5 +99,24 @@ namespace hal
          * @returns All sequential successors or predecessors of the net.
          */
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors);
+
+        /**
+         * TODO test
+         * Get the nets that are connected to a subset of pins of the specified gate.
+         * 
+         * @param[in] gate - The gate.
+         * @param[in] pins - The targeted pins.
+         * @param[in] is_inputs - True to look for fan-in nets, false for fan-out.
+         * @returns The set of nets connected to the pins.
+         */
+        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::vector<std::string> pins, bool is_inputs);
+
+        /**
+         * TODO test
+         * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
+         * 
+         * @param[in] netlist - The target netlist.
+         */
+        void remove_buffers(Netlist* netlist);
     }    // namespace netlist_utils
 }    // namespace hal

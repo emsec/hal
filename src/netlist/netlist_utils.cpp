@@ -376,5 +376,57 @@ namespace hal
             return get_next_sequential_gates(net, get_successors, cache);
         }
 
+        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::vector<std::string> pins, bool is_inputs)
+        {
+            std::unordered_set<Net*> nets;
+
+            if (is_inputs)
+            {
+                for (const auto& pin : pins)
+                {
+                    if (Net* net = gate->get_fan_in_net(pin); net != nullptr)
+                    {
+                        nets.insert(net);
+                    }
+                    else
+                    {
+                        log_error("netlist_utils", "could not retrieve fan-in net for pin '{}' of gate '{}' with ID {}.", pin, gate->get_name(), gate->get_id());
+                    }
+                }
+            }
+            else
+            {
+                for (const auto& pin : pins)
+                {
+                    if (Net* net = gate->get_fan_out_net(pin); net != nullptr)
+                    {
+                        nets.insert(net);
+                    }
+                    else
+                    {
+                        log_error("netlist_utils", "could not retrieve fan-out net for pin '{}' of gate '{}' with ID {}.", pin, gate->get_name(), gate->get_id());
+                    }
+                }
+            }
+            return nets;
+        }
+
+        void remove_buffers(Netlist* netlist)
+        {
+            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::buffer; }))
+            {
+                Net* in_net  = *(gate->get_fan_in_nets().begin());
+                Net* out_net = *(gate->get_fan_out_nets().begin());
+
+                for (const auto& dst : out_net->get_destinations())
+                {
+                    out_net->remove_destination(dst->get_gate(), dst->get_pin());
+                    in_net->add_destination(dst->get_gate(), dst->get_pin());
+                }
+
+                netlist->delete_net(out_net);
+                netlist->delete_gate(gate);
+            }
+        }
     }    // namespace netlist_utils
 }    // namespace hal
