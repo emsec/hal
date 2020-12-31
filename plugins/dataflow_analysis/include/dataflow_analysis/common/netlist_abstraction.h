@@ -2,6 +2,8 @@
 
 #include "hal_core/defines.h"
 
+#include "gate_library_specific_utils/include/plugin_gate_library_specific_utils.h"
+
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -14,20 +16,19 @@ namespace hal
 
     namespace dataflow
     {
-        namespace dataflow_utils
-        {
-            class Utils;
-        }
+        struct Grouping;
 
         struct NetlistAbstraction
         {
             NetlistAbstraction(Netlist* nl_arg);
 
+            std::shared_ptr<Grouping> create_initial_grouping() const;
+
             // netlist
             Netlist* nl;
 
             // utils
-            std::shared_ptr<dataflow_utils::Utils> utils;
+            std::shared_ptr<gate_library_specific_utils::Utils> utils;
             bool yosys;
 
             // all ffs
@@ -38,6 +39,7 @@ namespace hal
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_clock_signals;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_enable_signals;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_reset_signals;
+            std::unordered_map<u32, std::unordered_set<u32>> gate_to_set_signals;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_register_stages;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_predecessors;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_successors;

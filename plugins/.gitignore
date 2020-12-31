@@ -5,6 +5,8 @@
 !example_gate_library/**/*
 !gate_libraries*
 !gate_libraries/**/*
+!gate_library_specific_utils*
+!gate_library_specific_utils/**/*
 !graph_algorithm*
 !graph_algorithm/**/*
 !gui*

@@ -6,7 +6,6 @@
 #include "dataflow_analysis/utils/parallel_for_each.h"
 #include "dataflow_analysis/utils/progress_printer.h"
 #include "dataflow_analysis/utils/timing_utils.h"
-#include "dataflow_analysis/utils/utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -196,6 +195,12 @@ namespace hal
                         for (auto net : netlist_abstr.utils->get_reset_signals_of_gate(sg))
                         {
                             netlist_abstr.gate_to_reset_signals[id].insert(net->get_id());
+                            fingerprint.push_back(net->get_id());
+                        }
+
+                        for (auto net : netlist_abstr.utils->get_set_signals_of_gate(sg))
+                        {
+                            netlist_abstr.gate_to_set_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 

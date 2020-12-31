@@ -7,7 +7,7 @@
 #include "dataflow_analysis/processing/pass_collection.h"
 #include "dataflow_analysis/processing/result.h"
 #include "dataflow_analysis/utils/progress_printer.h"
-#include "dataflow_analysis/utils/utils.h"
+#include "dataflow_analysis/utils/timing_utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"

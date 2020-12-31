@@ -32,6 +32,7 @@ namespace hal
             std::unordered_set<u32> get_clock_signals_of_group(u32 group_id);
             std::unordered_set<u32> get_control_signals_of_group(u32 group_id);
             std::unordered_set<u32> get_reset_signals_of_group(u32 group_id);
+            std::unordered_set<u32> get_set_signals_of_group(u32 group_id);
 
             std::unordered_set<u32> get_successor_groups_of_group(u32 group_id);
             std::unordered_set<u32> get_predecessor_groups_of_group(u32 group_id);
