@@ -73,8 +73,7 @@ namespace hal
 
         std::set<std::string> m_cell_names;
 
-        static std::unordered_map<std::string, GateType::ClearPresetBehavior> m_string_to_behavior;
-
+        static const std::unordered_map<std::string, GateType::ClearPresetBehavior> m_string_to_behavior;
         static const std::unordered_map<std::string, GateType::BaseType> m_string_to_base_type;
         static const std::unordered_map<std::string, GateType::PinType> m_string_to_pin_type;
 

@@ -5,19 +5,6 @@
 
 namespace hal
 {
-    const std::unordered_map<GateType::PinType, std::string> HGLWriter::m_pin_type_to_string = {{GateType::PinType::none, "none"},
-                                                                                                {GateType::PinType::power, "power"},
-                                                                                                {GateType::PinType::ground, "ground"},
-                                                                                                {GateType::PinType::lut, "lut"},
-                                                                                                {GateType::PinType::state, "state"},
-                                                                                                {GateType::PinType::neg_state, "neg_state"},
-                                                                                                {GateType::PinType::clock, "clock"},
-                                                                                                {GateType::PinType::enable, "enable"},
-                                                                                                {GateType::PinType::set, "set"},
-                                                                                                {GateType::PinType::reset, "reset"},
-                                                                                                {GateType::PinType::data, "data"},
-                                                                                                {GateType::PinType::address, "address"}};
-
     namespace
     {
         static std::unique_ptr<GateLibrary> create_gate_library()

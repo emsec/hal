@@ -11,7 +11,8 @@ namespace hal
                                                                                                   {"ff", GateType::BaseType::ff},
                                                                                                   {"latch", GateType::BaseType::latch},
                                                                                                   {"lut", GateType::BaseType::lut},
-                                                                                                  {"ram", GateType::BaseType::ram}};
+                                                                                                  {"ram", GateType::BaseType::ram},
+                                                                                                  {"io", GateType::BaseType::io}};
 
     const std::unordered_map<std::string, GateType::PinType> HGLParser::m_string_to_pin_type = {{"none", GateType::PinType::none},
                                                                                                 {"power", GateType::PinType::power},
@@ -24,7 +25,14 @@ namespace hal
                                                                                                 {"set", GateType::PinType::set},
                                                                                                 {"reset", GateType::PinType::reset},
                                                                                                 {"data", GateType::PinType::data},
-                                                                                                {"address", GateType::PinType::address}};
+                                                                                                {"address", GateType::PinType::address},
+                                                                                                {"io_pad", GateType::PinType::io_pad}};
+
+    const std::unordered_map<std::string, GateType::ClearPresetBehavior> HGLParser::m_string_to_behavior = {{"L", GateType::ClearPresetBehavior::L},
+                                                                                                            {"H", GateType::ClearPresetBehavior::H},
+                                                                                                            {"N", GateType::ClearPresetBehavior::N},
+                                                                                                            {"T", GateType::ClearPresetBehavior::T},
+                                                                                                            {"X", GateType::ClearPresetBehavior::X}};
 
     std::unique_ptr<GateLibrary> HGLParser::parse(const std::filesystem::path& file_path)
     {
@@ -364,12 +372,6 @@ namespace hal
 
         return true;
     }
-
-    std::unordered_map<std::string, GateType::ClearPresetBehavior> HGLParser::m_string_to_behavior = {{"L", GateType::ClearPresetBehavior::L},
-                                                                                                      {"H", GateType::ClearPresetBehavior::H},
-                                                                                                      {"N", GateType::ClearPresetBehavior::N},
-                                                                                                      {"T", GateType::ClearPresetBehavior::T},
-                                                                                                      {"X", GateType::ClearPresetBehavior::X}};
 
     bool HGLParser::parse_ff_config(GateType* gt_ff, const rapidjson::Value& ff_config)
     {

@@ -51,7 +51,8 @@ namespace hal
             lut,           /**< Represents a combinational LUT gate type. **/
             ff,            /**< Represents a sequential FF gate type. **/
             latch,         /**< Represents a sequential latch gate type. **/
-            ram            /**< Represents a sequential RAM gate type. **/
+            ram,           /**< Represents a sequential RAM gate type. **/
+            io             /**< Represents an IO gate type. **/
         };
 
         /**
@@ -81,7 +82,8 @@ namespace hal
             set,       /**< Set/preset pin. **/
             reset,     /**< Reset/clear pin. **/
             data,      /**< Data pin. **/
-            address    /**< Address pin. **/
+            address,   /**< Address pin. **/
+            io_pad     /**< IO pad pin. **/
         };
 
         /**
