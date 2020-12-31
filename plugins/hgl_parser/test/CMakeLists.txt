@@ -1,4 +1,7 @@
 if(BUILD_TESTS)
+    #copy files to cmake binary dir
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/test.hgl ${CMAKE_BINARY_DIR}/bin/hal_plugins/test-files/hgl_parser/test.hgl COPYONLY)
+
     include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/plugins/hgl_parser/include)
 
     add_executable(runTest-hgl_parser  hgl_parser.cpp)

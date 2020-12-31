@@ -2,18 +2,18 @@
     "library": "example_library",
     "cells": [
         {
-            "name": "example_combinational",
+            "name": "gt_combinational",
             "type": "combinational",
             "pins": [
                 {
                     "name": "VDD",
                     "direction": "input",
-                    "type": "vdd"
+                    "type": "power"
                 },
                 {
                     "name": "GND",
                     "direction": "input",
-                    "type": "gnd"
+                    "type": "ground"
                 },
                 {
                     "name": "A",
@@ -21,7 +21,7 @@
                 },
                 {
                     "name": "B",
-                    "direction": "input"
+                    "direction": "inout"
                 },
                 {
                     "name": "O",
@@ -33,16 +33,18 @@
             ]
         },
         {
-            "name": "example_groups",
+            "name": "gt_group",
             "type": "combinational",
             "pins": [
                 {
                     "name": "VDD",
-                    "type": "vdd"
+                    "direction": "input",
+                    "type": "power"
                 },
                 {
                     "name": "GND",
-                    "type": "gnd"
+                    "direction": "input",
+                    "type": "ground"
                 },
                 {
                     "name": "A(0)",
@@ -104,7 +106,7 @@
             ]
         },
         {
-            "name": "example_lut2",
+            "name": "gt_lut_asc",
             "type": "lut",
             "lut_config": {
                 "bit_order": "ascending",
@@ -128,7 +130,31 @@
             ]
         },
         {
-            "name": "example_ff",
+            "name": "gt_lut_desc",
+            "type": "lut",
+            "lut_config": {
+                "bit_order": "descending",
+                "data_category": "generic",
+                "data_identifier": "INIT"
+            },
+            "pins": [
+                {
+                    "name": "I1",
+                    "direction": "input"
+                },
+                {
+                    "name": "I2",
+                    "direction": "input"
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "lut"
+                }
+            ]
+        },
+        {
+            "name": "gt_ff",
             "type": "ff",
             "ff_config": {
                 "next_state": "D",
@@ -136,13 +162,15 @@
                 "clear_on": "R",
                 "preset_on": "S",
                 "state_clear_preset": "L",
-                "neg_state_clear_preset": "H"
+                "neg_state_clear_preset": "H",
+                "data_category": "generic",
+                "data_identifier": "INIT"
             },
             "pins": [
                 {
                     "name": "CLK",
                     "direction": "input",
-                    "type": "clk"
+                    "type": "clock"
                 },
                 {
                     "name": "D",
@@ -177,7 +205,7 @@
             ]
         },
         {
-            "name": "example_latch",
+            "name": "gt_latch",
             "type": "latch",
             "latch_config": {
                 "data_in": "D",
@@ -217,6 +245,86 @@
                     "name": "QN",
                     "direction": "output",
                     "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "gt_ram",
+            "type": "ram",
+            "pins": [
+                {
+                    "name": "DI(0)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "DI(1)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "DI(2)",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "A(0)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "A(1)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "A(2)",
+                    "direction": "input",
+                    "type": "address"
+                },
+                {
+                    "name": "DO(0)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "DO(1)",
+                    "direction": "output",
+                    "type": "data"
+                },
+                {
+                    "name": "DO(2)",
+                    "direction": "output",
+                    "type": "data"
+                }
+            ],
+            "groups": [
+                {
+                    "name": "DI",
+                    "direction": "input",
+                    "pins": {
+                        "0": "DI(0)",
+                        "1": "DI(1)",
+                        "2": "DI(2)"
+                    }
+                },
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "pins": {
+                        "0": "A(0)",
+                        "1": "A(1)",
+                        "2": "A(2)"
+                    }
+                },
+                {
+                    "name": "DO",
+                    "direction": "output",
+                    "pins": {
+                        "0": "DO(0)",
+                        "1": "DO(1)",
+                        "2": "DO(2)"
+                    }
                 }
             ]
         }
