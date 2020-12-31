@@ -297,7 +297,8 @@ namespace hal
 
             SimulationGate* sim_gate_base = nullptr;
 
-            if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
+            GateType::BaseType base_type = gate->get_type()->get_base_type();
+            if (base_type == GateType::BaseType::ff)
             {
                 auto sim_gate_owner = std::make_unique<SimulationGateFF>();
                 auto sim_gate       = sim_gate_owner.get();
@@ -332,7 +333,7 @@ namespace hal
                 sim_gate->sr_behavior_out          = behavior.first;
                 sim_gate->sr_behavior_out_inverted = behavior.second;
             }
-            else if (gate->get_type()->get_base_type() == GateType::BaseType::combinational || gate->get_type()->get_base_type() == GateType::BaseType::lut)
+            else if (base_type == GateType::BaseType::combinational || base_type == GateType::BaseType::lut || base_type == GateType::BaseType::buffer)
             {
                 auto sim_gate_owner = std::make_unique<SimulationGateCombinational>();
                 auto sim_gate       = sim_gate_owner.get();

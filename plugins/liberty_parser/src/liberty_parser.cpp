@@ -5,7 +5,6 @@
 
 #include <fstream>
 
-// TODO add buffer type detection
 // TODO remove LUT parsing
 
 namespace hal
@@ -848,6 +847,22 @@ namespace hal
             if (pin.direction == PinDirection::OUT || pin.direction == PinDirection::INOUT)
             {
                 output_pins.insert(output_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
+            }
+        }
+
+        if (input_pins.size() == 1 && output_pins.size() == 1)
+        {
+            for (const auto& pin : cell.pins)
+            {
+                if (pin.direction != PinDirection::OUT)
+                {
+                    continue;
+                }
+
+                if (pin.function == input_pins.at(0) && pin.x_function.empty() && pin.z_function.empty())
+                {
+                    cell.type = GateType::BaseType::buffer;
+                }
             }
         }
 

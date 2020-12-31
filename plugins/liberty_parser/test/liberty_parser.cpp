@@ -335,7 +335,7 @@ namespace hal {
                 auto gate_types = gl->get_gate_types();
                 ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinational);
+                          GateType::BaseType::buffer);
             }
             {
                 // Define a pin twice
@@ -368,7 +368,7 @@ namespace hal {
                 auto gate_types = gl->get_gate_types();
                 ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinational);
+                          GateType::BaseType::buffer);
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_input_pins().size(), 1);
 
             }

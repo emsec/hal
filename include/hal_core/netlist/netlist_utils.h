@@ -112,11 +112,13 @@ namespace hal
         std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::vector<std::string> pins, bool is_inputs);
 
         /**
-         * TODO test
+         * TODO test, add option to check LUTs
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
          * 
          * @param[in] netlist - The target netlist.
          */
         void remove_buffers(Netlist* netlist);
+
+        // TODO remove inactive nets from gates (e.g. ICE40 LUTs)
     }    // namespace netlist_utils
 }    // namespace hal
