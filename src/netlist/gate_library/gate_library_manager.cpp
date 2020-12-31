@@ -28,14 +28,10 @@ namespace hal
 
                 if (lib->get_gnd_gate_types().empty())
                 {
-                    std::string name = "GND";
+                    std::string name = "HAL_GND";
                     if (gate_types.find(name) != gate_types.end())
                     {
-                        name += "_autogen";
-                    }
-                    if (gate_types.find(name) != gate_types.end())
-                    {
-                        log_error("gate_library_manager", "no 'GND' gate type found in gate library, but gate types 'GND' and '{}' already exist.", name);
+                        log_error("gate_library_manager", "no 'GND' gate type found in gate library, but gate type 'HAL_GND' already exist.");
                         return false;
                     }
 
@@ -48,14 +44,10 @@ namespace hal
 
                 if (lib->get_vcc_gate_types().empty())
                 {
-                    std::string name = "VCC";
+                    std::string name = "HAL_VDD";
                     if (gate_types.find(name) != gate_types.end())
                     {
-                        name += "_autogen";
-                    }
-                    if (gate_types.find(name) != gate_types.end())
-                    {
-                        log_error("gate_library_manager", "no 'VCC' gate found in gate library, but gate types 'VCC' and '{}' already exist.", name);
+                        log_error("gate_library_manager", "no 'VDD' gate found in gate library, but gate type 'HAL_VDD' already exist.");
                         return false;
                     }
 
@@ -63,7 +55,7 @@ namespace hal
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ONE);
                     lib->mark_vcc_gate_type(gt);
-                    log_info("gate_library_manager", "gate library did not contain a VCC gate, auto-generated type '{}'.", name);
+                    log_info("gate_library_manager", "gate library did not contain a VDD gate, auto-generated type '{}'.", name);
                 }
 
                 return true;

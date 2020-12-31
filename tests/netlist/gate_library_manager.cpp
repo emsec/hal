@@ -19,17 +19,13 @@ namespace hal
     protected:
         // The path, where the library is temporary stored
         std::filesystem::path m_test_lib_path;
-        std::string m_lib_file_name;
-        std::string m_test_lib_name;
 
         virtual void SetUp()
         {
             NO_COUT_BLOCK;
             test_utils::init_log_channels();
             plugin_manager::load_all_plugins();
-            m_lib_file_name = "test_lib";
-            m_test_lib_name = "TEST_GATE_LIBRARY_FOR_GATE_LIBRARY_MANAGER_TESTS";
-            m_test_lib_path = (utils::get_gate_library_directories()[0]) / (m_lib_file_name + ".lib");
+            m_test_lib_path = (utils::get_gate_library_directories()[0]) / "test1.lib";
         }
 
         virtual void TearDown()
@@ -46,7 +42,7 @@ namespace hal
             std::ofstream test_lib(m_test_lib_path.string());
             test_lib << "/* This file only exists for testing purposes and should be already destroyed*/\n"
                         "library ("
-                     << m_test_lib_name
+                     << "example_lib"
                      << ") {\n"
                         "    define(cell);\n"
                         "    cell(GND) {\n"
@@ -87,7 +83,7 @@ namespace hal
         bool found_test_lib = false;
         for (GateLibrary* gl : gate_library_manager::get_gate_libraries())
         {
-            if (gl->get_name() == m_test_lib_name)
+            if (gl->get_name() == "example_lib")
             {
                 found_test_lib = true;
                 break;
@@ -115,7 +111,7 @@ namespace hal
         bool found_test_lib = false;
         for (GateLibrary* gl : gate_library_manager::get_gate_libraries())
         {
-            if (gl->get_name() == m_test_lib_name)
+            if (gl->get_name() == "example_lib")
             {
                 found_test_lib = true;
                 break;
@@ -159,6 +155,7 @@ namespace hal
         {
             // Parse a file that does not contain a GND or VCC Gate type (constant 0 / constant 1)
             NO_COUT_TEST_BLOCK;
+            m_test_lib_path = (utils::get_gate_library_directories()[0]) / "test2.lib";
             std::ofstream test_lib(m_test_lib_path.string());
             test_lib << "/* This file only exists for testing purposes and should be already destroyed*/\n"
                         "library (check_prepare_library_1) {\n"
@@ -171,18 +168,18 @@ namespace hal
 
             // check GND gate type
             auto gnd_types = empty_lib->get_gnd_gate_types();
-            ASSERT_TRUE(gnd_types.size() == 1);
-            ASSERT_TRUE(gnd_types.find("GND") != gnd_types.end());
-            auto gnd_bf = gnd_types.at("GND")->get_boolean_functions();
-            ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
+            EXPECT_TRUE(gnd_types.size() == 1);
+            EXPECT_TRUE(gnd_types.find("HAL_GND") != gnd_types.end());
+            auto gnd_bf = gnd_types.at("HAL_GND")->get_boolean_functions();
+            EXPECT_TRUE(gnd_bf.find("O") != gnd_bf.end());
             EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
 
             // check VCC gate type
             auto vcc_types = empty_lib->get_vcc_gate_types();
-            ASSERT_TRUE(vcc_types.size() == 1);
-            ASSERT_TRUE(vcc_types.find("VCC") != vcc_types.end());
-            auto vcc_bf = vcc_types.at("VCC")->get_boolean_functions();
-            ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
+            EXPECT_TRUE(vcc_types.size() == 1);
+            EXPECT_TRUE(vcc_types.find("HAL_VDD") != vcc_types.end());
+            auto vcc_bf = vcc_types.at("HAL_VDD")->get_boolean_functions();
+            EXPECT_TRUE(vcc_bf.find("O") != vcc_bf.end());
             EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
         }
         std::filesystem::remove(m_test_lib_path);
