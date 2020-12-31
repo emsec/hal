@@ -32,6 +32,8 @@
 
 namespace hal
 {
+    class GateLibrary;
+
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
      *
@@ -96,15 +98,6 @@ namespace hal
         };
 
         /**
-         * Construct a new gate type by specifying its name and base type.
-         *
-         * @param[in] name - The name of the gate type.
-         * @param[in] base_type - The base type.
-         */
-        GateType(const std::string& name, BaseType base_type);
-        virtual ~GateType() = default;
-
-        /**
          * Get the unique ID of the gate type.
          *
          * @returns The unique ID of the gate type.
@@ -124,6 +117,13 @@ namespace hal
          * @returns The base type of the gate type.
          */
         BaseType get_base_type() const;
+
+        /**
+         * Get the gate library this gate type is associated with.
+         *
+         * @returns The gate library.
+         */
+        GateLibrary* get_gate_library() const;
 
         /**
          * Get a string describing the given gate type.
@@ -382,6 +382,9 @@ namespace hal
         bool is_lut_init_ascending() const;
 
     private:
+        friend class GateLibrary;
+
+        GateLibrary* m_gate_library;
         u32 m_id;
         std::string m_name;
         BaseType m_base_type;
@@ -404,11 +407,13 @@ namespace hal
 
         std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior;
 
-        std::string m_config_data_category = "";
+        std::string m_config_data_category   = "";
         std::string m_config_data_identifier = "";
-        bool m_ascending = true;
+        bool m_ascending                     = true;
 
-        GateType(const GateType&) = delete;               // disable copy-constructor
-        GateType& operator=(const GateType&) = delete;    // disable copy-assignment
+        GateType(GateLibrary* gate_library, u32 id, const std::string& name, BaseType base_type);
+
+        GateType(const GateType&) = delete;
+        GateType& operator=(const GateType&) = delete;
     };
 }    // namespace hal

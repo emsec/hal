@@ -62,26 +62,16 @@ namespace hal
          *
          * @returns The path to the gate library file.
          */
-        std::filesystem::path get_path() const;
+        std::filesystem::path get_path() const;        
 
         /**
-         * TODO prevent creation of multiple with same name
          * Create a new gate type, add it to the gate library, and return it.
          * 
          * @param[in] name - The name of the gate type.
-         * @param[in] type - The base type of the gate type.
+         * @param[in] base_type - The base type of the gate type.
          * @returns The new gate type instance on success, a nullptr otherwise.
          */
-        GateType* create_gate_type(const std::string& name, GateType::BaseType type = GateType::BaseType::combinational);
-
-        /**
-         * \deprecated
-         * DEPRECATED <br>
-         * Add a gate type to the gate library.
-         *
-         * @param[in] gate_type - The gate type to add.
-         */
-        [[deprecated("Use create_gate_type() instead.")]] void add_gate_type(std::unique_ptr<GateType> gate_type);
+        GateType* create_gate_type(const std::string& name, GateType::BaseType base_type = GateType::BaseType::combinational);
 
         /**
          * Check whether the given gate type is contained in this library.
@@ -162,6 +152,8 @@ namespace hal
         std::string m_name;
         std::filesystem::path m_path;
 
+        u32 m_next_gate_type_id;
+
         std::vector<std::unique_ptr<GateType>> m_gate_types;
         std::unordered_map<std::string, GateType*> m_gate_type_map;
         std::unordered_map<std::string, GateType*> m_vcc_gate_types;
@@ -169,7 +161,9 @@ namespace hal
 
         std::vector<std::string> m_includes;
 
-        GateLibrary(const GateLibrary&) = delete;               // disable copy-constructor
-        GateLibrary& operator=(const GateLibrary&) = delete;    // disable copy-assignment
+        GateLibrary(const GateLibrary&) = delete;
+        GateLibrary& operator=(const GateLibrary&) = delete;
+
+        u32 get_unique_gate_type_id();
     };
 }    // namespace hal

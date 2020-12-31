@@ -30,13 +30,12 @@ namespace hal
         {PinDirection::input, {PinType::none, PinType::power, PinType::ground, PinType::clock, PinType::enable, PinType::set, PinType::reset, PinType::data, PinType::address}},
         {PinDirection::output, {PinType::none, PinType::lut, PinType::state, PinType::neg_state, PinType::data, PinType::address}}};
 
-    GateType::GateType(const std::string& name, BaseType base_type)
+    GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, BaseType base_type)
     {
-        static u32 next_id = 1;
-
-        m_id        = next_id++;
-        m_name      = name;
-        m_base_type = base_type;
+        m_gate_library = gate_library;
+        m_id           = id;
+        m_name         = name;
+        m_base_type    = base_type;
     }
 
     u32 GateType::get_id() const
@@ -52,6 +51,11 @@ namespace hal
     GateType::BaseType GateType::get_base_type() const
     {
         return m_base_type;
+    }
+
+    GateLibrary* GateType::get_gate_library() const
+    {
+        return m_gate_library;
     }
 
     std::string GateType::to_string() const
@@ -81,7 +85,7 @@ namespace hal
 
     bool GateType::operator==(const GateType& other) const
     {
-        return m_id == other.get_id();
+        return ((m_id == other.get_id()) && (m_gate_library == other.get_gate_library()));
     }
 
     bool GateType::operator!=(const GateType& other) const

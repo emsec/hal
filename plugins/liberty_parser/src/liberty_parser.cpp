@@ -142,13 +142,11 @@ namespace hal
                     return false;
                 }
 
-                auto gt = construct_gate_type(cell.value());
+                GateType* gt = construct_gate_type(cell.value());
                 if (gt == nullptr)
                 {
                     return false;
                 }
-
-                m_gate_lib->add_gate_type(std::move(gt));
             }
             else if (next_token == "type" && library_str.peek() == "(")
             {
@@ -829,9 +827,8 @@ namespace hal
         return lut;
     }
 
-    std::unique_ptr<GateType> LibertyParser::construct_gate_type(cell_group& cell)
+    GateType* LibertyParser::construct_gate_type(cell_group& cell)
     {
-        std::unique_ptr<GateType> gt;
         std::vector<std::string> input_pins;
         std::vector<std::string> output_pins;
         std::unordered_map<std::string, std::map<u32, std::string>> input_pin_groups;
@@ -895,20 +892,13 @@ namespace hal
             }
         }
 
-        if (cell.type == GateType::BaseType::combinational)
+        GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.type);
+
+        gt->add_input_pins(input_pins);
+        gt->add_output_pins(output_pins);
+
+        if (cell.type == GateType::BaseType::ff)
         {
-            gt = std::make_unique<GateType>(cell.name, cell.type);
-
-            gt->add_input_pins(input_pins);
-            gt->add_output_pins(output_pins);
-        }
-        else if (cell.type == GateType::BaseType::ff)
-        {
-            gt = std::make_unique<GateType>(cell.name, cell.type);
-
-            gt->add_input_pins(input_pins);
-            gt->add_output_pins(output_pins);
-
             if (!cell.ff.clocked_on.empty())
             {
                 cell.special_functions["clock"] = cell.ff.clocked_on;
@@ -998,11 +988,6 @@ namespace hal
         }
         else if (cell.type == GateType::BaseType::latch)
         {
-            gt = std::make_unique<GateType>(cell.name, cell.type);
-
-            gt->add_input_pins(input_pins);
-            gt->add_output_pins(output_pins);
-
             if (!cell.latch.enable.empty())
             {
                 cell.special_functions["enable"] = cell.latch.enable;
@@ -1090,11 +1075,6 @@ namespace hal
         }
         else if (cell.type == GateType::BaseType::lut)
         {
-            gt = std::make_unique<GateType>(cell.name, GateType::BaseType::lut);
-
-            gt->add_input_pins(input_pins);
-            gt->add_output_pins(output_pins);
-
             gt->set_config_data_category(cell.lut.data_category);
             gt->set_config_data_identifier(cell.lut.data_identifier);
             gt->set_lut_init_ascending(cell.lut.data_direction == "ascending");

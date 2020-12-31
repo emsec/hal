@@ -54,13 +54,6 @@ namespace hal
             .value("X", GateType::ClearPresetBehavior::X, R"(Set the internal state to 'X'.)")
             .export_values();
 
-        py_gate_type.def(py::init<const std::string&, GateType::BaseType>(), py::arg("name"), py::arg("base_type"), R"(
-            Construct a new gate type by specifying its name and base type.
-
-            :param str name: The name of the gate type.
-            :param hal_py.GateType.BaseType base_type: The base type.
-        )");
-
         py_gate_type.def_property_readonly("id", &GateType::get_id, R"(
             :type: The unique ID of the gate type.
         )");
@@ -97,6 +90,19 @@ namespace hal
 
             :returns: The base type of the gate type.
             :rtype: hal_py.GateType.BaseType
+        )");
+
+        py_gate_type.def_property_readonly("gate_library", &GateType::get_gate_library, R"(
+            The gate library this gate type is associated with.
+
+            :type: hal_py.GateLibrary
+        )");
+
+        py_gate_type.def("get_gate_library", &GateType::get_gate_library, R"(
+            Get the gate library this gate type is associated with.
+
+            :returns: The gate library.
+            :rtype: hal_py.GateLibrary
         )");
 
         py_gate_type.def(

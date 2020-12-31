@@ -36,9 +36,16 @@ namespace hal
     {
         TEST_START
         {
-            auto gl = std::make_unique<GateLibrary>("imaginary_path", "gl_name");
+            auto gl = std::make_unique<GateLibrary>("imaginary_path", "gl");
+            auto other_gl = std::make_unique<GateLibrary>("imaginary_path", "other_gl");
 
-            // Create some Gate types beforehand
+            // check name and path
+            EXPECT_EQ(gl->get_name(), "gl");
+            EXPECT_EQ(other_gl->get_name(), "other_gl");
+            EXPECT_EQ(gl->get_path(), "imaginary_path");
+            EXPECT_EQ(other_gl->get_path(), "imaginary_path");
+
+            // create gate types
             // AND gate type
             auto gt_and = gl->create_gate_type("gt_and");
             ASSERT_TRUE(gt_and != nullptr);
@@ -72,21 +79,16 @@ namespace hal
             ASSERT_TRUE(gt_ff != nullptr);
             auto gt_latch = gl->create_gate_type("gt_latch",
 
-                                                    // Latch gate type
-                                                    GateType::BaseType::latch);
+            // Latch gate type
+            GateType::BaseType::latch);
             ASSERT_TRUE(gt_latch != nullptr);
 
             // LUT gate type
             auto gt_lut = gl->create_gate_type("gt_lut", GateType::BaseType::lut);
             ASSERT_TRUE(gt_lut != nullptr);
 
-            // Check the name
-            EXPECT_EQ(gl->get_name(), "gl_name");
-
             // check if all gate types contained in library
-            EXPECT_EQ(
-                gl->get_gate_types(),
-                (std::unordered_map<std::string, GateType*>({{"gt_and", gt_and}, {"gt_gnd", gt_gnd}, {"gt_vcc", gt_vcc}, {"gt_or", gt_or}, {"gt_ff", gt_ff}, {"gt_latch", gt_latch}, {"gt_lut", gt_lut}})));
+            EXPECT_EQ(gl->get_gate_types(),(std::unordered_map<std::string, GateType*>({{"gt_and", gt_and}, {"gt_gnd", gt_gnd}, {"gt_vcc", gt_vcc}, {"gt_or", gt_or}, {"gt_ff", gt_ff}, {"gt_latch", gt_latch}, {"gt_lut", gt_lut}})));
             EXPECT_EQ(gl->get_vcc_gate_types(), (std::unordered_map<std::string, GateType*>({{"gt_vcc", gt_vcc}})));
             EXPECT_EQ(gl->get_gnd_gate_types(), (std::unordered_map<std::string, GateType*>({{"gt_gnd", gt_gnd}})));
 
@@ -100,8 +102,8 @@ namespace hal
             // check contains_gate_type and contains_gate_type_by_name
             EXPECT_TRUE(gl->contains_gate_type(gt_and));
             EXPECT_FALSE(gl->contains_gate_type(nullptr));
-            GateType gt_nil("not_in_library", GateType::BaseType::combinational);
-            EXPECT_FALSE(gl->contains_gate_type(&gt_nil));
+            GateType* gt_nil = other_gl->create_gate_type("not_in_library", GateType::BaseType::combinational);
+            EXPECT_FALSE(gl->contains_gate_type(gt_nil));
 
             EXPECT_TRUE(gl->contains_gate_type_by_name(gt_and->get_name()));
             EXPECT_FALSE(gl->contains_gate_type_by_name(""));

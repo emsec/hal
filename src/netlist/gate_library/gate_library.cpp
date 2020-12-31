@@ -1,11 +1,13 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
     GateLibrary::GateLibrary(const std::filesystem::path& path, const std::string& name) : m_name(name), m_path(path)
     {
+        m_next_gate_type_id = 1;
     }
 
     std::string GateLibrary::get_name() const
@@ -20,18 +22,18 @@ namespace hal
 
     GateType* GateLibrary::create_gate_type(const std::string& name, GateType::BaseType type)
     {
-        std::unique_ptr<GateType> gt = std::make_unique<GateType>(name, type);
+        if (m_gate_type_map.find(name) != m_gate_type_map.end())
+        {
+            log_error("gate_library", "could not create gate type with name '{}' as a gate type with the same name already exists within gate library '{}'.", name, m_name);
+            return nullptr;
+        }
+
+        std::unique_ptr<GateType> gt = std::unique_ptr<GateType>(new GateType(this, get_unique_gate_type_id(), name, type));
 
         auto res = gt.get();
         m_gate_type_map.emplace(name, res);
         m_gate_types.push_back(std::move(gt));
         return res;
-    }
-
-    void GateLibrary::add_gate_type(std::unique_ptr<GateType> gt)
-    {
-        m_gate_type_map.emplace(gt->get_name(), gt.get());
-        m_gate_types.push_back(std::move(gt));
     }
 
     bool GateLibrary::contains_gate_type(GateType* gate_type) const
@@ -138,5 +140,10 @@ namespace hal
     void GateLibrary::add_include(const std::string& inc)
     {
         m_includes.push_back(inc);
+    }
+
+    u32 GateLibrary::get_unique_gate_type_id()
+    {
+        return m_next_gate_type_id++;
     }
 }    // namespace hal

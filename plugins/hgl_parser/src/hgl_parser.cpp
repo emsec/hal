@@ -132,9 +132,9 @@ namespace hal
         gt->add_input_pins(pin_ctx.input_pins);
         gt->add_output_pins(pin_ctx.output_pins);
 
-        for (const auto& [pin, type] : pin_ctx.pin_to_type)
+        for (const auto& [pin, pin_type] : pin_ctx.pin_to_type)
         {
-            gt->assign_pin_type(pin, type);
+            gt->assign_pin_type(pin, pin_type);
         }
 
         if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())
