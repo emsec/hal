@@ -51,51 +51,51 @@ namespace hal
         CORE_API std::unique_ptr<Netlist> copy_netlist(const Netlist* nl);
 
         /**
-         * TODO pybind
-         * Find all sequential predecessors or successors of a specific gate.
+         * Find all sequential predecessors or successors of a gate.
          * Traverses combinational logic of all input or output nets until sequential gates are found.
-         * This may include the gate itself.
-         * For improved performance when making extensive use of this function the same cache should be provided.
+         * The result may include the provided gate itself.
+         * The use of the this cached version is recommended in case of extensive usage to improve performance. 
+         * The cache will be filled by this function and should initially be provided empty.
+         * Different caches for different values of get_successors shall be used.
          *
-         * @param[in] gate - The gate to start from
-         * @param[in] get_successors - If true, sequential successors are returned, else sequential predecessors are returned
-         * @param[inout] cache - Cache to speed up computations. The cache is filled by this function. You must use different caches for different values of get_successors.
+         * @param[in] gate - The initial gate.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[inout] cache - The cache. 
          * @returns All sequential successors or predecessors of the gate.
          */
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
-         * TODO pybind
-         * Find all sequential predecessors or successors of a specific net.
-         * Traverses combinational logic until sequential gates are found.
-         * For improved performance when making extensive use of this function the same cache should be provided.
-         *
-         * @param[in] net - The net to start from
-         * @param[in] get_successors - If true, sequential successors are returned, else sequential predecessors are returned
-         * @param[inout] cache - Cache to speed up computations. The cache is filled by this function. You must use different caches for different values of get_successors.
-         * @returns All sequential successors or predecessors of the net.
-         */
-        CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
-
-        /**
-         * Find all sequential predecessors or successors of a specific gate.
+         * Find all sequential predecessors or successors of a gate.
          * Traverses combinational logic of all input or output nets until sequential gates are found.
-         * This may include the gate itself.
-         * If this function is used extensively, consider using the above variant with a cache.
+         * The result may include the provided gate itself.
          *
-         * @param[in] gate - The gate to start from
-         * @param[in] get_successors - If true, sequential successors are returned, else sequential predecessors are returned
+         * @param[in] gate - The initial gate.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
          * @returns All sequential successors or predecessors of the gate.
          */
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors);
 
         /**
-         * Find all sequential predecessors or successors of a specific net.
-         * Traverses combinational logic until sequential gates are found.
-         * If this function is used extensively, consider using the above variant with a cache.
+         * Find all sequential predecessors or successors of a net.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         * The use of the cache is recommended in case of extensive usage of this function. 
+         * The cache will be filled by this function and should initially be provided empty.
+         * Different caches for different values of get_successors shall be used.
          *
-         * @param[in] net - The net to start from
-         * @param[in] get_successors - If true, sequential successors are returned, else sequential predecessors are returned
+         * @param[in] net - The initial net.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[inout] cache - The cache. 
+         * @returns All sequential successors or predecessors of the net.
+         */
+        CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
+
+        /**
+         * Find all sequential predecessors or successors of a net.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         *
+         * @param[in] net - The initial net.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
          * @returns All sequential successors or predecessors of the net.
          */
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors);
@@ -112,13 +112,20 @@ namespace hal
         std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::vector<std::string> pins, bool is_inputs);
 
         /**
-         * TODO test, add option to check LUTs
+         * TODO test
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
          * 
          * @param[in] netlist - The target netlist.
+         * @param[in] check_luts - If true, check Boolean functions of LUTs and remove buffer LUTs.
          */
-        void remove_buffers(Netlist* netlist);
+        void remove_buffers(Netlist* netlist, bool check_luts);
 
-        // TODO remove inactive nets from gates (e.g. ICE40 LUTs)
+        /**
+         * TODO test
+         * Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.
+         * 
+         * @param[in] netlist - The target netlist.
+         */
+        void remove_unused_lut_endpoints(Netlist* netlist);
     }    // namespace netlist_utils
 }    // namespace hal

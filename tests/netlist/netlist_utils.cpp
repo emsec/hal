@@ -21,6 +21,47 @@ namespace hal
         }
     };
 
+    namespace 
+    {
+        Net* connect(Netlist* nl, Gate* src, std::string src_pin, Gate* dst, std::string dst_pin) 
+        {
+            Net* n;
+            if (n = src->get_fan_out_net(src_pin); n != nullptr)
+            {
+                n->add_destination(dst, dst_pin);
+            }
+            else if (n = dst->get_fan_in_net(dst_pin); n != nullptr)
+            {
+                n->add_source(src, src_pin);
+            }
+            else
+            {
+                n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
+                n->add_source(src, src_pin);
+                n->add_destination(dst, dst_pin);
+            }
+            return n;
+        }
+
+        std::unique_ptr<GateLibrary> create_lut_buffer_lib() 
+        {
+            std::unique_ptr<GateLibrary> lib = std::unique_ptr<GateLibrary>(new GateLibrary("dummy_path", "dummy_name"));
+            GateType* lut4 = lib->create_gate_type("LUT4", GateType::BaseType::lut);
+            lut4->add_input_pins({"I0", "I1", "I2", "I3"});
+            lut4->add_output_pin("O");
+            lut4->assign_pin_type("O", GateType::PinType::lut);
+            lut4->set_config_data_category("generic");
+            lut4->set_config_data_identifier("INIT");
+
+            GateType* buf = lib->create_gate_type("BUF", GateType::BaseType::buffer);
+            buf->add_input_pin("I");
+            buf->add_output_pin("O");
+            buf->add_boolean_function("O", BooleanFunction::from_string("I"));
+
+            return std::move(lib);
+        }
+    }
+
     /**
      * Testing the get_subgraph_function
      *
@@ -249,32 +290,15 @@ namespace hal
         Gate* gate_5_seq = nl->create_gate(MIN_GATE_ID + 5, gl->get_gate_types().at("gate_2_to_1_sequential"), "gate_5_seq");
         Gate* gate_6     = nl->create_gate(MIN_GATE_ID + 6, gl->get_gate_types().at("gate_2_to_1"), "gate_6");
 
-        auto connect = [&](Gate* src, std::string src_pin, Gate* dst, std::string dst_pin) {
-            if (auto n = src->get_fan_out_net(src_pin); n != nullptr)
-            {
-                n->add_destination(dst, dst_pin);
-            }
-            else if (auto n = dst->get_fan_in_net(dst_pin); n != nullptr)
-            {
-                n->add_source(src, src_pin);
-            }
-            else
-            {
-                n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
-                n->add_source(src, src_pin);
-                n->add_destination(dst, dst_pin);
-            }
-        };
-
-        connect(gate_0, "O", gate_2, "I");
-        connect(gate_0, "O", gate_3, "I1");
-        connect(gate_1, "O", gate_3, "I0");
-        connect(gate_3, "O", gate_4_seq, "I0");
-        connect(gate_4_seq, "O", gate_4_seq, "I1");
-        connect(gate_4_seq, "O", gate_5_seq, "I0");
-        connect(gate_0, "O", gate_5_seq, "I1");
-        connect(gate_4_seq, "O", gate_6, "I0");
-        connect(gate_5_seq, "O", gate_6, "I1");
+        connect(nl.get(), gate_0, "O", gate_2, "I");
+        connect(nl.get(), gate_0, "O", gate_3, "I1");
+        connect(nl.get(), gate_1, "O", gate_3, "I0");
+        connect(nl.get(), gate_3, "O", gate_4_seq, "I0");
+        connect(nl.get(), gate_4_seq, "O", gate_4_seq, "I1");
+        connect(nl.get(), gate_4_seq, "O", gate_5_seq, "I0");
+        connect(nl.get(), gate_0, "O", gate_5_seq, "I1");
+        connect(nl.get(), gate_4_seq, "O", gate_6, "I0");
+        connect(nl.get(), gate_5_seq, "O", gate_6, "I1");
 
         std::map<Gate*, std::vector<Gate*>> test_successors = {
             {gate_0, {gate_4_seq, gate_5_seq}},
@@ -321,6 +345,40 @@ namespace hal
             // std::cout << "computed: " << utils::join(", ", predecessors, [](auto x) { return x->get_name(); }) << std::endl;
             // std::cout << "expected: " << utils::join(", ", expected, [](auto x) { return x->get_name(); }) << std::endl;
         }
+
+        TEST_END
+    }
+
+    /**
+     * Testing getting the nets connected to a set of pins.
+     *
+     * Functions: get_nets_at_pins
+     */
+    TEST_F(NetlistUtilsTest, check_get_nets_at_pins)
+    {
+        TEST_START
+
+        std::unique_ptr<GateLibrary> lib = create_lut_buffer_lib();
+
+        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
+        ASSERT_NE(nl, nullptr);
+
+        Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
+        Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
+        Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
+        Gate* l3 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l3");
+        Gate* l4 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
+
+        Net* n0 = connect(nl.get(), l0, "O", l4, "I0");
+        Net* n1 = connect(nl.get(), l1, "O", l4, "I1");
+        Net* n2 = connect(nl.get(), l2, "O", l4, "I2");
+        Net* n3 = connect(nl.get(), l3, "O", l4, "I3");
+
+        EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I0", "I2"}, true), std::unordered_set<Net*>({n0, n2}));
+        EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I1", "I2", "I4"}, true), std::unordered_set<Net*>({n1, n2}));
+        EXPECT_EQ(netlist_utils::get_nets_at_pins(l4, {"I1", "I2", "I3"}, true), std::unordered_set<Net*>({n1, n2, n3}));
+        EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {"O"}, false), std::unordered_set<Net*>({n0}));
+        EXPECT_EQ(netlist_utils::get_nets_at_pins(l0, {"A", "B", "C"}, true), std::unordered_set<Net*>());
 
         TEST_END
     }

@@ -29,23 +29,62 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
-        py_netlist_utils.def("get_next_sequential_gates", py::overload_cast<const Gate*, bool>(&netlist_utils::get_next_sequential_gates), py::arg("gate"), py::arg("get_successors"), R"(
-            Find all sequential predecessors or successors of a specific gate.
+        py_netlist_utils.def("get_next_sequential_gates",
+                             py::overload_cast<const Gate*, bool, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_next_sequential_gates),
+                             py::arg("gate"),
+                             py::arg("get_successors"),
+                             py::arg("cache"),
+                             R"(
+            Find all sequential predecessors or successors of a gate.
             Traverses combinational logic of all input or output nets until sequential gates are found.
-            This may include the gate itself.
-
-            :param hal_py.Gate gate: The gate to start from
-            :param bool: If true, sequential successors are returned, else sequential predecessors are returned
+            The result may include the provided gate itself.
+            The use of the this cached version is recommended in case of extensive usage to improve performance. 
+            The cache will be filled by this function and should initially be provided empty.
+            Different caches for different values of get_successors shall be used.
+        
+            :param hal_py.Gate gate: The initial gate.
+            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param dict[int, list[hal_py.Gate]] cache - The cache. 
             :returns: All sequential successors or predecessors of the gate.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_next_sequential_gates", py::overload_cast<const Net*, bool>(&netlist_utils::get_next_sequential_gates), py::arg("net"), py::arg("get_successors"), R"(
-            Find all sequential predecessors or successors of a specific net.
-            Traverses combinational logic logic until sequential gates are found.
+        py_netlist_utils.def("get_next_sequential_gates", py::overload_cast<const Gate*, bool>(&netlist_utils::get_next_sequential_gates), py::arg("gate"), py::arg("get_successors"), R"(
+            Find all sequential predecessors or successors of a gate.
+            Traverses combinational logic of all input or output nets until sequential gates are found.
+            The result may include the provided gate itself.
 
-            :param hal_py.Net net: The net to start from
-            :param bool: If true, sequential successors are returned, else sequential predecessors are returned
+            :param hal_py.Gate gate: The initial gate.
+            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :returns: All sequential successors or predecessors of the gate.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_utils.def("get_next_sequential_gates",
+                             py::overload_cast<const Net*, bool, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_next_sequential_gates),
+                             py::arg("net"),
+                             py::arg("get_successors"),
+                             py::arg("cache"),
+                             R"(
+            Find all sequential predecessors or successors of a net.
+            Traverses combinational logic of all input or output nets until sequential gates are found.
+            The use of the cache is recommended in case of extensive usage of this function. 
+            The cache will be filled by this function and should initially be provided empty.
+            Different caches for different values of get_successors shall be used.
+
+            :param hal_py.Net net: The initial net.
+            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param dict[int, list[hal_py.Gate]] cache - The cache. 
+            :returns: All sequential successors or predecessors of the net.
+            :rtype: list[hal_py.Net]
+        )");
+
+        py_netlist_utils.def("get_next_sequential_gates", py::overload_cast<const Net*, bool>(&netlist_utils::get_next_sequential_gates), py::arg("net"), py::arg("get_successors"), R"(
+            Find all sequential predecessors or successors of a net.
+            Traverses combinational logic of all input or output nets until sequential gates are found.
+
+            :param hal_py.Net net: The initial net.
+            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
             :returns: All sequential successors or predecessors of the net.
             :rtype: list[hal_py.Net]
         )");
@@ -60,9 +99,16 @@ namespace hal
             :rtype: set[hal_py.Net]
         )");
 
-        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), R"(
+        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), py::arg("check_luts"), R"(
             Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
 
+            :param hal_py.Netlist netlist: The target netlist.
+            :param bool check_luts: If true, check Boolean functions of LUTs and remove buffer LUTs.
+        )");
+
+        py_netlist_utils.def("remove_unused_lut_endpoints", netlist_utils::remove_unused_lut_endpoints, py::arg("netlist"), R"(
+            Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.
+        
             :param hal_py.Netlist netlist: The target netlist.
         )");
     }

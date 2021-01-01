@@ -411,9 +411,43 @@ namespace hal
             return nets;
         }
 
-        void remove_buffers(Netlist* netlist)
+        void remove_buffers(Netlist* netlist, bool check_luts)
         {
-            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::buffer; }))
+            std::vector<Gate*> buffer_gates;
+            if (!check_luts)
+            {
+                buffer_gates = netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::buffer; });
+            }
+            else
+            {
+                buffer_gates = netlist->get_gates([](Gate* g) {
+                    if (g->get_type()->get_base_type() == GateType::BaseType::lut)
+                    {
+                        std::vector<Endpoint*> fan_in  = g->get_fan_in_endpoints();
+                        std::vector<Endpoint*> fan_out = g->get_fan_out_endpoints();
+                        if (fan_in.size() == 1 && fan_out.size() == 1)
+                        {
+                            std::unordered_map<std::string, BooleanFunction> functions = g->get_boolean_functions(true);
+                            if (functions.size() == 1)
+                            {
+                                if (functions.begin()->first != fan_out.at(0)->get_pin())
+                                {
+                                    if (functions.begin()->second.to_string() == fan_in.at(0)->get_pin())
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    return false;
+                });
+            }
+
+            u32 num_gates = buffer_gates.size();
+
+            for (const auto& gate : buffer_gates)
             {
                 Net* in_net  = *(gate->get_fan_in_nets().begin());
                 Net* out_net = *(gate->get_fan_out_nets().begin());
@@ -427,6 +461,35 @@ namespace hal
                 netlist->delete_net(out_net);
                 netlist->delete_gate(gate);
             }
+
+            log_info("netlist_utils", "removed {} buffer gates from the netlist.", num_gates);
+        }
+
+        void remove_unused_lut_endpoints(Netlist* netlist)
+        {
+            u32 num_eps = 0;
+
+            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            {
+                std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
+                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions(true);
+
+                std::vector<std::string> active_pins = functions.begin()->second.get_variables();
+
+                if (fan_in.size() > active_pins.size())
+                {
+                    for (const auto& ep : fan_in)
+                    {
+                        if (std::find(active_pins.begin(), active_pins.end(), ep->get_pin()) == active_pins.end())
+                        {
+                            num_eps++;
+                            ep->get_net()->remove_destination(gate, ep->get_pin());
+                        }
+                    }
+                }
+            }
+
+            log_info("netlist_utils", "removed {} unused LUT fan-in endpoints from the netlist.", num_eps);
         }
     }    // namespace netlist_utils
 }    // namespace hal
