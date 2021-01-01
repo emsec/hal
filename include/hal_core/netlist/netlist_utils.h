@@ -101,7 +101,6 @@ namespace hal
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors);
 
         /**
-         * TODO test
          * Get the nets that are connected to a subset of pins of the specified gate.
          * 
          * @param[in] gate - The gate.
@@ -112,13 +111,12 @@ namespace hal
         std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::vector<std::string> pins, bool is_inputs);
 
         /**
-         * TODO test
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
          * 
          * @param[in] netlist - The target netlist.
          * @param[in] check_luts - If true, check Boolean functions of LUTs and remove buffer LUTs.
          */
-        void remove_buffers(Netlist* netlist, bool check_luts);
+        void remove_buffers(Netlist* netlist, bool check_luts = false);
 
         /**
          * TODO test

@@ -99,7 +99,7 @@ namespace hal
             :rtype: set[hal_py.Net]
         )");
 
-        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), py::arg("check_luts"), R"(
+        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), py::arg("check_luts") = false, R"(
             Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
 
             :param hal_py.Netlist netlist: The target netlist.

@@ -445,21 +445,28 @@ namespace hal
                 });
             }
 
-            u32 num_gates = buffer_gates.size();
+            u32 num_gates = 0;
 
             for (const auto& gate : buffer_gates)
             {
-                Net* in_net  = *(gate->get_fan_in_nets().begin());
-                Net* out_net = *(gate->get_fan_out_nets().begin());
-
-                for (const auto& dst : out_net->get_destinations())
+                std::vector<Net*> fan_in_nets  = gate->get_fan_in_nets();
+                std::vector<Net*> fan_out_nets = gate->get_fan_out_nets();
+                
+                if (fan_in_nets.size() == 1 && fan_out_nets.size() == 1) 
                 {
-                    out_net->remove_destination(dst->get_gate(), dst->get_pin());
-                    in_net->add_destination(dst->get_gate(), dst->get_pin());
-                }
+                    Net* in_net  = *(fan_in_nets.begin());
+                    Net* out_net = *(fan_out_nets.begin());
 
-                netlist->delete_net(out_net);
-                netlist->delete_gate(gate);
+                    for (const auto& dst : out_net->get_destinations())
+                    {
+                        out_net->remove_destination(dst->get_gate(), dst->get_pin());
+                        in_net->add_destination(dst->get_gate(), dst->get_pin());
+                    }
+
+                    num_gates++;
+                    netlist->delete_net(out_net);
+                    netlist->delete_gate(gate);
+                }
             }
 
             log_info("netlist_utils", "removed {} buffer gates from the netlist.", num_gates);
