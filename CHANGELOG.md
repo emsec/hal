@@ -14,16 +14,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added gate library writer interface to enable writing out gate library files
 * extended and refactored gate library functionality
   * added `create_gate_type` to class `GateLibrary` to enable gate type creation from Python
-  * added `mark_vcc_gate_type` and `mark_gnd_gate_type` to enable marking gate types as power or ground connections
-  * deprecated `add_gate_type` 
-  * removed `GateTypeSequential` and `GateTypeLut` classes and moved functionality into class `GateType`
-  * added pin types to `GateType` to enable assigning special-purpose pins
+  * added `mark_vcc_gate_type` and `mark_gnd_gate_type` to class `GateLibrary` to enable marking gate types as power or ground connections
+  * added `get_gate_type_by_name` and `contains_gate_type_by_name` to class `GateLibrary`
+  * added pin types and respective functions to `GateType` to enable assigning special-purpose pins
+  * added `get_gate_library` to class `GateType`
+  * added base types `ram`, `io`, and `buffer`
+  * removed `add_gate_type` 
+  * removed `GateTypeSequential` and `GateTypeLut` classes and moved their functionality into class `GateType`
   * renamed some functions to have shorter and more understandable names
 * added new gate library format: "HAL Gate Library" (HGL)
   * supports assignment of enable, set, reset, data, and address pins to gate types
   * added parser for HGL (`.hgl`) files
   * added writer for HGL (`.hgl`) files
-* added parsing of power and ground pins (`pg_pin`) to Liberty parser
+* refactored liberty gate library parser
+  * added parsing of power and ground pins (`pg_pin`) to Liberty parser
+  * added buffer gate type detection
+* added more netlist utility functions
+  * added `get_nets_at_pins` to retrieve nets that are connected to a vector of pins
+  * added `remove_buffers` to remove buffer gates from a netlist
+  * added `remove_unused_lut_endpoints` to remove unused LUT fan-in endpoints
 
 ## [3.1.10] - 2020-12-18 14:00:00+02:00 (urgency: medium)
 * added `SB_GB_IO`, `SB_GB`, `SB_I2C`, `SB_SPI`, `SB_HFOSC`, and `SB_LFOSC` gate types to `ICE40ULTRA` gate library
