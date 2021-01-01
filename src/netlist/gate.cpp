@@ -309,7 +309,7 @@ namespace hal
                 auto tt = func.get_truth_table(get_input_pins());
 
                 u64 config_value = 0;
-                if (m_type->is_lut_init_ascending())
+                if (!m_type->is_lut_init_ascending())
                 {
                     std::reverse(tt.begin(), tt.end());
                 }

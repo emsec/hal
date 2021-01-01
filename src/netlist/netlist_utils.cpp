@@ -421,18 +421,23 @@ namespace hal
             else
             {
                 buffer_gates = netlist->get_gates([](Gate* g) {
-                    if (g->get_type()->get_base_type() == GateType::BaseType::lut)
+                    if (g->get_type()->get_base_type() == GateType::BaseType::buffer)
+                    {
+                        return true;
+                    }
+                    else if (g->get_type()->get_base_type() == GateType::BaseType::lut)
                     {
                         std::vector<Endpoint*> fan_in  = g->get_fan_in_endpoints();
                         std::vector<Endpoint*> fan_out = g->get_fan_out_endpoints();
                         if (fan_in.size() == 1 && fan_out.size() == 1)
                         {
-                            std::unordered_map<std::string, BooleanFunction> functions = g->get_boolean_functions(true);
+                            std::unordered_map<std::string, BooleanFunction> functions = g->get_boolean_functions();
                             if (functions.size() == 1)
                             {
-                                if (functions.begin()->first != fan_out.at(0)->get_pin())
+                                if (functions.begin()->first == fan_out.at(0)->get_pin())
                                 {
-                                    if (functions.begin()->second.to_string() == fan_in.at(0)->get_pin())
+                                    auto str = functions.begin()->second.to_string();
+                                    if (str == fan_in.at(0)->get_pin())
                                     {
                                         return true;
                                     }
@@ -457,10 +462,12 @@ namespace hal
                     Net* in_net  = *(fan_in_nets.begin());
                     Net* out_net = *(fan_out_nets.begin());
 
-                    for (const auto& dst : out_net->get_destinations())
+                    for (Endpoint* dst : out_net->get_destinations())
                     {
-                        out_net->remove_destination(dst->get_gate(), dst->get_pin());
-                        in_net->add_destination(dst->get_gate(), dst->get_pin());
+                        Gate* dst_gate = dst->get_gate();
+                        std::string dst_pin = dst->get_pin();
+                        out_net->remove_destination(dst);
+                        in_net->add_destination(dst_gate, dst_pin);
                     }
 
                     num_gates++;
@@ -479,7 +486,7 @@ namespace hal
             for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
-                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions(true);
+                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
 
                 std::vector<std::string> active_pins = functions.begin()->second.get_variables();
 

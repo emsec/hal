@@ -441,6 +441,15 @@ namespace hal
             {
                 EXPECT_NE(gate->get_type()->get_base_type(), GateType::BaseType::buffer);
             }
+
+            EXPECT_EQ(l0->get_successor("O")->get_gate(), l4);
+            EXPECT_EQ(l1->get_successor("O")->get_gate(), l4);
+            EXPECT_EQ(l2->get_successor("O")->get_gate(), l5);
+            EXPECT_EQ(l5->get_successor("O")->get_gate(), l4);
+            ASSERT_EQ(l3->get_successors().size(), 2);
+            EXPECT_EQ(l3->get_successors().at(0)->get_gate(), l6);
+            EXPECT_EQ(l3->get_successors().at(1)->get_gate(), l6);
+            EXPECT_EQ(l6->get_successor("O")->get_gate(), l4);
         }
 
         // including LUTs
@@ -493,6 +502,14 @@ namespace hal
             {
                 EXPECT_NE(gate->get_type()->get_base_type(), GateType::BaseType::buffer);
             }
+
+            EXPECT_EQ(l0->get_successor("O")->get_gate(), l4);
+            EXPECT_EQ(l1->get_successor("O")->get_gate(), l4);
+            EXPECT_EQ(l2->get_successor("O")->get_gate(), l4);
+            ASSERT_EQ(l3->get_successors().size(), 2);
+            EXPECT_EQ(l3->get_successors().at(0)->get_gate(), l6);
+            EXPECT_EQ(l3->get_successors().at(1)->get_gate(), l6);
+            EXPECT_EQ(l6->get_successor("O")->get_gate(), l4);
 
             EXPECT_EQ(std::find(gates.begin(), gates.end(), l5), gates.end());
             EXPECT_NE(std::find(gates.begin(), gates.end(), l6), gates.end());

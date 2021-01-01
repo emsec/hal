@@ -802,7 +802,7 @@ namespace hal {
                 test_gate->add_boolean_function("new_bf", bf_i);
 
                 // -- get all boolean functions
-                std::unordered_map<std::string, BooleanFunction> bf_all = test_gate->get_boolean_functions(false);
+                std::unordered_map<std::string, BooleanFunction> bf_all = test_gate->get_boolean_functions();
                 EXPECT_EQ(bf_all, (std::unordered_map<std::string, BooleanFunction>({{"O", bf_i_invert},
                                                                                      {"new_bf", bf_i}})));
                 // -- get only custom boolean functions via get_boolean_functions
@@ -941,7 +941,8 @@ namespace hal {
 
                 BooleanFunction lut_bf = BooleanFunction::from_string("I0 | I1 | I2", input_pins);
                 lut_gate->add_boolean_function("O_LUT", lut_bf);
-                get_truth_table_from_hex_string("EF", 8);
+                EXPECT_EQ(lut_gate->get_boolean_functions().size(), 2);
+                EXPECT_EQ(lut_gate->get_boolean_function("O_LUT"), lut_bf);
             }
             // NEGATIVE
             {
