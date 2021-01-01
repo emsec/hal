@@ -138,12 +138,9 @@ namespace hal
             }
         }
 
-        gt->add_input_pins(pin_ctx.input_pins);
-        gt->add_output_pins(pin_ctx.output_pins);
-
-        for (const auto& [pin, pin_type] : pin_ctx.pin_to_type)
+        for (const auto pin : pin_ctx.pins)
         {
-            gt->assign_pin_type(pin, pin_type);
+            gt->add_pin(pin, pin_ctx.pin_to_direction.at(pin), pin_ctx.pin_to_type.at(pin));
         }
 
         if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())
@@ -208,7 +205,7 @@ namespace hal
 
         for (const auto& [f_name, func] : pin_ctx.boolean_functions)
         {
-            gt->add_boolean_function(f_name, BooleanFunction::from_string(func, pin_ctx.input_pins));
+            gt->add_boolean_function(f_name, BooleanFunction::from_string(func, pin_ctx.pins));
         }
 
         return true;
@@ -233,16 +230,23 @@ namespace hal
         std::string direction = pin["direction"].GetString();
         if (direction == "input")
         {
-            pin_ctx.input_pins.push_back(name);
+            pin_ctx.pins.push_back(name);
+            pin_ctx.pin_to_direction[name] = GateType::PinDirection::input;
         }
         else if (direction == "output")
         {
-            pin_ctx.output_pins.push_back(name);
+            pin_ctx.pins.push_back(name);
+            pin_ctx.pin_to_direction[name] = GateType::PinDirection::output;
         }
         else if (direction == "inout")
         {
-            pin_ctx.input_pins.push_back(name);
-            pin_ctx.output_pins.push_back(name);
+            pin_ctx.pins.push_back(name);
+            pin_ctx.pin_to_direction[name] = GateType::PinDirection::inout;
+        }
+        else if (direction == "internal")
+        {
+            pin_ctx.pins.push_back(name);
+            pin_ctx.pin_to_direction[name] = GateType::PinDirection::internal;
         }
         else
         {
@@ -270,13 +274,15 @@ namespace hal
             std::string type_str = pin["type"].GetString();
             if (auto it = m_string_to_pin_type.find(type_str); it != m_string_to_pin_type.end())
             {
-                pin_ctx.pin_to_type.emplace(name, it->second);
+                pin_ctx.pin_to_type[name] = it->second;
             }
             else
             {
                 log_warning("hgl_parser", "invalid type '{}' given for pin '{}' of gate type '{}'.", type_str, name, gt_name);
                 return false;
             }
+        } else {
+            pin_ctx.pin_to_type[name] = GateType::PinType::none;
         }
 
         return true;

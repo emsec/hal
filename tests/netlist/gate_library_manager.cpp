@@ -130,7 +130,7 @@ namespace hal
     {
         TEST_START
         {
-            // Parse a file that does not contain a GND or VCC Gate type (constant 0 / constant 1)
+            // Parse a file that does contain a GND or VCC Gate type (constant 0 / constant 1)
             NO_COUT_TEST_BLOCK;
             create_test_lib();
             GateLibrary* test_lib = gate_library_manager::get_gate_library(m_test_lib_path);

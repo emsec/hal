@@ -5,7 +5,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-* fixed crash when moving top module upward
 * added **highly experimental** way to close and reopen netlists at runtime
 * added creation of backups for Python files created within the editor outside of the `.hal` file
 * added user prompt when detecting Python file backups after a crash
@@ -33,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added `get_nets_at_pins` to retrieve nets that are connected to a vector of pins
   * added `remove_buffers` to remove buffer gates from a netlist
   * added `remove_unused_lut_endpoints` to remove unused LUT fan-in endpoints
+* fixed crash when moving top module upward
+* fixed `add_boolean_function` of class `Gate`assigning wrong functions to LUTs
 
 ## [3.1.10] - 2020-12-18 14:00:00+02:00 (urgency: medium)
 * added `SB_GB_IO`, `SB_GB`, `SB_I2C`, `SB_SPI`, `SB_HFOSC`, and `SB_LFOSC` gate types to `ICE40ULTRA` gate library

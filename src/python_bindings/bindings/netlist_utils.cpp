@@ -93,7 +93,7 @@ namespace hal
             Get the nets that are connected to a subset of pins of the specified gate.
         
             :param hal_py.Gate gate: The gate.
-            :param list[str] pins: The targeted pins.
+            :param set[str] pins: The targeted pins.
             :param bool is_input: True to look for fan-in nets, false for fan-out.
             :returns: The set of nets connected to the pins.
             :rtype: set[hal_py.Net]

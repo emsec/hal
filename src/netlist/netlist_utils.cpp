@@ -376,7 +376,7 @@ namespace hal
             return get_next_sequential_gates(net, get_successors, cache);
         }
 
-        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::vector<std::string> pins, bool is_inputs)
+        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_inputs)
         {
             std::unordered_set<Net*> nets;
 
@@ -456,15 +456,15 @@ namespace hal
             {
                 std::vector<Net*> fan_in_nets  = gate->get_fan_in_nets();
                 std::vector<Net*> fan_out_nets = gate->get_fan_out_nets();
-                
-                if (fan_in_nets.size() == 1 && fan_out_nets.size() == 1) 
+
+                if (fan_in_nets.size() == 1 && fan_out_nets.size() == 1)
                 {
                     Net* in_net  = *(fan_in_nets.begin());
                     Net* out_net = *(fan_out_nets.begin());
 
                     for (Endpoint* dst : out_net->get_destinations())
                     {
-                        Gate* dst_gate = dst->get_gate();
+                        Gate* dst_gate      = dst->get_gate();
                         std::string dst_pin = dst->get_pin();
                         out_net->remove_destination(dst);
                         in_net->add_destination(dst_gate, dst_pin);
@@ -487,6 +487,11 @@ namespace hal
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
+
+                if (functions.size() != 1)
+                {
+                    continue;
+                }
 
                 std::vector<std::string> active_pins = functions.begin()->second.get_variables();
 

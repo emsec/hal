@@ -277,56 +277,55 @@ namespace hal
     std::vector<HGLWriter::PinCtx> HGLWriter::get_pins(GateType* gt, const std::unordered_map<std::string, BooleanFunction>& functions)
     {
         std::vector<PinCtx> res;
-        std::vector<std::string> input_pins  = gt->get_input_pins();
-        std::vector<std::string> output_pins = gt->get_output_pins();
+        const std::vector<std::string>& pins                                            = gt->get_pins();
+        const std::unordered_map<std::string, GateType::PinDirection>& pin_to_direction = gt->get_pin_directions();
+        const std::unordered_map<std::string, GateType::PinType>& pin_to_type           = gt->get_pin_types();
 
-        for (const auto& in_pin : input_pins)
+        for (const auto& pin : pins)
         {
             PinCtx res_pin;
-            res_pin.name = in_pin;
-            if (GateType::PinType pin_type = gt->get_pin_type(in_pin); pin_type != GateType::PinType::none)
+            res_pin.name = pin;
+            if (pin_to_type.at(pin) != GateType::PinType::none)
             {
-                res_pin.type = m_pin_type_to_string.at(pin_type);
+                res_pin.type = m_pin_type_to_string.at(pin_to_type.at(pin));
             }
-            res_pin.direction = "input";
-            res.push_back(res_pin);
-        }
-
-        for (const auto& out_pin : output_pins)
-        {
-            std::vector<PinCtx>::iterator pin_it;
-
-            if (auto it = std::find_if(res.begin(), res.end(), [out_pin](PinCtx p) { return p.name == out_pin; }); it == res.end())
+            switch (pin_to_direction.at(pin))
             {
-                PinCtx res_pin;
-                res_pin.name = out_pin;
-                if (GateType::PinType pin_type = gt->get_pin_type(out_pin); pin_type != GateType::PinType::none)
+                case GateType::PinDirection::none:
+                    continue;
+                case GateType::PinDirection::input:
+                    res_pin.direction = "input";
+                    break;
+                case GateType::PinDirection::output:
+                    res_pin.direction = "output";
+                    break;
+                case GateType::PinDirection::inout:
+                    res_pin.direction = "inout";
+                    break;
+                case GateType::PinDirection::internal:
+                    res_pin.direction = "internal";
+                    break;
+            }
+
+            if (pin_to_direction.at(pin) == GateType::PinDirection::output || pin_to_direction.at(pin) == GateType::PinDirection::inout)
+            {
+                if (const auto it = functions.find(pin); it != functions.end())
                 {
-                    res_pin.type = m_pin_type_to_string.at(pin_type);
+                    res_pin.function = it->second.to_string();
                 }
-                res_pin.direction = "output";
-                res.push_back(res_pin);
-                pin_it = res.end() - 1;
-            }
-            else
-            {
-                it->direction = "inout";
+
+                if (const auto it = functions.find(pin + "_undefined"); it != functions.end())
+                {
+                    res_pin.x_function = it->second.to_string();
+                }
+
+                if (const auto it = functions.find(pin + "_tristate"); it != functions.end())
+                {
+                    res_pin.z_function = it->second.to_string();
+                }
             }
 
-            if (const auto it = functions.find(out_pin); it != functions.end())
-            {
-                pin_it->function = it->second.to_string();
-            }
-
-            if (const auto it = functions.find(out_pin + "_undefined"); it != functions.end())
-            {
-                pin_it->x_function = it->second.to_string();
-            }
-
-            if (const auto it = functions.find(out_pin + "_tristate"); it != functions.end())
-            {
-                pin_it->z_function = it->second.to_string();
-            }
+            res.push_back(res_pin);
         }
 
         //TODO remove

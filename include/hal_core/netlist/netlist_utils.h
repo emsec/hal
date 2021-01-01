@@ -108,7 +108,7 @@ namespace hal
          * @param[in] is_inputs - True to look for fan-in nets, false for fan-out.
          * @returns The set of nets connected to the pins.
          */
-        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::vector<std::string> pins, bool is_inputs);
+        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_inputs);
 
         /**
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
@@ -119,7 +119,6 @@ namespace hal
         void remove_buffers(Netlist* netlist, bool check_luts = false);
 
         /**
-         * TODO test
          * Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.
          * 
          * @param[in] netlist - The target netlist.

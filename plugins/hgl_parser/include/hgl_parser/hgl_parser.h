@@ -55,10 +55,10 @@ namespace hal
     private:
         struct PinCtx
         {
-            std::vector<std::string> input_pins;
-            std::vector<std::string> output_pins;
-            std::unordered_map<std::string, std::string> boolean_functions;
+            std::vector<std::string> pins;
             std::unordered_map<std::string, GateType::PinType> pin_to_type;
+            std::unordered_map<std::string, GateType::PinDirection> pin_to_direction;
+            std::unordered_map<std::string, std::string> boolean_functions;
         };
 
         struct GroupCtx

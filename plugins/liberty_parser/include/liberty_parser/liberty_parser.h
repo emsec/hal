@@ -64,14 +64,6 @@ namespace hal
         std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path) override;
 
     private:
-        enum class PinDirection
-        {
-            UNKNOWN,
-            IN,
-            OUT,
-            INOUT
-        };
-
         struct type_group
         {
             u32 line_number;
@@ -83,7 +75,7 @@ namespace hal
         {
             u32 line_number;
             std::vector<std::string> pin_names;
-            PinDirection direction = PinDirection::UNKNOWN;
+            GateType::PinDirection direction = GateType::PinDirection::none;
             std::string function;
             std::string x_function;
             std::string z_function;
@@ -96,7 +88,7 @@ namespace hal
         {
             u32 line_number;
             std::string name;
-            PinDirection direction = PinDirection::UNKNOWN;
+            GateType::PinDirection direction = GateType::PinDirection::none;
             std::vector<std::string> pin_names;
             std::vector<pin_group> pins;
             std::map<u32, std::string> index_to_pin_name;
@@ -164,7 +156,7 @@ namespace hal
 
         std::optional<cell_group> parse_cell(TokenStream<std::string>& library_stream);
         std::optional<type_group> parse_type(TokenStream<std::string>& str);
-        std::optional<pin_group> parse_pin(TokenStream<std::string>& str, cell_group& cell, PinDirection direction = PinDirection::UNKNOWN, const std::string& external_pin_name = "");
+        std::optional<pin_group> parse_pin(TokenStream<std::string>& str, cell_group& cell, GateType::PinDirection direction = GateType::PinDirection::none, const std::string& external_pin_name = "");
         std::optional<pin_group> parse_pg_pin(TokenStream<std::string>& str, cell_group& cell);
         std::optional<bus_group> parse_bus(TokenStream<std::string>& str, cell_group& cell);
         std::optional<ff_group> parse_ff(TokenStream<std::string>& str);

@@ -24,6 +24,7 @@ namespace hal
         py::enum_<GateType::PinDirection>(py_gate_type, "PinDirection", R"(
             Defines the direction of a pin.
         )")
+            .value("none", GateType::PinDirection::none, R"(Invalid pin.)")
             .value("input", GateType::PinDirection::input, R"(Input pin.)")
             .value("output", GateType::PinDirection::output, R"(Output pin.)")
             .value("inout", GateType::PinDirection::inout, R"(Inout pin.)")
@@ -260,12 +261,12 @@ namespace hal
             :type: dict[str,hal_py.GateType.PinType]
         )");
 
-        py_gate_type.def("get_pins_of_type", &GateType::get_pins_of_type, R"(
+        py_gate_type.def("get_pins_of_type", &GateType::get_pins_of_type, py::arg("pin_type"), R"(
             Get all pins of the specified pin type.
         
             :param hal_py.GateType.PinType pin_type: The pin type.
             :returns: A list of pins.
-            :rtype: list[str]
+            :rtype: set[str]
         )");
 
         py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("pin_name"), py::arg("function"), R"(

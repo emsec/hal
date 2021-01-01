@@ -61,6 +61,7 @@ namespace hal
          */
         enum class PinDirection
         {
+            none,    /**< Invalid pin. **/
             input,   /**< Input pin. **/
             output,  /**< Output pin. **/
             inout,   /**< Inout pin. **/
@@ -112,7 +113,7 @@ namespace hal
          *
          * @returns The name of the gate type.
          */
-        std::string get_name() const;
+        const std::string& get_name() const;
 
         /**
          * Get the base type of the gate type, which can be either combinatorial, lut, ff, or latch.
@@ -192,7 +193,7 @@ namespace hal
          *
          * @param[in] pin - The name of the input pin to add.
          */
-        void add_input_pin(std::string pin);
+        void add_input_pin(const std::string& pin);
 
         /**
          * Add a vector of input pins to the gate type.
@@ -213,7 +214,7 @@ namespace hal
          *
          * @param[in] pin - The name of the output pin to add.
          */
-        void add_output_pin(std::string pin);
+        void add_output_pin(const std::string& pin);
 
         /**
          * Add a vector of output pins to the gate type.
@@ -275,11 +276,59 @@ namespace hal
 
         /**
          * TODO pybind, test
+         * Add a pin of the specified direction and type to the gate type.
+         * 
+         * @param[in] pin - The pin.
+         * @param[in] direction - The pin direction to be assigned.
+         * @param[in] pin_type - The pin type to be assigned.
+         * @returns True on success, false otherwise.
+         */
+        bool add_pin(const std::string& pin, PinDirection direction, PinType pin_type = PinType::none);
+
+        /**
+         * TODO pybind, test
+         * Add a pin of the specified direction and type to the gate type.
+         * 
+         * @param[in] pins - The pins.
+         * @param[in] direction - The pin direction to be assigned.
+         * @param[in] pin_type - The pin type to be assigned.
+         * @returns True on success, false otherwise.
+         */
+        bool add_pins(const std::vector<std::string>& pins, PinDirection direction, PinType pin_type = PinType::none);
+
+        /** 
+         * TODO pybind, test
+         * Get all pins belonging to the gate type.
+         * 
+         * @returns A vector of pins.
+         */
+        const std::vector<std::string>& get_pins() const;
+
+        /**
+         * TODO pybind, test
+         * Get the pin direction of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the direction 'internal' will be returned.
+         * 
+         * @param[in] pin - The pin.
+         * @returns The pin direction.
+         */
+        PinDirection get_pin_direction(const std::string& pin) const;
+
+        /**
+         * TODO pybind, test
          * Get the pin directions of all pins as a map.
          * 
          * @returns A map from pin to pin direction.
          */
-        std::unordered_map<std::string, PinDirection> get_pin_directions() const;
+        const std::unordered_map<std::string, PinDirection>& get_pin_directions() const;
+
+        /** 
+         *  TODO pybind, test
+         * Get all pins of the specified pin direction.
+         * 
+         * @param[in] direction - The pin direction.
+         * @returns A set of pins.
+         */
+        std::unordered_set<std::string> get_pins_of_direction(PinDirection direction) const;
 
         /**
          * Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.
@@ -291,7 +340,8 @@ namespace hal
         bool assign_pin_type(const std::string& pin, PinType pin_type);
 
         /**
-         * Get the pin type of the given pin. If the pin does not exist, the default type 'none' will be returned.
+         * TODO pydoc
+         * Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the type 'none' will be returned.
          * 
          * @param[in] pin - The pin.
          * @returns The pin type.
@@ -303,15 +353,16 @@ namespace hal
          * 
          * @returns A map from pin to pin type.
          */
-        std::unordered_map<std::string, PinType> get_pin_types() const;
+        const std::unordered_map<std::string, PinType>& get_pin_types() const;
 
         /** 
+         * TODO pybind, test
          * Get all pins of the specified pin type.
          * 
          * @param[in] pin_type - The pin type.
-         * @returns A vector of pins.
+         * @returns A set of pins.
          */
-        std::vector<std::string> get_pins_of_type(PinType pin_type) const;
+        std::unordered_set<std::string> get_pins_of_type(PinType pin_type) const;
 
         /**
          * Add a Boolean function with the specified name to the gate type.
@@ -333,7 +384,7 @@ namespace hal
          *
          * @returns A map from Boolean function names to Boolean functions.
          */
-        std::unordered_map<std::string, BooleanFunction> get_boolean_functions() const;
+        const std::unordered_map<std::string, BooleanFunction>& get_boolean_functions() const;
 
         /**
          * Set the behavior that describes the internal state when both clear and preset are active at the same time.
@@ -348,7 +399,7 @@ namespace hal
          *
          * @returns The values specifying the behavior for the internal and negated internal state.
          */
-        std::pair<ClearPresetBehavior, ClearPresetBehavior> get_clear_preset_behavior() const;
+        const std::pair<ClearPresetBehavior, ClearPresetBehavior>& get_clear_preset_behavior() const;
 
         /**
          * Set the category in which to find the configuration data associated with this gate type.
@@ -362,7 +413,7 @@ namespace hal
          *
          * @returns The data category.
          */
-        std::string get_config_data_category() const;
+        const std::string& get_config_data_category() const;
 
         /**
          * Set the identifier used to specify the configuration data associated with this gate type.
@@ -376,7 +427,7 @@ namespace hal
          *
          * @returns The data identifier.
          */
-        std::string get_config_data_identifier() const;
+        const std::string& get_config_data_identifier() const;
 
         /**
          * For LUT gate types, set the bit-order of the initialization string.
@@ -400,24 +451,33 @@ namespace hal
         std::string m_name;
         BaseType m_base_type;
 
+        // enum to string
         static const std::unordered_map<BaseType, std::string> m_base_type_to_string;
         static const std::unordered_map<PinDirection, std::string> m_pin_direction_to_string;
         static const std::unordered_map<PinType, std::string> m_pin_type_to_string;
 
-        std::unordered_map<std::string, PinDirection> m_pin_to_direction;
-        std::unordered_map<PinDirection, std::vector<std::string>> m_direction_to_pins;
+        // pins
+        std::vector<std::string> m_pins;
+        std::unordered_set<std::string> m_pins_set;
 
+        // pin direction
+        std::unordered_map<std::string, PinDirection> m_pin_to_direction;
+        std::unordered_map<PinDirection, std::unordered_set<std::string>> m_direction_to_pins;
+
+        // pin type
         std::unordered_map<std::string, PinType> m_pin_to_type;
-        std::unordered_map<PinType, std::vector<std::string>> m_type_to_pins;
+        std::unordered_map<PinType, std::unordered_set<std::string>> m_type_to_pins;
         static const std::unordered_map<PinDirection, std::unordered_set<PinType>> m_direction_to_types;
 
+        // pin groups
         std::unordered_map<std::string, std::map<u32, std::string>> m_input_pin_groups;
         std::unordered_map<std::string, std::map<u32, std::string>> m_output_pin_groups;
 
+        // Boolean functions
         std::unordered_map<std::string, BooleanFunction> m_functions;
 
+        // sequential and LUT stuff
         std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior;
-
         std::string m_config_data_category   = "";
         std::string m_config_data_identifier = "";
         bool m_ascending                     = true;

@@ -518,4 +518,62 @@ namespace hal
         TEST_END
     }
 
+    /**
+     * Testing removal of LUT fan-in endpoints that are not present within the LUT's Boolean function.
+     *
+     * Functions: remove_buffers
+     */
+    TEST_F(NetlistUtilsTest, check_remove_unused_lut_endpoints)
+    {
+        TEST_START
+
+        std::unique_ptr<GateLibrary> lib = create_lut_buffer_lib();
+
+        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
+        ASSERT_NE(nl, nullptr);
+
+        Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
+        Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
+        Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
+        Gate* l3 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l3");
+        Gate* l4 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
+        Gate* l5 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l5");
+        l4->add_boolean_function("O", BooleanFunction::from_string("I0 & I1 & I2 & I3"));
+        l5->add_boolean_function("O", BooleanFunction::from_string("I2"));
+
+        connect(nl.get(), l0, "O", l4, "I0");
+        connect(nl.get(), l1, "O", l4, "I1");
+        connect(nl.get(), l2, "O", l4, "I2");
+        connect(nl.get(), l3, "O", l4, "I3");
+
+        connect(nl.get(), l0, "O", l5, "I0");
+        connect(nl.get(), l1, "O", l5, "I1");
+        connect(nl.get(), l2, "O", l5, "I2");
+        connect(nl.get(), l3, "O", l5, "I3");
+
+        EXPECT_EQ(l4->get_predecessor("I0")->get_gate(), l0);
+        EXPECT_EQ(l4->get_predecessor("I1")->get_gate(), l1);
+        EXPECT_EQ(l4->get_predecessor("I2")->get_gate(), l2);
+        EXPECT_EQ(l4->get_predecessor("I3")->get_gate(), l3);
+
+        EXPECT_EQ(l5->get_predecessor("I0")->get_gate(), l0);
+        EXPECT_EQ(l5->get_predecessor("I1")->get_gate(), l1);
+        EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
+        EXPECT_EQ(l5->get_predecessor("I3")->get_gate(), l3);
+
+        netlist_utils::remove_unused_lut_endpoints(nl.get());
+
+        EXPECT_EQ(l4->get_predecessor("I0")->get_gate(), l0);
+        EXPECT_EQ(l4->get_predecessor("I1")->get_gate(), l1);
+        EXPECT_EQ(l4->get_predecessor("I2")->get_gate(), l2);
+        EXPECT_EQ(l4->get_predecessor("I3")->get_gate(), l3);
+
+        EXPECT_EQ(l5->get_predecessor("I0"), nullptr);
+        EXPECT_EQ(l5->get_predecessor("I1"), nullptr);
+        EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
+        EXPECT_EQ(l5->get_predecessor("I3"), nullptr);
+
+        TEST_END
+    } 
+
 }    //namespace hal

@@ -44,8 +44,8 @@ namespace hal {
                 // -- Check the pins
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "I"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::power), std::vector<std::string>({"VDD"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::ground), std::vector<std::string>({"GND"}));
+                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::power), std::unordered_set<std::string>({"VDD"}));
+                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::ground), std::unordered_set<std::string>({"GND"}));
                 // -- Check the boolean functions
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
@@ -89,7 +89,7 @@ namespace hal {
                 ASSERT_TRUE(gt_asc->get_boolean_functions().find("O3") != gt_asc->get_boolean_functions().end());
                 EXPECT_EQ(gt_asc->get_boolean_functions().at("O3"),
                           BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
-                EXPECT_EQ(gt_asc->get_pins_of_type(GateType::PinType::lut), std::vector<std::string>({"O0", "O2"}));
+                EXPECT_EQ(gt_asc->get_pins_of_type(GateType::PinType::lut), std::unordered_set<std::string>({"O0", "O2"}));
                 EXPECT_EQ(gt_asc->get_config_data_category(), "test_category");
                 EXPECT_EQ(gt_asc->get_config_data_identifier(), "test_identifier");
                 EXPECT_EQ(gt_asc->is_lut_init_ascending(), true);
@@ -131,7 +131,7 @@ namespace hal {
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::clock), std::vector<std::string>({"CLK"}));
+                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::clock), std::unordered_set<std::string>({"CLK"}));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
                           BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
@@ -149,8 +149,8 @@ namespace hal {
                 EXPECT_EQ(gt->get_boolean_functions().at("clear"),
                           BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
                 // -- Check the output pins
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::state), std::vector<std::string>({"Q"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::neg_state), std::vector<std::string>({"QN"}));
+                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::state), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 // -- Check the set-reset behaviour
                 EXPECT_EQ(gt->get_clear_preset_behavior(),
                           std::make_pair(GateType::ClearPresetBehavior::L,
@@ -203,8 +203,8 @@ namespace hal {
                 EXPECT_EQ(gt->get_boolean_functions().at("clear"),
                           BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
                 // -- Check the output pins
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::state), std::vector<std::string>({"Q"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::neg_state), std::vector<std::string>({"QN"}));
+                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::state), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 // -- Check the clear-preset behaviour
                 EXPECT_EQ(gt->get_clear_preset_behavior(),
                           std::make_pair(GateType::ClearPresetBehavior::N,
@@ -308,21 +308,17 @@ namespace hal {
                 LibertyParser liberty_parser;
                 std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
-                ASSERT_NE(gl, nullptr); // NOTE: Ok, only 'I' is not parsed
-                auto g_types = gl->get_gate_types();
-                ASSERT_TRUE(g_types.find("TEST_GATE_TYPE") != g_types.end());
-                EXPECT_EQ(g_types["TEST_GATE_TYPE"]->get_output_pins().size(), 1);
-                EXPECT_TRUE(g_types["TEST_GATE_TYPE"]->get_input_pins().empty());
+                ASSERT_EQ(gl, nullptr);
             }
-            /*{ // NOTE: Works (is ok?)
-                // Use an unknown variable in a boolean function
-                NO_COUT_TEST_BLOCK;
-                std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test7.lib";
-                LibertyParser liberty_parser;
-                std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
+            // { // NOTE: Works (is ok?)
+            //     // Use an unknown variable in a boolean function
+            //     NO_COUT_TEST_BLOCK;
+            //     std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test7.lib";
+            //     LibertyParser liberty_parser;
+            //     std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
-                EXPECT_EQ(gl, nullptr); // NOTE: Ok? BF is parsed anyway with Variable WAMBO
-            }*/
+            //     EXPECT_EQ(gl, nullptr); // NOTE: Ok? BF is parsed anyway with Variable WAMBO
+            // }
             {
                 // Use an unknown cell group (should be filtered out)
                 NO_COUT_TEST_BLOCK;
@@ -363,14 +359,7 @@ namespace hal {
                 LibertyParser liberty_parser;
                 std::unique_ptr<GateLibrary> gl = liberty_parser.parse(path_lib);
 
-                ASSERT_NE(gl, nullptr);
-
-                auto gate_types = gl->get_gate_types();
-                ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
-                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::buffer);
-                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_input_pins().size(), 1);
-
+                ASSERT_EQ(gl, nullptr);
             }
             {
                 // Test the usage of complex attributes

@@ -192,11 +192,11 @@ namespace hal
         GateType* gt = gl.create_gate_type("dummy", GateType::BaseType::combinational);
         ASSERT_NE(gt, nullptr);
         gt->add_input_pin("I0");
-        gt->add_input_pins(std::vector<std::string>({"I1", "I2"}));
+        gt->add_input_pins({"I1", "I2"});
         EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I0", "I1", "I2"}));
 
         gt->add_output_pin("O0");
-        gt->add_output_pins(std::vector<std::string>({"O1", "O2"}));
+        gt->add_output_pins({"O1", "O2"});
         EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O0", "O1", "O2"}));
 
         TEST_END
@@ -298,12 +298,12 @@ namespace hal
             GateType* gt = gl.create_gate_type("dummy1", GateType::BaseType::combinational);
             ASSERT_NE(gt, nullptr);
 
-            std::vector<std::string> in_pins = {"I0", "I1"};
-            std::vector<std::string> out_pins = {"O"};
+            std::unordered_set<std::string> in_pins = {"I0", "I1"};
+            std::unordered_set<std::string> out_pins = {"O"};
             std::unordered_map<std::string, GateType::PinType> pin_to_type;
 
-            gt->add_input_pins(in_pins);
-            gt->add_output_pins(out_pins);
+            gt->add_input_pins({"I0", "I1"});
+            gt->add_output_pins({"O"});
 
             EXPECT_EQ(gt->get_pin_type("I0"), GateType::PinType::none);
             EXPECT_EQ(gt->get_pin_type("I1"), GateType::PinType::none);
@@ -349,11 +349,11 @@ namespace hal
 
             std::unordered_map<std::string, GateType::PinType> pin_to_type;
 
-            std::vector<std::string> in_pins = {"I"};
-            std::vector<std::string> out_pins = {"O"};
+            std::unordered_set<std::string> in_pins = {"I"};
+            std::unordered_set<std::string> out_pins = {"O"};
 
-            gt->add_input_pins(in_pins);
-            gt->add_output_pins(out_pins);
+            gt->add_input_pins({"I"});
+            gt->add_output_pins({"O"});
 
             EXPECT_EQ(gt->get_pin_type("I"), GateType::PinType::none);
             EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::none);
@@ -379,11 +379,11 @@ namespace hal
 
             std::unordered_map<std::string, GateType::PinType> pin_to_type;
 
-            std::vector<std::string> in_pins = {"I0", "I1", "I2", "I3", "I4", "I5", "I6"};
-            std::vector<std::string> out_pins = {"O0", "O1", "O2", "O3", "O4"};
+            std::unordered_set<std::string> in_pins = {"I0", "I1", "I2", "I3", "I4", "I5", "I6"};
+            std::unordered_set<std::string> out_pins = {"O0", "O1", "O2", "O3", "O4"};
 
-            gt->add_input_pins(in_pins);
-            gt->add_output_pins(out_pins);
+            gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6"});
+            gt->add_output_pins({"O0", "O1", "O2", "O3", "O4"});
 
             for (const auto& pin : in_pins) 
             {

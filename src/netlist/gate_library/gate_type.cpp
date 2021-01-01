@@ -11,7 +11,8 @@ namespace hal
                                                                                                  {BaseType::ram, "ram"},
                                                                                                  {BaseType::io, "io"},
                                                                                                  {BaseType::buffer, "buffer"}};
-    const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::input, "input"},
+    const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::none, "none"},
+                                                                                                         {PinDirection::input, "input"},
                                                                                                          {PinDirection::output, "output"},
                                                                                                          {PinDirection::inout, "inout"},
                                                                                                          {PinDirection::internal, "internal"}};
@@ -30,6 +31,7 @@ namespace hal
                                                                                                {PinType::io_pad, "io_pad"}};
 
     const std::unordered_map<GateType::PinDirection, std::unordered_set<GateType::PinType>> GateType::m_direction_to_types = {
+        {PinDirection::none, {}},
         {PinDirection::input, {PinType::none, PinType::power, PinType::ground, PinType::clock, PinType::enable, PinType::set, PinType::reset, PinType::data, PinType::address, PinType::io_pad}},
         {PinDirection::output, {PinType::none, PinType::lut, PinType::state, PinType::neg_state, PinType::data, PinType::address, PinType::io_pad}},
         {PinDirection::inout, {PinType::none, PinType::io_pad}},
@@ -48,7 +50,7 @@ namespace hal
         return m_id;
     }
 
-    std::string GateType::get_name() const
+    const std::string& GateType::get_name() const
     {
         return m_name;
     }
@@ -98,66 +100,56 @@ namespace hal
         return !(*this == other);
     }
 
-    void GateType::add_input_pin(std::string pin)
+    void GateType::add_input_pin(const std::string& pin)
     {
-        m_pin_to_direction[pin] = PinDirection::input;
-        m_direction_to_pins[PinDirection::input].push_back(pin);
-        m_pin_to_type[pin] = PinType::none;
-        m_type_to_pins[PinType::none].push_back(pin);
+        add_pin(pin, PinDirection::input);
     }
 
     void GateType::add_input_pins(const std::vector<std::string>& pins)
     {
-        for (const auto& pin : pins)
-        {
-            m_pin_to_direction[pin] = PinDirection::input;
-            m_direction_to_pins[PinDirection::input].push_back(pin);
-            m_pin_to_type[pin] = PinType::none;
-            m_type_to_pins[PinType::none].push_back(pin);
-        }
+        add_pins(pins, PinDirection::input);
     }
 
     std::vector<std::string> GateType::get_input_pins() const
     {
-        if (const auto it = m_direction_to_pins.find(PinDirection::input); it != m_direction_to_pins.end())
+        std::vector<std::string> res;
+
+        for (const auto& pin : m_pins)
         {
-            return it->second;
+            PinDirection direction = m_pin_to_direction.at(pin);
+            if (direction == PinDirection::input || direction == PinDirection::inout)
+            {
+                res.push_back(pin);
+            }
         }
-        else
-        {
-            return {};
-        }
+
+        return res;
     }
 
-    void GateType::add_output_pin(std::string pin)
+    void GateType::add_output_pin(const std::string& pin)
     {
-        m_pin_to_direction[pin] = PinDirection::output;
-        m_direction_to_pins[PinDirection::output].push_back(pin);
-        m_pin_to_type[pin] = PinType::none;
-        m_type_to_pins[PinType::none].push_back(pin);
+        add_pin(pin, PinDirection::output);
     }
 
     void GateType::add_output_pins(const std::vector<std::string>& pins)
     {
-        for (const auto& pin : pins)
-        {
-            m_pin_to_direction[pin] = PinDirection::output;
-            m_direction_to_pins[PinDirection::output].push_back(pin);
-            m_pin_to_type[pin] = PinType::none;
-            m_type_to_pins[PinType::none].push_back(pin);
-        }
+        add_pins(pins, PinDirection::output);
     }
 
     std::vector<std::string> GateType::get_output_pins() const
     {
-        if (const auto it = m_direction_to_pins.find(PinDirection::output); it != m_direction_to_pins.end())
+        std::vector<std::string> res;
+
+        for (const auto& pin : m_pins)
         {
-            return it->second;
+            PinDirection direction = m_pin_to_direction.at(pin);
+            if (direction == PinDirection::output || direction == PinDirection::inout)
+            {
+                res.push_back(pin);
+            }
         }
-        else
-        {
-            return {};
-        }
+
+        return res;
     }
 
     void GateType::assign_input_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin)
@@ -190,28 +182,81 @@ namespace hal
         return m_output_pin_groups;
     }
 
-    std::unordered_map<std::string, GateType::PinDirection> GateType::get_pin_directions() const
+    bool GateType::add_pin(const std::string& pin, PinDirection direction, PinType pin_type)
+    {
+        if (m_pins_set.find(pin) != m_pins_set.end())
+        {
+            log_error("gate_library", "pin '{}' could not be added to gate type '{}' since a pin with the same name does already exist.", pin, m_name);
+            return false;
+        }
+
+        m_pins.push_back(pin);
+        m_pins_set.insert(pin);
+        m_pin_to_direction[pin] = direction;
+        m_direction_to_pins[direction].insert(pin);
+        if (!assign_pin_type(pin, pin_type))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool GateType::add_pins(const std::vector<std::string>& pins, PinDirection direction, PinType pin_type)
+    {
+        bool success = true;
+
+        for (const auto& pin : pins)
+        {
+            success &= add_pin(pin, direction, pin_type);
+        }
+
+        return success;
+    }
+
+    const std::vector<std::string>& GateType::get_pins() const
+    {
+        return m_pins;
+    }
+
+    GateType::PinDirection GateType::get_pin_direction(const std::string& pin) const
+    {
+        if (const auto it = m_pin_to_direction.find(pin); it != m_pin_to_direction.end())
+        {
+            return it->second;
+        }
+
+        return PinDirection::internal;
+    }
+
+    const std::unordered_map<std::string, GateType::PinDirection>& GateType::get_pin_directions() const
     {
         return m_pin_to_direction;
     }
 
+    std::unordered_set<std::string> GateType::get_pins_of_direction(PinDirection direction) const
+    {
+        if (const auto it = m_direction_to_pins.find(direction); it != m_direction_to_pins.end())
+        {
+            return it->second;
+        }
+
+        return {};
+    }
+
     bool GateType::assign_pin_type(const std::string& pin, PinType pin_type)
     {
-        for (const auto& [direction, pins] : m_direction_to_pins)
+        if (m_pins_set.find(pin) != m_pins_set.end()) 
         {
-            if (std::find(pins.begin(), pins.end(), pin) != pins.end())
+            std::unordered_set<PinType> types = m_direction_to_types.at(m_pin_to_direction.at(pin));
+            if (types.find(pin_type) != types.end())
             {
-                if (const auto it = m_direction_to_types.find(direction); it != m_direction_to_types.end())
-                {
-                    if (it->second.find(pin_type) != it->second.end())
-                    {
-                        PinType current_type = m_pin_to_type.at(pin);
-                        m_type_to_pins.at(current_type).erase(std::find(m_type_to_pins.at(current_type).begin(), m_type_to_pins.at(current_type).end(), pin));
-                        m_pin_to_type[pin] = pin_type;
-                        m_type_to_pins[pin_type].push_back(pin);
-                        return true;
-                    }
+                if (const auto it = m_pin_to_type.find(pin); it != m_pin_to_type.end()) {
+                    m_type_to_pins.at(it->second).erase(pin);
                 }
+                m_pin_to_type[pin] = pin_type;
+                m_type_to_pins[pin_type].insert(pin);
+                return true;
             }
         }
 
@@ -229,12 +274,12 @@ namespace hal
         return PinType::none;
     }
 
-    std::unordered_map<std::string, GateType::PinType> GateType::get_pin_types() const
+    const std::unordered_map<std::string, GateType::PinType>& GateType::get_pin_types() const
     {
         return m_pin_to_type;
     }
 
-    std::vector<std::string> GateType::get_pins_of_type(PinType pin_type) const
+    std::unordered_set<std::string> GateType::get_pins_of_type(PinType pin_type) const
     {
         if (const auto it = m_type_to_pins.find(pin_type); it != m_type_to_pins.end())
         {
@@ -254,7 +299,7 @@ namespace hal
         m_functions.insert(functions.begin(), functions.end());
     }
 
-    std::unordered_map<std::string, BooleanFunction> GateType::get_boolean_functions() const
+    const std::unordered_map<std::string, BooleanFunction>& GateType::get_boolean_functions() const
     {
         return m_functions;
     }
@@ -264,7 +309,7 @@ namespace hal
         m_clear_preset_behavior = {cp1, cp2};
     }
 
-    std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> GateType::get_clear_preset_behavior() const
+    const std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior>& GateType::get_clear_preset_behavior() const
     {
         return m_clear_preset_behavior;
     }
@@ -274,7 +319,7 @@ namespace hal
         m_config_data_category = category;
     }
 
-    std::string GateType::get_config_data_category() const
+    const std::string& GateType::get_config_data_category() const
     {
         return m_config_data_category;
     }
@@ -284,7 +329,7 @@ namespace hal
         m_config_data_identifier = identifier;
     }
 
-    std::string GateType::get_config_data_identifier() const
+    const std::string& GateType::get_config_data_identifier() const
     {
         return m_config_data_identifier;
     }
