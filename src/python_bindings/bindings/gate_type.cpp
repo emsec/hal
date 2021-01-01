@@ -17,6 +17,8 @@ namespace hal
             .value("ff", GateType::BaseType::ff, R"(Represents a sequential FF gate type.)")
             .value("latch", GateType::BaseType::latch, R"(Represents a sequential latch gate type.)")
             .value("ram", GateType::BaseType::ram, R"(Represents a sequential RAM gate type.)")
+            .value("io", GateType::BaseType::io, R"(Represents an IO gate type.)")
+            .value("buffer", GateType::BaseType::buffer, R"(Represents a buffer gate type.)")
             .export_values();
 
         py::enum_<GateType::PinDirection>(py_gate_type, "PinDirection", R"(
