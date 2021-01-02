@@ -1,2 +1,6 @@
 # require explicit add of unfinished libraries
-*.lib
+*
+!XILINX_SIMPRIM.hgl
+!XILINX_UNISIM.hgl
+!XILINX_UNISIM_ISE.hgl
+!ice40ultra.hgl

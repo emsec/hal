@@ -1096,7 +1096,6 @@
             "groups": [
                 {
                     "name": "MASK",
-                    "direction": "input",
                     "pins": {
                         "0": "MASK(0)",
                         "1": "MASK(1)",
@@ -1118,7 +1117,6 @@
                 },
                 {
                     "name": "RADDR",
-                    "direction": "input",
                     "pins": {
                         "0": "RADDR(0)",
                         "1": "RADDR(1)",
@@ -1134,47 +1132,7 @@
                     }
                 },
                 {
-                    "name": "WADDR",
-                    "direction": "input",
-                    "pins": {
-                        "0": "WADDR(0)",
-                        "1": "WADDR(1)",
-                        "2": "WADDR(2)",
-                        "3": "WADDR(3)",
-                        "4": "WADDR(4)",
-                        "5": "WADDR(5)",
-                        "6": "WADDR(6)",
-                        "7": "WADDR(7)",
-                        "8": "WADDR(8)",
-                        "9": "WADDR(9)",
-                        "10": "WADDR(10)"
-                    }
-                },
-                {
-                    "name": "WDATA",
-                    "direction": "input",
-                    "pins": {
-                        "0": "WDATA(0)",
-                        "1": "WDATA(1)",
-                        "2": "WDATA(2)",
-                        "3": "WDATA(3)",
-                        "4": "WDATA(4)",
-                        "5": "WDATA(5)",
-                        "6": "WDATA(6)",
-                        "7": "WDATA(7)",
-                        "8": "WDATA(8)",
-                        "9": "WDATA(9)",
-                        "10": "WDATA(10)",
-                        "11": "WDATA(11)",
-                        "12": "WDATA(12)",
-                        "13": "WDATA(13)",
-                        "14": "WDATA(14)",
-                        "15": "WDATA(15)"
-                    }
-                },
-                {
                     "name": "RDATA",
-                    "direction": "output",
                     "pins": {
                         "0": "RDATA(0)",
                         "1": "RDATA(1)",
@@ -1192,6 +1150,43 @@
                         "13": "RDATA(13)",
                         "14": "RDATA(14)",
                         "15": "RDATA(15)"
+                    }
+                },
+                {
+                    "name": "WADDR",
+                    "pins": {
+                        "0": "WADDR(0)",
+                        "1": "WADDR(1)",
+                        "2": "WADDR(2)",
+                        "3": "WADDR(3)",
+                        "4": "WADDR(4)",
+                        "5": "WADDR(5)",
+                        "6": "WADDR(6)",
+                        "7": "WADDR(7)",
+                        "8": "WADDR(8)",
+                        "9": "WADDR(9)",
+                        "10": "WADDR(10)"
+                    }
+                },
+                {
+                    "name": "WDATA",
+                    "pins": {
+                        "0": "WDATA(0)",
+                        "1": "WDATA(1)",
+                        "2": "WDATA(2)",
+                        "3": "WDATA(3)",
+                        "4": "WDATA(4)",
+                        "5": "WDATA(5)",
+                        "6": "WDATA(6)",
+                        "7": "WDATA(7)",
+                        "8": "WDATA(8)",
+                        "9": "WDATA(9)",
+                        "10": "WDATA(10)",
+                        "11": "WDATA(11)",
+                        "12": "WDATA(12)",
+                        "13": "WDATA(13)",
+                        "14": "WDATA(14)",
+                        "15": "WDATA(15)"
                     }
                 }
             ]
@@ -1315,7 +1310,7 @@
         },
         {
             "name": "SB_GB",
-            "type": "combinational",
+            "type": "buffer",
             "pins": [
                 {
                     "name": "USER_SIGNAL_TO_GLOBAL_BUFFER",
@@ -1334,6 +1329,7 @@
             "pins": [
                 {
                     "name": "CLKHFEN",
+                    "type": "enable",
                     "direction": "input"
                 },
                 {
@@ -1342,6 +1338,7 @@
                 },
                 {
                     "name": "CLKHF",
+                    "type": "clock",
                     "direction": "output"
                 }
             ]
@@ -1352,6 +1349,7 @@
             "pins": [
                 {
                     "name": "CLKLFEN",
+                    "type": "enable",
                     "direction": "input"
                 },
                 {
@@ -1360,20 +1358,23 @@
                 },
                 {
                     "name": "CLKLF",
+                    "type": "clock",
                     "direction": "output"
                 }
             ]
         },
         {
             "name": "SB_MAC16",
-            "type": "combinational",
+            "type": "dsp",
             "pins": [
                 {
                     "name": "CLK",
+                    "type": "clock",
                     "direction": "input"
                 },
                 {
                     "name": "CE",
+                    "type": "enable",
                     "direction": "input"
                 },
                 {
@@ -1433,7 +1434,13 @@
                     "direction": "input"
                 },
                 {
+                    "name": "CO",
+                    "type": "data",
+                    "direction": "output"
+                },
+                {
                     "name": "CI",
+                    "type": "data",
                     "direction": "input"
                 },
                 {
@@ -1441,410 +1448,501 @@
                     "direction": "input"
                 },
                 {
-                    "name": "SIGNEXTIN",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(0)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(1)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(2)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(3)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(4)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(5)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(6)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(7)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(8)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(9)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(10)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(11)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(12)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(13)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(14)",
-                    "direction": "input"
-                },
-                {
-                    "name": "A(15)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(0)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(1)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(2)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(3)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(4)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(5)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(6)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(7)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(8)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(9)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(10)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(11)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(12)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(13)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(14)",
-                    "direction": "input"
-                },
-                {
-                    "name": "B(15)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(0)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(1)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(2)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(3)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(4)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(5)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(6)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(7)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(8)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(9)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(10)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(11)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(12)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(13)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(14)",
-                    "direction": "input"
-                },
-                {
-                    "name": "C(15)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(0)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(1)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(2)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(3)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(4)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(5)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(6)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(7)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(8)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(9)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(10)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(11)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(12)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(13)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(14)",
-                    "direction": "input"
-                },
-                {
-                    "name": "D(15)",
-                    "direction": "input"
-                },
-                {
-                    "name": "CO",
-                    "direction": "output"
-                },
-                {
                     "name": "ACCUMCO",
                     "direction": "output"
+                },
+                {
+                    "name": "SIGNEXTIN",
+                    "direction": "input"
                 },
                 {
                     "name": "SIGNEXTOUT",
                     "direction": "output"
                 },
                 {
+                    "name": "A(0)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(1)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(2)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(3)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(4)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(5)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(6)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(7)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(8)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(9)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(10)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(11)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(12)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(13)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(14)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "A(15)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(0)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(1)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(2)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(3)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(4)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(5)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(6)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(7)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(8)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(9)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(10)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(11)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(12)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(13)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(14)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "B(15)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(0)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(1)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(2)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(3)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(4)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(5)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(6)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(7)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(8)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(9)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(10)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(11)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(12)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(13)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(14)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "C(15)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(0)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(1)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(2)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(3)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(4)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(5)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(6)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(7)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(8)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(9)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(10)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(11)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(12)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(13)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(14)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
+                    "name": "D(15)",
+                    "type": "data",
+                    "direction": "input"
+                },
+                {
                     "name": "O(0)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(1)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(2)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(3)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(4)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(5)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(6)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(7)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(8)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(9)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(10)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(11)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(12)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(13)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(14)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(15)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(16)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(17)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(18)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(19)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(20)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(21)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(22)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(23)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(24)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(25)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(26)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(27)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(28)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(29)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(30)",
+                    "type": "data",
                     "direction": "output"
                 },
                 {
                     "name": "O(31)",
+                    "type": "data",
                     "direction": "output"
                 }
             ],
             "groups": [
                 {
                     "name": "A",
-                    "direction": "input",
                     "pins": {
                         "0": "A(0)",
                         "1": "A(1)",
@@ -1866,7 +1964,6 @@
                 },
                 {
                     "name": "C",
-                    "direction": "input",
                     "pins": {
                         "0": "C(0)",
                         "1": "C(1)",
@@ -1888,7 +1985,6 @@
                 },
                 {
                     "name": "D",
-                    "direction": "input",
                     "pins": {
                         "0": "D(0)",
                         "1": "D(1)",
@@ -1910,7 +2006,6 @@
                 },
                 {
                     "name": "B",
-                    "direction": "input",
                     "pins": {
                         "0": "B(0)",
                         "1": "B(1)",
@@ -1932,7 +2027,6 @@
                 },
                 {
                     "name": "O",
-                    "direction": "output",
                     "pins": {
                         "0": "O(0)",
                         "1": "O(1)",
@@ -2051,14 +2145,6 @@
                     "direction": "input"
                 },
                 {
-                    "name": "SCLI",
-                    "direction": "input"
-                },
-                {
-                    "name": "SDAI",
-                    "direction": "input"
-                },
-                {
                     "name": "SBDATO0",
                     "direction": "output"
                 },
@@ -2103,12 +2189,20 @@
                     "direction": "output"
                 },
                 {
+                    "name": "SCLI",
+                    "direction": "input"
+                },
+                {
                     "name": "SCLO",
                     "direction": "output"
                 },
                 {
                     "name": "SCLOE",
                     "direction": "output"
+                },
+                {
+                    "name": "SDAI",
+                    "direction": "input"
                 },
                 {
                     "name": "SDAO",
@@ -2201,54 +2295,6 @@
                     "direction": "input"
                 },
                 {
-                    "name": "MI",
-                    "direction": "input"
-                },
-                {
-                    "name": "SI",
-                    "direction": "input"
-                },
-                {
-                    "name": "SCKI",
-                    "direction": "input"
-                },
-                {
-                    "name": "SCSNI",
-                    "direction": "input"
-                },
-                {
-                    "name": "MCSNO0",
-                    "direction": "input"
-                },
-                {
-                    "name": "MCSNO1",
-                    "direction": "input"
-                },
-                {
-                    "name": "MCSNO2",
-                    "direction": "input"
-                },
-                {
-                    "name": "MCSNO3",
-                    "direction": "input"
-                },
-                {
-                    "name": "MCSNOE0",
-                    "direction": "input"
-                },
-                {
-                    "name": "MCSNOE1",
-                    "direction": "input"
-                },
-                {
-                    "name": "MCSNOE2",
-                    "direction": "input"
-                },
-                {
-                    "name": "MCSNOE3",
-                    "direction": "input"
-                },
-                {
                     "name": "SBDATO0",
                     "direction": "output"
                 },
@@ -2293,12 +2339,20 @@
                     "direction": "output"
                 },
                 {
+                    "name": "MI",
+                    "direction": "input"
+                },
+                {
                     "name": "SO",
                     "direction": "output"
                 },
                 {
                     "name": "SOE",
                     "direction": "output"
+                },
+                {
+                    "name": "SI",
+                    "direction": "input"
                 },
                 {
                     "name": "MO",
@@ -2309,12 +2363,52 @@
                     "direction": "output"
                 },
                 {
+                    "name": "SCKI",
+                    "direction": "input"
+                },
+                {
                     "name": "SCKO",
                     "direction": "output"
                 },
                 {
                     "name": "SCKOE",
                     "direction": "output"
+                },
+                {
+                    "name": "SCSNI",
+                    "direction": "input"
+                },
+                {
+                    "name": "MCSNO0",
+                    "direction": "input"
+                },
+                {
+                    "name": "MCSNO1",
+                    "direction": "input"
+                },
+                {
+                    "name": "MCSNO2",
+                    "direction": "input"
+                },
+                {
+                    "name": "MCSNO3",
+                    "direction": "input"
+                },
+                {
+                    "name": "MCSNOE0",
+                    "direction": "input"
+                },
+                {
+                    "name": "MCSNOE1",
+                    "direction": "input"
+                },
+                {
+                    "name": "MCSNOE2",
+                    "direction": "input"
+                },
+                {
+                    "name": "MCSNOE3",
+                    "direction": "input"
                 }
             ]
         }

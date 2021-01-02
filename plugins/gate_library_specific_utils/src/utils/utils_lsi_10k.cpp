@@ -209,6 +209,12 @@ namespace hal
 
         std::unordered_set<std::string> UtilsLSI_10K::get_data_ports(GateType* g) const
         {
+            if (!is_sequential(g))
+            {
+                log_error("gl specifics", "gate type is not sequential: type: {}", g->get_name());
+                return std::unordered_set<std::string>();
+            }
+
             static std::map<std::string, std::unordered_set<std::string>> gate_to_data_ports;
             if (gate_to_data_ports.empty())
             {
