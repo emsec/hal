@@ -185,19 +185,12 @@ namespace hal
 
                         if constexpr (std::is_same<T, std::string>::value)
                         {
-                            pins                       = gate_it->second->get_input_pins();
-                            std::vector<T> output_pins = gate_it->second->get_output_pins();
-                            pins.insert(pins.end(), output_pins.begin(), output_pins.end());
-
+                            pins       = gate_it->second->get_pins();
                             pin_groups = gate_it->second->get_pin_groups();
                         }
                         else
                         {
-                            for (const auto& pin : gate_it->second->get_input_pins())
-                            {
-                                pins.push_back(core_strings::convert_string<std::string, T>(pin));
-                            }
-                            for (const auto& pin : gate_it->second->get_output_pins())
+                            for (const auto& pin : gate_it->second->get_pins())
                             {
                                 pins.push_back(core_strings::convert_string<std::string, T>(pin));
                             }
@@ -1541,23 +1534,16 @@ namespace hal
                     }
 
                     // cache pin types
-                    std::vector<T> input_pins;
-                    std::vector<T> output_pins;
+                    std::unordered_map<T, GateType::PinDirection> pin_to_direction;
                     if constexpr (std::is_same<T, std::string>::value)
                     {
-                        input_pins  = new_gate->get_input_pins();
-                        output_pins = new_gate->get_output_pins();
+                        pin_to_direction = new_gate->get_type()->get_pin_directions();
                     }
                     else
                     {
-                        for (const auto& pin : new_gate->get_input_pins())
+                        for (const auto& [pin, direction] : new_gate->get_type()->get_pin_directions())
                         {
-                            input_pins.push_back(core_strings::convert_string<std::string, T>(pin));
-                        }
-
-                        for (const auto& pin : new_gate->get_output_pins())
-                        {
-                            output_pins.push_back(core_strings::convert_string<std::string, T>(pin));
+                            pin_to_direction.emplace(core_strings::convert_string<std::string, T>(pin), direction);
                         }
                     }
 
@@ -1577,23 +1563,25 @@ namespace hal
                             auto current_net = net_it->second;
 
                             // add net src/dst by pin types
-                            bool is_input = false;
-                            if (const auto input_it = std::find(input_pins.begin(), input_pins.end(), port); input_it != input_pins.end())
-                            {
-                                is_input = true;
-                                pin      = *input_it;
-                            }
-
+                            bool is_input  = false;
                             bool is_output = false;
-                            if (const auto output_it = std::find(output_pins.begin(), output_pins.end(), port); output_it != output_pins.end())
+
+                            if (const auto it = pin_to_direction.find(port); it != pin_to_direction.end())
                             {
-                                is_output = true;
-                                pin       = *output_it;
+                                if (it->second == GateType::PinDirection::input || it->second == GateType::PinDirection::inout)
+                                {
+                                    is_input = true;
+                                }
+
+                                if (it->second == GateType::PinDirection::output || it->second == GateType::PinDirection::inout)
+                                {
+                                    is_output = true;
+                                }
                             }
 
                             if (!is_input && !is_output)
                             {
-                                log_error("hdl_parser", "undefined pin '{}' for gate '{}' of type '{}'", port, new_gate->get_name(), new_gate->get_type()->get_name());
+                                log_error("hdl_parser", "undefined pin '{}' for gate '{}' of type '{}'", pin, new_gate->get_name(), new_gate->get_type()->get_name());
                                 return nullptr;
                             }
 
