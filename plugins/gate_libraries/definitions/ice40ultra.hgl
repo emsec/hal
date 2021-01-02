@@ -1212,12 +1212,12 @@
                 },
                 {
                     "name": "INPUT_CLK",
-                    "type": "clk",
+                    "type": "clock",
                     "direction": "input"
                 },
                 {
                     "name": "OUTPUT_CLK",
-                    "type": "clk",
+                    "type": "clock",
                     "direction": "input"
                 },
                 {
