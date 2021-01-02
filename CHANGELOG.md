@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added base types `ram`, `io`, and `buffer`
   * removed `add_gate_type` 
   * removed `GateTypeSequential` and `GateTypeLut` classes and moved their functionality into class `GateType`
+  * merged input and output pin groups to simplify pin group handling
   * renamed some functions to have shorter and more understandable names
 * added new gate library format: "HAL Gate Library" (HGL)
   * supports assignment of enable, set, reset, data, and address pins to gate types
