@@ -10,7 +10,8 @@ namespace hal
                                                                                                  {BaseType::lut, "lut"},
                                                                                                  {BaseType::ram, "ram"},
                                                                                                  {BaseType::io, "io"},
-                                                                                                 {BaseType::buffer, "buffer"}};
+                                                                                                 {BaseType::buffer, "buffer"},
+                                                                                                 {BaseType::dsp, "dsp"}};
     const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::none, "none"},
                                                                                                          {PinDirection::input, "input"},
                                                                                                          {PinDirection::output, "output"},
@@ -33,7 +34,7 @@ namespace hal
     const std::unordered_map<GateType::PinDirection, std::unordered_set<GateType::PinType>> GateType::m_direction_to_types = {
         {PinDirection::none, {}},
         {PinDirection::input, {PinType::none, PinType::power, PinType::ground, PinType::clock, PinType::enable, PinType::set, PinType::reset, PinType::data, PinType::address, PinType::io_pad}},
-        {PinDirection::output, {PinType::none, PinType::lut, PinType::state, PinType::neg_state, PinType::data, PinType::address, PinType::io_pad}},
+        {PinDirection::output, {PinType::none, PinType::clock, PinType::lut, PinType::state, PinType::neg_state, PinType::data, PinType::address, PinType::io_pad}},
         {PinDirection::inout, {PinType::none, PinType::io_pad}},
         {PinDirection::internal, {PinType::none}}};
 

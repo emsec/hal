@@ -16,7 +16,8 @@ namespace hal
                                                                                                   {GateType::BaseType::lut, "lut"},
                                                                                                   {GateType::BaseType::ram, "ram"},
                                                                                                   {GateType::BaseType::io, "io"},
-                                                                                                  {GateType::BaseType::buffer, "buffer"}};
+                                                                                                  {GateType::BaseType::buffer, "buffer"},
+                                                                                                  {GateType::BaseType::dsp, "dsp"}};
 
     const std::unordered_map<GateType::PinType, std::string> HGLWriter::m_pin_type_to_string = {{GateType::PinType::none, "none"},
                                                                                                 {GateType::PinType::power, "power"},
@@ -368,7 +369,7 @@ namespace hal
     std::vector<HGLWriter::GroupCtx> HGLWriter::get_groups(GateType* gt)
     {
         std::vector<GroupCtx> res;
-        std::unordered_map<std::string, std::map<u32, std::string>> groups  = gt->get_pin_groups();
+        std::unordered_map<std::string, std::map<u32, std::string>> groups = gt->get_pin_groups();
 
         for (const auto& [group, index_to_pin] : groups)
         {

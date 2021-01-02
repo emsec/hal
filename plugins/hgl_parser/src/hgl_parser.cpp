@@ -13,7 +13,8 @@ namespace hal
                                                                                                   {"lut", GateType::BaseType::lut},
                                                                                                   {"ram", GateType::BaseType::ram},
                                                                                                   {"io", GateType::BaseType::io},
-                                                                                                  {"buffer", GateType::BaseType::buffer}};
+                                                                                                  {"buffer", GateType::BaseType::buffer},
+                                                                                                  {"dsp", GateType::BaseType::dsp}};
 
     const std::unordered_map<std::string, GateType::PinType> HGLParser::m_string_to_pin_type = {{"none", GateType::PinType::none},
                                                                                                 {"power", GateType::PinType::power},

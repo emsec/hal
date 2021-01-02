@@ -53,7 +53,8 @@ namespace hal
             latch,         /**< Represents a sequential latch gate type. **/
             ram,           /**< Represents a sequential RAM gate type. **/
             io,            /**< Represents an IO gate type. **/
-            buffer         /**< Represents a buffer gate type. **/
+            buffer,        /**< Represents a combinational buffer gate type. **/
+            dsp            /**< Represents a sequential DSP gate type. **/
         };
 
         /**

@@ -358,7 +358,7 @@ namespace hal
             std::unordered_set<std::string> out_pins = {"O0", "O1", "O2", "O3", "O4"};
 
             EXPECT_TRUE(gt->add_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6"}, GateType::PinDirection::input));
-            EXPECT_TRUE(gt->add_pins({"O0", "O1", "O2", "O3", "O4"}, GateType::PinDirection::output));
+            EXPECT_TRUE(gt->add_pins({"O0", "O1", "O2", "O3", "O4", "O5"}, GateType::PinDirection::output));
 
             for (const auto& pin : in_pins) 
             {
@@ -379,12 +379,13 @@ namespace hal
             ASSERT_FALSE(gt->assign_pin_type("I6", GateType::PinType::neg_state));
             ASSERT_TRUE(gt->assign_pin_type("O0", GateType::PinType::state));
             ASSERT_TRUE(gt->assign_pin_type("O1", GateType::PinType::neg_state));
-            ASSERT_FALSE(gt->assign_pin_type("O4", GateType::PinType::clock));
-            ASSERT_FALSE(gt->assign_pin_type("O4", GateType::PinType::enable));
-            ASSERT_FALSE(gt->assign_pin_type("O4", GateType::PinType::set));
-            ASSERT_FALSE(gt->assign_pin_type("O4", GateType::PinType::reset));
             ASSERT_TRUE(gt->assign_pin_type("O2", GateType::PinType::data));
             ASSERT_TRUE(gt->assign_pin_type("O3", GateType::PinType::address));
+            ASSERT_TRUE(gt->assign_pin_type("O4", GateType::PinType::clock));
+            ASSERT_FALSE(gt->assign_pin_type("O5", GateType::PinType::enable));
+            ASSERT_FALSE(gt->assign_pin_type("O5", GateType::PinType::set));
+            ASSERT_FALSE(gt->assign_pin_type("O5", GateType::PinType::reset));
+            
 
             pin_to_type = {
                 {"I0", GateType::PinType::clock},
@@ -398,7 +399,8 @@ namespace hal
                 {"O1", GateType::PinType::neg_state},
                 {"O2", GateType::PinType::data},
                 {"O3", GateType::PinType::address},
-                {"O4", GateType::PinType::none}};
+                {"O4", GateType::PinType::clock},
+                {"O5", GateType::PinType::none}};
 
             EXPECT_EQ(gt->get_pin_types(), pin_to_type);
         }
