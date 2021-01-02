@@ -805,6 +805,13 @@ namespace hal
     {
         Q_UNUSED(fileName)
         clearAllSnapshots(true);
+
+        //clear all open tabs and reset the edior
+        while(mTabWidget->count() > 0)
+            discardTab(0);
+        mNewFileCounter = 0;
+        mLastClickTime  = 0;
+        handleActionNewTab();
     }
 
     bool PythonEditor::eventFilter(QObject* obj, QEvent* event)
