@@ -75,11 +75,6 @@ namespace hal
 
     bool HGLWriter::write_gate_library(rapidjson::Document& document, const GateLibrary* gate_lib)
     {
-        // TODO remove
-        GateLibrarySpecificUtils pl;
-        m_utils = pl.get_gl_utils(gate_lib);
-        // TODO end remove
-
         rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
 
         // library name
@@ -327,41 +322,6 @@ namespace hal
 
             res.push_back(res_pin);
         }
-
-        //TODO remove
-        if (m_utils != nullptr)
-        {
-            std::unordered_set<std::string> clock_pins  = m_utils->get_clock_ports(gt);
-            std::unordered_set<std::string> enable_pins = m_utils->get_enable_ports(gt);
-            std::unordered_set<std::string> set_pins    = m_utils->get_set_ports(gt);
-            std::unordered_set<std::string> reset_pins  = m_utils->get_reset_ports(gt);
-            std::unordered_set<std::string> data_pins   = m_utils->get_data_ports(gt);
-
-            for (auto it = res.begin(); it != res.end(); it++)
-            {
-                if (clock_pins.find(it->name) != clock_pins.end())
-                {
-                    it->type = m_pin_type_to_string.at(GateType::PinType::clock);
-                }
-                else if (enable_pins.find(it->name) != enable_pins.end())
-                {
-                    it->type = m_pin_type_to_string.at(GateType::PinType::enable);
-                }
-                else if (set_pins.find(it->name) != set_pins.end())
-                {
-                    it->type = m_pin_type_to_string.at(GateType::PinType::set);
-                }
-                else if (reset_pins.find(it->name) != reset_pins.end())
-                {
-                    it->type = m_pin_type_to_string.at(GateType::PinType::reset);
-                }
-                else if (data_pins.find(it->name) != data_pins.end())
-                {
-                    it->type = m_pin_type_to_string.at(GateType::PinType::data);
-                }
-            }
-        }
-        // TODO end remove
 
         return res;
     }

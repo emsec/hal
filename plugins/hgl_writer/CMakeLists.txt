@@ -7,7 +7,6 @@ if(PL_HGL_WRITER OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${HGL_WRITER_INC}
                    SOURCES ${HGL_WRITER_SRC}
-                   LINK_LIBRARIES PUBLIC ${IGRAPH_LIBRARIES} gate_library_specific_utils
                    )
 
     add_subdirectory(test)
