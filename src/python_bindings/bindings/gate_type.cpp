@@ -179,56 +179,66 @@ namespace hal
             :rtype: list[str]
         )");
 
-        py_gate_type.def("assign_input_pin_group", &GateType::assign_input_pin_group, py::arg("group_name"), py::arg("index_to_pin"), R"(
-            Assign existing input pins to a input pin group.
-
-            :param str group_name: The name of the input pin group.
-            :param dict[int,str] index_to_pin: A dict from pin index to input pin name.
+        py_gate_type.def("add_pin", &GateType::add_pin, py::arg("pin"), py::arg("direction"), py::arg("pin_type"), R"(
+            Add a pin of the specified direction and type to the gate type.
+        
+            :param str pin: The pin.
+            :param hal_py.GateType.PinDirection direction: The pin direction to be assigned.
+            :param hal_py.GateType.PinType pin_type: The pin type to be assigned.
+            :returns: True on success, false otherwise.
+            :rtype: bool
         )");
 
-        py_gate_type.def("assign_input_pin_groups", &GateType::assign_input_pin_groups, py::arg("pin_groups"), R"(
-            Assign existing input pins to multiple input pin groups.
-
-            :param dict[str,dict[int,str]] pin_groups: A dict from pin group names to a dict from pin indices to pin names.
+        py_gate_type.def("add_pins", &GateType::add_pin, py::arg("pins"), py::arg("direction"), py::arg("pin_type"), R"(
+            Add a list of pin of the specified direction and type to the gate type.
+        
+            :param list[str] pins: The pins.
+            :param hal_py.GateType.PinDirection direction: The pin direction to be assigned.
+            :param hal_py.GateType.PinType pin_type: The pin type to be assigned.
+            :returns: True on success, false otherwise.
+            :rtype: bool
         )");
 
-        py_gate_type.def_property_readonly("input_pin_groups", &GateType::get_input_pin_groups, R"(
-            All input pin groups of the gate type as a dict from pin group names to a dict from pin indices to pin names.
-
-            :type: dict[str,dict[int,str]]
+        py_gate_type.def("get_pins", &GateType::get_pins, R"(
+            Get all pins belonging to the gate type.
+        
+            :returns: A list of pins.
+            :rtype: list[str]
         )");
 
-        py_gate_type.def("get_input_pin_groups", &GateType::get_input_pin_groups, R"(
-            Get all input pin groups of the gate type.
+        py_gate_type.def_property_readonly("pins", &GateType::get_pins, R"(
+            A list of all pins belonging to the gate type.
 
-            :returns: A dict from pin group names to a dict from pin indices to pin names.
-            :rtype: dict[str,dict[int,str]]
+            :type: list[str]
         )");
 
-        py_gate_type.def("assign_output_pin_group", &GateType::assign_output_pin_group, py::arg("group_name"), py::arg("index_to_pin"), R"(
-            Assign existing output pins to a output pin group.
-
-            :param str group_name: The name of the output pin group.
-            :param dict[int,str] index_to_pin: A dict from pin index to output pin name.
+        py_gate_type.def("get_pin_direction", &GateType::get_pin_direction, py::arg("pin"), R"(
+            Get the pin direction of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the direction 'internal' will be returned.
+        
+            :param str pin: The pin.
+            :returns: The pin direction.
+            :rtype: hal_py.GateType.PinDirection
         )");
 
-        py_gate_type.def("assign_output_pin_groups", &GateType::assign_output_pin_groups, py::arg("pin_groups"), R"(
-            Assign existing output pins to multiple output pin groups.
-
-            :param dict[str,dict[int,str]] pin_groups: A dict from pin group names to a dict from pin indices to pin names.
+        py_gate_type.def("get_pin_directions", &GateType::get_pin_directions, R"(
+            Get the pin directions of all pins as a dict.
+         
+            :returns: A dict from pin to pin direction.
+            :rtype: dict[std,hal_py.GateType.PinDirection]
         )");
 
-        py_gate_type.def_property_readonly("output_pin_groups", &GateType::get_output_pin_groups, R"(
-            All output pin groups of the gate type as a dict from pin group names to a dict from pin indices to pin names.
-
-            :type: dict[str,dict[int,str]]
+        py_gate_type.def_property_readonly("pin_directions", &GateType::get_pin_directions, R"(
+            The pin directions of all pins as a dict.
+         
+            :type: dict[str,hal_py.GateType.PinDirection]
         )");
 
-        py_gate_type.def("get_output_pin_groups", &GateType::get_output_pin_groups, R"(
-            Get all output pin groups of the gate type.
-
-            :returns: A dict from pin group names to a dict from pin indices to pin names.
-            :rtype: dict[str,dict[int,str]]
+        py_gate_type.def("get_pins_of_direction", &GateType::get_pins_of_direction, py::arg("direction"), R"(
+            Get all pins of the specified pin direction.
+        
+            :param hal_py.GateType.PinDirection direction: The pin direction.
+            :returns: A set of pins.
+            :rtype: set[str]
         )");
 
         py_gate_type.def("assign_pin_type", &GateType::assign_pin_type, py::arg("pin"), py::arg("pin_type"), R"(
@@ -241,7 +251,7 @@ namespace hal
         )");
 
         py_gate_type.def("get_pin_type", &GateType::get_pin_type, py::arg("pin"), R"(
-            Get the pin type of the given pin. If the pin does not exist, the default type 'none' will be returned.
+            Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the type 'none' will be returned.
         
             :param str pin: The pin.
             :returns: The pin type.
@@ -249,14 +259,14 @@ namespace hal
         )");
 
         py_gate_type.def("get_pin_types", &GateType::get_pin_types, R"(
-            Get the pin types of all pins as a map.
+            Get the pin types of all pins as a dict.
          
             :returns: A dict from pin to pin type.
             :rtype: dict[str,hal_py.GateType.PinType]
         )");
 
         py_gate_type.def_property_readonly("pin_types", &GateType::get_pin_types, R"(
-            The pin types of all pins as a map.
+            The pin types of all pins as a dict.
          
             :type: dict[str,hal_py.GateType.PinType]
         )");
@@ -265,8 +275,36 @@ namespace hal
             Get all pins of the specified pin type.
         
             :param hal_py.GateType.PinType pin_type: The pin type.
-            :returns: A list of pins.
+            :returns: A set of pins.
             :rtype: set[str]
+        )");
+
+        py_gate_type.def("assign_pin_group", &GateType::assign_pin_group, py::arg("group"), py::arg("index_to_pin"), R"(
+            Assign existing pins to a pin group.
+
+            :param str group: The name of the pin group.
+            :param dict[int,str] index_to_pin: A dict from pin index to pin.
+        )");
+
+        py_gate_type.def_property_readonly("pin_groups", &GateType::get_pin_groups, R"(
+            All pin groups of the gate type as a dict from pin group names to a dict from pin index to pin.
+
+            :type: dict[str,dict[int,str]]
+        )");
+
+        py_gate_type.def("get_pin_groups", &GateType::get_pin_groups, R"(
+            Get all pin groups of the gate type.
+
+            :returns: A dict from pin group names to a dict from pin index to pin.
+            :rtype: dict[str,dict[int,str]]
+        )");
+
+        py_gate_type.def("get_pins_of_group", &GateType::get_pins_of_group, py::arg("group"), R"(
+            Get all pins of the specified pin group including their indices.
+         
+            :param str group: The name of the pin group.
+            :returns: A map from pin index to pin.
+            :rtype: dict[int,str]
         )");
 
         py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("pin_name"), py::arg("function"), R"(

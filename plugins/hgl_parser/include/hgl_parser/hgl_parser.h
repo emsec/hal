@@ -61,12 +61,6 @@ namespace hal
             std::unordered_map<std::string, std::string> boolean_functions;
         };
 
-        struct GroupCtx
-        {
-            std::unordered_map<std::string, std::map<u32, std::string>> input_groups;
-            std::unordered_map<std::string, std::map<u32, std::string>> output_groups;
-        };
-
         std::unique_ptr<GateLibrary> m_gate_lib;
         std::stringstream* m_fs;
         std::filesystem::path m_path;
@@ -80,7 +74,7 @@ namespace hal
         bool parse_gate_library(const rapidjson::Document& document);
         bool parse_gate_type(const rapidjson::Value& gate_type);
         bool parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin, const std::string& gt_name);
-        bool parse_group(GroupCtx& group_ctx, const rapidjson::Value& group, const std::string& gt_name);
+        std::optional<std::pair<std::string, std::map<u32, std::string>>> parse_group(const rapidjson::Value& group, const std::string& gt_name);
         bool parse_lut_config(GateType* gt_lut, const rapidjson::Value& lut_config);
         bool parse_ff_config(GateType* gt_ff, const rapidjson::Value& ff_config);
         bool parse_latch_config(GateType* gt_latch, const rapidjson::Value& latch_config);

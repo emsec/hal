@@ -162,7 +162,7 @@ namespace hal
         std::optional<ff_group> parse_ff(TokenStream<std::string>& str);
         std::optional<latch_group> parse_latch(TokenStream<std::string>& str);
         std::optional<lut_group> parse_lut(TokenStream<std::string>& str);
-        GateType* construct_gate_type(cell_group& cell);
+        bool construct_gate_type(cell_group& cell);
 
         void remove_comments(std::string& line, bool& multi_line_comment);
         std::vector<std::string> tokenize_function(const std::string& function);

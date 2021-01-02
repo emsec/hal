@@ -75,7 +75,6 @@ namespace hal
         struct GroupCtx
         {
             std::string name;
-            std::string direction;
             std::map<u32, std::string> index_to_pin;
         };
 

@@ -189,9 +189,7 @@ namespace hal
                             std::vector<T> output_pins = gate_it->second->get_output_pins();
                             pins.insert(pins.end(), output_pins.begin(), output_pins.end());
 
-                            pin_groups                                                          = gate_it->second->get_input_pin_groups();
-                            std::unordered_map<T, std::map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
-                            pin_groups.insert(output_pin_groups.begin(), output_pin_groups.end());
+                            pin_groups = gate_it->second->get_pin_groups();
                         }
                         else
                         {
@@ -204,13 +202,9 @@ namespace hal
                                 pins.push_back(core_strings::convert_string<std::string, T>(pin));
                             }
 
-                            for (const auto& pin_group : gate_it->second->get_input_pin_groups())
+                            for (const auto& [group, index_to_pin] : gate_it->second->get_pin_groups())
                             {
-                                pin_groups.emplace(core_strings::convert_string<std::string, T>(pin_group.first), pin_group.second);
-                            }
-                            for (const auto& pin_group : gate_it->second->get_output_pin_groups())
-                            {
-                                pin_groups.emplace(core_strings::convert_string<std::string, T>(pin_group.first), pin_group.second);
+                                pin_groups.emplace(core_strings::convert_string<std::string, T>(group), index_to_pin);
                             }
                         }
 

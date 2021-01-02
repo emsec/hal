@@ -144,8 +144,7 @@ namespace hal
                     return false;
                 }
 
-                GateType* gt = construct_gate_type(cell.value());
-                if (gt == nullptr)
+                if (!construct_gate_type(cell.value()))
                 {
                     return false;
                 }
@@ -844,13 +843,12 @@ namespace hal
         return lut;
     }
 
-    GateType* LibertyParser::construct_gate_type(cell_group& cell)
+    bool LibertyParser::construct_gate_type(cell_group& cell)
     {
         std::vector<std::string> input_pins;
         std::vector<std::string> output_pins;
 
-        std::unordered_map<std::string, std::map<u32, std::string>> input_pin_groups;
-        std::unordered_map<std::string, std::map<u32, std::string>> output_pin_groups;
+        std::unordered_map<std::string, std::map<u32, std::string>> groups;
 
         // check if buffer type
         if (cell.pins.size() == 2 && cell.pins.at(0).pin_names.size() == 1 && cell.pins.at(1).pin_names.size() == 1)
@@ -893,25 +891,12 @@ namespace hal
         // get input and output pins from bus groups
         for (const auto& bus : cell.buses)
         {
-            if (bus.second.direction == GateType::PinDirection::input || bus.second.direction == GateType::PinDirection::inout)
+            if (groups.find(bus.first) != groups.end())
             {
-                if (input_pin_groups.find(bus.first) != input_pin_groups.end())
-                {
-                    log_error("liberty_parser", "input pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
-                    return nullptr;
-                }
-                input_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
+                log_error("liberty_parser", "pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
+                return false;
             }
-
-            if (bus.second.direction == GateType::PinDirection::output || bus.second.direction == GateType::PinDirection::inout)
-            {
-                if (output_pin_groups.find(bus.first) != output_pin_groups.end())
-                {
-                    log_error("liberty_parser", "output pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
-                    return nullptr;
-                }
-                output_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
-            }
+            groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
         }
 
         if (cell.type == GateType::BaseType::ff)
@@ -1145,8 +1130,13 @@ namespace hal
             }
         }
 
-        gt->assign_input_pin_groups(input_pin_groups);
-        gt->assign_output_pin_groups(output_pin_groups);
+        for (const auto& [group, index_to_pin] : groups)
+        {
+            if(!gt->assign_pin_group(group, index_to_pin)) 
+            {
+                return false;
+            }
+        }
 
         std::vector<std::string> all_pins = input_pins;
         all_pins.insert(all_pins.end(), output_pins.begin(), output_pins.end());
@@ -1194,7 +1184,7 @@ namespace hal
             }
         }
 
-        return gt;
+        return true;
     }
 
     void LibertyParser::remove_comments(std::string& line, bool& multi_line_comment)

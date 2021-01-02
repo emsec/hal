@@ -304,8 +304,8 @@ namespace hal
         gt = gl->create_gate_type("pin_group_gate_4_to_4");
         gt->add_input_pins({"I(0)", "I(1)", "I(2)", "I(3)"});
         gt->add_output_pins({"O(0)", "O(1)", "O(2)", "O(3)"});
-        gt->assign_input_pin_group("I", {{0, "I(0)"}, {1, "I(1)"}, {2, "I(2)"}, {3, "I(3)"}});
-        gt->assign_output_pin_group("O", {{0, "O(0)"}, {1, "O(1)"}, {2, "O(2)"}, {3, "O(3)"}});
+        gt->assign_pin_group("I", {{0, "I(0)"}, {1, "I(1)"}, {2, "I(2)"}, {3, "I(3)"}});
+        gt->assign_pin_group("O", {{0, "O(0)"}, {1, "O(1)"}, {2, "O(2)"}, {3, "O(3)"}});
 
         gt = gl->create_gate_type("gnd");
         gt->add_output_pins({"O"});

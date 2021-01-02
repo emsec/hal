@@ -181,7 +181,7 @@ namespace hal
     /**
      * Testing handling of input and output pins.
      *
-     * Functions: add_input_pin, add_input_pins, get_input_pins, add_output_pin, add_output_pins, get_output_pins
+     * Functions: add_pin, add_pins, get_input_pins, get_output_pins
      */
     TEST_F(GateTypeTest, check_pin_handling)
     {
@@ -191,12 +191,12 @@ namespace hal
 
         GateType* gt = gl.create_gate_type("dummy", GateType::BaseType::combinational);
         ASSERT_NE(gt, nullptr);
-        gt->add_input_pin("I0");
-        gt->add_input_pins({"I1", "I2"});
+        EXPECT_TRUE(gt->add_pin("I0", GateType::PinDirection::input));
+        EXPECT_TRUE(gt->add_pins({"I1", "I2"}, GateType::PinDirection::input));
         EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I0", "I1", "I2"}));
 
-        gt->add_output_pin("O0");
-        gt->add_output_pins({"O1", "O2"});
+        EXPECT_TRUE(gt->add_pin("O0", GateType::PinDirection::output));
+        EXPECT_TRUE(gt->add_pins({"O1", "O2"}, GateType::PinDirection::output));
         EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O0", "O1", "O2"}));
 
         TEST_END
@@ -205,7 +205,7 @@ namespace hal
     /**
      * Testing handling of input and output pin groups.
      *
-     * Functions: assign_input_pin_group, assign_input_pin_groups, get_input_pin_groups, assign_output_pin_group, assign_output_pin_groups, get_output_pin_groups
+     * Functions: assign_pin_group, get_pin_groups
      */
     TEST_F(GateTypeTest, check_pin_group_handling)
     {
@@ -221,62 +221,37 @@ namespace hal
         std::unordered_map<std::string, std::map<u32, std::string>> groups_bc = {{"B", index_to_pin_b}, {"C", index_to_pin_c}};
         std::unordered_map<std::string, std::map<u32, std::string>> groups_abc = {{"A", index_to_pin_a}, {"B", index_to_pin_b}, {"C", index_to_pin_c}};
         
-        // input groups
+        // pin groups
         {   
             GateType* gt = gl.create_gate_type("dummy1", GateType::BaseType::combinational);
             ASSERT_NE(gt, nullptr);
-            gt->add_input_pins({"A(0)", "A(1)", "B(0)", "B(1)", "C(0)", "C(1)"});
+            EXPECT_TRUE(gt->add_pins({"A(0)", "A(1)", "B(0)", "B(1)", "C(0)", "C(1)"}, GateType::PinDirection::input));
         
-            // multiple groups
-            gt->assign_input_pin_groups(groups_ab);
-            EXPECT_EQ(gt->get_input_pin_groups(), groups_ab);
-
-            // single group
-            gt->assign_input_pin_group("C", index_to_pin_c);
-            EXPECT_EQ(gt->get_input_pin_groups(), groups_abc);
+            EXPECT_TRUE(gt->assign_pin_group("A", index_to_pin_a));
+            EXPECT_TRUE(gt->assign_pin_group("B", index_to_pin_b));
+            EXPECT_EQ(gt->get_pin_groups(), groups_ab);
+            EXPECT_EQ(gt->get_pins_of_group("A"), index_to_pin_a);
         }
 
-        // output groups
+        // add already existing pin group
         {
             GateType* gt = gl.create_gate_type("dummy2", GateType::BaseType::combinational);
             ASSERT_NE(gt, nullptr);
-            gt->add_output_pins({"A(0)", "A(1)", "B(0)", "B(1)", "C(0)", "C(1)"});
-        
-            // multiple groups
-            gt->assign_output_pin_groups(groups_ab);
-            EXPECT_EQ(gt->get_output_pin_groups(), groups_ab);
 
-            // single group
-            gt->assign_output_pin_group("C", index_to_pin_c);
-            EXPECT_EQ(gt->get_output_pin_groups(), groups_abc);
+            EXPECT_TRUE(gt->add_pins({"A(0)", "A(1)"}, GateType::PinDirection::input));
+            EXPECT_TRUE(gt->assign_pin_group("A", index_to_pin_a));
+            EXPECT_EQ(gt->get_pin_groups(), groups_a);
+            EXPECT_FALSE(gt->assign_pin_group("A", index_to_pin_a));
+            EXPECT_EQ(gt->get_pin_groups(), groups_a);
         }
 
-        // add already existing input pin group
+        // add invalid pin to pin group
         {
             GateType* gt = gl.create_gate_type("dummy3", GateType::BaseType::combinational);
             ASSERT_NE(gt, nullptr);
 
-            gt->add_input_pins({"A(0)", "A(1)"});
-            gt->assign_input_pin_group("A", index_to_pin_a);
-            EXPECT_EQ(gt->get_input_pin_groups(), groups_a);
-            gt->assign_input_pin_group("A", index_to_pin_a);
-            EXPECT_EQ(gt->get_input_pin_groups(), groups_a);
-            gt->assign_input_pin_groups(groups_a);
-            EXPECT_EQ(gt->get_input_pin_groups(), groups_a);
-        }
-
-        // add already existing output pin group
-        {
-            GateType* gt = gl.create_gate_type("dummy4", GateType::BaseType::combinational);
-            ASSERT_NE(gt, nullptr);
-
-            gt->add_output_pins({"A(0)", "A(1)"});
-            gt->assign_output_pin_group("A", index_to_pin_a);
-            EXPECT_EQ(gt->get_output_pin_groups(), groups_a);
-            gt->assign_output_pin_group("A", index_to_pin_a);
-            EXPECT_EQ(gt->get_output_pin_groups(), groups_a);
-            gt->assign_output_pin_groups(groups_a);
-            EXPECT_EQ(gt->get_output_pin_groups(), groups_a);
+            EXPECT_FALSE(gt->assign_pin_group("A", index_to_pin_a));
+            EXPECT_TRUE(gt->get_pin_groups().empty());
         }
 
         TEST_END
@@ -302,11 +277,11 @@ namespace hal
             std::unordered_set<std::string> out_pins = {"O"};
             std::unordered_map<std::string, GateType::PinType> pin_to_type;
 
-            gt->add_input_pins({"I0", "I1"});
-            gt->add_output_pins({"O"});
+            EXPECT_TRUE(gt->add_pins({"I0", "I1"}, GateType::PinDirection::input, GateType::PinType::ground));
+            EXPECT_TRUE(gt->add_pins({"O"}, GateType::PinDirection::output));
 
-            EXPECT_EQ(gt->get_pin_type("I0"), GateType::PinType::none);
-            EXPECT_EQ(gt->get_pin_type("I1"), GateType::PinType::none);
+            EXPECT_EQ(gt->get_pin_type("I0"), GateType::PinType::ground);
+            EXPECT_EQ(gt->get_pin_type("I1"), GateType::PinType::ground);
             EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::none);
 
             ASSERT_TRUE(gt->assign_pin_type("I0", GateType::PinType::power));
@@ -352,8 +327,8 @@ namespace hal
             std::unordered_set<std::string> in_pins = {"I"};
             std::unordered_set<std::string> out_pins = {"O"};
 
-            gt->add_input_pins({"I"});
-            gt->add_output_pins({"O"});
+            EXPECT_TRUE(gt->add_pins({"I"}, GateType::PinDirection::input));
+            EXPECT_TRUE(gt->add_pins({"O"}, GateType::PinDirection::output));
 
             EXPECT_EQ(gt->get_pin_type("I"), GateType::PinType::none);
             EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::none);
@@ -382,8 +357,8 @@ namespace hal
             std::unordered_set<std::string> in_pins = {"I0", "I1", "I2", "I3", "I4", "I5", "I6"};
             std::unordered_set<std::string> out_pins = {"O0", "O1", "O2", "O3", "O4"};
 
-            gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6"});
-            gt->add_output_pins({"O0", "O1", "O2", "O3", "O4"});
+            EXPECT_TRUE(gt->add_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6"}, GateType::PinDirection::input));
+            EXPECT_TRUE(gt->add_pins({"O0", "O1", "O2", "O3", "O4"}, GateType::PinDirection::output));
 
             for (const auto& pin : in_pins) 
             {

@@ -248,7 +248,6 @@ namespace hal
                     rapidjson::Value group(rapidjson::kObjectType);
 
                     group.AddMember("name", group_ctx.name, allocator);
-                    group.AddMember("direction", group_ctx.direction, allocator);
 
                     rapidjson::Value group_pins(rapidjson::kObjectType);
                     for (const auto& [index, group_pin] : group_ctx.index_to_pin)
@@ -369,33 +368,14 @@ namespace hal
     std::vector<HGLWriter::GroupCtx> HGLWriter::get_groups(GateType* gt)
     {
         std::vector<GroupCtx> res;
-        std::unordered_map<std::string, std::map<u32, std::string>> input_groups  = gt->get_input_pin_groups();
-        std::unordered_map<std::string, std::map<u32, std::string>> output_groups = gt->get_output_pin_groups();
+        std::unordered_map<std::string, std::map<u32, std::string>> groups  = gt->get_pin_groups();
 
-        for (const auto& [in_group, index_to_pin] : input_groups)
+        for (const auto& [group, index_to_pin] : groups)
         {
             GroupCtx res_group;
-            res_group.name         = in_group;
-            res_group.direction    = "input";
+            res_group.name         = group;
             res_group.index_to_pin = index_to_pin;
             res.push_back(res_group);
-        }
-
-        for (const auto& [out_group, index_to_pin] : output_groups)
-        {
-            if (auto it = std::find_if(res.begin(), res.end(), [out_group](GroupCtx g) { return g.name == out_group; }); it == res.end())
-            {
-                GroupCtx res_group;
-
-                res_group.name         = out_group;
-                res_group.direction    = "output";
-                res_group.index_to_pin = index_to_pin;
-                res.push_back(res_group);
-            }
-            else
-            {
-                it->direction = "inout";
-            }
         }
 
         return res;

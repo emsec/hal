@@ -152,36 +152,6 @@ namespace hal
         return res;
     }
 
-    void GateType::assign_input_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin)
-    {
-        m_input_pin_groups.emplace(group_name, index_to_pin);
-    }
-
-    void GateType::assign_input_pin_groups(const std::unordered_map<std::string, std::map<u32, std::string>>& pin_groups)
-    {
-        m_input_pin_groups.insert(pin_groups.begin(), pin_groups.end());
-    }
-
-    std::unordered_map<std::string, std::map<u32, std::string>> GateType::get_input_pin_groups() const
-    {
-        return m_input_pin_groups;
-    }
-
-    void GateType::assign_output_pin_group(const std::string& group_name, const std::map<u32, std::string>& index_to_pin)
-    {
-        m_output_pin_groups.emplace(group_name, index_to_pin);
-    }
-
-    void GateType::assign_output_pin_groups(const std::unordered_map<std::string, std::map<u32, std::string>>& pin_groups)
-    {
-        m_output_pin_groups.insert(pin_groups.begin(), pin_groups.end());
-    }
-
-    std::unordered_map<std::string, std::map<u32, std::string>> GateType::get_output_pin_groups() const
-    {
-        return m_output_pin_groups;
-    }
-
     bool GateType::add_pin(const std::string& pin, PinDirection direction, PinType pin_type)
     {
         if (m_pins_set.find(pin) != m_pins_set.end())
@@ -246,12 +216,13 @@ namespace hal
 
     bool GateType::assign_pin_type(const std::string& pin, PinType pin_type)
     {
-        if (m_pins_set.find(pin) != m_pins_set.end()) 
+        if (m_pins_set.find(pin) != m_pins_set.end())
         {
             std::unordered_set<PinType> types = m_direction_to_types.at(m_pin_to_direction.at(pin));
             if (types.find(pin_type) != types.end())
             {
-                if (const auto it = m_pin_to_type.find(pin); it != m_pin_to_type.end()) {
+                if (const auto it = m_pin_to_type.find(pin); it != m_pin_to_type.end())
+                {
                     m_type_to_pins.at(it->second).erase(pin);
                 }
                 m_pin_to_type[pin] = pin_type;
@@ -282,6 +253,42 @@ namespace hal
     std::unordered_set<std::string> GateType::get_pins_of_type(PinType pin_type) const
     {
         if (const auto it = m_type_to_pins.find(pin_type); it != m_type_to_pins.end())
+        {
+            return it->second;
+        }
+
+        return {};
+    }
+
+    bool GateType::assign_pin_group(const std::string& group, const std::map<u32, std::string>& index_to_pin)
+    {
+        if (m_pin_groups.find(group) != m_pin_groups.end())
+        {
+            log_error("gate_library", "pin group '{}' could not be added to gate type '{}' since a pin group with the same name does already exist.", group, m_name);
+            return false;
+        }
+
+        for (const auto& pin : index_to_pin)
+        {
+            if (m_pins_set.find(pin.second) == m_pins_set.end())
+            {
+                log_error("gate_library", "could not assign pin '{}' to group '{}' of gate type '{}'.", pin.second, group, m_name);
+                return false;
+            }
+        }
+
+        m_pin_groups.emplace(group, index_to_pin);
+        return true;
+    }
+
+    std::unordered_map<std::string, std::map<u32, std::string>> GateType::get_pin_groups() const
+    {
+        return m_pin_groups;
+    }
+
+    std::map<u32, std::string> GateType::get_pins_of_group(const std::string& group) const
+    {
+        if (const auto it = m_pin_groups.find(group); it != m_pin_groups.end())
         {
             return it->second;
         }

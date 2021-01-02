@@ -98,7 +98,6 @@ namespace hal
         std::string name;
         GateType::BaseType type;
         PinCtx pin_ctx;
-        GroupCtx group_ctx;
 
         if (!gate_type.HasMember("name") || !gate_type["name"].IsString())
         {
@@ -145,17 +144,20 @@ namespace hal
 
         if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())
         {
-            for (const auto& group : gate_type["groups"].GetArray())
+            for (const auto& group_val : gate_type["groups"].GetArray())
             {
-                if (!parse_group(group_ctx, group, name))
+                auto group = parse_group(group_val, name);
+                if (!group.has_value())
+                {
+                    return false;
+                }
+
+                if (!gt->assign_pin_group(group->first, group->second))
                 {
                     return false;
                 }
             }
         }
-
-        gt->assign_input_pin_groups(group_ctx.input_groups);
-        gt->assign_output_pin_groups(group_ctx.output_groups);
 
         if (type == GateType::BaseType::lut)
         {
@@ -281,21 +283,23 @@ namespace hal
                 log_warning("hgl_parser", "invalid type '{}' given for pin '{}' of gate type '{}'.", type_str, name, gt_name);
                 return false;
             }
-        } else {
+        }
+        else
+        {
             pin_ctx.pin_to_type[name] = GateType::PinType::none;
         }
 
         return true;
     }
 
-    bool HGLParser::parse_group(GroupCtx& group_ctx, const rapidjson::Value& group, const std::string& gt_name)
+    std::optional<std::pair<std::string, std::map<u32, std::string>>> HGLParser::parse_group(const rapidjson::Value& group, const std::string& gt_name)
     {
         // read name
         std::string name;
         if (!group.HasMember("name") || !group["name"].IsString())
         {
             log_error("hgl_parser", "invalid name for at least one pin of gate type '{}'.", gt_name);
-            return false;
+            return std::nullopt;
         }
         name = group["name"].GetString();
 
@@ -304,7 +308,7 @@ namespace hal
         if (!group.HasMember("pins") || !group["pins"].IsObject())
         {
             log_error("hgl_parser", "no pins given for group '{}' of gate type '{}'.", name, gt_name);
-            return false;
+            return std::nullopt;
         }
 
         const auto pins_obj = group["pins"].GetObject();
@@ -315,33 +319,7 @@ namespace hal
             index_to_pin.emplace(pin_index, pin_name);
         }
 
-        // read direction
-        if (!group.HasMember("direction") || !group["direction"].IsString())
-        {
-            log_error("hgl_parser", "invalid direction for pin '{}' of gate type '{}'.", name, gt_name);
-            return false;
-        }
-        std::string direction = group["direction"].GetString();
-        if (direction == "input")
-        {
-            group_ctx.input_groups.emplace(name, index_to_pin);
-        }
-        else if (direction == "output")
-        {
-            group_ctx.output_groups.emplace(name, index_to_pin);
-        }
-        else if (direction == "inout")
-        {
-            group_ctx.input_groups.emplace(name, index_to_pin);
-            group_ctx.output_groups.emplace(name, index_to_pin);
-        }
-        else
-        {
-            log_warning("hgl_parser", "invalid direction '{}' given for pin '{}' of gate type '{}'.", direction, name, gt_name);
-            return false;
-        }
-
-        return true;
+        return std::make_pair(name, index_to_pin);
     }
 
     bool HGLParser::parse_lut_config(GateType* gt_lut, const rapidjson::Value& lut_config)

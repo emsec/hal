@@ -62,8 +62,7 @@ namespace hal
                     EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::none);
 
                     // pin groups
-                    EXPECT_TRUE(gt->get_input_pin_groups().empty());
-                    EXPECT_TRUE(gt->get_output_pin_groups().empty());
+                    EXPECT_TRUE(gt->get_pin_groups().empty());
 
                     // Boolean functions
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
@@ -110,10 +109,8 @@ namespace hal
                     EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::none);
 
                     // pin groups
-                    std::unordered_map<std::string, std::map<u32, std::string>> expected_in_group({{"A", {{0, "A(0)"}, {1, "A(1)"}}}, {"B", {{0, "B(0)"}, {1, "B(1)"}}}});
-                    std::unordered_map<std::string, std::map<u32, std::string>> expected_out_group({{"B", {{0, "B(0)"}, {1, "B(1)"}}}, {"C", {{0, "C(0)"}, {1, "C(1)"}}}});
-                    EXPECT_EQ(gt->get_input_pin_groups(), expected_in_group);
-                    EXPECT_EQ(gt->get_output_pin_groups(), expected_out_group);
+                    std::unordered_map<std::string, std::map<u32, std::string>> expected_groups({{"A", {{0, "A(0)"}, {1, "A(1)"}}}, {"B", {{0, "B(0)"}, {1, "B(1)"}}}, {"C", {{0, "C(0)"}, {1, "C(1)"}}}});
+                    EXPECT_EQ(gt->get_pin_groups(), expected_groups);
 
                     // Boolean functions
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
@@ -154,8 +151,7 @@ namespace hal
                     EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::lut);
 
                     // pin groups
-                    EXPECT_TRUE(gt->get_input_pin_groups().empty());
-                    EXPECT_TRUE(gt->get_output_pin_groups().empty());
+                    EXPECT_TRUE(gt->get_pin_groups().empty());
 
                     // Boolean functions
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
@@ -190,8 +186,7 @@ namespace hal
                     EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::lut);
 
                     // pin groups
-                    EXPECT_TRUE(gt->get_input_pin_groups().empty());
-                    EXPECT_TRUE(gt->get_output_pin_groups().empty());
+                    EXPECT_TRUE(gt->get_pin_groups().empty());
 
                     // Boolean functions
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
@@ -230,8 +225,7 @@ namespace hal
                     EXPECT_EQ(gt->get_pin_type("QN"), GateType::PinType::neg_state);
 
                     // pin groups
-                    EXPECT_TRUE(gt->get_input_pin_groups().empty());
-                    EXPECT_TRUE(gt->get_output_pin_groups().empty());
+                    EXPECT_TRUE(gt->get_pin_groups().empty());
 
                     // Boolean functions
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
@@ -277,8 +271,7 @@ namespace hal
                     EXPECT_EQ(gt->get_pin_type("QN"), GateType::PinType::neg_state);
 
                     // pin groups
-                    EXPECT_TRUE(gt->get_input_pin_groups().empty());
-                    EXPECT_TRUE(gt->get_output_pin_groups().empty());
+                    EXPECT_TRUE(gt->get_pin_groups().empty());
 
                     // Boolean functions
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
@@ -327,10 +320,8 @@ namespace hal
                     EXPECT_EQ(gt->get_pin_type("DO(2)"), GateType::PinType::data);
 
                     // pin groups
-                    std::unordered_map<std::string, std::map<u32, std::string>> expected_in_group({{"DI", {{0, "DI(0)"}, {1, "DI(1)"}, {2, "DI(2)"}}}, {"A", {{0, "A(0)"}, {1, "A(1)"}, {2, "A(2)"}}}});
-                    std::unordered_map<std::string, std::map<u32, std::string>> expected_out_group({{"DO", {{0, "DO(0)"}, {1, "DO(1)"}, {2, "DO(2)"}}}});
-                    EXPECT_EQ(gt->get_input_pin_groups(), expected_in_group);
-                    EXPECT_EQ(gt->get_output_pin_groups(), expected_out_group);
+                    std::unordered_map<std::string, std::map<u32, std::string>> expected_groups({{"DI", {{0, "DI(0)"}, {1, "DI(1)"}, {2, "DI(2)"}}}, {"A", {{0, "A(0)"}, {1, "A(1)"}, {2, "A(2)"}}}, {"DO", {{0, "DO(0)"}, {1, "DO(1)"}, {2, "DO(2)"}}}});
+                    EXPECT_EQ(gt->get_pin_groups(), expected_groups);
 
                     // Boolean functions
                     std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();

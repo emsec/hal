@@ -31,10 +31,9 @@ namespace hal
                 gt->add_input_pins({"VDD", "GND", "A(0)", "A(1)", "B(0)", "B(1)"});
                 gt->add_output_pins({"B(0)", "B(1)", "C(0)", "C(1)", "O"});
 
-                gt->assign_input_pin_group("A", {{0, "A(0)"}, {1, "A(1)"}});
-                gt->assign_input_pin_group("B", {{0, "B(0)"}, {1, "B(1)"}});
-                gt->assign_output_pin_group("B", {{0, "B(0)"}, {1, "B(1)"}});
-                gt->assign_output_pin_group("C", {{0, "C(0)"}, {1, "C(1)"}});
+                gt->assign_pin_group("A", {{0, "A(0)"}, {1, "A(1)"}});
+                gt->assign_pin_group("B", {{0, "B(0)"}, {1, "B(1)"}});
+                gt->assign_pin_group("C", {{0, "C(0)"}, {1, "C(1)"}});
 
                 gt->assign_pin_type("VDD", GateType::PinType::power);
                 gt->assign_pin_type("GND", GateType::PinType::ground);
@@ -121,9 +120,9 @@ namespace hal
                 gt->add_input_pins({"DI(0)", "DI(1)", "DI(2)", "A(0)", "A(1)", "A(2)"});
                 gt->add_output_pins({"DO(0)", "DO(1)", "DO(2)"});
 
-                gt->assign_input_pin_group("DI", {{0, "DI(0)"}, {1, "DI(1)"}, {2, "DI(2)"}});
-                gt->assign_input_pin_group("A", {{0, "A(0)"}, {1, "A(1)"}, {2, "A(2)"}});
-                gt->assign_output_pin_group("DO", {{0, "DO(0)"}, {1, "DO(1)"}, {2, "DO(2)"}});
+                gt->assign_pin_group("DI", {{0, "DI(0)"}, {1, "DI(1)"}, {2, "DI(2)"}});
+                gt->assign_pin_group("A", {{0, "A(0)"}, {1, "A(1)"}, {2, "A(2)"}});
+                gt->assign_pin_group("DO", {{0, "DO(0)"}, {1, "DO(1)"}, {2, "DO(2)"}});
 
                 gt->assign_pin_type("DI(0)", GateType::PinType::data);
                 gt->assign_pin_type("DI(1)", GateType::PinType::data);
@@ -189,8 +188,7 @@ namespace hal
             EXPECT_EQ(gt1->get_base_type(), gt2->get_base_type());
             EXPECT_EQ(gt1->get_input_pins(), gt2->get_input_pins());
             EXPECT_EQ(gt1->get_output_pins(), gt2->get_output_pins());
-            EXPECT_EQ(gt1->get_input_pin_groups(), gt2->get_input_pin_groups());
-            EXPECT_EQ(gt1->get_output_pin_groups(), gt2->get_output_pin_groups());
+            EXPECT_EQ(gt1->get_pin_groups(), gt2->get_pin_groups());
             EXPECT_EQ(gt1->get_pin_types(), gt2->get_pin_types());
             EXPECT_EQ(gt1->get_boolean_functions(), gt2->get_boolean_functions());
             EXPECT_EQ(gt1->get_clear_preset_behavior(), gt2->get_clear_preset_behavior());
