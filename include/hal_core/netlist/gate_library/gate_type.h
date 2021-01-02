@@ -232,7 +232,6 @@ namespace hal
         std::vector<std::string> get_output_pins() const;
 
         /**
-         * TODO  test
          * Add a pin of the specified direction and type to the gate type.
          * 
          * @param[in] pin - The pin.
@@ -243,7 +242,6 @@ namespace hal
         bool add_pin(const std::string& pin, PinDirection direction, PinType pin_type = PinType::none);
 
         /**
-         * TODO test
          * Add a vector of pin of the specified direction and type to the gate type.
          * 
          * @param[in] pins - The pins.
@@ -254,7 +252,6 @@ namespace hal
         bool add_pins(const std::vector<std::string>& pins, PinDirection direction, PinType pin_type = PinType::none);
 
         /** 
-         * TODO test
          * Get all pins belonging to the gate type.
          * 
          * @returns A vector of pins.
@@ -262,7 +259,6 @@ namespace hal
         const std::vector<std::string>& get_pins() const;
 
         /**
-         * TODO test
          * Get the pin direction of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the direction 'internal' will be returned.
          * 
          * @param[in] pin - The pin.
@@ -271,7 +267,6 @@ namespace hal
         PinDirection get_pin_direction(const std::string& pin) const;
 
         /**
-         * TODO test
          * Get the pin directions of all pins as a map.
          * 
          * @returns A map from pin to pin direction.
@@ -279,7 +274,6 @@ namespace hal
         const std::unordered_map<std::string, PinDirection>& get_pin_directions() const;
 
         /** 
-         *  TODO test
          * Get all pins of the specified pin direction.
          * 
          * @param[in] direction - The pin direction.
@@ -312,7 +306,6 @@ namespace hal
         const std::unordered_map<std::string, PinType>& get_pin_types() const;
 
         /** 
-         * TODO test
          * Get all pins of the specified pin type.
          * 
          * @param[in] pin_type - The pin type.
@@ -321,7 +314,6 @@ namespace hal
         std::unordered_set<std::string> get_pins_of_type(PinType pin_type) const;
 
         /**
-         * TODO test
          * Assign existing pins to a pin group.
          *
          * @param[in] group - The name of the pin group.
@@ -331,7 +323,6 @@ namespace hal
         bool assign_pin_group(const std::string& group, const std::map<u32, std::string>& index_to_pin);
 
         /**
-         * TODO test
          * Get all pin groups of the gate type.
          *
          * @returns A map from pin group names to a map from pin index to pin.
@@ -339,7 +330,6 @@ namespace hal
         std::unordered_map<std::string, std::map<u32, std::string>> get_pin_groups() const;
 
         /**
-         * TODO test
          * Get all pins of the specified pin group including their indices.
          *
          * @param[in] group - The name of the pin group.

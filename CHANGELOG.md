@@ -17,10 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added `get_gate_type_by_name` and `contains_gate_type_by_name` to class `GateLibrary`
   * added pin types and respective functions to `GateType` to enable assigning special-purpose pins
   * added `get_gate_library` to class `GateType`
-  * added base types `ram`, `io`, and `buffer`
-  * removed `add_gate_type` 
-  * removed `GateTypeSequential` and `GateTypeLut` classes and moved their functionality into class `GateType`
+  * added base types `ram`, `dsp`, `io`, and `buffer`
   * merged input and output pin groups to simplify pin group handling
+  * removed `add_gate_type` function from class `GateLibrary`
+  * removed `GateTypeSequential` and `GateTypeLut` classes and moved their functionality into class `GateType`
   * renamed some functions to have shorter and more understandable names
 * added new gate library format: "HAL Gate Library" (HGL)
   * supports assignment of enable, set, reset, data, and address pins to gate types
@@ -34,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added `remove_buffers` to remove buffer gates from a netlist
   * added `remove_unused_lut_endpoints` to remove unused LUT fan-in endpoints
 * fixed crash when moving top module upward
-* fixed `add_boolean_function` of class `Gate`assigning wrong functions to LUTs
+* fixed `add_boolean_function` of class `Gate` assigning wrong functions to LUTs
 
 ## [3.1.10] - 2020-12-18 14:00:00+02:00 (urgency: medium)
 * added `SB_GB_IO`, `SB_GB`, `SB_I2C`, `SB_SPI`, `SB_HFOSC`, and `SB_LFOSC` gate types to `ICE40ULTRA` gate library
