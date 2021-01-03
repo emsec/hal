@@ -279,6 +279,21 @@ namespace hal
             return nullptr;
         }
 
+        // mark module caches as dirty
+        std::unordered_set<Module*> affected_modules;
+        affected_modules.insert(gate->get_module());
+        for (Endpoint* ep : net->get_destinations())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+
+        for (Module* m : affected_modules)
+        {
+            m->m_input_nets_dirty    = true;
+            m->m_output_nets_dirty   = true;
+            m->m_internal_nets_dirty = true;
+        }
+
         auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, false));
         auto new_endpoint_raw = new_endpoint.get();
         net->m_sources.push_back(std::move(new_endpoint));
@@ -298,6 +313,21 @@ namespace hal
         if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_source(ep))
         {
             return false;
+        }
+
+        // mark module caches as dirty
+        std::unordered_set<Module*> affected_modules;
+        affected_modules.insert(ep->get_gate()->get_module());
+        for (Endpoint* e : net->get_destinations())
+        {
+            affected_modules.insert(e->get_gate()->get_module());
+        }
+
+        for (Module* m : affected_modules)
+        {
+            m->m_input_nets_dirty    = true;
+            m->m_output_nets_dirty   = true;
+            m->m_internal_nets_dirty = true;
         }
 
         bool removed = false;
@@ -359,6 +389,21 @@ namespace hal
             return nullptr;
         }
 
+        // mark module caches as dirty
+        std::unordered_set<Module*> affected_modules;
+        affected_modules.insert(gate->get_module());
+        for (Endpoint* ep : net->get_sources())
+        {
+            affected_modules.insert(ep->get_gate()->get_module());
+        }
+
+        for (Module* m : affected_modules)
+        {
+            m->m_input_nets_dirty    = true;
+            m->m_output_nets_dirty   = true;
+            m->m_internal_nets_dirty = true;
+        }
+
         auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, true));
         auto new_endpoint_raw = new_endpoint.get();
         net->m_destinations.push_back(std::move(new_endpoint));
@@ -377,6 +422,21 @@ namespace hal
         if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_destination(ep))
         {
             return false;
+        }
+
+        // mark module caches as dirty
+        std::unordered_set<Module*> affected_modules;
+        affected_modules.insert(ep->get_gate()->get_module());
+        for (Endpoint* e : net->get_sources())
+        {
+            affected_modules.insert(e->get_gate()->get_module());
+        }
+
+        for (Module* m : affected_modules)
+        {
+            m->m_input_nets_dirty    = true;
+            m->m_output_nets_dirty   = true;
+            m->m_internal_nets_dirty = true;
         }
 
         bool removed = false;
