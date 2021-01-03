@@ -168,7 +168,7 @@ namespace hal
          * Insert the pin type string representation to an output stream.
          *
          * @param[in] os - The output stream.
-         * @param[in] direction - The pin type.
+         * @param[in] pin_type - The pin type.
          * @returns An output stream.
          */
         friend std::ostream& operator<<(std::ostream& os, PinType pin_type);
