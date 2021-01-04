@@ -114,9 +114,8 @@ namespace hal
          * Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
          * 
          * @param[in] netlist - The target netlist.
-         * @param[in] check_luts - If true, check Boolean functions of LUTs and remove buffer LUTs.
          */
-        void remove_buffers(Netlist* netlist, bool check_luts = false);
+        void remove_buffers(Netlist* netlist);
 
         /**
          * Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.

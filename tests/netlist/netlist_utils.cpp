@@ -394,7 +394,6 @@ namespace hal
 
         std::unique_ptr<GateLibrary> lib = create_lut_buffer_lib();
 
-        // excluding LUTs
         {
             std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
             ASSERT_NE(nl, nullptr);
@@ -413,7 +412,7 @@ namespace hal
             Gate* l5 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l5");
             l5->add_boolean_function("O", BooleanFunction::from_string("I2"));
             Gate* l6 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l6");
-            l5->add_boolean_function("O", BooleanFunction::from_string("I2"));
+            l6->add_boolean_function("O", BooleanFunction::from_string("I2 & I3"));
 
             Net* n0 = connect(nl.get(), l0, "O", b0, "I");
             Net* n1 = connect(nl.get(), l1, "O", b1, "I");
@@ -433,64 +432,6 @@ namespace hal
             EXPECT_EQ(nl->get_nets().size(), 10);
 
             netlist_utils::remove_buffers(nl.get());
-
-            EXPECT_EQ(nl->get_gates().size(), 7);
-            EXPECT_EQ(nl->get_nets().size(), 6);
-
-            for (const auto gate : nl->get_gates()) 
-            {
-                EXPECT_NE(gate->get_type()->get_base_type(), GateType::BaseType::buffer);
-            }
-
-            EXPECT_EQ(l0->get_successor("O")->get_gate(), l4);
-            EXPECT_EQ(l1->get_successor("O")->get_gate(), l4);
-            EXPECT_EQ(l2->get_successor("O")->get_gate(), l5);
-            EXPECT_EQ(l5->get_successor("O")->get_gate(), l4);
-            ASSERT_EQ(l3->get_successors().size(), 2);
-            EXPECT_EQ(l3->get_successors().at(0)->get_gate(), l6);
-            EXPECT_EQ(l3->get_successors().at(1)->get_gate(), l6);
-            EXPECT_EQ(l6->get_successor("O")->get_gate(), l4);
-        }
-
-        // including LUTs
-        {
-            std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
-            ASSERT_NE(nl, nullptr);
-
-            Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
-            Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
-            Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
-            Gate* l3 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l3");
-            Gate* l4 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
-
-            Gate* b0 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "b0");
-            Gate* b1 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "b1");
-            Gate* b2 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "b2");
-            Gate* b3 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "b3");
-
-            Gate* l5 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l5");
-            l5->add_boolean_function("O", BooleanFunction::from_string("I2"));
-            Gate* l6 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l6");
-            l5->add_boolean_function("O", BooleanFunction::from_string("I2"));
-
-            Net* n0 = connect(nl.get(), l0, "O", b0, "I");
-            Net* n1 = connect(nl.get(), l1, "O", b1, "I");
-            Net* n2 = connect(nl.get(), l2, "O", b2, "I");
-            Net* n3 = connect(nl.get(), l3, "O", b3, "I");
-
-            Net* n4 = connect(nl.get(), b0, "O", l4, "I0");
-            Net* n5 = connect(nl.get(), b1, "O", l4, "I1");
-            Net* n6 = connect(nl.get(), b2, "O", l5, "I2");
-            Net* n7 = connect(nl.get(), b3, "O", l6, "I2");
-            Net* n8 = connect(nl.get(), b3, "O", l6, "I3");
-
-            Net* n9 = connect(nl.get(), l5, "O", l4, "I2");
-            Net* n10 = connect(nl.get(), l6, "O", l4, "I3");
-
-            EXPECT_EQ(nl->get_gates().size(), 11);
-            EXPECT_EQ(nl->get_nets().size(), 10);
-
-            netlist_utils::remove_buffers(nl.get(), true);
 
             std::vector<Gate*> gates = nl->get_gates();
             std::vector<Net*> nets = nl->get_nets();
