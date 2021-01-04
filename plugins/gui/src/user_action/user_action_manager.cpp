@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QCoreApplication>
 #include "gui/user_action/user_action.h"
+#include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/user_action/action_unfold_module.h"
 
@@ -56,8 +57,6 @@ namespace hal
         mStartRecording = -1;
     }
 
-
-
     void UserActionManager::playMacro(const QString& macroFilename)
     {
         QFile ff(macroFilename);
@@ -75,7 +74,8 @@ namespace hal
                         parseActions = true;
                     else if (parseActions)
                     {
-                        addParsedAction(xmlIn);
+                        UserAction* act = getParsedAction(xmlIn);
+                        if (act) mActionHistory.append(act);
                     }
                 }
                 else if (xmlIn.isEndElement())
@@ -108,7 +108,7 @@ namespace hal
         mStartRecording = -1;
     }
 
-    void UserActionManager::addParsedAction(QXmlStreamReader& xmlIn)
+    UserAction* UserActionManager::getParsedAction(QXmlStreamReader& xmlIn)
     {
         QMetaEnum metaAction = QMetaEnum::fromType<UserActionType>();
         QString actionTagName = xmlIn.name().toString();
@@ -119,21 +119,21 @@ namespace hal
                 actionType = i;
                 break;
             }
-        if (actionType < 0) return; // TODO : error command not found
+        if (actionType < 0) return nullptr; // TODO : error command not found
 
-        UserAction* act = nullptr;
+        UserAction* retval = nullptr;
         switch (static_cast<UserActionType>(actionType))
         {
-        case OpenNetlistFile:  act = new ActionOpenNetlistFile; break;
-        case UnfoldModule:     act = new ActionUnfoldModule;    break;
+        case CompoundAction:   retval = new UserActionCompound;    break;
+        case OpenNetlistFile:  retval = new ActionOpenNetlistFile; break;
+        case UnfoldModule:     retval = new ActionUnfoldModule;    break;
         default: break;
         }
 
-        if (act)
-        {
-            act->readFromXml(xmlIn);
-            mActionHistory.append(act);
-        }
+        if (retval)
+            retval->readFromXml(xmlIn);
+
+        return retval;
     }
 
     bool UserActionManager::hasRecorded() const

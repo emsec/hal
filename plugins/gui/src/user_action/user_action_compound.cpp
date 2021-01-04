@@ -2,7 +2,8 @@
 
 namespace hal {
     UserActionCompound::UserActionCompound()
-        : UserAction(UserActionManager::CompoundAction)
+        : UserAction(UserActionManager::CompoundAction),
+          mUseCreatedObject(false)
     {;}
 
     void UserActionCompound::addAction(UserAction* act)
@@ -12,7 +13,56 @@ namespace hal {
 
     void UserActionCompound::exec()
     {
+        bool first = true;
         for (UserAction* act : mActionList)
+        {
+            if (mUseCreatedObject && !first)
+                act->setObjectId(objectId());
             act->exec();
+            if (mUseCreatedObject && first)
+                setObjectId(act->objectId());
+            first = false;
+        }
+    }
+
+    void UserActionCompound::writeToXml(QXmlStreamWriter& xmlOut) const
+    {
+        xmlOut.writeStartElement("actions");
+        xmlOut.writeAttribute("useCreatedObject",mUseCreatedObject?"true":"false");
+        for (UserAction* act: mActionList)
+            act->writeToXml(xmlOut);
+        xmlOut.writeEndElement();
+    }
+
+    void UserActionCompound::readFromXml(QXmlStreamReader& xmlIn)
+    {
+        bool parseActions = false;
+        while (!xmlIn.atEnd())
+        {
+            if (xmlIn.readNext())
+            {
+                if (xmlIn.isStartElement())
+                {
+                    if (xmlIn.name() == "actions")
+                    {
+                        parseActions = true;
+                        mUseCreatedObject = (xmlIn.attributes().value("useCreatedObject")=="true");
+                    }
+                    else if (parseActions)
+                    {
+                        UserAction* act = UserActionManager::getParsedAction(xmlIn);
+                        if (act) mActionList.append(act);
+                    }
+                }
+                else if (xmlIn.isEndElement())
+                {
+                    if (xmlIn.name() == "actions")
+                    {
+                        parseActions = false;
+                        return;
+                    }
+                }
+            }
+        }
     }
 }

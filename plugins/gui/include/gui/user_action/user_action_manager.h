@@ -28,9 +28,9 @@ namespace hal
         bool isRecording() const;
         bool hasRecorded() const;
         void clearWaitCount() { mWaitCount = 0; }
+        static UserAction* getParsedAction(QXmlStreamReader& xmlIn);
     private:
         UserActionManager(QObject *parent = nullptr);
-        void addParsedAction(QXmlStreamReader& xmlIn);
 
         QList<UserAction*> mActionHistory;
         int mStartRecording;
