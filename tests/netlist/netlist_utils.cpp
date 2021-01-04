@@ -46,6 +46,16 @@ namespace hal
         std::unique_ptr<GateLibrary> create_lut_buffer_lib() 
         {
             std::unique_ptr<GateLibrary> lib = std::unique_ptr<GateLibrary>(new GateLibrary("dummy_path", "dummy_name"));
+            GateType* gnd = lib->create_gate_type("GND", GateType::BaseType::combinational);
+            gnd->add_pin("O", GateType::PinDirection::output);
+            gnd->add_boolean_function("O", BooleanFunction::from_string("0"));
+            lib->mark_gnd_gate_type(gnd);
+
+            GateType* vdd = lib->create_gate_type("VDD", GateType::BaseType::combinational);
+            vdd->add_pin("O", GateType::PinDirection::output);
+            vdd->add_boolean_function("O", BooleanFunction::from_string("1"));
+            lib->mark_vcc_gate_type(vdd);
+
             GateType* lut4 = lib->create_gate_type("LUT4", GateType::BaseType::lut);
             lut4->add_input_pins({"I0", "I1", "I2", "I3"});
             lut4->add_output_pin("O");
@@ -473,6 +483,11 @@ namespace hal
         std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
         ASSERT_NE(nl, nullptr);
 
+        Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
+        nl->mark_gnd_gate(gnd_gate);
+        Net* gnd_net = nl->create_net("gnd");
+        gnd_net->add_source(gnd_gate, "O");
+
         Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
         Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
         Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
@@ -509,10 +524,10 @@ namespace hal
         EXPECT_EQ(l4->get_predecessor("I2")->get_gate(), l2);
         EXPECT_EQ(l4->get_predecessor("I3")->get_gate(), l3);
 
-        EXPECT_EQ(l5->get_predecessor("I0"), nullptr);
-        EXPECT_EQ(l5->get_predecessor("I1"), nullptr);
+        EXPECT_EQ(l5->get_predecessor("I0")->get_gate(), gnd_gate);
+        EXPECT_EQ(l5->get_predecessor("I1")->get_gate(), gnd_gate);
         EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
-        EXPECT_EQ(l5->get_predecessor("I3"), nullptr);
+        EXPECT_EQ(l5->get_predecessor("I3")->get_gate(), gnd_gate);
 
         TEST_END
     } 

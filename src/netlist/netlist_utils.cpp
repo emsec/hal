@@ -496,11 +496,16 @@ namespace hal
         {
             u32 num_eps = 0;
 
+            // net connected to GND
+            Net* gnd_net = *(*netlist->get_gnd_gates().begin())->get_fan_out_nets().begin();
+
+            // iterate all LUT gates
             for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
 
+                // skip if more than one function
                 if (functions.size() != 1)
                 {
                     continue;
@@ -508,6 +513,7 @@ namespace hal
 
                 std::vector<std::string> active_pins = functions.begin()->second.get_variables();
 
+                // if there are more fan-in nets than there are active pins, we need to get rid of some nets
                 if (fan_in.size() > active_pins.size())
                 {
                     for (const auto& ep : fan_in)
@@ -515,7 +521,9 @@ namespace hal
                         if (std::find(active_pins.begin(), active_pins.end(), ep->get_pin()) == active_pins.end())
                         {
                             num_eps++;
-                            ep->get_net()->remove_destination(gate, ep->get_pin());
+                            std::string pin = ep->get_pin();
+                            ep->get_net()->remove_destination(gate, pin);
+                            gnd_net->add_destination(gate, pin);
                         }
                     }
                 }
