@@ -45,8 +45,8 @@ namespace hal
         void handleFilterTextChanged(const QString& filter_text);
  
     protected:
-        virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous) Q_DECL_OVERRIDE;
-        virtual void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+        virtual void currentChanged(const QModelIndex& current, const QModelIndex& previous) override;
+        virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
 
     public:
         SelectionTreeView(QWidget* parent = nullptr);

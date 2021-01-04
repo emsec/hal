@@ -37,7 +37,7 @@ namespace hal
         ModuleProxyModel(QObject* parent = nullptr);
 
     protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
     private Q_SLOTS:

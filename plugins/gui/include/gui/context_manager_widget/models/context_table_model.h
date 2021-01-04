@@ -35,7 +35,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        ContextTableModel(QObject* parent = 0);
+        ContextTableModel(QObject* parent = nullptr);
         int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
         QVariant data(const QModelIndex& inddex, int role = Qt::DisplayRole) const override;
@@ -51,6 +51,8 @@ namespace hal
         void endRemoveContext();
 
         void update(QVector<GraphContext*>* pointer);
+
+        void clear();
 
     private:
         QVector<GraphContext*>* mContextList;

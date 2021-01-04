@@ -39,7 +39,7 @@ namespace hal
     public:
         explicit ContentFrame(ContentWidget* widget, bool attached, QWidget* parent = nullptr);
 
-        void childEvent(QChildEvent* event) Q_DECL_OVERRIDE;
+        void childEvent(QChildEvent* event) override;
 
         ContentWidget* content();
 
@@ -49,7 +49,7 @@ namespace hal
         void handleNameChanged(const QString& name);
 
     private:
-        void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+        void closeEvent(QCloseEvent* event) override;
 
         QVBoxLayout* mVerticalLayout;
         QHBoxLayout* mHorizontalLayout;

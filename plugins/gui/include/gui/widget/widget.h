@@ -34,7 +34,7 @@ namespace hal
     public:
         explicit Widget(QWidget* parent = 0);
 
-        //virtual void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
+        //virtual void paintEvent(QPaintEvent*) override;
         //overshadowed functions
         void setParent(QWidget* parent);
 

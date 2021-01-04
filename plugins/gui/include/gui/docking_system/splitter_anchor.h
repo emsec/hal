@@ -50,7 +50,7 @@ namespace hal
         virtual void close(ContentWidget* widget) override;
 
         int count();
-        void removeContent();
+        void clear();
 
     Q_SIGNALS:
         void contentChanged();

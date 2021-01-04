@@ -44,14 +44,14 @@ namespace hal
     public:
         explicit RecentFileItem(const QString& file, QWidget* parent = nullptr);
 
-        void enterEvent(QEvent* event) Q_DECL_OVERRIDE;
-        void leaveEvent(QEvent* event) Q_DECL_OVERRIDE;
-        void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+        void enterEvent(QEvent* event) override;
+        void leaveEvent(QEvent* event) override;
+        void mousePressEvent(QMouseEvent* event) override;
 
-        virtual QSize sizeHint() const Q_DECL_OVERRIDE;
-        virtual bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE;
+        virtual QSize sizeHint() const override;
+        virtual bool eventFilter(QObject* object, QEvent* event) override;
 
-        QString file();
+        QString file() const;
 
         void repolish();
 
@@ -87,7 +87,6 @@ namespace hal
         QString mIconPath;
         QString mIconStyle;
 
-        //functions
         void handleCloseRequested();
     };
 }

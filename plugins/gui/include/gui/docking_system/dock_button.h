@@ -43,7 +43,7 @@ namespace hal
     public:
         DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent);
 
-        void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+        void paintEvent(QPaintEvent* event) override;
 
         void adjustSize();
         int relativeWidth();
