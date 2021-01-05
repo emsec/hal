@@ -34,16 +34,41 @@
 
 namespace hal
 {
+    /**
+     * The dialog widget that appears when the user uses auto-completion within the python editor. The user may select
+     * one of many (at least two) possible completions.
+     * For every auto-completion a new instance of this class is created.
+     */
     class PythonEditorCodeCompletionDialog : public QDialog
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget the completion dialog should appear in. (I.e. the python code editor)
+         * @param completions - A vector of possible completions. Vector of tuples (name_with_symbols, complete). <br>
+         *                      See PythonContext for further description of the completions data.
+         */
         explicit PythonEditorCodeCompletionDialog(QWidget* parent, std::vector<std::tuple<std::string, std::string>> completions);
 
+        /**
+         * Overrides QDialog::keyPressEvent. Used to apply a selection (ENTER/RETURN by default) or to close the menu
+         * (LEFT_ARROW or ESC by default). <br> <br>
+         *
+         * Emits completionsSelected if ENTER/RETURN was pressed with the selected entry.
+         *
+         * @param event - The key event.
+         */
         void keyPressEvent(QKeyEvent* event);
 
     Q_SIGNALS:
+        /**
+         * Signal that notifies, that a completion entry was selected in the Dialog.
+         *
+         * @param selected - The selected entry (name_with_symbols, complete).
+         */
         void completionSelected(std::tuple<std::string, std::string> selected);
 
     private:

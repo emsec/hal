@@ -42,24 +42,81 @@ namespace hal
     class PythonContextSubscriber;
 
     namespace py = pybind11;
+    /**
+     * This class provides an interface for using pybind11. It can call a python interpreter to run python expressions and
+     * scripts. Moreover it provides a function to get auto-completion candidates that are available in the context.
+     */
     class __attribute__((visibility("default"))) PythonContext
     {
     public:
+        /**
+         * Constructor.
+         */
         PythonContext();
+
+        /**
+         * Destructor.
+         */
         ~PythonContext();
 
+        /**
+         * Interprets an input string in python format.
+         *
+         * @param input - The input string in python format.
+         * @param multiple_expressions - Must be set to <b>true</b> if the input contains multiple expressions
+         *                               (i.e. is a compound statement).
+         */
         void interpret(const QString& input, bool multiple_expressions = false);
+
+        /**
+         * Interprets a python script.
+         *
+         * @param input - The python script as a string.
+         */
         void interpretScript(const QString& input);
 
+        /**
+         * Forwards standard output to the python console.
+         *
+         * @param output - The output
+         */
         void forwardStdout(const QString& output);
+
+        /**
+         * Forwards error output to the python console.
+         *
+         * @param output - The output
+         */
         void forwardError(const QString& output);
 
+        /**
+         * Clears the python console.
+         *
+         */
         void forwardClear();
 
+        /**
+         * Resets the python console.
+         */
         void forwardReset();
 
+        /**
+         * Assign this object the python console to work with.
+         *
+         * @param console - The python console to work with.
+         */
         void setConsole(PythonConsole* console);
 
+        /**
+         * Compute a list of auto completion options for a given input. <br>
+         * Each entry is a tuple (name_with_symbols, complete). <br>
+         * E.g. for <i>text</i>="pri" one entry would be ("print", "nt")
+         *
+         * @param text - The text to complete
+         * @param use_console_context - Set <b>true</b> if identifiers in the context of the python console should be
+         *                              considered in the auto completion.
+         * @returns a vector of all possible auto completion candidates.
+         */
         std::vector<std::tuple<std::string, std::string>> complete(const QString& text, bool use_console_context);
 
         /**
@@ -73,9 +130,19 @@ namespace hal
 
         //    void read_history_file(const QString& file);
         //    void write_history_file(const QString& file);
+        /**
+         * Initializes the context to work with hal.
+         */
         void initPython();
+
+        /**
+         * Close the current context.
+         */
         void closePython();
 
+        /**
+         * Update the current netlist the python context works with.
+         */
         void updateNetlist();
 
     private:
