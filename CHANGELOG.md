@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added `get_nets_at_pins` to retrieve nets that are connected to a vector of pins
   * added `remove_buffers` to remove buffer gates from a netlist
   * added `remove_unused_lut_endpoints` to remove unused LUT fan-in endpoints
+  * added `rename_luts_according_to_function` to rename LUTs depending on the Boolean function they implement
+* added `to_z3` to class `BooleanFunction` to translate a Boolean function into a z3 expression 
 * fixed `add_boolean_function` of class `Gate` assigning wrong functions to LUTs
 
 ## [3.1.11] - 2021-01-03 11:35:00+02:00 (urgency: medium)
