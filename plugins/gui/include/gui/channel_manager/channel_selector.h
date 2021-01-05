@@ -26,9 +26,17 @@
 #include <QComboBox>
 namespace hal
 {
+    /**
+     * This class is a simple combobox that displays each channel through its underlying channel model.
+     */
     class ChannelSelector : public QComboBox
     {
     public:
+        /**
+         * The constructor. The channel model is set here.
+         *
+         * @param parent - The parent of the widget.
+         */
         ChannelSelector(QWidget* parent = nullptr);
     };
 }
