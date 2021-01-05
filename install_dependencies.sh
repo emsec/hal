@@ -52,13 +52,13 @@ if [[ "$platform" == 'macOS' ]]; then
     fi
 elif [[ "$platform" == 'linux' ]]; then
     if [ "$distribution" == 'Ubuntu' ] || [ "$distribution" == 'LinuxMint' ]; then
-        sudo apt-get update && sudo apt-get install -y build-essential lsb-release git cmake pkgconf libboost-all-dev qt5-default \
+        sudo apt-get update && sudo apt-get install -y build-essential lsb-release git cmake pkgconf qt5-default \
         libpython3-dev ccache autoconf autotools-dev libsodium-dev libigraph0-dev \
-        libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx doxygen python3-sphinx-rtd-theme python3-jedi python3-pip pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev \
+        libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx doxygen python3-sphinx-rtd-theme python3-jedi python3-pip pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev z3-dev\
         graphviz # For documentation
         sudo pip3 install -r requirements.txt
     elif [[ "$distribution" == "Arch" ]]; then
-        yay -S --needed base-devel lsb-release git cmake pkgconf boost-libs \
+        yay -S --needed base-devel lsb-release git cmake pkgconf \
         qt5-base python ccache autoconf libsodium igraph qt5-svg ninja lcov \
         gcovr python-sphinx doxygen python-sphinx_rtd_theme python-jedi \
         python-pip pybind11 rapidjson spdlog graphviz

@@ -4,6 +4,14 @@ file(GLOB_RECURSE NETLIST_LIB_SOURCE ${CMAKE_SOURCE_DIR}/src/netlist/*.cpp)
 add_library(netlist SHARED ${NETLIST_LIB_INCLUDE} ${NETLIST_LIB_SOURCE} ${CMAKE_BINARY_DIR}/hal_version.h)
 set_target_properties(netlist PROPERTIES OUTPUT_NAME "hal_netlist")
 add_library(hal::netlist ALIAS netlist)
+
+find_package(Z3 REQUIRED)
+if(Z3_FOUND)
+    message(STATUS "Found z3")
+else()
+    message(STATUS "Could not find z3")
+endif(Z3_FOUND)
+
 target_include_directories(netlist
                            PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
@@ -22,6 +30,7 @@ target_link_libraries(netlist
                         spdlog::spdlog
                         ${CMAKE_DL_LIBS}
                         RapidJSON::RapidJSON
+                        ${Z3_LIBRARIES}
                       )
 install(TARGETS netlist
         EXPORT hal

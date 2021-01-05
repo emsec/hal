@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "z3++.h"
 
 #include <algorithm>
 #include <cassert>
@@ -311,6 +312,14 @@ namespace hal
          */
         std::vector<Value> get_truth_table(std::vector<std::string> ordered_variables = {}, bool remove_unknown_variables = false) const;
 
+        /**
+         * Get the z3 representation of the Boolean function.
+         * 
+         * @param[inout] context - The z3 context.
+         * @returns The z3 representation of the Boolean function.
+         */
+        z3::expr to_z3(z3::context& context) const;
+
     protected:
         enum class operation
         {
@@ -358,6 +367,8 @@ namespace hal
 
         // helper to allow for substitution with reduced amount of copies
         static void substitute_helper(BooleanFunction& f, const std::string& v, const BooleanFunction& s);
+
+        z3::expr to_z3_internal(z3::context& context, const std::unordered_map<std::string, z3::expr>& input2expr) const;
 
         bool m_invert;
 

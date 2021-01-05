@@ -1268,4 +1268,83 @@ namespace hal
         result.insert(result.end(), im.begin(), im.end());
         return result;
     }
+
+    z3::expr BooleanFunction::to_z3(z3::context& context) const
+    {
+        // convert bf variables to z3::expr
+        std::unordered_map<std::string, z3::expr> input2expr;
+
+        for (const std::string& var : get_variables())
+        {
+            input2expr.emplace(var, context.bv_const(var.c_str(), 1));
+        }
+
+        z3::expr expr = to_z3_internal(context, input2expr);
+
+        return expr;
+    }
+
+    z3::expr BooleanFunction::to_z3_internal(z3::context& context, const std::unordered_map<std::string, z3::expr>& input2expr) const
+    {
+        z3::expr result(context);
+
+        if (is_empty())
+        {
+            return result;
+        }
+
+        if (m_content == content_type::VARIABLE)
+        {
+            result = input2expr.at(m_variable);
+        }
+        else if (m_content == content_type::CONSTANT)
+        {
+            if (m_constant == Value::ZERO)
+            {
+                result = context.bv_val(0, 1);
+            }
+            else if (m_constant == Value::ONE)
+            {
+                result = context.bv_val(1, 1);
+            }
+            else
+            {
+                // TODO log error
+            }
+        }
+        else
+        {
+            std::vector<z3::expr> terms;
+
+            for (const BooleanFunction& x : m_operands)
+            {
+                terms.push_back(x.to_z3_internal(context, input2expr));
+            }
+
+            result = terms[0];
+
+            for (u32 i = 1; i < terms.size(); ++i)
+            {
+                if (m_op == operation::OR)
+                {
+                    result = result | terms[i];
+                }
+                else if (m_op == operation::XOR)
+                {
+                    result = result ^ terms[i];
+                }
+                else if (m_op == operation::AND)
+                {
+                    result = result & terms[i];
+                }
+            }
+        }
+
+        if (m_invert)
+        {
+            result = ~result;
+        }
+
+        return result;
+    }
 }    // namespace hal
