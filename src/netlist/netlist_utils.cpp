@@ -449,8 +449,8 @@ namespace hal
                     continue;
                 }
 
-                std::vector<Endpoint*> fan_in = gate->get_fan_in_endpoints();
-                std::string func_str          = functions.begin()->second.to_string();
+                std::vector<Endpoint*> fan_in           = gate->get_fan_in_endpoints();
+                std::string func_str                    = functions.begin()->second.to_string();
                 std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(GateType::PinDirection::input);
                 if (in_pins.find(func_str) == in_pins.end())
                 {
@@ -458,7 +458,7 @@ namespace hal
                     continue;
                 }
 
-                Net* out_net                  = out_endpoint->get_net();
+                Net* out_net = out_endpoint->get_net();
 
                 // check all input endpoints and ...
                 for (Endpoint* in_endpoint : fan_in)
@@ -530,6 +530,67 @@ namespace hal
             }
 
             log_info("netlist_utils", "removed {} unused LUT fan-in endpoints from the netlist.", num_eps);
+        }
+
+        void rename_luts_according_to_function(Netlist* netlist)
+        {
+            u32 num_luts = 0;
+
+            std::unordered_map<std::string, std::string> truth_table_to_function = {{"01", "BUF"},
+                                                                                    {"10", "INV"},
+                                                                                    {"0001", "AND2"},
+                                                                                    {"1110", "NAND2"},
+                                                                                    {"0111", "OR2"},
+                                                                                    {"1000", "NOR2"},
+                                                                                    {"0110", "XOR2"},
+                                                                                    {"1001", "XNOR2"},
+                                                                                    {"00000001", "AND3"},
+                                                                                    {"11111110", "NAND3"},
+                                                                                    {"01111111", "OR3"},
+                                                                                    {"10000000", "NOR3"},
+                                                                                    {"01101001", "XOR3"},
+                                                                                    {"10010110", "XNOR3"},
+                                                                                    {"0000000000000001", "AND4"},
+                                                                                    {"1111111111111110", "NAND4"},
+                                                                                    {"0111111111111111", "OR4"},
+                                                                                    {"1000000000000000", "NOR4"},
+                                                                                    {"0110100110010110", "XOR4"},
+                                                                                    {"1001011001101001", "XNOR4"}};
+
+            std::vector<Gate*> remaining_gates = {};
+
+            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            {
+                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
+
+                if (functions.size() != 1)
+                {
+                    continue;
+                }
+
+                std::string truth_table = "";
+                for (BooleanFunction::Value val : functions.begin()->second.get_truth_table())
+                {
+                    truth_table += BooleanFunction::to_string(val);
+                }
+
+                if (auto it = truth_table_to_function.find(truth_table); it != truth_table_to_function.end())
+                {
+                    gate->set_name(it->second + "_" + std::to_string(gate->get_id()));
+                    num_luts++;
+                }
+                else
+                {
+                    remaining_gates.push_back(gate);
+                }
+            }
+
+            for (Gate* gate : remaining_gates)
+            {
+                // TODO do SMT magic
+            }
+
+            log_info("netlist_utils", "renamed {} LUTs according to the function they implement.", num_luts);
         }
     }    // namespace netlist_utils
 }    // namespace hal

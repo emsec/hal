@@ -110,5 +110,11 @@ namespace hal
         
             :param hal_py.Netlist netlist: The target netlist.
         )");
+
+        py_netlist_utils.def("rename_luts_according_to_function", netlist_utils::rename_luts_according_to_function, py::arg("netlist"), R"(
+            Rename LUTs that implement simple functions to better reflect their functionality.
+        
+            :param hal_py.Netlist netlist: The target netlist.
+        )");
     }
 }    // namespace hal

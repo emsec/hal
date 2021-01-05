@@ -123,5 +123,12 @@ namespace hal
          * @param[in] netlist - The target netlist.
          */
         void remove_unused_lut_endpoints(Netlist* netlist);
+
+        /**
+         * Rename LUTs that implement simple functions to better reflect their functionality.
+         * 
+         * @param[in] netlist - The target netlist.
+         */
+        void rename_luts_according_to_function(Netlist* netlist);
     }    // namespace netlist_utils
 }    // namespace hal
