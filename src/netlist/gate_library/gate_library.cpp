@@ -68,6 +68,7 @@ namespace hal
             return it->second;
         }
 
+        log_error("gate_library", "could not get the specified gate type, as there exists no gate type called '{}' within gate library '{}'.", name, m_name);
         return nullptr;
     }
 
