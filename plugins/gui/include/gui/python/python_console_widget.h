@@ -29,12 +29,32 @@ namespace hal
 {
     class PythonConsole;
 
+    /**
+     * The ContentWidget that wraps the PythonConsole.
+     */
     class PythonConsoleWidget : public ContentWidget
     {
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget.
+         */
         PythonConsoleWidget(QWidget* parent = nullptr);
 
+        /**
+         * Setups the toolbar. Nothing done here, since the console has no toolbar.
+         *
+         * @param Toolbar - The Toolbar to set up.
+         */
         virtual void setupToolbar(Toolbar* Toolbar) override;
+
+        /**
+         * Create all shortcuts that are associated with the python console.
+         * There are currently no such shortcuts.
+         *
+         * @returns an list of shortcuts.
+         */
         virtual QList<QShortcut*> createShortcuts() override;
 
     private:
