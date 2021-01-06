@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * improved layouter uses location information from gate API
+* switched from float gate coordinates to integer ones
+* fixed wrong Python binding for property `gate_library` of class `Netlist
 
 ## [3.1.11] - 2021-01-03 11:35:00+02:00 (urgency: medium)
 * added **highly experimental** way to close and reopen netlists at runtime
