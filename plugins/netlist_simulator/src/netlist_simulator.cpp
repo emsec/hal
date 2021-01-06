@@ -333,7 +333,7 @@ namespace hal
                 sim_gate->sr_behavior_out          = behavior.first;
                 sim_gate->sr_behavior_out_inverted = behavior.second;
             }
-            else if (base_type == GateType::BaseType::combinational || base_type == GateType::BaseType::lut || base_type == GateType::BaseType::buffer)
+            else if (base_type == GateType::BaseType::combinational || base_type == GateType::BaseType::lut)
             {
                 auto sim_gate_owner = std::make_unique<SimulationGateCombinational>();
                 auto sim_gate       = sim_gate_owner.get();

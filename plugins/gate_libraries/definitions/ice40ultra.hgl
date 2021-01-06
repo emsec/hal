@@ -1310,7 +1310,7 @@
         },
         {
             "name": "SB_GB",
-            "type": "buffer",
+            "type": "combinational",
             "pins": [
                 {
                     "name": "USER_SIGNAL_TO_GLOBAL_BUFFER",

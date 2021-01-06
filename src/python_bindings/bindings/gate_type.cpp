@@ -18,7 +18,7 @@ namespace hal
             .value("latch", GateType::BaseType::latch, R"(Represents a sequential latch gate type.)")
             .value("ram", GateType::BaseType::ram, R"(Represents a sequential RAM gate type.)")
             .value("io", GateType::BaseType::io, R"(Represents an IO gate type.)")
-            .value("buffer", GateType::BaseType::buffer, R"(Represents a buffer gate type.)")
+            .value("dsp", GateType::BaseType::dsp, R"(Represents a sequential DSP gate type.)")
             .export_values();
 
         py::enum_<GateType::PinDirection>(py_gate_type, "PinDirection", R"(
@@ -44,6 +44,8 @@ namespace hal
             .value("reset", GateType::PinType::reset, R"(Reset pin.)")
             .value("data", GateType::PinType::data, R"(Data pin.)")
             .value("address", GateType::PinType::address, R"(Address pin.)")
+            .value("io_pad", GateType::PinType::io_pad, R"(IO pad pin.)")
+            .value("select", GateType::PinType::select, R"(Select pin.)")
             .export_values();
 
         py::enum_<GateType::ClearPresetBehavior>(py_gate_type, "ClearPresetBehavior", R"(

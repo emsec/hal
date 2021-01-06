@@ -4,14 +4,8 @@
 
 namespace hal
 {
-    const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string         = {{BaseType::combinational, "combinational"},
-                                                                                                 {BaseType::ff, "ff"},
-                                                                                                 {BaseType::latch, "latch"},
-                                                                                                 {BaseType::lut, "lut"},
-                                                                                                 {BaseType::ram, "ram"},
-                                                                                                 {BaseType::io, "io"},
-                                                                                                 {BaseType::buffer, "buffer"},
-                                                                                                 {BaseType::dsp, "dsp"}};
+    const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string =
+        {{BaseType::combinational, "combinational"}, {BaseType::ff, "ff"}, {BaseType::latch, "latch"}, {BaseType::lut, "lut"}, {BaseType::ram, "ram"}, {BaseType::io, "io"}, {BaseType::dsp, "dsp"}};
     const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::none, "none"},
                                                                                                          {PinDirection::input, "input"},
                                                                                                          {PinDirection::output, "output"},
@@ -29,7 +23,8 @@ namespace hal
                                                                                                {PinType::reset, "reset"},
                                                                                                {PinType::data, "data"},
                                                                                                {PinType::address, "address"},
-                                                                                               {PinType::io_pad, "io_pad"}};
+                                                                                               {PinType::io_pad, "io_pad"},
+                                                                                               {PinType::select, "select"}};
 
     const std::unordered_map<GateType::PinDirection, std::unordered_set<GateType::PinType>> GateType::m_direction_to_types = {
         {PinDirection::none, {}},

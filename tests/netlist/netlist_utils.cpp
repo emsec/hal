@@ -63,7 +63,7 @@ namespace hal
             lut4->set_config_data_category("generic");
             lut4->set_config_data_identifier("INIT");
 
-            GateType* buf = lib->create_gate_type("BUF", GateType::BaseType::buffer);
+            GateType* buf = lib->create_gate_type("BUF", GateType::BaseType::combinational);
             buf->add_input_pin("I");
             buf->add_output_pin("O");
             buf->add_boolean_function("O", BooleanFunction::from_string("I"));
@@ -451,7 +451,7 @@ namespace hal
 
             for (const auto gate : gates) 
             {
-                EXPECT_NE(gate->get_type()->get_base_type(), GateType::BaseType::buffer);
+                EXPECT_NE(gate->get_type()->get_base_type(), GateType::BaseType::combinational);
             }
 
             EXPECT_EQ(l0->get_successor("O")->get_gate(), l4);

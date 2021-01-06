@@ -16,7 +16,6 @@ namespace hal
                                                                                                   {GateType::BaseType::lut, "lut"},
                                                                                                   {GateType::BaseType::ram, "ram"},
                                                                                                   {GateType::BaseType::io, "io"},
-                                                                                                  {GateType::BaseType::buffer, "buffer"},
                                                                                                   {GateType::BaseType::dsp, "dsp"}};
 
     const std::unordered_map<GateType::PinType, std::string> HGLWriter::m_pin_type_to_string = {{GateType::PinType::none, "none"},
@@ -30,7 +29,9 @@ namespace hal
                                                                                                 {GateType::PinType::set, "set"},
                                                                                                 {GateType::PinType::reset, "reset"},
                                                                                                 {GateType::PinType::data, "data"},
-                                                                                                {GateType::PinType::address, "address"}};
+                                                                                                {GateType::PinType::address, "address"},
+                                                                                                {GateType::PinType::io_pad, "io_pad"},
+                                                                                                {GateType::PinType::select, "select"}};
 
     const std::unordered_map<GateType::ClearPresetBehavior, std::string> HGLWriter::m_behavior_to_string = {{GateType::ClearPresetBehavior::L, "L"},
                                                                                                             {GateType::ClearPresetBehavior::H, "H"},

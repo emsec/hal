@@ -416,7 +416,7 @@ namespace hal
             u32 num_gates = 0;
 
             // buffers can only be of these base types
-            std::unordered_set<GateType::BaseType> types = {GateType::BaseType::combinational, GateType::BaseType::buffer, GateType::BaseType::lut};
+            std::unordered_set<GateType::BaseType> types = {GateType::BaseType::combinational, GateType::BaseType::lut};
 
             for (const auto& gate : netlist->get_gates())
             {

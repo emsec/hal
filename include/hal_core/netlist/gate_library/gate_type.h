@@ -53,7 +53,6 @@ namespace hal
             latch,         /**< Represents a sequential latch gate type. **/
             ram,           /**< Represents a sequential RAM gate type. **/
             io,            /**< Represents an IO gate type. **/
-            buffer,        /**< Represents a combinational buffer gate type. **/
             dsp            /**< Represents a sequential DSP gate type. **/
         };
 
@@ -86,7 +85,8 @@ namespace hal
             reset,     /**< Reset/clear pin. **/
             data,      /**< Data pin. **/
             address,   /**< Address pin. **/
-            io_pad     /**< IO pad pin. **/
+            io_pad,    /**< IO pad pin. **/
+            select     /**< Select pin. **/
         };
 
         /**

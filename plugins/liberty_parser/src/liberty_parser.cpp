@@ -850,26 +850,6 @@ namespace hal
 
         std::unordered_map<std::string, std::map<u32, std::string>> groups;
 
-        // check if buffer type
-        if (cell.pins.size() == 2 && cell.pins.at(0).pin_names.size() == 1 && cell.pins.at(1).pin_names.size() == 1)
-        {
-            auto pin1 = cell.pins.at(0);
-            auto pin2 = cell.pins.at(1);
-            if(pin1.direction == GateType::PinDirection::input && pin2.direction == GateType::PinDirection::output)
-            {
-                if (pin2.function == pin1.pin_names.at(0) && pin2.x_function.empty() && pin2.z_function.empty())
-                {
-                    cell.type = GateType::BaseType::buffer;
-                }
-            } else if(pin1.direction == GateType::PinDirection::output && pin2.direction == GateType::PinDirection::input)
-            {
-                if (pin1.function == pin2.pin_names.at(0) && pin1.x_function.empty() && pin1.z_function.empty())
-                {
-                    cell.type = GateType::BaseType::buffer;
-                }
-            }
-        }
-
         GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.type);
 
         // get input and output pins from pin groups
@@ -879,7 +859,7 @@ namespace hal
             {
                 input_pins.insert(input_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
             }
-            
+
             if (pin.direction == GateType::PinDirection::output || pin.direction == GateType::PinDirection::inout)
             {
                 output_pins.insert(output_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
@@ -1132,7 +1112,7 @@ namespace hal
 
         for (const auto& [group, index_to_pin] : groups)
         {
-            if(!gt->assign_pin_group(group, index_to_pin)) 
+            if (!gt->assign_pin_group(group, index_to_pin))
             {
                 return false;
             }

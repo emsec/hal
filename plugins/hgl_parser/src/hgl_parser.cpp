@@ -13,7 +13,6 @@ namespace hal
                                                                                                   {"lut", GateType::BaseType::lut},
                                                                                                   {"ram", GateType::BaseType::ram},
                                                                                                   {"io", GateType::BaseType::io},
-                                                                                                  {"buffer", GateType::BaseType::buffer},
                                                                                                   {"dsp", GateType::BaseType::dsp}};
 
     const std::unordered_map<std::string, GateType::PinType> HGLParser::m_string_to_pin_type = {{"none", GateType::PinType::none},
@@ -28,7 +27,8 @@ namespace hal
                                                                                                 {"reset", GateType::PinType::reset},
                                                                                                 {"data", GateType::PinType::data},
                                                                                                 {"address", GateType::PinType::address},
-                                                                                                {"io_pad", GateType::PinType::io_pad}};
+                                                                                                {"io_pad", GateType::PinType::io_pad},
+                                                                                                {"select", GateType::PinType::select}};
 
     const std::unordered_map<std::string, GateType::ClearPresetBehavior> HGLParser::m_string_to_behavior = {{"L", GateType::ClearPresetBehavior::L},
                                                                                                             {"H", GateType::ClearPresetBehavior::H},
