@@ -95,7 +95,7 @@ namespace hal
         )");
 
         py_netlist.def_property_readonly(
-            "GateLibrary", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
+            "gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
             The gate library associated with the netlist.
 
             :type: hal_py.GateLibrary
@@ -123,7 +123,7 @@ namespace hal
         )");
 
         py_netlist.def("create_gate",
-                       py::overload_cast<u32, const GateType*, const std::string&, float, float>(&Netlist::create_gate),
+                       py::overload_cast<u32, const GateType*, const std::string&, i32, i32>(&Netlist::create_gate),
                        py::arg("gate_id"),
                        py::arg("gate_type"),
                        py::arg("name"),
@@ -135,14 +135,14 @@ namespace hal
             :param int gate_id: The unique ID of the gate.
             :param hal_py.GateType gate_type: The gate type.
             :param str name: The name of the gate.
-            :param float x: The x-coordinate of the gate.
-            :param float y: The y-coordinate of the gate.
+            :param int x: The x-coordinate of the gate.
+            :param int y: The y-coordinate of the gate.
             :returns: The new gate on success, None otherwise.
             :rtype: hal_py.Gate or None
         )");
 
         py_netlist.def("create_gate",
-                       py::overload_cast<const GateType*, const std::string&, float, float>(&Netlist::create_gate),
+                       py::overload_cast<const GateType*, const std::string&, i32, i32>(&Netlist::create_gate),
                        py::arg("gate_type"),
                        py::arg("name"),
                        py::arg("x") = -1,
@@ -153,8 +153,8 @@ namespace hal
 
             :param hal_py.GateType gate_type: The gate type.
             :param str name: The name of the gate.
-            :param float x: The x-coordinate of the gate.
-            :param float y: The y-coordinate of the gate.
+            :param int x: The x-coordinate of the gate.
+            :param int y: The y-coordinate of the gate.
             :returns: The new gate on success, None otherwise.
             :rtype: hal_py.Gate or None
         )");
