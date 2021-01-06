@@ -40,13 +40,28 @@ namespace hal
     class GraphLayoutSpinnerWidget;
     class GraphNavigationWidget;
 
+    /**
+     * The content widget that wraps a graph view of a certain GraphContext.
+     * It represents one tab of the GraphTabWidgets QTabWidget.
+     */
     class GraphWidget : public ContentWidget, public GraphContextSubscriber
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param context - The GraphContext of the view it.
+         * @param parent - The parent widget.
+         */
         explicit GraphWidget(GraphContext* context, QWidget* parent = nullptr);
 
+        /**
+         * Gets the GraphContext this GraphWidget shows.
+         *
+         * @returns a pointer of the context.
+         */
         GraphContext* getContext() const;
 
         void handleSceneAvailable() override;
@@ -56,6 +71,11 @@ namespace hal
         void handleStatusUpdate(const int percent) override;
         void handleStatusUpdate(const QString& message) override;
 
+        /**
+         * Get the GraphGraphicsView this object wraps.
+         *
+         * @returns the GraphGraphicsView.
+         */
         GraphGraphicsView* view();
 
         void ensureSelectionVisible();

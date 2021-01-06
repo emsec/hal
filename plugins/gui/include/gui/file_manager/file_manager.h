@@ -34,7 +34,7 @@ namespace hal
 {
     /**
      * The filemanager handles the status and information of the currently opened netlist file
-     * including wether a file is opened or not. This class is implemented with a singleton pattern.
+     * including whether a file is opened or not. This class is implemented with a singleton pattern.
      */
     class FileManager : public QObject
     {
