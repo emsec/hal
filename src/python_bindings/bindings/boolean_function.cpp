@@ -225,7 +225,7 @@ namespace hal
 
             WARNING: Exponential runtime in the number of variables!
 
-            Output is the vector of output values when walking the truth table in ascending order.
+            Output is the vector of output values when walking the truth table from the least significant bit to the most significant one.
 
             If ordered_variables is empty, all included variables are used and ordered alphabetically.
 

@@ -302,7 +302,7 @@ namespace hal
          * 
          * WARNING: Exponential runtime in the number of variables!
          *
-         * Output is the vector of output values when walking the truth table in ascending order.
+         * Output is the vector of output values when walking the truth table from the least significant bit to the most significant one.
          *
          * If ordered_variables is empty, all included variables are used and ordered alphabetically.
          *
@@ -312,6 +312,7 @@ namespace hal
          */
         std::vector<Value> get_truth_table(std::vector<std::string> ordered_variables = {}, bool remove_unknown_variables = false) const;
 
+        // TODO figure out how to test this
         /**
          * Get the z3 representation of the Boolean function.
          * 
