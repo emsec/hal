@@ -1513,7 +1513,20 @@ namespace hal
                     // create the new gate
                     instance_alias[inst_name] = get_unique_alias(m_instance_name_occurrences, inst_name);
 
-                    Gate* new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::convert_string<T, std::string>(instance_alias.at(inst_name)));
+                    i32 x = -1;
+                    i32 y = -1;
+
+                    const auto& generics = inst.get_generic_assignments();
+                    if (const auto it = generics.find("X_COORDINATE"); it != generics.end())
+                    {
+                        x = std::stoi(it->second.second);
+                    }
+                    if (const auto it = generics.find("Y_COORDINATE"); it != generics.end())
+                    {
+                        y = std::stoi(it->second.second);
+                    }
+
+                    Gate* new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::convert_string<T, std::string>(instance_alias.at(inst_name)), x, y);
                     if (new_gate == nullptr)
                     {
                         log_error("hdl_parser", "could not instantiate gate '{}' within entity '{}'", inst_name, e.get_name());
