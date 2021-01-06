@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist &mdash; hal_py v3.1.11 documentation</title>
+  <title>Netlist &mdash; hal_py v3.1.11-7-g104478097 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.1.11
+                v3.1.11-7-g104478097
               </div>
             
           
@@ -182,20 +182,6 @@
 <dt id="hal_py.Netlist">
 <em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">Netlist</code><a class="headerlink" href="#hal_py.Netlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Netlist class containing information about the netlist including its gates, modules, nets, and groupings as well as the underlying gate library.</p>
-<dl class="attribute">
-<dt id="hal_py.Netlist.GateLibrary">
-<code class="descname">GateLibrary</code><a class="headerlink" href="#hal_py.Netlist.GateLibrary" title="Permalink to this definition">¶</a></dt>
-<dd><p>The gate library associated with the netlist.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="hal_py.Netlist.clear_caches">
 <code class="descname">clear_caches</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Netlist.clear_caches" title="Permalink to this definition">¶</a></dt>
@@ -208,7 +194,7 @@ In a typical application, calling this function is not required.</p>
 <code class="descname">create_gate</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Netlist.create_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">create_gate(self: hal_py.Netlist, gate_id: int, gate_type: hal_py.GateType, name: str, x: float = -1, y: float = -1) -&gt; hal::Gate</p>
+<li><p class="first">create_gate(self: hal_py.Netlist, gate_id: int, gate_type: hal_py.GateType, name: str, x: int = -1, y: int = -1) -&gt; hal::Gate</p>
 <blockquote>
 <div><p>Create a new gate and add it to the netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -223,9 +209,9 @@ In a typical application, calling this function is not required.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">param str name:</th><td class="field-body">The name of the gate.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">param float x:</th><td class="field-body">The x-coordinate of the gate.</td>
+<tr class="field-even field"><th class="field-name">param int x:</th><td class="field-body">The x-coordinate of the gate.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">param float y:</th><td class="field-body">The y-coordinate of the gate.</td>
+<tr class="field-odd field"><th class="field-name">param int y:</th><td class="field-body">The y-coordinate of the gate.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The new gate on success, None otherwise.</td>
 </tr>
@@ -235,7 +221,7 @@ In a typical application, calling this function is not required.</p>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">create_gate(self: hal_py.Netlist, gate_type: hal_py.GateType, name: str, x: float = -1, y: float = -1) -&gt; hal::Gate</p>
+<li><p class="first">create_gate(self: hal_py.Netlist, gate_type: hal_py.GateType, name: str, x: int = -1, y: int = -1) -&gt; hal::Gate</p>
 <blockquote>
 <div><p>Create a new gate and add it to the netlist.
 The ID of the gate is set automatically.</p>
@@ -248,9 +234,9 @@ The ID of the gate is set automatically.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">param str name:</th><td class="field-body">The name of the gate.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">param float x:</th><td class="field-body">The x-coordinate of the gate.</td>
+<tr class="field-odd field"><th class="field-name">param int x:</th><td class="field-body">The x-coordinate of the gate.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">param float y:</th><td class="field-body">The y-coordinate of the gate.</td>
+<tr class="field-even field"><th class="field-name">param int y:</th><td class="field-body">The y-coordinate of the gate.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The new gate on success, None otherwise.</td>
 </tr>
@@ -508,6 +494,20 @@ The ID of the net is set automatically.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Netlist.gate_library">
+<code class="descname">gate_library</code><a class="headerlink" href="#hal_py.Netlist.gate_library" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gate library associated with the netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a></td>
 </tr>
 </tbody>
 </table>

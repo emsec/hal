@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate &mdash; hal_py v3.1.11 documentation</title>
+  <title>Gate &mdash; hal_py v3.1.11-7-g104478097 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.1.11
+                v3.1.11-7-g104478097
               </div>
             
           
@@ -554,7 +554,7 @@ If no grouping contains this gate, <em>None</em> is returned.</p>
 
 <dl class="method">
 <dt id="hal_py.Gate.get_location">
-<code class="descname">get_location</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Tuple[float, float]<a class="headerlink" href="#hal_py.Gate.get_location" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_location</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Tuple[int, int]<a class="headerlink" href="#hal_py.Gate.get_location" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the physical location of the gate in the layout.
 If no valid physical location coordinate is assigned, a negative value is returned for the respective coordinate.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -563,7 +563,7 @@ If no valid physical location coordinate is assigned, a negative value is return
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple &lt;x-coordinate, y-coordinate&gt;.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a>)</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>)</td>
 </tr>
 </tbody>
 </table>
@@ -571,7 +571,7 @@ If no valid physical location coordinate is assigned, a negative value is return
 
 <dl class="method">
 <dt id="hal_py.Gate.get_location_x">
-<code class="descname">get_location_x</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#hal_py.Gate.get_location_x" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_location_x</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Gate.get_location_x" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the physical location x-coordinate of the gate in the layout.
 If no valid physical location x-coordinate is assigned, a negative value is returned.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -580,7 +580,7 @@ If no valid physical location x-coordinate is assigned, a negative value is retu
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The gate’s x-coordinate.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -588,7 +588,7 @@ If no valid physical location x-coordinate is assigned, a negative value is retu
 
 <dl class="method">
 <dt id="hal_py.Gate.get_location_y">
-<code class="descname">get_location_y</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#hal_py.Gate.get_location_y" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_location_y</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Gate.get_location_y" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the physical location y-coordinate of the gate in the layout.
 If no valid physical location y-coordinate is assigned, a negative value is returned.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -597,7 +597,7 @@ If no valid physical location y-coordinate is assigned, a negative value is retu
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The gate’s y-coordinate.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -883,7 +883,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a>)</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>)</td>
 </tr>
 </tbody>
 </table>
@@ -897,7 +897,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -912,7 +912,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -1050,14 +1050,14 @@ May overwrite an existing entry.</p>
 
 <dl class="method">
 <dt id="hal_py.Gate.set_location">
-<code class="descname">set_location</code><span class="sig-paren">(</span><em>self: hal_py.Gate, location: Tuple[float, float]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Gate.set_location" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_location</code><span class="sig-paren">(</span><em>self: hal_py.Gate, location: Tuple[int, int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Gate.set_location" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the physical location of the gate in the layout.
 Only positive coordinates are valid, negative values will be regarded as no location assigned.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>location</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>)</em>) – A tuple &lt;x-coordinate, y-coordinate&gt;.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>location</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>)</em>) – A tuple &lt;x-coordinate, y-coordinate&gt;.</td>
 </tr>
 </tbody>
 </table>
@@ -1065,14 +1065,14 @@ Only positive coordinates are valid, negative values will be regarded as no loca
 
 <dl class="method">
 <dt id="hal_py.Gate.set_location_x">
-<code class="descname">set_location_x</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>x: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Gate.set_location_x" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_location_x</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>x: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Gate.set_location_x" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the physical location x-coordinate of the gate in the layout.
 Only positive values are valid, negative values will be regarded as no location assigned.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The gate’s x-coordinate.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The gate’s x-coordinate.</td>
 </tr>
 </tbody>
 </table>
@@ -1080,14 +1080,14 @@ Only positive values are valid, negative values will be regarded as no location 
 
 <dl class="method">
 <dt id="hal_py.Gate.set_location_y">
-<code class="descname">set_location_y</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>y: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Gate.set_location_y" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_location_y</code><span class="sig-paren">(</span><em>self: hal_py.Gate</em>, <em>y: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.Gate.set_location_y" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the physical location y-coordinate of the gate in the layout.
 Only positive values are valid, negative values will be regarded as no location assigned.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The gate’s y-coordinate.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The gate’s y-coordinate.</td>
 </tr>
 </tbody>
 </table>
