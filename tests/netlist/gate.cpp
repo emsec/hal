@@ -741,18 +741,16 @@ EXPECT_EQ(test_gate->get_location(), std::make_pair(5, 6));
 {
     // Test the has_location function
     auto nl         = test_utils::create_empty_netlist();
-    Gate* test_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate", 1.11f, 2.22f);
+    Gate* test_gate = nl->create_gate(MIN_GATE_ID + 0, test_utils::get_gate_type_by_name("gate_1_to_1"), "test_gate", 1, 2);
     // -- both coordinates are >= 0
-    test_gate->set_location(std::make_pair(1.11f, 2.22f));
+    test_gate->set_location(std::make_pair(1, 2));
     EXPECT_TRUE(test_gate->has_location());
-    test_gate->set_location(std::make_pair(0.0f, 0.0f));
+    test_gate->set_location(std::make_pair(0, 0));
     EXPECT_TRUE(test_gate->has_location());
     // -- not both coordinates are >= 0
-    test_gate->set_location(std::make_pair(-1.11f, 2.22f));
+    test_gate->set_location(std::make_pair(-1, 2));
     EXPECT_FALSE(test_gate->has_location());
-    test_gate->set_location(std::make_pair(1.11f, -2.22f));
-    EXPECT_FALSE(test_gate->has_location());
-    test_gate->set_location(std::make_pair(-1.11f, -2.22f));
+    test_gate->set_location(std::make_pair(-1, -1));
     EXPECT_FALSE(test_gate->has_location());
 }
 TEST_END

@@ -37,7 +37,7 @@ static u64 bitreverse(u64 n)
 
 namespace hal
 {
-    Gate::Gate(NetlistInternalManager* mgr, const u32 id, const GateType* gt, const std::string& name, float x, float y)
+    Gate::Gate(NetlistInternalManager* mgr, const u32 id, const GateType* gt, const std::string& name, i32 x, i32 y)
     {
         m_internal_manager = mgr;
         m_id               = id;
@@ -101,7 +101,7 @@ namespace hal
 
     bool Gate::has_location() const
     {
-        return m_x >= 0 && m_y >= 0;
+        return m_x != -1 && m_y != -1;
     }
 
     void Gate::set_location_x(i32 x)

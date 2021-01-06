@@ -376,7 +376,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, float x, float y);
+        Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, i32 x, i32 y);
 
         Gate(const Gate&) = delete;
         Gate(Gate&&)      = delete;
@@ -398,8 +398,8 @@ namespace hal
         const GateType* m_type;
 
         /* location */
-        float m_x;
-        float m_y;
+        i32 m_x = -1;
+        i32 m_y = -1;
 
         /* owning module */
         Module* m_module;
