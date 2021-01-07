@@ -235,14 +235,14 @@ namespace hal
         if(sources.empty() || clicked_net->is_global_input_net())
         {
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedNets.insert(mNetId);
+            gSelectionRelay->addNet(mNetId);
             gSelectionRelay->relaySelectionChanged(this);
         }
         else if(sources.size() == 1)
         {
             auto ep = *sources.begin();
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedGates.insert(ep->get_gate()->get_id());
+            gSelectionRelay->addGate(ep->get_gate()->get_id());
             gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
             gSelectionRelay->mFocusId   = ep->get_gate()->get_id();
             gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::Right;
@@ -283,14 +283,14 @@ namespace hal
         if(destinations.empty() || clicked_net->is_global_output_net())
         {
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedNets.insert(mNetId);
+            gSelectionRelay->addNet(mNetId);
             gSelectionRelay->relaySelectionChanged(this);
         }
         else if (destinations.size() == 1)
         {
             auto ep = *destinations.begin();
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedGates.insert(ep->get_gate()->get_id());
+            gSelectionRelay->addGate(ep->get_gate()->get_id());
             gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
             gSelectionRelay->mFocusId   = ep->get_gate()->get_id();
             gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::Left;
@@ -572,7 +572,7 @@ namespace hal
 
         mNavigationTable->hide();
         gSelectionRelay->clear();
-        gSelectionRelay->mSelectedGates = to_gates;
+        gSelectionRelay->setSelectedGates(to_gates);
         if (to_gates.size() == 1)
         {
             gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
@@ -605,7 +605,7 @@ namespace hal
         if (item->row() == m_ModuleItem->row() && item->column() == m_ModuleItem->column())
         {
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedModules.insert(m_ModuleItem->data(Qt::UserRole).toInt());
+            gSelectionRelay->addModule(m_ModuleItem->data(Qt::UserRole).toInt());
             gSelectionRelay->relaySelectionChanged(this);
         }
     }

@@ -1,6 +1,7 @@
 #pragma once
 #include <QObject>
 #include <QList>
+#include <QHash>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include "hal_core/defines.h"
@@ -8,19 +9,16 @@
 namespace hal
 {
     class UserAction;
+    class UserActionFactory;
     class GraphContext;
 
     class UserActionManager : public QObject
     {
         Q_OBJECT
     public:
-        enum UserActionType { NoAction, CompoundAction,
-                              OpenNetlistFile, UnfoldModule, NewSelection,
-                              CreateGrouping, DeleteGrouping, SelectionToGrouping,
-                              CreateModule, SelectionToModule};
-        Q_ENUM(UserActionType)
-
         void addExecutedAction(UserAction* act);
+        void registerFactory(UserActionFactory* fac);
+
         static UserActionManager* instance();
         void setStartRecording();
         void setStopRecording(const QString& macroFilename);
@@ -28,11 +26,12 @@ namespace hal
         bool isRecording() const;
         bool hasRecorded() const;
         void clearWaitCount() { mWaitCount = 0; }
-        static UserAction* getParsedAction(QXmlStreamReader& xmlIn);
+        UserAction* getParsedAction(QXmlStreamReader& xmlIn) const;
     private:
         UserActionManager(QObject *parent = nullptr);
 
         QList<UserAction*> mActionHistory;
+        QHash<QString,UserActionFactory*> mActionFactory;
         int mStartRecording;
         int mWaitCount;
 

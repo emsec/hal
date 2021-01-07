@@ -601,14 +601,14 @@ namespace hal
         if (destinations.empty() || clicked_net->is_global_output_net())
         {
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedNets.insert(mNetId);
+            gSelectionRelay->addNet(mNetId);
             gSelectionRelay->relaySelectionChanged(this);
         }
         else if (destinations.size() == 1)
         {
             auto ep = *destinations.begin();
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedGates.insert(ep->get_gate()->get_id());
+            gSelectionRelay->addGate(ep->get_gate()->get_id());
             gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
             gSelectionRelay->mFocusId   = ep->get_gate()->get_id();
             gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::Left;
@@ -649,14 +649,14 @@ namespace hal
         if (sources.empty() || net->is_global_input_net())
         {
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedNets.insert(net->get_id());
+            gSelectionRelay->addNet(net->get_id());
             gSelectionRelay->relaySelectionChanged(this);
         }
         else if (sources.size() == 1)
         {
             auto ep = *sources.begin();
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedGates.insert(ep->get_gate()->get_id());
+            gSelectionRelay->addGate(ep->get_gate()->get_id());
             gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
             gSelectionRelay->mFocusId   = ep->get_gate()->get_id();
             gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::Right;
@@ -703,7 +703,7 @@ namespace hal
 
         mNavigationTable->hide();
         gSelectionRelay->clear();
-        gSelectionRelay->mSelectedGates = to_gates;
+        gSelectionRelay->setSelectedGates(to_gates);
         if (to_gates.size() == 1)
         {
             gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;

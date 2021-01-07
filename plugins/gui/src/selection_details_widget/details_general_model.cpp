@@ -153,7 +153,7 @@ namespace hal {
             Module* parMod = mGetParentModule();
             if (!parMod) return;
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedModules.insert(parMod->get_id());
+            gSelectionRelay->addModule(parMod->get_id());
             gSelectionRelay->relaySelectionChanged(this);
         }
     }

@@ -2,6 +2,19 @@
 
 namespace hal
 {
-    ActionNewSelection::ActionNewSelection()
-      : UserAction(UserActionManager::NewSelection) {;}
+    ActionNewSelectionFactory::ActionNewSelectionFactory()
+        : UserActionFactory("NewSelection") {;}
+
+    ActionNewSelectionFactory* ActionNewSelectionFactory::sFactory = new ActionNewSelectionFactory;
+
+    UserAction* ActionNewSelectionFactory::newAction() const
+    {
+        return new ActionNewSelection;
+    }
+
+    QString ActionNewSelection::tagname() const
+    {
+        return ActionNewSelectionFactory::sFactory->tagname();
+    }
+
 }

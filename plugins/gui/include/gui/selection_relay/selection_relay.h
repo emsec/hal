@@ -25,11 +25,12 @@
 
 #include "hal_core/defines.h"
 #include "hal_config.h"
-
+#include <vector>
 #include <QObject>
 #include <QPair>
 #include <QVector>
 #include <QSet>
+#include <QList>
 
 namespace hal
 {
@@ -97,6 +98,39 @@ namespace hal
                                 const QList<u32>& gatIds = QList<u32>(),
                                 const QList<u32>& netIds = QList<u32>());
 
+        QList<u32> selectedGatesList()   const { return mSelectedGates.toList(); }
+        QList<u32> selectedNetsList()    const { return mSelectedNets.toList(); }
+        QList<u32> selectedModulesList() const { return mSelectedModules.toList(); }
+
+        std::vector<u32> selectedGatesVector()   const { return std::vector<u32>(mSelectedGates.begin(), mSelectedGates.end()); }
+        std::vector<u32> selectedNetsVector()    const { return std::vector<u32>(mSelectedNets.begin(), mSelectedNets.end()); }
+        std::vector<u32> selectedModulesVector() const { return std::vector<u32>(mSelectedModules.begin(), mSelectedModules.end()); }
+
+        const QSet<u32>& selectedGates()   const { return mSelectedGates; }
+        const QSet<u32>& selectedNets()    const { return mSelectedNets; }
+        const QSet<u32>& selectedModules() const { return mSelectedModules; }
+
+        int numberSelectedGates()   const { return mSelectedGates.size(); }
+        int numberSelectedNets()    const { return mSelectedNets.size(); }
+        int numberSelectedModules() const { return mSelectedModules.size(); }
+        int numberSelectedNodes()   const { return mSelectedGates.size() + mSelectedModules.size(); }
+        int numberSelectedItems()   const { return mSelectedGates.size() + mSelectedModules.size() + mSelectedNets.size(); }
+
+        bool containsGate(u32 id) const   { return mSelectedGates.contains(id); }
+        bool containsNet(u32 id) const    { return mSelectedNets.contains(id); }
+        bool containsModule(u32 id) const { return mSelectedModules.contains(id); }
+
+        void addGate(u32 id)   { mSelectedGates.insert(id); }
+        void addNet(u32 id)    { mSelectedNets.insert(id); }
+        void addModule(u32 id) { mSelectedModules.insert(id); }
+
+        void setSelectedGates(const QSet<u32>& ids)   { mSelectedGates = ids; }
+        void setSelectedNets(const QSet<u32>& ids)    { mSelectedNets = ids; }
+        void setSelectedModules(const QSet<u32>& ids) { mSelectedModules = ids; }
+
+        void removeGate(u32 id)   { mSelectedGates.remove(id); }
+        void removeNet(u32 id)    { mSelectedNets.remove(id); }
+        void removeModule(u32 id) { mSelectedModules.remove(id); }
     Q_SIGNALS:
         // TEST SIGNAL
         // ADD ADDITIONAL INFORMATION (LIKE PREVIOUS FOCUS) OR LEAVE THAT TO SUBSCRIBERS ???
@@ -106,10 +140,6 @@ namespace hal
         void subfocusChanged(void* sender);
 
     public:
-        QSet<u32> mSelectedGates;
-        QSet<u32> mSelectedNets;
-        QSet<u32> mSelectedModules;
-
         // MAYBE UNNECESSARY
         ItemType mCurrentType;
         u32 mCurrentId;
@@ -122,6 +152,10 @@ namespace hal
         u32 mSubfocusIndex;    // HANDLE VIA INT OR STRING ?? INDEX HAS TO BE KNOWN ANYWAY TO FIND NEXT / PREVIOUS BOTH OPTIONS KIND OF BAD
 
     private:
+        QSet<u32> mSelectedGates;
+        QSet<u32> mSelectedNets;
+        QSet<u32> mSelectedModules;
+
         QSet<u32> mModulesSuppressedByFilter;
         QSet<u32> mGatesSuppressedByFilter;
         QSet<u32> mNetsSuppressedByFilter;

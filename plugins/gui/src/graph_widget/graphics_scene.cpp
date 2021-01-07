@@ -414,19 +414,19 @@ namespace hal
             {
             case ItemType::Gate:
             {
-                gSelectionRelay->mSelectedGates.insert(static_cast<const GraphicsItem*>(item)->id());
+                gSelectionRelay->addGate(static_cast<const GraphicsItem*>(item)->id());
                 ++gates;
                 break;
             }
             case ItemType::Net:
             {
-                gSelectionRelay->mSelectedNets.insert(static_cast<const GraphicsItem*>(item)->id());
+                gSelectionRelay->addNet(static_cast<const GraphicsItem*>(item)->id());
                 ++nets;
                 break;
             }
             case ItemType::Module:
             {
-                gSelectionRelay->mSelectedModules.insert(static_cast<const GraphicsItem*>(item)->id());
+                gSelectionRelay->addModule(static_cast<const GraphicsItem*>(item)->id());
                 ++modules;
                 break;
             }
@@ -442,17 +442,17 @@ namespace hal
             if (gates)
             {
                 gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedGates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->mFocusId = gSelectionRelay->selectedGatesList().at(0);
             }
             else if (nets)
             {
                 gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedNets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->mFocusId = gSelectionRelay->selectedNetsList().at(0);
             }
             else
             {
                 gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
-                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedModules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->mFocusId = gSelectionRelay->selectedModulesList().at(0);
             }
         }
         else
@@ -533,7 +533,7 @@ namespace hal
 
         clearSelection();
 
-        if (!gSelectionRelay->mSelectedModules.isEmpty())
+        if (gSelectionRelay->numberSelectedModules())
         {
             for (auto& element : mModuleItems)
             {
@@ -545,7 +545,7 @@ namespace hal
             }
         }
 
-        if (!gSelectionRelay->mSelectedGates.isEmpty())
+        if (gSelectionRelay->numberSelectedGates())
         {
             for (auto& element : mGateItems)
             {
@@ -557,7 +557,7 @@ namespace hal
             }
         }
 
-        if (!gSelectionRelay->mSelectedNets.isEmpty())
+        if (gSelectionRelay->numberSelectedNets())
         {
             for (auto& element : mNetItems)
             {

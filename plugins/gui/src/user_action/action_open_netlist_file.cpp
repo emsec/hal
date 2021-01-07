@@ -3,9 +3,23 @@
 
 namespace hal
 {
+    ActionOpenNetlistFileFactory::ActionOpenNetlistFileFactory()
+       : UserActionFactory("OpenNetlistFile") {;}
+
+    ActionOpenNetlistFileFactory* ActionOpenNetlistFileFactory::sFactory = new ActionOpenNetlistFileFactory;
+
+    UserAction* ActionOpenNetlistFileFactory::newAction() const
+    {
+        return new ActionOpenNetlistFile;
+    }
+
+    QString ActionOpenNetlistFile::tagname() const
+    {
+        return ActionOpenNetlistFileFactory::sFactory->tagname();
+    }
+
     ActionOpenNetlistFile::ActionOpenNetlistFile(const QString &filename_)
-      : UserAction(UserActionManager::OpenNetlistFile),
-        mFilename(filename_)
+        : mFilename(filename_)
     {
         mWaitForReady = true;
     }

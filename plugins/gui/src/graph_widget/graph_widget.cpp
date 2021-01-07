@@ -372,8 +372,8 @@ namespace hal
 
         // SELECT IN RELAY
         gSelectionRelay->clear();
-        gSelectionRelay->mSelectedGates   = final_gates;
-        gSelectionRelay->mSelectedModules = final_modules;
+        gSelectionRelay->setSelectedGates(final_gates);
+        gSelectionRelay->setSelectedModules(final_modules);
 
         // TODO implement subselections on modules, then add a case for when the
         // selection is only one module (instead of one gate)
@@ -506,7 +506,7 @@ namespace hal
                     if (n->get_num_of_sources() == 0)
                     {
                         gSelectionRelay->clear();
-                        gSelectionRelay->mSelectedNets.insert(n->get_id());
+                        gSelectionRelay->addNet(n->get_id());
                         gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
                         gSelectionRelay->mFocusId   = n->get_id();
                         gSelectionRelay->relaySelectionChanged(nullptr);
@@ -577,7 +577,7 @@ namespace hal
                     if (n->get_num_of_sources() == 0)
                     {
                         gSelectionRelay->clear();
-                        gSelectionRelay->mSelectedNets.insert(n->get_id());
+                        gSelectionRelay->addNet(n->get_id());
                         gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
                         gSelectionRelay->mFocusId   = n->get_id();
                         gSelectionRelay->relaySelectionChanged(nullptr);
@@ -628,7 +628,7 @@ namespace hal
                     if (n->get_num_of_destinations() == 0)
                     {
                         gSelectionRelay->clear();
-                        gSelectionRelay->mSelectedNets.insert(n->get_id());
+                        gSelectionRelay->addNet(n->get_id());
                         gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
                         gSelectionRelay->mFocusId   = n->get_id();
                         gSelectionRelay->relaySelectionChanged(nullptr);
@@ -700,7 +700,7 @@ namespace hal
                     if (n->get_num_of_destinations() == 0)
                     {
                         gSelectionRelay->clear();
-                        gSelectionRelay->mSelectedNets.insert(n->get_id());
+                        gSelectionRelay->addNet(n->get_id());
                         gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
                         gSelectionRelay->mFocusId   = n->get_id();
                         gSelectionRelay->relaySelectionChanged(nullptr);
@@ -759,7 +759,7 @@ namespace hal
         }
 
         ActionUnfoldModule* act = new ActionUnfoldModule;
-        act->setObjectId(id);
+        act->setObject(UserActionObject(id,UserActionObjectType::Module));
         act->exec();
 /*
         if (mContext->gates().isEmpty() && mContext->modules() == QSet<u32>({id}))
@@ -834,8 +834,8 @@ namespace hal
         if (mContext->sceneUpdateInProgress())
             return;
 
-        if (mContext->gates().contains(gSelectionRelay->mSelectedGates) == false || mContext->nets().contains(gSelectionRelay->mSelectedNets) == false
-            || mContext->modules().contains(gSelectionRelay->mSelectedModules) == false)
+        if (!mContext->gates().contains(gSelectionRelay->selectedGates()) || !mContext->nets().contains(gSelectionRelay->selectedNets())
+            || !mContext->modules().contains(gSelectionRelay->selectedModules()))
             return;
 
         int min_x = INT_MAX;
@@ -843,7 +843,7 @@ namespace hal
         int max_x = INT_MIN;
         int max_y = INT_MIN;
 
-        for (auto id : gSelectionRelay->mSelectedGates)
+        for (auto id : gSelectionRelay->selectedGatesList())
         {
             auto rect = mContext->scene()->getGateItem(id)->sceneBoundingRect();
 
@@ -853,7 +853,7 @@ namespace hal
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
         }
 
-        for (auto id : gSelectionRelay->mSelectedNets)
+        for (auto id : gSelectionRelay->selectedNetsList())
         {
             auto rect = mContext->scene()->getNetItem(id)->sceneBoundingRect();
 
@@ -863,7 +863,7 @@ namespace hal
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
         }
 
-        for (auto id : gSelectionRelay->mSelectedModules)
+        for (auto id : gSelectionRelay->selectedModulesList())
         {
             auto rect = mContext->scene()->getModuleItem(id)->sceneBoundingRect();
 

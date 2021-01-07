@@ -2,8 +2,7 @@
 
 namespace hal {
     UserActionCompound::UserActionCompound()
-        : UserAction(UserActionManager::CompoundAction),
-          mUseCreatedObject(false)
+        : mUseCreatedObject(false)
     {;}
 
     void UserActionCompound::addAction(UserAction* act)
@@ -17,10 +16,10 @@ namespace hal {
         for (UserAction* act : mActionList)
         {
             if (mUseCreatedObject && !first)
-                act->setObjectId(objectId());
+                act->setObject(object());
             act->exec();
             if (mUseCreatedObject && first)
-                setObjectId(act->objectId());
+                setObject(act->object());
             first = false;
         }
     }
@@ -50,7 +49,7 @@ namespace hal {
                     }
                     else if (parseActions)
                     {
-                        UserAction* act = UserActionManager::getParsedAction(xmlIn);
+                        UserAction* act = UserActionManager::instance()->getParsedAction(xmlIn);
                         if (act) mActionList.append(act);
                     }
                 }

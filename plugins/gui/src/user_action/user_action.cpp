@@ -2,9 +2,13 @@
 
 namespace hal
 {
-    UserAction::UserAction(UserActionManager::UserActionType type_)
-        : mType(type_), mObjectId(0),
-          mWaitForReady(false),
+    UserActionFactory::UserActionFactory(const QString& nam)
+    {
+        UserActionManager::instance()->registerFactory(this);
+    }
+
+    UserAction::UserAction()
+        : mWaitForReady(false),
           mUndoAction(nullptr) {;}
 
     void UserAction::exec() {

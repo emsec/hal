@@ -130,7 +130,7 @@ namespace hal
 
         assert(m);
 
-        for (auto sel_id : gSelectionRelay->mSelectedGates)
+        for (auto sel_id : gSelectionRelay->selectedGatesList())
         {
             Gate* g = gNetlist->get_gate_by_id(sel_id);
 

@@ -33,7 +33,6 @@ namespace hal
         int n = mActionHistory.size();
         if (n>mStartRecording && !macroFilename.isEmpty())
         {
-            QMetaEnum metaAction = QMetaEnum::fromType<UserActionType>();
             QFile of(macroFilename);
             if (of.open(QIODevice::WriteOnly))
             {
@@ -45,8 +44,7 @@ namespace hal
                 for (int i=mStartRecording; i<n; i++)
                 {
                     const UserAction* act = mActionHistory.at(i);
-                    QString actionTag(metaAction.key(act->type()));
-                    xmlOut.writeStartElement(actionTag);
+                    xmlOut.writeStartElement(act->tagname());
                     act->writeToXml(xmlOut);
                     xmlOut.writeEndElement();
                 }
@@ -108,28 +106,17 @@ namespace hal
         mStartRecording = -1;
     }
 
-    UserAction* UserActionManager::getParsedAction(QXmlStreamReader& xmlIn)
+    UserAction* UserActionManager::getParsedAction(QXmlStreamReader& xmlIn) const
     {
-        QMetaEnum metaAction = QMetaEnum::fromType<UserActionType>();
         QString actionTagName = xmlIn.name().toString();
-        int actionType = -1;
-        for (int i=0; i<metaAction.keyCount(); i++)
-            if (actionTagName == metaAction.key(i))
-            {
-                actionType = i;
-                break;
-            }
-        if (actionType < 0) return nullptr; // TODO : error command not found
 
-        UserAction* retval = nullptr;
-        switch (static_cast<UserActionType>(actionType))
+        UserActionFactory* fac = mActionFactory.value(actionTagName);
+        if (!fac)
         {
-        case CompoundAction:   retval = new UserActionCompound;    break;
-        case OpenNetlistFile:  retval = new ActionOpenNetlistFile; break;
-        case UnfoldModule:     retval = new ActionUnfoldModule;    break;
-        default: break;
+            qDebug() << "cannot parse user action" << actionTagName;
+            return nullptr;
         }
-
+        UserAction* retval = fac->newAction();
         if (retval)
             retval->readFromXml(xmlIn);
 
@@ -144,6 +131,11 @@ namespace hal
     bool UserActionManager::isRecording() const
     {
         return mStartRecording >= 0;
+    }
+
+    void UserActionManager::registerFactory(UserActionFactory* fac)
+    {
+        mActionFactory.insert(fac->tagname(),fac);
     }
 
     UserActionManager* UserActionManager::instance()

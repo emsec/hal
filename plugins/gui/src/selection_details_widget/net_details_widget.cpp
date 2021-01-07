@@ -294,7 +294,7 @@ namespace hal
             return;
 
         gSelectionRelay->clear();
-        gSelectionRelay->mSelectedGates.insert(gate_id);
+        gSelectionRelay->addGate(gate_id);
         gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
         gSelectionRelay->mFocusId   = gate_id;
         gSelectionRelay->mSubfocus   = focus;

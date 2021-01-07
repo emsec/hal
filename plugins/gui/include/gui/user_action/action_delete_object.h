@@ -3,21 +3,21 @@
 
 namespace hal
 {
-    class ActionNewSelection : public UserAction
+    class ActionDeleteObject : public UserAction
     {
     public:
-        ActionNewSelection() {;}
-        QString tagname() const override;
+        ActionDeleteObject() {;}
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void exec() override;
+        QString tagname() const override;
     };
 
-    class ActionNewSelectionFactory : public UserActionFactory
+    class ActionDeleteObjectFactory : public UserActionFactory
     {
     public:
-        ActionNewSelectionFactory();
+        ActionDeleteObjectFactory();
         UserAction* newAction() const;
-        static ActionNewSelectionFactory* sFactory;
+        static ActionDeleteObjectFactory* sFactory;
     };
 }

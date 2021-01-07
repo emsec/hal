@@ -1,6 +1,7 @@
 #pragma once
 #include <QString>
 #include "user_action_manager.h"
+#include "user_action_object.h"
 
 namespace hal
 {
@@ -8,20 +9,28 @@ namespace hal
     {
     public:
         virtual void exec();
-        UserActionManager::UserActionType type() const { return mType; }
+        virtual QString tagname() const = 0;
         virtual void writeToXml(QXmlStreamWriter& xmlOut) const = 0;
         virtual void readFromXml(QXmlStreamReader& xmlIn) = 0;
 
-        virtual u32 objectId() const { return mObjectId; }
-        virtual void setObjectId(u32 id_) { mObjectId = id_; }
+        virtual UserActionObject object() const { return mObject; }
+        virtual void setObject(const UserActionObject& o) { mObject = o; }
         bool isWaitForReady() const { return mWaitForReady; }
     protected:
-        UserAction(UserActionManager::UserActionType type_);
-
-        UserActionManager::UserActionType mType;
-        u32 mObjectId;
+        UserAction();
+        UserActionObject mObject;
         bool mWaitForReady;
         UserAction *mUndoAction;
+    };
+
+    class UserActionFactory
+    {
+    protected:
+        QString mTagname;
+    public:
+        UserActionFactory(const QString& nam);
+        QString tagname() const { return mTagname; }
+        virtual UserAction* newAction() const = 0;
     };
 }
 

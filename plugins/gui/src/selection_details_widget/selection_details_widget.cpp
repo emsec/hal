@@ -148,7 +148,7 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToModuleMenu()
     {
-        if (gSelectionRelay->mSelectedModules.size() + gSelectionRelay->mSelectedGates.size() <= 0) return;
+        if (gSelectionRelay->numberSelectedNodes() <= 0) return;
         QMenu* menu = new QMenu(this);
         QAction* action = menu->addAction("New module …");
         action->setData(-1);
@@ -159,7 +159,7 @@ namespace hal
         {
             bool canAdd = true;
 
-            for (u32 mid : gSelectionRelay->mSelectedModules)
+            for (u32 mid : gSelectionRelay->selectedModulesList())
             {
                 Module* m = gNetlist->get_module_by_id(mid);
                 if (!m) continue;
@@ -170,7 +170,7 @@ namespace hal
                 }
             }
             if (canAdd)
-                for (u32 gid : gSelectionRelay->mSelectedGates)
+                for (u32 gid : gSelectionRelay->selectedGatesList())
                 {
                     Gate* g = gNetlist->get_gate_by_id(gid);
                     if (!g) continue;
@@ -207,10 +207,10 @@ namespace hal
         {
             std::unordered_set<Gate*> gatesSelected;
             std::unordered_set<Module*> modulesSelected;
-            for (u32 id : gSelectionRelay->mSelectedGates)
+            for (u32 id : gSelectionRelay->selectedGatesList())
                 gatesSelected.insert(gNetlist->get_gate_by_id(id));
 
-            for (u32 id : gSelectionRelay->mSelectedModules)
+            for (u32 id : gSelectionRelay->selectedModulesList())
                 modulesSelected.insert(gNetlist->get_module_by_id(id));
 
             Module* parentModule = gui_utility::firstCommonAncestor(modulesSelected, gatesSelected);
@@ -226,17 +226,17 @@ namespace hal
             targetModule = gNetlist->get_module_by_id(mod_id);
         }
         Q_ASSERT(targetModule);
-        for (const auto& id : gSelectionRelay->mSelectedGates)
+        for (const auto& id : gSelectionRelay->selectedGatesList())
         {
             targetModule->assign_gate(gNetlist->get_gate_by_id(id));
         }
-        for (const auto& id : gSelectionRelay->mSelectedModules)
+        for (const auto& id : gSelectionRelay->selectedModulesList())
         {
             gNetlist->get_module_by_id(id)->set_parent_module(targetModule);
         }
 
-        auto gates   = gSelectionRelay->mSelectedGates;
-        auto modules = gSelectionRelay->mSelectedModules;
+//        auto gates   = gSelectionRelay->mSelectedGates;
+//        auto modules = gSelectionRelay->mSelectedModules;
         gSelectionRelay->clear();
         gSelectionRelay->relaySelectionChanged(this);
     }
@@ -283,7 +283,7 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToGroupingInternal(Grouping* grp)
     {
-        for (u32 mid : gSelectionRelay->mSelectedModules)
+        for (u32 mid : gSelectionRelay->selectedModulesList())
         {
             Module* m = gNetlist->get_module_by_id(mid);
             if (m)
@@ -293,7 +293,7 @@ namespace hal
                 grp->assign_module(m);
             }
         }
-        for (u32 gid : gSelectionRelay->mSelectedGates)
+        for (u32 gid : gSelectionRelay->selectedGatesList())
         {
             Gate* g = gNetlist->get_gate_by_id(gid);
             if (g)
@@ -303,7 +303,7 @@ namespace hal
                 grp->assign_gate(g);
             }
         }
-        for (u32 nid : gSelectionRelay->mSelectedNets)
+        for (u32 nid : gSelectionRelay->selectedNetsList())
         {
             Net* n = gNetlist->get_net_by_id(nid);
             if (n)
@@ -370,7 +370,7 @@ namespace hal
         proxy->handleFilterTextChanged(QString());
         handleFilterTextChanged(QString());
 
-        mNumberSelectedItems = gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() + gSelectionRelay->mSelectedNets.size();
+        mNumberSelectedItems = gSelectionRelay->numberSelectedItems();
         QVector<const SelectionTreeItem*> defaultHighlight;
 
         if (mNumberSelectedItems)
@@ -381,7 +381,7 @@ namespace hal
 
             mHistory->storeCurrentSelection();
             canRestoreSelection();
-            canMoveToModule(gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size());
+            canMoveToModule(gSelectionRelay->numberSelectedNodes());
             enableSearchbar(true);
             mSelectionToGrouping->setEnabled(true);
             mSelectionToModule->setEnabled(true);
@@ -406,19 +406,19 @@ namespace hal
         }
 
 
-        if (!gSelectionRelay->mSelectedModules.isEmpty())
+        if (gSelectionRelay->numberSelectedModules())
         {
-            SelectionTreeItemModule sti(*gSelectionRelay->mSelectedModules.begin());
+            SelectionTreeItemModule sti(gSelectionRelay->selectedModulesList().at(0));
             singleSelectionInternal(&sti);
         }
-        else if (!gSelectionRelay->mSelectedGates.isEmpty())
+        else if (gSelectionRelay->numberSelectedGates())
         {
-            SelectionTreeItemGate sti(*gSelectionRelay->mSelectedGates.begin());
+            SelectionTreeItemGate sti(gSelectionRelay->selectedGatesList().at(0));
             singleSelectionInternal(&sti);
         }
-        else if (!gSelectionRelay->mSelectedNets.isEmpty())
+        else if (gSelectionRelay->numberSelectedNets())
         {
-            SelectionTreeItemNet sti(*gSelectionRelay->mSelectedNets.begin());
+            SelectionTreeItemNet sti(gSelectionRelay->selectedNetsList().at(0));
             singleSelectionInternal(&sti);
         }
         Q_EMIT triggerHighlight(defaultHighlight);

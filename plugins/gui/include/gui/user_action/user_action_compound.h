@@ -9,6 +9,7 @@ namespace hal {
     public:
         UserActionCompound();
         void addAction(UserAction* act);
+        QString tagname() const override;
         void exec() override;
         void writeToXml(QXmlStreamWriter& xmlOut) const;
         void readFromXml(QXmlStreamReader& xmlIn);
@@ -18,4 +19,12 @@ namespace hal {
         QList<UserAction*> mActionList;
         bool mUseCreatedObject;
     };
+
+    class UserActionCompundFactory : public UserActionFactory
+    {
+    public:
+        UserActionCompundFactory();
+        UserAction* newAction() const;
+    };
+
 }

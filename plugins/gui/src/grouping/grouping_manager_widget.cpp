@@ -137,11 +137,11 @@ namespace hal
         Grouping* grp = getCurrentGrouping().grouping();
         if (!grp) return;
         for (Module* m : grp->get_modules())
-            gSelectionRelay->mSelectedModules.insert(m->get_id());
+            gSelectionRelay->addModule(m->get_id());
         for (Gate* g : grp->get_gates())
-            gSelectionRelay->mSelectedGates.insert(g->get_id());
+            gSelectionRelay->addGate(g->get_id());
         for (Net* n : grp->get_nets())
-            gSelectionRelay->mSelectedNets.insert(n->get_id());
+            gSelectionRelay->addNet(n->get_id());
         gSelectionRelay->relaySelectionChanged(this);
     }
 

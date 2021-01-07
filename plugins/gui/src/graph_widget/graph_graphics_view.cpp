@@ -111,7 +111,7 @@ namespace hal
             if (!gGraphContextManager->contextWithNameExists(name))
             {
                 auto context = gGraphContextManager->createNewContext(name);
-                context->add(gSelectionRelay->mSelectedModules, gSelectionRelay->mSelectedGates);
+                context->add(gSelectionRelay->selectedModules(), gSelectionRelay->selectedGates());
                 return;
             }
         }
@@ -121,17 +121,17 @@ namespace hal
     {
         const u32 mod_id = action->data().toInt();
         Module* m        = gNetlist->get_module_by_id(mod_id);
-        for (const auto& id : gSelectionRelay->mSelectedGates)
+        for (const auto& id : gSelectionRelay->selectedGatesList())
         {
             m->assign_gate(gNetlist->get_gate_by_id(id));
         }
-        for (const auto& id : gSelectionRelay->mSelectedModules)
+        for (const auto& id : gSelectionRelay->selectedModulesList())
         {
             gNetlist->get_module_by_id(id)->set_parent_module(m);
         }
 
-        auto gates   = gSelectionRelay->mSelectedGates;
-        auto modules = gSelectionRelay->mSelectedModules;
+        // auto gates   = gSelectionRelay->mSelectedGates;
+        // auto modules = gSelectionRelay->mSelectedModules;
         gSelectionRelay->clear();
         gSelectionRelay->relaySelectionChanged(this);
     }
@@ -140,11 +140,11 @@ namespace hal
     {
         std::unordered_set<Gate*> gate_objs;
         std::unordered_set<Module*> module_objs;
-        for (const auto& id : gSelectionRelay->mSelectedGates)
+        for (const auto& id : gSelectionRelay->selectedGatesList())
         {
             gate_objs.insert(gNetlist->get_gate_by_id(id));
         }
-        for (const auto& id : gSelectionRelay->mSelectedModules)
+        for (const auto& id : gSelectionRelay->selectedModulesList())
         {
             module_objs.insert(gNetlist->get_module_by_id(id));
         }
@@ -156,17 +156,17 @@ namespace hal
             return;
         Module* m = gNetlist->create_module(gNetlist->get_unique_module_id(), name.toStdString(), parent);
 
-        for (const auto& id : gSelectionRelay->mSelectedGates)
+        for (const auto& id : gSelectionRelay->selectedGatesList())
         {
             m->assign_gate(gNetlist->get_gate_by_id(id));
         }
-        for (const auto& id : gSelectionRelay->mSelectedModules)
+        for (const auto& id : gSelectionRelay->selectedModulesList())
         {
             gNetlist->get_module_by_id(id)->set_parent_module(m);
         }
 
-        auto gates   = gSelectionRelay->mSelectedGates;
-        auto modules = gSelectionRelay->mSelectedModules;
+//        auto gates   = gSelectionRelay->mSelectedGates;
+//        auto modules = gSelectionRelay->mSelectedModules;
         gSelectionRelay->clear();
         gSelectionRelay->relaySelectionChanged(this);
     }
@@ -376,12 +376,12 @@ namespace hal
             QSizeF size(mDragItem->width(), mDragItem->height());
             QPointF mouse = event->posF();
             QPointF snap  = closestLayouterPos(mapToScene(mouse.x(), mouse.y()))[1];
-            if (gSelectionRelay->mSelectedGates.size() > 1)
+            if (gSelectionRelay->numberSelectedGates() > 1)
             {
                 // if we are in multi-select mode, reduce the selection to the
                 // item we are dragging
                 gSelectionRelay->clear();
-                gSelectionRelay->mSelectedGates.insert(mDragItem->id());
+                gSelectionRelay->addGate(mDragItem->id());
                 gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
                 gSelectionRelay->mFocusId   = mDragItem->id();
                 gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
@@ -573,10 +573,10 @@ namespace hal
 
             if (isGate)
             {
-                if (gSelectionRelay->mSelectedGates.find(mItem->id()) == gSelectionRelay->mSelectedGates.end())
+                if (!gSelectionRelay->containsGate(mItem->id()))
                 {
                     gSelectionRelay->clear();
-                    gSelectionRelay->mSelectedGates.insert(mItem->id());
+                    gSelectionRelay->addGate(mItem->id());
                     gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
                     gSelectionRelay->mFocusId   = mItem->id();
                     gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
@@ -593,10 +593,10 @@ namespace hal
             }
             else if (isModule)
             {
-                if (gSelectionRelay->mSelectedModules.find(mItem->id()) == gSelectionRelay->mSelectedModules.end())
+                if (!gSelectionRelay->containsModule(mItem->id()))
                 {
                     gSelectionRelay->clear();
-                    gSelectionRelay->mSelectedModules.insert(mItem->id());
+                    gSelectionRelay->addModule(mItem->id());
                     gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
                     gSelectionRelay->mFocusId   = mItem->id();
                     gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
@@ -616,10 +616,10 @@ namespace hal
             }
             else if (isNet)
             {
-                if (gSelectionRelay->mSelectedNets.find(mItem->id()) == gSelectionRelay->mSelectedNets.end())
+                if (!gSelectionRelay->containsNet((mItem->id())))
                 {
                     gSelectionRelay->clear();
-                    gSelectionRelay->mSelectedNets.insert(mItem->id());
+                    gSelectionRelay->addNet(mItem->id());
                     gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
                     gSelectionRelay->mFocusId   = mItem->id();
                     gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
@@ -632,13 +632,13 @@ namespace hal
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRenameAction);
             }
 
-            if (gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() > 1)
+            if (gSelectionRelay->numberSelectedNodes() > 1)
             {
                 context_menu.addSeparator();
                 context_menu.addAction("Entire selection:")->setEnabled(false);
             }
 
-            if (gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() + gSelectionRelay->mSelectedNets.size() > 1)
+            if (gSelectionRelay->numberSelectedItems() > 1)
                 isMultiSelect = true;
 
             if (isGate || isModule)
@@ -722,9 +722,9 @@ namespace hal
                 }
             }
 
-            if (gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() > 1)
+            if (gSelectionRelay->numberSelectedNodes() > 1)
             {
-                if (!gSelectionRelay->mSelectedGates.empty())
+                if (gSelectionRelay->numberSelectedGates())
                 {
                     context_menu.addSeparator();
                     context_menu.addAction("All selected gates:")->setEnabled(false);
@@ -732,7 +732,7 @@ namespace hal
                     action = context_menu.addAction("  Fold all parent modules");
                     QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldAllAction);
                 }
-                if (!gSelectionRelay->mSelectedModules.empty())
+                if (gSelectionRelay->numberSelectedModules())
                 {
                     context_menu.addSeparator();
                     context_menu.addAction("All selected modules:")->setEnabled(false);
@@ -803,7 +803,7 @@ namespace hal
         if (sender_action)
         {
             QSet<u32> gates;
-            for (auto sel_id : gSelectionRelay->mSelectedGates)
+            for (auto sel_id : gSelectionRelay->selectedGatesList())
             {
                 auto gate = gNetlist->get_gate_by_id(sel_id);
                 for (auto net : gate->get_fan_out_nets())
@@ -827,7 +827,7 @@ namespace hal
                     }
                 }
             }
-            for (auto sel_id : gSelectionRelay->mSelectedModules)
+            for (auto sel_id : gSelectionRelay->selectedModulesList())
             {
                 auto module = gNetlist->get_module_by_id(sel_id);
                 for (auto net : module->get_output_nets())
@@ -862,7 +862,7 @@ namespace hal
         if (sender_action)
         {
             QSet<u32> gates;
-            for (auto sel_id : gSelectionRelay->mSelectedGates)
+            for (auto sel_id : gSelectionRelay->selectedGatesList())
             {
                 auto gate = gNetlist->get_gate_by_id(sel_id);
                 for (auto net : gate->get_fan_in_nets())
@@ -886,7 +886,7 @@ namespace hal
                     }
                 }
             }
-            for (auto sel_id : gSelectionRelay->mSelectedModules)
+            for (auto sel_id : gSelectionRelay->selectedModulesList())
             {
                 auto module = gNetlist->get_module_by_id(sel_id);
                 for (auto net : module->get_input_nets())
@@ -963,7 +963,7 @@ namespace hal
         auto context = mGraphWidget->getContext();
 
         context->beginChange();
-        for (u32 id : gSelectionRelay->mSelectedGates)
+        for (u32 id : gSelectionRelay->selectedGatesList())
         {
             context->foldModuleOfGate(id);
         }
@@ -975,7 +975,7 @@ namespace hal
         auto context = mGraphWidget->getContext();
 
         context->beginChange();
-        for (u32 id : gSelectionRelay->mSelectedModules)
+        for (u32 id : gSelectionRelay->selectedModulesList())
         {
             context->unfoldModule(id);
         }
@@ -1007,7 +1007,7 @@ namespace hal
 
     void GraphGraphicsView::groupingAssignInternal(Grouping* grp)
     {
-        if (gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() + gSelectionRelay->mSelectedNets.size() > 1)
+        if (gSelectionRelay->numberSelectedItems() > 1)
         {
             gContentManager->getSelectionDetailsWidget()->selectionToGroupingInternal(grp);
             return;

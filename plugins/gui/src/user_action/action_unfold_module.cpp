@@ -7,14 +7,26 @@
 
 namespace hal
 {
-    ActionUnfoldModule::ActionUnfoldModule()
-      : UserAction(UserActionManager::UnfoldModule) {;}
+    ActionUnfoldModuleFactory::ActionUnfoldModuleFactory()
+        : UserActionFactory("UnfoldModule") {;}
+
+    ActionUnfoldModuleFactory* ActionUnfoldModuleFactory::sFactory = new ActionUnfoldModuleFactory;
+
+    UserAction* ActionUnfoldModuleFactory::newAction() const
+    {
+        return new ActionUnfoldModule;
+    }
+
+    QString ActionUnfoldModule::tagname() const
+    {
+        return ActionUnfoldModuleFactory::sFactory->tagname();
+    }
 
     void ActionUnfoldModule::exec()
     {
-        if (!mObjectId) return;
+        if (mObject.type() != UserActionObjectType::Module) return;
 
-        auto m = gNetlist->get_module_by_id(mObjectId);
+        auto m = gNetlist->get_module_by_id(mObject.id());
         if (m->get_gates().empty() && m->get_submodules().empty())
             return;
 
@@ -29,9 +41,9 @@ namespace hal
     void ActionUnfoldModule::execInternal(Module *m, GraphContext* currentContext)
     {
         if (currentContext->gates().isEmpty() &&
-                currentContext->modules() == QSet<u32>({mObjectId}))
+                currentContext->modules() == QSet<u32>({mObject.id()}))
         {
-            currentContext->unfoldModule(mObjectId);
+            currentContext->unfoldModule(mObject.id());
             return;
         }
 
@@ -48,7 +60,7 @@ namespace hal
 
         for (const auto& ctx : gGraphContextManager->getContexts())
         {
-            if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({mObjectId})) || (ctx->modules() == module_ids && ctx->gates() == gate_ids))
+            if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({mObject.id()})) || (ctx->modules() == module_ids && ctx->gates() == gate_ids))
             {
                 gContentManager->getGraphTabWidget()->showContext(ctx);
                 return;
@@ -61,15 +73,11 @@ namespace hal
 
     void ActionUnfoldModule::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        xmlOut.writeTextElement("id", QString::number(mObjectId));
+        mObject.writeToXml(xmlOut);
     }
 
     void ActionUnfoldModule::readFromXml(QXmlStreamReader& xmlIn)
     {
-        while (xmlIn.readNextStartElement())
-        {
-            if (xmlIn.name() == "id")
-                setObjectId(xmlIn.readElementText().toInt());
-        }
+        mObject.readFromXml(xmlIn);
     }
 }

@@ -183,7 +183,7 @@ namespace hal
         for (const auto& index : current_selection)
         {
             u32 module_id = getModuleItemFromIndex(index)->id();
-            gSelectionRelay->mSelectedModules.insert(module_id);
+            gSelectionRelay->addModule(module_id);
         }
 
         if (current_selection.size() == 1)
@@ -221,7 +221,7 @@ namespace hal
 
         QItemSelection module_selection;
 
-        for (auto module_id : gSelectionRelay->mSelectedModules)
+        for (auto module_id : gSelectionRelay->selectedModulesList())
         {
             QModelIndex index = mModuleProxyModel->mapFromSource(gNetlistRelay->getModuleModel()->getIndex(gNetlistRelay->getModuleModel()->getItem(module_id)));
             module_selection.select(index, index);
