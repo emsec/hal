@@ -700,12 +700,12 @@ library (ICE40ULTRA) {
         pin(OLOADBOT) { direction: input; }
         pin(ADDSUBTOP) { direction: input; }
         pin(ADDSUBBOT) { direction: input; }
-        pin(CO) { direction: input; }
+        pin(CO) { direction: output; }
         pin(CI) { direction: input; }
         pin(ACCUMCI) { direction: input; }
-        pin(ACCUMCO) { direction: input; }
+        pin(ACCUMCO) { direction: output; }
         pin(SIGNEXTIN) { direction: input; }
-        pin(SIGNEXTOUT) { direction: input; }
+        pin(SIGNEXTOUT) { direction: output; }
         bus(A) {
             bus_type: bus16;
             direction: input;
