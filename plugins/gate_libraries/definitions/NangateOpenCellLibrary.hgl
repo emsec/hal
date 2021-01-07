@@ -1,0 +1,4666 @@
+{
+    "library": "NangateOpenCellLibrary",
+    "cells": [
+        {
+            "name": "AND2_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 & A2"
+                }
+            ]
+        },
+        {
+            "name": "AND2_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 & A2"
+                }
+            ]
+        },
+        {
+            "name": "AND2_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 & A2"
+                }
+            ]
+        },
+        {
+            "name": "AND3_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 & A2 & A3"
+                }
+            ]
+        },
+        {
+            "name": "AND3_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 & A2 & A3"
+                }
+            ]
+        },
+        {
+            "name": "AND3_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 & A2 & A3"
+                }
+            ]
+        },
+        {
+            "name": "AND4_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 & A2 & A3 & A4"
+                }
+            ]
+        },
+        {
+            "name": "AND4_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 & A2 & A3 & A4"
+                }
+            ]
+        },
+        {
+            "name": "AND4_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 & A2 & A3 & A4"
+                }
+            ]
+        },
+        {
+            "name": "ANTENNA_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                }
+            ]
+        },
+        {
+            "name": "AOI21_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A | (B1 & B2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI21_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A | (B1 & B2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI21_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A | (B1 & B2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI22_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 & A2) | (B1 & B2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI22_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 & A2) | (B1 & B2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI22_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 & A2) | (B1 & B2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI211_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 & C2) | B | A)"
+                }
+            ]
+        },
+        {
+            "name": "AOI211_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 & C2) | B | A)"
+                }
+            ]
+        },
+        {
+            "name": "AOI211_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 & C2) | B | A)"
+                }
+            ]
+        },
+        {
+            "name": "AOI221_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 & C2) | A | (B1 & B2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI221_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 & C2) | A | (B1 & B2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI221_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 & C2) | A | (B1 & B2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI222_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 & A2) | (B1 & B2) | (C1 & C2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI222_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 & A2) | (B1 & B2) | (C1 & C2))"
+                }
+            ]
+        },
+        {
+            "name": "AOI222_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 & A2) | (B1 & B2) | (C1 & C2))"
+                }
+            ]
+        },
+        {
+            "name": "BUF_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "BUF_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "BUF_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "BUF_X8",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "BUF_X16",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "BUF_X32",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "CLKBUF_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "CLKBUF_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "CLKBUF_X3",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "CLKGATETST_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "IQ",
+                    "direction": "internal"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input"
+                },
+                {
+                    "name": "GCK",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "CLKGATETST_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "IQ",
+                    "direction": "internal"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input"
+                },
+                {
+                    "name": "GCK",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "CLKGATETST_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "IQ",
+                    "direction": "internal"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input"
+                },
+                {
+                    "name": "GCK",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "CLKGATETST_X8",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "IQ",
+                    "direction": "internal"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input"
+                },
+                {
+                    "name": "GCK",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "CLKGATE_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "IQ",
+                    "direction": "internal"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "GCK",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "CLKGATE_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "IQ",
+                    "direction": "internal"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "GCK",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "CLKGATE_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "IQ",
+                    "direction": "internal"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "GCK",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "CLKGATE_X8",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "IQ",
+                    "direction": "internal"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "GCK",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "DFFRS_X1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CK",
+                "clear_on": "!RN",
+                "preset_on": "!SN",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "RN",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SN",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "DFFRS_X2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CK",
+                "clear_on": "!RN",
+                "preset_on": "!SN",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "RN",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SN",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "DFFR_X1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CK",
+                "clear_on": "!RN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "RN",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "DFFR_X2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CK",
+                "clear_on": "!RN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "RN",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "DFFS_X1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CK",
+                "preset_on": "!SN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SN",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "DFFS_X2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CK",
+                "preset_on": "!SN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SN",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "DFF_X1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CK"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "DFF_X2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CK"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "DLH_X1",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "G"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                }
+            ]
+        },
+        {
+            "name": "DLH_X2",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "G"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                }
+            ]
+        },
+        {
+            "name": "DLL_X1",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "!GN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "GN",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                }
+            ]
+        },
+        {
+            "name": "DLL_X2",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "!GN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "GN",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                }
+            ]
+        },
+        {
+            "name": "FA_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "CI",
+                    "direction": "input"
+                },
+                {
+                    "name": "CO",
+                    "direction": "output",
+                    "function": "(A & B) | (CI & (A | B))"
+                },
+                {
+                    "name": "S",
+                    "direction": "output",
+                    "function": "CI ^ A ^ B"
+                }
+            ]
+        },
+        {
+            "name": "FILLCELL_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                }
+            ]
+        },
+        {
+            "name": "FILLCELL_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                }
+            ]
+        },
+        {
+            "name": "FILLCELL_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                }
+            ]
+        },
+        {
+            "name": "FILLCELL_X8",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                }
+            ]
+        },
+        {
+            "name": "FILLCELL_X16",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                }
+            ]
+        },
+        {
+            "name": "FILLCELL_X32",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                }
+            ]
+        },
+        {
+            "name": "HA_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "CO",
+                    "direction": "output",
+                    "function": "A & B"
+                },
+                {
+                    "name": "S",
+                    "direction": "output",
+                    "function": "A ^ B"
+                }
+            ]
+        },
+        {
+            "name": "INV_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "INV_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "INV_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "INV_X8",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "INV_X16",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "INV_X32",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "LOGIC0_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "0"
+                }
+            ]
+        },
+        {
+            "name": "LOGIC1_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "1"
+                }
+            ]
+        },
+        {
+            "name": "MUX2_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(S & B) | (A & !S)"
+                }
+            ]
+        },
+        {
+            "name": "MUX2_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(S & B) | (A & !S)"
+                }
+            ]
+        },
+        {
+            "name": "NAND2_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 & A2)"
+                }
+            ]
+        },
+        {
+            "name": "NAND2_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 & A2)"
+                }
+            ]
+        },
+        {
+            "name": "NAND2_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 & A2)"
+                }
+            ]
+        },
+        {
+            "name": "NAND3_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 & A2 & A3)"
+                }
+            ]
+        },
+        {
+            "name": "NAND3_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 & A2 & A3)"
+                }
+            ]
+        },
+        {
+            "name": "NAND3_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 & A2 & A3)"
+                }
+            ]
+        },
+        {
+            "name": "NAND4_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 & A2 & A3 & A4)"
+                }
+            ]
+        },
+        {
+            "name": "NAND4_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 & A2 & A3 & A4)"
+                }
+            ]
+        },
+        {
+            "name": "NAND4_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 & A2 & A3 & A4)"
+                }
+            ]
+        },
+        {
+            "name": "NOR2_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 | A2)"
+                }
+            ]
+        },
+        {
+            "name": "NOR2_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 | A2)"
+                }
+            ]
+        },
+        {
+            "name": "NOR2_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 | A2)"
+                }
+            ]
+        },
+        {
+            "name": "NOR3_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 | A2 | A3)"
+                }
+            ]
+        },
+        {
+            "name": "NOR3_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 | A2 | A3)"
+                }
+            ]
+        },
+        {
+            "name": "NOR3_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 | A2 | A3)"
+                }
+            ]
+        },
+        {
+            "name": "NOR4_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 | A2 | A3 | A4)"
+                }
+            ]
+        },
+        {
+            "name": "NOR4_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 | A2 | A3 | A4)"
+                }
+            ]
+        },
+        {
+            "name": "NOR4_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A1 | A2 | A3 | A4)"
+                }
+            ]
+        },
+        {
+            "name": "OAI21_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A & (B1 | B2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI21_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A & (B1 | B2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI21_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A & (B1 | B2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI22_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 | A2) & (B1 | B2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI22_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 | A2) & (B1 | B2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI22_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 | A2) & (B1 | B2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI33_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 | A2 | A3) & (B1 | B2 | B3))"
+                }
+            ]
+        },
+        {
+            "name": "OAI211_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 | C2) & A & B)"
+                }
+            ]
+        },
+        {
+            "name": "OAI211_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 | C2) & A & B)"
+                }
+            ]
+        },
+        {
+            "name": "OAI211_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 | C2) & A & B)"
+                }
+            ]
+        },
+        {
+            "name": "OAI221_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 | C2) & A & (B1 | B2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI221_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 | C2) & A & (B1 | B2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI221_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((C1 | C2) & A & (B1 | B2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI222_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 | A2) & (B1 | B2) & (C1 | C2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI222_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 | A2) & (B1 | B2) & (C1 | C2))"
+                }
+            ]
+        },
+        {
+            "name": "OAI222_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "B1",
+                    "direction": "input"
+                },
+                {
+                    "name": "B2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!((A1 | A2) & (B1 | B2) & (C1 | C2))"
+                }
+            ]
+        },
+        {
+            "name": "OR2_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 | A2"
+                }
+            ]
+        },
+        {
+            "name": "OR2_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 | A2"
+                }
+            ]
+        },
+        {
+            "name": "OR2_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 | A2"
+                }
+            ]
+        },
+        {
+            "name": "OR3_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 | A2 | A3"
+                }
+            ]
+        },
+        {
+            "name": "OR3_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 | A2 | A3"
+                }
+            ]
+        },
+        {
+            "name": "OR3_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 | A2 | A3"
+                }
+            ]
+        },
+        {
+            "name": "OR4_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 | A2 | A3 | A4"
+                }
+            ]
+        },
+        {
+            "name": "OR4_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 | A2 | A3 | A4"
+                }
+            ]
+        },
+        {
+            "name": "OR4_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A1",
+                    "direction": "input"
+                },
+                {
+                    "name": "A2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A4",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "A1 | A2 | A3 | A4"
+                }
+            ]
+        },
+        {
+            "name": "SDFFRS_X1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(SE & SI) | (D & !SE)",
+                "clocked_on": "CK",
+                "clear_on": "!RN",
+                "preset_on": "!SN",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "RN",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "SI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SN",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "SDFFRS_X2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(SE & SI) | (D & !SE)",
+                "clocked_on": "CK",
+                "clear_on": "!RN",
+                "preset_on": "!SN",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "RN",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "SI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SN",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "SDFFR_X1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(SE & SI) | (D & !SE)",
+                "clocked_on": "CK",
+                "clear_on": "!RN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "RN",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "SI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "SDFFR_X2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(SE & SI) | (D & !SE)",
+                "clocked_on": "CK",
+                "clear_on": "!RN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "RN",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "SI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "SDFFS_X1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(SE & SI) | (D & !SE)",
+                "clocked_on": "CK",
+                "preset_on": "!SN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "SI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SN",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "SDFFS_X2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(SE & SI) | (D & !SE)",
+                "clocked_on": "CK",
+                "preset_on": "!SN"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "SI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SN",
+                    "direction": "input",
+                    "type": "set"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "SDFF_X1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(SE & SI) | (D & !SE)",
+                "clocked_on": "CK"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "SI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "SDFF_X2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(SE & SI) | (D & !SE)",
+                "clocked_on": "CK"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "SE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "SI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CK",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "TBUF_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "EN",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A",
+                    "z_function": "EN"
+                }
+            ]
+        },
+        {
+            "name": "TBUF_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "EN",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A",
+                    "z_function": "EN"
+                }
+            ]
+        },
+        {
+            "name": "TBUF_X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "EN",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A",
+                    "z_function": "EN"
+                }
+            ]
+        },
+        {
+            "name": "TBUF_X8",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "EN",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A",
+                    "z_function": "EN"
+                }
+            ]
+        },
+        {
+            "name": "TBUF_X16",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "EN",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A",
+                    "z_function": "EN"
+                }
+            ]
+        },
+        {
+            "name": "TINV_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "EN",
+                    "direction": "input"
+                },
+                {
+                    "name": "I",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!I",
+                    "z_function": "EN"
+                }
+            ]
+        },
+        {
+            "name": "TLAT_X1",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "G"
+            },
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "OE",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state",
+                    "z_function": "!OE"
+                }
+            ]
+        },
+        {
+            "name": "XNOR2_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A ^ B)"
+                }
+            ]
+        },
+        {
+            "name": "XNOR2_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "function": "!(A ^ B)"
+                }
+            ]
+        },
+        {
+            "name": "XOR2_X1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A ^ B"
+                }
+            ]
+        },
+        {
+            "name": "XOR2_X2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "VDD",
+                    "direction": "input",
+                    "type": "power"
+                },
+                {
+                    "name": "VSS",
+                    "direction": "input",
+                    "type": "ground"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A ^ B"
+                }
+            ]
+        }
+    ]
+}
