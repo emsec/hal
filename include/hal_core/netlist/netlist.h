@@ -726,6 +726,9 @@ namespace hal
         /* stores the name of the device */
         std::string m_device_name;
 
+        // TODO eventhandler
+        EventHandler m_event_handler;
+
         /* stores the auto generated ids for fast next id */
         u32 m_next_gate_id;
         std::set<u32> m_used_gate_ids;
