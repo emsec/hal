@@ -3,6 +3,7 @@
 namespace hal
 {
     UserActionFactory::UserActionFactory(const QString& nam)
+        : mTagname(nam)
     {
         UserActionManager::instance()->registerFactory(this);
     }
@@ -15,4 +16,13 @@ namespace hal
         UserActionManager::instance()->addExecutedAction(this);
     }
 
+    void UserAction::writeToXml(QXmlStreamWriter& xmlOut) const
+    {
+        Q_UNUSED(xmlOut);
+    }
+
+    void UserAction::readFromXml(QXmlStreamReader& xmlIn)
+    {
+        Q_UNUSED(xmlIn);
+    }
 }

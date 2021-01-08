@@ -7,8 +7,6 @@ namespace hal
     {
     public:
         ActionDeleteObject() {;}
-        void writeToXml(QXmlStreamWriter& xmlOut) const override;
-        void readFromXml(QXmlStreamReader& xmlIn) override;
         void exec() override;
         QString tagname() const override;
     };

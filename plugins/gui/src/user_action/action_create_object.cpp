@@ -71,5 +71,6 @@ namespace hal
         default:
             break; // don't know how to create
         }
+        UserAction::exec();
     }
 }

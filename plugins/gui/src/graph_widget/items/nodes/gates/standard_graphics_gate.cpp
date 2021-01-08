@@ -128,9 +128,9 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         }
 
         bool gateHasFocus =
-                gSelectionRelay->mFocusType == SelectionRelay::ItemType::Gate
-                && gSelectionRelay->mFocusId == mId;
-        int subFocusIndex = static_cast<int>(gSelectionRelay->mSubfocusIndex);
+                gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate
+                && gSelectionRelay->focusId() == mId;
+        int subFocusIndex = static_cast<int>(gSelectionRelay->subfocusIndex());
 
         painter->setFont(sPinFont);
         sPen.setColor(sTextColor);
@@ -141,7 +141,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         for (int i = 0; i < mInputPins.size(); ++i)
         {
             if (gateHasFocus)
-                if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Left
+                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left
                         && i == subFocusIndex)
                     sPen.setColor(selectionColor());
                 else
@@ -156,7 +156,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         for (int i = 0; i < mOutputPins.size(); ++i)
         {
             if (gateHasFocus)
-                if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Right
+                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right
                         && i == subFocusIndex)
                     sPen.setColor(selectionColor());
                 else

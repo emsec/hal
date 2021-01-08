@@ -13,6 +13,7 @@
 #include "gui/graph_widget/items/nets/graphics_net.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
+#include "gui/user_action/action_set_selection.h"
 #include "gui/gui_globals.h"
 
 #include <QGraphicsSceneMouseEvent>
@@ -404,9 +405,9 @@ namespace hal
     {
         gSelectionRelay->clear();
 
-        int gates = 0;
-        int nets = 0;
-        int modules = 0;
+        QSet<u32> mods;
+        QSet<u32> gats;
+        QSet<u32> nets;
 
         for (const QGraphicsItem* item : selectedItems())
         {
@@ -414,20 +415,17 @@ namespace hal
             {
             case ItemType::Gate:
             {
-                gSelectionRelay->addGate(static_cast<const GraphicsItem*>(item)->id());
-                ++gates;
+                gats.insert(static_cast<const GraphicsItem*>(item)->id());
                 break;
             }
             case ItemType::Net:
             {
-                gSelectionRelay->addNet(static_cast<const GraphicsItem*>(item)->id());
-                ++nets;
+                nets.insert(static_cast<const GraphicsItem*>(item)->id());
                 break;
             }
             case ItemType::Module:
             {
-                gSelectionRelay->addModule(static_cast<const GraphicsItem*>(item)->id());
-                ++modules;
+                mods.insert(static_cast<const GraphicsItem*>(item)->id());
                 break;
             }
             default:
@@ -437,35 +435,32 @@ namespace hal
 
         // TEST CODE
         // ADD FOCUS DEDUCTION INTO RELAY ???
-        if (gates + nets + modules == 1)
+        if (gats.size() + nets.size() + mods.size() == 1)
         {
-            if (gates)
+            if (!gats.isEmpty())
             {
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-                gSelectionRelay->mFocusId = gSelectionRelay->selectedGatesList().at(0);
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,*gats.begin());
             }
-            else if (nets)
+            else if (!nets.isEmpty())
             {
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                gSelectionRelay->mFocusId = gSelectionRelay->selectedNetsList().at(0);
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,*nets.begin());
             }
             else
             {
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
-                gSelectionRelay->mFocusId = gSelectionRelay->selectedModulesList().at(0);
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,*mods.begin());
             }
         }
         else
         {
-            gSelectionRelay->mFocusType = SelectionRelay::ItemType::None;
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::None,0);
         }
-        gSelectionRelay->mSubfocus = SelectionRelay::Subfocus::None;
         // END OF TEST CODE
 
         //LOG MANUAL SELECTION CHANGED:
         //log_info("gui", "Selection changed through manual interaction with a view to: insert here..");
-        gSelectionRelay->relaySelectionChanged(this);
 
+        ActionSetSelection* act = new ActionSetSelection(mods,gats,nets);
+        act->exec();
     }
 
     void GraphicsScene::handleGroupingAssignModule(Grouping *grp, u32 id)

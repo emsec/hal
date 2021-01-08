@@ -1,6 +1,7 @@
 #include "gui/selection_relay/selection_relay.h"
 
 #include "gui/gui_globals.h"
+#include "gui/user_action/action_set_focus.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -12,7 +13,7 @@ namespace hal
     bool SelectionRelay::sNavigationSkipsEnabled = false;
 
     SelectionRelay::SelectionRelay(QObject* parent) : QObject(parent),
-        mCurrentType(ItemType::None), mFocusType(ItemType::None), mSubfocus(Subfocus::None)
+        mFocusType(ItemType::None), mSubfocus(Subfocus::None)
     {
         clear();
     }
@@ -28,6 +29,21 @@ namespace hal
         mSubfocus       = Subfocus::None;
         mSubfocusIndex = 0;
         mFocusId       = 0;
+    }
+
+    void SelectionRelay::setFocus(ItemType ftype, u32 fid, Subfocus sfoc, u32 sfinx)
+    {
+        ActionSetFocus* act = new ActionSetFocus(sfoc,sfinx);
+        act->setObject(UserActionObject(fid,UserActionObjectType::fromItemType(ftype)));
+        act->exec();
+    }
+
+    void SelectionRelay::setFocusDirect(ItemType ftype, u32 fid, Subfocus sfoc, u32 sfinx)
+    {
+        mFocusType = ftype;
+        mFocusId   = fid;
+        mSubfocus  = sfoc;
+        mSubfocusIndex = sfinx;
     }
 
     void SelectionRelay::clearAndUpdate()

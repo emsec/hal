@@ -70,14 +70,4 @@ namespace hal
         auto ctx = gGraphContextManager->createNewContext(QString::fromStdString(m->get_name()));
         ctx->add(module_ids, gate_ids);
     }
-
-    void ActionUnfoldModule::writeToXml(QXmlStreamWriter& xmlOut) const
-    {
-        mObject.writeToXml(xmlOut);
-    }
-
-    void ActionUnfoldModule::readFromXml(QXmlStreamReader& xmlIn)
-    {
-        mObject.readFromXml(xmlIn);
-    }
 }

@@ -1,8 +1,9 @@
 #pragma once
+#include <QObject>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include "hal_core/defines.h"
-#include <QObject>
+#include "gui/selection_relay/selection_relay.h"
 
 namespace hal {
     class UserActionObjectType : public QObject
@@ -14,6 +15,8 @@ namespace hal {
 
         static ObjectType fromString(const QString& s);
         static QString toString(ObjectType t);
+        static ObjectType fromItemType(SelectionRelay::ItemType itp);
+        static SelectionRelay::ItemType toItemType(ObjectType t);
     };
 
 

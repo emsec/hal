@@ -10,8 +10,8 @@ namespace hal
     public:
         virtual void exec();
         virtual QString tagname() const = 0;
-        virtual void writeToXml(QXmlStreamWriter& xmlOut) const = 0;
-        virtual void readFromXml(QXmlStreamReader& xmlIn) = 0;
+        virtual void writeToXml(QXmlStreamWriter& xmlOut) const;
+        virtual void readFromXml(QXmlStreamReader& xmlIn);
 
         virtual UserActionObject object() const { return mObject; }
         virtual void setObject(const UserActionObject& o) { mObject = o; }

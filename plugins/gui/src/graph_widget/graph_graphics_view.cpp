@@ -17,6 +17,7 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/user_action/action_add_to_selection.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -382,9 +383,7 @@ namespace hal
                 // item we are dragging
                 gSelectionRelay->clear();
                 gSelectionRelay->addGate(mDragItem->id());
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-                gSelectionRelay->mFocusId   = mDragItem->id();
-                gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,mDragItem->id());
                 gSelectionRelay->relaySelectionChanged(nullptr);
             }
             mDropAllowed = false;
@@ -577,9 +576,7 @@ namespace hal
                 {
                     gSelectionRelay->clear();
                     gSelectionRelay->addGate(mItem->id());
-                    gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-                    gSelectionRelay->mFocusId   = mItem->id();
-                    gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,mItem->id());
                     gSelectionRelay->relaySelectionChanged(this);
                 }
 
@@ -597,9 +594,7 @@ namespace hal
                 {
                     gSelectionRelay->clear();
                     gSelectionRelay->addModule(mItem->id());
-                    gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
-                    gSelectionRelay->mFocusId   = mItem->id();
-                    gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,mItem->id());
                     gSelectionRelay->relaySelectionChanged(this);
                 }
 
@@ -619,10 +614,10 @@ namespace hal
                 if (!gSelectionRelay->containsNet((mItem->id())))
                 {
                     gSelectionRelay->clear();
-                    gSelectionRelay->addNet(mItem->id());
-                    gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                    gSelectionRelay->mFocusId   = mItem->id();
-                    gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
+                    ActionAddToSelection* act = new ActionAddToSelection;
+                    act->setObject(UserActionObject(mItem->id(),UserActionObjectType::Net));
+                    act->exec();
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,mItem->id());
                     gSelectionRelay->relaySelectionChanged(this);
                 }
 

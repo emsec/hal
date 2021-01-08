@@ -1,6 +1,21 @@
 #include "gui/user_action/user_action_compound.h"
 
 namespace hal {
+    UserActionCompoundFactory::UserActionCompoundFactory()
+        : UserActionFactory("Compound") {;}
+
+    UserActionCompoundFactory* UserActionCompoundFactory::sFactory = new UserActionCompoundFactory;
+
+    UserAction* UserActionCompoundFactory::newAction() const
+    {
+        return new UserActionCompound;
+    }
+
+    QString UserActionCompound::tagname() const
+    {
+        return UserActionCompoundFactory::sFactory->tagname();
+    }
+
     UserActionCompound::UserActionCompound()
         : mUseCreatedObject(false)
     {;}

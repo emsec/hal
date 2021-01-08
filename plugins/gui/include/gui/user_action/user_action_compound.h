@@ -20,11 +20,11 @@ namespace hal {
         bool mUseCreatedObject;
     };
 
-    class UserActionCompundFactory : public UserActionFactory
+    class UserActionCompoundFactory : public UserActionFactory
     {
     public:
-        UserActionCompundFactory();
+        UserActionCompoundFactory();
         UserAction* newAction() const;
-    };
-
+        static UserActionCompoundFactory* sFactory;
+    };    
 }

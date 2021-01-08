@@ -8,8 +8,6 @@ namespace hal
     public:
         ActionSelectionToObject() {;}
         QString tagname() const override;
-        void writeToXml(QXmlStreamWriter& xmlOut) const override;
-        void readFromXml(QXmlStreamReader& xmlIn) override;
         void exec() override;
     };
 

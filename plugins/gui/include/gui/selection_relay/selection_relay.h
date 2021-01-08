@@ -140,9 +140,15 @@ namespace hal
         void subfocusChanged(void* sender);
 
     public:
-        // MAYBE UNNECESSARY
-        ItemType mCurrentType;
-        u32 mCurrentId;
+        ItemType focusType() const { return mFocusType; }
+        u32 focusId()        const { return mFocusId; }
+        Subfocus subfocus()  const { return mSubfocus; }
+        u32 subfocusIndex()  const { return mSubfocusIndex; }
+
+        void setFocus(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
+        void setFocusDirect(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
+
+    private:
 
         // USE ARRAY[0] INSTEAD OF MEMBER ???
         ItemType mFocusType;
@@ -151,7 +157,6 @@ namespace hal
         Subfocus mSubfocus;
         u32 mSubfocusIndex;    // HANDLE VIA INT OR STRING ?? INDEX HAS TO BE KNOWN ANYWAY TO FIND NEXT / PREVIOUS BOTH OPTIONS KIND OF BAD
 
-    private:
         QSet<u32> mSelectedGates;
         QSet<u32> mSelectedNets;
         QSet<u32> mSelectedModules;

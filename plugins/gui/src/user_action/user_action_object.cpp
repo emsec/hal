@@ -1,4 +1,5 @@
 #include "gui/user_action/user_action_object.h"
+#include "gui/selection_relay/selection_relay.h"
 #include <QMetaEnum>
 
 namespace hal {
@@ -17,7 +18,31 @@ namespace hal {
         return QString(me.key(t));
     }
 
+    UserActionObjectType::ObjectType UserActionObjectType::fromItemType(SelectionRelay::ItemType itp)
+    {
+        ObjectType retval = None;
+        switch (itp)
+        {
+        case SelectionRelay::ItemType::Module: retval = Module; break;
+        case SelectionRelay::ItemType::Gate:   retval = Gate;   break;
+        case SelectionRelay::ItemType::Net:    retval = Net;    break;
+        default:                                                break;
+        }
+        return retval;
+    }
 
+    SelectionRelay::ItemType UserActionObjectType::toItemType(UserActionObjectType::ObjectType t)
+    {
+        SelectionRelay::ItemType retval = SelectionRelay::ItemType::None;
+        switch (t)
+        {
+        case Module: retval = SelectionRelay::ItemType::Module; break;
+        case Gate:   retval = SelectionRelay::ItemType::Gate;   break;
+        case Net:    retval = SelectionRelay::ItemType::Net;    break;
+        default:                                                break;
+        }
+        return retval;
+    }
 
     void UserActionObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {

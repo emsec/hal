@@ -198,10 +198,10 @@ namespace hal
             case SelectionRelay::Subfocus::None:
                 return;
             case SelectionRelay::Subfocus::Left:
-                netId = nbox->item()->inputNets().at(gSelectionRelay->mSubfocusIndex);
+                netId = nbox->item()->inputNets().at(gSelectionRelay->subfocusIndex());
                 break;
             case SelectionRelay::Subfocus::Right:
-                netId = nbox->item()->outputNets().at(gSelectionRelay->mSubfocusIndex);
+                netId = nbox->item()->outputNets().at(gSelectionRelay->subfocusIndex());
                 break;
         }
 
@@ -326,20 +326,20 @@ namespace hal
         mViaNet    = nullptr;
         mDirection = direction;
 
-        switch (gSelectionRelay->mFocusType)
+        switch (gSelectionRelay->focusType())
         {
             case SelectionRelay::ItemType::Net:
-                mViaNet = gNetlist->get_net_by_id(gSelectionRelay->mFocusId);
+                mViaNet = gNetlist->get_net_by_id(gSelectionRelay->focusId());
                 break;
             case SelectionRelay::ItemType::Gate: {
-                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->mFocusId);
+                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->focusId());
                 Q_ASSERT(g);
                 mOrigin = Node(g->get_id(), Node::Gate);
                 viaNetByNode();
                 break;
             }
             case SelectionRelay::ItemType::Module: {
-                Module* m = gNetlist->get_module_by_id(gSelectionRelay->mFocusId);
+                Module* m = gNetlist->get_module_by_id(gSelectionRelay->focusId());
                 Q_ASSERT(m);
                 mOrigin = Node(m->get_id(), Node::Module);
                 viaNetByNode();

@@ -45,6 +45,7 @@ namespace hal
                 {
                     const UserAction* act = mActionHistory.at(i);
                     xmlOut.writeStartElement(act->tagname());
+                    act->object().writeToXml(xmlOut);
                     act->writeToXml(xmlOut);
                     xmlOut.writeEndElement();
                 }
@@ -118,7 +119,12 @@ namespace hal
         }
         UserAction* retval = fac->newAction();
         if (retval)
+        {
+            UserActionObject actObj;
+            actObj.readFromXml(xmlIn);
+            retval->setObject(actObj);
             retval->readFromXml(xmlIn);
+        }
 
         return retval;
     }
