@@ -385,7 +385,8 @@ namespace hal {
             {
                 // Optimize MUX function
                 BooleanFunction bf = (a & c) | (b & ~c) | (a & b);
-                EXPECT_EQ(bf.optimize().to_string(), "(A & C) | (B & !C)");
+                EXPECT_EQ(bf.optimize().to_string(), "(B & !C) | (A & C)");
+                // EXPECT_EQ(bf.optimize().to_string(), "(A & C) | (B & !C)");
             }
         TEST_END
     }
@@ -477,15 +478,25 @@ namespace hal {
                         EXPECT_TRUE(false) << "ERROR: DNF function does not match original function" << std::endl
                                            << "  original function:  " << f << std::endl
                                            << "  DNF of function:    " << dnf << std::endl
-                                           << "  optimized function: " << optimized << std::endl;
+                                           << "  --------------------" << std::endl
+                                           << "  TT original function:  " << utils::join("", original_truth_table, [](auto x){return x == BooleanFunction::X?"-":std::to_string(x);}) << std::endl
+                                           << "  TT DNF of function:    " << utils::join("", dnf_truth_table, [](auto x){return x == BooleanFunction::X?"-":std::to_string(x);}) << std::endl;
                     }
 
                     if (original_truth_table != optimized_truth_table) {
                         EXPECT_TRUE(false) << "ERROR: optimized function does not match original function" << std::endl
                                            << "  original function:  " << f << std::endl
-                                           << "  DNF of function:    " << dnf << std::endl
-                                           << "  optimized function: " << optimized << std::endl;
+                                           << "  optimized function: " << optimized << std::endl
+                                           << "  --------------------" << std::endl
+                                           << "  TT original function:  " << utils::join("", original_truth_table, [](auto x){return x == BooleanFunction::X?"-":std::to_string(x);}) << std::endl
+                                           << "  TT optimized function: " << utils::join("", optimized_truth_table, [](auto x){return x == BooleanFunction::X?"-":std::to_string(x);}) << std::endl;
                     }
+
+                    EXPECT_TRUE(optimized.to_string() == optimized.optimize().to_string()) << "ERROR: re-optimizing changed the function" << std::endl
+                                           << "  optimized function: " << optimized << std::endl
+                                           << "  optimized again:    " << optimized.optimize() << std::endl;
+
+                    // std::cout << f << std::endl << optimized << std::endl << std::endl;
                 }
             }
 

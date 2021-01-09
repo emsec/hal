@@ -361,7 +361,7 @@ namespace hal
         BooleanFunction optimize_constants() const;
 
         // merges nested expressions of the same operands
-        static std::vector<std::vector<Value>> qmc(const std::vector<std::vector<Value>>& terms);
+        static std::vector<std::vector<Value>> qmc(std::vector<std::vector<Value>> terms);
 
         // helper to allow for substitution with reduced amount of copies
         static void substitute_helper(BooleanFunction& f, const std::string& v, const BooleanFunction& s);
