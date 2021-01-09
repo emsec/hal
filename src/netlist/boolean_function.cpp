@@ -288,7 +288,7 @@ namespace hal
             return BooleanFunction();
         }
 
-        const std::string delimiters = "!^&|'+* ";
+        const std::string delimiters = "!~^&|'+* ";
 
         // check for constants
         if (expression == "0")
@@ -437,7 +437,7 @@ namespace hal
         {
             // multiple terms available -> initialize return Value with first term
             u32 i = 0;
-            while (terms[i] == "!")
+            while (terms[i] == "!" || terms[i] == "~")
             {
                 negate_next = !negate_next;
                 ++i;
@@ -459,7 +459,7 @@ namespace hal
             // process the remaining terms
             while (++i < terms.size())
             {
-                if (terms[i] == "!")
+                if (terms[i] == "!" || terms[i] == "~")
                 {
                     negate_next = !negate_next;
                 }
