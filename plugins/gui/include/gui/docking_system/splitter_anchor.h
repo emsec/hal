@@ -35,24 +35,92 @@ namespace hal
     class ContentFrame;
     class ContentWidget;
 
+    /**
+     * The SplitterAnchor class provides the interface to add content widgets to hal's main content area on the "lowest"
+     * level as well as the area (via the Splitter) to do so. It is the bridge between the dockbar and its corresponding area (the splitter)
+     * and manages/synchronizes the information between them.
+     */
     class SplitterAnchor : public QObject, public ContentAnchor
     {
         Q_OBJECT
 
     public:
+        /**
+         *The splitter anchor's constructor.
+         *
+         * @param DockBar - The splitter ancor's dockbar.
+         * @param Splitter - The actual splitter to represent the dockbar's area.
+         * @param parent - The parent of the splitter anchor.
+         */
         SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = 0);
 
+        /**
+         * Adds a contentwidget at the given position the splitter area and tells the dockbar to
+         * add a button holding the content widgets data at the given position.
+         *
+         * @param widget - The content widget to be added to the docking system.
+         * @param index - The index at which the content widget has to be added.
+         */
         virtual void add(ContentWidget* widget, int index = -1) override;
+
+        /**
+         * Removes (in this case hides, not deletes) the content widget from this area.
+         * The dockbutton is also removed from the dockbar.
+         *
+         * @param widget - The content widget that shall be removed.
+         */
         virtual void remove(ContentWidget* widget) override;
+
+        /**
+         * This function detaches a widget and its button from its area and dockbar (hides them) when the action "detach"
+         * is triggered in the content frame and propagated through many instances. A new content frame is created and
+         * the widget is displayed on the same level as hal as a seperate window.
+         *
+         * @param widget - The widget to be detached.
+         */
         virtual void detach(ContentWidget* widget) override;
+
+        /**
+         * Reattaches the given widget back to the splitter area and dockbar (shows them again) when
+         * the action "reattach" is triggered in the content frame. A new content frame is created and
+         * then placed back into the area. Thereafter the content widget's corresponding button is shown again.
+         *
+         * @param widget - The widget that is reattached.
+         */
         virtual void reattach(ContentWidget* widget) override;
+
+        /**
+         * Shows the given widget.
+         *
+         * @param widget - The widget to be displayed.
+         */
         virtual void open(ContentWidget* widget) override;
+
+        /**
+         * Hides the given widget.
+         *
+         * @param widget - The widget to hide.
+         */
         virtual void close(ContentWidget* widget) override;
 
+        /**
+         * Get the number of widgets currently associated with the dockbar.
+         *
+         * @return The number of widgets.
+         */
         int count();
+
+        /**
+         * Removes all buttons from the dockbar and therefore the widgets from the area. The corresponding
+         * widgets are not destroyed but hidden.
+         */
         void clear();
 
     Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when a widget is either added, removed, attached or reattched.
+         */
         void contentChanged();
 
     private:
