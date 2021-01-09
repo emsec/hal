@@ -26,7 +26,7 @@ namespace hal {
         UserActionObject(u32 i=0, UserActionObjectType::ObjectType t=UserActionObjectType::None)
             : mId(i), mType(t) {;}
         UserActionObjectType::ObjectType type() const { return mType; }
-        u32 id() const { return mType; }
+        u32 id() const { return mId; }
         void writeToXml(QXmlStreamWriter& xmlOut) const;
         void readFromXml(QXmlStreamReader& xmlIn);
     private:
