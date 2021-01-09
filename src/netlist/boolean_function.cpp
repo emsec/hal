@@ -737,28 +737,53 @@ namespace hal
         return result;
     }
 
-    std::vector<BooleanFunction> BooleanFunction::expand_ands_internal(const std::vector<std::vector<BooleanFunction>>& sub_primitives) const
+    std::vector<BooleanFunction> BooleanFunction::expand_AND_of_functions(const std::vector<std::vector<BooleanFunction>>& AND_terms_to_expand) const
     {
-        std::vector<BooleanFunction> result = sub_primitives[0];
+        /*
+        This helper function expands a list of AND terms
+        Example: we started with ((e | f) & cd & (g | h), so this function is called with [[e, f], [cd], [g, h]]
+        Strategy:
+            1. initialize the output list with first set of AND terms --> [e, f]
+            2. iterate over the remaining AND term sets --> [cd], [g, h]
+                a. for each member of the current set, AND it to all terms in the current output and add each result to a new output list
+                   reduce the output to only these new functions
+                b. replace the old output list with the new output list
 
-        auto set_identifier = [](const BooleanFunction& f) -> std::string {
-            std::string id;
+        Rundown:
+            1: init output = [e,f]
+            2: process [cd] --> output = [ecd, fcd]
+            2: process [g, h] --> output = [ecdg, ecdh, fcdg, fcdh]
+        */
+
+        std::vector<BooleanFunction> result = AND_terms_to_expand[0];
+
+        auto simple_hash = [](const BooleanFunction& f) -> std::string {
+            std::string hash = f.m_invert ? "!#" : "#";
             for (const auto& var : f.m_operands)
             {
                 if (var.m_invert)
-                    id += "!";
-                id += var.m_variable;
-                id += " ";
+                {
+                    hash += "!";
+                }
+                if (var.m_content == content_type::CONSTANT)
+                {
+                    hash += "c" + std::to_string(static_cast<int>(var.m_constant) + 1);
+                }
+                else
+                {
+                    hash += "v" + var.m_variable;
+                }
+                hash += " ";
             }
-            return id;
+            return hash;
         };
 
-        for (u32 i = 1; i < sub_primitives.size(); ++i)
+        for (u32 i = 1; i < AND_terms_to_expand.size(); ++i)
         {
-            std::set<std::string> seen;
+            std::unordered_set<std::string> seen;
             std::vector<BooleanFunction> tmp;
-            tmp.reserve(sub_primitives[i].size() * result.size());
-            for (const auto& bf : sub_primitives[i])
+            tmp.reserve(AND_terms_to_expand[i].size() * result.size());
+            for (const auto& bf : AND_terms_to_expand[i])
             {
                 for (const auto& bf2 : result)
                 {
@@ -769,7 +794,7 @@ namespace hal
                         {
                             std::sort(combined.m_operands.begin(), combined.m_operands.end(), [](const auto& f1, const auto& f2) { return f1.m_variable < f2.m_variable; });
                         }
-                        auto s = set_identifier(combined);
+                        auto s = simple_hash(combined);
                         if (seen.find(s) == seen.end())
                         {
                             seen.insert(s);
@@ -784,8 +809,13 @@ namespace hal
         return result;
     }
 
-    std::vector<BooleanFunction> BooleanFunction::get_primitives() const
+    std::vector<BooleanFunction> BooleanFunction::get_AND_terms() const
     {
+        /*
+        This helper function transforms the BF into a vector of terms that solely consist of the AND op
+        Example: ab | (cd & (e | f)) | g --> [ad, cde, cdf, g]
+        */
+
         if (m_content != content_type::TERMS)
         {
             return {*this};
@@ -793,28 +823,37 @@ namespace hal
 
         if (m_op == operation::OR)
         {
-            std::vector<BooleanFunction> primitives;
+            std::vector<BooleanFunction> AND_terms;
             for (const auto& operand : m_operands)
             {
-                auto tmp = operand.get_primitives();
-                primitives.insert(primitives.end(), tmp.begin(), tmp.end());
+                auto tmp = operand.get_AND_terms();
+                AND_terms.insert(AND_terms.end(), tmp.begin(), tmp.end());
             }
-            return primitives;
+            return AND_terms;
         }
         else    // m_op == AND
         {
-            std::vector<std::vector<BooleanFunction>> sub_primitives;
+            // at this point we potentially face a nested computation like "cd & (e | f)"
+            // we have to expand the terms, i.e., AND every outer term with every inner term
+            // for the example, we would output  (cd & (e | f)) --> [cde, cdf]
+            std::vector<std::vector<BooleanFunction>> ANDed_functions;
             for (const auto& operand : m_operands)
             {
-                sub_primitives.push_back(operand.get_primitives());
+                ANDed_functions.push_back(operand.get_AND_terms());
             }
-            return expand_ands_internal(sub_primitives);
+            return expand_AND_of_functions(ANDed_functions);
         }
     }
 
     BooleanFunction BooleanFunction::expand_ands() const
     {
-        std::vector<BooleanFunction> primitives = get_primitives();
+        /*
+        Strategy: expand all AND-multiplied terms
+        Example: (a | b | c) & d --> ad | bd | cd
+        Output: a flat OR-chain of AND terms
+        */
+
+        std::vector<BooleanFunction> primitives = get_AND_terms();
         if (primitives.empty())
         {
             return Value::ZERO;
@@ -944,32 +983,6 @@ namespace hal
         }
     }
 
-    BooleanFunction BooleanFunction::flatten() const
-    {
-        if (m_content != content_type::TERMS)
-        {
-            return *this;
-        }
-
-        std::vector<BooleanFunction> terms;
-        for (const auto& operand : m_operands)
-        {
-            auto term = operand.flatten();
-            if (term.m_content == content_type::TERMS && m_op == term.m_op)
-            {
-                for (const auto& x : term.m_operands)
-                {
-                    terms.push_back(x);
-                }
-            }
-            else
-            {
-                terms.push_back(term);
-            }
-        }
-        return BooleanFunction(m_op, terms);
-    }
-
     bool BooleanFunction::is_dnf() const
     {
         if (m_content != content_type::TERMS)
@@ -1020,6 +1033,7 @@ namespace hal
             return *this;
         }
 
+        // debug progress prints
         // auto tmp_vars = get_variables();
         // std::vector<std::string> init_vars(tmp_vars.begin(), tmp_vars.end());
         // auto init_tt = get_truth_table(init_vars);
@@ -1036,10 +1050,6 @@ namespace hal
         // std::cout << "  expand_ands " << x << std::endl;
         // if (x.get_truth_table(init_vars) != init_tt)
         //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
-        // x = x.flatten();
-        // std::cout << "  flatten " << x << std::endl;
-        // if (x.get_truth_table(init_vars) != init_tt)
-        //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
         // x = x.optimize_constants();
         // std::cout << "  optimize_constants " << x << std::endl;
         // if (x.get_truth_table(init_vars) != init_tt)
@@ -1048,7 +1058,7 @@ namespace hal
 
         // the order of the passes is important!
         // every pass after replace_xors expects that there are no more xor operations
-        return replace_xors().propagate_negations().expand_ands() /*.flatten()*/.optimize_constants();
+        return replace_xors().propagate_negations().expand_ands().optimize_constants();
     }
 
     std::vector<std::vector<std::pair<std::string, bool>>> BooleanFunction::get_dnf_clauses() const

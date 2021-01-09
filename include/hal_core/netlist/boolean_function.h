@@ -299,7 +299,7 @@ namespace hal
 
         /**
          * Get the truth table outputs of the function.
-         * 
+         *
          * WARNING: Exponential runtime in the number of variables!
          *
          * Output is the vector of output values when walking the truth table from the least significant bit to the most significant one.
@@ -315,7 +315,7 @@ namespace hal
         // TODO figure out how to test this
         /**
          * Get the z3 representation of the Boolean function.
-         * 
+         *
          * @param[inout] context - The z3 context.
          * @returns The z3 representation of the Boolean function.
          */
@@ -353,15 +353,12 @@ namespace hal
         // expands ands, i.e., a & (b | c) -> a&b | a&c
         BooleanFunction expand_ands() const;
         // helper function 1
-        std::vector<BooleanFunction> expand_ands_internal(const std::vector<std::vector<BooleanFunction>>& sub_primitives) const;
+        std::vector<BooleanFunction> expand_AND_of_functions(const std::vector<std::vector<BooleanFunction>>& AND_terms_to_expand) const;
         // helper function 2
-        std::vector<BooleanFunction> get_primitives() const;
+        std::vector<BooleanFunction> get_AND_terms() const;
 
         // merges constants if possible and resolves duplicates
         BooleanFunction optimize_constants() const;
-
-        // merges nested expressions of the same operands
-        BooleanFunction flatten() const;
 
         // merges nested expressions of the same operands
         static std::vector<std::vector<Value>> qmc(const std::vector<std::vector<Value>>& terms);

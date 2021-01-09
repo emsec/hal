@@ -334,7 +334,8 @@ namespace hal {
      *
      * Functions: optimize
      */
-    TEST_F(BooleanFunctionTest, check_optimize) {
+    TEST_F(BooleanFunctionTest, check_optimize_correctness)
+    {
         TEST_START
             BooleanFunction a("A");
             BooleanFunction b("B");
@@ -365,6 +366,22 @@ namespace hal {
                 EXPECT_EQ(bf.get_truth_table(std::vector<std::string>({"A", "B"})),
                           bf.optimize().get_truth_table(std::vector<std::string>({"A", "B"})));
             }
+        TEST_END
+    }
+
+    /**
+     * Testing that the optimize function actually returns a minimized result
+     *
+     * Functions: optimize
+     */
+    TEST_F(BooleanFunctionTest, check_optimize_minimality)
+    {
+        TEST_START
+            BooleanFunction a("A");
+            BooleanFunction b("B");
+            BooleanFunction c("C");
+            BooleanFunction _0(ZERO);
+            BooleanFunction _1(ONE);
             {
                 // Optimize MUX function
                 BooleanFunction bf = (a & c) | (b & ~c) | (a & b);
