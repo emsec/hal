@@ -385,8 +385,7 @@ namespace hal {
             {
                 // Optimize MUX function
                 BooleanFunction bf = (a & c) | (b & ~c) | (a & b);
-                EXPECT_EQ(bf.optimize().to_string(), "(B & !C) | (A & C)");
-                // EXPECT_EQ(bf.optimize().to_string(), "(A & C) | (B & !C)");
+                EXPECT_EQ(bf.optimize().to_string(), "(A & C) | (B & !C)");
             }
         TEST_END
     }

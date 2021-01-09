@@ -1185,8 +1185,10 @@ namespace hal
         terms = qmc(terms);
 
         result = BooleanFunction();
-        for (const auto& term : terms)
+
+        for (auto it = terms.rbegin(); it != terms.rend(); ++it) //qmc reverses order, so iterate in reverse
         {
+            auto& term = (*it);
             BooleanFunction tmp;
             for (u32 i = 0; i < term.size(); ++i)
             {
