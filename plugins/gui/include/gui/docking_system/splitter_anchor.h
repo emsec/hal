@@ -36,7 +36,7 @@ namespace hal
     class ContentWidget;
 
     /**
-     * The SplitterAnchor class provides the interface to add content widgets to hal's main content area on the "lowest"
+     * The SplitterAnchor class provides with the TabWidget the functionality to add content widgets to hal's main content area on the "lowest"
      * level as well as the area (via the Splitter) to do so. It is the bridge between the dockbar and its corresponding area (the splitter)
      * and manages/synchronizes the information between them.
      */
@@ -55,8 +55,8 @@ namespace hal
         SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = 0);
 
         /**
-         * Adds a contentwidget at the given position the splitter area and tells the dockbar to
-         * add a button holding the content widgets data at the given position.
+         * Adds a contentwidget at the given position to the splitter area and tells the dockbar to
+         * add a button at the given position that holds the content widget's data.
          *
          * @param widget - The content widget to be added to the docking system.
          * @param index - The index at which the content widget has to be added.
@@ -72,9 +72,9 @@ namespace hal
         virtual void remove(ContentWidget* widget) override;
 
         /**
-         * This function detaches a widget and its button from its area and dockbar (hides them) when the action "detach"
-         * is triggered in the content frame and propagated through many instances. A new content frame is created and
-         * the widget is displayed on the same level as hal as a seperate window.
+         * This function detaches a widget and its button from its area and dockbar (hides them)
+         * when the action "detach" is triggered in the content frame. A new content
+         * frame is created and the widget is displayed on the same level as hal as a seperate window.
          *
          * @param widget - The widget to be detached.
          */

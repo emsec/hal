@@ -40,25 +40,100 @@ namespace hal
     class ContentFrame;
     class ContentWidget;
 
+    /**
+     * The TabWidget class provides with the SplitterAnchor the functionality to add content widgets
+     * to hal's main content area on the "lowest" level.
+     */
     class TabWidget : public Widget, public ContentAnchor
     {
         Q_OBJECT
 
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param parent - The tab widget's parent.
+         */
         explicit TabWidget(QWidget* parent = nullptr);
+
+        /**
+         * Adds the given content widget to the dockbar at the given position
+         * and displays it if no current widget is set.
+         *
+         * @param widget - The widget to add to the dockbar.
+         * @param index - The position.
+         */
         virtual void add(ContentWidget* widget, int index = -1);
+
+        /**
+         * Removes the given content widget from the dockbar. If the widget was currently
+         * displayed it is then hidden.
+         *
+         * @param widget - The content widget to remove.
+         */
         virtual void remove(ContentWidget* widget);
+
+        /**
+         * Detaches the content widget and its corresponding dockbutton (hides it) from the dockbar
+         * and displays the content widget in its own window.
+         * @param widget
+         */
         virtual void detach(ContentWidget* widget);
+
+        /**
+         * Reattches the given content widget and corresponding dockbutton (shows it) to the dockbar.
+         *
+         * @param widget - The content widget to reattach.
+         */
         virtual void reattach(ContentWidget* widget);
+
+        /**
+         * Shows the given content widget in the tab widgets area. It sets up the new toolbar and shortcuts.
+         *
+         * @param widget - The widget to open.
+         */
         virtual void open(ContentWidget* widget);
+
+        /**
+         * Closes the currently displayed widget.
+         *
+         * @param widget - This parameter is not used since always the active widget is closed.
+         */
         virtual void close(ContentWidget* widget);
 
+        /**
+         * This function is used when the currently displayed widget is either removed or detached from the
+         * tab widget. It sets the next available widget as the current one. If no available widget is found
+         * the tab widget hides itself.
+         *
+         * @param index - The startposition to search for the next widget.
+         */
         void handleNoCurrentWidget(int index);
+
+        /**
+         * Removes all buttons from the dockbar and therefore the widgets from the area. The corresponding
+         * widgets are not destroyed but hidden.
+         */
         void clear();
 
     public Q_SLOTS:
+
+        /**
+         * Detaches the currently displayed widget.
+         */
         void detachCurrentWidget();
+
+        /**
+         * Shows its area in case it was hidden. It is connected to the dragStart signal
+         * of the content drag relay.
+         */
         void handleDragStart();
+
+        /**
+         * Hides the area when the tab widget's dockbar contains no dockbuttons.
+         * It is connected to the dragEnd signal of the content relay.
+         */
         void handleDragEnd();
 
     private:
