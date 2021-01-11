@@ -40,6 +40,6 @@ namespace hal
         /** interface implementation: i_cli */
         bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
 
-        std::vector<std::vector<Gate*>>execute(Netlist* nl, std::string path, const u32 layer, const std::vector<u32> sizes);
+        std::vector<std::vector<Gate*>>execute(Netlist* nl, std::string path, const std::vector<u32> sizes, bool draw_graph);
     };
 }    // namespace hal

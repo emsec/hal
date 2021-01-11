@@ -55,8 +55,6 @@ namespace hal
 
         description.add("--path", "provide path where results should be stored", {""});
 
-        description.add("--layer", "(optional) layers per pipeline (default = 2)", {""});
-
         description.add("--sizes", "(optional) sizes which should be prioritized", {""});
 
         return description;
@@ -81,15 +79,6 @@ namespace hal
             log_error("dataflow", "path parameter not set");
         }
 
-        if (args.is_option_set("--layer"))
-        {
-            layer = std::stoi(args.get_parameter("--layer"));
-        }
-        else
-        {
-            layer = 2;
-        }
-
         if (args.is_option_set("--sizes"))
         {
             std::istringstream f(args.get_parameter("--sizes"));
@@ -100,7 +89,7 @@ namespace hal
             }
         }
 
-        if (execute(nl, path, layer, sizes).empty())
+        if (execute(nl, path, sizes, false).empty())
         {
             return false;
         }
@@ -108,7 +97,7 @@ namespace hal
         return true;
     }
 
-    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl, std::string output_path, const u32 layer, const std::vector<u32> sizes)
+    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl, std::string output_path, const std::vector<u32> sizes, bool draw_graph)
     {
         log("--- starting dataflow analysis ---");
 
@@ -121,34 +110,18 @@ namespace hal
         // manage output
         if (!output_path.empty())
         {
-            if (nl->get_design_name().find("vivado") != std::string::npos)
+            if (output_path.back() != '/')
             {
-                output_path += "vivado/";
-            }
-            else if (nl->get_design_name().find("yosys") != std::string::npos)
-            {
-                output_path += "yosys/";
-            }
-            else if (nl->get_design_name().find("synopsys") != std::string::npos)
-            {
-                output_path += "synopsys/";
-            }
-            else if (nl->get_design_name().find("wordrev") != std::string::npos)
-            {
-                output_path += "wordrev/";
-            }
-            else
-            {
-                output_path += "others/";
+                output_path += "/";
             }
 
             if (sizes.empty())
             {
-                output_path += nl->get_design_name() + "/layer_" + std::to_string(layer) + "/";
+                output_path += nl->get_design_name() + "/";
             }
             else
             {
-                output_path += nl->get_design_name() + "/layer_" + std::to_string(layer) + "_sizes";
+                output_path += nl->get_design_name() + "_sizes";
                 for (const auto& size : sizes)
                 {
                     output_path += "_" + std::to_string(size);
@@ -183,7 +156,7 @@ namespace hal
         auto begin_time   = std::chrono::high_resolution_clock::now();
 
         dataflow::processing::Configuration config;
-        config.pass_layers = layer;
+        config.pass_layers = 2;
         config.num_threads = std::thread::hardware_concurrency();
 
         dataflow::evaluation::Context eval_ctx;
@@ -254,10 +227,13 @@ namespace hal
 
         // dot_graph::create_graph(final_grouping, output_path + "result_", {"png", "pdf"});
         // dot_graph::create_graph(final_grouping, output_path + "result_", {"png"});
-        // dataflow::dot_graph::create_graph(final_grouping, output_path + "result_", {"pdf"});
+
+        if (draw_graph)
+        {
+            dataflow::dot_graph::create_graph(final_grouping, output_path + "result_", {"pdf"});
+        }
 
         log("dataflow processing finished in {:3.2f}s", total_time);
-
 
         return dataflow::state_to_module::create_sets(nl, final_grouping);
     }
