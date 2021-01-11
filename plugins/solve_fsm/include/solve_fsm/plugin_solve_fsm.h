@@ -30,10 +30,10 @@ namespace hal
          * @param[in] state_reg - A vector containing all the gates of the fsm representing the state register.
          * @param[in] transition_logic - A vector containing all the gates of the fsm representing the transition_logic.
          * @param[in] initial_state - A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.
-         * @param[in] timeout - Timeout value for the sat solvers. Defaults to 600 (unit unkown).
+         * @param[in] timeout - Timeout value for the sat solvers. Defaults to 600000 ms.
          * @returns The transition state graph in dot format.
          */
-        std::string solve_fsm(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::map<Gate*, bool> initial_state = {}, const u32 timeout = 600);
+        std::string solve_fsm(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::map<Gate*, bool> initial_state = {}, const u32 timeout = 600000);
 
     private:
         std::map<Net*, Net*> find_output_net_to_input_net(const std::set<Gate*> state_reg);
