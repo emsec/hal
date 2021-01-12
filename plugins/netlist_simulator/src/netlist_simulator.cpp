@@ -71,6 +71,12 @@ namespace hal
 
     void NetlistSimulator::set_input(Net* net, SignalValue value)
     {
+        if (net == nullptr)
+        {
+            log_error("netlist_simulator", "net is a nullptr.");
+            return;
+        }
+
         if (auto it = m_simulation.m_events.find(net); it != m_simulation.m_events.end())
         {
             if (value == it->second.back().new_value)
