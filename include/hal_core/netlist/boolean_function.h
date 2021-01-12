@@ -316,7 +316,7 @@ namespace hal
         /**
          * Get the z3 representation of the Boolean function.
          *
-         * @param[inout] context - The z3 context.
+         * @param[in,out] context - The z3 context.
          * @returns The z3 representation of the Boolean function.
          */
         z3::expr to_z3(z3::context& context) const;
