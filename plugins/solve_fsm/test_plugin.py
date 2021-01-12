@@ -6,8 +6,8 @@ sys.path.append("/home/simon/projects/hal/build/lib/") #this is where your hal p
 os.environ["HAL_BASE_PATH"] = "/home/simon/projects/hal/build" # hal base path
 import hal_py
 
-netlist_to_read = "/home/simon/projects/maggie/maggie.v"
-gate_library_path = "/home/simon/projects/hal/plugins/gate_libraries/definitions/ice40ultra.lib"
+netlist_to_read = "netlist.v"
+gate_library_path = "gate_library.lib"
 
 #initialize HAL
 hal_py.plugin_manager.load_all_plugins()
@@ -17,13 +17,19 @@ netlist = hal_py.NetlistFactory.load_netlist(netlist_to_read, gate_library_path)
 
 from hal_plugins import solve_fsm
 
-pl = hal_py.plugin_manager.get_plugin_instance("solve_fsm")
+pl_fsm = hal_py.plugin_manager.get_plugin_instance("solve_fsm")
 
-transition = [1869, 4061, 1868, 1875, 1872, 2178, 4420, 2177, 2967, 4065, 1963, 3968, 1867, 1882, 4457, 1871]
-state = [1578, 1686, 1539, 1538, 1552, 1543, 1533, 1541, 1540, 1532, 1657, 1579]
+# UPDATE THE MODULE IDS OR CREATE YOUR OWN LIST OF GATES
+state_mod = netlist.get_module_by_id(0)
+transition_mod = netlist.get_module_by_id(0)
 
-graph = pl.solve_fsm(netlist, state, transition, {})
-print(graph)
+transition_gates = transition_mod.gates
+state_gates = state_mod.gates
+
+initial_state = {}
+timeout = 600000
+
+g = pl_fsm.solve_fsm(netlist, state_gates, transition_gates, initial_state, timeout)
 
 #unload everything hal related
 hal_py.plugin_manager.unload_all_plugins()
