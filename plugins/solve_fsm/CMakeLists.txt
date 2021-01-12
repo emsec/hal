@@ -6,14 +6,6 @@ if(PL_SOLVE_FSM OR BUILD_ALL_PLUGINS)
 
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
-    find_package(Z3 REQUIRED)
-    if(Z3_FOUND)
-        message(STATUS "Found z3")
-    else()
-        message(STATUS "Could not find z3")
-    endif(Z3_FOUND)
-
-
     hal_add_plugin(solve_fsm
                    SHARED
                    HEADER ${SOLVE_FSM_INC}
