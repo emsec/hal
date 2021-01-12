@@ -325,11 +325,17 @@ namespace hal
                 sim_gate->next_state_func = gate->get_boolean_function("next_state");
                 for (auto pin : gate_type->get_pins_of_type(GateType::PinType::state))
                 {
-                    sim_gate->state_output_nets.push_back(gate->get_fan_out_net(pin));
+                    if (Net* net = gate->get_fan_out_net(pin); net != nullptr)
+                    {
+                        sim_gate->state_output_nets.push_back(gate->get_fan_out_net(pin));
+                    }
                 }
                 for (auto pin : gate_type->get_pins_of_type(GateType::PinType::neg_state))
                 {
-                    sim_gate->state_inverted_output_nets.push_back(gate->get_fan_out_net(pin));
+                    if (Net* net = gate->get_fan_out_net(pin); net != nullptr)
+                    {
+                        sim_gate->state_inverted_output_nets.push_back(gate->get_fan_out_net(pin));
+                    }
                 }
                 for (auto pin : gate_type->get_pins_of_type(GateType::PinType::clock))
                 {
