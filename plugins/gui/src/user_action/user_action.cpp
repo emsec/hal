@@ -9,7 +9,7 @@ namespace hal
     }
 
     UserAction::UserAction()
-        : mWaitForReady(false),
+        : mWaitForReady(false), mCompound(false),
           mUndoAction(nullptr) {;}
 
     void UserAction::exec() {
