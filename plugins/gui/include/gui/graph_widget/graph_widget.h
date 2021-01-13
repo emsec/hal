@@ -42,7 +42,7 @@ namespace hal
 
     /**
      * The content widget that wraps a graph view of a certain GraphContext.
-     * It represents one tab of the GraphTabWidgets QTabWidget.
+     * It represents one tab of the GraphTabWidgets QTabWidget. <br>
      */
     class GraphWidget : public ContentWidget, public GraphContextSubscriber
     {
@@ -64,20 +64,48 @@ namespace hal
          */
         GraphContext* getContext() const;
 
+        /**
+         * Should be called whenever the scene becomes available (after a new layout). <br>
+         * Used to enable interactions and show the loaded scene.
+         */
         void handleSceneAvailable() override;
+        /**
+         * Should be called whenever the scene becomes unavailable (at the beginning of a new layout or a scene update). <br>
+         * Used to disable interactions.
+         */
         void handleSceneUnavailable() override;
+
+        /**
+         * Notifies that the context this graph widget manages is about to be deleted.
+         */
         void handleContextAboutToBeDeleted() override;
 
+        /**
+         * Currently unused. <br>
+         * Update the loading(?) progress of the layouter that layouts the context this graph widget manages.
+         *
+         * @param percent - The progress in percent (in range 0-100(?))
+         */
         void handleStatusUpdate(const int percent) override;
+
+        /**
+         * Currently unused. <br>
+         * Update the status message of the layouters progress that layouts the context this graph widget manages.
+         *
+         * @param message - The new status message
+         */
         void handleStatusUpdate(const QString& message) override;
 
         /**
-         * Get the GraphGraphicsView this object wraps.
+         * Get the GraphGraphicsView this object manages.
          *
          * @returns the GraphGraphicsView.
          */
         GraphGraphicsView* view();
 
+        /**
+         * Used to move and scale the camera of the view so that the whole selection can be seen.
+         */
         void ensureSelectionVisible();
 
         void focusGate(u32 gateId);
@@ -85,6 +113,12 @@ namespace hal
         void focusModule(u32 moduleId);
 
     protected:
+        /**
+         * Handle key presses within the graph widget <br>
+         * Used to handle the key presses for the navigation.
+         *
+         * @param e - The key event
+         */
         void keyPressEvent(QKeyEvent* event) override;
 
     private Q_SLOTS:
