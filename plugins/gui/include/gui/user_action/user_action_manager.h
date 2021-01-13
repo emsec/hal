@@ -27,6 +27,7 @@
 #include <QHash>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
+#include <QElapsedTimer>
 #include "hal_core/defines.h"
 
 namespace hal
@@ -39,17 +40,39 @@ namespace hal
     {
         Q_OBJECT
     public:
+        /// get singleton instance
+        static UserActionManager* instance();
+
+        /// add executed action to history list
         void addExecutedAction(UserAction* act);
+
+        /// register new action factory
         void registerFactory(UserActionFactory* fac);
 
-        static UserActionManager* instance();
+        /// set start marker for macro recording
         void setStartRecording();
+
+        /// stop macro recording and write commands to xml file
         void setStopRecording(const QString& macroFilename);
+
+        /// execute macro from file
         void playMacro(const QString& macroFilename);
+
+        /// test whether actions are currently recorded
         bool isRecording() const;
+
+        /// test whether actions are currently recorded and
+        /// at least one command has been executed
         bool hasRecorded() const;
+
+        /// reset wait flag issued from action
         void clearWaitCount() { mWaitCount = 0; }
+
+        /// create UserAction instance for next command found by xml parser
         UserAction* getParsedAction(QXmlStreamReader& xmlIn) const;
+
+        /// elapsed time in milliseconds since GUI start
+        qint64 timeStamp() const { return mElapsedTime.elapsed(); }
     private:
         UserActionManager(QObject *parent = nullptr);
 
@@ -57,7 +80,7 @@ namespace hal
         QHash<QString,UserActionFactory*> mActionFactory;
         int mStartRecording;
         int mWaitCount;
-
+        QElapsedTimer mElapsedTime;
         static UserActionManager* inst;
 
     Q_SIGNALS:

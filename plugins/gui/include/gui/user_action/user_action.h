@@ -23,6 +23,7 @@
 
 #pragma once
 #include <QString>
+#include <QCryptographicHash>
 #include "user_action_manager.h"
 #include "user_action_object.h"
 
@@ -54,6 +55,9 @@ namespace hal
     class UserAction
     {
     public:
+        /// destructor
+        virtual ~UserAction();
+
         /// executes user interaction. A call to base function must be issued in order
         /// to store object in action manager history.
         virtual void exec();
@@ -79,12 +83,22 @@ namespace hal
 
         /// interaction object is part of a compound of multiple actions
         bool isCompound() const { return mCompound; }
+
+        /// return time stamp for execution time
+        qint64 timeStamp() const { return mTimeStamp; }
+
+        /// return cryptographic hash to detect manipulations in xml macro file
+        QString cryptographicHash() const;
+
+        /// hook for derived classes to add parameter to cryptographic hash
+        virtual void addToHash(QCryptographicHash& cryptoHash) const;
     protected:
         UserAction();
         UserActionObject mObject;
         bool mWaitForReady;
         bool mCompound;
         UserAction *mUndoAction;
+        qint64 mTimeStamp;
     };
 
     /**
@@ -106,7 +120,7 @@ namespace hal
         /// return the tag name of derived class
         QString tagname() const { return mTagname; }
 
-        /// call the user action constructor
+        ///  call the user action constructor
         virtual UserAction* newAction() const = 0;
     };
 }

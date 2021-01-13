@@ -10,8 +10,9 @@ namespace hal
         ActionOpenNetlistFile(const QString& filename_ = QString());
         QString tagname() const override;
         void exec() override;
-        virtual void writeToXml(QXmlStreamWriter& xmlOut) const override;
-        virtual void readFromXml(QXmlStreamReader& xmlIn) override;
+        void writeToXml(QXmlStreamWriter& xmlOut) const override;
+        void readFromXml(QXmlStreamReader& xmlIn) override;
+        void addToHash(QCryptographicHash& cryptoHash) const override;
     };
 
     class ActionOpenNetlistFileFactory : public UserActionFactory

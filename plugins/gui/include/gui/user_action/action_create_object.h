@@ -6,13 +6,13 @@ namespace hal
     class ActionCreateObject : public UserAction
     {
     public:
-        ActionCreateObject(const QString& gname = QString());
+        ActionCreateObject(const QString& objName = QString());
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void exec() override;
         QString tagname() const override;
     private:
-        QString mGroupingName;
+        QString mObjectName;
     };
 
     class ActionCreateObjectFactory : public UserActionFactory

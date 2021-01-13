@@ -17,7 +17,6 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
-#include "gui/user_action/action_add_to_selection.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -614,9 +613,7 @@ namespace hal
                 if (!gSelectionRelay->containsNet((mItem->id())))
                 {
                     gSelectionRelay->clear();
-                    ActionAddToSelection* act = new ActionAddToSelection;
-                    act->setObject(UserActionObject(mItem->id(),UserActionObjectType::Net));
-                    act->exec();
+                    gSelectionRelay->addNet(mItem->id());
                     gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,mItem->id());
                     gSelectionRelay->relaySelectionChanged(this);
                 }

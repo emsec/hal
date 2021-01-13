@@ -13,7 +13,6 @@
 #include "gui/graph_widget/items/nets/graphics_net.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
-#include "gui/user_action/action_set_selection.h"
 #include "gui/gui_globals.h"
 
 #include <QGraphicsSceneMouseEvent>
@@ -459,8 +458,10 @@ namespace hal
         //LOG MANUAL SELECTION CHANGED:
         //log_info("gui", "Selection changed through manual interaction with a view to: insert here..");
 
-        ActionSetSelection* act = new ActionSetSelection(mods,gats,nets);
-        act->exec();
+        gSelectionRelay->setSelectedModules(mods);
+        gSelectionRelay->setSelectedGates(gats);
+        gSelectionRelay->setSelectedNets(nets);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GraphicsScene::handleGroupingAssignModule(Grouping *grp, u32 id)

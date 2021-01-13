@@ -57,9 +57,6 @@ namespace hal
                     grp->assign_net(n);
                 }
             }
-            gSelectionRelay->clear();
-            gSelectionRelay->relaySelectionChanged(nullptr);
-
         }
             break;
         default:

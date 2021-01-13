@@ -1,6 +1,7 @@
 #include "gui/user_action/action_create_object.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/grouping.h"
+#include "gui/grouping/grouping_manager_widget.h"
 
 namespace hal
 {
@@ -19,13 +20,13 @@ namespace hal
         return ActionCreateObjectFactory::sFactory->tagname();
     }
 
-    ActionCreateObject::ActionCreateObject(const QString &gname)
-      : mGroupingName(gname)
+    ActionCreateObject::ActionCreateObject(const QString &objName)
+      : mObjectName(objName)
     {;}
 
     void ActionCreateObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        xmlOut.writeTextElement("groupingname", mGroupingName);
+        xmlOut.writeTextElement("groupingname", mObjectName);
     }
 
     void ActionCreateObject::readFromXml(QXmlStreamReader& xmlIn)
@@ -33,7 +34,7 @@ namespace hal
         while (xmlIn.readNextStartElement())
         {
             if (xmlIn.name() == "groupingname")
-                mGroupingName = xmlIn.readElementText();
+                mObjectName = xmlIn.readElementText();
         }
     }
 
@@ -58,13 +59,15 @@ namespace hal
             */
         case UserActionObjectType::Net:
         {
-            Net* n = gNetlist->create_net(mGroupingName.toStdString());
+            Net* n = gNetlist->create_net(mObjectName.toStdString());
             setObject(UserActionObject(n->get_id(),UserActionObjectType::Net));
         }
             break;
         case UserActionObjectType::Grouping:
         {
-            Grouping* grp = gNetlist->create_grouping(mGroupingName.toStdString());
+            Grouping* grp = mObjectName.isEmpty()
+                    ? gContentManager->getGroupingManagerWidget()->getModel()->addDefaultEntry()
+                    : gNetlist->create_grouping(mObjectName.toStdString());
             setObject(UserActionObject(grp->get_id(),UserActionObjectType::Grouping));
         }
             break;

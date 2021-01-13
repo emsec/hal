@@ -17,7 +17,6 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/overlay/widget_overlay.h"
 #include "gui/toolbar/toolbar.h"
-#include "gui/user_action/action_set_selection.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -457,9 +456,9 @@ namespace hal
             gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,mid,sfoc,sfinx);
         }
 
-        ActionSetSelection* act =
-                new ActionSetSelection(final_modules, final_gates);
-        act->exec();
+        gSelectionRelay->setSelectedModules(final_modules);
+        gSelectionRelay->setSelectedGates(final_gates);
+        gSelectionRelay->relaySelectionChanged(nullptr);
 
         // FIXME If the scene has been resized during this method, the animation triggered by
         // ensure_gates_visible is broken. Thus, if that is the case, we bail out here and not

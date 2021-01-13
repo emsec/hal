@@ -16,7 +16,9 @@ namespace hal
     UserActionManager::UserActionManager(QObject *parent)
         : QObject(parent), mStartRecording(-1),
           mWaitCount(0)
-    {;}
+    {
+        mElapsedTime.start();
+    }
 
     void UserActionManager::addExecutedAction(UserAction* act)
     {
@@ -45,6 +47,9 @@ namespace hal
                 {
                     const UserAction* act = mActionHistory.at(i);
                     xmlOut.writeStartElement(act->tagname());
+                    // TODO : enable / disable timestamp and crypto hash by user option ?
+                    xmlOut.writeAttribute("ts",QString::number(act->timeStamp()));
+                    xmlOut.writeAttribute("md5",act->cryptographicHash());
                     act->object().writeToXml(xmlOut);
                     act->writeToXml(xmlOut);
                     xmlOut.writeEndElement();

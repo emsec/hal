@@ -4,7 +4,6 @@
 #include "gui/selection_details_widget/details_section_widget.h"
 #include "gui/selection_details_widget/details_general_model.h"
 #include "gui/selection_details_widget/details_table_utilities.h"
-#include "gui/user_action/action_set_selection.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -571,9 +570,7 @@ namespace hal
 
         mNavigationTable->hide();
         gSelectionRelay->clear();
-        ActionSetSelection* act =
-                new ActionSetSelection(QSet<u32>(),to_gates);
-        act->exec();
+        gSelectionRelay->setSelectedGates(to_gates);
         if (to_gates.size() == 1)
         {
             auto g = gNetlist->get_gate_by_id(*to_gates.constBegin());
@@ -590,9 +587,8 @@ namespace hal
                 }
                 index_cnt++;
             }
-
-            gSelectionRelay->relaySelectionChanged(this);
         }
+        gSelectionRelay->relaySelectionChanged(this);
         mNavigationTable->hide();
 
         // TODO ensure gates mVisible in graph

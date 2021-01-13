@@ -30,6 +30,11 @@ namespace hal
         UserAction::exec();
     }
 
+    void ActionOpenNetlistFile::addToHash(QCryptographicHash& cryptoHash) const
+    {
+        cryptoHash.addData(mFilename.toUtf8());
+    }
+
     void ActionOpenNetlistFile::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         xmlOut.writeTextElement("filename", mFilename);

@@ -37,6 +37,16 @@ namespace hal
         return retval;
     }
 
+    void ActionSetSelection::addToHash(QCryptographicHash& cryptoHash) const
+    {
+        cryptoHash.addData("mod",3);
+        cryptoHash.addData(setToText(mModules).toUtf8());
+        cryptoHash.addData("gat",3);
+        cryptoHash.addData(setToText(mGates).toUtf8());
+        cryptoHash.addData("net",3);
+        cryptoHash.addData(setToText(mNets).toUtf8());
+    }
+
     void ActionSetSelection::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         if (!mModules.isEmpty()) xmlOut.writeTextElement("modules",setToText(mModules));
@@ -57,12 +67,17 @@ namespace hal
         }
     }
 
+    bool ActionSetSelection::hasModifications() const
+    {
+        if (gSelectionRelay->selectedModules() != mModules) return true;
+        if (gSelectionRelay->selectedGates()   != mGates)   return true;
+        if (gSelectionRelay->selectedNets()    != mNets)    return true;
+        return false;
+    }
+
     void ActionSetSelection::exec()
     {
-        gSelectionRelay->setSelectedModules(mModules);
-        gSelectionRelay->setSelectedGates(mGates);
-        gSelectionRelay->setSelectedNets(mNets);
-        gSelectionRelay->relaySelectionChanged(nullptr);
+        gSelectionRelay->actionSetSelected(mModules, mGates, mNets);
         UserAction::exec();
     }
 }

@@ -38,6 +38,8 @@ namespace hal
     class Module;
     class Net;
 
+    class ActionSetSelection;
+
     class SelectionRelay : public QObject
     {
         Q_OBJECT
@@ -120,17 +122,18 @@ namespace hal
         bool containsNet(u32 id) const    { return mSelectedNets.contains(id); }
         bool containsModule(u32 id) const { return mSelectedModules.contains(id); }
 
-        void addGate(u32 id)   { mSelectedGates.insert(id); }
-        void addNet(u32 id)    { mSelectedNets.insert(id); }
-        void addModule(u32 id) { mSelectedModules.insert(id); }
+        void addGate(u32 id);
+        void addNet(u32 id);
+        void addModule(u32 id);
 
-        void setSelectedGates(const QSet<u32>& ids)   { mSelectedGates = ids; }
-        void setSelectedNets(const QSet<u32>& ids)    { mSelectedNets = ids; }
-        void setSelectedModules(const QSet<u32>& ids) { mSelectedModules = ids; }
+        void setSelectedGates(const QSet<u32>& ids);
+        void setSelectedNets(const QSet<u32>& ids);
+        void setSelectedModules(const QSet<u32>& ids);
+        void actionSetSelected(const QSet<u32>& mods, const QSet<u32>& gats, const QSet<u32>& nets);
 
-        void removeGate(u32 id)   { mSelectedGates.remove(id); }
-        void removeNet(u32 id)    { mSelectedNets.remove(id); }
-        void removeModule(u32 id) { mSelectedModules.remove(id); }
+        void removeGate(u32 id);
+        void removeNet(u32 id);
+        void removeModule(u32 id);
     Q_SIGNALS:
         // TEST SIGNAL
         // ADD ADDITIONAL INFORMATION (LIKE PREVIOUS FOCUS) OR LEAVE THAT TO SUBSCRIBERS ???
@@ -149,6 +152,11 @@ namespace hal
         void setFocusDirect(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
 
     private:
+        void initializeAction();
+        void executeAction();
+
+        ActionSetSelection* mAction;
+        bool mDisableExecution;
 
         // USE ARRAY[0] INSTEAD OF MEMBER ???
         ItemType mFocusType;

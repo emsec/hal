@@ -6,6 +6,8 @@
 #include "gui/selection_details_widget/module_details_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/selection_history_navigator/selection_history_navigator.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_selection_to_object.h"
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
@@ -267,7 +269,10 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToNewGrouping()
     {
-        Grouping* grp = gContentManager->getGroupingManagerWidget()->getModel()->addDefaultEntry();
+        ActionCreateObject* act = new ActionCreateObject;
+        act->setObject(UserActionObject(0,UserActionObjectType::Grouping));
+        act->exec();
+        Grouping* grp = gNetlist->get_grouping_by_id(act->object().id());
         if (grp) selectionToGroupingInternal(grp);
     }
 
@@ -283,36 +288,9 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToGroupingInternal(Grouping* grp)
     {
-        for (u32 mid : gSelectionRelay->selectedModulesList())
-        {
-            Module* m = gNetlist->get_module_by_id(mid);
-            if (m)
-            {
-                Grouping* mg = m->get_grouping();
-                if (mg) mg->remove_module(m);
-                grp->assign_module(m);
-            }
-        }
-        for (u32 gid : gSelectionRelay->selectedGatesList())
-        {
-            Gate* g = gNetlist->get_gate_by_id(gid);
-            if (g)
-            {
-                Grouping* gg = g->get_grouping();
-                if (gg) gg->remove_gate(g);
-                grp->assign_gate(g);
-            }
-        }
-        for (u32 nid : gSelectionRelay->selectedNetsList())
-        {
-            Net* n = gNetlist->get_net_by_id(nid);
-            if (n)
-            {
-                Grouping* ng = n->get_grouping();
-                if (ng) ng->remove_net(n);
-                grp->assign_net(n);
-            }
-        }
+        ActionSelectionToObject* act = new ActionSelectionToObject;
+        act->setObject(UserActionObject(grp->get_id(),UserActionObjectType::Grouping));
+        act->exec();
         gSelectionRelay->clear();
         gSelectionRelay->relaySelectionChanged(nullptr);
         canRestoreSelection();

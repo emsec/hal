@@ -6,6 +6,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
+#include "gui/user_action/action_set_selection.h"
 
 namespace hal
 {
@@ -13,6 +14,7 @@ namespace hal
     bool SelectionRelay::sNavigationSkipsEnabled = false;
 
     SelectionRelay::SelectionRelay(QObject* parent) : QObject(parent),
+        mAction(nullptr), mDisableExecution(false),
         mFocusType(ItemType::None), mSubfocus(Subfocus::None)
     {
         clear();
@@ -20,15 +22,102 @@ namespace hal
 
     void SelectionRelay::clear()
     {
+        initializeAction();
         mModulesSuppressedByFilter.clear();
         mGatesSuppressedByFilter.clear();
         mNetsSuppressedByFilter.clear();
-        mSelectedGates.clear();
-        mSelectedNets.clear();
-        mSelectedModules.clear();
         mSubfocus       = Subfocus::None;
         mSubfocusIndex = 0;
         mFocusId       = 0;
+    }
+
+    void SelectionRelay::initializeAction()
+    {
+        if (!mAction)
+        {
+            mAction = new ActionSetSelection;
+            mAction->mModules = mSelectedModules;
+            mAction->mGates   = mSelectedGates;
+            mAction->mNets    = mSelectedNets;
+            mAction->mPreviousModules = mSelectedModules;
+            mAction->mPreviousGates   = mSelectedGates;
+            mAction->mPreviousNets    = mSelectedNets;
+        }
+    }
+
+    void SelectionRelay::executeAction()
+    {
+        if (!mAction || mDisableExecution) return;
+
+        mDisableExecution = true;
+        if (mAction->hasModifications())
+            mAction->exec();
+        else
+            delete mAction;
+        mAction = nullptr;
+        mDisableExecution = false;
+    }
+
+    void SelectionRelay::addGate(u32 id)
+    {
+        initializeAction();
+        mAction->mGates.insert(id);
+    }
+
+    void SelectionRelay::addNet(u32 id)
+    {
+        initializeAction();
+        mAction->mNets.insert(id);
+    }
+
+    void SelectionRelay::addModule(u32 id)
+    {
+        initializeAction();
+        mAction->mModules.insert(id);
+    }
+
+    void SelectionRelay::setSelectedGates(const QSet<u32>& ids)
+    {
+        initializeAction();
+        mAction->mGates = ids;
+    }
+
+    void SelectionRelay::setSelectedNets(const QSet<u32>& ids)
+    {
+        initializeAction();
+        mAction->mNets = ids;
+    }
+
+    void SelectionRelay::setSelectedModules(const QSet<u32>& ids)
+    {
+        initializeAction();
+        mAction->mModules = ids;
+    }
+
+    void SelectionRelay::actionSetSelected(const QSet<u32>& mods, const QSet<u32>& gats, const QSet<u32>& nets)
+    {
+        mSelectedModules = mods;
+        mSelectedGates   = gats;
+        mSelectedNets    = nets;
+        Q_EMIT selectionChanged(nullptr);
+    }
+
+    void SelectionRelay::removeGate(u32 id)
+    {
+        initializeAction();
+        mAction->mGates.remove(id);
+    }
+
+    void SelectionRelay::removeNet(u32 id)
+    {
+        initializeAction();
+        mAction->mNets.remove(id);
+    }
+
+    void SelectionRelay::removeModule(u32 id)
+    {
+        initializeAction();
+        mAction->mModules.remove(id);
     }
 
     void SelectionRelay::setFocus(ItemType ftype, u32 fid, Subfocus sfoc, u32 sfinx)
@@ -49,7 +138,7 @@ namespace hal
     void SelectionRelay::clearAndUpdate()
     {
         clear();
-        Q_EMIT selectionChanged(nullptr);
+        executeAction();
     }
 
     void SelectionRelay::registerSender(void* sender, QString name)
@@ -70,8 +159,10 @@ namespace hal
     {
 #ifdef HAL_STUDY
         evaluateSelectionChanged(sender);
+#else
+        Q_UNUSED(sender);
 #endif
-        Q_EMIT selectionChanged(sender);
+        executeAction();
     }
 
     void SelectionRelay::relaySubfocusChanged(void* sender)
@@ -405,10 +496,11 @@ namespace hal
 
     void SelectionRelay::suppressedByFilter(const QList<u32>& modIds, const QList<u32>& gatIds, const QList<u32>& netIds)
     {
+        initializeAction();
         mModulesSuppressedByFilter = modIds.toSet();
         mGatesSuppressedByFilter   = gatIds.toSet();
         mNetsSuppressedByFilter    = netIds.toSet();
-        Q_EMIT selectionChanged(nullptr);
+        executeAction();
     }
 
     bool SelectionRelay::isModuleSelected(u32 id) const
@@ -431,8 +523,9 @@ namespace hal
         auto it = mSelectedModules.find(id);
         if (it != mSelectedModules.end())
         {
-            mSelectedModules.erase(it);
-            Q_EMIT selectionChanged(nullptr);
+            initializeAction();
+            mAction->mModules.remove(id);
+            executeAction();
         }
     }
 
@@ -441,8 +534,9 @@ namespace hal
         auto it = mSelectedGates.find(id);
         if (it != mSelectedGates.end())
         {
-            mSelectedGates.erase(it);
-            Q_EMIT selectionChanged(nullptr);
+            initializeAction();
+            mAction->mGates.remove(id);
+            executeAction();
         }
     }
 
@@ -451,8 +545,9 @@ namespace hal
         auto it = mSelectedNets.find(id);
         if (it != mSelectedNets.end())
         {
-            mSelectedNets.erase(it);
-            Q_EMIT selectionChanged(nullptr);
+            initializeAction();
+            mAction->mGates.remove(id);
+            executeAction();
         }
     }
 
@@ -468,7 +563,7 @@ namespace hal
 
         clear();
 
-        mSelectedNets.insert(n->get_id());
+        mAction->mNets.insert(n->get_id());
 
         mFocusType = ItemType::Net;
         mFocusId   = n->get_id();
@@ -497,7 +592,7 @@ namespace hal
             mSubfocusIndex = i;
         }
 
-        Q_EMIT selectionChanged(nullptr);
+        executeAction();
     }
 
     void SelectionRelay::followGateOutputPin(Gate* g, u32 output_pin_index)
@@ -510,8 +605,7 @@ namespace hal
 
         clear();
 
-        mSelectedNets.insert(n->get_id());
-
+        mAction->mNets.insert(n->get_id());
         mFocusType = ItemType::Net;
         mFocusId   = n->get_id();
 
@@ -522,7 +616,7 @@ namespace hal
 
         mSubfocusIndex = 0;
 
-        Q_EMIT selectionChanged(nullptr);
+        executeAction();
     }
 
     void SelectionRelay::followModuleInputPin(Module* m, u32 input_pin_index)
@@ -552,7 +646,7 @@ namespace hal
 
         clear();
 
-        mSelectedGates.insert(g->get_id());
+        mAction->mGates.insert(g->get_id());
 
         mFocusType = ItemType::Gate;
         mFocusId   = g->get_id();
@@ -577,7 +671,7 @@ namespace hal
             mSubfocusIndex = i;
         }
 
-        Q_EMIT selectionChanged(nullptr);
+        executeAction();
     }
 
     void SelectionRelay::followNetToDestination(Net* n, u32 dst_index)
@@ -590,7 +684,7 @@ namespace hal
 
         clear();
 
-        mSelectedGates.insert(g->get_id());
+        mAction->mGates.insert(g->get_id());
 
         mFocusType = ItemType::Gate;
         mFocusId   = g->get_id();
@@ -615,7 +709,7 @@ namespace hal
             mSubfocusIndex = i;
         }
 
-        Q_EMIT selectionChanged(nullptr);
+        executeAction();
     }
 
     void SelectionRelay::subfocusNone()
