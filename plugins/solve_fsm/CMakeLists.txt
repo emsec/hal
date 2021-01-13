@@ -10,6 +10,6 @@ if(PL_SOLVE_FSM OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${SOLVE_FSM_INC}
                    SOURCES ${SOLVE_FSM_SRC} ${SOLVE_FSM_PYTHON_SRC}
-                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES}
+                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} z3_utils
                    )
 endif()
