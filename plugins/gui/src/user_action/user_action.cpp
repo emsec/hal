@@ -25,9 +25,10 @@ namespace hal
         uam->addExecutedAction(this);
     }
 
-    QString UserAction::cryptographicHash() const
+    QString UserAction::cryptographicHash(int recordNo) const
     {
         QCryptographicHash cryptoHash(QCryptographicHash::Md5);
+        cryptoHash.addData((char*) (&recordNo), sizeof(int));
         cryptoHash.addData(tagname().toUtf8());
         cryptoHash.addData((char*) (&mObject), sizeof(mObject));
         cryptoHash.addData((char*) (&mTimeStamp), sizeof(mTimeStamp));

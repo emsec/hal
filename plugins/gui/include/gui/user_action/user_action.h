@@ -88,7 +88,7 @@ namespace hal
         qint64 timeStamp() const { return mTimeStamp; }
 
         /// return cryptographic hash to detect manipulations in xml macro file
-        QString cryptographicHash() const;
+        QString cryptographicHash(int recordNo) const;
 
         /// hook for derived classes to add parameter to cryptographic hash
         virtual void addToHash(QCryptographicHash& cryptoHash) const;

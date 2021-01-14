@@ -49,7 +49,7 @@ namespace hal
                     xmlOut.writeStartElement(act->tagname());
                     // TODO : enable / disable timestamp and crypto hash by user option ?
                     xmlOut.writeAttribute("ts",QString::number(act->timeStamp()));
-                    xmlOut.writeAttribute("md5",act->cryptographicHash());
+                    xmlOut.writeAttribute("md5",act->cryptographicHash(i-mStartRecording));
                     act->object().writeToXml(xmlOut);
                     act->writeToXml(xmlOut);
                     xmlOut.writeEndElement();
