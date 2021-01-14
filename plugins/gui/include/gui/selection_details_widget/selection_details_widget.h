@@ -61,7 +61,7 @@ namespace hal
         SelectionDetailsWidget(QWidget* parent = 0);
         void clear();
 
-        virtual void setupToolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual void setupToolbar(Toolbar* toolbar) override;
 
         QString disabledIconStyle() const;
 
@@ -104,7 +104,7 @@ namespace hal
     public Q_SLOTS:
         void handleSelectionUpdate(void* sender);
         void handleTreeSelection(const SelectionTreeItem* sti);
-        QList<QShortcut*> createShortcuts() Q_DECL_OVERRIDE;
+        QList<QShortcut*> createShortcuts() override;
 
 
     private Q_SLOTS:

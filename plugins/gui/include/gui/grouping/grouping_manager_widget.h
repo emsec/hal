@@ -64,7 +64,7 @@ namespace hal
     public:
         GroupingManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
-        virtual void setupToolbar(Toolbar* toolbar) Q_DECL_OVERRIDE;
+        virtual void setupToolbar(Toolbar* toolbar) override;
         virtual QList<QShortcut*> createShortcuts() override;
 
         QString newGroupingIconPath() const;

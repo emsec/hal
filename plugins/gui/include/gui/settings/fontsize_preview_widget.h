@@ -36,7 +36,7 @@ namespace hal
 
     public:
         explicit FontsizePreviewWidget(const QString& text, const QFont& font, QWidget* parent = 0);
-        void update(const QVariant& value) Q_DECL_OVERRIDE;
+        void update(const QVariant& value) override;
 
     private:
         QLabel* mLabel;

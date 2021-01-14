@@ -35,13 +35,15 @@ namespace hal
 {
     class MainWindow;
     class ContentWidget;
+    class PythonConsoleWidget;
     class PythonEditor;
     class GraphTabWidget;
-    class vigation_widget;
     class GroupingManagerWidget;
     class ContextManagerWidget;
     class NetlistWatcher;
     class SelectionDetailsWidget;
+    class ModuleWidget;
+    class LoggerWidget;
 
     class ContentManager : public QObject
     {
@@ -49,52 +51,38 @@ namespace hal
 
     public:
         explicit ContentManager(MainWindow* parent);
-
         ~ContentManager();
 
+        void deleteContent();
+
         PythonEditor* getPythonEditorWidget();
-
         GraphTabWidget* getGraphTabWidget();
-
         ContextManagerWidget* getContextManagerWidget();
-
         SelectionDetailsWidget* getSelectionDetailsWidget();
-
         GroupingManagerWidget* getGroupingManagerWidget();
 
-        void hackDeleteContent();
-
-    Q_SIGNALS:
-        void saveTriggered();
-
     public Q_SLOTS:
-
         void handleOpenDocument(const QString& fileName);
-
-        void handleCloseDocument();
-
         void handleFilsystemDocChanged(const QString& fileName);
-
         void handleSaveTriggered();
 
     private:
         MainWindow* mMainWindow;
-
         QString mWindowTitle;
 
         QList<ContentWidget*> mContent;
 
         NetlistWatcher* mNetlistWatcher;
 
+        PythonConsoleWidget* mPythonConsoleWidget;
         PythonEditor* mPythonWidget;
-
-        GraphTabWidget* mGraphTabWid;
-
-        ContextManagerWidget* mContextManagerWid;
-
+        GraphTabWidget* mGraphTabWidget;
+        ModuleWidget* mModuleWidget;
+        ContextManagerWidget* mContextManagerWidget;
         GroupingManagerWidget* mGroupingManagerWidget;
-
         SelectionDetailsWidget* mSelectionDetailsWidget;
+        LoggerWidget* mLoggerWidget;
+
 #ifdef HAL_STUDY
         SpecialLogContentManager* mSpecialLogContentManager;
 #endif

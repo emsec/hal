@@ -39,7 +39,7 @@ namespace hal
         void setWidget(QWidget* widget);
 
     //protected:
-    //    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+    //    void resizeEvent(QResizeEvent* event) override;
 
     private:
         QVBoxLayout* mLayout;

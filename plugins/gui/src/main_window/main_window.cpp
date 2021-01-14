@@ -179,7 +179,7 @@ namespace hal
         mMenuBar->addAction(mMenuHelp->menuAction());
         mMenuFile->addAction(mActionNew);
         mMenuFile->addAction(mActionOpen);
-        //mMenuFile->addAction(mActionClose);
+        mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuEdit->addAction(mActionSettings);
         mMenuMacro->addAction(mActionStartRecording);
@@ -241,7 +241,7 @@ namespace hal
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         //debug
-        connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionClosed);
+        connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
 
         connect(mActionStartRecording, &Action::triggered, this, &MainWindow::handleActionStartRecording);
         connect(mActionStopRecording, &Action::triggered, this, &MainWindow::handleActionStopRecording);
@@ -422,6 +422,22 @@ namespace hal
         mSettingsIconStyle = style;
     }
 
+    void MainWindow::addContent(ContentWidget* widget, int index, content_anchor anchor)
+    {
+        mLayoutArea->addContent(widget, index, anchor);
+    }
+
+    void MainWindow::removeContent(ContentWidget* widget)
+    {
+        Q_UNUSED(widget)
+        // IMPLEMENT
+    }
+
+    void MainWindow::clear()
+    {
+        mLayoutArea->clear();
+    }
+
     extern void runMain(const QString fileName, const QList<QString> plugins);
 
     void MainWindow::runPluginTriggered(const QString& name)
@@ -593,7 +609,7 @@ namespace hal
             path.replace_extension(".hal");
             netlist_serializer::serialize_to_file(gNetlist, path);
 
-            gFileStatusManager->flushUnsavedChanges();
+            gFileStatusManager->netlistSaved();
             FileManager::get_instance()->watchFile(QString::fromStdString(path.string()));
 
             Q_EMIT saveTriggered();
@@ -632,8 +648,10 @@ namespace hal
             UserActionManager::instance()->playMacro(macroFile);
     }
 
-    void MainWindow::handleActionClosed()
+    void MainWindow::handleActionCloseFile()
     {
+        if (FileManager::get_instance()->fileOpen())
+            tryToCloseFile();
     }
 
     void MainWindow::onActionQuitTriggered()
@@ -643,10 +661,26 @@ namespace hal
 
     void MainWindow::closeEvent(QCloseEvent* event)
     {
-        //check for unsaved changes and show confirmation dialog
+        if (FileManager::get_instance()->fileOpen())
+        {
+            if (tryToCloseFile())
+                event->accept();
+            else
+            {
+                event->ignore();
+                return;
+            }
+        }
+
+        saveState();
+        qApp->quit();
+    }
+
+    bool MainWindow::tryToCloseFile()
+    {
         if (gFileStatusManager->modifiedFilesExisting())
         {
-            QMessageBox msgBox;
+            QMessageBox msgBox(this);
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");
             auto cancelButton = msgBox.addButton("Cancel", QMessageBox::RejectRole);
             msgBox.addButton("Close Anyway", QMessageBox::ApplyRole);
@@ -672,19 +706,22 @@ namespace hal
             msgBox.exec();
 
             if (msgBox.clickedButton() == cancelButton)
-            {
-                event->ignore();
-                return;
-            }
+                return false;
         }
 
-        FileManager::get_instance()->closeFile();
+        gGraphContextManager->clear();
 
-        saveState();
-        event->accept();
-        // hack, remove later
-        gContentManager->hackDeleteContent();
-        qApp->quit();
+        clear();
+
+        gContentManager->deleteContent();
+        // PYTHON ???
+        gSelectionRelay->clear();
+        FileManager::get_instance()->closeFile();
+        setWindowTitle("HAL");
+
+        mStackedWidget->setCurrentWidget(mWelcomeScreen);
+
+        return true;
     }
 
     void MainWindow::restoreState()
@@ -704,10 +741,5 @@ namespace hal
         gSettingsManager->update("MainWindow/size", size());
         //save state of all subwindows and everything else that might need to be restored on the next program start
         gSettingsManager->sync();
-    }
-
-    void MainWindow::addContent(ContentWidget* widget, int index, content_anchor anchor)
-    {
-        mLayoutArea->addContent(widget, index, anchor);
     }
 }    // namespace hal

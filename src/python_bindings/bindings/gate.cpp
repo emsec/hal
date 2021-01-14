@@ -76,7 +76,7 @@ namespace hal
         py_gate.def_property("location_x", &Gate::get_location_x, &Gate::set_location_x, R"(
         The x-coordinate of the physical location of the gate in the layout. Only positive values are valid, negative values will be regarded as no location assigned.
 
-        :type: float
+        :type: int
 )");
 
         py_gate.def("get_location_x", &Gate::get_location_x, R"(
@@ -84,21 +84,21 @@ namespace hal
         If no valid physical location x-coordinate is assigned, a negative value is returned.
 
         :returns: The gate's x-coordinate.
-        :rtype: float
+        :rtype: int
 )");
 
         py_gate.def("set_location_x", &Gate::set_location_x, py::arg("x"), R"(
         Set the physical location x-coordinate of the gate in the layout.
         Only positive values are valid, negative values will be regarded as no location assigned.
 
-        :param float x: The gate's x-coordinate.
+        :param int x: The gate's x-coordinate.
 )");
 
         py_gate.def_property("location_y", &Gate::get_location_y, &Gate::set_location_y, R"(
         The y-coordinate of the physical location of the gate in the layout.
         Only positive values are valid, negative values will be regarded as no location assigned.
 
-        :type: float
+        :type: int
 )");
 
         py_gate.def("get_location_y", &Gate::get_location_y, R"(
@@ -106,21 +106,21 @@ namespace hal
         If no valid physical location y-coordinate is assigned, a negative value is returned.
 
         :returns: The gate's y-coordinate.
-        :rtype: float
+        :rtype: int
 )");
 
         py_gate.def("set_location_y", &Gate::set_location_y, py::arg("y"), R"(
         Set the physical location y-coordinate of the gate in the layout.
         Only positive values are valid, negative values will be regarded as no location assigned.
 
-        :param float y: The gate's y-coordinate.
+        :param int y: The gate's y-coordinate.
 )");
 
         py_gate.def_property("location", &Gate::get_location, &Gate::set_location, R"(
         The physical location of the gate in the layout.
         Only positive values are valid, negative values will be regarded as no location assigned.
 
-        :type: tuple(float,float)
+        :type: tuple(int,int)
 )");
 
         py_gate.def("get_location", &Gate::get_location, R"(
@@ -128,14 +128,14 @@ namespace hal
         If no valid physical location coordinate is assigned, a negative value is returned for the respective coordinate.
 
         :returns: A tuple <x-coordinate, y-coordinate>.
-        :rtype: tuple(float,float)
+        :rtype: tuple(int,int)
 )");
 
         py_gate.def("set_location", &Gate::set_location, py::arg("location"), R"(
         Set the physical location of the gate in the layout.
         Only positive coordinates are valid, negative values will be regarded as no location assigned.
 
-        :param tuple(float,float) location: A tuple <x-coordinate, y-coordinate>.
+        :param tuple(int,int) location: A tuple <x-coordinate, y-coordinate>.
 )");
 
         py_gate.def_property_readonly("module", &Gate::get_module, R"(

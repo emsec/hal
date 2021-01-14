@@ -5,7 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* improved layouter uses location information from gate API
+* switched from float gate coordinates to integer ones
+* fixed wrong Python binding for property `gate_library` of class `Netlist
+
+## [3.1.11] - 2021-01-03 11:35:00+02:00 (urgency: medium)
+* added **highly experimental** way to close and reopen netlists at runtime
+  * known issue: the Python context does not change properly between netlists
+* added creation of backups for Python files created within the editor outside of the `.hal` file
+* added user prompt when detecting Python file backups after a crash
 * fixed crash when moving top module upward
+* fixed module cache inconsistencies causing bad memory allocs in the GUI when deleting nets or endpoints
 
 ## [3.1.10] - 2020-12-18 14:00:00+02:00 (urgency: medium)
 * added `SB_GB_IO`, `SB_GB`, `SB_I2C`, `SB_SPI`, `SB_HFOSC`, and `SB_LFOSC` gate types to `ICE40ULTRA` gate library
@@ -448,7 +458,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.10...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.1.11...HEAD
+[3.1.11]: https://github.com/emsec/hal/compare/v3.1.10...v3.1.11
 [3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10
 [3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9
 [3.1.8]: https://github.com/emsec/hal/compare/v3.1.7...v3.1.8

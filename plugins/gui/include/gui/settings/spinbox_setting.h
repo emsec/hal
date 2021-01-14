@@ -35,8 +35,8 @@ namespace hal
     public:
         SpinboxSetting(const QString& key, const QString& title, const int min, const int max, const QString& mDescription, QWidget* parent = 0);
 
-        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
-        virtual QVariant value() Q_DECL_OVERRIDE;
+        virtual void load(const QVariant& value) override;
+        virtual QVariant value() override;
 
     private:
         QSpinBox* mSpinbox;

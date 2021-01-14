@@ -58,7 +58,7 @@ namespace hal
         /** destructor */
         ~GateDetailsWidget();
 
-        virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        virtual void resizeEvent(QResizeEvent* event) override;
 
         /**
          * Handles update of gate details widget to display information of selected gate.
