@@ -49,44 +49,192 @@ namespace hal
     enum class grid_type;
     }
 
+    /**
+     * The GraphicsScene is the scene where the GraphicsItems of the gates, nets and modules are placed in by the layouter.
+     * Besides the functions that are provided by its parent class QGraphicScene, it offers functions to work on a grid,
+     * to support drag-and-drop on the grid, to access the contained GraphicItems and to handle certain events like
+     * changed selections and groupings.
+     *
+     */
     class GraphicsScene : public QGraphicsScene
     {
         Q_OBJECT
 
     public:
+        /**
+         * Sets the Level of Detail (LOD) of the scene. If the LOD falls below a certain threshold, the grid in the
+         * background won't be drawn anymore.
+         *
+         * @param lod - The Level of Detail to draw
+         */
         static void setLod(const qreal& lod);
+
+        /**
+         * Enables/Disables the grid in the background.
+         *
+         * @param value - <b>true</b> to enable the grid. <b>false</b> to disable the grid.
+         */
         static void setGridEnabled(const bool& value);
+
+        /**
+         * Enables/Disables the grid clusters. The grid clusters are the darker lines in the grid that
+         * indicate 8 steps in the main grid.
+         *
+         * @param value - <b>true</b> to enable the grid clusters. <b>false</b> to disable the grid clusters.
+         */
         static void setGridClustersEnabled(const bool& value);
+
+        /**
+         * Sets the type of the grid. The following grid types are supported: None, Lines, Dots
+         *
+         * @param grid_type
+         */
         static void setGridType(const graph_widget_constants::grid_type& grid_type);
 
+        /**
+         * Sets the color of the grid base lines (not the clusters). <br>
+         * It does not affect the dot grid color.
+         *
+         * @param color - The color of the grid base lines
+         */
         static void setGridBaseLineColor(const QColor& color);
+
+        /**
+         * Sets the color of the grid cluster lines. The grid cluster lines are the darker lines in the grid that
+         * indicate 8 steps in the main grid. <br>
+         * It does not affect the dot cluster grid color.
+         *
+         * @param color - The color of the grid cluster lines
+         */
         static void setGridClusterLineColor(const QColor& color);
+
+        /**
+         * Sets the color of the grid base dotted lines (only shown if grid_type::Dots are activated). <br>
+         *
+         * @param color - The color of the grid base dotted lines
+         */
         static void setGridBaseDotColor(const QColor& color);
+
+        /**
+         * Sets the color of the grid dotted cluster lines (only shown if grid_type::Dots are activated).
+         * The grid cluster lines are the darker dots in the grid that indicate 8 steps in the main grid.
+         *
+         * @param color - The color of the grid dotted cluster lines
+         */
         static void setGridClusterDotColor(const QColor& color);
 
+        /**
+         * Given any position, this function returns a position on the grid that is next to it.
+         * \deprecated Please use GraphGraphicsView::closestLayouterPos instead.
+         *
+         * @param pos - The position to snap to the grid
+         * @returns the closest position on the grid
+         */
         static QPointF snapToGrid(const QPointF& pos) Q_DECL_DEPRECATED;
 
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent QObject
+         */
         GraphicsScene(QObject* parent = nullptr);
 
+        /**
+         * Starts the dragging of a gate or module to show its shadow meanwhile.
+         *
+         * @param posF - The position of the shadow
+         * @param sizeF - The size of the shadow (i.e. the size of the dragged gate)
+         * @param cue - The cue of the current position
+         */
         void startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue);
+
+        /**
+         * Moves the shadow that appears while dragging a gate or module.
+         *
+         * @param posF - The new position of the shadow
+         * @param cue - The cue of the current position
+         */
         void moveDragShadow(const QPointF& posF, const NodeDragShadow::DragCue cue);
+
+        /**
+         * Removes the shadow that appears while dragging a gate or module (at the end of the drag action).
+         */
         void stopDragShadow();
+
+        /**
+         * Gets the position of the drag shadow.
+         *
+         * @returns the position of the drag shadow.
+         */
         QPointF dropTarget();
 
+        /**
+         * Adds a GraphicsItem to the scene.
+         *
+         * @param item - The GraphicsItem to add
+         */
         void addGraphItem(GraphicsItem* item);
+
+        /**
+         * Removes a GraphicsItem from the scene.
+         *
+         * @param item - The GraphicsItem to remove
+         */
         void removeGraphItem(GraphicsItem* item);
 
+        /**
+         * Removes all GraphicsItems from the scene.
+         */
         void deleteAllItems();
 
+        /**
+         * Connects all necessary signals and slots.
+         */
         void connectAll();
+
+        /**
+         * Disconnects all connected signals and slots.
+         */
         void disconnectAll();
 
+        /**
+         * Updates all visuals using a certain GraphShader.
+         *
+         * @param s - The used GraphShader
+         */
         void updateVisuals(const GraphShader::Shading& s);
 
+        /**
+         * Moves all GraphicsNets to the background so that they do not overlap GraphicsGates.
+         * Helper function that can be used by the layouters.
+         */
         void moveNetsToBackground();
 
+        /**
+         * Gets the GraphicsGate for the corresponding gate. If there is no GraphicsGate for the given id,
+         * a <i>nullptr</i> is returned.
+         *
+         * @param id - The id of the gate in the netlist
+         * @returns the GraphicsGate.
+         */
         const GraphicsGate* getGateItem(const u32 id) const;
+
+        /**
+         * Gets the GraphicsNet for the corresponding net. If there is no GraphicsNet for the given id,
+         * a <i>nullptr</i> is returned.
+         *
+         * @param id - The id of the net in the netlist
+         * @returns the GraphicsNet.
+         */
         const GraphicsNet* getNetItem(const u32 id) const;
+
+        /**
+         * Gets the GraphicsModule for the corresponding module. If there is no GraphicsModule for the given id,
+         * a <i>nullptr</i> is returned.
+         *
+         * @param id - The id of the module in the netlist
+         * @returns the GraphicsModule.
+         */
         const GraphicsModule* getModuleItem(const u32 id) const;
 
         #ifdef GUI_DEBUG_GRID
@@ -94,6 +242,9 @@ namespace hal
         #endif
 
     public Q_SLOTS:
+        /**
+         * TODO...
+         */
         void handleInternSelectionChanged();
         void handleExternSelectionChanged(void* sender);
         void handleExternSubfocusChanged(void* sender);
