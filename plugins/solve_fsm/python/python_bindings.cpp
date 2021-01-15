@@ -1,12 +1,12 @@
-#include "hal_core/netlist/netlist.h"
+#include "hal_core/python_bindings/python_bindings.h"
+
 #include "hal_core/netlist/gate.h"
-#include "solve_fsm/plugin_solve_fsm.h"
+#include "hal_core/netlist/netlist.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
-
-#include "hal_core/python_bindings/python_bindings.h"
+#include "solve_fsm/plugin_solve_fsm.h"
 
 #include <map>
 namespace py = pybind11;
@@ -31,7 +31,7 @@ namespace hal
             .def("get_name", &SolveFsmPlugin::get_name)
             .def_property_readonly("version", &SolveFsmPlugin::get_version)
             .def("get_version", &SolveFsmPlugin::get_version)
-            .def("solve_fsm_brute_force", &SolveFsmPlugin::solve_fsm_brute_force, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), , R"(
+            .def("solve_fsm_brute_force", &SolveFsmPlugin::solve_fsm_brute_force, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), R"(
             Generates the state graph of a finite state machine in dot format of a given fsm using a simple brute force approach.
 
             :param halPy.Netlist nl: The netlist.
