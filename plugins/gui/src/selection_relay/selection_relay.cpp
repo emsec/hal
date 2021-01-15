@@ -23,6 +23,9 @@ namespace hal
     void SelectionRelay::clear()
     {
         initializeAction();
+        mAction->mModules.clear();
+        mAction->mGates.clear();
+        mAction->mNets.clear();
         mModulesSuppressedByFilter.clear();
         mGatesSuppressedByFilter.clear();
         mNetsSuppressedByFilter.clear();
