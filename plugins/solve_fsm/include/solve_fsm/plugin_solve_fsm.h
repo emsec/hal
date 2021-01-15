@@ -34,6 +34,7 @@ namespace hal
          * @returns The transition state graph in dot format.
          */
         std::string solve_fsm(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::map<Gate*, bool> initial_state = {}, const u32 timeout = 600000);
+        std::string solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic);
 
     private:
         std::map<Net*, Net*> find_output_net_to_input_net(const std::set<Gate*> state_reg);

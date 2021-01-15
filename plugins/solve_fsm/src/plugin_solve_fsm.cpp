@@ -7,6 +7,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 
@@ -37,6 +38,152 @@ namespace hal
 
     void SolveFsmPlugin::initialize()
     {
+    }
+
+    std::string SolveFsmPlugin::solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic) {
+        // create mapping between (negated) output nets and data input nets of state flip-flops in in order to later replace them.
+        const std::map<hal::Net*, hal::Net*> output_net_to_input_net = find_output_net_to_input_net({state_reg.begin(), state_reg.end()});
+        
+        std::map<u32, BooleanFunction> state_net_to_func;
+        std::map<u32, BooleanFunction> external_ids_to_func;
+        std::vector<u32> external_ids;
+        std::vector<u32> state_input_net_ids;
+
+        std::vector<const Gate*> subgraph_gates = {transition_logic.begin(), transition_logic.end()};
+
+        for (const auto& ff : state_reg) {
+            const std::unordered_set<std::string> d_ports = ff->get_type()->get_pins_of_type(GateType::PinType::data);
+            if (d_ports.size() != 1) {
+                log_error("Fsm solver", "currently not supporting flip-flops with multiple or no data inputs. ({})", d_ports.size());
+            }
+            const hal::Net* input_net = ff->get_fan_in_net(*d_ports.begin());
+            state_input_net_ids.push_back(input_net->get_id());
+
+            BooleanFunction bf = netlist_utils::get_subgraph_function(input_net, subgraph_gates);
+
+            // Special case if a flip-flop has another flip-flop as a direct predecessor
+            if (bf.is_empty()) {
+                bf =  BooleanFunction::from_string(std::to_string(input_net->get_id()));
+            }
+
+            // find all external inputs. We define external inputs as nets that are inputs to the transition logic but are not bits from the previous state.
+            for (const auto& id_str : bf.get_variables()) {
+                std::cout << id_str << std::endl;
+                u32 id = std::stoi(id_str);
+                hal::Net* net = nl->get_net_by_id(id);
+                if (output_net_to_input_net.find(net) == output_net_to_input_net.end()) {
+                    external_ids_to_func.insert({id, BooleanFunction::from_string(id_str)});
+                    if (std::find(external_ids.begin(), external_ids.end(), id) == external_ids.end()) {
+                        external_ids.push_back(id);
+                    }
+                }
+            }
+
+            // in the transition logic expressions of the next state bits we substitue the output nets of the state flip-flops with their (negated) input net.
+            for (const auto& [out, in] : output_net_to_input_net) {
+                // check wether output net is part of the expression
+                std::vector<std::string> vars = bf.get_variables();
+                if (std::find(vars.begin(), vars.end(), std::to_string(out->get_id())) == vars.end()) {
+                    continue;
+                }
+
+                BooleanFunction from = BooleanFunction::from_string(std::to_string(out->get_id()));
+                BooleanFunction to   = BooleanFunction::from_string(std::to_string(in->get_id()));
+
+                // check for multidriven nets
+                if (out->get_sources().size() != 1) {
+                    log_error("Fsm solver", "Multidriven nets are not supported! Aborting at Net {}.", out->get_id());
+                    return {};
+                }
+
+                // negate if the output stems from the negated state output
+                const std::string src_pin = out->get_sources().front()->get_pin();
+                const std::unordered_set<std::string> neg_state_pins = out->get_sources().front()->get_gate()->get_type()->get_pins_of_type(GateType::PinType::neg_state);
+                if (neg_state_pins.find(src_pin) != neg_state_pins.end()) {
+                    to = ~to;
+                } 
+
+                std::cout << "Before: " << bf.to_string() << std::endl;
+                bf = bf.substitute(from.to_string(), to);
+                std::cout << "After: " << bf.to_string() << std::endl;
+            }
+
+            state_net_to_func.insert({input_net->get_id(), bf});
+
+            std::cout << input_net->get_id() << ": " << bf.to_string() << std::endl;
+        }
+
+        const u32 state_size = state_net_to_func.size();
+        if (state_size > 64) {
+            log_error("Fsm solver", "Current maximum for state size is 64 bit.");
+            return("ERROR");
+        }
+
+        if (external_ids.size() > 64) {
+            log_error("Fsm solver", "Current maximum for input size is 64 bit.");
+            return("ERROR");
+        }
+
+        log_info("Fsm solver", "Starting brute force on state with {} bits and {} external inputs.", state_size, external_ids.size());
+
+        // generate all transitions that are reachable from the inital state.
+        std::vector<FsmTransition> all_transitions;
+        // TODO this conversion is only necessary because there is no default constructor for z3::expr. Will need to modify the fsm transition type.
+        z3::context ctx;
+
+        for (u64 state = 0; state < (u64(1) << state_size); state++) {
+
+            std::cout << "Checking State " << state << " from " << (u64(1) << state_size) << std::endl;
+
+            // generate state map
+            std::unordered_map<std::string, BooleanFunction::Value> state_id_str_to_val;
+            for (u32 state_index =  0; state_index < state_reg.size(); state_index++) {
+                std::string id_str = std::to_string(state_input_net_ids.at(state_index));
+                BooleanFunction::Value val = ((state >> state_index) & 0x1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO;
+                state_id_str_to_val.insert({id_str, val});
+            }
+
+            // brute force over all external inputs
+            for (u64 input = 0; input < (u64(1) << external_ids.size()); input++) {
+                // generate input map
+                std::unordered_map<std::string, BooleanFunction::Value> input_id_str_to_val;
+                std::map<u32, u8> input_id_to_val;
+                for (u32 input_index =  0; input_index < external_ids.size(); input_index++) {
+                    std::string id_str = std::to_string(external_ids.at(input_index));
+                    BooleanFunction::Value val = ((input >> input_index) & 0x1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO;
+                    input_id_str_to_val.insert({id_str, val});
+                    input_id_to_val.insert({external_ids.at(input_index), ((input >> input_index) & 0x1)});
+                }
+
+                // combine state and input mapping
+                std::unordered_map<std::string, BooleanFunction::Value> id_str_to_val;
+                id_str_to_val.insert(state_id_str_to_val.begin(), state_id_str_to_val.end());
+                id_str_to_val.insert(input_id_str_to_val.begin(), input_id_str_to_val.end());
+
+                // evaluate next state and create transition
+                u64 next_state = 0;
+                for (u32 next_state_index = 0; next_state_index < state_size; next_state_index++) {
+                    BooleanFunction::Value new_val = state_net_to_func.at(state_input_net_ids.at(next_state_index)).evaluate(id_str_to_val);
+                    if (new_val == BooleanFunction::Value::ONE) {
+                        next_state += (1 << next_state_index);
+                    }
+                }
+                
+                // TODO this conversion is only necessary because there is no default constructor for z3::expr. Will need to modify the fsm transition type.
+                z3::expr state_expr = ctx.bv_val(state, state_size); 
+                z3::expr next_state_expr = ctx.bv_val(next_state, state_size); 
+                all_transitions.push_back(FsmTransition(state_expr, next_state_expr, input_id_to_val));
+            }
+        }
+
+        std::cout << "Found " << all_transitions.size() << " transitions." << std::endl;
+
+        // in order to safe space when printing the new state transitions we merge transitions with the same start and end state and just update the conditions.
+        all_transitions = merge_transitions(all_transitions);
+
+        const std::string graph = generate_dot_graph(nl, all_transitions);
+
+        return graph;
     }
 
     std::string SolveFsmPlugin::solve_fsm(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::map<Gate*, bool> initial_state, const u32 timeout) {
@@ -244,7 +391,7 @@ namespace hal
                     // this could be ommitted if we just want to know the transitions without the conditions attached to them.
                     std::vector<u32> relevant_inputs = get_relevant_external_inputs(n, external_ids_to_expr);
                     for (u64 i = 0; i < pow(2, relevant_inputs.size()); i++) {
-                        hal::FsmTransition transition = generate_transition_with_inputs(start_state,n, relevant_inputs, i);
+                        hal::FsmTransition transition = generate_transition_with_inputs(start_state, n, relevant_inputs, i);
                         successor_transitions.push_back(transition);
                     }
                 }

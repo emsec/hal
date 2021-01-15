@@ -17,6 +17,12 @@ namespace hal {
         }
     }
 
+    // FsmTransition::FsmTransition(const u64& start, const u64& end, const std::map<u32, u8>& inputs) : starting_state(start), end_state(end) {
+    //     if (!inputs.empty()) {
+    //         input_ids_to_values = {inputs};
+    //     }
+    // }
+
     FsmTransition FsmTransition::merge(const FsmTransition& other) const {
         if (starting_state != other.starting_state) {
             log_error("FSM Solver", "cant merge tansitions that do not start in the same state. ({} vs. {})", starting_state, other.starting_state);
@@ -29,6 +35,25 @@ namespace hal {
         for (const auto& m : input_ids_to_values) {
             n.input_ids_to_values.push_back(m);
         }
+
+        // Check wether all possible conditions are covered and therefore the transition is always taken -> this is not exhaustive
+        u32 max_inputs = 0;
+        for (const auto& mapping : n.input_ids_to_values) {
+            if (mapping.size() > max_inputs) {
+                max_inputs = mapping.size();
+            }
+        }
+
+        // all possible conditions are covered -> we can omit them.
+        if (n.input_ids_to_values.size() == (u64(1) << max_inputs)) {
+            n.input_ids_to_values = {};
+        }
+
+        
+        std::cout << "MERGE: " << std::endl;
+        std::cout << other.to_string() << std::endl;
+        std::cout << this->to_string() << std::endl;
+        std::cout << n.to_string() << std::endl;
 
         return n;
     }

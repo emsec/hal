@@ -14,6 +14,7 @@ namespace hal {
     struct FsmTransition
     {
         FsmTransition(const z3::expr& start, const z3::expr& end, const std::map<u32, u8>& inputs);
+        // FsmTransition(const u64& start, const u64& end, const std::map<u32, u8>& inputs);
 
         FsmTransition merge(const FsmTransition& other) const;
         std::string to_string() const;
