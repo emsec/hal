@@ -94,6 +94,12 @@ namespace hal
             {
                 auto source     = output_net->get_sources()[0];
                 auto start_gate = source->get_gate();
+
+                // Check wether start gate is in the subgraph gates
+                if (std::find(subgraph_gates.begin(), subgraph_gates.end(), start_gate) == subgraph_gates.end()) {
+                    result = ctx.bv_const(std::to_string(output_net->get_id()).c_str(), 1);
+                    return;
+                }
                 
                 auto f = get_function_of_gate(start_gate, source->get_pin());
 
