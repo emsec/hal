@@ -110,6 +110,7 @@ namespace hal
         for (GraphContext* context : mGraphContexts)
             if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}))
                 context->add({added_module}, {});
+            else context->testIfAffected(m->get_id(), &added_module, nullptr);
     }
 
     void GraphContextManager::handleModuleSubmoduleRemoved(Module* m, const u32 removed_module)
@@ -125,6 +126,7 @@ namespace hal
                     deleteGraphContext(context);
                 }
             }
+            else context->testIfAffected(m->get_id(), &removed_module, nullptr);
     }
 
     void GraphContextManager::handleModuleGateAssigned(Module* m, const u32 inserted_gate) const
@@ -132,6 +134,7 @@ namespace hal
         for (GraphContext* context : mGraphContexts)
             if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
+            else context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
     }
 
     void GraphContextManager::handleModuleGateRemoved(Module* m, const u32 removed_gate)
@@ -148,8 +151,13 @@ namespace hal
             }
             // if a module is unfolded, then the gate is not deleted from the view
             // but the color of the gate changes to its new parent's color
-            else if (context->gates().contains(removed_gate))
-                context->scheduleSceneUpdate();
+
+
+            else context->testIfAffected(m->get_id(), nullptr, &removed_gate);
+
+            /// new code line above should cover commented lines below
+            /// else if (context->gates().contains(removed_gate))
+            ///    context->scheduleSceneUpdate();
         }
     }
 

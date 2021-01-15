@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added additional test whether removing or adding a gate/module requires context update
 * improved layouter uses location information from gate API
 * switched from float gate coordinates to integer ones
 * fixed wrong Python binding for property `gate_library` of class `Netlist
