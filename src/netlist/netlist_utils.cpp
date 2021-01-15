@@ -26,7 +26,7 @@ namespace hal
                 {
                     BooleanFunction bf = gate->get_boolean_function();
 
-                    for (const std::string& input_pin : gate->get_input_pins())
+                    for (const std::string& input_pin : bf.get_variables())
                     {
                         const Net* const input_net = gate->get_fan_in_net(input_pin);
                         if (input_net == nullptr)
