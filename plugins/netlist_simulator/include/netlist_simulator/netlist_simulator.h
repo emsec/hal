@@ -132,9 +132,10 @@ namespace hal
          * @param[in] path - The path to the VCD file.
          * @param[in] start_time - Start of the timeframe to write to the file (in picoseconds).
          * @param[in] end_time - End of the timeframe to write to the file (in picoseconds).
+         * @param[in] nets - Nets to include in the VCD file.
          * @returns True if the file gerneration was successful, false otherwise.
          */
-        bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time) const;
+        bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<Net*> nets = {}) const;
 
     private:
         friend class NetlistSimulatorPlugin;

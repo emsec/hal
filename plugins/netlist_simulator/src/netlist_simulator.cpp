@@ -772,7 +772,7 @@ namespace hal
         return SignalValue::X;
     }
 
-    bool NetlistSimulator::generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time) const
+    bool NetlistSimulator::generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<Net*> nets) const
     {
         if (m_simulation_set.empty())
         {
@@ -803,17 +803,20 @@ namespace hal
         //declare variables
         vcd << "$scope module TOP $end" << std::endl;
 
-        auto events = m_simulation.get_events();
+        std::unordered_map<Net*, std::vector<Event>> events = m_simulation.get_events();
         std::vector<Net*> simulated_nets;
 
         for (auto net_changes : events)
         {
             auto net = net_changes.first;
-            // maping net ids to net names
-            vcd << "$var wire 1 n" << net->get_id() << " " << net->get_name() << " $end" << std::endl;
+            if (nets.empty() || nets.find(net) != nets.end())
+            {
+                // maping net ids to net names
+                vcd << "$var wire 1 n" << net->get_id() << " " << net->get_name() << " $end" << std::endl;
 
-            // collect all simulated nets
-            simulated_nets.push_back(net);
+                // collect all simulated nets
+                simulated_nets.push_back(net);
+            }
         }
 
         vcd << "$upscope $end" << std::endl;
