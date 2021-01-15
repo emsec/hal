@@ -49,12 +49,6 @@ namespace hal {
             n.input_ids_to_values = {};
         }
 
-        
-        std::cout << "MERGE: " << std::endl;
-        std::cout << other.to_string() << std::endl;
-        std::cout << this->to_string() << std::endl;
-        std::cout << n.to_string() << std::endl;
-
         return n;
     }
 

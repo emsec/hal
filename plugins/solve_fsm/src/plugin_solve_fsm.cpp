@@ -68,7 +68,6 @@ namespace hal
 
             // find all external inputs. We define external inputs as nets that are inputs to the transition logic but are not bits from the previous state.
             for (const auto& id_str : bf.get_variables()) {
-                std::cout << id_str << std::endl;
                 u32 id = std::stoi(id_str);
                 hal::Net* net = nl->get_net_by_id(id);
                 if (output_net_to_input_net.find(net) == output_net_to_input_net.end()) {
@@ -103,14 +102,10 @@ namespace hal
                     to = ~to;
                 } 
 
-                std::cout << "Before: " << bf.to_string() << std::endl;
                 bf = bf.substitute(from.to_string(), to);
-                std::cout << "After: " << bf.to_string() << std::endl;
             }
 
             state_net_to_func.insert({input_net->get_id(), bf});
-
-            std::cout << input_net->get_id() << ": " << bf.to_string() << std::endl;
         }
 
         const u32 state_size = state_net_to_func.size();
@@ -132,9 +127,6 @@ namespace hal
         z3::context ctx;
 
         for (u64 state = 0; state < (u64(1) << state_size); state++) {
-
-            std::cout << "Checking State " << state << " from " << (u64(1) << state_size) << std::endl;
-
             // generate state map
             std::unordered_map<std::string, BooleanFunction::Value> state_id_str_to_val;
             for (u32 state_index =  0; state_index < state_reg.size(); state_index++) {
@@ -175,8 +167,6 @@ namespace hal
                 all_transitions.push_back(FsmTransition(state_expr, next_state_expr, input_id_to_val));
             }
         }
-
-        std::cout << "Found " << all_transitions.size() << " transitions." << std::endl;
 
         // in order to safe space when printing the new state transitions we merge transitions with the same start and end state and just update the conditions.
         all_transitions = merge_transitions(all_transitions);
