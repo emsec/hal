@@ -24,7 +24,7 @@ namespace hal
         void initialize() override;
 
         /**
-         * Generates the state graph of a finite state machine in dot format of a given fsm using the z3 as a sat solver.
+         * Generates the state graph of a finite state machine in dot format of a given fsm using z3 as sat solver.
          *
          * @param[in] nl - Pointer to the netlist.
          * @param[in] state_reg - A vector containing all the gates of the fsm representing the state register.
@@ -34,6 +34,15 @@ namespace hal
          * @returns The transition state graph in dot format.
          */
         std::string solve_fsm(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::map<Gate*, bool> initial_state = {}, const u32 timeout = 600000);
+        
+        /**
+         * Generates the state graph of a finite state machine in dot format of a given fsm using a simple brute force approach.
+         *
+         * @param[in] nl - Pointer to the netlist.
+         * @param[in] state_reg - A vector containing all the gates of the fsm representing the state register.
+         * @param[in] transition_logic - A vector containing all the gates of the fsm representing the transition_logic.
+         * @returns The transition state graph in dot format.
+         */
         std::string solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic);
 
     private:

@@ -128,7 +128,7 @@ namespace hal
 
         // generate all transitions that are reachable from the inital state.
         std::vector<FsmTransition> all_transitions;
-        // TODO this conversion is only necessary because there is no default constructor for z3::expr. Will need to modify the fsm transition type.
+        // TODO this is only necessary because there is no default constructor for z3::expr -> Cannot create fsm transition without ctx. Will need to modify the fsm transition type.
         z3::context ctx;
 
         for (u64 state = 0; state < (u64(1) << state_size); state++) {

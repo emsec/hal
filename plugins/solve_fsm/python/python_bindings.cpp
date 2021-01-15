@@ -31,9 +31,17 @@ namespace hal
             .def("get_name", &SolveFsmPlugin::get_name)
             .def_property_readonly("version", &SolveFsmPlugin::get_version)
             .def("get_version", &SolveFsmPlugin::get_version)
-            .def("solve_fsm_brute_force", &SolveFsmPlugin::solve_fsm_brute_force, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"))
+            .def("solve_fsm_brute_force", &SolveFsmPlugin::solve_fsm_brute_force, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), , R"(
+            Generates the state graph of a finite state machine in dot format of a given fsm using a simple brute force approach.
+
+            :param halPy.Netlist nl: The netlist.
+            :param list[halPy.Gate] state_reg: A list containing all the gates of the fsm representing the state register.
+            :param list[halPy.Gate] transition_logic: A list containing all the gates of the fsm representing the transition_logic.
+            :returns: The transition state graph in dot format.
+            :rtype: str
+        )")
             .def("solve_fsm", &SolveFsmPlugin::solve_fsm, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), py::arg("intial_state"), py::arg("timeout"), R"(
-            Generates the state graph of a finite state machine in dot format of a given fsm using the z3 as a sat solver.
+            Generates the state graph of a finite state machine in dot format of a given fsm using z3 as sat solver.
 
             :param halPy.Netlist nl: The netlist.
             :param list[halPy.Gate] state_reg: A list containing all the gates of the fsm representing the state register.
