@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added FSM detection plugin (experimental) using z3 for FSM verification
 * improved layouter uses location information from gate API
 * switched from float gate coordinates to integer ones
+* the netlist simulator VCD writer now optionally takes a set of target nets to write to VCD
 * fixed `add_boolean_function` of class `Gate` assigning wrong functions to LUTs
 * fixed wrong Python binding for property `gate_library` of class `Netlist
 * fixed netlist simulator segfaulting when an output pin of a FF remains unconnected
