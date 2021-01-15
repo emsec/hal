@@ -1,5 +1,5 @@
-Gate Library Parser Manager
+Gate Library Manager
 ==========================
 
-.. autoclass:: hal_py.GateLibraryParserManager
+.. autoclass:: hal_py.GateLibraryManager
    :members:
