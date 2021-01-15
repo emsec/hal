@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * fixed wrong Python binding for property `gate_library` of class `Netlist`
 * fixed netlist simulator segfaulting when an output pin of a FF remains unconnected
 * fixed optimization of Boolean functions sometimes producing wrong or non-optimal results
+* fixed `netlist_utils::get_subgraph_function` returning wrong results if input pins without relevance for the Boolean function remained unconnected
 
 ## [3.1.11] - 2021-01-03 11:35:00+02:00 (urgency: medium)
 * added **highly experimental** way to close and reopen netlists at runtime
