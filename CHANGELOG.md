@@ -14,30 +14,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added `get_gate_type_by_name` and `contains_gate_type_by_name` to class `GateLibrary`
   * added pin types and respective functions to `GateType` to enable assigning special-purpose pins
   * added `get_gate_library` to class `GateType`
-  * added base types `ram`, `dsp`, `io`, and `buffer`
+  * added base types `ram`, `dsp`, and `io`
   * merged input and output pin groups to simplify pin group handling
   * removed `add_gate_type` function from class `GateLibrary`
   * removed `GateTypeSequential` and `GateTypeLut` classes and moved their functionality into class `GateType`
   * renamed some functions to have shorter and more understandable names
 * added new gate library format: "HAL Gate Library" (HGL)
-  * supports assignment of enable, set, reset, data, and address pins to gate types
+  * supports assignment of pin types to gate types
   * added parser for HGL (`.hgl`) files
   * added writer for HGL (`.hgl`) files
 * refactored liberty gate library parser
   * added parsing of power and ground pins (`pg_pin`) to Liberty parser
-  * added buffer gate type detection
 * added more netlist utility functions
   * added `get_nets_at_pins` to retrieve nets that are connected to a vector of pins
   * added `remove_buffers` to remove buffer gates from a netlist
   * added `remove_unused_lut_endpoints` to remove unused LUT fan-in endpoints
   * added `rename_luts_according_to_function` to rename LUTs depending on the Boolean function they implement
 * added `to_z3` to class `BooleanFunction` to translate a Boolean function into a z3 expression
-* added FSM detection plugin (experimental) using z3 for FSM verification
+* added **highly experimental** `solve_fsm` plugin for FSM verification using z3
+* added `z3_utils` plugin to provide common z3 functions to all other plugins
 * improved layouter uses location information from gate API
 * switched from float gate coordinates to integer ones
 * the netlist simulator VCD writer now optionally takes a set of target nets to write to VCD
 * fixed `add_boolean_function` of class `Gate` assigning wrong functions to LUTs
-* fixed wrong Python binding for property `gate_library` of class `Netlist
+* fixed wrong Python binding for property `gate_library` of class `Netlist`
 * fixed netlist simulator segfaulting when an output pin of a FF remains unconnected
 * fixed optimization of Boolean functions sometimes producing wrong or non-optimal results
 
