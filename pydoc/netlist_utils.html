@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.1.11-9-ge0f434cf4 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.1.11-129-gba1823fdb documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.1.11-9-ge0f434cf4
+                v3.1.11-129-gba1823fdb
               </div>
             
           
@@ -95,8 +95,6 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type.html">Gate Type</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gate_type_lut.html">Gate Type LUT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gate_type_sequential.html">Gate Type Sequential</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
@@ -198,23 +196,74 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="hal_py.NetlistUtils.get_nets_at_pins">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_nets_at_pins</code><span class="sig-paren">(</span><em>gate: hal::Gate, pins: Set[str], is_inputs: bool</em><span class="sig-paren">)</span> &#x2192; Set[hal::Net]<a class="headerlink" href="#hal_py.NetlistUtils.get_nets_at_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the nets that are connected to a subset of pins of the specified gate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</li>
+<li><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The targeted pins.</li>
+<li><strong>is_input</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – True to look for fan-in nets, false for fan-out.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The set of nets connected to the pins.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="hal_py.NetlistUtils.get_next_sequential_gates">
 <code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_next_sequential_gates</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistUtils.get_next_sequential_gates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">get_next_sequential_gates(gate: hal::Gate, get_successors: bool) -&gt; List[hal::Gate]</p>
+<li><p class="first">get_next_sequential_gates(gate: hal::Gate, get_successors: bool, cache: Dict[int, List[hal::Gate]]) -&gt; List[hal::Gate]</p>
 <blockquote>
-<div><p>Find all sequential predecessors or successors of a specific gate.
+<div><p>Find all sequential predecessors or successors of a gate.
 Traverses combinational logic of all input or output nets until sequential gates are found.
-This may include the gate itself.</p>
+The result may include the provided gate itself.
+The use of the this cached version is recommended in case of extensive usage to improve performance. 
+The cache will be filled by this function and should initially be provided empty.
+Different caches for different values of get_successors shall be used.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The gate to start from</td>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial gate.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">param bool:</th><td class="field-body">If true, sequential successors are returned, else sequential predecessors are returned</td>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">If true, sequential successors are returned, otherwise sequential predecessors are returned.</td>
+</tr>
+</tbody>
+</table>
+<p>:param dict[int, list[hal_py.Gate]] cache - The cache. 
+:returns: All sequential successors or predecessors of the gate.
+:rtype: list[hal_py.Gate]</p>
+</div></blockquote>
+</li>
+<li><p class="first">get_next_sequential_gates(gate: hal::Gate, get_successors: bool) -&gt; List[hal::Gate]</p>
+<blockquote>
+<div><p>Find all sequential predecessors or successors of a gate.
+Traverses combinational logic of all input or output nets until sequential gates are found.
+The result may include the provided gate itself.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">If true, sequential successors are returned, otherwise sequential predecessors are returned.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All sequential successors or predecessors of the gate.</td>
 </tr>
@@ -224,18 +273,43 @@ This may include the gate itself.</p>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">get_next_sequential_gates(net: hal::Net, get_successors: bool) -&gt; List[hal::Gate]</p>
+<li><p class="first">get_next_sequential_gates(net: hal::Net, get_successors: bool, cache: Dict[int, List[hal::Gate]]) -&gt; List[hal::Gate]</p>
 <blockquote>
-<div><p>Find all sequential predecessors or successors of a specific net.
-Traverses combinational logic logic until sequential gates are found.</p>
+<div><p>Find all sequential predecessors or successors of a net.
+Traverses combinational logic of all input or output nets until sequential gates are found.
+The use of the cache is recommended in case of extensive usage of this function. 
+The cache will be filled by this function and should initially be provided empty.
+Different caches for different values of get_successors shall be used.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net to start from</td>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial net.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">param bool:</th><td class="field-body">If true, sequential successors are returned, else sequential predecessors are returned</td>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">If true, sequential successors are returned, otherwise sequential predecessors are returned.</td>
+</tr>
+</tbody>
+</table>
+<p>:param dict[int, list[hal_py.Gate]] cache - The cache. 
+:returns: All sequential successors or predecessors of the net.
+:rtype: list[hal_py.Net]</p>
+</div></blockquote>
+</li>
+<li><p class="first">get_next_sequential_gates(net: hal::Net, get_successors: bool) -&gt; List[hal::Gate]</p>
+<blockquote>
+<div><p>Find all sequential predecessors or successors of a net.
+Traverses combinational logic of all input or output nets until sequential gates are found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">If true, sequential successors are returned, otherwise sequential predecessors are returned.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All sequential successors or predecessors of the net.</td>
 </tr>
@@ -270,6 +344,48 @@ If this function is used extensively, consider using the above variant with a ca
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistUtils.remove_buffers">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">remove_buffers</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.NetlistUtils.remove_buffers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistUtils.remove_unused_lut_endpoints">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">remove_unused_lut_endpoints</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.NetlistUtils.remove_unused_lut_endpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistUtils.rename_luts_according_to_function">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">rename_luts_according_to_function</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.NetlistUtils.rename_luts_according_to_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename LUTs that implement simple functions to better reflect their functionality.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</td>
 </tr>
 </tbody>
 </table>

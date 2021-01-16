@@ -97,7 +97,7 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d8/db0/defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/dd6/gate__type_8h.html">hal_core/netlist/gate_library/gate_type/gate_type.h</a>&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/dd6/gate__type_8h.html">hal_core/netlist/gate_library/gate_type.h</a>&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
@@ -114,44 +114,62 @@ $(function() {
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        std::string get_name() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        std::filesystem::path get_path() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        std::filesystem::path get_path() <span class="keyword">const</span>;        </div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">void</span> add_gate_type(std::unique_ptr&lt;const GateType&gt; gate_type);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">bool</span> contains_gate_type(<span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* gate_type) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        std::unordered_map&lt;std::string, const GateType*&gt; get_gate_types() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        std::unordered_map&lt;std::string, const GateType*&gt; get_vcc_gate_types() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        std::unordered_map&lt;std::string, const GateType*&gt; get_gnd_gate_types() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">void</span> add_include(<span class="keyword">const</span> std::string&amp; inc);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        std::vector&lt;std::string&gt; get_includes() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        std::string m_name;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        std::filesystem::path m_path;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        std::vector&lt;std::unique_ptr&lt;const GateType&gt;&gt; m_gate_types;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        std::unordered_map&lt;std::string, const GateType*&gt; m_gate_type_map;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        std::unordered_map&lt;std::string, const GateType*&gt; m_vcc_gate_types;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        std::unordered_map&lt;std::string, const GateType*&gt; m_gnd_gate_types;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        std::vector&lt;std::string&gt; m_includes;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    };</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* create_gate_type(<span class="keyword">const</span> std::string&amp; name, <a class="code" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">GateType::BaseType</a> base_type = <a class="code" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36a294da9f271b64311147582da631ee638">GateType::BaseType::combinational</a>);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordtype">bool</span> contains_gate_type(<a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* gate_type) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordtype">bool</span> contains_gate_type_by_name(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* get_gate_type_by_name(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; get_gate_types() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordtype">bool</span> mark_vcc_gate_type(<a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* gate_type);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; get_vcc_gate_types() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordtype">bool</span> mark_gnd_gate_type(<a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* gate_type);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; get_gnd_gate_types() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordtype">void</span> add_include(<span class="keyword">const</span> std::string&amp; inc);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        std::vector&lt;std::string&gt; get_includes() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        std::string m_name;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        std::filesystem::path m_path;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> m_next_gate_type_id;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        std::vector&lt;std::unique_ptr&lt;GateType&gt;&gt; m_gate_types;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gate_type_map;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_vcc_gate_types;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        std::unordered_map&lt;std::string, GateType*&gt; m_gnd_gate_types;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        std::vector&lt;std::string&gt; m_includes;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <a class="code" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a>(<span class="keyword">const</span> <a class="code" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <a class="code" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="../../d7/daf/classhal_1_1GateLibrary.html">GateLibrary</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> get_unique_gate_type_id();</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    };</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasshal_1_1GateType_html_a9aee0f1be5eb3241a7e2d5e5a99fff36a294da9f271b64311147582da631ee638"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36a294da9f271b64311147582da631ee638">hal::GateType::BaseType::combinational</a></div><div class="ttdeci">@ combinational</div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> defines.h:43</div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="agate__type_8h_html"><div class="ttname"><a href="../../db/dd6/gate__type_8h.html">gate_type.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1GateType_html"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> gate_type.h:39</div></div>
+<div class="ttc" id="aclasshal_1_1GateType_html_a9aee0f1be5eb3241a7e2d5e5a99fff36"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">hal::GateType::BaseType</a></div><div class="ttdeci">BaseType</div><div class="ttdef"><b>Definition:</b> gate_type.h:48</div></div>
+<div class="ttc" id="aclasshal_1_1GateType_html"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> gate_type.h:42</div></div>
 <div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="../../d4/d3b/arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> arch_linux.h:28</div></div>
 <div class="ttc" id="aclasshal_1_1GateLibrary_html"><div class="ttname"><a href="../../d7/daf/classhal_1_1GateLibrary.html">hal::GateLibrary</a></div><div class="ttdef"><b>Definition:</b> gate_library.h:41</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 15 2021 21:04:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jan 16 2021 08:48:39 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

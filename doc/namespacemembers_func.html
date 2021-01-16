@@ -201,7 +201,7 @@ $(function() {
 : <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#a3ae6558acfeccd85000402340cd57874">hal::gate_library_manager</a>
 </li>
 <li>get_gate_library()
-: <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#a6bea3d7f340d955467aa5b31934b9f6c">hal::gate_library_manager</a>
+: <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#af8dbae03fe90a2dd846afd75022bbaeb">hal::gate_library_manager</a>
 </li>
 <li>get_gate_library_by_name()
 : <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#a6c1b0915537d0f6c835cb3bf5d1445b8">hal::gate_library_manager</a>
@@ -211,6 +211,9 @@ $(function() {
 </li>
 <li>get_library_directory()
 : <a class="el" href="d4/dd6/namespacehal_1_1utils.html#a23c89e12c9dca94e778f13090de02f09">hal::utils</a>
+</li>
+<li>get_nets_at_pins()
+: <a class="el" href="da/d42/namespacehal_1_1netlist__utils.html#ade1a86f1a00d212317171745c969a6ac">hal::netlist_utils</a>
 </li>
 <li>get_next_sequential_gates()
 : <a class="el" href="da/d42/namespacehal_1_1netlist__utils.html#a81020a4b71d211bbb7a8d81238c393c8">hal::netlist_utils</a>
@@ -277,16 +280,14 @@ $(function() {
 
 <h3><a id="index_l"></a>- l -</h3><ul>
 <li>load()
-: <a class="el" href="da/d5a/namespacehal_1_1plugin__manager.html#a223f5f76833a94861454eb6b07c4fe98">hal::plugin_manager</a>
+: <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#a21db0193886493918bc33a7ffd09b8ff">hal::gate_library_manager</a>
+, <a class="el" href="da/d5a/namespacehal_1_1plugin__manager.html#a223f5f76833a94861454eb6b07c4fe98">hal::plugin_manager</a>
 </li>
 <li>load_all()
-: <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#a4867606adb5e71f94d337face0b0b949">hal::gate_library_manager</a>
+: <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#a92abe4c023b408a948cc4d2693031764">hal::gate_library_manager</a>
 </li>
 <li>load_all_plugins()
 : <a class="el" href="da/d5a/namespacehal_1_1plugin__manager.html#a991b240018747caa41b17846d5b722b6">hal::plugin_manager</a>
-</li>
-<li>load_file()
-: <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#a73ae5e426dd92db0800fadbb7fff250c">hal::gate_library_manager</a>
 </li>
 <li>load_netlist()
 : <a class="el" href="d6/dee/namespacehal_1_1netlist__factory.html#a5e7129e68686cddb1b3a5e9fd73ac568">hal::netlist_factory</a>
@@ -342,7 +343,8 @@ $(function() {
 
 <h3><a id="index_p"></a>- p -</h3><ul>
 <li>parse()
-: <a class="el" href="d5/d96/namespacehal_1_1hdl__parser__manager.html#ae4dc38bc8200dcdb7f9ba6e6000259de">hal::hdl_parser_manager</a>
+: <a class="el" href="df/dfa/namespacehal_1_1gate__library__parser__manager.html#a46c37f29acf3a612781bb66142eaa6ca">hal::gate_library_parser_manager</a>
+, <a class="el" href="d5/d96/namespacehal_1_1hdl__parser__manager.html#ae4dc38bc8200dcdb7f9ba6e6000259de">hal::hdl_parser_manager</a>
 </li>
 <li>parse_all()
 : <a class="el" href="d5/d96/namespacehal_1_1hdl__parser__manager.html#ac48804124e85703a5c2a799f3ae29dc1">hal::hdl_parser_manager</a>
@@ -377,14 +379,24 @@ $(function() {
 : <a class="el" href="d7/d09/namespacehal_1_1hal__file__manager.html#a72956d551ca3c88735b0c1d9ae549e47">hal::hal_file_manager</a>
 </li>
 <li>register_parser()
-: <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#ac37474447ba7741b827219d7fd5c7bec">hal::gate_library_manager</a>
+: <a class="el" href="df/dfa/namespacehal_1_1gate__library__parser__manager.html#a12d000bf49f6de3906abf535087d82b0">hal::gate_library_parser_manager</a>
 , <a class="el" href="d5/d96/namespacehal_1_1hdl__parser__manager.html#a28d383363efdeadff69cae5e1a1e04e6">hal::hdl_parser_manager</a>
 </li>
 <li>register_writer()
-: <a class="el" href="db/d60/namespacehal_1_1hdl__writer__manager.html#a50dcfd5fe4b813a47ccd2e141a18f2ae">hal::hdl_writer_manager</a>
+: <a class="el" href="d3/d0d/namespacehal_1_1gate__library__writer__manager.html#affc203c9503f3adbad47ef7dc61b6f85">hal::gate_library_writer_manager</a>
+, <a class="el" href="db/d60/namespacehal_1_1hdl__writer__manager.html#a50dcfd5fe4b813a47ccd2e141a18f2ae">hal::hdl_writer_manager</a>
+</li>
+<li>remove_buffers()
+: <a class="el" href="da/d42/namespacehal_1_1netlist__utils.html#a31fdbd2a244bc451a6f009ff6e7933f6">hal::netlist_utils</a>
 </li>
 <li>remove_model_changed_callback()
 : <a class="el" href="da/d5a/namespacehal_1_1plugin__manager.html#ad66fea3d4017a3c7b058436924d3dda3">hal::plugin_manager</a>
+</li>
+<li>remove_unused_lut_endpoints()
+: <a class="el" href="da/d42/namespacehal_1_1netlist__utils.html#a3bc1381508d3e2e81a75762664d016cb">hal::netlist_utils</a>
+</li>
+<li>rename_luts_according_to_function()
+: <a class="el" href="da/d42/namespacehal_1_1netlist__utils.html#a7252fdca08ea0f7e5c0aa4720083d23c">hal::netlist_utils</a>
 </li>
 <li>replace()
 : <a class="el" href="d4/dd6/namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">hal::utils</a>
@@ -396,6 +408,9 @@ $(function() {
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>save()
+: <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#ac51a2114b65e6ff375df474c886525b4">hal::gate_library_manager</a>
+</li>
 <li>serialize()
 : <a class="el" href="d7/d09/namespacehal_1_1hal__file__manager.html#a9b47eacaed4789f9b59edfff7653b78c">hal::hal_file_manager</a>
 </li>
@@ -454,11 +469,12 @@ $(function() {
 : <a class="el" href="d7/d09/namespacehal_1_1hal__file__manager.html#a4e1225189163b21b43fe1dec9e702a53">hal::hal_file_manager</a>
 </li>
 <li>unregister_parser()
-: <a class="el" href="de/d78/namespacehal_1_1gate__library__manager.html#a07c59f9f7edc55048acb383933342054">hal::gate_library_manager</a>
+: <a class="el" href="df/dfa/namespacehal_1_1gate__library__parser__manager.html#af2881fc58f6a027d0b47becca8dcfd4e">hal::gate_library_parser_manager</a>
 , <a class="el" href="d5/d96/namespacehal_1_1hdl__parser__manager.html#a05ef41f7e7c8020b690354359b7cf4a7">hal::hdl_parser_manager</a>
 </li>
 <li>unregister_writer()
-: <a class="el" href="db/d60/namespacehal_1_1hdl__writer__manager.html#a3ba5b2fc407475ecd596d33d57f4c0a9">hal::hdl_writer_manager</a>
+: <a class="el" href="d3/d0d/namespacehal_1_1gate__library__writer__manager.html#af05a232ee18c16cc9c32fca18f86f14e">hal::gate_library_writer_manager</a>
+, <a class="el" href="db/d60/namespacehal_1_1hdl__writer__manager.html#a3ba5b2fc407475ecd596d33d57f4c0a9">hal::hdl_writer_manager</a>
 </li>
 </ul>
 
@@ -468,13 +484,14 @@ $(function() {
 : <a class="el" href="d4/dd6/namespacehal_1_1utils.html#a2b0a5b8e62f97d9e4ce5eefc428b0a2f">hal::utils</a>
 </li>
 <li>write()
-: <a class="el" href="db/d60/namespacehal_1_1hdl__writer__manager.html#ab708f4547ecb9d17e9a15fe98ae2a8ed">hal::hdl_writer_manager</a>
+: <a class="el" href="d3/d0d/namespacehal_1_1gate__library__writer__manager.html#ae6689e41c89a95d37b36cf8deb680d5f">hal::gate_library_writer_manager</a>
+, <a class="el" href="db/d60/namespacehal_1_1hdl__writer__manager.html#ab708f4547ecb9d17e9a15fe98ae2a8ed">hal::hdl_writer_manager</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 15 2021 21:04:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jan 16 2021 08:48:39 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

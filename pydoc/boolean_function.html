@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v3.1.11-9-ge0f434cf4 documentation</title>
+  <title>Boolean Function &mdash; hal_py v3.1.11-129-gba1823fdb documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.1.11-9-ge0f434cf4
+                v3.1.11-129-gba1823fdb
               </div>
             
           
@@ -95,8 +95,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Boolean Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type.html">Gate Type</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gate_type_lut.html">Gate Type LUT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gate_type_sequential.html">Gate Type Sequential</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
@@ -489,7 +487,7 @@ Operator precedence is <code class="docutils literal notranslate"><span class="p
 <code class="descname">get_truth_table</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>ordered_variables: List[str] = []</em>, <em>remove_unknown_variables: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.BooleanFunction.Value]<a class="headerlink" href="#hal_py.BooleanFunction.get_truth_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the truth table outputs of the Boolean function.</p>
 <p>WARNING: Exponential runtime in the number of variables!</p>
-<p>Output is the vector of output values when walking the truth table in ascending order.</p>
+<p>Output is the vector of output values when walking the truth table from the least significant bit to the most significant one.</p>
 <p>If ordered_variables is empty, all included variables are used and ordered alphabetically.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

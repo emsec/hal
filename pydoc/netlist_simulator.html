@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Simulator &mdash; hal_py v3.1.11-9-ge0f434cf4 documentation</title>
+  <title>Netlist Simulator &mdash; hal_py v3.1.11-129-gba1823fdb documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v3.1.11-9-ge0f434cf4
+                v3.1.11-129-gba1823fdb
               </div>
             
           
@@ -86,6 +86,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dataflow.html">Dataflow Analysis (DANA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui.html">GUI API</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist Simulator</a></li>
@@ -298,7 +299,7 @@ Only elements in the simulation set are considered during simulation.</p>
 
 <dl class="method">
 <dt id="netlist_simulator.NetlistSimulator.generate_vcd">
-<code class="descname">generate_vcd</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>path: hal_py.HalPath</em>, <em>start_time: int</em>, <em>end_time: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#netlist_simulator.NetlistSimulator.generate_vcd" title="Permalink to this definition">¶</a></dt>
+<code class="descname">generate_vcd</code><span class="sig-paren">(</span><em>self: netlist_simulator.NetlistSimulator</em>, <em>path: hal_py.HalPath</em>, <em>start_time: int</em>, <em>end_time: int</em>, <em>nets: Set[hal_py.Net] = set()</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#netlist_simulator.NetlistSimulator.generate_vcd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the a VCD file for parts the simulated netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -308,6 +309,7 @@ Only elements in the simulation set are considered during simulation.</p>
 <li><strong>path</strong> (<em>hal_py.hal_path</em>) – The path to the VCD file.</li>
 <li><strong>start_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Start of the timeframe to write to the file (in picoseconds).</li>
 <li><strong>end_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – End of the timeframe to write to the file (in picoseconds).</li>
+<li><strong>nets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>[</em><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a><em>]</em>) – Nets to include in the VCD file.</li>
 </ul>
 </td>
 </tr>

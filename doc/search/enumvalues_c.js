@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['src_5fadded_1348',['src_added',['../da/ddd/namespacehal_1_1net__event__handler.html#afd5006dc61f74916461dc0647567fed9ae8e900cd963192cd34b218f8bae610f6',1,'hal::net_event_handler']]],
-  ['src_5fremoved_1349',['src_removed',['../da/ddd/namespacehal_1_1net__event__handler.html#afd5006dc61f74916461dc0647567fed9af4fbf993ec8941614f5d71199a25615a',1,'hal::net_event_handler']]],
-  ['submodule_5fadded_1350',['submodule_added',['../d9/df4/namespacehal_1_1module__event__handler.html#af00b94311e9de6106b00acfaa58d520ea817c0a3f6f3b22d5f248061f2c56c672',1,'hal::module_event_handler']]],
-  ['submodule_5fremoved_1351',['submodule_removed',['../d9/df4/namespacehal_1_1module__event__handler.html#af00b94311e9de6106b00acfaa58d520eadb7bfef0159034f6d6268c148b35d585',1,'hal::module_event_handler']]]
+  ['parent_5fchanged_1388',['parent_changed',['../d9/df4/namespacehal_1_1module__event__handler.html#af00b94311e9de6106b00acfaa58d520eac96ace2c67b95714c6e29f5a0c9d9019',1,'hal::module_event_handler']]],
+  ['power_1389',['power',['../d1/d05/classhal_1_1GateType.html#a64ba033c4e437917813b0777494a0d7ba62cd275989e78ee56a81f0265a87562e',1,'hal::GateType']]]
 ];

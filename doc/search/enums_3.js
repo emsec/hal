@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['value_1315',['Value',['../d6/d9d/classhal_1_1BooleanFunction.html#aac7bb4fda3bf06664f6bc717c3be92fb',1,'hal::BooleanFunction']]]
+  ['pindirection_1341',['PinDirection',['../d1/d05/classhal_1_1GateType.html#a2564ab80fa9356e6b71a138b0b53d5cb',1,'hal::GateType']]],
+  ['pintype_1342',['PinType',['../d1/d05/classhal_1_1GateType.html#a64ba033c4e437917813b0777494a0d7b',1,'hal::GateType']]]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>hal: hal_core/netlist/gate_library/gate_library_parser.h File Reference</title>
+<title>hal: hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="../../dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="../../dir_99c48257bccc675a80b3dd868bdc8162.html">gate_library</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="../../dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="../../dir_99c48257bccc675a80b3dd868bdc8162.html">gate_library</a></li><li class="navelem"><a class="el" href="../../dir_a8aa398e84e291744d4a4c7ce89b8e7e.html">gate_library_parser</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -76,32 +76,33 @@ $(function() {
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="../../d8/db0/defines_8h_source.html">hal_core/defines.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="../../de/d88/gate__library_8h_source.html">hal_core/netlist/gate_library/gate_library.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="../../db/dd6/gate__type_8h_source.html">hal_core/netlist/gate_library/gate_type/gate_type.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="../../db/dd6/gate__type_8h_source.html">hal_core/netlist/gate_library/gate_type.h</a>&quot;</code><br />
 <code>#include &lt;sstream&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for gate_library_parser.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="../../d8/dc7/gate__library__parser_8h__incl.png" border="0" usemap="#hal__core_2netlist_2gate__library_2gate__library__parser_8h" alt=""/></div>
-<map name="hal__core_2netlist_2gate__library_2gate__library__parser_8h" id="hal__core_2netlist_2gate__library_2gate__library__parser_8h">
-<area shape="rect" title=" " alt="" coords="517,5,672,61"/>
-<area shape="rect" href="../../d8/db0/defines_8h.html" title=" " alt="" coords="149,392,289,419"/>
-<area shape="rect" href="../../de/d88/gate__library_8h.html" title=" " alt="" coords="573,109,736,151"/>
-<area shape="rect" href="../../db/dd6/gate__type_8h.html" title=" " alt="" coords="509,199,683,255"/>
-<area shape="rect" title=" " alt="" coords="760,117,835,143"/>
-<area shape="rect" title=" " alt="" coords="5,467,96,493"/>
-<area shape="rect" title=" " alt="" coords="121,467,207,493"/>
-<area shape="rect" title=" " alt="" coords="231,467,318,493"/>
-<area shape="rect" title=" " alt="" coords="342,467,413,493"/>
-<area shape="rect" title=" " alt="" coords="903,392,966,419"/>
-<area shape="rect" title=" " alt="" coords="432,310,483,337"/>
-<area shape="rect" title=" " alt="" coords="760,310,819,337"/>
-<area shape="rect" title=" " alt="" coords="757,213,800,240"/>
-<area shape="rect" href="../../dc/d6d/boolean__function_8h.html" title=" " alt="" coords="507,303,685,344"/>
-<area shape="rect" title=" " alt="" coords="755,392,879,419"/>
-<area shape="rect" title=" " alt="" coords="452,392,537,419"/>
-<area shape="rect" title=" " alt="" coords="561,392,631,419"/>
-<area shape="rect" title=" " alt="" coords="655,392,731,419"/>
-<area shape="rect" title=" " alt="" coords="313,392,428,419"/>
+<div class="center"><img src="../../d8/dc7/gate__library__parser_8h__incl.png" border="0" usemap="#hal__core_2netlist_2gate__library_2gate__library__parser_2gate__library__parser_8h" alt=""/></div>
+<map name="hal__core_2netlist_2gate__library_2gate__library__parser_2gate__library__parser_8h" id="hal__core_2netlist_2gate__library_2gate__library__parser_2gate__library__parser_8h">
+<area shape="rect" title=" " alt="" coords="701,5,912,61"/>
+<area shape="rect" href="../../d8/db0/defines_8h.html" title=" " alt="" coords="778,377,918,404"/>
+<area shape="rect" href="../../de/d88/gate__library_8h.html" title=" " alt="" coords="641,109,804,151"/>
+<area shape="rect" href="../../db/dd6/gate__type_8h.html" title=" " alt="" coords="429,199,584,240"/>
+<area shape="rect" title=" " alt="" coords="928,117,1003,143"/>
+<area shape="rect" title=" " alt="" coords="633,452,724,479"/>
+<area shape="rect" title=" " alt="" coords="749,452,835,479"/>
+<area shape="rect" title=" " alt="" coords="859,452,946,479"/>
+<area shape="rect" title=" " alt="" coords="970,452,1041,479"/>
+<area shape="rect" title=" " alt="" coords="691,377,754,404"/>
+<area shape="rect" title=" " alt="" coords="635,295,685,322"/>
+<area shape="rect" title=" " alt="" coords="552,295,611,322"/>
+<area shape="rect" title=" " alt="" coords="760,206,803,233"/>
+<area shape="rect" href="../../dc/d6d/boolean__function_8h.html" title=" " alt="" coords="299,288,477,329"/>
+<area shape="rect" title=" " alt="" coords="543,377,667,404"/>
+<area shape="rect" title=" " alt="" coords="5,377,120,404"/>
+<area shape="rect" title=" " alt="" coords="145,377,215,404"/>
+<area shape="rect" title=" " alt="" coords="240,377,325,404"/>
+<area shape="rect" title=" " alt="" coords="349,377,419,404"/>
+<area shape="rect" title=" " alt="" coords="443,377,519,404"/>
 </map>
 </div>
 </div>
@@ -120,7 +121,7 @@ Namespaces</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 15 2021 21:04:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jan 16 2021 08:48:39 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

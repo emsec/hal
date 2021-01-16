@@ -4,6 +4,7 @@ HAL Plugins Documentation
 .. toctree::
    :maxdepth: 1
 
+   dataflow
    graph_algorithm
    gui
    netlist_simulator

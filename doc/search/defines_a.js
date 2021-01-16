@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['rapidjson_5fhas_5fstdstring_1386',['RAPIDJSON_HAS_STDSTRING',['../d4/d6a/hal__file__manager_8h.html#a2f2eef0ee4477f3fe5874703a66e997f',1,'hal_file_manager.h']]]
+  ['stringify_1434',['STRINGIFY',['../d7/d7f/log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7',1,'log.h']]],
+  ['stringistringify_1435',['STRINGISTRINGIFY',['../d7/d7f/log_8h.html#ac96c6afee3270eb88719a98239ea7f75',1,'log.h']]]
 ];

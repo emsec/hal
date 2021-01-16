@@ -77,93 +77,93 @@ $(function() {
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dc/d6d/boolean__function_8h.html">hal_core/netlist/boolean_function.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d4/db6/gate_8h.html">hal_core/netlist/gate.h</a>&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../de/d88/gate__library_8h.html">hal_core/netlist/gate_library/gate_library.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/de4/gate__library__parser_8h.html">hal_core/netlist/gate_library/gate_library_parser.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/dd6/gate__type_8h.html">hal_core/netlist/gate_library/gate_type/gate_type.h</a>&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/d79/gate__type__lut_8h.html">hal_core/netlist/gate_library/gate_type/gate_type_lut.h</a>&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../da/dc0/gate__type__sequential_8h.html">hal_core/netlist/gate_library/gate_type/gate_type_sequential.h</a>&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d8/d44/gate__library__manager_8h.html">hal_core/netlist/gate_library/gate_library_manager.h</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d2/d8d/grouping_8h.html">hal_core/netlist/grouping.h</a>&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/dee/hdl__writer__manager_8h.html">hal_core/netlist/hdl_writer/hdl_writer_manager.h</a>&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/d16/module_8h.html">hal_core/netlist/module.h</a>&quot;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/d97/net_8h.html">hal_core/netlist/net.h</a>&quot;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../df/d5f/netlist_8h.html">hal_core/netlist/netlist.h</a>&quot;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d0a/netlist__factory_8h.html">hal_core/netlist/netlist_factory.h</a>&quot;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dc/d47/netlist__utils_8h.html">hal_core/netlist/netlist_utils.h</a>&quot;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d76/netlist__serializer_8h.html">hal_core/netlist/persistent/netlist_serializer.h</a>&quot;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d1f/plugin__interface__gui_8h.html">hal_core/plugin_system/plugin_interface_gui.h</a>&quot;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../de/d6f/plugin__manager_8h.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/d7f/log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/d60/utils_8h.html">hal_core/utilities/utils.h</a>&quot;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#pragma GCC diagnostic push</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wshadow&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#ifdef COMPILER_CLANG</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wnested-anon-types&quot;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wshadow-field-in-constructor-modified&quot;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wself-assign-overloaded&quot;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;pybind11/functional.h&quot;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;pybind11/operators.h&quot;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;pybind11/pybind11.h&quot;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;pybind11/stl.h&quot;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;pybind11/stl_bind.h&quot;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#pragma GCC diagnostic pop</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">namespace </span>py = pybind11;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="../../db/d7c/group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">   51</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="../../db/d7c/group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">RawPtrWrapper</a> = std::unique_ptr&lt;T, py::nodelete&gt;;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga12b7d19dc09194a879bf4d0b8b7641c7">path_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">data_container_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a">core_utils_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">gate_type_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6">gate_type_lut_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga23445061a41678f413471f3459e241d4">gate_type_sequential_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">gate_library_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gacd94e2b9ac19cb0a128446c71673aabf">gate_library_manager_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">endpoint_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">netlist_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1">netlist_utils_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81">gate_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga434508b48c606a9d6f30e5f2f39730b5">net_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22">module_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821">grouping_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaf8d3775de7aff4ada2993c698332de33">netlist_factory_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga7505bd440277893ffb3497c82539645b">hdl_writer_manager_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga9e03e20ad125cd9eb1f4e601ac556777">plugin_manager_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7">plugin_interfaces_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">boolean_function_init</a>(py::module&amp; m);</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d8/d44/gate__library__manager_8h.html">hal_core/netlist/gate_library/gate_library_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d3/d88/gate__library__parser__manager_8h.html">hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dd/d2b/gate__library__writer__manager_8h.html">hal_core/netlist/gate_library/gate_library_writer/gate_library_writer_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/dd6/gate__type_8h.html">hal_core/netlist/gate_library/gate_type.h</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d2/d8d/grouping_8h.html">hal_core/netlist/grouping.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d6/dee/hdl__writer__manager_8h.html">hal_core/netlist/hdl_writer/hdl_writer_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/d16/module_8h.html">hal_core/netlist/module.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/d97/net_8h.html">hal_core/netlist/net.h</a>&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../df/d5f/netlist_8h.html">hal_core/netlist/netlist.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d0/d0a/netlist__factory_8h.html">hal_core/netlist/netlist_factory.h</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dc/d47/netlist__utils_8h.html">hal_core/netlist/netlist_utils.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d9/d76/netlist__serializer_8h.html">hal_core/netlist/persistent/netlist_serializer.h</a>&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/d1f/plugin__interface__gui_8h.html">hal_core/plugin_system/plugin_interface_gui.h</a>&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../de/d6f/plugin__manager_8h.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d7/d7f/log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/d60/utils_8h.html">hal_core/utilities/utils.h</a>&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#pragma GCC diagnostic push</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wshadow&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#ifdef COMPILER_CLANG</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wnested-anon-types&quot;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wshadow-field-in-constructor-modified&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#pragma clang diagnostic ignored &quot;-Wself-assign-overloaded&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &quot;pybind11/functional.h&quot;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;pybind11/operators.h&quot;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;pybind11/pybind11.h&quot;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;pybind11/stl.h&quot;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;pybind11/stl_bind.h&quot;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#pragma GCC diagnostic pop</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../d0/d7f/namespacehal.html">hal</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">namespace </span>py = pybind11;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="../../db/d7c/group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">   50</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="../../db/d7c/group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">RawPtrWrapper</a> = std::unique_ptr&lt;T, py::nodelete&gt;;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga12b7d19dc09194a879bf4d0b8b7641c7">path_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">data_container_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a">core_utils_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">gate_type_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6">gate_type_lut_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga23445061a41678f413471f3459e241d4">gate_type_sequential_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">gate_library_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gacd94e2b9ac19cb0a128446c71673aabf">gate_library_manager_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">endpoint_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">netlist_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1">netlist_utils_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81">gate_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga434508b48c606a9d6f30e5f2f39730b5">net_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22">module_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821">grouping_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gaf8d3775de7aff4ada2993c698332de33">netlist_factory_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga7505bd440277893ffb3497c82539645b">hdl_writer_manager_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#ga9e03e20ad125cd9eb1f4e601ac556777">plugin_manager_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7">plugin_interfaces_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">boolean_function_init</a>(py::module&amp; m);</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="agrouping_8h_html"><div class="ttname"><a href="../../d2/d8d/grouping_8h.html">grouping.h</a></div></div>
 <div class="ttc" id="agroup__pybind_html_ga9e03e20ad125cd9eb1f4e601ac556777"><div class="ttname"><a href="../../db/d7c/group__pybind.html#ga9e03e20ad125cd9eb1f4e601ac556777">hal::plugin_manager_init</a></div><div class="ttdeci">void plugin_manager_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> plugin_manager.cpp:5</div></div>
-<div class="ttc" id="agroup__pybind_html_ga23445061a41678f413471f3459e241d4"><div class="ttname"><a href="../../db/d7c/group__pybind.html#ga23445061a41678f413471f3459e241d4">hal::gate_type_sequential_init</a></div><div class="ttdeci">void gate_type_sequential_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> gate_type_sequential.cpp:5</div></div>
+<div class="ttc" id="agroup__pybind_html_ga23445061a41678f413471f3459e241d4"><div class="ttname"><a href="../../db/d7c/group__pybind.html#ga23445061a41678f413471f3459e241d4">hal::gate_type_sequential_init</a></div><div class="ttdeci">void gate_type_sequential_init(py::module &amp;m)</div></div>
 <div class="ttc" id="agroup__pybind_html_gad09c61daaa174b451b0519d0f54a2382"><div class="ttname"><a href="../../db/d7c/group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">hal::gate_type_init</a></div><div class="ttdeci">void gate_type_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> gate_type.cpp:5</div></div>
+<div class="ttc" id="agate__library__parser__manager_8h_html"><div class="ttname"><a href="../../d3/d88/gate__library__parser__manager_8h.html">gate_library_parser_manager.h</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gaa2fbdd0b4ea1f33476ee30d7f2ce6a81"><div class="ttname"><a href="../../db/d7c/group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81">hal::gate_init</a></div><div class="ttdeci">void gate_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> gate.cpp:5</div></div>
 <div class="ttc" id="anetlist__utils_8h_html"><div class="ttname"><a href="../../dc/d47/netlist__utils_8h.html">netlist_utils.h</a></div></div>
 <div class="ttc" id="amodule_8h_html"><div class="ttname"><a href="../../d5/d16/module_8h.html">module.h</a></div></div>
@@ -176,15 +176,16 @@ $(function() {
 <div class="ttc" id="agroup__pybind_html_ga60d7e2dfe01bc847292f5473e2b849d1"><div class="ttname"><a href="../../db/d7c/group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1">hal::netlist_utils_init</a></div><div class="ttdeci">void netlist_utils_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> netlist_utils.cpp:5</div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="agate__library__manager_8h_html"><div class="ttname"><a href="../../d8/d44/gate__library__manager_8h.html">gate_library_manager.h</a></div></div>
-<div class="ttc" id="agroup__pybind_html_ga81181bacca930bfda574ce3a51a01e9c"><div class="ttname"><a href="../../db/d7c/group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">hal::RawPtrWrapper</a></div><div class="ttdeci">std::unique_ptr&lt; T, py::nodelete &gt; RawPtrWrapper</div><div class="ttdef"><b>Definition:</b> python_bindings.h:51</div></div>
+<div class="ttc" id="agroup__pybind_html_ga81181bacca930bfda574ce3a51a01e9c"><div class="ttname"><a href="../../db/d7c/group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">hal::RawPtrWrapper</a></div><div class="ttdeci">std::unique_ptr&lt; T, py::nodelete &gt; RawPtrWrapper</div><div class="ttdef"><b>Definition:</b> python_bindings.h:50</div></div>
 <div class="ttc" id="autils_8h_html"><div class="ttname"><a href="../../d5/d60/utils_8h.html">utils.h</a></div></div>
 <div class="ttc" id="anetlist__serializer_8h_html"><div class="ttname"><a href="../../d9/d76/netlist__serializer_8h.html">netlist_serializer.h</a></div></div>
 <div class="ttc" id="agate__type_8h_html"><div class="ttname"><a href="../../db/dd6/gate__type_8h.html">gate_type.h</a></div></div>
 <div class="ttc" id="ahdl__writer__manager_8h_html"><div class="ttname"><a href="../../d6/dee/hdl__writer__manager_8h.html">hdl_writer_manager.h</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gae5a4b7d4ff2a9896d9372662906d05fb"><div class="ttname"><a href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init</a></div><div class="ttdeci">void boolean_function_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> boolean_function.cpp:5</div></div>
-<div class="ttc" id="agroup__pybind_html_gaab97b444976a9d5305e3efc20b8bfad6"><div class="ttname"><a href="../../db/d7c/group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6">hal::gate_type_lut_init</a></div><div class="ttdeci">void gate_type_lut_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> gate_type_lut.cpp:5</div></div>
+<div class="ttc" id="agroup__pybind_html_gaab97b444976a9d5305e3efc20b8bfad6"><div class="ttname"><a href="../../db/d7c/group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6">hal::gate_type_lut_init</a></div><div class="ttdeci">void gate_type_lut_init(py::module &amp;m)</div></div>
 <div class="ttc" id="agroup__pybind_html_ga12b7d19dc09194a879bf4d0b8b7641c7"><div class="ttname"><a href="../../db/d7c/group__pybind.html#ga12b7d19dc09194a879bf4d0b8b7641c7">hal::path_init</a></div><div class="ttdeci">void path_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> path.cpp:5</div></div>
 <div class="ttc" id="agroup__pybind_html_gaa10fb860bfd6cbdbe95ab96e78c8cb1e"><div class="ttname"><a href="../../db/d7c/group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e">hal::netlist_init</a></div><div class="ttdeci">void netlist_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> netlist.cpp:5</div></div>
+<div class="ttc" id="agate__library__writer__manager_8h_html"><div class="ttname"><a href="../../dd/d2b/gate__library__writer__manager_8h.html">gate_library_writer_manager.h</a></div></div>
 <div class="ttc" id="aboolean__function_8h_html"><div class="ttname"><a href="../../dc/d6d/boolean__function_8h.html">boolean_function.h</a></div></div>
 <div class="ttc" id="aplugin__manager_8h_html"><div class="ttname"><a href="../../de/d6f/plugin__manager_8h.html">plugin_manager.h</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gaf8d3775de7aff4ada2993c698332de33"><div class="ttname"><a href="../../db/d7c/group__pybind.html#gaf8d3775de7aff4ada2993c698332de33">hal::netlist_factory_init</a></div><div class="ttdeci">void netlist_factory_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> netlist_factory.cpp:5</div></div>
@@ -194,9 +195,6 @@ $(function() {
 <div class="ttc" id="agroup__pybind_html_ga0b8291fb8af058d824b23bcd16a86821"><div class="ttname"><a href="../../db/d7c/group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821">hal::grouping_init</a></div><div class="ttdeci">void grouping_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> grouping.cpp:5</div></div>
 <div class="ttc" id="agroup__pybind_html_ga6d7aa3afc74611d7f65294808436eac9"><div class="ttname"><a href="../../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9">hal::endpoint_init</a></div><div class="ttdeci">void endpoint_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> endpoint.cpp:5</div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="../../d7/d7f/log_8h.html">log.h</a></div></div>
-<div class="ttc" id="agate__library__parser_8h_html"><div class="ttname"><a href="../../d7/de4/gate__library__parser_8h.html">gate_library_parser.h</a></div></div>
-<div class="ttc" id="agate__type__sequential_8h_html"><div class="ttname"><a href="../../da/dc0/gate__type__sequential_8h.html">gate_type_sequential.h</a></div></div>
-<div class="ttc" id="agate__type__lut_8h_html"><div class="ttname"><a href="../../d7/d79/gate__type__lut_8h.html">gate_type_lut.h</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gae67f2029fac093c1e1990401edbcfd0a"><div class="ttname"><a href="../../db/d7c/group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a">hal::core_utils_init</a></div><div class="ttdeci">void core_utils_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> core_utils.cpp:5</div></div>
 <div class="ttc" id="aplugin__interface__gui_8h_html"><div class="ttname"><a href="../../db/d1f/plugin__interface__gui_8h.html">plugin_interface_gui.h</a></div></div>
 <div class="ttc" id="agate__library_8h_html"><div class="ttname"><a href="../../de/d88/gate__library_8h.html">gate_library.h</a></div></div>
@@ -205,7 +203,7 @@ $(function() {
 <div class="ttc" id="agate_8h_html"><div class="ttname"><a href="../../d4/db6/gate_8h.html">gate.h</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 15 2021 21:04:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jan 16 2021 08:48:39 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

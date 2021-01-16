@@ -81,7 +81,7 @@ Collaboration diagram for hal::GateLibrary:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../de/d14/classhal_1_1GateLibrary__coll__graph.png" border="0" usemap="#hal_1_1GateLibrary_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1GateLibrary_coll__map" id="hal_1_1GateLibrary_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,184,229"/>
+<area shape="rect" title=" " alt="" coords="5,5,212,303"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -95,16 +95,24 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aef64b8371779e27c778227552deb3a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a203b238f213e1980b82f796763ea2ac7"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a203b238f213e1980b82f796763ea2ac7">get_path</a> () const</td></tr>
 <tr class="separator:a203b238f213e1980b82f796763ea2ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abafcc6da5e5d000d3dcebf36aec84f31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#abafcc6da5e5d000d3dcebf36aec84f31">add_gate_type</a> (std::unique_ptr&lt; const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> &gt; gate_type)</td></tr>
-<tr class="separator:abafcc6da5e5d000d3dcebf36aec84f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb40159f6ad605ef063aecdad4607139"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#acb40159f6ad605ef063aecdad4607139">contains_gate_type</a> (const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *gate_type) const</td></tr>
-<tr class="separator:acb40159f6ad605ef063aecdad4607139"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af244ebe63555e8ee771e3d0dca62095b"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#af244ebe63555e8ee771e3d0dca62095b">get_gate_types</a> () const</td></tr>
-<tr class="separator:af244ebe63555e8ee771e3d0dca62095b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5186e691271b4d42cbd632fd02e3195"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#ab5186e691271b4d42cbd632fd02e3195">get_vcc_gate_types</a> () const</td></tr>
-<tr class="separator:ab5186e691271b4d42cbd632fd02e3195"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d66afe693bdd824761470bd3311cc31"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a7d66afe693bdd824761470bd3311cc31">get_gnd_gate_types</a> () const</td></tr>
-<tr class="separator:a7d66afe693bdd824761470bd3311cc31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f558f3b7bdaad4ebcb8bc244c25d880"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a8f558f3b7bdaad4ebcb8bc244c25d880">create_gate_type</a> (const std::string &amp;name, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">GateType::BaseType</a> base_type=<a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36a294da9f271b64311147582da631ee638">GateType::BaseType::combinational</a>)</td></tr>
+<tr class="separator:a8f558f3b7bdaad4ebcb8bc244c25d880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87ff461bac5e8b03736eb909fe9eee5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a87ff461bac5e8b03736eb909fe9eee5a">contains_gate_type</a> (<a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *gate_type) const</td></tr>
+<tr class="separator:a87ff461bac5e8b03736eb909fe9eee5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03084dff2c24ba07925c4487547fc730"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a03084dff2c24ba07925c4487547fc730">contains_gate_type_by_name</a> (const std::string &amp;name) const</td></tr>
+<tr class="separator:a03084dff2c24ba07925c4487547fc730"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a515857dc13b6592f77f192009d24a708"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a515857dc13b6592f77f192009d24a708">get_gate_type_by_name</a> (const std::string &amp;name) const</td></tr>
+<tr class="separator:a515857dc13b6592f77f192009d24a708"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1d158602d866d6b198213d2407c6313"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#ae1d158602d866d6b198213d2407c6313">get_gate_types</a> () const</td></tr>
+<tr class="separator:ae1d158602d866d6b198213d2407c6313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a365e5c3131c9a1c9d753a43468aced8d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a365e5c3131c9a1c9d753a43468aced8d">mark_vcc_gate_type</a> (<a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *gate_type)</td></tr>
+<tr class="separator:a365e5c3131c9a1c9d753a43468aced8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3f32d464c6cc8bc93704d317e86428"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a4f3f32d464c6cc8bc93704d317e86428">get_vcc_gate_types</a> () const</td></tr>
+<tr class="separator:a4f3f32d464c6cc8bc93704d317e86428"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82ab1b37d4070635bc32d99e927024ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a82ab1b37d4070635bc32d99e927024ae">mark_gnd_gate_type</a> (<a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *gate_type)</td></tr>
+<tr class="separator:a82ab1b37d4070635bc32d99e927024ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc606af53f4d9c1fc42e029851410e1e"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#abc606af53f4d9c1fc42e029851410e1e">get_gnd_gate_types</a> () const</td></tr>
+<tr class="separator:abc606af53f4d9c1fc42e029851410e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a704f948603b277844a8f8bb20fa6a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a8a704f948603b277844a8f8bb20fa6a9">add_include</a> (const std::string &amp;inc)</td></tr>
 <tr class="separator:a8a704f948603b277844a8f8bb20fa6a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a955208e223376a19c808f83d486311d2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a955208e223376a19c808f83d486311d2">get_includes</a> () const</td></tr>
@@ -192,7 +200,7 @@ Public Member Functions</h2></td></tr>
 <p>Get the name of the gate library.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the gate library. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>, and <a class="el" href="../../d3/d0d/namespacehal_1_1gate__library__writer__manager.html#ae6689e41c89a95d37b36cf8deb680d5f">hal::gate_library_writer_manager::write()</a>.</p>
 
 </div>
 </div>
@@ -215,33 +223,49 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abafcc6da5e5d000d3dcebf36aec84f31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abafcc6da5e5d000d3dcebf36aec84f31">&#9670;&nbsp;</a></span>add_gate_type()</h2>
+<a id="a8f558f3b7bdaad4ebcb8bc244c25d880"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f558f3b7bdaad4ebcb8bc244c25d880">&#9670;&nbsp;</a></span>create_gate_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::GateLibrary::add_gate_type </td>
+          <td class="memname"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * hal::GateLibrary::create_gate_type </td>
           <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> &gt;&#160;</td>
-          <td class="paramname"><em>gate_type</em></td><td>)</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">GateType::BaseType</a>&#160;</td>
+          <td class="paramname"><em>base_type</em> = <code><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36a294da9f271b64311147582da631ee638">GateType::BaseType::combinational</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add a gate type to the gate library.</p>
+<p>Create a new gate type, add it to the gate library, and return it.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">gate_type</td><td>- The gate type to add. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the gate type. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">base_type</td><td>- The base type of the gate type. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The new gate type instance on success, a nullptr otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
 
 </div>
 </div>
-<a id="acb40159f6ad605ef063aecdad4607139"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb40159f6ad605ef063aecdad4607139">&#9670;&nbsp;</a></span>contains_gate_type()</h2>
+<a id="a87ff461bac5e8b03736eb909fe9eee5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87ff461bac5e8b03736eb909fe9eee5a">&#9670;&nbsp;</a></span>contains_gate_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -249,7 +273,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">bool hal::GateLibrary::contains_gate_type </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td>
           <td class="paramname"><em>gate_type</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -258,26 +282,84 @@ Public Member Functions</h2></td></tr>
 <p>Check whether the given gate type is contained in this library.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">gate_type</td><td>- The gate type to check. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate_type</td><td>- The gate type. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the gate type is part of this library, false otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d1/d05/classhal_1_1GateType.html#ada08ed06b774c41353d1d943f9eff203">hal::GateType::get_name()</a>.</p>
+<p class="reference">References <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a59bed23ba1e741d00b101660fb7aa2d3">hal::GateType::get_name()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
 
 </div>
 </div>
-<a id="af244ebe63555e8ee771e3d0dca62095b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af244ebe63555e8ee771e3d0dca62095b">&#9670;&nbsp;</a></span>get_gate_types()</h2>
+<a id="a03084dff2c24ba07925c4487547fc730"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03084dff2c24ba07925c4487547fc730">&#9670;&nbsp;</a></span>contains_gate_type_by_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt; std::string, const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt; hal::GateLibrary::get_gate_types </td>
+          <td class="memname">bool hal::GateLibrary::contains_gate_type_by_name </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check by name whether the given gate type is contained in this library.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the gate type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the gate type is part of this library, false otherwise. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
+
+</div>
+</div>
+<a id="a515857dc13b6592f77f192009d24a708"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a515857dc13b6592f77f192009d24a708">&#9670;&nbsp;</a></span>get_gate_type_by_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * hal::GateLibrary::get_gate_type_by_name </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the gate type corresponding to the given name if contained within the library. In case there is no gate type with that name, a nullptr is returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the gate type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The gate type on success, a nullptr otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
+
+</div>
+</div>
+<a id="ae1d158602d866d6b198213d2407c6313"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1d158602d866d6b198213d2407c6313">&#9670;&nbsp;</a></span>get_gate_types()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; std::string, <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt; hal::GateLibrary::get_gate_types </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -291,14 +373,44 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab5186e691271b4d42cbd632fd02e3195"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5186e691271b4d42cbd632fd02e3195">&#9670;&nbsp;</a></span>get_vcc_gate_types()</h2>
+<a id="a365e5c3131c9a1c9d753a43468aced8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a365e5c3131c9a1c9d753a43468aced8d">&#9670;&nbsp;</a></span>mark_vcc_gate_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt; std::string, const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt; hal::GateLibrary::get_vcc_gate_types </td>
+          <td class="memname">bool hal::GateLibrary::mark_vcc_gate_type </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td>
+          <td class="paramname"><em>gate_type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Mark a gate type as a VCC gate type.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate_type</td><td>- The gate type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d1/d05/classhal_1_1GateType.html#af205511b9029e75c0c2300046a367b56">hal::GateType::get_boolean_functions()</a>, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a8a90fb08834cb0074cdf5921f8b6fd0e">hal::GateType::get_input_pins()</a>, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a59bed23ba1e741d00b101660fb7aa2d3">hal::GateType::get_name()</a>, and <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a6187126b28eb574fca729c2418b628c5">hal::GateType::get_output_pins()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
+
+</div>
+</div>
+<a id="a4f3f32d464c6cc8bc93704d317e86428"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f3f32d464c6cc8bc93704d317e86428">&#9670;&nbsp;</a></span>get_vcc_gate_types()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; std::string, <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt; hal::GateLibrary::get_vcc_gate_types </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -312,14 +424,44 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7d66afe693bdd824761470bd3311cc31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d66afe693bdd824761470bd3311cc31">&#9670;&nbsp;</a></span>get_gnd_gate_types()</h2>
+<a id="a82ab1b37d4070635bc32d99e927024ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82ab1b37d4070635bc32d99e927024ae">&#9670;&nbsp;</a></span>mark_gnd_gate_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt; std::string, const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt; hal::GateLibrary::get_gnd_gate_types </td>
+          <td class="memname">bool hal::GateLibrary::mark_gnd_gate_type </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td>
+          <td class="paramname"><em>gate_type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Mark a gate type as a GND gate type.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate_type</td><td>- The gate type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d1/d05/classhal_1_1GateType.html#af205511b9029e75c0c2300046a367b56">hal::GateType::get_boolean_functions()</a>, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a8a90fb08834cb0074cdf5921f8b6fd0e">hal::GateType::get_input_pins()</a>, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a59bed23ba1e741d00b101660fb7aa2d3">hal::GateType::get_name()</a>, and <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a6187126b28eb574fca729c2418b628c5">hal::GateType::get_output_pins()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b">hal::gate_library_init()</a>.</p>
+
+</div>
+</div>
+<a id="abc606af53f4d9c1fc42e029851410e1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc606af53f4d9c1fc42e029851410e1e">&#9670;&nbsp;</a></span>get_gnd_gate_types()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; std::string, <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> * &gt; hal::GateLibrary::get_gnd_gate_types </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -388,7 +530,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 15 2021 21:04:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jan 16 2021 08:48:39 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

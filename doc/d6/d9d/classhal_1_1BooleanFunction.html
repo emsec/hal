@@ -84,7 +84,7 @@ Collaboration diagram for hal::BooleanFunction:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d09/classhal_1_1BooleanFunction__coll__graph.png" border="0" usemap="#hal_1_1BooleanFunction_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1BooleanFunction_coll__map" id="hal_1_1BooleanFunction_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,164,493"/>
+<area shape="rect" title=" " alt="" coords="5,5,164,508"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -152,6 +152,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af994e1397431496288ed5aab298bc54a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79f7213798c1927842874c8271fba751"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#aac7bb4fda3bf06664f6bc717c3be92fb">Value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a79f7213798c1927842874c8271fba751">get_truth_table</a> (std::vector&lt; std::string &gt; ordered_variables={}, bool remove_unknown_variables=false) const</td></tr>
 <tr class="separator:a79f7213798c1927842874c8271fba751"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8264cc6e595cabd8253a2be33d0213f6"><td class="memItemLeft" align="right" valign="top">z3::expr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a8264cc6e595cabd8253a2be33d0213f6">to_z3</a> (z3::context &amp;context) const</td></tr>
+<tr class="separator:a8264cc6e595cabd8253a2be33d0213f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -527,7 +529,7 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae96a6d2c72af72e5969ced6fed3bccd7">get_variables()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a79f7213798c1927842874c8271fba751">get_truth_table()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae96a6d2c72af72e5969ced6fed3bccd7">get_variables()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">optimize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a79f7213798c1927842874c8271fba751">get_truth_table()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae96a6d2c72af72e5969ced6fed3bccd7">get_variables()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">optimize()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a8264cc6e595cabd8253a2be33d0213f6">to_z3()</a>.</p>
 
 </div>
 </div>
@@ -599,7 +601,7 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a6b39eb961ba451df46b7ad19ff673733">is_empty()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a9a7638db9c73a22dde7768a87d02eaaa">get_dnf_clauses()</a>, and <a class="el" href="../../d0/d7f/namespacehal.html#aef8d4a8f510965ea04184d31d5714c79">hal::operator&lt;&lt;()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a9a7638db9c73a22dde7768a87d02eaaa">get_dnf_clauses()</a>, <a class="el" href="../../d0/d7f/namespacehal.html#aef8d4a8f510965ea04184d31d5714c79">hal::operator&lt;&lt;()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a7252fdca08ea0f7e5c0aa4720083d23c">hal::netlist_utils::rename_luts_according_to_function()</a>.</p>
 
 </div>
 </div>
@@ -977,7 +979,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>Get the truth table outputs of the function.</p>
 <p>WARNING: Exponential runtime in the number of variables!</p>
-<p>Output is the vector of output values when walking the truth table in ascending order.</p>
+<p>Output is the vector of output values when walking the truth table from the least significant bit to the most significant one.</p>
 <p>If ordered_variables is empty, all included variables are used and ordered alphabetically.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -991,6 +993,34 @@ Friends</h2></td></tr>
 <p class="reference">References <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a69acdbd8fe2a2de1a0040fb768c6f0b4">evaluate()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae96a6d2c72af72e5969ced6fed3bccd7">get_variables()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a86bc448620b92e78da68b4b220f709af">hal::Gate::add_boolean_function()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init()</a>.</p>
+
+</div>
+</div>
+<a id="a8264cc6e595cabd8253a2be33d0213f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8264cc6e595cabd8253a2be33d0213f6">&#9670;&nbsp;</a></span>to_z3()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">z3::expr hal::BooleanFunction::to_z3 </td>
+          <td>(</td>
+          <td class="paramtype">z3::context &amp;&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the z3 representation of the Boolean function.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">context</td><td>- The z3 context. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The z3 representation of the Boolean function. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae96a6d2c72af72e5969ced6fed3bccd7">get_variables()</a>.</p>
 
 </div>
 </div>
@@ -1128,7 +1158,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 15 2021 21:04:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jan 16 2021 08:48:39 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -100,7 +100,7 @@ $(function() {
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../dc/d6d/boolean__function_8h.html">hal_core/netlist/boolean_function.h</a>&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d1/df3/data__container_8h.html">hal_core/netlist/data_container.h</a>&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../d5/d97/endpoint_8h.html">hal_core/netlist/endpoint.h</a>&quot;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/dd6/gate__type_8h.html">hal_core/netlist/gate_library/gate_type/gate_type.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="../../db/dd6/gate__type_8h.html">hal_core/netlist/gate_library/gate_type.h</a>&quot;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
@@ -130,7 +130,7 @@ $(function() {
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">void</span> set_name(<span class="keyword">const</span> std::string&amp; name);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* get_type() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* get_type() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">bool</span> has_location() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
@@ -206,7 +206,7 @@ $(function() {
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160; </div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00378"></a><span class="lineno"><a class="line" href="../../d5/d57/classhal_1_1Gate.html#a71851ef81c1a491be6395f4c883218de">  378</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>;</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>(<a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>* mgr, <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* gt, <span class="keyword">const</span> std::string&amp; name, <a class="code" href="../../d8/db0/defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> x, <a class="code" href="../../d8/db0/defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> y);</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>(<a class="code" href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">NetlistInternalManager</a>* mgr, <a class="code" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* gt, <span class="keyword">const</span> std::string&amp; name, <a class="code" href="../../d8/db0/defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> x, <a class="code" href="../../d8/db0/defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> y);</div>
 <div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160; </div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>(<span class="keyword">const</span> <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>(<a class="code" href="../../d5/d57/classhal_1_1Gate.html">Gate</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
@@ -225,7 +225,7 @@ $(function() {
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        std::string m_name;</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; </div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;        <span class="comment">/* type of the gate */</span></div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <span class="keyword">const</span> <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* m_type;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <a class="code" href="../../d1/d05/classhal_1_1GateType.html">GateType</a>* m_type;</div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160; </div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        <span class="comment">/* location */</span></div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        <a class="code" href="../../d8/db0/defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> m_x = -1;</div>
@@ -252,14 +252,14 @@ $(function() {
 <div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> defines.h:43</div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="../../d0/d7f/namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> defines.h:46</div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="../../d8/db0/defines_8h.html">defines.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1BooleanFunction_html"><div class="ttname"><a href="../../d6/d9d/classhal_1_1BooleanFunction.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> boolean_function.h:42</div></div>
+<div class="ttc" id="aclasshal_1_1BooleanFunction_html"><div class="ttname"><a href="../../d6/d9d/classhal_1_1BooleanFunction.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> boolean_function.h:43</div></div>
 <div class="ttc" id="aclasshal_1_1NetlistInternalManager_html"><div class="ttname"><a href="../../d1/d1b/classhal_1_1NetlistInternalManager.html">hal::NetlistInternalManager</a></div><div class="ttdef"><b>Definition:</b> netlist_internal_manager.h:46</div></div>
 <div class="ttc" id="agate__type_8h_html"><div class="ttname"><a href="../../db/dd6/gate__type_8h.html">gate_type.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1Grouping_html"><div class="ttname"><a href="../../d2/d20/classhal_1_1Grouping.html">hal::Grouping</a></div><div class="ttdef"><b>Definition:</b> grouping.h:23</div></div>
 <div class="ttc" id="aclasshal_1_1Module_html"><div class="ttname"><a href="../../d1/d10/classhal_1_1Module.html">hal::Module</a></div><div class="ttdef"><b>Definition:</b> module.h:53</div></div>
 <div class="ttc" id="aboolean__function_8h_html"><div class="ttname"><a href="../../dc/d6d/boolean__function_8h.html">boolean_function.h</a></div></div>
 <div class="ttc" id="adefines_8h_html_aec41e5f8e4b7aef2540e84268692fa84"><div class="ttname"><a href="../../d8/db0/defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a></div><div class="ttdeci">int32_t i32</div><div class="ttdef"><b>Definition:</b> defines.h:38</div></div>
-<div class="ttc" id="aclasshal_1_1GateType_html"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> gate_type.h:39</div></div>
+<div class="ttc" id="aclasshal_1_1GateType_html"><div class="ttname"><a href="../../d1/d05/classhal_1_1GateType.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> gate_type.h:42</div></div>
 <div class="ttc" id="aclasshal_1_1Netlist_html"><div class="ttname"><a href="../../dc/d06/classhal_1_1Netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> netlist.h:52</div></div>
 <div class="ttc" id="aclasshal_1_1DataContainer_html"><div class="ttname"><a href="../../d1/d7d/classhal_1_1DataContainer.html">hal::DataContainer</a></div><div class="ttdef"><b>Definition:</b> data_container.h:39</div></div>
 <div class="ttc" id="adata__container_8h_html"><div class="ttname"><a href="../../d1/df3/data__container_8h.html">data_container.h</a></div></div>
@@ -269,7 +269,7 @@ $(function() {
 <div class="ttc" id="aclasshal_1_1Endpoint_html"><div class="ttname"><a href="../../d9/df8/classhal_1_1Endpoint.html">hal::Endpoint</a></div><div class="ttdef"><b>Definition:</b> endpoint.h:39</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 15 2021 21:04:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jan 16 2021 08:48:39 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

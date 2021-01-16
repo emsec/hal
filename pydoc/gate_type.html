@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v3.1.11-9-ge0f434cf4 documentation</title>
+  <title>Gate Type &mdash; hal_py v3.1.11-129-gba1823fdb documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Gate Type LUT" href="gate_type_lut.html" />
+    <link rel="next" title="Gate" href="gate.html" />
     <link rel="prev" title="Boolean Function" href="boolean_function.html" /> 
 </head>
 
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.1.11-9-ge0f434cf4
+                v3.1.11-129-gba1823fdb
               </div>
             
           
@@ -95,8 +95,6 @@
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Gate Type</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gate_type_lut.html">Gate Type LUT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gate_type_sequential.html">Gate Type Sequential</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
@@ -181,36 +179,103 @@
 <dl class="class">
 <dt id="hal_py.GateType">
 <em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">GateType</code><a class="headerlink" href="#hal_py.GateType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gate type class containing information about the internals of a specific gate type.</p>
+<dd><p>A gate type contains information about its internals such as input and output pins as well as its Boolean functions.</p>
 <dl class="method">
 <dt id="hal_py.GateType.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a new gate type by specifying its name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the gate type.</td>
-</tr>
-</tbody>
-</table>
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.GateType.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="hal_py.GateType.BaseType">
 <em class="property">class </em><code class="descname">BaseType</code><a class="headerlink" href="#hal_py.GateType.BaseType" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div>Represents the base type of a gate type.</div></blockquote>
+<div>Defines the base type of a gate type.</div></blockquote>
 <p>Members:</p>
 <blockquote>
-<div><p>combinatorial : Represents a combinatorial gate type.</p>
-<p>lut : Represents a combinatorial LUT gate type.</p>
+<div><p>combinational : Represents a combinational gate type.</p>
+<p>lut : Represents a combinational LUT gate type.</p>
 <p>ff : Represents a sequential FF gate type.</p>
 <p>latch : Represents a sequential latch gate type.</p>
+<p>ram : Represents a sequential RAM gate type.</p>
+<p>io : Represents an IO gate type.</p>
+<p>dsp : Represents a sequential DSP gate type.</p>
 </div></blockquote>
 <dl class="attribute">
 <dt id="hal_py.GateType.BaseType.name">
 <code class="descname">name</code><a class="headerlink" href="#hal_py.GateType.BaseType.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: handle) -&gt; str</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.GateType.ClearPresetBehavior">
+<em class="property">class </em><code class="descname">ClearPresetBehavior</code><a class="headerlink" href="#hal_py.GateType.ClearPresetBehavior" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Defines the behavior of the gate type in case both clear and preset are active at the same time.</div></blockquote>
+<p>Members:</p>
+<blockquote>
+<div><p>U : Default value when no behavior is specified.</p>
+<p>L : Set the internal state to ‘0’.</p>
+<p>H : Set the internal state to ‘1’.</p>
+<p>N : Do not change the internal state.</p>
+<p>T : Toggle, i.e., invert the internal state.</p>
+<p>X : Set the internal state to ‘X’.</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="hal_py.GateType.ClearPresetBehavior.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.GateType.ClearPresetBehavior.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: handle) -&gt; str</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.GateType.PinDirection">
+<em class="property">class </em><code class="descname">PinDirection</code><a class="headerlink" href="#hal_py.GateType.PinDirection" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Defines the direction of a pin.</div></blockquote>
+<p>Members:</p>
+<blockquote>
+<div><p>none : Invalid pin.</p>
+<p>input : Input pin.</p>
+<p>output : Output pin.</p>
+<p>inout : Inout pin.</p>
+<p>internal : Internal pin.</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="hal_py.GateType.PinDirection.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.GateType.PinDirection.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>(self: handle) -&gt; str</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hal_py.GateType.PinType">
+<em class="property">class </em><code class="descname">PinType</code><a class="headerlink" href="#hal_py.GateType.PinType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the type of a pin.</p>
+<p>Members:</p>
+<blockquote>
+<div><p>none : Default pin.</p>
+<p>power : Power pin.</p>
+<p>ground : Ground pin.</p>
+<p>lut : Pin that generates output from LUT initialization string.</p>
+<p>state : Pin that generates output from internal state.</p>
+<p>neg_state : Pin that generates output from negated internal state.</p>
+<p>clock : Clock pin.</p>
+<p>enable : Enable pin.</p>
+<p>set : Set pin.</p>
+<p>reset : Reset pin.</p>
+<p>data : Data pin.</p>
+<p>address : Address pin.</p>
+<p>io_pad : IO pad pin.</p>
+<p>select : Select pin.</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="hal_py.GateType.PinType.name">
+<code class="descname">name</code><a class="headerlink" href="#hal_py.GateType.PinType.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>(self: handle) -&gt; str</p>
 </dd></dl>
 
@@ -250,13 +315,13 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.add_input_pin">
-<code class="descname">add_input_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>input_pin: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.add_input_pin" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_input_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.add_input_pin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an input pin to the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the input pin to add.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the input pin to add.</td>
 </tr>
 </tbody>
 </table>
@@ -264,13 +329,13 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.add_input_pins">
-<code class="descname">add_input_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateType, input_pins: List[str]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.add_input_pins" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_input_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateType, pins: List[str]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.add_input_pins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a list of input pins to the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The list of names of input pins to add.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The list of names of input pins to add.</td>
 </tr>
 </tbody>
 </table>
@@ -278,13 +343,13 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.add_output_pin">
-<code class="descname">add_output_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>output_pin: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.add_output_pin" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_output_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.add_output_pin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an output pin to the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the output pin to add.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the output pin to add.</td>
 </tr>
 </tbody>
 </table>
@@ -292,29 +357,79 @@
 
 <dl class="method">
 <dt id="hal_py.GateType.add_output_pins">
-<code class="descname">add_output_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateType, output_pins: List[str]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.add_output_pins" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_output_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateType, pins: List[str]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.add_output_pins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a list of output pins to the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The list of names of output pins to add.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The list of names of output pins to add.</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.GateType.assign_input_pin_group">
-<code class="descname">assign_input_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.GateType, group_name: str, index_to_pin: Dict[int, str]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.assign_input_pin_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assign existing input pins to a input pin group.</p>
+<dt id="hal_py.GateType.add_pin">
+<code class="descname">add_pin</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em>, <em>direction: hal_py.GateType.PinDirection</em>, <em>pin_type: hal_py.GateType.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.add_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a pin of the specified direction and type to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The pin.</li>
+<li><strong>direction</strong> (<a class="reference internal" href="#hal_py.GateType.PinDirection" title="hal_py.GateType.PinDirection"><em>hal_py.GateType.PinDirection</em></a>) – The pin direction to be assigned.</li>
+<li><strong>pin_type</strong> (<a class="reference internal" href="#hal_py.GateType.PinType" title="hal_py.GateType.PinType"><em>hal_py.GateType.PinType</em></a>) – The pin type to be assigned.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, false otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.add_pins">
+<code class="descname">add_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pins: str</em>, <em>direction: hal_py.GateType.PinDirection</em>, <em>pin_type: hal_py.GateType.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.add_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a list of pin of the specified direction and type to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – The pins.</li>
+<li><strong>direction</strong> (<a class="reference internal" href="#hal_py.GateType.PinDirection" title="hal_py.GateType.PinDirection"><em>hal_py.GateType.PinDirection</em></a>) – The pin direction to be assigned.</li>
+<li><strong>pin_type</strong> (<a class="reference internal" href="#hal_py.GateType.PinType" title="hal_py.GateType.PinType"><em>hal_py.GateType.PinType</em></a>) – The pin type to be assigned.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, false otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.assign_pin_group">
+<code class="descname">assign_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.GateType, group: str, index_to_pin: Dict[int, str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.assign_pin_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign existing pins to a pin group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>group_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the input pin group.</li>
-<li><strong>index_to_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – A dict from pin index to input pin name.</li>
+<li><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the pin group.</li>
+<li><strong>index_to_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – A dict from pin index to pin.</li>
 </ul>
 </td>
 </tr>
@@ -323,46 +438,24 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.GateType.assign_input_pin_groups">
-<code class="descname">assign_input_pin_groups</code><span class="sig-paren">(</span><em>self: hal_py.GateType, pin_groups: Dict[str, Dict[int, str]]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.assign_input_pin_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assign existing input pins to multiple input pin groups.</p>
+<dt id="hal_py.GateType.assign_pin_type">
+<code class="descname">assign_pin_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em>, <em>pin_type: hal_py.GateType.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.assign_pin_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em>) – A dict from pin group names to a dict from pin indices to pin names.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.assign_output_pin_group">
-<code class="descname">assign_output_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.GateType, group_name: str, index_to_pin: Dict[int, str]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.assign_output_pin_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assign existing output pins to a output pin group.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>group_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the output pin group.</li>
-<li><strong>index_to_pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – A dict from pin index to output pin name.</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The pin.</li>
+<li><strong>pin_type</strong> (<a class="reference internal" href="#hal_py.GateType.PinType" title="hal_py.GateType.PinType"><em>hal_py.GateType.PinType</em></a>) – The pin type to be assigned.</li>
 </ul>
 </td>
 </tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.assign_output_pin_groups">
-<code class="descname">assign_output_pin_groups</code><span class="sig-paren">(</span><em>self: hal_py.GateType, pin_groups: Dict[str, Dict[int, str]]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.assign_output_pin_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assign existing output pins to multiple output pin groups.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em>) – A dict from pin group names to a dict from pin indices to pin names.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, false otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -391,6 +484,48 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateType.config_data_category">
+<code class="descname">config_data_category</code><a class="headerlink" href="#hal_py.GateType.config_data_category" title="Permalink to this definition">¶</a></dt>
+<dd><p>The category in which to find the configuration data associated with this gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateType.config_data_identifier">
+<code class="descname">config_data_identifier</code><a class="headerlink" href="#hal_py.GateType.config_data_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>The identifier used to specify the configuration data associated with this gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateType.gate_library">
+<code class="descname">gate_library</code><a class="headerlink" href="#hal_py.GateType.gate_library" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gate library this gate type is associated with.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a></td>
 </tr>
 </tbody>
 </table>
@@ -430,6 +565,70 @@ The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latc
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.GateType.get_clear_preset_behavior">
+<code class="descname">get_clear_preset_behavior</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Tuple[hal_py.GateType.ClearPresetBehavior, hal_py.GateType.ClearPresetBehavior]<a class="headerlink" href="#hal_py.GateType.get_clear_preset_behavior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the behavior of the internal state and the negated internal state when both clear and preset are active at the same time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The values specifying the behavior for the internal and negated internal state.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Rytpe:</th><td class="field-body">tuple(hal_py.GateType.ClearPresetBehavior, hal_py.GateType.ClearPresetBehavior)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_config_data_category">
+<code class="descname">get_config_data_category</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GateType.get_config_data_category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the category in which to find the configuration data associated with this gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The data category.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_config_data_identifier">
+<code class="descname">get_config_data_identifier</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.GateType.get_config_data_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the identifier used to specify the configuration data associated with this gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The data identifier.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_gate_library">
+<code class="descname">get_gate_library</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; hal::GateLibrary<a class="headerlink" href="#hal_py.GateType.get_gate_library" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the gate library this gate type is associated with.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The gate library.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.GateType.get_id">
 <code class="descname">get_id</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.GateType.get_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the unique ID of the gate type.</p>
@@ -440,22 +639,6 @@ The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latc
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The unique ID of the gate type.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.get_input_pin_groups">
-<code class="descname">get_input_pin_groups</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[int, str]]<a class="headerlink" href="#hal_py.GateType.get_input_pin_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all input pin groups of the gate type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin group names to a dict from pin indices to pin names.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
 </tr>
 </tbody>
 </table>
@@ -494,22 +677,6 @@ The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latc
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.GateType.get_output_pin_groups">
-<code class="descname">get_output_pin_groups</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[int, str]]<a class="headerlink" href="#hal_py.GateType.get_output_pin_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all output pin groups of the gate type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin group names to a dict from pin indices to pin names.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="hal_py.GateType.get_output_pins">
 <code class="descname">get_output_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.GateType.get_output_pins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of output pins of the gate type.</p>
@@ -520,6 +687,160 @@ The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latc
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of output pin names of the gate type.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pin_direction">
+<code class="descname">get_pin_direction</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em><span class="sig-paren">)</span> &#x2192; hal_py.GateType.PinDirection<a class="headerlink" href="#hal_py.GateType.get_pin_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin direction of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the direction ‘internal’ will be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin direction.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.GateType.PinDirection" title="hal_py.GateType.PinDirection">hal_py.GateType.PinDirection</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pin_directions">
+<code class="descname">get_pin_directions</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Dict[str, hal_py.GateType.PinDirection]<a class="headerlink" href="#hal_py.GateType.get_pin_directions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin directions of all pins as a dict.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin to pin direction.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[std,<a class="reference internal" href="#hal_py.GateType.PinDirection" title="hal_py.GateType.PinDirection">hal_py.GateType.PinDirection</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pin_groups">
+<code class="descname">get_pin_groups</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Dict[str, Dict[int, str]]<a class="headerlink" href="#hal_py.GateType.get_pin_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all pin groups of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin group names to a dict from pin index to pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pin_type">
+<code class="descname">get_pin_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin: str</em><span class="sig-paren">)</span> &#x2192; hal_py.GateType.PinType<a class="headerlink" href="#hal_py.GateType.get_pin_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the type ‘none’ will be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin type.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.GateType.PinType" title="hal_py.GateType.PinType">hal_py.GateType.PinType</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pin_types">
+<code class="descname">get_pin_types</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Dict[str, hal_py.GateType.PinType]<a class="headerlink" href="#hal_py.GateType.get_pin_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pin types of all pins as a dict.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from pin to pin type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference internal" href="#hal_py.GateType.PinType" title="hal_py.GateType.PinType">hal_py.GateType.PinType</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pins">
+<code class="descname">get_pins</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.GateType.get_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all pins belonging to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of pins.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pins_of_direction">
+<code class="descname">get_pins_of_direction</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>direction: hal_py.GateType.PinDirection</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#hal_py.GateType.get_pins_of_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all pins of the specified pin direction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction</strong> (<a class="reference internal" href="#hal_py.GateType.PinDirection" title="hal_py.GateType.PinDirection"><em>hal_py.GateType.PinDirection</em></a>) – The pin direction.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of pins.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pins_of_group">
+<code class="descname">get_pins_of_group</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>group: str</em><span class="sig-paren">)</span> &#x2192; Dict[int, str]<a class="headerlink" href="#hal_py.GateType.get_pins_of_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all pins of the specified pin group including their indices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the pin group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A map from pin index to pin.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.get_pins_of_type">
+<code class="descname">get_pins_of_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin_type: hal_py.GateType.PinType</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#hal_py.GateType.get_pins_of_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all pins of the specified pin type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_type</strong> (<a class="reference internal" href="#hal_py.GateType.PinType" title="hal_py.GateType.PinType"><em>hal_py.GateType.PinType</em></a>) – The pin type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A set of pins.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -539,20 +860,6 @@ The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latc
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.GateType.input_pin_groups">
-<code class="descname">input_pin_groups</code><a class="headerlink" href="#hal_py.GateType.input_pin_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>All input pin groups of the gate type as a dict from pin group names to a dict from pin indices to pin names.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="hal_py.GateType.input_pins">
 <code class="descname">input_pins</code><a class="headerlink" href="#hal_py.GateType.input_pins" title="Permalink to this definition">¶</a></dt>
 <dd><p>A list of input pin names of the gate type.</p>
@@ -561,6 +868,36 @@ The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latc
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.is_lut_init_ascending">
+<code class="descname">is_lut_init_ascending</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.is_lut_init_ascending" title="Permalink to this definition">¶</a></dt>
+<dd><p>For LUT gate types, get the bit-order of the initialization string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if ascending bit-order, false otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateType.lut_init_ascending">
+<code class="descname">lut_init_ascending</code><a class="headerlink" href="#hal_py.GateType.lut_init_ascending" title="Permalink to this definition">¶</a></dt>
+<dd><p>For LUT gate types, defines the bit-order of the initialization string. True if ascending bit-order, false otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -581,9 +918,37 @@ The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latc
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.GateType.output_pin_groups">
-<code class="descname">output_pin_groups</code><a class="headerlink" href="#hal_py.GateType.output_pin_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>All output pin groups of the gate type as a dict from pin group names to a dict from pin indices to pin names.</p>
+<dt id="hal_py.GateType.output_pins">
+<code class="descname">output_pins</code><a class="headerlink" href="#hal_py.GateType.output_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of output pin names of the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateType.pin_directions">
+<code class="descname">pin_directions</code><a class="headerlink" href="#hal_py.GateType.pin_directions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The pin directions of all pins as a dict.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference internal" href="#hal_py.GateType.PinDirection" title="hal_py.GateType.PinDirection">hal_py.GateType.PinDirection</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateType.pin_groups">
+<code class="descname">pin_groups</code><a class="headerlink" href="#hal_py.GateType.pin_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>All pin groups of the gate type as a dict from pin group names to a dict from pin index to pin.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -595,14 +960,88 @@ The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latc
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.GateType.output_pins">
-<code class="descname">output_pins</code><a class="headerlink" href="#hal_py.GateType.output_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of output pin names of the gate type.</p>
+<dt id="hal_py.GateType.pin_types">
+<code class="descname">pin_types</code><a class="headerlink" href="#hal_py.GateType.pin_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>The pin types of all pins as a dict.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>,<a class="reference internal" href="#hal_py.GateType.PinType" title="hal_py.GateType.PinType">hal_py.GateType.PinType</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateType.pins">
+<code class="descname">pins</code><a class="headerlink" href="#hal_py.GateType.pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all pins belonging to the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.set_clear_preset_behavior">
+<code class="descname">set_clear_preset_behavior</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>cp1: hal_py.GateType.ClearPresetBehavior</em>, <em>cp2: hal_py.GateType.ClearPresetBehavior</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.set_clear_preset_behavior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the behavior that describes the internal state when both clear and preset are active at the same time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cp1</strong> (<a class="reference internal" href="#hal_py.GateType.ClearPresetBehavior" title="hal_py.GateType.ClearPresetBehavior"><em>hal_py.GateType.ClearPresetBehavior</em></a>) – The value specifying the behavior for the internal state.</li>
+<li><strong>cp2</strong> (<a class="reference internal" href="#hal_py.GateType.ClearPresetBehavior" title="hal_py.GateType.ClearPresetBehavior"><em>hal_py.GateType.ClearPresetBehavior</em></a>) – The value specifying the behavior for the negated internal state.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.set_config_data_category">
+<code class="descname">set_config_data_category</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>category: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.set_config_data_category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the category in which to find the configuration data associated with this gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The data category.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.set_config_data_identifier">
+<code class="descname">set_config_data_identifier</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>identifier: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.set_config_data_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the identifier used to specify the configuration data associated with this gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The data identifier.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.set_lut_init_ascending">
+<code class="descname">set_lut_init_ascending</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>ascending: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.GateType.set_lut_init_ascending" title="Permalink to this definition">¶</a></dt>
+<dd><p>For LUT gate types, set the bit-order of the initialization string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ascending</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – True if ascending bit-order, false otherwise.</td>
 </tr>
 </tbody>
 </table>
@@ -620,7 +1059,7 @@ The base type can be either ‘combinatorial’, ‘lut’, ‘ff’, or ‘latc
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="gate_type_lut.html" class="btn btn-neutral float-right" title="Gate Type LUT" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="gate.html" class="btn btn-neutral float-right" title="Gate" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="boolean_function.html" class="btn btn-neutral float-left" title="Boolean Function" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
