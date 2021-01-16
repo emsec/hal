@@ -61,6 +61,8 @@ namespace hal
         bool isShowingModule(const u32 id) const;
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
+        void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
+
         bool isShowingNetSource(const u32 mNetId) const;
         bool isShowingNetDestination(const u32 mNetId) const;
 
@@ -97,6 +99,7 @@ namespace hal
         void update();
         void applyChanges();
         void startSceneUpdate();
+        bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
 
         QList<GraphContextSubscriber*> mSubscribers;
 

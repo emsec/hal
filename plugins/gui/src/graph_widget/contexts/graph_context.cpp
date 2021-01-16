@@ -209,6 +209,36 @@ namespace hal
         return mGates.empty() && mModules.empty();
     }
 
+    void GraphContext::testIfAffected(const u32 id, const u32* moduleId, const u32* gateId)
+    {
+        if (testIfAffectedInternal(id, moduleId, gateId))
+            scheduleSceneUpdate();
+    }
+
+    bool GraphContext::testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId)
+    {
+        Node nd(id,Node::Module);
+        if (getLayouter()->boxes().boxForNode(nd))
+            return true;
+
+        std::vector<Gate*> modifiedGates;
+        if (moduleId)
+        {
+            Module* m = gNetlist->get_module_by_id(*moduleId);
+            if (m) modifiedGates = m->get_gates(nullptr,true);
+        }
+        if (gateId)
+        {
+            Gate* g = gNetlist->get_gate_by_id(*gateId);
+            if (g) modifiedGates.push_back(g);
+        }
+        for (Gate* mg : modifiedGates)
+            if (getLayouter()->boxes().boxForGate(mg))
+                return true;
+
+        return false;
+    }
+
     bool GraphContext::isShowingModule(const u32 id) const
     {
         return isShowingModule(id, {}, {}, {}, {});
@@ -227,15 +257,15 @@ namespace hal
             return false;
         }
 
-        auto m = gNetlist->get_module_by_id(id);
+        Module* m = gNetlist->get_module_by_id(id);
         // TODO deduplicate
         QSet<u32> gates;
         QSet<u32> modules;
-        for (const auto& g : m->get_gates())
+        for (const Gate* g : m->get_gates())
         {
             gates.insert(g->get_id());
         }
-        for (auto sm : m->get_submodules())
+        for (const Module* sm : m->get_submodules())
         {
             modules.insert(sm->get_id());
         }
@@ -243,7 +273,8 @@ namespace hal
         // qDebug() << "MINUS_GATES" << minus_gates;
         // qDebug() << "PLUS_GATES" << plus_gates;
         // qDebug() << "MGATES" << mGates;
-        return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
+        return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates
+                && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
     }
 
     bool GraphContext::isShowingNetSource(const u32 mNetId) const
