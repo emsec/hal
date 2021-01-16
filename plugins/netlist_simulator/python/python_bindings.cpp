@@ -159,12 +159,13 @@ namespace hal
                 :rtype: int
             )")
 
-            .def("generate_vcd", &NetlistSimulator::generate_vcd, py::arg("path"), py::arg("start_time"), py::arg("end_time"), R"(
+            .def("generate_vcd", &NetlistSimulator::generate_vcd, py::arg("path"), py::arg("start_time"), py::arg("end_time"), py::arg("nets") = std::set<u32>(), R"(
                 Generates the a VCD file for parts the simulated netlist.
 
                 :param hal_py.hal_path path: The path to the VCD file.
                 :param int start_time: Start of the timeframe to write to the file (in picoseconds).
                 :param int end_time: End of the timeframe to write to the file (in picoseconds).
+                :param set[hal_py.Net] nets: Nets to include in the VCD file.
                 :returns: True if the file gerneration was successful, false otherwise.
                 :rtype: bool
             )");

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "dataflow_analysis/processing/configuration.h"
-#include "dataflow_analysis/utils/utils.h"
 #include "hal_core/plugin_system/plugin_interface_cli.h"
 
 #include <vector>
@@ -42,6 +40,6 @@ namespace hal
         /** interface implementation: i_cli */
         bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
 
-        std::vector<std::vector<Gate*>>execute(Netlist* nl, std::string path, const u32 layer, const std::vector<u32> sizes);
+        std::vector<std::vector<Gate*>>execute(Netlist* nl, std::string path, const std::vector<u32> sizes, bool draw_graph);
     };
 }    // namespace hal

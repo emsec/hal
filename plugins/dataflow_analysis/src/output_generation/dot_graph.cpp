@@ -33,8 +33,8 @@ namespace hal
                         {
                             size = size * 0.02;
                         }
-                        //dot_graph << group_id << " [width=" << 0.1 * gates.size() << " label=\"" << gates.size() << " bit (id " << group_id << ")\"];\n";
-                        dot_graph << group_id << " [width=" << size << " label=\"" << gates.size() << " bit \"];\n";
+                        dot_graph << group_id << " [width=" << 0.05 * gates.size() << " label=\"" << gates.size() << " bit (id " << group_id << ")\"];\n";
+                        //dot_graph << group_id << " [width=" << size << " label=\"" << gates.size() << " bit \"];\n";
                     }
                     // print edges
                     for (const auto& [group_id, gates] : state->gates_of_group)

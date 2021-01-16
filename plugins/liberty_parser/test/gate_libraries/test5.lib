@@ -1,0 +1,17 @@
+library (TEST_GATE_LIBRARY) {
+    define(cell);
+    cell(TEST_GATE_TYPE) {
+        pin(I) {
+            direction: input;
+        }
+        pin(O0) { direction: output; function: "I"; }
+        pin(O1) { direction: output; function: "I"; } 
+        /* pin(C0) { direction: output; function: "I"; }*/
+        pin(O2) { direction: output; function: "I"; }
+        /*pin(C1) { direction: output; function: "I"; }
+        pin(C2) { direction: output; function: "I"; }
+        pin(C3) { direction: output; function: "I"; }*/
+        pin(O3) { direction: output; function: "I"; }
+        
+    }
+}

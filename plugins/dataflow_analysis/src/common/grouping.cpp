@@ -62,6 +62,11 @@ namespace hal
             return get_signals_of_group(id, netlist_abstr.gate_to_reset_signals);
         }
 
+        std::unordered_set<u32> Grouping::get_set_signals_of_group(u32 id)
+        {
+            return get_signals_of_group(id, netlist_abstr.gate_to_set_signals);
+        }
+
         std::unordered_set<u32> Grouping::get_signals_of_group(u32 id, const std::unordered_map<u32, std::unordered_set<u32>>& signals)
         {
             std::unordered_set<u32> res;

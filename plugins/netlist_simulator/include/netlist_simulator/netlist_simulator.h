@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/net.h"
 #include "netlist_simulator/simulation.h"
 
@@ -132,9 +132,10 @@ namespace hal
          * @param[in] path - The path to the VCD file.
          * @param[in] start_time - Start of the timeframe to write to the file (in picoseconds).
          * @param[in] end_time - End of the timeframe to write to the file (in picoseconds).
+         * @param[in] nets - Nets to include in the VCD file.
          * @returns True if the file gerneration was successful, false otherwise.
          */
-        bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time) const;
+        bool generate_vcd(const std::filesystem::path& path, u32 start_time, u32 end_time, std::set<Net*> nets = {}) const;
 
     private:
         friend class NetlistSimulatorPlugin;
@@ -188,8 +189,8 @@ namespace hal
             std::vector<Net*> state_output_nets;
             std::vector<Net*> state_inverted_output_nets;
             std::vector<Net*> clock_nets;
-            GateTypeSequential::SetResetBehavior sr_behavior_out;
-            GateTypeSequential::SetResetBehavior sr_behavior_out_inverted;
+            GateType::ClearPresetBehavior sr_behavior_out;
+            GateType::ClearPresetBehavior sr_behavior_out_inverted;
             SignalValue output;
             SignalValue inv_output;
         };
@@ -205,6 +206,6 @@ namespace hal
         void prepare_clock_events(u64 nanoseconds);
         void process_events(u64 timeout);
 
-        SignalValue process_set_reset_behavior(GateTypeSequential::SetResetBehavior behavior, SignalValue previous_output);
+        SignalValue process_clear_preset_behavior(GateType::ClearPresetBehavior behavior, SignalValue previous_output);
     };
 }    // namespace hal

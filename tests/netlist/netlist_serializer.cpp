@@ -47,7 +47,7 @@ namespace hal {
             plugin_manager::load_all_plugins();
             test_utils::create_sandbox_directory();
             m_g_lib_path = test_utils::create_sandbox_file("min_test_gate_lib_for_netlist_serializer_tests.lib", m_min_gl_content);
-            m_gl = gate_library_manager::load_file(m_g_lib_path, true);
+            m_gl = gate_library_manager::load(m_g_lib_path, true);
         }
 
         virtual void TearDown() {

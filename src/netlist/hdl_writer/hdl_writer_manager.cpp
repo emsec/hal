@@ -54,13 +54,13 @@ namespace hal
                 }
                 if (auto it = m_extension_to_writer.find(ext); it != m_extension_to_writer.end())
                 {
-                    log_warning("gate_library_manager", "file type '{}' already has associated writer '{}', it remains unchanged", ext, it->second.first);
+                    log_warning("hdl_writer", "file type '{}' already has associated writer '{}', it remains unchanged", ext, it->second.first);
                     continue;
                 }
                 m_extension_to_writer.emplace(ext, std::make_pair(name, writer_factory));
                 m_writer_to_extensions[name].push_back(ext);
 
-                log_info("gate_library_manager", "registered gate library writer '{}' for file type '{}'", name, ext);
+                log_info("hdl_writer", "registered gate library writer '{}' for file type '{}'", name, ext);
             }
         }
 
@@ -73,7 +73,7 @@ namespace hal
                     if (auto rm_it = m_extension_to_writer.find(ext); rm_it != m_extension_to_writer.end())
                     {
                         m_extension_to_writer.erase(rm_it);
-                        log_info("gate_library_manager", "unregistered gate library writer '{}' which was registered for file type '{}'", name, ext);
+                        log_info("hdl_writer", "unregistered gate library writer '{}' which was registered for file type '{}'", name, ext);
                     }
                 }
                 m_writer_to_extensions.erase(it);

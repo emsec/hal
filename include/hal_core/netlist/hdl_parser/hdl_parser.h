@@ -36,7 +36,7 @@ namespace hal
     /**
      * @ingroup netlist_parser
      */
-    class HDL_PARSER_API HDLParser
+    class NETLIST_API HDLParser
     {
     public:
         HDLParser()          = default;

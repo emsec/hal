@@ -219,10 +219,12 @@ namespace hal
         {
             LogManager::get_instance().add_channel("event", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
             
+            /*
             gate_event_handler::register_callback("event_log", &handle_gate_event);
             net_event_handler::register_callback("event_log", &handle_net_event);
             netlist_event_handler::register_callback("event_log", &handle_netlist_event);
             module_event_handler::register_callback("event_log", &handle_submodule_event);
+            */
             
         }
     }    // namespace event_log

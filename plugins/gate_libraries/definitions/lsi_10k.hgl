@@ -1,0 +1,5076 @@
+{
+    "library": "lsi_10k",
+    "cells": [
+        {
+            "name": "AN2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A & B"
+                }
+            ]
+        },
+        {
+            "name": "OR2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A | B"
+                }
+            ]
+        },
+        {
+            "name": "IV",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "IVP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "IVA",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "IVAP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "IVDA",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Y",
+                    "direction": "output",
+                    "function": "!A"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "IVDAP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Y",
+                    "direction": "output",
+                    "function": "!A"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "B5I",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "B5IP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "B4I",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "B4IP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A"
+                }
+            ]
+        },
+        {
+            "name": "ND2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B)"
+                }
+            ]
+        },
+        {
+            "name": "ND2P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B)"
+                }
+            ]
+        },
+        {
+            "name": "NR2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B)"
+                }
+            ]
+        },
+        {
+            "name": "NR2P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B)"
+                }
+            ]
+        },
+        {
+            "name": "EN",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(A & B) | (!A & !B)"
+                }
+            ]
+        },
+        {
+            "name": "EO",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(A & !B) | (!A & B)"
+                }
+            ]
+        },
+        {
+            "name": "ND3",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C)"
+                }
+            ]
+        },
+        {
+            "name": "ND3P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C)"
+                }
+            ]
+        },
+        {
+            "name": "NR3",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C)"
+                }
+            ]
+        },
+        {
+            "name": "NR3P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C)"
+                }
+            ]
+        },
+        {
+            "name": "AN3",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A & B & C"
+                }
+            ]
+        },
+        {
+            "name": "OR3",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A | B | C"
+                }
+            ]
+        },
+        {
+            "name": "ND4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C & D)"
+                }
+            ]
+        },
+        {
+            "name": "ND4P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C & D)"
+                }
+            ]
+        },
+        {
+            "name": "NR4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C | D)"
+                }
+            ]
+        },
+        {
+            "name": "ND5",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C & D & E)"
+                }
+            ]
+        },
+        {
+            "name": "AO6",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | C)"
+                }
+            ]
+        },
+        {
+            "name": "AO6P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | C)"
+                }
+            ]
+        },
+        {
+            "name": "AO7",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & C)"
+                }
+            ]
+        },
+        {
+            "name": "AO7P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & C)"
+                }
+            ]
+        },
+        {
+            "name": "AO2",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | (C & D))"
+                }
+            ]
+        },
+        {
+            "name": "AO2P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | (C & D))"
+                }
+            ]
+        },
+        {
+            "name": "AO4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & (C | D))"
+                }
+            ]
+        },
+        {
+            "name": "AO4P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & (C | D))"
+                }
+            ]
+        },
+        {
+            "name": "AO1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | C | D)"
+                }
+            ]
+        },
+        {
+            "name": "AO3",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & C & D)"
+                }
+            ]
+        },
+        {
+            "name": "AO11",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | (C & D) | (E & F))"
+                }
+            ]
+        },
+        {
+            "name": "AN2P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A & B"
+                }
+            ]
+        },
+        {
+            "name": "AN3P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A & B & C"
+                }
+            ]
+        },
+        {
+            "name": "AN4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A & B & C & D"
+                }
+            ]
+        },
+        {
+            "name": "AN4P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A & B & C & D"
+                }
+            ]
+        },
+        {
+            "name": "OR2P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A | B"
+                }
+            ]
+        },
+        {
+            "name": "OR3P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A | B | C"
+                }
+            ]
+        },
+        {
+            "name": "OR4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A | B | C | D"
+                }
+            ]
+        },
+        {
+            "name": "OR4P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A | B | C | D"
+                }
+            ]
+        },
+        {
+            "name": "MUX21H",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!S & A) | (S & B)"
+                }
+            ]
+        },
+        {
+            "name": "MUX41",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D0",
+                    "direction": "input"
+                },
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "D3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(D0 & !A & !B) | (D1 & A & !B) | (D2 & !A & B) | (D3 & A & B)"
+                }
+            ]
+        },
+        {
+            "name": "NR5",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C | D | E)"
+                }
+            ]
+        },
+        {
+            "name": "ND6",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C & D & E & F)"
+                }
+            ]
+        },
+        {
+            "name": "NR6",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C | D | E | F)"
+                }
+            ]
+        },
+        {
+            "name": "ND8",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "H",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C & D & E & F & G & H)"
+                }
+            ]
+        },
+        {
+            "name": "NR8",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "H",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C | D | E | F | G | H)"
+                }
+            ]
+        },
+        {
+            "name": "EON1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & !(C & D))"
+                }
+            ]
+        },
+        {
+            "name": "EO1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | !(C | D))"
+                }
+            ]
+        },
+        {
+            "name": "ND5P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C & D & E)"
+                }
+            ]
+        },
+        {
+            "name": "NR5P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C | D | E)"
+                }
+            ]
+        },
+        {
+            "name": "ND6P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C & D & E & F)"
+                }
+            ]
+        },
+        {
+            "name": "NR6P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C | D | E | F)"
+                }
+            ]
+        },
+        {
+            "name": "ND8P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "H",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A & B & C & D & E & F & G & H)"
+                }
+            ]
+        },
+        {
+            "name": "NR8P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "H",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C | D | E | F | G | H)"
+                }
+            ]
+        },
+        {
+            "name": "NR16",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "I0",
+                    "direction": "input"
+                },
+                {
+                    "name": "I1",
+                    "direction": "input"
+                },
+                {
+                    "name": "I2",
+                    "direction": "input"
+                },
+                {
+                    "name": "I3",
+                    "direction": "input"
+                },
+                {
+                    "name": "I4",
+                    "direction": "input"
+                },
+                {
+                    "name": "I5",
+                    "direction": "input"
+                },
+                {
+                    "name": "I6",
+                    "direction": "input"
+                },
+                {
+                    "name": "I7",
+                    "direction": "input"
+                },
+                {
+                    "name": "I8",
+                    "direction": "input"
+                },
+                {
+                    "name": "I9",
+                    "direction": "input"
+                },
+                {
+                    "name": "I10",
+                    "direction": "input"
+                },
+                {
+                    "name": "I11",
+                    "direction": "input"
+                },
+                {
+                    "name": "I12",
+                    "direction": "input"
+                },
+                {
+                    "name": "I13",
+                    "direction": "input"
+                },
+                {
+                    "name": "I14",
+                    "direction": "input"
+                },
+                {
+                    "name": "I15",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(I0 | I1 | I2 | I3 | I4 | I5 | I6 | I7 | I8 | I9 | I10 | I11 | I12 | I13 | I14 | I15)"
+                }
+            ]
+        },
+        {
+            "name": "NR16P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "I0",
+                    "direction": "input"
+                },
+                {
+                    "name": "I1",
+                    "direction": "input"
+                },
+                {
+                    "name": "I2",
+                    "direction": "input"
+                },
+                {
+                    "name": "I3",
+                    "direction": "input"
+                },
+                {
+                    "name": "I4",
+                    "direction": "input"
+                },
+                {
+                    "name": "I5",
+                    "direction": "input"
+                },
+                {
+                    "name": "I6",
+                    "direction": "input"
+                },
+                {
+                    "name": "I7",
+                    "direction": "input"
+                },
+                {
+                    "name": "I8",
+                    "direction": "input"
+                },
+                {
+                    "name": "I9",
+                    "direction": "input"
+                },
+                {
+                    "name": "I10",
+                    "direction": "input"
+                },
+                {
+                    "name": "I11",
+                    "direction": "input"
+                },
+                {
+                    "name": "I12",
+                    "direction": "input"
+                },
+                {
+                    "name": "I13",
+                    "direction": "input"
+                },
+                {
+                    "name": "I14",
+                    "direction": "input"
+                },
+                {
+                    "name": "I15",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(I0 | I1 | I2 | I3 | I4 | I5 | I6 | I7 | I8 | I9 | I10 | I11 | I12 | I13 | I14 | I15)"
+                }
+            ]
+        },
+        {
+            "name": "ENP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(A & B) | (!A & !B)"
+                }
+            ]
+        },
+        {
+            "name": "EOP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(A & !B) | (!A & B)"
+                }
+            ]
+        },
+        {
+            "name": "EO1P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | !(C | D))"
+                }
+            ]
+        },
+        {
+            "name": "EON1P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & !(C & D))"
+                }
+            ]
+        },
+        {
+            "name": "AO1P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | C | D)"
+                }
+            ]
+        },
+        {
+            "name": "AO3P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & C & D)"
+                }
+            ]
+        },
+        {
+            "name": "AO11P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | (C & D) | (E & F))"
+                }
+            ]
+        },
+        {
+            "name": "MUX21HP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!S & A) | (S & B)"
+                }
+            ]
+        },
+        {
+            "name": "MUX21L",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!S & !A) | (S & !B)"
+                }
+            ]
+        },
+        {
+            "name": "MUX21LP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!S & !A) | (S & !B)"
+                }
+            ]
+        },
+        {
+            "name": "MUX31L",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D0",
+                    "direction": "input"
+                },
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!D0 & !A & !B) | (!D1 & A & !B) | (!D2 & B)"
+                }
+            ]
+        },
+        {
+            "name": "MUX31LP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D0",
+                    "direction": "input"
+                },
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!D0 & !A & !B) | (!D1 & A & !B) | (!D2 & B)"
+                }
+            ]
+        },
+        {
+            "name": "MUX41P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D0",
+                    "direction": "input"
+                },
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "D3",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(D0 & !A & !B) | (D1 & A & !B) | (D2 & !A & B) | (D3 & A & B)"
+                }
+            ]
+        },
+        {
+            "name": "MUX21LA",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "SN",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & !S & SN) | (B & S & !SN))"
+                }
+            ]
+        },
+        {
+            "name": "MUX51H",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D0",
+                    "direction": "input"
+                },
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "D3",
+                    "direction": "input"
+                },
+                {
+                    "name": "D4",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(D0 & !A & !B & !C) | (D1 & A & !B & !C) | (D2 & !A & B & !C) | (D3 & A & B & !C) | (D4 & C)"
+                }
+            ]
+        },
+        {
+            "name": "MUX51HP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D0",
+                    "direction": "input"
+                },
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "D3",
+                    "direction": "input"
+                },
+                {
+                    "name": "D4",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(D0 & !A & !B & !C) | (D1 & A & !B & !C) | (D2 & !A & B & !C) | (D3 & A & B & !C) | (D4 & C)"
+                }
+            ]
+        },
+        {
+            "name": "MUX81",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D0",
+                    "direction": "input"
+                },
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "D3",
+                    "direction": "input"
+                },
+                {
+                    "name": "D4",
+                    "direction": "input"
+                },
+                {
+                    "name": "D5",
+                    "direction": "input"
+                },
+                {
+                    "name": "D6",
+                    "direction": "input"
+                },
+                {
+                    "name": "D7",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(D0 & !A & !B & !C) | (D1 & A & !B & !C) | (D2 & !A & B & !C) | (D3 & A & B & !C) | (D4 & !A & !B & C) | (D5 & A & !B & C) | (D6 & !A & B & C) | (D7 & A & B & C)"
+                }
+            ]
+        },
+        {
+            "name": "MUX81P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D0",
+                    "direction": "input"
+                },
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "D3",
+                    "direction": "input"
+                },
+                {
+                    "name": "D4",
+                    "direction": "input"
+                },
+                {
+                    "name": "D5",
+                    "direction": "input"
+                },
+                {
+                    "name": "D6",
+                    "direction": "input"
+                },
+                {
+                    "name": "D7",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(D0 & !A & !B & !C) | (D1 & A & !B & !C) | (D2 & !A & B & !C) | (D3 & A & B & !C) | (D4 & !A & !B & C) | (D5 & A & !B & C) | (D6 & !A & B & C) | (D7 & A & B & C)"
+                }
+            ]
+        },
+        {
+            "name": "AO5",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | (A & C) | (B & C))"
+                }
+            ]
+        },
+        {
+            "name": "AO5P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & B) | (A & C) | (B & C))"
+                }
+            ]
+        },
+        {
+            "name": "EN3",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!A & !B & !C) | (!A & B & C) | (A & !B & C) | (A & B & !C)"
+                }
+            ]
+        },
+        {
+            "name": "EN3P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!A & !B & !C) | (!A & B & C) | (A & !B & C) | (A & B & !C)"
+                }
+            ]
+        },
+        {
+            "name": "EO3",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!A & !B & C) | (!A & B & !C) | (A & !B & !C) | (A & B & C)"
+                }
+            ]
+        },
+        {
+            "name": "EO3P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "(!A & !B & C) | (!A & B & !C) | (A & !B & !C) | (A & B & C)"
+                }
+            ]
+        },
+        {
+            "name": "AO12",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "H",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & (C | D) & (E | F) & (G | H))"
+                }
+            ]
+        },
+        {
+            "name": "AO12P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "F",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "H",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A | B) & (C | D) & (E | F) & (G | H))"
+                }
+            ]
+        },
+        {
+            "name": "B1I",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "MUX21LAP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "SN",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!((A & !S & SN) | (B & S & !SN))"
+                }
+            ]
+        },
+        {
+            "name": "NR4P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "C",
+                    "direction": "input"
+                },
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!(A | B | C | D)"
+                }
+            ]
+        },
+        {
+            "name": "FD1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD1P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD1S",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(D & !TE) | (TI & TE)",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD1SP",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(D & !TE) | (TI & TE)",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD2P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD2S",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(D & !TE) | (TI & TE)",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD2SP",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(D & !TE) | (TI & TE)",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD3",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP",
+                "clear_on": "!CD",
+                "preset_on": "!SD",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD3P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP",
+                "clear_on": "!CD",
+                "preset_on": "!SD",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD3S",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(D & !TE) | (TI & TE)",
+                "clocked_on": "CP",
+                "clear_on": "!CD",
+                "preset_on": "!SD",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD3SP",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(D & !TE) | (TI & TE)",
+                "clocked_on": "CP",
+                "clear_on": "!CD",
+                "preset_on": "!SD",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD4",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP",
+                "preset_on": "!SD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD4P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP",
+                "preset_on": "!SD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD4S",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(D & !TE) | (TI & TE)",
+                "clocked_on": "CP",
+                "preset_on": "!SD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FD4SP",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(D & !TE) | (TI & TE)",
+                "clocked_on": "CP",
+                "preset_on": "!SD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK1",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & I__v_4) | (J & !K) | (J & K & !I__v_4)",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK1P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & I__v_4) | (J & !K) | (J & K & !I__v_4)",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK1S",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & !TE & I__v_6) | (J & !K & !TE) | (J & K & !TE & !I__v_6) | (TI & TE)",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK1SP",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & !TE & I__v_6) | (J & !K & !TE) | (J & K & !TE & !I__v_6) | (TI & TE)",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & I__v_5) | (J & !K) | (J & K & !I__v_5)",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK2P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & I__v_5) | (J & !K) | (J & K & !I__v_5)",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK2S",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & !TE & I__v_7) | (J & !K & !TE) | (J & K & !TE & !I__v_7) | (TI & TE)",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK2SP",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & !TE & I__v_7) | (J & !K & !TE) | (J & K & !TE & !I__v_7) | (TI & TE)",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK3",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & I__v_6) | (J & !K) | (J & K & !I__v_6)",
+                "clocked_on": "CP",
+                "clear_on": "!CD",
+                "preset_on": "!SD",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK3P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & I__v_6) | (J & !K) | (J & K & !I__v_6)",
+                "clocked_on": "CP",
+                "clear_on": "!CD",
+                "preset_on": "!SD",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK3S",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & !TE & I__v_8) | (J & !K & !TE) | (J & K & !TE & !I__v_8) | (TI & TE)",
+                "clocked_on": "CP",
+                "clear_on": "!CD",
+                "preset_on": "!SD",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FJK3SP",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "(!J & !K & !TE & I__v_8) | (J & !K & !TE) | (J & K & !TE & !I__v_8) | (TI & TE)",
+                "clocked_on": "CP",
+                "clear_on": "!CD",
+                "preset_on": "!SD",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "J",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "K",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "TI",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "TE",
+                    "direction": "input",
+                    "type": "enable"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LD1",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "G"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LD1P",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "G"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LD2",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "!GN"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "GN",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LD2P",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "!GN"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "GN",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LD3",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "G",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LD3P",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "G",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LD4",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "!GN",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "GN",
+                    "direction": "input"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LD4P",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "!GN",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "GN",
+                    "direction": "input"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "B2I",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z1",
+                    "direction": "output",
+                    "function": "!A"
+                },
+                {
+                    "name": "Z2",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "B2IP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z1",
+                    "direction": "output",
+                    "function": "!A"
+                },
+                {
+                    "name": "Z2",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "B3I",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z1",
+                    "direction": "output",
+                    "function": "!A"
+                },
+                {
+                    "name": "Z2",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "B3IP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z1",
+                    "direction": "output",
+                    "function": "!A"
+                },
+                {
+                    "name": "Z2",
+                    "direction": "output",
+                    "function": "A"
+                }
+            ]
+        },
+        {
+            "name": "D24L",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z0",
+                    "direction": "output",
+                    "function": "(A & !B) | (!A & B) | (A & B)"
+                },
+                {
+                    "name": "Z1",
+                    "direction": "output",
+                    "function": "(!A & !B) | (!A & B) | (A & B)"
+                },
+                {
+                    "name": "Z2",
+                    "direction": "output",
+                    "function": "(!A & !B) | (A & !B) | (A & B)"
+                },
+                {
+                    "name": "Z3",
+                    "direction": "output",
+                    "function": "(!A & !B) | (A & !B) | (!A & B)"
+                }
+            ]
+        },
+        {
+            "name": "D24LP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z0",
+                    "direction": "output",
+                    "function": "(A & !B) | (!A & B) | (A & B)"
+                },
+                {
+                    "name": "Z1",
+                    "direction": "output",
+                    "function": "(!A & !B) | (!A & B) | (A & B)"
+                },
+                {
+                    "name": "Z2",
+                    "direction": "output",
+                    "function": "(!A & !B) | (A & !B) | (A & B)"
+                },
+                {
+                    "name": "Z3",
+                    "direction": "output",
+                    "function": "(!A & !B) | (A & !B) | (!A & B)"
+                }
+            ]
+        },
+        {
+            "name": "FA1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "CI",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "output",
+                    "function": "(CI & !A & !B) | (!CI & A & !B) | (!CI & !A & B) | (CI & A & B)"
+                },
+                {
+                    "name": "CO",
+                    "direction": "output",
+                    "function": "(CI & A & !B) | (CI & !A & B) | (!CI & A & B) | (CI & A & B)"
+                }
+            ]
+        },
+        {
+            "name": "FA1A",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "CI",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "output",
+                    "function": "(CI & !A & !B) | (!CI & A & !B) | (!CI & !A & B) | (CI & A & B)"
+                },
+                {
+                    "name": "CO",
+                    "direction": "output",
+                    "function": "(CI & A & !B) | (CI & !A & B) | (!CI & A & B) | (CI & A & B)"
+                }
+            ]
+        },
+        {
+            "name": "FA1AP",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "CI",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "output",
+                    "function": "(CI & !A & !B) | (!CI & A & !B) | (!CI & !A & B) | (CI & A & B)"
+                },
+                {
+                    "name": "CO",
+                    "direction": "output",
+                    "function": "(CI & A & !B) | (CI & !A & B) | (!CI & A & B) | (CI & A & B)"
+                }
+            ]
+        },
+        {
+            "name": "FA1P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "CI",
+                    "direction": "input"
+                },
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "output",
+                    "function": "(CI & !A & !B) | (!CI & A & !B) | (!CI & !A & B) | (CI & A & B)"
+                },
+                {
+                    "name": "CO",
+                    "direction": "output",
+                    "function": "(CI & A & !B) | (CI & !A & B) | (!CI & A & B) | (CI & A & B)"
+                }
+            ]
+        },
+        {
+            "name": "HA1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "output",
+                    "function": "(!A & B) | (A & !B)"
+                },
+                {
+                    "name": "CO",
+                    "direction": "output",
+                    "function": "A & B"
+                }
+            ]
+        },
+        {
+            "name": "HA1P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "B",
+                    "direction": "input"
+                },
+                {
+                    "name": "S",
+                    "direction": "output",
+                    "function": "(!A & B) | (A & !B)"
+                },
+                {
+                    "name": "CO",
+                    "direction": "output",
+                    "function": "A & B"
+                }
+            ]
+        },
+        {
+            "name": "FDS2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D & CR",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CR",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FDS2L",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "CR & ((D & LD) | (I__v_5 & !LD))",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CR",
+                    "direction": "input"
+                },
+                {
+                    "name": "LD",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FDS2LP",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "CR & ((D & LD) | (I__v_5 & !LD))",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CR",
+                    "direction": "input"
+                },
+                {
+                    "name": "LD",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FDS2P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "CR & D",
+                "clocked_on": "CP"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CR",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FT2",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "!I__v_3",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FT2P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "!I__v_3",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FT4",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "!I__v_3",
+                "clocked_on": "CP",
+                "preset_on": "!SD"
+            },
+            "pins": [
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "FT4P",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "!I__v_3",
+                "clocked_on": "CP",
+                "preset_on": "!SD"
+            },
+            "pins": [
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LD1X4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "G",
+                    "direction": "input"
+                }
+            ]
+        },
+        {
+            "name": "LD1X4P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "G",
+                    "direction": "input"
+                }
+            ]
+        },
+        {
+            "name": "LS1",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "LS1P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "D1",
+                    "direction": "input"
+                },
+                {
+                    "name": "C1",
+                    "direction": "input"
+                },
+                {
+                    "name": "D2",
+                    "direction": "input"
+                },
+                {
+                    "name": "C2",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output"
+                }
+            ]
+        },
+        {
+            "name": "LSR0",
+            "type": "latch",
+            "latch_config": {
+                "clear_on": "!R",
+                "preset_on": "!S",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "R",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LSR0P",
+            "type": "latch",
+            "latch_config": {
+                "clear_on": "!R",
+                "preset_on": "!S",
+                "state_clear_preset": "L",
+                "neg_state_clear_preset": "L"
+            },
+            "pins": [
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "R",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "LSR2",
+            "type": "latch",
+            "latch_config": {
+                "clear_on": "!RD | (S & !R & !G)",
+                "preset_on": "!SD | (R & !S & !G)",
+                "state_clear_preset": "H",
+                "neg_state_clear_preset": "H"
+            },
+            "pins": [
+                {
+                    "name": "S",
+                    "direction": "input"
+                },
+                {
+                    "name": "R",
+                    "direction": "input"
+                },
+                {
+                    "name": "G",
+                    "direction": "input"
+                },
+                {
+                    "name": "SD",
+                    "direction": "input"
+                },
+                {
+                    "name": "RD",
+                    "direction": "input"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        },
+        {
+            "name": "BTS4",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A",
+                    "z_function": "!E"
+                }
+            ]
+        },
+        {
+            "name": "BTS4P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "A",
+                    "z_function": "!E"
+                }
+            ]
+        },
+        {
+            "name": "BTS5",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A",
+                    "z_function": "!E"
+                }
+            ]
+        },
+        {
+            "name": "BTS5P",
+            "type": "combinational",
+            "pins": [
+                {
+                    "name": "A",
+                    "direction": "input"
+                },
+                {
+                    "name": "E",
+                    "direction": "input"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "function": "!A",
+                    "z_function": "!E"
+                }
+            ]
+        },
+        {
+            "name": "FD2TS",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "RD",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "type": "state",
+                    "z_function": "!RD"
+                },
+                {
+                    "name": "Q",
+                    "direction": "output",
+                    "type": "state"
+                }
+            ]
+        },
+        {
+            "name": "FD2TSP",
+            "type": "ff",
+            "ff_config": {
+                "data_category": "",
+                "data_identifier": "",
+                "next_state": "D",
+                "clocked_on": "CP",
+                "clear_on": "!CD"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "CP",
+                    "direction": "input",
+                    "type": "clock"
+                },
+                {
+                    "name": "CD",
+                    "direction": "input",
+                    "type": "reset"
+                },
+                {
+                    "name": "RD",
+                    "direction": "input",
+                    "type": "data"
+                },
+                {
+                    "name": "Z",
+                    "direction": "output",
+                    "type": "state",
+                    "z_function": "!RD"
+                }
+            ]
+        },
+        {
+            "name": "RAM1",
+            "type": "latch",
+            "latch_config": {
+                "data_in": "D",
+                "enable_on": "WR & !WRN"
+            },
+            "pins": [
+                {
+                    "name": "D",
+                    "direction": "input"
+                },
+                {
+                    "name": "WR",
+                    "direction": "input"
+                },
+                {
+                    "name": "WRN",
+                    "direction": "input"
+                },
+                {
+                    "name": "RD",
+                    "direction": "input"
+                },
+                {
+                    "name": "ZN",
+                    "direction": "output",
+                    "type": "neg_state",
+                    "z_function": "!RD"
+                },
+                {
+                    "name": "QN",
+                    "direction": "output",
+                    "type": "neg_state"
+                }
+            ]
+        }
+    ]
+}
