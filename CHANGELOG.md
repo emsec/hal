@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.2.1] - 2021-01-16 11:30:00+02:00 (urgency: medium)
+## [3.2.2] - 2021-01-16 14:40:00+02:00 (urgency: medium)
 * refactored gate library handling
   * separated gate library manager from gate library parser interface
   * added gate library writer interface to enable writing out gate library files
@@ -494,8 +494,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.2.1...HEAD
-[3.2.1]: https://github.com/emsec/hal/compare/v3.1.11...v3.2.1
+[Unreleased]: https://github.com/emsec/hal/compare/v3.2.2...HEAD
+[3.2.2]: https://github.com/emsec/hal/compare/v3.1.11...v3.2.2
 [3.1.11]: https://github.com/emsec/hal/compare/v3.1.10...v3.1.11
 [3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10
 [3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9
