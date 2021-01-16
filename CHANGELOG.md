@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.2.0]
 * refactored gate library handling
   * separated gate library manager from gate library parser interface
   * added gate library writer interface to enable writing out gate library files
@@ -492,7 +494,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.11...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/emsec/hal/compare/v3.1.11...v3.2.0
 [3.1.11]: https://github.com/emsec/hal/compare/v3.1.10...v3.1.11
 [3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10
 [3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9
