@@ -97,30 +97,34 @@ namespace hal
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type
 
-        for (auto gate : m_simulation_set)
+        for (Gate* gate : m_simulation_set)
         {
             if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
             {
-                auto gate_type = gate->get_type();
+                GateType* gate_type                                                 = gate->get_type();
+                const std::unordered_map<std::string, GateType::PinType>& pin_types = gate_type->get_pin_types();
 
                 SignalValue inv_value = toggle(value);
 
                 // generate events
-                for (const auto& pin : gate_type->get_pins_of_type(GateType::PinType::state))
+                for (Endpoint* ep : gate->get_fan_out_endpoints())
                 {
-                    Event e;
-                    e.affected_net = gate->get_fan_out_net(pin);
-                    e.new_value    = value;
-                    e.time         = m_current_time;
-                    m_event_queue.push_back(e);
-                }
-                for (const auto& pin : gate_type->get_pins_of_type(GateType::PinType::neg_state))
-                {
-                    Event e;
-                    e.affected_net = gate->get_fan_out_net(pin);
-                    e.new_value    = inv_value;
-                    e.time         = m_current_time;
-                    m_event_queue.push_back(e);
+                    if (pin_types.at(ep->get_pin()) == GateType::PinType::state)
+                    {
+                        Event e;
+                        e.affected_net = ep->get_net();
+                        e.new_value    = value;
+                        e.time         = m_current_time;
+                        m_event_queue.push_back(e);
+                    }
+                    else if (pin_types.at(ep->get_pin()) == GateType::PinType::neg_state)
+                    {
+                        Event e;
+                        e.affected_net = ep->get_net();
+                        e.new_value    = inv_value;
+                        e.time         = m_current_time;
+                        m_event_queue.push_back(e);
+                    }
                 }
             }
         }
@@ -131,13 +135,15 @@ namespace hal
         // has to work even if the simulation was not started, i.e., initialize was not called yet
         // so we cannot use the SimulationGateFF type
 
-        for (auto gate : m_simulation_set)
+        for (Gate* gate : m_simulation_set)
         {
             if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
             {
+                GateType* gate_type                                                 = gate->get_type();
+                const std::unordered_map<std::string, GateType::PinType>& pin_types = gate_type->get_pin_types();
+
                 // extract init string
-                auto gate_type = gate->get_type();
-                auto init_str  = std::get<1>(gate->get_data(gate_type->get_config_data_category(), gate_type->get_config_data_identifier()));
+                std::string init_str = std::get<1>(gate->get_data(gate_type->get_config_data_category(), gate_type->get_config_data_identifier()));
 
                 if (!init_str.empty())
                 {
@@ -160,21 +166,24 @@ namespace hal
                     SignalValue inv_value = toggle(value);
 
                     // generate events
-                    for (const auto& pin : gate_type->get_pins_of_type(GateType::PinType::state))
+                    for (Endpoint* ep : gate->get_fan_out_endpoints())
                     {
-                        Event e;
-                        e.affected_net = gate->get_fan_out_net(pin);
-                        e.new_value    = value;
-                        e.time         = m_current_time;
-                        m_event_queue.push_back(e);
-                    }
-                    for (const auto& pin : gate_type->get_pins_of_type(GateType::PinType::neg_state))
-                    {
-                        Event e;
-                        e.affected_net = gate->get_fan_out_net(pin);
-                        e.new_value    = inv_value;
-                        e.time         = m_current_time;
-                        m_event_queue.push_back(e);
+                        if (pin_types.at(ep->get_pin()) == GateType::PinType::state)
+                        {
+                            Event e;
+                            e.affected_net = ep->get_net();
+                            e.new_value    = value;
+                            e.time         = m_current_time;
+                            m_event_queue.push_back(e);
+                        }
+                        else if (pin_types.at(ep->get_pin()) == GateType::PinType::neg_state)
+                        {
+                            Event e;
+                            e.affected_net = ep->get_net();
+                            e.new_value    = inv_value;
+                            e.time         = m_current_time;
+                            m_event_queue.push_back(e);
+                        }
                     }
                 }
             }
@@ -808,8 +817,8 @@ namespace hal
 
         for (auto net_changes : events)
         {
-            auto net = net_changes.first;
-            if (nets.empty() || nets.find(net) != nets.end())
+            Net* net = net_changes.first;
+            if ((net != nullptr) && (nets.empty() || nets.find(net) != nets.end()))
             {
                 // maping net ids to net names
                 vcd << "$var wire 1 n" << net->get_id() << " " << net->get_name() << " $end" << std::endl;
