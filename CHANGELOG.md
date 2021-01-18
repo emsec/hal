@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.2.3] - 2021-01-18 18:30:00+02:00 (urgency: medium)
 * fixed `z3_utils` plugin being disabled by default causing linking errors
 * fixed `load_initial_values` and `load_initial_values_from_netlist` assigning values to potentially non-existing nets
 
@@ -496,7 +498,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.2.2...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.2.3...HEAD
+[3.2.3]: https://github.com/emsec/hal/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/emsec/hal/compare/v3.1.11...v3.2.2
 [3.1.11]: https://github.com/emsec/hal/compare/v3.1.10...v3.1.11
 [3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10
