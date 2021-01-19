@@ -15,6 +15,13 @@ namespace hal
 
         void initialize() override;
 
+        /**
+         * Generates the function of the dataport net of the given flip-flop.
+         * Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.G
+         *
+         * @param[in] gate - Pointer to the flip-flop which data input net is used to build the boolean function.
+         * @returns A mapping of the gates that appear in the function of the data net to their boolean influence in said function.
+         */
         std::map<Gate*, double> get_boolean_influences_of_gate(const Gate* gate);
 
     private:

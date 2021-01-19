@@ -31,9 +31,9 @@ namespace hal
             .def("get_version", &BooleanInfluencePlugin::get_version)
             .def("get_boolean_influences_of_gate", &BooleanInfluencePlugin::get_boolean_influences_of_gate, py::arg("gate"), R"(
             Generates the function of the dataport net of the given flip-flop.
-            Afterwards the generated function gets translated from a z3:expr to efficent c code, compiled, executed and evalated.
+            Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
 
-            :param halPy.Gate gate: The flip-flop which data net sources get evaluated.
+            :param halPy.Gate gate: The flip-flop which data input net is used to build the boolean function..
             :returns: A mapping of the gates that appear in the function of the data net to their boolean influence in said function.
             :rtype: dict
         )");

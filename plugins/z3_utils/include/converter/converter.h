@@ -22,6 +22,13 @@ namespace hal {
                     NONE,
                 };
 
+                /**
+                 * This base function prases and splits up the smt representation of a wrapped z3 expression and converts it into another representation 
+                 * depending on the child class that overrides the virtual methods. 
+                 *
+                 * @param[in] e - Z3Wrapper wrapping the expression that is converted.
+                 * @returns The converted expression as a string.
+                 */
                 std::string convert_z3_expr_to_func(const z3Wrapper& e) const;
 
             protected:
