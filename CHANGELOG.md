@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* views get persisted to .halv file and are restored if the file is found on disk
 * fixed `z3_utils` plugin being disabled by default causing linking errors
 * fixed `load_initial_values` and `load_initial_values_from_netlist` assigning values to potentially non-existing nets
 
