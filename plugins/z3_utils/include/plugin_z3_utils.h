@@ -2,6 +2,9 @@
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "SubgraphFunctionGenerator.h"
+#include "z3Wrapper.h"
+#include "converter/converter.h"
+#include "converter/cpp_converter.h"
 
 namespace hal
 {
