@@ -18,7 +18,7 @@ namespace hal {
 
         FsmTransition merge(const FsmTransition& other) const;
         std::string to_string() const;
-        std::string to_dot_string(const Netlist* nl) const;
+        std::string to_dot_string(const Netlist* nl, const u32 state_size) const;
 
         z3::expr starting_state_expr;
         z3::expr end_state_expr;
