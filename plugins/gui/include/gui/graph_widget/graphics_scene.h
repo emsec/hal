@@ -243,10 +243,19 @@ namespace hal
 
     public Q_SLOTS:
         /**
-         * TODO...
+         * Q_SLOT to call when the selection has been changed. Used to keep track of the selected modules, gates and nets.
          */
         void handleInternSelectionChanged();
+
+        /**
+         * Q_SLOT to call whenever the selection has beed changed. It only handles selection changes outside this scene.
+         * It is used to apply extern selection changes to the scene.
+         *
+         * @param sender
+         */
         void handleExternSelectionChanged(void* sender);
+
+
         void handleExternSubfocusChanged(void* sender);
         void handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems);
         void handleGroupingAssignModule(Grouping* grp, u32 id);

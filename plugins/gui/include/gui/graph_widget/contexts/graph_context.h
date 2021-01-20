@@ -148,6 +148,8 @@ namespace hal
         bool isShowingModule(const u32 id) const;
         /**
          * TODO: Documentation
+         * Checks if the context shows the content of the module of the passed id.
+         * The minus/plus_gates/modules can be used to consider past states of the module.
          *
          * @param id
          * @param minus_modules
