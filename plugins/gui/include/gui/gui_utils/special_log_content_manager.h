@@ -35,17 +35,46 @@ namespace hal
     class PythonEditor;
     class PythonCodeEditor;
 
+    /**
+     * The SpecialLogContentManager class creates special log content that is used for meta analysis.
+     * It takes screenshots of the mainwindow (and all detached widgets) as well as dumps every python editor tabs
+     * in a certain interval. The logged content is saved in a directory that is located next to the opened file.
+     */
     class SpecialLogContentManager : public QObject
     {
         Q_OBJECT
     public:
-        SpecialLogContentManager(QObject* parent = nullptr);
+        /**
+         * The constructor.
+         * @param parent - The manager's parent.
+         * @param python_editor - The editor which tabs are to be logged (dumped).
+         */
         SpecialLogContentManager(QObject* parent = nullptr, PythonEditor* python_editor = nullptr);
+
+        /**
+         * The default destructor.
+         */
         ~SpecialLogContentManager();
 
+        /**
+         * Creates (if it does not exist already) a directory named after the currently opened file.
+         * It takes a screenshot consisting of every top-level-widget of hal and saves it
+         * to the created directory in an interval that is specified when calling startLogging(int msec).
+         */
         void safeScreenshot();
+
+        /**
+         * Creates (if it does not exist already) a directory named after the currently opened file.
+         * It takes the content of every python editor tab, combines them into a single file
+         * and saves it to the created directory in an interval that is specified when calling startLogging(int msec).
+         */
         void safePythonEditor();
 
+        /**
+         * Starts the logging process of the manager by specifying an interval in which to log the content.
+         *
+         * @param msec - The interval in milliseconds.
+         */
         void startLogging(int msec);
 
     private:
