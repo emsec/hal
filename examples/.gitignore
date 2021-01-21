@@ -1,4 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
-*.log
-*.hal
-mips_16.v
+*
+!README.md
+!fsm.v
+!uart.v

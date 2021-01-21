@@ -27,7 +27,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <functional>
 #include <map>
@@ -87,7 +87,7 @@ namespace hal
          *
          * @returns The type.
          */
-        const GateType* get_type() const;
+        GateType* get_type() const;
 
         /**
          * Check whether the gate's location in the layout is available.
@@ -376,7 +376,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, i32 x, i32 y);
+        Gate(NetlistInternalManager* mgr, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
 
         Gate(const Gate&) = delete;
         Gate(Gate&&)      = delete;
@@ -395,7 +395,7 @@ namespace hal
         std::string m_name;
 
         /* type of the gate */
-        const GateType* m_type;
+        GateType* m_type;
 
         /* location */
         i32 m_x = -1;

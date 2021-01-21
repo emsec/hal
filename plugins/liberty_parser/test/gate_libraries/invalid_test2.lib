@@ -1,0 +1,21 @@
+library (TEST_GATE_LIBRARY) {
+    define(cell);
+    cell(TEST_FF) {
+    ff ("IQ" , "IQN") {
+            next_state          : "P";
+            clocked_on          : "P";
+            preset              : "P";
+            clear               : "P";
+            clear_preset_var1   : L;
+            clear_preset_var2   : Z;
+        }
+        pin(P) {
+            direction: input;
+            clock: true;
+        }
+        pin(Q) {
+            direction: output;
+            function: "IQ";
+        }
+    }
+}

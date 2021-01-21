@@ -6,7 +6,7 @@
 #include "hal_core/netlist/event_system/module_event_handler.h"
 #include "hal_core/netlist/event_system/net_event_handler.h"
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -36,7 +36,7 @@ namespace hal
     //###                      gates                                     ###
     //######################################################################
 
-    Gate* NetlistInternalManager::create_gate(const u32 id, const GateType* gt, const std::string& name, i32 x, i32 y)
+    Gate* NetlistInternalManager::create_gate(const u32 id, GateType* gt, const std::string& name, i32 x, i32 y)
     {
         if (id == 0)
         {
@@ -146,7 +146,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistInternalManager::is_gate_type_invalid(const GateType* gt) const
+    bool NetlistInternalManager::is_gate_type_invalid(GateType* gt) const
     {
         return !m_netlist->m_gate_library->contains_gate_type(gt);
     }

@@ -1,0 +1,11 @@
+library (TEST_GATE_LIBRARY) {
+    define(cell);
+    cell(TEST_GATE_TYPE) {
+        pin(I) {
+            direction: input;
+        }
+        pin() {
+            direction: output;
+        }
+    }
+}

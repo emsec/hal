@@ -39,7 +39,7 @@ namespace hal
     /**
      * @ingroup hdl_parsers
      */
-    class HDL_PARSER_API HDLParserVerilog : public HDLParserTemplate<std::string>
+    class NETLIST_API HDLParserVerilog : public HDLParserTemplate<std::string>
     {
     public:
         HDLParserVerilog()  = default;

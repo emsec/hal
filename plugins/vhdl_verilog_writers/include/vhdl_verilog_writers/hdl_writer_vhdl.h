@@ -41,7 +41,7 @@ namespace hal
     /**
      * @ingroup hdl_writers
      */
-    class HDL_FILE_WRITER_API HDLWriterVHDL : public HDLWriter
+    class NETLIST_API HDLWriterVHDL : public HDLWriter
     {
     public:
         HDLWriterVHDL() = default;
