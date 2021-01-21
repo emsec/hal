@@ -6,7 +6,7 @@ if(BUILD_TESTS)
 
     add_executable(runTest-hgl_parser  hgl_parser.cpp)
 
-    target_link_libraries(runTest-hgl_parser   hgl_parser pthread gtest gtest_main hal::core hal::netlist test_utils)
+    target_link_libraries(runTest-hgl_parser   hgl_parser pthread gtest hal::core hal::netlist test_utils)
 
     add_test(runTest-hgl_parser ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-hgl_parser --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 
