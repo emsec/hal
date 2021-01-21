@@ -1,0 +1,13 @@
+library (TEST_GATE_LIBRARY) {
+    define(cell);
+    cell(TEST_GATE_TYPE) {
+        pin(I) {
+            direction: input;
+        }
+        pin(O) {
+            complex_attr(param1, param2);
+            direction: output;
+            function: "!I";
+        }
+    }
+}

@@ -1,0 +1,47 @@
+library (TEST_GATE_LIBRARY) {
+    define(cell);
+    cell(TEST_LUT_ASC) {
+        lut ("lut_out") {
+            data_category     : "test_category";
+            data_identifier   : "test_identifier";
+            bit_order         : "ascending";
+        }
+        pin(I0) {
+            direction: input;
+        }
+        pin(I1) {
+            direction: input;
+        }
+        pin(O0) {
+            direction: output;
+            function: "lut_out";
+        }
+        pin(O1) {
+            direction: output;
+            function: "I0 ^ I1";
+        }
+        pin(O2) {
+            direction: output;
+            function: "lut_out";
+        }
+        pin(O3) {
+            direction: output;
+            function: "I0 & I1";
+        }
+    }
+
+    cell(TEST_LUT_DESC) {
+        lut ("lut_out") {
+            data_category     : "test_category";
+            data_identifier   : "test_identifier";
+            direction         : "descending";
+        }
+        pin(I) {
+            direction: input;
+        }
+        pin(O) {
+            direction: output;
+            function: "lut_out";
+        }
+    }
+}

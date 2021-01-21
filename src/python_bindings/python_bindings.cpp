@@ -23,10 +23,6 @@ namespace hal
 
         gate_type_init(m);
 
-        gate_type_lut_init(m);
-
-        gate_type_sequential_init(m);
-
         gate_library_init(m);
 
         gate_library_manager_init(m);

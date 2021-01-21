@@ -41,19 +41,37 @@ namespace hal
             :rtype: hal_py.hal_path
         )");
 
-        // TODO find a way to enable 'add_gate_type' via Python
-        // py_gate_library.def("add_gate_type", &GateLibrary::add_gate_type, py::arg("gate_type"), R"(
-        //     Add a gate type to the gate library.
+        py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, py::arg("name"), py::arg("base_type"), R"(
+            Create a new gate type, add it to the gate library, and return it.
 
-        //     :param hal_py.GateType gate_type: The gate type to add.
-        // )");
+            :param str name: The name of the gate type.
+            :param hal_py.GateType.BaseType base_type: The base type of the gate type.
+            :returns: The new gate type instance on success, None otherwise.
+            :rtype: hal_py.GateType
+        )");
 
         py_gate_library.def("contains_gate_type", &GateLibrary::contains_gate_type, py::arg("gate_type"), R"(
             Check whether the given gate type is contained in this library.
 
-            :param hal_py.GateType gate_type: The gate type to check.
+            :param hal_py.GateType gate_type: The gate type.
             :returns: True if the gate type is part of this library, false otherwise.
             :rtype: bool
+        )");
+
+        py_gate_library.def("contains_gate_type_by_name", &GateLibrary::contains_gate_type_by_name, py::arg("name"), R"(
+            Check by name whether the given gate type is contained in this library.
+
+            :param str name: The name of the gate type.
+            :returns: True if the gate type is part of this library, false otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_library.def("get_gate_type_by_name", &GateLibrary::get_gate_type_by_name, py::arg("name"), R"(
+            Get the gate type corresponding to the given name if contained within the library. In case there is no gate type with that name, None is returned.
+
+            :param str name: The name of the gate type.
+            :returns: The gate type on success, None otherwise.
+            :rtype: hal_py.GateType or None
         )");
 
         py_gate_library.def_property_readonly("gate_types", &GateLibrary::get_gate_types, R"(
@@ -69,6 +87,14 @@ namespace hal
             :rtype: dict[str,hal_py.GateType]
         )");
 
+        py_gate_library.def("mark_vcc_gate_type", &GateLibrary::mark_vcc_gate_type, py::arg("gate_type"), R"(
+            Mark a gate type as a VCC gate type.
+        
+            :param hal_py.GateType gate_type: The gate type.
+            :returns: True on success, false otherwise.
+            :rtype: bool
+        )");
+
         py_gate_library.def_property_readonly("vcc_gate_types", &GateLibrary::get_vcc_gate_types, R"(
             All VCC gate types of the gate library as as dict from gate type names to gate types.
 
@@ -80,6 +106,14 @@ namespace hal
 
             :returns: A dict from VCC gate type names to gate type objects.
             :rtype: dict[str,hal_py.GateType]
+        )");
+
+        py_gate_library.def("mark_gnd_gate_type", &GateLibrary::mark_gnd_gate_type, py::arg("gate_type"), R"(
+            Mark a gate type as a GND gate type.
+        
+            :param hal_py.GateType gate_type: The gate type.
+            :returns: True on success, false otherwise.
+            :rtype: bool
         )");
 
         py_gate_library.def_property_readonly("gnd_gate_types", &GateLibrary::get_vcc_gate_types, R"(

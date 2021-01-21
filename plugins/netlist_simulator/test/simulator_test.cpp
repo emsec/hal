@@ -49,7 +49,7 @@ namespace hal
         {
             NO_COUT_BLOCK;
             plugin_manager::load_all_plugins();
-            gate_library_manager::get_gate_library("XILINX_UNISIM.lib");
+            gate_library_manager::get_gate_library("XILINX_UNISIM.hgl");
         }
 
         virtual void TearDown()

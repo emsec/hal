@@ -249,6 +249,7 @@ namespace hal
 //        connect(mActionRunSchedule, &Action::triggered, PluginScheduleManager::get_instance(), &PluginScheduleManager::runSchedule);
 
         connect(this, &MainWindow::saveTriggered, gContentManager, &ContentManager::handleSaveTriggered);
+        connect(this, &MainWindow::saveTriggered, gGraphContextManager, &GraphContextManager::handleSaveTriggered);
 
         restoreState();
 

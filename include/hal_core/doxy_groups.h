@@ -36,6 +36,16 @@
  */
 
 /**
+ * @defgroup gate_lib_parser Gate Library Parser
+ * @ingroup gate_lib
+ */
+
+/**
+ * @defgroup gate_lib_writer Gate Library Writer
+ * @ingroup gate_lib
+ */
+
+/**
  * @defgroup persistent Persistency
  * @ingroup netlist
  */

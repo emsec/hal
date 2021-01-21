@@ -5,9 +5,48 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* views get persisted to .halv file and are restored if the file is found on disk
+* fixed `z3_utils` plugin being disabled by default causing linking errors
+* fixed `load_initial_values` and `load_initial_values_from_netlist` assigning values to potentially non-existing nets
+
+## [3.2.2] - 2021-01-16 14:40:00+02:00 (urgency: medium)
+* refactored gate library handling
+  * separated gate library manager from gate library parser interface
+  * added gate library writer interface to enable writing out gate library files
+* extended and refactored gate library functionality
+  * added `create_gate_type` to class `GateLibrary` to enable gate type creation from Python
+  * added `mark_vcc_gate_type` and `mark_gnd_gate_type` to class `GateLibrary` to enable marking gate types as power or ground connections
+  * added `get_gate_type_by_name` and `contains_gate_type_by_name` to class `GateLibrary`
+  * added pin types and respective functions to `GateType` to enable assigning special-purpose pins
+  * added `get_gate_library` to class `GateType`
+  * added base types `ram`, `dsp`, and `io`
+  * merged input and output pin groups to simplify pin group handling
+  * removed `add_gate_type` function from class `GateLibrary`
+  * removed `GateTypeSequential` and `GateTypeLut` classes and moved their functionality into class `GateType`
+  * renamed some functions to have shorter and more understandable names
+* added new gate library format: "HAL Gate Library" (HGL)
+  * supports assignment of pin types to gate types
+  * added parser for HGL (`.hgl`) files
+  * added writer for HGL (`.hgl`) files
+* refactored liberty gate library parser
+  * added parsing of power and ground pins (`pg_pin`) to Liberty parser
+* added more netlist utility functions
+  * added `get_nets_at_pins` to retrieve nets that are connected to a vector of pins
+  * added `remove_buffers` to remove buffer gates from a netlist
+  * added `remove_unused_lut_endpoints` to remove unused LUT fan-in endpoints
+  * added `rename_luts_according_to_function` to rename LUTs depending on the Boolean function they implement
+* added `to_z3` to class `BooleanFunction` to translate a Boolean function into a z3 expression
+* added **highly experimental** `solve_fsm` plugin for FSM verification using z3
+* added `z3_utils` plugin to provide common z3 functions to all other plugins
 * improved layouter uses location information from gate API
 * switched from float gate coordinates to integer ones
-* fixed wrong Python binding for property `gate_library` of class `Netlist
+* the netlist simulator VCD writer now optionally takes a set of target nets to write to VCD
+* fixed `add_boolean_function` of class `Gate` assigning wrong functions to LUTs
+* fixed wrong Python binding for property `gate_library` of class `Netlist`
+* fixed netlist simulator segfaulting when an output pin of a FF remains unconnected
+* fixed optimization of Boolean functions sometimes producing wrong or non-optimal results
+* fixed `netlist_utils::get_subgraph_function` returning wrong results if input pins without relevance for the Boolean function remained unconnected
+* fixed layouter not showing connections if things change within submodules by adding additional test whether removing or adding a gate/module requires context update
 
 ## [3.1.11] - 2021-01-03 11:35:00+02:00 (urgency: medium)
 * added **highly experimental** way to close and reopen netlists at runtime
@@ -458,7 +497,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.11...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.2.2...HEAD
+[3.2.2]: https://github.com/emsec/hal/compare/v3.1.11...v3.2.2
 [3.1.11]: https://github.com/emsec/hal/compare/v3.1.10...v3.1.11
 [3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10
 [3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9

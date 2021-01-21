@@ -5,46 +5,58 @@ namespace hal
     void gate_library_manager_init(py::module& m)
     {
         auto py_gate_library_manager = m.def_submodule("GateLibraryManager", R"(
-            HAL GateLibraryManager functions.
+            The gate library manager keeps track of all gate libraries that are used within HAL. Further, it takes care of loading and saving gate libraries on demnand.
         )");
 
         py_gate_library_manager.def(
-            "load_file",
-            [](std::filesystem::path path, bool reload_if_existing) { return RawPtrWrapper<GateLibrary>(gate_library_manager::load_file(path, reload_if_existing)); },
-            py::arg("path"),
-            py::arg("reload_if_existing"),
+            "load",
+            [](std::filesystem::path file_path, bool reload) { return RawPtrWrapper<GateLibrary>(gate_library_manager::load(file_path, reload)); },
+            py::arg("file_path"),
+            py::arg("reload") = false,
             R"(
-            Loads a gate library file.
+            Load a gate library from file.
 
-            :param path - the file to load.
-            :param reload_if_existing - If true, reloads all libraries that are already loaded.
-            :returns: Loaded gate library or nullptr on error.
-            :rtype: hal_py.GateLibrary
+            :param hal_py.hal_path file_path: The input path.
+            :param bool reload: If true, reloads the library in case it is already loaded.
+            :returns: The gate library on success, None otherwise.
+            :rtype: hal_py.GateLibrary or None
         )");
 
-        py_gate_library_manager.def("load_all", &gate_library_manager::load_all, py::arg("reload_if_existing"), R"(
-            Loads all gate libraries which are available.
+        py_gate_library_manager.def("load_all", &gate_library_manager::load_all, py::arg("reload") = false, R"(
+            Load all gate libraries available in standard gate library directories.
 
-            :param reload_if_existing - If true, reloads all libraries that are already loaded.
+            :param bool reload: If true, reloads all libraries that have already been loaded.
+        )");
+
+        py_gate_library_manager.def("save", &gate_library_manager::save, py::arg("file_path"), py::arg("gate_lib"), py::arg("overwrite") = false, R"(
+            Save a gate library to file.
+
+            :param hal_py.hal_path file_path: The output path. 
+            :param hal_py.GateLibrary gate_lib: The gate library.
+            :param bool overwrite: If true, overwrites already existing files.
+            :returns: True on success, false otherwise.
+            :rtype: bool
         )");
 
         py_gate_library_manager.def(
-            "get_gate_library", [](const std::string& file_name) { return RawPtrWrapper<GateLibrary>(gate_library_manager::get_gate_library(file_name)); }, py::arg("file_name"), R"(
-            If no library with the given name is already loaded this function will attempt to load the file.
+            "get_gate_library", [](const std::string& file_name) { return RawPtrWrapper<GateLibrary>(gate_library_manager::get_gate_library(file_name)); }, py::arg("file_path"), R"(
+            Get a gate library by file path. If no library with the given name is loaded, loading the gate library from file will be attempted.
 
-            :param file_name - file name of the gate library.
-            :returns: Gate library object or nullptr on error.
-            :rtype: hal_py.GateLibrary
+            :param str file_path: The input path.
+            :returns: The gate library on success, None otherwise.
+            :rtype: hal_py.GateLibrary or None
         )");
 
         py_gate_library_manager.def(
-            "get_gate_library_by_name", [](const std::string& lib_name) { return RawPtrWrapper<GateLibrary>(gate_library_manager::get_gate_library_by_name(lib_name)); }, py::arg("lib_name"), R"(
-            Get a gate library object by library name.
-            If no library with the given name is loaded this function returns nullptr.
+            "get_gate_library_by_name",
+            [](const std::string& lib_name) { return RawPtrWrapper<GateLibrary>(gate_library_manager::get_gate_library_by_name(lib_name)); },
+            py::arg("lib_name"),
+            R"(
+            Get a gate library by name. If no library with the given name is loaded, None will be returned.
 
-            :param lib_name - name of the gate library.
-            :returns: Gate library object or nullptr on error.
-            :rtype: hal_py.GateLibrary
+            :param str lib_name: The name of the gate library.
+            :returns: The gate library on success, None otherwise.
+            :rtype: hal_py.GateLibrary or None
         )");
 
         py_gate_library_manager.def(
@@ -60,8 +72,7 @@ namespace hal
             R"(
             Get all loaded gate libraries.
 
-            :param lib_name - name of the gate library.
-            :returns: A vector of pointers to the gate library objects.
+            :returns: A list of gate libraries.
             :rtype:  list[hal_py.GateLibrary]
         )");
     }

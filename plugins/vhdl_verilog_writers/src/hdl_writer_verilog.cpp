@@ -314,7 +314,7 @@ namespace hal
         for (auto&& gate : gates)
         {
             // TODO ugly bad bad bad
-            if (gate->get_type()->get_name() == "GLOBAL_GND" || gate->get_type()->get_name() == "GLOBAL_VCC")
+            if (gate->get_type()->get_name() == "HAL_GND" || gate->get_type()->get_name() == "HAL_VCC")
             {
                 continue;
             }

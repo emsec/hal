@@ -3,6 +3,8 @@
 #include "hal_core/utilities/utils.h"
 
 #include <algorithm>
+#include <bitset>
+#include <map>
 
 namespace hal
 {
@@ -288,7 +290,7 @@ namespace hal
             return BooleanFunction();
         }
 
-        const std::string delimiters = "!^&|'+* ";
+        const std::string delimiters = "!~^&|'+* ";
 
         // check for constants
         if (expression == "0")
@@ -437,7 +439,7 @@ namespace hal
         {
             // multiple terms available -> initialize return Value with first term
             u32 i = 0;
-            while (terms[i] == "!")
+            while (terms[i] == "!" || terms[i] == "~")
             {
                 negate_next = !negate_next;
                 ++i;
@@ -459,7 +461,7 @@ namespace hal
             // process the remaining terms
             while (++i < terms.size())
             {
-                if (terms[i] == "!")
+                if (terms[i] == "!" || terms[i] == "~")
                 {
                     negate_next = !negate_next;
                 }
@@ -737,28 +739,53 @@ namespace hal
         return result;
     }
 
-    std::vector<BooleanFunction> BooleanFunction::expand_ands_internal(const std::vector<std::vector<BooleanFunction>>& sub_primitives) const
+    std::vector<BooleanFunction> BooleanFunction::expand_AND_of_functions(const std::vector<std::vector<BooleanFunction>>& AND_terms_to_expand) const
     {
-        std::vector<BooleanFunction> result = sub_primitives[0];
+        /*
+        This helper function expands a list of AND terms
+        Example: we started with ((e | f) & cd & (g | h), so this function is called with [[e, f], [cd], [g, h]]
+        Strategy:
+            1. initialize the output list with first set of AND terms --> [e, f]
+            2. iterate over the remaining AND term sets --> [cd], [g, h]
+                a. for each member of the current set, AND it to all terms in the current output and add each result to a new output list
+                   reduce the output to only these new functions
+                b. replace the old output list with the new output list
 
-        auto set_identifier = [](const BooleanFunction& f) -> std::string {
-            std::string id;
+        Rundown:
+            1: init output = [e,f]
+            2: process [cd] --> output = [ecd, fcd]
+            2: process [g, h] --> output = [ecdg, ecdh, fcdg, fcdh]
+        */
+
+        std::vector<BooleanFunction> result = AND_terms_to_expand[0];
+
+        auto simple_hash = [](const BooleanFunction& f) -> std::string {
+            std::string hash = f.m_invert ? "!#" : "#";
             for (const auto& var : f.m_operands)
             {
                 if (var.m_invert)
-                    id += "!";
-                id += var.m_variable;
-                id += " ";
+                {
+                    hash += "!";
+                }
+                if (var.m_content == content_type::CONSTANT)
+                {
+                    hash += "c" + std::to_string(static_cast<int>(var.m_constant) + 1);
+                }
+                else
+                {
+                    hash += "v" + var.m_variable;
+                }
+                hash += " ";
             }
-            return id;
+            return hash;
         };
 
-        for (u32 i = 1; i < sub_primitives.size(); ++i)
+        for (u32 i = 1; i < AND_terms_to_expand.size(); ++i)
         {
-            std::set<std::string> seen;
+            std::unordered_set<std::string> seen;
             std::vector<BooleanFunction> tmp;
-            tmp.reserve(sub_primitives[i].size() * result.size());
-            for (const auto& bf : sub_primitives[i])
+            tmp.reserve(AND_terms_to_expand[i].size() * result.size());
+            for (const auto& bf : AND_terms_to_expand[i])
             {
                 for (const auto& bf2 : result)
                 {
@@ -769,7 +796,7 @@ namespace hal
                         {
                             std::sort(combined.m_operands.begin(), combined.m_operands.end(), [](const auto& f1, const auto& f2) { return f1.m_variable < f2.m_variable; });
                         }
-                        auto s = set_identifier(combined);
+                        auto s = simple_hash(combined);
                         if (seen.find(s) == seen.end())
                         {
                             seen.insert(s);
@@ -784,8 +811,13 @@ namespace hal
         return result;
     }
 
-    std::vector<BooleanFunction> BooleanFunction::get_primitives() const
+    std::vector<BooleanFunction> BooleanFunction::get_AND_terms() const
     {
+        /*
+        This helper function transforms the BF into a vector of terms that solely consist of the AND op
+        Example: ab | (cd & (e | f)) | g --> [ad, cde, cdf, g]
+        */
+
         if (m_content != content_type::TERMS)
         {
             return {*this};
@@ -793,28 +825,37 @@ namespace hal
 
         if (m_op == operation::OR)
         {
-            std::vector<BooleanFunction> primitives;
+            std::vector<BooleanFunction> AND_terms;
             for (const auto& operand : m_operands)
             {
-                auto tmp = operand.get_primitives();
-                primitives.insert(primitives.end(), tmp.begin(), tmp.end());
+                auto tmp = operand.get_AND_terms();
+                AND_terms.insert(AND_terms.end(), tmp.begin(), tmp.end());
             }
-            return primitives;
+            return AND_terms;
         }
         else    // m_op == AND
         {
-            std::vector<std::vector<BooleanFunction>> sub_primitives;
+            // at this point we potentially face a nested computation like "cd & (e | f)"
+            // we have to expand the terms, i.e., AND every outer term with every inner term
+            // for the example, we would output  (cd & (e | f)) --> [cde, cdf]
+            std::vector<std::vector<BooleanFunction>> ANDed_functions;
             for (const auto& operand : m_operands)
             {
-                sub_primitives.push_back(operand.get_primitives());
+                ANDed_functions.push_back(operand.get_AND_terms());
             }
-            return expand_ands_internal(sub_primitives);
+            return expand_AND_of_functions(ANDed_functions);
         }
     }
 
     BooleanFunction BooleanFunction::expand_ands() const
     {
-        std::vector<BooleanFunction> primitives = get_primitives();
+        /*
+        Strategy: expand all AND-multiplied terms
+        Example: (a | b | c) & d --> ad | bd | cd
+        Output: a flat OR-chain of AND terms
+        */
+
+        std::vector<BooleanFunction> primitives = get_AND_terms();
         if (primitives.empty())
         {
             return Value::ZERO;
@@ -944,32 +985,6 @@ namespace hal
         }
     }
 
-    BooleanFunction BooleanFunction::flatten() const
-    {
-        if (m_content != content_type::TERMS)
-        {
-            return *this;
-        }
-
-        std::vector<BooleanFunction> terms;
-        for (const auto& operand : m_operands)
-        {
-            auto term = operand.flatten();
-            if (term.m_content == content_type::TERMS && m_op == term.m_op)
-            {
-                for (const auto& x : term.m_operands)
-                {
-                    terms.push_back(x);
-                }
-            }
-            else
-            {
-                terms.push_back(term);
-            }
-        }
-        return BooleanFunction(m_op, terms);
-    }
-
     bool BooleanFunction::is_dnf() const
     {
         if (m_content != content_type::TERMS)
@@ -1020,6 +1035,7 @@ namespace hal
             return *this;
         }
 
+        // debug progress prints
         // auto tmp_vars = get_variables();
         // std::vector<std::string> init_vars(tmp_vars.begin(), tmp_vars.end());
         // auto init_tt = get_truth_table(init_vars);
@@ -1036,10 +1052,6 @@ namespace hal
         // std::cout << "  expand_ands " << x << std::endl;
         // if (x.get_truth_table(init_vars) != init_tt)
         //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
-        // x = x.flatten();
-        // std::cout << "  flatten " << x << std::endl;
-        // if (x.get_truth_table(init_vars) != init_tt)
-        //     std::cout << "FUNCTIONS DONT MATCH" << std::endl;
         // x = x.optimize_constants();
         // std::cout << "  optimize_constants " << x << std::endl;
         // if (x.get_truth_table(init_vars) != init_tt)
@@ -1048,7 +1060,7 @@ namespace hal
 
         // the order of the passes is important!
         // every pass after replace_xors expects that there are no more xor operations
-        return replace_xors().propagate_negations().expand_ands() /*.flatten()*/.optimize_constants();
+        return replace_xors().propagate_negations().expand_ands().optimize_constants();
     }
 
     std::vector<std::vector<std::pair<std::string, bool>>> BooleanFunction::get_dnf_clauses() const
@@ -1147,7 +1159,7 @@ namespace hal
             return result;
         }
 
-        // result is a OR-chain of *multiple* AND-chains of *only variables*
+        // result is an OR-chain of *multiple* AND-chains of *only variables*
         std::vector<std::vector<Value>> terms;
         std::vector<std::string> vars = get_variables();
 
@@ -1173,8 +1185,10 @@ namespace hal
         terms = qmc(terms);
 
         result = BooleanFunction();
-        for (const auto& term : terms)
+
+        for (auto it = terms.rbegin(); it != terms.rend(); ++it) //qmc reverses order, so iterate in reverse
         {
+            auto& term = (*it);
             BooleanFunction tmp;
             for (u32 i = 0; i < term.size(); ++i)
             {
@@ -1197,75 +1211,250 @@ namespace hal
         return result;
     }
 
-    std::vector<std::vector<BooleanFunction::Value>> BooleanFunction::qmc(const std::vector<std::vector<Value>>& terms)
+    std::vector<std::vector<BooleanFunction::Value>> BooleanFunction::qmc(std::vector<std::vector<Value>> terms)
     {
-        std::vector<std::vector<Value>> result;
-
         if (terms.empty())
         {
-            return result;
+            return {};
         }
 
-        std::vector<std::vector<Value>> im;
-        std::vector<bool> mark(terms.size(), false);
-        u32 term_size = terms[0].size();
+        u32 num_variables = terms[0].size();
 
+        // repeatedly merge all groups that only differ in a single value
+        while (true)
+        {
+            bool any_changes = false;
+            std::vector<std::vector<Value>> new_merged_terms;
+            std::vector<bool> removed_by_merge(terms.size(), false);
+            // pairwise compare all terms...
+            for (u32 i = 0; i < terms.size(); ++i)
+            {
+                for (u32 j = i + 1; j < terms.size(); ++j)
+                {
+                    // ...merge their values and count differences...
+                    std::vector<Value> merged(num_variables, Value::X);
+                    u32 cnt = 0;
+                    for (u32 k = 0; k < num_variables; ++k)
+                    {
+                        if (terms[i][k] == terms[j][k])
+                        {
+                            merged[k] = terms[i][k];
+                        }
+                        else
+                        {
+                            ++cnt;
+                        }
+                    }
+                    // ...and if they differ only in a single value, replace them with the merged term
+                    if (cnt == 1)
+                    {
+                        removed_by_merge[i] = removed_by_merge[j] = true;
+                        new_merged_terms.push_back(merged);
+                        any_changes = true;
+                    }
+                }
+            }
+            if (!any_changes)
+            {
+                break;
+            }
+            for (u32 i = 0; i < terms.size(); ++i)
+            {
+                if (!removed_by_merge[i])
+                {
+                    new_merged_terms.push_back(terms[i]);
+                }
+            }
+            std::sort(new_merged_terms.begin(), new_merged_terms.end());
+            new_merged_terms.erase(std::unique(new_merged_terms.begin(), new_merged_terms.end()), new_merged_terms.end());
+            terms = new_merged_terms;
+        }
+
+        std::vector<std::vector<Value>> output;
+
+        // build ON-set minterms to later identify essential implicants
+        std::map<u32, std::vector<u32>> table;
         for (u32 i = 0; i < terms.size(); ++i)
         {
-            for (u32 j = i + 1; j < terms.size(); ++j)
+            // find all inputs that are covered by term i
+            // Example: term=01-1 --> all inputs covered are 0101 and 0111
+            std::vector<u32> covered_inputs;
+            for (u32 j = 0; j < num_variables; ++j)
             {
-                std::vector<Value> c(term_size, Value::X);
-                u32 cnt = 0;
-                for (u32 k = 0; k < term_size; ++k)
+                if (terms[i][j] != Value::X)
                 {
-                    if (terms[i][k] == terms[j][k])
+                    if (covered_inputs.empty())
                     {
-                        c[k] = terms[i][k];
+                        covered_inputs.push_back(terms[i][j]);
                     }
                     else
                     {
-                        ++cnt;
+                        for (auto& v : covered_inputs)
+                        {
+                            v = (v << 1) | terms[i][j];
+                        }
                     }
                 }
-                if (cnt > 1)
+                else
                 {
-                    continue;
+                    if (covered_inputs.empty())
+                    {
+                        covered_inputs.push_back(0);
+                        covered_inputs.push_back(1);
+                    }
+                    else
+                    {
+                        std::vector<u32> tmp;
+                        for (auto v : covered_inputs)
+                        {
+                            tmp.push_back((v << 1) | 0);
+                            tmp.push_back((v << 1) | 1);
+                        }
+                        covered_inputs = tmp;
+                    }
                 }
-                im.push_back(c);
-                mark[i] = mark[j] = true;
             }
-        }
 
-        for (u32 i = 0; i < terms.size(); ++i)
-        {
-            if (!mark[i])
+            std::sort(covered_inputs.begin(), covered_inputs.end());
+            covered_inputs.erase(std::unique(covered_inputs.begin(), covered_inputs.end()), covered_inputs.end());
+
+            // now memorize that all these inputs are covered by term i
+            for (auto v : covered_inputs)
             {
-                result.push_back(terms[i]);
+                table[v].push_back(i);
             }
         }
 
-        if (result.size() == terms.size() || terms.size() == 1)
+        // helper function to add a term to the output and remove it from the table
+        auto add_to_output = [&](u32 term_index) {
+            output.push_back(terms[term_index]);
+            for (auto it2 = table.cbegin(); it2 != table.cend();)
+            {
+                if (std::find(it2->second.begin(), it2->second.end(), term_index) != it2->second.end())
+                {
+                    it2 = table.erase(it2);
+                }
+                else
+                {
+                    ++it2;
+                }
+            }
+        };
+
+        // finally, identify essential implicants and add them to the output
+        while (!table.empty())
+        {
+            bool no_change = true;
+
+            for (auto& it : table)
+            {
+                if (it.second.size() == 1)
+                {
+                    no_change = false;
+                    add_to_output(it.second[0]);
+                    break; // 'add_to_output' invalidates table iterator, so break and restart in next iteration
+                }
+            }
+
+            if (no_change)
+            {
+                // none of the remaining terms is essential, just pick the one that covers most input values
+                std::unordered_map<u32, u32> counter;
+                for (auto it : table)
+                {
+                    for (auto term_index : it.second)
+                    {
+                        counter[term_index]++;
+                    }
+                }
+
+                u32 index = std::max_element(counter.begin(), counter.end(), [](const auto& p1, const auto& p2) { return p1.second < p2.second; })->first;
+                add_to_output(index);
+            }
+        }
+
+        // sort output terms for deterministic output order (no impact on functionality)
+        std::sort(output.begin(), output.end());
+
+        return output;
+    }
+
+    z3::expr BooleanFunction::to_z3(z3::context& context) const
+    {
+        // convert bf variables to z3::expr
+        std::unordered_map<std::string, z3::expr> input2expr;
+
+        for (const std::string& var : get_variables())
+        {
+            input2expr.emplace(var, context.bv_const(var.c_str(), 1));
+        }
+
+        z3::expr expr = to_z3_internal(context, input2expr);
+
+        return expr;
+    }
+
+    z3::expr BooleanFunction::to_z3_internal(z3::context& context, const std::unordered_map<std::string, z3::expr>& input2expr) const
+    {
+        z3::expr result(context);
+
+        if (is_empty())
         {
             return result;
         }
 
-        std::vector<bool> mark2(im.size(), false);
-        for (u32 i = 0; i < im.size(); ++i)
+        if (m_content == content_type::VARIABLE)
         {
-            for (u32 j = i + 1; j < im.size(); ++j)
+            result = input2expr.at(m_variable);
+        }
+        else if (m_content == content_type::CONSTANT)
+        {
+            if (m_constant == Value::ZERO)
             {
-                if (!mark2[j] && im[i] == im[j])
+                result = context.bv_val(0, 1);
+            }
+            else if (m_constant == Value::ONE)
+            {
+                result = context.bv_val(1, 1);
+            }
+            else
+            {
+                // TODO log error
+            }
+        }
+        else
+        {
+            std::vector<z3::expr> terms;
+
+            for (const BooleanFunction& x : m_operands)
+            {
+                terms.push_back(x.to_z3_internal(context, input2expr));
+            }
+
+            result = terms[0];
+
+            for (u32 i = 1; i < terms.size(); ++i)
+            {
+                if (m_op == operation::OR)
                 {
-                    mark2[j] = true;
+                    result = result | terms[i];
+                }
+                else if (m_op == operation::XOR)
+                {
+                    result = result ^ terms[i];
+                }
+                else if (m_op == operation::AND)
+                {
+                    result = result & terms[i];
                 }
             }
         }
 
-        u32 cnt = 0;
-        im.erase(std::remove_if(im.begin(), im.end(), [&](auto&) { return mark2[cnt++]; }), im.end());
+        if (m_invert)
+        {
+            result = ~result;
+        }
 
-        im = qmc(im);
-        result.insert(result.end(), im.begin(), im.end());
         return result;
     }
 }    // namespace hal

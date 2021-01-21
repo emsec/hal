@@ -1,16 +1,30 @@
 #include "liberty_parser/liberty_parser.h"
 
 #include "hal_core/netlist/boolean_function.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
 #include "hal_core/utilities/log.h"
+
+#include <fstream>
+
+// TODO remove LUT parsing
 
 namespace hal
 {
-    std::unique_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path, std::stringstream& file_content)
+    std::unique_ptr<GateLibrary> LibertyParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
-        m_fs   = &file_content;
+
+        {
+            std::ifstream ifs;
+            ifs.open(m_path.string(), std::ifstream::in);
+            if (!ifs.is_open())
+            {
+                log_error("liberty_parser", "unable to open '{}'.", m_path.string());
+                return nullptr;
+            }
+            m_fs << ifs.rdbuf();
+            ifs.close();
+        }
+
         // tokenize file
         if (!tokenize())
         {
@@ -54,7 +68,7 @@ namespace hal
 
         std::vector<Token<std::string>> parsed_tokens;
 
-        while (std::getline(*m_fs, line))
+        while (std::getline(m_fs, line))
         {
             line_number++;
             this->remove_comments(line, multi_line_comment);
@@ -130,13 +144,10 @@ namespace hal
                     return false;
                 }
 
-                auto gt = construct_gate_type(cell.value());
-                if (gt == nullptr)
+                if (!construct_gate_type(cell.value()))
                 {
                     return false;
                 }
-
-                m_gate_lib->add_gate_type(std::move(gt));
             }
             else if (next_token == "type" && library_str.peek() == "(")
             {
@@ -215,13 +226,13 @@ namespace hal
                 else
                 {
                     log_error(
-                        "liberty_parser", "invalid token '{}' for boolean value in 'downto' statement in type group '{}' near line {}", type_str.peek().string, type.name, type_str.peek().number);
+                        "liberty_parser", "invalid token '{}' for boolean value in 'downto' statement in type group '{}' near line {}.", type_str.peek().string, type.name, type_str.peek().number);
                     return std::nullopt;
                 }
             }
             else
             {
-                log_error("liberty_parser", "invalid token '{}' in type group '{}' near line {}", type_str.peek().string, type.name, type_str.peek().number);
+                log_error("liberty_parser", "invalid token '{}' in type group '{}' near line {}.", type_str.peek().string, type.name, type_str.peek().number);
                 return std::nullopt;
             }
 
@@ -230,7 +241,7 @@ namespace hal
 
         if (width != (direction * (end - start)) + 1)
         {
-            log_error("liberty_parser", "invalid 'bit_width' value {} for type group '{}' near line {}", width, type.name, type.line_number);
+            log_error("liberty_parser", "invalid 'bit_width' value {} for type group '{}' near line {}.", width, type.name, type.line_number);
             return std::nullopt;
         }
 
@@ -256,7 +267,7 @@ namespace hal
 
         if (const auto cell_it = m_cell_names.find(cell.name); cell_it != m_cell_names.end())
         {
-            log_error("liberty_parser", "a cell with the name '{}' does already exist", cell.name);
+            log_error("liberty_parser", "a cell with the name '{}' does already exist.", cell.name);
             return std::nullopt;
         }
 
@@ -273,6 +284,15 @@ namespace hal
             else if (next_token == "pin")
             {
                 auto pin = parse_pin(cell_str, cell);
+                if (!pin.has_value())
+                {
+                    return std::nullopt;
+                }
+                cell.pins.push_back(pin.value());
+            }
+            else if (next_token == "pg_pin")
+            {
+                auto pin = parse_pg_pin(cell_str, cell);
                 if (!pin.has_value())
                 {
                     return std::nullopt;
@@ -323,7 +343,7 @@ namespace hal
         return cell;
     }
 
-    std::optional<LibertyParser::pin_group> LibertyParser::parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction, const std::string& external_pin_name)
+    std::optional<LibertyParser::pin_group> LibertyParser::parse_pin(TokenStream<std::string>& str, cell_group& cell, GateType::PinDirection direction, const std::string& external_pin_name)
     {
         pin_group pin;
 
@@ -337,7 +357,7 @@ namespace hal
 
         if (pin_names_str.size() == 0)
         {
-            log_error("liberty_parser", "no pin name given near line {}", pin.line_number);
+            log_error("liberty_parser", "no pin name given near line {}.", pin.line_number);
             return std::nullopt;
         }
 
@@ -346,7 +366,7 @@ namespace hal
             std::string name = pin_names_str.consume().string;
             if (!external_pin_name.empty() && name != external_pin_name)
             {
-                log_error("liberty_parser", "invalid pin name '{}' near line {}", name, pin.line_number);
+                log_error("liberty_parser", "invalid pin name '{}' near line {}.", name, pin.line_number);
                 return std::nullopt;
             }
 
@@ -365,7 +385,7 @@ namespace hal
 
                         if (const auto pin_it = cell.pin_names.find(new_name); pin_it != cell.pin_names.end())
                         {
-                            log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'", new_name, cell.name);
+                            log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", new_name, cell.name);
                             return std::nullopt;
                         }
 
@@ -380,7 +400,7 @@ namespace hal
 
                     if (const auto pin_it = cell.pin_names.find(new_name); pin_it != cell.pin_names.end())
                     {
-                        log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'", new_name, cell.name);
+                        log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", new_name, cell.name);
                         return std::nullopt;
                     }
 
@@ -394,7 +414,7 @@ namespace hal
             {
                 if (const auto pin_it = cell.pin_names.find(name); pin_it != cell.pin_names.end())
                 {
-                    log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'", name, cell.name);
+                    log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", name, cell.name);
                     return std::nullopt;
                 }
 
@@ -416,19 +436,24 @@ namespace hal
                 auto direction_str = pin_str.consume().string;
                 if (direction_str == "input")
                 {
-                    pin.direction = pin_direction::IN;
+                    pin.direction = GateType::PinDirection::input;
                 }
                 else if (direction_str == "output")
                 {
-                    pin.direction = pin_direction::OUT;
+                    pin.direction = GateType::PinDirection::output;
                 }
                 else if (direction_str == "inout")
                 {
-                    pin.direction = pin_direction::INOUT;
+                    pin.direction = GateType::PinDirection::inout;
+                }
+                else if (direction_str == "internal")
+                {
+                    pin.direction = GateType::PinDirection::internal;
                 }
                 else
                 {
-                    log_warning("liberty_parser", "could not handle pin direction '{}' near line {}, ignoring pin", direction_str, pin.line_number);
+                    log_warning("liberty_parser", "invalid pin direction '{}' near line {}.", direction_str, pin.line_number);
+                    return std::nullopt;
                 }
                 pin_str.consume(";", true);
             }
@@ -454,6 +479,75 @@ namespace hal
             {
                 pin_str.consume(":", true);
                 pin.clock = pin_str.consume("true");
+                pin_str.consume(";", true);
+            }
+        }
+
+        if (pin.direction == GateType::PinDirection::none)
+        {
+            log_error("liberty_parser", "no pin direction given near line {}.", pin.line_number);
+            return std::nullopt;
+        }
+
+        return pin;
+    }
+
+    std::optional<LibertyParser::pin_group> LibertyParser::parse_pg_pin(TokenStream<std::string>& str, cell_group& cell)
+    {
+        pin_group pin;
+
+        pin.line_number = str.peek().number;
+        str.consume("(", true);
+        TokenStream<std::string> pin_names_str = str.extract_until(")", TokenStream<std::string>::END_OF_STREAM, true, true);
+        str.consume(")", true);
+        str.consume("{", true);
+        TokenStream<std::string> pin_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
+        str.consume("}", true);
+
+        if (pin_names_str.size() == 0)
+        {
+            log_error("liberty_parser", "no pg_pin name given near line {}.", pin.line_number);
+            return std::nullopt;
+        }
+        else if (pin_names_str.size() > 1)
+        {
+            log_error("liberty_parser", "more than one pg_pin name given near line {}.", pin.line_number);
+            return std::nullopt;
+        }
+
+        std::string name = pin_names_str.consume().string;
+
+        if (const auto pin_it = cell.pin_names.find(name); pin_it != cell.pin_names.end())
+        {
+            log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", name, cell.name);
+            return std::nullopt;
+        }
+
+        cell.pin_names.insert(name);
+        pin.pin_names.push_back(name);
+
+        pin.direction = GateType::PinDirection::input;
+
+        while (pin_str.remaining() > 0)
+        {
+            auto next_token = pin_str.consume();
+            if (next_token == "pg_type")
+            {
+                pin_str.consume(":", true);
+                std::string type = pin_str.consume().string;
+                if (type == "primary_power")
+                {
+                    pin.power = true;
+                }
+                else if (type == "primary_ground")
+                {
+                    pin.ground = true;
+                }
+                else
+                {
+                    log_error("liberty_parser", "unsupported pg_type '{}' of pg_pin '{}' for cell '{}'.", type, name, cell.name);
+                    return std::nullopt;
+                }
                 pin_str.consume(";", true);
             }
         }
@@ -487,7 +581,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid bus type '{}' near line {}", bus_type_str, bus.line_number);
+                    log_error("liberty_parser", "invalid bus type '{}' near line {}.", bus_type_str, bus.line_number);
                     return std::nullopt;
                 }
                 bus_str.consume(";", true);
@@ -498,19 +592,23 @@ namespace hal
                 auto direction_str = bus_str.consume().string;
                 if (direction_str == "input")
                 {
-                    bus.direction = pin_direction::IN;
+                    bus.direction = GateType::PinDirection::input;
                 }
                 else if (direction_str == "output")
                 {
-                    bus.direction = pin_direction::OUT;
+                    bus.direction = GateType::PinDirection::output;
                 }
                 else if (direction_str == "inout")
                 {
-                    bus.direction = pin_direction::INOUT;
+                    bus.direction = GateType::PinDirection::inout;
+                }
+                else if (direction_str == "internal")
+                {
+                    bus.direction = GateType::PinDirection::internal;
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid pin direction '{}' near line {}", direction_str, bus.line_number);
+                    log_error("liberty_parser", "invalid pin direction '{}' near line {}.", direction_str, bus.line_number);
                     return std::nullopt;
                 }
                 bus_str.consume(";", true);
@@ -535,9 +633,9 @@ namespace hal
             bus.index_to_pin_name.emplace(index, pin_name);
         }
 
-        if (bus.direction == pin_direction::UNKNOWN)
+        if (bus.direction == GateType::PinDirection::none)
         {
-            log_error("liberty_parser", "no bus direction given near line {}", bus.line_number);
+            log_error("liberty_parser", "no bus direction given near line {}.", bus.line_number);
             return std::nullopt;
         }
 
@@ -596,11 +694,11 @@ namespace hal
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        ff.special_behavior_var1 = GateTypeSequential::SetResetBehavior(pos + 1);
+                        ff.special_behavior_var1 = GateType::ClearPresetBehavior(pos + 1);
                     }
                     else
                     {
-                        ff.special_behavior_var2 = GateTypeSequential::SetResetBehavior(pos + 1);
+                        ff.special_behavior_var2 = GateType::ClearPresetBehavior(pos + 1);
                     }
                 }
                 else
@@ -678,11 +776,11 @@ namespace hal
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        latch.special_behavior_var1 = GateTypeSequential::SetResetBehavior(pos + 1);
+                        latch.special_behavior_var1 = GateType::ClearPresetBehavior(pos + 1);
                     }
                     else
                     {
-                        latch.special_behavior_var2 = GateTypeSequential::SetResetBehavior(pos + 1);
+                        latch.special_behavior_var2 = GateType::ClearPresetBehavior(pos + 1);
                     }
                 }
                 else
@@ -745,86 +843,44 @@ namespace hal
         return lut;
     }
 
-    std::unique_ptr<GateType> LibertyParser::construct_gate_type(cell_group& cell)
+    bool LibertyParser::construct_gate_type(cell_group& cell)
     {
-        std::unique_ptr<GateType> gt;
         std::vector<std::string> input_pins;
         std::vector<std::string> output_pins;
-        std::unordered_map<std::string, std::map<u32, std::string>> input_pin_groups;
-        std::unordered_map<std::string, std::map<u32, std::string>> output_pin_groups;
+
+        std::unordered_map<std::string, std::map<u32, std::string>> groups;
+
+        GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.type);
 
         // get input and output pins from pin groups
         for (const auto& pin : cell.pins)
         {
-            if (pin.direction == pin_direction::IN || pin.direction == pin_direction::INOUT)
+            if (pin.direction == GateType::PinDirection::input || pin.direction == GateType::PinDirection::inout)
             {
                 input_pins.insert(input_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
             }
 
-            if (pin.direction == pin_direction::OUT || pin.direction == pin_direction::INOUT)
+            if (pin.direction == GateType::PinDirection::output || pin.direction == GateType::PinDirection::inout)
             {
                 output_pins.insert(output_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
             }
-        }
 
-        // check if there are any duplicate pin names
-        std::vector<std::string> pins_unique = input_pins;
-        std::sort(pins_unique.begin(), pins_unique.end());
-        pins_unique.erase(std::unique(pins_unique.begin(), pins_unique.end()), pins_unique.end());
-        if (pins_unique.size() != input_pins.size())
-        {
-            log_error("liberty_parser", "input pin must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
-            return nullptr;
-        }
-        pins_unique.clear();
-
-        pins_unique = output_pins;
-        std::sort(pins_unique.begin(), pins_unique.end());
-        pins_unique.erase(std::unique(pins_unique.begin(), pins_unique.end()), pins_unique.end());
-        if (pins_unique.size() != output_pins.size())
-        {
-            log_error("liberty_parser", "output pin must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
-            return nullptr;
+            gt->add_pins(pin.pin_names, pin.direction);
         }
 
         // get input and output pins from bus groups
         for (const auto& bus : cell.buses)
         {
-            if (bus.second.direction == pin_direction::IN || bus.second.direction == pin_direction::INOUT)
+            if (groups.find(bus.first) != groups.end())
             {
-                if (input_pin_groups.find(bus.first) != input_pin_groups.end())
-                {
-                    log_error("liberty_parser", "input pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
-                    return nullptr;
-                }
-                input_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
+                log_error("liberty_parser", "pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
+                return false;
             }
-
-            if (bus.second.direction == pin_direction::OUT || bus.second.direction == pin_direction::INOUT)
-            {
-                if (output_pin_groups.find(bus.first) != output_pin_groups.end())
-                {
-                    log_error("liberty_parser", "output pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
-                    return nullptr;
-                }
-                output_pin_groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
-            }
+            groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
         }
 
-        if (cell.type == GateType::BaseType::combinatorial)
+        if (cell.type == GateType::BaseType::ff)
         {
-            gt = std::make_unique<GateType>(cell.name);
-
-            gt->add_input_pins(input_pins);
-            gt->add_output_pins(output_pins);
-        }
-        else if (cell.type == GateType::BaseType::ff)
-        {
-            auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
-
-            seq_gt->add_input_pins(input_pins);
-            seq_gt->add_output_pins(output_pins);
-
             if (!cell.ff.clocked_on.empty())
             {
                 cell.special_functions["clock"] = cell.ff.clocked_on;
@@ -845,9 +901,9 @@ namespace hal
                 cell.special_functions["clear"] = cell.ff.clear;
             }
 
-            seq_gt->set_set_reset_behavior(cell.ff.special_behavior_var1, cell.ff.special_behavior_var2);
-            seq_gt->set_init_data_category(cell.ff.data_category);
-            seq_gt->set_init_data_identifier(cell.ff.data_identifier);
+            gt->set_clear_preset_behavior(cell.ff.special_behavior_var1, cell.ff.special_behavior_var2);
+            gt->set_config_data_category(cell.ff.data_category);
+            gt->set_config_data_identifier(cell.ff.data_identifier);
 
             for (auto& pin : cell.pins)
             {
@@ -855,7 +911,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_state_output_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::state);
                     }
 
                     pin.function = "";
@@ -864,7 +920,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_inverted_state_output_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
                     }
 
                     pin.function = "";
@@ -874,7 +930,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_clock_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::clock);
                     }
                 }
             }
@@ -887,7 +943,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_state_output_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::state);
                         }
 
                         pin.function = "";
@@ -896,7 +952,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_inverted_state_output_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
                         }
 
                         pin.function = "";
@@ -906,21 +962,14 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_clock_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::clock);
                         }
                     }
                 }
             }
-
-            gt = std::move(seq_gt);
         }
         else if (cell.type == GateType::BaseType::latch)
         {
-            auto seq_gt = std::make_unique<GateTypeSequential>(cell.name, cell.type);
-
-            seq_gt->add_input_pins(input_pins);
-            seq_gt->add_output_pins(output_pins);
-
             if (!cell.latch.enable.empty())
             {
                 cell.special_functions["enable"] = cell.latch.enable;
@@ -941,7 +990,7 @@ namespace hal
                 cell.special_functions["clear"] = cell.latch.clear;
             }
 
-            seq_gt->set_set_reset_behavior(cell.latch.special_behavior_var1, cell.latch.special_behavior_var2);
+            gt->set_clear_preset_behavior(cell.latch.special_behavior_var1, cell.latch.special_behavior_var2);
 
             for (auto& pin : cell.pins)
             {
@@ -949,7 +998,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_state_output_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::state);
                     }
 
                     pin.function = "";
@@ -958,7 +1007,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_inverted_state_output_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
                     }
 
                     pin.function = "";
@@ -968,7 +1017,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        seq_gt->add_clock_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::clock);
                     }
                 }
             }
@@ -981,7 +1030,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_state_output_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::state);
                         }
 
                         pin.function = "";
@@ -990,7 +1039,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_inverted_state_output_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
                         }
 
                         pin.function = "";
@@ -1000,24 +1049,17 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            seq_gt->add_clock_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::clock);
                         }
                     }
                 }
             }
-
-            gt = std::move(seq_gt);
         }
         else if (cell.type == GateType::BaseType::lut)
         {
-            auto lut_gt = std::make_unique<GateTypeLut>(cell.name);
-
-            lut_gt->add_input_pins(input_pins);
-            lut_gt->add_output_pins(output_pins);
-
-            lut_gt->set_config_data_category(cell.lut.data_category);
-            lut_gt->set_config_data_identifier(cell.lut.data_identifier);
-            lut_gt->set_config_data_ascending_order(cell.lut.data_direction == "ascending");
+            gt->set_config_data_category(cell.lut.data_category);
+            gt->set_config_data_identifier(cell.lut.data_identifier);
+            gt->set_lut_init_ascending(cell.lut.data_direction == "ascending");
 
             for (auto& pin : cell.pins)
             {
@@ -1025,7 +1067,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        lut_gt->add_output_from_init_string_pin(pin_name);
+                        gt->assign_pin_type(pin_name, GateType::PinType::lut);
                     }
 
                     pin.function = "";
@@ -1040,19 +1082,41 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            lut_gt->add_output_from_init_string_pin(pin_name);
+                            gt->assign_pin_type(pin_name, GateType::PinType::lut);
                         }
 
                         pin.function = "";
                     }
                 }
             }
-
-            gt = std::move(lut_gt);
         }
 
-        gt->assign_input_pin_groups(input_pin_groups);
-        gt->assign_output_pin_groups(output_pin_groups);
+        for (const auto& pin : cell.pins)
+        {
+            if (pin.power == true)
+            {
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    gt->assign_pin_type(pin_name, GateType::PinType::power);
+                }
+            }
+
+            if (pin.ground == true)
+            {
+                for (const auto& pin_name : pin.pin_names)
+                {
+                    gt->assign_pin_type(pin_name, GateType::PinType::ground);
+                }
+            }
+        }
+
+        for (const auto& [group, index_to_pin] : groups)
+        {
+            if (!gt->assign_pin_group(group, index_to_pin))
+            {
+                return false;
+            }
+        }
 
         std::vector<std::string> all_pins = input_pins;
         all_pins.insert(all_pins.end(), output_pins.begin(), output_pins.end());
@@ -1100,7 +1164,7 @@ namespace hal
             }
         }
 
-        return gt;
+        return true;
     }
 
     void LibertyParser::remove_comments(std::string& line, bool& multi_line_comment)
@@ -1302,7 +1366,7 @@ namespace hal
         {
             UNUSED(bus_name);
 
-            if (bus.direction != pin_direction::OUT && bus.direction != pin_direction::INOUT)
+            if (bus.direction != GateType::PinDirection::output && bus.direction != GateType::PinDirection::inout)
             {
                 continue;
             }

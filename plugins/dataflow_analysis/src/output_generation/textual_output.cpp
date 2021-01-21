@@ -31,7 +31,8 @@ namespace hal
                     result_out << "RS: {" << utils::join(", ", state->get_register_stage_intersect_of_group(group_id)) << "}, ";
                     result_out << "CLK: {" << utils::join(", ", state->get_clock_signals_of_group(group_id)) << "}, ";
                     result_out << "CS: {" << utils::join(", ", state->get_control_signals_of_group(group_id)) << "}, ";
-                    result_out << "R: {" << utils::join(", ", state->get_reset_signals_of_group(group_id)) << "}" << std::endl;
+                    result_out << "R: {" << utils::join(", ", state->get_reset_signals_of_group(group_id)) << "},";
+                    result_out << "S: {" << utils::join(", ", state->get_set_signals_of_group(group_id)) << "}" << std::endl;
 
                     auto unsorted_successors = state->get_successor_groups_of_group(group_id);
                     result_out << "  Successors:   {" + utils::join(", ", std::set<u32>(unsorted_successors.begin(), unsorted_successors.end())) << "}" << std::endl;

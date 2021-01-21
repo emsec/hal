@@ -12,7 +12,7 @@ namespace hal
     {
         namespace group_by_control_signals
         {
-            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset)
+            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset, bool set)
             {
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
@@ -34,6 +34,11 @@ namespace hal
                     if (reset)
                     {
                         auto signals = state->get_reset_signals_of_group(group_id);
+                        candidate_characteristic_set.insert(signals.begin(), signals.end());
+                    }
+                    if (set)
+                    {
+                        auto signals = state->get_set_signals_of_group(group_id);
                         candidate_characteristic_set.insert(signals.begin(), signals.end());
                     }
 
@@ -92,7 +97,7 @@ namespace hal
                 return new_state;
             }
 
-            std::shared_ptr<Grouping> pure_control_signals_process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset)
+            std::shared_ptr<Grouping> pure_control_signals_process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset, bool set)
             {
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
@@ -114,6 +119,11 @@ namespace hal
                     if (reset)
                     {
                         auto signals = state->get_reset_signals_of_group(group_id);
+                        candidate_characteristic_set.insert(signals.begin(), signals.end());
+                    }
+                    if (set)
+                    {
+                        auto signals = state->get_set_signals_of_group(group_id);
                         candidate_characteristic_set.insert(signals.begin(), signals.end());
                     }
 
