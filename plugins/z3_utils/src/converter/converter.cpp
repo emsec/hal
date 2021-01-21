@@ -241,7 +241,11 @@ namespace hal
         std::string Converter::convert_z3_expr_to_func(const z3Wrapper& e) const {
             std::string assignments = "";
 
+            log_info("z3_utils", "trying to create smt2 string");
+
             auto smt = e.get_smt2_string();
+
+            log_info("z3_utils", "created smt2 string: {}", smt);
 
             std::istringstream iss(smt);
             for (std::string line; std::getline(iss, line); ) {
@@ -250,6 +254,10 @@ namespace hal
                     assignments = assignments + assignment;;
                 }
             }
+
+            log_info("z3_utils", "read smt2");
+            log_info("z3_utils", "read assignments: {}, len: {}", assignments, assignments.size());
+
 
             const auto input_ids = e.get_inputs_net_ids();
 

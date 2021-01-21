@@ -27,9 +27,17 @@ namespace hal
 
     std::map<Gate*, double> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate) 
     {
+        if (gate->get_type()->get_base_type() != hal::GateType::BaseType::ff)
+        {
+            log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.");
+            return {};
+        }
+
+
         // Check for the data port pin
         std::unordered_set<std::string> d_ports = gate->get_type()->get_pins_of_type(GateType::PinType::data);
-        if (d_ports.size() != 1) {
+        if (d_ports.size() != 1)
+        {
             log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.");
             return {};
         }
@@ -47,6 +55,8 @@ namespace hal
         g.get_subgraph_z3_function(gate->get_fan_in_net(data_pin), function_gates, *ctx, func, net_ids);
 
         z3_utils::z3Wrapper func_wrapper = z3_utils::z3Wrapper(std::move(ctx), func);
+
+        log_info("boolean_influence", "boolean function generated, starting analysis");
 
         // Generate boolean influence
         std::unordered_map<u32, double> net_ids_to_inf = func_wrapper.get_boolean_influence();
