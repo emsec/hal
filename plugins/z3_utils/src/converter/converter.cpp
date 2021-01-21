@@ -243,6 +243,13 @@ namespace hal
 
             log_info("z3_utils", "trying to create smt2 string");
 
+            // TODO remove this is only for debugging
+            // auto test_ctx = std::make_unique<z3::context>();
+            // z3::expr t_1 = test_ctx->bv_const("1001", 1);
+            // z3::expr t_2 = {*test_ctx, Z3_mk_bvnot(*test_ctx, t_1)};
+            // z3::expr t_3 = {*test_ctx, Z3_mk_bvnot(*test_ctx, t_2)};
+            // auto wrap_t3 = z3Wrapper(std::move(test_ctx), t_3);
+
             auto smt = e.get_smt2_string();
 
             log_info("z3_utils", "created smt2 string: {}", smt);
@@ -258,6 +265,13 @@ namespace hal
             log_info("z3_utils", "read smt2");
             log_info("z3_utils", "read assignments: {}, len: {}", assignments, assignments.size());
 
+            if (assignments.empty()) {
+                log_info("z3_utils", "found now regular assignments. checking for an immediate assignment in case of a very short expression.");
+
+                // in order to stay compliant with the rest of the converter structure we simply simulate a dummy assignment with a double negation.
+                auto dummy_assignment = "(let ((?x1 (bvnot (bvnot " + e.get_expr().to_string() + ")))))";
+                assignments += generate_assignment(dummy_assignment);
+            }
 
             const auto input_ids = e.get_inputs_net_ids();
 
