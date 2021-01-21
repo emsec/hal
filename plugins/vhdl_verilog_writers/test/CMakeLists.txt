@@ -11,8 +11,8 @@ if(BUILD_TESTS AND (PL_VHDL_VERILOG_PARSERS OR BUILD_ALL_PLUGINS))
     add_executable(runTest-hdl_writer_verilog  hdl_writer_verilog.cpp)
     add_executable(runTest-hdl_writer_vhdl  hdl_writer_vhdl.cpp)
 
-    target_link_libraries(runTest-hdl_writer_verilog   vhdl_verilog_writers vhdl_verilog_parsers pthread gtest gtest_main hal::core hal::netlist test_utils)
-    target_link_libraries(runTest-hdl_writer_vhdl  vhdl_verilog_writers vhdl_verilog_parsers pthread gtest gtest_main hal::core hal::netlist test_utils)
+    target_link_libraries(runTest-hdl_writer_verilog   vhdl_verilog_writers vhdl_verilog_parsers pthread gtest hal::core hal::netlist test_utils)
+    target_link_libraries(runTest-hdl_writer_vhdl  vhdl_verilog_writers vhdl_verilog_parsers pthread gtest hal::core hal::netlist test_utils)
 
     add_test(runTest-hdl_writer_verilog ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-hdl_writer_verilog --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
     add_test(runTest-hdl_writer_vhdl ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-hdl_writer_vhdl --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
