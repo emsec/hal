@@ -144,15 +144,18 @@ namespace hal
             const std::string compile_command = "g++ -o " + program_name + " " + filename + " -O3";
             system(compile_command.c_str());
 
-            log_info("boolean_function", "created boolean function program");
+            log_info("boolean_function", "{}", compile_command);
 
             // run boolean function program for every input
             for (auto it = m_inputs_net_ids.begin(); it < m_inputs_net_ids.end(); it++)
             {
-                const std::string run_command = "./" + program_name + " " + std::to_string(*it) + " " + std::to_string(evaluation_count) + " 2>&1";
+                const std::string run_command = program_name + " " + std::to_string(*it) + " " + std::to_string(evaluation_count) + " 2>&1";
 
                 std::array<char, 128> buffer;
                 std::string result;
+
+
+                log_info("boolean_function", "{}", run_command);
 
                 FILE* pipe = popen(run_command.c_str(), "r");
                 if (!pipe)
@@ -175,7 +178,10 @@ namespace hal
             std::remove(filename.c_str());
             std::remove(program_name.c_str());
 
-            std::filesystem::remove(directory);
+            //std::filesystem::remove(directory);
+
+            log_info("boolean_function", "returning influences");
+
 
             return influences;
         }

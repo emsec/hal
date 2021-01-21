@@ -61,6 +61,9 @@ namespace hal
         // Generate boolean influence
         std::unordered_map<u32, double> net_ids_to_inf = func_wrapper.get_boolean_influence();
 
+        log_info("boolean_influence", "got boolean influences");
+
+
         // translate net_ids back to gates
         std::map<Gate*, double> gates_to_inf;
 
