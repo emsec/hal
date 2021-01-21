@@ -140,39 +140,44 @@ namespace hal
         bool empty() const;
 
         /**
-         * TODO: Documentation
+         * Checks if the context represents the content of the given module i.e. after double-clicking the module item.
          *
-         * @param id
-         * @return
+         * @param id - The id of the module
+         * @returns <b>true</b> if the context shows the content of the module
          */
         bool isShowingModule(const u32 id) const;
         /**
-         * TODO: Documentation
-         * Checks if the context shows the content of the module of the passed id.
-         * The minus/plus_gates/modules can be used to consider past states of the module.
+         * Checks if the context represents the content of the given module i.e. after double-clicking the module item. <br>
+         * In some cases it is necessary that the check is performed on a previous state e.g. if a gate was newly assigned to the
+         * netlist and the affected GraphContexts should be discovered now. Since the comparison is done on the current
+         * netlist but the context does not contain the gate yet, this function will falsely return <b>false</b> even
+         * on the right GraphContexts. Therefore the new gate must be manually removed from the comparison by passing
+         * it in the minus_gates list. <br>
+         * Accordingly, it is also possible to add gates to the comparison (e.g. after removing them from the module)
+         * as well as adding and removing modules (i.e. submodules).
          *
-         * @param id
-         * @param minus_modules
-         * @param minus_gates
-         * @param plus_modules
-         * @param plus_gates
-         * @return
+         * @param id - The id of the module
+         * @param minus_modules - The ids of the modules that are removed for comparison
+         * @param minus_gates - The ids of the gates that are removed for comparison
+         * @param plus_modules - The ids of the modules that are added for comparison
+         * @param plus_gates - The ids of the gates that are added for comparison
+         * @returns <b>true</b> if the context shows the content of the module.
          */
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
         /**
-         * TODO: Documentation
+         * Given a net, this functions checks if any of the nets source gates appear in the context.
          *
-         * @param mNetId
-         * @return
+         * @param mNetId - The id of the net
+         * @returns <b>true</b> if a source gate of the net is shown
          */
         bool isShowingNetSource(const u32 mNetId) const;
 
         /**
-         * TODO: Documentation
+         * Given a net, this functions checks if any of the nets destination gates appear in the context.
          *
-         * @param mNetId
-         * @return
+         * @param mNetId - The id of the net
+         * @returns <b>true</b> if a destination gate of the net is shown
          */
         bool isShowingNetDestination(const u32 mNetId) const;
 

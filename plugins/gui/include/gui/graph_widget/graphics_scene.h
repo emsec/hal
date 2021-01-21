@@ -54,7 +54,6 @@ namespace hal
      * Besides the functions that are provided by its parent class QGraphicScene, it offers functions to work on a grid,
      * to support drag-and-drop on the grid, to access the contained GraphicItems and to handle certain events like
      * changed selections and groupings.
-     *
      */
     class GraphicsScene : public QGraphicsScene
     {
@@ -251,19 +250,65 @@ namespace hal
          * Q_SLOT to call whenever the selection has beed changed. It only handles selection changes outside this scene.
          * It is used to apply extern selection changes to the scene.
          *
-         * @param sender
+         * @param sender - The object that is responsible for the changes and called the signal.
          */
         void handleExternSelectionChanged(void* sender);
 
-
+        /**
+         * Q_SLOT to call whenever the sub-focus has been changed. Currently unused.
+         *
+         * @param sender
+         */
         void handleExternSubfocusChanged(void* sender);
+
+        /**
+         * Q_SLOT used to highlight the selected graphics items.
+         *
+         * @param highlightItems - The selection tree items to highlight
+         */
         void handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems);
+
+        /**
+         * Q_SLOT to call whenever a module was assigned to or removed from a grouping. It is used to update the
+         * corresponding GraphicsModule accordingly.
+         *
+         * @param grp - The grouping that has been changed
+         * @param id - The id of the module that was assigned/removed to/from the grouping
+         */
         void handleGroupingAssignModule(Grouping* grp, u32 id);
+
+        /**
+         * Q_SLOT to call whenever a gate was assigned to or removed from a grouping. It is used to update the
+         * corresponding GraphicsGate accordingly.
+         *
+         * @param grp - The grouping that has been changed
+         * @param id - The id of the gate that was assigned/removed to/from the grouping
+         */
         void handleGroupingAssignGate(Grouping* grp, u32 id);
+
+        /**
+         * Q_SLOT to call whenever a net was assigned to or removed from a grouping. It is used to update the
+         * corresponding GraphicsNet accordingly.
+         *
+         * @param grp - The grouping that has been changed
+         * @param id - The id of the net that was assigned/removed to/from the grouping
+         */
         void handleGroupingAssignNet(Grouping* grp, u32 id);
+
+        /**
+         * Q_SLOT to call whenever the color of a grouping has been changed. It is used to update the affected
+         * GraphicsItems accordingly.
+         *
+         * @param grp - The grouping that has been changed
+         */
         void handleGroupingColorChanged(Grouping* grp);
 
     protected:
+        /**
+         * Handles the mouse event. Used to intercept and ignore right-clicks.
+         *
+         * @param event - The mouse event in the graphics scene
+         */
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
     private Q_SLOTS:

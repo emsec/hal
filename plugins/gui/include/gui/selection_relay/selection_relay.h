@@ -37,6 +37,12 @@ namespace hal
     class Module;
     class Net;
 
+    /**
+     * The SelectionRelay is used to manage the selection and the focus of modules, gates and nets. <br>
+     * There can be any number of selected modules and/or gates and/or nets, but only one focused item at a time. <br>
+     * This class contains signals to notify objects about changes of the focus and the selection. However these
+     * signals must be emitted manually by calling the functions relaySelectionChanged and relaySubfocusChanged.
+     */
     class SelectionRelay : public QObject
     {
         Q_OBJECT
@@ -120,7 +126,7 @@ namespace hal
          * Emits the selectionChanged signal. If compiled with the HAL_STUDY flag it also invokes the
          * evaluateSelectionChanged function. <br>
          * If the receiver wants to prevent event handling of certain senders (e.g. itself to prevent infinite loops),
-         * it can check the sender pointer. Therefore the sender should always pass a this-pointer.
+         * it can check the sender pointer. Therefore the sender should always pass a <i>this</i>-pointer.
          *
          * @param sender - The object that invokes this function.
          */
@@ -129,7 +135,7 @@ namespace hal
         /**
          * Emits the sub-focusChanged signal.
          * If the receiver wants to prevent event handling of certain senders (e.g. itself to prevent infinite loops),
-         * it can check the sender pointer. Therefore the sender should always pass a this-pointer.
+         * it can check the sender pointer. Therefore the sender should always pass a <i>this</i>-pointer.
          *
          * @param sender - The object that invokes this function.
          */
@@ -240,7 +246,7 @@ namespace hal
         /**
          * Q_SIGNAL to notify that the selection has been changed.
          * If the receiver wants to prevent event handling of certain senders (e.g. itself to prevent infinite loops),
-         * it can check the sender pointer. Therefore the sender should always pass a this-pointer.
+         * it can check the sender pointer. Therefore the sender should always pass a <i>this</i>-pointer.
          *
          * @param sender - The object
          */
@@ -250,23 +256,56 @@ namespace hal
         /**
          * Q_SIGNAL to notify that the sub-focus has been changed.
          * If the receiver wants to prevent event handling of certain senders (e.g. itself to prevent infinite loops),
-         * it can check the sender pointer. Therefore the sender should always pass a this-pointer.
+         * it can check the sender pointer. Therefore the sender should always pass a <i>this</i>-pointer.
          *
          * @param sender - The object
          */
         void subfocusChanged(void* sender);
 
     public:
+        // TODO: encapsulate public members?
+        /**
+         * Contains the currently selected gates. <br>
+         * Please call relaySelectionChanged after manipulations of this member.
+         */
         QSet<u32> mSelectedGates;
+
+        /**
+         * Contains the currently selected nets. <br>
+         * Please call relaySelectionChanged after manipulations of this member.
+         */
         QSet<u32> mSelectedNets;
+
+        /**
+         * Contains the currently selected modules. <br>
+         * Please call relaySelectionChanged after manipulations of this member.
+         */
         QSet<u32> mSelectedModules;
 
         // MAYBE UNNECESSARY
+        /**
+         * <b>Unused!</b> <br>
+         * \deprecated Please use mFocusType to access the ItemType of the current focus.
+         */
         ItemType mCurrentType;
+
+        /**
+         * <b>Unused!</b> <br>
+         * \deprecated Please use mFocusId to access the id of the current focused item.
+         */
         u32 mCurrentId;
 
         // USE ARRAY[0] INSTEAD OF MEMBER ???
+        /**
+         * Contains the ItemType of the currently focused item. <br>
+         * ItemType::None represents no focus.
+         */
         ItemType mFocusType;
+
+        /**
+         * Contains the id of the currently focused item. <br>
+         * The id is related to the module id/gate id/net id (depends on the ItemType mFocusType)
+         */
         u32 mFocusId;
 
         /**

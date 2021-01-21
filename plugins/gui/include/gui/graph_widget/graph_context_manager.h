@@ -42,38 +42,174 @@ namespace hal
 
     class ContextTableModel;
 
+    /**
+     * The GraphContextManager is a manager class that contains and manages all GraphContexts. <br>
+     * It can be used to create, delete or rename GraphContexts.  <br>
+     * Moreover it is responsible for applying changes of the netlist to the contexts. Therefore it inspects which
+     * contexts are affected by the corresponding changes to only adjust the relevant contexts.
+     */
     class GraphContextManager : public QObject
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         */
         GraphContextManager();
 
+        /**
+         * Creates a new context with the given name. The context is initialized with the default GrapgLayouter and
+         * GraphShader. <br>
+         * Emits the signal contextCreated.
+         *
+         * @param name - The name of the new context. Names don't have to be unique.
+         * @returns the created GraphContext
+         */
         GraphContext* createNewContext(const QString& name);
+
+        /**
+         * Renames a graph context. <br>
+         * Emits the signal contextRenamed.
+         *
+         * @param ctx - The graph context to rename. Must not be a <i>nullptr</i>.
+         * @param new_name - The new name of the context
+         */
         void renameGraphContext(GraphContext* ctx, const QString& new_name);
+
+        /**
+         * Removes and deletes the given GraphContext. The passed pointer will be a <i>nullptr</i> afterwards.<br>
+         * Emits deletingContext before the deletion.
+         *
+         * @param ctx - The graph context to delete.
+         */
         void deleteGraphContext(GraphContext* ctx);
+
+        /**
+         * Gets a list of all current GraphContexts.
+         *
+         * @returns a list of all GrapgContexts.
+         */
         QVector<GraphContext*> getContexts() const;
+
+        /**
+         * Checks if a context with the given name exists.
+         *
+         * @param name - The context name
+         * @returns <b>true</b> if a context with the name exists
+         */
         bool contextWithNameExists(const QString& name) const;
 
         //void handle_module_created(Module* m) const;
+        /**
+         * Handler to be called after a module has been removed. Used to apply the changes in the affected contexts.<br>
+         * The module is already removed from the netlist at this point. However the module isn't deleted yet (not <i>nullptr</i>).
+         *
+         * @param m - The module that has been removed
+         */
         void handleModuleRemoved(Module* m);
+
+        /**
+         * Handler to be called after a modules name has been changed. Used to apply the changes in the affected contexts.
+         *
+         * @param m - The module that has been changed
+         */
         void handleModuleNameChanged(Module* m) const;
+
+        /**
+         * Handler to be called after a modules type has been changed. Used to apply the changes in the affected contexts.
+         *
+         * @param m - The module that has been changed
+         */
         void handleModuleTypeChanged(Module* m) const;
+
+        /**
+         * Handler to be called after a modules color has been changed. Used to apply the changes in the affected contexts.
+         *
+         * @param m - The module which color has been changed
+         */
         void handleModuleColorChanged(Module* m) const;
         //void handle_module_parent_changed(Module* m) const;
+        /**
+         * Handler to be called after a submodule was added to a module. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param m - The module with the new submodule
+         * @param added_module - The id of the added submodule
+         */
         void handleModuleSubmoduleAdded(Module* m, const u32 added_module) const;
+
+        /**
+         * Handler to be called after a submodule was removed from a module. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param m - The module with the removed submodule
+         * @param removed_module - The id of the removed submodule
+         */
         void handleModuleSubmoduleRemoved(Module* m, const u32 removed_module);
+
+        /**
+         * Handler to be called after a gate was newly assigned to a module. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param m - The module with the new gate
+         * @param inserted_gate - The id of the newly assigned gate
+         */
         void handleModuleGateAssigned(Module* m, const u32 inserted_gate) const;
+
+        /**
+         * Handler to be called after a gate was removed from a module. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param m - The module with the removed gate
+         * @param removed_gate - The id of the removed gate
+         */
         void handleModuleGateRemoved(Module* m, const u32 removed_gate);
+
+        /**
+         * Handler to be called after an input port of a module has been renamed. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param m - The module with the renamed input port
+         * @param net - The net that is connected to the renamed input port
+         */
         void handleModuleInputPortNameChanged(Module* m, const u32 net);
+
+        /**
+         * Handler to be called after an output port of a module has been renamed. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param m - The module with the renamed output port
+         * @param net - The net that is connected to the renamed output port
+         */
         void handleModuleOutputPortNameChanged(Module* m, const u32 net);
 
         //void handle_gate_created(Gate* g) const;
         //void handleGateRemoved(Gate* g) const;
+        /**
+         * Handler to be called after a gate has been renamed. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param g - The renamed gate
+         */
         void handleGateNameChanged(Gate* g) const;
 
+        /**
+         * Handler to be called after a new net has been created. <br>
+         * Currently no logic is done here.
+         *
+         * @param n - The new net
+         */
         void handleNetCreated(Net* n) const;
+
+        /**
+         * Handler to be called after a net has been removed. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param n - The removed net
+         */
         void handleNetRemoved(Net* n) const;
+        // TODO: IN_PROGRESS: Documentation of the remaining functions
         void handleNetNameChanged(Net* n) const;
         void handleNetSourceAdded(Net* n, const u32 src_gate_id) const;
         void handleNetSourceRemoved(Net* n, const u32 src_gate_id) const;
