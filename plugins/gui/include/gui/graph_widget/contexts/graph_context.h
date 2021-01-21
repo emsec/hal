@@ -95,6 +95,12 @@ namespace hal
 
         void readFromFile(const QJsonObject& json);
 
+        void setDirty(bool dty);
+        bool isDirty() const {return mDirty; }
+
+    Q_SIGNALS:
+        void dataChanged();
+
     private Q_SLOTS:
         void handleLayouterUpdate(const int percent);
         void handleLayouterUpdate(const QString& message);
@@ -111,6 +117,7 @@ namespace hal
 
         u32 mId;
         QString mName;
+        bool mDirty;
 
         GraphLayouter* mLayouter;
         GraphShader* mShader;

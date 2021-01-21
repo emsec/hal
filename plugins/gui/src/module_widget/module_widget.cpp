@@ -1,6 +1,7 @@
 #include "gui/module_widget/module_widget.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_relay/module_relay.h"
@@ -202,14 +203,24 @@ namespace hal
 
     void ModuleWidget::openModuleInView(const QModelIndex& index)
     {
-        auto module = gNetlist->get_module_by_id(getModuleItemFromIndex(index)->id());
+        const Module* module = gNetlist->get_module_by_id(getModuleItemFromIndex(index)->id());
 
         if (!module)
             return;
 
-        GraphContext* new_context = nullptr;
-        new_context                = gGraphContextManager->createNewContext(QString::fromStdString(module->get_name()));
-        new_context->add({module->get_id()}, {});
+        GraphContext* moduleContext =
+                gGraphContextManager->getCleanContext(QString::fromStdString(module->get_name()));
+        if (moduleContext)
+        {
+            gContentManager->getContextManagerWidget()->selectViewContext(moduleContext);
+            gContentManager->getContextManagerWidget()->handleOpenContextClicked();
+        }
+        else
+        {
+            moduleContext                = gGraphContextManager->createNewContext(QString::fromStdString(module->get_name()));
+            moduleContext->add({module->get_id()}, {});
+            moduleContext->setDirty(false);
+        }
     }
 
     void ModuleWidget::handleSelectionChanged(void* sender)

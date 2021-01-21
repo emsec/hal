@@ -8,6 +8,7 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/gui_utils/graphics.h"
 #include "gui/toolbar/toolbar.h"
+#include "gui/user_action/action_rename_object.h"
 
 #include "hal_core/utilities/log.h"
 
@@ -149,18 +150,30 @@ namespace hal
     {
         QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
         if (!currentIndex.isValid()) return;
-        QModelIndex modelIndex = mGroupingTableModel->index(currentIndex.row(),0);
 
         InputDialog ipd;
         ipd.setWindowTitle("Rename Grouping");
         ipd.setInfoText("Please select a new unique name for the grouping.");
-        QString oldName = mGroupingTableModel->data(modelIndex,Qt::DisplayRole).toString();
+        int irow = currentIndex.row();
+        QString oldName = mGroupingTableModel->data(
+                    mGroupingTableModel->index(irow,0),Qt::DisplayRole).toString();
         mGroupingTableModel->setAboutToRename(oldName);
         ipd.setInputText(oldName);
         ipd.addValidator(mGroupingTableModel);
 
         if (ipd.exec() == QDialog::Accepted)
-            mGroupingTableModel->renameGrouping(modelIndex.row(),ipd.textValue());
+        {
+            QString newName = ipd.textValue();
+            if (newName != oldName)
+            {
+                ActionRenameObject* act = new ActionRenameObject(newName);
+                u32 grpId = mGroupingTableModel->data(
+                            mGroupingTableModel->index(irow,1),Qt::DisplayRole).toInt();
+                act->setObject(UserActionObject(grpId,
+                                                UserActionObjectType::Grouping));
+                act->exec();
+            }
+        }
         mGroupingTableModel->setAboutToRename(QString());
     }
 
@@ -222,10 +235,10 @@ namespace hal
         mDeleteAction->setEnabled(enabled);
     }
 
-    void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex& modelIndex)
+    void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex& modelIndexName)
     {
-        if (!modelIndex.isValid()) return;
-        QModelIndex proxyIndex = mProxyModel->mapFromSource(modelIndex);
+        if (!modelIndexName.isValid()) return;
+        QModelIndex proxyIndex = mProxyModel->mapFromSource(modelIndexName);
         if (!proxyIndex.isValid()) return;
         mGroupingTableView->setCurrentIndex(proxyIndex);
         handleCurrentChanged(proxyIndex);

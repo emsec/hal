@@ -235,15 +235,19 @@ namespace hal {
         }
     }
 
-    void GroupingTableModel::renameGrouping(int irow, const QString& groupingName)
+    void GroupingTableModel::renameGrouping(u32 id, const QString& groupingName)
     {
-        mDisableEvents = true;
-        Grouping* grp = mGroupings.at(irow).grouping();
-        grp->set_name(groupingName.toStdString());
-        mGroupings[irow].setName(groupingName);
-        QModelIndex inx = index(irow,0);
-        Q_EMIT dataChanged(inx,inx);
-        mDisableEvents = false;
+        for (int irow=0; irow < mGroupings.size(); irow++)
+        {
+            if (mGroupings.at(irow).id() != id) continue;
+            mDisableEvents = true;
+            mGroupings[irow].setName(groupingName);
+            mGroupings[irow].grouping()->set_name(groupingName.toStdString());
+            QModelIndex inx = index(irow,0);
+            Q_EMIT dataChanged(inx,inx);
+            mDisableEvents = false;
+            return;
+        }
     }
 
     QString GroupingTableModel::generateUniqueName(const QString& suggestion, const QSet<QString>& existingNames)

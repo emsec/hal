@@ -52,7 +52,7 @@ namespace hal {
         Grouping* addDefaultEntry();
         Grouping* groupingByName(const QString& name) const;
         QColor colorForItem(ItemType itemType, u32 itemId) const;
-        void renameGrouping(int irow, const QString& groupingName);
+        void renameGrouping(u32 id, const QString& groupingName);
         QStringList groupingNames() const;
 
     public Q_SLOTS:

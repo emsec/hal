@@ -112,6 +112,7 @@ namespace hal
             {
                 auto context = gGraphContextManager->createNewContext(name);
                 context->add(gSelectionRelay->selectedModules(), gSelectionRelay->selectedGates());
+                context->setDirty(false);
                 return;
             }
         }
@@ -493,6 +494,7 @@ namespace hal
                 }
                 // re-layout the nets
                 context->scheduleSceneUpdate();
+                context->setDirty(true);
             }
         }
         else

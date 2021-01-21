@@ -18,6 +18,7 @@ namespace hal
         : QObject(parent),
           mId(id_),
           mName(name),
+          mDirty(false),
           mUserUpdateCount(0),
           mUnappliedChanges(false),
           mSceneUpdateRequired(false),
@@ -112,6 +113,7 @@ namespace hal
             evaluateChanges();
             update();
         }
+        if (!new_modules.isEmpty() || !new_gates.isEmpty()) setDirty(true);
     }
 
     void GraphContext::remove(const QSet<u32>& modules, const QSet<u32>& gates)
@@ -135,6 +137,7 @@ namespace hal
             evaluateChanges();
             update();
         }
+        if (!old_modules.isEmpty() || !old_gates.isEmpty()) setDirty(true);
     }
 
     void GraphContext::clear()
@@ -205,6 +208,7 @@ namespace hal
             add(modules, gates);
             endChange();
         }
+        setDirty(false);
     }
 
     bool GraphContext::empty() const
@@ -341,6 +345,7 @@ namespace hal
 
     QString GraphContext::name() const
     {
+        if (mDirty) return mName + "*";
         return mName;
     }
 
@@ -598,6 +603,7 @@ namespace hal
         }
 
         scheduleSceneUpdate();
+        setDirty(false);
     }
 
     void GraphContext::writeToFile(QJsonObject& json)
@@ -645,5 +651,13 @@ namespace hal
             jsonNets.append(jsonNet);
         }
         json["nets"] = jsonNets;
+        setDirty(false);
+    }
+
+    void GraphContext::setDirty(bool dty)
+    {
+        if (mDirty==dty) return;
+        mDirty = dty;
+        Q_EMIT(dataChanged());
     }
 }

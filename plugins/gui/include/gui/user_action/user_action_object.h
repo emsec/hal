@@ -40,7 +40,7 @@ namespace hal {
     {
         Q_OBJECT
     public:
-        enum ObjectType{ None, Module, Gate, Net, Netlist, Grouping, MaxObjectType };
+        enum ObjectType{ None, Module, Gate, Net, Grouping, Netlist, Context, MaxObjectType };
         Q_ENUM(ObjectType)
 
         static ObjectType fromString(const QString& s);

@@ -53,6 +53,8 @@ namespace hal
         void renameGraphContext(GraphContext* ctx, const QString& new_name);
         void deleteGraphContext(GraphContext* ctx);
         QVector<GraphContext*> getContexts() const;
+        GraphContext* getCleanContext(const QString& name) const;
+
         bool contextWithNameExists(const QString& name) const;
 
         //void handle_module_created(Module* m) const;
@@ -99,7 +101,7 @@ namespace hal
         void deletingContext(GraphContext* context);
 
     private:
-        QVector<GraphContext*> mGraphContexts;
+//        QVector<GraphContext*> mGraphContexts;
 
         ContextTableModel* mContextTableModel;
         u32 mMaxContextId;

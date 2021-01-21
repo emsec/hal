@@ -40,6 +40,8 @@ namespace hal
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
         QVariant data(const QModelIndex& inddex, int role = Qt::DisplayRole) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+        void addContext(GraphContext* gc);
+        void removeContext(GraphContext* gc);
 
         GraphContext* getContext(const QModelIndex& index) const;
         QModelIndex getIndex(GraphContext* context) const;
@@ -50,11 +52,13 @@ namespace hal
         void beginRemoveContext(GraphContext* context);
         void endRemoveContext();
 
-        void update(QVector<GraphContext*>* pointer);
-
         void clear();
 
+        const QVector<GraphContext*>& list() const { return mContextList; }
+    private Q_SLOTS:
+        void handleDataChanged();
+
     private:
-        QVector<GraphContext*>* mContextList;
+        QVector<GraphContext*> mContextList;
     };
 }    // namespace hal

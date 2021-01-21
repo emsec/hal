@@ -115,6 +115,7 @@ namespace hal
 
             mContextManagerWidget->selectViewContext(new_context);
             gGraphContextManager->restoreFromFile();
+            new_context->setDirty(false);
         });
 
         //why does this segfault without a timer?
