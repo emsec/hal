@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added "rename" UserAction
 * if view for module already exists this view gets activated on module selection (rather than creating a new view)
 * indicator whether views have been modified
 * views get persisted to .halv file and are restored if the file is found on disk
