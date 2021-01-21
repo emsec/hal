@@ -2,6 +2,7 @@
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
+#include "hal_core/netlist/net.h"
 #include "hal_core/netlist/gate.h"
 
 namespace hal
@@ -22,7 +23,7 @@ namespace hal
          * @param[in] gate - Pointer to the flip-flop which data input net is used to build the boolean function.
          * @returns A mapping of the gates that appear in the function of the data net to their boolean influence in said function.
          */
-        std::map<Gate*, double> get_boolean_influences_of_gate(const Gate* gate);
+        std::map<Net*, double> get_boolean_influences_of_gate(const Gate* gate);
 
     private:
         std::vector<Gate*> extract_function_gates(const Gate* start, const std::string& pin);

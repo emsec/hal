@@ -241,7 +241,6 @@ namespace hal
         std::string Converter::convert_z3_expr_to_func(const z3Wrapper& e) const {
             std::string assignments = "";
 
-            log_info("z3_utils", "trying to create smt2 string");
 
             // TODO remove this is only for debugging
             // auto test_ctx = std::make_unique<z3::context>();
@@ -252,7 +251,6 @@ namespace hal
 
             auto smt = e.get_smt2_string();
 
-            log_info("z3_utils", "created smt2 string: {}", smt);
 
             std::istringstream iss(smt);
             for (std::string line; std::getline(iss, line); ) {
@@ -262,12 +260,7 @@ namespace hal
                 }
             }
 
-            log_info("z3_utils", "read smt2");
-            log_info("z3_utils", "read assignments: {}, len: {}", assignments, assignments.size());
-
             if (assignments.empty()) {
-                log_info("z3_utils", "found now regular assignments. checking for an immediate assignment in case of a very short expression.");
-
                 // in order to stay compliant with the rest of the converter structure we simply simulate a dummy assignment with a double negation.
                 auto dummy_assignment = "(let ((?x1 (bvnot (bvnot " + e.get_expr().to_string() + ")))))";
                 assignments += generate_assignment(dummy_assignment);

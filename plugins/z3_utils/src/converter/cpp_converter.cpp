@@ -102,44 +102,23 @@ namespace hal
 
         std::string Cpp_Converter::construct_function(const std::string& assignments, const std::string& initalization, const std::vector<u32>& inputs) const
         {
-            log_info("z3_utils", "construct function...");
-
             std::string func = m_function_corpus;
 
             const auto max_input = *std::max_element(inputs.begin(), inputs.end());
 
-            log_info("z3_utils", "max_input: {}", max_input);
 
-            log_info("z3_utils", "assignments: {}", assignments);
             // extract last return val
             const auto last_assigment_pos = assignments.rfind("bool") + 5;    // length of "bool" + one space
-            log_info("z3_utils", "last_assigment_pos: {}", last_assigment_pos);
-
             const auto last_line          = assignments.substr(last_assigment_pos);
-            log_info("z3_utils", "extracting last_line {}", last_line);
 
 
             const auto return_var = extract_lhs(last_line);
 
-            log_info("z3_utils", "return var {}", return_var);
-
-
             func = replace_all(func, "<INIT>", initalization);
-            log_info("z3_utils", "replace init");
-
             func = replace_all(func, "<ASSIGNMENTS>", assignments);
-            log_info("z3_utils", "replace assign");
-
-
-
             func = replace_all(func, "<RETURN>", return_var);
-            log_info("z3_utils", "replace return");
-
             func = replace_all(func, "<INPUT_SIZE>", std::to_string(max_input + 1));
-            log_info("z3_utils", "replace input size");
 
-
-            log_info("z3_utils", "construct function done");
 
             return func;
         }

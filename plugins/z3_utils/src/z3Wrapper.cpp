@@ -124,12 +124,12 @@ namespace hal
             std::string directory = "/tmp/boolean_influence_tmp/";
             std::filesystem::create_directory(directory);
 
-            log_info("boolean_function", "directory created");
+            log_debug("boolean_function", "directory created");
 
 
             std::string filename = directory + "boolean_func_" + std::to_string(omp_get_thread_num()) + "_" + std::to_string(m_z3_wrapper_id) + ".c";
             
-            log_info("boolean_function", "creating file: {}", filename);
+            log_debug("boolean_function", "creating file: {}", filename);
 
             if (!this->write_c_file(filename))
             {
@@ -137,14 +137,14 @@ namespace hal
                 return std::unordered_map<u32, double>();
             }
 
-            log_info("boolean_function", "file created: {}", filename);
+            log_debug("boolean_function", "file created: {}", filename);
 
 
             const std::string program_name = filename.substr(0, filename.size() - 2);
             const std::string compile_command = "g++ -o " + program_name + " " + filename + " -O3";
             system(compile_command.c_str());
 
-            log_info("boolean_function", "{}", compile_command);
+            log_debug("boolean_function", "{}", compile_command);
 
             // run boolean function program for every input
             for (auto it = m_inputs_net_ids.begin(); it < m_inputs_net_ids.end(); it++)
@@ -155,7 +155,7 @@ namespace hal
                 std::string result;
 
 
-                log_info("boolean_function", "{}", run_command);
+                log_debug("boolean_function", "{}", run_command);
 
                 FILE* pipe = popen(run_command.c_str(), "r");
                 if (!pipe)
@@ -173,7 +173,7 @@ namespace hal
                 double cv       = double(count) / double(evaluation_count);
 
 
-                log_info("boolean_function", "calculation done");
+                log_debug("boolean_function", "calculation done");
 
                 influences.insert({*it, cv});
             }
@@ -184,7 +184,7 @@ namespace hal
 
             //std::filesystem::remove(directory);
 
-            log_info("boolean_function", "returning influences");
+            log_debug("boolean_function", "returning influences");
 
 
             return influences;
@@ -227,7 +227,7 @@ namespace hal
             const auto converter = Cpp_Converter();
             std::string c_file   = converter.convert_z3_expr_to_func(*this);
 
-            log_info("z3_utils", "trying to write file");
+            log_debug("z3_utils", "trying to write file");
 
             // parse out c funtion into file
             std::ofstream ofs(path);

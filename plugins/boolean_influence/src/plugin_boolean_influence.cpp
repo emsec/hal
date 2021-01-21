@@ -23,7 +23,7 @@ namespace hal
     {
     }
 
-    std::map<Gate*, double> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate)
+    std::map<Net*, double> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate)
     {
         if (gate->get_type()->get_base_type() != hal::GateType::BaseType::ff)
         {
@@ -54,15 +54,11 @@ namespace hal
 
         z3_utils::z3Wrapper func_wrapper = z3_utils::z3Wrapper(std::move(ctx), std::move(func));
 
-        log_info("boolean_influence", "boolean function generated, starting analysis");
-
         // Generate boolean influence
         std::unordered_map<u32, double> net_ids_to_inf = func_wrapper.get_boolean_influence();
 
-        log_info("boolean_influence", "got boolean influences");
-
-        // translate net_ids back to gates
-        std::map<Gate*, double> gates_to_inf;
+        // translate net_ids back to nets
+        std::map<Net*, double> nets_to_inf;
 
         Netlist* nl = gate->get_netlist();
         for (const auto& [net_id, inf] : net_ids_to_inf)
@@ -75,24 +71,10 @@ namespace hal
                 return {};
             }
 
-            if (net->get_sources().front()->get_gate() == nullptr)
-            {
-                log_error("boolean_influence", "Net ({}) does not end in a gate.", net->get_id());
-                return {};
-            }
-
-            Gate* gate = net->get_sources().front()->get_gate();
-            gates_to_inf.insert({gate, inf});
+            nets_to_inf.insert({net, inf});
         }
 
-        for (const auto& [gate, inf] : gates_to_inf)
-        {
-            log_info("boolean_influence", "{}: {}", gate->get_name(), inf);
-        }
-
-        log_info("boolean_influence", "all done, returning influence");
-
-        return gates_to_inf;
+        return nets_to_inf;
     }
 
     std::vector<Gate*> BooleanInfluencePlugin::extract_function_gates(const Gate* start, const std::string& pin)
