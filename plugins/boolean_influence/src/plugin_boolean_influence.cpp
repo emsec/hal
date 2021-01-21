@@ -4,7 +4,6 @@
 
 namespace hal
 {
-
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<BooleanInfluencePlugin>();
@@ -22,17 +21,15 @@ namespace hal
 
     void BooleanInfluencePlugin::initialize()
     {
-
     }
 
-    std::map<Gate*, double> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate) 
+    std::map<Gate*, double> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate)
     {
         if (gate->get_type()->get_base_type() != hal::GateType::BaseType::ff)
         {
             log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.");
             return {};
         }
-
 
         // Check for the data port pin
         std::unordered_set<std::string> d_ports = gate->get_type()->get_pins_of_type(GateType::PinType::data);
@@ -50,11 +47,12 @@ namespace hal
         z3_utils::SubgraphFunctionGenerator g;
 
         std::unique_ptr ctx = std::make_unique<z3::context>();
-        z3::expr func(*ctx);
+        std::unique_ptr func = std::make_unique<z3::expr>(*ctx);
+        
         std::unordered_set<u32> net_ids;
-        g.get_subgraph_z3_function(gate->get_fan_in_net(data_pin), function_gates, *ctx, func, net_ids);
+        g.get_subgraph_z3_function(gate->get_fan_in_net(data_pin), function_gates, *ctx, *func, net_ids);
 
-        z3_utils::z3Wrapper func_wrapper = z3_utils::z3Wrapper(std::move(ctx), func);
+        z3_utils::z3Wrapper func_wrapper = z3_utils::z3Wrapper(std::move(ctx), std::move(func));
 
         log_info("boolean_influence", "boolean function generated, starting analysis");
 
@@ -63,20 +61,22 @@ namespace hal
 
         log_info("boolean_influence", "got boolean influences");
 
-
         // translate net_ids back to gates
         std::map<Gate*, double> gates_to_inf;
 
         Netlist* nl = gate->get_netlist();
-        for (const auto& [net_id, inf] : net_ids_to_inf) {
+        for (const auto& [net_id, inf] : net_ids_to_inf)
+        {
             Net* net = nl->get_net_by_id(net_id);
 
-            if (net->get_sources().size() != 1) {
+            if (net->get_sources().size() != 1)
+            {
                 log_error("boolean_influence", "Net ({}) has either multiple or 0 sources ({})", net->get_id(), net->get_sources().size());
                 return {};
             }
 
-            if (net->get_sources().front()->get_gate() == nullptr) {
+            if (net->get_sources().front()->get_gate() == nullptr)
+            {
                 log_error("boolean_influence", "Net ({}) does not end in a gate.", net->get_id());
                 return {};
             }
@@ -85,13 +85,20 @@ namespace hal
             gates_to_inf.insert({gate, inf});
         }
 
+        for (const auto& [gate, inf] : gates_to_inf)
+        {
+            log_info("boolean_influence", "{}: {}", gate->get_name(), inf);
+        }
+
+        log_info("boolean_influence", "all done, returning influence");
+
         return gates_to_inf;
     }
 
-    std::vector<Gate*> BooleanInfluencePlugin::extract_function_gates(const Gate* start, const std::string& pin) 
+    std::vector<Gate*> BooleanInfluencePlugin::extract_function_gates(const Gate* start, const std::string& pin)
     {
         std::unordered_set<Gate*> function_gates;
-        
+
         add_inputs(start->get_predecessor(pin)->get_gate(), function_gates);
 
         return {function_gates.begin(), function_gates.end()};
@@ -114,4 +121,4 @@ namespace hal
         }
         return;
     }
-}
+}    // namespace hal

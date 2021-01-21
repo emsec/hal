@@ -15,7 +15,7 @@ namespace hal
 {
     namespace z3_utils
     {
-        z3Wrapper::z3Wrapper(std::unique_ptr<z3::context> ctx, z3::expr& expr) : m_ctx(std::move(ctx)), m_expr(expr), m_z3_wrapper_id(create_id())
+        z3Wrapper::z3Wrapper(std::unique_ptr<z3::context> ctx, std::unique_ptr<z3::expr> expr) : m_ctx(std::move(ctx)), m_expr(std::move(expr)), m_z3_wrapper_id(create_id())
         {
             this->extract_function_inputs();
         }
@@ -71,7 +71,7 @@ namespace hal
         /*
         bool z3Wrapper::optimize()
         {
-            if (m_expr.id() == m_ctx->bv_val(0, 1).id() || m_expr.id() == m_ctx->bv_val(1, 1).id()) {
+            if (m_expr->id() == m_ctx->bv_val(0, 1).id() || m_expr->id() == m_ctx->bv_val(1, 1).id()) {
                 return true;
             }
 
@@ -167,8 +167,12 @@ namespace hal
                     result += buffer.data();
                 }
 
+                pclose(pipe);
+
                 const u32 count = std::stoi(result);
                 double cv       = double(count) / double(evaluation_count);
+
+
                 log_info("boolean_function", "calculation done");
 
                 influences.insert({*it, cv});
@@ -189,7 +193,7 @@ namespace hal
         std::string z3Wrapper::get_smt2_string() const
         {
             auto s = z3::solver(*m_ctx);
-            s.add(m_expr == m_ctx->bv_val(0, 1));
+            s.add(*m_expr == m_ctx->bv_val(0, 1));
             return s.to_smt2();
         }
 
@@ -234,6 +238,8 @@ namespace hal
             }
             ofs << c_file;
 
+
+            ofs.close();
             return true;
         }
 
@@ -265,12 +271,12 @@ namespace hal
 
                 from_vec.push_back(from);
                 to_vec.push_back(to);
-                m_expr = m_expr.substitute(from_vec, to_vec);
+                m_expr = std::make_unique<z3::expr>(m_expr->substitute(from_vec, to_vec));
             }
         }
 
         z3::expr z3Wrapper::get_expr() const {
-            return m_expr;
+            return *m_expr;
         }
     }  // namespace z3_utils
 }    // namespace hal

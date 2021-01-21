@@ -29,7 +29,7 @@ namespace hal
              * @param[in] expr - Expression to wrap.
              * @returns The Z3Wrapper around the provided expression.
              */
-            z3Wrapper(std::unique_ptr<z3::context> ctx, z3::expr& expr);
+            z3Wrapper(std::unique_ptr<z3::context> ctx, std::unique_ptr<z3::expr> expr);
 
             /**
              * Specifc Function used to optimize z3 epxr with the help of the logic synthesis tool ABC - CURRENTLY NOT IMPLEMENTED
@@ -124,7 +124,7 @@ namespace hal
             bool extract_function_inputs();
 
             std::unique_ptr<z3::context> m_ctx;
-            z3::expr m_expr;
+            std::unique_ptr<z3::expr> m_expr;
 
             std::unordered_map<u32, z3::expr> m_input_mapping_hal_to_z3;
             std::vector<z3::expr> m_inputs_z3_expr;
