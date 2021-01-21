@@ -29,7 +29,7 @@ namespace hal
     {
         if (gate->get_type()->get_base_type() != hal::GateType::BaseType::ff)
         {
-            log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.");
+            log_error("boolean_influence", "Can only handle flip flops but found gate type {}.", gate->get_type()->get_name());
             return {};
         }
 
@@ -38,7 +38,7 @@ namespace hal
         std::unordered_set<std::string> d_ports = gate->get_type()->get_pins_of_type(GateType::PinType::data);
         if (d_ports.size() != 1)
         {
-            log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.");
+            log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.", d_ports.size());
             return {};
         }
         std::string data_pin = *d_ports.begin();
