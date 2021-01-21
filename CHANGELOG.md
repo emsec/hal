@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* fixed `z3_utils` plugin being disabled by default causing linking errors
+* fixed `load_initial_values` and `load_initial_values_from_netlist` assigning values to potentially non-existing nets
 
 ## [3.2.2] - 2021-01-16 14:40:00+02:00 (urgency: medium)
 * refactored gate library handling
