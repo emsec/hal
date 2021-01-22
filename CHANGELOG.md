@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added plugin `boolean_influence` that enables calculation of the boolean influence for each FF depending on the predecessing FFs
+* extended the `z3_utils` plugin with a `z3Wrapper` class, which holds exactly one `z3::expr` and the corresponding `z3::context`
+* removed the code coverage checks from the macOS pipeline and added test command, so the macOS pipeline will work again properly
+* fixed a bug in DANA, where sometimes the net names were output in the DANA results instead of the gate names
 
-## [3.2.3] - 2021-01-18 18:20:00+02:00 (urgency: medium)
+## [3.2.3] - 2021-01-18 18:30:00+02:00 (urgency: medium)
 * fixed `z3_utils` plugin being disabled by default causing linking errors
 * fixed `load_initial_values` and `load_initial_values_from_netlist` assigning values to potentially non-existing nets
 
