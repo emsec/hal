@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>HAL Plugins Documentation &mdash; hal_py v3.2.3-28-g2dc342853 documentation</title>
+  <title>Boolean Influence &mdash; hal_py v3.2.3-28-g2dc342853 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Boolean Influence" href="boolean_influence.html" />
-    <link rel="prev" title="HDL Writer Manager" href="hdl_writer_manager.html" /> 
+    <link rel="next" title="Dataflow Analysis (DANA)" href="dataflow.html" />
+    <link rel="prev" title="HAL Plugins Documentation" href="plugins.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,8 +86,8 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">HAL Plugins Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="boolean_influence.html">Boolean Influence</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Boolean Influence</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataflow.html">Dataflow Analysis (DANA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui.html">GUI API</a></li>
@@ -139,13 +139,15 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>HAL Plugins Documentation</li>
+          <li><a href="plugins.html">HAL Plugins Documentation</a> &raquo;</li>
+        
+      <li>Boolean Influence</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/plugins.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/boolean_influence.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -158,17 +160,42 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="hal-plugins-documentation">
-<h1>HAL Plugins Documentation<a class="headerlink" href="#hal-plugins-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="boolean_influence.html">Boolean Influence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dataflow.html">Dataflow Analysis (DANA)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graph_algorithm.html">Graph Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gui.html">GUI API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="netlist_simulator.html">Netlist Simulator</a></li>
-</ul>
-</div>
+  <div class="section" id="boolean-influence">
+<h1>Boolean Influence<a class="headerlink" href="#boolean-influence" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="boolean_influence.BooleanInfluencePlugin">
+<em class="property">class </em><code class="descclassname">boolean_influence.</code><code class="descname">BooleanInfluencePlugin</code><a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_gate">
+<code class="descname">get_boolean_influences_of_gate</code><span class="sig-paren">(</span><em>self: boolean_influence.BooleanInfluencePlugin</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Dict[hal_py.Net, float]<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_boolean_influences_of_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the function of the dataport net of the given flip-flop.
+Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<em>halPy.Gate</em>) – The flip-flop which data input net is used to build the boolean function..</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A mapping of the gates that appear in the function of the data net to their boolean influence in said function.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="boolean_influence.BooleanInfluencePlugin.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: boolean_influence.BooleanInfluencePlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="boolean_influence.BooleanInfluencePlugin.get_version">
+<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: boolean_influence.BooleanInfluencePlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#boolean_influence.BooleanInfluencePlugin.get_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -179,10 +206,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="boolean_influence.html" class="btn btn-neutral float-right" title="Boolean Influence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dataflow.html" class="btn btn-neutral float-right" title="Dataflow Analysis (DANA)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="hdl_writer_manager.html" class="btn btn-neutral float-left" title="HDL Writer Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plugins.html" class="btn btn-neutral float-left" title="HAL Plugins Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
