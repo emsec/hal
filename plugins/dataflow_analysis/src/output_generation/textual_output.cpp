@@ -45,16 +45,7 @@ namespace hal
 
                     for (const auto& single_ff : gates)
                     {
-                        auto name = state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_name() + ", ";
-                        if (state->netlist_abstr.yosys)
-                        {
-                            auto net = state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_fan_out_net("Q");
-                            name     = state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_name() + ", ";
-                            if (net != nullptr)
-                            {
-                                name = net->get_name();
-                            }
-                        }
+                        auto name          = state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_name() + ", ";
                         auto type          = "type: " + state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_type()->get_name() + ", ";
                         auto id            = "id: " + std::to_string(state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_id()) + ", ";
                         std::string stages = "RS: ";
