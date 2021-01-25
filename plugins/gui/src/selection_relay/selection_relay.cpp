@@ -42,9 +42,6 @@ namespace hal
             mAction->mModules = mSelectedModules;
             mAction->mGates   = mSelectedGates;
             mAction->mNets    = mSelectedNets;
-            mAction->mPreviousModules = mSelectedModules;
-            mAction->mPreviousGates   = mSelectedGates;
-            mAction->mPreviousNets    = mSelectedNets;
         }
     }
 

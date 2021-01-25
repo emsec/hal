@@ -5,6 +5,9 @@
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_relay/module_relay.h"
+#include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_add_items_to_object.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -217,8 +220,13 @@ namespace hal
         }
         else
         {
-            moduleContext                = gGraphContextManager->createNewContext(QString::fromStdString(module->get_name()));
-            moduleContext->add({module->get_id()}, {});
+            UserActionCompound* act = new UserActionCompound;
+            act->setUseCreatedObject();
+            act->addAction(new ActionCreateObject(UserActionObjectType::Context,
+                                                  QString::fromStdString(module->get_name())));
+            act->addAction(new ActionAddItemsToObject({module->get_id()}, {}));
+            act->exec();
+            moduleContext = gGraphContextManager->getContextById(act->object().id());
             moduleContext->setDirty(false);
         }
     }

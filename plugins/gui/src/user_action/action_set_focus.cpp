@@ -53,6 +53,11 @@ namespace hal
 
     void ActionSetFocus::exec()
     {
+        ActionSetFocus* undo = new ActionSetFocus(gSelectionRelay->subfocus(),
+                                                  gSelectionRelay->subfocusIndex());
+        undo->setObject(UserActionObject(gSelectionRelay->focusId(),
+                                         UserActionObjectType::fromItemType(gSelectionRelay->focusType())));
+        mUndoAction = undo;
         gSelectionRelay->setFocusDirect(UserActionObjectType::toItemType(mObject.type()),
                                   mObject.id(),mSubfocus,mSubfocusIndex);
         UserAction::exec();

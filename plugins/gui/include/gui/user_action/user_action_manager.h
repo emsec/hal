@@ -73,8 +73,12 @@ namespace hal
 
         /// elapsed time in milliseconds since GUI start
         qint64 timeStamp() const { return mElapsedTime.elapsed(); }
+
+        /// undo last action
+        void undoLastAction();
     private:
         UserActionManager(QObject *parent = nullptr);
+        void testUndo();
 
         QList<UserAction*> mActionHistory;
         QHash<QString,UserActionFactory*> mActionFactory;
@@ -84,6 +88,6 @@ namespace hal
         static UserActionManager* inst;
 
     Q_SIGNALS:
-
+        void canUndoLastAction(bool yesWeCan);
     };
 }

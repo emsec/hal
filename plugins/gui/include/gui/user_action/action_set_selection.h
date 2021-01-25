@@ -11,13 +11,6 @@ namespace hal
         QSet<u32> mModules;
         QSet<u32> mGates;
         QSet<u32> mNets;
-
-        QSet<u32> mPreviousModules;
-        QSet<u32> mPreviousGates;
-        QSet<u32> mPreviousNets;
-
-        QString setToText(const QSet<u32>& set) const;
-        QSet<u32> setFromText(const QString& s) const;
     public:
         ActionSetSelection() {;}
 

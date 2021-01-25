@@ -6,6 +6,8 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/layouters/layouter_task.h"
 #include "gui/gui_globals.h"
+#include "gui/gui_def.h"
+#include "gui/implementations/qpoint_extension.h"
 #include "gui/user_action/user_action_manager.h"
 #include <QVector>
 #include <QJsonArray>
@@ -403,6 +405,15 @@ namespace hal
     {
         for (GraphContextSubscriber* s : mSubscribers)
             s->handleStatusUpdate(message);
+    }
+
+    void GraphContext::moveNodeAction(const QPoint& from, const QPoint& to)
+    {
+        const QMap<QPoint,Node> nodeMap = mLayouter->positionToNodeMap();
+        auto it = nodeMap.find(from);
+        if (it==nodeMap.constEnd()) return;
+        mLayouter->setNodePosition(it.value(),to);
+        scheduleSceneUpdate();
     }
 
     void GraphContext::handleLayouterFinished()

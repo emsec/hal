@@ -36,6 +36,25 @@ namespace hal
         return QString::fromUtf8(cryptoHash.result().toHex(0));
     }
 
+    QString UserAction::setToText(const QSet<u32> &set)
+    {
+        QString retval;
+        for (u32 id : set)
+        {
+            if (!retval.isEmpty()) retval += ',';
+            retval += QString::number(id);
+        }
+        return retval;
+    }
+
+    QSet<u32> UserAction::setFromText(const QString& s)
+    {
+        QSet<u32> retval;
+        for (QString x : s.split(QChar(',')))
+            retval.insert(x.toInt());
+        return retval;
+    }
+
     void UserAction::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         Q_UNUSED(xmlOut);

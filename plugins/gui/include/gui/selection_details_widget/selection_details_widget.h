@@ -50,8 +50,6 @@ namespace hal
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
-        Q_PROPERTY(QString restoreIconPath READ restoreIconPath WRITE setRestoreIconPath)
-        Q_PROPERTY(QString restoreIconStyle READ restoreIconStyle WRITE setRestoreIconStyle)
         Q_PROPERTY(QString toGroupingIconPath READ toGroupingIconPath WRITE setToGroupingIconPath)
         Q_PROPERTY(QString toGroupingIconStyle READ toGroupingIconStyle WRITE setToGroupingIconStyle)
         Q_PROPERTY(QString toModuleIconPath READ toModuleIconPath WRITE setToModuleIconPath)
@@ -69,9 +67,6 @@ namespace hal
         QString searchIconStyle() const;
         QString searchActiveIconStyle() const;
 
-        QString restoreIconPath() const;
-        QString restoreIconStyle() const;
-
         QString toGroupingIconPath() const;
         QString toGroupingIconStyle() const;
 
@@ -83,9 +78,6 @@ namespace hal
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
         void setSearchActiveIconStyle(const QString &style);
-
-        void setRestoreIconPath(const QString &path);
-        void setRestoreIconStyle(const QString &style);
 
         void setToGroupingIconPath(const QString &path);
         void setToGroupingIconStyle(const QString &style);
@@ -108,7 +100,6 @@ namespace hal
 
 
     private Q_SLOTS:
-        void restoreLastSelection();
         void selectionToGrouping();
         void selectionToModuleMenu();
         void toggleSearchbar();
@@ -136,7 +127,6 @@ namespace hal
 
         Searchbar* mSearchbar;
 
-        QAction* mRestoreLastSelection;
         QAction* mSelectionToGrouping;
         QAction* mSelectionToModule;
         QAction* mSearchAction;
@@ -147,19 +137,13 @@ namespace hal
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
 
-        QString mRestoreIconPath;
-        QString mRestoreIconStyle;
-
         QString mToGroupingIconPath;
         QString mToGroupingIconStyle;
         
         QString mToModuleIconPath;
         QString mToModuleIconStyle;
         
-        SelectionHistoryNavigator* mHistory;
-
         void handleFilterTextChanged(const QString& filter_text);
-        void canRestoreSelection();
         void canMoveToModule(int nodes);
         void enableSearchbar(bool enable);
 

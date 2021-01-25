@@ -54,6 +54,7 @@ namespace hal
         void deleteGraphContext(GraphContext* ctx);
         QVector<GraphContext*> getContexts() const;
         GraphContext* getCleanContext(const QString& name) const;
+        GraphContext* getContextById(u32 id) const;
 
         bool contextWithNameExists(const QString& name) const;
 
@@ -95,6 +96,7 @@ namespace hal
         void handleSaveTriggered();
         void restoreFromFile();
 
+        QString nextDefaultName() const { return QString("view %1").arg(mMaxContextId+1);}
     Q_SIGNALS:
         void contextCreated(GraphContext* context);
         void contextRenamed(GraphContext* context);

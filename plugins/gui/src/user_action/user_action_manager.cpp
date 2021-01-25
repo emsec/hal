@@ -23,6 +23,7 @@ namespace hal
     void UserActionManager::addExecutedAction(UserAction* act)
     {
         mActionHistory.append(act);
+        testUndo();
     }
 
     void UserActionManager::setStartRecording()
@@ -153,5 +154,24 @@ namespace hal
     {
         if (!inst) inst = new UserActionManager;
         return inst;
+    }
+
+    void UserActionManager::testUndo()
+    {
+        bool yesWeCan = !mActionHistory.isEmpty()
+                && mActionHistory.last()->undoAction() != nullptr;
+        Q_EMIT canUndoLastAction(yesWeCan);
+    }
+
+    void UserActionManager::undoLastAction()
+    {
+        if (mActionHistory.isEmpty()) return;
+        UserAction* undo = mActionHistory.takeLast()->undoAction();
+        if (!undo) return;
+        int n = mActionHistory.size();
+        undo->exec();
+        while (mActionHistory.size() > n)
+            mActionHistory.takeLast();
+        testUndo();
     }
 }

@@ -18,25 +18,6 @@ namespace hal
         return ActionSetSelectionFactory::sFactory->tagname();
     }
 
-    QString ActionSetSelection::setToText(const QSet<u32> &set) const
-    {
-        QString retval;
-        for (u32 id : set)
-        {
-            if (!retval.isEmpty()) retval += ',';
-            retval += QString::number(id);
-        }
-        return retval;
-    }
-
-    QSet<u32> ActionSetSelection::setFromText(const QString& s) const
-    {
-        QSet<u32> retval;
-        for (QString x : s.split(QChar(',')))
-            retval.insert(x.toInt());
-        return retval;
-    }
-
     void ActionSetSelection::addToHash(QCryptographicHash& cryptoHash) const
     {
         cryptoHash.addData("mod",3);
@@ -77,6 +58,11 @@ namespace hal
 
     void ActionSetSelection::exec()
     {
+        ActionSetSelection* undo = new ActionSetSelection;
+        undo->mModules = gSelectionRelay->selectedModules();
+        undo->mGates   = gSelectionRelay->selectedGates();
+        undo->mNets    = gSelectionRelay->selectedNets();
+        mUndoAction = undo;
         gSelectionRelay->actionSetSelected(mModules, mGates, mNets);
         UserAction::exec();
     }

@@ -26,6 +26,9 @@
 //#include <QStringListModel>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/user_action_compound.h"
 
 namespace hal
 {
@@ -104,9 +107,12 @@ namespace hal
 
     void ContextManagerWidget::handleCreateContextClicked()
     {
-        GraphContext* new_context = nullptr;
-        new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
-        new_context->add({gNetlist->get_top_module()->get_id()}, {});
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context,
+                  QString::fromStdString(gNetlist->get_top_module()->get_name())));
+        act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
+        act->exec();
     }
 
     void ContextManagerWidget::handleOpenContextClicked()

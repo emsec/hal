@@ -69,6 +69,9 @@ namespace hal
         Q_PROPERTY(QString contentIconStyle READ contentIconStyle WRITE setContentIconStyle)
         Q_PROPERTY(QString settingsIconPath READ settingsIconPath WRITE setSettingsIconPath)
         Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
+        Q_PROPERTY(QString undoIconPath READ undoIconPath WRITE setUndoIconPath)
+        Q_PROPERTY(QString undoIconStyle READ undoIconStyle WRITE setUndoIconStyle)
+        Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
 
     public:
         explicit MainWindow(QWidget* parent = nullptr);
@@ -97,6 +100,9 @@ namespace hal
         QString settingsIconPath() const;
         QString settingsIconStyle() const;
 
+        QString undoIconPath() const;
+        QString undoIconStyle() const;
+        QString disabledIconStyle() const;
 
         void setHalIconPath(const QString& path);
         void setHalIconStyle(const QString &style);
@@ -121,6 +127,10 @@ namespace hal
 
         void setSettingsIconPath(const QString& path);
         void setSettingsIconStyle(const QString& style);
+
+        void setUndoIconPath(const QString& path);
+        void setUndoIconStyle(const QString& style);
+        void setDisabledIconStyle(const QString &style);
 
         void addContent(ContentWidget* widget, int index, content_anchor anchor);
         void removeContent(ContentWidget* widget);
@@ -147,6 +157,9 @@ namespace hal
         void handleActionStartRecording();
         void handleActionStopRecording();
         void handleActionPlayMacro();
+        void handleActionUndo();
+
+        void enableUndo(bool enable=true);
 
     private:
         void closeEvent(QCloseEvent* event);
@@ -179,6 +192,7 @@ namespace hal
         Action* mActionStartRecording;
         Action* mActionStopRecording;
         Action* mActionPlayMacro;
+        Action* mActionUndo;
 
         Action* mActionSettings;
         Action* mActionClose;
@@ -215,5 +229,9 @@ namespace hal
 
         QString mSettingsIconPath;
         QString mSettingsIconStyle;
+
+        QString mUndoIconPath;
+        QString mUndoIconStyle;
+        QString mDisabledIconStyle;
     };
 }

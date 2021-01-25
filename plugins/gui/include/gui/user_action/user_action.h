@@ -92,6 +92,9 @@ namespace hal
 
         /// hook for derived classes to add parameter to cryptographic hash
         virtual void addToHash(QCryptographicHash& cryptoHash) const;
+
+        /// action to reverse last action (nullptr if action cant be undone)
+        UserAction* undoAction() const { return mUndoAction; }
     protected:
         UserAction();
         UserActionObject mObject;
@@ -99,6 +102,9 @@ namespace hal
         bool mCompound;
         UserAction *mUndoAction;
         qint64 mTimeStamp;
+
+        static QString setToText(const QSet<u32>& set);
+        static QSet<u32> setFromText(const QString& s);
     };
 
     /**

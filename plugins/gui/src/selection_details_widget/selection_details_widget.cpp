@@ -39,11 +39,9 @@ namespace hal
 
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), mNumberSelectedItems(0),
-          mRestoreLastSelection(new QAction),
           mSelectionToGrouping(new QAction),
           mSelectionToModule(new QAction),
-          mSearchAction(new QAction),
-          mHistory(new SelectionHistoryNavigator(5))
+          mSearchAction(new QAction)
     {
         //needed to load the properties
         ensurePolished();
@@ -113,13 +111,10 @@ namespace hal
         //    m_table_widget->setAlternatingRowColors(true);
         //    m_table_widget->horizontalHeader()->setStretchLastSection(true);
         //    m_table_widget->viewport()->setFocusPolicy(Qt::NoFocus);
-
-        mRestoreLastSelection->setToolTip("Restore last selection");
         mSelectionToGrouping->setToolTip("Assign to grouping");
         mSelectionToModule->setToolTip("Move to module");
         mSelectionToGrouping->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mToGroupingIconPath));
         mSelectionToModule->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mToModuleIconPath));
-        canRestoreSelection();
         canMoveToModule(0);
 
         mSearchAction->setToolTip("Search");
@@ -128,7 +123,6 @@ namespace hal
         mSelectionToModule->setDisabled(true);
 
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
-        connect(mRestoreLastSelection, &QAction::triggered, this, &SelectionDetailsWidget::restoreLastSelection);
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
         connect(mSelectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleMenu);
         connect(mSearchAction, &QAction::triggered, this, &SelectionDetailsWidget::toggleSearchbar);
@@ -138,14 +132,6 @@ namespace hal
         connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::handleFilterTextChanged);
         connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
         connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
-    }
-
-    void SelectionDetailsWidget::restoreLastSelection()
-    {
-        gSelectionRelay->clear();
-        mHistory->restorePreviousEntry();
-        gSelectionRelay->relaySelectionChanged(nullptr);
-        canRestoreSelection();
     }
 
     void SelectionDetailsWidget::selectionToModuleMenu()
@@ -220,7 +206,9 @@ namespace hal
             bool ok;
             QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parentName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
             if (!ok || name.isEmpty()) return;
-            targetModule = gNetlist->create_module(gNetlist->get_unique_module_id(), name.toStdString(), parentModule);
+            ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Module, name);
+            act->setParentId(parentModule->get_id());
+            act->exec();
         }
         else
         {
@@ -269,8 +257,7 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToNewGrouping()
     {
-        ActionCreateObject* act = new ActionCreateObject;
-        act->setObject(UserActionObject(0,UserActionObjectType::Grouping));
+        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Grouping);
         act->exec();
         Grouping* grp = gNetlist->get_grouping_by_id(act->object().id());
         if (grp) selectionToGroupingInternal(grp);
@@ -293,7 +280,6 @@ namespace hal
         act->exec();
         gSelectionRelay->clear();
         gSelectionRelay->relaySelectionChanged(nullptr);
-        canRestoreSelection();
     }
 
     void SelectionDetailsWidget::enableSearchbar(bool enable)
@@ -308,18 +294,6 @@ namespace hal
             setFocus();
         }
         mSearchAction->setEnabled(enable);
-    }
-
-    void SelectionDetailsWidget::canRestoreSelection()
-    {
-        bool enable = mHistory->hasPreviousEntry();
-
-        QString iconStyle = enable
-                ? mSearchIconStyle
-                : mDisabledIconStyle;
-
-        mRestoreLastSelection->setIcon(gui_utility::getStyledSvgIcon(iconStyle, mRestoreIconPath));
-        mRestoreLastSelection->setEnabled(enable);
     }
 
     void SelectionDetailsWidget::canMoveToModule(int nodes)
@@ -357,8 +331,6 @@ namespace hal
             mSelectionTreeView->populate(true);
             defaultHighlight.append(mSelectionTreeView->itemFromIndex());
 
-            mHistory->storeCurrentSelection();
-            canRestoreSelection();
             canMoveToModule(gSelectionRelay->numberSelectedNodes());
             enableSearchbar(true);
             mSelectionToGrouping->setEnabled(true);
@@ -372,7 +344,6 @@ namespace hal
             singleSelectionInternal(nullptr);
             // clear and hide tree
             mSelectionTreeView->populate(false);
-            mHistory->emptySelection();
             canMoveToModule(0);
             enableSearchbar(false);
             mSelectionToGrouping->setDisabled(true);
@@ -489,7 +460,6 @@ namespace hal
 
     void SelectionDetailsWidget::setupToolbar(Toolbar* toolbar)
     {
-        toolbar->addAction(mRestoreLastSelection);
         toolbar->addAction(mSelectionToGrouping);
         toolbar->addAction(mSelectionToModule);
         toolbar->addAction(mSearchAction);
@@ -535,26 +505,6 @@ namespace hal
         mSearchActiveIconStyle = style;
     }
 
-    QString SelectionDetailsWidget::restoreIconPath() const
-    {
-        return mRestoreIconPath;
-    }
-
-    QString SelectionDetailsWidget::restoreIconStyle() const
-    {
-        return mRestoreIconStyle;
-    }
-
-    void SelectionDetailsWidget::setRestoreIconPath(const QString& path)
-    {
-        mRestoreIconPath = path;
-    }
-
-    void SelectionDetailsWidget::setRestoreIconStyle(const QString& style)
-    {
-        mRestoreIconStyle = style;
-    }
-    
     QString SelectionDetailsWidget::toGroupingIconPath() const
     {
         return mToGroupingIconPath;

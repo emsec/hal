@@ -17,6 +17,10 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_move_node.h"
+#include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -110,8 +114,13 @@ namespace hal
             QString name = "Isolated View " + QString::number(cnt);
             if (!gGraphContextManager->contextWithNameExists(name))
             {
-                auto context = gGraphContextManager->createNewContext(name);
-                context->add(gSelectionRelay->selectedModules(), gSelectionRelay->selectedGates());
+                UserActionCompound* act = new UserActionCompound;
+                act->setUseCreatedObject();
+                act->addAction(new ActionCreateObject(UserActionObjectType::Context,name));
+                act->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                                          gSelectionRelay->selectedGates()));
+                act->exec();
+                GraphContext* context = gGraphContextManager->getContextById(act->object().id());
                 context->setDirty(false);
                 return;
             }
@@ -120,16 +129,11 @@ namespace hal
 
     void GraphGraphicsView::handleMoveAction(QAction* action)
     {
-        const u32 mod_id = action->data().toInt();
-        Module* m        = gNetlist->get_module_by_id(mod_id);
-        for (const auto& id : gSelectionRelay->selectedGatesList())
-        {
-            m->assign_gate(gNetlist->get_gate_by_id(id));
-        }
-        for (const auto& id : gSelectionRelay->selectedModulesList())
-        {
-            gNetlist->get_module_by_id(id)->set_parent_module(m);
-        }
+        u32 moduleId = action->data().toInt();
+        ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                                                 gSelectionRelay->selectedGates());
+        act->setObject(UserActionObject(moduleId,UserActionObjectType::Module));
+        act->exec();
 
         // auto gates   = gSelectionRelay->mSelectedGates;
         // auto modules = gSelectionRelay->mSelectedModules;
@@ -155,16 +159,15 @@ namespace hal
         QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parent_name + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
         if (!ok || name.isEmpty())
             return;
-        Module* m = gNetlist->create_module(gNetlist->get_unique_module_id(), name.toStdString(), parent);
 
-        for (const auto& id : gSelectionRelay->selectedGatesList())
-        {
-            m->assign_gate(gNetlist->get_gate_by_id(id));
-        }
-        for (const auto& id : gSelectionRelay->selectedModulesList())
-        {
-            gNetlist->get_module_by_id(id)->set_parent_module(m);
-        }
+        ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
+        actNewModule->setParentId(parent->get_id());
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(actNewModule);
+        act->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                                  gSelectionRelay->selectedGates()));
 
 //        auto gates   = gSelectionRelay->mSelectedGates;
 //        auto modules = gSelectionRelay->mSelectedModules;
@@ -486,11 +489,9 @@ namespace hal
                 }
                 else
                 {
-                    // move mode; move gate to the selected location
-                    QMap<QPoint,Node> nodeMap = layouter->positionToNodeMap();
-                    auto nodeToMoveIt = nodeMap.find(sourceLayouterPos);
-                    Q_ASSERT(nodeToMoveIt != nodeMap.end());
-                    layouter->setNodePosition(nodeToMoveIt.value(), targetLayouterPos);
+                    ActionMoveNode* act = new ActionMoveNode(sourceLayouterPos,targetLayouterPos);
+                    act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+                    act->exec();
                 }
                 // re-layout the nets
                 context->scheduleSceneUpdate();

@@ -8,7 +8,10 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/gui_utils/graphics.h"
 #include "gui/toolbar/toolbar.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_set_object_color.h"
 
 #include "hal_core/utilities/log.h"
 
@@ -115,7 +118,8 @@ namespace hal
 
     void GroupingManagerWidget::handleCreateGroupingClicked()
     {
-        mGroupingTableModel->addDefaultEntry();
+        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Grouping);
+        act->exec();
     }
 
     void GroupingManagerWidget::handleColorSelectClicked()
@@ -124,11 +128,17 @@ namespace hal
         if (!currentIndex.isValid()) return;
         QModelIndex nameIndex = mGroupingTableModel->index(currentIndex.row(),0);
         QString name = mGroupingTableModel->data(nameIndex,Qt::DisplayRole).toString();
+        QModelIndex idIndex = mGroupingTableModel->index(currentIndex.row(),1);
+        u32 id = mGroupingTableModel->data(idIndex,Qt::DisplayRole).toInt();
         QModelIndex modelIndex = mGroupingTableModel->index(currentIndex.row(),2);
         QColor color = mGroupingTableModel->data(modelIndex,Qt::BackgroundRole).value<QColor>();
         color = QColorDialog::getColor(color,this,"Select color for grouping " + name);
         if (color.isValid())
-            mGroupingTableModel->setData(modelIndex,color,Qt::EditRole);
+        {
+            ActionSetObjectColor* act = new ActionSetObjectColor(color);
+            act->setObject(UserActionObject(id,UserActionObjectType::Grouping));
+            act->exec();
+        }
     }
 
     void GroupingManagerWidget::handleToSelectionClicked()
@@ -179,7 +189,11 @@ namespace hal
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()
     {
-        mGroupingTableModel->removeRows(mProxyModel->mapToSource(mGroupingTableView->currentIndex()).row());
+        int irow = mProxyModel->mapToSource(mGroupingTableView->currentIndex()).row();
+        u32 grpId = mGroupingTableModel->groupingAt(irow).id();
+        ActionDeleteObject* act = new ActionDeleteObject;
+        act->setObject(UserActionObject(grpId,UserActionObjectType::Grouping));
+        act->exec();
     }
 
     void GroupingManagerWidget::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)

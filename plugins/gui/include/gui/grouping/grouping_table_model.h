@@ -52,10 +52,17 @@ namespace hal {
         Grouping* addDefaultEntry();
         Grouping* groupingByName(const QString& name) const;
         QColor colorForItem(ItemType itemType, u32 itemId) const;
-        void renameGrouping(u32 id, const QString& groupingName);
+
+        /// set grouping with id to new name, returns old name
+        QString renameGrouping(u32 id, const QString& groupingName);
+
+        /// set new color for grouping id, returns old color
+        QColor recolorGrouping(u32 id, const QColor& groupingColor);
+
         QStringList groupingNames() const;
 
     public Q_SLOTS:
+        /// handle extern call from NetlistRelay
         void deleteGroupingEvent(Grouping* grp);
         void createGroupingEvent(Grouping *grp);
         void groupingNameChangedEvent(Grouping *grp);

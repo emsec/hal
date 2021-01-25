@@ -235,19 +235,38 @@ namespace hal {
         }
     }
 
-    void GroupingTableModel::renameGrouping(u32 id, const QString& groupingName)
+    QString GroupingTableModel::renameGrouping(u32 id, const QString& groupingName)
     {
         for (int irow=0; irow < mGroupings.size(); irow++)
         {
             if (mGroupings.at(irow).id() != id) continue;
             mDisableEvents = true;
+            QString oldName = mGroupings.at(irow).name();
             mGroupings[irow].setName(groupingName);
-            mGroupings[irow].grouping()->set_name(groupingName.toStdString());
+            Grouping* grp = mGroupings[irow].grouping();
+            grp->set_name(groupingName.toStdString());
             QModelIndex inx = index(irow,0);
             Q_EMIT dataChanged(inx,inx);
             mDisableEvents = false;
-            return;
+            return oldName;
         }
+        return QString();
+    }
+
+    QColor GroupingTableModel::recolorGrouping(u32 id, const QColor& groupingColor)
+    {
+        for (int irow=0; irow < mGroupings.size(); irow++)
+        {
+            if (mGroupings.at(irow).id() != id) continue;
+            mDisableEvents = true;
+            QColor oldColor = mGroupings.at(irow).color();
+            mGroupings[irow].setColor(groupingColor);
+            QModelIndex inx = index(irow,2);
+            Q_EMIT dataChanged(inx,inx);
+            mDisableEvents = false;
+            return oldColor;
+        }
+        return QColor();
     }
 
     QString GroupingTableModel::generateUniqueName(const QString& suggestion, const QSet<QString>& existingNames)

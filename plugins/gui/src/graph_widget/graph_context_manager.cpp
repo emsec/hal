@@ -59,6 +59,16 @@ namespace hal
         return mContextTableModel->list();
     }
 
+    GraphContext* GraphContextManager::getContextById(u32 id) const
+    {
+        for (GraphContext* ctx : mContextTableModel->list())
+        {
+            if (ctx->id() == id)
+                return ctx;
+        }
+        return nullptr;
+    }
+
     GraphContext* GraphContextManager::getCleanContext(const QString& name) const
     {
         for (GraphContext* ctx : mContextTableModel->list())

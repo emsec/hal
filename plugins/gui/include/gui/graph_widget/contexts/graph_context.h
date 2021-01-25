@@ -81,6 +81,8 @@ namespace hal
 
         const GraphLayouter* getLayouter() const { return mLayouter; }
 
+        void moveNodeAction(const QPoint& from, const QPoint& to);
+
         bool sceneUpdateInProgress() const;
 
         void scheduleSceneUpdate();

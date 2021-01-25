@@ -38,16 +38,20 @@ namespace hal
                 mNewName = xmlIn.readElementText();
         }
     }
+
     void ActionRenameObject::exec()
     {
+        QString oldName;
         switch (mObject.type()) {
         case UserActionObjectType::Grouping:
-            gContentManager->getGroupingManagerWidget()->getModel()->
+            oldName = gContentManager->getGroupingManagerWidget()->getModel()->
                     renameGrouping(mObject.id(),mNewName);
             break;
         default:
             break;
         }
+        mUndoAction = new ActionRenameObject(oldName);
+        mUndoAction->setObject(mObject);
         UserAction::exec();
     }
 }
