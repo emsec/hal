@@ -1,6 +1,7 @@
 #include "hal_core/netlist/netlist.h"
 
 #include "hal_core/netlist/event_handler.h"
+
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -21,8 +22,7 @@ namespace hal
         m_top_module       = nullptr;    // this triggers the internal manager to allow creation of a module without parent
         m_top_module       = create_module("top module", nullptr);
         
-        // add eventhandler here
-        m_event_handler    = EventHandler();
+        m_event_handler    = new EventHandler();
     }
 
     Netlist::~Netlist()
@@ -41,7 +41,7 @@ namespace hal
         {
             auto old_id  = m_netlist_id;
             m_netlist_id = id;
-            m_event_handler::notify(event_handler::netlist_event::id_changed, this, old_id);
+            m_event_handler->notify(NetlistEvent::event::id_changed, this, old_id);
         }
     }
 
@@ -55,7 +55,7 @@ namespace hal
         if (input_filename != m_file_name)
         {
             m_file_name = input_filename;
-            m_event_handler::notify(netlist_event_handler::event::input_filename_changed, this);
+            m_event_handler->notify(NetlistEvent::event::input_filename_changed, this);
         }
     }
 
@@ -69,7 +69,7 @@ namespace hal
         if (design_name != m_design_name)
         {
             m_design_name = design_name;
-            m_event_handler::notify(netlist_event_handler::event::design_name_changed, this);
+            m_event_handler->notify(NetlistEvent::event::design_name_changed, this);
         }
     }
 
@@ -83,7 +83,7 @@ namespace hal
         if (device_name != m_device_name)
         {
             m_device_name = device_name;
-            m_event_handler::notify(netlist_event_handler::event::device_name_changed, this);
+            m_event_handler->notify(NetlistEvent::event::device_name_changed, this);
         }
     }
 
@@ -225,7 +225,7 @@ namespace hal
             return true;
         }
         m_vcc_gates.push_back(gate);
-        m_event_handler::notify(netlist_event_handler::event::marked_global_vcc, this, gate->get_id());
+        m_event_handler->notify(NetlistEvent::event::marked_global_vcc, this, gate->get_id());
         return true;
     }
 
@@ -241,7 +241,7 @@ namespace hal
             return true;
         }
         m_gnd_gates.push_back(gate);
-        m_event_handler::notify(netlist_event_handler::event::marked_global_gnd, this, gate->get_id());
+        m_event_handler->notify(NetlistEvent::event::marked_global_gnd, this, gate->get_id());
         return true;
     }
 
@@ -258,7 +258,7 @@ namespace hal
             return false;
         }
         m_vcc_gates.erase(it);
-        m_event_handler::notify(netlist_event_handler::event::unmarked_global_vcc, this, gate->get_id());
+        m_event_handler->notify(NetlistEvent::event::unmarked_global_vcc, this, gate->get_id());
         return true;
     }
 
@@ -275,7 +275,7 @@ namespace hal
             return false;
         }
         m_gnd_gates.erase(it);
-        m_event_handler::notify(netlist_event_handler::event::unmarked_global_gnd, this, gate->get_id());
+        m_event_handler->notify(NetlistEvent::event::unmarked_global_gnd, this, gate->get_id());
         return true;
     }
 
@@ -379,7 +379,7 @@ namespace hal
         }
         m_global_input_nets.push_back(n);
 
-        m_event_handler::notify(netlist_event_handler::event::marked_global_input, this, n->get_id());
+        m_event_handler->notify(NetlistEvent::event::marked_global_input, this, n->get_id());
         return true;
     }
 
@@ -396,7 +396,7 @@ namespace hal
         }
         m_global_output_nets.push_back(n);
 
-        m_event_handler::notify(netlist_event_handler::event::marked_global_output, this, n->get_id());
+        m_event_handler->notify(NetlistEvent::event::marked_global_output, this, n->get_id());
         return true;
     }
 
@@ -414,7 +414,7 @@ namespace hal
         }
         m_global_input_nets.erase(it);
 
-        m_event_handler::notify(netlist_event_handler::event::unmarked_global_input, this, n->get_id());
+        m_event_handler->notify(NetlistEvent::event::unmarked_global_input, this, n->get_id());
         return true;
     }
 
@@ -432,7 +432,7 @@ namespace hal
         }
         m_global_output_nets.erase(it);
 
-        m_event_handler::notify(netlist_event_handler::event::unmarked_global_output, this, n->get_id());
+        m_event_handler->notify(NetlistEvent::event::unmarked_global_output, this, n->get_id());
         return true;
     }
 

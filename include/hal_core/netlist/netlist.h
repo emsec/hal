@@ -25,6 +25,8 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/event_handler.h"
+
 
 #include <functional>
 #include <memory>
@@ -726,8 +728,7 @@ namespace hal
         /* stores the name of the device */
         std::string m_device_name;
 
-        // TODO eventhandler
-        EventHandler m_event_handler;
+        EventHandler* m_event_handler;
 
         /* stores the auto generated ids for fast next id */
         u32 m_next_gate_id;
