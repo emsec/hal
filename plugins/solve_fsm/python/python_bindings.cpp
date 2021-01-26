@@ -31,25 +31,27 @@ namespace hal
             .def("get_name", &SolveFsmPlugin::get_name)
             .def_property_readonly("version", &SolveFsmPlugin::get_version)
             .def("get_version", &SolveFsmPlugin::get_version)
-            .def("solve_fsm_brute_force", &SolveFsmPlugin::solve_fsm_brute_force, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), R"(
-            Generates the state graph of a finite state machine in dot format of a given fsm using a simple brute force approach.
+            .def("solve_fsm_brute_force", &SolveFsmPlugin::solve_fsm_brute_force, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), py::arg("graph_path"), R"(
+            Generates the state graph of a finite state machine and returns a mapping from each state to all its possible successor states using a simple brute force approach.
 
             :param halPy.Netlist nl: The netlist.
             :param list[halPy.Gate] state_reg: A list containing all the gates of the fsm representing the state register.
             :param list[halPy.Gate] transition_logic: A list containing all the gates of the fsm representing the transition_logic.
+            :param str graph_path: Path to the location where the state graph is saved in dot format.
             :returns: The transition state graph in dot format.
-            :rtype: str
+            :rtype: dict()
         )")
-            .def("solve_fsm", &SolveFsmPlugin::solve_fsm, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), py::arg("intial_state"), py::arg("timeout"), R"(
-            Generates the state graph of a finite state machine in dot format of a given fsm using z3 as sat solver.
+            .def("solve_fsm", &SolveFsmPlugin::solve_fsm, py::arg("nl"), py::arg("state_reg"), py::arg("transition_logic"), py::arg("intial_state"), py::arg("graph_path"), py::arg("timeout"), R"(
+            Generates the state graph of a finite state machine and returns a mapping from each state to all its possible successor states using z3 as sat solver.
 
             :param halPy.Netlist nl: The netlist.
             :param list[halPy.Gate] state_reg: A list containing all the gates of the fsm representing the state register.
             :param list[halPy.Gate] transition_logic: A list containing all the gates of the fsm representing the transition_logic.
             :param dict{halPy.Gate, bool} initial_state - A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.
+            :param str graph_path: Path to the location where the state graph is saved in dot format.
             :param int timeout - Timeout value for the sat solvers. Defaults to 600 (unit unkown).
             :returns: The transition state graph in dot format.
-            :rtype: str
+            :rtype: dict()
         )");
 
 #ifndef PYBIND11_MODULE
