@@ -8,6 +8,7 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/user_action/action_unfold_module.h"
+#include <QTextCursor>
 
 namespace hal
 {
@@ -15,7 +16,7 @@ namespace hal
 
     UserActionManager::UserActionManager(QObject *parent)
         : QObject(parent), mStartRecording(-1),
-          mWaitCount(0)
+          mWaitCount(0), mDumpAction(nullptr)
     {
         mElapsedTime.start();
     }
@@ -23,6 +24,16 @@ namespace hal
     void UserActionManager::addExecutedAction(UserAction* act)
     {
         mActionHistory.append(act);
+
+        if (!mDumpAction)
+        {
+            mDumpAction = new QPlainTextEdit;
+            mDumpAction->show();
+        }
+
+        mDumpAction->moveCursor (QTextCursor::End);
+        mDumpAction->insertPlainText(act->tagname() + '\n');
+        mDumpAction->moveCursor(QTextCursor::End);
         testUndo();
     }
 

@@ -71,8 +71,8 @@ namespace hal
             gSelectionRelay->clear();
 
         gSelectionRelay->addGate(gate->get_id());
-        gSelectionRelay->selectionChanged(this);
         gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,gate->get_id());
+        gSelectionRelay->selectionChanged(this);
 
         if(navigate_to_selection)
             Q_EMIT navigationRequested();
@@ -122,8 +122,8 @@ namespace hal
             gSelectionRelay->clear();
 
         gSelectionRelay->addNet(net->get_id());
-        gSelectionRelay->selectionChanged(this);
         gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,net->get_id());
+        gSelectionRelay->selectionChanged(this);
 
         if(navigate_to_selection)
             Q_EMIT navigationRequested();
@@ -173,8 +173,8 @@ namespace hal
             gSelectionRelay->clear();
 
         gSelectionRelay->addModule(module->get_id());
-        gSelectionRelay->selectionChanged(this);
         gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,module->get_id());
+        gSelectionRelay->selectionChanged(this);
 
         if(navigate_to_selection)
             Q_EMIT navigationRequested();

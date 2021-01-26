@@ -28,6 +28,7 @@
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <QElapsedTimer>
+#include <QPlainTextEdit>
 #include "hal_core/defines.h"
 
 namespace hal
@@ -86,6 +87,7 @@ namespace hal
         int mWaitCount;
         QElapsedTimer mElapsedTime;
         static UserActionManager* inst;
+        QPlainTextEdit* mDumpAction;
 
     Q_SIGNALS:
         void canUndoLastAction(bool yesWeCan);

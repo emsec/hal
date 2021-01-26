@@ -18,6 +18,7 @@
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_move_node.h"
 #include "gui/user_action/user_action_compound.h"
@@ -169,6 +170,7 @@ namespace hal
         act->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
                                                   gSelectionRelay->selectedGates()));
 
+        act->exec();
 //        auto gates   = gSelectionRelay->mSelectedGates;
 //        auto modules = gSelectionRelay->mSelectedModules;
         gSelectionRelay->clear();
@@ -185,7 +187,9 @@ namespace hal
             const QString new_name = QInputDialog::getText(this, "Change gate name", "New name:", QLineEdit::Normal, name, &confirm);
             if (confirm)
             {
-                g->set_name(new_name.toStdString());
+                ActionRenameObject* act = new ActionRenameObject(new_name);
+                act->setObject(UserActionObject(g->get_id(),UserActionObjectType::Gate));
+                act->exec();
             }
         }
         else if (mItem->itemType() == ItemType::Module)

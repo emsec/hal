@@ -1,12 +1,11 @@
 #include "gui/selection_relay/selection_relay.h"
 
 #include "gui/gui_globals.h"
-#include "gui/user_action/action_set_focus.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
-#include "gui/user_action/action_set_selection.h"
+#include "gui/user_action/action_set_selection_focus.h"
 
 namespace hal
 {
@@ -38,10 +37,14 @@ namespace hal
     {
         if (!mAction)
         {
-            mAction = new ActionSetSelection;
+            mAction = new ActionSetSelectionFocus;
             mAction->mModules = mSelectedModules;
             mAction->mGates   = mSelectedGates;
             mAction->mNets    = mSelectedNets;
+            mAction->setObject(UserActionObject(mFocusId,
+                                                UserActionObjectType::fromItemType(mFocusType)));
+            mAction->mSubfocus      = mSubfocus;
+            mAction->mSubfocusIndex = mSubfocusIndex;
         }
     }
 
@@ -122,9 +125,10 @@ namespace hal
 
     void SelectionRelay::setFocus(ItemType ftype, u32 fid, Subfocus sfoc, u32 sfinx)
     {
-        ActionSetFocus* act = new ActionSetFocus(sfoc,sfinx);
-        act->setObject(UserActionObject(fid,UserActionObjectType::fromItemType(ftype)));
-        act->exec();
+        initializeAction();
+        mAction->setObject(UserActionObject(fid,UserActionObjectType::fromItemType(ftype)));
+        mAction->mSubfocus = sfoc;
+        mAction->mSubfocusIndex = sfinx;
     }
 
     void SelectionRelay::setFocusDirect(ItemType ftype, u32 fid, Subfocus sfoc, u32 sfinx)
@@ -168,6 +172,7 @@ namespace hal
     void SelectionRelay::relaySubfocusChanged(void* sender)
     {
         Q_EMIT subfocusChanged(sender);
+        executeAction();
     }
 
     // TODO deduplicate navigateUp and navigateDown

@@ -38,7 +38,7 @@ namespace hal
     class Module;
     class Net;
 
-    class ActionSetSelection;
+    class ActionSetSelectionFocus;
 
     class SelectionRelay : public QObject
     {
@@ -155,7 +155,7 @@ namespace hal
         void initializeAction();
         void executeAction();
 
-        ActionSetSelection* mAction;
+        ActionSetSelectionFocus* mAction;
         bool mDisableExecution;
 
         // USE ARRAY[0] INSTEAD OF MEMBER ???

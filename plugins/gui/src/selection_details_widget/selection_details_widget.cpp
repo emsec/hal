@@ -7,7 +7,8 @@
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/selection_history_navigator/selection_history_navigator.h"
 #include "gui/user_action/action_create_object.h"
-#include "gui/user_action/action_selection_to_object.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/user_action_compound.h"
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
@@ -187,12 +188,16 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToModuleAction()
     {
-        Module* targetModule = nullptr;
         const QAction* senderAction = static_cast<const QAction*>(sender());
         Q_ASSERT(senderAction);
         int actionCode = senderAction->data().toInt();
+
+        ActionAddItemsToObject* actAddSelected =
+                new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                           gSelectionRelay->selectedGates());
         if (actionCode < 0)
         {
+            // add to new module
             std::unordered_set<Gate*> gatesSelected;
             std::unordered_set<Module*> modulesSelected;
             for (u32 id : gSelectionRelay->selectedGatesList())
@@ -206,27 +211,22 @@ namespace hal
             bool ok;
             QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parentName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
             if (!ok || name.isEmpty()) return;
-            ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Module, name);
-            act->setParentId(parentModule->get_id());
+            ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
+            actNewModule->setParentId(parentModule->get_id());
+            UserActionCompound* act = new UserActionCompound;
+            act->setUseCreatedObject();
+            act->addAction(actNewModule);
+            act->addAction(actAddSelected);
             act->exec();
         }
         else
         {
-            u32 mod_id = actionCode;
-            targetModule = gNetlist->get_module_by_id(mod_id);
-        }
-        Q_ASSERT(targetModule);
-        for (const auto& id : gSelectionRelay->selectedGatesList())
-        {
-            targetModule->assign_gate(gNetlist->get_gate_by_id(id));
-        }
-        for (const auto& id : gSelectionRelay->selectedModulesList())
-        {
-            gNetlist->get_module_by_id(id)->set_parent_module(targetModule);
+            // add to existing module
+            u32 targetModuleId = actionCode;
+            actAddSelected->setObject(UserActionObject(targetModuleId,UserActionObjectType::Module));
+            actAddSelected->exec();
         }
 
-//        auto gates   = gSelectionRelay->mSelectedGates;
-//        auto modules = gSelectionRelay->mSelectedModules;
         gSelectionRelay->clear();
         gSelectionRelay->relaySelectionChanged(this);
     }
@@ -275,7 +275,9 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToGroupingInternal(Grouping* grp)
     {
-        ActionSelectionToObject* act = new ActionSelectionToObject;
+        ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                                                 gSelectionRelay->selectedGates(),
+                                                                 gSelectionRelay->selectedNets());
         act->setObject(UserActionObject(grp->get_id(),UserActionObjectType::Grouping));
         act->exec();
         gSelectionRelay->clear();

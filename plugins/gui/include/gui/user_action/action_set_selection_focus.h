@@ -4,15 +4,19 @@
 
 namespace hal
 {
-    class ActionSetSelection : public UserAction
+    class ActionSetSelectionFocus : public UserAction
     {
         friend class SelectionRelay;
 
         QSet<u32> mModules;
         QSet<u32> mGates;
         QSet<u32> mNets;
+
+        SelectionRelay::Subfocus mSubfocus;
+        u32 mSubfocusIndex;
+
     public:
-        ActionSetSelection() {;}
+        ActionSetSelectionFocus() {;}
 
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
@@ -22,11 +26,11 @@ namespace hal
         bool hasModifications() const;
     };
 
-    class ActionSetSelectionFactory : public UserActionFactory
+    class ActionSetSelectionFocusFactory : public UserActionFactory
     {
     public:
-        ActionSetSelectionFactory();
+        ActionSetSelectionFocusFactory();
         UserAction* newAction() const;
-        static ActionSetSelectionFactory* sFactory;
+        static ActionSetSelectionFocusFactory* sFactory;
     };
 }

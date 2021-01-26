@@ -523,6 +523,7 @@ namespace hal
                     gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, g->get_id(),
                                               SelectionRelay::Subfocus::Left, 0);
                     gSelectionRelay->relaySubfocusChanged(nullptr);
+                    gSelectionRelay->relaySelectionChanged(nullptr);
                 }
 
                 return;

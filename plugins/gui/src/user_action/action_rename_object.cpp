@@ -42,7 +42,25 @@ namespace hal
     void ActionRenameObject::exec()
     {
         QString oldName;
+        Module* mod;
+        Gate*   gat;
         switch (mObject.type()) {
+        case UserActionObjectType::Module:
+            mod = gNetlist->get_module_by_id(mObject.id());
+            if (mod)
+            {
+                oldName = QString::fromStdString(mod->get_name());
+                mod->set_name(mNewName.toStdString());
+            }
+            break;
+        case UserActionObjectType::Gate:
+            gat = gNetlist->get_gate_by_id(mObject.id());
+            if (gat)
+            {
+                oldName = QString::fromStdString(gat->get_name());
+                gat->set_name(mNewName.toStdString());
+            }
+            break;
         case UserActionObjectType::Grouping:
             oldName = gContentManager->getGroupingManagerWidget()->getModel()->
                     renameGrouping(mObject.id(),mNewName);

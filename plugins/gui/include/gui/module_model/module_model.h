@@ -30,6 +30,7 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
+#include <QColor>
 #include <set>
 
 namespace hal
@@ -56,22 +57,29 @@ namespace hal
 
         ModuleItem* getItem(const QModelIndex& index) const;
         QModelIndex getIndex(const ModuleItem* const item) const;
-        ModuleItem* getItem(const u32 module_id) const;
+        ModuleItem* getItem(u32 module_id) const;
 
         void init();
         void clear();
 
-        void addModule(const u32 id, const u32 parent_module);
+        void addModule(u32 id, u32 parent_module);
         void addRecursively(const std::vector<Module*>& modules);
-        void remove_module(const u32 id);
-        void updateModule(const u32 id);
+        void remove_module(u32 id);
+        void updateModule(u32 id);
 
         bool isModifying();
+        QColor moduleColor(u32 id) const;
+
+        /// returns old color for undo action
+        QColor setModuleColor(u32 id, const QColor& col);
+        void setRandomColor(u32 id);
+        void removeColor(u32 id);
 
     private:
         ModuleItem* mTopModuleItem;
 
         QMap<u32, ModuleItem*> mModuleItems;
+        QMap<u32, QColor> mModuleColors;
 
         bool mIsModifying;
     };

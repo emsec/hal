@@ -110,13 +110,13 @@ namespace hal
 
         QMenu context_menu;
 
-        QAction isolate_action("Isolate In New View", &context_menu);
-        QAction add_selection_action("Add Graph Selection To Module", &context_menu);
-        QAction add_child_action("Add Child Module", &context_menu);
-        QAction change_name_action("Change Module Name", &context_menu);
-        QAction change_type_action("Change Module Type", &context_menu);
-        QAction change_color_action("Change Module Color", &context_menu);
-        QAction delete_action("Delete Module", &context_menu);
+        QAction isolate_action("Isolate in new view", &context_menu);
+        QAction add_selection_action("Add selected gates to module", &context_menu);
+        QAction add_child_action("Add child module", &context_menu);
+        QAction change_name_action("Change module name", &context_menu);
+        QAction change_type_action("Change module type", &context_menu);
+        QAction change_color_action("Change module color", &context_menu);
+        QAction delete_action("Delete module", &context_menu);
 
         context_menu.addAction(&isolate_action);
         context_menu.addAction(&add_selection_action);
