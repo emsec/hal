@@ -1,5 +1,7 @@
 #include "utils/fsm_transition.h"
 
+#include <bitset>
+
 namespace hal {
     FsmTransition::FsmTransition(const z3::expr& start, const z3::expr& end, const std::map<u32, u8>& inputs) : starting_state_expr(start), end_state_expr(end) {
         if (!start.is_numeral()) {
@@ -70,9 +72,21 @@ namespace hal {
         return std::to_string(starting_state) + " -> " + std::to_string(end_state) + " " + input_str;
     }
 
-    std::string FsmTransition::to_dot_string(const Netlist* nl) const {
+    std::string FsmTransition::to_dot_string(const Netlist* nl, const u32 state_size) const {
+        // generate state names
+        std::string start_name;
+        std::string end_name;
+
+        if (true) {
+            start_name = std::bitset<64>(starting_state).to_string().substr(64 - state_size, 64);
+            end_name = std::bitset<64>(end_state).to_string().substr(64 - state_size, 64);
+        } else {
+            start_name = std::to_string(starting_state);
+            end_name = std::to_string(end_state);
+        }
+
         if (input_ids_to_values.empty()) {
-            return std::to_string(starting_state) + " -> " + std::to_string(end_state) + ";\n";
+            return start_name + " -> " + end_name + ";\n";
         }
         
         const u32 size = input_ids_to_values.size();
@@ -89,20 +103,20 @@ namespace hal {
         // Dont show inputs if there are too many
         if (size > 8) {
             input_str += "...";
-            return std::to_string(starting_state) + " -> " + std::to_string(end_state) + "[label=\"" + input_str + "\", weight=\"" + input_str + "\"];\n";
         }
-
-        // print all inputs
-        input_str += "(";
-        for (const auto& mapping : input_ids_to_values) {
-            for (const auto& [_, val] : mapping) {
-                input_str += std::to_string(val);
+        else {
+            // print all inputs
+            input_str += "(";
+            for (const auto& mapping : input_ids_to_values) {
+                for (const auto& [_, val] : mapping) {
+                    input_str += std::to_string(val);
+                }
+                input_str += ", ";
             }
-            input_str += ", ";
+            input_str = input_str.erase(input_str.size()-2, 2);
+            input_str += ")";
         }
-        input_str = input_str.erase(input_str.size()-2, 2);
-        input_str += ")";
 
-        return std::to_string(starting_state) + " -> " + std::to_string(end_state) + "[label=\"" + input_str + "\", weight=\"" + input_str + "\"];\n";
+        return start_name + " -> " + end_name+ "[label=\"" + input_str + "\", weight=\"" + input_str + "\"];\n";
     }
 }  // namespace hal

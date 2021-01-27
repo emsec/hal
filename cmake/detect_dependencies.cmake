@@ -84,6 +84,12 @@ else()
     endif()
 endif()
 
+if(OPENMP_FOUND) 
+    message(STATUS "openMP found")
+else()
+    message(STATUS "openMP not found")
+endif()
+
 ################################
 #####   Filesystem
 ################################

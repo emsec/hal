@@ -1,4 +1,6 @@
 *
+!boolean_influence*
+!boolean_influence/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
 !example_gate_library*

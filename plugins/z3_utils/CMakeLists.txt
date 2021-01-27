@@ -8,5 +8,6 @@ if(PL_Z3_UTILS OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${Z3_UTILS_INC}
                    SOURCES ${Z3_UTILS_SRC} ${Z3_UTILS_PYTHON_SRC}
+                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES}  OpenMP::OpenMP_CXX
                    )
 endif()
