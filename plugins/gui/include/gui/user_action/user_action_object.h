@@ -27,6 +27,7 @@
 #include <QXmlStreamReader>
 #include "hal_core/defines.h"
 #include "gui/selection_relay/selection_relay.h"
+#include "gui/gui_def.h"
 
 namespace hal {
 
@@ -47,6 +48,8 @@ namespace hal {
         static QString toString(ObjectType t);
         static ObjectType fromItemType(SelectionRelay::ItemType itp);
         static SelectionRelay::ItemType toItemType(ObjectType t);
+        static ObjectType fromNodeType(Node::NodeType ntp);
+        static Node::NodeType toNodeType(ObjectType t);
     };
 
 
@@ -73,6 +76,9 @@ namespace hal {
 
         /// reads object member variables from xml attributes "id" and "type"
         void readFromXml(QXmlStreamReader& xmlIn);
+
+        /// short code for debugging purpose
+        QString debugDump() const;
     private:
         u32 mId;
         UserActionObjectType::ObjectType mType;

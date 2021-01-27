@@ -160,27 +160,27 @@ namespace hal
         }
     }
 
-    void GraphContext::foldModuleOfGate(const u32 id)
+    bool GraphContext::foldModuleAction(u32 moduleId)
     {
-        auto contained_gates = mGates + mAddedGates - mRemovedGates;
-        if (contained_gates.find(id) != contained_gates.end())
-        {
-            auto m = gNetlist->get_gate_by_id(id)->get_module();
-            QSet<u32> gates;
-            QSet<u32> modules;
-            for (const auto& g : m->get_gates(nullptr, true))
-            {
-                gates.insert(g->get_id());
-            }
-            for (auto sm : m->get_submodules(nullptr, true))
-            {
-                modules.insert(sm->get_id());
-            }
-            beginChange();
-            remove(modules, gates);
-            add({m->get_id()}, {});
-            endChange();
-        }
+        Module* m = gNetlist->get_module_by_id(moduleId);
+        if (!m) return false;
+        QSet<u32> gats;
+        QSet<u32> mods;
+        for (const auto& g : m->get_gates(nullptr, true))
+            gats.insert(g->get_id());
+        for (auto sm : m->get_submodules(nullptr, true))
+            mods.insert(sm->get_id());
+        beginChange();
+        remove(mods, gats);
+        add({m->get_id()}, {});
+        endChange();
+        return true;
+    }
+
+    bool GraphContext::isGateUnfolded(u32 gateId) const
+    {
+        QSet<u32> containedGates = mGates + mAddedGates - mRemovedGates;
+        return containedGates.contains(gateId);
     }
 
     void GraphContext::unfoldModule(const u32 id)

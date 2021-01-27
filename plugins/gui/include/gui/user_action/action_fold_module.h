@@ -6,23 +6,21 @@ namespace hal
     class Module;
     class GraphContext;
 
-    class ActionUnfoldModule : public UserAction
+    class ActionFoldModule : public UserAction
     {
         u32 mContextId;
     public:
-        ActionUnfoldModule(u32 moduleId = 0);
+        ActionFoldModule(u32 moduleId = 0);
         QString tagname() const override;
         void exec() override;
         void setContextId(u32 id) { mContextId = id; }
-    private:
-        void execInternal(Module* m, GraphContext* currentContext);
     };
 
-    class ActionUnfoldModuleFactory : public UserActionFactory
+    class ActionFoldModuleFactory : public UserActionFactory
     {
     public:
-        ActionUnfoldModuleFactory();
+        ActionFoldModuleFactory();
         UserAction* newAction() const;
-        static ActionUnfoldModuleFactory* sFactory;
+        static ActionFoldModuleFactory* sFactory;
     };
 }

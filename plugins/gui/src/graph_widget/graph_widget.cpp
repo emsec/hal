@@ -17,6 +17,9 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/overlay/widget_overlay.h"
 #include "gui/toolbar/toolbar.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_rename_object.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -290,7 +293,9 @@ namespace hal
                     }
                     if (!found)
                     {
-                        gGraphContextManager->renameGraphContext(mContext, new_name);
+                        ActionRenameObject* act = new ActionRenameObject(new_name);
+                        act->setObject(UserActionObject(mContext->id(),UserActionObjectType::Context));
+                        act->exec();
                         break;
                     }
                 }
@@ -351,10 +356,19 @@ namespace hal
                     : PlacementHint::PreferLeft;
 
             // add all new gates and modules
-            mContext->beginChange();
-            mContext->remove(remove_modules, remove_gates);
-            mContext->add(nonvisible_modules, nonvisible_gates, PlacementHint{placementMode, origin});
-            mContext->endChange();
+            if (!remove_modules.isEmpty() || !remove_gates.isEmpty())
+            {
+                ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(remove_modules, remove_gates);
+                act->setObject(UserActionObject(mContext->id(),UserActionObjectType::Context));
+                act->exec();
+            }
+            if (!nonvisible_modules.isEmpty() || !nonvisible_gates.isEmpty())
+            {
+                ActionAddItemsToObject* act = new ActionAddItemsToObject(nonvisible_modules, nonvisible_gates);
+                act->setPlacementHint(PlacementHint(placementMode,origin));
+                act->setObject(UserActionObject(mContext->id(),UserActionObjectType::Context));
+                act->exec();
+            }
 
             // FIXME find out how to do this properly
             // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,
@@ -748,8 +762,8 @@ namespace hal
             // contexts can't infer their corresponding module from their contents
         }
 
-        ActionUnfoldModule* act = new ActionUnfoldModule;
-        act->setObject(UserActionObject(id,UserActionObjectType::Module));
+        ActionUnfoldModule* act = new ActionUnfoldModule(id);
+        act->setContextId(mContext->id());
         act->exec();
 /*
         if (mContext->gates().isEmpty() && mContext->modules() == QSet<u32>({id}))

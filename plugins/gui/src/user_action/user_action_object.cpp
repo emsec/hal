@@ -44,6 +44,39 @@ namespace hal {
         return retval;
     }
 
+    UserActionObjectType::ObjectType UserActionObjectType::fromNodeType(Node::NodeType ntp)
+    {
+        ObjectType retval = None;
+        switch (ntp)
+        {
+        case Node::Module: retval = Module; break;
+        case Node::Gate:   retval = Gate;   break;
+        default:                            break;
+        }
+        return retval;
+    }
+
+    Node::NodeType UserActionObjectType::toNodeType(UserActionObjectType::ObjectType t)
+    {
+        Node::NodeType retval = Node::None;
+        switch (t)
+        {
+        case Module: retval = Node::Module; break;
+        case Gate:   retval = Node::Gate;   break;
+        default:                                                break;
+        }
+        return retval;
+    }
+
+    QString UserActionObject::debugDump() const
+    {
+        if (mType==UserActionObjectType::None) return QString(" \t-");
+        // None, Module, Gate, Net, Grouping, Netlist, Context
+        const char* cType = "-mgn{Lx";
+        return QString(" \t%1%2%3").arg(cType[mType]).arg(mId)
+                .arg(mType==UserActionObjectType::Grouping? "}" : "");
+    }
+
     void UserActionObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         if (mType==UserActionObjectType::None) return;

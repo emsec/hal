@@ -32,7 +32,7 @@ namespace hal
         }
 
         mDumpAction->moveCursor (QTextCursor::End);
-        mDumpAction->insertPlainText(act->tagname() + '\n');
+        mDumpAction->insertPlainText(act->tagname() + act->object().debugDump() + '\n');
         mDumpAction->moveCursor(QTextCursor::End);
         testUndo();
     }

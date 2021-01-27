@@ -55,7 +55,8 @@ namespace hal
         void remove(const QSet<u32>& modules, const QSet<u32>& gates);
         void clear();
 
-        void foldModuleOfGate(const u32 id);
+        bool isGateUnfolded(u32 gateId) const;
+        bool foldModuleAction(u32 moduleId);
         void unfoldModule(const u32 id);
 
         bool empty() const;

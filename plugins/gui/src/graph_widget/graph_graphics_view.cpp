@@ -17,10 +17,12 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
-#include "gui/user_action/action_create_object.h"
-#include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_fold_module.h"
 #include "gui/user_action/action_move_node.h"
+#include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
@@ -851,7 +853,16 @@ namespace hal
                 }
             }
 
-            context->add({}, gates);
+            ActionAddItemsToObject* act = new ActionAddItemsToObject({},gates);
+            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+            if (gSelectionRelay->numberSelectedNodes()==1)
+            {
+                Node origin = (gSelectionRelay->numberSelectedModules()==1)
+                   ? Node(gSelectionRelay->selectedModulesList().at(0),Node::Module)
+                   : Node(gSelectionRelay->selectedGatesList().at(0),Node::Gate);
+                act->setPlacementHint(PlacementHint(PlacementHint::PreferRight,origin));
+            }
+            act->exec();
         }
     }
     void GraphGraphicsView::handleSelectInputs()
@@ -909,7 +920,17 @@ namespace hal
                     }
                 }
             }
-            context->add({}, gates);
+
+            ActionAddItemsToObject* act = new ActionAddItemsToObject({},gates);
+            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+            if (gSelectionRelay->numberSelectedNodes()==1)
+            {
+                Node origin = (gSelectionRelay->numberSelectedModules()==1)
+                   ? Node(gSelectionRelay->selectedModulesList().at(0),Node::Module)
+                   : Node(gSelectionRelay->selectedGatesList().at(0),Node::Gate);
+                act->setPlacementHint(PlacementHint(PlacementHint::PreferLeft,origin));
+            }
+            act->exec();
         }
     }
 
@@ -937,13 +958,22 @@ namespace hal
     void GraphGraphicsView::handleFoldSingleAction()
     {
         auto context = mGraphWidget->getContext();
-        context->foldModuleOfGate(mItem->id());
+        u32 gateId = mItem->id();
+        if (context->isGateUnfolded(gateId))
+        {
+            Module* m = gNetlist->get_gate_by_id(gateId)->get_module();
+            if (!m) return;
+
+            ActionFoldModule* act = new ActionFoldModule(m->get_id());
+            act->setContextId(context->id());
+            act->exec();
+        }
     }
 
     void GraphGraphicsView::handleUnfoldSingleAction()
     {
-        auto context = mGraphWidget->getContext();
-        auto m       = gNetlist->get_module_by_id(mItem->id());
+        GraphContext* context = mGraphWidget->getContext();
+        Module* m       = gNetlist->get_module_by_id(mItem->id());
         if (m->get_gates().empty() && m->get_submodules().empty())
         {
             QMessageBox msg;
@@ -954,19 +984,30 @@ namespace hal
             // We would otherwise unfold the empty module into nothing, so the user
             // would have nowhere to click to get their module back
         }
-        context->unfoldModule(mItem->id());
+        ActionUnfoldModule* act = new ActionUnfoldModule(mItem->id());
+        act->setContextId(context->id());
+        act->exec();
     }
 
     void GraphGraphicsView::handleFoldAllAction()
     {
         auto context = mGraphWidget->getContext();
 
-        context->beginChange();
+        QSet<Module*> modSet;
+
         for (u32 id : gSelectionRelay->selectedGatesList())
         {
-            context->foldModuleOfGate(id);
+            if (context->isGateUnfolded(id))
+                modSet.insert(gNetlist->get_gate_by_id(id)->get_module());
         }
-        context->endChange();
+
+        for (Module* m : modSet)
+            if (m)
+            {
+                ActionFoldModule* act = new ActionFoldModule(m->get_id());
+                act->setContextId(context->id());
+                act->exec();
+            }
     }
 
     void GraphGraphicsView::handleUnfoldAllAction()

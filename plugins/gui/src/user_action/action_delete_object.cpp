@@ -2,9 +2,11 @@
 #include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_set_object_color.h"
+#include "gui/user_action/action_set_object_type.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
+#include "gui/module_model/module_model.h"
 #include "gui/gui_globals.h"
 
 namespace hal
@@ -26,13 +28,31 @@ namespace hal
 
     void ActionDeleteObject::exec()
     {
+        Module* mod;
         switch (mObject.type()) {
         case UserActionObjectType::Module:
-        {
-            Module* m = gNetlist->get_module_by_id(mObject.id());
-            if (!m) return;
-            gNetlist->delete_module(m);
-        }
+            mod = gNetlist->get_module_by_id(mObject.id());
+            if (mod)
+            {
+                UserActionCompound* act = new UserActionCompound;
+                act->setUseCreatedObject();
+                ActionCreateObject* actCreate =
+                        new ActionCreateObject(UserActionObjectType::Module,
+                                               QString::fromStdString(mod->get_name()));
+                actCreate->setParentId(mod->get_parent_module()->get_id());
+                act->addAction(actCreate);
+                act->addAction(new ActionSetObjectType(QString::fromStdString(mod->get_type())));
+                act->addAction(new ActionSetObjectColor(gNetlistRelay->getModuleModel()->moduleColor(mod->get_id())));
+                QSet<u32> mods, gats;
+                for (Gate* g : mod->get_gates())
+                    gats.insert(g->get_id());
+                for (Module* sm : mod->get_submodules())
+                    mods.insert(sm->get_id());
+                if (!mods.isEmpty() || !gats.isEmpty())
+                    act->addAction(new ActionAddItemsToObject(mods,gats));
+                mUndoAction = act;
+                gNetlist->delete_module(mod);
+            }
             break;
         case UserActionObjectType::Gate:
         {

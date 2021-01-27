@@ -36,9 +36,9 @@ namespace hal
         return context;
     }
 
-    void GraphContextManager::renameGraphContext(GraphContext* ctx, const QString& new_name)
+    void GraphContextManager::renameGraphContextAction(GraphContext* ctx, const QString& newName)
     {
-        ctx->mName = new_name;
+        ctx->mName = newName;
 
         Q_EMIT contextRenamed(ctx);
     }

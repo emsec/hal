@@ -28,6 +28,7 @@
 #include <QHeaderView>
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/user_action_compound.h"
 
 namespace hal
@@ -54,11 +55,11 @@ namespace hal
         mDeleteAction->setToolTip("Delete");
         mSearchAction->setToolTip("Search");
 
-        mOpenAction->setText("Open View");
-        mNewViewAction->setText("Create New View");
-        mRenameAction->setText("Rename View");
-        mDuplicateAction->setText("Duplicate View");
-        mDeleteAction->setText("Delete View");
+        mOpenAction->setText("Open view");
+        mNewViewAction->setText("Create new view");
+        mRenameAction->setText("Rename view");
+        mDuplicateAction->setText("Duplicate view");
+        mDeleteAction->setText("Delete view");
 
         //mOpenAction->setEnabled(false);
         //mRenameAction->setEnabled(false);
@@ -140,7 +141,11 @@ namespace hal
         ipd.addValidator(&empty_validator);
 
         if (ipd.exec() == QDialog::Accepted)
-            gGraphContextManager->renameGraphContext(clicked_context, ipd.textValue());
+        {
+            ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+            act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::Context));
+            act->exec();
+        }
     }
 
     void ContextManagerWidget::handleDuplicateContextClicked()

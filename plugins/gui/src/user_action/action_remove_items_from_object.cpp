@@ -61,7 +61,9 @@ namespace hal
             GraphContext* ctx = gGraphContextManager->getContextById(mObject.id());
             if (ctx)
             {
+                ctx->beginChange();
                 ctx->remove(mModules, mGates);
+                ctx->endChange();
                 implemented = true;
             }
         }

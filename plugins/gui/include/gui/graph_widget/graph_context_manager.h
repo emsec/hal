@@ -50,7 +50,7 @@ namespace hal
         GraphContextManager();
 
         GraphContext* createNewContext(const QString& name);
-        void renameGraphContext(GraphContext* ctx, const QString& new_name);
+        void renameGraphContextAction(GraphContext* ctx, const QString& newName);
         void deleteGraphContext(GraphContext* ctx);
         QVector<GraphContext*> getContexts() const;
         GraphContext* getCleanContext(const QString& name) const;

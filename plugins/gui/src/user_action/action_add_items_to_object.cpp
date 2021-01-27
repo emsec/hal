@@ -3,6 +3,7 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/grouping.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -33,6 +34,16 @@ namespace hal
 
     void ActionAddItemsToObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
+        if (mPlacementHint.mode()!=PlacementHint::Standard)
+        {
+            UserActionObjectType::ObjectType tp = UserActionObjectType::fromNodeType(
+                        mPlacementHint.preferredOrigin().type());
+            xmlOut.writeStartElement("placement");
+            xmlOut.writeAttribute("id", QString::number(mPlacementHint.preferredOrigin().id()));
+            xmlOut.writeAttribute("type", UserActionObjectType::toString(tp));
+            xmlOut.writeAttribute("mode", mPlacementHint.mode()==PlacementHint::PreferLeft ? "left" : "right");
+            xmlOut.writeEndElement();
+        }
         if (!mModules.isEmpty()) xmlOut.writeTextElement("modules",setToText(mModules));
         if (!mGates.isEmpty())   xmlOut.writeTextElement("gates",setToText(mGates));
         if (!mNets.isEmpty())    xmlOut.writeTextElement("nets",setToText(mNets));
@@ -42,7 +53,16 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name()=="modules")
+            if (xmlIn.name()=="placement")
+            {
+               u32 id = xmlIn.attributes().value("id").toInt();
+                UserActionObjectType::ObjectType tp = UserActionObjectType::fromString(xmlIn.attributes().value("type").toString());
+                PlacementHint::PlacementModeType mode = (xmlIn.attributes().value("mode").toString() == "left")
+                        ? PlacementHint::PreferLeft : PlacementHint::PreferRight ;
+                mPlacementHint = PlacementHint(mode,Node(id,UserActionObjectType::toNodeType(tp)));
+                xmlIn.skipCurrentElement(); // no text body to read
+            }
+            else if (xmlIn.name()=="modules")
                 mModules = setFromText(xmlIn.readElementText());
             else if (xmlIn.name()=="gates")
                 mGates = setFromText(xmlIn.readElementText());
@@ -74,7 +94,9 @@ namespace hal
             GraphContext* ctx = gGraphContextManager->getContextById(mObject.id());
             if (ctx)
             {
-                ctx->add(mModules, mGates);
+                ctx->beginChange();
+                ctx->add(mModules, mGates, mPlacementHint);
+                ctx->endChange();
                 implemented = true;
             }
 

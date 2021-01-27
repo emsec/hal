@@ -54,6 +54,8 @@ namespace hal
 
     void ActionCreateObject::exec()
     {
+        bool standardUndo = false;
+
         switch (mObject.type())
         {
 
@@ -65,6 +67,7 @@ namespace hal
                 Module* m = gNetlist->create_module(gNetlist->get_unique_module_id(),
                                                 mObjectName.toStdString(), parentModule);
                 setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+                standardUndo = true;
             }
         }
             break;
@@ -80,6 +83,7 @@ namespace hal
         {
             Net* n = gNetlist->create_net(mObjectName.toStdString());
             setObject(UserActionObject(n->get_id(),UserActionObjectType::Net));
+            standardUndo = true;
         }
             break;
         case UserActionObjectType::Grouping:
@@ -87,12 +91,10 @@ namespace hal
             GroupingTableModel* grpModel = gContentManager->getGroupingManagerWidget()->getModel();
             if (!grpModel) return;
             Grouping* grp = grpModel->addDefaultEntry();
-            UserActionObject obj(grp->get_id(),UserActionObjectType::Grouping);
             if (!mObjectName.isEmpty())
-                grpModel->renameGrouping(obj.id(),mObjectName);
-            mUndoAction = new ActionDeleteObject;
-            mUndoAction->setObject(obj);
+                grpModel->renameGrouping(grp->get_id(),mObjectName);
             setObject(UserActionObject(grp->get_id(),UserActionObjectType::Grouping));
+            standardUndo = true;
         }
             break;
         case UserActionObjectType::Context:
@@ -102,10 +104,16 @@ namespace hal
                     : mObjectName;
             GraphContext* ctx = gGraphContextManager->createNewContext(contextName);
             setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
+            standardUndo = true;
         }
             break;
         default:
             break; // don't know how to create
+        }
+        if (standardUndo)
+        {
+            mUndoAction = new ActionDeleteObject;
+            mUndoAction->setObject(mObject);
         }
         UserAction::exec();
     }

@@ -1,5 +1,6 @@
 #include "gui/gui_globals.h"
 #include "gui/user_action/action_rename_object.h"
+#include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 
@@ -41,9 +42,10 @@ namespace hal
 
     void ActionRenameObject::exec()
     {
-        QString oldName;
-        Module* mod;
-        Gate*   gat;
+        QString       oldName;
+        Module*       mod;
+        Gate*         gat;
+        GraphContext* ctx;
         switch (mObject.type()) {
         case UserActionObjectType::Module:
             mod = gNetlist->get_module_by_id(mObject.id());
@@ -64,6 +66,14 @@ namespace hal
         case UserActionObjectType::Grouping:
             oldName = gContentManager->getGroupingManagerWidget()->getModel()->
                     renameGrouping(mObject.id(),mNewName);
+            break;
+        case UserActionObjectType::Context:
+            ctx = gGraphContextManager->getContextById(mObject.id());
+            if (ctx)
+            {
+                oldName = ctx->name();
+                gGraphContextManager->renameGraphContextAction(ctx,mNewName);
+            }
             break;
         default:
             break;
