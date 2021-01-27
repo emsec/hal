@@ -30,6 +30,7 @@
 #include <QObject>
 #include <QSet>
 #include <QDateTime>
+#include <QJsonObject>
 
 namespace hal
 {
@@ -41,7 +42,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit GraphContext(const QString& name, QObject* parent = nullptr);
+        explicit GraphContext(u32 id_, const QString& name, QObject* parent = nullptr);
         ~GraphContext();
 
         void subscribe(GraphContextSubscriber* const subscriber);
@@ -72,6 +73,7 @@ namespace hal
 
         GraphicsScene* scene();
 
+        u32 id() const;
         QString name() const;
 
         void setLayouter(GraphLayouter* layouter);
@@ -89,6 +91,10 @@ namespace hal
 
         QDateTime getTimestamp() const;
 
+        void writeToFile(QJsonObject& json);
+
+        void readFromFile(const QJsonObject& json);
+
     private Q_SLOTS:
         void handleLayouterUpdate(const int percent);
         void handleLayouterUpdate(const QString& message);
@@ -103,6 +109,7 @@ namespace hal
 
         QList<GraphContextSubscriber*> mSubscribers;
 
+        u32 mId;
         QString mName;
 
         GraphLayouter* mLayouter;

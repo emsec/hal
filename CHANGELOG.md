@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* views get persisted to .halv file and are restored if the file is found on disk
 
 ## [3.2.4] - 2021-01-23 15:30:00+02:00 (urgency: medium)
 * added plugin `boolean_influence` that enables calculation of the boolean influence for each FF depending on the predecessing FFs
