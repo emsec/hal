@@ -41,8 +41,8 @@ namespace hal
     class GraphNavigationWidget;
 
     /**
-     * The content widget that wraps a graph view of a certain GraphContext.
-     * It represents one tab of the GraphTabWidgets QTabWidget. <br>
+     * The content widget that wraps a graph view of a certain GraphContext. <br>
+     * It represents one tab of the GraphTabWidgets QTabWidget.
      */
     class GraphWidget : public ContentWidget, public GraphContextSubscriber
     {

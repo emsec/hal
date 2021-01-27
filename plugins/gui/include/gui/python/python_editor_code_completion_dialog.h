@@ -65,7 +65,7 @@ namespace hal
 
     Q_SIGNALS:
         /**
-         * Signal that notifies, that a completion entry was selected in the Dialog.
+         * Signal that notifies that a completion entry was selected in the Dialog.
          *
          * @param selected - The selected entry (name_with_symbols, complete).
          */
