@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * views get persisted to .halv file and are restored if the file is found on disk
+* fixed bug in Boolean influence plugin causing problems on global inputs
 
 ## [3.2.4] - 2021-01-23 15:30:00+02:00 (urgency: medium)
 * added plugin `boolean_influence` that enables calculation of the boolean influence for each FF depending on the predecessing FFs
