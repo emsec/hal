@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * views get persisted to .halv file and are restored if the file is found on disk
+
+## [3.2.4] - 2021-01-23 15:30:00+02:00 (urgency: medium)
+* added plugin `boolean_influence` that enables calculation of the boolean influence for each FF depending on the predecessing FFs
+* extended the `z3_utils` plugin with a `z3Wrapper` class, which holds exactly one `z3::expr` and the corresponding `z3::context`
+* removed the code coverage checks from the macOS pipeline and added test command, so the macOS pipeline will work again properly
+* fixed a bug in DANA, where sometimes the net names were output in the DANA results instead of the gate names
+
+## [3.2.3] - 2021-01-18 18:30:00+02:00 (urgency: medium)
 * fixed `z3_utils` plugin being disabled by default causing linking errors
 * fixed `load_initial_values` and `load_initial_values_from_netlist` assigning values to potentially non-existing nets
 
@@ -497,7 +505,9 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.2.2...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.2.4...HEAD
+[3.2.4]: https://github.com/emsec/hal/compare/v3.2.3...v3.2.4
+[3.2.3]: https://github.com/emsec/hal/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/emsec/hal/compare/v3.1.11...v3.2.2
 [3.1.11]: https://github.com/emsec/hal/compare/v3.1.10...v3.1.11
 [3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10

@@ -13,6 +13,7 @@
 
 #include "z3_utils/include/plugin_z3_utils.h"
 
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <queue>
@@ -40,7 +41,7 @@ namespace hal
     {
     }
 
-    std::string SolveFsmPlugin::solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic) {
+    std::map<u64, std::vector<u64>> SolveFsmPlugin::solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::string graph_path) {
         // create mapping between (negated) output nets and data input nets of state flip-flops in in order to later replace them.
         const std::map<hal::Net*, hal::Net*> output_net_to_input_net = find_output_net_to_input_net({state_reg.begin(), state_reg.end()});
         
@@ -111,12 +112,12 @@ namespace hal
         const u32 state_size = state_net_to_func.size();
         if (state_size > 64) {
             log_error("Fsm solver", "Current maximum for state size is 64 bit.");
-            return("ERROR");
+            return{};
         }
 
         if (external_ids.size() > 64) {
             log_error("Fsm solver", "Current maximum for input size is 64 bit.");
-            return("ERROR");
+            return{};
         }
 
         log_info("Fsm solver", "Starting brute force on state with {} bits and {} external inputs.", state_size, external_ids.size());
@@ -171,12 +172,34 @@ namespace hal
         // in order to safe space when printing the new state transitions we merge transitions with the same start and end state and just update the conditions.
         all_transitions = merge_transitions(all_transitions);
 
-        const std::string graph = generate_dot_graph(nl, all_transitions);
+        // print state graph to file
+        if (graph_path != "") {
+            const std::string graph = generate_dot_graph(nl, all_transitions, state_reg);
 
-        return graph;
+            std::ofstream ofs(graph_path);
+            if (!ofs.is_open())
+            {
+                log_error("Fsm solver", "could not open file '{}' for writing.", graph_path);
+            }
+            ofs << graph;
+        }
+
+        // generate mapping
+        std::map<u64, std::vector<u64>> state_to_successors;
+
+        for (const auto& t : all_transitions) {
+            // init successors vector
+            if (state_to_successors.find(t.starting_state) == state_to_successors.end()) {
+                state_to_successors.insert({t.starting_state, {}});
+            }
+
+            state_to_successors.at(t.starting_state).push_back(t.end_state);
+        }
+
+        return state_to_successors;
     }
 
-    std::string SolveFsmPlugin::solve_fsm(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::map<Gate*, bool> initial_state, const u32 timeout) {
+    std::map<u64, std::vector<u64>> SolveFsmPlugin::solve_fsm(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::map<Gate*, bool> initial_state, const std::string graph_path, const u32 timeout) {
         // create mapping between (negated) output nets and data input nets of state flip-flops in in order to later replace them.
         const std::map<hal::Net*, hal::Net*> output_net_to_input_net = find_output_net_to_input_net({state_reg.begin(), state_reg.end()});
 
@@ -335,10 +358,31 @@ namespace hal
         // in order to safe space when printing the new state transitions we merge transitions with the same start and end state and just update the conditions.
         all_transitions = merge_transitions(all_transitions);
 
-        const std::string table = generate_state_transition_table(nl, all_transitions, external_ids_to_expr);
-        const std::string graph = generate_dot_graph(nl, all_transitions);
+        // print state graph to file
+        if (graph_path != "") {
+            const std::string graph = generate_dot_graph(nl, all_transitions, state_reg);
 
-        return graph;
+            std::ofstream ofs(graph_path);
+            if (!ofs.is_open())
+            {
+                log_error("Fsm solver", "could not open file '{}' for writing.", graph_path);
+            }
+            ofs << graph;
+        }
+
+        // generate mapping
+        std::map<u64, std::vector<u64>> state_to_successors;
+
+        for (const auto& t : all_transitions) {
+            // init successors vector
+            if (state_to_successors.find(t.starting_state) == state_to_successors.end()) {
+                state_to_successors.insert({t.starting_state, {}});
+            }
+
+            state_to_successors.at(t.starting_state).push_back(t.end_state);
+        }
+
+        return state_to_successors;
     }
 
     std::map<Net*, Net*> SolveFsmPlugin::find_output_net_to_input_net(const std::set<Gate*> state_reg) {
@@ -493,11 +537,27 @@ namespace hal
         return header_str + "\n" + body_str;
     }
 
-    std::string SolveFsmPlugin::generate_dot_graph(const Netlist* nl, const std::vector<FsmTransition>& transitions) {
+    std::string generate_legend(const std::vector<Gate*>& state_reg) {
+        // shape = box
+
+        std::string name_str = "";
+        for (const auto& reg : state_reg) {
+            name_str = name_str + reg->get_name();
+            name_str += ", ";
+        }
+
+        name_str =  name_str.substr(0, name_str.size()-2);
+
+        return "legend[label=\"" + name_str + + "\", shape= box]" + "\n";
+    }
+    
+    std::string SolveFsmPlugin::generate_dot_graph(const Netlist* nl, const std::vector<FsmTransition>& transitions, const std::vector<Gate*>& state_reg) {
         std::string graph_str = "digraph {\n";
 
+        graph_str += generate_legend(state_reg);
+
         for (const auto& t : transitions) {
-            graph_str += t.to_dot_string(nl);
+            graph_str += t.to_dot_string(nl, state_reg.size());
         }
 
         graph_str += "}";
