@@ -210,26 +210,133 @@ namespace hal
          */
         void handleNetRemoved(Net* n) const;
         // TODO: IN_PROGRESS: Documentation of the remaining functions
+        /**
+         * Handler to be called after a net has been renamed. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param n - The renamed net
+         */
         void handleNetNameChanged(Net* n) const;
+
+        /**
+         * Handler to be called after a source has been added to a net. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param n - The net with the new source
+         * @param src_gate_id - The id of the gate that contains the source pin
+         */
         void handleNetSourceAdded(Net* n, const u32 src_gate_id) const;
+
+        /**
+         * Handler to be called after a source has been removed from a net. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param n - The net with the removed source
+         * @param src_gate_id - The id of the gate that contains the source pin
+         */
         void handleNetSourceRemoved(Net* n, const u32 src_gate_id) const;
+
+        /**
+         * Handler to be called after a destination has been added to a net. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param n - The net with the new destination
+         * @param src_gate_id - The id of the gate that contains the destination pin
+         */
         void handleNetDestinationAdded(Net* n, const u32 dst_gate_id) const;
+
+        /**
+         * Handler to be called after a destination has been removed from a net. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param n - The net with the removed destination
+         * @param src_gate_id - The id of the gate that contains the destination pin
+         */
         void handleNetDestinationRemoved(Net* n, const u32 dst_gate_id) const;
+
+        /**
+         * Handler to be called after a net has been marked as a global input net. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param mNetId - The id of the net that has been marked as a global input
+         */
         void handleMarkedGlobalInput(u32 mNetId);
+
+        /**
+         * Handler to be called after a net has been marked as a global output net. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param mNetId - The id of the net that has been marked as a global output
+         */
         void handleMarkedGlobalOutput(u32 mNetId);
+
+        /**
+         * Handler to be called after a net is no longer a global input net. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param mNetId - The id of the net that is no longer a global input
+         */
         void handleUnmarkedGlobalInput(u32 mNetId);
+
+        /**
+         * Handler to be called after a net is no longer a global output net. <br>
+         * Used to apply the changes in the affected contexts.
+         *
+         * @param mNetId - The id of the net that is no longer a global output
+         */
         void handleUnmarkedGlobalOutput(u32 mNetId);
 
+        /**
+         * TODO: Memory leak? Better name: 'createDefaultLayouter'? Use smart pointer instead?
+         * Creates an instance of the StandardGraphLayouter used for a certain GraphContext.
+         *
+         * @param context - The context the layouter works on
+         * @returns a pointer to the new GraphLayouter
+         */
         GraphLayouter* getDefaultLayouter(GraphContext* const context) const;
+
+        /**
+         * TODO: Memory leak? Better name: 'createDefaultShader'? Use smart pointer instead?
+         * Creates an instance of ModuleShader used for a certain GraphContext.
+         *
+         * @param context - The context the shader works on
+         * @returns a pointer to the new GraphShader
+         */
         GraphShader* getDefaultShader(GraphContext* const context) const;
 
+        /**
+         * Gets the table model for the contexts.
+         *
+         * @returns the context table model
+         */
         ContextTableModel* getContextTableModel() const;
 
+        /**
+         * Deletes all contexts.
+         */
         void clear();
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that notifies about the creation of a new context by the context manager.
+         *
+         * @param context - The created context
+         */
         void contextCreated(GraphContext* context);
+
+        /**
+         * Q_SIGNAL that notifies about the renaming of a context by the context manager.
+         *
+         * @param context - The renamed context
+         */
         void contextRenamed(GraphContext* context);
+
+        /**
+         * Q_SIGNAL that notifies that a context is about to be deleted. <br>
+         * This signal is emitted before the context is removed from the manager and deleted.
+         *
+         * @param context - The context that is about to be deleted
+         */
         void deletingContext(GraphContext* context);
 
     private:
