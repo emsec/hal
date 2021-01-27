@@ -39,20 +39,35 @@ namespace hal
             return {};
         }
         std::string data_pin = *d_ports.begin();
+        log_debug("boolean_influence", "Data pin: {}", data_pin);
 
         // Extract all gates in front of the data port and iterate backwards until another flip flop is found.
         std::vector<Gate*> function_gates = extract_function_gates(gate, data_pin);
+
+        log_debug("boolean_influence", "Extracted {} gates infront of the gate.", function_gates.size());
 
         // Generate function for the data port
         z3_utils::SubgraphFunctionGenerator g;
 
         std::unique_ptr ctx = std::make_unique<z3::context>();
         std::unique_ptr func = std::make_unique<z3::expr>(*ctx);
-        
         std::unordered_set<u32> net_ids;
-        g.get_subgraph_z3_function(gate->get_fan_in_net(data_pin), function_gates, *ctx, *func, net_ids);
+
+        if (!function_gates.empty())
+        {
+            g.get_subgraph_z3_function(gate->get_fan_in_net(data_pin), function_gates, *ctx, *func, net_ids);
+        }
+        // edge case if the function gates are empty
+        else 
+        {
+            Net* in_net = gate->get_fan_in_net(data_pin);
+            *func = ctx->bv_const(std::to_string(in_net->get_id()).c_str(), 1);
+            net_ids.insert(in_net->get_id());
+        }
 
         z3_utils::z3Wrapper func_wrapper = z3_utils::z3Wrapper(std::move(ctx), std::move(func));
+
+        log_debug("boolean_influence", "Built subgraph function, now trying to extract boolean influence.");
 
         // Generate boolean influence
         std::unordered_map<u32, double> net_ids_to_inf = func_wrapper.get_boolean_influence();
@@ -65,9 +80,9 @@ namespace hal
         {
             Net* net = nl->get_net_by_id(net_id);
 
-            if (net->get_sources().size() != 1)
+            if (net->get_sources().size() > 1)
             {
-                log_error("boolean_influence", "Net ({}) has either multiple or 0 sources ({})", net->get_id(), net->get_sources().size());
+                log_error("boolean_influence", "Net ({}) has multiple sources ({})", net->get_id(), net->get_sources().size());
                 return {};
             }
 
@@ -81,7 +96,10 @@ namespace hal
     {
         std::unordered_set<Gate*> function_gates;
 
-        add_inputs(start->get_predecessor(pin)->get_gate(), function_gates);
+        auto pre = start->get_predecessor(pin);
+        if (pre != nullptr && pre->get_gate() != nullptr) {
+            add_inputs(pre->get_gate(), function_gates);
+        }
 
         return {function_gates.begin(), function_gates.end()};
     }
@@ -96,7 +114,7 @@ namespace hal
         gates.insert(gate);
         for (const auto& pre : gate->get_predecessors())
         {
-            if (pre->get_gate() && gates.find(pre->get_gate()) == gates.end())
+            if (pre && pre->get_gate() && gates.find(pre->get_gate()) == gates.end())
             {
                 add_inputs(pre->get_gate(), gates);
             }
