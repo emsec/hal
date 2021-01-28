@@ -28,6 +28,7 @@
 #include <QHeaderView>
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/user_action_compound.h"
 
@@ -151,14 +152,19 @@ namespace hal
     void ContextManagerWidget::handleDuplicateContextClicked()
     {
         GraphContext* clicked_context = getCurrentContext();
-        GraphContext* new_context     = gGraphContextManager->createNewContext(clicked_context->name() + " (Copy)");
-        new_context->add(clicked_context->modules(), clicked_context->gates());
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context,clicked_context->name() + " (Copy)"));
+        act->addAction(new ActionAddItemsToObject(clicked_context->modules(),clicked_context->gates()));
+        act->exec();
     }
 
     void ContextManagerWidget::handleDeleteContextClicked()
     {
         GraphContext* clicked_context = getCurrentContext();
-        gGraphContextManager->deleteGraphContext(clicked_context);
+        ActionDeleteObject* act = new ActionDeleteObject;
+        act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::Context));
+        act->exec();
     }
 
     void ContextManagerWidget::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)

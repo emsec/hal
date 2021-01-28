@@ -92,7 +92,7 @@ namespace hal
                             QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
                         });
 
-                        menu.addAction("Isolate In New View", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
+                        menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
 
                         break;
                     case SelectionTreeItem::TreeItemType::GateItem:
@@ -101,7 +101,7 @@ namespace hal
                             QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");
                         });
 
-                        menu.addAction("Isolate In New View", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
+                        menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
 
                         break;
                     case SelectionTreeItem::TreeItemType::NetItem:

@@ -22,6 +22,7 @@
 #include "gui/user_action/action_fold_module.h"
 #include "gui/user_action/action_move_node.h"
 #include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate.h"
@@ -644,7 +645,7 @@ namespace hal
 
             if (isGate || isModule)
             {
-                action = context_menu.addAction("  Isolate In New View");
+                action = context_menu.addAction("  Isolate in new view");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleIsolationViewAction);
 
                 action = context_menu.addAction("  Add successors to view");
@@ -1025,24 +1026,22 @@ namespace hal
     void GraphGraphicsView::handleGroupingUnassign()
     {
         Grouping* assignedGrouping = nullptr;
+        QSet<u32> mods, gats;
         if (mItem->itemType() == ItemType::Gate)
         {
             Gate* g = gNetlist->get_gate_by_id(mItem->id());
-            if (g)
-                assignedGrouping = g->get_grouping();
-            if (!assignedGrouping)
-                return;
-            assignedGrouping->remove_gate(g);
+            if (g) assignedGrouping = g->get_grouping();
+            gats.insert(mItem->id());
         }
         if (mItem->itemType() == ItemType::Module)
         {
             Module* m = gNetlist->get_module_by_id(mItem->id());
-            if (m)
-                assignedGrouping = m->get_grouping();
-            if (!assignedGrouping)
-                return;
-            assignedGrouping->remove_module(m);
+            if (m) assignedGrouping = m->get_grouping();
+            mods.insert(mItem->id());
         }
+        ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(mods,gats);
+        act->setObject(UserActionObject(assignedGrouping->get_id(),UserActionObjectType::Grouping));
+        act->exec();
     }
 
     void GraphGraphicsView::groupingAssignInternal(Grouping* grp)
