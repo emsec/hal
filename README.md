@@ -60,14 +60,6 @@ For all kinds of inquiries, please contact us using our dedicated e-mail address
 
 HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
 
-## macOS
-
-Use the following commands to install hal via [homebrew](https://brew.sh/index_de).
-
-```bash
-brew tap emsec/hal
-brew install hal
-```
 
 # Build Instructions <a name="build-instructions"></a>
 
