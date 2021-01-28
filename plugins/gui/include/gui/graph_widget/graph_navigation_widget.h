@@ -158,18 +158,101 @@ namespace hal {
          * @param parent - The parent widget (where to embed the navigation widget)
          */
         GraphNavigationWidget(bool onlyNavigate, QWidget* parent = nullptr);
-        // TODO: IN_PROGRESS: Documentation...
+
+        /**
+         * Prepares the widget to be shown. Based on the current focus and subfocus of gSelectionRelay, it searches for
+         * all valid navigation destinations in the given <i>direction</i>, i.e.: <ul>
+         *    <li> search for destination endpoints if <i>direction</i> = SelectionRelay::Subfocus::Right   <br>
+         *    <li> search for source endpoints if <i>direction</i> = SelectionRelay::Subfocus::Left         <br> </ul>
+         * Both navigation widgets (GraphNavigationTableWidget and GraphNavigationTreeWidget) are filled up with these
+         * navigation destinations depending on whether they are in the current context or not. <br>
+         * After calling the <i>setup</i>-function one can call <i>setFocus()</i> to open and activate the
+         * navigation widget.
+         *
+         * @param direction - The direction to navigate
+         */
         void setup(SelectionRelay::Subfocus direction);
+
+        /**
+         * Prepares the widget to be shown. Based on the passed origin node and its connected net,
+         * it searches for all valid navigation destinations in the given <i>direction</i>, i.e.: <ul>
+         *   <li> search for destination endpoints if <i>direction</i> = SelectionRelay::Subfocus::Right   <br>
+         *   <li> search for source endpoints if <i>direction</i> = SelectionRelay::Subfocus::Left         <br> </ul>
+         * Both navigation widgets (GraphNavigationTableWidget and GraphNavigationTreeWidget) are filled up with these
+         * navigation destinations depending on whether they are in the current context or not. <br>
+         * After calling the <i>setup</i>-function one can call <i>setFocus()</i> to open and activate the
+         * navigation widget.
+         *
+         * @param origin - The gate to navigate from
+         * @param via_net - The net to navigate along
+         * @param direction - The direction to navigate
+         */
         void setup(Node origin, Net* via_net, SelectionRelay::Subfocus dir);
+
+        // TODO: Why are GraphNavigationTableWidget and GraphNavigationTreeWidget not using their friendship for this?
+        /**
+         * Gets the direction to navigate along. The direction is set in the <i>setup</i>-function. <br>
+         * This function is internally used by both managed navigation widgets but should be irrelevant to
+         * other classes.
+         *
+         * @returns the current navigation direction
+         */
         SelectionRelay::Subfocus direction() const { return mDirection; }
+
+        /**
+         * Closes the navigation widget.
+         */
         void closeRequest();
+
+        /**
+         * Checks if the navigation widget is empty. It is considered empty if neither the GraphNavigationTableWidget nor
+         * the GraphNavigationTreeWidget contain data to show.
+         *
+         * @returns <b>true</b> if the navigation widget is considered empty.
+         */
         bool isEmpty() const;
+
+        /**
+         * Checks if both the GraphNavigationTableWidget and the GraphNavigationTreeWidget contain data to show.
+         *
+         * @returns <b>true</b> if both widgets contain data to show.
+         */
         bool hasBothWidgets() const;
+
+        /**
+         * Switches the focus within this widget from the GraphNavigationTableWidget to the GraphNavigationTreeWidget or
+         * the other way around.
+         */
         void toggleWidget();
 
     Q_SIGNALS:
+        /**
+         * This signal is sent after the user has selected a navigation target (chosen in the GraphNavigationTableWidget)
+         * or gates and modules to add to the view (chosen in the GraphNavigationTreeWidget). <br>
+         * If he has chosen a <b>navigation target</b>: <ul>
+         *   If the target is a gate, <i>to_gates</i> will contain the one id of the target gate while <i>to_modules</i>
+         *   will be empty. <br>
+         *   If the target is a module, <i>to_gates</i> will be empty while <i>to_modules</i> will contain the one id of the
+         *   target module. <br></ul>
+         *
+         * If he has chosen <b>gates and modules to add to the view</b>: <ul>
+         *   The sets <i>to_gates</i> and <i>to_modules</i> will be filled with the ids of the chosen gates and modules. </ul>
+         *
+         * @param origin - The gate to navigate from
+         * @param via_net - The net to navigate along
+         * @param to_gates - The navigation target / The gates to add to the view
+         * @param to_modules - The navigation target / The modules to add to the view
+         */
         void navigationRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);
+
+        /**
+         * This signal notifies that the navigation widget is about to be closed.
+         */
         void closeRequested();
+
+        /**
+         * This signal notifies that the navigation widget is about to be closed.
+         */
         void resetFocus();
 
     private Q_SLOTS:
