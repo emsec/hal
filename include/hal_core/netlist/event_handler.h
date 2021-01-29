@@ -125,6 +125,7 @@ namespace hal
             CallbackHook<void(GateEvent::event, Gate*, u32)> m_gate_callback;
             CallbackHook<void(NetEvent::event, Net*, u32)> m_net_callback;
             CallbackHook<void(ModuleEvent::event, Module*, u32)> m_module_callback;
+            CallbackHook<void(GroupingEvent::event, Grouping*, u32)> m_grouping_callback;
             bool netlist_event_enabled;
             bool gate_event_enabled;
             bool net_event_enabled;

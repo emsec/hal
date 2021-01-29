@@ -52,6 +52,34 @@ namespace hal
         }
     }
 
+    void EventHandler::notify(GroupingEvent::event c, Grouping* grouping, u32 associated_data)
+    {
+        if (module_event_enabled)
+        {
+            m_grouping_callback(c, grouping, associated_data);
+        }
+    }
+
+    void EventHandler::register_callback(const std::string& name, std::function<void(GateEvent::event, Gate*, u32)> function)
+    {
+        m_gate_callback.add_callback(name, function);
+    }
+
+    void EventHandler::register_callback(const std::string& name, std::function<void(GroupingEvent::event, Grouping*, u32)> function)
+    {
+        m_grouping_callback.add_callback(name, function);
+    }
+
+    void EventHandler::register_callback(const std::string& name, std::function<void(ModuleEvent::event, Module*, u32)> function)
+    {
+        m_module_callback.add_callback(name, function);
+    }
+
+    void EventHandler::register_callback(const std::string& name, std::function<void(NetEvent::event, Net*, u32)> function)
+    {
+        m_net_callback.add_callback(name, function);
+    }
+
     void EventHandler::register_callback(const std::string& name, std::function<void(NetlistEvent::event, Netlist*, u32)> function)
     {
         m_netlist_callback.add_callback(name, function);
