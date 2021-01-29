@@ -51,26 +51,25 @@ namespace hal
         }
     }
 
-    void ActionRemoveItemsFromObject::exec()
+    bool ActionRemoveItemsFromObject::exec()
     {
-        bool implemented = false;
+        GraphContext* ctx;
+        Grouping*     grp;
         switch (mObject.type())
         {
         case UserActionObjectType::Context:
-        {
-            GraphContext* ctx = gGraphContextManager->getContextById(mObject.id());
+            ctx = gGraphContextManager->getContextById(mObject.id());
             if (ctx)
             {
                 ctx->beginChange();
                 ctx->remove(mModules, mGates);
                 ctx->endChange();
-                implemented = true;
             }
-        }
+            else
+                return false;
             break;
         case UserActionObjectType::Grouping:
-        {
-            Grouping* grp = gNetlist->get_grouping_by_id(mObject.id());
+            grp = gNetlist->get_grouping_by_id(mObject.id());
             if (grp)
             {
                 for (u32 id : mModules)
@@ -79,19 +78,17 @@ namespace hal
                     grp->remove_gate_by_id(id);
                 for (u32 id : mNets)
                     grp->remove_net_by_id(id);
-                implemented = true;
             }
-        }
+            else
+                return false;
             break;
         default:
-            break;
+            return false;
         }
 
-        if (implemented)
-        {
-            mUndoAction = new ActionAddItemsToObject(mModules,mGates,mNets);
-            mUndoAction->setObject(mObject);
-        }
-        UserAction::exec();
+        mUndoAction = new ActionAddItemsToObject(mModules,mGates,mNets);
+        mUndoAction->setObject(mObject);
+
+        return UserAction::exec();
     }
 }

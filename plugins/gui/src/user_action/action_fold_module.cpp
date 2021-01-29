@@ -30,19 +30,19 @@ namespace hal
         return ActionFoldModuleFactory::sFactory->tagname();
     }
 
-    void ActionFoldModule::exec()
+    bool ActionFoldModule::exec()
     {
-        if (mObject.type() != UserActionObjectType::Module) return;
+        if (mObject.type() != UserActionObjectType::Module) return false;
 
-        GraphContext* currentContext = mContextId
+        GraphContext* ctx = mContextId
                 ? gGraphContextManager->getContextById(mContextId)
                 : gContentManager->getContextManagerWidget()->getCurrentContext();
-        if (!currentContext) return;
+        if (!ctx) return false;
 
-        if (!currentContext->foldModuleAction(mObject.id())) return;
+        if (!ctx->foldModuleAction(mObject.id())) return false;
         ActionUnfoldModule* undo = new ActionUnfoldModule(mObject.id());
         undo->setContextId(mContextId);
         mUndoAction = undo;
-        UserAction::exec();
+        return UserAction::exec();
     }
 }

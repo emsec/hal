@@ -10,7 +10,7 @@ namespace hal
     public:
         ActionCreateObject(UserActionObjectType::ObjectType type=UserActionObjectType::None,
                            const QString& objName = QString());
-        void exec() override;
+        bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;

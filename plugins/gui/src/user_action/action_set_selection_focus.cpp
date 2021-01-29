@@ -90,7 +90,7 @@ namespace hal
         return false;
     }
 
-    void ActionSetSelectionFocus::exec()
+    bool ActionSetSelectionFocus::exec()
     {
         ActionSetSelectionFocus* undo = new ActionSetSelectionFocus;
         undo->mModules = gSelectionRelay->selectedModules();
@@ -104,6 +104,6 @@ namespace hal
         gSelectionRelay->actionSetSelected(mModules, mGates, mNets);
         gSelectionRelay->setFocusDirect(UserActionObjectType::toItemType(mObject.type()),
                                   mObject.id(),mSubfocus,mSubfocusIndex);
-        UserAction::exec();
+        return UserAction::exec();
     }
 }

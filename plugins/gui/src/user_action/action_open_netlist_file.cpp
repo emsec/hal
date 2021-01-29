@@ -24,10 +24,10 @@ namespace hal
         mWaitForReady = true;
     }
 
-    void ActionOpenNetlistFile::exec()
+    bool ActionOpenNetlistFile::exec()
     {
         FileManager::get_instance()->openFile(mFilename);
-        UserAction::exec();
+        return UserAction::exec();
     }
 
     void ActionOpenNetlistFile::addToHash(QCryptographicHash& cryptoHash) const

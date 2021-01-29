@@ -8,6 +8,7 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/user_action/action_unfold_module.h"
+#include "hal_core/utilities/log.h"
 #include <QTextCursor>
 
 namespace hal
@@ -111,7 +112,11 @@ namespace hal
         for (int i=mStartRecording; i<endMacro; i++)
         {
             UserAction* act = mActionHistory.at(i);
-            act->exec();
+            if (!act->exec())
+            {
+                log_warning("gui", "failed to execute user action {}", act->tagname().toStdString());
+                break;
+            }
             if (act->isWaitForReady()) mWaitCount=100;
             while (mWaitCount > 0)
             {

@@ -13,7 +13,7 @@ namespace hal
                                     const QSet<u32>& gats = QSet<u32>(),
                                     const QSet<u32>& nets = QSet<u32>())
             : mModules(mods), mGates(gats), mNets(nets) {;}
-        void exec() override;
+        bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;

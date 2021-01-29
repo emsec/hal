@@ -33,7 +33,7 @@ namespace hal {
         UserActionCompound();
         void addAction(UserAction* act);
         QString tagname() const override;
-        void exec() override;
+        bool exec() override;
         void writeToXml(QXmlStreamWriter& xmlOut) const;
         void readFromXml(QXmlStreamReader& xmlIn);
         void setUseCreatedObject() { mUseCreatedObject = true; }

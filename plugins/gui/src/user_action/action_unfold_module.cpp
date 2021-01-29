@@ -30,24 +30,24 @@ namespace hal
             setObject(UserActionObject(moduleId,UserActionObjectType::Module));
     }
 
-    void ActionUnfoldModule::exec()
+    bool ActionUnfoldModule::exec()
     {
-        if (mObject.type() != UserActionObjectType::Module) return;
+        if (mObject.type() != UserActionObjectType::Module) return false;
 
         Module* m = gNetlist->get_module_by_id(mObject.id());
         if (m->get_gates().empty() && m->get_submodules().empty())
-            return;
+            return false;
 
-        GraphContext* currentContext = mContextId
+        GraphContext* ctx = mContextId
                 ? gGraphContextManager->getContextById(mContextId)
                 : gContentManager->getContextManagerWidget()->getCurrentContext();
-        if (!currentContext) return;
+        if (!ctx) return false;
 
         ActionFoldModule* undo = new ActionFoldModule(mObject.id());
         undo->setContextId(mContextId);
         mUndoAction = undo;
-        execInternal(m,currentContext);
-        UserAction::exec();
+        execInternal(m,ctx);
+        return UserAction::exec();
     }
 
     void ActionUnfoldModule::execInternal(Module *m, GraphContext* currentContext)

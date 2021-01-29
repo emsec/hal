@@ -9,7 +9,7 @@ namespace hal
         QColor mColor;
     public:
         ActionSetObjectColor(const QColor& col=QColor()) : mColor(col) {;}
-        void exec() override;
+        bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;

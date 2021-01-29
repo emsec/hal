@@ -12,7 +12,7 @@ namespace hal
     public:
         ActionFoldModule(u32 moduleId = 0);
         QString tagname() const override;
-        void exec() override;
+        bool exec() override;
         void setContextId(u32 id) { mContextId = id; }
     };
 

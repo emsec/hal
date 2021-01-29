@@ -58,9 +58,11 @@ namespace hal
         /// destructor
         virtual ~UserAction();
 
-        /// executes user interaction. A call to base function must be issued in order
-        /// to store object in action manager history.
-        virtual void exec();
+        /// executes user interaction and returns true on success.
+        /// Note: Each implementation of exec() must include a call to the exec()
+        /// method of base class to store the UserAction object in history and
+        /// to transfer its ownership.
+        virtual bool exec();
 
         /// the xml tagname for the action is purely virtual and needs to be implemented
         /// in derived class

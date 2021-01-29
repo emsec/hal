@@ -40,7 +40,7 @@ namespace hal
         }
     }
 
-    void ActionSetObjectColor::exec()
+    bool ActionSetObjectColor::exec()
     {
         QColor oldColor;
 
@@ -59,7 +59,7 @@ namespace hal
                     recolorGrouping(mObject.id(), mColor);
             break;
         default:
-            break;
+            return false;
         }
         if (oldColor.isValid())
         {
@@ -68,6 +68,6 @@ namespace hal
             mUndoAction = act;
         }
 
-        UserAction::exec();
+        return UserAction::exec();
     }
 }

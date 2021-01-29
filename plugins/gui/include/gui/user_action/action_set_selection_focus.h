@@ -21,7 +21,7 @@ namespace hal
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
-        void exec() override;
+        bool exec() override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
         bool hasModifications() const;
     };

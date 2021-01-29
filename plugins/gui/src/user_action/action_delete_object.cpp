@@ -26,9 +26,11 @@ namespace hal
         return ActionDeleteObjectFactory::sFactory->tagname();
     }
 
-    void ActionDeleteObject::exec()
+    bool ActionDeleteObject::exec()
     {
         Module* mod;
+        Gate*   gat;
+        Net*    net;
         switch (mObject.type()) {
         case UserActionObjectType::Module:
             mod = gNetlist->get_module_by_id(mObject.id());
@@ -53,20 +55,22 @@ namespace hal
                 mUndoAction = act;
                 gNetlist->delete_module(mod);
             }
+            else
+                return false;
             break;
         case UserActionObjectType::Gate:
-        {
-            Gate* g = gNetlist->get_gate_by_id(mObject.id());
-            if (!g) return;
-            gNetlist->delete_gate(g);
-        }
+            gat = gNetlist->get_gate_by_id(mObject.id());
+            if (gat)
+                gNetlist->delete_gate(gat);
+            else
+                return false;
             break;
         case UserActionObjectType::Net:
-        {
-            Net* n = gNetlist->get_net_by_id(mObject.id());
-            if (!n) return;
-            gNetlist->delete_net(n);
-        }
+            net = gNetlist->get_net_by_id(mObject.id());
+            if (net)
+                gNetlist->delete_net(net);
+            else
+                return false;
             break;
         case UserActionObjectType::Grouping:
         {
@@ -105,8 +109,8 @@ namespace hal
         }
             break;
         default:
-            break;
+            return false;
         }
-        UserAction::exec();
+        return UserAction::exec();
     }
 }

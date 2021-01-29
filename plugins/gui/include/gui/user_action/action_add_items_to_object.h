@@ -19,7 +19,7 @@ namespace hal
             : mModules(mods), mGates(gats), mNets(nets),
               mPlacementHint(PlacementHint::Standard)
         {;}
-        void exec() override;
+        bool exec() override;
         void setPlacementHint(PlacementHint hint) { mPlacementHint = hint; }
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;

@@ -18,11 +18,12 @@ namespace hal
         if (mUndoAction) delete mUndoAction;
     }
 
-    void UserAction::exec()
+    bool UserAction::exec()
     {
         UserActionManager* uam = UserActionManager::instance();
         mTimeStamp = uam->timeStamp();
         uam->addExecutedAction(this);
+        return true;
     }
 
     QString UserAction::cryptographicHash(int recordNo) const

@@ -8,7 +8,7 @@ namespace hal
         QString mObjectType;
     public:
         ActionSetObjectType(const QString& type=QString()) : mObjectType(type) {;}
-        void exec() override;
+        bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;

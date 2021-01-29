@@ -38,7 +38,7 @@ namespace hal
         }
     }
 
-    void ActionSetObjectType::exec()
+    bool ActionSetObjectType::exec()
     {
         QString oldType;
         Module* mod;
@@ -50,12 +50,14 @@ namespace hal
                 oldType = QString::fromStdString(mod->get_type());
                 mod->set_type(mObjectType.toStdString());
             }
+            else
+                return false;
             break;
         default:
-            break;
+            return false;
         }
         mUndoAction = new ActionSetObjectType(oldType);
         mUndoAction->setObject(mObject);
-        UserAction::exec();
+        return UserAction::exec();
     }
 }

@@ -52,7 +52,7 @@ namespace hal
         }
     }
 
-    void ActionCreateObject::exec()
+    bool ActionCreateObject::exec()
     {
         bool standardUndo = false;
 
@@ -89,7 +89,7 @@ namespace hal
         case UserActionObjectType::Grouping:
         {
             GroupingTableModel* grpModel = gContentManager->getGroupingManagerWidget()->getModel();
-            if (!grpModel) return;
+            if (!grpModel) return false;
             Grouping* grp = grpModel->addDefaultEntry();
             if (!mObjectName.isEmpty())
                 grpModel->renameGrouping(grp->get_id(),mObjectName);
@@ -108,13 +108,13 @@ namespace hal
         }
             break;
         default:
-            break; // don't know how to create
+            return false; // don't know how to create
         }
         if (standardUndo)
         {
             mUndoAction = new ActionDeleteObject;
             mUndoAction->setObject(mObject);
         }
-        UserAction::exec();
+        return UserAction::exec();
     }
 }

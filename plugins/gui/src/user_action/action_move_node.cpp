@@ -50,14 +50,14 @@ namespace hal
         return QPoint(sl.at(0).toInt(),sl.at(1).toInt());
     }
 
-    void ActionMoveNode::exec()
+    bool ActionMoveNode::exec()
     {
         GraphContext* ctx = gGraphContextManager->getContextById(mObject.id());
-        if (!ctx) return;
+        if (!ctx) return false;
         ActionMoveNode* undo = new ActionMoveNode(mTo,mFrom);
         undo->setObject(mObject);
         mUndoAction = undo;
         ctx->moveNodeAction(mFrom,mTo);
-        UserAction::exec();
+        return UserAction::exec();
     }
 }

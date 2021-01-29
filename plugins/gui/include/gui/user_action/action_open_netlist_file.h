@@ -9,7 +9,7 @@ namespace hal
     public:
         ActionOpenNetlistFile(const QString& filename_ = QString());
         QString tagname() const override;
-        void exec() override;
+        bool exec() override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;

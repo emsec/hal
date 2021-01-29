@@ -7,7 +7,7 @@ namespace hal
     {
     public:
         ActionDeleteObject() {;}
-        void exec() override;
+        bool exec() override;
         QString tagname() const override;
     };
 

@@ -25,18 +25,20 @@ namespace hal {
         mActionList.append(act);
     }
 
-    void UserActionCompound::exec()
+    bool UserActionCompound::exec()
     {
         bool first = true;
         for (UserAction* act : mActionList)
         {
             if (mUseCreatedObject && !first)
                 act->setObject(object());
-            act->exec();
+            if (!act->exec())
+                return false;
             if (mUseCreatedObject && first)
                 setObject(act->object());
             first = false;
         }
+        return true;
     }
 
     void UserActionCompound::writeToXml(QXmlStreamWriter& xmlOut) const

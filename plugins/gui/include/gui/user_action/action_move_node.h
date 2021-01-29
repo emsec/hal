@@ -13,7 +13,7 @@ namespace hal
     public:
         ActionMoveNode(const QPoint& from = QPoint(), const QPoint& to = QPoint())
             : mFrom(from), mTo(to) {;}
-        void exec() override;
+        bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;

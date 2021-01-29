@@ -71,40 +71,38 @@ namespace hal
         }
     }
 
-    void ActionAddItemsToObject::exec()
+    bool ActionAddItemsToObject::exec()
     {
-        bool implemented = false;
+        Module* m;
+        GraphContext* ctx;
+        Grouping* grp;
         switch (mObject.type())
         {
         case UserActionObjectType::Module:
-        {
-            Module* m = gNetlist->get_module_by_id(mObject.id());
+            m = gNetlist->get_module_by_id(mObject.id());
             if (m)
             {
                 for (u32 id : mGates)
                     m->assign_gate(gNetlist->get_gate_by_id(id));
                 for (u32 id : mModules)
                     gNetlist->get_module_by_id(id)->set_parent_module(m);
-                implemented = true;
             }
-        }
+            else
+                return false;
             break;
         case UserActionObjectType::Context:
-        {
-            GraphContext* ctx = gGraphContextManager->getContextById(mObject.id());
+            ctx = gGraphContextManager->getContextById(mObject.id());
             if (ctx)
             {
                 ctx->beginChange();
                 ctx->add(mModules, mGates, mPlacementHint);
                 ctx->endChange();
-                implemented = true;
             }
-
-        }
+            else
+                return false;
             break;
         case UserActionObjectType::Grouping:
-        {
-            Grouping* grp = gNetlist->get_grouping_by_id(mObject.id());
+            grp = gNetlist->get_grouping_by_id(mObject.id());
             if (grp)
             {
                 for (u32 id : mModules)
@@ -113,19 +111,17 @@ namespace hal
                     grp->assign_gate_by_id(id);
                 for (u32 id : mNets)
                     grp->assign_net_by_id(id);
-                implemented = true;
             }
-        }
+            else
+                return false;
             break;
         default:
-            break;
+            return false;
         }
 
-        if (implemented)
-        {
-            mUndoAction = new ActionRemoveItemsFromObject(mModules,mGates,mNets);
-            mUndoAction->setObject(mObject);
-        }
-        UserAction::exec();
+        mUndoAction = new ActionRemoveItemsFromObject(mModules,mGates,mNets);
+        mUndoAction->setObject(mObject);
+
+        return UserAction::exec();
     }
 }

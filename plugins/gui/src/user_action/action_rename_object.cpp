@@ -40,7 +40,7 @@ namespace hal
         }
     }
 
-    void ActionRenameObject::exec()
+    bool ActionRenameObject::exec()
     {
         QString       oldName;
         Module*       mod;
@@ -54,6 +54,8 @@ namespace hal
                 oldName = QString::fromStdString(mod->get_name());
                 mod->set_name(mNewName.toStdString());
             }
+            else
+                return false;
             break;
         case UserActionObjectType::Gate:
             gat = gNetlist->get_gate_by_id(mObject.id());
@@ -62,6 +64,8 @@ namespace hal
                 oldName = QString::fromStdString(gat->get_name());
                 gat->set_name(mNewName.toStdString());
             }
+            else
+                return false;
             break;
         case UserActionObjectType::Grouping:
             oldName = gContentManager->getGroupingManagerWidget()->getModel()->
@@ -74,12 +78,14 @@ namespace hal
                 oldName = ctx->name();
                 gGraphContextManager->renameGraphContextAction(ctx,mNewName);
             }
+            else
+                return false;
             break;
         default:
-            break;
+            return false;
         }
         mUndoAction = new ActionRenameObject(oldName);
         mUndoAction->setObject(mObject);
-        UserAction::exec();
+        return UserAction::exec();
     }
 }
