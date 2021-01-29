@@ -441,6 +441,7 @@ namespace hal
         mInputPinsSection->setRowCount(g->get_input_pins().size());
         mInputPinsTable->setRowCount(g->get_input_pins().size());
         mInputPinsTable->setMaximumHeight(mInputPinsTable->verticalHeader()->length());
+        mInputPinsTable->setMinimumHeight(mInputPinsTable->verticalHeader()->length());
         int index = 0;
         for(const auto &pin : g->get_input_pins())
         {
@@ -476,6 +477,7 @@ namespace hal
         mOutputPinsSection->setRowCount(g->get_output_pins().size());
         mOutputPinsTable->setRowCount(g->get_output_pins().size());
         mOutputPinsTable->setMaximumHeight(mOutputPinsTable->verticalHeader()->length());
+        mOutputPinsTable->setMinimumHeight(mOutputPinsTable->verticalHeader()->length());
         index = 0;
         for(const auto &pin : g->get_output_pins())
         {
