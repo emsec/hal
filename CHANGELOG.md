@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.2.5] - 2021-01-29 13:15:00+02:00 (urgency: medium)
+* **WARNING:** temporarily enabled extended logging (includes taking screenshots) for university course purposes. Note that no data leaves your machine unless you actively provide it to us.
 * views get persisted to .halv file and are restored if the file is found on disk
 * fixed bug in `boolean_influence` plugin causing problems on global inputs
+* fixed gate details widget not showing full list of pins for large gates
 
 ## [3.2.4] - 2021-01-23 15:30:00+02:00 (urgency: medium)
 * added plugin `boolean_influence` that enables calculation of the boolean influence for each FF depending on the predecessing FFs
@@ -506,7 +510,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.2.4...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.2.5...HEAD
+[3.2.5]: https://github.com/emsec/hal/compare/v3.2.4...v3.2.5
 [3.2.4]: https://github.com/emsec/hal/compare/v3.2.3...v3.2.4
 [3.2.3]: https://github.com/emsec/hal/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/emsec/hal/compare/v3.1.11...v3.2.2
