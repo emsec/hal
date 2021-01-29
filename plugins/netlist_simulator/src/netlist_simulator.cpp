@@ -160,7 +160,7 @@ namespace hal
                     }
                     else
                     {
-                        log_error("netlist simulator", "init value of sequential gate '{}' (type '{}') is neither '1' or '0'", gate->get_name(), gate_type->get_name());
+                        log_error("netlist_simulator", "init value of sequential gate '{}' (type '{}') is neither '1' or '0'.", gate->get_name(), gate_type->get_name());
                     }
 
                     SignalValue inv_value = toggle(value);
@@ -402,7 +402,7 @@ namespace hal
             }
             else
             {
-                log_error("netlist simulator", "no support for gate type {} of gate {}", gate->get_type()->get_name(), gate->get_name());
+                log_error("netlist_simulator", "no support for gate type {} of gate {}.", gate->get_type()->get_name(), gate->get_name());
                 m_successors.clear();
                 m_sim_gates.clear();
                 return;
@@ -615,7 +615,7 @@ namespace hal
             total_iterations_for_one_timeslot += processed;
             if (m_timeout_iterations > 0 && total_iterations_for_one_timeslot > m_timeout_iterations)
             {
-                log_error("netlist simulator", "reached iteration timeout of {} without advancing in time, aborting simulation. Is there a combinational loop?", m_timeout_iterations);
+                log_error("netlist_simulator", "reached iteration timeout of {} without advancing in time, aborting simulation. Please check for a combinational loop.", m_timeout_iterations);
                 return;
             }
 
@@ -754,7 +754,7 @@ namespace hal
     {
         if (behavior == GateType::ClearPresetBehavior::U)
         {
-            log_warning("netlist simulator", "undefined simultaneous set/reset behavior encountered");
+            log_warning("netlist_simulator", "undefined simultaneous set/reset behavior encountered.");
             return SignalValue::X;
         }
         else if (behavior == GateType::ClearPresetBehavior::N)
@@ -777,7 +777,7 @@ namespace hal
         {
             return toggle(previous_output);
         }
-        log_error("netlist simulator", "unsupported set/reset behavior {}", behavior);
+        log_error("netlist_simulator", "unsupported set/reset behavior {}.", behavior);
         return SignalValue::X;
     }
 
@@ -785,19 +785,19 @@ namespace hal
     {
         if (m_simulation_set.empty())
         {
-            log_error("netlist simulator", "no gates have been added to the simulator.");
+            log_error("netlist_simulator", "no gates have been added to the simulator.");
             return false;
         }
 
         if (m_simulation.get_events().empty())
         {
-            log_error("netlist simulator", "nothing has been simulated, cannot generate VCD.");
+            log_error("netlist_simulator", "nothing has been simulated, cannot generate VCD.");
             return false;
         }
 
         if (end_time > m_current_time)
         {
-            log_error("netlist simulator", "cannot generate VCD for {} ps, only {} ps have been simulated thus far.", end_time, m_current_time);
+            log_error("netlist_simulator", "cannot generate VCD for {} ps, only {} ps have been simulated thus far.", end_time, m_current_time);
             return false;
         }
 
@@ -885,12 +885,12 @@ namespace hal
                 }
                 else if (value == SignalValue::Z)
                 {
-                    log_error("netlist simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", net->get_id(), event_time);
+                    log_error("netlist_simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", net->get_id(), event_time);
                     return false;
                 }
                 else
                 {
-                    log_error("netlist simulator", "signal value for net with ID {} at {} ps is unknown.", net->get_id(), event_time);
+                    log_error("netlist_simulator", "signal value for net with ID {} at {} ps is unknown.", net->get_id(), event_time);
                     return false;
                 }
             }
