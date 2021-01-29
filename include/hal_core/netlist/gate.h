@@ -28,6 +28,8 @@
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/event_handler.h"
+
 
 #include <functional>
 #include <map>
@@ -376,7 +378,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, float x, float y);
+        Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, float x, float y, EventHandler* event_handler);
 
         Gate(const Gate&) = delete;
         Gate(Gate&&)      = delete;
@@ -415,5 +417,7 @@ namespace hal
 
         /* dedicated functions */
         std::map<std::string, BooleanFunction> m_functions;
+
+        EventHandler* m_event_handler;
     };
 }    // namespace hal

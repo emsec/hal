@@ -1,6 +1,6 @@
 #include "hal_core/netlist/module.h"
 
-#include "hal_core/netlist/event_system/module_event_handler.h"
+#include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
@@ -10,12 +10,14 @@
 
 namespace hal
 {
-    Module::Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager)
+    Module::Module(u32 id, Module* parent, const std::string& name, NetlistInternalManager* internal_manager, EventHandler* event_handler)
     {
         m_internal_manager = internal_manager;
         m_id               = id;
         m_parent           = parent;
         m_name             = name;
+
+        m_event_handler    = event_handler;
     }
 
     u32 Module::get_id() const
@@ -39,7 +41,7 @@ namespace hal
         {
             m_name = name;
 
-            module_event_handler::notify(module_event_handler::event::name_changed, this);
+            m_event_handler->notify(ModuleEvent::event::name_changed, this);
         }
     }
 
@@ -54,7 +56,7 @@ namespace hal
         {
             m_type = type;
 
-            module_event_handler::notify(module_event_handler::event::type_changed, this);
+            m_event_handler->notify(ModuleEvent::event::type_changed, this);
         }
     }
 
@@ -107,7 +109,7 @@ namespace hal
         m_parent->m_output_nets_dirty   = true;
         m_parent->m_internal_nets_dirty = true;
 
-        module_event_handler::notify(module_event_handler::event::submodule_removed, m_parent, m_id);
+        m_event_handler->notify(ModuleEvent::event::submodule_removed, m_parent, m_id);
 
         m_parent = new_parent;
 
@@ -118,8 +120,8 @@ namespace hal
         m_parent->m_output_nets_dirty   = true;
         m_parent->m_internal_nets_dirty = true;
 
-        module_event_handler::notify(module_event_handler::event::parent_changed, this);
-        module_event_handler::notify(module_event_handler::event::submodule_added, m_parent, m_id);
+        m_event_handler->notify(ModuleEvent::event::parent_changed, this);
+        m_event_handler->notify(ModuleEvent::event::submodule_added, m_parent, m_id);
 
         return true;
     }
@@ -389,7 +391,7 @@ namespace hal
         m_named_input_nets.insert(input_net);
         m_input_net_to_port_name[input_net] = port_name;
 
-        module_event_handler::notify(module_event_handler::event::input_port_name_changed, this, input_net->get_id());
+        m_event_handler->notify(ModuleEvent::event::input_port_name_changed, this, input_net->get_id());
     }
 
     void Module::set_output_port_name(Net* output_net, const std::string& port_name)
@@ -416,7 +418,7 @@ namespace hal
         m_named_output_nets.insert(output_net);
         m_output_net_to_port_name[output_net] = port_name;
 
-        module_event_handler::notify(module_event_handler::event::output_port_name_changed, this, output_net->get_id());
+        m_event_handler->notify(ModuleEvent::event::output_port_name_changed, this, output_net->get_id());
     }
 
     std::string Module::get_input_port_name(Net* net)

@@ -1,10 +1,7 @@
 #include "hal_core/netlist/netlist_internal_manager.h"
 
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_system/gate_event_handler.h"
-#include "hal_core/netlist/event_system/grouping_event_handler.h"
-#include "hal_core/netlist/event_system/module_event_handler.h"
-#include "hal_core/netlist/event_system/net_event_handler.h"
+#include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type.h"
 #include "hal_core/netlist/grouping.h"
@@ -13,11 +10,15 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
+
 namespace hal
 {
-    NetlistInternalManager::NetlistInternalManager(Netlist* nl) : m_netlist(nl)
+    NetlistInternalManager::NetlistInternalManager(Netlist* nl, EventHandler* eh)
     {
+        m_netlist = nl;
+        m_event_handler = eh;
         assert(nl != nullptr);
+        assert(eh != nullptr);
     }
 
     template<typename T>
@@ -64,7 +65,7 @@ namespace hal
             return nullptr;
         }
 
-        auto new_gate = std::unique_ptr<Gate>(new Gate(this, id, gt, name, x, y));
+        auto new_gate = std::unique_ptr<Gate>(new Gate(this, id, gt, name, x, y, m_event_handler));
 
         auto free_id_it = m_netlist->m_free_gate_ids.find(id);
         if (free_id_it != m_netlist->m_free_gate_ids.end())
@@ -87,8 +88,8 @@ namespace hal
         m_netlist->m_top_module->m_gates.push_back(raw);
 
         // notify
-        module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, id);
-        gate_event_handler::notify(gate_event_handler::event::created, raw);
+        m_event_handler->notify(ModuleEvent::event::gate_assigned, m_netlist->m_top_module, id);
+        m_event_handler->notify(GateEvent::event::created, raw);
 
         return raw;
     }
@@ -140,8 +141,8 @@ namespace hal
         m_netlist->m_free_gate_ids.insert(gate->get_id());
         m_netlist->m_used_gate_ids.erase(gate->get_id());
 
-        module_event_handler::notify(module_event_handler::event::gate_removed, gate->m_module, gate->get_id());
-        gate_event_handler::notify(gate_event_handler::event::removed, gate);
+        m_event_handler->notify(ModuleEvent::event::gate_removed, gate->m_module, gate->get_id());
+        m_event_handler->notify(GateEvent::event::removed, gate);
 
         return true;
     }
@@ -173,7 +174,7 @@ namespace hal
             return nullptr;
         }
 
-        auto new_net = std::unique_ptr<Net>(new Net(this, id, name));
+        auto new_net = std::unique_ptr<Net>(new Net(this, id, m_event_handler, name));
 
         auto free_id_it = m_netlist->m_free_net_ids.find(id);
         if (free_id_it != m_netlist->m_free_net_ids.end())
@@ -190,7 +191,7 @@ namespace hal
         m_netlist->m_nets.push_back(raw);
 
         // notify
-        net_event_handler::notify(net_event_handler::event::created, raw);
+        m_event_handler->notify(NetEvent::event::created, raw);
 
         return raw;
     }
@@ -240,7 +241,7 @@ namespace hal
         m_netlist->m_free_net_ids.insert(net->get_id());
         m_netlist->m_used_net_ids.erase(net->get_id());
 
-        net_event_handler::notify(net_event_handler::event::removed, net);
+        m_event_handler->notify(NetEvent::event::removed, net);
 
         return true;
     }
@@ -301,7 +302,7 @@ namespace hal
         gate->m_out_endpoints.push_back(new_endpoint_raw);
         gate->m_out_nets.push_back(net);
 
-        net_event_handler::notify(net_event_handler::event::src_added, net, gate->get_id());
+        m_event_handler->notify(NetEvent::event::src_added, net, gate->get_id());
 
         return new_endpoint_raw;
     }
@@ -341,7 +342,7 @@ namespace hal
                 net->m_sources.pop_back();
                 net->m_sources_raw[i] = net->m_sources_raw.back();
                 net->m_sources_raw.pop_back();
-                net_event_handler::notify(net_event_handler::event::src_removed, net, gate->get_id());
+                m_event_handler->notify(NetEvent::event::src_removed, net, gate->get_id());
                 removed = true;
                 break;
             }
@@ -411,7 +412,7 @@ namespace hal
         gate->m_in_endpoints.push_back(new_endpoint_raw);
         gate->m_in_nets.push_back(net);
 
-        net_event_handler::notify(net_event_handler::event::dst_added, net, gate->get_id());
+        m_event_handler->notify(NetEvent::event::dst_added, net, gate->get_id());
 
         return new_endpoint_raw;
     }
@@ -450,7 +451,7 @@ namespace hal
                 net->m_destinations.pop_back();
                 net->m_destinations_raw[i] = net->m_destinations_raw.back();
                 net->m_destinations_raw.pop_back();
-                net_event_handler::notify(net_event_handler::event::dst_removed, net, gate->get_id());
+                m_event_handler->notify(NetEvent::event::dst_removed, net, gate->get_id());
                 removed = true;
                 break;
             }
@@ -496,7 +497,7 @@ namespace hal
             return nullptr;
         }
 
-        auto m = std::unique_ptr<Module>(new Module(id, parent, name, this));
+        auto m = std::unique_ptr<Module>(new Module(id, parent, name, this, m_event_handler));
 
         auto free_id_it = m_netlist->m_free_module_ids.find(id);
         if (free_id_it != m_netlist->m_free_module_ids.end())
@@ -517,11 +518,11 @@ namespace hal
             parent->m_submodules.push_back(raw);
         }
 
-        module_event_handler::notify(module_event_handler::event::created, raw);
+        m_event_handler->notify(ModuleEvent::event::created, raw);
 
         if (parent != nullptr)
         {
-            module_event_handler::notify(module_event_handler::event::submodule_added, parent, id);
+            m_event_handler->notify(ModuleEvent::event::submodule_added, parent, id);
         }
 
         return raw;
@@ -560,18 +561,18 @@ namespace hal
             to_remove->m_parent->m_submodules_map[sm->get_id()] = sm;
             to_remove->m_parent->m_submodules.push_back(sm);
 
-            module_event_handler::notify(module_event_handler::event::submodule_removed, sm->get_parent_module(), sm->get_id());
+            m_event_handler->notify(ModuleEvent::event::submodule_removed, sm->get_parent_module(), sm->get_id());
 
             sm->m_parent = to_remove->m_parent;
 
-            module_event_handler::notify(module_event_handler::event::parent_changed, sm, 0);
-            module_event_handler::notify(module_event_handler::event::submodule_added, to_remove->m_parent, sm->get_id());
+            m_event_handler->notify(ModuleEvent::event::parent_changed, sm, 0);
+            m_event_handler->notify(ModuleEvent::event::submodule_added, to_remove->m_parent, sm->get_id());
         }
 
         // remove module from parent
         to_remove->m_parent->m_submodules_map.erase(to_remove->get_id());
         unordered_vector_erase(to_remove->m_parent->m_submodules, to_remove);
-        module_event_handler::notify(module_event_handler::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
+        m_event_handler->notify(ModuleEvent::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
 
         auto it  = m_netlist->m_modules_map.find(to_remove->get_id());
         auto ptr = std::move(it->second);
@@ -582,7 +583,7 @@ namespace hal
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());
 
-        module_event_handler::notify(module_event_handler::event::removed, to_remove);
+        m_event_handler->notify(ModuleEvent::event::removed, to_remove);
         return true;
     }
 
@@ -606,8 +607,8 @@ namespace hal
 
         g->m_module = m;
 
-        module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, g->get_id());
-        module_event_handler::notify(module_event_handler::event::gate_assigned, m, g->get_id());
+        m_event_handler->notify(ModuleEvent::event::gate_removed, prev_module, g->get_id());
+        m_event_handler->notify(ModuleEvent::event::gate_assigned, m, g->get_id());
         return true;
     }
 
@@ -639,8 +640,8 @@ namespace hal
         m_netlist->m_top_module->m_gates.push_back(g);
         g->m_module = m_netlist->m_top_module;
 
-        module_event_handler::notify(module_event_handler::event::gate_removed, m, g->get_id());
-        module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, g->get_id());
+        m_event_handler->notify(ModuleEvent::event::gate_removed, m, g->get_id());
+        m_event_handler->notify(ModuleEvent::event::gate_assigned, m_netlist->m_top_module, g->get_id());
 
         return true;
     }
@@ -667,7 +668,7 @@ namespace hal
             return nullptr;
         }
 
-        auto new_grouping = std::unique_ptr<Grouping>(new Grouping(this, id, name));
+        auto new_grouping = std::unique_ptr<Grouping>(new Grouping(this, id, name, m_event_handler));
 
         auto free_id_it = m_netlist->m_free_grouping_ids.find(id);
         if (free_id_it != m_netlist->m_free_grouping_ids.end())
@@ -684,7 +685,7 @@ namespace hal
         m_netlist->m_groupings.push_back(raw);
 
         // notify
-        grouping_event_handler::notify(grouping_event_handler::event::created, raw);
+        m_event_handler->notify(GroupingEvent::event::created, raw);
 
         return raw;
     }
@@ -722,7 +723,7 @@ namespace hal
         m_netlist->m_used_grouping_ids.erase(grouping->get_id());
 
         // notify
-        grouping_event_handler::notify(grouping_event_handler::event::removed, grouping);
+        m_event_handler->notify(GroupingEvent::event::removed, grouping);
 
         return true;
     }
@@ -753,7 +754,7 @@ namespace hal
         grouping->m_gates_map.emplace(gate_id, gate);
         gate->m_grouping = grouping;
 
-        grouping_event_handler::notify(grouping_event_handler::event::gate_assigned, grouping, gate_id);
+        m_event_handler->notify(GroupingEvent::event::gate_assigned, grouping, gate_id);
 
         return true;
     }
@@ -780,7 +781,7 @@ namespace hal
         grouping->m_gates_map.erase(gate_id);
         gate->m_grouping = nullptr;
 
-        grouping_event_handler::notify(grouping_event_handler::event::gate_removed, grouping, gate_id);
+        m_event_handler->notify(GroupingEvent::event::gate_removed, grouping, gate_id);
 
         return true;
     }
@@ -811,7 +812,7 @@ namespace hal
         grouping->m_nets_map.emplace(net_id, net);
         net->m_grouping = grouping;
 
-        grouping_event_handler::notify(grouping_event_handler::event::net_assigned, grouping, net_id);
+        m_event_handler->notify(GroupingEvent::event::net_assigned, grouping, net_id);
 
         return true;
     }
@@ -838,7 +839,7 @@ namespace hal
         grouping->m_nets_map.erase(net_id);
         net->m_grouping = nullptr;
 
-        grouping_event_handler::notify(grouping_event_handler::event::net_removed, grouping, net_id);
+        m_event_handler->notify(GroupingEvent::event::net_removed, grouping, net_id);
 
         return true;
     }
@@ -869,7 +870,7 @@ namespace hal
         grouping->m_modules_map.emplace(module_id, module);
         module->m_grouping = grouping;
 
-        grouping_event_handler::notify(grouping_event_handler::event::module_assigned, grouping, module_id);
+        m_event_handler->notify(GroupingEvent::event::module_assigned, grouping, module_id);
 
         return true;
     }
@@ -896,7 +897,7 @@ namespace hal
         grouping->m_modules_map.erase(module_id);
         module->m_grouping = nullptr;
 
-        grouping_event_handler::notify(grouping_event_handler::event::module_removed, grouping, module_id);
+        m_event_handler->notify(GroupingEvent::event::module_removed, grouping, module_id);
 
         return true;
     }

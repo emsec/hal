@@ -1,7 +1,7 @@
 #include "hal_core/netlist/gate.h"
 
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/event_system/gate_event_handler.h"
+#include "hal_core/netlist/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type/gate_type_lut.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -37,7 +37,7 @@ static u64 bitreverse(u64 n)
 
 namespace hal
 {
-    Gate::Gate(NetlistInternalManager* mgr, const u32 id, const GateType* gt, const std::string& name, float x, float y)
+    Gate::Gate(NetlistInternalManager* mgr, const u32 id, const GateType* gt, const std::string& name, float x, float y, EventHandler* event_handler)
     {
         m_internal_manager = mgr;
         m_id               = id;
@@ -45,6 +45,8 @@ namespace hal
         m_name             = name;
         m_x                = x;
         m_y                = y;
+
+        m_event_handler    = event_handler;
     }
 
     u32 Gate::get_id() const
@@ -75,7 +77,7 @@ namespace hal
 
             m_name = name;
 
-            gate_event_handler::notify(gate_event_handler::event::name_changed, this);
+            m_event_handler->notify(GateEvent::event::name_changed, this);
         }
     }
 
@@ -109,7 +111,7 @@ namespace hal
         if (x != m_x)
         {
             m_x = x;
-            gate_event_handler::notify(gate_event_handler::event::location_changed, this);
+            m_event_handler->notify(GateEvent::event::location_changed, this);
         }
     }
 
@@ -118,7 +120,7 @@ namespace hal
         if (y != m_y)
         {
             m_y = y;
-            gate_event_handler::notify(gate_event_handler::event::location_changed, this);
+            m_event_handler->notify(GateEvent::event::location_changed, this);
         }
     }
 
