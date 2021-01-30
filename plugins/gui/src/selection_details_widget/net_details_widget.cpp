@@ -129,6 +129,7 @@ namespace hal
         mSourcePinsSection->setRowCount(n->get_sources().size());
         mSourcePinsTable->setRowCount(n->get_sources().size());
         mSourcePinsTable->setMaximumHeight(mSourcePinsTable->verticalHeader()->length());
+        mSourcePinsTable->setMinimumHeight(mSourcePinsTable->verticalHeader()->length());
         int index = 0;
         if (!gNetlist->is_global_input_net(n))
         {
@@ -159,6 +160,7 @@ namespace hal
         mDestinationPinsSection->setRowCount(n->get_destinations().size());
         mDestinationPinsTable->setRowCount(n->get_destinations().size());
         mDestinationPinsTable->setMaximumHeight(mDestinationPinsTable->verticalHeader()->length());
+        mDestinationPinsTable->setMinimumHeight(mDestinationPinsTable->verticalHeader()->length());
         index = 0;
         if (!gNetlist->is_global_output_net(n))
         {
