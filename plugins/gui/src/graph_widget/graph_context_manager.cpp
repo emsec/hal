@@ -1,20 +1,25 @@
 #include "gui/graph_widget/graph_context_manager.h"
 
+#include "gui/context_manager_widget/models/context_table_model.h"
+#include "gui/file_manager/file_manager.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/layouters/physical_graph_layouter.h"
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 #include "gui/graph_widget/shaders/module_shader.h"
-#include "gui/context_manager_widget/models/context_table_model.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
 
 #include <QDateTime>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 namespace hal
 {
-    GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTableModel())
+    GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTableModel()), mMaxContextId(0)
     {
         mGraphContexts = QVector<GraphContext*>();
         mContextTableModel->update(&mGraphContexts);
@@ -22,7 +27,7 @@ namespace hal
 
     GraphContext* GraphContextManager::createNewContext(const QString& name)
     {
-        GraphContext* context = new GraphContext(name);
+        GraphContext* context = new GraphContext(++mMaxContextId, name);
         context->setLayouter(getDefaultLayouter(context));
         context->setShader(getDefaultShader(context));
 
@@ -84,7 +89,7 @@ namespace hal
                 context->scheduleSceneUpdate();
     }
 
-    void GraphContextManager::handleModuleTypeChanged(Module *m) const
+    void GraphContextManager::handleModuleTypeChanged(Module* m) const
     {
         for (GraphContext* context : mGraphContexts)
             if (context->modules().contains(m->get_id()))
@@ -110,7 +115,8 @@ namespace hal
         for (GraphContext* context : mGraphContexts)
             if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}))
                 context->add({added_module}, {});
-            else context->testIfAffected(m->get_id(), &added_module, nullptr);
+            else
+                context->testIfAffected(m->get_id(), &added_module, nullptr);
     }
 
     void GraphContextManager::handleModuleSubmoduleRemoved(Module* m, const u32 removed_module)
@@ -126,7 +132,8 @@ namespace hal
                     deleteGraphContext(context);
                 }
             }
-            else context->testIfAffected(m->get_id(), &removed_module, nullptr);
+            else
+                context->testIfAffected(m->get_id(), &removed_module, nullptr);
     }
 
     void GraphContextManager::handleModuleGateAssigned(Module* m, const u32 inserted_gate) const
@@ -134,7 +141,8 @@ namespace hal
         for (GraphContext* context : mGraphContexts)
             if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
-            else context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
+            else
+                context->testIfAffected(m->get_id(), nullptr, &inserted_gate);
     }
 
     void GraphContextManager::handleModuleGateRemoved(Module* m, const u32 removed_gate)
@@ -152,8 +160,8 @@ namespace hal
             // if a module is unfolded, then the gate is not deleted from the view
             // but the color of the gate changes to its new parent's color
 
-
-            else context->testIfAffected(m->get_id(), nullptr, &removed_gate);
+            else
+                context->testIfAffected(m->get_id(), nullptr, &removed_gate);
 
             /// new code line above should cover commented lines below
             /// else if (context->gates().contains(removed_gate))
@@ -330,4 +338,74 @@ namespace hal
 
         mContextTableModel->clear();
     }
-}
+
+    void GraphContextManager::restoreFromFile()
+    {
+        QString filename = FileManager::get_instance()->fileName();
+        if (filename.isEmpty())
+            return;
+        QFile jsFile(filename + "v");
+        if (!jsFile.open(QIODevice::ReadOnly))
+            return;
+        QJsonDocument jsonDoc   = QJsonDocument::fromJson(jsFile.readAll());
+        const QJsonObject& json = jsonDoc.object();
+        if (json.contains("views") && json["views"].isArray())
+        {
+            QJsonArray jsonViews = json["views"].toArray();
+            int nviews           = jsonViews.size();
+            for (int iview = 0; iview < nviews; iview++)
+            {
+                QJsonObject jsonView = jsonViews.at(iview).toObject();
+                if (!jsonView.contains("id") || !jsonView["id"].isDouble())
+                    continue;
+                u32 viewId = jsonView["id"].toInt();
+                if (!jsonView.contains("name") || !jsonView["name"].isString())
+                    continue;
+                QString viewName = jsonView["name"].toString();
+                if (viewId > mMaxContextId)
+                    mMaxContextId = viewId;
+                GraphContext* context = new GraphContext(viewId, viewName);
+                context->setLayouter(getDefaultLayouter(context));
+                context->setShader(getDefaultShader(context));
+                context->readFromFile(jsonView);
+
+                mContextTableModel->beginInsertContext(context);
+                mGraphContexts.append(context);
+                mContextTableModel->endInsertContext();
+
+                Q_EMIT contextCreated(context);
+            }
+        }
+    }
+
+    void GraphContextManager::handleSaveTriggered()
+    {
+        QString filename = FileManager::get_instance()->fileName();
+        if (filename.isEmpty())
+            return;
+        bool needToSave = false;
+        for (GraphContext* context : mGraphContexts)
+            if (context->id() > 1)
+            {
+                needToSave = true;
+                break;
+            }
+        if (!needToSave)
+            return;
+        QFile jsFile(filename + "v");
+        if (!jsFile.open(QIODevice::WriteOnly))
+            return;
+
+        QJsonObject json;
+        QJsonArray jsonViews;
+        for (GraphContext* context : mGraphContexts)
+            if (context->id() > 1)
+            {
+                QJsonObject jsonView;
+                context->writeToFile(jsonView);
+                jsonViews.append(jsonView);
+            }
+        json["views"] = jsonViews;
+        jsFile.write(QJsonDocument(json).toJson(QJsonDocument::Compact));
+    }
+}    // namespace hal

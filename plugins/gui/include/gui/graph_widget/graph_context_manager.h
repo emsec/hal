@@ -315,6 +315,8 @@ namespace hal
          * Deletes all contexts.
          */
         void clear();
+        void handleSaveTriggered();
+        void restoreFromFile();
 
     Q_SIGNALS:
         /**
@@ -343,5 +345,6 @@ namespace hal
         QVector<GraphContext*> mGraphContexts;
 
         ContextTableModel* mContextTableModel;
+        u32 mMaxContextId;
     };
 }

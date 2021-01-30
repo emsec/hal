@@ -30,6 +30,7 @@
 #include <QObject>
 #include <QSet>
 #include <QDateTime>
+#include <QJsonObject>
 
 namespace hal
 {
@@ -50,13 +51,15 @@ namespace hal
         Q_OBJECT
 
     public:
+
         /**
          * Constructor.
          *
+         * @param id_ - The unique id of the context.
          * @param name - The name of the context
          * @param parent - The parent QObject
          */
-        explicit GraphContext(const QString& name, QObject* parent = nullptr);
+        explicit GraphContext(u32 id_, const QString& name, QObject* parent = nullptr);
 
         /**
          * Destructor.
@@ -146,6 +149,7 @@ namespace hal
          * @returns <b>true</b> if the context shows the content of the module
          */
         bool isShowingModule(const u32 id) const;
+
         /**
          * Checks if the context represents the content of the given module i.e. after double-clicking the module item. <br>
          * In some cases it is necessary that the check is performed on a previous state e.g. if a gate was newly assigned to the
@@ -219,6 +223,13 @@ namespace hal
         QString name() const;
 
         /**
+         * Get the id of the context.
+         *
+         * @return the context's id.
+         */
+        u32 id() const;
+
+        /**
          * Set the GraphLayouter this context should use.
          *
          * @param layouter - The GraphLayouter to use
@@ -281,6 +292,10 @@ namespace hal
          */
         QDateTime getTimestamp() const;
 
+        void writeToFile(QJsonObject& json);
+
+        void readFromFile(const QJsonObject& json);
+
     private Q_SLOTS:
         void handleLayouterUpdate(const int percent);
         void handleLayouterUpdate(const QString& message);
@@ -295,6 +310,7 @@ namespace hal
 
         QList<GraphContextSubscriber*> mSubscribers;
 
+        u32 mId;
         QString mName;
 
         GraphLayouter* mLayouter;

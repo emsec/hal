@@ -114,6 +114,7 @@ namespace hal
             new_context->add({gNetlist->get_top_module()->get_id()}, {});
 
             mContextManagerWidget->selectViewContext(new_context);
+            gGraphContextManager->restoreFromFile();
         });
 
         //why does this segfault without a timer?
