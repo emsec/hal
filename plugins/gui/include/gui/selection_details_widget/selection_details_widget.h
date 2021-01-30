@@ -298,17 +298,63 @@ namespace hal
 
 
     private Q_SLOTS:
+
+        /**
+         * Restores the previous selection that is contained in its history.
+         */
         void restoreLastSelection();
+
+        /**
+         * Opens a context menu and calls, depending on the cosen action, either selectionToNewGrouping()
+         * or selectionToExistingGrouping().
+         */
         void selectionToGrouping();
+
+        /**
+         * Checks all modules if the current selection can be added to that specific module. Thereafter it
+         * creates a context menu with all valid modules as options as well as a "New module..." option.
+         */
         void selectionToModuleMenu();
+
+        /**
+         * Toggles the visibiliy of the searchbar.
+         */
         void toggleSearchbar();
+
+        /**
+         * Creates a new grouping by calling addDefault() from the GroupingManagerWidget's model and adds
+         * the current selection to the grouping.
+         */
         void selectionToNewGrouping();
+
+        /**
+         * Gets an existing grouping based on the before selected QAction in the ContextMenu created by
+         * selectionToGrouping() and adds the current selection to the grouping.
+         */
         void selectionToExistingGrouping();
+
+        /**
+         * Adds the current selection to a module that isbased on the before selected QAction
+         * in the ContextMenu created by selectionToModuleMenu().
+         */
         void selectionToModuleAction();
 
+        /**
+         * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
+         * type of the clicked item.
+         *
+         * @param sti - The clicked item in the selection-treeview.
+         */
         void handleTreeViewItemFocusClicked(const SelectionTreeItem* sti);
 
     private:
+
+        /**
+         * Displays either the GateDetailsWidget, NetDetailsWidget or ModuleDetailsWidget based on the
+         * type of the given item.
+         *
+         * @param sti - The item that is to be displayed.
+         */
         void singleSelectionInternal(const SelectionTreeItem* sti);
 
         QSplitter*           mSplitter;
