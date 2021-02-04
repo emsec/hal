@@ -32,15 +32,35 @@ namespace hal
 {
     class Gate;
 
+    /**
+     * Abstract base class for GraphicsGates. Besides the functionality already provided by its superclass GraphicsNode
+     * it stores the list of input and output pin type names of the GraphicsGate as well as the typename of the
+     * GraphicsGate itself.
+     */
     class GraphicsGate : public GraphicsNode
     {
     public:
+        /**
+         * Constructor.
+         *
+         * @param g - The underlying gate of the GraphicsGate
+         */
         GraphicsGate(Gate* g);
 
     protected:
+        /**
+         * The gate type of the underlying gate
+         */
         QString mType;
 
+        /**
+         * The input pin type identifiers of the underlying gate (from top to bottom)
+         */
         QVector<QString> mInputPins;
+
+        /**
+         * The output pin type identifiers of the underlying gate (from top to bottom)
+         */
         QVector<QString> mOutputPins;
     };
 }
