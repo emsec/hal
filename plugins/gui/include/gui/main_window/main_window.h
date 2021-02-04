@@ -29,6 +29,14 @@
 #include "gui/plugin_manager/plugin_manager_widget.h"
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/settings/main_settings_widget.h"
+#include "gui/settings/main_settings_widget_new.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
+#include "gui/settings/settings_items/settings_item_text.h"
+#include "gui/settings/settings_items/settings_item_spinbox.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
+#include "gui/settings/settings_items/settings_item_slider.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
+
 #include "gui/splitter/splitter.h"
 #include <QLayout>
 #include <QMenuBar>
@@ -71,6 +79,9 @@ namespace hal
         Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
 
     public:
+        enum PixmapType { Empty, Gate, Module, Horror };
+        Q_ENUM(PixmapType)
+
         explicit MainWindow(QWidget* parent = nullptr);
         void addContent(ContentWidget* widget, int index, content_anchor anchor);
 
@@ -151,6 +162,7 @@ namespace hal
 
         PluginScheduleWidget* mScheduleWidget;
         MainSettingsWidget* mSettings;
+        MainSettingsWidgetNew* mSettingsNew;
         WelcomeScreen* mWelcomeScreen;
         QHBoxLayout* mToolBarLayout;
         QToolBar* mLeftToolBar;
@@ -199,5 +211,12 @@ namespace hal
 
         QString mSettingsIconPath;
         QString mSettingsIconStyle;
+
+        SettingsItemCheckbox* mBlueBackground;
+        SettingsItemText* mTextLabel;
+        SettingsItemSpinbox* mNumberRows;
+        SettingsItemDropdown* mPixmapSelect;
+        SettingsItemSlider* mSettingSlider;
+        SettingsItemKeybind * mSettingsKeybind;
     };
 }

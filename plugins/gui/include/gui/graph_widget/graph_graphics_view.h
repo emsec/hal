@@ -26,6 +26,7 @@
 #include "hal_core/defines.h"
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
+#include "gui/graph_widget/graphics_scene.h"
 
 #include <QGraphicsView>
 #include <QAction>
@@ -34,6 +35,8 @@ namespace hal
 {
     class GraphicsItem;
     class GraphWidget;
+    class SettingsItemDropdown;
+    class SettingsItemCheckbox;
 
     namespace graph_widget_constants
     {
@@ -51,6 +54,9 @@ namespace hal
         void gentleZoom(const qreal factor);
         //zooms into the center of the viewport
         void viewportCenterZoom(const qreal factor);
+
+        enum KeyModifier{Shift, Ctrl, Alt};
+        Q_ENUM(KeyModifier)
 
     Q_SIGNALS:
         void moduleDoubleClicked(u32 id);
@@ -117,6 +123,7 @@ namespace hal
         void debugDrawLayouterGridpos(QPainter* painter);
         QPoint m_debug_gridpos = QPoint(0,0);
         bool mDebugGridposEnable;
+        SettingsItemCheckbox* mSettingDebugGrid;
         #endif
 
         GraphWidget* mGraphWidget;
@@ -139,7 +146,7 @@ namespace hal
         Qt::KeyboardModifier mDragModifier;
 
         QPoint mMovePosition;
-        Qt::KeyboardModifier mMoveModifier;
+        Qt::KeyboardModifier mPanModifier;
 
         Qt::KeyboardModifier mZoomModifier;
         qreal mZoomFactorBase;
@@ -149,5 +156,11 @@ namespace hal
         qreal mMinScale;
 
         static const QString sAssignToGrouping;
+
+        QMap<KeyModifier, Qt::KeyboardModifier> mKeyModifierMap;
+
+        SettingsItemDropdown* mSettingGridType;
+        SettingsItemDropdown* mSettingDragModifier;
+        SettingsItemDropdown* mSettingPanModifier;
     };
 }

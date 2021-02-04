@@ -144,18 +144,19 @@ namespace hal
         registerWidget("style-item", theme_settings);
 
         makeSection("Graph View", "graphview-item", ":/icons/graph");
-
+        
+        //DONE
         QMap<QString, QVariant> graph_grid_options;
         graph_grid_options.insert("None", "none");
         graph_grid_options.insert("Lines", "lines");
         graph_grid_options.insert("Dots", "dots");
         DropdownSetting* graph_grid_settings = new DropdownSetting("graph_view/grid_type", "Grid", graph_grid_options, "", this);
         registerWidget("graphview-item", graph_grid_settings);
-
+        //DONE
         DropdownSetting* graph_dragswap_settings = new DropdownSetting("graph_view/drag_mode_modifier", "Move/Swap modifier", standard_modifiers, "toggles drag-and-drop mode", this);
         registerWidget("graphview-item", graph_dragswap_settings);
         assignExclusiveGroup("kbdmodifiers", graph_dragswap_settings);
-
+        //DONE
         DropdownSetting* graph_movescene_settings = new DropdownSetting("graph_view/move_modifier", "Pan scene modifier", standard_modifiers, "lets you pan the scene", this);
         registerWidget("graphview-item", graph_movescene_settings);
         assignExclusiveGroup("kbdmodifiers", graph_movescene_settings);

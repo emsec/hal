@@ -42,6 +42,8 @@
 #include <QShortcut>
 #include <QtConcurrent>
 
+#include <QDebug>
+
 namespace hal
 {
     MainWindow::MainWindow(QWidget* parent) : QWidget(parent), mScheduleWidget(new PluginScheduleWidget())
@@ -89,6 +91,9 @@ namespace hal
 
         mSettings = new MainSettingsWidget();
         mStackedWidget->addWidget(mSettings);
+
+        mSettingsNew = new MainSettingsWidgetNew();
+        mStackedWidget->addWidget(mSettingsNew);
 
         mLayoutArea = new ContentLayoutArea();
         mStackedWidget->addWidget(mLayoutArea);
@@ -235,6 +240,86 @@ namespace hal
 
         //ReminderOverlay* o = new ReminderOverlay(this);
         //Q_UNUSED(o)
+        /*
+        mBlueBackground = new SettingsItemCheckbox(
+                    "Blue background",
+                    "background/rect",
+                    false,
+                    "Python",
+                    "If checked the whole background is filled with solid blue color");
+
+        mTextLabel = new SettingsItemText(
+                    "Text label",
+                    "dock/text",
+                    "Dock widget with additional settings",
+                    "Python",
+                    "Text label for dock widget",
+                    false);
+
+        mNumberRows = new SettingsItemSpinbox(
+                    "Number of rows",
+                    "subdivision/rows",
+                    6,
+                    "Python",
+                    "Select number rows, corresponding to number of pictures "
+                    "(if selected) which will be displayed on top of each other");
+
+        mPixmapSelect = new SettingsItemDropdown(
+                    "Select picture",
+                    "picture/file",
+                    Horror,
+                    "Python",
+                    "Select picture to be shown in tiles. "
+                    "People who are easily scared off are advised <b>not</b>"
+                    " to choose the one labeled with <font color=\"red\">Horror</font>");
+        mPixmapSelect->setValueNames<PixmapType>();
+
+        mSettingSlider = new SettingsItemSlider(
+                    "Number of rows",
+                    "stuff/morestuff",
+                    55,
+                    "Python",
+                    "Select number rows, corresponding to number of pictures "
+                    "(if selected) which will be displayed on top of each other");
+
+        mSettingsKeybind = new SettingsItemKeybind(
+                    "Number of rows",
+                    "asasf/fhdfhdfh",
+                    QKeySequence("Ctrl+f"),
+                    "Python",
+                    "Select number rows, corresponding to number of pictures "
+                    "(if selected) which will be displayed on top of each other");
+
+
+        connect(mBlueBackground, &SettingsItemCheckbox::valueChanged, this, [this]()
+        {
+            qDebug() << "Checkbox value change to " << mBlueBackground->value().toBool() << " .";
+        });
+
+        connect(mTextLabel, &SettingsItemText::valueChanged, this, [this]()
+        {
+            qDebug() << "Text value change to " << mTextLabel->value().toString() << " .";
+        });
+
+        connect(mNumberRows, &SettingsItemSpinbox::valueChanged, this, [this]()
+        {
+            qDebug() << "Slider value change to " << mNumberRows->value().toInt() << " .";
+        });
+
+        connect(mPixmapSelect, &SettingsItemDropdown::valueChanged, this, [this]()
+        {
+            qDebug() << "Dropdown value change to " << mPixmapSelect->value().toInt() << " .";
+        });
+
+        connect(mSettingSlider, &SettingsItemSlider::valueChanged, this, [this]()
+        {
+            qDebug() << "Slider value change to " << mSettingSlider->value().toInt() << " .";
+        });
+
+        connect(mSettingsKeybind, &SettingsItemKeybind::valueChanged, this, [this]()
+        {
+            qDebug() << "Keybind value change to " << mSettingsKeybind->value().toString() << " .";
+        });*/
     }
 
     QString MainWindow::halIconPath() const
@@ -436,12 +521,15 @@ namespace hal
 
     void MainWindow::toggleSettings()
     {
-        if (mStackedWidget->currentWidget() == mSettings)
+        if (mStackedWidget->currentWidget() == mSettingsNew)
         {
             closeSettings();
         }
         else
-            mStackedWidget->setCurrentWidget(mSettings);
+        {
+            mSettingsNew->activate();
+            mStackedWidget->setCurrentWidget(mSettingsNew);
+        }
     }
 
     void MainWindow::closeSettings()

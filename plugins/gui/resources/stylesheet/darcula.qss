@@ -457,6 +457,51 @@ hal--SettingsWidget hal--keybind_edit[validated=false] QLineEdit {
     /*color: red;*/
 }
 
+hal--SettingsWidgetNew {
+    background-color : #25292D;
+    padding          : 10px;
+    margin-bottom    : 20px;
+    font             : 14px bold "Helvetica";
+    border-left      : 5px solid rgb(73, 74, 76);
+}
+
+hal--SettingsWidgetNew[dirty=true] {
+    border-left      : 5px solid rgb(73, 200, 76);
+}
+
+hal--SettingsWidgetNew QLabel {
+    color            : #D3DCE6;
+    background-color : rgba(255, 255, 255, 0);
+    margin-right     : 10px;
+}
+
+hal--SettingsWidgetNew #name-label {
+    min-height : 42px;
+    max-height : 42px;
+    font       : 14px bold "Helvetica";
+}
+
+hal--SettingsWidgetNew QToolButton {
+    color : #D3DCE6;
+}
+
+hal--SettingsWidgetNew QToolButton:disabled {
+    color : #888888;
+}
+
+/* LABEL_BUTTON */
+
+hal--SettingsWidgetNew hal--label_button {
+    font           : bold "Helvetica";
+    border         : 1px solid rgb(228, 228, 228);
+    padding-top    : 4px;
+    padding-bottom : 4px;
+    padding-left   : 14px;
+    padding-right  : 14px;
+    min-width      : 50px;
+}
+
+
 /* MainSettingsWidget */
 
 hal--MainSettingsWidget {
@@ -583,6 +628,136 @@ hal--MainSettingsWidget hal--ExpandingListButton[selected=true] #right-border {
     background-color : rgb(85, 255, 0);
     /*background-color : rgb(0, 255, 0);*/
 }
+
+
+
+/* MainSettingsWidgetNew */
+
+hal--MainSettingsWidgetNew {
+    border : 1px solid rgb(23, 26, 26);
+}
+
+hal--MainSettingsWidgetNew #Searchbar-container {
+    min-height : 80px;
+    max-height : 80px;
+    /*background-color : rgba(38, 40, 41, 1);*/
+}
+
+hal--MainSettingsWidgetNew #Searchbar-container hal--Searchbar {
+    min-width : 400px;
+    max-width : 400px;
+    border    : 1px solid rgb(73, 74, 76);
+}
+
+hal--MainSettingsWidgetNew hal--SettingsDisplay {
+    background-color : red;
+    border           : 1px solid #A9B7C6;
+}
+
+hal--MainSettingsWidgetNew hal--SettingsDisplay * {
+    background-color : red;
+    border           : 1px solid #A9B7C6;
+}
+
+hal--MainSettingsWidgetNew hal--PreviewWidget {
+    background-color: rgb(9, 11, 13);
+    border          : 2px solid rgb(73, 74, 76);
+    border-radius   : 8px;
+    margin-top      : 8px;
+    padding         : 5px 0;
+}
+
+hal--MainSettingsWidgetNew hal--PreviewWidget *{
+    background-color: rgba(255, 255, 255, 0);
+}
+
+/* ExpandingListWidget */
+
+hal--MainSettingsWidgetNew hal--ExpandingListWidget {
+    border-right : 1px solid rgb(23, 26, 26);
+    min-width    : 250px;
+    max-width    : 250px;
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListWidget #content {
+    background   : rgb(9, 11, 13);
+    border-right : 5px solid rgb(13, 15, 17);
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListWidget #spacer {
+    min-height   : 80px;
+    max-height   : 80px;
+    background   : rgb(9, 11, 13);
+    border-right : 5px solid rgb(13, 15, 17);
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton {
+    min-height           : 42px;
+    max-height           : 42px;
+    background-color     : rgb(9, 11, 13);
+    color                : #D2DAE2;
+    border-right         : 5px solid rgb(13, 15, 17);
+    qproperty-iconStyle : "all -> #969696";
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton[hover=true] {
+    qproperty-iconStyle : "all -> #E4E4E4";
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton[hover=true] * {
+    /*color: rgb(228, 228, 228);*/
+    color            : rgb(255, 255, 255);
+    background-color : rgba(255, 255, 255, 0.012);
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton[selected=true] {
+    background-color     : rgb(34, 37, 38);
+    qproperty-iconStyle : "all -> #A9B7C6";
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton[type="child"] {
+    background-color : rgb(14, 17, 20);
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton[type="child"][selected=true] {
+    background-color : rgb(34, 37, 38);
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton * {
+    font             : 14px bold "Helvetica";
+    background-color : transparent;
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton #left-border {
+    min-width : 4px;
+    max-width : 4px;
+    /*padding-right: 40px;*/
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton #icon-label {
+    padding-left  : 40px;
+    padding-right : 10px;
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton #right-border {
+    min-width : 4px;
+    max-width : 4px;
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton[selected=true] #text-label {
+    /*color : rgb(114, 140, 0);*/
+    /*color : rgb(35, 200, 46);*/
+    color : rgb(85, 255, 0);
+    /*color : rgb(0, 255, 0);*/
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton[selected=true] #right-border {
+    /*background-color: rgb(114, 140, 0);*/
+    /*background-color : rgb(35, 200, 46);*/
+    background-color : rgb(85, 255, 0);
+    /*background-color : rgb(0, 255, 0);*/
+}
+
 
 /*DockBar {
 background-color : rgb(9, 11, 13);

@@ -22,6 +22,8 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
 
 #include <QAction>
 #include <QApplication>
@@ -47,13 +49,13 @@ namespace hal
     const QString GraphGraphicsView::sAssignToGrouping("Assign to grouping ");
 
     GraphGraphicsView::GraphGraphicsView(GraphWidget* parent)
-        : QGraphicsView(parent), mGraphWidget(parent), mMinimapEnabled(false), mGridEnabled(true), mGridClustersEnabled(true), mGridType(graph_widget_constants::grid_type::Lines),
+        : QGraphicsView(parent), mGraphWidget(parent), mMinimapEnabled(false), mGridEnabled(true), mGridClustersEnabled(true),
           mZoomModifier(Qt::NoModifier), mZoomFactorBase(1.0015)
     {
         connect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphGraphicsView::conditionalUpdate);
         connect(this, &GraphGraphicsView::customContextMenuRequested, this, &GraphGraphicsView::showContextMenu);
         connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphGraphicsView::handleGlobalSettingChanged);
-
+ 
         initializeSettings();
 
         setContextMenuPolicy(Qt::CustomContextMenu);
@@ -66,25 +68,72 @@ namespace hal
 
     void GraphGraphicsView::initializeSettings()
     {
-        unsigned int drag_modifier_setting = gSettingsManager->get("graph_view/drag_mode_modifier").toUInt();
-        mDragModifier                    = Qt::KeyboardModifier(drag_modifier_setting);
-        unsigned int move_modifier_setting = gSettingsManager->get("graph_view/move_modifier").toUInt();
-        mMoveModifier                    = Qt::KeyboardModifier(move_modifier_setting);
+        mKeyModifierMap = QMap<KeyModifier, Qt::KeyboardModifier>();
+        mKeyModifierMap.insert(KeyModifier::Alt, Qt::KeyboardModifier::AltModifier);
+        mKeyModifierMap.insert(KeyModifier::Ctrl, Qt::KeyboardModifier::ControlModifier);
+        mKeyModifierMap.insert(KeyModifier::Shift, Qt::KeyboardModifier::ShiftModifier);
 
-        // might think about Q_ENUM to avoid separate enum and config file tokens
-        const char* gridTypeNames[] = {"lines", "dots", "none", 0};
 
-        QString sGridType = gSettingsManager->get("graph_view/grid_type").toString();
-        for (int i = 0; gridTypeNames[i]; i++)
-            if (sGridType == gridTypeNames[i])
-            {
-                mGridType = static_cast<graph_widget_constants::grid_type>(i);
-                break;
-            }
+        mSettingGridType = new SettingsItemDropdown(
+            "Background Grid",
+            "graph_view/grid_type",
+            int(graph_widget_constants::grid_type::None),
+            "Graph View",
+            "Specifies the grid pattern in the background of the Graph View scene"
+        );
+       mSettingGridType->setValueNames<graph_widget_constants::grid_type>();
 
-#ifdef GUI_DEBUG_GRID
-        mDebugGridposEnable = gSettingsManager->get("debug/grid").toBool();
-#endif
+       mSettingDragModifier = new SettingsItemDropdown(
+            "Move/Swap Modifier",
+            "graph_view/drag_mode_modifier",
+            KeyModifier::Alt,
+            "Graph View",
+            "Specifies the key which can be pressed to switch the position of two Module/Gates in the Graph View while dragging."
+       );
+        mSettingDragModifier->setValueNames<KeyModifier>();
+
+        mSettingPanModifier = new SettingsItemDropdown(
+            "Pan Scene Modifier",
+            "graph_view/pan_modifier",
+            KeyModifier::Shift,
+            "Graph View",
+            "Specifies the key which can be pressed to pan the scene in the Graph View while left clicking."
+        );
+        mSettingPanModifier->setValueNames<KeyModifier>();
+        
+        connect(mSettingGridType, &SettingsItemDropdown::valueChanged, this, [this](){
+            mGridType = graph_widget_constants::grid_type(mSettingGridType->value().toInt());
+        });
+
+        connect(mSettingDragModifier, &SettingsItemDropdown::valueChanged, this, [this](){
+            mDragModifier = mKeyModifierMap.value(KeyModifier(mSettingDragModifier->value().toInt()));
+        });
+
+        connect(mSettingPanModifier, &SettingsItemDropdown::valueChanged, this, [this](){
+            mPanModifier = mKeyModifierMap.value(KeyModifier(mSettingPanModifier->value().toInt()));
+        });
+
+
+        mGridType = graph_widget_constants::grid_type(mSettingGridType->value().toInt());
+        mDragModifier = mKeyModifierMap.value(KeyModifier(mSettingDragModifier->value().toInt()));
+        mPanModifier = mKeyModifierMap.value(KeyModifier(mSettingPanModifier->value().toInt()));
+
+        #ifdef GUI_DEBUG_GRID
+        mSettingDebugGrid = new SettingsItemCheckbox(
+            "GUI Debug Grid",
+            "debug/grid",
+            false,
+            "Graph View",
+            "Specifies wheather the debug grid is displayed in the Graph View. The gird represents the scene as the layouter interprets it."
+        );
+
+        connect(mSettingDebugGrid, &SettingsItemCheckbox::valueChanged, this, [this](){
+            mDebugGridposEnable = mSettingDebugGrid->value().toBool();
+        });
+
+        //mDebugGridposEnable = gSettingsManager->get("debug/grid").toBool();
+        mDebugGridposEnable = mSettingDebugGrid->value().toBool();
+        #endif  
     }
 
     void GraphGraphicsView::conditionalUpdate()
@@ -294,7 +343,7 @@ namespace hal
 
     void GraphGraphicsView::mousePressEvent(QMouseEvent* event)
     {
-        if (event->modifiers() == mMoveModifier)
+        if (event->modifiers() == mPanModifier)
         {
             if (event->button() == Qt::LeftButton)
                 mMovePosition = event->pos();
@@ -335,7 +384,7 @@ namespace hal
 
         if (event->buttons().testFlag(Qt::LeftButton))
         {
-            if (event->modifiers() == mMoveModifier)
+            if (event->modifiers() == mPanModifier)
             {
                 QScrollBar* hBar  = horizontalScrollBar();
                 QScrollBar* vBar  = verticalScrollBar();
@@ -925,7 +974,7 @@ namespace hal
         else if (key == "graph_view/move_modifier")
         {
             unsigned int modifier = value.toUInt();
-            mMoveModifier       = Qt::KeyboardModifier(modifier);
+            mPanModifier       = Qt::KeyboardModifier(modifier);
         }
 #ifdef GUI_DEBUG_GRID
         else if (key == "debug/grid")
