@@ -21,7 +21,7 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_netlist_utils.def("copy_netlist", &netlist_utils::copy_netlist, py::arg("nl"), R"(
+        py_netlist_utils.def("copy_netlist", [](const Netlist* nl) {return std::shared_ptr<Netlist>(netlist_utils::copy_netlist(nl));}, py::arg("nl"), R"(
             Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings.
 
             :param hal_py.Netlist nl: The netlist to copy.
