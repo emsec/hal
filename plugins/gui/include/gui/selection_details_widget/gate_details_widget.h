@@ -76,18 +76,98 @@ namespace hal
 
     public Q_SLOTS:
 
+        /**
+         * Checks if the given gate is the one that is currently displayed. If yes, the information
+         * is updated. This function should be connected to a gate-name-changed signal.
+         *
+         * @param gate - The gate which name was changed.
+         */
         void handleGateNameChanged(Gate* gate);
+
+        /**
+         * Checks if the given gate is currently dispalyed. If yes, the main scroll are (where the content is located)
+         * is hidden. This function should be connected to a gate-removed signal.
+         *
+         * @param gate - The gate that was removed.
+         */
         void handleGateRemoved(Gate* gate);
 
+        /**
+         * Checks if the currently displayed gate is contained in the given module. If yes, the information
+         * is updated. Should be connected to a module-name-changed signal.
+         *
+         * @param module - The module which name was changed.
+         */
         void handleModuleNameChanged(Module* module);
+
+        /**
+         * Checks if the currently displayed gate is contained in the given module. If yes, the information
+         * is updated. This function should be connected to a module-removed signal.
+         *
+         * @param module - The removoed module.
+         */
         void handleModuleRemoved(Module* module);
+
+        /**
+         * Checks if the currently displayed gate is the one that was assigned to a module. If yes,
+         * the information is updated. This function should be connected to a module-gate-assigned signal.
+         *
+         * @param module - The module a gate was assigned to.
+         * @param associated_data - The id of the assigned gate.
+         */
         void handleModuleGateAssigned(Module* module, u32 associated_data);
+
+        /**
+         * Checks if the currently displayed gate is the one that was removed from a module. If yes,
+         * the information is updated. This function should be connected to a module-gate-removed signal.
+         *
+         * @param module - The module a gate was removed from.
+         * @param associated_data - The id of the removed gate.
+         */
         void handleModuleGateRemoved(Module* module, u32 associated_data);
 
+        /**
+         * Checks if the given net is either a source or a destination of the currently displayed gate.
+         * If yes, the information is updated. This function should be connected to a net-name-changed signal.
+         *
+         * @param net - The net that had a name-change.
+         */
         void handleNetNameChanged(Net* net);
+
+        /**
+         * Checks if the given gate-id belongs to the gate that is currently displayed. If yes, the information
+         * is updated. This function should be connected to a net-source-added signal.
+         *
+         * @param net - The net to which a source was added.
+         * @param src_gate_id - The gate-id of the added source.
+         */
         void handleNetSourceAdded(Net* net, const u32 src_gate_id);
+
+        /**
+         * Checks if the given gate-id belongs to the gate that is currently displayed. If yes, the information
+         * is updated. This function should be connected to a net-source-removed signal.
+         *
+         * @param net - The net from which a source was removed.
+         * @param src_gate_id - The gate-id of the removed source.
+         */
         void handleNetSourceRemoved(Net* net, const u32 src_gate_id);
+
+        /**
+         * Checks if the given gate-id belongs to the gate that is currently displayed. If yes, the information
+         * is updated. This function should be connected to a net-destination-added signal.
+         *
+         * @param net - The net to which a destination was added.
+         * @param dst_gate_id - The gate-id of the added destination.
+         */
         void handleNetDestinationAdded(Net* net, const u32 dst_gate_id);
+
+        /**
+         * Checks if the given gate-id belongs to the gate that is currently displayed. If yes, the information
+         * is updated. This function should be connected to a net-destination-removed signal.
+         *
+         * @param net - The net from which a destination was removed.
+         * @param dst_gate_id - The gate-id of the removed destination.
+         */
         void handleNetDestinationRemoved(Net* net, const u32 dst_gate_id);
 
     private:

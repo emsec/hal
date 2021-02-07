@@ -31,22 +31,82 @@
 
 namespace hal
 {
+
+    /**
+     * The details section encapsulates a header and its corresponding content into a single object. These sections
+     * are used by the specific details widgets to display its data. The visibility of the contents can be toggled
+     * by clicking on the header.
+     */
     class DetailsSectionWidget : public QWidget
     {
         Q_OBJECT
     public:
+        /**
+         * The first constructor.
+         *
+         * @param content - The content to be displayed.
+         * @param txt - The displayed text of the header.
+         * @param parent - The widget's parent.
+         */
         DetailsSectionWidget(QWidget* content, const QString& txt, QWidget* parent = nullptr);
+
+        /**
+         * The second constructor.
+         *
+         * @param txt - The displayed text of the header.
+         * @param tab - The table as the section's content.
+         * @param parent - The widget's parent.
+         */
         DetailsSectionWidget(const QString& txt, QTableWidget* tab, QWidget* parent = nullptr);
+
+        /**
+         * Get the details section's content as a table (most sections display tables).
+         *
+         * @return The table of the section. If the first constructor was used, a nullptr is returned.
+         */
         QTableWidget* table() const;
+
+        /**
+         * Updates the header text by using the given rowcount (used when displaying a table).
+         *
+         * @param rc - The new rowcount of the widget's table.
+         */
         void setRowCount(int rc);
 
     private Q_SLOTS:
+
+        /**
+         * Toggles the visibily of the section's content.
+         */
         void toggleBodyVisible();
+
+        /**
+         * A handler function to catch signals that are emitted from the settings-relay. Checks if the key belongs
+         * to the widget and if yes, its value is updated. In this case, the setting manages if the sections should
+         * hide itself if the content is empty (e.g. the table has no entries).
+         *
+         * @param sender - The sender that triggered the change.
+         * @param key - The setting's key.
+         * @param value - The new value of the setting.
+         */
         void handleGlobalSettingsChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
+        /**
+         * Hides itself when the hideEmpty setting is set and the table(the content) is empty.
+         */
         void hideEmpty();
+
+        /**
+         * Shows or hides the body depending on a set boolean.
+         */
         void bodyVisible();
+
+        /**
+         * Helperfunction to set up the widget (such as setting the header text and connecting signals).
+         *
+         * @param txt - The displayed text of the header.
+         */
         void constructor(const QString& txt);
 
         QVBoxLayout* mLayout;
