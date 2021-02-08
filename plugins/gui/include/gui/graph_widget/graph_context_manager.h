@@ -89,6 +89,10 @@ namespace hal
 
         ContextTableModel* getContextTableModel() const;
 
+        void clear();
+        void handleSaveTriggered();
+        void restoreFromFile();
+
     Q_SIGNALS:
         void contextCreated(GraphContext* context);
         void contextRenamed(GraphContext* context);
@@ -98,5 +102,6 @@ namespace hal
         QVector<GraphContext*> mGraphContexts;
 
         ContextTableModel* mContextTableModel;
+        u32 mMaxContextId;
     };
 }

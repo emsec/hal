@@ -13,8 +13,6 @@ HAL Core Documentation
    netlist_utils
    boolean_function
    gate_type
-   gate_type_lut
-   gate_type_sequential
    gate
    net
    module

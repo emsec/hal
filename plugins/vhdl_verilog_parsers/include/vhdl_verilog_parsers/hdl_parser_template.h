@@ -26,7 +26,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -58,7 +58,7 @@ namespace hal
      * @ingroup hdl_parsers
      */
     template<typename T>
-    class HDL_PARSER_API HDLParserTemplate : public HDLParser
+    class NETLIST_API HDLParserTemplate : public HDLParser
     {
     public:
         /**
@@ -185,32 +185,19 @@ namespace hal
 
                         if constexpr (std::is_same<T, std::string>::value)
                         {
-                            pins                       = gate_it->second->get_input_pins();
-                            std::vector<T> output_pins = gate_it->second->get_output_pins();
-                            pins.insert(pins.end(), output_pins.begin(), output_pins.end());
-
-                            pin_groups                                                          = gate_it->second->get_input_pin_groups();
-                            std::unordered_map<T, std::map<u32, std::string>> output_pin_groups = gate_it->second->get_output_pin_groups();
-                            pin_groups.insert(output_pin_groups.begin(), output_pin_groups.end());
+                            pins       = gate_it->second->get_pins();
+                            pin_groups = gate_it->second->get_pin_groups();
                         }
                         else
                         {
-                            for (const auto& pin : gate_it->second->get_input_pins())
-                            {
-                                pins.push_back(core_strings::convert_string<std::string, T>(pin));
-                            }
-                            for (const auto& pin : gate_it->second->get_output_pins())
+                            for (const auto& pin : gate_it->second->get_pins())
                             {
                                 pins.push_back(core_strings::convert_string<std::string, T>(pin));
                             }
 
-                            for (const auto& pin_group : gate_it->second->get_input_pin_groups())
+                            for (const auto& [group, index_to_pin] : gate_it->second->get_pin_groups())
                             {
-                                pin_groups.emplace(core_strings::convert_string<std::string, T>(pin_group.first), pin_group.second);
-                            }
-                            for (const auto& pin_group : gate_it->second->get_output_pin_groups())
-                            {
-                                pin_groups.emplace(core_strings::convert_string<std::string, T>(pin_group.first), pin_group.second);
+                                pin_groups.emplace(core_strings::convert_string<std::string, T>(group), index_to_pin);
                             }
                         }
 
@@ -1027,7 +1014,7 @@ namespace hal
         std::unordered_map<T, std::vector<T>> m_nets_to_merge;
 
         // buffer gate types
-        std::unordered_map<T, const GateType*> m_tmp_gate_types;
+        std::unordered_map<T, GateType*> m_tmp_gate_types;
         std::unordered_map<Net*, std::tuple<port_direction, std::string, Module*>> m_module_ports;
 
         bool build_netlist(const T& top_module)
@@ -1410,8 +1397,8 @@ namespace hal
                 m_nets_to_merge[b].push_back(a);
             }
 
-            std::unordered_map<T, const GateType*> vcc_gate_types;
-            std::unordered_map<T, const GateType*> gnd_gate_types;
+            std::unordered_map<T, GateType*> vcc_gate_types;
+            std::unordered_map<T, GateType*> gnd_gate_types;
 
             if constexpr (std::is_same<T, std::string>::value)
             {
@@ -1526,7 +1513,20 @@ namespace hal
                     // create the new gate
                     instance_alias[inst_name] = get_unique_alias(m_instance_name_occurrences, inst_name);
 
-                    Gate* new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::convert_string<T, std::string>(instance_alias.at(inst_name)));
+                    i32 x = -1;
+                    i32 y = -1;
+
+                    const auto& generics = inst.get_generic_assignments();
+                    if (const auto it = generics.find("X_COORDINATE"); it != generics.end())
+                    {
+                        x = std::stoi(it->second.second);
+                    }
+                    if (const auto it = generics.find("Y_COORDINATE"); it != generics.end())
+                    {
+                        y = std::stoi(it->second.second);
+                    }
+
+                    Gate* new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::convert_string<T, std::string>(instance_alias.at(inst_name)), x, y);
                     if (new_gate == nullptr)
                     {
                         log_error("hdl_parser", "could not instantiate gate '{}' within entity '{}'", inst_name, e.get_name());
@@ -1547,23 +1547,16 @@ namespace hal
                     }
 
                     // cache pin types
-                    std::vector<T> input_pins;
-                    std::vector<T> output_pins;
+                    std::unordered_map<T, GateType::PinDirection> pin_to_direction;
                     if constexpr (std::is_same<T, std::string>::value)
                     {
-                        input_pins  = new_gate->get_input_pins();
-                        output_pins = new_gate->get_output_pins();
+                        pin_to_direction = new_gate->get_type()->get_pin_directions();
                     }
                     else
                     {
-                        for (const auto& pin : new_gate->get_input_pins())
+                        for (const auto& [pin, direction] : new_gate->get_type()->get_pin_directions())
                         {
-                            input_pins.push_back(core_strings::convert_string<std::string, T>(pin));
-                        }
-
-                        for (const auto& pin : new_gate->get_output_pins())
-                        {
-                            output_pins.push_back(core_strings::convert_string<std::string, T>(pin));
+                            pin_to_direction.emplace(core_strings::convert_string<std::string, T>(pin), direction);
                         }
                     }
 
@@ -1583,23 +1576,25 @@ namespace hal
                             auto current_net = net_it->second;
 
                             // add net src/dst by pin types
-                            bool is_input = false;
-                            if (const auto input_it = std::find(input_pins.begin(), input_pins.end(), port); input_it != input_pins.end())
-                            {
-                                is_input = true;
-                                pin      = *input_it;
-                            }
-
+                            bool is_input  = false;
                             bool is_output = false;
-                            if (const auto output_it = std::find(output_pins.begin(), output_pins.end(), port); output_it != output_pins.end())
+
+                            if (const auto it = pin_to_direction.find(port); it != pin_to_direction.end())
                             {
-                                is_output = true;
-                                pin       = *output_it;
+                                if (it->second == GateType::PinDirection::input || it->second == GateType::PinDirection::inout)
+                                {
+                                    is_input = true;
+                                }
+
+                                if (it->second == GateType::PinDirection::output || it->second == GateType::PinDirection::inout)
+                                {
+                                    is_output = true;
+                                }
                             }
 
                             if (!is_input && !is_output)
                             {
-                                log_error("hdl_parser", "undefined pin '{}' for gate '{}' of type '{}'", port, new_gate->get_name(), new_gate->get_type()->get_name());
+                                log_error("hdl_parser", "undefined pin '{}' for gate '{}' of type '{}'", pin, new_gate->get_name(), new_gate->get_type()->get_name());
                                 return nullptr;
                             }
 

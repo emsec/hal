@@ -27,7 +27,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/data_container.h"
 #include "hal_core/netlist/endpoint.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <functional>
 #include <map>
@@ -87,7 +87,7 @@ namespace hal
          *
          * @returns The type.
          */
-        const GateType* get_type() const;
+        GateType* get_type() const;
 
         /**
          * Check whether the gate's location in the layout is available.
@@ -102,7 +102,7 @@ namespace hal
          *
          * @param[in] x - The gate's x-coordinate.
          */
-        void set_location_x(float x);
+        void set_location_x(i32 x);
 
         /**
          * Get the physical location x-coordinate of the gate in the layout.<br>
@@ -110,7 +110,7 @@ namespace hal
          *
          * @returns The gate's x-coordinate.
          */
-        float get_location_x() const;
+        i32 get_location_x() const;
 
         /**
          * Set the physical location y-coordinate of the gate in the layout.<br>
@@ -118,7 +118,7 @@ namespace hal
          *
          * @param[in] y - The gate's y-coordinate.
          */
-        void set_location_y(float y);
+        void set_location_y(i32 y);
 
         /**
          * Get the physical location y-coordinate of the gate in the layout.<br>
@@ -126,7 +126,7 @@ namespace hal
          *
          * @returns The gate's y-coordinate.
          */
-        float get_location_y() const;
+        i32 get_location_y() const;
 
         /**
          * Set the physical location of the gate in the layout.<br>
@@ -134,7 +134,7 @@ namespace hal
          *
          * @param[in] location - A pair <x-coordinate, y-coordinate>.
          */
-        void set_location(const std::pair<float, float>& location);
+        void set_location(const std::pair<i32, i32>& location);
 
         /**
          * Get the physical location of the gate in the layout.<br>
@@ -143,7 +143,7 @@ namespace hal
          *
          * @returns A pair <x-coordinate, y-coordinate>.
          */
-        std::pair<float, float> get_location() const;
+        std::pair<i32, i32> get_location() const;
 
         /**
          * Get the module which contains this gate.
@@ -376,7 +376,7 @@ namespace hal
 
     private:
         friend class NetlistInternalManager;
-        Gate(NetlistInternalManager* mgr, u32 id, const GateType* gt, const std::string& name, float x, float y);
+        Gate(NetlistInternalManager* mgr, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);
 
         Gate(const Gate&) = delete;
         Gate(Gate&&)      = delete;
@@ -395,11 +395,11 @@ namespace hal
         std::string m_name;
 
         /* type of the gate */
-        const GateType* m_type;
+        GateType* m_type;
 
         /* location */
-        float m_x;
-        float m_y;
+        i32 m_x = -1;
+        i32 m_y = -1;
 
         /* owning module */
         Module* m_module;

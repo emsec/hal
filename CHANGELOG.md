@@ -6,6 +6,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.5] - 2021-01-29 13:15:00+02:00 (urgency: medium)
+* **WARNING:** temporarily enabled extended logging (includes taking screenshots) for university course purposes. Note that no data leaves your machine unless you actively provide it to us.
+* views get persisted to .halv file and are restored if the file is found on disk
+* fixed bug in `boolean_influence` plugin causing problems on global inputs
+* fixed gate details widget not showing full list of pins for large gates
+
+## [3.2.4] - 2021-01-23 15:30:00+02:00 (urgency: medium)
+* added plugin `boolean_influence` that enables calculation of the boolean influence for each FF depending on the predecessing FFs
+* extended the `z3_utils` plugin with a `z3Wrapper` class, which holds exactly one `z3::expr` and the corresponding `z3::context`
+* removed the code coverage checks from the macOS pipeline and added test command, so the macOS pipeline will work again properly
+* fixed a bug in DANA, where sometimes the net names were output in the DANA results instead of the gate names
+
+## [3.2.3] - 2021-01-18 18:30:00+02:00 (urgency: medium)
+* fixed `z3_utils` plugin being disabled by default causing linking errors
+* fixed `load_initial_values` and `load_initial_values_from_netlist` assigning values to potentially non-existing nets
+
+## [3.2.2] - 2021-01-16 14:40:00+02:00 (urgency: medium)
+* refactored gate library handling
+  * separated gate library manager from gate library parser interface
+  * added gate library writer interface to enable writing out gate library files
+* extended and refactored gate library functionality
+  * added `create_gate_type` to class `GateLibrary` to enable gate type creation from Python
+  * added `mark_vcc_gate_type` and `mark_gnd_gate_type` to class `GateLibrary` to enable marking gate types as power or ground connections
+  * added `get_gate_type_by_name` and `contains_gate_type_by_name` to class `GateLibrary`
+  * added pin types and respective functions to `GateType` to enable assigning special-purpose pins
+  * added `get_gate_library` to class `GateType`
+  * added base types `ram`, `dsp`, and `io`
+  * merged input and output pin groups to simplify pin group handling
+  * removed `add_gate_type` function from class `GateLibrary`
+  * removed `GateTypeSequential` and `GateTypeLut` classes and moved their functionality into class `GateType`
+  * renamed some functions to have shorter and more understandable names
+* added new gate library format: "HAL Gate Library" (HGL)
+  * supports assignment of pin types to gate types
+  * added parser for HGL (`.hgl`) files
+  * added writer for HGL (`.hgl`) files
+* refactored liberty gate library parser
+  * added parsing of power and ground pins (`pg_pin`) to Liberty parser
+* added more netlist utility functions
+  * added `get_nets_at_pins` to retrieve nets that are connected to a vector of pins
+  * added `remove_buffers` to remove buffer gates from a netlist
+  * added `remove_unused_lut_endpoints` to remove unused LUT fan-in endpoints
+  * added `rename_luts_according_to_function` to rename LUTs depending on the Boolean function they implement
+* added `to_z3` to class `BooleanFunction` to translate a Boolean function into a z3 expression
+* added **highly experimental** `solve_fsm` plugin for FSM verification using z3
+* added `z3_utils` plugin to provide common z3 functions to all other plugins
+* improved layouter uses location information from gate API
+* switched from float gate coordinates to integer ones
+* the netlist simulator VCD writer now optionally takes a set of target nets to write to VCD
+* fixed `add_boolean_function` of class `Gate` assigning wrong functions to LUTs
+* fixed wrong Python binding for property `gate_library` of class `Netlist`
+* fixed netlist simulator segfaulting when an output pin of a FF remains unconnected
+* fixed optimization of Boolean functions sometimes producing wrong or non-optimal results
+* fixed `netlist_utils::get_subgraph_function` returning wrong results if input pins without relevance for the Boolean function remained unconnected
+* fixed layouter not showing connections if things change within submodules by adding additional test whether removing or adding a gate/module requires context update
+
+## [3.1.11] - 2021-01-03 11:35:00+02:00 (urgency: medium)
+* added **highly experimental** way to close and reopen netlists at runtime
+  * known issue: the Python context does not change properly between netlists
+* added creation of backups for Python files created within the editor outside of the `.hal` file
+* added user prompt when detecting Python file backups after a crash
+* fixed crash when moving top module upward
+* fixed module cache inconsistencies causing bad memory allocs in the GUI when deleting nets or endpoints
+
 ## [3.1.10] - 2020-12-18 14:00:00+02:00 (urgency: medium)
 * added `SB_GB_IO`, `SB_GB`, `SB_I2C`, `SB_SPI`, `SB_HFOSC`, and `SB_LFOSC` gate types to `ICE40ULTRA` gate library
 * added jumping to gates, nets, and modules from the selection details widget when double-clicking the respective item in the list or using the context menu
@@ -447,7 +510,12 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.1.10...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.2.5...HEAD
+[3.2.5]: https://github.com/emsec/hal/compare/v3.2.4...v3.2.5
+[3.2.4]: https://github.com/emsec/hal/compare/v3.2.3...v3.2.4
+[3.2.3]: https://github.com/emsec/hal/compare/v3.2.2...v3.2.3
+[3.2.2]: https://github.com/emsec/hal/compare/v3.1.11...v3.2.2
+[3.1.11]: https://github.com/emsec/hal/compare/v3.1.10...v3.1.11
 [3.1.10]: https://github.com/emsec/hal/compare/v3.1.9...v3.1.10
 [3.1.9]: https://github.com/emsec/hal/compare/v3.1.8...v3.1.9
 [3.1.8]: https://github.com/emsec/hal/compare/v3.1.7...v3.1.8

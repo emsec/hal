@@ -1,10 +1,10 @@
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 
-#include "hal_core/utilities/log.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/log.h"
 
 #include <fstream>
 

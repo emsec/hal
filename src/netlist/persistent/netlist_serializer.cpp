@@ -113,7 +113,7 @@ namespace hal
                 }
                 return val;
             }
-            bool deserialize_gate(Netlist* nl, const rapidjson::Value& val, const std::unordered_map<std::string, const hal::GateType*>& gate_types)
+            bool deserialize_gate(Netlist* nl, const rapidjson::Value& val, const std::unordered_map<std::string, hal::GateType*>& gate_types)
             {
                 auto gt_name = val["type"].GetString();
                 auto it      = gate_types.find(gt_name);

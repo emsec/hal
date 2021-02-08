@@ -42,9 +42,9 @@ namespace hal
     public:
         ExpandingListItem(ExpandingListButton* parentButton, QWidget* parent = 0);
 
-        virtual QSize minimumSizeHint() const Q_DECL_OVERRIDE;
-        virtual QSize sizeHint() const Q_DECL_OVERRIDE;
-        virtual void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
+        virtual QSize minimumSizeHint() const override;
+        virtual QSize sizeHint() const override;
+        virtual void resizeEvent(QResizeEvent* event) override;
 
         bool expanded();
         int fixedHeight();

@@ -1,7 +1,7 @@
 #include "dataflow_analysis/pre_processing/counter_identification.h"
 
 #include "dataflow_analysis/common/netlist_abstraction.h"
-#include "dataflow_analysis/utils/utils.h"
+#include "dataflow_analysis/utils/timing_utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"

@@ -31,7 +31,8 @@ namespace hal
                     result_out << "RS: {" << utils::join(", ", state->get_register_stage_intersect_of_group(group_id)) << "}, ";
                     result_out << "CLK: {" << utils::join(", ", state->get_clock_signals_of_group(group_id)) << "}, ";
                     result_out << "CS: {" << utils::join(", ", state->get_control_signals_of_group(group_id)) << "}, ";
-                    result_out << "R: {" << utils::join(", ", state->get_reset_signals_of_group(group_id)) << "}" << std::endl;
+                    result_out << "R: {" << utils::join(", ", state->get_reset_signals_of_group(group_id)) << "},";
+                    result_out << "S: {" << utils::join(", ", state->get_set_signals_of_group(group_id)) << "}" << std::endl;
 
                     auto unsorted_successors = state->get_successor_groups_of_group(group_id);
                     result_out << "  Successors:   {" + utils::join(", ", std::set<u32>(unsorted_successors.begin(), unsorted_successors.end())) << "}" << std::endl;
@@ -44,16 +45,7 @@ namespace hal
 
                     for (const auto& single_ff : gates)
                     {
-                        auto name = state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_name() + ", ";
-                        if (state->netlist_abstr.yosys)
-                        {
-                            auto net = state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_fan_out_net("Q");
-                            name     = state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_name() + ", ";
-                            if (net != nullptr)
-                            {
-                                name = net->get_name();
-                            }
-                        }
+                        auto name          = state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_name() + ", ";
                         auto type          = "type: " + state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_type()->get_name() + ", ";
                         auto id            = "id: " + std::to_string(state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_id()) + ", ";
                         std::string stages = "RS: ";

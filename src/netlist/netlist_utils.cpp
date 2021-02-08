@@ -26,7 +26,7 @@ namespace hal
                 {
                     BooleanFunction bf = gate->get_boolean_function();
 
-                    for (const std::string& input_pin : gate->get_input_pins())
+                    for (const std::string& input_pin : bf.get_variables())
                     {
                         const Net* const input_net = gate->get_fan_in_net(input_pin);
                         if (input_net == nullptr)
@@ -376,5 +376,230 @@ namespace hal
             return get_next_sequential_gates(net, get_successors, cache);
         }
 
+        std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_inputs)
+        {
+            std::unordered_set<Net*> nets;
+
+            if (is_inputs)
+            {
+                for (const auto& pin : pins)
+                {
+                    if (Net* net = gate->get_fan_in_net(pin); net != nullptr)
+                    {
+                        nets.insert(net);
+                    }
+                    else
+                    {
+                        log_error("netlist_utils", "could not retrieve fan-in net for pin '{}' of gate '{}' with ID {}.", pin, gate->get_name(), gate->get_id());
+                    }
+                }
+            }
+            else
+            {
+                for (const auto& pin : pins)
+                {
+                    if (Net* net = gate->get_fan_out_net(pin); net != nullptr)
+                    {
+                        nets.insert(net);
+                    }
+                    else
+                    {
+                        log_error("netlist_utils", "could not retrieve fan-out net for pin '{}' of gate '{}' with ID {}.", pin, gate->get_name(), gate->get_id());
+                    }
+                }
+            }
+            return nets;
+        }
+
+        void remove_buffers(Netlist* netlist)
+        {
+            u32 num_gates = 0;
+
+            // buffers can only be of these base types
+            std::unordered_set<GateType::BaseType> types = {GateType::BaseType::combinational, GateType::BaseType::lut};
+
+            for (const auto& gate : netlist->get_gates())
+            {
+                std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
+
+                GateType* gt = gate->get_type();
+                if (types.find(gt->get_base_type()) == types.end())
+                {
+                    // continue if of invalid base type
+                    continue;
+                }
+
+                if (fan_out.size() != 1)
+                {
+                    // continue if more than one fan-out net
+                    continue;
+                }
+
+                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
+                if (functions.size() != 1)
+                {
+                    // continue if more than one Boolean function (tri-state?)
+                    continue;
+                }
+
+                Endpoint* out_endpoint = *(fan_out.begin());
+                if (out_endpoint->get_pin() != (functions.begin())->first)
+                {
+                    // continue if Boolean function name does not match output pin
+                    continue;
+                }
+
+                std::vector<Endpoint*> fan_in           = gate->get_fan_in_endpoints();
+                std::string func_str                    = functions.begin()->second.to_string();
+                std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(GateType::PinDirection::input);
+                if (in_pins.find(func_str) == in_pins.end())
+                {
+                    // continue if Boolean function does not match any of the input pins
+                    continue;
+                }
+
+                Net* out_net = out_endpoint->get_net();
+
+                // check all input endpoints and ...
+                for (Endpoint* in_endpoint : fan_in)
+                {
+                    Net* in_net = in_endpoint->get_net();
+
+                    if (in_endpoint->get_pin() == func_str)
+                    {
+                        // reconnect outputs if the input is passed through the buffer
+                        for (Endpoint* dst : out_net->get_destinations())
+                        {
+                            Gate* dst_gate      = dst->get_gate();
+                            std::string dst_pin = dst->get_pin();
+                            out_net->remove_destination(dst);
+                            in_net->add_destination(dst_gate, dst_pin);
+                        }
+                    }
+                    else
+                    {
+                        // remove the input endpoint otherwise
+                        in_net->remove_destination(gate, in_endpoint->get_pin());
+                    }
+                }
+
+                // delete output net and buffer gate
+                netlist->delete_net(out_net);
+                netlist->delete_gate(gate);
+                num_gates++;
+            }
+
+            log_info("netlist_utils", "removed {} buffer gates from the netlist.", num_gates);
+        }
+
+        void remove_unused_lut_endpoints(Netlist* netlist)
+        {
+            u32 num_eps = 0;
+
+            // net connected to GND
+            Net* gnd_net = *(*netlist->get_gnd_gates().begin())->get_fan_out_nets().begin();
+
+            // iterate all LUT gates
+            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            {
+                std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
+                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
+
+                // skip if more than one function
+                if (functions.size() != 1)
+                {
+                    continue;
+                }
+
+                std::vector<std::string> active_pins = functions.begin()->second.get_variables();
+
+                // if there are more fan-in nets than there are active pins, we need to get rid of some nets
+                if (fan_in.size() > active_pins.size())
+                {
+                    for (const auto& ep : fan_in)
+                    {
+                        if (std::find(active_pins.begin(), active_pins.end(), ep->get_pin()) == active_pins.end())
+                        {
+                            num_eps++;
+                            std::string pin = ep->get_pin();
+                            ep->get_net()->remove_destination(gate, pin);
+                            gnd_net->add_destination(gate, pin);
+                        }
+                    }
+                }
+            }
+
+            log_info("netlist_utils", "removed {} unused LUT fan-in endpoints from the netlist.", num_eps);
+        }
+
+        void rename_luts_according_to_function(Netlist* netlist)
+        {
+            u32 num_luts = 0;
+
+            std::unordered_map<std::string, std::string> truth_table_to_function = {
+                {"01", "BUF"},
+                {"10", "INV"},
+                {"0001", "AND2"},
+                {"1110", "NAND2"},
+                {"0111", "OR2"},
+                {"1000", "NOR2"},
+                {"0110", "XOR2"},
+                {"1001", "XNOR2"},
+                {"00000001", "AND3"},
+                {"11111110", "NAND3"},
+                {"01111111", "OR3"},
+                {"10000000", "NOR3"},
+                {"01101001", "XOR3"},
+                {"10010110", "XNOR3"},
+                {"00011011", "MUX"},      // A B S_B (meaning S selects B when S=1)
+                {"00100111", "MUX"},      // A B S_A
+                {"00011101", "MUX"},      // A S_B B
+                {"01000111", "MUX"},      // A S_A B
+                {"00110101", "MUX"},      // S_B A B
+                {"01010011", "MUX"},      // S_A A B
+                {"11100000", "AOI21"},    // !(A | (B & C))
+                {"11001000", "AOI21"},    // !(B | (A & C))
+                {"10101000", "AOI21"},    // !(C | (A & B))
+                {"11111000", "OAI21"},    // !(A | (B & C))
+                {"11101100", "OAI21"},    // !(B | (A & C))
+                {"11101010", "OAI21"},    // !(C | (A & B))
+                {"0000000000000001", "AND4"},
+                {"1111111111111110", "NAND4"},
+                {"0111111111111111", "OR4"},
+                {"1000000000000000", "NOR4"},
+                {"0110100110010110", "XOR4"},
+                {"1001011001101001", "XNOR4"},
+                {"1110111011100000", "AOI22"},    // !((A & B) | (C & D))
+                {"1111101011001000", "AOI22"},    // !((A & C) | (B & D))
+                {"1111110010101000", "AOI22"},    // !((A & D) | (B & C))
+                {"1111100010001000", "OAI22"},    // !((A | B) & (C | D))
+                {"1110110010100000", "OAI22"},    // !((A | C) & (B | D))
+                {"1110101011000000", "OAI22"}     // !((A | D) & (B | C))
+            };
+
+            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            {
+                std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
+
+                if (functions.size() != 1)
+                {
+                    continue;
+                }
+
+                std::string truth_table = "";
+                for (BooleanFunction::Value val : functions.begin()->second.get_truth_table())
+                {
+                    truth_table += BooleanFunction::to_string(val);
+                }
+
+                if (auto it = truth_table_to_function.find(truth_table); it != truth_table_to_function.end())
+                {
+                    gate->set_name(it->second + "_" + std::to_string(gate->get_id()));
+                    num_luts++;
+                }
+            }
+
+            log_info("netlist_utils", "renamed {} LUTs according to the function they implement.", num_luts);
+        }
     }    // namespace netlist_utils
 }    // namespace hal

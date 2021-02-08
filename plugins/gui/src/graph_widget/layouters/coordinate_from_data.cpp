@@ -4,6 +4,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include <QMap>
+#include "hal_core/utilities/log.h"
 
 namespace hal {
 
@@ -23,6 +24,12 @@ namespace hal {
         case Node::Gate:
             g = gNetlist->get_gate_by_id(nd.id());
             Q_ASSERT(g);
+            if (g->has_location())
+            {
+                int lx = (int) floor(g->get_location_x()+0.5);
+                int ly = (int) floor(g->get_location_y()+0.5);
+                return CoordinateFromData(lx,ly);
+            }
             return fromData(g->get_data_map());
         default:
             break;
@@ -136,6 +143,9 @@ namespace hal {
 
     bool CoordinateFromDataMap::good() const
     {
+        if (mDoubleCount!=0)
+            log_info("gui", "multiple assignment to same gate coordinate(s)");
+
         return (!mPlacedGates.isEmpty() || !mPlacedModules.isEmpty())
                 && mDoubleCount == 0;
     }

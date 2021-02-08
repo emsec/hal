@@ -30,6 +30,7 @@
 #include <QObject>
 #include <QSet>
 #include <QDateTime>
+#include <QJsonObject>
 
 namespace hal
 {
@@ -41,7 +42,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        explicit GraphContext(const QString& name, QObject* parent = nullptr);
+        explicit GraphContext(u32 id_, const QString& name, QObject* parent = nullptr);
         ~GraphContext();
 
         void subscribe(GraphContextSubscriber* const subscriber);
@@ -61,6 +62,8 @@ namespace hal
         bool isShowingModule(const u32 id) const;
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
+        void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
+
         bool isShowingNetSource(const u32 mNetId) const;
         bool isShowingNetDestination(const u32 mNetId) const;
 
@@ -70,6 +73,7 @@ namespace hal
 
         GraphicsScene* scene();
 
+        u32 id() const;
         QString name() const;
 
         void setLayouter(GraphLayouter* layouter);
@@ -87,6 +91,10 @@ namespace hal
 
         QDateTime getTimestamp() const;
 
+        void writeToFile(QJsonObject& json);
+
+        void readFromFile(const QJsonObject& json);
+
     private Q_SLOTS:
         void handleLayouterUpdate(const int percent);
         void handleLayouterUpdate(const QString& message);
@@ -97,9 +105,11 @@ namespace hal
         void update();
         void applyChanges();
         void startSceneUpdate();
+        bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
 
         QList<GraphContextSubscriber*> mSubscribers;
 
+        u32 mId;
         QString mName;
 
         GraphLayouter* mLayouter;

@@ -117,7 +117,7 @@ namespace hal
         return false;
     }
 
-    QString RecentFileItem::file()
+    QString RecentFileItem::file() const
     {
         return mFile;
     }

@@ -39,7 +39,7 @@ namespace hal
         virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) override;
 
     private:
-        float mMinXDistance;
-        float mMinYDistance;
+        i32 mMinXDistance;
+        i32 mMinYDistance;
     };
 }    // namespace hal

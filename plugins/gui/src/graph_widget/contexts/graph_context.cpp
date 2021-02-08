@@ -8,13 +8,15 @@
 #include "gui/gui_globals.h"
 
 #include <QVector>
+#include <QJsonArray>
 
 namespace hal
 {
     static const bool sLazyUpdates = false;
 
-    GraphContext::GraphContext(const QString& name, QObject* parent)
+    GraphContext::GraphContext(u32 id_, const QString& name, QObject* parent)
         : QObject(parent),
+          mId(id_),
           mName(name),
           mUserUpdateCount(0),
           mUnappliedChanges(false),
@@ -209,6 +211,36 @@ namespace hal
         return mGates.empty() && mModules.empty();
     }
 
+    void GraphContext::testIfAffected(const u32 id, const u32* moduleId, const u32* gateId)
+    {
+        if (testIfAffectedInternal(id, moduleId, gateId))
+            scheduleSceneUpdate();
+    }
+
+    bool GraphContext::testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId)
+    {
+        Node nd(id,Node::Module);
+        if (getLayouter()->boxes().boxForNode(nd))
+            return true;
+
+        std::vector<Gate*> modifiedGates;
+        if (moduleId)
+        {
+            Module* m = gNetlist->get_module_by_id(*moduleId);
+            if (m) modifiedGates = m->get_gates(nullptr,true);
+        }
+        if (gateId)
+        {
+            Gate* g = gNetlist->get_gate_by_id(*gateId);
+            if (g) modifiedGates.push_back(g);
+        }
+        for (Gate* mg : modifiedGates)
+            if (getLayouter()->boxes().boxForGate(mg))
+                return true;
+
+        return false;
+    }
+
     bool GraphContext::isShowingModule(const u32 id) const
     {
         return isShowingModule(id, {}, {}, {}, {});
@@ -227,15 +259,15 @@ namespace hal
             return false;
         }
 
-        auto m = gNetlist->get_module_by_id(id);
+        Module* m = gNetlist->get_module_by_id(id);
         // TODO deduplicate
         QSet<u32> gates;
         QSet<u32> modules;
-        for (const auto& g : m->get_gates())
+        for (const Gate* g : m->get_gates())
         {
             gates.insert(g->get_id());
         }
-        for (auto sm : m->get_submodules())
+        for (const Module* sm : m->get_submodules())
         {
             modules.insert(sm->get_id());
         }
@@ -243,7 +275,8 @@ namespace hal
         // qDebug() << "MINUS_GATES" << minus_gates;
         // qDebug() << "PLUS_GATES" << plus_gates;
         // qDebug() << "MGATES" << mGates;
-        return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
+        return (mGates - mRemovedGates) + mAddedGates == (gates - minus_gates) + plus_gates
+                && (mModules - mRemovedModules) + mAddedModules == (modules - minus_modules) + plus_modules;
     }
 
     bool GraphContext::isShowingNetSource(const u32 mNetId) const
@@ -298,6 +331,11 @@ namespace hal
     GraphicsScene* GraphContext::scene()
     {
         return mLayouter->scene();
+    }
+
+    u32 GraphContext::id() const
+    {
+        return mId;
     }
 
     QString GraphContext::name() const
@@ -500,5 +538,111 @@ namespace hal
     QDateTime GraphContext::getTimestamp() const
     {
         return mTimestamp;
+    }
+
+    void GraphContext::readFromFile(const QJsonObject& json)
+    {
+        if (json.contains("timestamp") && json["timestamp"].isString())
+            mTimestamp = QDateTime::fromString(json["timestamp"].toString());
+
+        if (json.contains("modules") && json["modules"].isArray())
+        {
+            QJsonArray jsonMods = json["modules"].toArray();
+            int nmods = jsonMods.size();
+            for (int imod=0; imod<nmods; imod++)
+            {
+                QJsonObject jsonMod = jsonMods.at(imod).toObject();
+                if (!jsonMod.contains("id") || !jsonMod["id"].isDouble()) continue;
+                u32 id = jsonMod["id"].toInt();
+                mModules.insert(id);
+                if (!jsonMod.contains("x") || !jsonMod["x"].isDouble()) continue;
+                int x = jsonMod["x"].toInt();
+                if (!jsonMod.contains("y") || !jsonMod["y"].isDouble()) continue;
+                int y = jsonMod["y"].toInt();
+                Node nd(id,Node::Module);
+                mLayouter->setNodePosition(nd,QPoint(x,y));
+            }
+        }
+
+        if (json.contains("gates") && json["gates"].isArray())
+        {
+            QJsonArray jsonGats = json["gates"].toArray();
+            int ngats = jsonGats.size();
+            for (int igat=0; igat<ngats; igat++)
+            {
+                QJsonObject jsonGat = jsonGats.at(igat).toObject();
+                if (!jsonGat.contains("id") || !jsonGat["id"].isDouble()) continue;
+                u32 id = jsonGat["id"].toInt();
+                mGates.insert(id);
+                if (!jsonGat.contains("x") || !jsonGat["x"].isDouble()) continue;
+                int x = jsonGat["x"].toInt();
+                if (!jsonGat.contains("y") || !jsonGat["y"].isDouble()) continue;
+                int y = jsonGat["y"].toInt();
+                Node nd(id,Node::Gate);
+                mLayouter->setNodePosition(nd,QPoint(x,y));
+            }
+        }
+
+        if (json.contains("nets") && json["nets"].isArray())
+        {
+            QJsonArray jsonNets = json["nets"].toArray();
+            int nnets = jsonNets.size();
+            for (int inet=0; inet<nnets; inet++)
+            {
+                QJsonObject jsonNet = jsonNets.at(inet).toObject();
+                if (!jsonNet.contains("id") || !jsonNet["id"].isDouble()) continue;
+                u32 id = jsonNet["id"].toInt();
+                mNets.insert(id);
+            }
+        }
+
+        scheduleSceneUpdate();
+    }
+
+    void GraphContext::writeToFile(QJsonObject& json)
+    {
+        json["id"] = (int) mId;
+        json["name"] = mName;
+        json["timestamp"] = mTimestamp.toString();
+
+        /// modules
+        QJsonArray jsonMods;
+        for (u32 id : mModules)
+        {
+            Node searchMod(id, Node::Module);
+            const NodeBox* box = getLayouter()->boxes().boxForNode(searchMod);
+            Q_ASSERT(box);
+            QJsonObject jsonMod;
+            jsonMod["id"] = (int) id;
+            jsonMod["x"]  = (int) box->x();
+            jsonMod["y"]  = (int) box->y();
+            jsonMods.append(jsonMod);
+        }
+        json["modules"] = jsonMods;
+
+        /// gates
+        QJsonArray jsonGats;
+        for (u32 id : mGates)
+        {
+            Node searchGat(id, Node::Gate);
+            const NodeBox* box = getLayouter()->boxes().boxForNode(searchGat);
+            Q_ASSERT(box);
+            QJsonObject jsonGat;
+            jsonGat["id"] = (int) id;
+            jsonGat["x"]  = (int) box->x();
+            jsonGat["y"]  = (int) box->y();
+            jsonGats.append(jsonGat);
+        }
+        json["gates"] = jsonGats;
+
+        /// nets
+        QJsonArray jsonNets;
+        for (u32 id : mNets)
+        {
+            QJsonObject jsonNet;
+            jsonNet["id"] = (int) id;
+            jsonNets.append(jsonNet);
+        }
+        json["nets"] = jsonNets;
     }
 }

@@ -23,16 +23,15 @@
 
 #pragma once
 
-#include "hal_core/utilities/token_stream.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
-#include "hal_core/netlist/gate_library/gate_library_parser.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type.h"
-#include "hal_core/netlist/gate_library/gate_type/gate_type_sequential.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/utilities/token_stream.h"
 
 #include <filesystem>
-#include <optional>
 #include <map>
+#include <optional>
 #include <unordered_map>
 
 namespace hal
@@ -60,20 +59,11 @@ namespace hal
          * direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).
          *
          * @param[in] file_path - Path to the file containing the gate library definition.
-         * @param[in] file_content - The string stream containing the gate library definition.
          * @returns The gate library or a nullptr on error.
          */
-        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path, std::stringstream& file_content) override;
+        std::unique_ptr<GateLibrary> parse(const std::filesystem::path& file_path) override;
 
     private:
-        enum class pin_direction
-        {
-            UNKNOWN,
-            IN,
-            OUT,
-            INOUT
-        };
-
         struct type_group
         {
             u32 line_number;
@@ -85,18 +75,20 @@ namespace hal
         {
             u32 line_number;
             std::vector<std::string> pin_names;
-            pin_direction direction = pin_direction::UNKNOWN;
+            GateType::PinDirection direction = GateType::PinDirection::none;
             std::string function;
             std::string x_function;
             std::string z_function;
-            bool clock = false;
+            bool clock  = false;
+            bool power  = false;
+            bool ground = false;
         };
 
         struct bus_group
         {
             u32 line_number;
             std::string name;
-            pin_direction direction = pin_direction::UNKNOWN;
+            GateType::PinDirection direction = GateType::PinDirection::none;
             std::vector<std::string> pin_names;
             std::vector<pin_group> pins;
             std::map<u32, std::string> index_to_pin_name;
@@ -110,8 +102,8 @@ namespace hal
             std::string next_state;
             std::string clear;
             std::string preset;
-            GateTypeSequential::SetResetBehavior special_behavior_var1 = GateTypeSequential::SetResetBehavior::U;
-            GateTypeSequential::SetResetBehavior special_behavior_var2 = GateTypeSequential::SetResetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::U;
             std::string data_category;
             std::string data_identifier;
         };
@@ -124,8 +116,8 @@ namespace hal
             std::string data_in;
             std::string clear;
             std::string preset;
-            GateTypeSequential::SetResetBehavior special_behavior_var1 = GateTypeSequential::SetResetBehavior::U;
-            GateTypeSequential::SetResetBehavior special_behavior_var2 = GateTypeSequential::SetResetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::U;
         };
 
         struct lut_group
@@ -141,7 +133,7 @@ namespace hal
         {
             u32 line_number;
             std::string name;
-            GateType::BaseType type = GateType::BaseType::combinatorial;
+            GateType::BaseType type = GateType::BaseType::combinational;
             ff_group ff;
             latch_group latch;
             lut_group lut;
@@ -152,7 +144,7 @@ namespace hal
         };
 
         std::unique_ptr<GateLibrary> m_gate_lib;
-        std::stringstream* m_fs;
+        std::stringstream m_fs;
         std::filesystem::path m_path;
 
         TokenStream<std::string> m_token_stream;
@@ -164,12 +156,13 @@ namespace hal
 
         std::optional<cell_group> parse_cell(TokenStream<std::string>& library_stream);
         std::optional<type_group> parse_type(TokenStream<std::string>& str);
-        std::optional<pin_group> parse_pin(TokenStream<std::string>& str, cell_group& cell, pin_direction direction = pin_direction::UNKNOWN, const std::string& external_pin_name = "");
+        std::optional<pin_group> parse_pin(TokenStream<std::string>& str, cell_group& cell, GateType::PinDirection direction = GateType::PinDirection::none, const std::string& external_pin_name = "");
+        std::optional<pin_group> parse_pg_pin(TokenStream<std::string>& str, cell_group& cell);
         std::optional<bus_group> parse_bus(TokenStream<std::string>& str, cell_group& cell);
         std::optional<ff_group> parse_ff(TokenStream<std::string>& str);
         std::optional<latch_group> parse_latch(TokenStream<std::string>& str);
         std::optional<lut_group> parse_lut(TokenStream<std::string>& str);
-        std::unique_ptr<GateType> construct_gate_type(cell_group& cell);
+        bool construct_gate_type(cell_group& cell);
 
         void remove_comments(std::string& line, bool& multi_line_comment);
         std::vector<std::string> tokenize_function(const std::string& function);
