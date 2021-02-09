@@ -21,8 +21,6 @@ namespace hal
 
                 :param netlist: The netlist.
                 :type netlist: hal_py.Netlist
-                :param format: The target format of the file, e.g. vhdl, verilog...
-                :type format: str
                 :param file_name: The input file.
                 :type file_name: hal_py.hal_path
                 :returns: True on success.
