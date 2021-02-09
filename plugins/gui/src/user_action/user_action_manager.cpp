@@ -17,7 +17,8 @@ namespace hal
 
     UserActionManager::UserActionManager(QObject *parent)
         : QObject(parent), mStartRecording(-1),
-          mWaitCount(0), mDumpAction(nullptr)
+          mWaitCount(0), mRecordHashAttribute(true),
+          mDumpAction(nullptr)
     {
         mElapsedTime.start();
     }
@@ -43,6 +44,13 @@ namespace hal
         mStartRecording = mActionHistory.size();
     }
 
+    void UserActionManager::crashDump(int sig)
+    {
+        mStartRecording = 0;
+        mRecordHashAttribute = false;
+        setStopRecording(QString("hal_crashdump_signal%1.xml").arg(sig));
+    }
+
     void UserActionManager::setStopRecording(const QString& macroFilename)
     {
         int n = mActionHistory.size();
@@ -62,7 +70,8 @@ namespace hal
                     xmlOut.writeStartElement(act->tagname());
                     // TODO : enable / disable timestamp and crypto hash by user option ?
                     xmlOut.writeAttribute("ts",QString::number(act->timeStamp()));
-                    xmlOut.writeAttribute("sha",act->cryptographicHash(i-mStartRecording));
+                    if (mRecordHashAttribute)
+                        xmlOut.writeAttribute("sha",act->cryptographicHash(i-mStartRecording));
                     act->object().writeToXml(xmlOut);
                     act->writeToXml(xmlOut);
                     xmlOut.writeEndElement();

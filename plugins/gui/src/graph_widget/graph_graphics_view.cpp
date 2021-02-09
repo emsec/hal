@@ -1039,6 +1039,7 @@ namespace hal
             if (m) assignedGrouping = m->get_grouping();
             mods.insert(mItem->id());
         }
+        if (!assignedGrouping) return; // nothing to do
         ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(mods,gats);
         act->setObject(UserActionObject(assignedGrouping->get_id(),UserActionObjectType::Grouping));
         act->exec();
@@ -1046,32 +1047,17 @@ namespace hal
 
     void GraphGraphicsView::groupingAssignInternal(Grouping* grp)
     {
-        if (gSelectionRelay->numberSelectedItems() > 1)
-        {
-            gContentManager->getSelectionDetailsWidget()->selectionToGroupingInternal(grp);
-            return;
-        }
+        if (!grp || !gSelectionRelay->numberSelectedItems()) return;
 
-        if (mItem->itemType() == ItemType::Gate)
-        {
-            Gate* g = gNetlist->get_gate_by_id(mItem->id());
-            if (g)
-                grp->assign_gate(g);
-        }
-        if (mItem->itemType() == ItemType::Module)
-        {
-            Module* m = gNetlist->get_module_by_id(mItem->id());
-            if (m)
-                grp->assign_module(m);
-        }
-        gSelectionRelay->clear();
-        gSelectionRelay->relaySelectionChanged(nullptr);
+        gContentManager->getSelectionDetailsWidget()->selectionToGroupingInternal(grp);
     }
 
     void GraphGraphicsView::handleGroupingAssignNew()
     {
         handleGroupingUnassign();
-        Grouping* grp = gContentManager->getGroupingManagerWidget()->getModel()->addDefaultEntry();
+        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Grouping);
+        act->exec();
+        Grouping* grp = gNetlist->get_grouping_by_id(act->object().id());
         if (grp)
             groupingAssignInternal(grp);
     }

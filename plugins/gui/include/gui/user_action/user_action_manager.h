@@ -77,6 +77,9 @@ namespace hal
 
         /// undo last action
         void undoLastAction();
+
+        /// dump actions from beginning
+        void crashDump(int sig);
     private:
         UserActionManager(QObject *parent = nullptr);
         void testUndo();
@@ -86,6 +89,8 @@ namespace hal
         int mStartRecording;
         int mWaitCount;
         QElapsedTimer mElapsedTime;
+        bool mRecordHashAttribute;
+
         static UserActionManager* inst;
         QPlainTextEdit* mDumpAction;
 

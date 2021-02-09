@@ -17,6 +17,7 @@
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
+#include "gui/user_action/user_action_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/plugin_system/plugin_manager.h"
@@ -31,6 +32,7 @@
 #include <QResource>
 #include <QSettings>
 #include <QString>
+#include <QDebug>
 #include <gui/focus_logger/focus_logger.h>
 #include <signal.h>
 
@@ -97,6 +99,14 @@ namespace hal
             log_info("gui", "Detected Ctrl+C in terminal");
             QApplication::exit(0);
         }
+    }
+
+    static void mCrashHandler(int sig)
+    {
+        log_info("gui", "Emergency dump of executed actions on signal {}", sig);
+        UserActionManager::instance()->crashDump(sig);
+        signal(sig,SIG_DFL);
+        return;
     }
 
     bool PluginGui::exec(ProgramArguments& args)
@@ -189,6 +199,9 @@ namespace hal
 
         gGuiApi = new GuiApi();
 
+        const int handleSignals[] = { SIGTERM, SIGSEGV, SIGILL, SIGABRT, SIGFPE, 0 };
+        for (int isignal=0; handleSignals[isignal]; isignal++)
+            signal(handleSignals[isignal], mCrashHandler);
         signal(SIGINT, mCleanup);
 
         MainWindow w;
