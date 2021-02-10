@@ -27,19 +27,59 @@
 
 namespace hal
 {
+    /**
+     * A type of separated nets with circles as in- and output symbols. Currently unused.
+     */
     class CircleSeparatedNet : public SeparatedGraphicsNet
     {
     public:
+        /**
+         * Loads the cosmetic setting that will be applied to all CircleSeparatedNets.
+         */
         static void loadSettings();
 
+        /**
+         * Constructor.
+         *
+         * @param n - The underlying net
+         */
         CircleSeparatedNet(Net* n);
 
+        /**
+         * Draws the CircleSeparatedNet in the scene.
+         *
+         * @param painter - The used QPainter
+         * @param option - The styling options. Used to access the state (option->state).
+         * @param widget - The widget to paint on
+         */
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
+        /**
+         * Add the an input pin as a destination of the CircleSeparatedNet
+         *
+         * @param scene_position - The scene position of the input pin
+         */
         void addInput(const QPointF& scene_position) override;
+
+        /**
+         * Add the an output pin as a source of the CircleSeparatedNet
+         *
+         * @param scene_position - The scene position of the output pin
+         */
         void addOutput(const QPointF& scene_position) override;
 
+        /**
+         * Get the width of one entire input (including the line and the circle) of the CircleSeparatedNet
+         *
+         * @returns the width of an input
+         */
         qreal inputWidth() const override;
+
+        /**
+         * Get the width of one entire output (including the line and the circle) of the CircleSeparatedNet
+         *
+         * @returns the width of an output
+         */
         qreal outputWidth() const override;
 
     private:

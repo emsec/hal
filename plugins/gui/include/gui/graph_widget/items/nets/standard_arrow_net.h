@@ -5,10 +5,19 @@
 
 namespace hal {
 
+    /**
+     * The GraphicsNet that can be used to display nets in the scene. TODO: Purpose?
+     */
     class StandardArrowNet : public StandardGraphicsNet
     {
         ArrowSeparatedNet mArrowNet;
     public:
+        /**
+         * Constructor.
+         *
+         * @param n - The underlying net
+         * @param l - The lines this GraphicsNet consists of
+         */
         StandardArrowNet(Net* n, const Lines& l);
         void setInputPosition(const QPointF &pos);
         void setOutputPosition(const QPointF &pos);
