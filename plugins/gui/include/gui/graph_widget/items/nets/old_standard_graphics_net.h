@@ -32,6 +32,10 @@ namespace hal
 {
     class Net;
 
+    /**
+     * An old version of the StandardGraphicsNet that is used to display (normal) nets in the scene.
+     * \deprecated Please use StandardGraphicsNet instead!
+     */
     class OldStandardGraphicsNet : public GraphicsNet
     {
     public:
@@ -63,6 +67,14 @@ namespace hal
         static void updateAlpha();
 
         //StandardGraphicsNet(Net* n, const Lines& l);
+        /**
+         * Constructor.
+         * \deprecated Please use StandardGraphicsNet instead!
+         *
+         * @param n - The underlying net
+         * @param l - The lines this net consists of
+         * @param complete
+         */
         OldStandardGraphicsNet(Net* n, Lines& l, bool complete = true);
 
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
