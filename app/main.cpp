@@ -82,6 +82,7 @@ int main(int argc, const char* argv[])
     lm.add_channel("hdl_parser", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("hdl_writer", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     lm.add_channel("PythonContext", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+    lm.add_channel("event", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
 
     if (args.is_option_set("--logfile"))
     {
