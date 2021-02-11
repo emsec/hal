@@ -32,9 +32,18 @@
 
 namespace hal
 {
-
+    /**
+     * The ChannelEntry struct is used by the ChannelItem class to store a single entry.
+     * An entry consists of the message itself and and its type (error, debug, etc.).
+     */
     struct ChannelEntry
     {
+        /**
+         * The channel entry's "constructor"
+         *
+         * @param msg - The message
+         * @param msg_type - The message's type
+         */
         ChannelEntry(std::string msg, spdlog::level::level_enum msg_type) : mMsg(msg), mMsgType(msg_type)
         {
         }
@@ -45,6 +54,7 @@ namespace hal
 
     static const int sMaxEntries = 1000;
 
+    // Does not serve any moment as of this moment.
     struct LogChannel
     {
         //    LogChannel(const QString& name) : mName(name)
@@ -64,16 +74,55 @@ namespace hal
         int mUnreadSuccesses;
     };
 
+    /**
+     * This class represents a channel in the channel model. It primarily holds the channel
+     * name and its entries.
+     */
     class ChannelItem
     {
     public:
+        /**
+         * The constructor
+         * @param name - The name of the channel.
+         */
         ChannelItem(QString name);
 
+        /**
+         * Get the column specific data of the item. The channel logically consists of only one column that holds the name.
+         * This function is the same as name() for column = 0.
+         *
+         * @param column - The column for which data is requested.
+         * @return The data of the column.
+         */
         QVariant data(int column) const;
+
+        /**
+         * Get the channel's name.
+         *
+         * @return The name of the channel.
+         */
         const QString name() const;
+
+        /**
+         * Get the List of all buffered messages.
+         *
+         * @return The List that contains the channel entries.
+         */
         const QList<ChannelEntry*>* getList() const;
+
+        /**
+         * Get the lock of the channel.
+         *
+         * @return The channel's lock.
+         */
         QReadWriteLock* getLock();
 
+        /**
+         * Append a given entry to the end of the message list. If the list's size exceeds the maximum number
+         * of allowed entries, the first entry in the list is removed.
+         *
+         * @param entry - The entry to append to the list.
+         */
         void appendEntry(ChannelEntry* entry);
 
     private:

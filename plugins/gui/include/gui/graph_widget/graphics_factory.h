@@ -33,12 +33,31 @@
 
 namespace hal
 {
+    /**
+     * The GraphicsFactory namespace provides functions to create GraphicsModules and GraphicsGates
+     */
     namespace GraphicsFactory
     {
         QStringList graphicsModuleTypes();
         QStringList graphicsGateTypes();
 
+        // TODO: enum for GraphicsModule/GraphicsGate type? type necessary or legacy?
+        /**
+         * Creates a GraphicsModule for a certain module on the heap.
+         *
+         * @param m - The underlying module of the GraphicsModule
+         * @param type - The type of the GraphicsModule (must be 0 currently)
+         * @returns a pointer to the new GraphicsModules
+         */
         GraphicsModule* createGraphicsModule(Module* m, const int type);
+
+        /**
+         * Creates a GraphicsGate for a certain gate on the heap.
+         *
+         * @param g - The underlying gate of the GraphicsModule
+         * @param type - The type of the GraphicsGate (must be 0 currently)
+         * @returns a pointer to the new GraphicsGate
+         */
         GraphicsGate* createGraphicsGate(Gate* g, const int type);
     }
 }

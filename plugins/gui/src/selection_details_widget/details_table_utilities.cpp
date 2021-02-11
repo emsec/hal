@@ -12,7 +12,7 @@ namespace hal {
     QSize DetailsTableUtilities::tableViewSize(const QTableView* table, int nrows, int ncols)
     {
         //necessary to test if the table is empty, otherwise (due to the resizeColumnsToContents function)
-        //is the tables width far too big, so just return 0 as the size
+        //is the table's width far too big, so just return 0 as the size
         if (!nrows)
             return QSize(0, 0);
 

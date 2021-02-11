@@ -32,29 +32,53 @@ namespace hal
 {
     class Module;
 
+    /**
+     * Abstract base class for GraphicsModules. Besides the functionality already given by its superclass GraphicsNode
+     * it stores the list of input and output pins in a unique struct.
+     */
     class GraphicsModule : public GraphicsNode
     {
     public:
+        /**
+         * Constructor.
+         *
+         * @param m - The underlying module of this GraphicsModule
+         */
         explicit GraphicsModule(Module* m);
 
     protected:
+        /**
+         * Represents one pin (both input or output) of a module. It stores the pin type name and the id of the net
+         * connected to the pin. Besides, it provides comparison functions.
+         */
         struct ModulePin
         {
+            /** The name of the pin type */
             QString name;
+            /** The id of the net connected to this pin */
             u32 mNetId;
 
+            /** Two ModulePins are considered equal if both their names and their connected nets are the same */
             bool operator==(const ModulePin& rhs) const
             {
                 return this->name == rhs.name && this->mNetId == rhs.mNetId;
             }
 
+            /** The comparison is done based only on the name of both modules. (See gui_utility::numeratedOrderCompare) */
             bool operator<(const ModulePin& rhs) const
             {
                 return gui_utility::numeratedOrderCompare(this->name, rhs.name);
             }
         };
 
+        /**
+         * The list of input pins of the module
+         */
         QVector<ModulePin> mInputPins;
+
+        /**
+         * The list of output pins of the module
+         */
         QVector<ModulePin> mOutputPins;
     };
 }    // namespace hal

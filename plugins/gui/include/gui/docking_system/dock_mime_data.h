@@ -30,12 +30,27 @@ namespace hal
 {
     class ContentWidget;
 
+    /**
+     * The DockMimeData class is used for the drag system. It holds the content widget of the corresponding dockbutton as metadata
+     * when the dockbutton is dragged. It is needed to use Qt's default drag implementation.
+     */
     class DockMimeData : public QMimeData
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param widget - The content widget to be saved in this object.
+         */
         DockMimeData(ContentWidget* widget);
+
+        /**
+         * Get the content widget.
+         *
+         * @return The content widget.
+         */
         ContentWidget* widget() const;
 
     private:
