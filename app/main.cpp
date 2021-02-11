@@ -1,5 +1,4 @@
 #include "hal_core/defines.h"
-#include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 #include "hal_core/netlist/hdl_writer/hdl_writer_manager.h"
@@ -196,7 +195,6 @@ int main(int argc, const char* argv[])
 
             /* add timestamp to log output */
             LogManager::get_instance().set_format_pattern("[%d.%m.%Y %H:%M:%S] [%n] [%l] %v");
-            event_log::initialize();
 
             auto ret = plugin->exec(args);
 

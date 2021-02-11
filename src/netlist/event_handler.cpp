@@ -1,4 +1,5 @@
 #include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/event_system/event_log.h"
 
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/gate.h"
@@ -25,6 +26,7 @@ namespace hal
         if (netlist_event_enabled)
         {
             m_netlist_callback(c, netlist, associated_data);
+            event_log::handle_netlist_event(c, netlist, associated_data);
         }
     }
 
@@ -33,6 +35,7 @@ namespace hal
         if (gate_event_enabled)
         {
             m_gate_callback(c, gate, associated_data);
+            event_log::handle_gate_event(c, gate, associated_data);
         }
     }
 
@@ -41,6 +44,7 @@ namespace hal
         if (net_event_enabled)
         {
             m_net_callback(c, net, associated_data);
+            event_log::handle_net_event(c, net, associated_data);
         }
     }
 
@@ -49,6 +53,7 @@ namespace hal
         if (module_event_enabled)
         {
             m_module_callback(c, module, associated_data);
+            event_log::handle_submodule_event(c, module, associated_data);
         }
     }
 

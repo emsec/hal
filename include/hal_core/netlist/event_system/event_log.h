@@ -25,6 +25,13 @@
 
 #include "hal_core/defines.h"
 
+#include "hal_core/netlist/event_handler.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+
+
 /**
  * @ingroup events
  */
@@ -33,9 +40,9 @@ namespace hal
 {
     namespace event_log
     {
-        /**
-        * Initializes the event log channel.
-        */
-        NETLIST_API void initialize();
+        NETLIST_API void handle_gate_event(GateEvent::event event, Gate* gate, u32 associated_data);
+        NETLIST_API void handle_net_event(NetEvent::event event, Net* net, u32 associated_data);
+        NETLIST_API void handle_netlist_event(NetlistEvent::event event, Netlist* netlist, u32 associated_data);
+        NETLIST_API void handle_submodule_event(ModuleEvent::event event, Module* submodule, u32 associated_data);
     }    // namespace event_log
 }    // namespace hal
