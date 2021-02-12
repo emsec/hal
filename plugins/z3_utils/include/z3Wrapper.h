@@ -14,7 +14,7 @@ namespace hal
     /* forward declaration */
     class Netlist;
 
-    namespace z3_utils 
+    namespace z3_utils
     {
         class z3Wrapper
         {
@@ -30,6 +30,11 @@ namespace hal
              * @returns The Z3Wrapper around the provided expression.
              */
             z3Wrapper(std::unique_ptr<z3::context> ctx, std::unique_ptr<z3::expr> expr);
+
+            /** 
+             * TODO document this shit
+             */
+            bool operator==(const z3Wrapper& other) const;
 
             /**
              * Specifc Function used to optimize z3 epxr with the help of the logic synthesis tool ABC - CURRENTLY NOT IMPLEMENTED
@@ -59,7 +64,7 @@ namespace hal
              * @returns The id of the  Z3Wrapper.
              */
             u32 get_id() const;
-            
+
             /**
              * Getter to the wrapped expr.
              * 
@@ -114,7 +119,7 @@ namespace hal
              * 
              * @param[in] nl - Pointer to the netlist that includedes the GND and VCC gates to replace.
              */
-            
+
             void remove_global_inputs(const Netlist* nl);
 
         private:

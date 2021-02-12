@@ -1,14 +1,14 @@
 #include "z3Wrapper.h"
 
+#include "converter/cpp_converter.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
-#include "converter/cpp_converter.h"
 
+#include <array>
 #include <fstream>
 #include <memory>
-#include <array>
 #include <omp.h>
 
 namespace hal
@@ -18,6 +18,12 @@ namespace hal
         z3Wrapper::z3Wrapper(std::unique_ptr<z3::context> ctx, std::unique_ptr<z3::expr> expr) : m_ctx(std::move(ctx)), m_expr(std::move(expr)), m_z3_wrapper_id(create_id())
         {
             this->extract_function_inputs();
+        }
+
+        bool z3Wrapper::operator==(const z3Wrapper& other) const
+        {
+            // TODO implement this shit
+            return false;
         }
 
         u32 z3Wrapper::create_id()
@@ -31,7 +37,8 @@ namespace hal
             return m_z3_wrapper_id;
         }
 
-        z3::expr z3Wrapper::get_expr_in_ctx(z3::context& ctx) const {
+        z3::expr z3Wrapper::get_expr_in_ctx(z3::context& ctx) const
+        {
             auto expr_vec = ctx.parse_string(get_smt2_string().c_str());
             return expr_vec.back().arg(0).simplify();
         }
@@ -126,9 +133,8 @@ namespace hal
 
             log_debug("boolean_function", "directory created");
 
-
             std::string filename = directory + "boolean_func_" + std::to_string(omp_get_thread_num()) + "_" + std::to_string(m_z3_wrapper_id) + ".c";
-            
+
             log_debug("boolean_function", "creating file: {}", filename);
 
             if (!this->write_c_file(filename))
@@ -139,8 +145,7 @@ namespace hal
 
             log_debug("boolean_function", "file created: {}", filename);
 
-
-            const std::string program_name = filename.substr(0, filename.size() - 2);
+            const std::string program_name    = filename.substr(0, filename.size() - 2);
             const std::string compile_command = "g++ -o " + program_name + " " + filename + " -O3";
             system(compile_command.c_str());
 
@@ -153,7 +158,6 @@ namespace hal
 
                 std::array<char, 128> buffer;
                 std::string result;
-
 
                 log_debug("boolean_function", "{}", run_command);
 
@@ -172,7 +176,6 @@ namespace hal
                 const u32 count = std::stoi(result);
                 double cv       = double(count) / double(evaluation_count);
 
-
                 log_debug("boolean_function", "calculation done");
 
                 influences.insert({*it, cv});
@@ -185,7 +188,6 @@ namespace hal
             //std::filesystem::remove(directory);
 
             log_debug("boolean_function", "returning influences");
-
 
             return influences;
         }
@@ -238,7 +240,6 @@ namespace hal
             }
             ofs << c_file;
 
-
             ofs.close();
             return true;
         }
@@ -275,8 +276,9 @@ namespace hal
             }
         }
 
-        z3::expr z3Wrapper::get_expr() const {
+        z3::expr z3Wrapper::get_expr() const
+        {
             return *m_expr;
         }
-    }  // namespace z3_utils
+    }    // namespace z3_utils
 }    // namespace hal
