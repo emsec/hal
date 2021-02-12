@@ -89,6 +89,66 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
+        py_netlist_utils.def("get_combinational_path",
+                             py::overload_cast<const Gate*, bool, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_combinational_path),
+                             py::arg("gate"),
+                             py::arg("get_successors"),
+                             py::arg("cache"),
+                             R"(
+            Find all sequential predecessors or successors of a gate.
+            Traverses combinational logic of all input or output nets until sequential gates are found.
+            The result may include the provided gate itself.
+            The use of the this cached version is recommended in case of extensive usage to improve performance. 
+            The cache will be filled by this function and should initially be provided empty.
+            Different caches for different values of get_successors shall be used.
+        
+            :param hal_py.Gate gate: The initial gate.
+            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param dict[int, list[hal_py.Gate]] cache - The cache. 
+            :returns: All sequential successors or predecessors of the gate.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_utils.def("get_combinational_path", py::overload_cast<const Gate*, bool>(&netlist_utils::get_combinational_path), py::arg("gate"), py::arg("get_successors"), R"(
+            Find all sequential predecessors or successors of a gate.
+            Traverses combinational logic of all input or output nets until sequential gates are found.
+            The result may include the provided gate itself.
+
+            :param hal_py.Gate gate: The initial gate.
+            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :returns: All sequential successors or predecessors of the gate.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_utils.def("get_combinational_path",
+                             py::overload_cast<const Net*, bool, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_combinational_path),
+                             py::arg("net"),
+                             py::arg("get_successors"),
+                             py::arg("cache"),
+                             R"(
+            Find all sequential predecessors or successors of a net.
+            Traverses combinational logic of all input or output nets until sequential gates are found.
+            The use of the cache is recommended in case of extensive usage of this function. 
+            The cache will be filled by this function and should initially be provided empty.
+            Different caches for different values of get_successors shall be used.
+
+            :param hal_py.Net net: The initial net.
+            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param dict[int, list[hal_py.Gate]] cache - The cache. 
+            :returns: All sequential successors or predecessors of the net.
+            :rtype: list[hal_py.Net]
+        )");
+
+        py_netlist_utils.def("get_combinational_path", py::overload_cast<const Net*, bool>(&netlist_utils::get_combinational_path), py::arg("net"), py::arg("get_successors"), R"(
+            Find all sequential predecessors or successors of a net.
+            Traverses combinational logic of all input or output nets until sequential gates are found.
+
+            :param hal_py.Net net: The initial net.
+            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :returns: All sequential successors or predecessors of the net.
+            :rtype: list[hal_py.Net]
+        )");
+
         py_netlist_utils.def("get_nets_at_pins", netlist_utils::get_nets_at_pins, py::arg("gate"), py::arg("pins"), py::arg("is_inputs"), R"(
             Get the nets that are connected to a subset of pins of the specified gate.
         

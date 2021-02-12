@@ -376,6 +376,81 @@ namespace hal
             return get_next_sequential_gates(net, get_successors, cache);
         }
 
+        namespace
+        {
+            std::vector<Gate*> get_combinational_path_internal(const Net* start_net, bool forward, std::unordered_set<u32>& seen, std::unordered_map<u32, std::vector<Gate*>>& cache)
+            {
+                if (auto it = cache.find(start_net->get_id()); it != cache.end())
+                {
+                    return it->second;
+                }
+
+                if (seen.find(start_net->get_id()) != seen.end())
+                {
+                    return {};
+                }
+
+                seen.insert(start_net->get_id());
+
+                std::vector<Gate*> found_combinational;
+
+                for (auto endpoint : forward ? start_net->get_destinations() : start_net->get_sources())
+                {
+                    auto next_gate = endpoint->get_gate();
+
+                    if (GateType::BaseType type = next_gate->get_type()->get_base_type(); type == GateType::BaseType::lut || type == GateType::BaseType::combinational)
+                    {
+                        found_combinational.push_back(next_gate);
+
+                        for (auto n : forward ? next_gate->get_fan_out_nets() : next_gate->get_fan_in_nets())
+                        {
+                            auto next_gates = get_combinational_path_internal(n, forward, seen, cache);
+                            found_combinational.insert(found_combinational.end(), next_gates.begin(), next_gates.end());
+                        }
+                    }
+                }
+
+                std::sort(found_combinational.begin(), found_combinational.end());
+                found_combinational.erase(std::unique(found_combinational.begin(), found_combinational.end()), found_combinational.end());
+
+                cache.emplace(start_net->get_id(), found_combinational);
+                return found_combinational;
+            }
+        }    // namespace
+
+        std::vector<Gate*> get_combinational_path(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::vector<Gate*> found_combinational;
+            for (const auto& n : get_successors ? gate->get_fan_out_nets() : gate->get_fan_in_nets())
+            {
+                auto suc = get_combinational_path(n, get_successors, cache);
+                found_combinational.insert(found_combinational.end(), suc.begin(), suc.end());
+            }
+
+            std::sort(found_combinational.begin(), found_combinational.end());
+            found_combinational.erase(std::unique(found_combinational.begin(), found_combinational.end()), found_combinational.end());
+
+            return found_combinational;
+        }
+
+        std::vector<Gate*> get_combinational_path(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::unordered_set<u32> seen;
+            return get_combinational_path_internal(net, get_successors, seen, cache);
+        }
+
+        std::vector<Gate*> get_combinational_path(const Gate* gate, bool get_successors)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_combinational_path(gate, get_successors, cache);
+        }
+
+        std::vector<Gate*> get_combinational_path(const Net* net, bool get_successors)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_combinational_path(net, get_successors, cache);
+        }
+
         std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_inputs)
         {
             std::unordered_set<Net*> nets;

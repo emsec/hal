@@ -101,6 +101,60 @@ namespace hal
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors);
 
         /**
+         * TODO doc + pybind
+         * Find all sequential predecessors or successors of a gate.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         * The result may include the provided gate itself.
+         * The use of the this cached version is recommended in case of extensive usage to improve performance. 
+         * The cache will be filled by this function and should initially be provided empty.
+         * Different caches for different values of get_successors shall be used.
+         *
+         * @param[in] gate - The initial gate.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[inout] cache - The cache. 
+         * @returns All sequential successors or predecessors of the gate.
+         */
+        CORE_API std::vector<Gate*> get_combinational_path(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
+
+        /**
+         * TODO doc + pybind
+         * Find all sequential predecessors or successors of a gate.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         * The result may include the provided gate itself.
+         *
+         * @param[in] gate - The initial gate.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @returns All sequential successors or predecessors of the gate.
+         */
+        CORE_API std::vector<Gate*> get_combinational_path(const Gate* gate, bool get_successors);
+
+        /**
+         * TODO doc + pybind
+         * Find all sequential predecessors or successors of a net.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         * The use of the cache is recommended in case of extensive usage of this function. 
+         * The cache will be filled by this function and should initially be provided empty.
+         * Different caches for different values of get_successors shall be used.
+         *
+         * @param[in] net - The initial net.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[inout] cache - The cache. 
+         * @returns All sequential successors or predecessors of the net.
+         */
+        CORE_API std::vector<Gate*> get_combinational_path(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
+
+        /**
+         * TODO doc + pybind
+         * Find all sequential predecessors or successors of a net.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         *
+         * @param[in] net - The initial net.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @returns All sequential successors or predecessors of the net.
+         */
+        CORE_API std::vector<Gate*> get_combinational_path(const Net* net, bool get_successors);
+
+        /**
          * Get the nets that are connected to a subset of pins of the specified gate.
          * 
          * @param[in] gate - The gate.
