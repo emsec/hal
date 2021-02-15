@@ -5,6 +5,8 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
+#include "converter/cpp_converter.h"
+#include "converter/verilog_converter.h"
 
 #include <array>
 #include <fstream>
@@ -22,8 +24,221 @@ namespace hal
 
         bool z3Wrapper::operator==(const z3Wrapper& other) const
         {
-            // TODO implement this shit
+            if (m_inputs_net_ids.size() != other.m_inputs_net_ids.size()) {
+                return false;
+            }
+
+            // Have you heard of the boolean influence?      
+            /*
+            auto bf_x = get_boolean_influence();
+            auto bf_y = other.get_boolean_influence();
+
+            std::cout << "Boolean influence X:" << std::endl;
+            for (const auto& [net_id, inf] : bf_x) {
+                std::cout << net_id << ": " << inf << std::endl;
+            }
+
+            std::cout << "Boolean influence Y:" << std::endl;
+            for (const auto& [net_id, inf] : bf_y) {
+                std::cout << net_id << ": " << inf << std::endl;
+            }
+            */
+            
+           z3::expr o_trans_expr(*m_ctx);
+
+#pragma omp critical 
+{
+            o_trans_expr = other.get_expr_in_ctx(*m_ctx);
+}
+            z3::solver s = {*m_ctx};
+
+            // Create a solver using "qe" and "smt" tactics
+            /*
+            z3::solver s = 
+                (z3::tactic(*m_ctx, "qe") &
+                z3::tactic(*m_ctx, "smt")).mk_solver();
+            */
+            // setze gleiche input gleich.
+            // (bvnot (bvxor |191| (bvnot (bvxor |189| |153|))))
+            // (bvnot (bvxor |190| (bvnot (bvxor |149| |185|))))
+
+            /*
+             * x1 == y1 && x1_id == y1_id || x1 == y2 && x2_str == "y2" || x1 == y3 &&
+             * x2 == y1 && x2_id == y1_id || x2 == y2 || x2 == y3 &&
+             * x3 == y1 && x3_id == y1_id || x3 == y2 || x3 == y3 &&
+             * distinct(x1_str, x2_str, x3_str)
+             */
+
+            z3::expr_vector x_ids(*m_ctx);
+            z3::expr x_vals(*m_ctx);
+            z3::expr y_vals(*m_ctx);
+
+            std::vector<Z3_app> vars;
+
+            z3::expr constraint_expr(*m_ctx);
+
+            // Build mapping constraint
+            for (const auto& x_id : m_inputs_net_ids) {
+                auto x_expr = m_ctx->bv_const(std::to_string(x_id).c_str(), 1);
+
+                std::string x_int_name = std::to_string(x_id) + "_id";
+
+                auto x_id_expr = m_ctx->int_const(x_int_name.c_str());
+
+                z3::expr n_expr(*m_ctx);
+                for (const auto& y_id : other.m_inputs_net_ids) {
+                    z3::expr y_expr = m_ctx->bv_const(std::to_string(y_id).c_str(), 1);
+
+                    std::string y_int_name = std::to_string(y_id) + "_id";
+
+                    //auto y_id_expr = m_ctx->int_const(y_int_name.c_str());
+                    auto y_id_val = m_ctx->int_val(y_id);
+
+                    z3::expr value_constraint = x_expr == y_expr;
+                    z3::expr id_constraint = x_id_expr == y_id_val;
+
+                    if (n_expr.to_string() == "null") {
+                        n_expr = (value_constraint && id_constraint); 
+                    } else {
+                        n_expr = n_expr || (value_constraint && id_constraint);
+                    }
+                }
+                
+                if (constraint_expr.to_string() == "null") {
+                    constraint_expr = n_expr;
+                } else {
+                    constraint_expr = constraint_expr && n_expr;
+                }
+
+                if (x_vals.to_string() == "null") {
+                    x_vals = x_expr;
+                } else {
+                    x_vals = z3::concat(x_vals, x_expr);
+                }
+
+                vars.push_back((Z3_app)x_expr);
+                x_ids.push_back(x_id_expr);
+            }
+
+            // for (const auto& y_id : other.m_inputs_net_ids) {
+            //     z3::expr y_expr = m_ctx->bv_const(std::to_string(y_id).c_str(), 1);
+
+            //     if (y_vals.to_string() == "null") {
+            //         y_vals = y_expr;
+            //     } else {
+            //         y_vals = z3::concat(y_vals, y_expr);
+            //     }
+            // }
+
+            //std::cout << x_vals << std::endl;
+            //std::cout << z3::distinct(x_ids) << std::endl;
+            //std::cout << "Constraint: " << constraint_expr << std::endl;
+
+            //std::cout << "LHS: " << m_expr->simplify().to_string() << std::endl;
+            //std::cout << "RHS: " << o_trans_expr.simplify().to_string() << std::endl;
+
+            s.add(constraint_expr);
+            s.add(z3::distinct(x_ids));
+
+            // in order to prevent the solver from finding only edgecases where the functions behave identically check random testcases..
+            srand(0x1337);
+            z3::expr test_vals = m_ctx->bv_val(rand()%2, 1);
+            for (u32 i = 1; i < x_vals.get_sort().bv_size(); i++) {
+                test_vals = z3::concat(test_vals, m_ctx->bv_val(rand()%2, 1));
+            }
+
+            z3::expr f = (*m_expr) == o_trans_expr;
+
+            // We have to use the C API directly for creating quantified formulas.
+            /*
+            z3::expr qf = z3::to_expr(*m_ctx, Z3_mk_forall_const(*m_ctx, 0, vars.size(), vars.data(),
+                                                                0, 0, // no pattern
+                                                                (Z3_ast)f));
+            */
+
+            
+
+            // Here for the for all shit
+            // s.add(qf);
+            // auto c1 = s.check();
+            // std::cout << s.to_smt2() << std::endl;
+            // std::cout << c1 << std::endl;
+            /*
+            if (c1 == z3::sat) {
+                return true;
+            }
+            
             return false;
+            */
+
+            u32 guesses = 0;
+            while (true) {
+                guesses++;
+                s.push();
+
+                s.add(x_vals == test_vals);
+                s.add((*m_expr) == o_trans_expr);
+
+                z3::check_result c1 = s.check();
+
+                if (c1 != z3::sat) {
+                    // z3::model m = s.get_model();
+                    // //std::cout << m << std::endl;
+                    log_debug("z3_utils", "Cannot find a valid permutation under which the expressions are equal.");
+
+                    return false;
+                }
+
+                log_debug("z3_utils", "Found valid mapping.");
+
+                // evaluate found mapping
+                std::vector<std::pair<z3::expr, z3::expr>> found_mapping;
+
+                z3::model m1 = s.get_model();
+
+                // std::cout << "Mapping: " << std::endl;
+                for (const auto& x_i : x_ids) {
+                    found_mapping.push_back({x_i, m1.eval(x_i)});
+                    // std::cout << x_i << ": " << m1.eval(x_i) << std::endl;
+                }
+
+                s.pop();
+                s.push();
+
+                // try to verify found mapping
+                for (const auto& p : found_mapping) {
+                    s.add(p.first == p.second);
+                }
+
+                s.add(*m_expr != o_trans_expr);
+
+                z3::check_result c2 = s.check();
+                if (c2 == z3::unsat) {
+                    log_info("z3_utils", "Took {} guesses to find correct permutation.", guesses);
+                    break;
+                }
+
+                log_debug("z3_utils", "Failed to verify that the found permutation leads to equal expressions.");
+
+                // set the next testval to the val the last permutation converged for
+                z3::model m2 = s.get_model();
+                test_vals = m2.eval(x_vals);
+
+                s.pop();
+
+                // forbid found mapping
+                z3::expr forbidden_mapping(*m_ctx);
+                for (const auto& p : found_mapping) {
+                    if (forbidden_mapping.to_string() == "null") {
+                        forbidden_mapping = p.first != p.second;
+                    } else {
+                        forbidden_mapping = forbidden_mapping || p.first != p.second;
+                    }
+                }
+                s.add(forbidden_mapping);
+            }
+
+            return true;
         }
 
         u32 z3Wrapper::create_id()
@@ -199,17 +414,13 @@ namespace hal
             return s.to_smt2();
         }
 
-        /*
         bool z3Wrapper::write_verilog_file(const std::filesystem::path& path) const
         {
-            // write verilog
+            // Convert z3 expr to boolean function in verilog
             auto converter    = VerilogConverter();
             auto verilog_file = converter.convert_z3_expr_to_func(*this);
 
-            // if (verilog_file == "x") {
-            //     std::cout << m_expr << std::endl;
-            // }
-
+            // parse out verilog function into file
             std::ofstream ofs(path);
             if (!ofs.is_open())
             {
@@ -219,9 +430,9 @@ namespace hal
 
             ofs << verilog_file;
 
+            ofs.close();
             return true;
         }
-        */
 
         bool z3Wrapper::write_c_file(const std::filesystem::path& path) const
         {

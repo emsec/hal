@@ -102,12 +102,15 @@ namespace hal
             std::vector<u32> get_inputs_net_ids() const;
 
             /**
-             * Used for the optimization with ABC - CURRENTLY NOT IMPLEMENTED
+             * Transforms the wrapped z3 expression into verligo syntax and writes it to a file.
+             * 
+             * @param[in] path - Path where the file is written to.
+             * @returns True in case of success, false otherwise.
              */
-            //bool write_verilog_file(const std::filesystem::path& path) const;
+            bool write_verilog_file(const std::filesystem::path& path) const;
 
             /**
-             * Transforms the wrapped z3 expression into efficent c code and writed it to a file.
+             * Transforms the wrapped z3 expression into efficent c code and writes it to a file.
              * 
              * @param[in] path - Path where the file is written to.
              * @returns True in case of success, false otherwise.
