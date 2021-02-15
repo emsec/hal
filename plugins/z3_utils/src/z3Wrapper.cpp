@@ -28,6 +28,11 @@ namespace hal
                 return false;
             }
 
+            /*
+             * This acts a timeout value.
+             */
+            u32 max_guesses = 1;
+
             // Have you heard of the boolean influence?      
             /*
             auto bf_x = get_boolean_influence();
@@ -49,7 +54,7 @@ namespace hal
            z3::expr other_trans_expr(comp_ctx);
            z3::expr original_trans_expr(comp_ctx);
 
-//#pragma omp critical 
+#pragma omp critical 
 {
             other_trans_expr = other.get_expr_in_ctx(comp_ctx);
             original_trans_expr = this->get_expr_in_ctx(comp_ctx);
@@ -62,20 +67,9 @@ namespace hal
                 (z3::tactic(comp_ctx, "qe") &
                 z3::tactic(comp_ctx, "smt")).mk_solver();
             */
-            // setze gleiche input gleich.
-            // (bvnot (bvxor |191| (bvnot (bvxor |189| |153|))))
-            // (bvnot (bvxor |190| (bvnot (bvxor |149| |185|))))
-
-            /*
-             * x1 == y1 && x1_id == y1_id || x1 == y2 && x2_str == "y2" || x1 == y3 &&
-             * x2 == y1 && x2_id == y1_id || x2 == y2 || x2 == y3 &&
-             * x3 == y1 && x3_id == y1_id || x3 == y2 || x3 == y3 &&
-             * distinct(x1_str, x2_str, x3_str)
-             */
 
             z3::expr_vector x_ids(comp_ctx);
             z3::expr x_vals(comp_ctx);
-            z3::expr y_vals(comp_ctx);
 
             std::vector<Z3_app> vars;
 
@@ -120,19 +114,10 @@ namespace hal
                     x_vals = z3::concat(x_vals, x_expr);
                 }
 
-                vars.push_back((Z3_app)x_expr);
+                //vars.push_back((Z3_app)x_expr);
                 x_ids.push_back(x_id_expr);
             }
 
-            // for (const auto& y_id : other.m_inputs_net_ids) {
-            //     z3::expr y_expr = m_ctx->bv_const(std::to_string(y_id).c_str(), 1);
-
-            //     if (y_vals.to_string() == "null") {
-            //         y_vals = y_expr;
-            //     } else {
-            //         y_vals = z3::concat(y_vals, y_expr);
-            //     }
-            // }
 
             //std::cout << x_vals << std::endl;
             //std::cout << z3::distinct(x_ids) << std::endl;
@@ -147,7 +132,7 @@ namespace hal
             // in order to prevent the solver from finding only edgecases where the functions behave identically check random testcases..
             srand(0x1337);
             z3::expr test_vals = comp_ctx.bv_val(rand()%2, 1);
-            for (u32 i = 1; i < x_vals.get_sort().bv_size(); i++) {
+            for (u32 i = 1; i < m_inputs_net_ids.size(); i++) {
                 test_vals = z3::concat(test_vals, comp_ctx.bv_val(rand()%2, 1));
             }
 
@@ -179,6 +164,11 @@ namespace hal
 
                 if (guesses % 1000 == 0) {
                     std::cout << guesses << std::endl;
+                }
+
+                if (guesses > max_guesses) {
+                    log_debug("z3_utils", "Timeouted.");
+                    return false;
                 }
 
                 s.push();
