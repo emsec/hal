@@ -43,20 +43,24 @@ namespace hal
                 std::cout << net_id << ": " << inf << std::endl;
             }
             */
-            
-           z3::expr o_trans_expr(*m_ctx);
+           
+           z3::context comp_ctx;
 
-#pragma omp critical 
+           z3::expr other_trans_expr(comp_ctx);
+           z3::expr original_trans_expr(comp_ctx);
+
+//#pragma omp critical 
 {
-            o_trans_expr = other.get_expr_in_ctx(*m_ctx);
+            other_trans_expr = other.get_expr_in_ctx(comp_ctx);
+            original_trans_expr = this->get_expr_in_ctx(comp_ctx);
 }
-            z3::solver s = {*m_ctx};
+            z3::solver s = {comp_ctx};
 
             // Create a solver using "qe" and "smt" tactics
             /*
             z3::solver s = 
-                (z3::tactic(*m_ctx, "qe") &
-                z3::tactic(*m_ctx, "smt")).mk_solver();
+                (z3::tactic(comp_ctx, "qe") &
+                z3::tactic(comp_ctx, "smt")).mk_solver();
             */
             // setze gleiche input gleich.
             // (bvnot (bvxor |191| (bvnot (bvxor |189| |153|))))
@@ -69,30 +73,30 @@ namespace hal
              * distinct(x1_str, x2_str, x3_str)
              */
 
-            z3::expr_vector x_ids(*m_ctx);
-            z3::expr x_vals(*m_ctx);
-            z3::expr y_vals(*m_ctx);
+            z3::expr_vector x_ids(comp_ctx);
+            z3::expr x_vals(comp_ctx);
+            z3::expr y_vals(comp_ctx);
 
             std::vector<Z3_app> vars;
 
-            z3::expr constraint_expr(*m_ctx);
+            z3::expr constraint_expr(comp_ctx);
 
             // Build mapping constraint
             for (const auto& x_id : m_inputs_net_ids) {
-                auto x_expr = m_ctx->bv_const(std::to_string(x_id).c_str(), 1);
+                auto x_expr = comp_ctx.bv_const(std::to_string(x_id).c_str(), 1);
 
                 std::string x_int_name = std::to_string(x_id) + "_id";
 
-                auto x_id_expr = m_ctx->int_const(x_int_name.c_str());
+                auto x_id_expr = comp_ctx.int_const(x_int_name.c_str());
 
-                z3::expr n_expr(*m_ctx);
+                z3::expr n_expr(comp_ctx);
                 for (const auto& y_id : other.m_inputs_net_ids) {
-                    z3::expr y_expr = m_ctx->bv_const(std::to_string(y_id).c_str(), 1);
+                    z3::expr y_expr = comp_ctx.bv_const(std::to_string(y_id).c_str(), 1);
 
                     std::string y_int_name = std::to_string(y_id) + "_id";
 
-                    //auto y_id_expr = m_ctx->int_const(y_int_name.c_str());
-                    auto y_id_val = m_ctx->int_val(y_id);
+                    //auto y_id_expr = comp_ctx.int_const(y_int_name.c_str());
+                    auto y_id_val = comp_ctx.int_val(y_id);
 
                     z3::expr value_constraint = x_expr == y_expr;
                     z3::expr id_constraint = x_id_expr == y_id_val;
@@ -142,12 +146,12 @@ namespace hal
 
             // in order to prevent the solver from finding only edgecases where the functions behave identically check random testcases..
             srand(0x1337);
-            z3::expr test_vals = m_ctx->bv_val(rand()%2, 1);
+            z3::expr test_vals = comp_ctx.bv_val(rand()%2, 1);
             for (u32 i = 1; i < x_vals.get_sort().bv_size(); i++) {
-                test_vals = z3::concat(test_vals, m_ctx->bv_val(rand()%2, 1));
+                test_vals = z3::concat(test_vals, comp_ctx.bv_val(rand()%2, 1));
             }
 
-            z3::expr f = (*m_expr) == o_trans_expr;
+            z3::expr f = original_trans_expr == other_trans_expr;
 
             // We have to use the C API directly for creating quantified formulas.
             /*
@@ -155,8 +159,6 @@ namespace hal
                                                                 0, 0, // no pattern
                                                                 (Z3_ast)f));
             */
-
-            
 
             // Here for the for all shit
             // s.add(qf);
@@ -174,10 +176,15 @@ namespace hal
             u32 guesses = 0;
             while (true) {
                 guesses++;
+
+                if (guesses % 1000 == 0) {
+                    std::cout << guesses << std::endl;
+                }
+
                 s.push();
 
                 s.add(x_vals == test_vals);
-                s.add((*m_expr) == o_trans_expr);
+                s.add(original_trans_expr == other_trans_expr);
 
                 z3::check_result c1 = s.check();
 
@@ -210,7 +217,7 @@ namespace hal
                     s.add(p.first == p.second);
                 }
 
-                s.add(*m_expr != o_trans_expr);
+                s.add(original_trans_expr != other_trans_expr);
 
                 z3::check_result c2 = s.check();
                 if (c2 == z3::unsat) {
@@ -227,7 +234,7 @@ namespace hal
                 s.pop();
 
                 // forbid found mapping
-                z3::expr forbidden_mapping(*m_ctx);
+                z3::expr forbidden_mapping(comp_ctx);
                 for (const auto& p : found_mapping) {
                     if (forbidden_mapping.to_string() == "null") {
                         forbidden_mapping = p.first != p.second;
