@@ -21,8 +21,19 @@ namespace hal
         {
             this->extract_function_inputs();
         }
-
+        
         bool z3Wrapper::operator==(const z3Wrapper& other) const
+        {
+            const std::string path = "verilog_network_";
+            this->write_verilog_file(path + "X");
+            other.write_verilog_file(path + "Y");
+
+            // call abc
+
+            return false;
+        }
+        
+        bool z3Wrapper::oldeq(const z3Wrapper& other) const
         {
             if (m_inputs_net_ids.size() != other.m_inputs_net_ids.size()) {
                 return false;
