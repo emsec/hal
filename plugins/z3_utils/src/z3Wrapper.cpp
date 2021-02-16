@@ -32,30 +32,41 @@ namespace hal
             bool functions_are_equal = false;
 
             // create tmp directory for files
-            std::string path = "/tmp/id_" + std::to_string(m_z3_wrapper_id) + "_" + std::to_string(omp_get_thread_num());
-            std::filesystem::create_directory(path);
+            std::string x_function = "/tmp/" + std::to_string(m_z3_wrapper_id) + ".v";
+            std::string y_function = "/tmp/" + std::to_string(other.m_z3_wrapper_id) + ".v";
 
-            // write boolean functions to verilog
-            std::string this_function  = path + "/X.v";
-            std::string other_function = path + "/Y.v";
+#pragma omp critical
+            {
+                // check if functions match
+                if (!std::filesystem::exists(x_function))
+                {
+                    log_info("z3_utils", "writing {}:", x_function);
+                    this->write_verilog_file(x_function);
+                    log_info("z3_utils", "done {}:", x_function);
+                }
 
-            this->write_verilog_file(this_function);
-            other.write_verilog_file(other_function);
+                // check if functions match
+                if (!std::filesystem::exists(y_function))
+                {
+                    log_info("z3_utils", "writing {}:", x_function);
+                    other.write_verilog_file(y_function);
+                    log_info("z3_utils", "done {}:", x_function);
+                }
+            }
 
-            // call abc
-            std::string cd      = "cd " + path;
-            std::string command = "cd " + path + "&& abc -c \"bm " + this_function + " " + other_function + "\" > /dev/null";
+            std::string compare_dir = "/tmp/compare_" + std::to_string(m_z3_wrapper_id) + "_" + std::to_string(other.m_z3_wrapper_id);
+            std::filesystem::create_directory(compare_dir);
+
+            std::string command = "cd " + compare_dir + " && abc -c \"bm " + x_function + " " + y_function + "\" > /dev/null";
 
             system(command.c_str());
 
             // check if functions match
-            if (std::filesystem::exists(path + "/IOmatch.txt"))
+            if (std::filesystem::exists(compare_dir + "/IOmatch.txt"))
             {
                 functions_are_equal = true;
             }
 
-            // cleanup
-            std::filesystem::remove_all(path);
             return functions_are_equal;
         }
 
