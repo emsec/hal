@@ -87,7 +87,12 @@ namespace hal
             auto sub_expressions_string = l.substr(sub_expressions_start, sub_expressions_size);
 
             auto sub_expressions            = extract_sub_exrepssions(sub_expressions_string);
+
+            log_debug("z3_utils", "Found {} sub_expressions.", sub_expressions.size());
+
             auto translated_sub_expressions = translate_sub_expressions(sub_expressions);
+
+            log_debug("z3_utils", "Translated {} sub_expressions.", translated_sub_expressions.size());
 
             auto rhs = merge_sub_expressions(translated_sub_expressions);
 

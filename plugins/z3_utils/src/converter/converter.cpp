@@ -96,6 +96,7 @@ namespace hal
                 }
 
                 start_index = found_index + 1;
+                log_debug("z3_utils", "Trying to find paranthesis_pairs.");
             }
 
             return pairs;
@@ -115,6 +116,7 @@ namespace hal
                     count++;
 
                     start_index = found_index + op_str.size();
+                    log_debug("z3_utils", "{}", op_str);
                 }
             }
 
@@ -169,6 +171,11 @@ namespace hal
                     }
                 } else {
                     q.push(f_name);
+                }
+
+                if (!q.empty()) {
+                    log_debug("z3_utils", "Queue: {} at front {}.", q.size(), q.front());
+                    log_debug("z3_utils", "Sub: {}", sub_expressions.at(q.front()));
                 }
             }
 
@@ -241,7 +248,6 @@ namespace hal
         std::string Converter::convert_z3_expr_to_func(const z3Wrapper& e) const {
             std::string assignments = "";
 
-
             // TODO remove this is only for debugging
             // auto test_ctx = std::make_unique<z3::context>();
             // z3::expr t_1 = test_ctx->bv_const("1001", 1);
@@ -259,6 +265,8 @@ namespace hal
                     assignments = assignments + assignment;;
                 }
             }
+
+            log_debug("z3_utils", "found {} assignments.", assignments.size());
 
             if (assignments.empty()) {
                 // in order to stay compliant with the rest of the converter structure we simply simulate a dummy assignment with a double negation.
