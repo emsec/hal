@@ -43,17 +43,17 @@ namespace hal
                 // check if functions match
                 if (!std::filesystem::exists(x_function))
                 {
-                    log_info("z3_utils", "writing {}:", x_function);
+                    std::filesystem::create_directory("/tmp/" + std::string(getenv("USER")));
+                    std::filesystem::create_directory(base_path);
                     this->write_verilog_file(x_function);
-                    log_info("z3_utils", "done {}:", x_function);
                 }
 
                 // check if functions match
                 if (!std::filesystem::exists(y_function))
                 {
-                    log_info("z3_utils", "writing {}:", x_function);
+                    std::filesystem::create_directory("/tmp/" + std::string(getenv("USER")));
+                    std::filesystem::create_directory(base_path);
                     other.write_verilog_file(y_function);
-                    log_info("z3_utils", "done {}:", x_function);
                 }
             }
 
