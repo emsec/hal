@@ -31,9 +31,11 @@ namespace hal
 
             bool functions_are_equal = false;
 
+            std::string base_path = "/tmp/netlists/";
+
             // create tmp directory for files
-            std::string x_function = "/tmp/" + std::to_string(m_z3_wrapper_id) + ".v";
-            std::string y_function = "/tmp/" + std::to_string(other.m_z3_wrapper_id) + ".v";
+            std::string x_function = base_path + std::to_string(m_z3_wrapper_id) + ".v";
+            std::string y_function = base_path + std::to_string(other.m_z3_wrapper_id) + ".v";
 
 #pragma omp critical
             {
@@ -54,7 +56,7 @@ namespace hal
                 }
             }
 
-            std::string compare_dir = "/tmp/compare_" + std::to_string(m_z3_wrapper_id) + "_" + std::to_string(other.m_z3_wrapper_id);
+            std::string compare_dir = base_dir + "/compare_" + std::to_string(m_z3_wrapper_id) + "_" + std::to_string(other.m_z3_wrapper_id);
             std::filesystem::create_directory(compare_dir);
 
             std::string command = "cd " + compare_dir + " && abc -c \"bm " + x_function + " " + y_function + "\" > /dev/null";
