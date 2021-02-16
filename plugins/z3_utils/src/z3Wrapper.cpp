@@ -12,6 +12,7 @@
 #include <fstream>
 #include <memory>
 #include <omp.h>
+#include <stdlib.h>
 
 namespace hal
 {
@@ -31,7 +32,7 @@ namespace hal
 
             bool functions_are_equal = false;
 
-            std::string base_path = "/tmp/netlists/";
+            std::string base_path = "/tmp/" + std::string(getenv("USER")) + "/netlists/";
 
             // create tmp directory for files
             std::string x_function = base_path + std::to_string(m_z3_wrapper_id) + ".v";
@@ -42,17 +43,17 @@ namespace hal
                 // check if functions match
                 if (!std::filesystem::exists(x_function))
                 {
-                    log_info("z3_utils", "writing {}:", x_function);
+                    std::filesystem::create_directory("/tmp/" + std::string(getenv("USER")));
+                    std::filesystem::create_directory(base_path);
                     this->write_verilog_file(x_function);
-                    log_info("z3_utils", "done {}:", x_function);
                 }
 
                 // check if functions match
                 if (!std::filesystem::exists(y_function))
                 {
-                    log_info("z3_utils", "writing {}:", x_function);
+                    std::filesystem::create_directory("/tmp/" + std::string(getenv("USER")));
+                    std::filesystem::create_directory(base_path);
                     other.write_verilog_file(y_function);
-                    log_info("z3_utils", "done {}:", x_function);
                 }
             }
 
