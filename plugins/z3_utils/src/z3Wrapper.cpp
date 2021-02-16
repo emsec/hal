@@ -57,18 +57,21 @@ namespace hal
                 }
             }
 
-            std::string compare_dir = base_path + "/compare_" + std::to_string(m_z3_wrapper_id) + "_" + std::to_string(other.m_z3_wrapper_id);
+            std::string compare_dir = base_path + "compare_" + std::to_string(m_z3_wrapper_id) + "_" + std::to_string(other.m_z3_wrapper_id);
             std::filesystem::create_directory(compare_dir);
 
-            std::string command = "cd " + compare_dir + " && abc -c \"bm " + x_function + " " + y_function + "\" > /dev/null";
-
-            system(command.c_str());
-
+            std::string command = "cd " + compare_dir + " && timeout --kill-after=90s 60s abc -c \"bm " + x_function + " " + y_function + "\" > /dev/null";
+            int status          = system(command.c_str());
             // check if functions match
             if (std::filesystem::exists(compare_dir + "/IOmatch.txt"))
             {
                 functions_are_equal = true;
             }
+            if (status == 124 || status == (128 + 9))
+            {
+                log_info("z3_utils", "timeout reached");
+            }
+            // std::filesystem::remove_all(compare_dir);
 
             return functions_are_equal;
         }
