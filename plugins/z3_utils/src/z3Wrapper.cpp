@@ -12,6 +12,7 @@
 #include <fstream>
 #include <memory>
 #include <omp.h>
+#include <stdlib.h>
 
 namespace hal
 {
@@ -31,7 +32,7 @@ namespace hal
 
             bool functions_are_equal = false;
 
-            std::string base_path = "/tmp/netlists/";
+            std::string base_path = "/tmp/" + std::string(getenv("USER")) + "/netlists/";
 
             // create tmp directory for files
             std::string x_function = base_path + std::to_string(m_z3_wrapper_id) + ".v";
