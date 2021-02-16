@@ -56,7 +56,7 @@ namespace hal
                 }
             }
 
-            std::string compare_dir = base_dir + "/compare_" + std::to_string(m_z3_wrapper_id) + "_" + std::to_string(other.m_z3_wrapper_id);
+            std::string compare_dir = base_path + "/compare_" + std::to_string(m_z3_wrapper_id) + "_" + std::to_string(other.m_z3_wrapper_id);
             std::filesystem::create_directory(compare_dir);
 
             std::string command = "cd " + compare_dir + " && abc -c \"bm " + x_function + " " + y_function + "\" > /dev/null";
