@@ -22,8 +22,6 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
-#include "gui/settings/settings_items/settings_item_dropdown.h"
-#include "gui/settings/settings_items/settings_item_checkbox.h"
 
 #include <QAction>
 #include <QApplication>
@@ -50,14 +48,13 @@ namespace hal
 
     GraphGraphicsView::GraphGraphicsView(GraphWidget* parent)
         : QGraphicsView(parent), mGraphWidget(parent), mMinimapEnabled(false), mGridEnabled(true), mGridClustersEnabled(true),
-          mZoomModifier(Qt::NoModifier), mZoomFactorBase(1.0015)
+          mZoomModifier(Qt::NoModifier), mZoomFactorBase(1.0015), mPanModifier(Qt::KeyboardModifier::ShiftModifier),
+          mDragModifier(Qt::KeyboardModifier::AltModifier), mGridType(GraphicsScene::GridType::Dots)
     {
         connect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphGraphicsView::conditionalUpdate);
         connect(this, &GraphGraphicsView::customContextMenuRequested, this, &GraphGraphicsView::showContextMenu);
         connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphGraphicsView::handleGlobalSettingChanged);
  
-        initializeSettings();
-
         setContextMenuPolicy(Qt::CustomContextMenu);
         setOptimizationFlags(QGraphicsView::DontSavePainterState);
         setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -73,16 +70,7 @@ namespace hal
         mKeyModifierMap.insert(KeyModifier::Ctrl, Qt::KeyboardModifier::ControlModifier);
         mKeyModifierMap.insert(KeyModifier::Shift, Qt::KeyboardModifier::ShiftModifier);
 
-
-        mSettingGridType = new SettingsItemDropdown(
-            "Background Grid",
-            "graph_view/grid_type",
-            int(graph_widget_constants::grid_type::None),
-            "Graph View",
-            "Specifies the grid pattern in the background of the Graph View scene"
-        );
-       mSettingGridType->setValueNames<graph_widget_constants::grid_type>();
-
+        /*
        mSettingDragModifier = new SettingsItemDropdown(
             "Move/Swap Modifier",
             "graph_view/drag_mode_modifier",
@@ -101,10 +89,6 @@ namespace hal
         );
         mSettingPanModifier->setValueNames<KeyModifier>();
         
-        connect(mSettingGridType, &SettingsItemDropdown::valueChanged, this, [this](){
-            mGridType = graph_widget_constants::grid_type(mSettingGridType->value().toInt());
-        });
-
         connect(mSettingDragModifier, &SettingsItemDropdown::valueChanged, this, [this](){
             mDragModifier = mKeyModifierMap.value(KeyModifier(mSettingDragModifier->value().toInt()));
         });
@@ -113,27 +97,9 @@ namespace hal
             mPanModifier = mKeyModifierMap.value(KeyModifier(mSettingPanModifier->value().toInt()));
         });
 
-
-        mGridType = graph_widget_constants::grid_type(mSettingGridType->value().toInt());
         mDragModifier = mKeyModifierMap.value(KeyModifier(mSettingDragModifier->value().toInt()));
         mPanModifier = mKeyModifierMap.value(KeyModifier(mSettingPanModifier->value().toInt()));
-
-        #ifdef GUI_DEBUG_GRID
-        mSettingDebugGrid = new SettingsItemCheckbox(
-            "GUI Debug Grid",
-            "debug/grid",
-            false,
-            "Graph View",
-            "Specifies wheather the debug grid is displayed in the Graph View. The gird represents the scene as the layouter interprets it."
-        );
-
-        connect(mSettingDebugGrid, &SettingsItemCheckbox::valueChanged, this, [this](){
-            mDebugGridposEnable = mSettingDebugGrid->value().toBool();
-        });
-
-        //mDebugGridposEnable = gSettingsManager->get("debug/grid").toBool();
-        mDebugGridposEnable = mSettingDebugGrid->value().toBool();
-        #endif  
+        */
     }
 
     void GraphGraphicsView::conditionalUpdate()
@@ -319,7 +285,7 @@ namespace hal
         Q_UNUSED(rect)
 
 #ifdef GUI_DEBUG_GRID
-        if (mDebugGridposEnable)
+        if(mGraphWidget->getContext()->scene()->debugGridEnabled())
             debugDrawLayouterGridpos(painter);
 #endif
 
@@ -1198,5 +1164,15 @@ namespace hal
             }
         }
         return LayouterPoint{index, pos};
+    }
+
+    GraphicsScene::GridType GraphGraphicsView::gridType()
+    {
+        return mGridType;
+    }
+
+    void GraphGraphicsView::setGridType(GraphicsScene::GridType gridType)
+    {
+        mGridType = gridType;
     }
 }    // namespace hal

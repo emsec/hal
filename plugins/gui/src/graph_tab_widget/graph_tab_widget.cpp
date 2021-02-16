@@ -3,6 +3,7 @@
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_graphics_view.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
 
 #include "gui/gui_globals.h"
 
@@ -13,7 +14,7 @@
 
 namespace hal
 {
-    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2)
+    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2), mGridType(GraphicsScene::GridType::None)
     {
         mContentLayout->addWidget(mTabWidget);
         mTabWidget->setTabsClosable(true);
@@ -25,6 +26,27 @@ namespace hal
         connect(gGraphContextManager, &GraphContextManager::contextRenamed, this, &GraphTabWidget::handleContextRenamed);
         connect(gGraphContextManager, &GraphContextManager::deletingContext, this, &GraphTabWidget::handleContextRemoved);
         connect(gGuiApi, &GuiApi::navigationRequested, this, &GraphTabWidget::ensureSelectionVisible);
+        
+        mSettingGridType = new SettingsItemDropdown(
+            "Background Grid",
+            "graph_view/grid_type",
+            GraphicsScene::GridType::None,
+            "Graph View",
+            "Specifies the grid pattern in the background of the Graph View scene"
+        );
+        mSettingGridType->setValueNames<GraphicsScene::GridType>();
+
+        mGridType = GraphicsScene::GridType(mSettingGridType->value().toInt());
+        
+        connect(mSettingGridType, &SettingsItemDropdown::intChanged, this, [this](){
+            mGridType = GraphicsScene::GridType(mSettingGridType->value().toInt());
+
+            for (int i = 0; i < mTabWidget->count(); i++)
+            {
+                auto p = dynamic_cast<GraphWidget*>(mTabWidget->widget(i));
+                p->view()->setGridType(mGridType);
+            }
+        });
     }
 
     QList<QShortcut *> GraphTabWidget::createShortcuts()
@@ -127,6 +149,7 @@ namespace hal
     void GraphTabWidget::addGraphWidgetTab(GraphContext* context)
     {
         GraphWidget* new_graph_widget = new GraphWidget(context);
+        new_graph_widget->view()->setGridType(mGridType);
         //mContextWidgetMap.insert(context, new_graph_widget);
 
         int tab_index = addTab(new_graph_widget, context->name());

@@ -30,7 +30,7 @@ namespace hal
 
     bool GraphicsScene::sGridEnabled = true;
     bool GraphicsScene::sGridClustersEnabled = true;
-    graph_widget_constants::grid_type GraphicsScene::sGridType = graph_widget_constants::grid_type::Lines;
+    GraphicsScene::GridType GraphicsScene::sGridType = GraphicsScene::GridType::Dots;
 
     QColor GraphicsScene::sGridBaseLineColor = QColor(30, 30, 30);
     QColor GraphicsScene::sGridClusterLineColor = QColor(15, 15, 15);
@@ -74,9 +74,9 @@ namespace hal
         sGridClustersEnabled = value;
     }
 
-    void GraphicsScene::setGridType(const graph_widget_constants::grid_type& grid_type)
+    void GraphicsScene::setGridType(const GraphicsScene::GridType& gridType)
     {
-        sGridType = grid_type;
+        sGridType = gridType;
     }
 
     void GraphicsScene::setGridBaseLineColor(const QColor& color)
@@ -107,7 +107,7 @@ namespace hal
     }
 
     GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
-        mDragShadowGate(new NodeDragShadow())
+        mDragShadowGate(new NodeDragShadow()), mDebugGridEnable(false)
     {
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
         //mScene.setBspTreeDepth(10);
@@ -117,10 +117,6 @@ namespace hal
         connectAll();
 
         QGraphicsScene::addItem(mDragShadowGate);
-
-        #ifdef GUI_DEBUG_GRID
-        mDebugGridEnable = gSettingsManager->get("debug/grid").toBool();
-        #endif
     }
 
     void GraphicsScene::startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
@@ -629,9 +625,9 @@ namespace hal
 
         switch (sGridType)
         {
-        case graph_widget_constants::grid_type::None:
-            return; // nothing to do
-        case graph_widget_constants::grid_type::Lines:
+        case GraphicsScene::GridType::None:
+            break;//return; // nothing to do //indirectly disabled the debug grid if activated
+        case GraphicsScene::GridType::Lines:
         {
             QVarLengthArray<QLine, 512> base_lines;
             QVarLengthArray<QLine, 64> cluster_lines;
@@ -669,7 +665,7 @@ namespace hal
             break;
         }
 
-        case graph_widget_constants::grid_type::Dots:
+        case GraphicsScene::GridType::Dots:
         {
             QVector<QPoint> base_points;
             QVector<QPoint> cluster_points;
@@ -769,6 +765,17 @@ namespace hal
             painter->drawLine(line);
             y -= mDebugDefaultHeight;
         }
+    }
+
+    void GraphicsScene::setDebugGridEnabled(bool enabled)
+    {
+        mDebugGridEnable = enabled;
+        qDebug() << "SCENE: " << mDebugGridEnable;
+    }
+
+    bool GraphicsScene::debugGridEnabled()
+    {
+        return mDebugGridEnable;
     }
     #endif
 }

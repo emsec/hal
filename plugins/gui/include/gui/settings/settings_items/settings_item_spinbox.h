@@ -52,6 +52,9 @@ namespace hal
             return mMaximum;
         }
 
+    Q_SIGNALS:
+        void intChanged(int value);
+
     private:
         int mValue;
         int mDefaultValue;

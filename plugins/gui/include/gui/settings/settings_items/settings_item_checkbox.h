@@ -42,6 +42,9 @@ namespace hal
         virtual void setValue(const QVariant& v) override;
         virtual SettingsWidgetNew* editWidget(QWidget* parent = nullptr) override;
 
+    Q_SIGNALS:
+        void boolChanged(bool);
+
     private:
         bool mValue;
         bool mDefaultValue;

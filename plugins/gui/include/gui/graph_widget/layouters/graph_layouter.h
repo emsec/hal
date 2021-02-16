@@ -230,6 +230,9 @@ namespace hal
 
         bool done() const;
 
+        bool optimizeNetLayoutEnabled();
+        void setOptimizeNetLayoutEnabled(bool enbabled);
+
         QVector<qreal> xValues() const;
         QVector<qreal> yValues() const;
 
@@ -379,6 +382,8 @@ namespace hal
         QHash<u32,EndpointList> mWireEndpoint;
         QHash<u32,int> mGlobalInputHash;
         QHash<u32,int> mGlobalOutputHash;
+
+        bool mOptimizeNetLayout;
     };
 }
 

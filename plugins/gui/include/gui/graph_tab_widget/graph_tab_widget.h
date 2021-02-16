@@ -27,6 +27,7 @@
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_widget.h"
+#include "gui/graph_widget/graphics_scene.h"
 
 #include <QMap>
 
@@ -35,6 +36,8 @@ class QVBoxLayout;
 
 namespace hal
 {
+    class SettingsItemDropdown;
+
     class GraphTabWidget : public ContentWidget
     {
         Q_OBJECT
@@ -68,6 +71,8 @@ namespace hal
 
         QMap<GraphContext*, QWidget*> mContextWidgetMap;
 
+        GraphicsScene::GridType mGridType;
+
         int getContextTabIndex(GraphContext* context) const;
 
         //functions
@@ -77,5 +82,7 @@ namespace hal
 
         void zoomInShortcut();
         void zoomOutShortcut();
+
+        SettingsItemDropdown* mSettingGridType;
     };
 }

@@ -35,8 +35,6 @@ namespace hal
 {
     class GraphicsItem;
     class GraphWidget;
-    class SettingsItemDropdown;
-    class SettingsItemCheckbox;
 
     namespace graph_widget_constants
     {
@@ -54,6 +52,9 @@ namespace hal
         void gentleZoom(const qreal factor);
         //zooms into the center of the viewport
         void viewportCenterZoom(const qreal factor);
+
+        GraphicsScene::GridType gridType();
+        void setGridType(GraphicsScene::GridType gridType);
 
         enum KeyModifier{Shift, Ctrl, Alt};
         Q_ENUM(KeyModifier)
@@ -122,8 +123,7 @@ namespace hal
         void debugShowLayouterGridpos(const QPoint& mouse_pos);
         void debugDrawLayouterGridpos(QPainter* painter);
         QPoint m_debug_gridpos = QPoint(0,0);
-        bool mDebugGridposEnable;
-        SettingsItemCheckbox* mSettingDebugGrid;
+        bool mDebugGridposEnable = true;
         #endif
 
         GraphWidget* mGraphWidget;
@@ -134,7 +134,7 @@ namespace hal
 
         bool mGridEnabled;
         bool mGridClustersEnabled;
-        graph_widget_constants::grid_type mGridType;
+        GraphicsScene::GridType mGridType;
 
         QPoint mDragMousedownPosition;
         QPoint mDragStartGridpos;
@@ -158,9 +158,5 @@ namespace hal
         static const QString sAssignToGrouping;
 
         QMap<KeyModifier, Qt::KeyboardModifier> mKeyModifierMap;
-
-        SettingsItemDropdown* mSettingGridType;
-        SettingsItemDropdown* mSettingDragModifier;
-        SettingsItemDropdown* mSettingPanModifier;
     };
 }

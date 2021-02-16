@@ -37,6 +37,7 @@ namespace hal
         mValue = newValue;
 
         Q_EMIT valueChanged();
+        Q_EMIT intChanged(v.toInt());
     }
 
     SettingsWidgetNew* SettingsItemDropdown::editWidget(QWidget* parent)

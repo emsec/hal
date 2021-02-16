@@ -44,20 +44,18 @@ namespace hal
     class GraphicsModule;
     class GraphicsNet;
 
-    namespace graph_widget_constants
-    {
-    enum class grid_type;
-    }
-
     class GraphicsScene : public QGraphicsScene
     {
         Q_OBJECT
 
     public:
+        enum GridType {None, Dots, Lines};
+        Q_ENUM(GridType)
+
         static void setLod(const qreal& lod);
         static void setGridEnabled(const bool& value);
         static void setGridClustersEnabled(const bool& value);
-        static void setGridType(const graph_widget_constants::grid_type& grid_type);
+        static void setGridType(const GridType& gridType);
 
         static void setGridBaseLineColor(const QColor& color);
         static void setGridClusterLineColor(const QColor& color);
@@ -91,6 +89,8 @@ namespace hal
 
         #ifdef GUI_DEBUG_GRID
         void debugSetLayouterGrid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
+        void setDebugGridEnabled(bool enabled);
+        bool debugGridEnabled();
         #endif
 
     public Q_SLOTS:
@@ -135,7 +135,7 @@ namespace hal
 
         static bool sGridEnabled;
         static bool sGridClustersEnabled;
-        static graph_widget_constants::grid_type sGridType;
+        static GraphicsScene::GridType sGridType;
 
         static QColor sGridBaseLineColor;
         static QColor sGridClusterLineColor;

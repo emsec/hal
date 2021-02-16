@@ -62,6 +62,9 @@ namespace hal
             reloadSettings();
         }
 
+    Q_SIGNALS:
+        void intChanged(int value);
+
     private:
         int mValue;
         int mDefaultValue;

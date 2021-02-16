@@ -40,6 +40,9 @@ namespace hal
         virtual void setValue(const QVariant& v) override;
         virtual SettingsWidgetNew* editWidget(QWidget* parent = nullptr) override;
 
+    Q_SIGNALS:
+        void stringChanged(const QString& text);
+
     private:
         QString mValue;
         QString mDefaultValue;

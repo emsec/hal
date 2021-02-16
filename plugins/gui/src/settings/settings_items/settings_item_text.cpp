@@ -38,6 +38,7 @@ namespace hal
         mValue = newValue;
         
         Q_EMIT valueChanged();
+        Q_EMIT stringChanged(v.toString());
     }
     
     SettingsWidgetNew* SettingsItemText::editWidget(QWidget* parent)

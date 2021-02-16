@@ -42,6 +42,8 @@ namespace hal
 
     class ContextTableModel;
 
+    class SettingsItemCheckbox;
+
     class GraphContextManager : public QObject
     {
         Q_OBJECT
@@ -103,5 +105,10 @@ namespace hal
 
         ContextTableModel* mContextTableModel;
         u32 mMaxContextId;
+
+        SettingsItemCheckbox* mSettingDebugGrid;
+        SettingsItemCheckbox* mSettingNetLayout;
+        SettingsItemCheckbox* mSettingParseLayout;
+        SettingsItemCheckbox* mSettingLayoutBoxes;
     };
 }

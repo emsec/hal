@@ -152,23 +152,23 @@ namespace hal
         graph_grid_options.insert("Dots", "dots");
         DropdownSetting* graph_grid_settings = new DropdownSetting("graph_view/grid_type", "Grid", graph_grid_options, "", this);
         registerWidget("graphview-item", graph_grid_settings);
-        //DONE
+        
         DropdownSetting* graph_dragswap_settings = new DropdownSetting("graph_view/drag_mode_modifier", "Move/Swap modifier", standard_modifiers, "toggles drag-and-drop mode", this);
         registerWidget("graphview-item", graph_dragswap_settings);
         assignExclusiveGroup("kbdmodifiers", graph_dragswap_settings);
-        //DONE
+        
         DropdownSetting* graph_movescene_settings = new DropdownSetting("graph_view/move_modifier", "Pan scene modifier", standard_modifiers, "lets you pan the scene", this);
         registerWidget("graphview-item", graph_movescene_settings);
         assignExclusiveGroup("kbdmodifiers", graph_movescene_settings);
-
-        CheckboxSetting* graph_layout_parse = new CheckboxSetting("graph_view/layout_parse", "Apply parsed position", "enabled", "<--- use parsed verilog coordinates if any", this);
-        registerWidget("graphview-item", graph_layout_parse);
-
-        CheckboxSetting* graph_layout_boxes = new CheckboxSetting("graph_view/layout_boxes", "Optimize box layout", "enabled", "<--- fast random placement if disabled", this);
-        registerWidget("graphview-item", graph_layout_boxes);
-
-        CheckboxSetting* graph_layout_nets = new CheckboxSetting("graph_view/layout_nets", "Optimize net layout", "enabled", "<--- net optimization not fully tested", this);
-        registerWidget("graphview-item", graph_layout_nets);
+        //DONE
+        //CheckboxSetting* graph_layout_parse = new CheckboxSetting("graph_view/layout_parse", "Apply parsed position", "enabled", "<--- use parsed verilog coordinates if any", this);
+        //registerWidget("graphview-item", graph_layout_parse);
+        //DONE
+        //CheckboxSetting* graph_layout_boxes = new CheckboxSetting("graph_view/layout_boxes", "Optimize box layout", "enabled", "<--- fast random placement if disabled", this);
+        //registerWidget("graphview-item", graph_layout_boxes);
+        //DONE
+        //CheckboxSetting* graph_layout_nets = new CheckboxSetting("graph_view/layout_nets", "Optimize net layout", "enabled", "<--- net optimization not fully tested", this);
+        //registerWidget("graphview-item", graph_layout_nets);
 
         makeSection("Navigation", "navigation-item", ":/icons/graph");
 
@@ -258,11 +258,11 @@ namespace hal
         assignExclusiveGroup("keybinds", everywhere_search_keybind);
 
         makeSection("Debug", "debug-item", ":/icons/bug");
-
-        #ifdef GUI_DEBUG_GRID
-        CheckboxSetting* grid_debug_setting = new CheckboxSetting("debug/grid", "Show grid debug Overlay", "enabled", "<-- shows you how the layouter sees the graph", this);
-        registerWidget("debug-item", grid_debug_setting);
-        #endif
+        //DONE
+        //#ifdef GUI_DEBUG_GRID
+        //CheckboxSetting* grid_debug_setting = new CheckboxSetting("debug/grid", "Show grid debug Overlay", "enabled", "<-- shows you how the layouter sees the graph", this);
+        //registerWidget("debug-item", grid_debug_setting);
+        //#endif
 
         // TextSetting* py_interpreter_setting = new TextSetting("python/interpreter", "Python Interpreter", "will be used after restart", "/path/to/python");
         // registerWidget("advanced-item", py_interpreter_setting);
