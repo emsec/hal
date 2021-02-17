@@ -48,9 +48,6 @@ namespace hal
     public Q_SLOTS:
         void handleFilterTextChanged(const QString& filter_text);
 
-    private Q_SLOTS:
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
-
     private:
         gui_utility::mSortMechanism mSortMechanism;
         QRegularExpression mFilterExpression;

@@ -12,9 +12,6 @@ namespace hal
         // IN VIEW
         // EVERY TIME FILTER CHANGES / ITEM GETS ADDED MODIFY LOCAL DATA STRUCTURE TO REFLECT CURRENT ITEM VISUALS
         // STYLED DELEGATES USE THAT DATA STRUCTURE TO DRAW THEMSELVES
-
-        mSortMechanism = gui_utility::mSortMechanism(gSettingsManager->get("navigation/mSortMechanism").toInt());
-        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &ModuleProxyModel::handleGlobalSettingChanged);
     }
 
     bool ModuleProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
@@ -58,17 +55,6 @@ namespace hal
         }
 
         return gui_utility::compare(mSortMechanism, name_left, name_right);
-    }
-
-    void ModuleProxyModel::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
-    {
-        Q_UNUSED(sender);
-        if (key == "navigation/mSortMechanism")
-        {
-            mSortMechanism = gui_utility::mSortMechanism(value.toInt());
-            // force re-sort
-            invalidate();
-        }
     }
 
     gui_utility::mSortMechanism ModuleProxyModel::sortMechanism()

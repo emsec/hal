@@ -101,7 +101,6 @@ namespace hal
         void handleBlockCountChanged(int new_block_count);
         void updateLineNumberArea(const QRect& rect, int dy);
         void updateMinimap(const QRect& rect, int dy);
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         void updateLayout();

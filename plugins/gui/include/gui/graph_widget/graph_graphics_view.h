@@ -86,8 +86,6 @@ namespace hal
         void handleGroupingAssignNew();
         void handleGroupingAssingExisting();
 
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
-
     private:
         void paintEvent(QPaintEvent* event) override;
         void drawForeground(QPainter* painter, const QRectF& rect) override;

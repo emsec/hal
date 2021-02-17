@@ -53,7 +53,6 @@ namespace hal
     {
         connect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphGraphicsView::conditionalUpdate);
         connect(this, &GraphGraphicsView::customContextMenuRequested, this, &GraphGraphicsView::showContextMenu);
-        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphGraphicsView::handleGlobalSettingChanged);
  
         setContextMenuPolicy(Qt::CustomContextMenu);
         setOptimizationFlags(QGraphicsView::DontSavePainterState);
@@ -888,27 +887,6 @@ namespace hal
             }
             context->add({}, gates);
         }
-    }
-
-    void GraphGraphicsView::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
-    {
-        UNUSED(sender);
-        if (key == "graph_view/drag_mode_modifier")
-        {
-            unsigned int modifier = value.toUInt();
-            mDragModifier       = Qt::KeyboardModifier(modifier);
-        }
-        else if (key == "graph_view/move_modifier")
-        {
-            unsigned int modifier = value.toUInt();
-            mPanModifier       = Qt::KeyboardModifier(modifier);
-        }
-#ifdef GUI_DEBUG_GRID
-        else if (key == "debug/grid")
-        {
-            mDebugGridposEnable = value.toBool();
-        }
-#endif
     }
 
     void GraphGraphicsView::handleFoldSingleAction()

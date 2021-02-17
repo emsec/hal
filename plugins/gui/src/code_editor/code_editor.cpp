@@ -215,43 +215,6 @@ namespace hal
         mMinimap->update();
     }
 
-    void CodeEditor::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
-    {
-        Q_UNUSED(sender);
-        if (key == "python/highlightCurrentLine")
-        {
-            bool enable = value.toBool();
-            if (enable == mLineHighlightEnabled)
-                return;
-            mLineHighlightEnabled = enable;
-            if (enable)
-            {
-                connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
-                highlightCurrentLine();
-            }
-            else
-            {
-                disconnect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
-                clearLineHighlight();
-            }
-        }
-        else if (key == "python/line_numbers")
-        {
-            mLineNumbersEnabled = value.toBool();
-            updateLayout();
-        }
-        else if (key == "python/line_wrap")
-        {
-            mLineWrapEnabled = value.toBool();
-            setLineWrapMode(mLineWrapEnabled ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
-        }
-        else if (key == "python/minimap")
-        {
-            mMinimapEnabled = value.toBool();
-            updateLayout();
-        }
-    }
-
     void CodeEditor::search(const QString& string)
     {
         // THREAD ?
