@@ -532,30 +532,8 @@ namespace hal
                     continue;
                 }
 
-                BooleanFunction bf            = functions.begin()->second;
-                std::vector<std::string> vars = bf.get_variables();
-                for (std::string var : vars)
-                {
-                    std::vector<Endpoint*> sources = gate->get_fan_in_net(var)->get_sources();
-                    if (sources.size() != 1)
-                    {
-                        continue;
-                    }
-
-                    if (sources.at(0)->get_gate()->is_gnd_gate())
-                    {
-                        bf.substitute(var, BooleanFunction::Value::ZERO);
-                    }
-                    else if (sources.at(0)->get_gate()->is_vcc_gate())
-                    {
-                        bf.substitute(var, BooleanFunction::Value::ONE);
-                    }
-                }
-
-                bf.optimize_constants();
-
                 std::vector<Endpoint*> fan_in           = gate->get_fan_in_endpoints();
-                std::string func_str                    = bf.to_string();
+                std::string func_str                    = functions.begin()->second.to_string();
                 std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(GateType::PinDirection::input);
                 if (in_pins.find(func_str) == in_pins.end())
                 {
