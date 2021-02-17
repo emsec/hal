@@ -38,40 +38,24 @@ namespace hal
             std::string x_function = base_path + std::to_string(m_z3_wrapper_id) + ".v";
             std::string y_function = base_path + std::to_string(other.m_z3_wrapper_id) + ".v";
 
-#pragma omp critical
-            {
-                // check if functions match
-                if (!std::filesystem::exists(x_function))
-                {
-                    std::filesystem::create_directory("/tmp/" + std::string(getenv("USER")));
-                    std::filesystem::create_directory(base_path);
-                    this->write_verilog_file(x_function);
-                }
-
-                // check if functions match
-                if (!std::filesystem::exists(y_function))
-                {
-                    std::filesystem::create_directory("/tmp/" + std::string(getenv("USER")));
-                    std::filesystem::create_directory(base_path);
-                    other.write_verilog_file(y_function);
-                }
-            }
-
             std::string compare_dir = base_path + "compare_" + std::to_string(m_z3_wrapper_id) + "_" + std::to_string(other.m_z3_wrapper_id);
             std::filesystem::create_directory(compare_dir);
 
-            std::string command = "cd " + compare_dir + " && timeout --kill-after=90s 60s abc -c \"bm " + x_function + " " + y_function + "\" > /dev/null";
+            std::string command = "cd " + compare_dir + " && timeout --kill-after=66s 60s abc -c \"bm " + x_function + " " + y_function + "\" > " + compare_dir + "/output.txt 2>&1";
             int status          = system(command.c_str());
+
             // check if functions match
             if (std::filesystem::exists(compare_dir + "/IOmatch.txt"))
             {
                 functions_are_equal = true;
             }
-            if (status == 124 || status == (128 + 9))
+
+            if (status >= 124)
             {
-                log_info("z3_utils", "timeout reached");
+                log_info("z3_utils", "timeout, trying fallback");
+                functions_are_equal = oldeq(other);
             }
-            // std::filesystem::remove_all(compare_dir);
+            std::filesystem::remove_all(compare_dir);
 
             return functions_are_equal;
         }
@@ -86,7 +70,7 @@ namespace hal
             /*
              * This acts a timeout value.
              */
-            u32 max_guesses = 1;
+            u32 max_guesses = 1000;
 
             // Have you heard of the boolean influence?
             /*
@@ -115,6 +99,10 @@ namespace hal
                 original_trans_expr = this->get_expr_in_ctx(comp_ctx);
             }
             z3::solver s = {comp_ctx};
+
+            z3::params p(comp_ctx);
+            p.set(":timeout", 60000u);
+            s.set(p);
 
             // Create a solver using "qe" and "smt" tactics
             /*
@@ -229,14 +217,14 @@ namespace hal
             {
                 guesses++;
 
-                if (guesses % 1000 == 0)
+                if (guesses % 100 == 0)
                 {
                     std::cout << guesses << std::endl;
                 }
 
                 if (guesses > max_guesses)
                 {
-                    log_debug("z3_utils", "Timeouted.");
+                    log_info("z3_utils", "Simon says: timeout guesses");
                     return false;
                 }
 
@@ -247,13 +235,24 @@ namespace hal
 
                 z3::check_result c1 = s.check();
 
-                if (c1 != z3::sat)
+                if (c1 == z3::unsat)
                 {
                     // z3::model m = s.get_model();
                     // //std::cout << m << std::endl;
-                    log_debug("z3_utils", "Cannot find a valid permutation under which the expressions are equal.");
+                    log_info("z3_utils", "Simon says: not equal!, yeaayy fallback successfull");
 
                     return false;
+                }
+                else if (c1 == z3::unsat)
+                {
+                    log_info("z3_utils", "Simon says: timeout solver after 60s");
+                }
+                
+                
+
+                if (guesses == 1)
+                {
+                    log_info("z3_utils", "Simon says: found first guess.");
                 }
 
                 log_debug("z3_utils", "Found valid mapping.");
@@ -284,7 +283,7 @@ namespace hal
                 z3::check_result c2 = s.check();
                 if (c2 == z3::unsat)
                 {
-                    log_info("z3_utils", "Took {} guesses to find correct permutation.", guesses);
+                    log_info("z3_utils", "Simon says: equal!; took {} guesses, totally worth it!", guesses);
                     break;
                 }
 
