@@ -18,7 +18,9 @@ namespace hal
             .value("latch", GateType::BaseType::latch, R"(Represents a sequential latch gate type.)")
             .value("ram", GateType::BaseType::ram, R"(Represents a sequential RAM gate type.)")
             .value("io", GateType::BaseType::io, R"(Represents an IO gate type.)")
-            .value("dsp", GateType::BaseType::dsp, R"(Represents a sequential DSP gate type.)")
+            .value("dsp", GateType::BaseType::dsp, R"(Represents a DSP gate type.)")
+            .value("mux", GateType::BaseType::mux, R"(Represents a combinational MUX gate type.)")
+            .value("buffer", GateType::BaseType::buffer, R"(Represents a combinational buffer gate type.)")
             .export_values();
 
         py::enum_<GateType::PinDirection>(py_gate_type, "PinDirection", R"(
@@ -83,18 +85,25 @@ namespace hal
             :rtype: str
         )");
 
-        py_gate_type.def_property_readonly("base_type", &GateType::get_base_type, R"(
-            The base type of the gate typ, which can be either 'combinatorial', 'lut', ‘ff', or 'latch'.
+        py_gate_type.def_property_readonly("base_types", &GateType::get_base_types, R"(
+            The base types assigned to the gate type.
 
-            :type: hal_py.GateType.BaseType
+            :type: set[hal_py.GateType.BaseType]
         )");
 
-        py_gate_type.def("get_base_type", &GateType::get_base_type, R"(
-            Get the base type of the gate type.
-            The base type can be either 'combinatorial', 'lut', ‘ff', or 'latch'.
+        py_gate_type.def("get_base_types", &GateType::get_base_types, R"(
+            Get the base types assigned to the gate type.
 
             :returns: The base type of the gate type.
-            :rtype: hal_py.GateType.BaseType
+            :rtype: set[hal_py.GateType.BaseType]
+        )");
+
+        py_gate_type.def("has_base_type", &GateType::has_base_type, R"(
+            Check whether the gate type is tagged with the given base type.
+
+            :param hal_py.GateType.BaseType type: The base type.
+            :returns: True if the gate type is of the given base type, false otherwise.
+            :rtype: bool
         )");
 
         py_gate_type.def_property_readonly("gate_library", &GateType::get_gate_library, R"(

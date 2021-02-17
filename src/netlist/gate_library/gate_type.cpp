@@ -4,8 +4,15 @@
 
 namespace hal
 {
-    const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string =
-        {{BaseType::combinational, "combinational"}, {BaseType::ff, "ff"}, {BaseType::latch, "latch"}, {BaseType::lut, "lut"}, {BaseType::ram, "ram"}, {BaseType::io, "io"}, {BaseType::dsp, "dsp"}};
+    const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string         = {{BaseType::combinational, "combinational"},
+                                                                                                 {BaseType::ff, "ff"},
+                                                                                                 {BaseType::latch, "latch"},
+                                                                                                 {BaseType::lut, "lut"},
+                                                                                                 {BaseType::ram, "ram"},
+                                                                                                 {BaseType::io, "io"},
+                                                                                                 {BaseType::dsp, "dsp"},
+                                                                                                 {BaseType::mux, "mux"},
+                                                                                                 {BaseType::buffer, "buffer"}};
     const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::none, "none"},
                                                                                                          {PinDirection::input, "input"},
                                                                                                          {PinDirection::output, "output"},
@@ -34,12 +41,12 @@ namespace hal
         {PinDirection::inout, {PinType::none, PinType::io_pad}},
         {PinDirection::internal, {PinType::none}}};
 
-    GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, BaseType base_type)
+    GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<BaseType> base_types)
     {
         m_gate_library = gate_library;
         m_id           = id;
         m_name         = name;
-        m_base_type    = base_type;
+        m_base_types   = base_types;
     }
 
     u32 GateType::get_id() const
@@ -52,9 +59,14 @@ namespace hal
         return m_name;
     }
 
-    GateType::BaseType GateType::get_base_type() const
+    std::set<GateType::BaseType> GateType::get_base_types() const
     {
-        return m_base_type;
+        return m_base_types;
+    }
+
+    bool GateType::has_base_type(BaseType type) const
+    {
+        return m_base_types.find(type) != m_base_types.end();
     }
 
     GateLibrary* GateType::get_gate_library() const

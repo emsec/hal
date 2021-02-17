@@ -321,7 +321,7 @@ namespace hal
                 {
                     auto next_gate = endpoint->get_gate();
 
-                    if (next_gate->get_type()->get_base_type() == GateType::BaseType::ff)
+                    if (next_gate->get_type()->has_base_type(GateType::BaseType::ff))
                     {
                         found_ffs.push_back(next_gate);
                     }
@@ -398,7 +398,7 @@ namespace hal
                 {
                     auto next_gate = endpoint->get_gate();
 
-                    if (GateType::BaseType type = next_gate->get_type()->get_base_type(); type == GateType::BaseType::lut || type == GateType::BaseType::combinational)
+                    if (next_gate->get_type()->has_base_type(GateType::BaseType::combinational))
                     {
                         found_combinational.push_back(next_gate);
 
@@ -491,14 +491,12 @@ namespace hal
             u32 num_gates = 0;
 
             // buffers can only be of these base types
-            std::unordered_set<GateType::BaseType> types = {GateType::BaseType::combinational, GateType::BaseType::lut};
-
             for (const auto& gate : netlist->get_gates())
             {
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
 
                 GateType* gt = gate->get_type();
-                if (types.find(gt->get_base_type()) == types.end())
+                if (gt->has_base_type(GateType::BaseType::combinational))
                 {
                     // continue if of invalid base type
                     continue;
@@ -575,7 +573,7 @@ namespace hal
             Net* gnd_net = *(*netlist->get_gnd_gates().begin())->get_fan_out_nets().begin();
 
             // iterate all LUT gates
-            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_base_type(GateType::BaseType::lut); }))
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
@@ -652,7 +650,7 @@ namespace hal
                 {"1110101011000000", "OAI22"}     // !((A | D) & (B | C))
             };
 
-            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_base_type(GateType::BaseType::lut); }))
             {
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
 
