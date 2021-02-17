@@ -219,6 +219,11 @@ namespace hal
         explicit GraphLayouter(const GraphContext* const context, QObject* parent = nullptr);
 
         /**
+         * Destructor.
+         */
+        ~GraphLayouter();
+
+        /**
          * Gets the name of the layouter.
          *
          * @returns the name of the layouter.
