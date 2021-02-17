@@ -46,24 +46,24 @@ namespace hal
         std::unique_ptr<GateLibrary> create_lut_buffer_lib() 
         {
             std::unique_ptr<GateLibrary> lib = std::unique_ptr<GateLibrary>(new GateLibrary("dummy_path", "dummy_name"));
-            GateType* gnd = lib->create_gate_type("GND", GateType::BaseType::combinational);
+            GateType* gnd = lib->create_gate_type("GND", {GateType::BaseType::combinational});
             gnd->add_pin("O", GateType::PinDirection::output);
             gnd->add_boolean_function("O", BooleanFunction::from_string("0"));
             lib->mark_gnd_gate_type(gnd);
 
-            GateType* vdd = lib->create_gate_type("VDD", GateType::BaseType::combinational);
+            GateType* vdd = lib->create_gate_type("VDD", {GateType::BaseType::combinational});
             vdd->add_pin("O", GateType::PinDirection::output);
             vdd->add_boolean_function("O", BooleanFunction::from_string("1"));
             lib->mark_vcc_gate_type(vdd);
 
-            GateType* lut4 = lib->create_gate_type("LUT4", GateType::BaseType::lut);
+            GateType* lut4 = lib->create_gate_type("LUT4", {GateType::BaseType::combinational,GateType::BaseType::lut});
             lut4->add_input_pins({"I0", "I1", "I2", "I3"});
             lut4->add_output_pin("O");
             lut4->assign_pin_type("O", GateType::PinType::lut);
             lut4->set_config_data_category("generic");
             lut4->set_config_data_identifier("INIT");
 
-            GateType* buf = lib->create_gate_type("BUF", GateType::BaseType::combinational);
+            GateType* buf = lib->create_gate_type("BUF", {GateType::BaseType::combinational});
             buf->add_input_pin("I");
             buf->add_output_pin("O");
             buf->add_boolean_function("O", BooleanFunction::from_string("I"));
@@ -451,7 +451,7 @@ namespace hal
 
             for (const auto gate : gates) 
             {
-                EXPECT_NE(gate->get_type()->get_base_type(), GateType::BaseType::combinational);
+                EXPECT_TRUE(gate->get_type()->has_base_type(GateType::BaseType::combinational));
             }
 
             EXPECT_EQ(l0->get_successor("O")->get_gate(), l4);

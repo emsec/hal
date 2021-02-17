@@ -35,60 +35,88 @@ namespace hal
         GateLibrary gl("no_path", "example_gl");
 
         // combinational gate type
-        GateType* gt1 = gl.create_gate_type("combinational", GateType::BaseType::combinational);
-        ASSERT_NE(gt1, nullptr);
-        EXPECT_EQ(gt1->get_id(), 1);
-        EXPECT_EQ(gt1->get_name(), "combinational");
-        EXPECT_EQ(gt1->get_base_type(), GateType::BaseType::combinational);
-        EXPECT_EQ(gt1->get_gate_library(), &gl);
+        {
+            GateType* gt = gl.create_gate_type("combinational", {GateType::BaseType::combinational});
+            ASSERT_NE(gt, nullptr);
+            EXPECT_EQ(gt->get_id(), 1);
+            EXPECT_EQ(gt->get_name(), "combinational");
+            EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::combinational}));
+            EXPECT_TRUE(gt->has_base_type(GateType::BaseType::combinational));
+            EXPECT_FALSE(gt->has_base_type(GateType::BaseType::ff));
+            EXPECT_EQ(gt->get_gate_library(), &gl);
+        }
 
         // FF gate type
-        GateType* gt2 = gl.create_gate_type("ff", GateType::BaseType::ff);
-        ASSERT_NE(gt2, nullptr);
-        EXPECT_EQ(gt2->get_id(), 2);
-        EXPECT_EQ(gt2->get_name(), "ff");
-        EXPECT_EQ(gt2->get_base_type(), GateType::BaseType::ff);
-        EXPECT_EQ(gt2->get_gate_library(), &gl);
+        {
+            GateType* gt = gl.create_gate_type("ff", {GateType::BaseType::ff});
+            ASSERT_NE(gt, nullptr);
+            EXPECT_EQ(gt->get_id(), 2);
+            EXPECT_EQ(gt->get_name(), "ff");
+            EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::ff}));
+            EXPECT_TRUE(gt->has_base_type(GateType::BaseType::ff));
+            EXPECT_FALSE(gt->has_base_type(GateType::BaseType::combinational));
+            EXPECT_EQ(gt->get_gate_library(), &gl);
+        }
 
         // latch gate type
-        GateType* gt3 = gl.create_gate_type("latch", GateType::BaseType::latch);
-        ASSERT_NE(gt3, nullptr);
-        EXPECT_EQ(gt3->get_id(), 3);
-        EXPECT_EQ(gt3->get_name(), "latch");
-        EXPECT_EQ(gt3->get_base_type(), GateType::BaseType::latch);
-        EXPECT_EQ(gt3->get_gate_library(), &gl);
+        {
+            GateType* gt = gl.create_gate_type("latch", {GateType::BaseType::latch});
+            ASSERT_NE(gt, nullptr);
+            EXPECT_EQ(gt->get_id(), 3);
+            EXPECT_EQ(gt->get_name(), "latch");
+            EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::latch}));
+            EXPECT_TRUE(gt->has_base_type(GateType::BaseType::latch));
+            EXPECT_FALSE(gt->has_base_type(GateType::BaseType::ff));
+            EXPECT_EQ(gt->get_gate_library(), &gl);
+        }
 
         // LUT gate type
-        GateType* gt4 = gl.create_gate_type("lut", GateType::BaseType::lut);
-        ASSERT_NE(gt4, nullptr);
-        EXPECT_EQ(gt4->get_id(), 4);
-        EXPECT_EQ(gt4->get_name(), "lut");
-        EXPECT_EQ(gt4->get_base_type(), GateType::BaseType::lut);
-        EXPECT_EQ(gt4->get_gate_library(), &gl);
+        {
+            GateType* gt = gl.create_gate_type("lut", {GateType::BaseType::lut});
+            ASSERT_NE(gt, nullptr);
+            EXPECT_EQ(gt->get_id(), 4);
+            EXPECT_EQ(gt->get_name(), "lut");
+            EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::lut}));
+            EXPECT_TRUE(gt->has_base_type(GateType::BaseType::lut));
+            EXPECT_FALSE(gt->has_base_type(GateType::BaseType::ff));
+            EXPECT_EQ(gt->get_gate_library(), &gl);
+        }
 
         // RAM gate type
-        GateType* gt5 = gl.create_gate_type("ram", GateType::BaseType::ram);
-        ASSERT_NE(gt5, nullptr);
-        EXPECT_EQ(gt5->get_id(), 5);
-        EXPECT_EQ(gt5->get_name(), "ram");
-        EXPECT_EQ(gt5->get_base_type(), GateType::BaseType::ram);
-        EXPECT_EQ(gt5->get_gate_library(), &gl);
+        {
+            GateType* gt = gl.create_gate_type("ram", {GateType::BaseType::ram});
+            ASSERT_NE(gt, nullptr);
+            EXPECT_EQ(gt->get_id(), 5);
+            EXPECT_EQ(gt->get_name(), "ram");
+            EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::ram}));
+            EXPECT_TRUE(gt->has_base_type(GateType::BaseType::ram));
+            EXPECT_FALSE(gt->has_base_type(GateType::BaseType::combinational));
+            EXPECT_EQ(gt->get_gate_library(), &gl);
+        }
 
         // IO gate type
-        GateType* gt6 = gl.create_gate_type("io", GateType::BaseType::io);
-        ASSERT_NE(gt6, nullptr);
-        EXPECT_EQ(gt6->get_id(), 6);
-        EXPECT_EQ(gt6->get_name(), "io");
-        EXPECT_EQ(gt6->get_base_type(), GateType::BaseType::io);
-        EXPECT_EQ(gt6->get_gate_library(), &gl);
+        {
+            GateType* gt = gl.create_gate_type("io", {GateType::BaseType::io});
+            ASSERT_NE(gt, nullptr);
+            EXPECT_EQ(gt->get_id(), 6);
+            EXPECT_EQ(gt->get_name(), "io");
+            EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::io}));
+            EXPECT_TRUE(gt->has_base_type(GateType::BaseType::io));
+            EXPECT_FALSE(gt->has_base_type(GateType::BaseType::combinational));
+            EXPECT_EQ(gt->get_gate_library(), &gl);
+        }
 
         // DSP gate type
-        GateType* gt7 = gl.create_gate_type("dsp", GateType::BaseType::dsp);
-        ASSERT_NE(gt7, nullptr);
-        EXPECT_EQ(gt7->get_id(), 7);
-        EXPECT_EQ(gt7->get_name(), "dsp");
-        EXPECT_EQ(gt7->get_base_type(), GateType::BaseType::dsp);
-        EXPECT_EQ(gt7->get_gate_library(), &gl);
+        {
+            GateType* gt = gl.create_gate_type("dsp", {GateType::BaseType::dsp});
+            ASSERT_NE(gt, nullptr);
+            EXPECT_EQ(gt->get_id(), 7);
+            EXPECT_EQ(gt->get_name(), "dsp");
+            EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::dsp}));
+            EXPECT_TRUE(gt->has_base_type(GateType::BaseType::dsp));
+            EXPECT_FALSE(gt->has_base_type(GateType::BaseType::combinational));
+            EXPECT_EQ(gt->get_gate_library(), &gl);
+        }
 
         TEST_END
     }
@@ -104,8 +132,8 @@ namespace hal
 
         std::stringstream ss;
         GateLibrary gl("no_path", "example_gl");
-        GateType* gt1 = gl.create_gate_type("dummy1", GateType::BaseType::combinational);
-        GateType* gt2 = gl.create_gate_type("dummy2", GateType::BaseType::combinational);
+        GateType* gt1 = gl.create_gate_type("dummy1", {GateType::BaseType::combinational});
+        GateType* gt2 = gl.create_gate_type("dummy2", {GateType::BaseType::combinational});
 
         ASSERT_NE(gt1, nullptr);
         ASSERT_NE(gt2, nullptr);
@@ -207,7 +235,7 @@ namespace hal
 
         // input
         {
-            GateType* gt = gl.create_gate_type("dummy1", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy1", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
             EXPECT_TRUE(gt->add_pin("I0", GateType::PinDirection::input));
             EXPECT_TRUE(gt->add_pins({"I1", "I2"}, GateType::PinDirection::input));
@@ -231,7 +259,7 @@ namespace hal
 
         // output
         {
-            GateType* gt = gl.create_gate_type("dummy2", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy2", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
             EXPECT_TRUE(gt->add_pin("O0", GateType::PinDirection::output));
             EXPECT_TRUE(gt->add_pins({"O1", "O2"}, GateType::PinDirection::output));
@@ -255,7 +283,7 @@ namespace hal
 
         // inout
         {
-            GateType* gt = gl.create_gate_type("dummy3", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy3", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
             EXPECT_TRUE(gt->add_pin("IO0", GateType::PinDirection::inout));
             EXPECT_TRUE(gt->add_pins({"IO1", "IO2"}, GateType::PinDirection::inout));
@@ -279,7 +307,7 @@ namespace hal
 
         // internal
         {
-            GateType* gt = gl.create_gate_type("dummy4", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy4", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
             EXPECT_TRUE(gt->add_pin("INT0", GateType::PinDirection::internal));
             EXPECT_TRUE(gt->add_pins({"INT1", "INT2"}, GateType::PinDirection::internal));
@@ -303,7 +331,7 @@ namespace hal
 
         // existing pin
         {
-            GateType* gt = gl.create_gate_type("dummy5", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy5", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
             EXPECT_TRUE(gt->add_pin("A", GateType::PinDirection::input));
             EXPECT_EQ(gt->get_pins(), std::vector<std::string>({"A"}));
@@ -338,7 +366,7 @@ namespace hal
         
         // pin groups
         {   
-            GateType* gt = gl.create_gate_type("dummy1", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy1", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
             EXPECT_TRUE(gt->add_pins({"A(0)", "A(1)", "B(0)", "B(1)", "C(0)", "C(1)"}, GateType::PinDirection::input));
         
@@ -350,7 +378,7 @@ namespace hal
 
         // add already existing pin group
         {
-            GateType* gt = gl.create_gate_type("dummy2", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy2", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
 
             EXPECT_TRUE(gt->add_pins({"A(0)", "A(1)"}, GateType::PinDirection::input));
@@ -362,7 +390,7 @@ namespace hal
 
         // add invalid pin to pin group
         {
-            GateType* gt = gl.create_gate_type("dummy3", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy3", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
 
             EXPECT_FALSE(gt->assign_pin_group("A", index_to_pin_a));
@@ -385,7 +413,7 @@ namespace hal
 
         // combinational pin types
         {
-            GateType* gt = gl.create_gate_type("dummy1", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy1", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
 
             std::unordered_set<std::string> in_pins = {"I0", "I1"};
@@ -434,7 +462,7 @@ namespace hal
 
         // LUT pin types
         {
-            GateType* gt = gl.create_gate_type("dummy2", GateType::BaseType::lut);
+            GateType* gt = gl.create_gate_type("dummy2", {GateType::BaseType::lut});
             ASSERT_NE(gt, nullptr);
 
             std::unordered_map<std::string, GateType::PinType> pin_to_type;
@@ -464,7 +492,7 @@ namespace hal
 
         // FF pin types
         {
-            GateType* gt = gl.create_gate_type("dummy3", GateType::BaseType::ff);
+            GateType* gt = gl.create_gate_type("dummy3", {GateType::BaseType::ff});
             ASSERT_NE(gt, nullptr);
 
             std::unordered_map<std::string, GateType::PinType> pin_to_type;
@@ -538,7 +566,7 @@ namespace hal
         
         // single function
         {
-            GateType* gt = gl.create_gate_type("dummy1", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy1", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
 
             BooleanFunction bf1 = BooleanFunction::ONE;
@@ -552,7 +580,7 @@ namespace hal
 
         // multiple functions
         {
-            GateType* gt = gl.create_gate_type("dummy2", GateType::BaseType::combinational);
+            GateType* gt = gl.create_gate_type("dummy2", {GateType::BaseType::combinational});
             ASSERT_NE(gt, nullptr);
         
             std::unordered_map<std::string, BooleanFunction> func_map = {
@@ -578,7 +606,7 @@ namespace hal
 
         GateLibrary gl("no_path", "example_gl");
         
-        GateType* gt = gl.create_gate_type("dummy", GateType::BaseType::lut);
+        GateType* gt = gl.create_gate_type("dummy", {GateType::BaseType::lut});
         ASSERT_NE(gt, nullptr);
 
         // category
@@ -607,7 +635,7 @@ namespace hal
 
         GateLibrary gl("no_path", "example_gl");
         
-        GateType* gt = gl.create_gate_type("dummy", GateType::BaseType::lut);
+        GateType* gt = gl.create_gate_type("dummy", {GateType::BaseType::lut});
         ASSERT_NE(gt, nullptr);
 
         gt->set_lut_init_ascending(true);
@@ -630,7 +658,7 @@ namespace hal
 
         GateLibrary gl("no_path", "example_gl");
 
-        GateType* gt = gl.create_gate_type("dummy", GateType::BaseType::ff);
+        GateType* gt = gl.create_gate_type("dummy", {GateType::BaseType::ff});
         ASSERT_NE(gt, nullptr);
 
         EXPECT_EQ(gt->get_clear_preset_behavior(), std::make_pair(GateType::ClearPresetBehavior::U, GateType::ClearPresetBehavior::U));

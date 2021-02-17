@@ -506,7 +506,7 @@ namespace hal
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
 
                 GateType* gt = gate->get_type();
-                if (gt->has_base_type(GateType::BaseType::combinational))
+                if (!gt->has_base_type(GateType::BaseType::combinational) && !gt->has_base_type(GateType::BaseType::buffer))
                 {
                     // continue if of invalid base type
                     continue;
