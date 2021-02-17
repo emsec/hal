@@ -12,6 +12,7 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/splitter/splitter.h"
 #include "gui/toolbar/toolbar.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
 
 #include <QAction>
 #include <QFileDialog>
@@ -97,6 +98,39 @@ namespace hal
         connect(mFileWatcher, &QFileSystemWatcher::fileChanged, this, &PythonEditor::handleTabFileChanged);
         connect(mFileWatcher, &QFileSystemWatcher::fileChanged, mFileModifiedBar, &FileModifiedBar::handleFileChanged);
 
+        mSettingLineNumbers = new SettingsItemCheckbox(
+            "Line Numbers",
+            "python/line_numbers",
+            true,
+            "Python Editor",
+            "Enables line numbers."
+        );
+
+        mSettingHighlight = new SettingsItemCheckbox(
+            "Highlight Current Lines",
+            "python/highlight_current_line",
+            true,
+            "Python Editor",
+            "The current line in the editor gets highlighted if enabled."
+        );
+
+        mSettingLineWrap = new SettingsItemCheckbox(
+            "Line Wrap",
+            "python/line_wrap",
+            false,
+            "Python Editor",
+            "Autowraps lines in the editor to prevent horizontal scroll bars."
+        );
+
+        mSettingMinimap = new SettingsItemCheckbox(
+            "Code Minimap",
+            "python_editor/minimap",
+            false,
+            "Python Editor",
+            "Enable code minimap."
+        );
+
+            
         handleActionNewTab();
 
         using namespace std::placeholders;
@@ -563,6 +597,16 @@ namespace hal
     void PythonEditor::handleActionNewTab()
     {
         PythonCodeEditor* editor = new PythonCodeEditor();
+        editor->setMinimapEnabled(mSettingMinimap->value().toBool());
+        editor->setLineWrapEnabled(mSettingLineWrap->value().toBool());
+        editor->setHighlightCurrentLineEnabled(mSettingHighlight->value().toBool());
+        editor->setLineNumberEnabled(mSettingLineNumbers->value().toBool());
+
+        connect(mSettingMinimap, &SettingsItemCheckbox::boolChanged, editor, &PythonCodeEditor::setMinimapEnabled);
+        connect(mSettingLineWrap, &SettingsItemCheckbox::boolChanged, editor, &PythonCodeEditor::setLineWrapEnabled);
+        connect(mSettingHighlight, &SettingsItemCheckbox::boolChanged, editor, &PythonCodeEditor::setHighlightCurrentLineEnabled);
+        connect(mSettingLineNumbers, &SettingsItemCheckbox::boolChanged, editor, &PythonCodeEditor::setLineNumberEnabled);
+
         new PythonSyntaxHighlighter(editor->document());
         new PythonSyntaxHighlighter(editor->minimap()->document());
         mTabWidget->addTab(editor, QString("New File ").append(QString::number(++mNewFileCounter)));

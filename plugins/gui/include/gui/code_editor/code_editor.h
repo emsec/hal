@@ -82,6 +82,11 @@ namespace hal
         void setLineNumberHighlightBackground(QColor& color);
         void setCurrentLineBackground(QColor& color);
 
+        void setLineNumberEnabled(bool enabled);
+        void setHighlightCurrentLineEnabled(bool enabled);
+        void setLineWrapEnabled(bool enabled);
+        void setMinimapEnabled(bool enabled);
+
     public Q_SLOTS:
         void search(const QString& string);
 

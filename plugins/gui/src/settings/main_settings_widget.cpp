@@ -143,23 +143,23 @@ namespace hal
         //theme_settings->resetLabels();
         registerWidget("style-item", theme_settings);
 
-        makeSection("Graph View", "graphview-item", ":/icons/graph");
+        //makeSection("Graph View", "graphview-item", ":/icons/graph");
         
         //DONE
-        QMap<QString, QVariant> graph_grid_options;
-        graph_grid_options.insert("None", "none");
-        graph_grid_options.insert("Lines", "lines");
-        graph_grid_options.insert("Dots", "dots");
-        DropdownSetting* graph_grid_settings = new DropdownSetting("graph_view/grid_type", "Grid", graph_grid_options, "", this);
-        registerWidget("graphview-item", graph_grid_settings);
+        //QMap<QString, QVariant> graph_grid_options;
+        //graph_grid_options.insert("None", "none");
+        //graph_grid_options.insert("Lines", "lines");
+        //graph_grid_options.insert("Dots", "dots");
+        //DropdownSetting* graph_grid_settings = new DropdownSetting("graph_view/grid_type", "Grid", graph_grid_options, "", this);
+        //registerWidget("graphview-item", graph_grid_settings);
         
-        DropdownSetting* graph_dragswap_settings = new DropdownSetting("graph_view/drag_mode_modifier", "Move/Swap modifier", standard_modifiers, "toggles drag-and-drop mode", this);
-        registerWidget("graphview-item", graph_dragswap_settings);
-        assignExclusiveGroup("kbdmodifiers", graph_dragswap_settings);
+        //DropdownSetting* graph_dragswap_settings = new DropdownSetting("graph_view/drag_mode_modifier", "Move/Swap modifier", standard_modifiers, "toggles drag-and-drop mode", this);
+        //registerWidget("graphview-item", graph_dragswap_settings);
+        //assignExclusiveGroup("kbdmodifiers", graph_dragswap_settings);
         
-        DropdownSetting* graph_movescene_settings = new DropdownSetting("graph_view/move_modifier", "Pan scene modifier", standard_modifiers, "lets you pan the scene", this);
-        registerWidget("graphview-item", graph_movescene_settings);
-        assignExclusiveGroup("kbdmodifiers", graph_movescene_settings);
+        //DropdownSetting* graph_movescene_settings = new DropdownSetting("graph_view/move_modifier", "Pan scene modifier", standard_modifiers, "lets you pan the scene", this);
+        //registerWidget("graphview-item", graph_movescene_settings);
+        //assignExclusiveGroup("kbdmodifiers", graph_movescene_settings);
         //DONE
         //CheckboxSetting* graph_layout_parse = new CheckboxSetting("graph_view/layout_parse", "Apply parsed position", "enabled", "<--- use parsed verilog coordinates if any", this);
         //registerWidget("graphview-item", graph_layout_parse);
@@ -170,27 +170,27 @@ namespace hal
         //CheckboxSetting* graph_layout_nets = new CheckboxSetting("graph_view/layout_nets", "Optimize net layout", "enabled", "<--- net optimization not fully tested", this);
         //registerWidget("graphview-item", graph_layout_nets);
 
-        makeSection("Navigation", "navigation-item", ":/icons/graph");
+        //makeSection("Navigation", "navigation-item", ":/icons/graph");
 
-        DropdownSetting* nav_sort_mechanism_settings = new DropdownSetting("navigation/mSortMechanism", "Sort Mechanism for the Details View", standard_sort_mechanisms, "", this);
-        registerWidget("navigation-item", nav_sort_mechanism_settings);
+        //DropdownSetting* nav_sort_mechanism_settings = new DropdownSetting("navigation/mSortMechanism", "Sort Mechanism for the Details View", standard_sort_mechanisms, "", this);
+        //registerWidget("navigation-item", nav_sort_mechanism_settings);
 
-        makeSection("Python editor", "python-item", ":/icons/python");
+        //makeSection("Python editor", "python-item", ":/icons/python");
 
-        SliderSetting* py_font_size_setting          = new SliderSetting("python/sFontSize", "Font Size", 6, 40, "pt", this);
-        FontsizePreviewWidget* py_font_size_preview = new FontsizePreviewWidget("foobar", font());
-        py_font_size_preview->setMinimumSize(QSize(220, 85));
-        py_font_size_setting->setPreviewWidget(py_font_size_preview);
-        py_font_size_setting->setPreviewPosition(SettingsWidget::preview_position::right);
-        registerWidget("python-item", py_font_size_setting);
-        CheckboxSetting* py_line_numbers_setting = new CheckboxSetting("python/line_numbers", "Line Numbers", "show", "", this);
-        registerWidget("python-item", py_line_numbers_setting);
-        CheckboxSetting* py_line_highlight = new CheckboxSetting("python/highlightCurrentLine", "Highlight Current Line", "enabled", "", this);
-        registerWidget("python-item", py_line_highlight);
-        CheckboxSetting* py_line_wrap = new CheckboxSetting("python/line_wrap", "Line Wrap Mode", "wrap", "<-- prevents horizontal scrollbar", this);
-        registerWidget("python-item", py_line_wrap);
-        CheckboxSetting* py_minimap = new CheckboxSetting("python/minimap", "Minimap", "show", "", this);
-        registerWidget("python-item", py_minimap);
+        //SliderSetting* py_font_size_setting          = new SliderSetting("python/sFontSize", "Font Size", 6, 40, "pt", this);
+        //FontsizePreviewWidget* py_font_size_preview = new FontsizePreviewWidget("foobar", font());
+        //py_font_size_preview->setMinimumSize(QSize(220, 85));
+        //py_font_size_setting->setPreviewWidget(py_font_size_preview);
+        //py_font_size_setting->setPreviewPosition(SettingsWidget::preview_position::right);
+        //registerWidget("python-item", py_font_size_setting);
+        //CheckboxSetting* py_line_numbers_setting = new CheckboxSetting("python/line_numbers", "Line Numbers", "show", "", this);
+        //registerWidget("python-item", py_line_numbers_setting);
+        //CheckboxSetting* py_line_highlight = new CheckboxSetting("python/highlightCurrentLine", "Highlight Current Line", "enabled", "", this);
+        //registerWidget("python-item", py_line_highlight);
+        //CheckboxSetting* py_line_wrap = new CheckboxSetting("python/line_wrap", "Line Wrap Mode", "wrap", "<-- prevents horizontal scrollbar", this);
+        //registerWidget("python-item", py_line_wrap);
+        //CheckboxSetting* py_minimap = new CheckboxSetting("python/minimap", "Minimap", "show", "", this);
+        //registerWidget("python-item", py_minimap);
 
         makeSection("Details window", "selection-details-window-item", ":/icons/gen-window");
 
@@ -257,7 +257,7 @@ namespace hal
         registerWidget("keybind-item", everywhere_search_keybind);
         assignExclusiveGroup("keybinds", everywhere_search_keybind);
 
-        makeSection("Debug", "debug-item", ":/icons/bug");
+        //makeSection("Debug", "debug-item", ":/icons/bug");
         //DONE
         //#ifdef GUI_DEBUG_GRID
         //CheckboxSetting* grid_debug_setting = new CheckboxSetting("debug/grid", "Show grid debug Overlay", "enabled", "<-- shows you how the layouter sees the graph", this);

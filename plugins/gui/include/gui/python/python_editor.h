@@ -49,6 +49,8 @@ namespace hal
 
     class PythonCodeEditor;
 
+    class SettingsItemCheckbox;
+
     class PythonEditor : public ContentWidget, public PythonContextSubscriber
     {
         Q_OBJECT
@@ -341,5 +343,10 @@ namespace hal
          * Map: tab -> snapshot path
          */
         QMap<PythonCodeEditor*, QString> mTabToSnapshotPath;
+
+        SettingsItemCheckbox* mSettingLineNumbers;
+        SettingsItemCheckbox* mSettingHighlight;
+        SettingsItemCheckbox* mSettingLineWrap;
+        SettingsItemCheckbox* mSettingMinimap;
     };
 }
