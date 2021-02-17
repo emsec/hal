@@ -89,63 +89,70 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist_utils.def("get_combinational_path",
-                             py::overload_cast<const Gate*, bool, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_combinational_path),
+        py_netlist_utils.def("get_path",
+                             py::overload_cast<const Gate*, bool, std::set<GateType::BaseType>, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_path),
                              py::arg("gate"),
                              py::arg("get_successors"),
+                             py::arg("stop_types"),
                              py::arg("cache"),
                              R"(
-            Find all sequential predecessors or successors of a gate.
-            Traverses combinational logic of all input or output nets until sequential gates are found.
+            Find all gates on the predecessor or successor path of a gate.
+            Traverses all input or output nets until gates of the specified base types are found.
             The result may include the provided gate itself.
             The use of the this cached version is recommended in case of extensive usage to improve performance. 
             The cache will be filled by this function and should initially be provided empty.
             Different caches for different values of get_successors shall be used.
         
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param set[hal_py.GateType.BaseType] stop_types: Base types of gate types at which traversal should halt.
             :param dict[int, list[hal_py.Gate]] cache - The cache. 
-            :returns: All sequential successors or predecessors of the gate.
+            :returns: All gates on the predecessor or successor path of the gate.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_combinational_path", py::overload_cast<const Gate*, bool>(&netlist_utils::get_combinational_path), py::arg("gate"), py::arg("get_successors"), R"(
-            Find all sequential predecessors or successors of a gate.
-            Traverses combinational logic of all input or output nets until sequential gates are found.
+        py_netlist_utils.def(
+            "get_path", py::overload_cast<const Gate*, bool, std::set<GateType::BaseType>>(&netlist_utils::get_path), py::arg("gate"), py::arg("get_successors"), py::arg("stop_types"), R"(
+            Find all gates on the predeccessor or successor path of a gate.
+            Traverses all input or output nets until gates of the specified base types are found.
             The result may include the provided gate itself.
 
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
-            :returns: All sequential successors or predecessors of the gate.
+            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param set[hal_py.GateType.BaseType] stop_types: Base types of gate types at which traversal should halt.
+            :returns: All gates on the predecessor or successor path of the gate.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_combinational_path",
-                             py::overload_cast<const Net*, bool, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_combinational_path),
+        py_netlist_utils.def("get_path",
+                             py::overload_cast<const Net*, bool, std::set<GateType::BaseType>, std::unordered_map<u32, std::vector<Gate*>>&>(&netlist_utils::get_path),
                              py::arg("net"),
                              py::arg("get_successors"),
+                             py::arg("stop_types"),
                              py::arg("cache"),
                              R"(
-            Find all sequential predecessors or successors of a net.
-            Traverses combinational logic of all input or output nets until sequential gates are found.
-            The use of the cache is recommended in case of extensive usage of this function. 
+            Find all gates on the predecessor or successor path of a net.
+            Traverses all input or output nets until gates of the specified base types are found.
+            The use of the this cached version is recommended in case of extensive usage to improve performance. 
             The cache will be filled by this function and should initially be provided empty.
             Different caches for different values of get_successors shall be used.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param set[hal_py.GateType.BaseType] stop_types: Base types of gate types at which traversal should halt.
             :param dict[int, list[hal_py.Gate]] cache - The cache. 
-            :returns: All sequential successors or predecessors of the net.
+            :returns: All gates on the predecessor or successor path of the net.
             :rtype: list[hal_py.Net]
         )");
-
-        py_netlist_utils.def("get_combinational_path", py::overload_cast<const Net*, bool>(&netlist_utils::get_combinational_path), py::arg("net"), py::arg("get_successors"), R"(
-            Find all sequential predecessors or successors of a net.
-            Traverses combinational logic of all input or output nets until sequential gates are found.
+        py_netlist_utils.def(
+            "get_path", py::overload_cast<const Net*, bool, std::set<GateType::BaseType>>(&netlist_utils::get_path), py::arg("net"), py::arg("get_successors"), py::arg("stop_types"), R"(
+            Find all gates on the predecessor or successor path of a net.
+            Traverses all input or output nets until gates of the specified base types are found.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
-            :returns: All sequential successors or predecessors of the net.
+            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param set[hal_py.GateType.BaseType] stop_types: Base types of gate types at which traversal should halt.
+            :returns: All gates on the predecessor or successor path of the net.
             :rtype: list[hal_py.Net]
         )");
 
