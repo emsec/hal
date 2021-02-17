@@ -517,6 +517,11 @@ namespace hal
         toolbar->addAction(mSearchAction);
     }
 
+    SelectionTreeView* SelectionDetailsWidget::selectionTreeView()
+    {
+        return mSelectionTreeView;
+    }
+
     QString SelectionDetailsWidget::disabledIconStyle() const
     {
         return mDisabledIconStyle;

@@ -181,4 +181,10 @@ namespace hal
         if (defaultSel.isValid())
             selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     }
+
+    SelectionTreeProxyModel* SelectionTreeView::proxyModel()
+    {
+        return mSelectionTreeProxyModel;
+    }
+
 }    // namespace hal

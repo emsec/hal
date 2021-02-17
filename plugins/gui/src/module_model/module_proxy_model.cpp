@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    ModuleProxyModel::ModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
+    ModuleProxyModel::ModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
     {
         // QTS PROXY MODELS ARE DUMB, IMPLEMENT CUSTOM SOLUTION OR SWITCH TO A DIFFERENT FILTER METHOD
 
@@ -69,5 +69,16 @@ namespace hal
             // force re-sort
             invalidate();
         }
+    }
+
+    gui_utility::mSortMechanism ModuleProxyModel::sortMechanism()
+    {
+        return mSortMechanism;
+    }
+
+    void ModuleProxyModel::setSortMechanism(gui_utility::mSortMechanism sortMechanism)
+    {
+        mSortMechanism = sortMechanism;
+        invalidate();
     }
 }

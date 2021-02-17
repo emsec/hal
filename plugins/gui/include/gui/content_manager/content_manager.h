@@ -44,6 +44,7 @@ namespace hal
     class SelectionDetailsWidget;
     class ModuleWidget;
     class LoggerWidget;
+    class SettingsItemDropdown;
 
     class ContentManager : public QObject
     {
@@ -82,6 +83,8 @@ namespace hal
         GroupingManagerWidget* mGroupingManagerWidget;
         SelectionDetailsWidget* mSelectionDetailsWidget;
         LoggerWidget* mLoggerWidget;
+
+        SettingsItemDropdown* mSettingSortMechanism;
 
 #ifdef HAL_STUDY
         SpecialLogContentManager* mSpecialLogContentManager;

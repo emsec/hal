@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    GroupingProxyModel::GroupingProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
+    GroupingProxyModel::GroupingProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
     {
         mSortMechanism = gui_utility::mSortMechanism(gSettingsManager->get("navigation/mSortMechanism").toInt());
         connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GroupingProxyModel::handleGlobalSettingChanged);
@@ -63,5 +63,16 @@ namespace hal
             // force re-sort
             invalidate();
         }
+    }
+
+    gui_utility::mSortMechanism GroupingProxyModel::sortMechanism()
+    {
+        return mSortMechanism;
+    }
+
+    void GroupingProxyModel::setSortMechanism(gui_utility::mSortMechanism sortMechanism)
+    {
+        mSortMechanism = sortMechanism;
+        invalidate();
     }
 }

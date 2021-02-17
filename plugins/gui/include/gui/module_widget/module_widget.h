@@ -54,6 +54,8 @@ namespace hal
         virtual void setupToolbar(Toolbar* Toolbar) override;
         virtual QList<QShortcut*> createShortcuts() override;
 
+        ModuleProxyModel* proxyModel();
+
     public Q_SLOTS:
         void toggleSearchbar();
         void filter(const QString& text);

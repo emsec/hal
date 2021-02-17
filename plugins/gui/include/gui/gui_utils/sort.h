@@ -30,6 +30,8 @@ namespace hal
 {
     namespace gui_utility
     {
+        Q_NAMESPACE
+
         class NumeratedString : public QString
         {
         public:
@@ -44,6 +46,8 @@ namespace hal
             natural = 1,
             numerated = 2
         };
+
+        Q_ENUM_NS(mSortMechanism)
 
         bool naturalOrderCompare(const QString& a, const QString& b);
         bool lexicalOrderCompare(const QString& a, const QString& b);

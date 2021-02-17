@@ -52,7 +52,7 @@ namespace hal
 
         mSettingLayoutBoxes = new SettingsItemCheckbox(
             "Optimize Box Layout",
-            "graph_view/layout/boxes",
+            "graph_view/layout_boxes",
             true,
             "Graph View",
             "If disabled faster randomized placement."

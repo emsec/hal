@@ -95,6 +95,8 @@ namespace hal
         
         void selectionToGroupingInternal(Grouping* grp);
 
+        SelectionTreeView* selectionTreeView();
+
     Q_SIGNALS:
         void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
         void focusGateClicked(u32 gateId);

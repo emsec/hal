@@ -36,6 +36,9 @@ namespace hal
     public:
         ModuleProxyModel(QObject* parent = nullptr);
 
+        gui_utility::mSortMechanism sortMechanism();
+        void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;

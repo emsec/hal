@@ -25,6 +25,10 @@
 #include "gui/vhdl_editor/vhdl_editor.h"
 #include "gui/gui_utils/special_log_content_manager.h"
 //#include "hal_config.h"
+#include "gui/gui_utils/sort.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/grouping/grouping_proxy_model.h"
+#include "gui/module_model/module_proxy_model.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -166,6 +170,25 @@ namespace hal
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusGateClicked, mGraphTabWidget, &GraphTabWidget::handleGateFocus);
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWidget, &GraphTabWidget::handleNetFocus);
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusModuleClicked, mGraphTabWidget, &GraphTabWidget::handleModuleFocus);
+
+        mSettingSortMechanism = new SettingsItemDropdown(
+            "Sort Mechanism",
+            "misc/sort_mechanism",
+            gui_utility::mSortMechanism::lexical,
+            "Miscellaneous",
+            "Specifies the sort mechanism used in every list "
+        );
+        mSettingSortMechanism->setValueNames<gui_utility::mSortMechanism>();
+
+        connect(mSettingSortMechanism, &SettingsItemDropdown::intChanged, this, [this](int value){
+            gui_utility::mSortMechanism sortMechanism = gui_utility::mSortMechanism(value);
+            mSelectionDetailsWidget->selectionTreeView()->proxyModel()->setSortMechanism(sortMechanism);
+            mModuleWidget->proxyModel()->setSortMechanism(sortMechanism);
+            mGroupingManagerWidget->getProxyModel()->setSortMechanism(sortMechanism);
+        });
+
+        mSettingSortMechanism->intChanged(mSettingSortMechanism->value().toInt());
+
     }
 
     void ContentManager::handleFilsystemDocChanged(const QString& fileName)

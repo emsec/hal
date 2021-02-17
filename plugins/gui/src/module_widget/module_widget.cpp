@@ -236,4 +236,9 @@ namespace hal
     {
         return gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(index));
     }
+
+    ModuleProxyModel* ModuleWidget::proxyModel()
+    {
+        return mModuleProxyModel;
+    }
 }
