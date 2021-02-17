@@ -536,11 +536,17 @@ namespace hal
                 std::vector<std::string> vars = bf.get_variables();
                 for (std::string var : vars)
                 {
-                    if (gate->get_fan_in_net(var)->get_sources().at(0)->get_gate()->is_gnd_gate())
+                    std::vector<Endpoint*> sources = gate->get_fan_in_net(var)->get_sources();
+                    if (sources.size() != 1)
+                    {
+                        continue;
+                    }
+
+                    if (sources.at(0)->get_gate()->is_gnd_gate())
                     {
                         bf.substitute(var, BooleanFunction::Value::ZERO);
                     }
-                    else if (gate->get_fan_in_net(var)->get_sources().at(0)->get_gate()->is_vcc_gate())
+                    else if (sources.at(0)->get_gate()->is_vcc_gate())
                     {
                         bf.substitute(var, BooleanFunction::Value::ONE);
                     }
