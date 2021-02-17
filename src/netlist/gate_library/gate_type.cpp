@@ -5,6 +5,7 @@
 namespace hal
 {
     const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string         = {{BaseType::combinational, "combinational"},
+                                                                                                 {BaseType::sequential, "sequential"},
                                                                                                  {BaseType::ff, "ff"},
                                                                                                  {BaseType::latch, "latch"},
                                                                                                  {BaseType::lut, "lut"},
@@ -12,7 +13,8 @@ namespace hal
                                                                                                  {BaseType::io, "io"},
                                                                                                  {BaseType::dsp, "dsp"},
                                                                                                  {BaseType::mux, "mux"},
-                                                                                                 {BaseType::buffer, "buffer"}};
+                                                                                                 {BaseType::buffer, "buffer"},
+                                                                                                 {BaseType::carry, "carry"}};
     const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::none, "none"},
                                                                                                          {PinDirection::input, "input"},
                                                                                                          {PinDirection::output, "output"},

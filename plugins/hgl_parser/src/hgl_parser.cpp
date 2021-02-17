@@ -8,6 +8,7 @@
 namespace hal
 {
     const std::unordered_map<std::string, GateType::BaseType> HGLParser::m_string_to_base_type = {{"combinational", GateType::BaseType::combinational},
+                                                                                                  {"sequential", GateType::BaseType::sequential},
                                                                                                   {"ff", GateType::BaseType::ff},
                                                                                                   {"latch", GateType::BaseType::latch},
                                                                                                   {"lut", GateType::BaseType::lut},
@@ -15,7 +16,8 @@ namespace hal
                                                                                                   {"io", GateType::BaseType::io},
                                                                                                   {"dsp", GateType::BaseType::dsp},
                                                                                                   {"mux", GateType::BaseType::mux},
-                                                                                                  {"buffer", GateType::BaseType::buffer}};
+                                                                                                  {"buffer", GateType::BaseType::buffer},
+                                                                                                  {"carry", GateType::BaseType::carry}};
 
     const std::unordered_map<std::string, GateType::PinType> HGLParser::m_string_to_pin_type = {{"none", GateType::PinType::none},
                                                                                                 {"power", GateType::PinType::power},

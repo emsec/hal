@@ -11,16 +11,17 @@ namespace hal
         py::enum_<GateType::BaseType>(py_gate_type, "BaseType", R"(
             Defines the base type of a gate type.
         )")
-
-            .value("combinational", GateType::BaseType::combinational, R"(Represents a combinational gate type.)")
-            .value("lut", GateType::BaseType::lut, R"(Represents a combinational LUT gate type.)")
-            .value("ff", GateType::BaseType::ff, R"(Represents a sequential FF gate type.)")
-            .value("latch", GateType::BaseType::latch, R"(Represents a sequential latch gate type.)")
-            .value("ram", GateType::BaseType::ram, R"(Represents a sequential RAM gate type.)")
-            .value("io", GateType::BaseType::io, R"(Represents an IO gate type.)")
-            .value("dsp", GateType::BaseType::dsp, R"(Represents a DSP gate type.)")
-            .value("mux", GateType::BaseType::mux, R"(Represents a combinational MUX gate type.)")
-            .value("buffer", GateType::BaseType::buffer, R"(Represents a combinational buffer gate type.)")
+            .value("combinational", GateType::BaseType::combinational, R"(Combinational gate type.)")
+            .value("sequential", GateType::BaseType::sequential, R"(Sequential gate type.)")
+            .value("lut", GateType::BaseType::lut, R"(LUT gate type.)")
+            .value("ff", GateType::BaseType::ff, R"(Flip-flop gate type.)")
+            .value("latch", GateType::BaseType::latch, R"(Latch gate type.)")
+            .value("ram", GateType::BaseType::ram, R"(RAM gate type.)")
+            .value("io", GateType::BaseType::io, R"(IO gate type.)")
+            .value("dsp", GateType::BaseType::dsp, R"(DSP gate type.)")
+            .value("mux", GateType::BaseType::mux, R"(MUX gate type.)")
+            .value("buffer", GateType::BaseType::buffer, R"(Buffer gate type.)")
+            .value("carry", GateType::BaseType::carry, R"(Carry gate type.)")
             .export_values();
 
         py::enum_<GateType::PinDirection>(py_gate_type, "PinDirection", R"(

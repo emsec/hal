@@ -48,15 +48,17 @@ namespace hal
          */
         enum class BaseType
         {
-            combinational, /**< Represents a combinational gate type. **/
-            lut,           /**< Represents a combinational LUT gate type. **/
-            ff,            /**< Represents a sequential FF gate type. **/
-            latch,         /**< Represents a sequential latch gate type. **/
-            ram,           /**< Represents a sequential RAM gate type. **/
-            io,            /**< Represents an IO gate type. **/
-            dsp,           /**< Represents a DSP gate type. **/
-            mux,           /**< Represents a combinational MUX gate type. **/
-            buffer,        /**< Represents a combinational buffer gate type. **/
+            combinational, /**< Combinational gate type. **/
+            sequential,    /**< Sequential gate type. **/
+            lut,           /**< LUT gate type. **/
+            ff,            /**< Flip-flop gate type. **/
+            latch,         /**< Latch gate type. **/
+            ram,           /**< RAM gate type. **/
+            io,            /**< IO gate type. **/
+            dsp,           /**< DSP gate type. **/
+            mux,           /**< MUX gate type. **/
+            buffer,        /**< Buffer gate type. **/
+            carry          /**< Carry gate type. **/
         };
 
         /**

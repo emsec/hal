@@ -11,6 +11,7 @@
 namespace hal
 {
     const std::unordered_map<GateType::BaseType, std::string> HGLWriter::m_base_type_to_string = {{GateType::BaseType::combinational, "combinational"},
+                                                                                                  {GateType::BaseType::sequential, "sequential"},
                                                                                                   {GateType::BaseType::ff, "ff"},
                                                                                                   {GateType::BaseType::latch, "latch"},
                                                                                                   {GateType::BaseType::lut, "lut"},
@@ -18,7 +19,8 @@ namespace hal
                                                                                                   {GateType::BaseType::io, "io"},
                                                                                                   {GateType::BaseType::dsp, "dsp"},
                                                                                                   {GateType::BaseType::mux, "mux"},
-                                                                                                  {GateType::BaseType::buffer, "buffer"}};
+                                                                                                  {GateType::BaseType::buffer, "buffer"},
+                                                                                                  {GateType::BaseType::carry, "carry"}};
 
     const std::unordered_map<GateType::PinType, std::string> HGLWriter::m_pin_type_to_string = {{GateType::PinType::none, "none"},
                                                                                                 {GateType::PinType::power, "power"},

@@ -316,6 +316,7 @@ namespace hal
                     return std::nullopt;
                 }
                 cell.base_types.insert(GateType::BaseType::ff);
+                cell.base_types.insert(GateType::BaseType::sequential);
                 cell.ff = ff.value();
             }
             else if (next_token == "latch")
@@ -326,6 +327,7 @@ namespace hal
                     return std::nullopt;
                 }
                 cell.base_types.insert(GateType::BaseType::latch);
+                cell.base_types.insert(GateType::BaseType::sequential);
                 cell.latch = latch.value();
             }
             else if (next_token == "lut")
