@@ -63,45 +63,6 @@ namespace hal
         setMouseTracking(true);
     }
 
-    void GraphGraphicsView::initializeSettings()
-    {
-        mKeyModifierMap = QMap<KeyModifier, Qt::KeyboardModifier>();
-        mKeyModifierMap.insert(KeyModifier::Alt, Qt::KeyboardModifier::AltModifier);
-        mKeyModifierMap.insert(KeyModifier::Ctrl, Qt::KeyboardModifier::ControlModifier);
-        mKeyModifierMap.insert(KeyModifier::Shift, Qt::KeyboardModifier::ShiftModifier);
-
-        /*
-       mSettingDragModifier = new SettingsItemDropdown(
-            "Move/Swap Modifier",
-            "graph_view/drag_mode_modifier",
-            KeyModifier::Alt,
-            "Graph View",
-            "Specifies the key which can be pressed to switch the position of two Module/Gates in the Graph View while dragging."
-       );
-        mSettingDragModifier->setValueNames<KeyModifier>();
-
-        mSettingPanModifier = new SettingsItemDropdown(
-            "Pan Scene Modifier",
-            "graph_view/pan_modifier",
-            KeyModifier::Shift,
-            "Graph View",
-            "Specifies the key which can be pressed to pan the scene in the Graph View while left clicking."
-        );
-        mSettingPanModifier->setValueNames<KeyModifier>();
-        
-        connect(mSettingDragModifier, &SettingsItemDropdown::valueChanged, this, [this](){
-            mDragModifier = mKeyModifierMap.value(KeyModifier(mSettingDragModifier->value().toInt()));
-        });
-
-        connect(mSettingPanModifier, &SettingsItemDropdown::valueChanged, this, [this](){
-            mPanModifier = mKeyModifierMap.value(KeyModifier(mSettingPanModifier->value().toInt()));
-        });
-
-        mDragModifier = mKeyModifierMap.value(KeyModifier(mSettingDragModifier->value().toInt()));
-        mPanModifier = mKeyModifierMap.value(KeyModifier(mSettingPanModifier->value().toInt()));
-        */
-    }
-
     void GraphGraphicsView::conditionalUpdate()
     {
         if (QStyleOptionGraphicsItem::levelOfDetailFromTransform(transform()) >= graph_widget_constants::sGateMinLod)
@@ -1174,5 +1135,25 @@ namespace hal
     void GraphGraphicsView::setGridType(GraphicsScene::GridType gridType)
     {
         mGridType = gridType;
+    }
+
+    Qt::KeyboardModifier GraphGraphicsView::dragModifier()
+    {
+        return mDragModifier;
+    }
+
+    void GraphGraphicsView::setDragModifier(Qt::KeyboardModifier dragModifier)
+    {
+        mDragModifier = dragModifier;
+    }
+
+    Qt::KeyboardModifier GraphGraphicsView::panModifier()
+    {
+        return mPanModifier;
+    }
+
+    void GraphGraphicsView::setPanModifier(Qt::KeyboardModifier panModifier)
+    {
+        mPanModifier = panModifier;
     }
 }    // namespace hal

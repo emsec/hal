@@ -14,7 +14,8 @@
 
 namespace hal
 {
-    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2), mGridType(GraphicsScene::GridType::None)
+    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2), mGridType(GraphicsScene::GridType::None),
+        mDragModifier(Qt::KeyboardModifier::AltModifier), mPanModifier(Qt::KeyboardModifier::ShiftModifier)
     {
         mContentLayout->addWidget(mTabWidget);
         mTabWidget->setTabsClosable(true);
@@ -45,6 +46,49 @@ namespace hal
             {
                 auto p = dynamic_cast<GraphWidget*>(mTabWidget->widget(i));
                 p->view()->setGridType(mGridType);
+            }
+        });
+
+        mSettingDragModifier = new SettingsItemDropdown(
+            "Move/Swap Modifier",
+            "graph_view/drag_mode_modifier",
+            KeyboardModifier::Alt,
+            "Graph View",
+            "Specifies the key which can be pressed to switch the position of two Module/Gates in the Graph View while dragging."
+       );
+        mSettingDragModifier->setValueNames<KeyboardModifier>();
+
+        mSettingPanModifier = new SettingsItemDropdown(
+            "Pan Scene Modifier",
+            "graph_view/pan_modifier",
+            KeyboardModifier::Shift,
+            "Graph View",
+            "Specifies the key which can be pressed to pan the scene in the Graph View while left clicking."
+        );
+        mSettingPanModifier->setValueNames<KeyboardModifier>();
+
+        mKeyModifierMap = QMap<KeyboardModifier, Qt::KeyboardModifier>();
+        mKeyModifierMap.insert(KeyboardModifier::Alt, Qt::KeyboardModifier::AltModifier);
+        mKeyModifierMap.insert(KeyboardModifier::Ctrl, Qt::KeyboardModifier::ControlModifier);
+        mKeyModifierMap.insert(KeyboardModifier::Shift, Qt::KeyboardModifier::ShiftModifier);
+
+        connect(mSettingDragModifier, &SettingsItemDropdown::intChanged, this, [this](int value){
+            mDragModifier = mKeyModifierMap.value(KeyboardModifier(value));
+
+            for (int i = 0; i < mTabWidget->count(); i++)
+            {
+                auto p = dynamic_cast<GraphWidget*>(mTabWidget->widget(i));
+                p->view()->setDragModifier(mDragModifier);
+            }
+        });
+
+        connect(mSettingPanModifier, &SettingsItemDropdown::intChanged, this, [this](int value){
+            mPanModifier = mKeyModifierMap.value(KeyboardModifier(value));
+
+            for (int i = 0; i < mTabWidget->count(); i++)
+            {
+                auto p = dynamic_cast<GraphWidget*>(mTabWidget->widget(i));
+                p->view()->setPanModifier(mPanModifier);
             }
         });
     }
@@ -150,6 +194,8 @@ namespace hal
     {
         GraphWidget* new_graph_widget = new GraphWidget(context);
         new_graph_widget->view()->setGridType(mGridType);
+        new_graph_widget->view()->setDragModifier(mDragModifier);
+        new_graph_widget->view()->setPanModifier(mPanModifier);
         //mContextWidgetMap.insert(context, new_graph_widget);
 
         int tab_index = addTab(new_graph_widget, context->name());

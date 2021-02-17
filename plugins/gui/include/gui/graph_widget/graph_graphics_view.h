@@ -56,8 +56,11 @@ namespace hal
         GraphicsScene::GridType gridType();
         void setGridType(GraphicsScene::GridType gridType);
 
-        enum KeyModifier{Shift, Ctrl, Alt};
-        Q_ENUM(KeyModifier)
+        Qt::KeyboardModifier dragModifier();
+        void setDragModifier(Qt::KeyboardModifier dragModifier);
+
+        Qt::KeyboardModifier panModifier();
+        void setPanModifier(Qt::KeyboardModifier panModifier);
 
     Q_SIGNALS:
         void moduleDoubleClicked(u32 id);
@@ -99,8 +102,6 @@ namespace hal
         void keyPressEvent(QKeyEvent* event) override;
         void keyReleaseEvent(QKeyEvent* event) override;
         void resizeEvent(QResizeEvent* event) override;
-
-        void initializeSettings();
 
         void showContextMenu(const QPoint& pos);
 
@@ -156,7 +157,5 @@ namespace hal
         qreal mMinScale;
 
         static const QString sAssignToGrouping;
-
-        QMap<KeyModifier, Qt::KeyboardModifier> mKeyModifierMap;
     };
 }

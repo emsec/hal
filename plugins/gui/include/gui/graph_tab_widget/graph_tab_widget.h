@@ -52,6 +52,9 @@ namespace hal
 
         void ensureSelectionVisible();
 
+        enum KeyboardModifier{Alt, Ctrl, Shift};
+        Q_ENUM(KeyboardModifier)
+
     public Q_SLOTS:
         void handleContextCreated(GraphContext* context);
         void handleContextRenamed(GraphContext* context);
@@ -84,5 +87,12 @@ namespace hal
         void zoomOutShortcut();
 
         SettingsItemDropdown* mSettingGridType;
+        SettingsItemDropdown* mSettingDragModifier;
+        SettingsItemDropdown* mSettingPanModifier;
+
+        Qt::KeyboardModifier mDragModifier;
+        Qt::KeyboardModifier mPanModifier;
+
+        QMap<KeyboardModifier, Qt::KeyboardModifier> mKeyModifierMap;
     };
 }
