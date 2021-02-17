@@ -180,15 +180,19 @@ namespace hal
         );
         mSettingSortMechanism->setValueNames<gui_utility::mSortMechanism>();
 
-        connect(mSettingSortMechanism, &SettingsItemDropdown::intChanged, this, [this](int value){
-            gui_utility::mSortMechanism sortMechanism = gui_utility::mSortMechanism(value);
-            mSelectionDetailsWidget->selectionTreeView()->proxyModel()->setSortMechanism(sortMechanism);
-            mModuleWidget->proxyModel()->setSortMechanism(sortMechanism);
-            mGroupingManagerWidget->getProxyModel()->setSortMechanism(sortMechanism);
+        connect(mSettingSortMechanism, &SettingsItemDropdown::intChanged, mSelectionDetailsWidget, [this](int value){
+            mSelectionDetailsWidget->selectionTreeView()->proxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
+        });
+
+        connect(mSettingSortMechanism, &SettingsItemDropdown::intChanged, mModuleWidget, [this](int value){
+            mModuleWidget->proxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
+        });
+
+        connect(mSettingSortMechanism, &SettingsItemDropdown::intChanged, mGroupingManagerWidget, [this](int value){
+            mGroupingManagerWidget->getProxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
         });
 
         mSettingSortMechanism->intChanged(mSettingSortMechanism->value().toInt());
-
     }
 
     void ContentManager::handleFilsystemDocChanged(const QString& fileName)

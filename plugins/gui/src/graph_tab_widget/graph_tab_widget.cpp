@@ -14,8 +14,7 @@
 
 namespace hal
 {
-    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2), mGridType(GraphicsScene::GridType::None),
-        mDragModifier(Qt::KeyboardModifier::AltModifier), mPanModifier(Qt::KeyboardModifier::ShiftModifier)
+    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2)
     {
         mContentLayout->addWidget(mTabWidget);
         mTabWidget->setTabsClosable(true);
@@ -37,18 +36,6 @@ namespace hal
         );
         mSettingGridType->setValueNames<GraphicsScene::GridType>();
 
-        mGridType = GraphicsScene::GridType(mSettingGridType->value().toInt());
-        
-        connect(mSettingGridType, &SettingsItemDropdown::intChanged, this, [this](){
-            mGridType = GraphicsScene::GridType(mSettingGridType->value().toInt());
-
-            for (int i = 0; i < mTabWidget->count(); i++)
-            {
-                auto p = dynamic_cast<GraphWidget*>(mTabWidget->widget(i));
-                p->view()->setGridType(mGridType);
-            }
-        });
-
         mSettingDragModifier = new SettingsItemDropdown(
             "Move/Swap Modifier",
             "graph_view/drag_mode_modifier",
@@ -67,30 +54,11 @@ namespace hal
         );
         mSettingPanModifier->setValueNames<KeyboardModifier>();
 
+        //cant use the qt enum Qt::KeyboardModifer, therefore a map as santas little helper
         mKeyModifierMap = QMap<KeyboardModifier, Qt::KeyboardModifier>();
         mKeyModifierMap.insert(KeyboardModifier::Alt, Qt::KeyboardModifier::AltModifier);
         mKeyModifierMap.insert(KeyboardModifier::Ctrl, Qt::KeyboardModifier::ControlModifier);
         mKeyModifierMap.insert(KeyboardModifier::Shift, Qt::KeyboardModifier::ShiftModifier);
-
-        connect(mSettingDragModifier, &SettingsItemDropdown::intChanged, this, [this](int value){
-            mDragModifier = mKeyModifierMap.value(KeyboardModifier(value));
-
-            for (int i = 0; i < mTabWidget->count(); i++)
-            {
-                auto p = dynamic_cast<GraphWidget*>(mTabWidget->widget(i));
-                p->view()->setDragModifier(mDragModifier);
-            }
-        });
-
-        connect(mSettingPanModifier, &SettingsItemDropdown::intChanged, this, [this](int value){
-            mPanModifier = mKeyModifierMap.value(KeyboardModifier(value));
-
-            for (int i = 0; i < mTabWidget->count(); i++)
-            {
-                auto p = dynamic_cast<GraphWidget*>(mTabWidget->widget(i));
-                p->view()->setPanModifier(mPanModifier);
-            }
-        });
     }
 
     QList<QShortcut *> GraphTabWidget::createShortcuts()
@@ -193,9 +161,23 @@ namespace hal
     void GraphTabWidget::addGraphWidgetTab(GraphContext* context)
     {
         GraphWidget* new_graph_widget = new GraphWidget(context);
-        new_graph_widget->view()->setGridType(mGridType);
-        new_graph_widget->view()->setDragModifier(mDragModifier);
-        new_graph_widget->view()->setPanModifier(mPanModifier);
+
+        new_graph_widget->view()->setGridType((GraphicsScene::GridType(mSettingGridType->value().toInt())));
+        new_graph_widget->view()->setDragModifier(mKeyModifierMap.value((KeyboardModifier)mSettingDragModifier->value().toInt()));
+        new_graph_widget->view()->setPanModifier(mKeyModifierMap.value((KeyboardModifier)mSettingPanModifier->value().toInt()));
+
+        connect(mSettingGridType, &SettingsItemDropdown::intChanged, new_graph_widget, [new_graph_widget](int value){
+            new_graph_widget->view()->setGridType((GraphicsScene::GridType(value)));
+        });
+
+        connect(mSettingDragModifier, &SettingsItemDropdown::intChanged, new_graph_widget, [new_graph_widget, this](int value){
+            new_graph_widget->view()->setDragModifier(mKeyModifierMap.value((KeyboardModifier)value));
+        });
+
+        connect(mSettingPanModifier, &SettingsItemDropdown::intChanged, new_graph_widget, [new_graph_widget, this](int value){
+            new_graph_widget->view()->setPanModifier(mKeyModifierMap.value((KeyboardModifier)value));
+        });
+
         //mContextWidgetMap.insert(context, new_graph_widget);
 
         int tab_index = addTab(new_graph_widget, context->name());

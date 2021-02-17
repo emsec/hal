@@ -74,8 +74,6 @@ namespace hal
 
         QMap<GraphContext*, QWidget*> mContextWidgetMap;
 
-        GraphicsScene::GridType mGridType;
-
         int getContextTabIndex(GraphContext* context) const;
 
         //functions
@@ -89,9 +87,6 @@ namespace hal
         SettingsItemDropdown* mSettingGridType;
         SettingsItemDropdown* mSettingDragModifier;
         SettingsItemDropdown* mSettingPanModifier;
-
-        Qt::KeyboardModifier mDragModifier;
-        Qt::KeyboardModifier mPanModifier;
 
         QMap<KeyboardModifier, Qt::KeyboardModifier> mKeyModifierMap;
     };
