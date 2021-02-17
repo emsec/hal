@@ -123,8 +123,14 @@ namespace hal
              * 
              * @param[in] nl - Pointer to the netlist that includedes the GND and VCC gates to replace.
              */
-
             void remove_global_inputs(const Netlist* nl);
+
+            /**
+             * Removes all static constants from the wrapped expression and replaces them with nets that are driven by GND or VCC gates.
+             * 
+             * @param[in] nl - Pointer to the netlist that includedes the GND and VCC gates to replace.
+             */
+            void remove_static_inputs(const Netlist* nl);
 
         private:
             u32 m_z3_wrapper_id;

@@ -560,6 +560,37 @@ namespace hal
             }
         }
 
+        void z3Wrapper::remove_static_inputs(const Netlist* nl) {
+            auto new_expr = *m_expr;
+            for (const auto& v : nl->get_vcc_gates()) {
+                auto id = v->get_fan_out_nets().front()->get_id();
+                z3::expr v_ex = m_ctx->bv_const(std::to_string(id).c_str(), 1);
+
+                z3::expr_vector from_vec(*m_ctx);
+                z3::expr_vector to_vec(*m_ctx);
+
+                from_vec.push_back(m_ctx->bv_val(1, 1));
+                to_vec.push_back(v_ex);
+
+                new_expr = new_expr.substitute(from_vec, to_vec);
+            }
+
+            for (const auto& g : nl->get_gnd_gates()) {
+                auto id = g->get_fan_out_nets().front()->get_id();
+                z3::expr g_ex = m_ctx->bv_const(std::to_string(id).c_str(), 1);
+
+                z3::expr_vector from_vec(*m_ctx);
+                z3::expr_vector to_vec(*m_ctx);
+
+                from_vec.push_back(m_ctx->bv_val(0, 1));
+                to_vec.push_back(g_ex);
+
+                new_expr = new_expr.substitute(from_vec, to_vec);
+            }
+
+            m_expr = std::make_unique<z3::expr>(new_expr);
+        }
+
         z3::expr z3Wrapper::get_expr() const
         {
             return *m_expr;
