@@ -139,6 +139,12 @@ namespace hal
         GraphicsScene(QObject* parent = nullptr);
 
         /**
+         * Destructor.
+         *
+         */
+        ~GraphicsScene();
+
+        /**
          * Starts the dragging of a gate or module to show its shadow meanwhile.
          *
          * @param posF - The position of the shadow
