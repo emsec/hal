@@ -599,6 +599,14 @@ namespace hal
 
         // TODO ensure gates mVisible in graph
     }
+    
+    void GateDetailsWidget::hideSectionsWhenEmpty(bool hide)
+    {
+        mInputPinsSection->hideWhenEmpty(hide);
+        mOutputPinsSection->hideWhenEmpty(hide);
+        mDataFieldsSection->hideWhenEmpty(hide);
+        mBooleanFunctionsSection->hideWhenEmpty(hide);  
+    }
 /*
     void GateDetailsWidget::handle_general_table_item_clicked(const QTableWidgetItem *item)
     {

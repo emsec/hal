@@ -726,4 +726,11 @@ namespace hal
         }
         mNavigationTable->hide();
     }
+
+    void ModuleDetailsWidget::hideSectionsWhenEmpty(bool hide)
+    {
+        mInputPortsSection->hideWhenEmpty(hide);
+        mOutputPortsSection->hideWhenEmpty(hide);
+        mDataFieldsSection->hideWhenEmpty(hide);
+    }
 }    // namespace hal

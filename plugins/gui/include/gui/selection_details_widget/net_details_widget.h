@@ -58,6 +58,8 @@ namespace hal
 
         void update(u32 mNetId);
 
+        void hideSectionsWhenEmpty(bool hide) override;
+
     public Q_SLOTS:
 
         void handleNetRemoved(Net* n);

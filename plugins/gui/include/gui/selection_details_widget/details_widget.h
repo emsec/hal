@@ -49,6 +49,8 @@ namespace hal
         QString detailsTypeName() const;
         QLabel* bigIcon();
 
+        virtual void hideSectionsWhenEmpty(bool hide);
+
     protected:
         DetailsType mDetailsType;
         u32 mCurrentId;

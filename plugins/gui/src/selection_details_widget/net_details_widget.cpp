@@ -338,4 +338,10 @@ namespace hal
         menu.exec();
     }
 
+    void NetDetailsWidget::hideSectionsWhenEmpty(bool hide)
+    {
+        mSourcePinsSection->hideWhenEmpty(hide);
+        mDestinationPinsSection->hideWhenEmpty(hide);
+        mDataFieldsSection->hideWhenEmpty(hide);
+    }
 }    // namespace hal

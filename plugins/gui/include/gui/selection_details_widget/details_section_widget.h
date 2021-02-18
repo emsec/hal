@@ -39,10 +39,10 @@ namespace hal
         DetailsSectionWidget(const QString& txt, QTableWidget* tab, QWidget* parent = nullptr);
         QTableWidget* table() const;
         void setRowCount(int rc);
+        void hideWhenEmpty(bool hide);
 
     private Q_SLOTS:
         void toggleBodyVisible();
-        void handleGlobalSettingsChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         void hideEmpty();

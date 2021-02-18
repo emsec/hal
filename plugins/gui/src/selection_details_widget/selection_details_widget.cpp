@@ -142,6 +142,22 @@ namespace hal
         connect(mSettingVisible, &SettingsItemCheckbox::boolChanged, mNetDetails->bigIcon(), &QLabel::setVisible);
         connect(mSettingVisible, &SettingsItemCheckbox::boolChanged, mModuleDetails->bigIcon(), &QLabel::setVisible);
 
+        mSettingHideEmpty = new SettingsItemCheckbox(
+            "Hide Empty Section",
+            "selection_details/hide_empty",
+            false,
+            "Selection Details",
+            "Specifies wheter empty sections are hidden or shown in the Selection Details Widget."
+        );
+
+        mGateDetails->hideSectionsWhenEmpty(mSettingHideEmpty->value().toBool());
+        mModuleDetails->hideSectionsWhenEmpty(mSettingHideEmpty->value().toBool());
+        mNetDetails->hideSectionsWhenEmpty(mSettingHideEmpty->value().toBool());
+
+        connect(mSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mGateDetails, &GateDetailsWidget::hideSectionsWhenEmpty);
+        connect(mSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mModuleDetails, &ModuleDetailsWidget::hideSectionsWhenEmpty);
+        connect(mSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mNetDetails, &NetDetailsWidget::hideSectionsWhenEmpty);
+
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
         connect(mRestoreLastSelection, &QAction::triggered, this, &SelectionDetailsWidget::restoreLastSelection);
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);

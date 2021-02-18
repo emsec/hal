@@ -169,5 +169,6 @@ namespace hal
         static const QString sAddToGrouping;
 
         SettingsItemCheckbox* mSettingVisible;
+        SettingsItemCheckbox* mSettingHideEmpty;
     };
 }
