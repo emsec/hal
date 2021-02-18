@@ -126,7 +126,7 @@ namespace hal {
                 auto gt_it = gate_types.find("TEST_FF");
                 ASSERT_TRUE(gt_it != gate_types.end());
                 GateType* gt = gt_it->second;
-                EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::ff}));
+                EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::sequential, GateType::BaseType::ff}));
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
@@ -179,7 +179,7 @@ namespace hal {
                 auto gt_it = gate_types.find("TEST_LATCH");
                 ASSERT_TRUE(gt_it != gate_types.end());
                 GateType* gt = gt_it->second;
-                EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::latch}));
+                EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::sequential, GateType::BaseType::latch}));
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"G", "D", "S", "R"}));
