@@ -66,12 +66,12 @@ namespace hal
         mGeneralView->setSelectionMode(QAbstractItemView::SingleSelection);
 
         // place module icon
-        QLabel* img = new DisputedBigIcon("sel_module", this);
+        mBigIcon = new DisputedBigIcon("sel_module", this);
 
         intermediate_layout_gt->addWidget(mGeneralView);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_gt->addWidget(img);
-        intermediate_layout_gt->setAlignment(img, Qt::AlignTop);
+        intermediate_layout_gt->addWidget(mBigIcon);
+        intermediate_layout_gt->setAlignment(mBigIcon, Qt::AlignTop);
 
         mTopLvlLayout->addWidget(mGeneralInfoButton);
         mTopLvlLayout->addLayout(intermediate_layout_gt);

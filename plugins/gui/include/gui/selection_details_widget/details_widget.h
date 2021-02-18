@@ -27,6 +27,7 @@
 
 #include <QFont>
 #include <QWidget>
+#include <QLabel>
 
 namespace hal
 {
@@ -46,11 +47,13 @@ namespace hal
         QFont keyFont() const;
         u32 currentId() const;
         QString detailsTypeName() const;
+        QLabel* bigIcon();
 
     protected:
         DetailsType mDetailsType;
         u32 mCurrentId;
         QFont mKeyFont;
         bool mHideEmptySections;
+        QLabel* mBigIcon;
     };
 }    // namespace hal

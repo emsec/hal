@@ -69,13 +69,13 @@ namespace hal
         mGeneralView->setSelectionMode(QAbstractItemView::SingleSelection);
 
         // place net icon
-        QLabel* img = new DisputedBigIcon("sel_net", this);
+        mBigIcon = new DisputedBigIcon("sel_net", this);
 
         //adding things to intermediate layout (the one thats neccessary for the left spacing)
         intermediate_layout_gt->addWidget(mGeneralView);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_gt->addWidget(img);
-        intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
+        intermediate_layout_gt->addWidget(mBigIcon);
+        intermediate_layout_gt->setAlignment(mBigIcon,Qt::AlignTop);
 
         //adding things to the main layout
         mTopLvlLayout->addWidget(mGeneralInfoButton);

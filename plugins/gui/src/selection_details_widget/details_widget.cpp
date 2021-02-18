@@ -25,4 +25,8 @@ namespace hal
         return QString(typeName[mDetailsType]);
     }
 
+    QLabel* DetailsWidget::bigIcon()
+    {
+        return mBigIcon;
+    }
 }

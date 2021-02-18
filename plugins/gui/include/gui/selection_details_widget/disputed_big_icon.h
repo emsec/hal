@@ -33,8 +33,6 @@ namespace hal
         Q_OBJECT
     public:
         DisputedBigIcon(const QString& iconName, QWidget* parent = nullptr);
-    public Q_SLOTS:
-        void handleGlobalSettingsChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         void showOrHide();

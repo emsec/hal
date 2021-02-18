@@ -196,8 +196,8 @@ namespace hal
 
         CheckboxSetting* selection_details_empty_sections_setting = new CheckboxSetting("selection_details/hide_empty_sections", "Hide empty sections", "enabled", "", this);
         registerWidget("selection-details-window-item", selection_details_empty_sections_setting);
-        CheckboxSetting* selection_details_big_icon_setting = new CheckboxSetting("selection_details/show_big_icon", "Show big icon", "enabled", "", this);
-        registerWidget("selection-details-window-item", selection_details_big_icon_setting);
+        //CheckboxSetting* selection_details_big_icon_setting = new CheckboxSetting("selection_details/show_big_icon", "Show big icon", "enabled", "", this);
+        //registerWidget("selection-details-window-item", selection_details_big_icon_setting);
 
         makeSection("Expert settings", "advanced-item", ":/icons/preferences");
 

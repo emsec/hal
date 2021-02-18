@@ -42,6 +42,7 @@ namespace hal
     class GateDetailsWidget;
     class NetDetailsWidget;
     class SelectionHistoryNavigator;
+    class SettingsItemCheckbox;
 
     class SelectionDetailsWidget : public ContentWidget
     {
@@ -166,5 +167,7 @@ namespace hal
         void enableSearchbar(bool enable);
 
         static const QString sAddToGrouping;
+
+        SettingsItemCheckbox* mSettingVisible;
     };
 }
