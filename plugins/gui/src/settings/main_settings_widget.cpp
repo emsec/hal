@@ -192,19 +192,19 @@ namespace hal
         //CheckboxSetting* py_minimap = new CheckboxSetting("python/minimap", "Minimap", "show", "", this);
         //registerWidget("python-item", py_minimap);
 
-        makeSection("Details window", "selection-details-window-item", ":/icons/gen-window");
+        //makeSection("Details window", "selection-details-window-item", ":/icons/gen-window");
 
-        CheckboxSetting* selection_details_empty_sections_setting = new CheckboxSetting("selection_details/hide_empty_sections", "Hide empty sections", "enabled", "", this);
-        registerWidget("selection-details-window-item", selection_details_empty_sections_setting);
+        //CheckboxSetting* selection_details_empty_sections_setting = new CheckboxSetting("selection_details/hide_empty_sections", "Hide empty sections", "enabled", "", this);
+        //registerWidget("selection-details-window-item", selection_details_empty_sections_setting);
         //CheckboxSetting* selection_details_big_icon_setting = new CheckboxSetting("selection_details/show_big_icon", "Show big icon", "enabled", "", this);
         //registerWidget("selection-details-window-item", selection_details_big_icon_setting);
 
-        makeSection("Expert settings", "advanced-item", ":/icons/preferences");
+        //makeSection("Expert settings", "advanced-item", ":/icons/preferences");
 
-        CheckboxSetting* autosave_setting = new CheckboxSetting("advanced/autosave", "Auto-save your project", "enabled", "", this);
-        registerWidget("advanced-item", autosave_setting);
-        SpinboxSetting* autosave_interval_setting = new SpinboxSetting("advanced/autosave_interval", "Auto-save interval", 30, 600, "s", this);
-        registerWidget("advanced-item", autosave_interval_setting);
+        //CheckboxSetting* autosave_setting = new CheckboxSetting("advanced/autosave", "Auto-save your project", "enabled", "", this);
+        //registerWidget("advanced-item", autosave_setting);
+        //SpinboxSetting* autosave_interval_setting = new SpinboxSetting("advanced/autosave_interval", "Auto-save interval", 30, 600, "s", this);
+        //registerWidget("advanced-item", autosave_interval_setting);
 
         makeSection("Keyboard Shortcuts", "keybind-item", ":/icons/keyboard");
 

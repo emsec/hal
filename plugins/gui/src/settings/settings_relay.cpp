@@ -11,7 +11,6 @@ namespace hal
 
         // connect statement moved here since FileManager singleton might get
         // created prior to SettingsRelay
-        connect(this, &SettingsRelay::settingChanged, FileManager::get_instance(), &FileManager::handleGlobalSettingChanged);
     }
 
     void SettingsRelay::debug(void* sender, const QString& key, const QVariant& val)

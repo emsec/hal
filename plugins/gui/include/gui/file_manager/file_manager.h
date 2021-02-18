@@ -32,6 +32,9 @@ class QFileSystemWatcher;
 
 namespace hal
 {
+    class SettingsItemCheckbox;
+    class SettingsItemSpinbox;
+
     class FileManager : public QObject
     {
         Q_OBJECT
@@ -59,7 +62,6 @@ namespace hal
         void openFile(QString fileName);
         void closeFile();
         void autosave();
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private Q_SLOTS:
         void handleFileChanged(const QString& path);
@@ -80,5 +82,8 @@ namespace hal
         QTimer* mTimer;
         bool mAutosaveEnabled;
         int mAutosaveInterval;
+
+        SettingsItemCheckbox* mSettingAutosave;
+        SettingsItemSpinbox* mSettingAutosaveInterval;
     };
 }

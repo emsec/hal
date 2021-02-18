@@ -7,6 +7,9 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 
+#include "gui/settings/settings_items/settings_item_checkbox.h"
+#include "gui/settings/settings_items/settings_item_spinbox.h"
+
 #include <QDateTime>
 #include <QFile>
 #include <QFileInfo>
@@ -22,10 +25,41 @@ namespace hal
 {
     FileManager::FileManager(QObject* parent) : QObject(parent), mFileWatcher(new QFileSystemWatcher(this)), mFileOpen(false)
     {
-        mAutosaveEnabled  = gSettingsManager->get("advanced/autosave").toBool();
-        mAutosaveInterval = gSettingsManager->get("advanced/autosave_interval").toInt();
+        mSettingAutosave = new SettingsItemCheckbox(
+            "Autosave",
+            "advanced/autosave",
+            true,
+            "Advanced",
+            "Specifies wheather HAL should autosave."
+        );
+
+        mSettingAutosaveInterval = new SettingsItemSpinbox(
+            "Autosave Interval",
+            "advanced/autosave_interval",
+            30,
+            "Advanced",
+            "Sets after how much time in seconds an autosave will occur."
+        );
+
+        mAutosaveEnabled = mSettingAutosave->value().toBool();
+        mAutosaveInterval = mSettingAutosaveInterval->value().toInt();
+
+        //mAutosaveEnabled  = gSettingsManager->get("advanced/autosave").toBool();
+        //mAutosaveInterval = gSettingsManager->get("advanced/autosave_interval").toInt();
         if (mAutosaveInterval < 30)    // failsafe in case somebody sets "0" in the .ini
             mAutosaveInterval = 30;
+
+        connect(mSettingAutosave, &SettingsItemCheckbox::boolChanged, this, [this](bool value){
+            mAutosaveEnabled = value;
+            if (mTimer->isActive())
+                mTimer->start(mAutosaveInterval * 1000);
+        });
+
+        connect(mSettingAutosaveInterval, &SettingsItemSpinbox::intChanged, this, [this](int value){
+            mAutosaveInterval = value;
+            if (mTimer->isActive())
+                mTimer->start(mAutosaveInterval * 1000);
+        });
 
         connect(mFileWatcher, &QFileSystemWatcher::fileChanged, this, &FileManager::handleFileChanged);
         connect(mFileWatcher, &QFileSystemWatcher::directoryChanged, this, &FileManager::handleDirectoryChanged);
@@ -345,29 +379,6 @@ namespace hal
     void FileManager::handleDirectoryChanged(const QString& path)
     {
         Q_EMIT fileDirectoryChanged(path);
-    }
-
-    void FileManager::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
-    {
-        Q_UNUSED(sender);
-        if (key == "advanced/autosave")
-        {
-            mAutosaveEnabled = value.toBool();
-            if (mTimer->isActive())
-            {
-                // restart timer so the interval starts NOW
-                mTimer->start(mAutosaveInterval * 1000);
-            }
-        }
-        else if (key == "advanced/autosave_interval")
-        {
-            mAutosaveInterval = value.toInt();
-            if (mTimer->isActive())
-            {
-                // restart timer with new interval
-                mTimer->start(mAutosaveInterval * 1000);
-            }
-        }
     }
 
     void FileManager::updateRecentFiles(const QString& file) const
