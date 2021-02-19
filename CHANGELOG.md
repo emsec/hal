@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * changed function `create_gate_type` of class `GateLibrary` to support multiple base types
 * added `sequential`, `buffer`, `mux`, and `carry` base types to class `GateType`
 * added `get_path` to `netlist_utils` to retrieve all gates on the predecessor/successor path from a start gate/net to gates of a specified base type
-* added `optimize_constants` to class `BooleanFunction`
+* made `optimize_constants` of class `BooleanFunction` publicly accessible
+* changes to `z3_utils` (WIP)
 
 ## [3.2.5] - 2021-01-29 13:15:00+02:00 (urgency: medium)
 * **WARNING:** temporarily enabled extended logging (includes taking screenshots) for university course purposes. Note that no data leaves your machine unless you actively provide it to us.
