@@ -82,13 +82,14 @@ namespace hal
                 :returns: A dict from community IDs to communities.
                 :rtype: dict[set[hal_py.get_gate()]]
                 )")
+            /*
             .def("get_communities_multilevel", &GraphAlgorithmPlugin::get_communities_multilevel, py::arg("netlist"), R"(
                 Get a dict of community IDs to communities running the multilevel clustering algorithm from igraph. Each community is represented by a set of gates.
 
                 :param hal_py.Netlist netlist: The netlist to operate on.
                 :returns: A dict from community IDs to communities.
                 :rtype: dict[int,set[hal_py.get_gate()]]
-                )")
+                )") */
             .def("get_strongly_connected_components", &GraphAlgorithmPlugin::get_strongly_connected_components, py::arg("netlist"), R"(
                 Get a list of strongly connected components (SCC) with each SSC being represented by a list of gates.
 
