@@ -263,6 +263,7 @@ namespace hal {
             mGroupings[irow].setColor(groupingColor);
             QModelIndex inx = index(irow,2);
             Q_EMIT dataChanged(inx,inx);
+            Q_EMIT groupingColorChanged(mGroupings.at(irow).grouping());
             mDisableEvents = false;
             return oldColor;
         }

@@ -31,6 +31,7 @@ namespace hal
         Module* mod;
         Gate*   gat;
         Net*    net;
+        GraphContext* ctx;
         switch (mObject.type()) {
         case UserActionObjectType::Module:
             mod = gNetlist->get_module_by_id(mObject.id());
@@ -107,6 +108,16 @@ namespace hal
                 }
             }
         }
+            break;
+        case UserActionObjectType::Context:
+            ctx = gGraphContextManager->getContextById(mObject.id());
+            if (ctx)
+            {
+                // TODO : Undo action
+                gGraphContextManager->deleteGraphContext(ctx);
+            }
+            else
+                return false;
             break;
         default:
             return false;
