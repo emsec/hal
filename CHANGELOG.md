@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added `get_path` to `netlist_utils` to retrieve all gates on the predecessor/successor path from a start gate/net to gates of a specified base type
 * made `optimize_constants` of class `BooleanFunction` publicly accessible
 * changes to `z3_utils` (WIP)
+* properly clean up graphics scene and items when closing a view
 
 ## [3.2.5] - 2021-01-29 13:15:00+02:00 (urgency: medium)
 * **WARNING:** temporarily enabled extended logging (includes taking screenshots) for university course purposes. Note that no data leaves your machine unless you actively provide it to us.

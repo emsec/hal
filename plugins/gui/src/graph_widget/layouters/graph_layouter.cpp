@@ -46,7 +46,7 @@ namespace hal
 
     GraphLayouter::~GraphLayouter()
     {
-        delete mScene;
+        mScene->deleteLater();
     }
 
     GraphicsScene* GraphLayouter::scene() const
