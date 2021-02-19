@@ -11,14 +11,17 @@ namespace hal
         py::enum_<GateType::BaseType>(py_gate_type, "BaseType", R"(
             Defines the base type of a gate type.
         )")
-
-            .value("combinational", GateType::BaseType::combinational, R"(Represents a combinational gate type.)")
-            .value("lut", GateType::BaseType::lut, R"(Represents a combinational LUT gate type.)")
-            .value("ff", GateType::BaseType::ff, R"(Represents a sequential FF gate type.)")
-            .value("latch", GateType::BaseType::latch, R"(Represents a sequential latch gate type.)")
-            .value("ram", GateType::BaseType::ram, R"(Represents a sequential RAM gate type.)")
-            .value("io", GateType::BaseType::io, R"(Represents an IO gate type.)")
-            .value("dsp", GateType::BaseType::dsp, R"(Represents a sequential DSP gate type.)")
+            .value("combinational", GateType::BaseType::combinational, R"(Combinational gate type.)")
+            .value("sequential", GateType::BaseType::sequential, R"(Sequential gate type.)")
+            .value("lut", GateType::BaseType::lut, R"(LUT gate type.)")
+            .value("ff", GateType::BaseType::ff, R"(Flip-flop gate type.)")
+            .value("latch", GateType::BaseType::latch, R"(Latch gate type.)")
+            .value("ram", GateType::BaseType::ram, R"(RAM gate type.)")
+            .value("io", GateType::BaseType::io, R"(IO gate type.)")
+            .value("dsp", GateType::BaseType::dsp, R"(DSP gate type.)")
+            .value("mux", GateType::BaseType::mux, R"(MUX gate type.)")
+            .value("buffer", GateType::BaseType::buffer, R"(Buffer gate type.)")
+            .value("carry", GateType::BaseType::carry, R"(Carry gate type.)")
             .export_values();
 
         py::enum_<GateType::PinDirection>(py_gate_type, "PinDirection", R"(
@@ -83,18 +86,25 @@ namespace hal
             :rtype: str
         )");
 
-        py_gate_type.def_property_readonly("base_type", &GateType::get_base_type, R"(
-            The base type of the gate typ, which can be either 'combinatorial', 'lut', ‘ff', or 'latch'.
+        py_gate_type.def_property_readonly("base_types", &GateType::get_base_types, R"(
+            The base types assigned to the gate type.
 
-            :type: hal_py.GateType.BaseType
+            :type: set[hal_py.GateType.BaseType]
         )");
 
-        py_gate_type.def("get_base_type", &GateType::get_base_type, R"(
-            Get the base type of the gate type.
-            The base type can be either 'combinatorial', 'lut', ‘ff', or 'latch'.
+        py_gate_type.def("get_base_types", &GateType::get_base_types, R"(
+            Get the base types assigned to the gate type.
 
             :returns: The base type of the gate type.
-            :rtype: hal_py.GateType.BaseType
+            :rtype: set[hal_py.GateType.BaseType]
+        )");
+
+        py_gate_type.def("has_base_type", &GateType::has_base_type, R"(
+            Check whether the gate type is tagged with the given base type.
+
+            :param hal_py.GateType.BaseType type: The base type.
+            :returns: True if the gate type is of the given base type, false otherwise.
+            :rtype: bool
         )");
 
         py_gate_type.def_property_readonly("gate_library", &GateType::get_gate_library, R"(

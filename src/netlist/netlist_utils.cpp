@@ -321,7 +321,7 @@ namespace hal
                 {
                     auto next_gate = endpoint->get_gate();
 
-                    if (next_gate->get_type()->get_base_type() == GateType::BaseType::ff)
+                    if (next_gate->get_type()->has_base_type(GateType::BaseType::ff))
                     {
                         found_ffs.push_back(next_gate);
                     }
@@ -376,6 +376,91 @@ namespace hal
             return get_next_sequential_gates(net, get_successors, cache);
         }
 
+        namespace
+        {
+            std::vector<Gate*>
+                get_path_internal(const Net* start_net, bool forward, std::set<GateType::BaseType> stop_types, std::unordered_set<u32>& seen, std::unordered_map<u32, std::vector<Gate*>>& cache)
+            {
+                if (auto it = cache.find(start_net->get_id()); it != cache.end())
+                {
+                    return it->second;
+                }
+
+                if (seen.find(start_net->get_id()) != seen.end())
+                {
+                    return {};
+                }
+
+                seen.insert(start_net->get_id());
+
+                std::vector<Gate*> found_combinational;
+
+                for (auto endpoint : forward ? start_net->get_destinations() : start_net->get_sources())
+                {
+                    auto next_gate = endpoint->get_gate();
+
+                    bool stop = false;
+                    for (GateType::BaseType bt : next_gate->get_type()->get_base_types())
+                    {
+                        if (stop_types.find(bt) != stop_types.end())
+                        {
+                            stop = true;
+                        }
+                    }
+
+                    if (stop == false)
+                    {
+                        found_combinational.push_back(next_gate);
+
+                        for (auto n : forward ? next_gate->get_fan_out_nets() : next_gate->get_fan_in_nets())
+                        {
+                            auto next_gates = get_path_internal(n, forward, stop_types, seen, cache);
+                            found_combinational.insert(found_combinational.end(), next_gates.begin(), next_gates.end());
+                        }
+                    }
+                }
+
+                std::sort(found_combinational.begin(), found_combinational.end());
+                found_combinational.erase(std::unique(found_combinational.begin(), found_combinational.end()), found_combinational.end());
+
+                cache.emplace(start_net->get_id(), found_combinational);
+                return found_combinational;
+            }
+        }    // namespace
+
+        std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateType::BaseType> stop_types, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::vector<Gate*> found_combinational;
+            for (const auto& n : get_successors ? gate->get_fan_out_nets() : gate->get_fan_in_nets())
+            {
+                auto suc = get_path(n, get_successors, stop_types, cache);
+                found_combinational.insert(found_combinational.end(), suc.begin(), suc.end());
+            }
+
+            std::sort(found_combinational.begin(), found_combinational.end());
+            found_combinational.erase(std::unique(found_combinational.begin(), found_combinational.end()), found_combinational.end());
+
+            return found_combinational;
+        }
+
+        std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateType::BaseType> stop_types, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::unordered_set<u32> seen;
+            return get_path_internal(net, get_successors, stop_types, seen, cache);
+        }
+
+        std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateType::BaseType> stop_types)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_path(gate, get_successors, stop_types, cache);
+        }
+
+        std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateType::BaseType> stop_types)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_path(net, get_successors, stop_types, cache);
+        }
+
         std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_inputs)
         {
             std::unordered_set<Net*> nets;
@@ -416,14 +501,12 @@ namespace hal
             u32 num_gates = 0;
 
             // buffers can only be of these base types
-            std::unordered_set<GateType::BaseType> types = {GateType::BaseType::combinational, GateType::BaseType::lut};
-
             for (const auto& gate : netlist->get_gates())
             {
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
 
                 GateType* gt = gate->get_type();
-                if (types.find(gt->get_base_type()) == types.end())
+                if (!gt->has_base_type(GateType::BaseType::combinational) && !gt->has_base_type(GateType::BaseType::buffer))
                 {
                     // continue if of invalid base type
                     continue;
@@ -500,7 +583,7 @@ namespace hal
             Net* gnd_net = *(*netlist->get_gnd_gates().begin())->get_fan_out_nets().begin();
 
             // iterate all LUT gates
-            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_base_type(GateType::BaseType::lut); }))
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
@@ -577,7 +660,7 @@ namespace hal
                 {"1110101011000000", "OAI22"}     // !((A | D) & (B | C))
             };
 
-            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_base_type(GateType::BaseType::lut); }))
             {
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
 

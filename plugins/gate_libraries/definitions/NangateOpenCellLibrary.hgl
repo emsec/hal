@@ -3,7 +3,7 @@
     "cells": [
         {
             "name": "AND2_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -32,7 +32,7 @@
         },
         {
             "name": "AND2_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -61,7 +61,7 @@
         },
         {
             "name": "AND2_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -90,7 +90,7 @@
         },
         {
             "name": "AND3_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -123,7 +123,7 @@
         },
         {
             "name": "AND3_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -156,7 +156,7 @@
         },
         {
             "name": "AND3_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -189,7 +189,7 @@
         },
         {
             "name": "AND4_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -226,7 +226,7 @@
         },
         {
             "name": "AND4_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -263,7 +263,7 @@
         },
         {
             "name": "AND4_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -300,7 +300,7 @@
         },
         {
             "name": "ANTENNA_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -320,7 +320,7 @@
         },
         {
             "name": "AOI21_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -353,7 +353,7 @@
         },
         {
             "name": "AOI21_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -386,7 +386,7 @@
         },
         {
             "name": "AOI21_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -419,7 +419,7 @@
         },
         {
             "name": "AOI22_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -456,7 +456,7 @@
         },
         {
             "name": "AOI22_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -493,7 +493,7 @@
         },
         {
             "name": "AOI22_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -530,7 +530,7 @@
         },
         {
             "name": "AOI211_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -567,7 +567,7 @@
         },
         {
             "name": "AOI211_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -604,7 +604,7 @@
         },
         {
             "name": "AOI211_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -641,7 +641,7 @@
         },
         {
             "name": "AOI221_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -682,7 +682,7 @@
         },
         {
             "name": "AOI221_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -723,7 +723,7 @@
         },
         {
             "name": "AOI221_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -764,7 +764,7 @@
         },
         {
             "name": "AOI222_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -809,7 +809,7 @@
         },
         {
             "name": "AOI222_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -854,7 +854,7 @@
         },
         {
             "name": "AOI222_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -899,7 +899,7 @@
         },
         {
             "name": "BUF_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -924,7 +924,7 @@
         },
         {
             "name": "BUF_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -949,7 +949,7 @@
         },
         {
             "name": "BUF_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -974,7 +974,7 @@
         },
         {
             "name": "BUF_X8",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -999,7 +999,7 @@
         },
         {
             "name": "BUF_X16",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1024,7 +1024,7 @@
         },
         {
             "name": "BUF_X32",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1049,7 +1049,7 @@
         },
         {
             "name": "CLKBUF_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1074,7 +1074,7 @@
         },
         {
             "name": "CLKBUF_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1099,7 +1099,7 @@
         },
         {
             "name": "CLKBUF_X3",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1124,7 +1124,7 @@
         },
         {
             "name": "CLKGATETST_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1160,7 +1160,7 @@
         },
         {
             "name": "CLKGATETST_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1196,7 +1196,7 @@
         },
         {
             "name": "CLKGATETST_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1232,7 +1232,7 @@
         },
         {
             "name": "CLKGATETST_X8",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1268,7 +1268,7 @@
         },
         {
             "name": "CLKGATE_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1300,7 +1300,7 @@
         },
         {
             "name": "CLKGATE_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1332,7 +1332,7 @@
         },
         {
             "name": "CLKGATE_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1364,7 +1364,7 @@
         },
         {
             "name": "CLKGATE_X8",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1396,7 +1396,7 @@
         },
         {
             "name": "DFFRS_X1",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -1452,7 +1452,7 @@
         },
         {
             "name": "DFFRS_X2",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -1508,7 +1508,7 @@
         },
         {
             "name": "DFFR_X1",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -1556,7 +1556,7 @@
         },
         {
             "name": "DFFR_X2",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -1604,7 +1604,7 @@
         },
         {
             "name": "DFFS_X1",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -1652,7 +1652,7 @@
         },
         {
             "name": "DFFS_X2",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -1700,7 +1700,7 @@
         },
         {
             "name": "DFF_X1",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -1742,7 +1742,7 @@
         },
         {
             "name": "DFF_X2",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -1784,7 +1784,7 @@
         },
         {
             "name": "DLH_X1",
-            "type": "latch",
+            "types": ["latch"],
             "latch_config": {
                 "data_in": "D",
                 "enable_on": "G"
@@ -1818,7 +1818,7 @@
         },
         {
             "name": "DLH_X2",
-            "type": "latch",
+            "types": ["latch"],
             "latch_config": {
                 "data_in": "D",
                 "enable_on": "G"
@@ -1852,7 +1852,7 @@
         },
         {
             "name": "DLL_X1",
-            "type": "latch",
+            "types": ["latch"],
             "latch_config": {
                 "data_in": "D",
                 "enable_on": "!GN"
@@ -1886,7 +1886,7 @@
         },
         {
             "name": "DLL_X2",
-            "type": "latch",
+            "types": ["latch"],
             "latch_config": {
                 "data_in": "D",
                 "enable_on": "!GN"
@@ -1920,7 +1920,7 @@
         },
         {
             "name": "FA_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1958,7 +1958,7 @@
         },
         {
             "name": "FILLCELL_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1974,7 +1974,7 @@
         },
         {
             "name": "FILLCELL_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -1990,7 +1990,7 @@
         },
         {
             "name": "FILLCELL_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2006,7 +2006,7 @@
         },
         {
             "name": "FILLCELL_X8",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2022,7 +2022,7 @@
         },
         {
             "name": "FILLCELL_X16",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2038,7 +2038,7 @@
         },
         {
             "name": "FILLCELL_X32",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2054,7 +2054,7 @@
         },
         {
             "name": "HA_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2088,7 +2088,7 @@
         },
         {
             "name": "INV_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2113,7 +2113,7 @@
         },
         {
             "name": "INV_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2138,7 +2138,7 @@
         },
         {
             "name": "INV_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2163,7 +2163,7 @@
         },
         {
             "name": "INV_X8",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2188,7 +2188,7 @@
         },
         {
             "name": "INV_X16",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2213,7 +2213,7 @@
         },
         {
             "name": "INV_X32",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2238,7 +2238,7 @@
         },
         {
             "name": "LOGIC0_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2259,7 +2259,7 @@
         },
         {
             "name": "LOGIC1_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2280,7 +2280,7 @@
         },
         {
             "name": "MUX2_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2313,7 +2313,7 @@
         },
         {
             "name": "MUX2_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2346,7 +2346,7 @@
         },
         {
             "name": "NAND2_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2375,7 +2375,7 @@
         },
         {
             "name": "NAND2_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2404,7 +2404,7 @@
         },
         {
             "name": "NAND2_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2433,7 +2433,7 @@
         },
         {
             "name": "NAND3_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2466,7 +2466,7 @@
         },
         {
             "name": "NAND3_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2499,7 +2499,7 @@
         },
         {
             "name": "NAND3_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2532,7 +2532,7 @@
         },
         {
             "name": "NAND4_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2569,7 +2569,7 @@
         },
         {
             "name": "NAND4_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2606,7 +2606,7 @@
         },
         {
             "name": "NAND4_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2643,7 +2643,7 @@
         },
         {
             "name": "NOR2_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2672,7 +2672,7 @@
         },
         {
             "name": "NOR2_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2701,7 +2701,7 @@
         },
         {
             "name": "NOR2_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2730,7 +2730,7 @@
         },
         {
             "name": "NOR3_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2763,7 +2763,7 @@
         },
         {
             "name": "NOR3_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2796,7 +2796,7 @@
         },
         {
             "name": "NOR3_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2829,7 +2829,7 @@
         },
         {
             "name": "NOR4_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2866,7 +2866,7 @@
         },
         {
             "name": "NOR4_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2903,7 +2903,7 @@
         },
         {
             "name": "NOR4_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2940,7 +2940,7 @@
         },
         {
             "name": "OAI21_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2973,7 +2973,7 @@
         },
         {
             "name": "OAI21_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3006,7 +3006,7 @@
         },
         {
             "name": "OAI21_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3039,7 +3039,7 @@
         },
         {
             "name": "OAI22_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3076,7 +3076,7 @@
         },
         {
             "name": "OAI22_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3113,7 +3113,7 @@
         },
         {
             "name": "OAI22_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3150,7 +3150,7 @@
         },
         {
             "name": "OAI33_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3195,7 +3195,7 @@
         },
         {
             "name": "OAI211_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3232,7 +3232,7 @@
         },
         {
             "name": "OAI211_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3269,7 +3269,7 @@
         },
         {
             "name": "OAI211_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3306,7 +3306,7 @@
         },
         {
             "name": "OAI221_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3347,7 +3347,7 @@
         },
         {
             "name": "OAI221_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3388,7 +3388,7 @@
         },
         {
             "name": "OAI221_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3429,7 +3429,7 @@
         },
         {
             "name": "OAI222_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3474,7 +3474,7 @@
         },
         {
             "name": "OAI222_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3519,7 +3519,7 @@
         },
         {
             "name": "OAI222_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3564,7 +3564,7 @@
         },
         {
             "name": "OR2_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3593,7 +3593,7 @@
         },
         {
             "name": "OR2_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3622,7 +3622,7 @@
         },
         {
             "name": "OR2_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3651,7 +3651,7 @@
         },
         {
             "name": "OR3_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3684,7 +3684,7 @@
         },
         {
             "name": "OR3_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3717,7 +3717,7 @@
         },
         {
             "name": "OR3_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3750,7 +3750,7 @@
         },
         {
             "name": "OR4_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3787,7 +3787,7 @@
         },
         {
             "name": "OR4_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3824,7 +3824,7 @@
         },
         {
             "name": "OR4_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -3861,7 +3861,7 @@
         },
         {
             "name": "SDFFRS_X1",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -3927,7 +3927,7 @@
         },
         {
             "name": "SDFFRS_X2",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -3993,7 +3993,7 @@
         },
         {
             "name": "SDFFR_X1",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -4051,7 +4051,7 @@
         },
         {
             "name": "SDFFR_X2",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -4109,7 +4109,7 @@
         },
         {
             "name": "SDFFS_X1",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -4167,7 +4167,7 @@
         },
         {
             "name": "SDFFS_X2",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -4225,7 +4225,7 @@
         },
         {
             "name": "SDFF_X1",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -4277,7 +4277,7 @@
         },
         {
             "name": "SDFF_X2",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "",
                 "data_identifier": "",
@@ -4329,7 +4329,7 @@
         },
         {
             "name": "TBUF_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -4359,7 +4359,7 @@
         },
         {
             "name": "TBUF_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -4389,7 +4389,7 @@
         },
         {
             "name": "TBUF_X4",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -4419,7 +4419,7 @@
         },
         {
             "name": "TBUF_X8",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -4449,7 +4449,7 @@
         },
         {
             "name": "TBUF_X16",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -4479,7 +4479,7 @@
         },
         {
             "name": "TINV_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -4509,7 +4509,7 @@
         },
         {
             "name": "TLAT_X1",
-            "type": "latch",
+            "types": ["latch"],
             "latch_config": {
                 "data_in": "D",
                 "enable_on": "G"
@@ -4548,7 +4548,7 @@
         },
         {
             "name": "XNOR2_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -4577,7 +4577,7 @@
         },
         {
             "name": "XNOR2_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -4606,7 +4606,7 @@
         },
         {
             "name": "XOR2_X1",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -4635,7 +4635,7 @@
         },
         {
             "name": "XOR2_X2",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",

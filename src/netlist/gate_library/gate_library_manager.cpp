@@ -35,7 +35,7 @@ namespace hal
                         return false;
                     }
 
-                    GateType* gt = lib->create_gate_type(name, GateType::BaseType::combinational);
+                    GateType* gt = lib->create_gate_type(name, {GateType::BaseType::combinational});
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ZERO);
                     lib->mark_gnd_gate_type(gt);
@@ -51,7 +51,7 @@ namespace hal
                         return false;
                     }
 
-                    GateType* gt = lib->create_gate_type(name, GateType::BaseType::combinational);
+                    GateType* gt = lib->create_gate_type(name, {GateType::BaseType::combinational});
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ONE);
                     lib->mark_vcc_gate_type(gt);

@@ -298,6 +298,13 @@ namespace hal
         BooleanFunction optimize() const;
 
         /**
+         * Removes constant values whenever possible.
+         * 
+         * @return The optimized Boolean function.
+         */
+        BooleanFunction optimize_constants() const;
+
+        /**
          * Get the truth table outputs of the function.
          *
          * WARNING: Exponential runtime in the number of variables!
@@ -356,9 +363,6 @@ namespace hal
         std::vector<BooleanFunction> expand_AND_of_functions(const std::vector<std::vector<BooleanFunction>>& AND_terms_to_expand) const;
         // helper function 2
         std::vector<BooleanFunction> get_AND_terms() const;
-
-        // merges constants if possible and resolves duplicates
-        BooleanFunction optimize_constants() const;
 
         // merges nested expressions of the same operands
         static std::vector<std::vector<Value>> qmc(std::vector<std::vector<Value>> terms);

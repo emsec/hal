@@ -11,12 +11,16 @@
 namespace hal
 {
     const std::unordered_map<GateType::BaseType, std::string> HGLWriter::m_base_type_to_string = {{GateType::BaseType::combinational, "combinational"},
+                                                                                                  {GateType::BaseType::sequential, "sequential"},
                                                                                                   {GateType::BaseType::ff, "ff"},
                                                                                                   {GateType::BaseType::latch, "latch"},
                                                                                                   {GateType::BaseType::lut, "lut"},
                                                                                                   {GateType::BaseType::ram, "ram"},
                                                                                                   {GateType::BaseType::io, "io"},
-                                                                                                  {GateType::BaseType::dsp, "dsp"}};
+                                                                                                  {GateType::BaseType::dsp, "dsp"},
+                                                                                                  {GateType::BaseType::mux, "mux"},
+                                                                                                  {GateType::BaseType::buffer, "buffer"},
+                                                                                                  {GateType::BaseType::carry, "carry"}};
 
     const std::unordered_map<GateType::PinType, std::string> HGLWriter::m_pin_type_to_string = {{GateType::PinType::none, "none"},
                                                                                                 {GateType::PinType::power, "power"},
@@ -103,13 +107,22 @@ namespace hal
             cell.AddMember("name", gt->get_name(), allocator);
 
             // base type
-            GateType::BaseType base_type = gt->get_base_type();
-            cell.AddMember("type", m_base_type_to_string.at(base_type), allocator);
+            std::set<GateType::BaseType> base_types = gt->get_base_types();
+
+            rapidjson::Value bts(rapidjson::kArrayType);
+
+            for (const auto& base_type : base_types)
+            {
+                std::string bt_str = m_base_type_to_string.at(base_type);
+                bts.PushBack(rapidjson::Value{}.SetString(bt_str.c_str(), bt_str.length(), allocator), allocator);
+            }
+
+            cell.AddMember("types", bts, allocator);
 
             std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
 
             // lut_config, ff_config, latch_config
-            if (base_type == GateType::BaseType::lut)
+            if (gt->has_base_type(GateType::BaseType::lut))
             {
                 rapidjson::Value lut_config(rapidjson::kObjectType);
 
@@ -129,7 +142,7 @@ namespace hal
 
                 cell.AddMember("lut_config", lut_config, allocator);
             }
-            else if (base_type == GateType::BaseType::ff)
+            else if (gt->has_base_type(GateType::BaseType::ff))
             {
                 rapidjson::Value ff_config(rapidjson::kObjectType);
 
@@ -167,7 +180,7 @@ namespace hal
 
                 cell.AddMember("ff_config", ff_config, allocator);
             }
-            else if (base_type == GateType::BaseType::latch)
+            else if (gt->has_base_type(GateType::BaseType::latch))
             {
                 rapidjson::Value latch_config(rapidjson::kObjectType);
 

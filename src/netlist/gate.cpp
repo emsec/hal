@@ -150,7 +150,7 @@ namespace hal
             name = output_pins[0];
         }
 
-        if (m_type->get_base_type() == GateType::BaseType::lut)
+        if (m_type->has_base_type(GateType::BaseType::lut))
         {
             auto lut_pins = m_type->get_pins_of_type(GateType::PinType::lut);
             if (std::find(lut_pins.begin(), lut_pins.end(), name) != lut_pins.end())
@@ -187,7 +187,7 @@ namespace hal
             res.emplace(it.first, it.second);
         }
 
-        if (!only_custom_functions && m_type->get_base_type() == GateType::BaseType::lut)
+        if (!only_custom_functions && m_type->has_base_type(GateType::BaseType::lut))
         {
             for (auto pin : m_type->get_pins_of_type(GateType::PinType::lut))
             {
@@ -301,7 +301,7 @@ namespace hal
 
     void Gate::add_boolean_function(const std::string& name, const BooleanFunction& func)
     {
-        if (m_type->get_base_type() == GateType::BaseType::lut)
+        if (m_type->has_base_type(GateType::BaseType::lut))
         {
             auto output_pins = m_type->get_output_pins();
             if (!output_pins.empty() && name == output_pins[0])

@@ -3,7 +3,7 @@
     "cells": [
         {
             "name": "SB_CARRY",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "CI",
@@ -26,7 +26,7 @@
         },
         {
             "name": "SB_DFF",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -53,7 +53,7 @@
         },
         {
             "name": "SB_DFFE",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -85,7 +85,7 @@
         },
         {
             "name": "SB_DFFSR",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -117,7 +117,7 @@
         },
         {
             "name": "SB_DFFR",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -150,7 +150,7 @@
         },
         {
             "name": "SB_DFFSS",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -182,7 +182,7 @@
         },
         {
             "name": "SB_DFFS",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -215,7 +215,7 @@
         },
         {
             "name": "SB_DFFESR",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -247,7 +247,7 @@
         },
         {
             "name": "SB_DFFER",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -285,7 +285,7 @@
         },
         {
             "name": "SB_DFFESS",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -322,7 +322,7 @@
         },
         {
             "name": "SB_DFFES",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -360,7 +360,7 @@
         },
         {
             "name": "SB_DFFN",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -387,7 +387,7 @@
         },
         {
             "name": "SB_DFFNE",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -419,7 +419,7 @@
         },
         {
             "name": "SB_DFFNSR",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -451,7 +451,7 @@
         },
         {
             "name": "SB_DFFNR",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -484,7 +484,7 @@
         },
         {
             "name": "SB_DFFNSS",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -516,7 +516,7 @@
         },
         {
             "name": "SB_DFFNS",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -549,7 +549,7 @@
         },
         {
             "name": "SB_DFFNESR",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -581,7 +581,7 @@
         },
         {
             "name": "SB_DFFNER",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -619,7 +619,7 @@
         },
         {
             "name": "SB_DFFNESS",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -656,7 +656,7 @@
         },
         {
             "name": "SB_DFFNES",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "data_category": "generic",
                 "data_identifier": "INIT",
@@ -694,7 +694,7 @@
         },
         {
             "name": "SB_LUT4",
-            "type": "lut",
+            "types": ["lut", "combinational"],
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
@@ -726,7 +726,7 @@
         },
         {
             "name": "SB_RAM40_4K",
-            "type": "ram",
+            "types": ["ram"],
             "pins": [
                 {
                     "name": "WE",
@@ -1193,7 +1193,7 @@
         },
         {
             "name": "SB_IO",
-            "type": "io",
+            "types": ["io"],
             "pins": [
                 {
                     "name": "PACKAGE_PIN",
@@ -1249,7 +1249,7 @@
         },
         {
             "name": "SB_GB_IO",
-            "type": "io",
+            "types": ["io"],
             "pins": [
                 {
                     "name": "PACKAGE_PIN",
@@ -1310,7 +1310,7 @@
         },
         {
             "name": "SB_GB",
-            "type": "combinational",
+            "types": ["combinational", "buffer"],
             "pins": [
                 {
                     "name": "USER_SIGNAL_TO_GLOBAL_BUFFER",
@@ -1325,7 +1325,7 @@
         },
         {
             "name": "SB_HFOSC",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "CLKHFEN",
@@ -1345,7 +1345,7 @@
         },
         {
             "name": "SB_LFOSC",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "CLKLFEN",
@@ -1365,7 +1365,7 @@
         },
         {
             "name": "SB_MAC16",
-            "type": "dsp",
+            "types": ["dsp"],
             "pins": [
                 {
                     "name": "CLK",
@@ -2066,7 +2066,7 @@
         },
         {
             "name": "SB_I2C",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "SBCLKI",
@@ -2216,7 +2216,7 @@
         },
         {
             "name": "SB_SPI",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "SBCLKI",

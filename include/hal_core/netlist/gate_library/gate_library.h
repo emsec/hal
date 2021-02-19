@@ -62,16 +62,16 @@ namespace hal
          *
          * @returns The path to the gate library file.
          */
-        std::filesystem::path get_path() const;        
+        std::filesystem::path get_path() const;
 
         /**
          * Create a new gate type, add it to the gate library, and return it.
          * 
          * @param[in] name - The name of the gate type.
-         * @param[in] base_type - The base type of the gate type.
+         * @param[in] base_types - The base types of the gate type.
          * @returns The new gate type instance on success, a nullptr otherwise.
          */
-        GateType* create_gate_type(const std::string& name, GateType::BaseType base_type = GateType::BaseType::combinational);
+        GateType* create_gate_type(const std::string& name, std::set<GateType::BaseType> base_types = {GateType::BaseType::combinational});
 
         /**
          * Check whether the given gate type is contained in this library.
