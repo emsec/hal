@@ -84,7 +84,7 @@ Collaboration diagram for hal::BooleanFunction:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../db/d09/classhal_1_1BooleanFunction__coll__graph.png" border="0" usemap="#hal_1_1BooleanFunction_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1BooleanFunction_coll__map" id="hal_1_1BooleanFunction_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,164,508"/>
+<area shape="rect" title=" " alt="" coords="5,5,180,523"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -150,6 +150,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9a7638db9c73a22dde7768a87d02eaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af994e1397431496288ed5aab298bc54a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">optimize</a> () const</td></tr>
 <tr class="separator:af994e1397431496288ed5aab298bc54a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75f0425f8656a9318812b17c6ff200bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a75f0425f8656a9318812b17c6ff200bb">optimize_constants</a> () const</td></tr>
+<tr class="separator:a75f0425f8656a9318812b17c6ff200bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79f7213798c1927842874c8271fba751"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#aac7bb4fda3bf06664f6bc717c3be92fb">Value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a79f7213798c1927842874c8271fba751">get_truth_table</a> (std::vector&lt; std::string &gt; ordered_variables={}, bool remove_unknown_variables=false) const</td></tr>
 <tr class="separator:a79f7213798c1927842874c8271fba751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8264cc6e595cabd8253a2be33d0213f6"><td class="memItemLeft" align="right" valign="top">z3::expr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a8264cc6e595cabd8253a2be33d0213f6">to_z3</a> (z3::context &amp;context) const</td></tr>
@@ -214,7 +216,7 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>Construct an empty Boolean function and thus evaluates to X (undefined). </p>
 
-<p class="reference">Referenced by <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">optimize()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae9242e7d969fc9b6eb402fc5c2386153">substitute()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">optimize()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a75f0425f8656a9318812b17c6ff200bb">optimize_constants()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae9242e7d969fc9b6eb402fc5c2386153">substitute()</a>.</p>
 
 </div>
 </div>
@@ -506,7 +508,7 @@ Friends</h2></td></tr>
 <p>Check whether the function is empty.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if function is empty, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a9a7638db9c73a22dde7768a87d02eaaa">get_dnf_clauses()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a3a32b24f0162f2edaa4e676ebb7a3956">operator==()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">optimize()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a404f2bad29d2cd14108e22fc247b7e15">to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a9a7638db9c73a22dde7768a87d02eaaa">get_dnf_clauses()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a3a32b24f0162f2edaa4e676ebb7a3956">operator==()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">optimize()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a75f0425f8656a9318812b17c6ff200bb">optimize_constants()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a404f2bad29d2cd14108e22fc247b7e15">to_string()</a>.</p>
 
 </div>
 </div>
@@ -898,7 +900,7 @@ Friends</h2></td></tr>
 <p>Get the plain disjunctive normal form (DNF) representation of the Boolean function.</p>
 <dl class="section return"><dt>Returns</dt><dd>The DNF as a Boolean function. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#acd91dc3c60400bb61c84e55c91c96a99">is_dnf()</a>.</p>
+<p class="reference">References <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#acd91dc3c60400bb61c84e55c91c96a99">is_dnf()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a75f0425f8656a9318812b17c6ff200bb">optimize_constants()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a9a7638db9c73a22dde7768a87d02eaaa">get_dnf_clauses()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">optimize()</a>.</p>
 
@@ -946,9 +948,32 @@ Friends</h2></td></tr>
 <p>Optimizes the Boolean function by first converting it to disjunctive normal form (DNF) and then applying the Quine-McCluskey algorithm.</p>
 <dl class="section return"><dt>Returns</dt><dd>The optimized Boolean function. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a2e0e3d095ea036a3be96256eb59d4297">BooleanFunction()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae96a6d2c72af72e5969ced6fed3bccd7">get_variables()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a6b39eb961ba451df46b7ad19ff673733">is_empty()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a51239fd8f787b31b7a59561c19162cab">to_dnf()</a>.</p>
+<p class="reference">References <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a2e0e3d095ea036a3be96256eb59d4297">BooleanFunction()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#ae96a6d2c72af72e5969ced6fed3bccd7">get_variables()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a6b39eb961ba451df46b7ad19ff673733">is_empty()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a75f0425f8656a9318812b17c6ff200bb">optimize_constants()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a51239fd8f787b31b7a59561c19162cab">to_dnf()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a699783dc199b969b663b91553e6cf807">is_constant_one()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#aec67289287df362a060e81aec4d80ab7">is_constant_zero()</a>.</p>
+
+</div>
+</div>
+<a id="a75f0425f8656a9318812b17c6ff200bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75f0425f8656a9318812b17c6ff200bb">&#9670;&nbsp;</a></span>optimize_constants()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html">BooleanFunction</a> hal::BooleanFunction::optimize_constants </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Removes constant values whenever possible.</p>
+<dl class="section return"><dt>Returns</dt><dd>The optimized Boolean function. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a2e0e3d095ea036a3be96256eb59d4297">BooleanFunction()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a6b39eb961ba451df46b7ad19ff673733">is_empty()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#aac7bb4fda3bf06664f6bc717c3be92fba2253448caf5f40b7ce887c337f7da14a">ONE</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a75f0425f8656a9318812b17c6ff200bb">optimize_constants()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#aac7bb4fda3bf06664f6bc717c3be92fbac487892e83456269ce717a99dffe1d49">ZERO</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#af994e1397431496288ed5aab298bc54a">optimize()</a>, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a75f0425f8656a9318812b17c6ff200bb">optimize_constants()</a>, and <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#a51239fd8f787b31b7a59561c19162cab">to_dnf()</a>.</p>
 
 </div>
 </div>
@@ -1158,7 +1183,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 19 2021 07:42:31 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 19 2021 08:13:51 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

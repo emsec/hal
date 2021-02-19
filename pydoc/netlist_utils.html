@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.2.5-47-ga54fbfde3 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.2.5-79-g2951a4a93 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.5-47-ga54fbfde3
+                v3.2.5-79-g2951a4a93
               </div>
             
           
@@ -314,6 +314,120 @@ Traverses combinational logic of all input or output nets until sequential gates
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All sequential successors or predecessors of the net.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Net]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistUtils.get_path">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_path</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistUtils.get_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_path(gate: hal::Gate, get_successors: bool, stop_types: Set[hal_py.GateType.BaseType], cache: Dict[int, List[hal::Gate]]) -&gt; List[hal::Gate]</p>
+<blockquote>
+<div><p>Find all gates on the predecessor or successor path of a gate.
+Traverses all input or output nets until gates of the specified base types are found.
+The result may include the provided gate itself.
+The use of the this cached version is recommended in case of extensive usage to improve performance. 
+The cache will be filled by this function and should initially be provided empty.
+Different caches for different values of get_successors shall be used.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">If true, the successor path is returned, otherwise the predecessor path is returned.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateType.BaseType] stop_types:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Base types of gate types at which traversal should halt.</td>
+</tr>
+</tbody>
+</table>
+<p>:param dict[int, list[hal_py.Gate]] cache - The cache. 
+:returns: All gates on the predecessor or successor path of the gate.
+:rtype: list[hal_py.Gate]</p>
+</div></blockquote>
+</li>
+<li><p class="first">get_path(gate: hal::Gate, get_successors: bool, stop_types: Set[hal_py.GateType.BaseType]) -&gt; List[hal::Gate]</p>
+<blockquote>
+<div><p>Find all gates on the predeccessor or successor path of a gate.
+Traverses all input or output nets until gates of the specified base types are found.
+The result may include the provided gate itself.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">If true, the successor path is returned, otherwise the predecessor path is returned.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateType.BaseType] stop_types:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Base types of gate types at which traversal should halt.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All gates on the predecessor or successor path of the gate.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_path(net: hal::Net, get_successors: bool, stop_types: Set[hal_py.GateType.BaseType], cache: Dict[int, List[hal::Gate]]) -&gt; List[hal::Gate]</p>
+<blockquote>
+<div><p>Find all gates on the predecessor or successor path of a net.
+Traverses all input or output nets until gates of the specified base types are found.
+The use of the this cached version is recommended in case of extensive usage to improve performance. 
+The cache will be filled by this function and should initially be provided empty.
+Different caches for different values of get_successors shall be used.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">If true, the successor path is returned, otherwise the predecessor path is returned.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateType.BaseType] stop_types:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Base types of gate types at which traversal should halt.</td>
+</tr>
+</tbody>
+</table>
+<p>:param dict[int, list[hal_py.Gate]] cache - The cache. 
+:returns: All gates on the predecessor or successor path of the net.
+:rtype: list[hal_py.Net]</p>
+</div></blockquote>
+</li>
+<li><p class="first">get_path(net: hal::Net, get_successors: bool, stop_types: Set[hal_py.GateType.BaseType]) -&gt; List[hal::Gate]</p>
+<blockquote>
+<div><p>Find all gates on the predecessor or successor path of a net.
+Traverses all input or output nets until gates of the specified base types are found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The initial net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">If true, the successor path is returned, otherwise the predecessor path is returned.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateType.BaseType] stop_types:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Base types of gate types at which traversal should halt.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All gates on the predecessor or successor path of the net.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Net]</td>
 </tr>
 </tbody>
 </table>

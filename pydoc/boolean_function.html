@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v3.2.5-47-ga54fbfde3 documentation</title>
+  <title>Boolean Function &mdash; hal_py v3.2.5-79-g2951a4a93 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.5-47-ga54fbfde3
+                v3.2.5-79-g2951a4a93
               </div>
             
           
@@ -593,6 +593,22 @@ Operator precedence is <code class="docutils literal notranslate"><span class="p
 <dt id="hal_py.BooleanFunction.optimize">
 <code class="descname">optimize</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.optimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optimize the Boolean function by first converting it to disjunctive normal form (DNF) and then applying the Quine-McCluskey algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The optimized Boolean function.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.optimize_constants">
+<code class="descname">optimize_constants</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.optimize_constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes constant values whenever possible.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
