@@ -42,7 +42,7 @@ namespace hal
             mAction->mGates   = mSelectedGates;
             mAction->mNets    = mSelectedNets;
             mAction->setObject(UserActionObject(mFocusId,
-                                                UserActionObjectType::fromItemType(mFocusType)));
+                                                UserActionObjectType::fromSelectionType(mFocusType)));
             mAction->mSubfocus      = mSubfocus;
             mAction->mSubfocusIndex = mSubfocusIndex;
         }
@@ -126,7 +126,7 @@ namespace hal
     void SelectionRelay::setFocus(ItemType ftype, u32 fid, Subfocus sfoc, u32 sfinx)
     {
         initializeAction();
-        mAction->setObject(UserActionObject(fid,UserActionObjectType::fromItemType(ftype)));
+        mAction->setObject(UserActionObject(fid,UserActionObjectType::fromSelectionType(ftype)));
         mAction->mSubfocus = sfoc;
         mAction->mSubfocusIndex = sfinx;
     }

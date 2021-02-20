@@ -46,8 +46,10 @@ namespace hal {
 
         static ObjectType fromString(const QString& s);
         static QString toString(ObjectType t);
-        static ObjectType fromItemType(SelectionRelay::ItemType itp);
-        static SelectionRelay::ItemType toItemType(ObjectType t);
+        static ObjectType fromSelectionType(SelectionRelay::ItemType itp);
+        static SelectionRelay::ItemType toSelectionType(ObjectType t);
+        static ObjectType fromHalType(hal::ItemType itp);
+        static hal::ItemType toHalType(ObjectType t);
         static ObjectType fromNodeType(Node::NodeType ntp);
         static Node::NodeType toNodeType(ObjectType t);
     };

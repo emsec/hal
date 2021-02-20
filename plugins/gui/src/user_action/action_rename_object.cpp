@@ -45,6 +45,7 @@ namespace hal
         QString       oldName;
         Module*       mod;
         Gate*         gat;
+        Net*          net;
         GraphContext* ctx;
         switch (mObject.type()) {
         case UserActionObjectType::Module:
@@ -63,6 +64,16 @@ namespace hal
             {
                 oldName = QString::fromStdString(gat->get_name());
                 gat->set_name(mNewName.toStdString());
+            }
+            else
+                return false;
+            break;
+        case UserActionObjectType::Net:
+            net = gNetlist->get_net_by_id(mObject.id());
+            if (net)
+            {
+                oldName = QString::fromStdString(net->get_name());
+                net->set_name(mNewName.toStdString());
             }
             else
                 return false;

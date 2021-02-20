@@ -80,7 +80,7 @@ namespace hal
     bool ActionSetSelectionFocus::hasModifications() const
     {
         if (gSelectionRelay->focusId()         != mObject.id())     return true;
-        if (UserActionObjectType::fromItemType(gSelectionRelay->focusType())
+        if (UserActionObjectType::fromSelectionType(gSelectionRelay->focusType())
                                                != mObject.type())   return true;
         if (gSelectionRelay->subfocus()        != mSubfocus)        return true;
         if (gSelectionRelay->subfocusIndex()   != mSubfocusIndex)   return true;
@@ -99,10 +99,10 @@ namespace hal
         undo->mSubfocus = gSelectionRelay->subfocus();
         undo->mSubfocusIndex = gSelectionRelay->subfocusIndex();
         undo->setObject(UserActionObject(gSelectionRelay->focusId(),
-                                         UserActionObjectType::fromItemType(gSelectionRelay->focusType())));
+                                         UserActionObjectType::fromSelectionType(gSelectionRelay->focusType())));
         mUndoAction = undo;
         gSelectionRelay->actionSetSelected(mModules, mGates, mNets);
-        gSelectionRelay->setFocusDirect(UserActionObjectType::toItemType(mObject.type()),
+        gSelectionRelay->setFocusDirect(UserActionObjectType::toSelectionType(mObject.type()),
                                   mObject.id(),mSubfocus,mSubfocusIndex);
         return UserAction::exec();
     }

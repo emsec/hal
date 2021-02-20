@@ -1,5 +1,7 @@
 #include "gui/selection_details_widget/details_general_model.h"
 #include "gui/input_dialog/input_dialog.h"
+#include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_set_object_type.h"
 #include <QTableView>
 #include <QApplication>
 #include <QClipboard>
@@ -8,6 +10,11 @@
 namespace hal {
 
 //------------------------------------------------------------
+    bool DetailsGeneralModelEntry::canEditText() const
+    {
+        return mObject.type() != UserActionObjectType::None;
+    }
+
     QVariant DetailsGeneralModelEntry::data(int iColumn) const
     {
         switch (iColumn) {
@@ -21,8 +28,19 @@ namespace hal {
 
     void DetailsGeneralModelEntry::setValue(const QString &v) const
     {
-        if (!hasSetter()) return;
-        mSetter(v.toStdString());
+        if (mObject.type()==UserActionObjectType::None) return;
+        if (lcLabel()=="name")
+        {
+            ActionRenameObject* act = new ActionRenameObject(v);
+            act->setObject(mObject);
+            act->exec();
+        }
+        else if (lcLabel()=="type")
+        {
+            ActionSetObjectType* act = new ActionSetObjectType(v);
+            act->setObject(mObject);
+            act->exec();
+        }
     }
 //------------------------------------------------------------
 
@@ -66,8 +84,9 @@ namespace hal {
         mContent.append(DetailsGeneralModelEntry("Nets", nNets));
 
         // mContent :  Name=0, Type=1, Id=2, Grouping=3, Parent=4, Gates=5, Submodules=6, Nets=7
-        mContent[0].assignSetter(std::bind(&Module::set_name,m,std::placeholders::_1));
-        mContent[1].assignSetter(std::bind(&Module::set_type,m,std::placeholders::_1));
+        for (int irow=0; irow<2; irow++)
+            mContent[irow].setObject(UserActionObject(m->get_id(),
+                                                      UserActionObjectType::Module));
         mGetParentModule = std::bind(&Module::get_parent_module,m);
     }
 
@@ -88,7 +107,9 @@ namespace hal {
 
     void DetailsGeneralModel::additionalInformation(Net* n)
     {
-        mContent[0].assignSetter(std::bind(&Net::set_name,n,std::placeholders::_1));
+        // can edit name
+        mContent[0].setObject(UserActionObject(n->get_id(),
+                                                  UserActionObjectType::Net));
     }
 
 
@@ -134,11 +155,11 @@ namespace hal {
     void DetailsGeneralModel::editValueTriggered()
     {
         if (mContextIndex < 0 || mContextIndex >= mContent.size()) return;
-        const DetailsGeneralModelEntry& dgme = mContent.at(mContextIndex);
+        DetailsGeneralModelEntry dgme = mContent.at(mContextIndex);
         InputDialog ipd("Change "+dgme.lcLabel(), "New "+dgme.lcLabel(), dgme.textValue());
         if (ipd.exec() == QDialog::Accepted)
         {
-            mContent.at(mContextIndex).setValue(ipd.textValue());
+            dgme.setValue(ipd.textValue());
             Q_EMIT requireUpdate(mId);
         }
     }
@@ -167,10 +188,10 @@ namespace hal {
         if (!inx.isValid()) return;
         mContextIndex = inx.row();
         const DetailsGeneralModelEntry& dgme = mContent.at(mContextIndex);
-        if (!dgme.hasSetter() && dgme.pythonGetter().isEmpty()) return;
+        if (!dgme.canEditText() && dgme.pythonGetter().isEmpty()) return;
         QMenu* contextMenu = new QMenu(tv);
         QAction* action;
-        if (dgme.hasSetter())
+        if (dgme.canEditText())
         {
             action = contextMenu->addAction("Change " + dgme.lcLabel());
             connect(action, &QAction::triggered, this, &DetailsGeneralModel::editValueTriggered);

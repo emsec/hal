@@ -182,40 +182,40 @@ namespace hal
 
     void GraphGraphicsView::handleRenameAction()
     {
+        QString oldName;
+        QString prompt;
+        UserActionObjectType::ObjectType type =
+                UserActionObjectType::fromHalType(mItem->itemType());
+
         if (mItem->itemType() == ItemType::Gate)
         {
-            Gate* g            = gNetlist->get_gate_by_id(mItem->id());
-            const QString name = QString::fromStdString(g->get_name());
-            bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Change gate name", "New name:", QLineEdit::Normal, name, &confirm);
-            if (confirm)
-            {
-                ActionRenameObject* act = new ActionRenameObject(new_name);
-                act->setObject(UserActionObject(g->get_id(),UserActionObjectType::Gate));
-                act->exec();
-            }
+            Gate* g   = gNetlist->get_gate_by_id(mItem->id());
+            oldName   = QString::fromStdString(g->get_name());
+            prompt    = "Change gate name";
         }
         else if (mItem->itemType() == ItemType::Module)
         {
-            Module* m          = gNetlist->get_module_by_id(mItem->id());
-            const QString name = QString::fromStdString(m->get_name());
-            bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Change module name", "New name:", QLineEdit::Normal, name, &confirm);
-            if (confirm)
-            {
-                m->set_name(new_name.toStdString());
-            }
+            Module* m = gNetlist->get_module_by_id(mItem->id());
+            oldName   = QString::fromStdString(m->get_name());
+            prompt    = "Change module name";
         }
         else if (mItem->itemType() == ItemType::Net)
         {
-            Net* n             = gNetlist->get_net_by_id(mItem->id());
-            const QString name = QString::fromStdString(n->get_name());
-            bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Change net name", "New name:", QLineEdit::Normal, name, &confirm);
-            if (confirm)
-            {
-                n->set_name(new_name.toStdString());
-            }
+            Net* n    = gNetlist->get_net_by_id(mItem->id());
+            oldName   = QString::fromStdString(n->get_name());
+            prompt    = "Change net name";
+        }
+        else return;
+
+        bool confirm;
+        QString newName =
+                QInputDialog::getText(this, prompt, "New name:", QLineEdit::Normal,
+                                      oldName, &confirm);
+        if (confirm)
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(UserActionObject(mItem->id(),type));
+            act->exec();
         }
     }
 

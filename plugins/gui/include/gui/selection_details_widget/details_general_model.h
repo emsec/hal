@@ -6,6 +6,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/grouping.h"
 #include "gui/gui_globals.h"
+#include "gui/user_action/user_action_object.h"
 #include <QStringList>
 #include <QPair>
 
@@ -16,23 +17,22 @@ namespace hal {
         QString mLabel;
         QVariant mValue;
         QString mPythonGetter;
-        std::function<void(const std::string&)> mSetter;
+        UserActionObject mObject; // must be assigned if field editable, None otherwise
 
     public:
-        DetailsGeneralModelEntry()
-            : mSetter(nullptr) {;}
+        DetailsGeneralModelEntry() {;}
         DetailsGeneralModelEntry(const QString& label_,
                                  const QVariant& value_,
                                  const QString& python_ = QString())
-            : mLabel(label_), mValue(value_), mPythonGetter(python_), mSetter(nullptr)
+            : mLabel(label_), mValue(value_), mPythonGetter(python_)
         {;}
         QVariant data(int iColumn) const;
-        bool hasSetter() const { return mSetter != nullptr; }
         void setValue(const QString& v) const;
-        void assignSetter(const std::function<void(const std::string&)>& setter_) { mSetter = setter_; }
+        void setObject(const UserActionObject& obj) { mObject = obj; }
         QString lcLabel() const { return mLabel.toLower(); }
         QString textValue() const { return mValue.toString(); }
         QString pythonGetter() const { return mPythonGetter; }
+        bool canEditText() const;
     };
 
     template <typename T> class DetailsGeneralCommonInfo

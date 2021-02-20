@@ -18,7 +18,33 @@ namespace hal {
         return QString(me.key(t));
     }
 
-    UserActionObjectType::ObjectType UserActionObjectType::fromItemType(SelectionRelay::ItemType itp)
+    UserActionObjectType::ObjectType UserActionObjectType::fromHalType(hal::ItemType itp)
+    {
+        ObjectType retval = None;
+        switch (itp)
+        {
+        case ItemType::Module: retval = Module; break;
+        case ItemType::Gate:   retval = Gate;   break;
+        case ItemType::Net:    retval = Net;    break;
+        default:                                                break;
+        }
+        return retval;
+    }
+
+    hal::ItemType UserActionObjectType::toHalType(UserActionObjectType::ObjectType t)
+    {
+        hal::ItemType retval = ItemType::None;
+        switch (t)
+        {
+        case Module: retval = ItemType::Module; break;
+        case Gate:   retval = ItemType::Gate;   break;
+        case Net:    retval = ItemType::Net;    break;
+        default:                                break;
+        }
+        return retval;
+    }
+
+    UserActionObjectType::ObjectType UserActionObjectType::fromSelectionType(SelectionRelay::ItemType itp)
     {
         ObjectType retval = None;
         switch (itp)
@@ -31,7 +57,7 @@ namespace hal {
         return retval;
     }
 
-    SelectionRelay::ItemType UserActionObjectType::toItemType(UserActionObjectType::ObjectType t)
+    SelectionRelay::ItemType UserActionObjectType::toSelectionType(UserActionObjectType::ObjectType t)
     {
         SelectionRelay::ItemType retval = SelectionRelay::ItemType::None;
         switch (t)
