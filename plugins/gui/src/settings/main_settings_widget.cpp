@@ -134,14 +134,14 @@ namespace hal
 
         /************* ADD NEW SETTINGS WIDGETS HERE *************/
 
-        makeSection("Style", "style-item", ":/icons/eye");
+        //makeSection("Style", "style-item", ":/icons/eye");
 
-        QMap<QString, QVariant> theme_options;
-        theme_options.insert("Darcula", "darcula");
-        theme_options.insert("Sunny", "sunny");
-        DropdownSetting* theme_settings = new DropdownSetting("main_style/theme", "Main Style Theme", theme_options, "will be set as your theme after restarting", this);
+        //QMap<QString, QVariant> theme_options;
+        //theme_options.insert("Darcula", "darcula");
+        //theme_options.insert("Sunny", "sunny");
+        //DropdownSetting* theme_settings = new DropdownSetting("main_style/theme", "Main Style Theme", theme_options, "will be set as your theme after restarting", this);
         //theme_settings->resetLabels();
-        registerWidget("style-item", theme_settings);
+        //registerWidget("style-item", theme_settings);
 
         //makeSection("Graph View", "graphview-item", ":/icons/graph");
         

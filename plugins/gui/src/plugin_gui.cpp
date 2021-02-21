@@ -33,6 +33,7 @@
 #include <QString>
 #include <gui/focus_logger/focus_logger.h>
 #include <signal.h>
+#include <QDebug>
 
 namespace hal
 {
@@ -153,15 +154,20 @@ namespace hal
 
         //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
         //this settingsobject is currently neccessary to read from the settings from here, because the mGSettings are not yet initialized(?)
-        QSettings tempsettings_to_read_from(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
-        QString stylesheet_to_open = ":/style/darcula";    //default style
+        QString styleSheetToOpen;
 
-        if (tempsettings_to_read_from.value("main_style/theme", "") == "" || tempsettings_to_read_from.value("main_style/theme", "") == "darcula")
-            stylesheet_to_open = ":/style/darcula";
-        else if (tempsettings_to_read_from.value("main_style/theme", "") == "sunny")
-            stylesheet_to_open = ":/style/sunny";
+        QSettings tempSettingsToReadFrom("emsec", "settings");
+        MainWindow::StyleSheetOption theme = MainWindow::StyleSheetOption(tempSettingsToReadFrom.value("style/main_theme").toInt());
 
-        QFile stylesheet(stylesheet_to_open);
+        switch(theme)
+        {
+            case MainWindow::StyleSheetOption::Darcula : styleSheetToOpen =  ":/style/darcula"; break;
+            case MainWindow::StyleSheetOption::Sunny : styleSheetToOpen =  ":/style/sunny"; break;
+
+            default: styleSheetToOpen =  ":/style/darcula";
+        }
+
+        QFile stylesheet(styleSheetToOpen);
         stylesheet.open(QFile::ReadOnly);
         a.setStyleSheet(QString(stylesheet.readAll()));
         stylesheet.close();

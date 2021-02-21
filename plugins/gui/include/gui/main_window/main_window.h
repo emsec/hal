@@ -50,8 +50,8 @@ namespace hal
     class ContentManager;
     class AboutDialog;
     class WelcomeScreen;
-
     class SettingsItemKeybind;
+    class SettingsItemDropdown;
 
     class MainWindow : public QWidget
     {
@@ -75,8 +75,8 @@ namespace hal
         Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
 
     public:
-        enum PixmapType { Empty, Gate, Module, Horror };
-        Q_ENUM(PixmapType)
+        enum StyleSheetOption {Darcula, Sunny};
+        Q_ENUM(StyleSheetOption)
 
         explicit MainWindow(QWidget* parent = nullptr);
 
@@ -218,5 +218,7 @@ namespace hal
         SettingsItemKeybind* mSettingCreateFile;
         SettingsItemKeybind* mSettingOpenFile;
         SettingsItemKeybind* mSettingSaveFile;
+
+        SettingsItemDropdown* mSettingStyle;
     };
 }

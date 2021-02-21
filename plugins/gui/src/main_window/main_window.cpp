@@ -19,6 +19,7 @@
 #include "gui/python/python_editor.h"
 #include "gui/welcome_screen/welcome_screen.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_controls.h"
@@ -249,6 +250,15 @@ namespace hal
         connect(shortCutOpenFile, &QShortcut::activated, mActionOpen, &QAction::trigger);
         connect(shortCutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
 
+        mSettingStyle = new SettingsItemDropdown(
+            "Theme",
+            "style/main_theme",
+            StyleSheetOption::Darcula,
+            "Style",
+            "Specifies which theme should be used. For the effects to take place you must restart HAL."
+        );
+        mSettingStyle->setValueNames<StyleSheetOption>();
+
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
         connect(mActionOpen, &Action::triggered, this, &MainWindow::handleActionOpen);
         connect(mActionAbout, &Action::triggered, mAboutDialog, &AboutDialog::exec);
@@ -274,56 +284,6 @@ namespace hal
 
         //ReminderOverlay* o = new ReminderOverlay(this);
         //Q_UNUSED(o)
-        /*
-        mBlueBackground = new SettingsItemCheckbox(
-                    "Blue background",
-                    "background/rect",
-                    false,
-                    "Python",
-                    "If checked the whole background is filled with solid blue color");
-
-        mTextLabel = new SettingsItemText(
-                    "Text label",
-                    "dock/text",
-                    "Dock widget with additional settings",
-                    "Python",
-                    "Text label for dock widget",
-                    false);
-
-        mNumberRows = new SettingsItemSpinbox(
-                    "Number of rows",
-                    "subdivision/rows",
-                    6,
-                    "Python",
-                    "Select number rows, corresponding to number of pictures "
-                    "(if selected) which will be displayed on top of each other");
-
-        mPixmapSelect = new SettingsItemDropdown(
-                    "Select picture",
-                    "picture/file",
-                    Horror,
-                    "Python",
-                    "Select picture to be shown in tiles. "
-                    "People who are easily scared off are advised <b>not</b>"
-                    " to choose the one labeled with <font color=\"red\">Horror</font>");
-        mPixmapSelect->setValueNames<PixmapType>();
-
-        mSettingSlider = new SettingsItemSlider(
-                    "Number of rows",
-                    "stuff/morestuff",
-                    55,
-                    "Python",
-                    "Select number rows, corresponding to number of pictures "
-                    "(if selected) which will be displayed on top of each other");
-
-        mSettingsKeybind = new SettingsItemKeybind(
-                    "Number of rows",
-                    "asasf/fhdfhdfh",
-                    QKeySequence("Ctrl+f"),
-                    "Python",
-                    "Select number rows, corresponding to number of pictures "
-                    "(if selected) which will be displayed on top of each other");
-        */
     }
 
     QString MainWindow::halIconPath() const
