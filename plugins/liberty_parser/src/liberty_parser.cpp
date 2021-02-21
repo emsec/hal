@@ -315,8 +315,9 @@ namespace hal
                 {
                     return std::nullopt;
                 }
-                cell.type = GateType::BaseType::ff;
-                cell.ff   = ff.value();
+                cell.base_types.insert(GateType::BaseType::ff);
+                cell.base_types.insert(GateType::BaseType::sequential);
+                cell.ff = ff.value();
             }
             else if (next_token == "latch")
             {
@@ -325,7 +326,8 @@ namespace hal
                 {
                     return std::nullopt;
                 }
-                cell.type  = GateType::BaseType::latch;
+                cell.base_types.insert(GateType::BaseType::latch);
+                cell.base_types.insert(GateType::BaseType::sequential);
                 cell.latch = latch.value();
             }
             else if (next_token == "lut")
@@ -335,8 +337,9 @@ namespace hal
                 {
                     return std::nullopt;
                 }
-                cell.type = GateType::BaseType::lut;
-                cell.lut  = lut.value();
+                cell.base_types.insert(GateType::BaseType::lut);
+                cell.base_types.insert(GateType::BaseType::combinational);
+                cell.lut = lut.value();
             }
         }
 
@@ -850,7 +853,12 @@ namespace hal
 
         std::unordered_map<std::string, std::map<u32, std::string>> groups;
 
-        GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.type);
+        if (cell.base_types.empty())
+        {
+            cell.base_types.insert(GateType::BaseType::combinational);
+        }
+
+        GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.base_types);
 
         // get input and output pins from pin groups
         for (const auto& pin : cell.pins)
@@ -879,7 +887,7 @@ namespace hal
             groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
         }
 
-        if (cell.type == GateType::BaseType::ff)
+        if (cell.base_types.find(GateType::BaseType::ff) != cell.base_types.end())
         {
             if (!cell.ff.clocked_on.empty())
             {
@@ -968,7 +976,7 @@ namespace hal
                 }
             }
         }
-        else if (cell.type == GateType::BaseType::latch)
+        else if (cell.base_types.find(GateType::BaseType::latch) != cell.base_types.end())
         {
             if (!cell.latch.enable.empty())
             {
@@ -1055,7 +1063,7 @@ namespace hal
                 }
             }
         }
-        else if (cell.type == GateType::BaseType::lut)
+        else if (cell.base_types.find(GateType::BaseType::lut) != cell.base_types.end())
         {
             gt->set_config_data_category(cell.lut.data_category);
             gt->set_config_data_identifier(cell.lut.data_identifier);

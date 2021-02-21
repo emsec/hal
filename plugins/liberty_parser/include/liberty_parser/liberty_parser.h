@@ -133,7 +133,7 @@ namespace hal
         {
             u32 line_number;
             std::string name;
-            GateType::BaseType type = GateType::BaseType::combinational;
+            std::set<GateType::BaseType> base_types;
             ff_group ff;
             latch_group latch;
             lut_group lut;

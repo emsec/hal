@@ -24,7 +24,7 @@ namespace hal
 
             if (bf.is_empty())
             {
-                log_error("Fsm solver", "function of gate {} (type {}) associated with pin {} is empty!", gate->get_name(), gate->get_type()->get_name(), out_pin);
+                log_error("z3_utils", "function of gate {} (type {}) associated with pin {} is empty!", gate->get_name(), gate->get_type()->get_name(), out_pin);
                 return BooleanFunction();
             }
 
@@ -53,7 +53,7 @@ namespace hal
                 const auto& input_net = gate->get_fan_in_net(input_pin);
                 if (!input_net)
                 {
-                    log_info("Fsm solver", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
+                    log_info("z3_utils", "Pin ({}) has no input net. Gate id: ({})", input_pin, gate->get_id());
                     continue;
                 }
                 // std::cout << gate->get_id() << "\t" << gate->get_name() << "\t" << gate->get_type()->get_name() << "\t" << input_pin << std::endl;
@@ -75,15 +75,15 @@ namespace hal
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
             {
-                log_error("Fsm solver", "parameter 'subgraph_gates' is empty");
+                log_error("z3_utils", "parameter 'subgraph_gates' is empty");
             }
             if (std::any_of(subgraph_gates.begin(), subgraph_gates.end(), [](auto& g) { return g == nullptr; }))
             {
-                log_error("Fsm solver", "parameter 'subgraph_gates' contains a nullptr");
+                log_error("z3_utils", "parameter 'subgraph_gates' contains a nullptr");
             }
             if (output_net->get_num_of_sources() != 1)
             {
-                log_error("Fsm solver", "target net has 0 or more than 1 sources.");
+                log_error("z3_utils", "target net has 0 or more than 1 sources.");
             }
 
             std::queue<Net*> q;
@@ -123,13 +123,13 @@ namespace hal
 
                 if (n->get_num_of_sources() != 1)
                 {
-                    //log_error("Fsm solver", "net has 0 or more than 1 sources. not expanding the function here");
+                    //log_error("z3_utils", "net has 0 or more than 1 sources. not expanding the function here");
                     continue;
                 }
 
                 if (input_net_ids.find(n->get_id()) == input_net_ids.end())
                 {
-                    // log_info("Fsm solver", "net {} (id {}) is not an input to the function", n->get_name(), n->get_id());
+                    // log_info("z3_utils", "net {} (id {}) is not an input to the function", n->get_name(), n->get_id());
                     continue;
                 }
 

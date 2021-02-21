@@ -26,6 +26,7 @@
 #include "hal_core/netlist/boolean_function.h"
 
 #include <map>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -47,13 +48,17 @@ namespace hal
          */
         enum class BaseType
         {
-            combinational, /**< Represents a combinational gate type. **/
-            lut,           /**< Represents a combinational LUT gate type. **/
-            ff,            /**< Represents a sequential FF gate type. **/
-            latch,         /**< Represents a sequential latch gate type. **/
-            ram,           /**< Represents a sequential RAM gate type. **/
-            io,            /**< Represents an IO gate type. **/
-            dsp            /**< Represents a sequential DSP gate type. **/
+            combinational, /**< Combinational gate type. **/
+            sequential,    /**< Sequential gate type. **/
+            lut,           /**< LUT gate type. **/
+            ff,            /**< Flip-flop gate type. **/
+            latch,         /**< Latch gate type. **/
+            ram,           /**< RAM gate type. **/
+            io,            /**< IO gate type. **/
+            dsp,           /**< DSP gate type. **/
+            mux,           /**< MUX gate type. **/
+            buffer,        /**< Buffer gate type. **/
+            carry          /**< Carry gate type. **/
         };
 
         /**
@@ -117,11 +122,19 @@ namespace hal
         const std::string& get_name() const;
 
         /**
-         * Get the base type of the gate type, which can be either combinatorial, lut, ff, or latch.
+         * Get the base types assigned to the gate type.
          *
          * @returns The base type of the gate type.
          */
-        BaseType get_base_type() const;
+        std::set<BaseType> get_base_types() const;
+
+        /**
+         * Check whether the gate type is tagged with the given base type.
+         *
+         * @param[in] type - The base type.
+         * @returns True if the gate type is of the given base type, false otherwise.
+         */
+        bool has_base_type(BaseType type) const;
 
         /**
          * Get the gate library this gate type is associated with.
@@ -422,7 +435,7 @@ namespace hal
         GateLibrary* m_gate_library;
         u32 m_id;
         std::string m_name;
-        BaseType m_base_type;
+        std::set<BaseType> m_base_types;
 
         // enum to string
         static const std::unordered_map<BaseType, std::string> m_base_type_to_string;
@@ -454,7 +467,7 @@ namespace hal
         std::string m_config_data_identifier = "";
         bool m_ascending                     = true;
 
-        GateType(GateLibrary* gate_library, u32 id, const std::string& name, BaseType base_type);
+        GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<BaseType> base_types);
 
         GateType(const GateType&) = delete;
         GateType& operator=(const GateType&) = delete;

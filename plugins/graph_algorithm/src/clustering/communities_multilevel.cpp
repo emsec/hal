@@ -1,3 +1,4 @@
+/*
 #include "graph_algorithm/plugin_graph_algorithm.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -33,7 +34,8 @@ namespace hal
         igraph_matrix_init(&membership_mat, 1, 1);
 
         igraph_community_multilevel(&graph,
-                                    0, /* no weights */
+                                    0,
+                                    0,
                                     &membership_vec,
                                     &membership_mat,
                                     &modularity);
@@ -53,3 +55,4 @@ namespace hal
         return community_sets;
     }
 }    // namespace hal
+*/
