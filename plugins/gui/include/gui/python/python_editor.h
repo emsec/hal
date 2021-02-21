@@ -50,6 +50,7 @@ namespace hal
     class PythonCodeEditor;
 
     class SettingsItemCheckbox;
+    class SettingsItemKeybind;
 
     class PythonEditor : public ContentWidget, public PythonContextSubscriber
     {
@@ -348,5 +349,11 @@ namespace hal
         SettingsItemCheckbox* mSettingHighlight;
         SettingsItemCheckbox* mSettingLineWrap;
         SettingsItemCheckbox* mSettingMinimap;
+
+        SettingsItemKeybind* mSettingOpenFile;
+        SettingsItemKeybind* mSettingSaveFile;
+        SettingsItemKeybind* mSettingSaveFileAs;
+        SettingsItemKeybind* mSettingRunFile;
+        SettingsItemKeybind* mSettingCreateFile;
     };
 }

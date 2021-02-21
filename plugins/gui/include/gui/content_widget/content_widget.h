@@ -77,6 +77,7 @@ namespace hal
         void reattach();
         void open();
         void close();
+        void handleSearchKeysequenceChanged(QKeySequence seq);
 
     private:
         void closeEvent(QCloseEvent* event);
@@ -91,5 +92,8 @@ namespace hal
 
     protected:
         QVBoxLayout* mContentLayout;
+        QAction* mSearchAction;
+        QShortcut* mSearchShortcut;
+        QKeySequence mSearchKeysequence;
     };
 }

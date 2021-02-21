@@ -37,6 +37,7 @@ class QVBoxLayout;
 namespace hal
 {
     class SettingsItemDropdown;
+    class SettingsItemKeybind;
 
     class GraphTabWidget : public ContentWidget
     {
@@ -87,6 +88,9 @@ namespace hal
         SettingsItemDropdown* mSettingGridType;
         SettingsItemDropdown* mSettingDragModifier;
         SettingsItemDropdown* mSettingPanModifier;
+
+        SettingsItemKeybind* mSettingZoomIn;
+        SettingsItemKeybind* mSettingZoomOut;
 
         QMap<KeyboardModifier, Qt::KeyboardModifier> mKeyModifierMap;
     };

@@ -10,7 +10,8 @@
 
 namespace hal
 {
-    ContentWidget::ContentWidget(QString name, QWidget* parent) : Widget(parent), mName(name), mContentLayout(new QVBoxLayout())
+    ContentWidget::ContentWidget(QString name, QWidget* parent) : Widget(parent), mName(name), mContentLayout(new QVBoxLayout()),
+        mSearchAction(new QAction(this)), mSearchShortcut(new QShortcut(this)), mSearchKeysequence(tr("Ctrl+F"))
     {
         mContentLayout->setContentsMargins(0, 0, 0, 0);
         mContentLayout->setSpacing(0);
@@ -143,4 +144,10 @@ namespace hal
         mIconPath = path;
         repolish();
     }
+
+   void ContentWidget::handleSearchKeysequenceChanged(QKeySequence seq)
+   {
+       mSearchKeysequence = seq;
+       mSearchShortcut->setKey(mSearchKeysequence);
+   }
 }

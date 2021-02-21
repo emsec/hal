@@ -133,7 +133,6 @@ namespace hal
         QString mOpenIconPath;
         QString mOpenIconStyle;
 
-        QAction* mSearchAction;
         QString mSearchIconPath;
         QString mSearchIconStyle;
 

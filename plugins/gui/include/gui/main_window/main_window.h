@@ -30,12 +30,6 @@
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/settings/main_settings_widget.h"
 #include "gui/settings/main_settings_widget_new.h"
-#include "gui/settings/settings_items/settings_item_checkbox.h"
-#include "gui/settings/settings_items/settings_item_text.h"
-#include "gui/settings/settings_items/settings_item_spinbox.h"
-#include "gui/settings/settings_items/settings_item_dropdown.h"
-#include "gui/settings/settings_items/settings_item_slider.h"
-#include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include "gui/splitter/splitter.h"
 #include <QLayout>
@@ -56,6 +50,8 @@ namespace hal
     class ContentManager;
     class AboutDialog;
     class WelcomeScreen;
+
+    class SettingsItemKeybind;
 
     class MainWindow : public QWidget
     {
@@ -219,11 +215,8 @@ namespace hal
         QString mSettingsIconPath;
         QString mSettingsIconStyle;
 
-        SettingsItemCheckbox* mBlueBackground;
-        SettingsItemText* mTextLabel;
-        SettingsItemSpinbox* mNumberRows;
-        SettingsItemDropdown* mPixmapSelect;
-        SettingsItemSlider* mSettingSlider;
-        SettingsItemKeybind * mSettingsKeybind;
+        SettingsItemKeybind* mSettingCreateFile;
+        SettingsItemKeybind* mSettingOpenFile;
+        SettingsItemKeybind* mSettingSaveFile;
     };
 }

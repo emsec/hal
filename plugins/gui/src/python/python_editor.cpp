@@ -13,6 +13,7 @@
 #include "gui/splitter/splitter.h"
 #include "gui/toolbar/toolbar.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include <QAction>
 #include <QFileDialog>
@@ -59,12 +60,6 @@ namespace hal
         mActionToggleMinimap->setIcon(gui_utility::getStyledSvgIcon(mToggleMinimapIconStyle, mToggleMinimapIconPath));
         mActionNewFile->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
 
-        gKeybindManager->bind(mActionOpenFile, "keybinds/python_open_file");
-        gKeybindManager->bind(mActionSave, "keybinds/python_save_file");
-        gKeybindManager->bind(mActionSaveAs, "keybinds/python_save_file_as");
-        gKeybindManager->bind(mActionRun, "keybinds/python_run_file");
-        gKeybindManager->bind(mActionNewFile, "keybinds/python_create_file");
-
         mActionOpenFile->setText("Open Script");
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save as");
@@ -78,6 +73,7 @@ namespace hal
         connect(mActionRun, &Action::triggered, this, &PythonEditor::handleActionRun);
         connect(mActionNewFile, &Action::triggered, this, &PythonEditor::handleActionNewTab);
         connect(mActionToggleMinimap, &Action::triggered, this, &PythonEditor::handleActionToggleMinimap);
+        connect(mSearchAction, &QAction::triggered, this, &PythonEditor::toggleSearchbar);
 
         connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::handleSearchbarTextEdited);
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
@@ -130,7 +126,46 @@ namespace hal
             "Enable code minimap."
         );
 
-            
+        mSettingOpenFile = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Open Python File'",
+            "keybind/python_open_file",
+            QKeySequence("Ctrl+Shift+O"),
+            "Keybindings: PyEditor",
+            "Keybind for opening a python file in the Python Editor."
+        );
+
+        mSettingSaveFile = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Save Python File'",
+            "keybind/python_save_file",
+            QKeySequence("Ctrl+Shift+S"),
+            "Keybindings: PyEditor",
+            "Keybind for saving a python file in the Python Editor."
+        );
+
+        mSettingSaveFileAs = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Save Python File As'",
+            "keybind/python_save_file_as",
+            QKeySequence("Ctrl+Alt+S"),
+            "Keybindings: PyEditor",
+            "Keybind for saving a python file in the Python Editor 'as ...' in the Python Editor."
+        );
+
+        mSettingRunFile = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Run Python File'",
+            "keybind/python_run_file",
+            QKeySequence("Ctrl+R"),
+            "Keybindings: PyEditor",
+            "Keybind for executing a python file in the Python Editor."
+        );
+
+        mSettingCreateFile = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Create New Python File'",
+            "keybind/python_create_file",
+            QKeySequence("Ctrl+Shift+N"),
+            "Keybindings: PyEditor",
+            "Keybind for creating a new python file in the Python Editor."
+        );
+
         handleActionNewTab();
 
         using namespace std::placeholders;
@@ -338,11 +373,33 @@ namespace hal
 
     QList<QShortcut*> PythonEditor::createShortcuts()
     {
-        QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"), this);
-        connect(search_shortcut, &QShortcut::activated, this, &PythonEditor::toggleSearchbar);
+        QShortcut* shortcutNewFile = new QShortcut(mSettingCreateFile->value().toString(),this );
+        QShortcut* shortcutOpenFile = new QShortcut(mSettingOpenFile->value().toString(),this );
+        QShortcut* shortcutSaveFile = new QShortcut(mSettingSaveFile->value().toString(),this );
+        QShortcut* shortcutSaveFileAs = new QShortcut(mSettingSaveFileAs->value().toString(),this );
+        QShortcut* shortcutRun = new QShortcut(mSettingRunFile->value().toString(),this );
+        mSearchShortcut = new QShortcut(mSearchKeysequence, this);
+
+        connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
+        connect(shortcutNewFile, &QShortcut::activated, mActionNewFile, &QAction::trigger);
+        connect(shortcutOpenFile, &QShortcut::activated, mActionOpenFile, &QAction::trigger);
+        connect(shortcutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
+        connect(shortcutSaveFileAs, &QShortcut::activated, mActionSaveAs, &QAction::trigger);
+        connect(shortcutRun, &QShortcut::activated, mActionRun, &QAction::trigger);
+
+        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
+        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
+        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
+        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
+        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
 
         QList<QShortcut*> list;
-        list.append(search_shortcut);
+        list.append(shortcutNewFile);
+        list.append(shortcutOpenFile);
+        list.append(shortcutSaveFile);
+        list.append(shortcutSaveFileAs);
+        list.append(shortcutRun);
+        list.append(mSearchShortcut);
 
         return list;
     }

@@ -41,7 +41,6 @@ namespace hal
           mRestoreLastSelection(new QAction),
           mSelectionToGrouping(new QAction),
           mSelectionToModule(new QAction),
-          mSearchAction(new QAction),
           mHistory(new SelectionHistoryNavigator(5))
     {
         //needed to load the properties
@@ -501,10 +500,13 @@ namespace hal
 
     QList<QShortcut *> SelectionDetailsWidget::createShortcuts()
     {
-        QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"),this);
-        connect(search_shortcut, &QShortcut::activated, this, &SelectionDetailsWidget::toggleSearchbar);
+        mSearchShortcut = new QShortcut(mSearchKeysequence, this);
+        connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
 
-        return (QList<QShortcut*>() << search_shortcut);
+        QList<QShortcut*> list;
+        list.append(mSearchShortcut);
+
+        return list;
     }
 
     void SelectionDetailsWidget::toggleSearchbar()

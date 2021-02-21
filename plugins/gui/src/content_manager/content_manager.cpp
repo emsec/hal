@@ -29,6 +29,8 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 #include "gui/grouping/grouping_proxy_model.h"
 #include "gui/module_model/module_proxy_model.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -193,6 +195,22 @@ namespace hal
         });
 
         mSettingSortMechanism->intChanged(mSettingSortMechanism->value().toInt());
+
+        mSettingSearch = new SettingsItemKeybind(
+            "Search",
+            "keybind/search",
+            QKeySequence("Ctrl+F"),
+            "Keybindings: Global",
+            "Keybind for toggeling the searchbar in widgets where available (Selection Details Widget, Modules Widget, Python Editor, Views Widget, Grouping Widget)."
+        );
+
+        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mContextManagerWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mModuleWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mPythonWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mGroupingManagerWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mSelectionDetailsWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+
+        mSettingSearch->keySequenceChanged(mSettingSearch->value().toString());
     }
 
     void ContentManager::handleFilsystemDocChanged(const QString& fileName)

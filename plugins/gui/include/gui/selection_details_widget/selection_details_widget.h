@@ -142,7 +142,6 @@ namespace hal
         QAction* mRestoreLastSelection;
         QAction* mSelectionToGrouping;
         QAction* mSelectionToModule;
-        QAction* mSearchAction;
 
         QString mDisabledIconStyle;
 

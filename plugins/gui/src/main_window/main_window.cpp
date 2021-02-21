@@ -18,6 +18,7 @@
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/python/python_editor.h"
 #include "gui/welcome_screen/welcome_screen.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_controls.h"
@@ -190,11 +191,6 @@ namespace hal
         //    mRightToolBar->addSeparator();
         mRightToolBar->addAction(mActionSettings);
 
-        gKeybindManager->bind(mActionNew, "keybinds/project_create_file");
-        gKeybindManager->bind(mActionOpen, "keybinds/project_open_file");
-        gKeybindManager->bind(mActionSave, "keybinds/project_save_file");
- //       gKeybindManager->bind(mActionRunSchedule, "keybinds/schedule_run");
-
         setWindowTitle("HAL");
         mActionNew->setText("New Netlist");
         mActionOpen->setText("Open");
@@ -215,6 +211,43 @@ namespace hal
         gPythonContext = std::make_unique<PythonContext>();
 
         gContentManager = new ContentManager(this);
+
+
+        mSettingCreateFile = new SettingsItemKeybind(
+            "HAL Shortcut 'Create Empty Netlist'",
+            "keybind/project_create_file",
+            QKeySequence("Ctrl+N"),
+            "Keybindings: Global",
+            "Keybind for creating a new and empty netlist in HAL."
+        );
+
+        mSettingOpenFile = new SettingsItemKeybind(
+            "HAL Shortcut 'Open File'",
+            "keybind/project_open_file",
+            QKeySequence("Ctrl+O"),
+            "Keybindings: Global",
+            "Keybind for opening a new File in HAL."
+        );
+
+        mSettingSaveFile = new SettingsItemKeybind(
+            "HAL Shortcut 'Save File'",
+            "keybind/project_save_file",
+            QKeySequence("Ctrl+S"),
+            "Keybindings: Global",
+            "Keybind for saving the currently opened file."
+        );
+
+        QShortcut* shortCutNewFile = new QShortcut(mSettingCreateFile->value().toString(), this);
+        QShortcut* shortCutOpenFile = new QShortcut(mSettingOpenFile->value().toString(), this);
+        QShortcut* shortCutSaveFile = new QShortcut(mSettingSaveFile->value().toString(), this);
+
+        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortCutNewFile, &QShortcut::setKey);
+        connect(mSettingOpenFile, &SettingsItemKeybind::keySequenceChanged, shortCutOpenFile, &QShortcut::setKey);
+        connect(mSettingSaveFile, &SettingsItemKeybind::keySequenceChanged, shortCutSaveFile, &QShortcut::setKey);
+
+        connect(shortCutNewFile, &QShortcut::activated, mActionNew, &QAction::trigger);
+        connect(shortCutOpenFile, &QShortcut::activated, mActionOpen, &QAction::trigger);
+        connect(shortCutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
 
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
         connect(mActionOpen, &Action::triggered, this, &MainWindow::handleActionOpen);
@@ -290,37 +323,7 @@ namespace hal
                     "Python",
                     "Select number rows, corresponding to number of pictures "
                     "(if selected) which will be displayed on top of each other");
-
-
-        connect(mBlueBackground, &SettingsItemCheckbox::valueChanged, this, [this]()
-        {
-            qDebug() << "Checkbox value change to " << mBlueBackground->value().toBool() << " .";
-        });
-
-        connect(mTextLabel, &SettingsItemText::valueChanged, this, [this]()
-        {
-            qDebug() << "Text value change to " << mTextLabel->value().toString() << " .";
-        });
-
-        connect(mNumberRows, &SettingsItemSpinbox::valueChanged, this, [this]()
-        {
-            qDebug() << "Slider value change to " << mNumberRows->value().toInt() << " .";
-        });
-
-        connect(mPixmapSelect, &SettingsItemDropdown::valueChanged, this, [this]()
-        {
-            qDebug() << "Dropdown value change to " << mPixmapSelect->value().toInt() << " .";
-        });
-
-        connect(mSettingSlider, &SettingsItemSlider::valueChanged, this, [this]()
-        {
-            qDebug() << "Slider value change to " << mSettingSlider->value().toInt() << " .";
-        });
-
-        connect(mSettingsKeybind, &SettingsItemKeybind::valueChanged, this, [this]()
-        {
-            qDebug() << "Keybind value change to " << mSettingsKeybind->value().toString() << " .";
-        });*/
+        */
     }
 
     QString MainWindow::halIconPath() const

@@ -206,56 +206,56 @@ namespace hal
         //SpinboxSetting* autosave_interval_setting = new SpinboxSetting("advanced/autosave_interval", "Auto-save interval", 30, 600, "s", this);
         //registerWidget("advanced-item", autosave_interval_setting);
 
-        makeSection("Keyboard Shortcuts", "keybind-item", ":/icons/keyboard");
+        //makeSection("Keyboard Shortcuts", "keybind-item", ":/icons/keyboard");
 
-        KeybindSetting* py_open_keybind = new KeybindSetting("keybinds/python_open_file", "Python: Open file", "", this);
-        registerWidget("keybind-item", py_open_keybind);
-        assignExclusiveGroup("keybinds", py_open_keybind);
+        //KeybindSetting* py_open_keybind = new KeybindSetting("keybinds/python_open_file", "Python: Open file", "", this);
+        //registerWidget("keybind-item", py_open_keybind);
+        //assignExclusiveGroup("keybinds", py_open_keybind);
 
-        KeybindSetting* py_save_keybind = new KeybindSetting("keybinds/python_save_file", "Python: Save file", "", this);
-        registerWidget("keybind-item", py_save_keybind);
-        assignExclusiveGroup("keybinds", py_save_keybind);
+        //KeybindSetting* py_save_keybind = new KeybindSetting("keybinds/python_save_file", "Python: Save file", "", this);
+        //registerWidget("keybind-item", py_save_keybind);
+        //assignExclusiveGroup("keybinds", py_save_keybind);
 
-        KeybindSetting* py_saveas_keybind = new KeybindSetting("keybinds/python_save_file_as", "Python: Save file as", "", this);
-        registerWidget("keybind-item", py_saveas_keybind);
-        assignExclusiveGroup("keybinds", py_saveas_keybind);
+        //KeybindSetting* py_saveas_keybind = new KeybindSetting("keybinds/python_save_file_as", "Python: Save file as", "", this);
+        //registerWidget("keybind-item", py_saveas_keybind);
+        //assignExclusiveGroup("keybinds", py_saveas_keybind);
 
-        KeybindSetting* py_run_keybind = new KeybindSetting("keybinds/python_run_file", "Python: Run current file", "", this);
-        registerWidget("keybind-item", py_run_keybind);
-        assignExclusiveGroup("keybinds", py_run_keybind);
+        //KeybindSetting* py_run_keybind = new KeybindSetting("keybinds/python_run_file", "Python: Run current file", "", this);
+        //registerWidget("keybind-item", py_run_keybind);
+        //assignExclusiveGroup("keybinds", py_run_keybind);
 
-        KeybindSetting* py_create_keybind = new KeybindSetting("keybinds/python_create_file", "Python: Create file", "", this);
-        registerWidget("keybind-item", py_create_keybind);
-        assignExclusiveGroup("keybinds", py_create_keybind);
+        //KeybindSetting* py_create_keybind = new KeybindSetting("keybinds/python_create_file", "Python: Create file", "", this);
+        //registerWidget("keybind-item", py_create_keybind);
+        //assignExclusiveGroup("keybinds", py_create_keybind);
 
-        KeybindSetting* project_create_keybind = new KeybindSetting("keybinds/project_create_file", "Project: New empty netlist", "", this);
-        registerWidget("keybind-item", project_create_keybind);
-        assignExclusiveGroup("keybinds", project_create_keybind);
+        //KeybindSetting* project_create_keybind = new KeybindSetting("keybinds/project_create_file", "Project: New empty netlist", "", this);
+        //registerWidget("keybind-item", project_create_keybind);
+        //assignExclusiveGroup("keybinds", project_create_keybind);
 
-        KeybindSetting* project_open_keybind = new KeybindSetting("keybinds/project_open_file", "Project: Open HDL or project file", "", this);
-        registerWidget("keybind-item", project_open_keybind);
-        assignExclusiveGroup("keybinds", project_open_keybind);
+        //KeybindSetting* project_open_keybind = new KeybindSetting("keybinds/project_open_file", "Project: Open HDL or project file", "", this);
+        //registerWidget("keybind-item", project_open_keybind);
+        //assignExclusiveGroup("keybinds", project_open_keybind);
 
-        KeybindSetting* project_save_keybind = new KeybindSetting("keybinds/project_save_file", "Project: Save", "", this);
-        registerWidget("keybind-item", project_save_keybind);
-        assignExclusiveGroup("keybinds", project_save_keybind);
+        //KeybindSetting* project_save_keybind = new KeybindSetting("keybinds/project_save_file", "Project: Save", "", this);
+        //egisterWidget("keybind-item", project_save_keybind);
+        //assignExclusiveGroup("keybinds", project_save_keybind);
 
-        KeybindSetting* schedule_run_keybind = new KeybindSetting("keybinds/schedule_run", "Schedule: Run scheduled plugins", "", this);
-        registerWidget("keybind-item", schedule_run_keybind);
-        assignExclusiveGroup("keybinds", schedule_run_keybind);
+        //KeybindSetting* schedule_run_keybind = new KeybindSetting("keybinds/schedule_run", "Schedule: Run scheduled plugins", "", this);
+        //registerWidget("keybind-item", schedule_run_keybind);
+        //assignExclusiveGroup("keybinds", schedule_run_keybind);
 
-        KeybindSetting* graph_view_zoom_in_keybind = new KeybindSetting("keybinds/graph_view_zoom_in", "Graphview: Zoom in", "", this);
-        registerWidget("keybind-item", graph_view_zoom_in_keybind);
-        assignExclusiveGroup("keybinds", graph_view_zoom_in_keybind);
+        //KeybindSetting* graph_view_zoom_in_keybind = new KeybindSetting("keybinds/graph_view_zoom_in", "Graphview: Zoom in", "", this);
+        //registerWidget("keybind-item", graph_view_zoom_in_keybind);
+        //assignExclusiveGroup("keybinds", graph_view_zoom_in_keybind);
 
-        KeybindSetting* graph_view_zoom_out_keybind = new KeybindSetting("keybinds/graph_view_zoom_out", "Graphview: Zoom out", "", this);
-        registerWidget("keybind-item", graph_view_zoom_out_keybind);
-        assignExclusiveGroup("keybinds", graph_view_zoom_out_keybind);
+        //KeybindSetting* graph_view_zoom_out_keybind = new KeybindSetting("keybinds/graph_view_zoom_out", "Graphview: Zoom out", "", this);
+        //registerWidget("keybind-item", graph_view_zoom_out_keybind);
+        //assignExclusiveGroup("keybinds", graph_view_zoom_out_keybind);
 
         // this keybind is used in several locations, depending on which widget has focus
-        KeybindSetting* everywhere_search_keybind = new KeybindSetting("keybinds/searchbar_toggle", "Search", "opens/closes the search bar", this);
-        registerWidget("keybind-item", everywhere_search_keybind);
-        assignExclusiveGroup("keybinds", everywhere_search_keybind);
+        //KeybindSetting* everywhere_search_keybind = new KeybindSetting("keybinds/searchbar_toggle", "Search", "opens/closes the search bar", this);
+        //registerWidget("keybind-item", everywhere_search_keybind);
+        //assignExclusiveGroup("keybinds", everywhere_search_keybind);
 
         //makeSection("Debug", "debug-item", ":/icons/bug");
         //DONE

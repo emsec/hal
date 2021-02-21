@@ -4,6 +4,7 @@
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include "gui/gui_globals.h"
 
@@ -59,19 +60,38 @@ namespace hal
         mKeyModifierMap.insert(KeyboardModifier::Alt, Qt::KeyboardModifier::AltModifier);
         mKeyModifierMap.insert(KeyboardModifier::Ctrl, Qt::KeyboardModifier::ControlModifier);
         mKeyModifierMap.insert(KeyboardModifier::Shift, Qt::KeyboardModifier::ShiftModifier);
+
+        mSettingZoomIn = new SettingsItemKeybind(
+            "Graph View Zoom In",
+            "keybind/graph_zoom_in",
+            QKeySequence("Ctrl++"),
+            "Keybindings: Graph",
+            "Keybind for zooming in in the Graph View."
+        );
+
+        mSettingZoomOut = new SettingsItemKeybind(
+            "Graph View Zoom Out",
+            "keybind/graph_zoom_out",
+            QKeySequence("Ctrl+-"),
+            "Keybindings: Graph",
+            "Keybind for zooming out in the Graph View."
+        );
     }
 
     QList<QShortcut *> GraphTabWidget::createShortcuts()
     {
-        QShortcut* zoom_in_sc = gKeybindManager->makeShortcut(this, "keybinds/graph_view_zoom_in");
-        connect(zoom_in_sc, &QShortcut::activated, this, &GraphTabWidget::zoomInShortcut);
+        QShortcut* zoomInShortcut = new QShortcut(mSettingZoomIn->value().toString(), this);
+        QShortcut* zoomOutShortcut = new QShortcut(mSettingZoomOut->value().toString(), this);
 
-        QShortcut* zoom_out_sc = gKeybindManager->makeShortcut(this, "keybinds/graph_view_zoom_out");
-        connect(zoom_out_sc, &QShortcut::activated, this, &GraphTabWidget::zoomOutShortcut);
+        connect(zoomInShortcut, &QShortcut::activated, this, &GraphTabWidget::zoomInShortcut);
+        connect(zoomOutShortcut, &QShortcut::activated, this, &GraphTabWidget::zoomOutShortcut);
+
+        connect(mSettingZoomIn, &SettingsItemKeybind::keySequenceChanged, zoomInShortcut, &QShortcut::setKey);
+        connect(mSettingZoomOut, &SettingsItemKeybind::keySequenceChanged, zoomOutShortcut, &QShortcut::setKey);
 
         QList<QShortcut*> list;
-        list.append(zoom_in_sc);
-        list.append(zoom_out_sc);
+        list.append(zoomInShortcut);
+        list.append(zoomOutShortcut);
 
         return list;
     }

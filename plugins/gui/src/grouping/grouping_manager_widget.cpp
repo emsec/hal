@@ -93,6 +93,7 @@ namespace hal
         connect(mColorSelectAction, &QAction::triggered, this, &GroupingManagerWidget::handleColorSelectClicked);
         connect(mToSelectionAction, &QAction::triggered, this, &GroupingManagerWidget::handleToSelectionClicked);
         connect(mDeleteAction, &QAction::triggered, this, &GroupingManagerWidget::handleDeleteGroupingClicked);
+        connect(mSearchAction, &QAction::triggered, this, &GroupingManagerWidget::toggleSearchbar);
 
         connect(mGroupingTableView, &QTableView::customContextMenuRequested, this, &GroupingManagerWidget::handleContextMenuRequest);
         connect(mGroupingTableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &GroupingManagerWidget::handleCurrentChanged);
@@ -103,11 +104,11 @@ namespace hal
 
     QList<QShortcut*> GroupingManagerWidget::createShortcuts()
     {
-        QShortcut* search_shortcut = gKeybindManager->makeShortcut(this, "keybinds/searchbar_toggle");
-        connect(search_shortcut, &QShortcut::activated, this, &GroupingManagerWidget::toggleSearchbar);
+        mSearchShortcut = new QShortcut(mSearchKeysequence, this);
+        connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
 
         QList<QShortcut*> list;
-        list.append(search_shortcut);
+        list.append(mSearchShortcut);
 
         return list;
     }
