@@ -125,6 +125,7 @@ namespace hal
 
     GraphicsScene::~GraphicsScene()
     {
+        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
         for (QGraphicsItem* gi : items())
         {
             removeItem(gi);
