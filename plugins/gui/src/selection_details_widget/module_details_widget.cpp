@@ -11,6 +11,7 @@
 #include "gui/selection_details_widget/disputed_big_icon.h"
 #include "gui/selection_details_widget/details_general_model.h"
 #include "gui/selection_details_widget/details_table_utilities.h"
+#include "gui/user_action/action_rename_object.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -535,7 +536,10 @@ namespace hal
                     auto corresponding_net = gNetlist->get_net_by_id(mInputPortsTable->item(curr_item->row(), 2)->data(Qt::UserRole).toInt());
                     if (!corresponding_net)
                         return;
-                    gNetlist->get_module_by_id(mCurrentId)->set_input_port_name(corresponding_net, ipd.textValue().toStdString());
+                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+                    act->setObject(UserActionObject(mCurrentId,UserActionObjectType::Port));
+                    act->setInputNetId(corresponding_net->get_id());
+                    act->exec();
                     update(mCurrentId);
                 }
             });
@@ -576,7 +580,10 @@ namespace hal
                     auto corresponding_net = gNetlist->get_net_by_id(mOutputPortsTable->item(curr_item->row(), 2)->data(Qt::UserRole).toInt());
                     if (!corresponding_net)
                         return;
-                    gNetlist->get_module_by_id(mCurrentId)->set_output_port_name(corresponding_net, ipd.textValue().toStdString());
+                    ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+                    act->setObject(UserActionObject(mCurrentId,UserActionObjectType::Port));
+                    act->setOutputNetId(corresponding_net->get_id());
+                    act->exec();
                     update(mCurrentId);
                 }
             });

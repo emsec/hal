@@ -29,6 +29,11 @@ namespace hal
     void ActionRenameObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         xmlOut.writeTextElement("name", mNewName);
+        if (mObject.type()==UserActionObjectType::Port && mPortType != NoPort)
+        {
+            xmlOut.writeTextElement("netid", QString::number(mNetId));
+            xmlOut.writeTextElement("porttype", mPortType==Input ? "input" : "output");
+        }
     }
 
     void ActionRenameObject::readFromXml(QXmlStreamReader& xmlIn)
@@ -37,6 +42,10 @@ namespace hal
         {
             if (xmlIn.name() == "name")
                 mNewName = xmlIn.readElementText();
+            if (xmlIn.name() == "netid")
+                mNetId = xmlIn.readElementText().toInt();
+            if (xmlIn.name() == "porttype")
+                mPortType = (xmlIn.readElementText() == "input") ? Input : Output;
         }
     }
 
@@ -92,11 +101,38 @@ namespace hal
             else
                 return false;
             break;
+        case UserActionObjectType::Port:
+            mod = gNetlist->get_module_by_id(mObject.id());
+            net = gNetlist->get_net_by_id(mNetId);
+            if (mod && net)
+            {
+                switch (mPortType) {
+                case NoPort:
+                    return false;
+                case Input:
+                    oldName = QString::fromStdString(mod->get_input_port_name(net));
+                    mod->set_input_port_name(net,mNewName.toStdString());
+                    break;
+                case Output:
+                    oldName = QString::fromStdString(mod->get_output_port_name(net));
+                    mod->set_output_port_name(net,mNewName.toStdString());
+                    break;
+                }
+            }
+            else
+                return false;
+            break;
         default:
             return false;
         }
-        mUndoAction = new ActionRenameObject(oldName);
-        mUndoAction->setObject(mObject);
+        ActionRenameObject* undo = new ActionRenameObject(oldName);
+        undo->setObject(mObject);
+        if (mPortType!=NoPort)
+        {
+            undo->mNetId    = mNetId;
+            undo->mPortType = mPortType;
+        }
+        mUndoAction = undo;
         return UserAction::exec();
     }
 }

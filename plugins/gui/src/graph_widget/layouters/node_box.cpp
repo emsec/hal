@@ -74,6 +74,17 @@ namespace hal
         }
     }
 
+    QSet<u32> NodeBoxes::filterNotInView(const QSet<u32>& gats) const
+    {
+        QSet<u32> retval;
+        for (u32 gateId : gats)
+        {
+            if (!mNodeHash.value(Node(gateId,Node::Gate)))
+                retval.insert(gateId);
+        }
+        return retval;
+    }
+
     uint qHash(const Node &n)
     {
         uint retval = ( n.id() << 1);

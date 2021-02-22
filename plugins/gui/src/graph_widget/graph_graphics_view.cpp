@@ -854,6 +854,7 @@ namespace hal
                 }
             }
 
+            gates = context->getLayouter()->boxes().filterNotInView(gates);
             ActionAddItemsToObject* act = new ActionAddItemsToObject({},gates);
             act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
             if (gSelectionRelay->numberSelectedNodes()==1)
@@ -922,6 +923,7 @@ namespace hal
                 }
             }
 
+            gates = context->getLayouter()->boxes().filterNotInView(gates);
             ActionAddItemsToObject* act = new ActionAddItemsToObject({},gates);
             act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
             if (gSelectionRelay->numberSelectedNodes()==1)
