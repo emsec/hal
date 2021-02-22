@@ -22,6 +22,7 @@ namespace hal {
 
     void UserActionCompound::addAction(UserAction* act)
     {
+        act->setCompoundOrder(mActionList.size());
         mActionList.append(act);
     }
 

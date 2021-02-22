@@ -44,9 +44,9 @@ namespace hal
      * If pointer to mUndoAction is set the interaction might be reversed using
      * Ctrl-Z in a future version of hal
      *
-     * The mCompound flag indicates that the action is part of a compound of several
-     * actions. While this flag has no immediate significance it might get used later
-     * on to e.g. disable layouting until all actions have been performed
+     * The mCompoundOrder number is the index of this action if part of an action
+     * compound. It can be used to identify actions which belong together and might
+     * be undone in a single step.
      *
      * The mWaitForReady flag causes the execution of a macro to be paused until
      * a handle (e.g. timer handle) resets the flag. It is considered to be a dirty hack and
@@ -83,8 +83,11 @@ namespace hal
         /// pause macro execution until flag gets cleared by handler
         bool isWaitForReady() const { return mWaitForReady; }
 
-        /// interaction object is part of a compound of multiple actions
-        bool isCompound() const { return mCompound; }
+        /// order number in action compound, -1 if not in compound
+        int compoundOrder() const { return mCompoundOrder; }
+
+        /// setter for compoundOrder
+        void setCompoundOrder(int cmpord) { mCompoundOrder = cmpord; }
 
         /// return time stamp for execution time
         qint64 timeStamp() const { return mTimeStamp; }
@@ -101,7 +104,7 @@ namespace hal
         UserAction();
         UserActionObject mObject;
         bool mWaitForReady;
-        bool mCompound;
+        int mCompoundOrder;
         UserAction *mUndoAction;
         qint64 mTimeStamp;
 

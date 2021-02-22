@@ -72,6 +72,8 @@ namespace hal
                     xmlOut.writeAttribute("ts",QString::number(act->timeStamp()));
                     if (mRecordHashAttribute)
                         xmlOut.writeAttribute("sha",act->cryptographicHash(i-mStartRecording));
+                    if (act->compoundOrder() >= 0)
+                        xmlOut.writeAttribute("compound",QString::number(act->compoundOrder()));
                     act->object().writeToXml(xmlOut);
                     act->writeToXml(xmlOut);
                     xmlOut.writeEndElement();
@@ -151,6 +153,9 @@ namespace hal
         UserAction* retval = fac->newAction();
         if (retval)
         {
+            QStringRef compound = xmlIn.attributes().value("compound");
+            if (!compound.isNull() && !compound.isEmpty())
+                retval->setCompoundOrder(compound.toInt());
             UserActionObject actObj;
             actObj.readFromXml(xmlIn);
             retval->setObject(actObj);
@@ -183,18 +188,40 @@ namespace hal
 
     void UserActionManager::testUndo()
     {
-        bool yesWeCan = !mActionHistory.isEmpty()
-                && mActionHistory.last()->undoAction() != nullptr;
+        bool yesWeCan = true;
+        if (mActionHistory.isEmpty())
+            yesWeCan = false;
+        else
+        {
+            auto it = mActionHistory.end() - 1;
+            // compound can be reversed only if all actions have undo pointer
+            while (it != mActionHistory.begin() &&
+                   (*it)->undoAction() &&
+                   (*it)->compoundOrder() > 0)
+                --it;
+            if (!(*it)->undoAction())
+                yesWeCan = false;
+        }
         Q_EMIT canUndoLastAction(yesWeCan);
     }
 
     void UserActionManager::undoLastAction()
     {
         if (mActionHistory.isEmpty()) return;
-        UserAction* undo = mActionHistory.takeLast()->undoAction();
-        if (!undo) return;
+        UserActionCompound* actUndo = new UserActionCompound;
+        while (!mActionHistory.isEmpty())
+        {
+            UserAction* lastAction = mActionHistory.takeLast();
+            if (!lastAction->undoAction())
+            {
+                delete actUndo;
+                return;
+            }
+            actUndo->addAction(lastAction->undoAction());
+            if (lastAction->compoundOrder() <= 0) break;
+        }
         int n = mActionHistory.size();
-        undo->exec();
+        actUndo->exec();
         while (mActionHistory.size() > n)
             mActionHistory.takeLast();
         testUndo();
