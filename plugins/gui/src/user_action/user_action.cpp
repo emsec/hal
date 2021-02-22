@@ -70,4 +70,12 @@ namespace hal
     {
         Q_UNUSED(cryptoHash);
     }
+
+    QString UserAction::debugDump() const
+    {
+        QString retval = "  ";
+        if (mCompoundOrder >= 0) retval = QString("%1 ").arg((char)('0' + mCompoundOrder%10));
+        retval += QString("%1 %2\n").arg(tagname(),22).arg(mObject.debugDump());
+        return retval;
+    }
 }

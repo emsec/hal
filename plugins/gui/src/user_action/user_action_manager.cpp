@@ -34,7 +34,7 @@ namespace hal
         }
 
         mDumpAction->moveCursor (QTextCursor::End);
-        mDumpAction->insertPlainText(act->tagname() + act->object().debugDump() + '\n');
+        mDumpAction->insertPlainText(act->debugDump());
         mDumpAction->moveCursor(QTextCursor::End);
         testUndo();
     }
@@ -208,20 +208,19 @@ namespace hal
     void UserActionManager::undoLastAction()
     {
         if (mActionHistory.isEmpty()) return;
-        UserActionCompound* actUndo = new UserActionCompound;
+        QList<UserAction*> undoList;
         while (!mActionHistory.isEmpty())
         {
             UserAction* lastAction = mActionHistory.takeLast();
             if (!lastAction->undoAction())
-            {
-                delete actUndo;
                 return;
-            }
-            actUndo->addAction(lastAction->undoAction());
+
+            undoList.append(lastAction->undoAction());
             if (lastAction->compoundOrder() <= 0) break;
         }
         int n = mActionHistory.size();
-        actUndo->exec();
+        for (UserAction* act : undoList)
+            act->exec();
         while (mActionHistory.size() > n)
             mActionHistory.takeLast();
         testUndo();

@@ -96,10 +96,10 @@ namespace hal {
 
     QString UserActionObject::debugDump() const
     {
-        if (mType==UserActionObjectType::None) return QString(" \t-");
+        if (mType==UserActionObjectType::None) return QString("-");
         // None, Module, Gate, Net, Grouping, Netlist, Context
         const char* cType = "-mgn{Lx";
-        return QString(" \t%1%2%3").arg(cType[mType]).arg(mId)
+        return QString("%1%2%3").arg(cType[mType]).arg(mId)
                 .arg(mType==UserActionObjectType::Grouping? "}" : "");
     }
 

@@ -100,6 +100,9 @@ namespace hal
 
         /// action to reverse last action (nullptr if action cant be undone)
         UserAction* undoAction() const { return mUndoAction; }
+
+        /// dump action in debug window
+        QString debugDump() const;
     protected:
         UserAction();
         UserActionObject mObject;
