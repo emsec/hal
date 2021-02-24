@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/utilities/enums.h"
 
 #include <map>
 #include <set>
@@ -36,6 +37,27 @@ namespace hal
     class GateLibrary;
 
     /**
+     * A set of available properties for a gate type.
+     */
+    enum class GateTypeProperty
+    {
+        combinational, /**< Combinational gate type. **/
+        sequential,    /**< Sequential gate type. **/
+        power,         /**< Power gate type. **/
+        ground,        /**< Ground gate type. **/
+        lut,           /**< LUT gate type. **/
+        ff,            /**< Flip-flop gate type. **/
+        latch,         /**< Latch gate type. **/
+        ram,           /**< RAM gate type. **/
+        io,            /**< IO gate type. **/
+        dsp,           /**< DSP gate type. **/
+        mux,           /**< MUX gate type. **/
+        buffer,        /**< Buffer gate type. **/
+        carry,         /**< Carry gate type. **/
+        invalid        /**< Invalid property. **/
+    };
+
+    /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
      *
      * @ingroup gate_lib
@@ -43,26 +65,6 @@ namespace hal
     class NETLIST_API GateType
     {
     public:
-        /**
-         * Defines the base type of a gate type.
-         */
-        enum class BaseType
-        {
-            combinational, /**< Combinational gate type. **/
-            sequential,    /**< Sequential gate type. **/
-            power,         /**< Power gate type. **/
-            ground,        /**< Ground gate type. **/
-            lut,           /**< LUT gate type. **/
-            ff,            /**< Flip-flop gate type. **/
-            latch,         /**< Latch gate type. **/
-            ram,           /**< RAM gate type. **/
-            io,            /**< IO gate type. **/
-            dsp,           /**< DSP gate type. **/
-            mux,           /**< MUX gate type. **/
-            buffer,        /**< Buffer gate type. **/
-            carry          /**< Carry gate type. **/
-        };
-
         /**
          * Defines the direction of a pin.
          */
@@ -101,12 +103,12 @@ namespace hal
          */
         enum class ClearPresetBehavior
         {
-            U = 0, /**< Default value when no behavior is specified. **/
-            L = 1, /**< Set the internal state to \p 0. **/
-            H = 2, /**< Set the internal state to \p 1. **/
-            N = 3, /**< Do not change the internal state. **/
-            T = 4, /**< Toggle, i.e., invert the internal state. **/
-            X = 5  /**< Set the internal state to \p X. **/
+            L, /**< Set the internal state to \p 0. **/
+            H, /**< Set the internal state to \p 1. **/
+            N, /**< Do not change the internal state. **/
+            T, /**< Toggle, i.e., invert the internal state. **/
+            X,  /**< Set the internal state to \p X. **/
+            invalid /**< Invalid behavior, used by default. **/
         };
 
         /**
@@ -124,19 +126,21 @@ namespace hal
         const std::string& get_name() const;
 
         /**
-         * Get the base types assigned to the gate type.
+         * TODO rename
+         * Get the properties assigned to the gate type.
          *
-         * @returns The base type of the gate type.
+         * @returns The properties of the gate type.
          */
-        std::set<BaseType> get_base_types() const;
+        std::set<GateTypeProperty> get_base_types() const;
 
         /**
-         * Check whether the gate type is tagged with the given base type.
+         * TODO rename
+         * Check whether the gate type has the specified property.
          *
-         * @param[in] type - The base type.
-         * @returns True if the gate type is of the given base type, false otherwise.
+         * @param[in] property - The property to check for.
+         * @returns True if the gate type has the specified property, false otherwise.
          */
-        bool has_base_type(BaseType type) const;
+        bool has_base_type(GateTypeProperty property) const;
 
         /**
          * Get the gate library this gate type is associated with.
@@ -160,15 +164,6 @@ namespace hal
          * @returns An output stream.
          */
         friend std::ostream& operator<<(std::ostream& os, const GateType& gate_type);
-
-        /**
-         * Insert the base type string representation to an output stream.
-         *
-         * @param[in] os - The output stream.
-         * @param[in] base_type - The base type.
-         * @returns An output stream.
-         */
-        friend std::ostream& operator<<(std::ostream& os, BaseType base_type);
 
         /**
          * Insert the pin direction string representation to an output stream.
@@ -437,10 +432,9 @@ namespace hal
         GateLibrary* m_gate_library;
         u32 m_id;
         std::string m_name;
-        std::set<BaseType> m_base_types;
+        std::set<GateTypeProperty> m_properties;
 
         // enum to string
-        static const std::unordered_map<BaseType, std::string> m_base_type_to_string;
         static const std::unordered_map<PinDirection, std::string> m_pin_direction_to_string;
         static const std::unordered_map<PinType, std::string> m_pin_type_to_string;
 
@@ -464,12 +458,12 @@ namespace hal
         std::unordered_map<std::string, BooleanFunction> m_functions;
 
         // sequential and LUT stuff
-        std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior;
+        std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior = {ClearPresetBehavior::invalid, ClearPresetBehavior::invalid};
         std::string m_config_data_category   = "";
         std::string m_config_data_identifier = "";
         bool m_ascending                     = true;
 
-        GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<BaseType> base_types);
+        GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties);
 
         GateType(const GateType&) = delete;
         GateType& operator=(const GateType&) = delete;

@@ -22,11 +22,11 @@ namespace hal
 
                 for (const auto& [gt_name, gt] : gate_types)
                 {
-                    if (gt->has_base_type(GateType::BaseType::power))
+                    if (gt->has_base_type(GateTypeProperty::power))
                     {
                         lib->mark_vcc_gate_type(gt);
                     }
-                    else if (gt->has_base_type(GateType::BaseType::ground))
+                    else if (gt->has_base_type(GateTypeProperty::ground))
                     {
                         lib->mark_gnd_gate_type(gt);
                     }
@@ -41,7 +41,7 @@ namespace hal
                         return false;
                     }
 
-                    GateType* gt = lib->create_gate_type(name, {GateType::BaseType::combinational, GateType::BaseType::ground});
+                    GateType* gt = lib->create_gate_type(name, {GateTypeProperty::combinational, GateTypeProperty::ground});
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ZERO);
                     lib->mark_gnd_gate_type(gt);
@@ -57,7 +57,7 @@ namespace hal
                         return false;
                     }
 
-                    GateType* gt = lib->create_gate_type(name, {GateType::BaseType::combinational, GateType::BaseType::power});
+                    GateType* gt = lib->create_gate_type(name, {GateTypeProperty::combinational, GateTypeProperty::power});
                     gt->add_output_pin("O");
                     gt->add_boolean_function("O", BooleanFunction::ONE);
                     lib->mark_vcc_gate_type(gt);

@@ -48,7 +48,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 1);
                     EXPECT_EQ(gt->get_name(), "gt_combinational");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::combinational}));
+                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "A", "B"}));
@@ -75,7 +75,7 @@ namespace hal
                     ASSERT_EQ(functions.at("O_tristate"), BooleanFunction::from_string("!A & !B"));
 
                     // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::U, GateType::ClearPresetBehavior::U));
+                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::invalid, GateType::ClearPresetBehavior::invalid));
 
                     // config data and init string
                     ASSERT_EQ(gt->get_config_data_category(), "");
@@ -91,7 +91,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 2);
                     EXPECT_EQ(gt->get_name(), "gt_group");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::combinational}));
+                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "A(0)", "A(1)", "B(0)", "B(1)"}));
@@ -123,7 +123,7 @@ namespace hal
                     ASSERT_EQ(functions.at("O_tristate"), BooleanFunction::from_string("!A(1) & !B(1)", std::vector<std::string>({"A(1)", "B(1)"})));
 
                     // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::U, GateType::ClearPresetBehavior::U));
+                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::invalid, GateType::ClearPresetBehavior::invalid));
 
                     // config data and init string
                     ASSERT_EQ(gt->get_config_data_category(), "");
@@ -139,7 +139,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 3);
                     EXPECT_EQ(gt->get_name(), "gt_lut_asc");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::lut, GateType::BaseType::combinational}));
+                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I1", "I2"}));
@@ -158,7 +158,7 @@ namespace hal
                     ASSERT_TRUE(functions.empty());
 
                     // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::U, GateType::ClearPresetBehavior::U));
+                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::invalid, GateType::ClearPresetBehavior::invalid));
 
                     // config data and init string
                     ASSERT_EQ(gt->get_config_data_category(), "generic");
@@ -174,7 +174,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 4);
                     EXPECT_EQ(gt->get_name(), "gt_lut_desc");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::lut, GateType::BaseType::combinational}));
+                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I1", "I2"}));
@@ -193,7 +193,7 @@ namespace hal
                     ASSERT_TRUE(functions.empty());
 
                     // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::U, GateType::ClearPresetBehavior::U));
+                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::invalid, GateType::ClearPresetBehavior::invalid));
 
                     // config data and init string
                     ASSERT_EQ(gt->get_config_data_category(), "generic");
@@ -209,7 +209,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 5);
                     EXPECT_EQ(gt->get_name(), "gt_ff");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::ff}));
+                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "D", "EN", "R", "S"}));
@@ -256,7 +256,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 6);
                     EXPECT_EQ(gt->get_name(), "gt_latch");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::latch}));
+                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"D", "EN", "R", "S"}));
@@ -302,7 +302,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 7);
                     EXPECT_EQ(gt->get_name(), "gt_ram");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::ram}));
+                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::ram}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"DI(0)", "DI(1)", "DI(2)", "A(0)", "A(1)", "A(2)"}));
@@ -328,7 +328,7 @@ namespace hal
                     ASSERT_TRUE(functions.empty());
 
                     // clear-preset behavior
-                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::U, GateType::ClearPresetBehavior::U));
+                    ASSERT_EQ(gt->get_clear_preset_behavior(), std::pair(GateType::ClearPresetBehavior::invalid, GateType::ClearPresetBehavior::invalid));
 
                     // config data and init string
                     ASSERT_EQ(gt->get_config_data_category(), "");

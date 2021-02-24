@@ -101,6 +101,7 @@ namespace hal
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors);
 
         /**
+         * todo python
          * Find all gates on the predecessor or successor path of a gate.
          * Traverses all input or output nets until gates of the specified base types are found.
          * The result may include the provided gate itself.
@@ -110,25 +111,27 @@ namespace hal
          *
          * @param[in] gate - The initial gate.
          * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
-         * @param[in] stop_types - Base types of gate types at which traversal should halt.
+         * @param[in] stop_types - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the gate.
          */
-        CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateType::BaseType> stop_types, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
+         * todo python
          * Find all gates on the predeccessor or successor path of a gate.
          * Traverses all input or output nets until gates of the specified base types are found.
          * The result may include the provided gate itself.
          *
          * @param[in] gate - The initial gate.
          * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
-         * @param[in] stop_types - Base types of gate types at which traversal should halt.
+         * @param[in] stop_types - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the gate.
          */
-        CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateType::BaseType> stop_types);
+        CORE_API std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties);
 
         /**
+         * todo python
          * Find all gates on the predecessor or successor path of a net.
          * Traverses all input or output nets until gates of the specified base types are found.
          * The use of the this cached version is recommended in case of extensive usage to improve performance. 
@@ -137,22 +140,23 @@ namespace hal
          *
          * @param[in] net - The initial net.
          * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
-         * @param[in] stop_types - Base types of gate types at which traversal should halt.
+         * @param[in] stop_types - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the net.
          */
-        CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateType::BaseType> stop_types, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
+         * todo python
          * Find all gates on the predecessor or successor path of a net.
          * Traverses all input or output nets until gates of the specified base types are found.
          *
          * @param[in] net - The initial net.
          * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
-         * @param[in] stop_types - Base types of gate types at which traversal should halt.
+         * @param[in] stop_types - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the net.
          */
-        CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateType::BaseType> stop_types);
+        CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);
 
         /**
          * Get the nets that are connected to a subset of pins of the specified gate.

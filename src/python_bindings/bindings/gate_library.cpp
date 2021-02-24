@@ -41,11 +41,11 @@ namespace hal
             :rtype: hal_py.hal_path
         )");
 
-        py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, py::arg("name"), py::arg("base_types") = std::set<GateType::BaseType>(), R"(
+        py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, py::arg("name"), py::arg("properties") = std::set<GateTypeProperty>(), R"(
             Create a new gate type, add it to the gate library, and return it.
 
             :param str name: The name of the gate type.
-            :param set[hal_py.GateType.BaseType] base_types: The base types of the gate type.
+            :param set[hal_py.GateTypeProperty] properties: The properties of the gate type.
             :returns: The new gate type instance on success, None otherwise.
             :rtype: hal_py.GateType
         )");

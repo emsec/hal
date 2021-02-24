@@ -54,7 +54,7 @@ namespace hal
             gt_and->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
 
             // OR gate type
-            auto gt_or = gl->create_gate_type("gt_or", {GateType::BaseType::combinational});
+            auto gt_or = gl->create_gate_type("gt_or", {GateTypeProperty::combinational});
             ASSERT_TRUE(gt_or != nullptr);
             gt_or->add_input_pins(std::vector<std::string>({"I0", "I1"}));
             gt_or->add_output_pins(std::vector<std::string>({"O"}));
@@ -75,16 +75,16 @@ namespace hal
             gl->mark_vcc_gate_type(gt_vcc);
 
             // FF gate type
-            auto gt_ff = gl->create_gate_type("gt_ff", {GateType::BaseType::ff});
+            auto gt_ff = gl->create_gate_type("gt_ff", {GateTypeProperty::ff});
             ASSERT_TRUE(gt_ff != nullptr);
             
 
             // Latch gate type
-            auto gt_latch = gl->create_gate_type("gt_latch", {GateType::BaseType::latch});
+            auto gt_latch = gl->create_gate_type("gt_latch", {GateTypeProperty::latch});
             ASSERT_TRUE(gt_latch != nullptr);
 
             // LUT gate type
-            auto gt_lut = gl->create_gate_type("gt_lut", {GateType::BaseType::lut});
+            auto gt_lut = gl->create_gate_type("gt_lut", {GateTypeProperty::lut});
             ASSERT_TRUE(gt_lut != nullptr);
 
             // check if all gate types contained in library
@@ -93,16 +93,16 @@ namespace hal
             EXPECT_EQ(gl->get_gnd_gate_types(), (std::unordered_map<std::string, GateType*>({{"gt_gnd", gt_gnd}})));
 
             // check base types
-            EXPECT_EQ(gt_and->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::combinational}));
-            EXPECT_EQ(gt_or->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::combinational}));
-            EXPECT_EQ(gt_ff->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::ff}));
-            EXPECT_EQ(gt_latch->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::latch}));
-            EXPECT_EQ(gt_lut->get_base_types(), std::set<GateType::BaseType>({GateType::BaseType::lut}));
+            EXPECT_EQ(gt_and->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
+            EXPECT_EQ(gt_or->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
+            EXPECT_EQ(gt_ff->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
+            EXPECT_EQ(gt_latch->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
+            EXPECT_EQ(gt_lut->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::lut}));
 
             // check contains_gate_type and contains_gate_type_by_name
             EXPECT_TRUE(gl->contains_gate_type(gt_and));
             EXPECT_FALSE(gl->contains_gate_type(nullptr));
-            GateType* gt_nil = other_gl->create_gate_type("not_in_library", {GateType::BaseType::combinational});
+            GateType* gt_nil = other_gl->create_gate_type("not_in_library", {GateTypeProperty::combinational});
             EXPECT_FALSE(gl->contains_gate_type(gt_nil));
 
             EXPECT_TRUE(gl->contains_gate_type_by_name(gt_and->get_name()));

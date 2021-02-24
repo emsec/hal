@@ -25,7 +25,7 @@ namespace hal
 
     std::map<Net*, double> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate)
     {
-        if (!gate->get_type()->has_base_type(GateType::BaseType::ff))
+        if (!gate->get_type()->has_base_type(GateTypeProperty::ff))
         {
             log_error("boolean_influence", "Can only handle flip flops but found gate type {}.", gate->get_type()->get_name());
             return {};
@@ -107,7 +107,7 @@ namespace hal
 
     void BooleanInfluencePlugin::add_inputs(Gate* gate, std::unordered_set<Gate*>& gates)
     {
-        if (gate->is_vcc_gate() || gate->is_gnd_gate() || gate->get_type()->has_base_type(GateType::BaseType::ff) || gate->get_type()->get_name().find("RAM") != std::string::npos)
+        if (gate->is_vcc_gate() || gate->is_gnd_gate() || gate->get_type()->has_base_type(GateTypeProperty::ff) || gate->get_type()->get_name().find("RAM") != std::string::npos)
         {
             return;
         }
