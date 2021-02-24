@@ -16,6 +16,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QTextStream>
 
 namespace hal
 {
@@ -129,6 +130,7 @@ namespace hal
 
     void GraphContextManager::handleModuleSubmoduleAdded(Module* m, const u32 added_module) const
     {
+//        dump("ModuleSubmoduleAdded", m->get_id(), added_module);
         for (GraphContext* context : mContextTableModel->list())
             if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}))
                 context->add({added_module}, {});
@@ -140,6 +142,7 @@ namespace hal
     {
         // FIXME this also triggers on module deletion (not only moving)
         // and collides with handleModuleRemoved
+//        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
         for (GraphContext* context : mContextTableModel->list())
             if (context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}))
             {
@@ -155,6 +158,7 @@ namespace hal
 
     void GraphContextManager::handleModuleGateAssigned(Module* m, const u32 inserted_gate) const
     {
+//        dump("ModuleGateAssigned", m->get_id(), inserted_gate);
         for (GraphContext* context : mContextTableModel->list())
             if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
@@ -164,6 +168,7 @@ namespace hal
 
     void GraphContextManager::handleModuleGateRemoved(Module* m, const u32 removed_gate)
     {
+//        dump("ModuleGateRemoved", m->get_id(), removed_gate);
         for (GraphContext* context : mContextTableModel->list())
         {
             if (context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}))
@@ -184,6 +189,36 @@ namespace hal
             /// else if (context->gates().contains(removed_gate))
             ///    context->scheduleSceneUpdate();
         }
+    }
+
+    void GraphContextManager::dump(const QString &title, u32 mid, u32 xid) const
+    {
+        QTextStream xout(stdout, QIODevice::WriteOnly);
+        xout << "===" << title << "===" << mid << "===" << xid << "===\n";
+        for (Module* m : gNetlist->get_modules())
+        {
+            xout << "M" << m->get_id() << "   SM:";
+            for (Module* sm : m->get_submodules())
+                xout << " " << sm->get_id();
+            xout << "   G:";
+            for (Gate* g : m->get_gates())
+                xout << " " << g->get_id();
+            xout << "\n";
+        }
+        xout << "gats:";
+        for (Gate* g : gNetlist->get_gates()) xout << " " << g->get_id();
+        xout << "\n";
+
+        for (GraphContext* ctx : mContextTableModel->list())
+        {
+            xout << "ctx " << ctx->id() << ":";
+            for (hal::Node nd : ctx->getLayouter()->positionToNodeMap().values())
+            {
+                xout << " " << (nd.type() == Node::Module ? 'm' : 'g') << nd.id();
+            }
+            xout << "\n";
+        }
+        xout << "-------\n";
     }
 
     void GraphContextManager::handleModuleInputPortNameChanged(Module* m, const u32 net)

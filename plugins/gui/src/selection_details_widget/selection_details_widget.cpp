@@ -6,9 +6,12 @@
 #include "gui/selection_details_widget/module_details_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/selection_history_navigator/selection_history_navigator.h"
-#include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_set_selection_focus.h"
 #include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/user_action_object.h"
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
@@ -257,10 +260,7 @@ namespace hal
 
     void SelectionDetailsWidget::selectionToNewGrouping()
     {
-        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Grouping);
-        act->exec();
-        Grouping* grp = gNetlist->get_grouping_by_id(act->object().id());
-        if (grp) selectionToGroupingInternal(grp);
+        selectionToGroupingAction();
     }
 
     void SelectionDetailsWidget::selectionToExistingGrouping()
@@ -268,20 +268,70 @@ namespace hal
         const QAction* action = static_cast<const QAction*>(QObject::sender());
         QString grpName = action->text();
         if (grpName.startsWith(sAddToGrouping)) grpName.remove(0,sAddToGrouping.size());
-        Grouping* grp =
-                gContentManager->getGroupingManagerWidget()->getModel()->groupingByName(grpName);
-        if (grp) selectionToGroupingInternal(grp);
+        selectionToGroupingAction(grpName);
     }
 
-    void SelectionDetailsWidget::selectionToGroupingInternal(Grouping* grp)
+    UserAction* SelectionDetailsWidget::groupingUnassignActionFactory(const UserActionObject& obj) const
     {
+        Grouping* assignedGrouping = nullptr;
+        QSet<u32> mods, gats, nets;
+        Module* mod;
+        Gate*   gat;
+        Net*    net;
+        switch(obj.type()) {
+        case UserActionObjectType::Module:
+            mod = gNetlist->get_module_by_id(obj.id());
+            if (mod) assignedGrouping = mod->get_grouping();
+            mods.insert(mod->get_id());
+            break;
+        case UserActionObjectType::Gate:
+            gat = gNetlist->get_gate_by_id(obj.id());
+            if (gat) assignedGrouping = gat->get_grouping();
+            gats.insert(gat->get_id());
+            break;
+        case UserActionObjectType::Net:
+            net = gNetlist->get_net_by_id(obj.id());
+            if (net) assignedGrouping = net->get_grouping();
+            nets.insert(net->get_id());
+            break;
+        default:
+            break;
+        }
+        if (!assignedGrouping) return nullptr; // nothing to do
+        ActionRemoveItemsFromObject* retval = new ActionRemoveItemsFromObject(mods,gats,nets);
+        retval->setObject(UserActionObject(assignedGrouping->get_id(),
+                                           UserActionObjectType::Grouping));
+        retval->setObjectLock(true);
+        return retval;
+    }
+
+    void SelectionDetailsWidget::selectionToGroupingAction(const QString& existingGrpName)
+    {
+        UserActionCompound* compound = new UserActionCompound;
+        u32 grpId = 0;
+        if (existingGrpName.isEmpty())
+        {
+            compound->addAction(new ActionCreateObject(UserActionObjectType::Grouping));
+            compound->setUseCreatedObject();
+        }
+        else
+        {
+            Grouping* grp = gContentManager->getGroupingManagerWidget()->
+                    getModel()->groupingByName(existingGrpName);
+            if (grp) grpId = grp->get_id();
+        }
+        for (const UserActionObject& obj : gSelectionRelay->toUserActionObject())
+        {
+            UserAction* act = groupingUnassignActionFactory(obj);
+            if (act) compound->addAction(act);
+        }
         ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
                                                                  gSelectionRelay->selectedGates(),
                                                                  gSelectionRelay->selectedNets());
-        act->setObject(UserActionObject(grp->get_id(),UserActionObjectType::Grouping));
-        act->exec();
-        gSelectionRelay->clear();
-        gSelectionRelay->relaySelectionChanged(nullptr);
+        act->setObject(UserActionObject(grpId,UserActionObjectType::Grouping));
+        compound->addAction(act);
+        compound->addAction(new ActionSetSelectionFocus);
+        compound->exec();
     }
 
     void SelectionDetailsWidget::enableSearchbar(bool enable)

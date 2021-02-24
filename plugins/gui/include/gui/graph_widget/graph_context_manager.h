@@ -107,5 +107,6 @@ namespace hal
 
         ContextTableModel* mContextTableModel;
         u32 mMaxContextId;
+        void dump(const QString& title, u32 mid, u32 xid) const;
     };
 }

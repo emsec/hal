@@ -22,7 +22,7 @@
 #include "gui/user_action/action_fold_module.h"
 #include "gui/user_action/action_move_node.h"
 #include "gui/user_action/action_rename_object.h"
-#include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_set_object_type.h"
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate.h"
@@ -99,14 +99,6 @@ namespace hal
     {
         if (QStyleOptionGraphicsItem::levelOfDetailFromTransform(transform()) >= graph_widget_constants::sGateMinLod)
             update();
-    }
-
-    void GraphGraphicsView::handleChangeColorAction()
-    {
-        QColor color = QColorDialog::getColor();
-
-        if (!color.isValid())
-            return;
     }
 
     void GraphGraphicsView::handleIsolationViewAction()
@@ -229,7 +221,9 @@ namespace hal
             const QString new_type = QInputDialog::getText(this, "Change module type", "New type:", QLineEdit::Normal, type, &confirm);
             if (confirm)
             {
-                m->set_type(new_type.toStdString());
+                ActionSetObjectType* act = new ActionSetObjectType(new_type);
+                act->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+                act->exec();
             }
         }
     }
@@ -1027,41 +1021,26 @@ namespace hal
 
     void GraphGraphicsView::handleGroupingUnassign()
     {
-        Grouping* assignedGrouping = nullptr;
-        QSet<u32> mods, gats;
-        if (mItem->itemType() == ItemType::Gate)
+        QList<UserAction*> actList;
+        for (const UserActionObject& obj : gSelectionRelay->toUserActionObject())
         {
-            Gate* g = gNetlist->get_gate_by_id(mItem->id());
-            if (g) assignedGrouping = g->get_grouping();
-            gats.insert(mItem->id());
+            UserAction* act = gContentManager->getSelectionDetailsWidget()->groupingUnassignActionFactory(obj);
+            if (act) actList.append(act);
         }
-        if (mItem->itemType() == ItemType::Module)
+        if (actList.isEmpty()) return;
+        if (actList.size() == 1)
         {
-            Module* m = gNetlist->get_module_by_id(mItem->id());
-            if (m) assignedGrouping = m->get_grouping();
-            mods.insert(mItem->id());
+            actList.at(0)->exec();
+            return;
         }
-        if (!assignedGrouping) return; // nothing to do
-        ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(mods,gats);
-        act->setObject(UserActionObject(assignedGrouping->get_id(),UserActionObjectType::Grouping));
-        act->exec();
-    }
-
-    void GraphGraphicsView::groupingAssignInternal(Grouping* grp)
-    {
-        if (!grp || !gSelectionRelay->numberSelectedItems()) return;
-
-        gContentManager->getSelectionDetailsWidget()->selectionToGroupingInternal(grp);
+        UserActionCompound* compound = new UserActionCompound;
+        for (UserAction* act : actList) compound->addAction(act);
+        compound->exec();
     }
 
     void GraphGraphicsView::handleGroupingAssignNew()
     {
-        handleGroupingUnassign();
-        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Grouping);
-        act->exec();
-        Grouping* grp = gNetlist->get_grouping_by_id(act->object().id());
-        if (grp)
-            groupingAssignInternal(grp);
+        gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction();
     }
 
     void GraphGraphicsView::handleGroupingAssingExisting()
@@ -1069,11 +1048,7 @@ namespace hal
         handleGroupingUnassign();
         const QAction* action = static_cast<const QAction*>(QObject::sender());
         QString grpName       = action->text();
-        if (grpName.startsWith(sAssignToGrouping))
-            grpName.remove(0, sAssignToGrouping.size());
-        Grouping* grp = gContentManager->getGroupingManagerWidget()->getModel()->groupingByName(grpName);
-        if (grp)
-            groupingAssignInternal(grp);
+        gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction(grpName);
     }
 
 #ifdef GUI_DEBUG_GRID

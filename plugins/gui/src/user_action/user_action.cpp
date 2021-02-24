@@ -10,7 +10,8 @@ namespace hal
 
     UserAction::UserAction()
         : mWaitForReady(false), mCompoundOrder(-1),
-          mUndoAction(nullptr), mTimeStamp(0)
+          mUndoAction(nullptr), mTimeStamp(0),
+          mObjectLock(false)
     {;}
 
     UserAction::~UserAction()
@@ -24,6 +25,12 @@ namespace hal
         mTimeStamp = uam->timeStamp();
         uam->addExecutedAction(this);
         return true;
+    }
+
+    void UserAction::setObject(const UserActionObject &obj)
+    {
+        if (mObjectLock) return;
+        mObject = obj;
     }
 
     QString UserAction::cryptographicHash(int recordNo) const

@@ -39,6 +39,7 @@ namespace hal
     class Net;
 
     class ActionSetSelectionFocus;
+    class UserActionObject;
 
     class SelectionRelay : public QObject
     {
@@ -151,6 +152,8 @@ namespace hal
         void setFocus(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
         void setFocusDirect(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
 
+        QList<UserActionObject> toUserActionObject() const;
+
     private:
         void initializeAction();
         void executeAction();
@@ -183,7 +186,6 @@ namespace hal
 
         void followNetToSource(Net* n);
         void followNetToDestination(Net* n, u32 dst_index);
-
 
 #ifdef HAL_STUDY
         void evaluateSelectionChanged(void* sender);

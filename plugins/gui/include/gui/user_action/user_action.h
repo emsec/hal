@@ -78,7 +78,7 @@ namespace hal
         virtual UserActionObject object() const { return mObject; }
 
         /// setter for object argument of interaction
-        virtual void setObject(const UserActionObject& o) { mObject = o; }
+        virtual void setObject(const UserActionObject& obj);
 
         /// pause macro execution until flag gets cleared by handler
         bool isWaitForReady() const { return mWaitForReady; }
@@ -103,6 +103,9 @@ namespace hal
 
         /// dump action in debug window
         QString debugDump() const;
+
+        /// refuse set object requests (e.g. in UserActionCompound)
+        void setObjectLock(bool lock) { mObjectLock = lock; }
     protected:
         UserAction();
         UserActionObject mObject;
@@ -110,6 +113,7 @@ namespace hal
         int mCompoundOrder;
         UserAction *mUndoAction;
         qint64 mTimeStamp;
+        bool mObjectLock;
 
         static QString setToText(const QSet<u32>& set);
         static QSet<u32> setFromText(const QString& s);

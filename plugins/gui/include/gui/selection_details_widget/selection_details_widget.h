@@ -42,6 +42,8 @@ namespace hal
     class GateDetailsWidget;
     class NetDetailsWidget;
     class SelectionHistoryNavigator;
+    class UserAction;
+    class UserActionObject;
 
     class SelectionDetailsWidget : public ContentWidget
     {
@@ -85,7 +87,9 @@ namespace hal
         void setToModuleIconPath(const QString &path);
         void setToModuleIconStyle(const QString &style);
         
-        void selectionToGroupingInternal(Grouping* grp);
+        // empty name -> selection to new grouping with default nameS
+        void selectionToGroupingAction(const QString& existingGrpName = QString());
+        UserAction* groupingUnassignActionFactory(const UserActionObject& obj) const;
 
     Q_SIGNALS:
         void triggerHighlight(QVector<const SelectionTreeItem*> highlight);

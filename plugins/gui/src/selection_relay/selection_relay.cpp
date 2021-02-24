@@ -79,6 +79,18 @@ namespace hal
         mAction->mModules.insert(id);
     }
 
+    QList<UserActionObject> SelectionRelay::toUserActionObject() const
+    {
+        QList<UserActionObject> retval;
+        for (u32 id : mSelectedModules)
+            retval.append(UserActionObject(id,UserActionObjectType::Module));
+        for (u32 id : mSelectedGates)
+            retval.append(UserActionObject(id,UserActionObjectType::Gate));
+        for (u32 id : mSelectedNets)
+            retval.append(UserActionObject(id,UserActionObjectType::Net));
+        return retval;
+    }
+
     void SelectionRelay::setSelectedGates(const QSet<u32>& ids)
     {
         initializeAction();
