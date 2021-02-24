@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v3.2.5-86-ge1e56093f documentation</title>
+  <title>Gate Type &mdash; hal_py v3.2.5-95-g476ab92db documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.5-86-ge1e56093f
+                v3.2.5-95-g476ab92db
               </div>
             
           
@@ -187,45 +187,18 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="hal_py.GateType.BaseType">
-<em class="property">class </em><code class="descname">BaseType</code><a class="headerlink" href="#hal_py.GateType.BaseType" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Defines the base type of a gate type.</div></blockquote>
-<p>Members:</p>
-<blockquote>
-<div><p>combinational : Combinational gate type.</p>
-<p>sequential : Sequential gate type.</p>
-<p>lut : LUT gate type.</p>
-<p>ff : Flip-flop gate type.</p>
-<p>latch : Latch gate type.</p>
-<p>ram : RAM gate type.</p>
-<p>io : IO gate type.</p>
-<p>dsp : DSP gate type.</p>
-<p>mux : MUX gate type.</p>
-<p>buffer : Buffer gate type.</p>
-<p>carry : Carry gate type.</p>
-</div></blockquote>
-<dl class="attribute">
-<dt id="hal_py.GateType.BaseType.name">
-<code class="descname">name</code><a class="headerlink" href="#hal_py.GateType.BaseType.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>(self: handle) -&gt; str</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="hal_py.GateType.ClearPresetBehavior">
 <em class="property">class </em><code class="descname">ClearPresetBehavior</code><a class="headerlink" href="#hal_py.GateType.ClearPresetBehavior" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div>Defines the behavior of the gate type in case both clear and preset are active at the same time.</div></blockquote>
 <p>Members:</p>
 <blockquote>
-<div><p>U : Default value when no behavior is specified.</p>
-<p>L : Set the internal state to ‘0’.</p>
+<div><p>L : Set the internal state to ‘0’.</p>
 <p>H : Set the internal state to ‘1’.</p>
 <p>N : Do not change the internal state.</p>
 <p>T : Toggle, i.e., invert the internal state.</p>
 <p>X : Set the internal state to ‘X’.</p>
+<p>invalid : Invalid bahavior, used by default.</p>
 </div></blockquote>
 <dl class="attribute">
 <dt id="hal_py.GateType.ClearPresetBehavior.name">
@@ -466,20 +439,6 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hal_py.GateType.base_types">
-<code class="descname">base_types</code><a class="headerlink" href="#hal_py.GateType.base_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>The base types assigned to the gate type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference internal" href="#hal_py.GateType.BaseType" title="hal_py.GateType.BaseType">hal_py.GateType.BaseType</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="hal_py.GateType.boolean_functions">
 <code class="descname">boolean_functions</code><a class="headerlink" href="#hal_py.GateType.boolean_functions" title="Permalink to this definition">¶</a></dt>
 <dd><p>All Boolean functions of the gate type as a dict from Boolean function names to Boolean functions.</p>
@@ -530,22 +489,6 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary">hal_py.GateLibrary</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hal_py.GateType.get_base_types">
-<code class="descname">get_base_types</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Set[hal_py.GateType.BaseType]<a class="headerlink" href="#hal_py.GateType.get_base_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the base types assigned to the gate type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The base type of the gate type.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[<a class="reference internal" href="#hal_py.GateType.BaseType" title="hal_py.GateType.BaseType">hal_py.GateType.BaseType</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -850,16 +793,32 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="hal_py.GateType.has_base_type">
-<code class="descname">has_base_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>arg0: hal_py.GateType.BaseType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.has_base_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether the gate type is tagged with the given base type.</p>
+<dt id="hal_py.GateType.get_properties">
+<code class="descname">get_properties</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em><span class="sig-paren">)</span> &#x2192; Set[hal_py.GateTypeProperty]<a class="headerlink" href="#hal_py.GateType.get_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the properties assigned to the gate type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<a class="reference internal" href="#hal_py.GateType.BaseType" title="hal_py.GateType.BaseType"><em>hal_py.GateType.BaseType</em></a>) – The base type.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The properties of the gate type.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate type is of the given base type, false otherwise.</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[hal_py.GateTypeProperty]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.has_property">
+<code class="descname">has_property</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>arg0: hal_py.GateTypeProperty</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.has_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the gate type has the specified property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<em>hal_py.GateTypeProperty</em>) – The property to check for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the gate type has the specified property, false otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>
@@ -1003,6 +962,20 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GateType.properties">
+<code class="descname">properties</code><a class="headerlink" href="#hal_py.GateType.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>The properties assigned to the gate type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)">set</a>[hal_py.GateTypeProperty]</td>
 </tr>
 </tbody>
 </table>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['number_1324',['number',['../d7/d7a/structhal_1_1Token.html#a1c0a98969a36a5aa44722af38fdc47f6',1,'hal::Token']]]
+  ['message_1333',['message',['../df/df6/structhal_1_1TokenStream_1_1TokenStreamException.html#ad45051801a87dc6ab7384e4971b7c59a',1,'hal::TokenStream::TokenStreamException']]]
 ];

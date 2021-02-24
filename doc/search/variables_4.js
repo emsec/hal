@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['interactive_5fui_1320',['interactive_ui',['../d5/df3/plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42',1,'plugin_interface_base.h']]],
-  ['is_5ffile_5fsink_1321',['is_file_sink',['../d3/d1f/structhal_1_1LogManager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa',1,'hal::LogManager::log_sink']]]
+  ['end_5fof_5fstream_1329',['END_OF_STREAM',['../db/d9d/classhal_1_1TokenStream.html#a059d296b9805d98e33992dd8b44c7139',1,'hal::TokenStream']]]
 ];

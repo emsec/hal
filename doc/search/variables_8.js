@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['path_1325',['path',['../d3/d1f/structhal_1_1LogManager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357',1,'hal::LogManager::log_sink']]]
+  ['number_1334',['number',['../d7/d7a/structhal_1_1Token.html#a1c0a98969a36a5aa44722af38fdc47f6',1,'hal::Token']]]
 ];

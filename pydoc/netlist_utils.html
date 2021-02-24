@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.2.5-86-ge1e56093f documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.2.5-95-g476ab92db documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.5-86-ge1e56093f
+                v3.2.5-95-g476ab92db
               </div>
             
           
@@ -327,7 +327,7 @@ Traverses combinational logic of all input or output nets until sequential gates
 <code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_path</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistUtils.get_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">get_path(gate: hal::Gate, get_successors: bool, stop_types: Set[hal_py.GateType.BaseType], cache: Dict[int, List[hal::Gate]]) -&gt; List[hal::Gate]</p>
+<li><p class="first">get_path(gate: hal::Gate, get_successors: bool, stop_properties: Set[hal_py.GateTypeProperty], cache: Dict[int, List[hal::Gate]]) -&gt; List[hal::Gate]</p>
 <blockquote>
 <div><p>Find all gates on the predecessor or successor path of a gate.
 Traverses all input or output nets until gates of the specified base types are found.
@@ -345,8 +345,8 @@ Different caches for different values of get_successors shall be used.</p>
 <tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">If true, the successor path is returned, otherwise the predecessor path is returned.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateType.BaseType] stop_types:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Base types of gate types at which traversal should halt.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateTypeProperty] stop_properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Stop recursion when reaching a gate of a type with one of the specified properties.</td>
 </tr>
 </tbody>
 </table>
@@ -355,7 +355,7 @@ Different caches for different values of get_successors shall be used.</p>
 :rtype: list[hal_py.Gate]</p>
 </div></blockquote>
 </li>
-<li><p class="first">get_path(gate: hal::Gate, get_successors: bool, stop_types: Set[hal_py.GateType.BaseType]) -&gt; List[hal::Gate]</p>
+<li><p class="first">get_path(gate: hal::Gate, get_successors: bool, stop_properties: Set[hal_py.GateTypeProperty]) -&gt; List[hal::Gate]</p>
 <blockquote>
 <div><p>Find all gates on the predeccessor or successor path of a gate.
 Traverses all input or output nets until gates of the specified base types are found.
@@ -370,8 +370,8 @@ The result may include the provided gate itself.</p>
 <tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">If true, the successor path is returned, otherwise the predecessor path is returned.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateType.BaseType] stop_types:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Base types of gate types at which traversal should halt.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateTypeProperty] stop_properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Stop recursion when reaching a gate of a type with one of the specified properties.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All gates on the predecessor or successor path of the gate.</td>
 </tr>
@@ -381,7 +381,7 @@ The result may include the provided gate itself.</p>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">get_path(net: hal::Net, get_successors: bool, stop_types: Set[hal_py.GateType.BaseType], cache: Dict[int, List[hal::Gate]]) -&gt; List[hal::Gate]</p>
+<li><p class="first">get_path(net: hal::Net, get_successors: bool, stop_properties: Set[hal_py.GateTypeProperty], cache: Dict[int, List[hal::Gate]]) -&gt; List[hal::Gate]</p>
 <blockquote>
 <div><p>Find all gates on the predecessor or successor path of a net.
 Traverses all input or output nets until gates of the specified base types are found.
@@ -398,8 +398,8 @@ Different caches for different values of get_successors shall be used.</p>
 <tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">If true, the successor path is returned, otherwise the predecessor path is returned.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateType.BaseType] stop_types:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Base types of gate types at which traversal should halt.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateTypeProperty] stop_properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Stop recursion when reaching a gate of a type with one of the specified properties.</td>
 </tr>
 </tbody>
 </table>
@@ -408,7 +408,7 @@ Different caches for different values of get_successors shall be used.</p>
 :rtype: list[hal_py.Net]</p>
 </div></blockquote>
 </li>
-<li><p class="first">get_path(net: hal::Net, get_successors: bool, stop_types: Set[hal_py.GateType.BaseType]) -&gt; List[hal::Gate]</p>
+<li><p class="first">get_path(net: hal::Net, get_successors: bool, stop_properties: Set[hal_py.GateTypeProperty]) -&gt; List[hal::Gate]</p>
 <blockquote>
 <div><p>Find all gates on the predecessor or successor path of a net.
 Traverses all input or output nets until gates of the specified base types are found.</p>
@@ -422,8 +422,8 @@ Traverses all input or output nets until gates of the specified base types are f
 <tr class="field-even field"><th class="field-name" colspan="2">param bool get_successors:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">If true, the successor path is returned, otherwise the predecessor path is returned.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateType.BaseType] stop_types:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Base types of gate types at which traversal should halt.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateTypeProperty] stop_properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Stop recursion when reaching a gate of a type with one of the specified properties.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All gates on the predecessor or successor path of the net.</td>
 </tr>

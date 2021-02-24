@@ -69,12 +69,14 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">gate_type.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="../../dc/d6d/boolean__function_8h_source.html">hal_core/netlist/boolean_function.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="../../d0/d0b/enums_8h_source.html">hal_core/utilities/enums.h</a>&quot;</code><br />
 <code>#include &lt;map&gt;</code><br />
 <code>#include &lt;set&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -85,23 +87,25 @@ Include dependency graph for gate_type.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d09/gate__type_8h__incl.png" border="0" usemap="#hal__core_2netlist_2gate__library_2gate__type_8h" alt=""/></div>
 <map name="hal__core_2netlist_2gate__library_2gate__type_8h" id="hal__core_2netlist_2gate__library_2gate__type_8h">
-<area shape="rect" title=" " alt="" coords="864,5,1019,47"/>
-<area shape="rect" href="../../dc/d6d/boolean__function_8h.html" title=" " alt="" coords="560,95,739,136"/>
-<area shape="rect" title=" " alt="" coords="798,184,922,211"/>
-<area shape="rect" title=" " alt="" coords="947,184,1061,211"/>
-<area shape="rect" title=" " alt="" coords="948,102,999,129"/>
-<area shape="rect" title=" " alt="" coords="1023,102,1065,129"/>
-<area shape="rect" title=" " alt="" coords="1089,102,1148,129"/>
-<area shape="rect" href="../../d8/db0/defines_8h.html" title=" " alt="" coords="149,184,289,211"/>
-<area shape="rect" title=" " alt="" coords="313,184,383,211"/>
-<area shape="rect" title=" " alt="" coords="408,184,493,211"/>
-<area shape="rect" title=" " alt="" coords="517,184,587,211"/>
-<area shape="rect" title=" " alt="" coords="611,184,687,211"/>
-<area shape="rect" title=" " alt="" coords="711,184,774,211"/>
+<area shape="rect" title=" " alt="" coords="783,5,937,47"/>
+<area shape="rect" href="../../dc/d6d/boolean__function_8h.html" title=" " alt="" coords="541,95,720,136"/>
+<area shape="rect" title=" " alt="" coords="801,184,925,211"/>
+<area shape="rect" title=" " alt="" coords="949,184,1064,211"/>
+<area shape="rect" href="../../d0/d0b/enums_8h.html" title=" " alt="" coords="155,95,285,136"/>
+<area shape="rect" title=" " alt="" coords="897,102,948,129"/>
+<area shape="rect" title=" " alt="" coords="972,102,1015,129"/>
+<area shape="rect" title=" " alt="" coords="1039,102,1097,129"/>
+<area shape="rect" href="../../d8/db0/defines_8h.html" title=" " alt="" coords="150,184,290,211"/>
+<area shape="rect" title=" " alt="" coords="595,184,666,211"/>
+<area shape="rect" title=" " alt="" coords="691,184,776,211"/>
+<area shape="rect" title=" " alt="" coords="315,184,384,211"/>
+<area shape="rect" title=" " alt="" coords="409,184,485,211"/>
+<area shape="rect" title=" " alt="" coords="509,184,571,211"/>
 <area shape="rect" title=" " alt="" coords="5,259,96,285"/>
 <area shape="rect" title=" " alt="" coords="121,259,207,285"/>
 <area shape="rect" title=" " alt="" coords="231,259,318,285"/>
 <area shape="rect" title=" " alt="" coords="342,259,413,285"/>
+<area shape="rect" title=" " alt="" coords="45,184,125,211"/>
 </map>
 </div>
 </div>
@@ -116,11 +120,35 @@ Classes</h2></td></tr>
 Namespaces</h2></td></tr>
 <tr class="memitem:d0/d7f/namespacehal"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html">hal</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:adb8da04d2161f277bd489e806a2721ca"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721ca">hal::GateTypeProperty</a> { <br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638">hal::GateTypeProperty::combinational</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa6ec7489017b25b5fff20d353b6d2162e">hal::GateTypeProperty::sequential</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa62cd275989e78ee56a81f0265a87562e">hal::GateTypeProperty::power</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa578552719239a72a2d45ad422f67d24d">hal::GateTypeProperty::ground</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caab56efdaa67baedcc830a453ecd15b37f">hal::GateTypeProperty::lut</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::GateTypeProperty::ff</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa42f3c93a0b1ca287d5456f3fc3200366">hal::GateTypeProperty::latch</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa4641999a7679fcaef2df0e26d11e3c72">hal::GateTypeProperty::ram</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caaf98ed07a4d5f50f7de1410d905f1477f">hal::GateTypeProperty::io</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caaa9bfcbd77aed59d33d77710050ce42d6">hal::GateTypeProperty::dsp</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caaf1e492ffa7562aa744240b8b3eb403c5">hal::GateTypeProperty::mux</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">hal::GateTypeProperty::buffer</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caaf9c05403344bba5b3993d54797b56820">hal::GateTypeProperty::carry</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caafedb2d84cafe20862cb4399751a8a7e3">hal::GateTypeProperty::invalid</a>
+<br />
+ }</td></tr>
+<tr class="separator:adb8da04d2161f277bd489e806a2721ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 23 2021 13:14:27 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 24 2021 17:37:10 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

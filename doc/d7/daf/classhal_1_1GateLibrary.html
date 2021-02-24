@@ -95,8 +95,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aef64b8371779e27c778227552deb3a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a203b238f213e1980b82f796763ea2ac7"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a203b238f213e1980b82f796763ea2ac7">get_path</a> () const</td></tr>
 <tr class="separator:a203b238f213e1980b82f796763ea2ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a322a58dcec56be5a50653957530eb225"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a322a58dcec56be5a50653957530eb225">create_gate_type</a> (const std::string &amp;name, std::set&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">GateType::BaseType</a> &gt; base_types={<a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36a294da9f271b64311147582da631ee638">GateType::BaseType::combinational</a>})</td></tr>
-<tr class="separator:a322a58dcec56be5a50653957530eb225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae695647b4859b38f36a71ad3d01b0132"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#ae695647b4859b38f36a71ad3d01b0132">create_gate_type</a> (const std::string &amp;name, std::set&lt; <a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721ca">GateTypeProperty</a> &gt; properties={<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638">GateTypeProperty::combinational</a>})</td></tr>
+<tr class="separator:ae695647b4859b38f36a71ad3d01b0132"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87ff461bac5e8b03736eb909fe9eee5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a87ff461bac5e8b03736eb909fe9eee5a">contains_gate_type</a> (<a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *gate_type) const</td></tr>
 <tr class="separator:a87ff461bac5e8b03736eb909fe9eee5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03084dff2c24ba07925c4487547fc730"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/daf/classhal_1_1GateLibrary.html#a03084dff2c24ba07925c4487547fc730">contains_gate_type_by_name</a> (const std::string &amp;name) const</td></tr>
@@ -223,8 +223,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a322a58dcec56be5a50653957530eb225"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a322a58dcec56be5a50653957530eb225">&#9670;&nbsp;</a></span>create_gate_type()</h2>
+<a id="ae695647b4859b38f36a71ad3d01b0132"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae695647b4859b38f36a71ad3d01b0132">&#9670;&nbsp;</a></span>create_gate_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,8 +238,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::set&lt; <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36">GateType::BaseType</a> &gt;&#160;</td>
-          <td class="paramname"><em>base_types</em> = <code>{<a class="el" href="../../d1/d05/classhal_1_1GateType.html#a9aee0f1be5eb3241a7e2d5e5a99fff36a294da9f271b64311147582da631ee638">GateType::BaseType::combinational</a>}</code>&#160;</td>
+          <td class="paramtype">std::set&lt; <a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721ca">GateTypeProperty</a> &gt;&#160;</td>
+          <td class="paramname"><em>properties</em> = <code>{<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638">GateTypeProperty::combinational</a>}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -252,7 +252,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>- The name of the gate type. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">base_types</td><td>- The base types of the gate type. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">properties</td><td>- The properties of the gate type. </td></tr>
   </table>
   </dd>
 </dl>
@@ -530,7 +530,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 23 2021 13:14:27 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 24 2021 17:37:10 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>
