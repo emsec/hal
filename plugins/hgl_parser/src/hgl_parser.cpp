@@ -7,18 +7,6 @@
 
 namespace hal
 {
-    const std::unordered_map<std::string, GateType::BaseType> HGLParser::m_string_to_base_type = {{"combinational", GateType::BaseType::combinational},
-                                                                                                  {"sequential", GateType::BaseType::sequential},
-                                                                                                  {"ff", GateType::BaseType::ff},
-                                                                                                  {"latch", GateType::BaseType::latch},
-                                                                                                  {"lut", GateType::BaseType::lut},
-                                                                                                  {"ram", GateType::BaseType::ram},
-                                                                                                  {"io", GateType::BaseType::io},
-                                                                                                  {"dsp", GateType::BaseType::dsp},
-                                                                                                  {"mux", GateType::BaseType::mux},
-                                                                                                  {"buffer", GateType::BaseType::buffer},
-                                                                                                  {"carry", GateType::BaseType::carry}};
-
     const std::unordered_map<std::string, GateType::PinType> HGLParser::m_string_to_pin_type = {{"none", GateType::PinType::none},
                                                                                                 {"power", GateType::PinType::power},
                                                                                                 {"ground", GateType::PinType::ground},
@@ -101,7 +89,7 @@ namespace hal
     bool HGLParser::parse_gate_type(const rapidjson::Value& gate_type)
     {
         std::string name;
-        std::set<GateType::BaseType> base_types;
+        std::set<GateTypeProperty> properties;
         PinCtx pin_ctx;
 
         if (!gate_type.HasMember("name") || !gate_type["name"].IsString())
@@ -115,9 +103,9 @@ namespace hal
         {
             for (const auto& base_type : gate_type["types"].GetArray())
             {
-                if (const auto it = m_string_to_base_type.find(base_type.GetString()); it != m_string_to_base_type.end())
+                if (auto property = enum_from_string<GateTypeProperty>(base_type.GetString()); property != GateTypeProperty::invalid)
                 {
-                    base_types.insert(it->second);
+                    properties.insert(property);
                 }
                 else
                 {
@@ -128,10 +116,10 @@ namespace hal
         }
         else
         {
-            base_types = {GateType::BaseType::combinational};
+            properties = {GateTypeProperty::combinational};
         }
 
-        GateType* gt = m_gate_lib->create_gate_type(name, base_types);
+        GateType* gt = m_gate_lib->create_gate_type(name, properties);
 
         if (gate_type.HasMember("pins") && gate_type["pins"].IsArray())
         {
@@ -166,7 +154,7 @@ namespace hal
             }
         }
 
-        if (base_types.find(GateType::BaseType::lut) != base_types.end())
+        if (properties.find(GateTypeProperty::lut) != properties.end())
         {
             GateType* gt_lut = gt;
 
@@ -181,7 +169,7 @@ namespace hal
                 return false;
             }
         }
-        else if (base_types.find(GateType::BaseType::ff) != base_types.end())
+        else if (properties.find(GateTypeProperty::ff) != properties.end())
         {
             GateType* gt_ff = gt;
 
@@ -196,7 +184,7 @@ namespace hal
                 return false;
             }
         }
-        else if (base_types.find(GateType::BaseType::latch) != base_types.end())
+        else if (properties.find(GateTypeProperty::latch) != properties.end())
         {
             GateType* gt_latch = gt;
 

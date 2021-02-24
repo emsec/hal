@@ -68,10 +68,10 @@ namespace hal
          * Create a new gate type, add it to the gate library, and return it.
          * 
          * @param[in] name - The name of the gate type.
-         * @param[in] base_types - The base types of the gate type.
+         * @param[in] properties - The properties of the gate type.
          * @returns The new gate type instance on success, a nullptr otherwise.
          */
-        GateType* create_gate_type(const std::string& name, std::set<GateType::BaseType> base_types = {GateType::BaseType::combinational});
+        GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational});
 
         /**
          * Check whether the given gate type is contained in this library.

@@ -2238,7 +2238,7 @@
         },
         {
             "name": "LOGIC0_X1",
-            "types": ["combinational"],
+            "types": ["combinational","ground"],
             "pins": [
                 {
                     "name": "VDD",
@@ -2259,7 +2259,7 @@
         },
         {
             "name": "LOGIC1_X1",
-            "types": ["combinational"],
+            "types": ["combinational","power"],
             "pins": [
                 {
                     "name": "VDD",
