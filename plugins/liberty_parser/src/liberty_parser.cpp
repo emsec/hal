@@ -315,8 +315,8 @@ namespace hal
                 {
                     return std::nullopt;
                 }
-                cell.base_types.insert(GateType::BaseType::ff);
-                cell.base_types.insert(GateType::BaseType::sequential);
+                cell.properties.insert(GateTypeProperty::ff);
+                cell.properties.insert(GateTypeProperty::sequential);
                 cell.ff = ff.value();
             }
             else if (next_token == "latch")
@@ -326,8 +326,8 @@ namespace hal
                 {
                     return std::nullopt;
                 }
-                cell.base_types.insert(GateType::BaseType::latch);
-                cell.base_types.insert(GateType::BaseType::sequential);
+                cell.properties.insert(GateTypeProperty::latch);
+                cell.properties.insert(GateTypeProperty::sequential);
                 cell.latch = latch.value();
             }
             else if (next_token == "lut")
@@ -337,8 +337,8 @@ namespace hal
                 {
                     return std::nullopt;
                 }
-                cell.base_types.insert(GateType::BaseType::lut);
-                cell.base_types.insert(GateType::BaseType::combinational);
+                cell.properties.insert(GateTypeProperty::lut);
+                cell.properties.insert(GateTypeProperty::combinational);
                 cell.lut = lut.value();
             }
         }
@@ -689,24 +689,23 @@ namespace hal
             else if (next_token == "clear_preset_var1" || next_token == "clear_preset_var2")
             {
                 ff_str.consume(":", true);
-                auto behav = ff_str.consume();
+                Token<std::string> behav_str = ff_str.consume();
                 ff_str.consume(";", true);
 
-                std::string behav_string = "LHNTX";
-                if (auto pos = behav_string.find(behav); pos != std::string::npos)
+                if(auto behav = enum_from_string<GateType::ClearPresetBehavior>(behav_str); behav != GateType::ClearPresetBehavior::invalid)
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        ff.special_behavior_var1 = GateType::ClearPresetBehavior(pos + 1);
+                        ff.special_behavior_var1 = behav;
                     }
                     else
                     {
-                        ff.special_behavior_var2 = GateType::ClearPresetBehavior(pos + 1);
+                        ff.special_behavior_var2 = behav;
                     }
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
+                    log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav_str.string, behav_str.number);
                     return std::nullopt;
                 }
             }
@@ -771,24 +770,23 @@ namespace hal
             else if (next_token == "clear_preset_var1" || next_token == "clear_preset_var2")
             {
                 latch_str.consume(":", true);
-                auto behav = latch_str.consume();
+                Token<std::string> behav_str = latch_str.consume();
                 latch_str.consume(";", true);
 
-                std::string behav_string = "LHNTX";
-                if (auto pos = behav_string.find(behav); pos != std::string::npos)
+                if(auto behav = enum_from_string<GateType::ClearPresetBehavior>(behav_str); behav != GateType::ClearPresetBehavior::invalid)
                 {
                     if (next_token == "clear_preset_var1")
                     {
-                        latch.special_behavior_var1 = GateType::ClearPresetBehavior(pos + 1);
+                        latch.special_behavior_var1 = behav;
                     }
                     else
                     {
-                        latch.special_behavior_var2 = GateType::ClearPresetBehavior(pos + 1);
+                        latch.special_behavior_var2 = behav;
                     }
                 }
                 else
                 {
-                    log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav.string, behav.number);
+                    log_error("liberty_parser", "invalid clear_preset behavior '{}' near line {}.", behav_str.string, behav_str.number);
                     return std::nullopt;
                 }
             }
@@ -853,12 +851,55 @@ namespace hal
 
         std::unordered_map<std::string, std::map<u32, std::string>> groups;
 
-        if (cell.base_types.empty())
+        bool has_inputs        = false;
+        bool has_single_output = false;
+        std::string func;
+        for (const auto& pin : cell.pins)
         {
-            cell.base_types.insert(GateType::BaseType::combinational);
+            if (pin.direction == GateType::PinDirection::input)
+            {
+                has_inputs = true;
+                break;
+            }
+            else if (pin.direction == GateType::PinDirection::output)
+            {
+                if (has_single_output == true)
+                {
+                    has_single_output = false;
+                    break;
+                }
+                else if (pin.pin_names.size() != 1)
+                {
+                    break;
+                }
+                else
+                {
+                    has_single_output = true;
+                    func              = pin.function;
+                }
+            }
         }
 
-        GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.base_types);
+        if (!has_inputs && has_single_output)
+        {
+            if (func == "0")
+            {
+                cell.properties.insert(GateTypeProperty::combinational);
+                cell.properties.insert(GateTypeProperty::ground);
+            }
+            else if (func == "1")
+            {
+                cell.properties.insert(GateTypeProperty::combinational);
+                cell.properties.insert(GateTypeProperty::power);
+            }
+        }
+
+        if (cell.properties.empty())
+        {
+            cell.properties.insert(GateTypeProperty::combinational);
+        }
+
+        GateType* gt = m_gate_lib->create_gate_type(cell.name, cell.properties);
 
         // get input and output pins from pin groups
         for (const auto& pin : cell.pins)
@@ -887,7 +928,7 @@ namespace hal
             groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
         }
 
-        if (cell.base_types.find(GateType::BaseType::ff) != cell.base_types.end())
+        if (cell.properties.find(GateTypeProperty::ff) != cell.properties.end())
         {
             if (!cell.ff.clocked_on.empty())
             {
@@ -976,7 +1017,7 @@ namespace hal
                 }
             }
         }
-        else if (cell.base_types.find(GateType::BaseType::latch) != cell.base_types.end())
+        else if (cell.properties.find(GateTypeProperty::latch) != cell.properties.end())
         {
             if (!cell.latch.enable.empty())
             {
@@ -1063,7 +1104,7 @@ namespace hal
                 }
             }
         }
-        else if (cell.base_types.find(GateType::BaseType::lut) != cell.base_types.end())
+        else if (cell.properties.find(GateTypeProperty::lut) != cell.properties.end())
         {
             gt->set_config_data_category(cell.lut.data_category);
             gt->set_config_data_identifier(cell.lut.data_identifier);

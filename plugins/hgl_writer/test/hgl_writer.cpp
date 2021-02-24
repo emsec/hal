@@ -12,7 +12,7 @@ namespace hal
             std::unique_ptr<GateLibrary> gl = std::make_unique<GateLibrary>(utils::get_base_directory().string() + "/bin/hal_plugins/test-files/hgl_writer/test.hgl", "example_library");
 
             {
-                GateType* gt = gl->create_gate_type("gt_combinational", {GateType::BaseType::combinational});
+                GateType* gt = gl->create_gate_type("gt_combinational", {GateTypeProperty::combinational});
 
                 gt->add_input_pins({"VDD", "GND", "A", "B"});
                 gt->add_output_pins({"B", "O"});
@@ -26,7 +26,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_group", {GateType::BaseType::combinational});
+                GateType* gt = gl->create_gate_type("gt_group", {GateTypeProperty::combinational});
 
                 gt->add_input_pins({"VDD", "GND", "A(0)", "A(1)", "B(0)", "B(1)"});
                 gt->add_output_pins({"B(0)", "B(1)", "C(0)", "C(1)", "O"});
@@ -44,7 +44,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_lut_asc", {GateType::BaseType::lut, GateType::BaseType::combinational});
+                GateType* gt = gl->create_gate_type("gt_lut_asc", {GateTypeProperty::lut, GateTypeProperty::combinational});
 
                 gt->add_input_pins({"I1", "I2"});
                 gt->add_output_pins({"O"});
@@ -57,7 +57,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_lut_desc", {GateType::BaseType::lut, GateType::BaseType::combinational});
+                GateType* gt = gl->create_gate_type("gt_lut_desc", {GateTypeProperty::lut, GateTypeProperty::combinational});
 
                 gt->add_input_pins({"I1", "I2"});
                 gt->add_output_pins({"O"});
@@ -70,7 +70,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_ff", {GateType::BaseType::ff});
+                GateType* gt = gl->create_gate_type("gt_ff", {GateTypeProperty::ff});
 
                 gt->add_input_pins({"CLK", "D", "EN", "R", "S"});
                 gt->add_output_pins({"Q", "QN"});
@@ -94,7 +94,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_latch", {GateType::BaseType::latch});
+                GateType* gt = gl->create_gate_type("gt_latch", {GateTypeProperty::latch});
 
                 gt->add_input_pins({"D", "EN", "R", "S"});
                 gt->add_output_pins({"Q", "QN"});
@@ -115,7 +115,7 @@ namespace hal
             }
 
             {
-                GateType* gt = gl->create_gate_type("gt_ram", {GateType::BaseType::ram});
+                GateType* gt = gl->create_gate_type("gt_ram", {GateTypeProperty::ram});
 
                 gt->add_input_pins({"DI(0)", "DI(1)", "DI(2)", "A(0)", "A(1)", "A(2)"});
                 gt->add_output_pins({"DO(0)", "DO(1)", "DO(2)"});
@@ -185,7 +185,7 @@ namespace hal
 
             EXPECT_EQ(gt1->get_id(), gt2->get_id());
             EXPECT_EQ(gt1->get_name(), gt2->get_name());
-            EXPECT_EQ(gt1->get_base_types(), gt2->get_base_types());
+            EXPECT_EQ(gt1->get_properties(), gt2->get_properties());
             EXPECT_EQ(gt1->get_input_pins(), gt2->get_input_pins());
             EXPECT_EQ(gt1->get_output_pins(), gt2->get_output_pins());
             EXPECT_EQ(gt1->get_pin_groups(), gt2->get_pin_groups());
