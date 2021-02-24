@@ -47,7 +47,8 @@ namespace hal
         Q_UNUSED(nets)
 
         CoordinateFromDataMap cfdMap(modules,gates);
-        if (gSettingsManager->get("graph_view/layout_parse").toBool() &&
+        if (mPositionToNodeMap.isEmpty() &&
+                gSettingsManager->get("graph_view/layout_parse").toBool() &&
                 !gFileStatusManager->modifiedFilesExisting() &&
                 cfdMap.good())
         {

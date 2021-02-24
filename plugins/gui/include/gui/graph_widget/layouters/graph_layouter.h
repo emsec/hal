@@ -286,6 +286,8 @@ namespace hal
     protected:
         GraphicsScene* mScene;
         const GraphContext* const mContext;
+        QMap<Node, QPoint> mNodeToPositionMap;
+        QMap<QPoint, Node> mPositionToNodeMap;
 
     private:
         void clearLayoutData();
@@ -386,9 +388,6 @@ namespace hal
 
         QMap<int, qreal> mMaxLeftIoPaddingForChannelX;
         QMap<int, qreal> mMaxRightIoPaddingForChannelX;
-
-        QMap<Node, QPoint> mNodeToPositionMap;
-        QMap<QPoint, Node> mPositionToNodeMap;
 
         int mMinXIndex;
         int mMinYIndex;
