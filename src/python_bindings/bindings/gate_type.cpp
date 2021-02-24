@@ -13,6 +13,8 @@ namespace hal
         )")
             .value("combinational", GateType::BaseType::combinational, R"(Combinational gate type.)")
             .value("sequential", GateType::BaseType::sequential, R"(Sequential gate type.)")
+            .value("power", GateType::BaseType::power, R"(Power gate type.)")
+            .value("ground", GateType::BaseType::ground, R"(Ground gate type.)")
             .value("lut", GateType::BaseType::lut, R"(LUT gate type.)")
             .value("ff", GateType::BaseType::ff, R"(Flip-flop gate type.)")
             .value("latch", GateType::BaseType::latch, R"(Latch gate type.)")
