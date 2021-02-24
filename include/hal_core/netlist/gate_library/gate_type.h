@@ -50,6 +50,8 @@ namespace hal
         {
             combinational, /**< Combinational gate type. **/
             sequential,    /**< Sequential gate type. **/
+            power,         /**< Power gate type. **/
+            ground,        /**< Ground gate type. **/
             lut,           /**< LUT gate type. **/
             ff,            /**< Flip-flop gate type. **/
             latch,         /**< Latch gate type. **/

@@ -12,6 +12,8 @@ namespace hal
 {
     const std::unordered_map<GateType::BaseType, std::string> HGLWriter::m_base_type_to_string = {{GateType::BaseType::combinational, "combinational"},
                                                                                                   {GateType::BaseType::sequential, "sequential"},
+                                                                                                  {GateType::BaseType::power, "power"},
+                                                                                                  {GateType::BaseType::ground, "ground"},
                                                                                                   {GateType::BaseType::ff, "ff"},
                                                                                                   {GateType::BaseType::latch, "latch"},
                                                                                                   {GateType::BaseType::lut, "lut"},

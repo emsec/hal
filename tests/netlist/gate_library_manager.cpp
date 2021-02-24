@@ -140,6 +140,7 @@ namespace hal
             auto gnd_types = test_lib->get_gnd_gate_types();
             ASSERT_TRUE(gnd_types.size() == 1);
             ASSERT_TRUE(gnd_types.find("GND") != gnd_types.end());
+            EXPECT_TRUE(gnd_types.at("GND")->has_base_type(GateType::BaseType::ground));
             auto gnd_bf = gnd_types.at("GND")->get_boolean_functions();
             ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
             EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
@@ -148,6 +149,7 @@ namespace hal
             auto vcc_types = test_lib->get_vcc_gate_types();
             ASSERT_TRUE(vcc_types.size() == 1);
             ASSERT_TRUE(vcc_types.find("VCC") != vcc_types.end());
+            EXPECT_TRUE(vcc_types.at("VCC")->has_base_type(GateType::BaseType::power));
             auto vcc_bf = vcc_types.at("VCC")->get_boolean_functions();
             ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
             EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
@@ -168,18 +170,20 @@ namespace hal
 
             // check GND gate type
             auto gnd_types = empty_lib->get_gnd_gate_types();
-            EXPECT_TRUE(gnd_types.size() == 1);
-            EXPECT_TRUE(gnd_types.find("HAL_GND") != gnd_types.end());
+            ASSERT_TRUE(gnd_types.size() == 1);
+            ASSERT_TRUE(gnd_types.find("HAL_GND") != gnd_types.end());
+            EXPECT_TRUE(gnd_types.at("HAL_GND")->has_base_type(GateType::BaseType::ground));
             auto gnd_bf = gnd_types.at("HAL_GND")->get_boolean_functions();
-            EXPECT_TRUE(gnd_bf.find("O") != gnd_bf.end());
+            ASSERT_TRUE(gnd_bf.find("O") != gnd_bf.end());
             EXPECT_TRUE(gnd_bf.at("O").is_constant_zero());
 
             // check VCC gate type
             auto vcc_types = empty_lib->get_vcc_gate_types();
-            EXPECT_TRUE(vcc_types.size() == 1);
-            EXPECT_TRUE(vcc_types.find("HAL_VDD") != vcc_types.end());
+            ASSERT_TRUE(vcc_types.size() == 1);
+            ASSERT_TRUE(vcc_types.find("HAL_VDD") != vcc_types.end());
+            EXPECT_TRUE(vcc_types.at("HAL_VDD")->has_base_type(GateType::BaseType::power));
             auto vcc_bf = vcc_types.at("HAL_VDD")->get_boolean_functions();
-            EXPECT_TRUE(vcc_bf.find("O") != vcc_bf.end());
+            ASSERT_TRUE(vcc_bf.find("O") != vcc_bf.end());
             EXPECT_TRUE(vcc_bf.at("O").is_constant_one());
         }
         std::filesystem::remove(m_test_lib_path);

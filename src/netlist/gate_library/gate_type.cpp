@@ -6,6 +6,8 @@ namespace hal
 {
     const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string         = {{BaseType::combinational, "combinational"},
                                                                                                  {BaseType::sequential, "sequential"},
+                                                                                                 {BaseType::power, "power"},
+                                                                                                 {BaseType::ground, "ground"},
                                                                                                  {BaseType::ff, "ff"},
                                                                                                  {BaseType::latch, "latch"},
                                                                                                  {BaseType::lut, "lut"},

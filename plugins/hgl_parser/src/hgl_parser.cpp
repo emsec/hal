@@ -9,6 +9,8 @@ namespace hal
 {
     const std::unordered_map<std::string, GateType::BaseType> HGLParser::m_string_to_base_type = {{"combinational", GateType::BaseType::combinational},
                                                                                                   {"sequential", GateType::BaseType::sequential},
+                                                                                                  {"power", GateType::BaseType::power},
+                                                                                                  {"ground", GateType::BaseType::ground},
                                                                                                   {"ff", GateType::BaseType::ff},
                                                                                                   {"latch", GateType::BaseType::latch},
                                                                                                   {"lut", GateType::BaseType::lut},
@@ -128,6 +130,7 @@ namespace hal
         }
         else
         {
+            log_error("hgl_parser", "FOOOOO {}", name);
             base_types = {GateType::BaseType::combinational};
         }
 

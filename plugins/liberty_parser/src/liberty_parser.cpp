@@ -853,6 +853,49 @@ namespace hal
 
         std::unordered_map<std::string, std::map<u32, std::string>> groups;
 
+        bool has_inputs        = false;
+        bool has_single_output = false;
+        std::string func;
+        for (const auto& pin : cell.pins)
+        {
+            if (pin.direction == GateType::PinDirection::input)
+            {
+                has_inputs = true;
+                break;
+            }
+            else if (pin.direction == GateType::PinDirection::output)
+            {
+                if (has_single_output == true)
+                {
+                    has_single_output = false;
+                    break;
+                }
+                else if (pin.pin_names.size() != 1)
+                {
+                    break;
+                }
+                else
+                {
+                    has_single_output = true;
+                    func              = pin.function;
+                }
+            }
+        }
+
+        if (!has_inputs && has_single_output)
+        {
+            if (func == "0")
+            {
+                cell.base_types.insert(GateType::BaseType::combinational);
+                cell.base_types.insert(GateType::BaseType::ground);
+            }
+            else if (func == "1")
+            {
+                cell.base_types.insert(GateType::BaseType::combinational);
+                cell.base_types.insert(GateType::BaseType::power);
+            }
+        }
+
         if (cell.base_types.empty())
         {
             cell.base_types.insert(GateType::BaseType::combinational);
