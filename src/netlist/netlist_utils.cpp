@@ -321,7 +321,7 @@ namespace hal
                 {
                     auto next_gate = endpoint->get_gate();
 
-                    if (next_gate->get_type()->has_base_type(GateTypeProperty::ff))
+                    if (next_gate->get_type()->has_property(GateTypeProperty::ff))
                     {
                         found_ffs.push_back(next_gate);
                     }
@@ -400,7 +400,7 @@ namespace hal
                     auto next_gate = endpoint->get_gate();
 
                     bool stop = false;
-                    for (GateTypeProperty property : next_gate->get_type()->get_base_types())
+                    for (GateTypeProperty property : next_gate->get_type()->get_properties())
                     {
                         if (stop_types.find(property) != stop_types.end())
                         {
@@ -509,7 +509,7 @@ namespace hal
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
 
                 GateType* gt = gate->get_type();
-                if (!gt->has_base_type(GateTypeProperty::combinational) || gt->has_base_type(GateTypeProperty::power) || gt->has_base_type(GateTypeProperty::ground))
+                if (!gt->has_property(GateTypeProperty::combinational) || gt->has_property(GateTypeProperty::power) || gt->has_property(GateTypeProperty::ground))
                 {
                     // continue if of invalid base type
                     continue;
@@ -640,7 +640,7 @@ namespace hal
             Net* gnd_net = *(*netlist->get_gnd_gates().begin())->get_fan_out_nets().begin();
 
             // iterate all LUT gates
-            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_base_type(GateTypeProperty::lut); }))
+            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::lut); }))
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
@@ -717,7 +717,7 @@ namespace hal
                 {"1110101011000000", "OAI22"}     // !((A | D) & (B | C))
             };
 
-            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_base_type(GateTypeProperty::lut); }))
+            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::lut); }))
             {
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
 

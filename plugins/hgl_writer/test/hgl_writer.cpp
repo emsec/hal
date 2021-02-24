@@ -185,7 +185,7 @@ namespace hal
 
             EXPECT_EQ(gt1->get_id(), gt2->get_id());
             EXPECT_EQ(gt1->get_name(), gt2->get_name());
-            EXPECT_EQ(gt1->get_base_types(), gt2->get_base_types());
+            EXPECT_EQ(gt1->get_properties(), gt2->get_properties());
             EXPECT_EQ(gt1->get_input_pins(), gt2->get_input_pins());
             EXPECT_EQ(gt1->get_output_pins(), gt2->get_output_pins());
             EXPECT_EQ(gt1->get_pin_groups(), gt2->get_pin_groups());

@@ -40,9 +40,9 @@ namespace hal
             ASSERT_NE(gt, nullptr);
             EXPECT_EQ(gt->get_id(), 1);
             EXPECT_EQ(gt->get_name(), "combinational");
-            EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
-            EXPECT_TRUE(gt->has_base_type(GateTypeProperty::combinational));
-            EXPECT_FALSE(gt->has_base_type(GateTypeProperty::ff));
+            EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
+            EXPECT_TRUE(gt->has_property(GateTypeProperty::combinational));
+            EXPECT_FALSE(gt->has_property(GateTypeProperty::ff));
             EXPECT_EQ(gt->get_gate_library(), &gl);
         }
 
@@ -52,9 +52,9 @@ namespace hal
             ASSERT_NE(gt, nullptr);
             EXPECT_EQ(gt->get_id(), 2);
             EXPECT_EQ(gt->get_name(), "ff");
-            EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
-            EXPECT_TRUE(gt->has_base_type(GateTypeProperty::ff));
-            EXPECT_FALSE(gt->has_base_type(GateTypeProperty::combinational));
+            EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
+            EXPECT_TRUE(gt->has_property(GateTypeProperty::ff));
+            EXPECT_FALSE(gt->has_property(GateTypeProperty::combinational));
             EXPECT_EQ(gt->get_gate_library(), &gl);
         }
 
@@ -64,9 +64,9 @@ namespace hal
             ASSERT_NE(gt, nullptr);
             EXPECT_EQ(gt->get_id(), 3);
             EXPECT_EQ(gt->get_name(), "latch");
-            EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
-            EXPECT_TRUE(gt->has_base_type(GateTypeProperty::latch));
-            EXPECT_FALSE(gt->has_base_type(GateTypeProperty::ff));
+            EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
+            EXPECT_TRUE(gt->has_property(GateTypeProperty::latch));
+            EXPECT_FALSE(gt->has_property(GateTypeProperty::ff));
             EXPECT_EQ(gt->get_gate_library(), &gl);
         }
 
@@ -76,9 +76,9 @@ namespace hal
             ASSERT_NE(gt, nullptr);
             EXPECT_EQ(gt->get_id(), 4);
             EXPECT_EQ(gt->get_name(), "lut");
-            EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::lut}));
-            EXPECT_TRUE(gt->has_base_type(GateTypeProperty::lut));
-            EXPECT_FALSE(gt->has_base_type(GateTypeProperty::ff));
+            EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut}));
+            EXPECT_TRUE(gt->has_property(GateTypeProperty::lut));
+            EXPECT_FALSE(gt->has_property(GateTypeProperty::ff));
             EXPECT_EQ(gt->get_gate_library(), &gl);
         }
 
@@ -88,9 +88,9 @@ namespace hal
             ASSERT_NE(gt, nullptr);
             EXPECT_EQ(gt->get_id(), 5);
             EXPECT_EQ(gt->get_name(), "ram");
-            EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::ram}));
-            EXPECT_TRUE(gt->has_base_type(GateTypeProperty::ram));
-            EXPECT_FALSE(gt->has_base_type(GateTypeProperty::combinational));
+            EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ram}));
+            EXPECT_TRUE(gt->has_property(GateTypeProperty::ram));
+            EXPECT_FALSE(gt->has_property(GateTypeProperty::combinational));
             EXPECT_EQ(gt->get_gate_library(), &gl);
         }
 
@@ -100,9 +100,9 @@ namespace hal
             ASSERT_NE(gt, nullptr);
             EXPECT_EQ(gt->get_id(), 6);
             EXPECT_EQ(gt->get_name(), "io");
-            EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::io}));
-            EXPECT_TRUE(gt->has_base_type(GateTypeProperty::io));
-            EXPECT_FALSE(gt->has_base_type(GateTypeProperty::combinational));
+            EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::io}));
+            EXPECT_TRUE(gt->has_property(GateTypeProperty::io));
+            EXPECT_FALSE(gt->has_property(GateTypeProperty::combinational));
             EXPECT_EQ(gt->get_gate_library(), &gl);
         }
 
@@ -112,9 +112,9 @@ namespace hal
             ASSERT_NE(gt, nullptr);
             EXPECT_EQ(gt->get_id(), 7);
             EXPECT_EQ(gt->get_name(), "dsp");
-            EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::dsp}));
-            EXPECT_TRUE(gt->has_base_type(GateTypeProperty::dsp));
-            EXPECT_FALSE(gt->has_base_type(GateTypeProperty::combinational));
+            EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::dsp}));
+            EXPECT_TRUE(gt->has_property(GateTypeProperty::dsp));
+            EXPECT_FALSE(gt->has_property(GateTypeProperty::combinational));
             EXPECT_EQ(gt->get_gate_library(), &gl);
         }
 

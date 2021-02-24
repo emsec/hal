@@ -89,20 +89,20 @@ namespace hal
             :rtype: str
         )");
 
-        py_gate_type.def_property_readonly("base_types", &GateType::get_base_types, R"(
+        py_gate_type.def_property_readonly("properties", &GateType::get_properties, R"(
             The properties assigned to the gate type.
 
             :type: set[hal_py.GateTypeProperty]
         )");
 
-        py_gate_type.def("get_base_types", &GateType::get_base_types, R"(
+        py_gate_type.def("get_properties", &GateType::get_properties, R"(
             Get the properties assigned to the gate type.
 
             :returns: The properties of the gate type.
             :rtype: set[hal_py.GateTypeProperty]
         )");
 
-        py_gate_type.def("has_base_type", &GateType::has_base_type, R"(
+        py_gate_type.def("has_property", &GateType::has_property, R"(
             Check whether the gate type has the specified property.
 
             :param hal_py.GateTypeProperty type: The property to check for.

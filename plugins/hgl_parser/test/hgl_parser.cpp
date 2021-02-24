@@ -48,7 +48,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 1);
                     EXPECT_EQ(gt->get_name(), "gt_combinational");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "A", "B"}));
@@ -91,7 +91,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 2);
                     EXPECT_EQ(gt->get_name(), "gt_group");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "A(0)", "A(1)", "B(0)", "B(1)"}));
@@ -139,7 +139,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 3);
                     EXPECT_EQ(gt->get_name(), "gt_lut_asc");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I1", "I2"}));
@@ -174,7 +174,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 4);
                     EXPECT_EQ(gt->get_name(), "gt_lut_desc");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I1", "I2"}));
@@ -209,7 +209,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 5);
                     EXPECT_EQ(gt->get_name(), "gt_ff");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "D", "EN", "R", "S"}));
@@ -256,7 +256,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 6);
                     EXPECT_EQ(gt->get_name(), "gt_latch");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"D", "EN", "R", "S"}));
@@ -302,7 +302,7 @@ namespace hal
                     // general stuff
                     EXPECT_EQ(gt->get_id(), 7);
                     EXPECT_EQ(gt->get_name(), "gt_ram");
-                    EXPECT_EQ(gt->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::ram}));
+                    EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ram}));
 
                     // pins
                     EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"DI(0)", "DI(1)", "DI(2)", "A(0)", "A(1)", "A(2)"}));

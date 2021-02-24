@@ -22,11 +22,11 @@ namespace hal
 
                 for (const auto& [gt_name, gt] : gate_types)
                 {
-                    if (gt->has_base_type(GateTypeProperty::power))
+                    if (gt->has_property(GateTypeProperty::power))
                     {
                         lib->mark_vcc_gate_type(gt);
                     }
-                    else if (gt->has_base_type(GateTypeProperty::ground))
+                    else if (gt->has_property(GateTypeProperty::ground))
                     {
                         lib->mark_gnd_gate_type(gt);
                     }

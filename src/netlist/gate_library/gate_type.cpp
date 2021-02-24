@@ -56,12 +56,12 @@ namespace hal
         return m_name;
     }
 
-    std::set<GateTypeProperty> GateType::get_base_types() const
+    std::set<GateTypeProperty> GateType::get_properties() const
     {
         return m_properties;
     }
 
-    bool GateType::has_base_type(GateTypeProperty property) const
+    bool GateType::has_property(GateTypeProperty property) const
     {
         return m_properties.find(property) != m_properties.end();
     }

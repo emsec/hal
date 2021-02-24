@@ -126,21 +126,19 @@ namespace hal
         const std::string& get_name() const;
 
         /**
-         * TODO rename
          * Get the properties assigned to the gate type.
          *
          * @returns The properties of the gate type.
          */
-        std::set<GateTypeProperty> get_base_types() const;
+        std::set<GateTypeProperty> get_properties() const;
 
         /**
-         * TODO rename
          * Check whether the gate type has the specified property.
          *
          * @param[in] property - The property to check for.
          * @returns True if the gate type has the specified property, false otherwise.
          */
-        bool has_base_type(GateTypeProperty property) const;
+        bool has_property(GateTypeProperty property) const;
 
         /**
          * Get the gate library this gate type is associated with.

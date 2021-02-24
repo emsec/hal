@@ -93,11 +93,11 @@ namespace hal
             EXPECT_EQ(gl->get_gnd_gate_types(), (std::unordered_map<std::string, GateType*>({{"gt_gnd", gt_gnd}})));
 
             // check base types
-            EXPECT_EQ(gt_and->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
-            EXPECT_EQ(gt_or->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
-            EXPECT_EQ(gt_ff->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
-            EXPECT_EQ(gt_latch->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
-            EXPECT_EQ(gt_lut->get_base_types(), std::set<GateTypeProperty>({GateTypeProperty::lut}));
+            EXPECT_EQ(gt_and->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
+            EXPECT_EQ(gt_or->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
+            EXPECT_EQ(gt_ff->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::ff}));
+            EXPECT_EQ(gt_latch->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::latch}));
+            EXPECT_EQ(gt_lut->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut}));
 
             // check contains_gate_type and contains_gate_type_by_name
             EXPECT_TRUE(gl->contains_gate_type(gt_and));

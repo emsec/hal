@@ -95,7 +95,7 @@ namespace hal
             cell.AddMember("name", gt->get_name(), allocator);
 
             // base type
-            std::set<GateTypeProperty> properties = gt->get_base_types();
+            std::set<GateTypeProperty> properties = gt->get_properties();
 
             rapidjson::Value bts(rapidjson::kArrayType);
 
@@ -113,7 +113,7 @@ namespace hal
             std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
 
             // lut_config, ff_config, latch_config
-            if (gt->has_base_type(GateTypeProperty::lut))
+            if (gt->has_property(GateTypeProperty::lut))
             {
                 rapidjson::Value lut_config(rapidjson::kObjectType);
 
@@ -133,7 +133,7 @@ namespace hal
 
                 cell.AddMember("lut_config", lut_config, allocator);
             }
-            else if (gt->has_base_type(GateTypeProperty::ff))
+            else if (gt->has_property(GateTypeProperty::ff))
             {
                 rapidjson::Value ff_config(rapidjson::kObjectType);
 
@@ -171,7 +171,7 @@ namespace hal
 
                 cell.AddMember("ff_config", ff_config, allocator);
             }
-            else if (gt->has_base_type(GateTypeProperty::latch))
+            else if (gt->has_property(GateTypeProperty::latch))
             {
                 rapidjson::Value latch_config(rapidjson::kObjectType);
 

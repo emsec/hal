@@ -166,7 +166,7 @@ namespace hal
                 {
                     // TODO currently only accepts FFs
                     log_info("dataflow", "identifying sequential gates");
-                    netlist_abstr.all_sequential_gates = netlist_abstr.nl->get_gates([&](auto g) { return g->get_type()->has_base_type(GateTypeProperty::ff); });
+                    netlist_abstr.all_sequential_gates = netlist_abstr.nl->get_gates([&](auto g) { return g->get_type()->has_property(GateTypeProperty::ff); });
                     std::sort(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end());
                     log_info("dataflow", "  #gates: {}", netlist_abstr.nl->get_gates().size());
                     log_info("dataflow", "  #sequential gates: {}", netlist_abstr.all_sequential_gates.size());
