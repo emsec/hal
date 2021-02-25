@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added undoable UserAction create, delete, fold, unfold, rename, set type, set color, add to object, remove from object
 * if view for module already exists this view gets activated on module selection (rather than creating a new view)
 * indicator whether views have been modified
+* added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`
+  * renamed enum `GateType::BaseType` to `GateTypeProperty` and moved it out of class `GateType`
+  * added function `has_property` to class `GateType`
+  * changed function `get_base_type` of class `GateType` to `get_properties`
+* added `sequential`, `power`, `ground`, `buffer`, `mux`, and `carry` base types to class `GateType`
+* made `optimize_constants` of class `BooleanFunction` publicly accessible
+* refined buffer removal in `netlist_utils::remove_buffers` to take constant `0` and `1` inputs into account
+* changes to `z3_utils` (WIP)
+* cleaned up and refined some logger outputs and streamlined log channel names
+* disabled extended logging again
+* fixed crash related to GraphicsScene destructor
 
 ## [3.2.5] - 2021-01-29 13:15:00+02:00 (urgency: medium)
 * **WARNING:** temporarily enabled extended logging (includes taking screenshots) for university course purposes. Note that no data leaves your machine unless you actively provide it to us.

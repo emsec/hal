@@ -102,8 +102,8 @@ namespace hal
             std::string next_state;
             std::string clear;
             std::string preset;
-            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::U;
-            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::invalid;
+            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::invalid;
             std::string data_category;
             std::string data_identifier;
         };
@@ -116,8 +116,8 @@ namespace hal
             std::string data_in;
             std::string clear;
             std::string preset;
-            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::U;
-            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::invalid;
+            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::invalid;
         };
 
         struct lut_group
@@ -133,7 +133,7 @@ namespace hal
         {
             u32 line_number;
             std::string name;
-            GateType::BaseType type = GateType::BaseType::combinational;
+            std::set<GateTypeProperty> properties;
             ff_group ff;
             latch_group latch;
             lut_group lut;

@@ -73,7 +73,8 @@ namespace hal {
         *       gate_2_to_0 (6)         gate_2_to_1 (7) =--'       ...  gate_2_to_1 (8) =
         *     =                       =                            =
         */
-        std::unique_ptr<Netlist> create_example_serializer_netlist() {
+        std::unique_ptr<Netlist> create_example_serializer_netlist() 
+        {
             auto nl = std::make_unique<Netlist>(m_gl);
             nl->set_id(123);
             nl->set_input_filename("esnl_input_filename");
@@ -143,16 +144,12 @@ namespace hal {
             test_m_0->set_input_port_name(net_1_3, "test_m_0_net_1_3_in");
             test_m_0->set_input_port_name(net_2_0, "test_m_0_net_2_0_in");
             test_m_0->set_output_port_name(net_0_4_5, "test_m_0_net_0_4_5_out");
-
             test_m_1->set_output_port_name(net_0_4_5, "test_m_1_net_0_4_5_out");
 
             // Store some boolean functions in some gates
-            nl->get_gate_by_id(MIN_GATE_ID + 0)->add_boolean_function("O_and",
-                BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0","I1"})));
-            nl->get_gate_by_id(MIN_GATE_ID + 0)->add_boolean_function("O_or",
-                                                                      BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0","I1"})));
-            nl->get_gate_by_id(MIN_GATE_ID + 4)->add_boolean_function("O_not",
-                                                                      BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
+            nl->get_gate_by_id(MIN_GATE_ID + 0)->add_boolean_function("O_and", BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0","I1"})));
+            nl->get_gate_by_id(MIN_GATE_ID + 0)->add_boolean_function("O_or", BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0","I1"})));
+            nl->get_gate_by_id(MIN_GATE_ID + 4)->add_boolean_function("O_not", BooleanFunction::from_string("!I", std::vector<std::string>({"I"})));
 
             // create the groupings
             Grouping* grouping_0 = nl->create_grouping(MIN_GROUPING_ID + 0, "grouping_0");
@@ -205,8 +202,7 @@ namespace hal {
                 nl->delete_module(nl->get_module_by_id(MIN_MODULE_ID + 0));
                 nl->delete_module(nl->get_module_by_id(MIN_MODULE_ID + 1));
                 // -- Add them again with flipped ids
-                Module *test_m_0_flipped =
-                    nl->create_module(MIN_MODULE_ID + 1, "test_mod_0_flipped", nl->get_top_module());
+                Module *test_m_0_flipped = nl->create_module(MIN_MODULE_ID + 1, "test_mod_0_flipped", nl->get_top_module());
                 test_m_0_flipped->set_type("test_mod_type_0_flipped");
                 test_m_0_flipped->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 0));
                 test_m_0_flipped->assign_gate(nl->get_gate_by_id(MIN_GATE_ID + 3));
@@ -218,15 +214,10 @@ namespace hal {
                 test_m_0_flipped->set_data("category", "key_3", "data_type", "test_value");
 
                 // Set some input/output port names of module 0
-                test_m_0_flipped
-                    ->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "test_m_0_flipped_net_1_3_in");
-                test_m_0_flipped
-                    ->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 20), "test_m_0_flipped_net_2_0_in");
-                test_m_0_flipped
-                    ->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "test_m_0_flipped_net_0_4_5_out");
-
-                test_m_1_flipped
-                    ->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "test_m_1_flipped_net_0_4_5_out");
+                test_m_0_flipped->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 13), "test_m_0_flipped_net_1_3_in");
+                test_m_0_flipped->set_input_port_name(nl->get_net_by_id(MIN_NET_ID + 20), "test_m_0_flipped_net_2_0_in");
+                test_m_0_flipped->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "test_m_0_flipped_net_0_4_5_out");
+                test_m_1_flipped->set_output_port_name(nl->get_net_by_id(MIN_NET_ID + 045), "test_m_1_flipped_net_0_4_5_out");
 
                 // Serialize and deserialize the netlist now
                 std::filesystem::path test_hal_file_path = test_utils::create_sandbox_path("test_hal_file.hal");

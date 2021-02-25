@@ -26,16 +26,42 @@
 #include <QString>
 namespace hal
 {
+    /**
+     * Interface for a class that is a subscriber of a GraphContext. A subscriber will be notified about changes of the
+     * layout status and about the deletion of the subscribed context.
+     */
     class GraphContextSubscriber
     {
     public:
         virtual ~GraphContextSubscriber() = default;
 
+        /**
+         * Called whenever the scene becomes available again (i.e. after the GraphLayouter has finished its job).
+         */
         virtual void handleSceneAvailable() = 0;
+
+        /**
+         * Called whenever the scene becomes unavailable (i.e. when the scene is blocked during the layouting process).
+         */
         virtual void handleSceneUnavailable() = 0;
+
+        /**
+         * Called whenever the context is about to be deleted.
+         */
         virtual void handleContextAboutToBeDeleted() = 0;
 
+        /**
+         * Called whenever the loading progress of the layouter of the subscribed context has changed.
+         *
+         * @param percent - The progress in percent (in range 0-100(?))
+         */
         virtual void handleStatusUpdate(const int percent) = 0;
+
+        /**
+         * Called whenever the loading progress message of the layouter of the subscribed context has changed.
+         *
+         * @param message - The new message
+         */
         virtual void handleStatusUpdate(const QString& message) = 0;
     };
 }

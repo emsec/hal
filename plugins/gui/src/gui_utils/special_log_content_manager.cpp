@@ -19,11 +19,6 @@
 
 namespace hal
 {
-    SpecialLogContentManager::SpecialLogContentManager(QObject* parent) : QObject(parent), mTimer(new QTimer(this))
-    {
-
-    }
-
     SpecialLogContentManager::SpecialLogContentManager(QObject *parent, PythonEditor *python_editor) : QObject(parent),
        mTimer(new QTimer(this)), mPythonEditor(python_editor)
     {

@@ -25,7 +25,7 @@ namespace hal
 
     std::map<Net*, double> BooleanInfluencePlugin::get_boolean_influences_of_gate(const Gate* gate)
     {
-        if (gate->get_type()->get_base_type() != hal::GateType::BaseType::ff)
+        if (!gate->get_type()->has_property(GateTypeProperty::ff))
         {
             log_error("boolean_influence", "Can only handle flip flops but found gate type {}.", gate->get_type()->get_name());
             return {};
@@ -49,7 +49,7 @@ namespace hal
         // Generate function for the data port
         z3_utils::SubgraphFunctionGenerator g;
 
-        std::unique_ptr ctx = std::make_unique<z3::context>();
+        std::unique_ptr ctx  = std::make_unique<z3::context>();
         std::unique_ptr func = std::make_unique<z3::expr>(*ctx);
         std::unordered_set<u32> net_ids;
 
@@ -58,10 +58,10 @@ namespace hal
             g.get_subgraph_z3_function(gate->get_fan_in_net(data_pin), function_gates, *ctx, *func, net_ids);
         }
         // edge case if the function gates are empty
-        else 
+        else
         {
             Net* in_net = gate->get_fan_in_net(data_pin);
-            *func = ctx->bv_const(std::to_string(in_net->get_id()).c_str(), 1);
+            *func       = ctx->bv_const(std::to_string(in_net->get_id()).c_str(), 1);
             net_ids.insert(in_net->get_id());
         }
 
@@ -97,7 +97,8 @@ namespace hal
         std::unordered_set<Gate*> function_gates;
 
         auto pre = start->get_predecessor(pin);
-        if (pre != nullptr && pre->get_gate() != nullptr) {
+        if (pre != nullptr && pre->get_gate() != nullptr)
+        {
             add_inputs(pre->get_gate(), function_gates);
         }
 
@@ -106,7 +107,7 @@ namespace hal
 
     void BooleanInfluencePlugin::add_inputs(Gate* gate, std::unordered_set<Gate*>& gates)
     {
-        if (gate->is_vcc_gate() || gate->is_gnd_gate() || gate->get_type()->get_base_type() == hal::GateType::BaseType::ff || gate->get_type()->get_name().find("RAM") != std::string::npos)
+        if (gate->is_vcc_gate() || gate->is_gnd_gate() || gate->get_type()->has_property(GateTypeProperty::ff) || gate->get_type()->get_name().find("RAM") != std::string::npos)
         {
             return;
         }

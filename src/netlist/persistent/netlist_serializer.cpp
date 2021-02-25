@@ -43,7 +43,7 @@ namespace hal
 #define assert_availablility(MEMBER)                                                               \
     if (!root.HasMember(MEMBER))                                                                   \
     {                                                                                              \
-        log_critical("netlist.persistent", "'netlist' node does not include a '{}' node", MEMBER); \
+        log_critical("netlist_persistent", "'netlist' node does not include a '{}' node", MEMBER); \
         return nullptr;                                                                            \
     }
 
@@ -526,7 +526,7 @@ namespace hal
             {
                 if (!document.HasMember("netlist"))
                 {
-                    log_critical("netlist.persistent", "file does not include a 'netlist' node");
+                    log_critical("netlist_persistent", "file does not include a 'netlist' node");
                     return nullptr;
                 }
                 auto root = document["netlist"].GetObject();
@@ -535,7 +535,7 @@ namespace hal
                 auto lib = gate_library_manager::get_gate_library(root["gate_library"].GetString());
                 if (lib == nullptr)
                 {
-                    log_critical("netlist.persistent", "error loading gate library '{}'.", root["gate_library"].GetString());
+                    log_critical("netlist_persistent", "error loading gate library '{}'.", root["gate_library"].GetString());
                     return nullptr;
                 }
 
@@ -653,7 +653,7 @@ namespace hal
 
             if (!hal_file_manager::serialize(hal_file, nl, document))
             {
-                log_info("netlist.persistent", "serialization failed");
+                log_info("netlist_persistent", "serialization failed");
                 return false;
             }
 
@@ -669,7 +669,7 @@ namespace hal
 
             hal_file_stream.close();
 
-            log_info("netlist.persistent", "serialized netlist in {:2.2f} seconds", DURATION(begin_time));
+            log_info("netlist_persistent", "serialized netlist in {:2.2f} seconds", DURATION(begin_time));
 
             return true;
         }
@@ -683,7 +683,7 @@ namespace hal
             FILE* pFile = fopen(hal_file.string().c_str(), "rb");
             if (pFile == NULL)
             {
-                log_error("netlist.persistent", "unable to open '{}'.", hal_file.string());
+                log_error("netlist_persistent", "unable to open '{}'.", hal_file.string());
                 return nullptr;
             }
 
@@ -695,7 +695,7 @@ namespace hal
 
             if (document.HasParseError())
             {
-                log_error("netlist.persistent", "invalid json string for deserialization");
+                log_error("netlist_persistent", "invalid json string for deserialization");
                 return nullptr;
             }
 
@@ -704,16 +704,16 @@ namespace hal
                 u32 encoded_version = document["serialization_format_version"].GetUint();
                 if (encoded_version < SERIALIZATION_FORMAT_VERSION)
                 {
-                    log_warning("netlist.persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+                    log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
                 }
                 else if (encoded_version > SERIALIZATION_FORMAT_VERSION)
                 {
-                    log_warning("netlist.persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
+                    log_warning("netlist_persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
                 }
             }
             else
             {
-                log_warning("netlist.persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+                log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
             }
 
             auto netlist = deserialize(document);
@@ -722,10 +722,10 @@ namespace hal
             {
                 if (!hal_file_manager::deserialize(hal_file, netlist.get(), document))
                 {
-                    log_info("netlist.persistent", "deserialization failed");
+                    log_info("netlist_persistent", "deserialization failed");
                     return nullptr;
                 }
-                log_info("netlist.persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
+                log_info("netlist_persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
             }
 
             // event_controls::enable_all(true);

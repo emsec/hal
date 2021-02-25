@@ -45,25 +45,87 @@ namespace hal
     class ModuleWidget;
     class LoggerWidget;
 
+
+    /**
+     * The ContentManager class manages the creation and deletion of hal's subwidgets such as the python editor or the
+     * selection details widget. There should only be one content manager at any time.
+     */
     class ContentManager : public QObject
     {
         Q_OBJECT
 
     public:
-        explicit ContentManager(MainWindow* parent);
+        /**
+         * The constructor of the class. The content manager's parent is the mainwindow of hal.
+         * The mainwindow must be known to the content manager so it can place the subwidgets in it.
+         *
+         * @param parent - The content manager's parent.
+         */
+        explicit ContentManager(MainWindow* parent);       
         ~ContentManager();
 
+        /**
+         * Deletes all subwidgets created by the manager. Used when closing a file.
+         */
         void deleteContent();
 
+        /**
+         * Get hal's python editor.
+         *
+         * @return The python editor.
+         */
         PythonEditor* getPythonEditorWidget();
+
+        /**
+         * @brief Get hal's graph tab widget.
+         *
+         * @return The graph tab widget.
+         */
         GraphTabWidget* getGraphTabWidget();
+
+        /**
+         * Get hal's context manager.
+         *
+         * @return The context manager.
+         */
         ContextManagerWidget* getContextManagerWidget();
+
+        /**
+         * Get hal's selection details widget.
+         *
+         * @return The selection details widget.
+         */
         SelectionDetailsWidget* getSelectionDetailsWidget();
+
+        /**
+         * Get hal's grouping manager.
+         *
+         * @return The grouping manager.
+         */
         GroupingManagerWidget* getGroupingManagerWidget();
 
     public Q_SLOTS:
+
+        /**
+         * This function is called when a file is opened (connected to a signal that is emitted by the file manager).
+         * It creates the necessary subwidgets and places them in the mainwindow.
+         *
+         * @param fileName - The name of the opened file.
+         */
         void handleOpenDocument(const QString& fileName);
+
+        /**
+         * A function yet to be implemented.
+         *
+         * @param fileName - The name of the new file.
+         */
         void handleFilsystemDocChanged(const QString& fileName);
+
+        /**
+         * A function yet to be implemented.
+         *
+         * @param fileName - The name of the new file.
+         */
         void handleSaveTriggered();
 
     private:

@@ -10,14 +10,6 @@
 
 namespace hal
 {
-    const std::unordered_map<GateType::BaseType, std::string> HGLWriter::m_base_type_to_string = {{GateType::BaseType::combinational, "combinational"},
-                                                                                                  {GateType::BaseType::ff, "ff"},
-                                                                                                  {GateType::BaseType::latch, "latch"},
-                                                                                                  {GateType::BaseType::lut, "lut"},
-                                                                                                  {GateType::BaseType::ram, "ram"},
-                                                                                                  {GateType::BaseType::io, "io"},
-                                                                                                  {GateType::BaseType::dsp, "dsp"}};
-
     const std::unordered_map<GateType::PinType, std::string> HGLWriter::m_pin_type_to_string = {{GateType::PinType::none, "none"},
                                                                                                 {GateType::PinType::power, "power"},
                                                                                                 {GateType::PinType::ground, "ground"},
@@ -32,12 +24,6 @@ namespace hal
                                                                                                 {GateType::PinType::address, "address"},
                                                                                                 {GateType::PinType::io_pad, "io_pad"},
                                                                                                 {GateType::PinType::select, "select"}};
-
-    const std::unordered_map<GateType::ClearPresetBehavior, std::string> HGLWriter::m_behavior_to_string = {{GateType::ClearPresetBehavior::L, "L"},
-                                                                                                            {GateType::ClearPresetBehavior::H, "H"},
-                                                                                                            {GateType::ClearPresetBehavior::N, "N"},
-                                                                                                            {GateType::ClearPresetBehavior::T, "T"},
-                                                                                                            {GateType::ClearPresetBehavior::X, "X"}};
 
     bool HGLWriter::write(const GateLibrary* gate_lib, const std::filesystem::path& file_path)
     {
@@ -103,13 +89,25 @@ namespace hal
             cell.AddMember("name", gt->get_name(), allocator);
 
             // base type
-            GateType::BaseType base_type = gt->get_base_type();
-            cell.AddMember("type", m_base_type_to_string.at(base_type), allocator);
+            std::set<GateTypeProperty> properties = gt->get_properties();
+
+            rapidjson::Value bts(rapidjson::kArrayType);
+
+            for (const auto& property : properties)
+            {
+                if (property != GateTypeProperty::invalid)
+                {
+                    std::string bt_str = enum_to_string<GateTypeProperty>(property);
+                    bts.PushBack(rapidjson::Value{}.SetString(bt_str.c_str(), bt_str.length(), allocator), allocator);
+                }
+            }
+
+            cell.AddMember("types", bts, allocator);
 
             std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
 
             // lut_config, ff_config, latch_config
-            if (base_type == GateType::BaseType::lut)
+            if (gt->has_property(GateTypeProperty::lut))
             {
                 rapidjson::Value lut_config(rapidjson::kObjectType);
 
@@ -129,7 +127,7 @@ namespace hal
 
                 cell.AddMember("lut_config", lut_config, allocator);
             }
-            else if (base_type == GateType::BaseType::ff)
+            else if (gt->has_property(GateTypeProperty::ff))
             {
                 rapidjson::Value ff_config(rapidjson::kObjectType);
 
@@ -156,18 +154,18 @@ namespace hal
                 }
 
                 std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
-                if (cp_behav.first != GateType::ClearPresetBehavior::U)
+                if (cp_behav.first != GateType::ClearPresetBehavior::invalid)
                 {
-                    ff_config.AddMember("state_clear_preset", m_behavior_to_string.at(cp_behav.first), allocator);
+                    ff_config.AddMember("state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.first), allocator);
                 }
-                if (cp_behav.second != GateType::ClearPresetBehavior::U)
+                if (cp_behav.second != GateType::ClearPresetBehavior::invalid)
                 {
-                    ff_config.AddMember("neg_state_clear_preset", m_behavior_to_string.at(cp_behav.second), allocator);
+                    ff_config.AddMember("neg_state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.second), allocator);
                 }
 
                 cell.AddMember("ff_config", ff_config, allocator);
             }
-            else if (base_type == GateType::BaseType::latch)
+            else if (gt->has_property(GateTypeProperty::latch))
             {
                 rapidjson::Value latch_config(rapidjson::kObjectType);
 
@@ -190,13 +188,13 @@ namespace hal
                 }
 
                 std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
-                if (cp_behav.first != GateType::ClearPresetBehavior::U)
+                if (cp_behav.first != GateType::ClearPresetBehavior::invalid)
                 {
-                    latch_config.AddMember("state_clear_preset", m_behavior_to_string.at(cp_behav.first), allocator);
+                    latch_config.AddMember("state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.first), allocator);
                 }
-                if (cp_behav.second != GateType::ClearPresetBehavior::U)
+                if (cp_behav.second != GateType::ClearPresetBehavior::invalid)
                 {
-                    latch_config.AddMember("neg_state_clear_preset", m_behavior_to_string.at(cp_behav.second), allocator);
+                    latch_config.AddMember("neg_state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.second), allocator);
                 }
 
                 cell.AddMember("latch_config", latch_config, allocator);

@@ -36,62 +36,265 @@ namespace hal
 {
     class GraphContextSubscriber;
 
+    /**
+     * The GraphContext is a container that holds all elements (modules, gates, nets) that should be drawn in the
+     * scene. It uses a GraphLayouter to layout its elements and creates a scene with the corresponding graphic items.
+     * Afterwards this scene can be shown in a GraphWidgets GraphGraphicsView. <br>
+     * Moreover the context may be changed (e.g. add/remove gates or modules). In this case the scene will be adapted
+     * as well. <br>
+     * This class implements an observer pattern to notify subscribers (currently only GraphWidget objects) about
+     * certain events.
+     */
     class GraphContext : public QObject
     {
         friend class GraphContextManager;
         Q_OBJECT
 
     public:
+
+        /**
+         * Constructor.
+         *
+         * @param id_ - The unique id of the context.
+         * @param name - The name of the context
+         * @param parent - The parent QObject
+         */
         explicit GraphContext(u32 id_, const QString& name, QObject* parent = nullptr);
+
+        /**
+         * Destructor.
+         * Used to notify all subscribers about the deletion.
+         */
         ~GraphContext();
 
+        /**
+         * Register a subscriber that will notified about certain changes (see GraphContextSubscriber).
+         *
+         * @param subscriber - The GraphContextSubscriber to subscribe
+         */
         void subscribe(GraphContextSubscriber* const subscriber);
+
+        /**
+         * Remove a subscriber.
+         *
+         * @param subscriber - The GraphContextSubscriber to unsubscribe
+         */
         void unsubscribe(GraphContextSubscriber* const subscriber);
 
+        /**
+         * Mark the beginning of a block of changes that are done successively. Used to prevent the scene from updating
+         * after every single step. The scene will be only updated after endChange is called. <br>
+         * These 'changes-blocks' may be nested. In this case only the outer block will be considered.
+         */
         void beginChange();
+
+        /**
+         * Mark the ending of a block of changes that are done successively. Used to prevent the scene from updating
+         * after every single step.
+         */
         void endChange();
 
+        /**
+         * Add gates and/or modules to the context. The scene will be updated afterwards
+         * (if no in a beginChanges-endChanges-block). Moreover a placement hint may be passed that can be used by the
+         * GraphLayouter.
+         *
+         * @param modules - A set of ids of the modules to be added
+         * @param gates - A set of ids of the gates to be added
+         * @param placement - A placement hint (leave empty for no hint)
+         */
         void add(const QSet<u32>& modules, const QSet<u32>& gates, PlacementHint placement = PlacementHint());
+
+        /**
+         * Remove gates and/or modules from the context. The scene will be updated afterwards
+         * (if no in a beginChanges-endChanges-block).
+         *
+         * @param modules - A set of ids of the modules to be removed
+         * @param gates - A set of ids of the gates to be removed
+         */
         void remove(const QSet<u32>& modules, const QSet<u32>& gates);
+
+        /**
+         * Clear the context. All gates and modules as well as their placement hints will be removed.
+         */
         void clear();
 
+        /**
+         * Fold the parent module of a specific gate. The specified gate as well as all other gates and submodules of the parent
+         * module are removed from the context and replaced by the module itself.
+         *
+         * @param id - The id of the gate
+         */
         bool isGateUnfolded(u32 gateId) const;
         bool foldModuleAction(u32 moduleId);
+        /**
+         * Unfold a specific module. The specified module is removed from the context and replaced by its gates and
+         * submodules.
+         *
+         * @param id - The id of the module to unfold
+         */
         void unfoldModule(const u32 id);
 
+        /**
+         * Check if the context is empty i.e. does not contain modules or gates.
+         *
+         * @returns <b>true</b> if the context is empty.
+         */
         bool empty() const;
+
+        /**
+         * Checks if the context represents the content of the given module i.e. after double-clicking the module item.
+         *
+         * @param id - The id of the module
+         * @returns <b>true</b> if the context shows the content of the module
+         */
         bool isShowingModule(const u32 id) const;
+
+        /**
+         * Checks if the context represents the content of the given module i.e. after double-clicking the module item. <br>
+         * In some cases it is necessary that the check is performed on a previous state e.g. if a gate was newly assigned to the
+         * netlist and the affected GraphContexts should be discovered now. Since the comparison is done on the current
+         * netlist but the context does not contain the gate yet, this function will falsely return <b>false</b> even
+         * on the right GraphContexts. Therefore the new gate must be manually removed from the comparison by passing
+         * it in the minus_gates list. <br>
+         * Accordingly, it is also possible to add gates to the comparison (e.g. after removing them from the module)
+         * as well as adding and removing modules (i.e. submodules).
+         *
+         * @param id - The id of the module
+         * @param minus_modules - The ids of the modules that are removed for comparison
+         * @param minus_gates - The ids of the gates that are removed for comparison
+         * @param plus_modules - The ids of the modules that are added for comparison
+         * @param plus_gates - The ids of the gates that are added for comparison
+         * @returns <b>true</b> if the context shows the content of the module.
+         */
         bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
-        void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
+	void testIfAffected(const u32 id, const u32* moduleId, const u32* gateId);
 
+        /**
+         * Given a net, this functions checks if any of the nets source gates appear in the context.
+         *
+         * @param mNetId - The id of the net
+         * @returns <b>true</b> if a source gate of the net is shown
+         */
         bool isShowingNetSource(const u32 mNetId) const;
+
+        /**
+         * Given a net, this functions checks if any of the nets destination gates appear in the context.
+         *
+         * @param mNetId - The id of the net
+         * @returns <b>true</b> if a destination gate of the net is shown
+         */
         bool isShowingNetDestination(const u32 mNetId) const;
 
+        /**
+         * Get the ids of the modules of the context.
+         *
+         * @returns a set of module ids.
+         */
         const QSet<u32>& modules() const;
+
+        /**
+         * Get the ids of the gates of the context.
+         *
+         * @returns a set of gate ids.
+         */
         const QSet<u32>& gates() const;
+
+        /**
+         * Get the ids of the nets of the context.
+         *
+         * @returns a set of net ids.
+         */
         const QSet<u32>& nets() const;
 
+        /**
+         * Get the scene the context works on.
+         *
+         * @returns the scene.
+         */
         GraphicsScene* scene();
 
-        u32 id() const;
+        /**
+         * Get the name of the context.
+         *
+         * @returns the contexts name.
+         */
         QString name() const;
 
+        /**
+         * Get the id of the context.
+         *
+         * @return the context's id.
+         */
+        u32 id() const;
+
+        /**
+         * Set the GraphLayouter this context should use.
+         *
+         * @param layouter - The GraphLayouter to use
+         */
         void setLayouter(GraphLayouter* layouter);
+
+        /**
+         * Set the GraphShader that will be used.
+         *
+         * @param shader - The GraphShader
+         */
         void setShader(GraphShader* shader);
 
+        /**
+         * Get the used GraphLayouter.
+         * Returns a <i>nullptr</i> if no layouter was configured yet.
+         *
+         * @returns the used GraphLayouter
+         */
         const GraphLayouter* getLayouter() const { return mLayouter; }
 
+        /**
+		 * Move node to antother grid location
+		 */
         void moveNodeAction(const QPoint& from, const QPoint& to);
-
+		
+        /**
+         * Returns whether the scene is in an updating process (i.e. layouter process) or not.
+         *
+         * @returns <b>true</b> while the scene updates.
+         */
         bool sceneUpdateInProgress() const;
 
+        /**
+         * Notifies the context that a scene update is necessary. The scene will be updated immediately or as soon as
+         * the exterior beginChanges-endChanges-block is left.
+         */
         void scheduleSceneUpdate();
 
+        /**
+         * Get a Node that contains a specific gate. <br>
+         * If the context contains the gate, the node of this gate is returned. <br>
+         * If the context only contains a parent module of the gate (or the parents parent and so on...), the node of
+         * this module is returned. <br>
+         * Else an empty node is returned.
+         *
+         * @param id - The gates id
+         * @returns the Node that contains the gate
+         */
         Node nodeForGate(const u32 id) const;
 
+        /**
+         * TODO: remove?
+         * Get the used GraphLayouter. Originally used for debug purposes.
+         * \deprecated Please use getLayouter() instead.
+         *
+         * @returns the used GraphLayouter
+         */
         GraphLayouter* debugGetLayouter() const;
 
+        /**
+         * Returns the timestamp of this context. The timestamp is generated in the constructor.
+         *
+         * @returns the timestamp of the context.
+         */
         QDateTime getTimestamp() const;
 
         void writeToFile(QJsonObject& json);

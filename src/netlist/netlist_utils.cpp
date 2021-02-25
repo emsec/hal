@@ -32,7 +32,7 @@ namespace hal
                         if (input_net == nullptr)
                         {
                             // if no net is connected, the input pin name cannot be replaced
-                            log_warning("netlist utils", "not net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", input_pin, gate->get_id());
+                            log_warning("netlist_utils", "not net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", input_pin, gate->get_id());
                             return bf;
                         }
 
@@ -47,7 +47,7 @@ namespace hal
             {
                 if (n->get_num_of_sources() > 1)
                 {
-                    log_error("netlist utils", "net with ID {} has more than one source, cannot expand Boolean function in this direction.", n->get_id());
+                    log_error("netlist_utils", "net with ID {} has more than one source, cannot expand Boolean function in this direction.", n->get_id());
                     return;
                 }
                 else if (n->get_num_of_sources() == 0)
@@ -57,7 +57,7 @@ namespace hal
 
                 if (auto it = std::find(stack.begin(), stack.end(), n); it != stack.end())
                 {
-                    log_error("netlist utils", "subgraph contains a cycle: {} -> {}", utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name(); }), n->get_name());
+                    log_error("netlist_utils", "subgraph contains a cycle: {} -> {}", utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name(); }), n->get_name());
                     result = BooleanFunction();
                     return;
                 }
@@ -83,27 +83,27 @@ namespace hal
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
             {
-                log_error("netlist utils", "no gates given to determine the Boolean function of.");
+                log_error("netlist_utils", "no gates given to determine the Boolean function of.");
                 return BooleanFunction();
             }
             else if (std::any_of(subgraph_gates.begin(), subgraph_gates.end(), [](const Gate* g) { return g == nullptr; }))
             {
-                log_error("netlist utils", "set of gates contains a nullptr.");
+                log_error("netlist_utils", "set of gates contains a nullptr.");
                 return BooleanFunction();
             }
             else if (net == nullptr)
             {
-                log_error("netlist utils", "nullptr given for target net.");
+                log_error("netlist_utils", "nullptr given for target net.");
                 return BooleanFunction();
             }
             else if (net->get_num_of_sources() > 1)
             {
-                log_error("netlist utils", "target net with ID {} has more than one source.", net->get_id());
+                log_error("netlist_utils", "target net with ID {} has more than one source.", net->get_id());
                 return BooleanFunction();
             }
             else if (net->get_num_of_sources() == 0)
             {
-                log_error("netlist utils", "target net with ID {} has no sources.", net->get_id());
+                log_error("netlist_utils", "target net with ID {} has no sources.", net->get_id());
                 return BooleanFunction();
             }
 
@@ -321,7 +321,7 @@ namespace hal
                 {
                     auto next_gate = endpoint->get_gate();
 
-                    if (next_gate->get_type()->get_base_type() == GateType::BaseType::ff)
+                    if (next_gate->get_type()->has_property(GateTypeProperty::ff))
                     {
                         found_ffs.push_back(next_gate);
                     }
@@ -376,6 +376,91 @@ namespace hal
             return get_next_sequential_gates(net, get_successors, cache);
         }
 
+        namespace
+        {
+            std::vector<Gate*>
+                get_path_internal(const Net* start_net, bool forward, std::set<GateTypeProperty> stop_types, std::unordered_set<u32>& seen, std::unordered_map<u32, std::vector<Gate*>>& cache)
+            {
+                if (auto it = cache.find(start_net->get_id()); it != cache.end())
+                {
+                    return it->second;
+                }
+
+                if (seen.find(start_net->get_id()) != seen.end())
+                {
+                    return {};
+                }
+
+                seen.insert(start_net->get_id());
+
+                std::vector<Gate*> found_combinational;
+
+                for (auto endpoint : forward ? start_net->get_destinations() : start_net->get_sources())
+                {
+                    auto next_gate = endpoint->get_gate();
+
+                    bool stop = false;
+                    for (GateTypeProperty property : next_gate->get_type()->get_properties())
+                    {
+                        if (stop_types.find(property) != stop_types.end())
+                        {
+                            stop = true;
+                        }
+                    }
+
+                    if (stop == false)
+                    {
+                        found_combinational.push_back(next_gate);
+
+                        for (auto n : forward ? next_gate->get_fan_out_nets() : next_gate->get_fan_in_nets())
+                        {
+                            auto next_gates = get_path_internal(n, forward, stop_types, seen, cache);
+                            found_combinational.insert(found_combinational.end(), next_gates.begin(), next_gates.end());
+                        }
+                    }
+                }
+
+                std::sort(found_combinational.begin(), found_combinational.end());
+                found_combinational.erase(std::unique(found_combinational.begin(), found_combinational.end()), found_combinational.end());
+
+                cache.emplace(start_net->get_id(), found_combinational);
+                return found_combinational;
+            }
+        }    // namespace
+
+        std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::vector<Gate*> found_combinational;
+            for (const auto& n : get_successors ? gate->get_fan_out_nets() : gate->get_fan_in_nets())
+            {
+                auto suc = get_path(n, get_successors, stop_properties, cache);
+                found_combinational.insert(found_combinational.end(), suc.begin(), suc.end());
+            }
+
+            std::sort(found_combinational.begin(), found_combinational.end());
+            found_combinational.erase(std::unique(found_combinational.begin(), found_combinational.end()), found_combinational.end());
+
+            return found_combinational;
+        }
+
+        std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::unordered_set<u32> seen;
+            return get_path_internal(net, get_successors, stop_properties, seen, cache);
+        }
+
+        std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_path(gate, get_successors, stop_properties, cache);
+        }
+
+        std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_path(net, get_successors, stop_properties, cache);
+        }
+
         std::unordered_set<Net*> get_nets_at_pins(Gate* gate, std::unordered_set<std::string> pins, bool is_inputs)
         {
             std::unordered_set<Net*> nets;
@@ -415,15 +500,16 @@ namespace hal
         {
             u32 num_gates = 0;
 
-            // buffers can only be of these base types
-            std::unordered_set<GateType::BaseType> types = {GateType::BaseType::combinational, GateType::BaseType::lut};
+            Net* gnd_net = netlist->get_gnd_gates().front()->get_fan_out_nets().front();
+            Net* vcc_net = netlist->get_vcc_gates().front()->get_fan_out_nets().front();
 
+            // buffers can only be of these base types
             for (const auto& gate : netlist->get_gates())
             {
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
 
                 GateType* gt = gate->get_type();
-                if (types.find(gt->get_base_type()) == types.end())
+                if (!gt->has_property(GateTypeProperty::combinational) || gt->has_property(GateTypeProperty::power) || gt->has_property(GateTypeProperty::ground))
                 {
                     // continue if of invalid base type
                     continue;
@@ -449,44 +535,98 @@ namespace hal
                     continue;
                 }
 
-                std::vector<Endpoint*> fan_in           = gate->get_fan_in_endpoints();
-                std::string func_str                    = functions.begin()->second.to_string();
-                std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(GateType::PinDirection::input);
-                if (in_pins.find(func_str) == in_pins.end())
+                std::vector<Endpoint*> fan_in = gate->get_fan_in_endpoints();
+                BooleanFunction func          = functions.begin()->second;
+
+                for (Endpoint* ep : fan_in)
                 {
-                    // continue if Boolean function does not match any of the input pins
-                    continue;
+                    auto sources = ep->get_net()->get_sources();
+                    if (sources.size() != 1)
+                    {
+                        break;
+                    }
+
+                    if (sources.front()->get_gate()->is_gnd_gate())
+                    {
+                        func = func.substitute(ep->get_pin(), BooleanFunction::Value::ZERO);
+                    }
+                    else if (sources.front()->get_gate()->is_vcc_gate())
+                    {
+                        func = func.substitute(ep->get_pin(), BooleanFunction::Value::ONE);
+                    }
                 }
 
-                Net* out_net = out_endpoint->get_net();
+                func = func.optimize_constants();
 
-                // check all input endpoints and ...
-                for (Endpoint* in_endpoint : fan_in)
+                std::string func_str                    = func.to_string();
+                std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(GateType::PinDirection::input);
+                if (in_pins.find(func_str) != in_pins.end())
                 {
-                    Net* in_net = in_endpoint->get_net();
+                    Net* out_net = out_endpoint->get_net();
 
-                    if (in_endpoint->get_pin() == func_str)
+                    // check all input endpoints and ...
+                    for (Endpoint* in_endpoint : fan_in)
                     {
-                        // reconnect outputs if the input is passed through the buffer
+                        Net* in_net = in_endpoint->get_net();
+
+                        if (in_endpoint->get_pin() == func_str)
+                        {
+                            // reconnect outputs if the input is passed through the buffer
+                            for (Endpoint* dst : out_net->get_destinations())
+                            {
+                                Gate* dst_gate      = dst->get_gate();
+                                std::string dst_pin = dst->get_pin();
+                                out_net->remove_destination(dst);
+                                in_net->add_destination(dst_gate, dst_pin);
+                            }
+                        }
+                        else
+                        {
+                            // remove the input endpoint otherwise
+                            in_net->remove_destination(gate, in_endpoint->get_pin());
+                        }
+                    }
+
+                    // delete output net and buffer gate
+                    netlist->delete_net(out_net);
+                    netlist->delete_gate(gate);
+                    num_gates++;
+                }
+                else if (func_str == "0" || func_str == "1")
+                {
+                    Net* out_net = out_endpoint->get_net();
+
+                    for (Endpoint* in_endpoint : fan_in)
+                    {
+                        // remove the input endpoint otherwise
+                        in_endpoint->get_net()->remove_destination(gate, in_endpoint->get_pin());
+                    }
+                    if (func_str == "0")
+                    {
                         for (Endpoint* dst : out_net->get_destinations())
                         {
                             Gate* dst_gate      = dst->get_gate();
                             std::string dst_pin = dst->get_pin();
                             out_net->remove_destination(dst);
-                            in_net->add_destination(dst_gate, dst_pin);
+                            gnd_net->add_destination(dst_gate, dst_pin);
                         }
                     }
-                    else
+                    else if (func_str == "1")
                     {
-                        // remove the input endpoint otherwise
-                        in_net->remove_destination(gate, in_endpoint->get_pin());
+                        for (Endpoint* dst : out_net->get_destinations())
+                        {
+                            Gate* dst_gate      = dst->get_gate();
+                            std::string dst_pin = dst->get_pin();
+                            out_net->remove_destination(dst);
+                            vcc_net->add_destination(dst_gate, dst_pin);
+                        }
                     }
-                }
 
-                // delete output net and buffer gate
-                netlist->delete_net(out_net);
-                netlist->delete_gate(gate);
-                num_gates++;
+                    // delete output net and buffer gate
+                    netlist->delete_net(out_net);
+                    netlist->delete_gate(gate);
+                    num_gates++;
+                }
             }
 
             log_info("netlist_utils", "removed {} buffer gates from the netlist.", num_gates);
@@ -500,7 +640,7 @@ namespace hal
             Net* gnd_net = *(*netlist->get_gnd_gates().begin())->get_fan_out_nets().begin();
 
             // iterate all LUT gates
-            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::lut); }))
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
@@ -577,7 +717,7 @@ namespace hal
                 {"1110101011000000", "OAI22"}     // !((A | D) & (B | C))
             };
 
-            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->get_base_type() == GateType::BaseType::lut; }))
+            for (Gate* gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::lut); }))
             {
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
 

@@ -32,11 +32,56 @@ namespace hal
 {
     namespace gui_utility
     {
+        /**
+         * Opens and reads a file and returns its content (Must not even be a svg file).
+         *
+         * @param svg_path - The path to the file to read.
+         * @return The file's content.
+         */
         extern QString getSvgData(const QString& svg_path);
+
+        /**
+         * Replaces a color within given svg data to a new specified color.
+         *
+         * @param svg_data - The svg data as a string (e.g. read from a file)
+         * @param from - The color to replace.
+         * @param to - The new color.
+         */
         extern void changeSvgColor(QString& svg_data, const QColor& from, const QColor& to);
+
+        /**
+         * Replaces all colors within given svg data to a new specified color.
+         *
+         * @param svg_data - The svg data as a string (e.g. read from a file)
+         * @param to - The new color.
+         */
         extern void changeAllSvgColors(QString& svg_data, const QColor& to);
+
+        /**
+         * Converts given svg data to a QIcon.
+         *
+         * @param svg_data - The svg data as a string (e.g. read from a file)
+         * @return  The resulting QIcon.
+         */
         extern QIcon getIconFromSvgData(const QString& svg_data);
+
+        /**
+         * Reads svg data from a file and styles it (replacing colors) according to a format string.
+         * When no styling is necessary, an empty string can be passed.
+         * The result is then converted into an icon and returned.
+         *
+         * @param from_to_colors - The format string in the form "from -> to" (e.g.: "all -> #E4E4E4").
+         * @param svg_path - The path to the svg file.
+         * @return The (perhabs styled) icon.
+         */
         extern QIcon getStyledSvgIcon(const QString& from_to_colors, const QString& svg_path);
+
+        /**
+         * Returns a somewhat random color through a funny method (should be the same order
+         * of colors each time the program starts).
+         *
+         * @return The "random" color.
+         */
         extern QColor getRandomColor();
     }
 }

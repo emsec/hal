@@ -99,7 +99,7 @@ namespace hal
 
         for (Gate* gate : m_simulation_set)
         {
-            if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
+            if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
                 GateType* gate_type                                                 = gate->get_type();
                 const std::unordered_map<std::string, GateType::PinType>& pin_types = gate_type->get_pin_types();
@@ -137,7 +137,7 @@ namespace hal
 
         for (Gate* gate : m_simulation_set)
         {
-            if (gate->get_type()->get_base_type() == GateType::BaseType::ff)
+            if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
                 GateType* gate_type                                                 = gate->get_type();
                 const std::unordered_map<std::string, GateType::PinType>& pin_types = gate_type->get_pin_types();
@@ -312,8 +312,7 @@ namespace hal
 
             SimulationGate* sim_gate_base = nullptr;
 
-            GateType::BaseType base_type = gate->get_type()->get_base_type();
-            if (base_type == GateType::BaseType::ff)
+            if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
                 auto sim_gate_owner = std::make_unique<SimulationGateFF>();
                 auto sim_gate       = sim_gate_owner.get();
@@ -354,7 +353,7 @@ namespace hal
                 sim_gate->sr_behavior_out          = behavior.first;
                 sim_gate->sr_behavior_out_inverted = behavior.second;
             }
-            else if (base_type == GateType::BaseType::combinational || base_type == GateType::BaseType::lut)
+            else if (gate->get_type()->has_property(GateTypeProperty::combinational))
             {
                 auto sim_gate_owner = std::make_unique<SimulationGateCombinational>();
                 auto sim_gate       = sim_gate_owner.get();
@@ -752,12 +751,7 @@ namespace hal
 
     SignalValue NetlistSimulator::process_clear_preset_behavior(GateType::ClearPresetBehavior behavior, SignalValue previous_output)
     {
-        if (behavior == GateType::ClearPresetBehavior::U)
-        {
-            log_warning("netlist_simulator", "undefined simultaneous set/reset behavior encountered.");
-            return SignalValue::X;
-        }
-        else if (behavior == GateType::ClearPresetBehavior::N)
+        if (behavior == GateType::ClearPresetBehavior::N)
         {
             return previous_output;
         }

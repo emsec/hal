@@ -859,7 +859,7 @@ namespace hal
         // Create a custom GateLibrary which contains custom lut gates
         GateLibrary lib("imaginary_path", "TEST_LIB");
         auto gl = &lib;
-        auto lut = gl->create_gate_type("LUT_GATE", GateType::BaseType::lut);
+        auto lut = gl->create_gate_type("LUT_GATE", {GateTypeProperty::lut});
 
         std::vector<std::string> input_pins({"I0", "I1", "I2"});
         std::vector<std::string> output_pins({"O_LUT", "O_normal", "O_LUT_other"});

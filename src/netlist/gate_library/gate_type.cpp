@@ -4,8 +4,12 @@
 
 namespace hal
 {
-    const std::unordered_map<GateType::BaseType, std::string> GateType::m_base_type_to_string =
-        {{BaseType::combinational, "combinational"}, {BaseType::ff, "ff"}, {BaseType::latch, "latch"}, {BaseType::lut, "lut"}, {BaseType::ram, "ram"}, {BaseType::io, "io"}, {BaseType::dsp, "dsp"}};
+    template<>
+    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry", "invalid"};
+
+    template<>
+    std::vector<std::string> EnumStrings<GateType::ClearPresetBehavior>::data = {"L", "H", "N", "T", "X", "invalid"};
+
     const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::none, "none"},
                                                                                                          {PinDirection::input, "input"},
                                                                                                          {PinDirection::output, "output"},
@@ -34,12 +38,12 @@ namespace hal
         {PinDirection::inout, {PinType::none, PinType::io_pad}},
         {PinDirection::internal, {PinType::none}}};
 
-    GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, BaseType base_type)
+    GateType::GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties)
     {
         m_gate_library = gate_library;
         m_id           = id;
         m_name         = name;
-        m_base_type    = base_type;
+        m_properties   = properties;
     }
 
     u32 GateType::get_id() const
@@ -52,9 +56,14 @@ namespace hal
         return m_name;
     }
 
-    GateType::BaseType GateType::get_base_type() const
+    std::set<GateTypeProperty> GateType::get_properties() const
     {
-        return m_base_type;
+        return m_properties;
+    }
+
+    bool GateType::has_property(GateTypeProperty property) const
+    {
+        return m_properties.find(property) != m_properties.end();
     }
 
     GateLibrary* GateType::get_gate_library() const
@@ -70,11 +79,6 @@ namespace hal
     std::ostream& operator<<(std::ostream& os, const GateType& gt)
     {
         return os << gt.to_string();
-    }
-
-    std::ostream& operator<<(std::ostream& os, GateType::BaseType base_type)
-    {
-        return os << GateType::m_base_type_to_string.at(base_type);
     }
 
     std::ostream& operator<<(std::ostream& os, GateType::PinDirection direction)

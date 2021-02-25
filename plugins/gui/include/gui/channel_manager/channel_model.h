@@ -33,8 +33,18 @@
 
 namespace hal
 {
+    /**
+     * This model handels incoming callbacks from the core's logmanager. It creates new channels and updates existing ones and is
+     * realized through a singleton pattern.
+     * It is implemeted as a ’standard’ Qt tablemodle overwriting the necessary functions. Pleaser refer to the Qt documentation
+     * for further details as to how to implement models.
+     */
     class ChannelModel : public QAbstractTableModel
     {
+        /**
+         * Represents the meaning of each column in the model. The progressbar- and status- column
+         * are not used yet and (therefore) not implemented.
+         */
         enum class ColumnNumber
         {
             NameColumn        = 0,
@@ -45,6 +55,10 @@ namespace hal
         Q_OBJECT
 
     public:
+        /**
+         * Get the singleton instance of the model.
+         * @return The channel model instance.
+         */
         static ChannelModel* get_instance();
         ~ChannelModel() override;
 
@@ -55,10 +69,32 @@ namespace hal
         int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
+        /**
+         * Adds a new channel with the given name to its temporary channel list.
+         *
+         * @param name - The name of the soon to be channel.
+         * @return The created channel item.
+         */
         ChannelItem* add_channel(const QString name);
+
+        /**
+         * This function manages the callback from the logmanager. It is registered in the model's constructor and checks if the channel for the
+         * message already exists. If yes, the message is added to channel. If not, the channel is created.
+         *
+         * @param t - The type of the message (debug, error,...).
+         * @param channel_name - The channel of the message.
+         * @param msg_text - The message itselft.
+         */
         void handleLogmanagerCallback(const spdlog::level::level_enum& t, const std::string& channel_name, const std::string& msg_text);
 
     Q_SIGNALS:
+        /**
+         * This signal is emitted at the end of handleLogmanagerCallback (when a new message was received from the logmanager).
+         *
+         * @param t - The type of the message.
+         * @param logger_name - The channel of the message.
+         * @param msg - The message itself.
+         */
         void updated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
 
     private:

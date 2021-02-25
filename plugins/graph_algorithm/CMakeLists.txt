@@ -13,13 +13,16 @@ if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
         message(STATUS "    IGRAPH_LIBRARIES: ${IGRAPH_LIBRARIES}")
     endif(HAVE_IGRAPH)
 
+    #find_package(LAPACK)
+    #find_package(BLAS)
+    #find_package(SuiteSparse)
+
     hal_add_plugin(graph_algorithm
                    SHARED
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/graph_algorithm.rst
                    HEADER ${GRAPH_ALGORITHM_INC}
                    SOURCES ${GRAPH_ALGORITHM_SRC} ${GRAPH_ALGORITHM_PYTHON_SRC}
                    INCLUDES PUBLIC $<BUILD_INTERFACE:${IGRAPH_INCLUDES}>
-                   DEFINITIONS PUBLIC -DIGRAPH_VERSION_MAJOR_GUESS=${IGRAPH_VERSION_MAJOR_GUESS} -DIGRAPH_VERSION_MINOR_GUESS=${IGRAPH_VERSION_MINOR_GUESS} -DIGRAPH_VERSION_PATCH_GUESS=${IGRAPH_VERSION_PATCH_GUESS}
-                   LINK_LIBRARIES PUBLIC ${IGRAPH_LIBRARIES}
+                   LINK_LIBRARIES PUBLIC ${IGRAPH_LIBRARIES} 
                    )
 endif()

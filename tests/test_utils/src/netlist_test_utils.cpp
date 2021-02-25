@@ -46,7 +46,7 @@ namespace hal
         if (!already_init)
         {
             std::vector<std::string> channel_ids = {
-                "core", "gate_library_parser", "gate_library_writer", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "hdl_writer", "python_context", "test_utils"};
+                "core", "gate_library_parser", "gate_library_writer", "gate_library_manager", "gate_library", "netlist", "netlist_utils", "netlist_internal", "netlist_persistent", "gate", "net", "module", "grouping", "hdl_parser", "hdl_writer", "python_context", "test_utils"};
 
             LogManager& lm = LogManager::get_instance();
             for (std::string ch_id : channel_ids)
@@ -319,59 +319,59 @@ namespace hal
 
         // sequential types
 
-        gt = gl->create_gate_type("gate_1_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_1_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O"});
 
-        gt = gl->create_gate_type("gate_2_to_2_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_2_to_2_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I0", "I1"});
         gt->add_output_pins({"O0", "O1"});
 
-        gt = gl->create_gate_type("gate_2_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_2_to_1_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I0", "I1"});
         gt->add_output_pins({"O"});
 
-        gt = gl->create_gate_type("gate_1_to_2_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_2_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1"});
 
-        gt = gl->create_gate_type("gate_3_to_3_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_3_to_3_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I0", "I1", "I2"});
         gt->add_output_pins({"O0", "O1", "O2"});
 
-        gt = gl->create_gate_type("gate_3_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_3_to_1_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I0", "I1", "I2"});
         gt->add_output_pins({"O"});
 
-        gt = gl->create_gate_type("gate_1_to_3_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_3_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2"});
 
-        gt = gl->create_gate_type("gate_4_to_4_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_4_to_4_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I0", "I1", "I2", "I3"});
         gt->add_output_pins({"O0", "O1", "O2", "O3"});
 
-        gt = gl->create_gate_type("gate_4_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_4_to_1_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I0", "I1", "I2", "I3"});
         gt->add_output_pins({"O"});
 
-        gt = gl->create_gate_type("gate_1_to_4_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_4_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2", "O3"});
 
-        gt = gl->create_gate_type("gate_8_to_8_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_8_to_8_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
         gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
 
-        gt = gl->create_gate_type("gate_8_to_1_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_8_to_1_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6", "I7"});
         gt->add_output_pins({"O"});
 
-        gt = gl->create_gate_type("gate_1_to_8_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_1_to_8_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I"});
         gt->add_output_pins({"O0", "O1", "O2", "O3", "O4", "O5", "O6", "O7"});
 
-        gt = gl->create_gate_type("gate_2_to_0_sequential", GateType::BaseType::ff);
+        gt = gl->create_gate_type("gate_2_to_0_sequential", {GateTypeProperty::ff});
         gt->add_input_pins({"I0", "I1"});
 
         return gl.get();

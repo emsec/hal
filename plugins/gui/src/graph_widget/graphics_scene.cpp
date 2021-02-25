@@ -123,6 +123,16 @@ namespace hal
         #endif
     }
 
+    GraphicsScene::~GraphicsScene()
+    {
+        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        for (QGraphicsItem* gi : items())
+        {
+            removeItem(gi);
+            delete gi;
+        }
+    }
+
     void GraphicsScene::startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
     {
         mDragShadowGate->setVisualCue(cue);
