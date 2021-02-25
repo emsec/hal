@@ -59,13 +59,5 @@ namespace hal
          * @returns a pointer to the new GraphicsGate
          */
         GraphicsGate* createGraphicsGate(Gate* g, const int type);
-
-        /**
-         * Find gate pointer in netlist or module (workaround)
-         *
-         * @param gateId - The Id of gate
-         * @returns a pointer to the gate
-         */
-        Gate* getGateById(u32 gateId);
     }
 }
