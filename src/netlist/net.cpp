@@ -40,12 +40,12 @@ namespace hal
     {
         if (utils::trim(name).empty())
         {
-            log_error("netlist.internal", "net::set_name: empty name is not allowed");
+            log_error("net", "net name cannot be empty.");
             return;
         }
         if (name != m_name)
         {
-            log_info("netlist.internal", "changed name for net (id = {}) from '{}' to '{}'.", m_id, m_name, name);
+            log_info("net", "changed name for net with ID {} from '{}' to '{}' in netlist with ID {}.", m_id, m_name, name, m_internal_manager->m_netlist->get_id());
 
             m_name = name;
 
@@ -90,7 +90,6 @@ namespace hal
         }
         if (!ep->is_source_pin())
         {
-            log_error("netlist", "net::is_a_source: tried to use a destination-endpoint as a source-endpoint");
             return false;
         }
 
@@ -123,14 +122,13 @@ namespace hal
 
     Endpoint* Net::get_source() const
     {
-        // log_warning("netlist", "Net::get_source() is deprecated");
         if (m_sources_raw.empty())
         {
             return nullptr;
         }
         if (m_sources_raw.size() > 1)
         {
-            log_warning("netlist", "queried only the first source of multi driven net '{}' (id {})", m_name, m_id);
+            log_warning("net", "queried only the first source of multi driven net '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
         }
         return m_sources_raw.at(0);
     }
@@ -168,7 +166,6 @@ namespace hal
         }
         if (!ep->is_destination_pin())
         {
-            log_error("netlist", "net::is_a_destination: tried to use a source-endpoint as a destination-endpoint");
             return false;
         }
 

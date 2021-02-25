@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`
+  * renamed enum `GateType::BaseType` to `GateTypeProperty` and moved it out of class `GateType`
   * added function `has_property` to class `GateType`
   * changed function `get_base_type` of class `GateType` to `get_properties`
   * changed HGL gate libraries to support multiple properties
@@ -13,7 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added `sequential`, `power`, `ground`, `buffer`, `mux`, and `carry` base types to class `GateType`
 * added `get_path` to `netlist_utils` to retrieve all gates on the predecessor/successor path from a start gate/net to gates of a specified property
 * made `optimize_constants` of class `BooleanFunction` publicly accessible
+* refined buffer removal in `netlist_utils::remove_buffers` to take constant `0` and `1` inputs into account
 * changes to `z3_utils` (WIP)
+* cleaned up and refined some logger outputs and streamlined log channel names
+* disabled extended logging again
 * fixed crash related to GraphicsScene destructor
 * fixed overlapping gates in cone view (and subsequent segfault) by suppressing gate coordinates when adding to cone view
 * fixed crash caused when gate pointer cannot be found in netlist (but in module)

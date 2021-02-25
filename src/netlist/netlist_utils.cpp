@@ -32,7 +32,7 @@ namespace hal
                         if (input_net == nullptr)
                         {
                             // if no net is connected, the input pin name cannot be replaced
-                            log_warning("netlist utils", "not net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", input_pin, gate->get_id());
+                            log_warning("netlist_utils", "not net is connected to input pin '{}' of gate with ID {}, cannot replace pin name with net ID.", input_pin, gate->get_id());
                             return bf;
                         }
 
@@ -47,7 +47,7 @@ namespace hal
             {
                 if (n->get_num_of_sources() > 1)
                 {
-                    log_error("netlist utils", "net with ID {} has more than one source, cannot expand Boolean function in this direction.", n->get_id());
+                    log_error("netlist_utils", "net with ID {} has more than one source, cannot expand Boolean function in this direction.", n->get_id());
                     return;
                 }
                 else if (n->get_num_of_sources() == 0)
@@ -57,7 +57,7 @@ namespace hal
 
                 if (auto it = std::find(stack.begin(), stack.end(), n); it != stack.end())
                 {
-                    log_error("netlist utils", "subgraph contains a cycle: {} -> {}", utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name(); }), n->get_name());
+                    log_error("netlist_utils", "subgraph contains a cycle: {} -> {}", utils::join(" -> ", it, stack.end(), [](auto nlog) { return nlog->get_name(); }), n->get_name());
                     result = BooleanFunction();
                     return;
                 }
@@ -83,27 +83,27 @@ namespace hal
             /* check validity of subgraph_gates */
             if (subgraph_gates.empty())
             {
-                log_error("netlist utils", "no gates given to determine the Boolean function of.");
+                log_error("netlist_utils", "no gates given to determine the Boolean function of.");
                 return BooleanFunction();
             }
             else if (std::any_of(subgraph_gates.begin(), subgraph_gates.end(), [](const Gate* g) { return g == nullptr; }))
             {
-                log_error("netlist utils", "set of gates contains a nullptr.");
+                log_error("netlist_utils", "set of gates contains a nullptr.");
                 return BooleanFunction();
             }
             else if (net == nullptr)
             {
-                log_error("netlist utils", "nullptr given for target net.");
+                log_error("netlist_utils", "nullptr given for target net.");
                 return BooleanFunction();
             }
             else if (net->get_num_of_sources() > 1)
             {
-                log_error("netlist utils", "target net with ID {} has more than one source.", net->get_id());
+                log_error("netlist_utils", "target net with ID {} has more than one source.", net->get_id());
                 return BooleanFunction();
             }
             else if (net->get_num_of_sources() == 0)
             {
-                log_error("netlist utils", "target net with ID {} has no sources.", net->get_id());
+                log_error("netlist_utils", "target net with ID {} has no sources.", net->get_id());
                 return BooleanFunction();
             }
 

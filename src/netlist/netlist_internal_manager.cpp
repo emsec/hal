@@ -21,15 +21,16 @@ namespace hal
     }
 
     template<typename T>
-    static void unordered_vector_erase(std::vector<T>& vec, T element)
+    static bool unordered_vector_erase(std::vector<T>& vec, T element)
     {
         auto it = std::find(vec.begin(), vec.end(), element);
         if (it == vec.end())
         {
-            log_critical("netlist.internal", "element that is guaranteed to be there is not there!");
+            return false;
         }
         *it = vec.back();
         vec.pop_back();
+        return true;
     }
 
     //######################################################################
@@ -40,27 +41,27 @@ namespace hal
     {
         if (id == 0)
         {
-            log_error("netlist.internal", "netlist::create_gate: id 0 represents 'invalid ID'.");
+            log_error("gate", "ID 0 represents an invalid gate ID.");
             return nullptr;
         }
         if (m_netlist->m_used_gate_ids.find(id) != m_netlist->m_used_gate_ids.end())
         {
-            log_error("netlist.internal", "netlist::create_gate: gate id {:08x} is already taken.", id);
+            log_error("gate", "gate ID {} is already taken in netlist with ID {}.", id, m_netlist->m_netlist_id);
             return nullptr;
         }
         if (gt == nullptr)
         {
-            log_error("netlist.internal", "netlist::create_gate: nullptr given for gate type.", id);
+            log_error("gate", "nullptr given for gate type.", id);
             return nullptr;
         }
         if (this->is_gate_type_invalid(gt))
         {
-            log_error("netlist.internal", "netlist::create_gate: gate type '{}' is invalid.", gt->get_name());
+            log_error("gate", "gate type '{}' with ID {} is invalid.", gt->get_name(), gt->get_id());
             return nullptr;
         }
         if (utils::trim(name).empty())
         {
-            log_error("netlist.internal", "netlist::create_gate: empty name is not allowed.");
+            log_error("gate", "gate name cannot be empty.");
             return nullptr;
         }
 
@@ -159,17 +160,17 @@ namespace hal
     {
         if (id == 0)
         {
-            log_error("netlist.internal", "netlist::create_net: id 0 represents 'invalid ID'.");
+            log_error("net", "ID 0 represents an invalid net ID.");
             return nullptr;
         }
         if (m_netlist->m_used_net_ids.find(id) != m_netlist->m_used_net_ids.end())
         {
-            log_error("netlist.internal", "netlist::create_net: net id {:08x} is already taken.", id);
+            log_error("net", "net ID {} is already taken in netlist with ID {}.", id, m_netlist->m_netlist_id);
             return nullptr;
         }
         if (utils::trim(name).empty())
         {
-            log_error("netlist.internal", "netlist::create_net: empty name is not allowed");
+            log_error("net", "net name cannot be empty.");
             return nullptr;
         }
 
@@ -254,7 +255,14 @@ namespace hal
 
         if (net->is_a_source(gate, pin))
         {
-            log_error("netlist.internal", "net::add_source: src gate ('{}',  type = {}) is already added to net '{}'.", gate->get_name(), gate->get_type()->get_name(), net->get_name());
+            log_error("net",
+                      "pin '{}' of gate '{}' with ID {} is already a source of net '{}' with ID {} in netlist with ID {}.",
+                      pin,
+                      gate->get_name(),
+                      gate->get_id(),
+                      net->get_name(),
+                      net->get_id(),
+                      m_netlist->m_netlist_id);
             return nullptr;
         }
 
@@ -263,19 +271,23 @@ namespace hal
 
         if ((std::find(output_pins.begin(), output_pins.end(), pin) == output_pins.end()))
         {
-            log_error("netlist.internal", "net::add_source: src gate ('{}',  type = {}) has no output type '{}'.", gate->get_name(), gate->get_type()->get_name(), pin);
+            log_error("net", "gate '{}' with ID {} has no output pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
             return nullptr;
         }
 
         // check whether src has already an assigned net
         if (gate->get_fan_out_net(pin) != nullptr)
         {
-            log_error("netlist.internal",
-                      "net::add_source: gate '{}' already has an assigned net '{}' for output pin '{}', cannot assign new net '{}'.",
+            log_error("net",
+                      "gate '{}' with ID {} is already connected to net '{}' with ID {} at output pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
                       gate->get_name(),
+                      gate->get_id(),
                       gate->get_fan_out_net(pin)->get_name(),
+                      gate->get_fan_out_net(pin)->get_id(),
                       pin,
-                      net->get_name());
+                      net->get_name(),
+                      net->get_id(),
+                      m_netlist->m_netlist_id);
             return nullptr;
         }
 
@@ -349,7 +361,14 @@ namespace hal
 
         if (!removed)
         {
-            log_warning("nelist.internal", "net::remove_source: net '{}' has no src gate '{}' at pin '{}'", net->get_name(), gate->get_name(), ep->get_pin());
+            log_warning("net",
+                        "output pin '{}' of gate '{}' with ID {} is not a source of net '{}' with ID {} in netlist with ID {}",
+                        ep->get_pin(),
+                        gate->get_name(),
+                        gate->get_id(),
+                        net->get_name(),
+                        net->get_id(),
+                        m_netlist->m_netlist_id);
         }
 
         return true;
@@ -364,7 +383,14 @@ namespace hal
 
         if (net->is_a_destination(gate, pin))
         {
-            log_error("netlist.internal", "net::add_destination: dst gate ('{}',  type = {}) is already added to net '{}'.", gate->get_name(), gate->get_type()->get_name(), net->get_name());
+            log_error("net",
+                      "pin '{}' of gate '{}' with ID {} is already a destination of net '{}' with ID {} in netlist with ID {}.",
+                      pin,
+                      gate->get_name(),
+                      gate->get_id(),
+                      net->get_name(),
+                      net->get_id(),
+                      m_netlist->m_netlist_id);
             return nullptr;
         }
 
@@ -373,19 +399,23 @@ namespace hal
 
         if ((std::find(input_pins.begin(), input_pins.end(), pin) == input_pins.end()))
         {
-            log_error("netlist.internal", "net::add_destination: dst gate ('{}',  type = {}) has no input type '{}'.", gate->get_name(), gate->get_type()->get_name(), pin);
+            log_error("net", "gate '{}' with ID {} has no input pin called '{}' in netlist with ID {}.", gate->get_name(), gate->get_id(), pin, m_netlist->m_netlist_id);
             return nullptr;
         }
 
         // check whether dst has already an assigned net
         if (gate->get_fan_in_net(pin) != nullptr)
         {
-            log_error("netlist.internal",
-                      "net::add_destination: gate '{}' already has an assigned net '{}' for input pin '{}', cannot assign new net '{}'.",
+            log_error("net",
+                      "gate '{}' with ID {} is already connected to net '{}' with ID {} at input pin '{}', cannot assign new net '{}' with ID {} in netlist with ID {}.",
                       gate->get_name(),
+                      gate->get_id(),
                       gate->get_fan_in_net(pin)->get_name(),
+                      gate->get_fan_in_net(pin)->get_id(),
                       pin,
-                      net->get_name());
+                      net->get_name(),
+                      net->get_id(),
+                      m_netlist->m_netlist_id);
             return nullptr;
         }
 
@@ -458,7 +488,14 @@ namespace hal
 
         if (!removed)
         {
-            log_warning("nelist.internal", "net::remove_source: net '{}' has no src gate '{}' at pin '{}'", net->get_name(), gate->get_name(), ep->get_pin());
+            log_warning("net",
+                        "input pin '{}' of gate '{}' with ID {} is not a destination of net '{}' with ID {} in netlist with ID {}",
+                        ep->get_pin(),
+                        gate->get_name(),
+                        gate->get_id(),
+                        net->get_name(),
+                        net->get_id(),
+                        m_netlist->m_netlist_id);
         }
 
         return true;
@@ -472,27 +509,27 @@ namespace hal
     {
         if (id == 0)
         {
-            log_error("netlist.internal", "netlist::create_module: id 0 represents 'invalid ID'.");
+            log_error("module", "ID 0 represents an invalid module ID.");
             return nullptr;
         }
         if (m_netlist->m_used_module_ids.find(id) != m_netlist->m_used_module_ids.end())
         {
-            log_error("netlist.internal", "netlist::create_module: module id {:08x} is already taken.", id);
+            log_error("module", "module ID {} is already taken in netlist with ID {}.", id, m_netlist->m_netlist_id);
             return nullptr;
         }
         if (utils::trim(name).empty())
         {
-            log_error("netlist.internal", "netlist::create_module: empty name is not allowed");
+            log_error("module", "module name cannot be empty.");
             return nullptr;
         }
         if (parent == nullptr && m_netlist->m_top_module != nullptr)
         {
-            log_error("netlist.internal", "netlist::create_module: parent must not be nullptr");
+            log_error("module", "parent module cannot not be nullptr.");
             return nullptr;
         }
         if (parent != nullptr && m_netlist != parent->get_netlist())
         {
-            log_error("netlist.internal", "netlist::create_module: parent must belong to current netlist");
+            log_error("module", "parent module must belong to netlist with ID {}.", m_netlist->m_netlist_id);
             return nullptr;
         }
 
@@ -620,7 +657,8 @@ namespace hal
 
         if (m == m_netlist->m_top_module)
         {
-            log_error("module", "cannot remove gates from top module.", g->get_name(), g->get_id(), m->get_name(), m->get_id());
+            log_error(
+                "module", "cannot remove gate '{}' with ID {} from top module '{}' with ID {} in netlist with ID {}.", g->get_name(), g->get_id(), m->get_name(), m->get_id(), m_netlist->m_netlist_id);
             return false;
         }
 
@@ -628,7 +666,8 @@ namespace hal
 
         if (it == m->m_gates_map.end())
         {
-            log_error("module", "gate '{}' (id {}) is not stored in module '{}' (id {}).", g->get_name(), g->get_id(), m->get_name(), m->get_id());
+            log_error(
+                "module", "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.", g->get_name(), g->get_id(), m->get_name(), m->get_id(), m_netlist->m_netlist_id);
             return false;
         }
 
@@ -653,17 +692,17 @@ namespace hal
     {
         if (id == 0)
         {
-            log_error("netlist.internal", "netlist::create_grouping: id 0 represents 'invalid ID'.");
+            log_error("grouping", "ID 0 represents an invalid grouping ID.");
             return nullptr;
         }
         if (m_netlist->m_used_grouping_ids.find(id) != m_netlist->m_used_grouping_ids.end())
         {
-            log_error("netlist.internal", "netlist::create_grouping: grouping id {:08x} is already taken.", id);
+            log_error("grouping", "grouping ID {} is already taken in netlist with ID {}.", id, m_netlist->m_netlist_id);
             return nullptr;
         }
         if (utils::trim(name).empty())
         {
-            log_error("netlist.internal", "netlist::create_grouping: empty name is not allowed.");
+            log_error("grouping", "grouping name cannot be empty.");
             return nullptr;
         }
 
@@ -744,7 +783,13 @@ namespace hal
             }
             else
             {
-                log_error("netlist.internal", "netlist::grouping_assign_gate: gate with ID {:08x} is already part of a grouping with ID {:08x}.", gate_id, other->get_id());
+                log_error("grouping",
+                          "gate '{}' with ID {} is already part of another grouping called '{}' with ID {} in netlist with ID {}.",
+                          gate->get_name(),
+                          gate_id,
+                          other->get_name(),
+                          other->get_id(),
+                          m_netlist->m_netlist_id);
                 return false;
             }
         }
@@ -769,7 +814,13 @@ namespace hal
 
         if (!grouping->contains_gate(gate))
         {
-            log_error("netlist.internal", "netlist::grouping_remove_gate: gate with ID {:08x} is not part of grouping with ID {:08x}.", gate_id, grouping->get_id());
+            log_error("grouping",
+                      "gate '{}' with ID {} is not part of grouping '{}' with ID {} in netlist with ID {}.",
+                      gate->get_name(),
+                      gate_id,
+                      grouping->get_name(),
+                      grouping->get_id(),
+                      m_netlist->m_netlist_id);
             return false;
         }
 
@@ -802,7 +853,13 @@ namespace hal
             }
             else
             {
-                log_error("netlist.internal", "netlist::grouping_assign_net: net with ID {:08x} is already part of grouping with ID {:08x}.", net_id, other->get_id());
+                log_error("grouping",
+                          "net '{}' with ID {} is already part of another grouping called '{}' with ID {} in netlist with ID {}.",
+                          net->get_name(),
+                          net_id,
+                          other->get_name(),
+                          other->get_id(),
+                          m_netlist->m_netlist_id);
                 return false;
             }
         }
@@ -827,7 +884,13 @@ namespace hal
 
         if (!grouping->contains_net(net))
         {
-            log_error("netlist.internal", "netlist::grouping_remove_net: net with ID {:08x} is not part of grouping with ID {:08x}.", net_id, grouping->get_id());
+            log_error("grouping",
+                      "net '{}' with ID {} is not part of grouping '{}' with ID {} in netlist with ID {}.",
+                      net->get_name(),
+                      net_id,
+                      grouping->get_name(),
+                      grouping->get_id(),
+                      m_netlist->m_netlist_id);
             return false;
         }
 
@@ -860,7 +923,13 @@ namespace hal
             }
             else
             {
-                log_error("netlist.internal", "netlist::grouping_assign_module: module with ID {:08x} is already part of grouping with ID {:08x}.", module_id, other->get_id());
+                log_error("grouping",
+                          "module '{}' with ID {} is already part of another grouping called '{}' with ID {} in netlist with ID {}.",
+                          module->get_name(),
+                          module_id,
+                          other->get_name(),
+                          other->get_id(),
+                          m_netlist->m_netlist_id);
                 return false;
             }
         }
@@ -885,7 +954,13 @@ namespace hal
 
         if (!grouping->contains_module(module))
         {
-            log_error("netlist.internal", "netlist::grouping_remove_module: module with ID {:08x} is not part of grouping with ID {:08x}.", module_id, grouping->get_id());
+            log_error("grouping",
+                      "module '{}' with ID {} is not part of grouping '{}' with ID {} in netlist with ID {}.",
+                      module->get_name(),
+                      module_id,
+                      grouping->get_name(),
+                      grouping->get_id(),
+                      m_netlist->m_netlist_id);
             return false;
         }
 
