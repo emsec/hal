@@ -72,8 +72,9 @@ namespace hal
          *
          * @param[in] netlist - The netlist to operate on.
          * @returns A map from community IDs to communities.
-         */
+       
         std::map<int, std::set<Gate*>> get_communities_multilevel(Netlist* netlist);
+          */
 
         /**
          *  other graph algorithm

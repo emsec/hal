@@ -40,7 +40,7 @@ namespace hal {
                 GateType* gt = gt_it->second;
 
                 // Check the content of the created Gate type
-                EXPECT_EQ(gt->get_base_type(), GateType::BaseType::combinational);
+                EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
                 // -- Check the pins
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "I"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
@@ -78,7 +78,7 @@ namespace hal {
                 auto gt_it_asc = gate_types.find("TEST_LUT_ASC");
                 ASSERT_TRUE(gt_it_asc != gate_types.end());
                 GateType* gt_asc = gt_it_asc->second;
-                ASSERT_EQ(gt_asc->get_base_type(), GateType::BaseType::lut);
+                EXPECT_EQ(gt_asc->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
 
                 // Check the content of the created gate type
                 EXPECT_EQ(gt_asc->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
@@ -98,7 +98,7 @@ namespace hal {
                 auto gt_it_desc = gate_types.find("TEST_LUT_DESC");
                 ASSERT_TRUE(gt_it_desc != gate_types.end());
                 GateType* gt_desc = gt_it_desc->second;
-                ASSERT_EQ(gt_desc->get_base_type(), GateType::BaseType::lut);
+                EXPECT_EQ(gt_desc->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
 
                 // Check the content of the created gate type
                 EXPECT_EQ(gt_desc->is_lut_init_ascending(), false);
@@ -126,7 +126,7 @@ namespace hal {
                 auto gt_it = gate_types.find("TEST_FF");
                 ASSERT_TRUE(gt_it != gate_types.end());
                 GateType* gt = gt_it->second;
-                ASSERT_EQ(gt->get_base_type(), GateType::BaseType::ff);
+                EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::sequential, GateTypeProperty::ff}));
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
@@ -179,7 +179,7 @@ namespace hal {
                 auto gt_it = gate_types.find("TEST_LATCH");
                 ASSERT_TRUE(gt_it != gate_types.end());
                 GateType* gt = gt_it->second;
-                ASSERT_EQ(gt->get_base_type(), GateType::BaseType::latch);
+                EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::sequential, GateTypeProperty::latch}));
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"G", "D", "S", "R"}));
@@ -330,8 +330,7 @@ namespace hal {
 
                 auto gate_types = gl->get_gate_types();
                 ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
-                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinational);
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
             }
             {
                 // Define a pin twice
@@ -371,8 +370,7 @@ namespace hal {
 
                 auto gate_types = gl->get_gate_types();
                 ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
-                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinational);
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_output_pins().size(), 1);
 
             }

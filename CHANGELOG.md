@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`
+  * added function `has_property` to class `GateType`
+  * changed function `get_base_type` of class `GateType` to `get_properties`
+  * changed HGL gate libraries to support multiple properties
+  * changed function `create_gate_type` of class `GateLibrary` to support multiple properties
+* added `sequential`, `power`, `ground`, `buffer`, `mux`, and `carry` base types to class `GateType`
+* added `get_path` to `netlist_utils` to retrieve all gates on the predecessor/successor path from a start gate/net to gates of a specified property
+* made `optimize_constants` of class `BooleanFunction` publicly accessible
+* changes to `z3_utils` (WIP)
+* fixed crash related to GraphicsScene destructor
+* fixed overlapping gates in cone view by suppressing gate coordinates when adding to cone view
 
 ## [3.2.5] - 2021-01-29 13:15:00+02:00 (urgency: medium)
 * **WARNING:** temporarily enabled extended logging (includes taking screenshots) for university course purposes. Note that no data leaves your machine unless you actively provide it to us.

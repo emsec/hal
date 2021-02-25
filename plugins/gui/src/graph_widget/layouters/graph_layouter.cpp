@@ -44,6 +44,11 @@ namespace hal
         if (details) connect(details, &SelectionDetailsWidget::triggerHighlight, mScene, &GraphicsScene::handleHighlight);
     }
 
+    GraphLayouter::~GraphLayouter()
+    {
+        mScene->deleteLater();
+    }
+
     GraphicsScene* GraphLayouter::scene() const
     {
         return mScene;

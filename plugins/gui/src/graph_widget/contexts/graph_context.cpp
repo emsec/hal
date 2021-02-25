@@ -18,6 +18,8 @@ namespace hal
         : QObject(parent),
           mId(id_),
           mName(name),
+          mLayouter(nullptr),
+          mShader(nullptr),
           mUserUpdateCount(0),
           mUnappliedChanges(false),
           mSceneUpdateRequired(false),
@@ -26,27 +28,36 @@ namespace hal
         mTimestamp = QDateTime::currentDateTime();
     }
 
+    GraphContext::~GraphContext()
+    {
+        for (GraphContextSubscriber* subscriber : mSubscribers)
+            subscriber->handleContextAboutToBeDeleted();
+
+        delete mLayouter;
+        delete mShader;
+    }
+
     void GraphContext::setLayouter(GraphLayouter* layouter)
     {
         assert(layouter);
 
-        connect(layouter, qOverload<int>(&GraphLayouter::statusUpdate), this, qOverload<int>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
-        connect(layouter, qOverload<const QString&>(&GraphLayouter::statusUpdate), this, qOverload<const QString&>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
+        if (mLayouter)
+            delete mLayouter;
 
         mLayouter = layouter;
+
+        connect(layouter, qOverload<int>(&GraphLayouter::statusUpdate), this, qOverload<int>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
+        connect(layouter, qOverload<const QString&>(&GraphLayouter::statusUpdate), this, qOverload<const QString&>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
     }
 
     void GraphContext::setShader(GraphShader* shader)
     {
         assert(shader);
 
-        mShader = shader;
-    }
+        if (mShader)
+            delete mShader;
 
-    GraphContext::~GraphContext()
-    {
-        for (GraphContextSubscriber* subscriber : mSubscribers)
-            subscriber->handleContextAboutToBeDeleted();
+        mShader = shader;
     }
 
     void GraphContext::subscribe(GraphContextSubscriber* const subscriber)

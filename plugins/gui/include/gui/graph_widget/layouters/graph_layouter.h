@@ -219,6 +219,11 @@ namespace hal
         explicit GraphLayouter(const GraphContext* const context, QObject* parent = nullptr);
 
         /**
+         * Destructor.
+         */
+        ~GraphLayouter();
+
+        /**
          * Gets the name of the layouter.
          *
          * @returns the name of the layouter.
@@ -281,6 +286,8 @@ namespace hal
     protected:
         GraphicsScene* mScene;
         const GraphContext* const mContext;
+        QMap<Node, QPoint> mNodeToPositionMap;
+        QMap<QPoint, Node> mPositionToNodeMap;
 
     private:
         void clearLayoutData();
@@ -381,9 +388,6 @@ namespace hal
 
         QMap<int, qreal> mMaxLeftIoPaddingForChannelX;
         QMap<int, qreal> mMaxRightIoPaddingForChannelX;
-
-        QMap<Node, QPoint> mNodeToPositionMap;
-        QMap<QPoint, Node> mPositionToNodeMap;
 
         int mMinXIndex;
         int mMinYIndex;

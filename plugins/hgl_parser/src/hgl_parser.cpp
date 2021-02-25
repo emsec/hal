@@ -7,14 +7,6 @@
 
 namespace hal
 {
-    const std::unordered_map<std::string, GateType::BaseType> HGLParser::m_string_to_base_type = {{"combinational", GateType::BaseType::combinational},
-                                                                                                  {"ff", GateType::BaseType::ff},
-                                                                                                  {"latch", GateType::BaseType::latch},
-                                                                                                  {"lut", GateType::BaseType::lut},
-                                                                                                  {"ram", GateType::BaseType::ram},
-                                                                                                  {"io", GateType::BaseType::io},
-                                                                                                  {"dsp", GateType::BaseType::dsp}};
-
     const std::unordered_map<std::string, GateType::PinType> HGLParser::m_string_to_pin_type = {{"none", GateType::PinType::none},
                                                                                                 {"power", GateType::PinType::power},
                                                                                                 {"ground", GateType::PinType::ground},
@@ -97,7 +89,7 @@ namespace hal
     bool HGLParser::parse_gate_type(const rapidjson::Value& gate_type)
     {
         std::string name;
-        GateType::BaseType type;
+        std::set<GateTypeProperty> properties;
         PinCtx pin_ctx;
 
         if (!gate_type.HasMember("name") || !gate_type["name"].IsString())
@@ -107,25 +99,27 @@ namespace hal
         }
         name = gate_type["name"].GetString();
 
-        if (gate_type.HasMember("type") && gate_type["type"].IsString())
+        if (gate_type.HasMember("types") && gate_type["types"].IsArray())
         {
-            std::string type_str = gate_type["type"].GetString();
-            if (const auto it = m_string_to_base_type.find(type_str); it != m_string_to_base_type.end())
+            for (const auto& base_type : gate_type["types"].GetArray())
             {
-                type = it->second;
-            }
-            else
-            {
-                log_error("hgl_parser", "invalid base type '{}' given for gate type '{}'.", type_str, name);
-                return false;
+                if (auto property = enum_from_string<GateTypeProperty>(base_type.GetString()); property != GateTypeProperty::invalid)
+                {
+                    properties.insert(property);
+                }
+                else
+                {
+                    log_error("hgl_parser", "invalid base type '{}' given for gate type '{}'.", base_type.GetString(), name);
+                    return false;
+                }
             }
         }
         else
         {
-            type = GateType::BaseType::combinational;
+            properties = {GateTypeProperty::combinational};
         }
 
-        GateType* gt = m_gate_lib->create_gate_type(name, type);
+        GateType* gt = m_gate_lib->create_gate_type(name, properties);
 
         if (gate_type.HasMember("pins") && gate_type["pins"].IsArray())
         {
@@ -160,7 +154,7 @@ namespace hal
             }
         }
 
-        if (type == GateType::BaseType::lut)
+        if (properties.find(GateTypeProperty::lut) != properties.end())
         {
             GateType* gt_lut = gt;
 
@@ -175,7 +169,7 @@ namespace hal
                 return false;
             }
         }
-        else if (type == GateType::BaseType::ff)
+        else if (properties.find(GateTypeProperty::ff) != properties.end())
         {
             GateType* gt_ff = gt;
 
@@ -190,7 +184,7 @@ namespace hal
                 return false;
             }
         }
-        else if (type == GateType::BaseType::latch)
+        else if (properties.find(GateTypeProperty::latch) != properties.end())
         {
             GateType* gt_latch = gt;
 

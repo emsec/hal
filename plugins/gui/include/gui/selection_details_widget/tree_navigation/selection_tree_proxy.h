@@ -30,12 +30,24 @@
 
 namespace hal
 {
+    /**
+     * A proxy model to filter the SelectionTreeModel. This allows to search efficiently through the
+     * model and the results can be displayed within the view in a tree-styled fashion.
+     */
     class SelectionTreeProxyModel : public QSortFilterProxyModel
     {
         Q_OBJECT
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param parent - The model's parent.
+         */
         SelectionTreeProxyModel(QObject* parent = 0);
+
         void applyFilterOnGraphics();
+
         bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 
     protected:

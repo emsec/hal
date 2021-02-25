@@ -235,7 +235,7 @@ endif()
 configure_file(${CMAKE_SOURCE_DIR}/include/hal_core/hal_version.h.in ${CMAKE_BINARY_DIR}/hal_version.h @ONLY)
 
 # Declare Study Config in hal_config.h
-option(HAL_STUDY "Enable Study Config" ON)
+option(HAL_STUDY "Enable Study Config" OFF)
 configure_file(${CMAKE_SOURCE_DIR}/include/hal_core/hal_config.h.in ${CMAKE_BINARY_DIR}/hal_config.h @ONLY)
 if(HAL_STUDY)
     message(STATUS "HAL_STUDY mode turned ON!")
