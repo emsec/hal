@@ -1,7 +1,9 @@
+#include "gui/gui_globals.h"
 #include "gui/graph_widget/graphics_factory.h"
 
 #include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
+#include "hal_core/netlist/netlist.h"
 
 namespace hal
 {
@@ -43,6 +45,20 @@ namespace hal
             case 0: return new StandardGraphicsGate(g);
             default: assert(false); return nullptr; // UNREACHABLE
             }
+        }
+
+        Gate* getGateById(u32 gateId)
+        {
+            Gate* g = gNetlist->get_gate_by_id(gateId);
+            if (g) return g;
+
+            for (Module* m : gNetlist->get_modules())
+            {
+                g = m->get_gate_by_id(gateId);
+                if (g) return g;
+            }
+            Q_ASSERT(g);
+            return nullptr;
         }
     }
 }

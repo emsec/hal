@@ -26,7 +26,8 @@ namespace hal
             break;
         }
         case Node::Gate: {
-            mItem = GraphicsFactory::createGraphicsGate(gNetlist->get_gate_by_id(id()), 0);
+            mItem = GraphicsFactory::createGraphicsGate(
+                        GraphicsFactory::getGateById(id()), 0);
             break;
         }
         default:

@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * made `optimize_constants` of class `BooleanFunction` publicly accessible
 * changes to `z3_utils` (WIP)
 * fixed crash related to GraphicsScene destructor
-* fixed overlapping gates in cone view by suppressing gate coordinates when adding to cone view
+* fixed overlapping gates in cone view (and subsequent segfault) by suppressing gate coordinates when adding to cone view
+* fixed crash caused when gate pointer cannot be found in netlist (but in module)
 
 ## [3.2.5] - 2021-01-29 13:15:00+02:00 (urgency: medium)
 * **WARNING:** temporarily enabled extended logging (includes taking screenshots) for university course purposes. Note that no data leaves your machine unless you actively provide it to us.

@@ -4,6 +4,7 @@
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
+#include "gui/graph_widget/graphics_factory.h"
 
 namespace hal
 {
@@ -44,7 +45,7 @@ namespace hal
         {
             for (const u32& id : mContext->gates())
             {
-                Gate* g = gNetlist->get_gate_by_id(id);
+                Gate* g = GraphicsFactory::getGateById(id);
                 assert(g);
 
                 Module* m = g->get_module();
