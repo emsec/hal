@@ -202,8 +202,10 @@ namespace hal
 
     Gate* Netlist::get_gate_by_id(const u32 gate_id) const
     {
-        return m_top_module->get_gate_by_id(gate_id, true);
-    }
+        if (auto it = m_gates_map.find(gate_id); it != m_gates_map.end())
+        {
+            return it->second.get();
+        }
 
         log_error("netlist", "there is no gate with ID {} in the netlist with ID {}.", gate_id, m_netlist_id);
         return nullptr;
@@ -211,7 +213,24 @@ namespace hal
 
     std::vector<Gate*> Netlist::get_gates(const std::function<bool(Gate*)>& filter) const
     {
-        return m_top_module->get_gates(filter, true);
+        std::vector<Gate*> res;
+        if (!filter)
+        {
+            res = m_gates;
+        }
+        else
+        {
+            for (Gate* g : m_gates)
+            {
+                if (!filter(g))
+                {
+                    continue;
+                }
+                res.push_back(g);
+            }
+        }
+
+        return res;
     }
 
     bool Netlist::mark_vcc_gate(Gate* gate)
