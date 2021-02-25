@@ -32,19 +32,50 @@ namespace hal
 {
     class GetInTouchItem;
 
+    /**
+     * The "Get In Touch"-widget at the right side in the welcome screen. The user can click a field to show
+     * license and version information, the c++/python documentation or the github bug report site in the browser.
+     */
     class GetInTouchWidget : public QFrame
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
         GetInTouchWidget(QWidget* parent = nullptr);
 
+        /**
+         * (Re-)Initializes the appearance of the widget.
+         */
         void repolish();
 
     public Q_SLOTS:
+        /**
+         * Q_SLOT to handle that the 'About' field has been clicked.
+         * TODO: It does nothing
+         */
         void handleAboutItemClicked();
+
+        /**
+         * Q_SLOT to handle that the 'Open C++ Documentation' field has been clicked.
+         * Opens the cpp documentation in the browser.
+         */
         void handleCppDocumentationItemClicked();
+
+        /**
+         * Q_SLOT to handle that the 'Open Python Documentation' field has been clicked.
+         * Opens the pythin documentation in the browser.
+         */
         void handlePyDocumentationItemClicked();
+
+        /**
+         * Q_SLOT to handle that the 'Found a bug?' field has been clicked.
+         * Opens the github bug report site in the browser.
+         */
         void handleTicketItemClicked();
 
     private:

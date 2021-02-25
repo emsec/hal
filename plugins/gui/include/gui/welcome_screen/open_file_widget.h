@@ -30,6 +30,10 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * The "Open File"-widget in the center of the welcome screen where the user can drag&drop a file to open/parse a
+     * the netlist of the file.
+     */
     class OpenFileWidget : public QFrame
     {
         Q_OBJECT
@@ -38,19 +42,51 @@ namespace hal
         Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
         explicit OpenFileWidget(QWidget* parent = nullptr);
 
+        /**
+         * Handles the event that a user drags a file into the widget.
+         *
+         * @param event - the drag event
+         */
         void dragEnterEvent(QDragEnterEvent* event) override;
+        /**
+         * Handles the event that a user drags a file out of the widget (that was previously dragged in)
+         *
+         * @param event
+         */
         void dragLeaveEvent(QDragLeaveEvent* event) override;
+
+        /**
+         * Handles the event that a user drops a file in the widget. Used to open the dropped file.
+         *
+         * @param event
+         */
         void dropEvent(QDropEvent* event) override;
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         bool dragActive();
         QString iconPath();
         QString iconStyle();
+        ///@}
 
+        /** @name Q_PROPERTY WRITE Functions
+         */
+        ///@{
         void setIconPath(const QString& path);
         void setIconStyle(const QString& style);
+        ///@}
 
+        /**
+         * (Re-)Initializes the appearance of the widget.
+         */
         void repolish();
 
     private:
