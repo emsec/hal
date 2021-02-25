@@ -33,6 +33,11 @@
 
 namespace hal
 {
+    /**
+     * TODO: Remove me
+     * Old graphics view.
+     * @deprecated gui/graph_widget/graph_graphics_view is used instead.
+     */
     class GraphicsView : public QGraphicsView
     {
         Q_OBJECT
