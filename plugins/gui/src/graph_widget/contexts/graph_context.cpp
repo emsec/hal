@@ -21,6 +21,7 @@ namespace hal
           mId(id_),
           mName(name),
           mDirty(false),
+          mLayouter(nullptr),
           mShader(nullptr),
           mUserUpdateCount(0),
           mUnappliedChanges(false),
