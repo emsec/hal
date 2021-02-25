@@ -22,12 +22,6 @@ namespace hal
                                                                                                 {"io_pad", GateType::PinType::io_pad},
                                                                                                 {"select", GateType::PinType::select}};
 
-    const std::unordered_map<std::string, GateType::ClearPresetBehavior> HGLParser::m_string_to_behavior = {{"L", GateType::ClearPresetBehavior::L},
-                                                                                                            {"H", GateType::ClearPresetBehavior::H},
-                                                                                                            {"N", GateType::ClearPresetBehavior::N},
-                                                                                                            {"T", GateType::ClearPresetBehavior::T},
-                                                                                                            {"X", GateType::ClearPresetBehavior::X}};
-
     std::unique_ptr<GateLibrary> HGLParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
@@ -132,7 +126,7 @@ namespace hal
             }
         }
 
-        for (const auto pin : pin_ctx.pins)
+        for (const auto& pin : pin_ctx.pins)
         {
             gt->add_pin(pin, pin_ctx.pin_to_direction.at(pin), pin_ctx.pin_to_type.at(pin));
         }
@@ -382,9 +376,9 @@ namespace hal
         {
             GateType::ClearPresetBehavior cp1, cp2;
 
-            if (const auto it = m_string_to_behavior.find(ff_config["state_clear_preset"].GetString()); it != m_string_to_behavior.end())
+            if (const auto behav = enum_from_string<GateType::ClearPresetBehavior>(ff_config["state_clear_preset"].GetString()); behav != GateType::ClearPresetBehavior::invalid)
             {
-                cp1 = it->second;
+                cp1 = behav;
             }
             else
             {
@@ -392,9 +386,9 @@ namespace hal
                 return false;
             }
 
-            if (const auto it = m_string_to_behavior.find(ff_config["neg_state_clear_preset"].GetString()); it != m_string_to_behavior.end())
+            if (const auto behav = enum_from_string<GateType::ClearPresetBehavior>(ff_config["neg_state_clear_preset"].GetString()); behav != GateType::ClearPresetBehavior::invalid)
             {
-                cp2 = it->second;
+                cp2 = behav;
             }
             else
             {
@@ -452,9 +446,9 @@ namespace hal
         {
             GateType::ClearPresetBehavior cp1, cp2;
 
-            if (const auto it = m_string_to_behavior.find(latch_config["state_clear_preset"].GetString()); it != m_string_to_behavior.end())
+            if (const auto behav = enum_from_string<GateType::ClearPresetBehavior>(latch_config["state_clear_preset"].GetString()); behav != GateType::ClearPresetBehavior::invalid)
             {
-                cp1 = it->second;
+                cp1 = behav;
             }
             else
             {
@@ -462,9 +456,9 @@ namespace hal
                 return false;
             }
 
-            if (const auto it = m_string_to_behavior.find(latch_config["neg_state_clear_preset"].GetString()); it != m_string_to_behavior.end())
+            if (const auto behav = enum_from_string<GateType::ClearPresetBehavior>(latch_config["neg_state_clear_preset"].GetString()); behav != GateType::ClearPresetBehavior::invalid)
             {
-                cp2 = it->second;
+                cp2 = behav;
             }
             else
             {

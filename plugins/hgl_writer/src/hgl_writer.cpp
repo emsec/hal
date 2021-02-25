@@ -25,12 +25,6 @@ namespace hal
                                                                                                 {GateType::PinType::io_pad, "io_pad"},
                                                                                                 {GateType::PinType::select, "select"}};
 
-    const std::unordered_map<GateType::ClearPresetBehavior, std::string> HGLWriter::m_behavior_to_string = {{GateType::ClearPresetBehavior::L, "L"},
-                                                                                                            {GateType::ClearPresetBehavior::H, "H"},
-                                                                                                            {GateType::ClearPresetBehavior::N, "N"},
-                                                                                                            {GateType::ClearPresetBehavior::T, "T"},
-                                                                                                            {GateType::ClearPresetBehavior::X, "X"}};
-
     bool HGLWriter::write(const GateLibrary* gate_lib, const std::filesystem::path& file_path)
     {
         if (gate_lib == nullptr)
@@ -162,11 +156,11 @@ namespace hal
                 std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
                 if (cp_behav.first != GateType::ClearPresetBehavior::invalid)
                 {
-                    ff_config.AddMember("state_clear_preset", m_behavior_to_string.at(cp_behav.first), allocator);
+                    ff_config.AddMember("state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.first), allocator);
                 }
                 if (cp_behav.second != GateType::ClearPresetBehavior::invalid)
                 {
-                    ff_config.AddMember("neg_state_clear_preset", m_behavior_to_string.at(cp_behav.second), allocator);
+                    ff_config.AddMember("neg_state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.second), allocator);
                 }
 
                 cell.AddMember("ff_config", ff_config, allocator);
@@ -196,11 +190,11 @@ namespace hal
                 std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
                 if (cp_behav.first != GateType::ClearPresetBehavior::invalid)
                 {
-                    latch_config.AddMember("state_clear_preset", m_behavior_to_string.at(cp_behav.first), allocator);
+                    latch_config.AddMember("state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.first), allocator);
                 }
                 if (cp_behav.second != GateType::ClearPresetBehavior::invalid)
                 {
-                    latch_config.AddMember("neg_state_clear_preset", m_behavior_to_string.at(cp_behav.second), allocator);
+                    latch_config.AddMember("neg_state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.second), allocator);
                 }
 
                 cell.AddMember("latch_config", latch_config, allocator);
