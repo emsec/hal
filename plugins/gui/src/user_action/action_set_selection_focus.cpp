@@ -1,5 +1,6 @@
 #include "gui/user_action/action_set_selection_focus.h"
 #include "gui/gui_globals.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -90,6 +91,26 @@ namespace hal
         return false;
     }
 
+    void ActionSetSelectionFocus::setObject(const UserActionObject &obj)
+    {
+        UserAction::setObject(obj);
+        if (obj.id() > 0)
+            switch (obj.type())
+            {
+            case UserActionObjectType::Module:
+                mModules.insert(obj.id());
+                break;
+            case UserActionObjectType::Gate:
+                mGates.insert(obj.id());
+                break;
+            case UserActionObjectType::Net:
+                mNets.insert(obj.id());
+                break;
+            default:
+                break;
+            }
+    }
+
     bool ActionSetSelectionFocus::exec()
     {
         ActionSetSelectionFocus* undo = new ActionSetSelectionFocus;
@@ -98,9 +119,11 @@ namespace hal
         undo->mNets    = gSelectionRelay->selectedNets();
         undo->mSubfocus = gSelectionRelay->subfocus();
         undo->mSubfocusIndex = gSelectionRelay->subfocusIndex();
-        undo->setObject(UserActionObject(gSelectionRelay->focusId(),
-                                         UserActionObjectType::fromSelectionType(gSelectionRelay->focusType())));
+        undo->mObject = UserActionObject(gSelectionRelay->focusId(),
+                                         UserActionObjectType::fromSelectionType(gSelectionRelay->focusType()));
         mUndoAction = undo;
+        qDebug() << "sG" << setToText(mGates) << "sM" << setToText(mModules)
+                 << "uG" << setToText(undo->mGates) << "uM" << setToText(undo->mModules);
         gSelectionRelay->actionSetSelected(mModules, mGates, mNets);
         gSelectionRelay->setFocusDirect(UserActionObjectType::toSelectionType(mObject.type()),
                                   mObject.id(),mSubfocus,mSubfocusIndex);

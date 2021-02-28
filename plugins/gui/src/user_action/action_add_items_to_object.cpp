@@ -1,5 +1,6 @@
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/user_action_compound.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/grouping.h"
@@ -76,16 +77,57 @@ namespace hal
         Module* m;
         GraphContext* ctx;
         Grouping* grp;
+        mUndoAction = nullptr;
+
         switch (mObject.type())
         {
         case UserActionObjectType::Module:
             m = gNetlist->get_module_by_id(mObject.id());
             if (m)
             {
+                class ChildSet
+                {
+                public:
+                    QSet<u32> mods;
+                    QSet<u32> gats;
+                    ActionAddItemsToObject* actionFactory(u32 moduleId) const {
+                        ActionAddItemsToObject* retval =
+                                new ActionAddItemsToObject(mods,gats);
+                        retval->setObject(UserActionObject(moduleId,UserActionObjectType::Module));
+                        return retval;
+                    }
+                };
+                QHash<u32,ChildSet> parentHash;
+
                 for (u32 id : mGates)
-                    m->assign_gate(gNetlist->get_gate_by_id(id));
+                {
+                    Gate* g = gNetlist->get_gate_by_id(id);
+                    Q_ASSERT(g);
+                    parentHash[g->get_module()->get_id()].gats.insert(id);
+                    m->assign_gate(g);
+                }
                 for (u32 id : mModules)
-                    gNetlist->get_module_by_id(id)->set_parent_module(m);
+                {
+                    Module* sm = gNetlist->get_module_by_id(id);
+                    Q_ASSERT(sm);
+                    u32 parentModuleId = sm->get_parent_module()
+                            ? sm->get_parent_module()->get_id() : 1;
+                    parentHash[parentModuleId].mods.insert(id);
+                    sm->set_parent_module(m);
+                }
+
+                if (parentHash.size()>1)
+                {
+                    UserActionCompound* compound = new UserActionCompound;
+                    for (auto it = parentHash.begin(); it != parentHash.end(); ++it)
+                        compound->addAction(it.value().actionFactory(it.key()));
+                    mUndoAction = compound;
+                }
+                else if (!parentHash.isEmpty())
+                {
+                    u32 id = parentHash.keys().at(0);
+                    mUndoAction = parentHash.value(id).actionFactory(id);
+                }
             }
             else
                 return false;
@@ -119,8 +161,11 @@ namespace hal
             return false;
         }
 
-        mUndoAction = new ActionRemoveItemsFromObject(mModules,mGates,mNets);
-        mUndoAction->setObject(mObject);
+        if (!mUndoAction)
+        {
+            mUndoAction = new ActionRemoveItemsFromObject(mModules,mGates,mNets);
+            mUndoAction->setObject(mObject);
+        }
 
         return UserAction::exec();
     }

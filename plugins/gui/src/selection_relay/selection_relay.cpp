@@ -273,12 +273,12 @@ namespace hal
             }
         }
 
+        initializeAction();
         if (mSubfocusIndex == 0)
-            mSubfocusIndex = size - 1;
+            mAction->mSubfocusIndex = size - 1;
         else
-            --mSubfocusIndex;
-
-        Q_EMIT subfocusChanged(nullptr);
+            --mAction->mSubfocusIndex;
+        relaySubfocusChanged(nullptr);
     }
 
     void SelectionRelay::navigateDown()
@@ -366,12 +366,12 @@ namespace hal
             }
         }
 
+        initializeAction();
         if (mSubfocusIndex == size - 1)
-            mSubfocusIndex = 0;
+            mAction->mSubfocusIndex = 0;
         else
-            ++mSubfocusIndex;
-
-        Q_EMIT subfocusChanged(nullptr);
+            ++mAction->mSubfocusIndex;
+        relaySubfocusChanged(nullptr);
     }
 
     // TODO nothing is using this method - do we need it?
@@ -731,18 +731,18 @@ namespace hal
 
     void SelectionRelay::subfocusNone()
     {
-        mSubfocus       = Subfocus::None;
-        mSubfocusIndex = 0;    // TECHNICALLY REDUNDANT, KEEP FOR COMPLETENESS ???
-
-        Q_EMIT subfocusChanged(nullptr);
+        initializeAction();
+        mAction->mSubfocus = Subfocus::None;
+        mAction->mSubfocusIndex = 0;
+        relaySubfocusChanged(nullptr);
     }
 
     void SelectionRelay::subfocusLeft()
     {
-        mSubfocus       = Subfocus::Left;
-        mSubfocusIndex = 0;
-
-        Q_EMIT subfocusChanged(nullptr);
+        initializeAction();
+        mAction->mSubfocus = Subfocus::Left;
+        mAction->mSubfocusIndex = 0;
+        relaySubfocusChanged(nullptr);
     }
 
     void SelectionRelay::subfocusRight()

@@ -23,6 +23,7 @@
 #include "gui/user_action/action_move_node.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_type.h"
+#include "gui/user_action/action_set_selection_focus.h"
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate.h"
@@ -130,10 +131,9 @@ namespace hal
                                                                  gSelectionRelay->selectedGates());
         act->setObject(UserActionObject(moduleId,UserActionObjectType::Module));
         act->exec();
-
-        // auto gates   = gSelectionRelay->mSelectedGates;
-        // auto modules = gSelectionRelay->mSelectedModules;
         gSelectionRelay->clear();
+        gSelectionRelay->addModule(moduleId);
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,moduleId);
         gSelectionRelay->relaySelectionChanged(this);
     }
 
@@ -159,16 +159,15 @@ namespace hal
         ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
         actNewModule->setParentId(parent->get_id());
 
-        UserActionCompound* act = new UserActionCompound;
-        act->setUseCreatedObject();
-        act->addAction(actNewModule);
-        act->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+        UserActionCompound* compound = new UserActionCompound;
+        compound->setUseCreatedObject();
+        compound->addAction(actNewModule);
+        compound->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
                                                   gSelectionRelay->selectedGates()));
-
-        act->exec();
-//        auto gates   = gSelectionRelay->mSelectedGates;
-//        auto modules = gSelectionRelay->mSelectedModules;
+        compound->exec();
         gSelectionRelay->clear();
+        gSelectionRelay->addModule(compound->object().id());
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,compound->object().id());
         gSelectionRelay->relaySelectionChanged(this);
     }
 

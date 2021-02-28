@@ -24,6 +24,7 @@ namespace hal
         bool exec() override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
         bool hasModifications() const;
+        void setObject(const UserActionObject &obj) override;
     };
 
     class ActionSetSelectionFocusFactory : public UserActionFactory
