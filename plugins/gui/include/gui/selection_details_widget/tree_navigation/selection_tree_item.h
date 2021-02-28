@@ -182,6 +182,7 @@ namespace hal
 
         /**
          * The constructor.
+         *
          * @param id_ - The item's id. It is the same id as the module it represents.
          */
         SelectionTreeItemModule(u32 id_);
@@ -208,7 +209,6 @@ namespace hal
 
         /**
          * Get the name of the item. The name is usually the name of the underlying netlist item.
-         * Must be implemented in the subclasse(s).
          *
          * @return The item's name.
          */
@@ -250,7 +250,7 @@ namespace hal
         void addChild(SelectionTreeItem* cld);
 
         /**
-         * Checks if the module is the root item of the module.
+         * Checks if the module is the root item of the model.
          *
          * @return True if the item is the root item. False otherwise.
          */
@@ -268,28 +268,102 @@ namespace hal
     class SelectionTreeItemRoot : public SelectionTreeItemModule
     {
     public :
+        /**
+         * The constructor. The fixed id 0 is set here.
+         */
         SelectionTreeItemRoot();
     };
 
+    /**
+     * A subclass of the basic tree item class that represents a gate of the netlist.
+     * It implements the necessary commonly shared inherited functions as well as the
+     * gate specific function gateType().
+     */
     class SelectionTreeItemGate : public SelectionTreeItem
     {
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param id_ - The item's id. It is the same id as the gate it represents.
+         */
         SelectionTreeItemGate(u32 id_);
+
+        /**
+         * Get the name of the item. The name is usually the name of the underlying netlist item.
+         *
+         * @return The item's name.
+         */
         virtual QVariant name() const;
+
+        /**
+         * Get the icon for a gate type item.
+         *
+         * @return The gate specific icon.
+         */
         virtual const QIcon& icon() const;
+
+        /**
+         * Get the name of the gate's type (e.g. LUT5 or FF).
+         *
+         * @return The gate type.
+         */
         virtual QVariant gateType() const;
+
+        /**
+         * Matches itself against the given regex. If no match was found it appends itself (its id)
+         * to the gatIds list.
+         *
+         * @param modIds - The list that contains the suppresed module-type items at the end.
+         * @param gatIds - The list that contains the suppressed gate-type items at the end.
+         * @param netIds - The list that contains the suppressed net-type items at the end.
+         * @param regex - The regular expression to match the items against.
+         */
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const;
     private:
         static QIcon* sIconInstance;
     };
 
+    /**
+     * A subclass of the basic tree item class that represents a net of the netlist.
+     * It implements the necessary commonly shared inherited functions.
+     */
     class SelectionTreeItemNet : public SelectionTreeItem
     {
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param id_ - The item's id. It is the same id as the net it represents.
+         */
         SelectionTreeItemNet(u32 id_);
+
+        /**
+         * Get the name of the item. The name is usually the name of the underlying netlist item.
+         *
+         * @return The item's name.
+         */
         virtual QVariant name() const;
+
+        /**
+         * Get the icon for a net type item.
+         *
+         * @return The net net icon.
+         */
         virtual const QIcon& icon() const;
+
+        /**
+         * Matches itself against the given regex. If no match was found it appends itself (its id)
+         * to the netIds list.
+         *
+         * @param modIds - The list that contains the suppresed module-type items at the end.
+         * @param gatIds - The list that contains the suppressed gate-type items at the end.
+         * @param netIds - The list that contains the suppressed net-type items at the end.
+         * @param regex - The regular expression to match the items against.
+         */
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const;
     private:

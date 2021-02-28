@@ -46,15 +46,41 @@ namespace hal
          */
         SelectionTreeProxyModel(QObject* parent = 0);
 
+        /**
+         * Calls the suppressedByFilter() function to get all items that should not be displayed
+         * in the view because they do not match the filter-string. Then it tells the selection
+         * relay to update these items.
+         */
         void applyFilterOnGraphics();
 
+        /**
+         * Checks if the model is still busy with applying the changes (in applyFilterOnGraphics()).
+         *
+         * @return True if the model is still busy. False otherwise.
+         */
         bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 
     protected:
+
+        /**
+          * Overwritten Qt function that is necessary for the model. For further information pleaser
+          * refer to the Qt documentation.
+          */
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+
+        /**
+          * Overwritten Qt function that is necessary for the model. For further information pleaser
+          * refer to the Qt documentation.
+          */
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
     public Q_SLOTS:
+
+        /**
+         * Filters the model by the given text.
+         *
+         * @param filter_text - The text to filter the model by.
+         */
         void handleFilterTextChanged(const QString& filter_text);
 
     private Q_SLOTS:
