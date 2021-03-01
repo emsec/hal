@@ -635,6 +635,9 @@ namespace hal
         }
         auto prev_module = g->m_module;
 
+        prev_module->m_input_nets_dirty    = true;
+        prev_module->m_output_nets_dirty   = true;
+        prev_module->m_internal_nets_dirty = true;
         prev_module->m_gates_map.erase(prev_module->m_gates_map.find(g->get_id()));
         unordered_vector_erase(prev_module->m_gates, g);
 
