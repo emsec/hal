@@ -46,19 +46,5 @@ namespace hal
             default: assert(false); return nullptr; // UNREACHABLE
             }
         }
-
-        Gate* getGateById(u32 gateId)
-        {
-            Gate* g = gNetlist->get_gate_by_id(gateId);
-            if (g) return g;
-
-            for (Module* m : gNetlist->get_modules())
-            {
-                g = m->get_gate_by_id(gateId);
-                if (g) return g;
-            }
-            Q_ASSERT(g);
-            return nullptr;
-        }
     }
 }
