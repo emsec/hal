@@ -218,15 +218,15 @@ Enumerations</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a5f5dd456d7ad61e7cc14445fbb1c17e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/de9/arch__win_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a> std::unique_ptr&lt; <a class="el" href="../../d5/ddc/classhal_1_1BasePluginInterface.html">BasePluginInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#a5f5dd456d7ad61e7cc14445fbb1c17e1">create_plugin_instance</a> ()</td></tr>
 <tr class="separator:a5f5dd456d7ad61e7cc14445fbb1c17e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0c1d3be9481684e1dff712c2129323d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ac0c1d3be9481684e1dff712c2129323d"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#ac0c1d3be9481684e1dff712c2129323d">enum_to_string</a> (T const &amp;e)</td></tr>
-<tr class="separator:ac0c1d3be9481684e1dff712c2129323d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae66d8c8ad436e46c7ba42b07f0811303"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ae66d8c8ad436e46c7ba42b07f0811303"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#ae66d8c8ad436e46c7ba42b07f0811303">enum_from_string</a> (const std::string &amp;str)</td></tr>
-<tr class="separator:ae66d8c8ad436e46c7ba42b07f0811303"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e418c47f76d9dfc1cb411a047a5fcce"><td class="memTemplParams" colspan="2">template&lt;typename T , typename std::enable_if&lt; std::is_enum&lt; T &gt;::value &gt;::type *  = nullptr&gt; </td></tr>
-<tr class="memitem:a2e418c47f76d9dfc1cb411a047a5fcce"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#a2e418c47f76d9dfc1cb411a047a5fcce">operator&lt;&lt;</a> (std::ostream &amp;os, const T &amp;e)</td></tr>
-<tr class="separator:a2e418c47f76d9dfc1cb411a047a5fcce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe11c53f9f94ae23527944574e1f5df3"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </td></tr>
+<tr class="memitem:afe11c53f9f94ae23527944574e1f5df3"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a> (T e)</td></tr>
+<tr class="separator:afe11c53f9f94ae23527944574e1f5df3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2319a036cfb2272af66101db753b7b5c"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </td></tr>
+<tr class="memitem:a2319a036cfb2272af66101db753b7b5c"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#a2319a036cfb2272af66101db753b7b5c">enum_from_string</a> (const std::string &amp;str)</td></tr>
+<tr class="separator:a2319a036cfb2272af66101db753b7b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfc41a824ec2e2d67ef693316ffca725"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </td></tr>
+<tr class="memitem:abfc41a824ec2e2d67ef693316ffca725"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#abfc41a824ec2e2d67ef693316ffca725">operator&lt;&lt;</a> (std::ostream &amp;os, T e)</td></tr>
+<tr class="separator:abfc41a824ec2e2d67ef693316ffca725"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef8d4a8f510965ea04184d31d5714c79"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#aef8d4a8f510965ea04184d31d5714c79">operator&lt;&lt;</a> (std::ostream &amp;os, const BooleanFunction::operation &amp;op)</td></tr>
 <tr class="separator:aef8d4a8f510965ea04184d31d5714c79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90756e09e3a11b7dd4e7362ae3101ce9"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#a90756e09e3a11b7dd4e7362ae3101ce9">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="../../d6/d9d/classhal_1_1BooleanFunction.html#aac7bb4fda3bf06664f6bc717c3be92fb">BooleanFunction::Value</a> v)</td></tr>
@@ -411,18 +411,18 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac0c1d3be9481684e1dff712c2129323d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0c1d3be9481684e1dff712c2129323d">&#9670;&nbsp;</a></span>enum_to_string()</h2>
+<a id="afe11c53f9f94ae23527944574e1f5df3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe11c53f9f94ae23527944574e1f5df3">&#9670;&nbsp;</a></span>enum_to_string()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::string hal::enum_to_string </td>
           <td>(</td>
-          <td class="paramtype">T const &amp;&#160;</td>
+          <td class="paramtype">T&#160;</td>
           <td class="paramname"><em>e</em></td><td>)</td>
           <td></td>
         </tr>
@@ -437,17 +437,17 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The string representation. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#a2e418c47f76d9dfc1cb411a047a5fcce">operator&lt;&lt;()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d0/d7f/namespacehal.html#abfc41a824ec2e2d67ef693316ffca725">operator&lt;&lt;()</a>.</p>
 
 </div>
 </div>
-<a id="ae66d8c8ad436e46c7ba42b07f0811303"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae66d8c8ad436e46c7ba42b07f0811303">&#9670;&nbsp;</a></span>enum_from_string()</h2>
+<a id="a2319a036cfb2272af66101db753b7b5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2319a036cfb2272af66101db753b7b5c">&#9670;&nbsp;</a></span>enum_from_string()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">T hal::enum_from_string </td>
@@ -469,13 +469,13 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a2e418c47f76d9dfc1cb411a047a5fcce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e418c47f76d9dfc1cb411a047a5fcce">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/7]</span></h2>
+<a id="abfc41a824ec2e2d67ef693316ffca725"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfc41a824ec2e2d67ef693316ffca725">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename std::enable_if&lt; std::is_enum&lt; T &gt;::value &gt;::type *  = nullptr&gt; </div>
+template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::ostream&amp; hal::operator&lt;&lt; </td>
@@ -486,7 +486,7 @@ template&lt;typename T , typename std::enable_if&lt; std::is_enum&lt; T &gt;::va
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramtype">T&#160;</td>
           <td class="paramname"><em>e</em>&#160;</td>
         </tr>
         <tr>
@@ -499,14 +499,14 @@ template&lt;typename T , typename std::enable_if&lt; std::is_enum&lt; T &gt;::va
 <p>Inserts the string representation of an enum value into an output stream.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">os</td><td>- The original output stream. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">os</td><td>- The output stream. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">e</td><td>- The enum value. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The output stream including the appended string representation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Reference to the provided stream. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../d0/d7f/namespacehal.html#ac0c1d3be9481684e1dff712c2129323d">enum_to_string()</a>.</p>
+<p class="reference">References <a class="el" href="../../d0/d7f/namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string()</a>.</p>
 
 </div>
 </div>
@@ -754,7 +754,7 @@ template&lt;typename T , typename std::enable_if&lt; std::is_enum&lt; T &gt;::va
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Feb 25 2021 13:50:47 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Mar 1 2021 09:02:21 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

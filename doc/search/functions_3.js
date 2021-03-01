@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['data_932',['data',['../df/d38/structhal_1_1EnumStrings.html#a847f01d2e857c733f20a61a2f6a3e989',1,'hal::EnumStrings::data'],['../df/d38/structhal_1_1EnumStrings.html#a81646b7bdf1f13a30d9b7ccbe10ef394',1,'hal::EnumStrings::data']]],
+  ['data_932',['data',['../df/d38/structhal_1_1EnumStrings.html#a847f01d2e857c733f20a61a2f6a3e989',1,'hal::EnumStrings::data'],['../df/d38/structhal_1_1EnumStrings.html#a81646b7bdf1f13a30d9b7ccbe10ef394',1,'hal::EnumStrings::data'],['../df/d38/structhal_1_1EnumStrings.html#a847f01d2e857c733f20a61a2f6a3e989',1,'hal::EnumStrings::data'],['../df/d38/structhal_1_1EnumStrings.html#a81646b7bdf1f13a30d9b7ccbe10ef394',1,'hal::EnumStrings::data']]],
   ['data_5fcontainer_5finit_933',['data_container_init',['../db/d7c/group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4',1,'hal']]],
   ['datacontainer_934',['DataContainer',['../d1/d7d/classhal_1_1DataContainer.html#a268c27a803da43b036ac0d324dfd31c9',1,'hal::DataContainer']]],
   ['deactivate_5fall_5fchannels_935',['deactivate_all_channels',['../d5/d2e/classhal_1_1LogManager.html#a2defb30df0b5f5b3a572b002a551a9c0',1,'hal::LogManager']]],
