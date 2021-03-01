@@ -627,63 +627,62 @@ namespace hal
     {
         if (g == nullptr)
         {
+            log_error("module", "gate cannot be a nullptr.");
             return false;
         }
-        if (g->m_module == m)
-        {
-            return false;
-        }
-        auto prev_module = g->m_module;
 
+        if (m == nullptr)
+        {
+            log_error("module", "module cannot be a nullptr.");
+            return false;
+        }
+
+        auto prev_module = g->m_module;
+        if (prev_module == m)
+        {
+            log_error("module",
+                      "gate '{}' with ID {} is already contained in module '{}' with ID {} in netlist with ID {}.",
+                      g->get_name(),
+                      g->get_id(),
+                      m->get_name(),
+                      m->get_id(),
+                      m_netlist->m_netlist_id);
+            return false;
+        }
+
+        // mark caches as dirty
+        m->m_input_nets_dirty              = true;
+        m->m_output_nets_dirty             = true;
+        m->m_internal_nets_dirty           = true;
         prev_module->m_input_nets_dirty    = true;
         prev_module->m_output_nets_dirty   = true;
         prev_module->m_internal_nets_dirty = true;
-        prev_module->m_gates_map.erase(prev_module->m_gates_map.find(g->get_id()));
-        unordered_vector_erase(prev_module->m_gates, g);
 
-        m->m_gates_map[g->get_id()] = g;
-        m->m_gates.push_back(g);
-
-        g->m_module = m;
-
-        module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, g->get_id());
-        module_event_handler::notify(module_event_handler::event::gate_assigned, m, g->get_id());
-        return true;
-    }
-
-    bool NetlistInternalManager::module_remove_gate(Module* m, Gate* g)
-    {
-        if (g == nullptr)
-        {
-            return false;
-        }
-
-        if (m == m_netlist->m_top_module)
-        {
-            log_error(
-                "module", "cannot remove gate '{}' with ID {} from top module '{}' with ID {} in netlist with ID {}.", g->get_name(), g->get_id(), m->get_name(), m->get_id(), m_netlist->m_netlist_id);
-            return false;
-        }
-
-        auto it = m->m_gates_map.find(g->get_id());
-
+        // remove gate from old module
+        auto it = prev_module->m_gates_map.find(g->get_id());
         if (it == m->m_gates_map.end())
         {
-            log_error(
-                "module", "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.", g->get_name(), g->get_id(), m->get_name(), m->get_id(), m_netlist->m_netlist_id);
+            log_error("module",
+                      "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.",
+                      g->get_name(),
+                      g->get_id(),
+                      prev_module->get_name(),
+                      prev_module->get_id(),
+                      m_netlist->m_netlist_id);
             return false;
         }
 
-        m->m_gates_map.erase(it);
-        unordered_vector_erase(m->m_gates, g);
+        prev_module->m_gates_map.erase(it);
+        unordered_vector_erase(prev_module->m_gates, g);
 
-        m_netlist->m_top_module->m_gates_map[g->get_id()] = g;
-        m_netlist->m_top_module->m_gates.push_back(g);
-        g->m_module = m_netlist->m_top_module;
+        // move gate to new module
+        m->m_gates_map[g->get_id()] = g;
+        m->m_gates.push_back(g);
+        g->m_module = m;
 
-        module_event_handler::notify(module_event_handler::event::gate_removed, m, g->get_id());
-        module_event_handler::notify(module_event_handler::event::gate_assigned, m_netlist->m_top_module, g->get_id());
-
+        // notify event handlers
+        module_event_handler::notify(module_event_handler::event::gate_removed, prev_module, g->get_id());
+        module_event_handler::notify(module_event_handler::event::gate_assigned, m, g->get_id());
         return true;
     }
 
