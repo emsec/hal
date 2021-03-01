@@ -1,6 +1,5 @@
 #include "gui/user_action/action_set_selection_focus.h"
 #include "gui/gui_globals.h"
-#include <QDebug>
 
 namespace hal
 {
@@ -122,8 +121,6 @@ namespace hal
         undo->mObject = UserActionObject(gSelectionRelay->focusId(),
                                          UserActionObjectType::fromSelectionType(gSelectionRelay->focusType()));
         mUndoAction = undo;
-        qDebug() << "sG" << setToText(mGates) << "sM" << setToText(mModules)
-                 << "uG" << setToText(undo->mGates) << "uM" << setToText(undo->mModules);
         gSelectionRelay->actionSetSelected(mModules, mGates, mNets);
         gSelectionRelay->setFocusDirect(UserActionObjectType::toSelectionType(mObject.type()),
                                   mObject.id(),mSubfocus,mSubfocusIndex);
