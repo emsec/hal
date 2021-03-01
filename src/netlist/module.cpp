@@ -182,18 +182,25 @@ namespace hal
 
     bool Module::assign_gate(Gate* gate)
     {
-        m_input_nets_dirty    = true;
-        m_output_nets_dirty   = true;
-        m_internal_nets_dirty = true;
         return m_internal_manager->module_assign_gate(this, gate);
     }
 
     bool Module::remove_gate(Gate* gate)
     {
-        m_input_nets_dirty    = true;
-        m_output_nets_dirty   = true;
-        m_internal_nets_dirty = true;
-        return m_internal_manager->module_remove_gate(this, gate);
+        if (contains_gate(gate))
+        {
+            return m_internal_manager->module_assign_gate(m_internal_manager->m_netlist->get_top_module(), gate);
+        }
+
+        if (gate == nullptr)
+        {
+            log_error("module", "gate cannot be a nullptr.");
+            return false;
+        }
+
+        log_error(
+            "module", "gate '{}' with ID {} does not belong to module '{}' with ID {} in netlist with ID {}.", gate->get_name(), gate->get_id(), m_name, m_id, m_internal_manager->m_netlist->get_id());
+        return false;
     }
 
     bool Module::contains_gate(Gate* gate, bool recursive) const

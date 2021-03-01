@@ -2,8 +2,22 @@
 import sys
 import os
 
+def print_usage():
+    print("Doxygen Comment Checker")
+    print("  (custom script, may contain errors)")
+    print("")
+    print("  Usage: python check_docu.py inputpath1 [inputpath2 ...] [-i/-ignore ignorepath1 [ignorepath2]]")
+    print("")
+    print("  You can always provide directories or single files.")
+    print("  All files/directories will be ignored which start with any of the ignorepaths.")
+    print("")
+
+##################################################################
+##################################################################
+##################################################################
+
 # color codes for nice output formatting
-class colors:
+class Colors:
     RED = '\033[91m'
     BLUE = '\033[94m'
     GREEN = '\033[92m'
@@ -12,32 +26,42 @@ class colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def index_of_last_scope(text, start, end):
-    last_end = len(text) - 1 -text[::-1].index(end)
+# finds the start of the last block with given delimiters, with support for nested blocks.
+# for example, given "ab () ( c ( de ) )", finding the last () block will return the position of the "(" before "c"
+def index_of_last_block(text, block_start, block_end):
+    last_end = len(text) - 1 - text[::-1].index(block_end)
     level = -1
-    for i in range(0, last_end)[::-1]:
-        if text[i] == end: level -= 1
-        if text[i] == start:
+    for i in range(last_end-1, -1, -1):
+        if text[i] == block_end: level -= 1
+        if text[i] == block_start:
             level += 1
             if level == 0:
                 return i
     return None
 
-
-def remove_scope(text, start, end):
+# replaces a semantic block with given start/end delimiters by "#", e.g., everything between "<" and ">" becomes "#"
+# this function is level-aware, i.e., it supports nested blocks: "xy<a<B>>" simply becomes "xy<####>" when removing the <> block
+def blind_block(text, block_start, block_end):
+    patches = ["operator<<", "operator>>", "operator[]", "operator()"]
+    for i, p in enumerate(patches):
+        text = text.replace(p, f"___PATCH##{i}##___")
     tmp = ""
-    tmp_depth = 0
+    lvl = 0
     for c in text:
-        if c == end and tmp_depth > 0: tmp_depth -= 1
-        if tmp_depth == 0:
+        if c == block_end and lvl > 0: lvl -= 1
+        if lvl == 0:
             tmp += c
         else:
             tmp += "#"
-        if c == start: tmp_depth += 1
-
+        if c == block_start: lvl += 1
+    for i, p in enumerate(patches):
+        tmp = tmp.replace(f"___PATCH##{i}##___", p)
     return tmp
 
-def analyze_scope(scope):
+# analyze a scope, e.g., the global file scope, everything between { and }, or everything in a class
+# this function is calling itself recursively on every inner scope it encounters
+# returns a list of tuples (function signature, associated comment)
+def analyze_scope_recursive(scope):
     candidates = list()
 
     in_public_part = True
@@ -48,9 +72,11 @@ def analyze_scope(scope):
     while True:
         scope = scope.strip()
 
+        # look for specific identifiers and narrow scope accordingly
+
         if len(scope) == 0: break
 
-        if any(scope.startswith(x) for x in ["private:", "protected:"]):
+        if scope.startswith(("private:", "protected:")):
             in_public_part = False
             scope = scope[scope.index(":")+1:].strip()
 
@@ -65,44 +91,58 @@ def analyze_scope(scope):
             scope = scope[scope.index("\n")+1:] if ("\n" in scope) else ""
             continue
 
-        if any(scope.startswith(x) for x in ["#", "//", "class", "struct", "namespace", "typedef", "using"]):
+        if scope.startswith(("#", "//", "class", "struct", "namespace", "typedef", "using")):
             scope = scope[scope.index("\n")+1:] if ("\n" in scope) else ""
             continue
 
-        blinded_scope = remove_scope(scope, "(", ")")
-        if "(" in blinded_scope:
-            blinded_scope = remove_scope(blinded_scope[:blinded_scope.index("(")], "<", ">") + blinded_scope[blinded_scope.index("("):]
+        # reached this point? potentially found a function!
 
+        # now "blind" the scope, i.e., replace all template/function parameters with "#"
+        blinded_scope = blind_block(scope, "(", ")")
+        if "(" in blinded_scope:
+            blinded_scope = blind_block(blinded_scope[:blinded_scope.index("(")], "<", ">") + blinded_scope[blinded_scope.index("("):]
+
+        # find the index of the next comment block, the next "{" and the next ";"
+        # whatever comes first determines how to continue
         comment_block_index = blinded_scope.index("/*") if ("/*" in blinded_scope) else len(scope) + 1
         bracket_index = blinded_scope.index("{") if ("{" in blinded_scope) else len(scope) + 1
         semicolon_index = blinded_scope.index(";") if (";" in blinded_scope) else len(scope) + 1
 
         next_index = min(comment_block_index,bracket_index,semicolon_index)
 
+        # scope started with none of them
         if comment_block_index != 0 and bracket_index != 0 and semicolon_index != 0:
+            # extract code until whichever came first
             blinded_code = blinded_scope[:next_index]
             code = scope[:next_index].replace("\n", " ")
             if "<" in blinded_code and ">" in blinded_code:
-                blinded_code = remove_scope(blinded_code, "<", ">")
+                blinded_code = blind_block(blinded_code, "<", ">")
 
             last_fragment_was_function = False
 
+            # check that we potentially have a function
             if "(" in blinded_code and ")" in blinded_code and not blinded_code.endswith("= default") and not ":" in blinded_code.replace("::","#"):
 
                 if len(blinded_code[:blinded_code.find("(")].strip().split()) >= 2: # this helps to ignore macro calls
 
+                    # candidate for a function signature found
                     candidates.append((code, last_comment_block))
                     last_fragment_was_function = True
 
+            # adjust scope
             scope = scope[next_index:]
             last_comment_block = None
 
+        ### at this point, the scope definitely started with one of the three blocks
+
+        # if it started with a comment block, extract the whole comment
         elif comment_block_index == next_index:
             end = scope.index("*/")+3
             last_comment_block = scope[:end]
             last_fragment_was_function = False
             scope = scope[end:]
 
+        # if it started with an opening curly brace, we are at the start of a new scope --> recursive call
         elif bracket_index == next_index:
             level = 0
             for i in range(len(scope)):
@@ -112,10 +152,12 @@ def analyze_scope(scope):
                     end = i
                     break
             if not last_fragment_was_function:
-                candidates += analyze_scope(scope[1:end])
+                candidates += analyze_scope_recursive(scope[1:end])
             scope = scope[end+1:]
             last_comment_block = None
             last_fragment_was_function = False
+
+        # if it started with a semicolon, the current statement is simply over. continue with the next one
         elif semicolon_index == next_index:
             scope = scope[1:]
             last_comment_block = None
@@ -123,21 +165,23 @@ def analyze_scope(scope):
 
     return candidates
 
-# processes a file and returns tuples (line number, line, associated comment)
+# processes a file and returns tuples (function signature, associated comment)
 def extract_functions(file):
-    # read the whole file line by line and store the line numbers
+
+    # load file as one long string
     with open(file) as f:
         content = "\n".join(x.strip() for x in f.readlines()).replace("\\\n", "")
 
-    return analyze_scope(content)
+    # analyze the global file scope (recursively analyzes subscopes)
+    return analyze_scope_recursive(content)
 
 # extract the parameters/arguments from a function
 def extract_params(line):
     if "<" in line and ">" in line:
-        line = remove_scope(line.replace("operator()",""), "<", ">")
+        line = blind_block(line.replace("operator()",""), "<", ">")
     line = line.replace("&", "")
 
-    param_str = line[index_of_last_scope(line,"(",")")+1:]
+    param_str = line[index_of_last_block(line,"(",")")+1:]
     param_str = param_str[:len(param_str)-1-param_str[::-1].index(")")]
 
     params = []
@@ -157,9 +201,9 @@ def extract_return_type(line):
     for x in ["explicit", "static", "typedef", "inline", "virtual"]:
         line = line.replace(x,"")
 
-    line = remove_scope(line[:index_of_last_scope(line,"(",")")],"<",">").strip()
+    line = blind_block(line[:index_of_last_block(line,"(",")")],"<",">").strip()
 
-    # no space before "(" ? we have a constructor
+    # no space before "(" --> we have a constructor
     if ' ' not in line:
         return None
 
@@ -185,7 +229,7 @@ def extract_return_type_comment(comment):
     if comment == None:
         return None
     if "@return" in comment:
-        comment = remove_scope(comment[comment.index("@return"):], "<",">")
+        comment = blind_block(comment[comment.index("@return"):], "<",">")
         return comment.split()[1]
     return None
 
@@ -234,20 +278,20 @@ def analyze_file(file):
             error = True
             print("  "+text)
             if not_commented_error:
-                print(colors.RED + "    the function is not commented."+ colors.ENDC)
+                print(Colors.RED + "    the function is not commented."+ Colors.ENDC)
             else:
                 for x in commented_but_missing:
-                    print(colors.RED + "    \"" + x + "\" is commented but not specified."+ colors.ENDC)
+                    print(Colors.RED + "    \"" + x + "\" is commented but not specified."+ Colors.ENDC)
                 for x in type_missing:
-                    print(colors.RED + "    \"" + x + "\" is of unknown direction ([in], [out] or [in,out])."+ colors.ENDC)
+                    print(Colors.RED + "    \"" + x + "\" is of unknown direction ([in], [out] or [in,out])."+ Colors.ENDC)
                 for x in not_commented:
-                    print(colors.RED + "    \"" + x + "\" is specified but not commented."+ colors.ENDC)
+                    print(Colors.RED + "    \"" + x + "\" is specified but not commented."+ Colors.ENDC)
                 if return_type == None and return_type_comment != None:
-                    print(colors.RED + "    function has no return type but one was commented."+ colors.ENDC)
+                    print(Colors.RED + "    function has no return type but one was commented."+ Colors.ENDC)
                 if return_type not in valid_return_types and return_type_comment == None:
-                    print(colors.RED + "    function has a return type but none was commented."+ colors.ENDC)
+                    print(Colors.RED + "    function has a return type but none was commented."+ Colors.ENDC)
                 if return_type_comment != None and return_type == return_type_comment:
-                    print(colors.RED + "    comment for return value is just the return type."+ colors.ENDC)
+                    print(Colors.RED + "    comment for return value is just the return type."+ Colors.ENDC)
             print("")
 
     return not error
@@ -271,16 +315,6 @@ def check_recursive(thing, ignore_list):
 ##################################################################
 ##################################################################
 ##################################################################
-
-def print_usage():
-    print("Doxygen Comment Checker")
-    print("  (custom script, may contain errors)")
-    print("")
-    print("  Usage: python check_docu.py inputpath1 [inputpath2 ...] [-i/-ignore ignorepath1 [ignorepath2]]")
-    print("")
-    print("  You can always provide directories or single files.")
-    print("  All files/directories will be ignored which start with any of the ignorepaths.")
-    print("")
 
 if __name__ == '__main__':
     # parameter check
