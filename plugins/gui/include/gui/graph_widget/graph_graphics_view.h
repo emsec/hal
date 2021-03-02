@@ -82,6 +82,7 @@ namespace hal
     private Q_SLOTS:
         void conditionalUpdate();
         void handleIsolationViewAction();
+        void handleRemoveFromView();
         void handleMoveAction(QAction* action);
         void handleMoveNewAction();
         void handleRenameAction();

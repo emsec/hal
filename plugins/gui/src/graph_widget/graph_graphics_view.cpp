@@ -11,6 +11,8 @@
 #include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 #include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
+#include "gui/content_manager/content_manager.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
@@ -21,6 +23,7 @@
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_fold_module.h"
 #include "gui/user_action/action_move_node.h"
+#include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_type.h"
 #include "gui/user_action/action_set_selection_focus.h"
@@ -100,6 +103,17 @@ namespace hal
     {
         if (QStyleOptionGraphicsItem::levelOfDetailFromTransform(transform()) >= graph_widget_constants::sGateMinLod)
             update();
+    }
+
+    void GraphGraphicsView::handleRemoveFromView()
+    {
+        GraphContext* ctx = gContentManager->getContextManagerWidget()->getCurrentContext();
+        if (!ctx) return;
+        ActionRemoveItemsFromObject* act =
+                new ActionRemoveItemsFromObject(gSelectionRelay->selectedModules(),
+                                                gSelectionRelay->selectedGates());
+        act->setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
+        act->exec();
     }
 
     void GraphGraphicsView::handleIsolationViewAction()
@@ -647,6 +661,8 @@ namespace hal
                 action = context_menu.addAction("  Add predecessors to view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleSelectInputs);
 
+                action = context_menu.addAction("  Remove from view");
+                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
                 Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
