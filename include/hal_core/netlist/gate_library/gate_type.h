@@ -172,24 +172,6 @@ namespace hal
         friend std::ostream& operator<<(std::ostream& os, const GateType& gate_type);
 
         /**
-         * Insert the pin direction string representation to an output stream.
-         *
-         * @param[in] os - The output stream.
-         * @param[in] direction - The pin direction.
-         * @returns An output stream.
-         */
-        friend std::ostream& operator<<(std::ostream& os, PinDirection direction);
-
-        /**
-         * Insert the pin type string representation to an output stream.
-         *
-         * @param[in] os - The output stream.
-         * @param[in] pin_type - The pin type.
-         * @returns An output stream.
-         */
-        friend std::ostream& operator<<(std::ostream& os, PinType pin_type);
-
-        /**
          * Check whether two gate types are equal.
          *
          * @param[in] other - The gate type to compare against.
