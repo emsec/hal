@@ -16,9 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * added `get_path` to `netlist_utils` to retrieve all gates on the predecessor/successor path from a start gate/net to gates of a specified property
 * made `optimize_constants` of class `BooleanFunction` publicly accessible
 * refined buffer removal in `netlist_utils::remove_buffers` to take constant `0` and `1` inputs into account
-* changes to `z3_utils` (WIP)
+* added high-impedance state `Z` to class `BooleanFunction` and added basic support to `evaluate`
 * cleaned up and refined some logger outputs and streamlined log channel names
 * disabled extended logging again
+* changes to `z3_utils` (WIP)
 * fixed crash related to GraphicsScene destructor
 * fixed overlapping gates in cone view (and subsequent segfault) by suppressing gate coordinates when adding to cone view
 * fixed `get_gate_by_id` and `get_gates` of class `Netlist` returning only gates contained within one of its modules (causing a GUI crash upon deleting gates from a module)
