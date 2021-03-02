@@ -53,9 +53,51 @@ namespace hal
         dsp,           /**< DSP gate type. **/
         mux,           /**< MUX gate type. **/
         buffer,        /**< Buffer gate type. **/
-        carry,         /**< Carry gate type. **/
-        invalid        /**< Invalid property. **/
+        carry          /**< Carry gate type. **/
     };
+
+    template<>
+    std::vector<std::string> EnumStrings<GateTypeProperty>::data;
+
+    /**
+     * Defines the direction of a pin.
+     */
+    enum class PinDirection
+    {
+        none,    /**< Invalid pin. **/
+        input,   /**< Input pin. **/
+        output,  /**< Output pin. **/
+        inout,   /**< Inout pin. **/
+        internal /**< Internal pin. **/
+    };
+
+    template<>
+    std::vector<std::string> EnumStrings<PinDirection>::data;
+
+    /**
+     * Defines the type of a pin.
+     */
+    enum class PinType
+    {
+        none,      /**< Default pin. **/
+        power,     /**< Power pin. **/
+        ground,    /**< Ground pin. **/
+        lut,       /**< Pin that generates output from LUT initialization string. **/
+        state,     /**< Pin that generates output from internal state. **/
+        neg_state, /**< Pin that generates output from negated internal state. **/
+        clock,     /**< Clock pin. **/
+        enable,    /**< Enable pin. **/
+        set,       /**< Set/preset pin. **/
+        reset,     /**< Reset/clear pin. **/
+        data,      /**< Data pin. **/
+        address,   /**< Address pin. **/
+        io_pad,    /**< IO pad pin. **/
+        select     /**< Select pin. **/
+    };
+
+    template<>
+    std::vector<std::string> EnumStrings<PinType>::data;
+    
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
      *
@@ -65,49 +107,16 @@ namespace hal
     {
     public:
         /**
-         * Defines the direction of a pin.
-         */
-        enum class PinDirection
-        {
-            none,    /**< Invalid pin. **/
-            input,   /**< Input pin. **/
-            output,  /**< Output pin. **/
-            inout,   /**< Inout pin. **/
-            internal /**< Internal pin. **/
-        };
-
-        /**
-         * Defines the type of a pin.
-         */
-        enum class PinType
-        {
-            none,      /**< Default pin. **/
-            power,     /**< Power pin. **/
-            ground,    /**< Ground pin. **/
-            lut,       /**< Pin that generates output from LUT initialization string. **/
-            state,     /**< Pin that generates output from internal state. **/
-            neg_state, /**< Pin that generates output from negated internal state. **/
-            clock,     /**< Clock pin. **/
-            enable,    /**< Enable pin. **/
-            set,       /**< Set/preset pin. **/
-            reset,     /**< Reset/clear pin. **/
-            data,      /**< Data pin. **/
-            address,   /**< Address pin. **/
-            io_pad,    /**< IO pad pin. **/
-            select     /**< Select pin. **/
-        };
-
-        /**
          * Defines the behavior of the gate type in case both clear and preset are active at the same time.
          */
         enum class ClearPresetBehavior
         {
-            L,      /**< Set the internal state to \p 0. **/
-            H,      /**< Set the internal state to \p 1. **/
-            N,      /**< Do not change the internal state. **/
-            T,      /**< Toggle, i.e., invert the internal state. **/
-            X,      /**< Set the internal state to \p X. **/
-            invalid /**< Invalid behavior, used by default. **/
+            L,    /**< Set the internal state to \p 0. **/
+            H,    /**< Set the internal state to \p 1. **/
+            N,    /**< Do not change the internal state. **/
+            T,    /**< Toggle, i.e., invert the internal state. **/
+            X,    /**< Set the internal state to \p X. **/
+            undef /**< Invalid behavior, used by default. **/
         };
 
         /**
@@ -161,24 +170,6 @@ namespace hal
          * @returns An output stream.
          */
         friend std::ostream& operator<<(std::ostream& os, const GateType& gate_type);
-
-        /**
-         * Insert the pin direction string representation to an output stream.
-         *
-         * @param[in] os - The output stream.
-         * @param[in] direction - The pin direction.
-         * @returns An output stream.
-         */
-        friend std::ostream& operator<<(std::ostream& os, PinDirection direction);
-
-        /**
-         * Insert the pin type string representation to an output stream.
-         *
-         * @param[in] os - The output stream.
-         * @param[in] pin_type - The pin type.
-         * @returns An output stream.
-         */
-        friend std::ostream& operator<<(std::ostream& os, PinType pin_type);
 
         /**
          * Check whether two gate types are equal.
@@ -431,10 +422,6 @@ namespace hal
         std::string m_name;
         std::set<GateTypeProperty> m_properties;
 
-        // enum to string
-        static const std::unordered_map<PinDirection, std::string> m_pin_direction_to_string;
-        static const std::unordered_map<PinType, std::string> m_pin_type_to_string;
-
         // pins
         std::vector<std::string> m_pins;
         std::unordered_set<std::string> m_pins_set;
@@ -455,7 +442,7 @@ namespace hal
         std::unordered_map<std::string, BooleanFunction> m_functions;
 
         // sequential and LUT stuff
-        std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior = {ClearPresetBehavior::invalid, ClearPresetBehavior::invalid};
+        std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior = {ClearPresetBehavior::undef, ClearPresetBehavior::undef};
         std::string m_config_data_category                                          = "";
         std::string m_config_data_identifier                                        = "";
         bool m_ascending                                                            = true;
@@ -467,10 +454,5 @@ namespace hal
     };
 
     template<>
-    std::vector<std::string> EnumStrings<GateTypeProperty>::data;
-
-    template<>
     std::vector<std::string> EnumStrings<GateType::ClearPresetBehavior>::data;
-
-
 }    // namespace hal

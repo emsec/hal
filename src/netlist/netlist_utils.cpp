@@ -559,7 +559,7 @@ namespace hal
                 func = func.optimize_constants();
 
                 std::string func_str                    = func.to_string();
-                std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(GateType::PinDirection::input);
+                std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(PinDirection::input);
                 if (in_pins.find(func_str) != in_pins.end())
                 {
                     Net* out_net = out_endpoint->get_net();

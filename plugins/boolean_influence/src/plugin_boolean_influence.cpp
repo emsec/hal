@@ -32,7 +32,7 @@ namespace hal
         }
 
         // Check for the data port pin
-        std::unordered_set<std::string> d_ports = gate->get_type()->get_pins_of_type(GateType::PinType::data);
+        std::unordered_set<std::string> d_ports = gate->get_type()->get_pins_of_type(PinType::data);
         if (d_ports.size() != 1)
         {
             log_error("boolean_influence", "Can only handle flip flops with exactly 1 data port, but found {}.", d_ports.size());

@@ -866,8 +866,8 @@ namespace hal
 
         lut->add_input_pins(input_pins);
         lut->add_output_pins(output_pins);
-        lut->assign_pin_type("O_LUT", GateType::PinType::lut);
-        lut->assign_pin_type("O_LUT_other", GateType::PinType::lut);
+        lut->assign_pin_type("O_LUT", PinType::lut);
+        lut->assign_pin_type("O_LUT_other", PinType::lut);
         lut->set_lut_init_ascending(true);
         lut->set_config_data_identifier("data_identifier");
         lut->set_config_data_category("data_category");

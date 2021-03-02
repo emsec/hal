@@ -152,7 +152,7 @@ namespace hal
 
         if (m_type->has_property(GateTypeProperty::lut))
         {
-            auto lut_pins = m_type->get_pins_of_type(GateType::PinType::lut);
+            auto lut_pins = m_type->get_pins_of_type(PinType::lut);
             if (std::find(lut_pins.begin(), lut_pins.end(), name) != lut_pins.end())
             {
                 return get_lut_function(name);
@@ -189,7 +189,7 @@ namespace hal
 
         if (!only_custom_functions && m_type->has_property(GateTypeProperty::lut))
         {
-            for (auto pin : m_type->get_pins_of_type(GateType::PinType::lut))
+            for (auto pin : m_type->get_pins_of_type(PinType::lut))
             {
                 res.emplace(pin, get_lut_function(pin));
             }

@@ -17,8 +17,8 @@ namespace hal
                 gt->add_input_pins({"VDD", "GND", "A", "B"});
                 gt->add_output_pins({"B", "O"});
 
-                gt->assign_pin_type("VDD", GateType::PinType::power);
-                gt->assign_pin_type("GND", GateType::PinType::ground);
+                gt->assign_pin_type("VDD", PinType::power);
+                gt->assign_pin_type("GND", PinType::ground);
 
                 gt->add_boolean_function("O", BooleanFunction::from_string("A & B"));
                 gt->add_boolean_function("O_undefined", BooleanFunction::from_string("!A & B"));
@@ -35,8 +35,8 @@ namespace hal
                 gt->assign_pin_group("B", {{0, "B(0)"}, {1, "B(1)"}});
                 gt->assign_pin_group("C", {{0, "C(0)"}, {1, "C(1)"}});
 
-                gt->assign_pin_type("VDD", GateType::PinType::power);
-                gt->assign_pin_type("GND", GateType::PinType::ground);
+                gt->assign_pin_type("VDD", PinType::power);
+                gt->assign_pin_type("GND", PinType::ground);
 
                 gt->add_boolean_function("O", BooleanFunction::from_string("A(1) & B(0)", {"A(1)", "B(0)"}));
                 gt->add_boolean_function("O_undefined", BooleanFunction::from_string("!A(0) & B(0)", {"A(0)", "B(0)"}));
@@ -49,7 +49,7 @@ namespace hal
                 gt->add_input_pins({"I1", "I2"});
                 gt->add_output_pins({"O"});
 
-                gt->assign_pin_type("O", GateType::PinType::lut);
+                gt->assign_pin_type("O", PinType::lut);
 
                 gt->set_config_data_category("generic");
                 gt->set_config_data_identifier("INIT");
@@ -62,7 +62,7 @@ namespace hal
                 gt->add_input_pins({"I1", "I2"});
                 gt->add_output_pins({"O"});
 
-                gt->assign_pin_type("O", GateType::PinType::lut);
+                gt->assign_pin_type("O", PinType::lut);
 
                 gt->set_config_data_category("generic");
                 gt->set_config_data_identifier("INIT");
@@ -75,13 +75,13 @@ namespace hal
                 gt->add_input_pins({"CLK", "D", "EN", "R", "S"});
                 gt->add_output_pins({"Q", "QN"});
 
-                gt->assign_pin_type("CLK", GateType::PinType::clock);
-                gt->assign_pin_type("D", GateType::PinType::data);
-                gt->assign_pin_type("EN", GateType::PinType::enable);
-                gt->assign_pin_type("R", GateType::PinType::reset);
-                gt->assign_pin_type("S", GateType::PinType::set);
-                gt->assign_pin_type("Q", GateType::PinType::state);
-                gt->assign_pin_type("QN", GateType::PinType::neg_state);
+                gt->assign_pin_type("CLK", PinType::clock);
+                gt->assign_pin_type("D", PinType::data);
+                gt->assign_pin_type("EN", PinType::enable);
+                gt->assign_pin_type("R", PinType::reset);
+                gt->assign_pin_type("S", PinType::set);
+                gt->assign_pin_type("Q", PinType::state);
+                gt->assign_pin_type("QN", PinType::neg_state);
 
                 gt->add_boolean_function("next_state", BooleanFunction::from_string("D"));
                 gt->add_boolean_function("clock", BooleanFunction::from_string("CLK & EN"));
@@ -99,12 +99,12 @@ namespace hal
                 gt->add_input_pins({"D", "EN", "R", "S"});
                 gt->add_output_pins({"Q", "QN"});
 
-                gt->assign_pin_type("D", GateType::PinType::data);
-                gt->assign_pin_type("EN", GateType::PinType::enable);
-                gt->assign_pin_type("R", GateType::PinType::reset);
-                gt->assign_pin_type("S", GateType::PinType::set);
-                gt->assign_pin_type("Q", GateType::PinType::state);
-                gt->assign_pin_type("QN", GateType::PinType::neg_state);
+                gt->assign_pin_type("D", PinType::data);
+                gt->assign_pin_type("EN", PinType::enable);
+                gt->assign_pin_type("R", PinType::reset);
+                gt->assign_pin_type("S", PinType::set);
+                gt->assign_pin_type("Q", PinType::state);
+                gt->assign_pin_type("QN", PinType::neg_state);
 
                 gt->add_boolean_function("data", BooleanFunction::from_string("D"));
                 gt->add_boolean_function("enable", BooleanFunction::from_string("EN"));
@@ -124,15 +124,15 @@ namespace hal
                 gt->assign_pin_group("A", {{0, "A(0)"}, {1, "A(1)"}, {2, "A(2)"}});
                 gt->assign_pin_group("DO", {{0, "DO(0)"}, {1, "DO(1)"}, {2, "DO(2)"}});
 
-                gt->assign_pin_type("DI(0)", GateType::PinType::data);
-                gt->assign_pin_type("DI(1)", GateType::PinType::data);
-                gt->assign_pin_type("DI(2)", GateType::PinType::data);
-                gt->assign_pin_type("A(0)", GateType::PinType::address);
-                gt->assign_pin_type("A(1)", GateType::PinType::address);
-                gt->assign_pin_type("A(2)", GateType::PinType::address);
-                gt->assign_pin_type("DO(0)", GateType::PinType::data);
-                gt->assign_pin_type("DO(1)", GateType::PinType::data);
-                gt->assign_pin_type("DO(2)", GateType::PinType::data);
+                gt->assign_pin_type("DI(0)", PinType::data);
+                gt->assign_pin_type("DI(1)", PinType::data);
+                gt->assign_pin_type("DI(2)", PinType::data);
+                gt->assign_pin_type("A(0)", PinType::address);
+                gt->assign_pin_type("A(1)", PinType::address);
+                gt->assign_pin_type("A(2)", PinType::address);
+                gt->assign_pin_type("DO(0)", PinType::data);
+                gt->assign_pin_type("DO(1)", PinType::data);
+                gt->assign_pin_type("DO(2)", PinType::data);
             }
 
             return gl;
