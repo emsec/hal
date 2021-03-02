@@ -47,35 +47,35 @@ namespace hal
         {
             std::unique_ptr<GateLibrary> lib = std::unique_ptr<GateLibrary>(new GateLibrary("dummy_path", "dummy_name"));
             GateType* gnd = lib->create_gate_type("GND", {GateTypeProperty::combinational, GateTypeProperty::ground});
-            gnd->add_pin("O", GateType::PinDirection::output);
+            gnd->add_pin("O", PinDirection::output);
             gnd->add_boolean_function("O", BooleanFunction::from_string("0"));
             lib->mark_gnd_gate_type(gnd);
 
             GateType* vcc = lib->create_gate_type("VCC", {GateTypeProperty::combinational, GateTypeProperty::power});
-            vcc->add_pin("O", GateType::PinDirection::output);
+            vcc->add_pin("O", PinDirection::output);
             vcc->add_boolean_function("O", BooleanFunction::from_string("1"));
             lib->mark_vcc_gate_type(vcc);
 
             GateType* and2 = lib->create_gate_type("AND2", {GateTypeProperty::combinational});
-            and2->add_pins({"I0", "I1"}, GateType::PinDirection::input);
-            and2->add_pin("O", GateType::PinDirection::output);
+            and2->add_pins({"I0", "I1"}, PinDirection::input);
+            and2->add_pin("O", PinDirection::output);
             and2->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
 
             GateType* lut2 = lib->create_gate_type("LUT2", {GateTypeProperty::combinational, GateTypeProperty::lut});
-            lut2->add_pins({"I0", "I1"}, GateType::PinDirection::input);
-            lut2->add_pin("O", GateType::PinDirection::output, GateType::PinType::lut);
+            lut2->add_pins({"I0", "I1"}, PinDirection::input);
+            lut2->add_pin("O", PinDirection::output, PinType::lut);
             lut2->set_config_data_category("generic");
             lut2->set_config_data_identifier("INIT");
 
             GateType* lut4 = lib->create_gate_type("LUT4", {GateTypeProperty::combinational, GateTypeProperty::lut});
-            lut4->add_pins({"I0", "I1", "I2", "I3"}, GateType::PinDirection::input);
-            lut4->add_pin("O", GateType::PinDirection::output, GateType::PinType::lut);
+            lut4->add_pins({"I0", "I1", "I2", "I3"}, PinDirection::input);
+            lut4->add_pin("O", PinDirection::output, PinType::lut);
             lut4->set_config_data_category("generic");
             lut4->set_config_data_identifier("INIT");
 
             GateType* buf = lib->create_gate_type("BUF", {GateTypeProperty::combinational});
-            buf->add_pin("I", GateType::PinDirection::input);
-            buf->add_pin("O", GateType::PinDirection::output);
+            buf->add_pin("I", PinDirection::input);
+            buf->add_pin("O", PinDirection::output);
             buf->add_boolean_function("O", BooleanFunction::from_string("I"));
 
             return std::move(lib);

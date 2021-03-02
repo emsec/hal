@@ -10,21 +10,6 @@
 
 namespace hal
 {
-    const std::unordered_map<GateType::PinType, std::string> HGLWriter::m_pin_type_to_string = {{GateType::PinType::none, "none"},
-                                                                                                {GateType::PinType::power, "power"},
-                                                                                                {GateType::PinType::ground, "ground"},
-                                                                                                {GateType::PinType::lut, "lut"},
-                                                                                                {GateType::PinType::state, "state"},
-                                                                                                {GateType::PinType::neg_state, "neg_state"},
-                                                                                                {GateType::PinType::clock, "clock"},
-                                                                                                {GateType::PinType::enable, "enable"},
-                                                                                                {GateType::PinType::set, "set"},
-                                                                                                {GateType::PinType::reset, "reset"},
-                                                                                                {GateType::PinType::data, "data"},
-                                                                                                {GateType::PinType::address, "address"},
-                                                                                                {GateType::PinType::io_pad, "io_pad"},
-                                                                                                {GateType::PinType::select, "select"}};
-
     bool HGLWriter::write(const GateLibrary* gate_lib, const std::filesystem::path& file_path)
     {
         if (gate_lib == nullptr)
@@ -95,11 +80,8 @@ namespace hal
 
             for (const auto& property : properties)
             {
-                if (property != GateTypeProperty::invalid)
-                {
-                    std::string bt_str = enum_to_string<GateTypeProperty>(property);
-                    bts.PushBack(rapidjson::Value{}.SetString(bt_str.c_str(), bt_str.length(), allocator), allocator);
-                }
+                std::string bt_str = enum_to_string<GateTypeProperty>(property);
+                bts.PushBack(rapidjson::Value{}.SetString(bt_str.c_str(), bt_str.length(), allocator), allocator);
             }
 
             cell.AddMember("types", bts, allocator);
@@ -154,11 +136,11 @@ namespace hal
                 }
 
                 std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
-                if (cp_behav.first != GateType::ClearPresetBehavior::invalid)
+                if (cp_behav.first != GateType::ClearPresetBehavior::undef)
                 {
                     ff_config.AddMember("state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.first), allocator);
                 }
-                if (cp_behav.second != GateType::ClearPresetBehavior::invalid)
+                if (cp_behav.second != GateType::ClearPresetBehavior::undef)
                 {
                     ff_config.AddMember("neg_state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.second), allocator);
                 }
@@ -188,11 +170,11 @@ namespace hal
                 }
 
                 std::pair<GateType::ClearPresetBehavior, GateType::ClearPresetBehavior> cp_behav = gt->get_clear_preset_behavior();
-                if (cp_behav.first != GateType::ClearPresetBehavior::invalid)
+                if (cp_behav.first != GateType::ClearPresetBehavior::undef)
                 {
                     latch_config.AddMember("state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.first), allocator);
                 }
-                if (cp_behav.second != GateType::ClearPresetBehavior::invalid)
+                if (cp_behav.second != GateType::ClearPresetBehavior::undef)
                 {
                     latch_config.AddMember("neg_state_clear_preset", enum_to_string<GateType::ClearPresetBehavior>(cp_behav.second), allocator);
                 }
@@ -271,37 +253,29 @@ namespace hal
     std::vector<HGLWriter::PinCtx> HGLWriter::get_pins(GateType* gt, const std::unordered_map<std::string, BooleanFunction>& functions)
     {
         std::vector<PinCtx> res;
-        const std::vector<std::string>& pins                                            = gt->get_pins();
-        const std::unordered_map<std::string, GateType::PinDirection>& pin_to_direction = gt->get_pin_directions();
-        const std::unordered_map<std::string, GateType::PinType>& pin_to_type           = gt->get_pin_types();
+        const std::vector<std::string>& pins                                  = gt->get_pins();
+        const std::unordered_map<std::string, PinDirection>& pin_to_direction = gt->get_pin_directions();
+        const std::unordered_map<std::string, PinType>& pin_to_type           = gt->get_pin_types();
 
         for (const auto& pin : pins)
         {
             PinCtx res_pin;
             res_pin.name = pin;
-            if (pin_to_type.at(pin) != GateType::PinType::none)
+            if (pin_to_type.at(pin) != PinType::none)
             {
-                res_pin.type = m_pin_type_to_string.at(pin_to_type.at(pin));
-            }
-            switch (pin_to_direction.at(pin))
-            {
-                case GateType::PinDirection::none:
-                    continue;
-                case GateType::PinDirection::input:
-                    res_pin.direction = "input";
-                    break;
-                case GateType::PinDirection::output:
-                    res_pin.direction = "output";
-                    break;
-                case GateType::PinDirection::inout:
-                    res_pin.direction = "inout";
-                    break;
-                case GateType::PinDirection::internal:
-                    res_pin.direction = "internal";
-                    break;
+                res_pin.type = enum_to_string<PinType>(pin_to_type.at(pin));
             }
 
-            if (pin_to_direction.at(pin) == GateType::PinDirection::output || pin_to_direction.at(pin) == GateType::PinDirection::inout)
+            if (pin_to_direction.at(pin) != PinDirection::none)
+            {
+                res_pin.direction = enum_to_string<PinDirection>(pin_to_direction.at(pin));
+            }
+            else
+            {
+                log_error("hgl_writer", "invalid pin type 'none' for pin '{}' of gate type '{}' with ID {}.", pin, gt->get_name(), gt->get_id());
+            }
+
+            if (pin_to_direction.at(pin) == PinDirection::output || pin_to_direction.at(pin) == PinDirection::inout)
             {
                 if (const auto it = functions.find(pin); it != functions.end())
                 {

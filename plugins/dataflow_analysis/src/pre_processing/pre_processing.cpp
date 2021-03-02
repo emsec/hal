@@ -182,25 +182,25 @@ namespace hal
                         auto id = sg->get_id();
                         sg->get_name();
 
-                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::clock), true))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(PinType::clock), true))
                         {
                             netlist_abstr.gate_to_clock_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 
-                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::enable), true))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(PinType::enable), true))
                         {
                             netlist_abstr.gate_to_enable_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 
-                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::reset), true))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(PinType::reset), true))
                         {
                             netlist_abstr.gate_to_reset_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 
-                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::set), true))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(PinType::set), true))
                         {
                             netlist_abstr.gate_to_set_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());

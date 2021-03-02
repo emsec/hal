@@ -28,14 +28,14 @@ namespace hal
         auto index = static_cast<size_t>(e);
         if (index >= EnumStrings<T>::data.size())
         {
-            throw std::runtime_error("no string for enum with value '" + std::to_string(index) + "'");
+            throw std::runtime_error("no string for enum with value '" + std::to_string(index) + "'.");
         }
         return EnumStrings<T>::data.at(index);
     }
 
     /**
      * Translates a string into an enum value if possible.
-     * Assumes the last enum entry to represent an invalid state, as it defaults to this value.
+     * Throws an exception if no matching enum value is found.
      *
      * @param[in] str - The string.
      * @returns The enum value.
@@ -51,7 +51,29 @@ namespace hal
             }
         }
 
-        return static_cast<T>(EnumStrings<T>::data.size() - 1);
+        throw std::runtime_error("no enum value for string `" + str + "` available.");
+    }
+
+    /**
+     * Translates a string into an enum value if possible.
+     * Defaults to the given default value if no matching enum value is found.
+     *
+     * @param[in] str - The string.
+     * @param[in] default_val - The default value.
+     * @returns The enum value.
+     */
+    template<typename T, typename = typename std::enable_if<std::is_enum<T>::value, T>::type>
+    T enum_from_string(const std::string& str, const T default_val) noexcept
+    {
+        for (size_t i = 0; i < EnumStrings<T>::data.size(); i++)
+        {
+            if (EnumStrings<T>::data.at(i) == str)
+            {
+                return static_cast<T>(i);
+            }
+        }
+
+        return default_val;
     }
 
     /**

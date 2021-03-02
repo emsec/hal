@@ -44,8 +44,8 @@ namespace hal {
                 // -- Check the pins
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "I"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::power), std::unordered_set<std::string>({"VDD"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::ground), std::unordered_set<std::string>({"GND"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::power), std::unordered_set<std::string>({"VDD"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::ground), std::unordered_set<std::string>({"GND"}));
                 // -- Check the boolean functions
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
@@ -89,7 +89,7 @@ namespace hal {
                 ASSERT_TRUE(gt_asc->get_boolean_functions().find("O3") != gt_asc->get_boolean_functions().end());
                 EXPECT_EQ(gt_asc->get_boolean_functions().at("O3"),
                           BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
-                EXPECT_EQ(gt_asc->get_pins_of_type(GateType::PinType::lut), std::unordered_set<std::string>({"O0", "O2"}));
+                EXPECT_EQ(gt_asc->get_pins_of_type(PinType::lut), std::unordered_set<std::string>({"O0", "O2"}));
                 EXPECT_EQ(gt_asc->get_config_data_category(), "test_category");
                 EXPECT_EQ(gt_asc->get_config_data_identifier(), "test_identifier");
                 EXPECT_EQ(gt_asc->is_lut_init_ascending(), true);
@@ -131,7 +131,7 @@ namespace hal {
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::clock), std::unordered_set<std::string>({"CLK"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::clock), std::unordered_set<std::string>({"CLK"}));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
                           BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
@@ -149,8 +149,8 @@ namespace hal {
                 EXPECT_EQ(gt->get_boolean_functions().at("clear"),
                           BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
                 // -- Check the output pins
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::state), std::unordered_set<std::string>({"Q"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::neg_state), std::unordered_set<std::string>({"QN"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 // -- Check the set-reset behaviour
                 EXPECT_EQ(gt->get_clear_preset_behavior(),
                           std::make_pair(GateType::ClearPresetBehavior::L,
@@ -203,8 +203,8 @@ namespace hal {
                 EXPECT_EQ(gt->get_boolean_functions().at("clear"),
                           BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
                 // -- Check the output pins
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::state), std::unordered_set<std::string>({"Q"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::neg_state), std::unordered_set<std::string>({"QN"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 // -- Check the clear-preset behaviour
                 EXPECT_EQ(gt->get_clear_preset_behavior(),
                           std::make_pair(GateType::ClearPresetBehavior::N,

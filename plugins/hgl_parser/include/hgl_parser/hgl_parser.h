@@ -56,8 +56,8 @@ namespace hal
         struct PinCtx
         {
             std::vector<std::string> pins;
-            std::unordered_map<std::string, GateType::PinType> pin_to_type;
-            std::unordered_map<std::string, GateType::PinDirection> pin_to_direction;
+            std::unordered_map<std::string,PinType> pin_to_type;
+            std::unordered_map<std::string, PinDirection> pin_to_direction;
             std::unordered_map<std::string, std::string> boolean_functions;
         };
 
@@ -65,8 +65,6 @@ namespace hal
         std::filesystem::path m_path;
 
         std::set<std::string> m_cell_names;
-
-        static const std::unordered_map<std::string, GateType::PinType> m_string_to_pin_type;
 
         bool parse_gate_library(const rapidjson::Document& document);
         bool parse_gate_type(const rapidjson::Value& gate_type);
