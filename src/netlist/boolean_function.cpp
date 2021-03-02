@@ -8,6 +8,9 @@
 
 namespace hal
 {
+    template<>
+    std::vector<std::string> EnumStrings<BooleanFunction::Value>::data = {"0", "1", "Z", "X"};
+
     std::string BooleanFunction::to_string(const operation& op)
     {
         switch (op)
@@ -30,15 +33,7 @@ namespace hal
 
     std::string BooleanFunction::to_string(Value v)
     {
-        switch (v)
-        {
-            case Value::ONE:
-                return "1";
-            case Value::ZERO:
-                return "0";
-            default:
-                return "X";
-        }
+        return enum_to_string<Value>(v);
     }
 
     std::ostream& operator<<(std::ostream& os, BooleanFunction::Value v)
@@ -156,7 +151,7 @@ namespace hal
             for (u32 i = 1; i < m_operands.size(); ++i)
             {
                 // early exit
-                if ((m_op == operation::AND && result == 0) || (m_op == operation::OR && result == 1) || (m_op == operation::XOR && result == X))
+                if ((m_op == operation::AND && result == ZERO) || (m_op == operation::OR && result == ONE) || (m_op == operation::XOR && result == X))
                 {
                     break;
                 }
@@ -164,29 +159,29 @@ namespace hal
                 auto next = m_operands[i].evaluate(inputs);
                 if (m_op == operation::AND)
                 {
-                    if (next == 0 || result == 0)
+                    if (next == ZERO || result == ZERO)
                     {
-                        result = (Value)0;
+                        result = ZERO;
                     }
-                    else if (next == X && result == 1)
+                    else if (next == X && result == ONE)
                     {
                         result = X;
                     }
                 }
                 else if (m_op == operation::OR)
                 {
-                    if (next == 1 || result == 1)
+                    if (next == ONE || result == ONE)
                     {
-                        result = (Value)1;
+                        result = ONE;
                     }
-                    else if (next == X && result == 0)
+                    else if (next == X && result == ZERO)
                     {
                         result = X;
                     }
                 }
                 else if (m_op == operation::XOR)
                 {
-                    if (next == 1)
+                    if (next == ONE)
                     {
                         result = (Value)(1 - result);
                     }
@@ -200,13 +195,13 @@ namespace hal
 
         if (m_invert)
         {
-            if (result == 1)
+            if (result == ONE)
             {
-                return (Value)0;
+                return ZERO;
             }
-            else if (result == 0)
+            else if (result == ZERO)
             {
-                return (Value)1;
+                return ONE;
             }
         }
         return result;
@@ -1186,7 +1181,7 @@ namespace hal
 
         result = BooleanFunction();
 
-        for (auto it = terms.rbegin(); it != terms.rend(); ++it) //qmc reverses order, so iterate in reverse
+        for (auto it = terms.begin(); it != terms.end(); ++it)
         {
             auto& term = (*it);
             BooleanFunction tmp;
@@ -1352,7 +1347,7 @@ namespace hal
                 {
                     no_change = false;
                     add_to_output(it.second[0]);
-                    break; // 'add_to_output' invalidates table iterator, so break and restart in next iteration
+                    break;    // 'add_to_output' invalidates table iterator, so break and restart in next iteration
                 }
             }
 

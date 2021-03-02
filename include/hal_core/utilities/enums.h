@@ -3,6 +3,7 @@
 #include "hal_core/defines.h"
 
 #include <iostream>
+#include <vector>
 
 namespace hal
 {
