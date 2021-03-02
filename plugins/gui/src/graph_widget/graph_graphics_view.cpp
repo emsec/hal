@@ -1047,6 +1047,8 @@ namespace hal
         handleGroupingUnassign();
         const QAction* action = static_cast<const QAction*>(QObject::sender());
         QString grpName       = action->text();
+        if (grpName.startsWith(sAssignToGrouping)) // remove trailing "Assign to.."
+            grpName.remove(0,sAssignToGrouping.length());
         gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction(grpName);
     }
 
