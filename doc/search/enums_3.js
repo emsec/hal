@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['pindirection_1359',['PinDirection',['../d1/d05/classhal_1_1GateType.html#a2564ab80fa9356e6b71a138b0b53d5cb',1,'hal::GateType']]],
-  ['pintype_1360',['PinType',['../d1/d05/classhal_1_1GateType.html#a64ba033c4e437917813b0777494a0d7b',1,'hal::GateType']]]
+  ['pindirection_1360',['PinDirection',['../d0/d7f/namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec',1,'hal']]],
+  ['pintype_1361',['PinType',['../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b',1,'hal']]]
 ];

@@ -1,10 +1,11 @@
 var searchData=
 [
-  ['u16_676',['u16',['../d8/db0/defines_8h.html#a6dbf9516e516c901604625282c174aa4',1,'defines.h']]],
-  ['u32_677',['u32',['../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41',1,'defines.h']]],
-  ['u64_678',['u64',['../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574',1,'defines.h']]],
-  ['u8_679',['u8',['../d8/db0/defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6',1,'defines.h']]],
-  ['uiplugininterface_680',['UIPluginInterface',['../dd/d86/classhal_1_1UIPluginInterface.html',1,'hal::UIPluginInterface'],['../dd/d86/classhal_1_1UIPluginInterface.html#ae94df09f5acb09d4c5ee7a0f9a49fc78',1,'hal::UIPluginInterface::UIPluginInterface()']]],
+  ['u16_675',['u16',['../d8/db0/defines_8h.html#a6dbf9516e516c901604625282c174aa4',1,'defines.h']]],
+  ['u32_676',['u32',['../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41',1,'defines.h']]],
+  ['u64_677',['u64',['../d8/db0/defines_8h.html#a1af9f95651e921615e75917a6dd1b574',1,'defines.h']]],
+  ['u8_678',['u8',['../d8/db0/defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6',1,'defines.h']]],
+  ['uiplugininterface_679',['UIPluginInterface',['../dd/d86/classhal_1_1UIPluginInterface.html',1,'hal::UIPluginInterface'],['../dd/d86/classhal_1_1UIPluginInterface.html#ae94df09f5acb09d4c5ee7a0f9a49fc78',1,'hal::UIPluginInterface::UIPluginInterface()']]],
+  ['undef_680',['undef',['../d1/d05/classhal_1_1GateType.html#a15686996a46af6fd61df29b08e8d66e6af31ee5e3824f1f5e5d206bdf3029f22b',1,'hal::GateType']]],
   ['unload_681',['unload',['../da/d5a/namespacehal_1_1plugin__manager.html#a54caf767ba2c2f754875e9aad4849767',1,'hal::plugin_manager']]],
   ['unload_5fall_5fplugins_682',['unload_all_plugins',['../da/d5a/namespacehal_1_1plugin__manager.html#acb6d1f3c164b832fb19257b1df06aa53',1,'hal::plugin_manager']]],
   ['unload_5flibrary_683',['unload_library',['../d7/d66/classhal_1_1RuntimeLibrary.html#a599b0580b6b910e1065da1cb0f703c01',1,'hal::RuntimeLibrary']]],

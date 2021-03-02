@@ -208,11 +208,41 @@ Enumerations</h2></td></tr>
 <a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caaf1e492ffa7562aa744240b8b3eb403c5">GateTypeProperty::mux</a>, 
 <a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa7f2db423a49b305459147332fb01cf87">GateTypeProperty::buffer</a>, 
 <br />
-&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caaf9c05403344bba5b3993d54797b56820">GateTypeProperty::carry</a>, 
-<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caafedb2d84cafe20862cb4399751a8a7e3">GateTypeProperty::invalid</a>
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caaf9c05403344bba5b3993d54797b56820">GateTypeProperty::carry</a>
 <br />
  }</td></tr>
 <tr class="separator:adb8da04d2161f277bd489e806a2721ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a119eb4e25d047caa41d83e762cbed8ec"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> { <br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">PinDirection::none</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">PinDirection::input</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">PinDirection::output</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">PinDirection::inout</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecad1efad72dc5b17dc66a46767c32fff40">PinDirection::internal</a>
+<br />
+ }</td></tr>
+<tr class="separator:a119eb4e25d047caa41d83e762cbed8ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae062cd9848a7ac51bd0bb4d76f1fb94b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> { <br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8">PinType::none</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba62cd275989e78ee56a81f0265a87562e">PinType::power</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba578552719239a72a2d45ad422f67d24d">PinType::ground</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bab56efdaa67baedcc830a453ecd15b37f">PinType::lut</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">PinType::state</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bad7d6085c987ddd1621d42b6f15044764">PinType::neg_state</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">PinType::clock</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">PinType::enable</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">PinType::set</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">PinType::reset</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">PinType::data</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba884d9804999fc47a3c2694e49ad2536a">PinType::address</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba1822c0e3720259c5b1054f25fc266cac">PinType::io_pad</a>, 
+<a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba99938282f04071859941e18f16efcf42">PinType::select</a>
+<br />
+ }</td></tr>
+<tr class="separator:ae062cd9848a7ac51bd0bb4d76f1fb94b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -224,6 +254,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a2319a036cfb2272af66101db753b7b5c"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </td></tr>
 <tr class="memitem:a2319a036cfb2272af66101db753b7b5c"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#a2319a036cfb2272af66101db753b7b5c">enum_from_string</a> (const std::string &amp;str)</td></tr>
 <tr class="separator:a2319a036cfb2272af66101db753b7b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cd05eb343d9af79934226e60f1ee55e"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </td></tr>
+<tr class="memitem:a0cd05eb343d9af79934226e60f1ee55e"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#a0cd05eb343d9af79934226e60f1ee55e">enum_from_string</a> (const std::string &amp;str, const T default_val) noexcept</td></tr>
+<tr class="separator:a0cd05eb343d9af79934226e60f1ee55e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfc41a824ec2e2d67ef693316ffca725"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </td></tr>
 <tr class="memitem:abfc41a824ec2e2d67ef693316ffca725"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#abfc41a824ec2e2d67ef693316ffca725">operator&lt;&lt;</a> (std::ostream &amp;os, T e)</td></tr>
 <tr class="separator:abfc41a824ec2e2d67ef693316ffca725"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -235,10 +268,6 @@ Functions</h2></td></tr>
 <tr class="separator:a269baf7c77d18645a4d0a9f759725f8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1c6648030f8b55e519fb07e3a8750f9"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#ad1c6648030f8b55e519fb07e3a8750f9">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> &amp;gt)</td></tr>
 <tr class="separator:ad1c6648030f8b55e519fb07e3a8750f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b2ea6bb0988104392d1a19cf54b7022"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#a9b2ea6bb0988104392d1a19cf54b7022">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a2564ab80fa9356e6b71a138b0b53d5cb">GateType::PinDirection</a> direction)</td></tr>
-<tr class="separator:a9b2ea6bb0988104392d1a19cf54b7022"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada543a76694a03ac9f265a1b7ac8d6a7"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#ada543a76694a03ac9f265a1b7ac8d6a7">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a64ba033c4e437917813b0777494a0d7b">GateType::PinType</a> pin_type)</td></tr>
-<tr class="separator:ada543a76694a03ac9f265a1b7ac8d6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a034467b937d9c580d84c198167d00929"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d7f/namespacehal.html#a034467b937d9c580d84c198167d00929">PYBIND11_PLUGIN</a> (hal_py)</td></tr>
 <tr class="separator:a034467b937d9c580d84c198167d00929"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga12b7d19dc09194a879bf4d0b8b7641c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d7c/group__pybind.html#ga12b7d19dc09194a879bf4d0b8b7641c7">path_init</a> (py::module &amp;m)</td></tr>
@@ -387,7 +416,93 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="adb8da04d2161f277bd489e806a2721caaf9c05403344bba5b3993d54797b56820"></a>carry&#160;</td><td class="fielddoc"><p>Carry gate type. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="adb8da04d2161f277bd489e806a2721caafedb2d84cafe20862cb4399751a8a7e3"></a>invalid&#160;</td><td class="fielddoc"><p>Invalid property. </p>
+</table>
+
+</div>
+</div>
+<a id="a119eb4e25d047caa41d83e762cbed8ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a119eb4e25d047caa41d83e762cbed8ec">&#9670;&nbsp;</a></span>PinDirection</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="../../d0/d7f/namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">hal::PinDirection</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Defines the direction of a pin. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8"></a>none&#160;</td><td class="fielddoc"><p>Invalid pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967"></a>input&#160;</td><td class="fielddoc"><p>Input pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d"></a>output&#160;</td><td class="fielddoc"><p>Output pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432"></a>inout&#160;</td><td class="fielddoc"><p>Inout pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a119eb4e25d047caa41d83e762cbed8ecad1efad72dc5b17dc66a46767c32fff40"></a>internal&#160;</td><td class="fielddoc"><p>Internal pin. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ae062cd9848a7ac51bd0bb4d76f1fb94b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae062cd9848a7ac51bd0bb4d76f1fb94b">&#9670;&nbsp;</a></span>PinType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="../../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">hal::PinType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Defines the type of a pin. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8"></a>none&#160;</td><td class="fielddoc"><p>Default pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba62cd275989e78ee56a81f0265a87562e"></a>power&#160;</td><td class="fielddoc"><p>Power pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba578552719239a72a2d45ad422f67d24d"></a>ground&#160;</td><td class="fielddoc"><p>Ground pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94bab56efdaa67baedcc830a453ecd15b37f"></a>lut&#160;</td><td class="fielddoc"><p>Pin that generates output from LUT initialization string. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e"></a>state&#160;</td><td class="fielddoc"><p>Pin that generates output from internal state. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94bad7d6085c987ddd1621d42b6f15044764"></a>neg_state&#160;</td><td class="fielddoc"><p>Pin that generates output from negated internal state. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3"></a>clock&#160;</td><td class="fielddoc"><p>Clock pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4"></a>enable&#160;</td><td class="fielddoc"><p>Enable pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e"></a>set&#160;</td><td class="fielddoc"><p>Set/preset pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29"></a>reset&#160;</td><td class="fielddoc"><p>Reset/clear pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc"></a>data&#160;</td><td class="fielddoc"><p>Data pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba884d9804999fc47a3c2694e49ad2536a"></a>address&#160;</td><td class="fielddoc"><p>Address pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba1822c0e3720259c5b1054f25fc266cac"></a>io_pad&#160;</td><td class="fielddoc"><p>IO pad pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae062cd9848a7ac51bd0bb4d76f1fb94ba99938282f04071859941e18f16efcf42"></a>select&#160;</td><td class="fielddoc"><p>Select pin. </p>
 </td></tr>
 </table>
 
@@ -442,7 +557,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a2319a036cfb2272af66101db753b7b5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2319a036cfb2272af66101db753b7b5c">&#9670;&nbsp;</a></span>enum_from_string()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2319a036cfb2272af66101db753b7b5c">&#9670;&nbsp;</a></span>enum_from_string() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -458,7 +573,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Translates a string into an enum value if possible. Assumes the last enum entry to represent an invalid state, as it defaults to this value.</p>
+<p>Translates a string into an enum value if possible. Throws an exception if no matching enum value is found.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>- The string. </td></tr>
@@ -469,8 +584,55 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 
 </div>
 </div>
+<a id="a0cd05eb343d9af79934226e60f1ee55e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cd05eb343d9af79934226e60f1ee55e">&#9670;&nbsp;</a></span>enum_from_string() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T hal::enum_from_string </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>default_val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Translates a string into an enum value if possible. Defaults to the given default value if no matching enum value is found.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>- The string. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">default_val</td><td>- The default value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The enum value. </dd></dl>
+
+</div>
+</div>
 <a id="abfc41a824ec2e2d67ef693316ffca725"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfc41a824ec2e2d67ef693316ffca725">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abfc41a824ec2e2d67ef693316ffca725">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -511,7 +673,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="aef8d4a8f510965ea04184d31d5714c79"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef8d4a8f510965ea04184d31d5714c79">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aef8d4a8f510965ea04184d31d5714c79">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -541,7 +703,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a90756e09e3a11b7dd4e7362ae3101ce9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90756e09e3a11b7dd4e7362ae3101ce9">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[3/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a90756e09e3a11b7dd4e7362ae3101ce9">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -580,7 +742,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="a269baf7c77d18645a4d0a9f759725f8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a269baf7c77d18645a4d0a9f759725f8f">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[4/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a269baf7c77d18645a4d0a9f759725f8f">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -619,7 +781,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div>
 </div>
 <a id="ad1c6648030f8b55e519fb07e3a8750f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1c6648030f8b55e519fb07e3a8750f9">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[5/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1c6648030f8b55e519fb07e3a8750f9">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -657,80 +819,6 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 
 </div>
 </div>
-<a id="a9b2ea6bb0988104392d1a19cf54b7022"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b2ea6bb0988104392d1a19cf54b7022">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[6/7]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream&amp; hal::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a2564ab80fa9356e6b71a138b0b53d5cb">GateType::PinDirection</a>&#160;</td>
-          <td class="paramname"><em>direction</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Insert the pin direction string representation to an output stream.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">os</td><td>- The output stream. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The pin direction. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An output stream. </dd></dl>
-
-</div>
-</div>
-<a id="ada543a76694a03ac9f265a1b7ac8d6a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada543a76694a03ac9f265a1b7ac8d6a7">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[7/7]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream&amp; hal::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d1/d05/classhal_1_1GateType.html#a64ba033c4e437917813b0777494a0d7b">GateType::PinType</a>&#160;</td>
-          <td class="paramname"><em>pin_type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Insert the pin type string representation to an output stream.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">os</td><td>- The output stream. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pin_type</td><td>- The pin type. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An output stream. </dd></dl>
-
-</div>
-</div>
 <a id="a034467b937d9c580d84c198167d00929"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a034467b937d9c580d84c198167d00929">&#9670;&nbsp;</a></span>PYBIND11_PLUGIN()</h2>
 
@@ -754,7 +842,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Mar 1 2021 15:10:15 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Mar 2 2021 15:14:18 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

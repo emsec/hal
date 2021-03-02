@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['enable_111',['enable',['../d1/d05/classhal_1_1GateType.html#a64ba033c4e437917813b0777494a0d7ba208f156d4a803025c284bb595a7576b4',1,'hal::GateType::enable()'],['../de/d4d/namespacehal_1_1gate__event__handler.html#aa3753cc8705e0dde5fefc234ea07eb59',1,'hal::gate_event_handler::enable()'],['../db/dd4/namespacehal_1_1grouping__event__handler.html#a32f24191075170591a66d45566175f49',1,'hal::grouping_event_handler::enable()'],['../d9/df4/namespacehal_1_1module__event__handler.html#a55c6c1001fdba60f2c0ce36ddfe23f5e',1,'hal::module_event_handler::enable()'],['../da/ddd/namespacehal_1_1net__event__handler.html#a771f9d7bbfdf53f3c59ecdb9f450ea24',1,'hal::net_event_handler::enable()'],['../da/d3f/namespacehal_1_1netlist__event__handler.html#aabca40f2791604519331c9b2d5b2f2bb',1,'hal::netlist_event_handler::enable()']]],
+  ['enable_111',['enable',['../de/d4d/namespacehal_1_1gate__event__handler.html#aa3753cc8705e0dde5fefc234ea07eb59',1,'hal::gate_event_handler::enable()'],['../db/dd4/namespacehal_1_1grouping__event__handler.html#a32f24191075170591a66d45566175f49',1,'hal::grouping_event_handler::enable()'],['../d9/df4/namespacehal_1_1module__event__handler.html#a55c6c1001fdba60f2c0ce36ddfe23f5e',1,'hal::module_event_handler::enable()'],['../da/ddd/namespacehal_1_1net__event__handler.html#a771f9d7bbfdf53f3c59ecdb9f450ea24',1,'hal::net_event_handler::enable()'],['../da/d3f/namespacehal_1_1netlist__event__handler.html#aabca40f2791604519331c9b2d5b2f2bb',1,'hal::netlist_event_handler::enable()'],['../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4',1,'hal::enable()']]],
   ['enable_5fall_112',['enable_all',['../d9/d0e/namespacehal_1_1event__controls.html#a9040120a122a0fac8c16d1d4efccfa5f',1,'hal::event_controls']]],
   ['end_113',['end',['../d3/d7b/classhal_1_1utils_1_1RecursiveDirectoryRange.html#a56f2de338dc17a167719fb5cfc4f1ebd',1,'hal::utils::RecursiveDirectoryRange::end()'],['../d5/dab/classhal_1_1utils_1_1DirectoryRange.html#a3c64904d713ee57bb2c81b81a592c35e',1,'hal::utils::DirectoryRange::end()']]],
   ['end_5fof_5fstream_114',['END_OF_STREAM',['../db/d9d/classhal_1_1TokenStream.html#a059d296b9805d98e33992dd8b44c7139',1,'hal::TokenStream']]],
@@ -9,7 +9,7 @@ var searchData=
   ['endpoint_2eh_117',['endpoint.h',['../d5/d97/endpoint_8h.html',1,'']]],
   ['endpoint_5finit_118',['endpoint_init',['../db/d7c/group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9',1,'hal']]],
   ['ends_5fwith_119',['ends_with',['../d4/dd6/namespacehal_1_1utils.html#a0de77a47a2551c69619fd6e3fce84674',1,'hal::utils']]],
-  ['enum_5ffrom_5fstring_120',['enum_from_string',['../d0/d7f/namespacehal.html#a2319a036cfb2272af66101db753b7b5c',1,'hal']]],
+  ['enum_5ffrom_5fstring_120',['enum_from_string',['../d0/d7f/namespacehal.html#a2319a036cfb2272af66101db753b7b5c',1,'hal::enum_from_string(const std::string &amp;str)'],['../d0/d7f/namespacehal.html#a0cd05eb343d9af79934226e60f1ee55e',1,'hal::enum_from_string(const std::string &amp;str, const T default_val) noexcept']]],
   ['enum_5fto_5fstring_121',['enum_to_string',['../d0/d7f/namespacehal.html#afe11c53f9f94ae23527944574e1f5df3',1,'hal']]],
   ['enums_2eh_122',['enums.h',['../d0/d0b/enums_8h.html',1,'']]],
   ['enumstrings_123',['EnumStrings',['../df/d38/structhal_1_1EnumStrings.html',1,'hal']]],

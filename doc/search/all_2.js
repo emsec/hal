@@ -14,7 +14,7 @@ var searchData=
   ['clearpresetbehavior_52',['ClearPresetBehavior',['../d1/d05/classhal_1_1GateType.html#a15686996a46af6fd61df29b08e8d66e6',1,'hal::GateType']]],
   ['cli_53',['cli',['../d5/df3/plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd',1,'plugin_interface_base.h']]],
   ['cliplugininterface_54',['CLIPluginInterface',['../d1/d82/classhal_1_1CLIPluginInterface.html',1,'hal::CLIPluginInterface'],['../d1/d82/classhal_1_1CLIPluginInterface.html#a1784bd703e0d7adf21c053f2694339d2',1,'hal::CLIPluginInterface::CLIPluginInterface()']]],
-  ['clock_55',['clock',['../d1/d05/classhal_1_1GateType.html#a64ba033c4e437917813b0777494a0d7ba05531b19bb846b18c09f979eeb429ad3',1,'hal::GateType']]],
+  ['clock_55',['clock',['../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3',1,'hal']]],
   ['combinational_56',['combinational',['../d0/d7f/namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638',1,'hal']]],
   ['compare_57',['compare',['../df/def/structhal_1_1core__strings_1_1CaseInsensitiveCharTraits.html#a0a2d016644e01f43d60895e8e04246e0',1,'hal::core_strings::CaseInsensitiveCharTraits']]],
   ['compiler_5fother_58',['COMPILER_OTHER',['../d8/db0/defines_8h.html#a2e84ab83ff97cbc71e5d0abb15cc630f',1,'defines.h']]],

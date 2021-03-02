@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['enable_1374',['enable',['../d1/d05/classhal_1_1GateType.html#a64ba033c4e437917813b0777494a0d7ba208f156d4a803025c284bb595a7576b4',1,'hal::GateType']]]
+  ['enable_1375',['enable',['../d0/d7f/namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4',1,'hal']]]
 ];
