@@ -163,7 +163,7 @@ namespace hal
                     {
                         result = ZERO;
                     }
-                    else if (next == X && result == ONE)
+                    else if ((next == X || next == Z) && result == ONE)
                     {
                         result = X;
                     }
@@ -174,7 +174,7 @@ namespace hal
                     {
                         result = ONE;
                     }
-                    else if (next == X && result == ZERO)
+                    else if ((next == X || next == Z) && result == ZERO)
                     {
                         result = X;
                     }
@@ -185,7 +185,7 @@ namespace hal
                     {
                         result = (Value)(1 - result);
                     }
-                    else if (next == X)
+                    else if (next == X || next == Z)
                     {
                         result = X;
                     }
@@ -202,6 +202,10 @@ namespace hal
             else if (result == ZERO)
             {
                 return ONE;
+            }
+            else if (result == Z)
+            {
+                result = X;
             }
         }
         return result;
@@ -299,6 +303,10 @@ namespace hal
         else if (expression == "X")
         {
             return BooleanFunction(X);
+        }
+        else if (expression == "Z")
+        {
+            return BooleanFunction(Z);
         }
         else
         {
