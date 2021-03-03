@@ -38,6 +38,10 @@
 
 namespace hal
 {
+
+    /**
+     * TODO: Legacy?
+     */
     class ModuleRelay : public QObject
     {
         Q_OBJECT
