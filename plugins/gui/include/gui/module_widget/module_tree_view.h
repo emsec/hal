@@ -27,14 +27,31 @@
 
 namespace hal
 {
-    //This class is neccessary to prevent that the right click on the tree-view does not select the
-    //underlying item, otherwise you cant select the option "add selection to module" in
-    //the contextmenu
+
+
+    /**
+     * This class wraps the QTreeView used for the ModuleWidget.
+     *
+     * It is necessary to prevent that a right click on the tree-view selects the
+     * underlying item and overwrites the previous selection. Otherwise you cant select the option
+     * <i>add selection to module</i> in the contextmenu.
+     */
     class ModuleTreeView : public QTreeView
     {
         Q_OBJECT
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
         ModuleTreeView(QWidget* parent = nullptr);
+
+        /**
+         * Captures the mousePressEvent for right-clicks to prevent a reselection.
+         *
+         * @param event
+         */
         void mousePressEvent(QMouseEvent* event);
     };
 }    // namespace hal

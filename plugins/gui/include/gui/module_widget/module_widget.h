@@ -44,23 +44,88 @@ namespace hal
 {
     class ModuleProxyModel;
 
+    /**
+     * The ModuleWidget shows the modules of the netlist hierarchical in a tree view.
+     *
+     * By right-clicking a module in the widget the user can do various actions with the module like changing the name and
+     * type, move, append or delete the module.
+     */
     class ModuleWidget : public ContentWidget
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
         ModuleWidget(QWidget* parent = nullptr);
 
+        /**
+         * Configures the ModuleWidgets toolbar. Since the ModuleWidget has no toolbar actions, nothing is done here.
+         *
+         * @param Toolbar - The toolbar to configure
+         */
         virtual void setupToolbar(Toolbar* Toolbar) override;
+
+        /**
+         * Creates and registers the shortcuts associated with the ModuleWidget.
+         *
+         * @returns the list of created shortcuts
+         */
         virtual QList<QShortcut*> createShortcuts() override;
 
     public Q_SLOTS:
+        /**
+         * Q_SLOT to open/close the searchbar of the ModuleWidget depending on whether it is already open or not.
+         */
         void toggleSearchbar();
+
+        /**
+         * TODO: Filtering seems to be broken. Can't search for submodules. Works only for the topmodule.
+         * Q_SLOT to overwrite the filter with the regular expression given in <i>text</i>.
+         *
+         * @param text - Contains the regular expression filter as a string
+         */
         void filter(const QString& text);
+
+        /**
+         * Q_SLOT to open and handle the context menu of a module in the ModuleWidget.
+         *
+         * @param point - The contents coordinates of the click
+         */
         void handleTreeViewContextMenuRequested(const QPoint& point);
+
+        /**
+         * Q_SLOT to handle that the selection within the tree view has been changed.
+         * Updates the selection in other widgets using the selection relay.
+         *
+         * @param selected - The newly selected items
+         * @param deselected - The newly deselected items
+         */
         void handleTreeSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+
+        /**
+         * Q_SLOT to handle a double-click on a module of the ModuleWidget.
+         *
+         * @param index - The module index of the item that has been double clicked.
+         */
         void handleItemDoubleClicked(const QModelIndex& index);
+
+        /**
+         * Q_SLOT to handle that the item selection has been changed by another widget.
+         *
+         * @param sender - The responsible class for the selection change
+         */
         void handleSelectionChanged(void* sender);
+
+        /**
+         * Q_SLOT to handle that a module has been removed from the netlist.
+         *
+         * @param module - The module that has been removed
+         * @param module_id - The id of the module that has been removed
+         */
         void handleModuleRemoved(Module* module, u32 module_id);
 
     private:
