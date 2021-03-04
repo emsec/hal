@@ -195,5 +195,17 @@ namespace hal
             :returns: The common input nets.
             :rtype: list[hal_py.Net]
         )");
+
+        py_netlist_utils.def("replace_gate", netlist_utils::replace_gate, py::arg("gate"), py::arg("target_type"), py::arg("pin_map"), R"(
+            Replace the given gate with a gate of the specified gate type.
+            A dict from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
+            A pin can be omitted if no connection at that pin is desired.
+
+            :param hal_py.Gate gate: The gate to be replaced.
+            :param hal_py.GateType target_type: The gate type of the replacement gate.
+            :param dict[str,str] pin_map: A dict from old to new pin names.
+            :returns: True on success, False otherwise.
+            :rtype: bool
+        )");
     }
 }    // namespace hal

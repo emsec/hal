@@ -785,5 +785,105 @@ namespace hal
 
             return common_inputs;
         }
+
+        bool replace_gate(Gate* gate, GateType* target_type, std::map<std::string, std::string> pin_map)
+        {
+            Netlist* netlist                  = gate->get_netlist();
+            u32 gate_id                       = gate->get_id();
+            std::string gate_name             = gate->get_name();
+            std::pair<i32, i32> gate_location = gate->get_location();
+            std::vector<Endpoint*> fan_in     = gate->get_fan_in_endpoints();
+            std::vector<Endpoint*> fan_out    = gate->get_fan_out_endpoints();
+            Module* gate_module               = gate->get_module();
+            Grouping* gate_grouping           = gate->get_grouping();
+            auto gate_data                    = gate->get_data_map();
+
+            std::map<std::string, Net*> in_nets;
+            std::map<std::string, Net*> out_nets;
+
+            // map new input pins to nets
+            for (Endpoint* in_ep : fan_in)
+            {
+                if (const auto it = pin_map.find(in_ep->get_pin()); it != pin_map.end())
+                {
+                    in_nets[it->second] = in_ep->get_net();
+                }
+            }
+
+            for (Endpoint* out_ep : fan_out)
+            {
+                if (const auto it = pin_map.find(out_ep->get_pin()); it != pin_map.end())
+                {
+                    out_nets[it->second] = out_ep->get_net();
+                }
+            }
+
+            // remove old gate
+            netlist->delete_gate(gate);
+
+            // create new gate
+            Gate* new_gate = netlist->create_gate(gate_id, target_type, gate_name, gate_location.first, gate_location.second);
+            if (new_gate == nullptr)
+            {
+                log_error("netlist_utils",
+                          "failed to replace gate '{}' with ID {} in netlist with ID {} with new gate of type '{}' after deleting the original gate.",
+                          gate_name,
+                          gate_id,
+                          netlist->get_id(),
+                          target_type->get_name());
+                return false;
+            }
+
+            // reconnect nets
+            for (const auto& [in_pin, in_net] : in_nets)
+            {
+                if (in_net->add_destination(new_gate, in_pin) == nullptr)
+                {
+                    log_error("netlist_utils",
+                              "failed to reconnect input net '{}' with ID {} to pin '{}' of the replacement gate '{}' with ID {} of type '{}' in netlist with ID {}.",
+                              in_net->get_name(),
+                              in_net->get_id(),
+                              in_pin,
+                              gate_name,
+                              gate_id,
+                              target_type->get_name(),
+                              netlist->get_id());
+                    return false;
+                }
+            }
+
+            for (const auto& [out_pin, out_net] : out_nets)
+            {
+                if (out_net->add_source(new_gate, out_pin) == nullptr)
+                {
+                    log_error("netlist_utils",
+                              "failed to reconnect output net '{}' with ID {} to pin '{}' of the replacement gate '{}' with ID {} of type '{}' in netlist with ID {}.",
+                              out_net->get_name(),
+                              out_net->get_id(),
+                              out_pin,
+                              gate_name,
+                              gate_id,
+                              target_type->get_name(),
+                              netlist->get_id());
+                    return false;
+                }
+            }
+
+            // restore data, module, and grouping
+            if (!gate_module->is_top_module())
+            {
+                gate_module->assign_gate(new_gate);
+            }
+            if (gate_grouping != nullptr)
+            {
+                gate_grouping->assign_gate(new_gate);
+            }
+            if (!gate_data.empty())
+            {
+                new_gate->set_data_map(gate_data);
+            }
+
+            return true;
+        }
     }    // namespace netlist_utils
 }    // namespace hal

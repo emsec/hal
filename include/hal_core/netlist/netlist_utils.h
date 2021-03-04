@@ -195,5 +195,17 @@ namespace hal
          * @returns The common input nets.
          */
         std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
+
+        /**
+         * Replace the given gate with a gate of the specified gate type.
+         * A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
+         * A pin can be omitted if no connection at that pin is desired.
+         * 
+         * @param[in] gate - The gate to be replaced.
+         * @param[in] target_type - The gate type of the replacement gate.
+         * @param[in] pin_map - A map from old to new pin names.
+         * @returns True on success, false otherwise.
+         */
+        bool replace_gate(Gate* gate, GateType* target_type, std::map<std::string, std::string> pin_map);
     }    // namespace netlist_utils
 }    // namespace hal
