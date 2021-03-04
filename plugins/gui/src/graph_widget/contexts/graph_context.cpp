@@ -112,14 +112,8 @@ namespace hal
         mAddedModules += new_modules;
         mAddedGates += new_gates;
 
-        for (const u32 m : new_modules)
-        {
-            mModuleHints.insert(placement, m);
-        }
-        for (const u32 g : new_gates)
-        {
-            mGateHints.insert(placement, g);
-        }
+        mPlacementList[placement.mode()].append(
+                    PlacementEntry(placement,new_modules,new_gates));
 
         if (mUserUpdateCount == 0)
         {
@@ -140,9 +134,9 @@ namespace hal
         mAddedModules -= modules;
         mAddedGates -= gates;
 
-        // We don't update mModuleHints and mGateHints here. Keeping elements
+        // We don't update mPlacementList here. Keeping elements
         // in memory is less of an issue than finding the modules/gates _by value_
-        // in the maps and removing them. At the end of applyChanges() the maps are
+        // in the maps and removing them. At the end of applyChanges() the lists are
         // cleared anyway.
 
         if (mUserUpdateCount == 0)
@@ -161,8 +155,8 @@ namespace hal
         mAddedModules.clear();
         mAddedGates.clear();
 
-        mModuleHints.clear();
-        mGateHints.clear();
+        for (int i=0; i<4; i++)
+            mPlacementList[i].clear();
 
         if (mUserUpdateCount == 0)
         {
@@ -507,27 +501,21 @@ namespace hal
             }
         }
 
-        // number of placement hints is small, not performance critical
-        QVector<PlacementHint> queued_hints;
-        queued_hints.append(mModuleHints.uniqueKeys().toVector());
-        // we can't use QSet for enum class
-        for (auto h : mGateHints.uniqueKeys())
+        int placementOrder[4] = { PlacementHint::GridPosition,
+                                  PlacementHint::PreferLeft,
+                                  PlacementHint::PreferRight,
+                                  PlacementHint::Standard};
+
+        for (int iplc = 0; iplc<4; iplc++)
         {
-            if (!queued_hints.contains(h))
+            for (const PlacementEntry& plcEntry : mPlacementList[placementOrder[iplc]])
             {
-                queued_hints.append(h);
+                QSet<u32> modsForHint = plcEntry.mModules;
+                modsForHint &= mAddedModules; // may contain obsolete entries that we must filter out
+                QSet<u32> gatsForHint = plcEntry.mGates;
+                gatsForHint &= mAddedGates;
+                mLayouter->add(modsForHint, gatsForHint, mNets, plcEntry.mPlacementHint);
             }
-        }
-
-        for (PlacementHint h : queued_hints)
-        {
-            // call the placer once for each placement hint
-
-            QSet<u32> modules_for_hint = QSet<u32>::fromList(mModuleHints.values(h));
-            modules_for_hint &= mAddedModules; // may contain obsolete entries that we must filter out
-            QSet<u32> gates_for_hint = QSet<u32>::fromList(mGateHints.values(h));
-            gates_for_hint &= mAddedGates;
-            mLayouter->add(modules_for_hint, gates_for_hint, mNets, h);
         }
 
         mShader->add(mAddedModules, mAddedGates, mNets);
@@ -538,8 +526,8 @@ namespace hal
         mRemovedModules.clear();
         mRemovedGates.clear();
 
-        mModuleHints.clear();
-        mGateHints.clear();
+        for (int i=0; i<4; i++)
+            mPlacementList[i].clear();
 
         mUnappliedChanges     = false;
         mSceneUpdateRequired = true;

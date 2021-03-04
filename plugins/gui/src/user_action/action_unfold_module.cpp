@@ -52,8 +52,16 @@ namespace hal
 
     void ActionUnfoldModule::execInternal(Module *m, GraphContext* currentContext)
     {
+        // only module shown in context
         if (currentContext->gates().isEmpty() &&
                 currentContext->modules() == QSet<u32>({mObject.id()}))
+        {
+            currentContext->unfoldModule(mObject.id());
+            return;
+        }
+
+        // module to unfold and other boxes shown
+        if (currentContext->modules().contains(mObject.id()))
         {
             currentContext->unfoldModule(mObject.id());
             return;

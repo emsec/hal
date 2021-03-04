@@ -104,6 +104,13 @@ namespace hal
          */
         GroupingManagerWidget* getGroupingManagerWidget();
 
+        /**
+         * get hal's module tree widget
+         *
+         * @return module tree widget
+         */
+        ModuleWidget* getModuleWidget();
+
     public Q_SLOTS:
 
         /**

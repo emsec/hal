@@ -206,7 +206,12 @@ namespace hal
 
     void ModuleWidget::openModuleInView(const QModelIndex& index)
     {
-        const Module* module = gNetlist->get_module_by_id(getModuleItemFromIndex(index)->id());
+        openModuleInView(getModuleItemFromIndex(index)->id());
+    }
+
+    void ModuleWidget::openModuleInView(u32 moduleId)
+    {
+        const Module* module = gNetlist->get_module_by_id(moduleId);
 
         if (!module)
             return;

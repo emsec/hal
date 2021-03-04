@@ -11,6 +11,7 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
+#include "gui/module_widget/module_widget.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
@@ -762,39 +763,14 @@ namespace hal
             // contexts can't infer their corresponding module from their contents
         }
 
-        ActionUnfoldModule* act = new ActionUnfoldModule(id);
-        act->setContextId(mContext->id());
-        act->exec();
-/*
         if (mContext->gates().isEmpty() && mContext->modules() == QSet<u32>({id}))
         {
-            mContext->unfoldModule(id);
-            return;
+            ActionUnfoldModule* act = new ActionUnfoldModule(id);
+            act->setContextId(mContext->id());
+            act->exec();
         }
-
-        QSet<u32> gate_ids;
-        QSet<u32> module_ids;
-        for (const auto& g : m->get_gates())
-        {
-            gate_ids.insert(g->get_id());
-        }
-        for (auto sm : m->get_submodules())
-        {
-            module_ids.insert(sm->get_id());
-        }
-
-        for (const auto& ctx : gGraphContextManager->getContexts())
-        {
-            if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({id})) || (ctx->modules() == module_ids && ctx->gates() == gate_ids))
-            {
-                gContentManager->getGraphTabWidget()->showContext(ctx);
-                return;
-            }
-        }
-
-        auto ctx = gGraphContextManager->createNewContext(QString::fromStdString(m->get_name()));
-        ctx->add(module_ids, gate_ids);
-        */
+        else
+            gContentManager->getModuleWidget()->openModuleInView(id);
     }
 
     void GraphWidget::ensureItemsVisible(const QSet<u32>& gates, const QSet<u32>& modules)

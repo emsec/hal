@@ -53,6 +53,7 @@ namespace hal
 
     bool ActionRemoveItemsFromObject::exec()
     {
+        mUndoAction = nullptr;
         GraphContext* ctx;
         Grouping*     grp;
         switch (mObject.type())
@@ -61,6 +62,24 @@ namespace hal
             ctx = gGraphContextManager->getContextById(mObject.id());
             if (ctx)
             {
+                ActionAddItemsToObject* undo =
+                        new ActionAddItemsToObject(mModules,mGates,mNets);
+                undo->setObject(mObject);
+                PlacementHint plc(PlacementHint::GridPosition);
+                for (u32 id : mModules)
+                {
+                    Node nd(id,Node::Module);
+                    QPoint p = ctx->getLayouter()->nodeToPositionMap().value(nd);
+                    plc.addGridPosition(nd,p);
+                }
+                for (u32 id : mGates)
+                {
+                    Node nd(id,Node::Gate);
+                    QPoint p = ctx->getLayouter()->nodeToPositionMap().value(nd);
+                    plc.addGridPosition(nd,p);
+                }
+                undo->setPlacementHint(plc);
+                mUndoAction = undo;
                 ctx->beginChange();
                 ctx->remove(mModules, mGates);
                 ctx->endChange();
@@ -86,9 +105,11 @@ namespace hal
             return false;
         }
 
-        mUndoAction = new ActionAddItemsToObject(mModules,mGates,mNets);
-        mUndoAction->setObject(mObject);
-
+        if (!mUndoAction)
+        {
+            mUndoAction = new ActionAddItemsToObject(mModules,mGates,mNets);
+            mUndoAction->setObject(mObject);
+        }
         return UserAction::exec();
     }
 }

@@ -82,6 +82,11 @@ namespace hal
         return mGroupingManagerWidget;
     }
 
+    ModuleWidget* ContentManager::getModuleWidget()
+    {
+        return mModuleWidget;
+    }
+
     ContextManagerWidget* ContentManager::getContextManagerWidget()
     {
         return mContextManagerWidget;

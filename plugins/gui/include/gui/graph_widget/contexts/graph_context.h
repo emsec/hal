@@ -335,8 +335,7 @@ namespace hal
         QSet<u32> mAddedModules;
         QSet<u32> mAddedGates;
 
-        QMultiMap<PlacementHint, u32> mModuleHints;
-        QMultiMap<PlacementHint, u32> mGateHints;
+        QList<PlacementEntry> mPlacementList[4];
 
         QSet<u32> mRemovedModules;
         QSet<u32> mRemovedGates;

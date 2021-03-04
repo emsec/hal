@@ -21,6 +21,7 @@
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_fold_module.h"
 #include "gui/user_action/action_move_node.h"
 #include "gui/user_action/action_remove_items_from_object.h"
@@ -113,7 +114,21 @@ namespace hal
                 new ActionRemoveItemsFromObject(gSelectionRelay->selectedModules(),
                                                 gSelectionRelay->selectedGates());
         act->setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
-        act->exec();
+
+        //  delete context/view if nothing left to show
+        QSet<u32> remainingMods = ctx->modules() - gSelectionRelay->selectedModules();
+        QSet<u32> remainingGats = ctx->gates()   - gSelectionRelay->selectedGates();
+        if (remainingMods.isEmpty() && remainingGats.isEmpty())
+        {
+            UserActionCompound* compound = new UserActionCompound;
+            compound->setUseCreatedObject();
+            act->setObjectLock(true);
+            compound->addAction(act);
+            compound->addAction(new ActionDeleteObject);
+            compound->exec();
+        }
+        else
+            act->exec();
     }
 
     void GraphGraphicsView::handleIsolationViewAction()
