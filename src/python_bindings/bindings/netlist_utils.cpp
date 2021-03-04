@@ -184,5 +184,16 @@ namespace hal
         
             :param hal_py.Netlist netlist: The target netlist.
         )");
+
+        py_netlist_utils.def("get_common_inputs", netlist_utils::get_common_inputs, py::arg("gates"), py::arg("threshold") = 0, R"(
+            Returns all nets that are considered to be common inputs to the provided gates.
+            A threshold value can be provided to specify the number of gates a net must be connected to in order to be classified as a common input.
+            If the theshold value is set to 0, a net must be input to all gates to be considered a common input.
+        
+            :param list[hal_py.Gate] gates: The gates.
+            :param int threshold: The threshold value, defaults to 0.
+            :returns: The common input nets.
+            :rtype: list[hal_py.Net]
+        )");
     }
 }    // namespace hal

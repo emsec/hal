@@ -741,5 +741,49 @@ namespace hal
 
             log_info("netlist_utils", "renamed {} LUTs according to the function they implement.", num_luts);
         }
+
+        std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold)
+        {
+            // if threshold = 0, a net is only considered to be common if it is an input to all gates
+            if (threshold == 0)
+            {
+                threshold = gates.size();
+            }
+
+            // count input net occurences
+            std::map<Net*, u32> net_count;
+            for (Gate* g : gates)
+            {
+                for (Endpoint* pred : g->get_predecessors())
+                {
+                    if (pred->get_gate()->is_gnd_gate() || pred->get_gate()->is_vcc_gate())
+                    {
+                        continue;
+                    }
+
+                    Net* pred_net = pred->get_net();
+                    if (const auto it = net_count.find(pred_net); it != net_count.end())
+                    {
+                        it->second++;
+                    }
+                    else
+                    {
+                        net_count[pred_net] = 1;
+                    }
+                }
+            }
+
+            // consider every net that is input to at least half the gates to be a common input
+            std::vector<Net*> common_inputs;
+            for (const auto& [n, cnt] : net_count)
+            {
+                if (cnt >= threshold)
+                {
+                    common_inputs.push_back(n);
+                }
+            }
+
+            return common_inputs;
+        }
     }    // namespace netlist_utils
 }    // namespace hal

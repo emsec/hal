@@ -184,5 +184,16 @@ namespace hal
          * @param[in] netlist - The target netlist.
          */
         void rename_luts_according_to_function(Netlist* netlist);
+
+        /**
+         * Returns all nets that are considered to be common inputs to the provided gates.
+         * A threshold value can be provided to specify the number of gates a net must be connected to in order to be classified as a common input.
+         * If the theshold value is set to 0, a net must be input to all gates to be considered a common input.
+         * 
+         * @param[in] gates - The gates.
+         * @param[in] threshold - The threshold value, defaults to 0.
+         * @returns The common input nets.
+         */
+        std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
     }    // namespace netlist_utils
 }    // namespace hal

@@ -605,4 +605,53 @@ namespace hal
         TEST_END
     } 
 
+    /**
+     * Testing detection of common inputs of gates.
+     *
+     * Functions: get_common_inputs
+     */
+    TEST_F(NetlistUtilsTest, check_get_common_inputs)
+    {
+        TEST_START
+
+        std::unique_ptr<GateLibrary> lib = create_buffer_lib();
+
+        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
+        ASSERT_NE(nl, nullptr);
+
+        Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
+        nl->mark_gnd_gate(gnd_gate);
+
+        Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
+        Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
+        Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
+        Gate* l3 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l3");
+        Gate* l4 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
+        Gate* l5 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
+
+        Net* gnd_net = connect(nl.get(), gnd_gate, "O", l2, "I0");
+        connect(nl.get(), gnd_gate, "O", l3, "I0");
+        connect(nl.get(), gnd_gate, "O", l4, "I0");
+        connect(nl.get(), gnd_gate, "O", l5, "I0");
+        Net* common_net4 = connect(nl.get(), l0, "O", l2, "I2");
+        connect(nl.get(), l0, "O", l3, "I2");
+        connect(nl.get(), l0, "O", l4, "I2");
+        connect(nl.get(), l0, "O", l5, "I2");
+        Net* common_net2 = connect(nl.get(), l1, "O", l2, "I1");
+        connect(nl.get(), l1, "O", l3, "I1");
+
+        std::vector<Gate*> gates = {l2, l3, l4, l5};
+        std::vector<Net*> common_nets4 = netlist_utils::get_common_inputs(gates);
+        std::vector<Net*> common_nets2 = netlist_utils::get_common_inputs(gates, 2);
+
+        ASSERT_EQ(common_nets4.size(), 1);
+        EXPECT_TRUE(std::find(common_nets4.begin(), common_nets4.end(), common_net4) != common_nets4.end());
+
+        ASSERT_EQ(common_nets2.size(), 2);
+        EXPECT_TRUE(std::find(common_nets2.begin(), common_nets2.end(), common_net2) != common_nets2.end());
+        EXPECT_TRUE(std::find(common_nets2.begin(), common_nets2.end(), common_net4) != common_nets2.end());
+
+        TEST_END
+    } 
+
 }    //namespace hal
