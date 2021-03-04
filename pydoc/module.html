@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v3.2.6 documentation</title>
+  <title>Module &mdash; hal_py v3.2.6-3-g8789d01e9 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6
+                v3.2.6-3-g8789d01e9
               </div>
             
           
@@ -763,6 +763,22 @@ An input net is either a global input to the netlist or has a source outside of 
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="hal_py.Module.is_top_module">
+<code class="descname">is_top_module</code><span class="sig-paren">(</span><em>self: hal_py.Module</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.is_top_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true only if the module is the top module of the netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the module is the top module, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="hal_py.Module.name">
 <code class="descname">name</code><a class="headerlink" href="#hal_py.Module.name" title="Permalink to this definition">¶</a></dt>
@@ -1013,6 +1029,20 @@ If the new parent is a submodule of this module, the new parent is added as a di
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.Module.top_module">
+<code class="descname">top_module</code><a class="headerlink" href="#hal_py.Module.top_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>True only if the module is the top module of the netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></td>
 </tr>
 </tbody>
 </table>

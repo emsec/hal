@@ -82,7 +82,7 @@ Collaboration diagram for hal::Module:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../da/d57/classhal_1_1Module__coll__graph.png" border="0" usemap="#hal_1_1Module_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1Module_coll__map" id="hal_1_1Module_coll__map">
-<area shape="rect" title=" " alt="" coords="5,219,211,736"/>
+<area shape="rect" title=" " alt="" coords="5,219,211,751"/>
 <area shape="rect" href="../../d1/d7d/classhal_1_1DataContainer.html" title=" " alt="" coords="32,5,184,171"/>
 </map>
 </div>
@@ -109,6 +109,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af1256fe9a3080693b07d7e657d9a31ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a467e3713d791b36b7f54255852b469a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d10/classhal_1_1Module.html#a467e3713d791b36b7f54255852b469a0">contains_module</a> (<a class="el" href="../../d1/d10/classhal_1_1Module.html">Module</a> *other, bool recursive=false) const</td></tr>
 <tr class="separator:a467e3713d791b36b7f54255852b469a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ed13732e904b8bf1b3bc670f637acc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d10/classhal_1_1Module.html#a5ed13732e904b8bf1b3bc670f637acc2">is_top_module</a> () const</td></tr>
+<tr class="separator:a5ed13732e904b8bf1b3bc670f637acc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7ad37f7e5b0982c387ec6c33651a25f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d10/classhal_1_1Module.html#ab7ad37f7e5b0982c387ec6c33651a25f">get_netlist</a> () const</td></tr>
 <tr class="separator:ab7ad37f7e5b0982c387ec6c33651a25f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9864b560cb63a6fbb2a336a4b71931a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d10/classhal_1_1Module.html#ae9864b560cb63a6fbb2a336a4b71931a">get_input_nets</a> () const</td></tr>
@@ -439,6 +441,27 @@ Friends</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>True if the other module is a submodule, false otherwise. </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22">hal::module_init()</a>.</p>
+
+</div>
+</div>
+<a id="a5ed13732e904b8bf1b3bc670f637acc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ed13732e904b8bf1b3bc670f637acc2">&#9670;&nbsp;</a></span>is_top_module()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::Module::is_top_module </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true only if the module is the top module of the netlist.</p>
+<dl class="section return"><dt>Returns</dt><dd>True if the module is the top module, false otherwise. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22">hal::module_init()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">hal::netlist_utils::replace_gate()</a>.</p>
 
 </div>
 </div>
@@ -903,7 +926,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#af2441daee88b306451caa9265d37d78c">hal::Netlist::create_module()</a>, and <a class="el" href="../../db/d7c/group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22">hal::module_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#af2441daee88b306451caa9265d37d78c">hal::Netlist::create_module()</a>, <a class="el" href="../../db/d7c/group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22">hal::module_init()</a>, and <a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">hal::netlist_utils::replace_gate()</a>.</p>
 
 </div>
 </div>
@@ -1089,7 +1112,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 3 2021 08:35:19 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 12:18:15 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

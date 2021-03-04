@@ -106,6 +106,10 @@ Functions</h2></td></tr>
 <tr class="separator:a3bc1381508d3e2e81a75762664d016cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7252fdca08ea0f7e5c0aa4720083d23c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a7252fdca08ea0f7e5c0aa4720083d23c">rename_luts_according_to_function</a> (<a class="el" href="../../dc/d06/classhal_1_1Netlist.html">Netlist</a> *netlist)</td></tr>
 <tr class="separator:a7252fdca08ea0f7e5c0aa4720083d23c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea70c3bec835e4f88d4e208c59f5edee"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#aea70c3bec835e4f88d4e208c59f5edee">get_common_inputs</a> (const std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;gates, <a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> threshold=0)</td></tr>
+<tr class="separator:aea70c3bec835e4f88d4e208c59f5edee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a6599c0e0034abb437a5ba1b9f15493"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d42/namespacehal_1_1netlist__utils.html#a2a6599c0e0034abb437a5ba1b9f15493">replace_gate</a> (<a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *gate, <a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *target_type, std::map&lt; std::string, std::string &gt; pin_map)</td></tr>
+<tr class="separator:a2a6599c0e0034abb437a5ba1b9f15493"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a4951c274ab6c15d1ccc06acc83d28335"></a>
@@ -732,10 +736,97 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aea70c3bec835e4f88d4e208c59f5edee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea70c3bec835e4f88d4e208c59f5edee">&#9670;&nbsp;</a></span>get_common_inputs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="../../de/db0/classhal_1_1Net.html">Net</a> * &gt; hal::netlist_utils::get_common_inputs </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>gates</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d8/db0/defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
+          <td class="paramname"><em>threshold</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns all nets that are considered to be common inputs to the provided gates. A threshold value can be provided to specify the number of gates a net must be connected to in order to be classified as a common input. If the theshold value is set to 0, a net must be input to all gates to be considered a common input.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- The gates. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">threshold</td><td>- The threshold value, defaults to 0. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The common input nets. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1">hal::netlist_utils_init()</a>.</p>
+
+</div>
+</div>
+<a id="a2a6599c0e0034abb437a5ba1b9f15493"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a6599c0e0034abb437a5ba1b9f15493">&#9670;&nbsp;</a></span>replace_gate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::netlist_utils::replace_gate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d5/d57/classhal_1_1Gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>gate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d1/d05/classhal_1_1GateType.html">GateType</a> *&#160;</td>
+          <td class="paramname"><em>target_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::map&lt; std::string, std::string &gt;&#160;</td>
+          <td class="paramname"><em>pin_map</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Replace the given gate with a gate of the specified gate type. A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs. A pin can be omitted if no connection at that pin is desired.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate to be replaced. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">target_type</td><td>- The gate type of the replacement gate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pin_map</td><td>- A map from old to new pin names. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d20/classhal_1_1Grouping.html#a5aeceac13528e3d7f1d8e166aaec24b0">hal::Grouping::assign_gate()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a7446c45dc94cefbf49a51261e0299e1d">hal::Module::assign_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#aaeb832a880bee7804dd2bd7cfd6adfd4">hal::Netlist::create_gate()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a728131b164768661bd3e5ffb868b681d">hal::Netlist::delete_gate()</a>, <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#ad8011dbbba5f9fcd99f76f8834d4d396">hal::DataContainer::get_data_map()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a963338d9ae39c39fcdd60353e533c716">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#aa129e49b4e029a1f47fc2b5998d77d1f">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a5b0652086f601967e3fac66118571117">hal::Gate::get_grouping()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id()</a>, <a class="el" href="../../dc/d06/classhal_1_1Netlist.html#a7dc3f04d8b357b25fc129bf85b3b2dec">hal::Netlist::get_id()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a2713a08abda05435d4172b2dba549df5">hal::Gate::get_location()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#a8ebbb9b79db2666beadc913467436a1f">hal::Gate::get_module()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ad9ee997b04fa42b1151cac1640930292">hal::Gate::get_name()</a>, <a class="el" href="../../d1/d05/classhal_1_1GateType.html#a59bed23ba1e741d00b101660fb7aa2d3">hal::GateType::get_name()</a>, <a class="el" href="../../d5/d57/classhal_1_1Gate.html#ae77f8b10587bddd7b80fe0ab008953e3">hal::Gate::get_netlist()</a>, <a class="el" href="../../d1/d10/classhal_1_1Module.html#a5ed13732e904b8bf1b3bc670f637acc2">hal::Module::is_top_module()</a>, <a class="el" href="../../dc/d39/group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>, and <a class="el" href="../../d1/d7d/classhal_1_1DataContainer.html#adc65cb7d330fb44e2c9cf92523832b5e">hal::DataContainer::set_data_map()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../db/d7c/group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1">hal::netlist_utils_init()</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 3 2021 08:35:19 for hal by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Mar 4 2021 12:18:15 for hal by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

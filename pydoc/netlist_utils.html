@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.2.6 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.2.6-3-g8789d01e9 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6
+                v3.2.6-3-g8789d01e9
               </div>
             
           
@@ -190,6 +190,32 @@
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The deep copy of the netlist.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistUtils.get_common_inputs">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">get_common_inputs</code><span class="sig-paren">(</span><em>gates: List[hal::Gate], threshold: int = 0</em><span class="sig-paren">)</span> &#x2192; List[hal::Net]<a class="headerlink" href="#hal_py.NetlistUtils.get_common_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all nets that are considered to be common inputs to the provided gates.
+A threshold value can be provided to specify the number of gates a net must be connected to in order to be classified as a common input.
+If the theshold value is set to 0, a net must be input to all gates to be considered a common input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The threshold value, defaults to 0.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The common input nets.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -500,6 +526,33 @@ If this function is used extensively, consider using the above variant with a ca
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hal_py.NetlistUtils.replace_gate">
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">replace_gate</code><span class="sig-paren">(</span><em>gate: hal::Gate, target_type: hal_py.GateType, pin_map: Dict[str, str]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.NetlistUtils.replace_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the given gate with a gate of the specified gate type.
+A dict from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
+A pin can be omitted if no connection at that pin is desired.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to be replaced.</li>
+<li><strong>target_type</strong> (<a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a>) – The gate type of the replacement gate.</li>
+<li><strong>pin_map</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – A dict from old to new pin names.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
+</td>
 </tr>
 </tbody>
 </table>
