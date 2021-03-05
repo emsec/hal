@@ -134,6 +134,13 @@ namespace hal
         bool contains_module(Module* other, bool recursive = false) const;
 
         /**
+         * Returns true only if the module is the top module of the netlist.
+         * 
+         * @returns True if the module is the top module, false otherwise.
+         */
+        bool is_top_module() const;
+
+        /**
          * Get the netlist this module is associated with.
          *
          * @returns The netlist.

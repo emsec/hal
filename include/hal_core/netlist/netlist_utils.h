@@ -184,5 +184,28 @@ namespace hal
          * @param[in] netlist - The target netlist.
          */
         void rename_luts_according_to_function(Netlist* netlist);
+
+        /**
+         * Returns all nets that are considered to be common inputs to the provided gates.
+         * A threshold value can be provided to specify the number of gates a net must be connected to in order to be classified as a common input.
+         * If the theshold value is set to 0, a net must be input to all gates to be considered a common input.
+         * 
+         * @param[in] gates - The gates.
+         * @param[in] threshold - The threshold value, defaults to 0.
+         * @returns The common input nets.
+         */
+        std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
+
+        /**
+         * Replace the given gate with a gate of the specified gate type.
+         * A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
+         * A pin can be omitted if no connection at that pin is desired.
+         * 
+         * @param[in] gate - The gate to be replaced.
+         * @param[in] target_type - The gate type of the replacement gate.
+         * @param[in] pin_map - A map from old to new pin names.
+         * @returns True on success, false otherwise.
+         */
+        bool replace_gate(Gate* gate, GateType* target_type, std::map<std::string, std::string> pin_map);
     }    // namespace netlist_utils
 }    // namespace hal

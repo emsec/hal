@@ -346,7 +346,7 @@ namespace hal
         return cell;
     }
 
-    std::optional<LibertyParser::pin_group> LibertyParser::parse_pin(TokenStream<std::string>& str, cell_group& cell, GateType::PinDirection direction, const std::string& external_pin_name)
+    std::optional<LibertyParser::pin_group> LibertyParser::parse_pin(TokenStream<std::string>& str, cell_group& cell, PinDirection direction, const std::string& external_pin_name)
     {
         pin_group pin;
 
@@ -437,23 +437,11 @@ namespace hal
             {
                 pin_str.consume(":", true);
                 auto direction_str = pin_str.consume().string;
-                if (direction_str == "input")
+                try
                 {
-                    pin.direction = GateType::PinDirection::input;
+                    pin.direction = enum_from_string<PinDirection>(direction_str);
                 }
-                else if (direction_str == "output")
-                {
-                    pin.direction = GateType::PinDirection::output;
-                }
-                else if (direction_str == "inout")
-                {
-                    pin.direction = GateType::PinDirection::inout;
-                }
-                else if (direction_str == "internal")
-                {
-                    pin.direction = GateType::PinDirection::internal;
-                }
-                else
+                catch (const std::runtime_error&)
                 {
                     log_warning("liberty_parser", "invalid pin direction '{}' near line {}.", direction_str, pin.line_number);
                     return std::nullopt;
@@ -486,7 +474,7 @@ namespace hal
             }
         }
 
-        if (pin.direction == GateType::PinDirection::none)
+        if (pin.direction == PinDirection::none)
         {
             log_error("liberty_parser", "no pin direction given near line {}.", pin.line_number);
             return std::nullopt;
@@ -529,7 +517,7 @@ namespace hal
         cell.pin_names.insert(name);
         pin.pin_names.push_back(name);
 
-        pin.direction = GateType::PinDirection::input;
+        pin.direction = PinDirection::input;
 
         while (pin_str.remaining() > 0)
         {
@@ -595,19 +583,19 @@ namespace hal
                 auto direction_str = bus_str.consume().string;
                 if (direction_str == "input")
                 {
-                    bus.direction = GateType::PinDirection::input;
+                    bus.direction = PinDirection::input;
                 }
                 else if (direction_str == "output")
                 {
-                    bus.direction = GateType::PinDirection::output;
+                    bus.direction = PinDirection::output;
                 }
                 else if (direction_str == "inout")
                 {
-                    bus.direction = GateType::PinDirection::inout;
+                    bus.direction = PinDirection::inout;
                 }
                 else if (direction_str == "internal")
                 {
-                    bus.direction = GateType::PinDirection::internal;
+                    bus.direction = PinDirection::internal;
                 }
                 else
                 {
@@ -636,7 +624,7 @@ namespace hal
             bus.index_to_pin_name.emplace(index, pin_name);
         }
 
-        if (bus.direction == GateType::PinDirection::none)
+        if (bus.direction == PinDirection::none)
         {
             log_error("liberty_parser", "no bus direction given near line {}.", bus.line_number);
             return std::nullopt;
@@ -692,7 +680,7 @@ namespace hal
                 Token<std::string> behav_str = ff_str.consume();
                 ff_str.consume(";", true);
 
-                if(auto behav = enum_from_string<GateType::ClearPresetBehavior>(behav_str); behav != GateType::ClearPresetBehavior::invalid)
+                if (auto behav = enum_from_string<GateType::ClearPresetBehavior>(behav_str, GateType::ClearPresetBehavior::undef); behav != GateType::ClearPresetBehavior::undef)
                 {
                     if (next_token == "clear_preset_var1")
                     {
@@ -773,7 +761,7 @@ namespace hal
                 Token<std::string> behav_str = latch_str.consume();
                 latch_str.consume(";", true);
 
-                if(auto behav = enum_from_string<GateType::ClearPresetBehavior>(behav_str); behav != GateType::ClearPresetBehavior::invalid)
+                if (auto behav = enum_from_string<GateType::ClearPresetBehavior>(behav_str, GateType::ClearPresetBehavior::undef); behav != GateType::ClearPresetBehavior::undef)
                 {
                     if (next_token == "clear_preset_var1")
                     {
@@ -856,12 +844,12 @@ namespace hal
         std::string func;
         for (const auto& pin : cell.pins)
         {
-            if (pin.direction == GateType::PinDirection::input)
+            if (pin.direction == PinDirection::input)
             {
                 has_inputs = true;
                 break;
             }
-            else if (pin.direction == GateType::PinDirection::output)
+            else if (pin.direction == PinDirection::output)
             {
                 if (has_single_output == true)
                 {
@@ -904,12 +892,12 @@ namespace hal
         // get input and output pins from pin groups
         for (const auto& pin : cell.pins)
         {
-            if (pin.direction == GateType::PinDirection::input || pin.direction == GateType::PinDirection::inout)
+            if (pin.direction == PinDirection::input || pin.direction == PinDirection::inout)
             {
                 input_pins.insert(input_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
             }
 
-            if (pin.direction == GateType::PinDirection::output || pin.direction == GateType::PinDirection::inout)
+            if (pin.direction == PinDirection::output || pin.direction == PinDirection::inout)
             {
                 output_pins.insert(output_pins.end(), pin.pin_names.begin(), pin.pin_names.end());
             }
@@ -960,7 +948,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        gt->assign_pin_type(pin_name, GateType::PinType::state);
+                        gt->assign_pin_type(pin_name, PinType::state);
                     }
 
                     pin.function = "";
@@ -969,7 +957,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
+                        gt->assign_pin_type(pin_name, PinType::neg_state);
                     }
 
                     pin.function = "";
@@ -979,7 +967,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        gt->assign_pin_type(pin_name, GateType::PinType::clock);
+                        gt->assign_pin_type(pin_name, PinType::clock);
                     }
                 }
             }
@@ -992,7 +980,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            gt->assign_pin_type(pin_name, GateType::PinType::state);
+                            gt->assign_pin_type(pin_name, PinType::state);
                         }
 
                         pin.function = "";
@@ -1001,7 +989,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
+                            gt->assign_pin_type(pin_name, PinType::neg_state);
                         }
 
                         pin.function = "";
@@ -1011,7 +999,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            gt->assign_pin_type(pin_name, GateType::PinType::clock);
+                            gt->assign_pin_type(pin_name, PinType::clock);
                         }
                     }
                 }
@@ -1047,7 +1035,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        gt->assign_pin_type(pin_name, GateType::PinType::state);
+                        gt->assign_pin_type(pin_name, PinType::state);
                     }
 
                     pin.function = "";
@@ -1056,7 +1044,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
+                        gt->assign_pin_type(pin_name, PinType::neg_state);
                     }
 
                     pin.function = "";
@@ -1066,7 +1054,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        gt->assign_pin_type(pin_name, GateType::PinType::clock);
+                        gt->assign_pin_type(pin_name, PinType::clock);
                     }
                 }
             }
@@ -1079,7 +1067,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            gt->assign_pin_type(pin_name, GateType::PinType::state);
+                            gt->assign_pin_type(pin_name, PinType::state);
                         }
 
                         pin.function = "";
@@ -1088,7 +1076,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            gt->assign_pin_type(pin_name, GateType::PinType::neg_state);
+                            gt->assign_pin_type(pin_name, PinType::neg_state);
                         }
 
                         pin.function = "";
@@ -1098,7 +1086,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            gt->assign_pin_type(pin_name, GateType::PinType::clock);
+                            gt->assign_pin_type(pin_name, PinType::clock);
                         }
                     }
                 }
@@ -1116,7 +1104,7 @@ namespace hal
                 {
                     for (const auto& pin_name : pin.pin_names)
                     {
-                        gt->assign_pin_type(pin_name, GateType::PinType::lut);
+                        gt->assign_pin_type(pin_name, PinType::lut);
                     }
 
                     pin.function = "";
@@ -1131,7 +1119,7 @@ namespace hal
                     {
                         for (const auto& pin_name : pin.pin_names)
                         {
-                            gt->assign_pin_type(pin_name, GateType::PinType::lut);
+                            gt->assign_pin_type(pin_name, PinType::lut);
                         }
 
                         pin.function = "";
@@ -1146,7 +1134,7 @@ namespace hal
             {
                 for (const auto& pin_name : pin.pin_names)
                 {
-                    gt->assign_pin_type(pin_name, GateType::PinType::power);
+                    gt->assign_pin_type(pin_name, PinType::power);
                 }
             }
 
@@ -1154,7 +1142,7 @@ namespace hal
             {
                 for (const auto& pin_name : pin.pin_names)
                 {
-                    gt->assign_pin_type(pin_name, GateType::PinType::ground);
+                    gt->assign_pin_type(pin_name, PinType::ground);
                 }
             }
         }
@@ -1415,7 +1403,7 @@ namespace hal
         {
             UNUSED(bus_name);
 
-            if (bus.direction != GateType::PinDirection::output && bus.direction != GateType::PinDirection::inout)
+            if (bus.direction != PinDirection::output && bus.direction != PinDirection::inout)
             {
                 continue;
             }
