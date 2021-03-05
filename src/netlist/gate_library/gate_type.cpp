@@ -5,32 +5,18 @@
 namespace hal
 {
     template<>
-    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry", "invalid"};
+    std::vector<std::string> EnumStrings<GateTypeProperty>::data = {"combinational", "sequential", "power", "ground", "lut", "ff", "latch", "ram", "io", "dsp", "mux", "buffer", "carry"};
 
     template<>
-    std::vector<std::string> EnumStrings<GateType::ClearPresetBehavior>::data = {"L", "H", "N", "T", "X", "invalid"};
+    std::vector<std::string> EnumStrings<GateType::ClearPresetBehavior>::data = {"L", "H", "N", "T", "X", "undef"};
 
-    const std::unordered_map<GateType::PinDirection, std::string> GateType::m_pin_direction_to_string = {{PinDirection::none, "none"},
-                                                                                                         {PinDirection::input, "input"},
-                                                                                                         {PinDirection::output, "output"},
-                                                                                                         {PinDirection::inout, "inout"},
-                                                                                                         {PinDirection::internal, "internal"}};
-    const std::unordered_map<GateType::PinType, std::string> GateType::m_pin_type_to_string           = {{PinType::none, "none"},
-                                                                                               {PinType::power, "power"},
-                                                                                               {PinType::ground, "ground"},
-                                                                                               {PinType::lut, "lut"},
-                                                                                               {PinType::state, "state"},
-                                                                                               {PinType::neg_state, "neg_state"},
-                                                                                               {PinType::clock, "clock"},
-                                                                                               {PinType::enable, "enable"},
-                                                                                               {PinType::set, "set"},
-                                                                                               {PinType::reset, "reset"},
-                                                                                               {PinType::data, "data"},
-                                                                                               {PinType::address, "address"},
-                                                                                               {PinType::io_pad, "io_pad"},
-                                                                                               {PinType::select, "select"}};
+    template<>
+    std::vector<std::string> EnumStrings<PinDirection>::data = {"none", "input", "output", "inout", "internal"};
 
-    const std::unordered_map<GateType::PinDirection, std::unordered_set<GateType::PinType>> GateType::m_direction_to_types = {
+    template<>
+    std::vector<std::string> EnumStrings<PinType>::data = {"none", "power", "ground", "lut", "state", "neg_state", "clock", "enable", "set", "reset", "data", "address", "io_pad", "select"};
+
+    const std::unordered_map<PinDirection, std::unordered_set<PinType>> GateType::m_direction_to_types = {
         {PinDirection::none, {}},
         {PinDirection::input,
          {PinType::none, PinType::power, PinType::ground, PinType::clock, PinType::enable, PinType::set, PinType::reset, PinType::data, PinType::address, PinType::io_pad, PinType::select}},
@@ -79,16 +65,6 @@ namespace hal
     std::ostream& operator<<(std::ostream& os, const GateType& gt)
     {
         return os << gt.to_string();
-    }
-
-    std::ostream& operator<<(std::ostream& os, GateType::PinDirection direction)
-    {
-        return os << GateType::m_pin_direction_to_string.at(direction);
-    }
-
-    std::ostream& operator<<(std::ostream& os, GateType::PinType pin_type)
-    {
-        return os << GateType::m_pin_type_to_string.at(pin_type);
     }
 
     bool GateType::operator==(const GateType& other) const
@@ -190,7 +166,7 @@ namespace hal
         return m_pins;
     }
 
-    GateType::PinDirection GateType::get_pin_direction(const std::string& pin) const
+    PinDirection GateType::get_pin_direction(const std::string& pin) const
     {
         if (const auto it = m_pin_to_direction.find(pin); it != m_pin_to_direction.end())
         {
@@ -200,7 +176,7 @@ namespace hal
         return PinDirection::internal;
     }
 
-    const std::unordered_map<std::string, GateType::PinDirection>& GateType::get_pin_directions() const
+    const std::unordered_map<std::string, PinDirection>& GateType::get_pin_directions() const
     {
         return m_pin_to_direction;
     }
@@ -232,11 +208,11 @@ namespace hal
             }
         }
 
-        log_error("gate_library", "could not assign type '{}' to pin '{}' of gate type '{}'.", m_pin_type_to_string.at(pin_type), pin, m_name);
+        log_error("gate_library", "could not assign type '{}' to pin '{}' of gate type '{}'.", enum_to_string<PinType>(pin_type), pin, m_name);
         return false;
     }
 
-    GateType::PinType GateType::get_pin_type(const std::string& pin) const
+    PinType GateType::get_pin_type(const std::string& pin) const
     {
         if (const auto it = m_pin_to_type.find(pin); it != m_pin_to_type.end())
         {
@@ -246,7 +222,7 @@ namespace hal
         return PinType::none;
     }
 
-    const std::unordered_map<std::string, GateType::PinType>& GateType::get_pin_types() const
+    const std::unordered_map<std::string, PinType>& GateType::get_pin_types() const
     {
         return m_pin_to_type;
     }

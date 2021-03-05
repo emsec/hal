@@ -5,17 +5,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* added function `is_top_module` to class `Module` to determin whether the current module is the top module of the netlist
+* added function `get_common_inputs` to `netlist_utils` to get inputs that are common across multiple gates
+* added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type 
+
+## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`
+  * renamed enum `GateType::BaseType` to `GateTypeProperty` and moved it out of class `GateType`
   * added function `has_property` to class `GateType`
   * changed function `get_base_type` of class `GateType` to `get_properties`
   * changed HGL gate libraries to support multiple properties
   * changed function `create_gate_type` of class `GateLibrary` to support multiple properties
-* added `sequential`, `power`, `ground`, `buffer`, `mux`, and `carry` base types to class `GateType`
+* added `sequential`, `power`, `ground`, `buffer`, `mux`, and `carry` gate type properties to enum `GateTypeProperty`
+* moved enums `PinType` and `PinDirection` from class `GateType` into global scope
 * added `get_path` to `netlist_utils` to retrieve all gates on the predecessor/successor path from a start gate/net to gates of a specified property
 * made `optimize_constants` of class `BooleanFunction` publicly accessible
+* refined buffer removal in `netlist_utils::remove_buffers` to take constant `0` and `1` inputs into account
+* added high-impedance state `Z` to class `BooleanFunction` and added basic support to `evaluate`
+* cleaned up and refined some logger outputs and streamlined log channel names
+* disabled extended logging again
 * changes to `z3_utils` (WIP)
 * fixed crash related to GraphicsScene destructor
-* fixed overlapping gates in cone view by suppressing gate coordinates when adding to cone view
+* fixed overlapping gates in cone view (and subsequent segfault) by suppressing gate coordinates when adding to cone view
+* fixed `get_gate_by_id` and `get_gates` of class `Netlist` returning only gates contained within one of its modules (causing a GUI crash upon deleting gates from a module)
+* fixed nets of old module not updating when moving gate from one module to another
 
 ## [3.2.5] - 2021-01-29 13:15:00+02:00 (urgency: medium)
 * **WARNING:** temporarily enabled extended logging (includes taking screenshots) for university course purposes. Note that no data leaves your machine unless you actively provide it to us.
@@ -521,7 +534,8 @@ Note: This is an API breaking release.
 * Initial Release
 
 [//]: # (Hyperlink section)
-[Unreleased]: https://github.com/emsec/hal/compare/v3.2.5...HEAD
+[Unreleased]: https://github.com/emsec/hal/compare/v3.2.6...HEAD
+[3.2.6]: https://github.com/emsec/hal/compare/v3.2.5...v3.2.6
 [3.2.5]: https://github.com/emsec/hal/compare/v3.2.4...v3.2.5
 [3.2.4]: https://github.com/emsec/hal/compare/v3.2.3...v3.2.4
 [3.2.3]: https://github.com/emsec/hal/compare/v3.2.2...v3.2.3

@@ -101,15 +101,15 @@ namespace hal
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
-                GateType* gate_type                                                 = gate->get_type();
-                const std::unordered_map<std::string, GateType::PinType>& pin_types = gate_type->get_pin_types();
+                GateType* gate_type                                       = gate->get_type();
+                const std::unordered_map<std::string, PinType>& pin_types = gate_type->get_pin_types();
 
                 SignalValue inv_value = toggle(value);
 
                 // generate events
                 for (Endpoint* ep : gate->get_fan_out_endpoints())
                 {
-                    if (pin_types.at(ep->get_pin()) == GateType::PinType::state)
+                    if (pin_types.at(ep->get_pin()) == PinType::state)
                     {
                         Event e;
                         e.affected_net = ep->get_net();
@@ -117,7 +117,7 @@ namespace hal
                         e.time         = m_current_time;
                         m_event_queue.push_back(e);
                     }
-                    else if (pin_types.at(ep->get_pin()) == GateType::PinType::neg_state)
+                    else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
                     {
                         Event e;
                         e.affected_net = ep->get_net();
@@ -139,8 +139,8 @@ namespace hal
         {
             if (gate->get_type()->has_property(GateTypeProperty::ff))
             {
-                GateType* gate_type                                                 = gate->get_type();
-                const std::unordered_map<std::string, GateType::PinType>& pin_types = gate_type->get_pin_types();
+                GateType* gate_type                                       = gate->get_type();
+                const std::unordered_map<std::string, PinType>& pin_types = gate_type->get_pin_types();
 
                 // extract init string
                 std::string init_str = std::get<1>(gate->get_data(gate_type->get_config_data_category(), gate_type->get_config_data_identifier()));
@@ -168,7 +168,7 @@ namespace hal
                     // generate events
                     for (Endpoint* ep : gate->get_fan_out_endpoints())
                     {
-                        if (pin_types.at(ep->get_pin()) == GateType::PinType::state)
+                        if (pin_types.at(ep->get_pin()) == PinType::state)
                         {
                             Event e;
                             e.affected_net = ep->get_net();
@@ -176,7 +176,7 @@ namespace hal
                             e.time         = m_current_time;
                             m_event_queue.push_back(e);
                         }
-                        else if (pin_types.at(ep->get_pin()) == GateType::PinType::neg_state)
+                        else if (pin_types.at(ep->get_pin()) == PinType::neg_state)
                         {
                             Event e;
                             e.affected_net = ep->get_net();
@@ -331,21 +331,21 @@ namespace hal
                 sim_gate->preset_func     = gate->get_boolean_function("preset");
                 sim_gate->clear_func      = gate->get_boolean_function("clear");
                 sim_gate->next_state_func = gate->get_boolean_function("next_state");
-                for (auto pin : gate_type->get_pins_of_type(GateType::PinType::state))
+                for (auto pin : gate_type->get_pins_of_type(PinType::state))
                 {
                     if (Net* net = gate->get_fan_out_net(pin); net != nullptr)
                     {
                         sim_gate->state_output_nets.push_back(gate->get_fan_out_net(pin));
                     }
                 }
-                for (auto pin : gate_type->get_pins_of_type(GateType::PinType::neg_state))
+                for (auto pin : gate_type->get_pins_of_type(PinType::neg_state))
                 {
                     if (Net* net = gate->get_fan_out_net(pin); net != nullptr)
                     {
                         sim_gate->state_inverted_output_nets.push_back(gate->get_fan_out_net(pin));
                     }
                 }
-                for (auto pin : gate_type->get_pins_of_type(GateType::PinType::clock))
+                for (auto pin : gate_type->get_pins_of_type(PinType::clock))
                 {
                     sim_gate->clock_nets.push_back(gate->get_fan_in_net(pin));
                 }

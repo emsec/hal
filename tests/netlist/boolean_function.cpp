@@ -187,6 +187,16 @@ namespace hal {
     }
 
     /**
+     * Testing the integer values for enum BooleanFunction::Value.
+     */
+    TEST_F(BooleanFunctionTest, check_enum_values) {
+        TEST_START
+            EXPECT_EQ(static_cast<BooleanFunction::Value>(0), BooleanFunction::Value::ZERO);
+            EXPECT_EQ(static_cast<BooleanFunction::Value>(1), BooleanFunction::Value::ONE);
+        TEST_END
+    }
+
+    /**
      * Testing the functions is_constant_one and is_constant_zero, by passing some sample inputs
      *
      * Functions: is_constant_one, is_constant_zero
