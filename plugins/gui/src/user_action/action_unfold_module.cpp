@@ -24,7 +24,7 @@ namespace hal
     }
 
     ActionUnfoldModule::ActionUnfoldModule(u32 moduleId)
-        : mContextId(0)
+        : mContextId(0), mPlacementHint(PlacementHint::Standard)
     {
         if (moduleId)
             setObject(UserActionObject(moduleId,UserActionObjectType::Module));
@@ -69,11 +69,11 @@ namespace hal
 
         QSet<u32> gats;
         QSet<u32> mods;
-        for (const auto& g : m->get_gates())
+        for (const Gate* g : m->get_gates())
         {
             gats.insert(g->get_id());
         }
-        for (auto sm : m->get_submodules())
+        for (const Module* sm : m->get_submodules())
         {
             mods.insert(sm->get_id());
         }
@@ -89,6 +89,6 @@ namespace hal
         }
 
         auto ctx = gGraphContextManager->createNewContext(QString::fromStdString(m->get_name()));
-        ctx->add(mods, gats);
+        ctx->add(mods, gats, mPlacementHint);
     }
 }

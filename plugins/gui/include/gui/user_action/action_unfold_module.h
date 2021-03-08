@@ -9,11 +9,13 @@ namespace hal
     class ActionUnfoldModule : public UserAction
     {
         u32 mContextId;
+        PlacementHint mPlacementHint;
     public:
         ActionUnfoldModule(u32 moduleId = 0);
         QString tagname() const override;
         bool exec() override;
         void setContextId(u32 id) { mContextId = id; }
+        void setPlacementHint(PlacementHint hint) { mPlacementHint = hint; }
     private:
         void execInternal(Module* m, GraphContext* currentContext);
     };

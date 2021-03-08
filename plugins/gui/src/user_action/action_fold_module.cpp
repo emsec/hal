@@ -33,6 +33,8 @@ namespace hal
     bool ActionFoldModule::exec()
     {
         if (mObject.type() != UserActionObjectType::Module) return false;
+        Module* m = gNetlist->get_module_by_id(mObject.id());
+        if (!m) return false;
 
         GraphContext* ctx = mContextId
                 ? gGraphContextManager->getContextById(mContextId)
@@ -42,6 +44,22 @@ namespace hal
         if (!ctx->foldModuleAction(mObject.id())) return false;
         ActionUnfoldModule* undo = new ActionUnfoldModule(mObject.id());
         undo->setContextId(mContextId);
+        PlacementHint plc(PlacementHint::GridPosition);
+        for (const Gate* g : m->get_gates())
+        {
+            Node nd(g->get_id(),Node::Gate);
+            auto it = ctx->getLayouter()->nodeToPositionMap().find(nd);
+            if (it!=ctx->getLayouter()->nodeToPositionMap().end())
+                plc.addGridPosition(nd,it.value());
+        }
+        for (auto sm : m->get_submodules())
+        {
+            Node nd(sm->get_id(),Node::Module);
+            auto it = ctx->getLayouter()->nodeToPositionMap().find(nd);
+            if (it!=ctx->getLayouter()->nodeToPositionMap().end())
+                plc.addGridPosition(nd,it.value());
+        }
+        undo->setPlacementHint(plc);
         mUndoAction = undo;
         return UserAction::exec();
     }

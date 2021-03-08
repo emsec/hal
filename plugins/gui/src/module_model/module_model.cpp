@@ -9,7 +9,6 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 
-#include <QDebug>
 
 namespace hal
 {
@@ -316,7 +315,6 @@ namespace hal
     {
         QColor retval = mModuleColors.value(id);
         mModuleColors[id] = col;
-        qDebug() << "set color" << id << mModuleColors.value(id).name() << retval.name();
         return retval;
     }
 
@@ -324,7 +322,6 @@ namespace hal
     {
         QColor retval = mModuleColors.value(id);
         mModuleColors.insert(id,gui_utility::getRandomColor());
-        qDebug() << "random color" << id << mModuleColors.value(id).name() << retval.name();
     }
 
     void ModuleModel::removeColor(u32 id)

@@ -41,8 +41,9 @@ namespace hal
             mAction->mModules = mSelectedModules;
             mAction->mGates   = mSelectedGates;
             mAction->mNets    = mSelectedNets;
-            mAction->setObject(UserActionObject(mFocusId,
-                                                UserActionObjectType::fromSelectionType(mFocusType)));
+            mAction->mObject  = UserActionObject(
+                        mFocusId,
+                        UserActionObjectType::fromSelectionType(mFocusType));
             mAction->mSubfocus      = mSubfocus;
             mAction->mSubfocusIndex = mSubfocusIndex;
         }
