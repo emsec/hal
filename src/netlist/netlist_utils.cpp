@@ -957,7 +957,7 @@ namespace hal
                             gate_chain.push_front(pred_gate);
                             current_gate    = pred_gate;
                             found_next_gate = true;
-                            log_debug("netlist_utils", "found successor gate with ID {}.", pred_gate->get_id());
+                            log_debug("netlist_utils", "found predecessor gate with ID {}.", pred_gate->get_id());
                         }
                     }
                 }
