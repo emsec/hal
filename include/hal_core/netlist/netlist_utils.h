@@ -207,5 +207,18 @@ namespace hal
          * @returns True on success, false otherwise.
          */
         bool replace_gate(Gate* gate, GateType* target_type, std::map<std::string, std::string> pin_map);
+
+        /**
+         * Find a chain of identical gates within the netlist.
+         * The start gate may be any gate within a chain, it is not reuired to be the first or last gate.
+         * A pin must be specified through which the gates are expected to be connected.
+         * A user-defined filter is evaluated in every candidate gate before it is added to the chain.
+         * 
+         * @param[in] start_gate - The gate at which to start the chain detection.
+         * @param[in] pin - The pin through which the gates are connected.
+         * @param[in] filter - A filter that is evaluated on all candidates.
+         * @returns A vector of gates that form a chain.
+         */
+        std::vector<Gate*> get_gate_chain(Gate* start_gate, const std::string& pin, const std::function<bool(const Gate*)>& filter);
     }    // namespace netlist_utils
 }    // namespace hal
