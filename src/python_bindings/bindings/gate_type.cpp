@@ -20,39 +20,38 @@ namespace hal
             .value("mux", GateTypeProperty::mux, R"(MUX gate type.)")
             .value("buffer", GateTypeProperty::buffer, R"(Buffer gate type.)")
             .value("carry", GateTypeProperty::carry, R"(Carry gate type.)")
-            .value("invalid", GateTypeProperty::invalid, R"(Invalid property.)")
+            .export_values();
+
+        py::enum_<PinDirection>(m, "PinDirection", R"(
+            Defines the direction of a pin.
+        )")
+            .value("none", PinDirection::none, R"(Invalid pin.)")
+            .value("input", PinDirection::input, R"(Input pin.)")
+            .value("output", PinDirection::output, R"(Output pin.)")
+            .value("inout", PinDirection::inout, R"(Inout pin.)")
+            .value("internal", PinDirection::internal, R"(Internal pin.)")
+            .export_values();
+
+        py::enum_<PinType>(m, "PinType", R"(Defines the type of a pin.)")
+            .value("none", PinType::none, R"(Default pin.)")
+            .value("power", PinType::power, R"(Power pin.)")
+            .value("ground", PinType::ground, R"(Ground pin.)")
+            .value("lut", PinType::lut, R"(Pin that generates output from LUT initialization string.)")
+            .value("state", PinType::state, R"(Pin that generates output from internal state.)")
+            .value("neg_state", PinType::neg_state, R"(Pin that generates output from negated internal state.)")
+            .value("clock", PinType::clock, R"(Clock pin.)")
+            .value("enable", PinType::enable, R"(Enable pin.)")
+            .value("set", PinType::set, R"(Set pin.)")
+            .value("reset", PinType::reset, R"(Reset pin.)")
+            .value("data", PinType::data, R"(Data pin.)")
+            .value("address", PinType::address, R"(Address pin.)")
+            .value("io_pad", PinType::io_pad, R"(IO pad pin.)")
+            .value("select", PinType::select, R"(Select pin.)")
             .export_values();
 
         py::class_<GateType, RawPtrWrapper<GateType>> py_gate_type(m, "GateType", R"(
             A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
         )");
-
-        py::enum_<GateType::PinDirection>(py_gate_type, "PinDirection", R"(
-            Defines the direction of a pin.
-        )")
-            .value("none", GateType::PinDirection::none, R"(Invalid pin.)")
-            .value("input", GateType::PinDirection::input, R"(Input pin.)")
-            .value("output", GateType::PinDirection::output, R"(Output pin.)")
-            .value("inout", GateType::PinDirection::inout, R"(Inout pin.)")
-            .value("internal", GateType::PinDirection::internal, R"(Internal pin.)")
-            .export_values();
-
-        py::enum_<GateType::PinType>(py_gate_type, "PinType", R"(Defines the type of a pin.)")
-            .value("none", GateType::PinType::none, R"(Default pin.)")
-            .value("power", GateType::PinType::power, R"(Power pin.)")
-            .value("ground", GateType::PinType::ground, R"(Ground pin.)")
-            .value("lut", GateType::PinType::lut, R"(Pin that generates output from LUT initialization string.)")
-            .value("state", GateType::PinType::state, R"(Pin that generates output from internal state.)")
-            .value("neg_state", GateType::PinType::neg_state, R"(Pin that generates output from negated internal state.)")
-            .value("clock", GateType::PinType::clock, R"(Clock pin.)")
-            .value("enable", GateType::PinType::enable, R"(Enable pin.)")
-            .value("set", GateType::PinType::set, R"(Set pin.)")
-            .value("reset", GateType::PinType::reset, R"(Reset pin.)")
-            .value("data", GateType::PinType::data, R"(Data pin.)")
-            .value("address", GateType::PinType::address, R"(Address pin.)")
-            .value("io_pad", GateType::PinType::io_pad, R"(IO pad pin.)")
-            .value("select", GateType::PinType::select, R"(Select pin.)")
-            .export_values();
 
         py::enum_<GateType::ClearPresetBehavior>(py_gate_type, "ClearPresetBehavior", R"(
             Defines the behavior of the gate type in case both clear and preset are active at the same time.
@@ -62,7 +61,7 @@ namespace hal
             .value("N", GateType::ClearPresetBehavior::N, R"(Do not change the internal state.)")
             .value("T", GateType::ClearPresetBehavior::T, R"(Toggle, i.e., invert the internal state.)")
             .value("X", GateType::ClearPresetBehavior::X, R"(Set the internal state to 'X'.)")
-            .value("invalid", GateType::ClearPresetBehavior::invalid, R"(Invalid bahavior, used by default.)")
+            .value("undef", GateType::ClearPresetBehavior::undef, R"(Invalid bahavior, used by default.)")
             .export_values();
 
         py_gate_type.def_property_readonly("id", &GateType::get_id, R"(

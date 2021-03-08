@@ -175,6 +175,11 @@ namespace hal
         return false;
     }
 
+    bool Module::is_top_module() const
+    {
+        return m_parent == nullptr;
+    }
+
     Netlist* Module::get_netlist() const
     {
         return m_internal_manager->m_netlist;
