@@ -4712,7 +4712,7 @@
         },
         {
             "name": "LS1",
-            "types": ["combinational"],
+            "types": ["latch"],
             "pins": [
                 {
                     "name": "D1",
@@ -4742,7 +4742,7 @@
         },
         {
             "name": "LS1P",
-            "types": ["combinational"],
+            "types": ["latch"],
             "pins": [
                 {
                     "name": "D1",
