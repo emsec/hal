@@ -13,6 +13,7 @@
 #include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
@@ -164,6 +165,7 @@ namespace hal
         gSelectionRelay->addModule(moduleId);
         gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,moduleId);
         gSelectionRelay->relaySelectionChanged(this);
+        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
     }
 
     void GraphGraphicsView::handleMoveNewAction()
@@ -198,6 +200,7 @@ namespace hal
         gSelectionRelay->addModule(compound->object().id());
         gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,compound->object().id());
         gSelectionRelay->relaySelectionChanged(this);
+        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
     }
 
     void GraphGraphicsView::handleRenameAction()

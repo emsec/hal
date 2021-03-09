@@ -6,6 +6,7 @@
 #include "gui/selection_details_widget/module_details_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/selection_history_navigator/selection_history_navigator.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_remove_items_from_object.h"
@@ -198,6 +199,8 @@ namespace hal
         ActionAddItemsToObject* actAddSelected =
                 new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
                                            gSelectionRelay->selectedGates());
+        u32 targetModuleId = 0;
+
         if (actionCode < 0)
         {
             // add to new module
@@ -221,17 +224,21 @@ namespace hal
             act->addAction(actNewModule);
             act->addAction(actAddSelected);
             act->exec();
+            targetModuleId = act->object().id();
         }
         else
         {
             // add to existing module
-            u32 targetModuleId = actionCode;
+            targetModuleId = actionCode;
             actAddSelected->setObject(UserActionObject(targetModuleId,UserActionObjectType::Module));
             actAddSelected->exec();
         }
 
         gSelectionRelay->clear();
+        gSelectionRelay->addModule(targetModuleId);
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,targetModuleId);
         gSelectionRelay->relaySelectionChanged(this);
+        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
     }
 
     void SelectionDetailsWidget::selectionToGrouping()
