@@ -207,5 +207,18 @@ namespace hal
             :returns: True on success, False otherwise.
             :rtype: bool
         )");
+
+        py_netlist_utils.def("get_gate_chain", netlist_utils::get_gate_chain, py::arg("start_gate"), py::arg("pin"), py::arg("filter"), R"(
+            Find a chain of identical gates within the netlist.
+            The start gate may be any gate within a chain, it is not reuired to be the first or last gate.
+            A pin must be specified through which the gates are expected to be connected.
+            A user-defined filter is evaluated in every candidate gate before it is added to the chain.
+
+            :param hal_py.Gate start_gate: The gate at which to start the chain detection.
+            :param str pin: The pin through which the gates are connected.
+            :param lambda filter: A filter that is evaluated on all candidates.
+            :returns: A list of gates that form a chain.
+            :rtype: list[hal_py.Gate]
+        )");
     }
 }    // namespace hal

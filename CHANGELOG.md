@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * indicator whether views have been modified
 * added function `is_top_module` to class `Module` to determin whether the current module is the top module of the netlist
 * added function `get_common_inputs` to `netlist_utils` to get inputs that are common across multiple gates
-* added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type 
+* added function `replace_gate` to `netlist_utils` to replace a gate with an instance of another gate type
+* added function `get_gate_chain` to `netlist_utils` to find gates that are arranged in a chain 
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`
