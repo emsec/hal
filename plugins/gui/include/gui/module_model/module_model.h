@@ -119,6 +119,8 @@ namespace hal
          */
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+        // === Others ===
+
         /**
          * Returns the ModuleItem stored under the specified model index.
          *
