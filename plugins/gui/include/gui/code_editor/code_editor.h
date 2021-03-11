@@ -38,6 +38,10 @@ namespace hal
     class CodeEditorScrollbar;
     class LineNumberArea;
 
+    /**
+     * The Code Editor is a plain text edit widget that is intended to edit code. Therefore it has numbered lines
+     * and provides a code minimap for easier navigation in larger files.
+     */
     class CodeEditor : public QPlainTextEdit
     {
         Q_OBJECT
@@ -49,15 +53,53 @@ namespace hal
         Q_PROPERTY(QColor currentLineBackground READ currentLineBackground WRITE setCurrentLineBackground)
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
         explicit CodeEditor(QWidget* parent = nullptr);
 
+        /**
+         * TODO: Does not work! (eventFilter never installed?)
+         * Captures the mouse scroll event to zoom in and out via CTRL+SCROLL UP/DOWN.
+         *
+         * @param object - The object this filter is applied on.
+         * @param event - The event to filter
+         * @returns true if the event is handled by this filter and shouldn't be processed any further by the target
+         *          object. Returns false to pass the event to the target object.
+         */
         virtual bool eventFilter(QObject* object, QEvent* event) override;
 
+        /**
+         * Paint event handler to paint the line numbers.
+         *
+         * @param event - The paint event
+         */
         void lineNumberAreaPaintEvent(QPaintEvent* event);
+
+        /**
+         * Paint event handler to paint the line numbers.
+         *
+         * @param event - The paint event
+         */
         void minimapPaintEvent(QPaintEvent* event);
 
+        /**
+         * Gets the width of area where the line numbers are drawn.
+         *
+         * @returns the line number area width.
+         */
         int lineNumberAreaWidth();
+
+        /**
+         * Gets the width of the minimap.
+         *
+         * @returns the width of the minimap.
+         */
         int minimapWidth();
+
+        // IN_PROGRESS: Further documentation
 
         int first_visible_block();
         int visibleBlockCount();
