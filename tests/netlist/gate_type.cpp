@@ -161,54 +161,54 @@ namespace hal
         ss.str(std::string());
 
         // pin direction to ostream
-        ss << GateType::PinDirection::input;
+        ss << PinDirection::input;
         EXPECT_EQ(ss.str(), "input");
         ss.str(std::string());
-        ss << GateType::PinDirection::output;
+        ss << PinDirection::output;
         EXPECT_EQ(ss.str(), "output");
         ss.str(std::string());
-        ss << GateType::PinDirection::inout;
+        ss << PinDirection::inout;
         EXPECT_EQ(ss.str(), "inout");
         ss.str(std::string());
-        ss << GateType::PinDirection::internal;
+        ss << PinDirection::internal;
         EXPECT_EQ(ss.str(), "internal");
         ss.str(std::string());
 
         // pin type to ostream
-        ss << GateType::PinType::none;
+        ss << PinType::none;
         EXPECT_EQ(ss.str(), "none");
         ss.str(std::string());
-        ss << GateType::PinType::power;
+        ss << PinType::power;
         EXPECT_EQ(ss.str(), "power");
         ss.str(std::string());
-        ss << GateType::PinType::ground;
+        ss << PinType::ground;
         EXPECT_EQ(ss.str(), "ground");
         ss.str(std::string());
-        ss << GateType::PinType::lut;
+        ss << PinType::lut;
         EXPECT_EQ(ss.str(), "lut");
         ss.str(std::string());
-        ss << GateType::PinType::state;
+        ss << PinType::state;
         EXPECT_EQ(ss.str(), "state");
         ss.str(std::string());
-        ss << GateType::PinType::neg_state;
+        ss << PinType::neg_state;
         EXPECT_EQ(ss.str(), "neg_state");
         ss.str(std::string());
-        ss << GateType::PinType::clock;
+        ss << PinType::clock;
         EXPECT_EQ(ss.str(), "clock");
         ss.str(std::string());
-        ss << GateType::PinType::enable;
+        ss << PinType::enable;
         EXPECT_EQ(ss.str(), "enable");
         ss.str(std::string());
-        ss << GateType::PinType::set;
+        ss << PinType::set;
         EXPECT_EQ(ss.str(), "set");
         ss.str(std::string());
-        ss << GateType::PinType::reset;
+        ss << PinType::reset;
         EXPECT_EQ(ss.str(), "reset");
         ss.str(std::string());
-        ss << GateType::PinType::data;
+        ss << PinType::data;
         EXPECT_EQ(ss.str(), "data");
         ss.str(std::string());
-        ss << GateType::PinType::address;
+        ss << PinType::address;
         EXPECT_EQ(ss.str(), "address");
         ss.str(std::string());
 
@@ -237,23 +237,23 @@ namespace hal
         {
             GateType* gt = gl.create_gate_type("dummy1", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
-            EXPECT_TRUE(gt->add_pin("I0", GateType::PinDirection::input));
-            EXPECT_TRUE(gt->add_pins({"I1", "I2"}, GateType::PinDirection::input));
+            EXPECT_TRUE(gt->add_pin("I0", PinDirection::input));
+            EXPECT_TRUE(gt->add_pins({"I1", "I2"}, PinDirection::input));
             EXPECT_EQ(gt->get_pins(), std::vector<std::string>({"I0", "I1", "I2"}));
             EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"I0", "I1", "I2"}));
             EXPECT_TRUE(gt->get_output_pins().empty());
-            EXPECT_EQ(gt->get_pins_of_direction(GateType::PinDirection::input), std::unordered_set<std::string>({"I0", "I1", "I2"}));
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::output).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::inout).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::internal).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::none).empty());
-            EXPECT_EQ(gt->get_pin_direction("I0"), GateType::PinDirection::input);
-            EXPECT_EQ(gt->get_pin_direction("I1"), GateType::PinDirection::input);
-            EXPECT_EQ(gt->get_pin_direction("I2"), GateType::PinDirection::input);
-            std::unordered_map<std::string, GateType::PinDirection> direction_map = {
-                {"I0", GateType::PinDirection::input},
-                {"I1", GateType::PinDirection::input},
-                {"I2", GateType::PinDirection::input}};
+            EXPECT_EQ(gt->get_pins_of_direction(PinDirection::input), std::unordered_set<std::string>({"I0", "I1", "I2"}));
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::output).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::inout).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::internal).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::none).empty());
+            EXPECT_EQ(gt->get_pin_direction("I0"), PinDirection::input);
+            EXPECT_EQ(gt->get_pin_direction("I1"), PinDirection::input);
+            EXPECT_EQ(gt->get_pin_direction("I2"), PinDirection::input);
+            std::unordered_map<std::string, PinDirection> direction_map = {
+                {"I0", PinDirection::input},
+                {"I1", PinDirection::input},
+                {"I2", PinDirection::input}};
             EXPECT_EQ(gt->get_pin_directions(), direction_map);
         }
 
@@ -261,23 +261,23 @@ namespace hal
         {
             GateType* gt = gl.create_gate_type("dummy2", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
-            EXPECT_TRUE(gt->add_pin("O0", GateType::PinDirection::output));
-            EXPECT_TRUE(gt->add_pins({"O1", "O2"}, GateType::PinDirection::output));
+            EXPECT_TRUE(gt->add_pin("O0", PinDirection::output));
+            EXPECT_TRUE(gt->add_pins({"O1", "O2"}, PinDirection::output));
             EXPECT_EQ(gt->get_pins(), std::vector<std::string>({"O0", "O1", "O2"}));
             EXPECT_TRUE(gt->get_input_pins().empty());
             EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O0", "O1", "O2"}));
-            EXPECT_EQ(gt->get_pins_of_direction(GateType::PinDirection::output), std::unordered_set<std::string>({"O0", "O1", "O2"}));
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::input).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::inout).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::internal).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::none).empty());
-            EXPECT_EQ(gt->get_pin_direction("O0"), GateType::PinDirection::output);
-            EXPECT_EQ(gt->get_pin_direction("O1"), GateType::PinDirection::output);
-            EXPECT_EQ(gt->get_pin_direction("O2"), GateType::PinDirection::output);
-            std::unordered_map<std::string, GateType::PinDirection> direction_map = {
-                {"O0", GateType::PinDirection::output},
-                {"O1", GateType::PinDirection::output},
-                {"O2", GateType::PinDirection::output}};
+            EXPECT_EQ(gt->get_pins_of_direction(PinDirection::output), std::unordered_set<std::string>({"O0", "O1", "O2"}));
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::input).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::inout).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::internal).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::none).empty());
+            EXPECT_EQ(gt->get_pin_direction("O0"), PinDirection::output);
+            EXPECT_EQ(gt->get_pin_direction("O1"), PinDirection::output);
+            EXPECT_EQ(gt->get_pin_direction("O2"), PinDirection::output);
+            std::unordered_map<std::string, PinDirection> direction_map = {
+                {"O0", PinDirection::output},
+                {"O1", PinDirection::output},
+                {"O2", PinDirection::output}};
             EXPECT_EQ(gt->get_pin_directions(), direction_map);
         }
 
@@ -285,23 +285,23 @@ namespace hal
         {
             GateType* gt = gl.create_gate_type("dummy3", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
-            EXPECT_TRUE(gt->add_pin("IO0", GateType::PinDirection::inout));
-            EXPECT_TRUE(gt->add_pins({"IO1", "IO2"}, GateType::PinDirection::inout));
+            EXPECT_TRUE(gt->add_pin("IO0", PinDirection::inout));
+            EXPECT_TRUE(gt->add_pins({"IO1", "IO2"}, PinDirection::inout));
             EXPECT_EQ(gt->get_pins(), std::vector<std::string>({"IO0", "IO1", "IO2"}));
             EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"IO0", "IO1", "IO2"}));
             EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"IO0", "IO1", "IO2"}));
-            EXPECT_EQ(gt->get_pins_of_direction(GateType::PinDirection::inout), std::unordered_set<std::string>({"IO0", "IO1", "IO2"}));
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::input).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::output).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::internal).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::none).empty());
-            EXPECT_EQ(gt->get_pin_direction("IO0"), GateType::PinDirection::inout);
-            EXPECT_EQ(gt->get_pin_direction("IO1"), GateType::PinDirection::inout);
-            EXPECT_EQ(gt->get_pin_direction("IO2"), GateType::PinDirection::inout);
-            std::unordered_map<std::string, GateType::PinDirection> direction_map = {
-                {"IO0", GateType::PinDirection::inout},
-                {"IO1", GateType::PinDirection::inout},
-                {"IO2", GateType::PinDirection::inout}};
+            EXPECT_EQ(gt->get_pins_of_direction(PinDirection::inout), std::unordered_set<std::string>({"IO0", "IO1", "IO2"}));
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::input).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::output).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::internal).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::none).empty());
+            EXPECT_EQ(gt->get_pin_direction("IO0"), PinDirection::inout);
+            EXPECT_EQ(gt->get_pin_direction("IO1"), PinDirection::inout);
+            EXPECT_EQ(gt->get_pin_direction("IO2"), PinDirection::inout);
+            std::unordered_map<std::string, PinDirection> direction_map = {
+                {"IO0", PinDirection::inout},
+                {"IO1", PinDirection::inout},
+                {"IO2", PinDirection::inout}};
             EXPECT_EQ(gt->get_pin_directions(), direction_map);
         }
 
@@ -309,23 +309,23 @@ namespace hal
         {
             GateType* gt = gl.create_gate_type("dummy4", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
-            EXPECT_TRUE(gt->add_pin("INT0", GateType::PinDirection::internal));
-            EXPECT_TRUE(gt->add_pins({"INT1", "INT2"}, GateType::PinDirection::internal));
+            EXPECT_TRUE(gt->add_pin("INT0", PinDirection::internal));
+            EXPECT_TRUE(gt->add_pins({"INT1", "INT2"}, PinDirection::internal));
             EXPECT_EQ(gt->get_pins(), std::vector<std::string>({"INT0", "INT1", "INT2"}));
             EXPECT_TRUE(gt->get_input_pins().empty());
             EXPECT_TRUE(gt->get_output_pins().empty());
-            EXPECT_EQ(gt->get_pins_of_direction(GateType::PinDirection::internal), std::unordered_set<std::string>({"INT0", "INT1", "INT2"}));
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::input).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::output).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::inout).empty());
-            EXPECT_TRUE(gt->get_pins_of_direction(GateType::PinDirection::none).empty());
-            EXPECT_EQ(gt->get_pin_direction("INT0"), GateType::PinDirection::internal);
-            EXPECT_EQ(gt->get_pin_direction("INT1"), GateType::PinDirection::internal);
-            EXPECT_EQ(gt->get_pin_direction("INT2"), GateType::PinDirection::internal);
-            std::unordered_map<std::string, GateType::PinDirection> direction_map = {
-                {"INT0", GateType::PinDirection::internal},
-                {"INT1", GateType::PinDirection::internal},
-                {"INT2", GateType::PinDirection::internal}};
+            EXPECT_EQ(gt->get_pins_of_direction(PinDirection::internal), std::unordered_set<std::string>({"INT0", "INT1", "INT2"}));
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::input).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::output).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::inout).empty());
+            EXPECT_TRUE(gt->get_pins_of_direction(PinDirection::none).empty());
+            EXPECT_EQ(gt->get_pin_direction("INT0"), PinDirection::internal);
+            EXPECT_EQ(gt->get_pin_direction("INT1"), PinDirection::internal);
+            EXPECT_EQ(gt->get_pin_direction("INT2"), PinDirection::internal);
+            std::unordered_map<std::string, PinDirection> direction_map = {
+                {"INT0", PinDirection::internal},
+                {"INT1", PinDirection::internal},
+                {"INT2", PinDirection::internal}};
             EXPECT_EQ(gt->get_pin_directions(), direction_map);
         }
 
@@ -333,13 +333,13 @@ namespace hal
         {
             GateType* gt = gl.create_gate_type("dummy5", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
-            EXPECT_TRUE(gt->add_pin("A", GateType::PinDirection::input));
+            EXPECT_TRUE(gt->add_pin("A", PinDirection::input));
             EXPECT_EQ(gt->get_pins(), std::vector<std::string>({"A"}));
-            EXPECT_FALSE(gt->add_pin("A", GateType::PinDirection::input));
+            EXPECT_FALSE(gt->add_pin("A", PinDirection::input));
             EXPECT_EQ(gt->get_pins(), std::vector<std::string>({"A"}));
-            EXPECT_FALSE(gt->add_pin("A", GateType::PinDirection::output));
+            EXPECT_FALSE(gt->add_pin("A", PinDirection::output));
             EXPECT_EQ(gt->get_pins(), std::vector<std::string>({"A"}));
-            EXPECT_EQ(gt->get_pin_direction("A"), GateType::PinDirection::input);
+            EXPECT_EQ(gt->get_pin_direction("A"), PinDirection::input);
         }
 
         TEST_END
@@ -368,7 +368,7 @@ namespace hal
         {   
             GateType* gt = gl.create_gate_type("dummy1", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
-            EXPECT_TRUE(gt->add_pins({"A(0)", "A(1)", "B(0)", "B(1)", "C(0)", "C(1)"}, GateType::PinDirection::input));
+            EXPECT_TRUE(gt->add_pins({"A(0)", "A(1)", "B(0)", "B(1)", "C(0)", "C(1)"}, PinDirection::input));
         
             EXPECT_TRUE(gt->assign_pin_group("A", index_to_pin_a));
             EXPECT_TRUE(gt->assign_pin_group("B", index_to_pin_b));
@@ -381,7 +381,7 @@ namespace hal
             GateType* gt = gl.create_gate_type("dummy2", {GateTypeProperty::combinational});
             ASSERT_NE(gt, nullptr);
 
-            EXPECT_TRUE(gt->add_pins({"A(0)", "A(1)"}, GateType::PinDirection::input));
+            EXPECT_TRUE(gt->add_pins({"A(0)", "A(1)"}, PinDirection::input));
             EXPECT_TRUE(gt->assign_pin_group("A", index_to_pin_a));
             EXPECT_EQ(gt->get_pin_groups(), groups_a);
             EXPECT_FALSE(gt->assign_pin_group("A", index_to_pin_a));
@@ -418,46 +418,46 @@ namespace hal
 
             std::unordered_set<std::string> in_pins = {"I0", "I1"};
             std::unordered_set<std::string> out_pins = {"O"};
-            std::unordered_map<std::string, GateType::PinType> pin_to_type;
+            std::unordered_map<std::string, PinType> pin_to_type;
 
-            EXPECT_TRUE(gt->add_pins({"I0", "I1"}, GateType::PinDirection::input, GateType::PinType::ground));
-            EXPECT_TRUE(gt->add_pins({"O"}, GateType::PinDirection::output));
+            EXPECT_TRUE(gt->add_pins({"I0", "I1"}, PinDirection::input, PinType::ground));
+            EXPECT_TRUE(gt->add_pins({"O"}, PinDirection::output));
 
-            EXPECT_EQ(gt->get_pin_type("I0"), GateType::PinType::ground);
-            EXPECT_EQ(gt->get_pin_type("I1"), GateType::PinType::ground);
-            EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::none);
+            EXPECT_EQ(gt->get_pin_type("I0"), PinType::ground);
+            EXPECT_EQ(gt->get_pin_type("I1"), PinType::ground);
+            EXPECT_EQ(gt->get_pin_type("O"), PinType::none);
 
-            ASSERT_TRUE(gt->assign_pin_type("I0", GateType::PinType::power));
-            ASSERT_TRUE(gt->assign_pin_type("I1", GateType::PinType::power));
-            ASSERT_FALSE(gt->assign_pin_type("O", GateType::PinType::power));
-
-            pin_to_type = {
-                {"I0", GateType::PinType::power}, 
-                {"I1", GateType::PinType::power}, 
-                {"O", GateType::PinType::none}};
-
-            EXPECT_EQ(gt->get_pin_types(), pin_to_type);
-            EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::power), in_pins);
-            EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::none), out_pins);
-            EXPECT_EQ(gt->get_pin_type("I0"), GateType::PinType::power);
-            EXPECT_EQ(gt->get_pin_type("I1"), GateType::PinType::power);
-            EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::none);
-
-            ASSERT_TRUE(gt->assign_pin_type("I0", GateType::PinType::ground));
-            ASSERT_TRUE(gt->assign_pin_type("I1", GateType::PinType::ground));
-            ASSERT_FALSE(gt->assign_pin_type("O", GateType::PinType::ground));
+            ASSERT_TRUE(gt->assign_pin_type("I0", PinType::power));
+            ASSERT_TRUE(gt->assign_pin_type("I1", PinType::power));
+            ASSERT_FALSE(gt->assign_pin_type("O", PinType::power));
 
             pin_to_type = {
-                {"I0", GateType::PinType::ground}, 
-                {"I1", GateType::PinType::ground}, 
-                {"O", GateType::PinType::none}};
+                {"I0", PinType::power}, 
+                {"I1", PinType::power}, 
+                {"O", PinType::none}};
 
             EXPECT_EQ(gt->get_pin_types(), pin_to_type);
-            EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::ground), in_pins);
-            EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::none), out_pins);
-            EXPECT_EQ(gt->get_pin_type("I0"), GateType::PinType::ground);
-            EXPECT_EQ(gt->get_pin_type("I1"), GateType::PinType::ground);
-            EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::none);
+            EXPECT_EQ(gt->get_pins_of_type(PinType::power), in_pins);
+            EXPECT_EQ(gt->get_pins_of_type(PinType::none), out_pins);
+            EXPECT_EQ(gt->get_pin_type("I0"), PinType::power);
+            EXPECT_EQ(gt->get_pin_type("I1"), PinType::power);
+            EXPECT_EQ(gt->get_pin_type("O"), PinType::none);
+
+            ASSERT_TRUE(gt->assign_pin_type("I0", PinType::ground));
+            ASSERT_TRUE(gt->assign_pin_type("I1", PinType::ground));
+            ASSERT_FALSE(gt->assign_pin_type("O", PinType::ground));
+
+            pin_to_type = {
+                {"I0", PinType::ground}, 
+                {"I1", PinType::ground}, 
+                {"O", PinType::none}};
+
+            EXPECT_EQ(gt->get_pin_types(), pin_to_type);
+            EXPECT_EQ(gt->get_pins_of_type(PinType::ground), in_pins);
+            EXPECT_EQ(gt->get_pins_of_type(PinType::none), out_pins);
+            EXPECT_EQ(gt->get_pin_type("I0"), PinType::ground);
+            EXPECT_EQ(gt->get_pin_type("I1"), PinType::ground);
+            EXPECT_EQ(gt->get_pin_type("O"), PinType::none);
         }
 
         // LUT pin types
@@ -465,29 +465,29 @@ namespace hal
             GateType* gt = gl.create_gate_type("dummy2", {GateTypeProperty::lut});
             ASSERT_NE(gt, nullptr);
 
-            std::unordered_map<std::string, GateType::PinType> pin_to_type;
+            std::unordered_map<std::string, PinType> pin_to_type;
 
             std::unordered_set<std::string> in_pins = {"I"};
             std::unordered_set<std::string> out_pins = {"O"};
 
-            EXPECT_TRUE(gt->add_pins({"I"}, GateType::PinDirection::input));
-            EXPECT_TRUE(gt->add_pins({"O"}, GateType::PinDirection::output));
+            EXPECT_TRUE(gt->add_pins({"I"}, PinDirection::input));
+            EXPECT_TRUE(gt->add_pins({"O"}, PinDirection::output));
 
-            EXPECT_EQ(gt->get_pin_type("I"), GateType::PinType::none);
-            EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::none);
+            EXPECT_EQ(gt->get_pin_type("I"), PinType::none);
+            EXPECT_EQ(gt->get_pin_type("O"), PinType::none);
 
-            ASSERT_FALSE(gt->assign_pin_type("I", GateType::PinType::lut));
-            ASSERT_TRUE(gt->assign_pin_type("O", GateType::PinType::lut));
+            ASSERT_FALSE(gt->assign_pin_type("I", PinType::lut));
+            ASSERT_TRUE(gt->assign_pin_type("O", PinType::lut));
 
             pin_to_type = {
-                {"I", GateType::PinType::none},
-                {"O", GateType::PinType::lut}};
+                {"I", PinType::none},
+                {"O", PinType::lut}};
 
             EXPECT_EQ(gt->get_pin_types(), pin_to_type);
-            EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::none), in_pins);
-            EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::lut), out_pins);
-            EXPECT_EQ(gt->get_pin_type("I"), GateType::PinType::none);
-            EXPECT_EQ(gt->get_pin_type("O"), GateType::PinType::lut);
+            EXPECT_EQ(gt->get_pins_of_type(PinType::none), in_pins);
+            EXPECT_EQ(gt->get_pins_of_type(PinType::lut), out_pins);
+            EXPECT_EQ(gt->get_pin_type("I"), PinType::none);
+            EXPECT_EQ(gt->get_pin_type("O"), PinType::lut);
         }
 
         // FF pin types
@@ -495,55 +495,55 @@ namespace hal
             GateType* gt = gl.create_gate_type("dummy3", {GateTypeProperty::ff});
             ASSERT_NE(gt, nullptr);
 
-            std::unordered_map<std::string, GateType::PinType> pin_to_type;
+            std::unordered_map<std::string, PinType> pin_to_type;
 
             std::unordered_set<std::string> in_pins = {"I0", "I1", "I2", "I3", "I4", "I5", "I6"};
             std::unordered_set<std::string> out_pins = {"O0", "O1", "O2", "O3", "O4"};
 
-            EXPECT_TRUE(gt->add_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6"}, GateType::PinDirection::input));
-            EXPECT_TRUE(gt->add_pins({"O0", "O1", "O2", "O3", "O4", "O5"}, GateType::PinDirection::output));
+            EXPECT_TRUE(gt->add_pins({"I0", "I1", "I2", "I3", "I4", "I5", "I6"}, PinDirection::input));
+            EXPECT_TRUE(gt->add_pins({"O0", "O1", "O2", "O3", "O4", "O5"}, PinDirection::output));
 
             for (const auto& pin : in_pins) 
             {
-                EXPECT_EQ(gt->get_pin_type(pin), GateType::PinType::none);
+                EXPECT_EQ(gt->get_pin_type(pin), PinType::none);
             }
             for (const auto& pin : out_pins) 
             {
-                EXPECT_EQ(gt->get_pin_type(pin), GateType::PinType::none);
+                EXPECT_EQ(gt->get_pin_type(pin), PinType::none);
             }
 
-            ASSERT_TRUE(gt->assign_pin_type("I0", GateType::PinType::clock));
-            ASSERT_TRUE(gt->assign_pin_type("I1", GateType::PinType::enable));
-            ASSERT_TRUE(gt->assign_pin_type("I2", GateType::PinType::set));
-            ASSERT_TRUE(gt->assign_pin_type("I3", GateType::PinType::reset));
-            ASSERT_TRUE(gt->assign_pin_type("I4", GateType::PinType::data));
-            ASSERT_TRUE(gt->assign_pin_type("I5", GateType::PinType::address));
-            ASSERT_FALSE(gt->assign_pin_type("I6", GateType::PinType::state));
-            ASSERT_FALSE(gt->assign_pin_type("I6", GateType::PinType::neg_state));
-            ASSERT_TRUE(gt->assign_pin_type("O0", GateType::PinType::state));
-            ASSERT_TRUE(gt->assign_pin_type("O1", GateType::PinType::neg_state));
-            ASSERT_TRUE(gt->assign_pin_type("O2", GateType::PinType::data));
-            ASSERT_TRUE(gt->assign_pin_type("O3", GateType::PinType::address));
-            ASSERT_TRUE(gt->assign_pin_type("O4", GateType::PinType::clock));
-            ASSERT_FALSE(gt->assign_pin_type("O5", GateType::PinType::enable));
-            ASSERT_FALSE(gt->assign_pin_type("O5", GateType::PinType::set));
-            ASSERT_FALSE(gt->assign_pin_type("O5", GateType::PinType::reset));
+            ASSERT_TRUE(gt->assign_pin_type("I0", PinType::clock));
+            ASSERT_TRUE(gt->assign_pin_type("I1", PinType::enable));
+            ASSERT_TRUE(gt->assign_pin_type("I2", PinType::set));
+            ASSERT_TRUE(gt->assign_pin_type("I3", PinType::reset));
+            ASSERT_TRUE(gt->assign_pin_type("I4", PinType::data));
+            ASSERT_TRUE(gt->assign_pin_type("I5", PinType::address));
+            ASSERT_FALSE(gt->assign_pin_type("I6", PinType::state));
+            ASSERT_FALSE(gt->assign_pin_type("I6", PinType::neg_state));
+            ASSERT_TRUE(gt->assign_pin_type("O0", PinType::state));
+            ASSERT_TRUE(gt->assign_pin_type("O1", PinType::neg_state));
+            ASSERT_TRUE(gt->assign_pin_type("O2", PinType::data));
+            ASSERT_TRUE(gt->assign_pin_type("O3", PinType::address));
+            ASSERT_TRUE(gt->assign_pin_type("O4", PinType::clock));
+            ASSERT_FALSE(gt->assign_pin_type("O5", PinType::enable));
+            ASSERT_FALSE(gt->assign_pin_type("O5", PinType::set));
+            ASSERT_FALSE(gt->assign_pin_type("O5", PinType::reset));
             
 
             pin_to_type = {
-                {"I0", GateType::PinType::clock},
-                {"I1", GateType::PinType::enable},
-                {"I2", GateType::PinType::set},
-                {"I3", GateType::PinType::reset},
-                {"I4", GateType::PinType::data},
-                {"I5", GateType::PinType::address},
-                {"I6", GateType::PinType::none},
-                {"O0", GateType::PinType::state},
-                {"O1", GateType::PinType::neg_state},
-                {"O2", GateType::PinType::data},
-                {"O3", GateType::PinType::address},
-                {"O4", GateType::PinType::clock},
-                {"O5", GateType::PinType::none}};
+                {"I0", PinType::clock},
+                {"I1", PinType::enable},
+                {"I2", PinType::set},
+                {"I3", PinType::reset},
+                {"I4", PinType::data},
+                {"I5", PinType::address},
+                {"I6", PinType::none},
+                {"O0", PinType::state},
+                {"O1", PinType::neg_state},
+                {"O2", PinType::data},
+                {"O3", PinType::address},
+                {"O4", PinType::clock},
+                {"O5", PinType::none}};
 
             EXPECT_EQ(gt->get_pin_types(), pin_to_type);
         }
@@ -661,7 +661,7 @@ namespace hal
         GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::ff});
         ASSERT_NE(gt, nullptr);
 
-        EXPECT_EQ(gt->get_clear_preset_behavior(), std::make_pair(GateType::ClearPresetBehavior::invalid, GateType::ClearPresetBehavior::invalid));
+        EXPECT_EQ(gt->get_clear_preset_behavior(), std::make_pair(GateType::ClearPresetBehavior::undef, GateType::ClearPresetBehavior::undef));
         gt->set_clear_preset_behavior(GateType::ClearPresetBehavior::L, GateType::ClearPresetBehavior::H);
         EXPECT_EQ(gt->get_clear_preset_behavior(), std::make_pair(GateType::ClearPresetBehavior::L, GateType::ClearPresetBehavior::H));
         

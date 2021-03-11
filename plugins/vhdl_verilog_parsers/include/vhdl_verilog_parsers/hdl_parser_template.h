@@ -1547,7 +1547,7 @@ namespace hal
                     }
 
                     // cache pin types
-                    std::unordered_map<T, GateType::PinDirection> pin_to_direction;
+                    std::unordered_map<T, PinDirection> pin_to_direction;
                     if constexpr (std::is_same<T, std::string>::value)
                     {
                         pin_to_direction = new_gate->get_type()->get_pin_directions();
@@ -1581,12 +1581,12 @@ namespace hal
 
                             if (const auto it = pin_to_direction.find(port); it != pin_to_direction.end())
                             {
-                                if (it->second == GateType::PinDirection::input || it->second == GateType::PinDirection::inout)
+                                if (it->second == PinDirection::input || it->second == PinDirection::inout)
                                 {
                                     is_input = true;
                                 }
 
-                                if (it->second == GateType::PinDirection::output || it->second == GateType::PinDirection::inout)
+                                if (it->second == PinDirection::output || it->second == PinDirection::inout)
                                 {
                                     is_output = true;
                                 }

@@ -46,7 +46,7 @@ namespace hal
         if (!already_init)
         {
             std::vector<std::string> channel_ids = {
-                "core", "gate_library_parser", "gate_library_writer", "netlist", "module", "netlist.internal", "netlist.persistent", "hdl_parser", "hdl_writer", "python_context", "test_utils"};
+                "core", "gate_library_parser", "gate_library_writer", "gate_library_manager", "gate_library", "netlist", "netlist_utils", "netlist_internal", "netlist_persistent", "gate", "net", "module", "grouping", "hdl_parser", "hdl_writer", "python_context", "test_utils"};
 
             LogManager& lm = LogManager::get_instance();
             for (std::string ch_id : channel_ids)
