@@ -103,6 +103,7 @@ namespace hal
                     ? gGraphContextManager->nextDefaultName()
                     : mObjectName;
             GraphContext* ctx = gGraphContextManager->createNewContext(contextName);
+            if (mObject.id() > 0) gGraphContextManager->setContextId(ctx,mObject.id());
             setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
             standardUndo = true;
         }

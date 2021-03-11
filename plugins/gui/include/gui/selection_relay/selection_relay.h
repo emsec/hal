@@ -158,24 +158,6 @@ namespace hal
         void navigateDown();
 
         /**
-         * Navigates left in/from the currently focused object. It adjusts the sub-focus and the sub-focus index and
-         * emits subfocusChanged if necessary. <br>
-         * If the focused item is left (i.e. navigating left while an input pin is in focus),
-         * the focus type mFocusType and the id of the focused item mFocusId are modified accordingly and
-         * the selectionChanged signal is emitted.
-         */
-        void navigateLeft();
-
-        /**
-         * Navigates right in/from the currently focused object. It adjusts the sub-focus and the sub-focus index and
-         * emits subfocusChanged if necessary. <br>
-         * If the focused item is left (i.e. navigating right while an output pin is in focus),
-         * the focus type mFocusType and the id of the focused item mFocusId are modified accordingly and
-         * the selectionChanged signal is emitted.
-         */
-        void navigateRight();
-
-        /**
          * Called whenever a module was removed from the netlist. Used to remove the id of the removed module from the
          * selection (if available).
          *
@@ -380,13 +362,8 @@ namespace hal
         static bool sNavigationSkipsEnabled;    // DOES THIS HAVE ANY USE ???
 
         // RENAME THESE METHODS ???
-        void followGateInputPin(Gate* g, u32 input_pin_index);
-        void followGateOutputPin(Gate* g, u32 output_pin_index);
         void followModuleInputPin(Module* m, u32 input_pin_index);
         void followModuleOutputPin(Module* m, u32 output_pin_index);
-
-        void followNetToSource(Net* n);
-        void followNetToDestination(Net* n, u32 dst_index);
 
 #ifdef HAL_STUDY
         void evaluateSelectionChanged(void* sender);

@@ -25,12 +25,12 @@ namespace hal
         mAction->mModules.clear();
         mAction->mGates.clear();
         mAction->mNets.clear();
+        mAction->mObject        = UserActionObject();
+        mAction->mSubfocus      = Subfocus::None;
+        mAction->mSubfocusIndex = 0;
         mModulesSuppressedByFilter.clear();
         mGatesSuppressedByFilter.clear();
         mNetsSuppressedByFilter.clear();
-        mSubfocus       = Subfocus::None;
-        mSubfocusIndex = 0;
-        mFocusId       = 0;
     }
 
     void SelectionRelay::initializeAction()
@@ -375,143 +375,6 @@ namespace hal
         relaySubfocusChanged(nullptr);
     }
 
-    // TODO nothing is using this method - do we need it?
-    void SelectionRelay::navigateLeft()
-    {
-        switch (mFocusType)
-        {
-        case ItemType::None: {
-                return;
-            }
-        case ItemType::Gate: {
-                Gate* g = gNetlist->get_gate_by_id(mFocusId);
-
-                if (!g)
-                    return;
-
-                if (g->get_input_pins().size())    // CHECK HERE OR IN PRIVATE METHODS ?
-                {
-                    if (mSubfocus == Subfocus::Left)
-                        followGateInputPin(g, mSubfocusIndex);
-                    else
-                    {
-                        if (sNavigationSkipsEnabled && g->get_input_pins().size() == 1)
-                            followGateInputPin(g, 0);
-                        else
-                            subfocusLeft();
-                    }
-                }
-
-                return;
-            }
-        case ItemType::Net: {
-                Net* n = gNetlist->get_net_by_id(mFocusId);
-
-                if (!n)
-                    return;
-
-                if (mSubfocus == Subfocus::Left)
-                    followNetToSource(n);
-                else
-                {
-                    if (sNavigationSkipsEnabled && n->get_destinations().size() == 1)
-                        followNetToSource(n);
-                    else
-                        subfocusLeft();
-                }
-
-                return;
-            }
-        case ItemType::Module: {
-                Module* m = gNetlist->get_module_by_id(mFocusId);
-
-                if (!m)
-                    return;
-
-                if (m->get_input_nets().size())    // CHECK HERE OR IN PRIVATE METHODS ?
-                {
-                    if (mSubfocus == Subfocus::Left)
-                        followModuleInputPin(m, mSubfocusIndex);
-                    else
-                    {
-                        if (sNavigationSkipsEnabled && m->get_input_nets().size() == 1)
-                            followModuleInputPin(m, 0);
-                        else
-                            subfocusLeft();
-                    }
-                }
-
-                return;
-            }
-        }
-    }
-
-    // TODO nothing is using this method - do we need it?
-    void SelectionRelay::navigateRight()
-    {
-        switch (mFocusType)
-        {
-        case ItemType::None: {
-                return;
-            }
-        case ItemType::Gate: {
-                Gate* g = gNetlist->get_gate_by_id(mFocusId);
-
-                if (!g)
-                    return;
-
-                if (mSubfocus == Subfocus::Right)
-                    followGateOutputPin(g, mSubfocusIndex);
-                else
-                {
-                    if (sNavigationSkipsEnabled && g->get_output_pins().size() == 1)
-                        followGateOutputPin(g, 0);
-                    else
-                        subfocusRight();
-                }
-
-                return;
-            }
-        case ItemType::Net: {
-                Net* n = gNetlist->get_net_by_id(mFocusId);
-
-                if (!n)
-                    return;
-
-                if (mSubfocus == Subfocus::Right)
-                {
-                    followNetToDestination(n, mSubfocusIndex);
-                    return;
-                }
-
-                if (sNavigationSkipsEnabled && n->get_destinations().size() == 1)
-                    followNetToDestination(n, 0);
-                else
-                    subfocusRight();
-
-                return;
-            }
-        case ItemType::Module: {
-                Module* m = gNetlist->get_module_by_id(mFocusId);
-
-                if (!m)
-                    return;
-
-                if (mSubfocus == Subfocus::Right)
-                    followModuleOutputPin(m, mSubfocusIndex);
-                else
-                {
-                    if (sNavigationSkipsEnabled && m->get_output_nets().size() == 1)
-                        followModuleOutputPin(m, 0);
-                    else
-                        subfocusRight();
-                }
-
-                return;
-            }
-        }
-    }
-
     void SelectionRelay::suppressedByFilter(const QList<u32>& modIds, const QList<u32>& gatIds, const QList<u32>& netIds)
     {
         initializeAction();
@@ -569,74 +432,6 @@ namespace hal
         }
     }
 
-    // GET CORE GUARANTEES
-    // UNCERTAIN ABOUT UNROUTED (GLOBAL) NETS, DECIDE
-    void SelectionRelay::followGateInputPin(Gate* g, u32 input_pin_index)
-    {
-        std::string pin_type = *std::next(g->get_input_pins().begin(), input_pin_index);
-        Net* n               = g->get_fan_in_net(pin_type);
-
-        if (!n)
-            return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
-
-        clear();
-
-        mAction->mNets.insert(n->get_id());
-
-        mFocusType = ItemType::Net;
-        mFocusId   = n->get_id();
-
-        if (n->get_destinations().size() == 1)
-        {
-            if (sNavigationSkipsEnabled)
-                mSubfocus = Subfocus::None;
-            else
-                mSubfocus = Subfocus::Right;
-
-            mSubfocusIndex = 0;
-        }
-        else
-        {
-            int i = 0;
-            for (auto e : n->get_destinations())
-            {
-                if (e->get_gate() == g && e->get_pin() == pin_type)
-                    break;
-
-                ++i;
-            }
-
-            mSubfocus       = Subfocus::Right;
-            mSubfocusIndex = i;
-        }
-
-        executeAction();
-    }
-
-    void SelectionRelay::followGateOutputPin(Gate* g, u32 output_pin_index)
-    {
-        std::string pin_type = *std::next(g->get_output_pins().begin(), output_pin_index);
-        auto n               = g->get_fan_out_net(pin_type);
-
-        if (!n)
-            return;    // ADD SOUND OR SOMETHING, ALTERNATIVELY ADD BOOL RETURN VALUE TO METHOD ???
-
-        clear();
-
-        mAction->mNets.insert(n->get_id());
-        mFocusType = ItemType::Net;
-        mFocusId   = n->get_id();
-
-        if (sNavigationSkipsEnabled)
-            mSubfocus = Subfocus::None;
-        else
-            mSubfocus = Subfocus::Left;
-
-        mSubfocusIndex = 0;
-
-        executeAction();
-    }
-
     void SelectionRelay::followModuleInputPin(Module* m, u32 input_pin_index)
     {
         Q_UNUSED(m)
@@ -649,85 +444,6 @@ namespace hal
         Q_UNUSED(m)
         Q_UNUSED(output_pin_index)
         // TODO implement
-    }
-
-    void SelectionRelay::followNetToSource(Net* n)
-    {
-        if(n->get_sources().empty())
-            return;
-
-        auto e = n->get_sources().at(0);
-        auto g = e->get_gate();
-
-        if (!g)
-            return;
-
-        clear();
-
-        mAction->mGates.insert(g->get_id());
-
-        mFocusType = ItemType::Gate;
-        mFocusId   = g->get_id();
-
-        if (sNavigationSkipsEnabled && g->get_output_pins().size() == 1)
-        {
-            mSubfocus       = Subfocus::Left;    // NONE OR LEFT ???
-            mSubfocusIndex = 0;
-        }
-        else
-        {
-            int i = 0;
-            for (const std::string& pin_type : g->get_output_pins())
-            {
-                if (pin_type == e->get_pin())
-                    break;
-
-                ++i;
-            }
-
-            mSubfocus       = Subfocus::Right;
-            mSubfocusIndex = i;
-        }
-
-        executeAction();
-    }
-
-    void SelectionRelay::followNetToDestination(Net* n, u32 dst_index)
-    {
-        auto e  = n->get_destinations().at(dst_index);
-        Gate* g = e->get_gate();
-
-        if (!g)
-            return;
-
-        clear();
-
-        mAction->mGates.insert(g->get_id());
-
-        mFocusType = ItemType::Gate;
-        mFocusId   = g->get_id();
-
-        if (sNavigationSkipsEnabled && g->get_input_pins().size() == 1)
-        {
-            mSubfocus       = Subfocus::Right;    // NONE OR RIGHT ???
-            mSubfocusIndex = 0;
-        }
-        else
-        {
-            int i = 0;
-            for (const std::string& pin_type : g->get_input_pins())
-            {
-                if (pin_type == e->get_pin())
-                    break;
-
-                ++i;
-            }
-
-            mSubfocus       = Subfocus::Left;
-            mSubfocusIndex = i;
-        }
-
-        executeAction();
     }
 
     void SelectionRelay::subfocusNone()

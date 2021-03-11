@@ -38,6 +38,14 @@ namespace hal
         return context;
     }
 
+    void GraphContextManager::setContextId(GraphContext *ctx, u32 ctxId)
+    {
+        if (!ctx || ctx->id() == ctxId) return; // nothing to do
+        if (getContextById(ctxId)) return; // id is in use
+        ctx->mId = ctxId;
+        if (ctxId > mMaxContextId) mMaxContextId = ctxId;
+    }
+
     void GraphContextManager::renameGraphContextAction(GraphContext* ctx, const QString& newName)
     {
         ctx->mName = newName;

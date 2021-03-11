@@ -289,6 +289,14 @@ namespace hal
         void handleUnmarkedGlobalOutput(u32 mNetId);
 
         /**
+         * Assigns new ID to context if this id is not in use
+         *
+         * @param ctx the context
+         * @param ctxId user provided ID
+         */
+        void setContextId(GraphContext* ctx, u32 ctxId);
+
+        /**
          * TODO: Memory leak? Better name: 'createDefaultLayouter'? Use smart pointer instead?
          * Creates an instance of the StandardGraphLayouter used for a certain GraphContext.
          *

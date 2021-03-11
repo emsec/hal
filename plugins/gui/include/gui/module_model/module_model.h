@@ -72,7 +72,7 @@ namespace hal
 
         /// returns old color for undo action
         QColor setModuleColor(u32 id, const QColor& col);
-        void setRandomColor(u32 id);
+        QColor setRandomColor(u32 id);
         void removeColor(u32 id);
 
     private:

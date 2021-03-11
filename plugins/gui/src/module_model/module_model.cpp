@@ -318,10 +318,11 @@ namespace hal
         return retval;
     }
 
-    void ModuleModel::setRandomColor(u32 id)
+    QColor ModuleModel::setRandomColor(u32 id)
     {
         QColor retval = mModuleColors.value(id);
         mModuleColors.insert(id,gui_utility::getRandomColor());
+        return retval;
     }
 
     void ModuleModel::removeColor(u32 id)

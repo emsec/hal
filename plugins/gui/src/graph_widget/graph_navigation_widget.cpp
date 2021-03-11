@@ -211,14 +211,25 @@ namespace hal
     QStringList GraphNavigationWidget::moduleEntry(Module* m, Endpoint* ep)
     {
         Module* pm    = m->get_parent_module();
-        QString pname = pm ? QString::fromStdString(pm->get_name()) : QString("top level");
+        QString parentName = pm
+                ? QString::fromStdString(pm->get_name())
+                : QString("top level");
         QString mtype = QString::fromStdString(m->get_type());
         if (mtype.isEmpty())
             mtype = "module";
         else
             mtype += " (module)";
 
-        return QStringList() << QString::fromStdString(m->get_name()) << QString::number(m->get_id()) << mtype << QString::fromStdString(ep->get_pin()) << pname;
+        QString pinName = QString::fromStdString(ep->get_pin());
+        Net* epNet = ep->get_net();
+        if (epNet)
+        {
+            if (ep->is_source_pin())
+                pinName = QString::fromStdString(m->get_output_port_name(epNet));
+            else
+                pinName = QString::fromStdString(m->get_input_port_name(epNet));
+        }
+        return QStringList() << QString::fromStdString(m->get_name()) << QString::number(m->get_id()) << mtype << pinName << parentName;
     }
 
     QStringList GraphNavigationWidget::gateEntry(Gate* g, Endpoint* ep)
