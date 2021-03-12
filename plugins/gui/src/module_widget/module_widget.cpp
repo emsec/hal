@@ -5,9 +5,10 @@
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_relay/module_relay.h"
-#include "gui/user_action/user_action_compound.h"
-#include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_unfold_module.h"
+#include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -206,10 +207,10 @@ namespace hal
 
     void ModuleWidget::openModuleInView(const QModelIndex& index)
     {
-        openModuleInView(getModuleItemFromIndex(index)->id());
+        openModuleInView(getModuleItemFromIndex(index)->id(), false);
     }
 
-    void ModuleWidget::openModuleInView(u32 moduleId)
+    void ModuleWidget::openModuleInView(u32 moduleId, bool unfold)
     {
         const Module* module = gNetlist->get_module_by_id(moduleId);
 
@@ -230,6 +231,7 @@ namespace hal
             act->addAction(new ActionCreateObject(UserActionObjectType::Context,
                                                   QString::fromStdString(module->get_name())));
             act->addAction(new ActionAddItemsToObject({module->get_id()}, {}));
+            if (unfold) act->addAction(new ActionUnfoldModule(module->get_id()));
             act->exec();
             moduleContext = gGraphContextManager->getContextById(act->object().id());
             moduleContext->setDirty(false);

@@ -433,40 +433,29 @@ namespace hal
             // subfocus only possible when just one module selected
             u32 mid = *final_modules.begin();
             auto m  = gNetlist->get_module_by_id(mid);
-
-            u32 cnt = 0;
-            // FIXME this is super hacky because currently we have no way of
-            // properly indexing port names on modules (since no order is guaranteed
-            // on the port names (different to pin names in gates), but our GUI
-            // wants integer indexes)
-            // (what we use here is the fact that GraphicsModule builds its port
-            // list by traversing m->get_input_nets(), so we just use that order and
-            // hope nobody touches that implementation)
+            Q_ASSERT(m);
 
             // TODO simplify (we do actually know if we're navigating left or right)
-            for (const auto& inet : m->get_input_nets())
+            Node needle(mid,Node::Module);
+            const NodeBox* nbox = mContext->getLayouter()->boxes().boxForNode(needle);
+            Q_ASSERT(nbox);
+            const GraphicsNode* gnode = static_cast<const GraphicsNode*>(nbox->item());
+            Q_ASSERT(gnode);
+
+            int inx = gnode->inputByNet(n->get_id());
+            if (inx < 0)
             {
-                if (inet == n)    // input net
+                inx = gnode->outputByNet(n->get_id());
+                if (inx >= 0)
                 {
-                    sfoc  = SelectionRelay::Subfocus::Left;
-                    sfinx = cnt;
-                    break;
+                    sfoc  = SelectionRelay::Subfocus::Right;
+                    sfinx = inx;
                 }
-                cnt++;
             }
-            if (sfoc == SelectionRelay::Subfocus::None)
+            else
             {
-                cnt = 0;
-                for (const auto& inet : m->get_output_nets())
-                {
-                    if (inet == n)    // input net
-                    {
-                        sfoc  = SelectionRelay::Subfocus::Right;
-                        sfinx = cnt;
-                        break;
-                    }
-                    cnt++;
-                }
+                sfoc  = SelectionRelay::Subfocus::Left;
+                sfinx = inx;
             }
             gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,mid,sfoc,sfinx);
         }
@@ -573,18 +562,14 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left)
                 {
-                    // FIXME this is super hacky because currently we have no way of
-                    // properly indexing port names on modules (since no order is guaranteed
-                    // on the port names (different to pin names in gates), but our GUI
-                    // wants integer indexes)
-                    // (what we use here is the fact that GraphicsModule builds its port
-                    // list by traversing m->get_input_nets(), so we just use that order and
-                    // hope nobody touches that implementation)
-                    auto nets = m->get_input_nets();
-                    auto it   = nets.begin();
-                    if (gSelectionRelay->subfocusIndex() > 0)
-                        std::advance(it, gSelectionRelay->subfocusIndex());
-                    auto n = *it;
+                    Node needle(m->get_id(),Node::Module);
+                    const NodeBox* nbox = mContext->getLayouter()->boxes().boxForNode(needle);
+                    Q_ASSERT(nbox);
+                    const GraphicsNode* gnode = static_cast<const GraphicsNode*>(nbox->item());
+                    Q_ASSERT(gnode);
+                    Net* n = gNetlist->get_net_by_id(gnode->inputNets().at(gSelectionRelay->subfocusIndex()));
+                    Q_ASSERT(n);
+
                     if (n->get_num_of_sources() == 0)
                     {
                         gSelectionRelay->clear();
@@ -692,18 +677,14 @@ namespace hal
 
                 if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right)
                 {
-                    // FIXME this is super hacky because currently we have no way of
-                    // properly indexing port names on modules (since no order is guaranteed
-                    // on the port names (different to pin names in gates), but our GUI
-                    // wants integer indexes)
-                    // (what we use here is the fact that GraphicsModule builds its port
-                    // list by traversing m->get_input_nets(), so we just use that order and
-                    // hope nobody touches that implementation)
-                    auto nets = m->get_output_nets();
-                    auto it   = nets.begin();
-                    if (gSelectionRelay->subfocusIndex() > 0)
-                        std::advance(it, gSelectionRelay->subfocusIndex());
-                    auto n = *it;
+                    Node needle(m->get_id(),Node::Module);
+                    const NodeBox* nbox = mContext->getLayouter()->boxes().boxForNode(needle);
+                    Q_ASSERT(nbox);
+                    const GraphicsNode* gnode = static_cast<const GraphicsNode*>(nbox->item());
+                    Q_ASSERT(gnode);
+                    Net* n = gNetlist->get_net_by_id(gnode->outputNets().at(gSelectionRelay->subfocusIndex()));
+                    Q_ASSERT(n);
+
                     if (n->get_num_of_destinations() == 0)
                     {
                         gSelectionRelay->clear();
@@ -770,7 +751,7 @@ namespace hal
             act->exec();
         }
         else
-            gContentManager->getModuleWidget()->openModuleInView(id);
+            gContentManager->getModuleWidget()->openModuleInView(id,true);
     }
 
     void GraphWidget::ensureItemsVisible(const QSet<u32>& gates, const QSet<u32>& modules)

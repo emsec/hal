@@ -5,6 +5,7 @@
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/user_action/action_fold_module.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -28,6 +29,23 @@ namespace hal
     {
         if (moduleId)
             setObject(UserActionObject(moduleId,UserActionObjectType::Module));
+    }
+
+    void ActionUnfoldModule::setObject(const UserActionObject &obj)
+    {
+        switch (obj.type())
+        {
+        case UserActionObjectType::None:
+        case UserActionObjectType::Module:
+            UserAction::setObject(obj);
+            break;
+        case UserActionObjectType::Context:
+            mContextId = obj.id();
+            break;
+        default:
+            qDebug() << "ActionUnfoldModule warning: invalid object type" << obj.type();
+            break;
+        }
     }
 
     bool ActionUnfoldModule::exec()
