@@ -127,6 +127,7 @@ namespace hal
         //context menu connects
         connect(mInputPinsTable, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handleInputPinTableMenuRequested);
         connect(mOutputPinsTable, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handleOutputPinTableMenuRequested);
+        connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &GateDetailsWidget::handleGateNameChanged);
 
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
 

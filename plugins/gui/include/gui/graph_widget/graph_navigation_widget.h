@@ -293,7 +293,7 @@ namespace hal {
         void resizeToFit();
         void setModulesInView();
         void setModuleInView(Module* m);
-        bool addNavigateItem(Endpoint* ep);
+        void addNavigateItem(Endpoint* ep, const Node &targetNode);
         bool addToViewItem(Endpoint* ep);
 
         QTreeWidgetItem* itemFactory(const QStringList& fields, const Node& nd);

@@ -282,35 +282,29 @@ namespace hal
         return true;
     }
 
-    bool GraphNavigationWidget::addNavigateItem(Endpoint* ep)
+    void GraphNavigationWidget::addNavigateItem(Endpoint* ep, const Node& targetNode)
     {
         Gate* g = ep->get_gate();
-        if (!g)
-            return false;
-
-        const NodeBoxes& boxes = gContentManager->getContextManagerWidget()->getCurrentContext()->getLayouter()->boxes();
-        const NodeBox* nbox    = boxes.boxForGate(g);
-        if (!nbox)
-            return false;
+        Q_ASSERT(g);
 
         QStringList fields;
 
-        switch (nbox->type())
+        switch (targetNode.type())
         {
             case Node::None:
-                return false;
+                return;
             case Node::Gate:
                 fields = gateEntry(g, ep);
                 break;
             case Node::Module:
-                Module* m = gNetlist->get_module_by_id(nbox->id());
+                Module* m = gNetlist->get_module_by_id(targetNode.id());
                 Q_ASSERT(m);
                 fields = moduleEntry(m, ep);
                 break;
         }
 
         int n = mNavigateWidget->rowCount();
-        mNavigateNodes.append(nbox->getNode());
+        mNavigateNodes.append(targetNode);
         mNavigateWidget->insertRow(n);
         for (int icol = 0; icol < fields.size(); icol++)
         {
@@ -321,7 +315,6 @@ namespace hal
                 cell->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
             mNavigateWidget->setItem(n, icol, cell);
         }
-        return true;
     }
 
     void GraphNavigationWidget::setup(Node origin, Net* via_net, SelectionRelay::Subfocus dir)
@@ -440,10 +433,30 @@ namespace hal
         setModulesInView();
         mNavigateVisible = false;
 
-        for (Endpoint* ep : (mDirection == SelectionRelay::Subfocus::Left) ? mViaNet->get_sources() : mViaNet->get_destinations())
+        QSet<Node> listedTargets;
+
+        for (Endpoint* ep : (mDirection == SelectionRelay::Subfocus::Left)
+             ? mViaNet->get_sources()
+             : mViaNet->get_destinations())
         {
-            if (addNavigateItem(ep))
+            Gate* g = ep->get_gate();
+            if (!g) continue; // gate not connected
+
+            const NodeBoxes& boxes = gContentManager->getContextManagerWidget()->getCurrentContext()->getLayouter()->boxes();
+            const NodeBox* nbox    = boxes.boxForGate(g);
+            if (nbox)
+            {
+                Node targetNode = nbox->getNode();
+                if (targetNode==mOrigin) // net loops back to origin
+                    continue;
+
+                if (listedTargets.contains(targetNode)) // already listed
+                    continue;
+
+                listedTargets.insert(targetNode);
+                addNavigateItem(ep,targetNode);
                 mNavigateVisible = true;
+            }
             else
                 mEndpointNotInView.append(ep);
         }
