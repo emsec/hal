@@ -5,10 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+* selection details get updated immediately when renamed or type changed
 * remember grid position when removing module/gate from view so it can be restored at original location
 * context menu `unfold module` unfolds module in current view
 * doubleclick menu displays it unfolded in new view
 * navigation bug (ports and nets did not match for modules) fixed
+* list of navigation targets cleaned up (no duplicates, no loops)
 * added `remove from view` action to context menu
 * dump actions upon crash or external kill signal
 * added grouping toolbox feature to highlight successors or predecessors

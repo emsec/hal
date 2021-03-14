@@ -12,8 +12,12 @@ namespace hal
     SelectionTreeModel::SelectionTreeModel(QObject* parent)
         : QAbstractItemModel(parent), mDoNotDisturb(0)
     {
-        mRootItem = new SelectionTreeItemRoot();
+        mRootItem = new SelectionTreeItemRoot;
         // root item has no parent
+
+        connect(gNetlistRelay,&NetlistRelay::moduleNameChanged,this,&SelectionTreeModel::handleModuleItemChanged);
+        connect(gNetlistRelay,&NetlistRelay::moduleTypeChanged,this,&SelectionTreeModel::handleModuleItemChanged);
+        connect(gNetlistRelay,&NetlistRelay::gateNameChanged,this,&SelectionTreeModel::handleGateItemChanged);
     }
 
     SelectionTreeModel::~SelectionTreeModel()
@@ -200,6 +204,45 @@ namespace hal
         if (index.isValid())
             return static_cast<SelectionTreeItem*>(index.internalPointer());
         return nullptr;
+    }
+
+    void SelectionTreeModel::handleGateItemChanged(Gate* gate)
+    {
+        SelectionTreeItem* item = getItem(mRootItem,
+                    SelectionTreeItemGate(gate->get_id()));
+        if (item)
+        {
+            QModelIndex inx0 = indexFromItem(item);
+            QModelIndex inx1 = createIndex(inx0.row(),2,inx0.internalPointer());
+            Q_EMIT dataChanged(inx0,inx1);
+        }
+    }
+
+    void SelectionTreeModel::handleModuleItemChanged(Module* module)
+    {
+        SelectionTreeItem* item = getItem(mRootItem,
+                    SelectionTreeItemModule(module->get_id()));
+        if (item)
+        {
+            QModelIndex inx0 = indexFromItem(item);
+            QModelIndex inx1 = createIndex(inx0.row(),2,inx0.internalPointer());
+            Q_EMIT dataChanged(inx0,inx1);
+        }
+    }
+
+    SelectionTreeItem* SelectionTreeModel::getItem(SelectionTreeItem* parentItem,
+                                                   const SelectionTreeItem& needle) const
+    {
+        if (needle.isEqual(parentItem)) return parentItem;
+        SelectionTreeItem* retval = nullptr;
+
+        int n = parentItem->childCount();
+        for (int irow=0; irow<n; irow++)
+        {
+            retval = getItem(parentItem->child(irow),needle);
+            if (retval) return retval;
+        }
+        return retval;
     }
 
     QModelIndex SelectionTreeModel::indexFromItem(SelectionTreeItem* item) const
