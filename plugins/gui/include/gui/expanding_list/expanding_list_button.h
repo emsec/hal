@@ -32,7 +32,10 @@ namespace hal
 {
     class ExpandingListWidget;
 
-
+    /**
+     * An ExpandingListButton can be added to an ExpandingListWidget and is then
+     * displayed as an item. Its primary feature is to be either selected or not.
+     */
     class ExpandingListButton : public QFrame
     {
         Q_OBJECT
@@ -42,27 +45,113 @@ namespace hal
         Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param parent - The button's parent.
+         */
         ExpandingListButton(QWidget* parent = 0);
 
+        /**
+         * Overwritten qt function that is triggered when the mouse enters the button.
+         * This function is used to set the hover state (which is used to style the
+         * button in the stylesheet(s)).
+         *
+         * @param event - The associated event.
+         */
         void enterEvent(QEvent* event) override;
+
+        /**
+         * Overwritten qt function that is triggered when the mouse leaves the button.
+         * This function is used to unset the hover state (which is used to style the
+         * button in the stylesheet(s)).
+         *
+         * @param event - The associated event.
+         */
         void leaveEvent(QEvent* event) override;
+
+        /**
+         * Overwritten qt function that is triggerd when the mouse is pressed inside the
+         * button's boundaries. It emitts the clicked signal so that the ExpandingListWidget
+         * can catch it (or any other widget that might want to know it)
+         *
+         * @param event - The associated event.
+         */
         void mousePressEvent(QMouseEvent* event) override;
 
+        /**
+         * Get the button's hover state.
+         *
+         * @return True if the mouse is currently over the button. False otherwise.
+         */
         bool hover();
+
+        /**
+         * Get the button's selected state.
+         *
+         * @return True if the button is currently selected. False otherwise.
+         */
         bool selected();
+
+        /**
+         * Get the button's type.
+         *
+         * @return The type.
+         */
         QString type();
+
+        /**
+         * Get the icon stlye of the button.
+         *
+         * @return The button's icon style.
+         */
         QString iconStyle();
 
+        /**
+         * Set or unset the button's selected state.
+         *
+         * @param selected - True to set the state, false to unset the state.
+         */
         void setSelected(bool selected);
+
+        /**
+         * Sets the button's type.
+         *
+         * @param type - The type.
+         */
         void set_type(const QString& type);
+
+        /**
+         * Sets the button's icon style.
+         *
+         * @param style - The style.
+         */
         void setIconStyle(const QString& style);
 
+        /**
+         * Sets the path of the button's icon.
+         *
+         * @param path - The icon's path.
+         */
         void setIconPath(const QString& path);
+
+        /**
+         * Sets the button's text.
+         *
+         * @param text - The soon to be displayed Text.
+         */
         void setText(const QString& text);
 
+        /**
+         * Applies the style that is currently set through "the" stylesheet.
+         */
         void repolish();
 
     Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when the button is clicked.
+         */
         void clicked();
 
     private:

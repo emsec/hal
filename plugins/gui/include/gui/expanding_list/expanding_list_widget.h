@@ -33,25 +33,72 @@ namespace hal
     class ExpandingListButton;
     class ExpandingListItem;
 
+    /**
+     * The ExpandingListWidget class is a list in which each top-level-item can be expanded
+     * to display other items below it (e.g. a flattened tree with 2 levels). This widget
+     * primarily functions as a navigation or section menu (as can be seen in the settings).
+     * Each of the list's item can either be selected or not, and only one item can be
+     * selected at a time (thus showing which section is currently displayedn).
+     */
     class ExpandingListWidget : public QScrollArea
     {
         Q_OBJECT
 
     public:
+
+        /**
+         * The constructor.
+         *
+         * @param parent - The widget's parent.
+         */
         ExpandingListWidget(QWidget* parent = 0);
 
         //    bool eventFilter(QObject* object, QEvent* event) override;
 
+        /**
+         * Appends a button to the list. If an optional parent button is specified, the button
+         * is added as a child to the parent and then hidden from the user. When the user clicks
+         * on the top-level parent button, all its children appear right below it.
+         *
+         * @param button - The button to add to the list.
+         * @param parentButton - The parent to which the button is added (optional).
+         */
         void appendItem(ExpandingListButton* button, ExpandingListButton* parentButton = 0);
+
+        /**
+         * Selects a specific button within the list. It collapses or expands all necessary
+         * items depending on the situation (which button was selected before).
+         *
+         * @param button - The button to select.
+         */
         void selectButton(ExpandingListButton* button);
+
+        /**
+         * Selects a specific item within the list. An item is a wrapper for a top-level button
+         * so that children can be added (a normal button can not have children).
+         *
+         * @param index - The index of the item to select.
+         */
         void selectItem(int index);
 
+        /**
+         * Applies the currently set style (e.g. stylesheet) to itself and all of its items.
+         */
         void repolish();
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted when a new button is selected.
+         *
+         * @param button - The newly selected button.
+         */
         void buttonSelected(ExpandingListButton* button);
 
     public Q_SLOTS:
+
+        /**
+         * Handler method to catch the clicked signal of the buttons.
+         */
         void handleClicked();
 
     private:
