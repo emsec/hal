@@ -207,6 +207,10 @@ namespace hal
 
         makeSection("Keyboard Shortcuts", "keybind-item", ":/icons/keyboard");
 
+        KeybindSetting* action_undo_keybind = new KeybindSetting("keybinds/action_undo", "User interactions: undo last", "", this);
+        registerWidget("keybind-item", action_undo_keybind);
+        assignExclusiveGroup("keybinds", action_undo_keybind);
+
         KeybindSetting* py_open_keybind = new KeybindSetting("keybinds/python_open_file", "Python: Open file", "", this);
         registerWidget("keybind-item", py_open_keybind);
         assignExclusiveGroup("keybinds", py_open_keybind);

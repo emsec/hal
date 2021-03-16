@@ -9,6 +9,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 
+
 namespace hal
 {
     ModuleModel::ModuleModel(QObject* parent) : QAbstractItemModel(parent), mTopModuleItem(nullptr)
@@ -188,6 +189,7 @@ namespace hal
 
     void ModuleModel::init()
     {
+        setModuleColor(1, QColor(96, 110, 112));
         ModuleItem* item = new ModuleItem(1);
 
         mModuleItems.insert(1, item);
@@ -221,11 +223,12 @@ namespace hal
             delete m;
 
         mModuleItems.clear();
+        mModuleColors.clear();
 
         endResetModel();
     }
 
-    void ModuleModel::addModule(const u32 id, const u32 parent_module)
+    void ModuleModel::addModule(u32 id, u32 parent_module)
     {
         assert(gNetlist->get_module_by_id(id));
         assert(gNetlist->get_module_by_id(parent_module));
@@ -283,7 +286,7 @@ namespace hal
         delete item;
     }
 
-    void ModuleModel::updateModule(const u32 id)    // SPLIT ???
+    void ModuleModel::updateModule(u32 id)    // SPLIT ???
     {
         assert(gNetlist->get_module_by_id(id));
         assert(mModuleItems.contains(id));
@@ -298,9 +301,33 @@ namespace hal
         Q_EMIT dataChanged(index, index);
     }
 
-    ModuleItem* ModuleModel::getItem(const u32 module_id) const
+    ModuleItem* ModuleModel::getItem(u32 module_id) const
     {
         return mModuleItems.value(module_id);
+    }
+
+    QColor ModuleModel::moduleColor(u32 id) const
+    {
+        return mModuleColors.value(id);
+    }
+
+    QColor ModuleModel::setModuleColor(u32 id, const QColor& col)
+    {
+        QColor retval = mModuleColors.value(id);
+        mModuleColors[id] = col;
+        return retval;
+    }
+
+    QColor ModuleModel::setRandomColor(u32 id)
+    {
+        QColor retval = mModuleColors.value(id);
+        mModuleColors.insert(id,gui_utility::getRandomColor());
+        return retval;
+    }
+
+    void ModuleModel::removeColor(u32 id)
+    {
+        mModuleColors.remove(id);
     }
 
     bool ModuleModel::isModifying()

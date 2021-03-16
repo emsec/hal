@@ -30,6 +30,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/grouping.h"
 #include "gui/gui_globals.h"
+#include "gui/user_action/user_action_object.h"
 #include <QStringList>
 #include <QPair>
 
@@ -47,14 +48,13 @@ namespace hal {
         QString mPythonGetter;
         //mSetter is the actual setter function that can be invoked in setValue
         // -> mSetter(newValue) where mSetter is for example the set_name method of a gate
-        std::function<void(const std::string&)> mSetter;
+        UserActionObject mObject; // must be assigned if field editable, None otherwise
 
     public:
         /**
          * First constructor. Primarily used to create dummy content.
          */
-        DetailsGeneralModelEntry()
-            : mSetter(nullptr) {;}
+        DetailsGeneralModelEntry() {;}
         /**
          * Second constructor that is used for actual content of the model.
          *
@@ -65,7 +65,7 @@ namespace hal {
         DetailsGeneralModelEntry(const QString& label_,
                                  const QVariant& value_,
                                  const QString& python_ = QString())
-            : mLabel(label_), mValue(value_), mPythonGetter(python_), mSetter(nullptr)
+            : mLabel(label_), mValue(value_), mPythonGetter(python_)
         {;}
 
         /**
@@ -82,7 +82,6 @@ namespace hal {
          *
          * @return True if entry has a setter method, false otherwise.
          */
-        bool hasSetter() const { return mSetter != nullptr; }
 
         /**
          * Invokes the setter method for the given entry if a setter method is available.
@@ -96,7 +95,7 @@ namespace hal {
          *
          * @param setter_ - The actual setter method.
          */
-        void assignSetter(const std::function<void(const std::string&)>& setter_) { mSetter = setter_; }
+        void setObject(const UserActionObject& obj) { mObject = obj; }
 
         /**
          * Get the lower case version of the entry's key(label).
@@ -118,6 +117,7 @@ namespace hal {
          * @return The python getter code.
          */
         QString pythonGetter() const { return mPythonGetter; }
+        bool canEditText() const;
     };
 
     /**

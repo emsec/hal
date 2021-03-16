@@ -77,6 +77,9 @@ namespace hal
         Q_PROPERTY(QString contentIconStyle READ contentIconStyle WRITE setContentIconStyle)
         Q_PROPERTY(QString settingsIconPath READ settingsIconPath WRITE setSettingsIconPath)
         Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
+        Q_PROPERTY(QString undoIconPath READ undoIconPath WRITE setUndoIconPath)
+        Q_PROPERTY(QString undoIconStyle READ undoIconStyle WRITE setUndoIconStyle)
+        Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
 
     public:
         /**
@@ -198,6 +201,9 @@ namespace hal
          */
         QString settingsIconStyle() const;
 
+        QString undoIconPath() const;
+        QString undoIconStyle() const;
+        QString disabledIconStyle() const;
 
         /**
          * Q_PROPERTY WRITE function for the hal icon path.
@@ -303,6 +309,10 @@ namespace hal
          */
         void setSettingsIconStyle(const QString& style);
 
+        void setUndoIconPath(const QString& path);
+        void setUndoIconStyle(const QString& style);
+        void setDisabledIconStyle(const QString &style);
+
         /**
          * Add a content widget to the layout area.
          *
@@ -390,6 +400,13 @@ namespace hal
          */
         void handleActionCloseFile();
 
+        void handleActionStartRecording();
+        void handleActionStopRecording();
+        void handleActionPlayMacro();
+        void handleActionUndo();
+
+        void enableUndo(bool enable=true);
+
     private:
         /**
          * Overwritten Qt function to handle the close event.
@@ -432,11 +449,17 @@ namespace hal
    //     Action* mActionSchedule;
    //     Action* mActionRunSchedule;
    //     Action* mActionContent;
+        Action* mActionStartRecording;
+        Action* mActionStopRecording;
+        Action* mActionPlayMacro;
+        Action* mActionUndo;
+
         Action* mActionSettings;
         Action* mActionClose;
 
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
+        QMenu* mMenuMacro;
         QMenu* mMenuHelp;
 
         AboutDialog* mAboutDialog;
@@ -466,5 +489,9 @@ namespace hal
 
         QString mSettingsIconPath;
         QString mSettingsIconStyle;
+
+        QString mUndoIconPath;
+        QString mUndoIconStyle;
+        QString mDisabledIconStyle;
     };
 }

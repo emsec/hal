@@ -14,6 +14,12 @@
 #include "gui/gui_globals.h"                  // DEBUG LINE
 #include "gui/gui_utils/graphics.h"
 
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_delete_object.h"
+#include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_set_object_color.h"
+#include "gui/user_action/action_set_object_type.h"
 #include <functional>
 
 #include <QColorDialog>    // DEBUG LINE
@@ -63,7 +69,7 @@ namespace hal
 
     QColor NetlistRelay::getModuleColor(const u32 id)
     {
-        return mModuleColors.value(id);
+        return mModuleModel->moduleColor(id);
     }
 
     ModuleModel* NetlistRelay::getModuleModel()
@@ -82,7 +88,11 @@ namespace hal
         QString text = QInputDialog::getText(nullptr, "Rename Module", "New Name", QLineEdit::Normal, QString::fromStdString(m->get_name()), &ok);
 
         if (ok && !text.isEmpty())
-            m->set_name(text.toStdString());
+        {
+            ActionRenameObject* act = new ActionRenameObject(text);
+            act->setObject(UserActionObject(id,UserActionObjectType::Module));
+            act->exec();
+        }
     }
 
     void NetlistRelay::debugChangeModuleType(const u32 id)
@@ -96,7 +106,11 @@ namespace hal
         QString text = QInputDialog::getText(nullptr, "Change Module Type", "New Type", QLineEdit::Normal, QString::fromStdString(m->get_type()), &ok);
 
         if (ok && !text.isEmpty())
-            m->set_type(text.toStdString());
+        {
+            ActionSetObjectType* act = new ActionSetObjectType(text);
+            act->setObject(UserActionObject(id,UserActionObjectType::Module));
+            act->exec();
+        }
     }
 
     void NetlistRelay::debugChangeModuleColor(const u32 id)
@@ -111,12 +125,9 @@ namespace hal
         if (!color.isValid())
             return;
 
-        mModuleColors.insert(id, color);
-        mModuleModel->updateModule(id);
-
-        // Since color is our Overlay over the netlist data, no event is
-        // automatically fired. We need to take care of that ourselves here.
-        gGraphContextManager->handleModuleColorChanged(m);
+        ActionSetObjectColor* act = new ActionSetObjectColor(color);
+        act->setObject(UserActionObject(id,UserActionObjectType::Module));
+        act->exec();
 
         Q_EMIT moduleColorChanged(m);
     }
@@ -126,17 +137,9 @@ namespace hal
         // NOT THREADSAFE
         // DECIDE HOW TO HANDLE MODULES
 
-        Module* m = gNetlist->get_module_by_id(id);
-
-        assert(m);
-
-        for (auto sel_id : gSelectionRelay->mSelectedGates)
-        {
-            Gate* g = gNetlist->get_gate_by_id(sel_id);
-
-            if (g)
-                m->assign_gate(g);
-        }
+        ActionAddItemsToObject* act = new ActionAddItemsToObject({},gSelectionRelay->selectedGates());
+        act->setObject(UserActionObject(id,UserActionObjectType::Module));
+        act->exec();
     }
 
     void NetlistRelay::debugAddChildModule(const u32 id)
@@ -154,15 +157,16 @@ namespace hal
         if (!m)
             return;
 
-        gNetlist->create_module(gNetlist->get_unique_module_id(), name.toStdString(), m);
+        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::Module,name);
+        act->setParentId(id);
+        act->exec();
     }
 
     void NetlistRelay::debugDeleteModule(const u32 id)
     {
-        Module* m = gNetlist->get_module_by_id(id);
-        assert(m);
-
-        gNetlist->delete_module(m);
+        ActionDeleteObject* act = new ActionDeleteObject;
+        act->setObject(UserActionObject(id,UserActionObjectType::Module));
+        act->exec();
     }
 
     void NetlistRelay::relayNetlistEvent(netlist_event_handler::event ev, Netlist* object, u32 associated_data)
@@ -343,7 +347,7 @@ namespace hal
             // suppress actions if we receive this for the top module
             if (object->get_parent_module() != nullptr)
             {
-                mModuleColors.insert(object->get_id(), gui_utility::getRandomColor());
+                mModuleModel->setRandomColor(object->get_id());
             }
 
             Q_EMIT moduleCreated(object);
@@ -353,7 +357,7 @@ namespace hal
         {
             //< no associated_data
 
-            mModuleColors.remove(object->get_id());
+            mModuleModel->removeColor(object->get_id());
 
             gGraphContextManager->handleModuleRemoved(object);
             gSelectionRelay->handleModuleRemoved(object->get_id());
@@ -586,16 +590,12 @@ namespace hal
     void NetlistRelay::debugHandleFileOpened()
     {
         for (Module* m : gNetlist->get_modules())
-            mModuleColors.insert(m->get_id(), gui_utility::getRandomColor());
-
-        mModuleColors.insert(1, QColor(96, 110, 112));
-
+            mModuleModel->setRandomColor(m->get_id());
         mModuleModel->init();
     }
 
     void NetlistRelay::debugHandleFileClosed()
     {
         mModuleModel->clear();
-        mModuleColors.clear();
     }
 }

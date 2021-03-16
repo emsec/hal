@@ -75,7 +75,7 @@ namespace hal
          * @param ctx - The graph context to rename. Must not be a <i>nullptr</i>.
          * @param new_name - The new name of the context
          */
-        void renameGraphContext(GraphContext* ctx, const QString& new_name);
+        void renameGraphContextAction(GraphContext* ctx, const QString& newName);
 
         /**
          * Removes and deletes the given GraphContext. The passed pointer will be a <i>nullptr</i> afterwards.<br>
@@ -91,6 +91,8 @@ namespace hal
          * @returns a list of all GrapgContexts.
          */
         QVector<GraphContext*> getContexts() const;
+        GraphContext* getCleanContext(const QString& name) const;
+        GraphContext* getContextById(u32 id) const;
 
         /**
          * Checks if a context with the given name exists.
@@ -287,6 +289,14 @@ namespace hal
         void handleUnmarkedGlobalOutput(u32 mNetId);
 
         /**
+         * Assigns new ID to context if this id is not in use
+         *
+         * @param ctx the context
+         * @param ctxId user provided ID
+         */
+        void setContextId(GraphContext* ctx, u32 ctxId);
+
+        /**
          * TODO: Memory leak? Better name: 'createDefaultLayouter'? Use smart pointer instead?
          * Creates an instance of the StandardGraphLayouter used for a certain GraphContext.
          *
@@ -318,6 +328,7 @@ namespace hal
         void handleSaveTriggered();
         void restoreFromFile();
 
+        QString nextDefaultName() const { return QString("view %1").arg(mMaxContextId+1);}
     Q_SIGNALS:
         /**
          * Q_SIGNAL that notifies about the creation of a new context by the context manager.
@@ -342,9 +353,10 @@ namespace hal
         void deletingContext(GraphContext* context);
 
     private:
-        QVector<GraphContext*> mGraphContexts;
+//        QVector<GraphContext*> mGraphContexts;
 
         ContextTableModel* mContextTableModel;
         u32 mMaxContextId;
+        void dump(const QString& title, u32 mid, u32 xid) const;
     };
 }

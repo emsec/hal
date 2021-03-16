@@ -81,8 +81,8 @@ namespace hal
 
     private Q_SLOTS:
         void conditionalUpdate();
-        void handleChangeColorAction();
         void handleIsolationViewAction();
+        void handleRemoveFromView();
         void handleMoveAction(QAction* action);
         void handleMoveNewAction();
         void handleRenameAction();
@@ -126,7 +126,6 @@ namespace hal
         void toggleAntialiasing();
 
         bool itemDraggable(GraphicsItem* item);
-        void groupingAssignInternal(Grouping* grp);
 
         struct LayouterPoint
         {
