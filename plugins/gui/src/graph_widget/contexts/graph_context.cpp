@@ -165,7 +165,7 @@ namespace hal
         }
     }
 
-    bool GraphContext::foldModuleAction(u32 moduleId)
+    bool GraphContext::foldModuleAction(u32 moduleId, const PlacementHint &plc)
     {
         Module* m = gNetlist->get_module_by_id(moduleId);
         if (!m) return false;
@@ -177,7 +177,7 @@ namespace hal
             mods.insert(sm->get_id());
         beginChange();
         remove(mods, gats);
-        add({m->get_id()}, {});
+        add({m->get_id()}, {}, plc);
         endChange();
         return true;
     }

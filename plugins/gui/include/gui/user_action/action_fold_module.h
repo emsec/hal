@@ -9,11 +9,13 @@ namespace hal
     class ActionFoldModule : public UserAction
     {
         u32 mContextId;
+        PlacementHint mPlacementHint;
     public:
         ActionFoldModule(u32 moduleId = 0);
         QString tagname() const override;
         bool exec() override;
         void setContextId(u32 id) { mContextId = id; }
+        void setPlacementHint(PlacementHint hint) { mPlacementHint = hint; }
     };
 
     class ActionFoldModuleFactory : public UserActionFactory

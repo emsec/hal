@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * selection details get updated immediately when renamed or type changed
 * remember grid position when removing module/gate from view so it can be restored at original location
 * context menu `unfold module` unfolds module in current view
+* restore previous grid positions when executing UNDO actions
 * doubleclick menu displays it unfolded in new view
 * navigation bug (ports and nets did not match for modules) fixed
 * list of navigation targets cleaned up (no duplicates, no loops)

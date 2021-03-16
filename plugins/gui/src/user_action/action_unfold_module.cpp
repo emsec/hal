@@ -63,6 +63,14 @@ namespace hal
 
         ActionFoldModule* undo = new ActionFoldModule(mObject.id());
         undo->setContextId(mContextId);
+        PlacementHint plc(PlacementHint::GridPosition);
+        Node nd(mObject.id(),Node::Module);
+        auto it = ctx->getLayouter()->nodeToPositionMap().find(nd);
+        if (it!=ctx->getLayouter()->nodeToPositionMap().end())
+        {
+            plc.addGridPosition(nd,it.value());
+            undo->setPlacementHint(plc);
+        }
         mUndoAction = undo;
         execInternal(m,ctx);
         return UserAction::exec();

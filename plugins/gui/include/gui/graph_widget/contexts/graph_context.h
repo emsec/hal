@@ -126,7 +126,7 @@ namespace hal
          * @param id - The id of the gate
          */
         bool isGateUnfolded(u32 gateId) const;
-        bool foldModuleAction(u32 moduleId);
+        bool foldModuleAction(u32 moduleId, const PlacementHint& plc);
         /**
          * Unfold a specific module. The specified module is removed from the context and replaced by its gates and
          * submodules.

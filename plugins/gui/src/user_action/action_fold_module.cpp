@@ -19,7 +19,7 @@ namespace hal
     }
 
     ActionFoldModule::ActionFoldModule(u32 moduleId)
-        : mContextId(0)
+        : mContextId(0), mPlacementHint(PlacementHint::Standard)
     {
         if (moduleId)
             setObject(UserActionObject(moduleId,UserActionObjectType::Module));
@@ -41,7 +41,7 @@ namespace hal
                 : gContentManager->getContextManagerWidget()->getCurrentContext();
         if (!ctx) return false;
 
-        if (!ctx->foldModuleAction(mObject.id())) return false;
+        if (!ctx->foldModuleAction(mObject.id(),mPlacementHint)) return false;
         ActionUnfoldModule* undo = new ActionUnfoldModule(mObject.id());
         undo->setContextId(mContextId);
         PlacementHint plc(PlacementHint::GridPosition);
