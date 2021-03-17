@@ -167,10 +167,12 @@ namespace hal
             :rtype: set[hal_py.Net]
         )");
 
-        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), R"(
+        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), py::arg("analyze_inputs") = false, R"(
             Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
+            If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.
 
             :param hal_py.Netlist netlist: The target netlist.
+            :param bool analyze_inputs: Set True to dynamically analyze the inputs, False otherwise.
         )");
 
         py_netlist_utils.def("remove_unused_lut_endpoints", netlist_utils::remove_unused_lut_endpoints, py::arg("netlist"), R"(

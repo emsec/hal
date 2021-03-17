@@ -497,14 +497,13 @@ namespace hal
             return nets;
         }
 
-        void remove_buffers(Netlist* netlist)
+        void remove_buffers(Netlist* netlist, bool analyze_inputs)
         {
             u32 num_gates = 0;
 
             Net* gnd_net = netlist->get_gnd_gates().front()->get_fan_out_nets().front();
             Net* vcc_net = netlist->get_vcc_gates().front()->get_fan_out_nets().front();
 
-            // buffers can only be of these base types
             for (const auto& gate : netlist->get_gates())
             {
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
@@ -539,25 +538,28 @@ namespace hal
                 std::vector<Endpoint*> fan_in = gate->get_fan_in_endpoints();
                 BooleanFunction func          = functions.begin()->second;
 
-                for (Endpoint* ep : fan_in)
+                if (analyze_inputs)
                 {
-                    auto sources = ep->get_net()->get_sources();
-                    if (sources.size() != 1)
+                    for (Endpoint* ep : fan_in)
                     {
-                        break;
+                        auto sources = ep->get_net()->get_sources();
+                        if (sources.size() != 1)
+                        {
+                            break;
+                        }
+
+                        if (sources.front()->get_gate()->is_gnd_gate())
+                        {
+                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ZERO);
+                        }
+                        else if (sources.front()->get_gate()->is_vcc_gate())
+                        {
+                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ONE);
+                        }
                     }
 
-                    if (sources.front()->get_gate()->is_gnd_gate())
-                    {
-                        func = func.substitute(ep->get_pin(), BooleanFunction::Value::ZERO);
-                    }
-                    else if (sources.front()->get_gate()->is_vcc_gate())
-                    {
-                        func = func.substitute(ep->get_pin(), BooleanFunction::Value::ONE);
-                    }
+                    func = func.optimize_constants();
                 }
-
-                func = func.optimize_constants();
 
                 std::string func_str                    = func.to_string();
                 std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(PinDirection::input);
