@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Utils &mdash; hal_py v3.2.6-64-g4835b8a04 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v3.2.6-66-gf4f70a27d documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v3.2.6-64-g4835b8a04
+                v3.2.6-66-gf4f70a27d
               </div>
             
           
@@ -519,13 +519,18 @@ If this function is used extensively, consider using the above variant with a ca
 
 <dl class="function">
 <dt id="hal_py.NetlistUtils.remove_buffers">
-<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">remove_buffers</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.NetlistUtils.remove_buffers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.</p>
+<code class="descclassname">hal_py.NetlistUtils.</code><code class="descname">remove_buffers</code><span class="sig-paren">(</span><em>netlist: hal_py.Netlist</em>, <em>analyze_inputs: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.NetlistUtils.remove_buffers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
+If enabled, analyzes every gate’s inputs and removes fixed ‘0’ or ‘1’ inputs from the Boolean function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</li>
+<li><strong>analyze_inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Set True to dynamically analyze the inputs, False otherwise.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
