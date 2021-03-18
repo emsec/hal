@@ -29,6 +29,13 @@ namespace hal
 {
     class CodeEditor;
 
+    /**
+     * The LineNumberArea is a widget next to its associated CodeEditor widget that shows the line numbers for the
+     * content of this CodeEditor. This widget provides an area where these line numbers can be entered and stores
+     * information about the size of the line number area. However, it is the responsibility of the CodeEditor to
+     * insert the correct line numbers in the area, after the widget calls CodeEditor::lineNumberAreaPaintEvent in
+     * its paint event.
+     */
     class LineNumberArea : public QWidget
     {
         Q_OBJECT
@@ -36,18 +43,45 @@ namespace hal
         Q_PROPERTY(int rightOffset READ rightOffset WRITE setRightOffset)
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param editor - The CodeEditor this line number area should be associated with. Must not be a <i>nullptr</i>.
+         */
         explicit LineNumberArea(CodeEditor* editor);
 
+        /** @name Q_PROPERTY READ Functions */
+        ///@{
         int leftOffset() const;
         int rightOffset() const;
+        ///@}
 
+        /** @name Q_PROPERTY WRITE Functions */
+        ///@{
         void setLeftOffset(const int offset);
         void setRightOffset(const int offset);
+        ///@}
 
+        /**
+         * Reinitializes the appearance of the line number area widget.
+         */
         void repolish();
 
     protected:
+        /**
+         * Paints the line number are widget. Afterwards it invokes CodeEditor::lineNumberAreaPaintEvent so that the
+         * line numbers are inserted
+         *
+         * @param event - The paint event
+         */
         void paintEvent(QPaintEvent* event) override;
+
+        /**
+         * Handles a wheel event so that the event is passed to the CodeEditor. It allows to scroll in the
+         * code editor while the mouse hovers above the line number area.
+         *
+         * @param event - The wheel event
+         */
         void wheelEvent(QWheelEvent* event) override;
 
     private:

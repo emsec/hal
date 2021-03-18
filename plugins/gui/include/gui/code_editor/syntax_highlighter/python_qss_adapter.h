@@ -28,10 +28,13 @@
 
 namespace hal
 {
+    /**
+     * QSS Adapter to provide the color configurations used by the PythonSyntaxHighlighter
+     */
     class PythonQssAdapter : public QWidget
     {
         Q_OBJECT
-        Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor)
+        Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor) // TODO: Unused?
         Q_PROPERTY(QColor keywordColor READ keywordColor WRITE setKeywordColor)
         Q_PROPERTY(QColor operator_color READ operator_color WRITE setOperatorColor)
         Q_PROPERTY(QColor braceColor READ braceColor WRITE setBraceColor)

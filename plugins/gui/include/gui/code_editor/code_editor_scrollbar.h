@@ -28,16 +28,35 @@ namespace hal
 {
     class MinimapScrollbar;
 
+    /**
+     * Represents the scrollbar of the CodeEditor. It overrides the QScrollBar class to extend its functionality so that
+     * the CodeEditorScrollbar is able to synchronize with the MinimapScrollbar of the CodeEditor.
+     */
     class CodeEditorScrollbar : public QScrollBar
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
         explicit CodeEditorScrollbar(QWidget* parent = nullptr);
 
+        /**
+         * Sets the MinimapScrollbar this scollbar should be stay in sync with.
+         *
+         * @param scrollbar - The minimap scrollbar to associate with
+         */
         void setMinimapScrollbar(MinimapScrollbar* scrollbar);
 
     protected:
+        /**
+         * Handles the sliderChange event to stay in sync with the MinimapScrollbar.
+         *
+         * @param change - the slider change event
+         */
         virtual void sliderChange(SliderChange change) override;
 
     private:
