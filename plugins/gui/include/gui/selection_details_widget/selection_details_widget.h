@@ -42,8 +42,16 @@ namespace hal
     class GateDetailsWidget;
     class NetDetailsWidget;
     class SelectionHistoryNavigator;
+    class UserAction;
+    class UserActionObject;
     class SettingsItemCheckbox;
 
+    /**
+     * The SelectionDetailsWidget class is primarily a container used to display on the left side the complete
+     * selection as a tree (via a treeview) and on the right side the specific details of a single item chosen
+     * from the complete selection (via a stackedwidget containing the specific-details-widgets). This class manages
+     * which specific widget to display and provides usefull actions such as adding the current selection to a grouping.
+     */
     class SelectionDetailsWidget : public ContentWidget
     {
         Q_OBJECT
@@ -51,77 +59,298 @@ namespace hal
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
-        Q_PROPERTY(QString restoreIconPath READ restoreIconPath WRITE setRestoreIconPath)
-        Q_PROPERTY(QString restoreIconStyle READ restoreIconStyle WRITE setRestoreIconStyle)
         Q_PROPERTY(QString toGroupingIconPath READ toGroupingIconPath WRITE setToGroupingIconPath)
         Q_PROPERTY(QString toGroupingIconStyle READ toGroupingIconStyle WRITE setToGroupingIconStyle)
         Q_PROPERTY(QString toModuleIconPath READ toModuleIconPath WRITE setToModuleIconPath)
         Q_PROPERTY(QString toModuleIconStyle READ toModuleIconStyle WRITE setToModuleIconStyle)
 
     public:
-        SelectionDetailsWidget(QWidget* parent = 0);
-        void clear();
 
+        /**
+         * The default constructor. Initialization of every child-widget and
+         * its connections happens here.
+         *
+         * @param parent - The widget's parent.
+         */
+        SelectionDetailsWidget(QWidget* parent = 0);
+        void clear(); //delete later, does not even exist in the cpp...
+
+        /**
+         * Overrides the ContentWidget's setupToolbar method. Adds its specific actions to the given toolbar
+         * so it can be displayed in the ContentFrame.
+         *
+         * @param toolbar - The toolbar to which the actions are added.
+         */
         virtual void setupToolbar(Toolbar* toolbar) override;
 
+        // =====================================================================
+        //   Q_PROPERTY functions
+        // =====================================================================
+
+        /** @name Q_PROPERTY Functions
+         */
+        ///@{
+
+        /**
+         * Q_PROPERTY READ function for the "disabled"-icon style.
+         *
+         * @return The "disabled" icon style.
+         */
         QString disabledIconStyle() const;
 
+        /**
+         * Q_PROPERTY READ function for the "search"-icon path.
+         *
+         * @return The "search" icon path.
+         */
         QString searchIconPath() const;
+
+        /**
+         * Q_PROPERTY READ function for the "search"-icon style.
+         *
+         * @return The "disabled" icon style.
+         */
         QString searchIconStyle() const;
+
+        /**
+         * Q_PROPERTY READ function for the "search active"-icon style.
+         *
+         * @return The "search activate" icon style.
+         */
         QString searchActiveIconStyle() const;
 
-        QString restoreIconPath() const;
-        QString restoreIconStyle() const;
+        /**
+         * Q_PROPERTY READ function for the "restore"-icon path.
+         *
+         * @return The "restore" icon path.
+         */
 
+        /**
+         * Q_PROPERTY READ function for the "restore"-icon style.
+         *
+         * @return The "restore" icon style.
+         */
+        /**
+         * Q_PROPERTY READ function for the "to grouping"-icon path.
+         *
+         * @return The "to grouping" icon path.
+         */
         QString toGroupingIconPath() const;
+
+        /**
+         * Q_PROPERTY READ function for the "to grouping"-icon style.
+         *
+         * @return The "to grouping" icon style.
+         */
         QString toGroupingIconStyle() const;
 
+        /**
+         * Q_PROPERTY READ function for the "to module"-icon path.
+         *
+         * @return The "to module" icon path.
+         */
         QString toModuleIconPath() const;
+
+        /**
+         * Q_PROPERTY READ function for the "to module"-icon style.
+         *
+         * @return The "to module" icon style.
+         */
         QString toModuleIconStyle() const;
-                
+
+        /**
+         * Q_PROPERTY WRITE function for the "disabled"-icon style.
+         *
+         * @param style - The new style.
+         */
         void setDisabledIconStyle(const QString &style);
 
+        /**
+         * Q_PROPERTY WRITE function for the "search"-icon path.
+         *
+         * @param path - The new path.
+         */
         void setSearchIconPath(const QString &path);
+
+        /**
+         * Q_PROPERTY WRITE function for the "search"-icon style.
+         *
+         * @param style - The new style.
+         */
         void setSearchIconStyle(const QString &style);
+
+        /**
+         * Q_PROPERTY WRITE function for the "search active"-icon style.
+         *
+         * @param style - The new style.
+         */
         void setSearchActiveIconStyle(const QString &style);
 
-        void setRestoreIconPath(const QString &path);
-        void setRestoreIconStyle(const QString &style);
+        /**
+         * Q_PROPERTY WRITE function for the "restore"-icon path.
+         *
+         * @param path - The new path.
+         */
 
+        /**
+         * Q_PROPERTY WRITE function for the "restore"-icon style.
+         *
+         * @param style - The new style.
+         */
+        /**
+         * Q_PROPERTY WRITE function for the "to grouping"-icon path.
+         *
+         * @param path - The new path.
+         */
         void setToGroupingIconPath(const QString &path);
+
+        /**
+         * Q_PROPERTY WRITE function for the "to grouping"-icon style.
+         *
+         * @param style - The new style.
+         */
         void setToGroupingIconStyle(const QString &style);
         
+        /**
+         * Q_PROPERTY WRITE function for the "to module"-icon path.
+         *
+         * @param path - The new path.
+         */
         void setToModuleIconPath(const QString &path);
+
+        /**
+         * Q_PROPERTY WRITE function for the "to module"-icon style.
+         *
+         * @param style - The new style.
+         */
         void setToModuleIconStyle(const QString &style);
+        ///@}
         
-        void selectionToGroupingInternal(Grouping* grp);
+        /**
+         * Adds the current selection to the given grouping. The selection is cleared afterwards.
+         *
+         */
+        void selectionToGroupingAction(const QString& existingGrpName = QString());
+        UserAction* groupingUnassignActionFactory(const UserActionObject& obj) const;
 
         SelectionTreeView* selectionTreeView();
 
     Q_SIGNALS:
+
+        /**
+         * Q_SIGNAL that is emitted when the selection within the treeview changes.
+         *
+         * @param highlight - The items to highlight (that were selected in the view).
+         */
         void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
+
+        /**
+         * Q_SIGNAL that is emitted when a gate-type item in the treeview is double clicked
+         * (or single clicked if it was in the focus to begin with).
+         *
+         * @param gateId - The id of the clicked gate item.
+         */
         void focusGateClicked(u32 gateId);
+
+        /**
+         * Q_SIGNAL that is emitted when a net-type item in the treeview is double clicked
+         * (or single clicked if it was in the focus to begin with).
+         *
+         * @param netId - The id of the clicked net item.
+         */
         void focusNetClicked(u32 netId);
+
+        /**
+         * Q_SIGNAL that is emitted when a module-type item in the treeview is double clicked
+         * (or single clicked if it was in the focus to begin with).
+         *
+         * @param moduleId - The id of the clicked module item.
+         */
         void focusModuleClicked(u32 moduleId);
 
     public Q_SLOTS:
+
+        /**
+         * A function that is called when the selection is changed (external). It sets up the widget
+         * anew, e.g. populates the treeview and sets up the icons (disabled or enabled style).
+         *
+         * @param sender - The object that triggered the change.
+         */
         void handleSelectionUpdate(void* sender);
+
+        /**
+         * A function that is called when the selection of the treeview is changed (single-selection).
+         * Responsible to set the specific-details-widget and emits the triggerHighlight signal.
+         *
+         * @param sti - The selected item.
+         */
         void handleTreeSelection(const SelectionTreeItem* sti);
+
+        /**
+         * Overriden function of the ContentWidget. Sets up all shortcuts and returns them.
+         *
+         * @return The List of shortcuts.
+         */
         QList<QShortcut*> createShortcuts() override;
 
 
     private Q_SLOTS:
-        void restoreLastSelection();
+
+        /**
+         * Restores the previous selection that is contained in its history.
+         */
+
+        /**
+         * Opens a context menu and calls, depending on the cosen action, either selectionToNewGrouping()
+         * or selectionToExistingGrouping().
+         */
         void selectionToGrouping();
+
+        /**
+         * Checks all modules if the current selection can be added to that specific module. Thereafter it
+         * creates a context menu with all valid modules as options as well as a "New module..." option.
+         */
         void selectionToModuleMenu();
+
+        /**
+         * Toggles the visibiliy of the searchbar.
+         */
         void toggleSearchbar();
+
+        /**
+         * Creates a new grouping by calling addDefault() from the GroupingManagerWidget's model and adds
+         * the current selection to the grouping.
+         */
         void selectionToNewGrouping();
+
+        /**
+         * Gets an existing grouping based on the before selected QAction in the ContextMenu created by
+         * selectionToGrouping() and adds the current selection to the grouping.
+         */
         void selectionToExistingGrouping();
+
+        /**
+         * Adds the current selection to a module that isbased on the before selected QAction
+         * in the ContextMenu created by selectionToModuleMenu().
+         */
         void selectionToModuleAction();
 
+        /**
+         * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
+         * type of the clicked item.
+         *
+         * @param sti - The clicked item in the selection-treeview.
+         */
         void handleTreeViewItemFocusClicked(const SelectionTreeItem* sti);
 
     private:
+
+        /**
+         * Displays either the GateDetailsWidget, NetDetailsWidget or ModuleDetailsWidget based on the
+         * type of the given item.
+         *
+         * @param sti - The item that is to be displayed.
+         */
         void singleSelectionInternal(const SelectionTreeItem* sti);
 
         QSplitter*           mSplitter;
@@ -139,9 +368,9 @@ namespace hal
 
         Searchbar* mSearchbar;
 
-        QAction* mRestoreLastSelection;
         QAction* mSelectionToGrouping;
         QAction* mSelectionToModule;
+        QAction* mSearchAction;
 
         QString mDisabledIconStyle;
 
@@ -149,19 +378,13 @@ namespace hal
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
 
-        QString mRestoreIconPath;
-        QString mRestoreIconStyle;
-
         QString mToGroupingIconPath;
         QString mToGroupingIconStyle;
         
         QString mToModuleIconPath;
         QString mToModuleIconStyle;
         
-        SelectionHistoryNavigator* mHistory;
-
         void handleFilterTextChanged(const QString& filter_text);
-        void canRestoreSelection();
         void canMoveToModule(int nodes);
         void enableSearchbar(bool enable);
 

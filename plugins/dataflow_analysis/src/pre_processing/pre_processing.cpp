@@ -166,10 +166,7 @@ namespace hal
                 {
                     // TODO currently only accepts FFs
                     log_info("dataflow", "identifying sequential gates");
-                    netlist_abstr.all_sequential_gates = netlist_abstr.nl->get_gates([&](auto g) {
-                        auto base_type = g->get_type()->get_base_type();
-                        return base_type == GateType::BaseType::ff;
-                    });
+                    netlist_abstr.all_sequential_gates = netlist_abstr.nl->get_gates([&](auto g) { return g->get_type()->has_property(GateTypeProperty::ff); });
                     std::sort(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end());
                     log_info("dataflow", "  #gates: {}", netlist_abstr.nl->get_gates().size());
                     log_info("dataflow", "  #sequential gates: {}", netlist_abstr.all_sequential_gates.size());
@@ -185,25 +182,25 @@ namespace hal
                         auto id = sg->get_id();
                         sg->get_name();
 
-                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::clock), true))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(PinType::clock), true))
                         {
                             netlist_abstr.gate_to_clock_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 
-                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::enable), true))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(PinType::enable), true))
                         {
                             netlist_abstr.gate_to_enable_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 
-                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::reset), true))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(PinType::reset), true))
                         {
                             netlist_abstr.gate_to_reset_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());
                         }
 
-                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(GateType::PinType::set), true))
+                        for (auto net : netlist_utils::get_nets_at_pins(sg, sg->get_type()->get_pins_of_type(PinType::set), true))
                         {
                             netlist_abstr.gate_to_set_signals[id].insert(net->get_id());
                             fingerprint.push_back(net->get_id());

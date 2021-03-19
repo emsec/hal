@@ -29,6 +29,11 @@ namespace hal
 {
     class ContentWidget;
 
+    /**
+     * This enum represents the orientation of a dockbutton. A dockbutton is either
+     * placed in horizontal or vertical dockbar. Depending on this orientation the width, height
+     * and text is displayed accordingly.
+     */
     enum class button_orientation
     {
         horizontal    = 0,
@@ -36,28 +41,98 @@ namespace hal
         vertical_down = 2
     };
 
+    /**
+     * The dockbutton is placed and displayed in a dockbar to determine the position and appearence
+     * of a content widget. It computes and holds necessary information for the docking system such as
+     * its size, the associated content widget as well as his hidden/show status.
+     */
     class DockButton : public QToolButton
     {
         Q_OBJECT
 
     public:
+        /**
+         * The constructor.
+         *
+         * @param widget - The associated content widget that is displayed in the corresponding area of the dockbutton.
+         * @param orientation - The dockbutton's orientation. This is set depending if the dockbar its placed in is horizontal or vertical.
+         * @param eventFilter - The eventfilter to be installed on the dockbutton. Mainly used by the dockbar to set a button as the current dragbutton.
+         * @param parent -  The dockbutton's parent.
+         */
         DockButton(ContentWidget* widget, button_orientation orientation, QObject* eventFilter, QWidget* parent);
 
         void paintEvent(QPaintEvent* event) override;
 
+        /**
+         * Calculates its size and sets the height and width as fixed values.
+         */
         void adjustSize();
+
+        /**
+         * Get the relative width of the button. This value is used in the adjustSize() calculation.
+         *
+         * @return The relative width.
+         */
         int relativeWidth();
+
+        /**
+         * Get the associated content widget.
+         *
+         * @return The associated content widget.
+         */
         ContentWidget* widget();
+
+        /**
+         * Get the visible status of the associated content widget wether it is currently shown or hidden.
+         * Does the same as QWidget::isHidden() when combined with the overriden hide() method.
+         *
+         * @return The visible status of the widget.
+         */
         bool hidden();
+
+        /**
+         * Get the available status of the dockbutton. This status is set to false when the dockbutton is dragged.
+         *
+         * @return The available status of the dockbutton.
+         */
         bool available();
+
+        /**
+         * Sets the available status of the button. This status is to be set to false at the start of the buttondragging and
+         * set to true at the end of it.
+         *
+         * @param available - The new available status of the widget.
+         */
         void setAvailable(bool available);
+
+        /**
+         * Sets the relative height.
+         *
+         * @param height - The ’new’ height.
+         */
         void setRelativeHeight(int height);
 
         //overshadowed functions
+
+        /**
+         * Overrides the  QWidget's hide method. Does the same as QWidget::hide().
+         */
         void hide();
+
+        /**
+         * Overrides the QWidgets show method. Does the same as QWidget::show().
+         */
         void show();
 
     public Q_SLOTS:
+
+        /**
+         * The main purpose of this function is to be connected to the buttons's own clicked signal.
+         * When the button is checked and therefore mChecked = true (remember, it is a toolbutton), the
+         * associated widget is opened and therefore visible. Otherwise it is closed.
+         *
+         * @param mChecked - The boolean wether the dockbutton is checked or not checked.
+         */
         void handleClicked(bool mChecked);
 
     private:

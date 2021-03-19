@@ -7,35 +7,6 @@
 
 namespace hal
 {
-    const std::unordered_map<std::string, GateType::BaseType> HGLParser::m_string_to_base_type = {{"combinational", GateType::BaseType::combinational},
-                                                                                                  {"ff", GateType::BaseType::ff},
-                                                                                                  {"latch", GateType::BaseType::latch},
-                                                                                                  {"lut", GateType::BaseType::lut},
-                                                                                                  {"ram", GateType::BaseType::ram},
-                                                                                                  {"io", GateType::BaseType::io},
-                                                                                                  {"dsp", GateType::BaseType::dsp}};
-
-    const std::unordered_map<std::string, GateType::PinType> HGLParser::m_string_to_pin_type = {{"none", GateType::PinType::none},
-                                                                                                {"power", GateType::PinType::power},
-                                                                                                {"ground", GateType::PinType::ground},
-                                                                                                {"lut", GateType::PinType::lut},
-                                                                                                {"state", GateType::PinType::state},
-                                                                                                {"neg_state", GateType::PinType::neg_state},
-                                                                                                {"clock", GateType::PinType::clock},
-                                                                                                {"enable", GateType::PinType::enable},
-                                                                                                {"set", GateType::PinType::set},
-                                                                                                {"reset", GateType::PinType::reset},
-                                                                                                {"data", GateType::PinType::data},
-                                                                                                {"address", GateType::PinType::address},
-                                                                                                {"io_pad", GateType::PinType::io_pad},
-                                                                                                {"select", GateType::PinType::select}};
-
-    const std::unordered_map<std::string, GateType::ClearPresetBehavior> HGLParser::m_string_to_behavior = {{"L", GateType::ClearPresetBehavior::L},
-                                                                                                            {"H", GateType::ClearPresetBehavior::H},
-                                                                                                            {"N", GateType::ClearPresetBehavior::N},
-                                                                                                            {"T", GateType::ClearPresetBehavior::T},
-                                                                                                            {"X", GateType::ClearPresetBehavior::X}};
-
     std::unique_ptr<GateLibrary> HGLParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
@@ -97,7 +68,7 @@ namespace hal
     bool HGLParser::parse_gate_type(const rapidjson::Value& gate_type)
     {
         std::string name;
-        GateType::BaseType type;
+        std::set<GateTypeProperty> properties;
         PinCtx pin_ctx;
 
         if (!gate_type.HasMember("name") || !gate_type["name"].IsString())
@@ -107,25 +78,28 @@ namespace hal
         }
         name = gate_type["name"].GetString();
 
-        if (gate_type.HasMember("type") && gate_type["type"].IsString())
+        if (gate_type.HasMember("types") && gate_type["types"].IsArray())
         {
-            std::string type_str = gate_type["type"].GetString();
-            if (const auto it = m_string_to_base_type.find(type_str); it != m_string_to_base_type.end())
+            for (const auto& base_type : gate_type["types"].GetArray())
             {
-                type = it->second;
-            }
-            else
-            {
-                log_error("hgl_parser", "invalid base type '{}' given for gate type '{}'.", type_str, name);
-                return false;
+                try
+                {
+                    GateTypeProperty property = enum_from_string<GateTypeProperty>(base_type.GetString());
+                    properties.insert(property);
+                }
+                catch (const std::runtime_error&)
+                {
+                    log_error("hgl_parser", "invalid base type '{}' given for gate type '{}'.", base_type.GetString(), name);
+                    return false;
+                }
             }
         }
         else
         {
-            type = GateType::BaseType::combinational;
+            properties = {GateTypeProperty::combinational};
         }
 
-        GateType* gt = m_gate_lib->create_gate_type(name, type);
+        GateType* gt = m_gate_lib->create_gate_type(name, properties);
 
         if (gate_type.HasMember("pins") && gate_type["pins"].IsArray())
         {
@@ -138,7 +112,7 @@ namespace hal
             }
         }
 
-        for (const auto pin : pin_ctx.pins)
+        for (const auto& pin : pin_ctx.pins)
         {
             gt->add_pin(pin, pin_ctx.pin_to_direction.at(pin), pin_ctx.pin_to_type.at(pin));
         }
@@ -160,7 +134,7 @@ namespace hal
             }
         }
 
-        if (type == GateType::BaseType::lut)
+        if (properties.find(GateTypeProperty::lut) != properties.end())
         {
             GateType* gt_lut = gt;
 
@@ -175,7 +149,7 @@ namespace hal
                 return false;
             }
         }
-        else if (type == GateType::BaseType::ff)
+        else if (properties.find(GateTypeProperty::ff) != properties.end())
         {
             GateType* gt_ff = gt;
 
@@ -190,7 +164,7 @@ namespace hal
                 return false;
             }
         }
-        else if (type == GateType::BaseType::latch)
+        else if (properties.find(GateTypeProperty::latch) != properties.end())
         {
             GateType* gt_latch = gt;
 
@@ -231,27 +205,12 @@ namespace hal
         }
 
         std::string direction = pin["direction"].GetString();
-        if (direction == "input")
+        try
         {
+            pin_ctx.pin_to_direction[name] = enum_from_string<PinDirection>(direction);
             pin_ctx.pins.push_back(name);
-            pin_ctx.pin_to_direction[name] = GateType::PinDirection::input;
         }
-        else if (direction == "output")
-        {
-            pin_ctx.pins.push_back(name);
-            pin_ctx.pin_to_direction[name] = GateType::PinDirection::output;
-        }
-        else if (direction == "inout")
-        {
-            pin_ctx.pins.push_back(name);
-            pin_ctx.pin_to_direction[name] = GateType::PinDirection::inout;
-        }
-        else if (direction == "internal")
-        {
-            pin_ctx.pins.push_back(name);
-            pin_ctx.pin_to_direction[name] = GateType::PinDirection::internal;
-        }
-        else
+        catch (const std::runtime_error&)
         {
             log_warning("hgl_parser", "invalid direction '{}' given for pin '{}' of gate type '{}'.", direction, name, gt_name);
             return false;
@@ -275,11 +234,11 @@ namespace hal
         if (pin.HasMember("type") && pin["type"].IsString())
         {
             std::string type_str = pin["type"].GetString();
-            if (auto it = m_string_to_pin_type.find(type_str); it != m_string_to_pin_type.end())
+            try
             {
-                pin_ctx.pin_to_type[name] = it->second;
+                pin_ctx.pin_to_type[name] = enum_from_string<PinType>(type_str);
             }
-            else
+            catch (const std::runtime_error&)
             {
                 log_warning("hgl_parser", "invalid type '{}' given for pin '{}' of gate type '{}'.", type_str, name, gt_name);
                 return false;
@@ -287,7 +246,7 @@ namespace hal
         }
         else
         {
-            pin_ctx.pin_to_type[name] = GateType::PinType::none;
+            pin_ctx.pin_to_type[name] = PinType::none;
         }
 
         return true;
@@ -388,9 +347,10 @@ namespace hal
         {
             GateType::ClearPresetBehavior cp1, cp2;
 
-            if (const auto it = m_string_to_behavior.find(ff_config["state_clear_preset"].GetString()); it != m_string_to_behavior.end())
+            if (const auto behav = enum_from_string<GateType::ClearPresetBehavior>(ff_config["state_clear_preset"].GetString(), GateType::ClearPresetBehavior::undef);
+                behav != GateType::ClearPresetBehavior::undef)
             {
-                cp1 = it->second;
+                cp1 = behav;
             }
             else
             {
@@ -398,9 +358,10 @@ namespace hal
                 return false;
             }
 
-            if (const auto it = m_string_to_behavior.find(ff_config["neg_state_clear_preset"].GetString()); it != m_string_to_behavior.end())
+            if (const auto behav = enum_from_string<GateType::ClearPresetBehavior>(ff_config["neg_state_clear_preset"].GetString(), GateType::ClearPresetBehavior::undef);
+                behav != GateType::ClearPresetBehavior::undef)
             {
-                cp2 = it->second;
+                cp2 = behav;
             }
             else
             {
@@ -458,9 +419,10 @@ namespace hal
         {
             GateType::ClearPresetBehavior cp1, cp2;
 
-            if (const auto it = m_string_to_behavior.find(latch_config["state_clear_preset"].GetString()); it != m_string_to_behavior.end())
+            if (const auto behav = enum_from_string<GateType::ClearPresetBehavior>(latch_config["state_clear_preset"].GetString(), GateType::ClearPresetBehavior::undef);
+                behav != GateType::ClearPresetBehavior::undef)
             {
-                cp1 = it->second;
+                cp1 = behav;
             }
             else
             {
@@ -468,9 +430,10 @@ namespace hal
                 return false;
             }
 
-            if (const auto it = m_string_to_behavior.find(latch_config["neg_state_clear_preset"].GetString()); it != m_string_to_behavior.end())
+            if (const auto behav = enum_from_string<GateType::ClearPresetBehavior>(latch_config["neg_state_clear_preset"].GetString(), GateType::ClearPresetBehavior::undef);
+                behav != GateType::ClearPresetBehavior::undef)
             {
-                cp2 = it->second;
+                cp2 = behav;
             }
             else
             {

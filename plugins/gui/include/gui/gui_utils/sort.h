@@ -31,7 +31,13 @@ namespace hal
     namespace gui_utility
     {
         Q_NAMESPACE
-
+		
+        /**
+         * The NumeratedString class extends the information of a normal QString by extracting
+         * the in the QString contained numbers and saving these to a list. The remaining characters
+         * are saved as an additional string.
+         * Example: "a123bc9d" -> mNumList={123,9}, mRemainder="abcd"
+         */
         class NumeratedString : public QString
         {
         public:
@@ -40,6 +46,10 @@ namespace hal
             NumeratedString(const QString& s);
         };
 
+        /**
+         * An enum for convenience purposes. Used in the compare function to determine which compare
+         * criteria should be used.
+         */
         enum mSortMechanism
         {
             lexical = 0,
@@ -48,14 +58,53 @@ namespace hal
         };
 
         Q_ENUM_NS(mSortMechanism)
-
+		
+        /**
+         * Compares two strings by the natural order critera (e.g. z2 < z11).
+         *
+         * @param a - First string to compare.
+         * @param b - Second string to compare.
+         * @return True if a < b, false otherwise.
+         */
         bool naturalOrderCompare(const QString& a, const QString& b);
+
+        /**
+         * Compares two strings by the lexical order critera (e.g. z11 < z2).
+         *
+         * @param a - First string to compare
+         * @param b - Second string to compare
+         * @return True if a < b, false otherwise.
+         */
         bool lexicalOrderCompare(const QString& a, const QString& b);
+
+        /**
+         * Compares two strings firstly by their value without any digits.
+         * If these parts are the same, the numbers the strings contained are compared.
+         *
+         * @param a - The first string to compare.
+         * @param b - The second string to compare.
+         * @return True if a < b, false otherwise.
+         */
         bool numeratedOrderCompare(const QString& a, const QString& b);
 
+        /**
+         * Compares two string by its (numerical) value. The smaller string is filled
+         * with "0"s until it matches the size of the longer string.
+         *
+         * @param a_num - First string to compare.
+         * @param b_num - second string to compare.
+         * @return An integer less than, equal to, or greater than zero if a_num is less than, equal to, or greater than b_num.
+         */
         int numericStringCompare(QString a_num, QString b_num);
 
-        // convenience method to select an algoritm
+        /**
+         * Compares to string by the preferred compare critera.
+         *
+         * @param mechanism - The critera by which the 2 strings should be compared with.
+         * @param a - The first string to compare.
+         * @param b - The second string to compare.
+         * @return True if a < b, false otherwise.
+         */
         int compare(mSortMechanism mechanism, QString a, QString b);
 
     } // namespace gui_utility

@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * Class to capsule all QSS Property functions used for Graphics
+     */
     class GraphicsQssAdapter : public QWidget
     {
         Q_OBJECT
@@ -54,6 +57,9 @@ namespace hal
 
         void repolish();
 
+        /** @name Q_PROPERTY READ Functions
+         */
+        ///@{
         QColor gateBaseColor() const;
         QColor netBaseColor() const;
 
@@ -75,7 +81,11 @@ namespace hal
 
         QColor gridBaseDotColor() const;
         QColor gridClusterDotColor() const;
+        ///@}
 
+        /** @name Q_PROPERTY WRITE Functions
+         */
+        ///@{
         void setGateBaseColor(const QColor& color);
         void setNetBaseColor(const QColor& color);
 
@@ -93,6 +103,7 @@ namespace hal
 
         void setGridBaseDotColor(const QColor& color);
         void setGridClusterDotColor(const QColor& color);
+        ///@}
 
     private:
         QColor mGateBaseColor;

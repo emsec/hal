@@ -26,11 +26,29 @@
 #include <QString>
 namespace hal
 {
+    /**
+     * Interface for handling python outputs.
+     */
     class PythonContextSubscriber
     {
     public:
+        /**
+         * Handle standard output messages.
+         *
+         * @param output - The message.
+         */
         virtual void handleStdout(const QString& output) = 0;
+
+        /**
+         * Handle error messages.
+         *
+         * @param output - The message.
+         */
         virtual void handleError(const QString& output)  = 0;
+
+        /**
+         * Handle that a 'clear'-command occurs (i.e. clear the console).
+         */
         virtual void clear()                              = 0;
     };
 }

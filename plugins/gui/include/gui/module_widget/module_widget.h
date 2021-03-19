@@ -53,6 +53,7 @@ namespace hal
 
         virtual void setupToolbar(Toolbar* Toolbar) override;
         virtual QList<QShortcut*> createShortcuts() override;
+        void openModuleInView(u32 moduleId, bool unfold);
 
         ModuleProxyModel* proxyModel();
 

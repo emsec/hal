@@ -75,7 +75,7 @@ namespace hal
         {
             u32 line_number;
             std::vector<std::string> pin_names;
-            GateType::PinDirection direction = GateType::PinDirection::none;
+            PinDirection direction = PinDirection::none;
             std::string function;
             std::string x_function;
             std::string z_function;
@@ -88,7 +88,7 @@ namespace hal
         {
             u32 line_number;
             std::string name;
-            GateType::PinDirection direction = GateType::PinDirection::none;
+            PinDirection direction = PinDirection::none;
             std::vector<std::string> pin_names;
             std::vector<pin_group> pins;
             std::map<u32, std::string> index_to_pin_name;
@@ -102,8 +102,8 @@ namespace hal
             std::string next_state;
             std::string clear;
             std::string preset;
-            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::U;
-            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::undef;
+            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::undef;
             std::string data_category;
             std::string data_identifier;
         };
@@ -116,8 +116,8 @@ namespace hal
             std::string data_in;
             std::string clear;
             std::string preset;
-            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::U;
-            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::U;
+            GateType::ClearPresetBehavior special_behavior_var1 = GateType::ClearPresetBehavior::undef;
+            GateType::ClearPresetBehavior special_behavior_var2 = GateType::ClearPresetBehavior::undef;
         };
 
         struct lut_group
@@ -133,7 +133,7 @@ namespace hal
         {
             u32 line_number;
             std::string name;
-            GateType::BaseType type = GateType::BaseType::combinational;
+            std::set<GateTypeProperty> properties;
             ff_group ff;
             latch_group latch;
             lut_group lut;
@@ -156,7 +156,7 @@ namespace hal
 
         std::optional<cell_group> parse_cell(TokenStream<std::string>& library_stream);
         std::optional<type_group> parse_type(TokenStream<std::string>& str);
-        std::optional<pin_group> parse_pin(TokenStream<std::string>& str, cell_group& cell, GateType::PinDirection direction = GateType::PinDirection::none, const std::string& external_pin_name = "");
+        std::optional<pin_group> parse_pin(TokenStream<std::string>& str, cell_group& cell, PinDirection direction = PinDirection::none, const std::string& external_pin_name = "");
         std::optional<pin_group> parse_pg_pin(TokenStream<std::string>& str, cell_group& cell);
         std::optional<bus_group> parse_bus(TokenStream<std::string>& str, cell_group& cell);
         std::optional<ff_group> parse_ff(TokenStream<std::string>& str);

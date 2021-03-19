@@ -11,12 +11,26 @@
 #include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 #include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
+#include "gui/content_manager/content_manager.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_delete_object.h"
+#include "gui/user_action/action_fold_module.h"
+#include "gui/user_action/action_move_node.h"
+#include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_set_object_type.h"
+#include "gui/user_action/action_set_selection_focus.h"
+#include "gui/user_action/action_unfold_module.h"
+#include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -47,9 +61,13 @@ namespace hal
     const QString GraphGraphicsView::sAssignToGrouping("Assign to grouping ");
 
     GraphGraphicsView::GraphGraphicsView(GraphWidget* parent)
-        : QGraphicsView(parent), mGraphWidget(parent), mMinimapEnabled(false), mGridEnabled(true), mGridClustersEnabled(true),
-          mZoomModifier(Qt::NoModifier), mZoomFactorBase(1.0015), mPanModifier(Qt::KeyboardModifier::ShiftModifier),
-          mDragModifier(Qt::KeyboardModifier::AltModifier), mGridType(GraphicsScene::GridType::Dots)
+        : QGraphicsView(parent), mGraphWidget(parent),
+          mMinimapEnabled(false), mGridEnabled(true), mGridClustersEnabled(true),
+          mGridType(GraphicsScene::GridType::Dots),
+          mDragModifier(Qt::KeyboardModifier::AltModifier),
+          mPanModifier(Qt::KeyboardModifier::ShiftModifier),
+          mZoomModifier(Qt::NoModifier),
+          mZoomFactorBase(1.0015)
     {
         connect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphGraphicsView::conditionalUpdate);
         connect(this, &GraphGraphicsView::customContextMenuRequested, this, &GraphGraphicsView::showContextMenu);
@@ -68,12 +86,29 @@ namespace hal
             update();
     }
 
-    void GraphGraphicsView::handleChangeColorAction()
+    void GraphGraphicsView::handleRemoveFromView()
     {
-        QColor color = QColorDialog::getColor();
+        GraphContext* ctx = gContentManager->getContextManagerWidget()->getCurrentContext();
+        if (!ctx) return;
+        ActionRemoveItemsFromObject* act =
+                new ActionRemoveItemsFromObject(gSelectionRelay->selectedModules(),
+                                                gSelectionRelay->selectedGates());
+        act->setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
 
-        if (!color.isValid())
-            return;
+        //  delete context/view if nothing left to show
+        QSet<u32> remainingMods = ctx->modules() - gSelectionRelay->selectedModules();
+        QSet<u32> remainingGats = ctx->gates()   - gSelectionRelay->selectedGates();
+        if (remainingMods.isEmpty() && remainingGats.isEmpty())
+        {
+            UserActionCompound* compound = new UserActionCompound;
+            compound->setUseCreatedObject();
+            act->setObjectLock(true);
+            compound->addAction(act);
+            compound->addAction(new ActionDeleteObject);
+            compound->exec();
+        }
+        else
+            act->exec();
     }
 
     void GraphGraphicsView::handleIsolationViewAction()
@@ -85,8 +120,14 @@ namespace hal
             QString name = "Isolated View " + QString::number(cnt);
             if (!gGraphContextManager->contextWithNameExists(name))
             {
-                auto context = gGraphContextManager->createNewContext(name);
-                context->add(gSelectionRelay->mSelectedModules, gSelectionRelay->mSelectedGates);
+                UserActionCompound* act = new UserActionCompound;
+                act->setUseCreatedObject();
+                act->addAction(new ActionCreateObject(UserActionObjectType::Context,name));
+                act->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                                          gSelectionRelay->selectedGates()));
+                act->exec();
+                GraphContext* context = gGraphContextManager->getContextById(act->object().id());
+                context->setDirty(false);
                 return;
             }
         }
@@ -94,32 +135,27 @@ namespace hal
 
     void GraphGraphicsView::handleMoveAction(QAction* action)
     {
-        const u32 mod_id = action->data().toInt();
-        Module* m        = gNetlist->get_module_by_id(mod_id);
-        for (const auto& id : gSelectionRelay->mSelectedGates)
-        {
-            m->assign_gate(gNetlist->get_gate_by_id(id));
-        }
-        for (const auto& id : gSelectionRelay->mSelectedModules)
-        {
-            gNetlist->get_module_by_id(id)->set_parent_module(m);
-        }
-
-        auto gates   = gSelectionRelay->mSelectedGates;
-        auto modules = gSelectionRelay->mSelectedModules;
+        u32 moduleId = action->data().toInt();
+        ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                                                 gSelectionRelay->selectedGates());
+        act->setObject(UserActionObject(moduleId,UserActionObjectType::Module));
+        act->exec();
         gSelectionRelay->clear();
+        gSelectionRelay->addModule(moduleId);
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,moduleId);
         gSelectionRelay->relaySelectionChanged(this);
+        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
     }
 
     void GraphGraphicsView::handleMoveNewAction()
     {
         std::unordered_set<Gate*> gate_objs;
         std::unordered_set<Module*> module_objs;
-        for (const auto& id : gSelectionRelay->mSelectedGates)
+        for (const auto& id : gSelectionRelay->selectedGatesList())
         {
             gate_objs.insert(gNetlist->get_gate_by_id(id));
         }
-        for (const auto& id : gSelectionRelay->mSelectedModules)
+        for (const auto& id : gSelectionRelay->selectedModulesList())
         {
             module_objs.insert(gNetlist->get_module_by_id(id));
         }
@@ -129,57 +165,59 @@ namespace hal
         QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parent_name + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
         if (!ok || name.isEmpty())
             return;
-        Module* m = gNetlist->create_module(gNetlist->get_unique_module_id(), name.toStdString(), parent);
 
-        for (const auto& id : gSelectionRelay->mSelectedGates)
-        {
-            m->assign_gate(gNetlist->get_gate_by_id(id));
-        }
-        for (const auto& id : gSelectionRelay->mSelectedModules)
-        {
-            gNetlist->get_module_by_id(id)->set_parent_module(m);
-        }
+        ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
+        actNewModule->setParentId(parent->get_id());
 
-        auto gates   = gSelectionRelay->mSelectedGates;
-        auto modules = gSelectionRelay->mSelectedModules;
+        UserActionCompound* compound = new UserActionCompound;
+        compound->setUseCreatedObject();
+        compound->addAction(actNewModule);
+        compound->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
+                                                  gSelectionRelay->selectedGates()));
+        compound->exec();
         gSelectionRelay->clear();
+        gSelectionRelay->addModule(compound->object().id());
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,compound->object().id());
         gSelectionRelay->relaySelectionChanged(this);
+        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
     }
 
     void GraphGraphicsView::handleRenameAction()
     {
+        QString oldName;
+        QString prompt;
+        UserActionObjectType::ObjectType type =
+                UserActionObjectType::fromHalType(mItem->itemType());
+
         if (mItem->itemType() == ItemType::Gate)
         {
-            Gate* g            = gNetlist->get_gate_by_id(mItem->id());
-            const QString name = QString::fromStdString(g->get_name());
-            bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Change gate name", "New name:", QLineEdit::Normal, name, &confirm);
-            if (confirm)
-            {
-                g->set_name(new_name.toStdString());
-            }
+            Gate* g   = gNetlist->get_gate_by_id(mItem->id());
+            oldName   = QString::fromStdString(g->get_name());
+            prompt    = "Change gate name";
         }
         else if (mItem->itemType() == ItemType::Module)
         {
-            Module* m          = gNetlist->get_module_by_id(mItem->id());
-            const QString name = QString::fromStdString(m->get_name());
-            bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Change module name", "New name:", QLineEdit::Normal, name, &confirm);
-            if (confirm)
-            {
-                m->set_name(new_name.toStdString());
-            }
+            Module* m = gNetlist->get_module_by_id(mItem->id());
+            oldName   = QString::fromStdString(m->get_name());
+            prompt    = "Change module name";
         }
         else if (mItem->itemType() == ItemType::Net)
         {
-            Net* n             = gNetlist->get_net_by_id(mItem->id());
-            const QString name = QString::fromStdString(n->get_name());
-            bool confirm;
-            const QString new_name = QInputDialog::getText(this, "Change net name", "New name:", QLineEdit::Normal, name, &confirm);
-            if (confirm)
-            {
-                n->set_name(new_name.toStdString());
-            }
+            Net* n    = gNetlist->get_net_by_id(mItem->id());
+            oldName   = QString::fromStdString(n->get_name());
+            prompt    = "Change net name";
+        }
+        else return;
+
+        bool confirm;
+        QString newName =
+                QInputDialog::getText(this, prompt, "New name:", QLineEdit::Normal,
+                                      oldName, &confirm);
+        if (confirm)
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(UserActionObject(mItem->id(),type));
+            act->exec();
         }
     }
 
@@ -193,7 +231,9 @@ namespace hal
             const QString new_type = QInputDialog::getText(this, "Change module type", "New type:", QLineEdit::Normal, type, &confirm);
             if (confirm)
             {
-                m->set_type(new_type.toStdString());
+                ActionSetObjectType* act = new ActionSetObjectType(new_type);
+                act->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+                act->exec();
             }
         }
     }
@@ -351,15 +391,13 @@ namespace hal
             QSizeF size(mDragItem->width(), mDragItem->height());
             QPointF mouse = event->posF();
             QPointF snap  = closestLayouterPos(mapToScene(mouse.x(), mouse.y()))[1];
-            if (gSelectionRelay->mSelectedGates.size() > 1)
+            if (gSelectionRelay->numberSelectedGates() > 1)
             {
                 // if we are in multi-select mode, reduce the selection to the
                 // item we are dragging
                 gSelectionRelay->clear();
-                gSelectionRelay->mSelectedGates.insert(mDragItem->id());
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-                gSelectionRelay->mFocusId   = mDragItem->id();
-                gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
+                gSelectionRelay->addGate(mDragItem->id());
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,mDragItem->id());
                 gSelectionRelay->relaySelectionChanged(nullptr);
             }
             mDropAllowed = false;
@@ -462,14 +500,13 @@ namespace hal
                 }
                 else
                 {
-                    // move mode; move gate to the selected location
-                    QMap<QPoint,Node> nodeMap = layouter->positionToNodeMap();
-                    auto nodeToMoveIt = nodeMap.find(sourceLayouterPos);
-                    Q_ASSERT(nodeToMoveIt != nodeMap.end());
-                    layouter->setNodePosition(nodeToMoveIt.value(), targetLayouterPos);
+                    ActionMoveNode* act = new ActionMoveNode(sourceLayouterPos,targetLayouterPos);
+                    act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+                    act->exec();
                 }
                 // re-layout the nets
                 context->scheduleSceneUpdate();
+                context->setDirty(true);
             }
         }
         else
@@ -548,13 +585,11 @@ namespace hal
 
             if (isGate)
             {
-                if (gSelectionRelay->mSelectedGates.find(mItem->id()) == gSelectionRelay->mSelectedGates.end())
+                if (!gSelectionRelay->containsGate(mItem->id()))
                 {
                     gSelectionRelay->clear();
-                    gSelectionRelay->mSelectedGates.insert(mItem->id());
-                    gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-                    gSelectionRelay->mFocusId   = mItem->id();
-                    gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
+                    gSelectionRelay->addGate(mItem->id());
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,mItem->id());
                     gSelectionRelay->relaySelectionChanged(this);
                 }
 
@@ -568,13 +603,11 @@ namespace hal
             }
             else if (isModule)
             {
-                if (gSelectionRelay->mSelectedModules.find(mItem->id()) == gSelectionRelay->mSelectedModules.end())
+                if (!gSelectionRelay->containsModule(mItem->id()))
                 {
                     gSelectionRelay->clear();
-                    gSelectionRelay->mSelectedModules.insert(mItem->id());
-                    gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
-                    gSelectionRelay->mFocusId   = mItem->id();
-                    gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
+                    gSelectionRelay->addModule(mItem->id());
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,mItem->id());
                     gSelectionRelay->relaySelectionChanged(this);
                 }
 
@@ -591,13 +624,11 @@ namespace hal
             }
             else if (isNet)
             {
-                if (gSelectionRelay->mSelectedNets.find(mItem->id()) == gSelectionRelay->mSelectedNets.end())
+                if (!gSelectionRelay->containsNet((mItem->id())))
                 {
                     gSelectionRelay->clear();
-                    gSelectionRelay->mSelectedNets.insert(mItem->id());
-                    gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                    gSelectionRelay->mFocusId   = mItem->id();
-                    gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
+                    gSelectionRelay->addNet(mItem->id());
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,mItem->id());
                     gSelectionRelay->relaySelectionChanged(this);
                 }
 
@@ -607,18 +638,18 @@ namespace hal
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRenameAction);
             }
 
-            if (gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() > 1)
+            if (gSelectionRelay->numberSelectedNodes() > 1)
             {
                 context_menu.addSeparator();
                 context_menu.addAction("Entire selection:")->setEnabled(false);
             }
 
-            if (gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() + gSelectionRelay->mSelectedNets.size() > 1)
+            if (gSelectionRelay->numberSelectedItems() > 1)
                 isMultiSelect = true;
 
             if (isGate || isModule)
             {
-                action = context_menu.addAction("  Isolate In New View");
+                action = context_menu.addAction("  Isolate in new view");
                 QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleIsolationViewAction);
 
                 action = context_menu.addAction("  Add successors to view");
@@ -627,6 +658,8 @@ namespace hal
                 action = context_menu.addAction("  Add predecessors to view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleSelectInputs);
 
+                action = context_menu.addAction("  Remove from view");
+                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
                 Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
@@ -697,9 +730,9 @@ namespace hal
                 }
             }
 
-            if (gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() > 1)
+            if (gSelectionRelay->numberSelectedNodes() > 1)
             {
-                if (!gSelectionRelay->mSelectedGates.empty())
+                if (gSelectionRelay->numberSelectedGates())
                 {
                     context_menu.addSeparator();
                     context_menu.addAction("All selected gates:")->setEnabled(false);
@@ -707,7 +740,7 @@ namespace hal
                     action = context_menu.addAction("  Fold all parent modules");
                     QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldAllAction);
                 }
-                if (!gSelectionRelay->mSelectedModules.empty())
+                if (gSelectionRelay->numberSelectedModules())
                 {
                     context_menu.addSeparator();
                     context_menu.addAction("All selected modules:")->setEnabled(false);
@@ -778,7 +811,7 @@ namespace hal
         if (sender_action)
         {
             QSet<u32> gates;
-            for (auto sel_id : gSelectionRelay->mSelectedGates)
+            for (auto sel_id : gSelectionRelay->selectedGatesList())
             {
                 auto gate = gNetlist->get_gate_by_id(sel_id);
                 for (auto net : gate->get_fan_out_nets())
@@ -802,7 +835,7 @@ namespace hal
                     }
                 }
             }
-            for (auto sel_id : gSelectionRelay->mSelectedModules)
+            for (auto sel_id : gSelectionRelay->selectedModulesList())
             {
                 auto module = gNetlist->get_module_by_id(sel_id);
                 for (auto net : module->get_output_nets())
@@ -827,7 +860,17 @@ namespace hal
                 }
             }
 
-            context->add({}, gates);
+            gates = context->getLayouter()->boxes().filterNotInView(gates);
+            ActionAddItemsToObject* act = new ActionAddItemsToObject({},gates);
+            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+            if (gSelectionRelay->numberSelectedNodes()==1)
+            {
+                Node origin = (gSelectionRelay->numberSelectedModules()==1)
+                   ? Node(gSelectionRelay->selectedModulesList().at(0),Node::Module)
+                   : Node(gSelectionRelay->selectedGatesList().at(0),Node::Gate);
+                act->setPlacementHint(PlacementHint(PlacementHint::PreferRight,origin));
+            }
+            act->exec();
         }
     }
     void GraphGraphicsView::handleSelectInputs()
@@ -837,7 +880,7 @@ namespace hal
         if (sender_action)
         {
             QSet<u32> gates;
-            for (auto sel_id : gSelectionRelay->mSelectedGates)
+            for (auto sel_id : gSelectionRelay->selectedGatesList())
             {
                 auto gate = gNetlist->get_gate_by_id(sel_id);
                 for (auto net : gate->get_fan_in_nets())
@@ -861,7 +904,7 @@ namespace hal
                     }
                 }
             }
-            for (auto sel_id : gSelectionRelay->mSelectedModules)
+            for (auto sel_id : gSelectionRelay->selectedModulesList())
             {
                 auto module = gNetlist->get_module_by_id(sel_id);
                 for (auto net : module->get_input_nets())
@@ -885,20 +928,40 @@ namespace hal
                     }
                 }
             }
-            context->add({}, gates);
+
+            gates = context->getLayouter()->boxes().filterNotInView(gates);
+            ActionAddItemsToObject* act = new ActionAddItemsToObject({},gates);
+            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+            if (gSelectionRelay->numberSelectedNodes()==1)
+            {
+                Node origin = (gSelectionRelay->numberSelectedModules()==1)
+                   ? Node(gSelectionRelay->selectedModulesList().at(0),Node::Module)
+                   : Node(gSelectionRelay->selectedGatesList().at(0),Node::Gate);
+                act->setPlacementHint(PlacementHint(PlacementHint::PreferLeft,origin));
+            }
+            act->exec();
         }
     }
 
     void GraphGraphicsView::handleFoldSingleAction()
     {
         auto context = mGraphWidget->getContext();
-        context->foldModuleOfGate(mItem->id());
+        u32 gateId = mItem->id();
+        if (context->isGateUnfolded(gateId))
+        {
+            Module* m = gNetlist->get_gate_by_id(gateId)->get_module();
+            if (!m) return;
+
+            ActionFoldModule* act = new ActionFoldModule(m->get_id());
+            act->setContextId(context->id());
+            act->exec();
+        }
     }
 
     void GraphGraphicsView::handleUnfoldSingleAction()
     {
-        auto context = mGraphWidget->getContext();
-        auto m       = gNetlist->get_module_by_id(mItem->id());
+        GraphContext* context = mGraphWidget->getContext();
+        Module* m       = gNetlist->get_module_by_id(mItem->id());
         if (m->get_gates().empty() && m->get_submodules().empty())
         {
             QMessageBox msg;
@@ -909,19 +972,30 @@ namespace hal
             // We would otherwise unfold the empty module into nothing, so the user
             // would have nowhere to click to get their module back
         }
-        context->unfoldModule(mItem->id());
+        ActionUnfoldModule* act = new ActionUnfoldModule(mItem->id());
+        act->setContextId(context->id());
+        act->exec();
     }
 
     void GraphGraphicsView::handleFoldAllAction()
     {
         auto context = mGraphWidget->getContext();
 
-        context->beginChange();
-        for (u32 id : gSelectionRelay->mSelectedGates)
+        QSet<Module*> modSet;
+
+        for (u32 id : gSelectionRelay->selectedGatesList())
         {
-            context->foldModuleOfGate(id);
+            if (context->isGateUnfolded(id))
+                modSet.insert(gNetlist->get_gate_by_id(id)->get_module());
         }
-        context->endChange();
+
+        for (Module* m : modSet)
+            if (m)
+            {
+                ActionFoldModule* act = new ActionFoldModule(m->get_id());
+                act->setContextId(context->id());
+                act->exec();
+            }
     }
 
     void GraphGraphicsView::handleUnfoldAllAction()
@@ -929,7 +1003,7 @@ namespace hal
         auto context = mGraphWidget->getContext();
 
         context->beginChange();
-        for (u32 id : gSelectionRelay->mSelectedModules)
+        for (u32 id : gSelectionRelay->selectedModulesList())
         {
             context->unfoldModule(id);
         }
@@ -938,57 +1012,26 @@ namespace hal
 
     void GraphGraphicsView::handleGroupingUnassign()
     {
-        Grouping* assignedGrouping = nullptr;
-        if (mItem->itemType() == ItemType::Gate)
+        QList<UserAction*> actList;
+        for (const UserActionObject& obj : gSelectionRelay->toUserActionObject())
         {
-            Gate* g = gNetlist->get_gate_by_id(mItem->id());
-            if (g)
-                assignedGrouping = g->get_grouping();
-            if (!assignedGrouping)
-                return;
-            assignedGrouping->remove_gate(g);
+            UserAction* act = gContentManager->getSelectionDetailsWidget()->groupingUnassignActionFactory(obj);
+            if (act) actList.append(act);
         }
-        if (mItem->itemType() == ItemType::Module)
+        if (actList.isEmpty()) return;
+        if (actList.size() == 1)
         {
-            Module* m = gNetlist->get_module_by_id(mItem->id());
-            if (m)
-                assignedGrouping = m->get_grouping();
-            if (!assignedGrouping)
-                return;
-            assignedGrouping->remove_module(m);
-        }
-    }
-
-    void GraphGraphicsView::groupingAssignInternal(Grouping* grp)
-    {
-        if (gSelectionRelay->mSelectedGates.size() + gSelectionRelay->mSelectedModules.size() + gSelectionRelay->mSelectedNets.size() > 1)
-        {
-            gContentManager->getSelectionDetailsWidget()->selectionToGroupingInternal(grp);
+            actList.at(0)->exec();
             return;
         }
-
-        if (mItem->itemType() == ItemType::Gate)
-        {
-            Gate* g = gNetlist->get_gate_by_id(mItem->id());
-            if (g)
-                grp->assign_gate(g);
-        }
-        if (mItem->itemType() == ItemType::Module)
-        {
-            Module* m = gNetlist->get_module_by_id(mItem->id());
-            if (m)
-                grp->assign_module(m);
-        }
-        gSelectionRelay->clear();
-        gSelectionRelay->relaySelectionChanged(nullptr);
+        UserActionCompound* compound = new UserActionCompound;
+        for (UserAction* act : actList) compound->addAction(act);
+        compound->exec();
     }
 
     void GraphGraphicsView::handleGroupingAssignNew()
     {
-        handleGroupingUnassign();
-        Grouping* grp = gContentManager->getGroupingManagerWidget()->getModel()->addDefaultEntry();
-        if (grp)
-            groupingAssignInternal(grp);
+        gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction();
     }
 
     void GraphGraphicsView::handleGroupingAssingExisting()
@@ -996,11 +1039,9 @@ namespace hal
         handleGroupingUnassign();
         const QAction* action = static_cast<const QAction*>(QObject::sender());
         QString grpName       = action->text();
-        if (grpName.startsWith(sAssignToGrouping))
-            grpName.remove(0, sAssignToGrouping.size());
-        Grouping* grp = gContentManager->getGroupingManagerWidget()->getModel()->groupingByName(grpName);
-        if (grp)
-            groupingAssignInternal(grp);
+        if (grpName.startsWith(sAssignToGrouping)) // remove trailing "Assign to.."
+            grpName.remove(0,sAssignToGrouping.length());
+        gContentManager->getSelectionDetailsWidget()->selectionToGroupingAction(grpName);
     }
 
 #ifdef GUI_DEBUG_GRID

@@ -31,9 +31,16 @@ namespace hal
 {
     class Net;
 
+    /**
+     * The GraphicsItem that represents a single net in the scene.
+     */
     class GraphicsNet : public GraphicsItem
     {
     public:
+        /**
+         * Struct to store visuals properties of a graphics net, i.e. whether the net is visible or not as well as
+         * the different colors and the brush style used to draw the net.
+         */
         struct Visuals
         {
             bool mVisible;
@@ -44,16 +51,41 @@ namespace hal
             Qt::BrushStyle mBrushStyle;
         };
 
+        /**
+         * Loads the cosmetic setting that will be applied to all GraphicsNets.
+         */
         static void loadSettings();
 
+        /**
+         * Constructor.
+         *
+         * @param n - The underlying net
+         */
         GraphicsNet(Net* n);
 
+        /**
+         * Get the rectangle that frames the entire net.
+         *
+         * @returns the bounding rectangle
+         */
         QRectF boundingRect() const override;
+
+        /**
+         * Returns a painter path to draw this GraphicsNet.
+         *
+         * @returns the QPainterPath of the GraphicsNet
+         */
         QPainterPath shape() const override;
 
+        /**
+         * Configures the passed visuals.
+         *
+         * @param v - The visuals to apply
+         */
         virtual void setVisuals(const Visuals& v);
 
     protected:
+        /** The line width of the GraphicsNet */
         static qreal sLineWidth;
         static qreal sShapeWidth;
 

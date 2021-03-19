@@ -29,18 +29,18 @@ namespace hal
     {
         switch(placement.mode())
         {
-        case PlacementHint::Standard: {
+        case PlacementHint::Standard:
             addCompact(modules, gates, nets);
             break;
-        }
-        case PlacementHint::PreferLeft: {
+        case PlacementHint::PreferLeft:
             addVertical(modules, gates, nets, true, placement.preferredOrigin());
             break;
-        }
-        case PlacementHint::PreferRight: {
+        case PlacementHint::PreferRight:
             addVertical(modules, gates, nets, false, placement.preferredOrigin());
             break;
-        }
+        case PlacementHint::GridPosition:
+            addGridPosition(modules, gates, nets, placement.gridPosition());
+            break;
         }
     }
 
@@ -49,7 +49,8 @@ namespace hal
         Q_UNUSED(nets)
 
         CoordinateFromDataMap cfdMap(modules,gates);
-        if (mParseLayout &&
+        if (mPositionToNodeMap.isEmpty() &&
+        	mParseLayout &&
                 !gFileStatusManager->modifiedFilesExisting() &&
                 cfdMap.good())
         {
@@ -105,14 +106,10 @@ namespace hal
         }
 
         QList<Node> nodeList;
-
-        for (QSet<u32>::const_iterator it = modules.constBegin();
-             it != modules.constEnd(); ++it)
-            nodeList.append(Node(*it,Node::Module));
-
-        for (QSet<u32>::const_iterator it = gates.constBegin();
-             it != gates.constEnd(); ++it)
-            nodeList.append(Node(*it,Node::Gate));
+        for (u32 id : modules)
+            nodeList.append(Node(id,Node::Module));
+        for (u32 id : gates)
+            nodeList.append(Node(id,Node::Gate));
 
         PositionGenerator pg;
 
@@ -122,6 +119,53 @@ namespace hal
             while (positionToNodeMap().contains(p))
                 p = pg.next();
             setNodePosition(n, p);
+        }
+    }
+
+    void StandardGraphLayouter::addGridPosition(const QSet<u32>& modules, const QSet<u32>& gates,
+                                                const QSet<u32>& nets, const QHash<Node,QPoint>& pos)
+    {
+        QList<Node> nodeList;
+        QList<Node> nodeNotPlaced;
+
+        for (u32 id : modules)
+            nodeList.append(Node(id,Node::Module));
+        for (u32 id : gates)
+            nodeList.append(Node(id,Node::Gate));
+
+        for (Node nd : nodeList)
+        {
+            auto it = pos.find(nd);
+            if (it == pos.constEnd())
+                nodeNotPlaced.append(nd);
+            else
+            {
+               QPoint p = it.value();
+               if (positionToNodeMap().contains(p))
+                    nodeNotPlaced.append(nd);
+               else
+                   setNodePosition(nd, p);
+            }
+        }
+
+        if (!nodeNotPlaced.isEmpty())
+        {
+            QSet<u32> modsNotPlaced;
+            QSet<u32> gatsNotPlaced;
+            for (Node nd : nodeNotPlaced)
+            {
+                switch (nd.type()) {
+                case Node::Module:
+                    modsNotPlaced.insert(nd.id());
+                    break;
+                case Node::Gate:
+                    gatsNotPlaced.insert(nd.id());
+                    break;
+                default:
+                    break;
+                }
+            }
+            addCompact(modsNotPlaced,gatsNotPlaced,nets);
         }
     }
 

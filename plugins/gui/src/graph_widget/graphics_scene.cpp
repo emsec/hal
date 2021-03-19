@@ -119,6 +119,16 @@ namespace hal
         QGraphicsScene::addItem(mDragShadowGate);
     }
 
+    GraphicsScene::~GraphicsScene()
+    {
+        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        for (QGraphicsItem* gi : items())
+        {
+            removeItem(gi);
+            delete gi;
+        }
+    }
+
     void GraphicsScene::startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
     {
         mDragShadowGate->setVisualCue(cue);
@@ -400,9 +410,9 @@ namespace hal
     {
         gSelectionRelay->clear();
 
-        int gates = 0;
-        int nets = 0;
-        int modules = 0;
+        QSet<u32> mods;
+        QSet<u32> gats;
+        QSet<u32> nets;
 
         for (const QGraphicsItem* item : selectedItems())
         {
@@ -410,20 +420,17 @@ namespace hal
             {
             case ItemType::Gate:
             {
-                gSelectionRelay->mSelectedGates.insert(static_cast<const GraphicsItem*>(item)->id());
-                ++gates;
+                gats.insert(static_cast<const GraphicsItem*>(item)->id());
                 break;
             }
             case ItemType::Net:
             {
-                gSelectionRelay->mSelectedNets.insert(static_cast<const GraphicsItem*>(item)->id());
-                ++nets;
+                nets.insert(static_cast<const GraphicsItem*>(item)->id());
                 break;
             }
             case ItemType::Module:
             {
-                gSelectionRelay->mSelectedModules.insert(static_cast<const GraphicsItem*>(item)->id());
-                ++modules;
+                mods.insert(static_cast<const GraphicsItem*>(item)->id());
                 break;
             }
             default:
@@ -433,35 +440,34 @@ namespace hal
 
         // TEST CODE
         // ADD FOCUS DEDUCTION INTO RELAY ???
-        if (gates + nets + modules == 1)
+        if (gats.size() + nets.size() + mods.size() == 1)
         {
-            if (gates)
+            if (!gats.isEmpty())
             {
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedGates.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,*gats.begin());
             }
-            else if (nets)
+            else if (!nets.isEmpty())
             {
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedNets.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,*nets.begin());
             }
             else
             {
-                gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
-                gSelectionRelay->mFocusId = *gSelectionRelay->mSelectedModules.begin(); // UNNECESSARY ??? USE ARRAY[0] INSTEAD OF MEMBER VARIABLE ???
+                gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,*mods.begin());
             }
         }
         else
         {
-            gSelectionRelay->mFocusType = SelectionRelay::ItemType::None;
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::None,0);
         }
-        gSelectionRelay->mSubfocus = SelectionRelay::Subfocus::None;
         // END OF TEST CODE
 
         //LOG MANUAL SELECTION CHANGED:
         //log_info("gui", "Selection changed through manual interaction with a view to: insert here..");
-        gSelectionRelay->relaySelectionChanged(this);
 
+        gSelectionRelay->setSelectedModules(mods);
+        gSelectionRelay->setSelectedGates(gats);
+        gSelectionRelay->setSelectedNets(nets);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GraphicsScene::handleGroupingAssignModule(Grouping *grp, u32 id)
@@ -529,7 +535,7 @@ namespace hal
 
         clearSelection();
 
-        if (!gSelectionRelay->mSelectedModules.isEmpty())
+        if (gSelectionRelay->numberSelectedModules())
         {
             for (auto& element : mModuleItems)
             {
@@ -541,7 +547,7 @@ namespace hal
             }
         }
 
-        if (!gSelectionRelay->mSelectedGates.isEmpty())
+        if (gSelectionRelay->numberSelectedGates())
         {
             for (auto& element : mGateItems)
             {
@@ -553,7 +559,7 @@ namespace hal
             }
         }
 
-        if (!gSelectionRelay->mSelectedNets.isEmpty())
+        if (gSelectionRelay->numberSelectedNets())
         {
             for (auto& element : mNetItems)
             {

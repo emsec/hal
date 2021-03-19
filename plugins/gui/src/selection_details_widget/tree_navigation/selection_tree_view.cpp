@@ -3,6 +3,9 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/user_action_compound.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -89,7 +92,7 @@ namespace hal
                             QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
                         });
 
-                        menu.addAction("Isolate In New View", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
+                        menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
 
                         break;
                     case SelectionTreeItem::TreeItemType::GateItem:
@@ -98,7 +101,7 @@ namespace hal
                             QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");
                         });
 
-                        menu.addAction("Isolate In New View", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
+                        menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
 
                         break;
                     case SelectionTreeItem::TreeItemType::NetItem:
@@ -148,8 +151,12 @@ namespace hal
             QString contextName = name + " " + QString::number(cnt);
             if (!gGraphContextManager->contextWithNameExists(contextName))
             {
-                auto context = gGraphContextManager->createNewContext(contextName);
-                context->add(moduleId, gateId);
+                UserActionCompound* act = new UserActionCompound;
+                act->setUseCreatedObject();
+                act->addAction(new ActionCreateObject(UserActionObjectType::Context,
+                                                      contextName));
+                act->addAction(new ActionAddItemsToObject(moduleId, gateId));
+                act->exec();
                 return;
             }
         }

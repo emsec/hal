@@ -120,6 +120,19 @@ namespace hal
             :rtype: bool
         )");
 
+        py_module.def_property_readonly("top_module", &Module::is_top_module, R"(
+            True only if the module is the top module of the netlist.
+        
+            :type: bool
+        )");
+
+        py_module.def("is_top_module", &Module::is_top_module, R"(
+            Returns true only if the module is the top module of the netlist.
+
+            :returns: True if the module is the top module, False otherwise.
+            :rtype: bool
+        )");
+
         py_module.def_property_readonly(
             "netlist", [](Module* module) { return RawPtrWrapper<Netlist>(module->get_netlist()); }, R"(
             The netlist this module is associated with.

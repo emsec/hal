@@ -20,7 +20,7 @@ namespace hal
         return m_path;
     }
 
-    GateType* GateLibrary::create_gate_type(const std::string& name, GateType::BaseType type)
+    GateType* GateLibrary::create_gate_type(const std::string& name, std::set<GateTypeProperty> properties)
     {
         if (m_gate_type_map.find(name) != m_gate_type_map.end())
         {
@@ -28,7 +28,7 @@ namespace hal
             return nullptr;
         }
 
-        std::unique_ptr<GateType> gt = std::unique_ptr<GateType>(new GateType(this, get_unique_gate_type_id(), name, type));
+        std::unique_ptr<GateType> gt = std::unique_ptr<GateType>(new GateType(this, get_unique_gate_type_id(), name, properties));
 
         auto res = gt.get();
         m_gate_type_map.emplace(name, res);

@@ -40,12 +40,12 @@ namespace hal {
                 GateType* gt = gt_it->second;
 
                 // Check the content of the created Gate type
-                EXPECT_EQ(gt->get_base_type(), GateType::BaseType::combinational);
+                EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
                 // -- Check the pins
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"VDD", "GND", "I"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"O"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::power), std::unordered_set<std::string>({"VDD"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::ground), std::unordered_set<std::string>({"GND"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::power), std::unordered_set<std::string>({"VDD"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::ground), std::unordered_set<std::string>({"GND"}));
                 // -- Check the boolean functions
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
@@ -78,7 +78,7 @@ namespace hal {
                 auto gt_it_asc = gate_types.find("TEST_LUT_ASC");
                 ASSERT_TRUE(gt_it_asc != gate_types.end());
                 GateType* gt_asc = gt_it_asc->second;
-                ASSERT_EQ(gt_asc->get_base_type(), GateType::BaseType::lut);
+                EXPECT_EQ(gt_asc->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
 
                 // Check the content of the created gate type
                 EXPECT_EQ(gt_asc->get_input_pins(), std::vector<std::string>({"I0", "I1"}));
@@ -89,7 +89,7 @@ namespace hal {
                 ASSERT_TRUE(gt_asc->get_boolean_functions().find("O3") != gt_asc->get_boolean_functions().end());
                 EXPECT_EQ(gt_asc->get_boolean_functions().at("O3"),
                           BooleanFunction::from_string("I0 & I1", std::vector<std::string>({"I0", "I1"})));
-                EXPECT_EQ(gt_asc->get_pins_of_type(GateType::PinType::lut), std::unordered_set<std::string>({"O0", "O2"}));
+                EXPECT_EQ(gt_asc->get_pins_of_type(PinType::lut), std::unordered_set<std::string>({"O0", "O2"}));
                 EXPECT_EQ(gt_asc->get_config_data_category(), "test_category");
                 EXPECT_EQ(gt_asc->get_config_data_identifier(), "test_identifier");
                 EXPECT_EQ(gt_asc->is_lut_init_ascending(), true);
@@ -98,7 +98,7 @@ namespace hal {
                 auto gt_it_desc = gate_types.find("TEST_LUT_DESC");
                 ASSERT_TRUE(gt_it_desc != gate_types.end());
                 GateType* gt_desc = gt_it_desc->second;
-                ASSERT_EQ(gt_desc->get_base_type(), GateType::BaseType::lut);
+                EXPECT_EQ(gt_desc->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::lut, GateTypeProperty::combinational}));
 
                 // Check the content of the created gate type
                 EXPECT_EQ(gt_desc->is_lut_init_ascending(), false);
@@ -126,12 +126,12 @@ namespace hal {
                 auto gt_it = gate_types.find("TEST_FF");
                 ASSERT_TRUE(gt_it != gate_types.end());
                 GateType* gt = gt_it->second;
-                ASSERT_EQ(gt->get_base_type(), GateType::BaseType::ff);
+                EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::sequential, GateTypeProperty::ff}));
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"CLK", "CE", "D", "R", "S"}));
                 EXPECT_EQ(gt->get_output_pins(), std::vector<std::string>({"Q", "QN", "O"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::clock), std::unordered_set<std::string>({"CLK"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::clock), std::unordered_set<std::string>({"CLK"}));
                 ASSERT_TRUE(gt->get_boolean_functions().find("O") != gt->get_boolean_functions().end());
                 EXPECT_EQ(gt->get_boolean_functions().at("O"),
                           BooleanFunction::from_string("S & R & D", std::vector<std::string>({"S", "R", "D"})));
@@ -149,8 +149,8 @@ namespace hal {
                 EXPECT_EQ(gt->get_boolean_functions().at("clear"),
                           BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
                 // -- Check the output pins
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::state), std::unordered_set<std::string>({"Q"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::neg_state), std::unordered_set<std::string>({"QN"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 // -- Check the set-reset behaviour
                 EXPECT_EQ(gt->get_clear_preset_behavior(),
                           std::make_pair(GateType::ClearPresetBehavior::L,
@@ -179,7 +179,7 @@ namespace hal {
                 auto gt_it = gate_types.find("TEST_LATCH");
                 ASSERT_TRUE(gt_it != gate_types.end());
                 GateType* gt = gt_it->second;
-                ASSERT_EQ(gt->get_base_type(), GateType::BaseType::latch);
+                EXPECT_EQ(gt->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::sequential, GateTypeProperty::latch}));
 
                 // Check the content of the created Gate type
                 EXPECT_EQ(gt->get_input_pins(), std::vector<std::string>({"G", "D", "S", "R"}));
@@ -203,8 +203,8 @@ namespace hal {
                 EXPECT_EQ(gt->get_boolean_functions().at("clear"),
                           BooleanFunction::from_string("R", std::vector<std::string>({"R"})));
                 // -- Check the output pins
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::state), std::unordered_set<std::string>({"Q"}));
-                EXPECT_EQ(gt->get_pins_of_type(GateType::PinType::neg_state), std::unordered_set<std::string>({"QN"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::state), std::unordered_set<std::string>({"Q"}));
+                EXPECT_EQ(gt->get_pins_of_type(PinType::neg_state), std::unordered_set<std::string>({"QN"}));
                 // -- Check the clear-preset behaviour
                 EXPECT_EQ(gt->get_clear_preset_behavior(),
                           std::make_pair(GateType::ClearPresetBehavior::N,
@@ -330,8 +330,7 @@ namespace hal {
 
                 auto gate_types = gl->get_gate_types();
                 ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
-                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinational);
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
             }
             {
                 // Define a pin twice
@@ -371,8 +370,7 @@ namespace hal {
 
                 auto gate_types = gl->get_gate_types();
                 ASSERT_TRUE(gate_types.find("TEST_GATE_TYPE") != gate_types.end());
-                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_base_type(),
-                          GateType::BaseType::combinational);
+                EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_properties(), std::set<GateTypeProperty>({GateTypeProperty::combinational}));
                 EXPECT_EQ(gate_types.at("TEST_GATE_TYPE")->get_output_pins().size(), 1);
 
             }

@@ -4,6 +4,7 @@
 
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/user_action/action_open_netlist_file.h"
 
 #include <QEvent>
 #include <QFileInfo>
@@ -90,7 +91,8 @@ namespace hal
         {
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(false);
-            FileManager::get_instance()->openFile(mFile);
+            ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(mFile);
+            actOpenfile->exec();
             // DEBUG -- REMOVE WHEN GUI CAN HANDLE EVENTS DURING CREATION
             event_controls::enable_all(true);
             event->accept();

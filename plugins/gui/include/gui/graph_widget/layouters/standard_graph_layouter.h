@@ -48,7 +48,7 @@ namespace hal
         void addCompact(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
         void addWaitToBeSeated(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets);
         void addVertical(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, bool left, const Node& preferredOrigin);
-
+        void addGridPosition(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, const QHash<Node,QPoint>& pos);
         bool mParseLayout;
         bool mLayoutBoxes;
     };

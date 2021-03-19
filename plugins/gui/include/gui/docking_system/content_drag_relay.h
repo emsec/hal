@@ -27,17 +27,40 @@
 
 namespace hal
 {
+    /**
+     * This relay provides the timing information when a dockbutton is dragged.
+     * It is implented as a singleton pattern.
+     */
     class ContentDragRelay : public QObject
     {
         Q_OBJECT
 
     public:
+        /**
+         * Get the singleton instance of the relay.
+         *
+         * @return The content-drag-relay instance.
+         */
         static ContentDragRelay* instance();
+        /**
+         * Calling this function causes the relay to emit the dragStart signal.
+         * Should be called when the dragging of a dockbutton starts.
+         */
         void relayDragStart();
+        /**
+         * Calling this function causes the relay to emit the dragEnd signal.
+         * Should be called when the dragging of a dockbutton ends.
+         */
         void relayDragEnd();
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted after calling relayDragStart().
+         */
         void dragStart();
+        /**
+         * Q_SIGNAL that is emitted after calling relayDragEnd().
+         */
         void dragEnd();
 
     private:

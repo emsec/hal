@@ -4,59 +4,64 @@ namespace hal
 {
     void gate_type_init(py::module& m)
     {
-        py::class_<GateType, RawPtrWrapper<GateType>> py_gate_type(m, "GateType", R"(
-        A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
-)");
-
-        py::enum_<GateType::BaseType>(py_gate_type, "BaseType", R"(
-            Defines the base type of a gate type.
+        py::enum_<GateTypeProperty>(m, "GateTypeProperty", R"(
+            A set of available properties for a gate type.
         )")
-
-            .value("combinational", GateType::BaseType::combinational, R"(Represents a combinational gate type.)")
-            .value("lut", GateType::BaseType::lut, R"(Represents a combinational LUT gate type.)")
-            .value("ff", GateType::BaseType::ff, R"(Represents a sequential FF gate type.)")
-            .value("latch", GateType::BaseType::latch, R"(Represents a sequential latch gate type.)")
-            .value("ram", GateType::BaseType::ram, R"(Represents a sequential RAM gate type.)")
-            .value("io", GateType::BaseType::io, R"(Represents an IO gate type.)")
-            .value("dsp", GateType::BaseType::dsp, R"(Represents a sequential DSP gate type.)")
+            .value("combinational", GateTypeProperty::combinational, R"(Combinational gate type.)")
+            .value("sequential", GateTypeProperty::sequential, R"(Sequential gate type.)")
+            .value("power", GateTypeProperty::power, R"(Power gate type.)")
+            .value("ground", GateTypeProperty::ground, R"(Ground gate type.)")
+            .value("lut", GateTypeProperty::lut, R"(LUT gate type.)")
+            .value("ff", GateTypeProperty::ff, R"(Flip-flop gate type.)")
+            .value("latch", GateTypeProperty::latch, R"(Latch gate type.)")
+            .value("ram", GateTypeProperty::ram, R"(RAM gate type.)")
+            .value("io", GateTypeProperty::io, R"(IO gate type.)")
+            .value("dsp", GateTypeProperty::dsp, R"(DSP gate type.)")
+            .value("mux", GateTypeProperty::mux, R"(MUX gate type.)")
+            .value("buffer", GateTypeProperty::buffer, R"(Buffer gate type.)")
+            .value("carry", GateTypeProperty::carry, R"(Carry gate type.)")
             .export_values();
 
-        py::enum_<GateType::PinDirection>(py_gate_type, "PinDirection", R"(
+        py::enum_<PinDirection>(m, "PinDirection", R"(
             Defines the direction of a pin.
         )")
-            .value("none", GateType::PinDirection::none, R"(Invalid pin.)")
-            .value("input", GateType::PinDirection::input, R"(Input pin.)")
-            .value("output", GateType::PinDirection::output, R"(Output pin.)")
-            .value("inout", GateType::PinDirection::inout, R"(Inout pin.)")
-            .value("internal", GateType::PinDirection::internal, R"(Internal pin.)")
+            .value("none", PinDirection::none, R"(Invalid pin.)")
+            .value("input", PinDirection::input, R"(Input pin.)")
+            .value("output", PinDirection::output, R"(Output pin.)")
+            .value("inout", PinDirection::inout, R"(Inout pin.)")
+            .value("internal", PinDirection::internal, R"(Internal pin.)")
             .export_values();
 
-        py::enum_<GateType::PinType>(py_gate_type, "PinType", R"(Defines the type of a pin.)")
-            .value("none", GateType::PinType::none, R"(Default pin.)")
-            .value("power", GateType::PinType::power, R"(Power pin.)")
-            .value("ground", GateType::PinType::ground, R"(Ground pin.)")
-            .value("lut", GateType::PinType::lut, R"(Pin that generates output from LUT initialization string.)")
-            .value("state", GateType::PinType::state, R"(Pin that generates output from internal state.)")
-            .value("neg_state", GateType::PinType::neg_state, R"(Pin that generates output from negated internal state.)")
-            .value("clock", GateType::PinType::clock, R"(Clock pin.)")
-            .value("enable", GateType::PinType::enable, R"(Enable pin.)")
-            .value("set", GateType::PinType::set, R"(Set pin.)")
-            .value("reset", GateType::PinType::reset, R"(Reset pin.)")
-            .value("data", GateType::PinType::data, R"(Data pin.)")
-            .value("address", GateType::PinType::address, R"(Address pin.)")
-            .value("io_pad", GateType::PinType::io_pad, R"(IO pad pin.)")
-            .value("select", GateType::PinType::select, R"(Select pin.)")
+        py::enum_<PinType>(m, "PinType", R"(Defines the type of a pin.)")
+            .value("none", PinType::none, R"(Default pin.)")
+            .value("power", PinType::power, R"(Power pin.)")
+            .value("ground", PinType::ground, R"(Ground pin.)")
+            .value("lut", PinType::lut, R"(Pin that generates output from LUT initialization string.)")
+            .value("state", PinType::state, R"(Pin that generates output from internal state.)")
+            .value("neg_state", PinType::neg_state, R"(Pin that generates output from negated internal state.)")
+            .value("clock", PinType::clock, R"(Clock pin.)")
+            .value("enable", PinType::enable, R"(Enable pin.)")
+            .value("set", PinType::set, R"(Set pin.)")
+            .value("reset", PinType::reset, R"(Reset pin.)")
+            .value("data", PinType::data, R"(Data pin.)")
+            .value("address", PinType::address, R"(Address pin.)")
+            .value("io_pad", PinType::io_pad, R"(IO pad pin.)")
+            .value("select", PinType::select, R"(Select pin.)")
             .export_values();
+
+        py::class_<GateType, RawPtrWrapper<GateType>> py_gate_type(m, "GateType", R"(
+            A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
+        )");
 
         py::enum_<GateType::ClearPresetBehavior>(py_gate_type, "ClearPresetBehavior", R"(
             Defines the behavior of the gate type in case both clear and preset are active at the same time.
         )")
-            .value("U", GateType::ClearPresetBehavior::U, R"(Default value when no behavior is specified.)")
             .value("L", GateType::ClearPresetBehavior::L, R"(Set the internal state to '0'.)")
             .value("H", GateType::ClearPresetBehavior::H, R"(Set the internal state to '1'.)")
             .value("N", GateType::ClearPresetBehavior::N, R"(Do not change the internal state.)")
             .value("T", GateType::ClearPresetBehavior::T, R"(Toggle, i.e., invert the internal state.)")
             .value("X", GateType::ClearPresetBehavior::X, R"(Set the internal state to 'X'.)")
+            .value("undef", GateType::ClearPresetBehavior::undef, R"(Invalid bahavior, used by default.)")
             .export_values();
 
         py_gate_type.def_property_readonly("id", &GateType::get_id, R"(
@@ -83,18 +88,25 @@ namespace hal
             :rtype: str
         )");
 
-        py_gate_type.def_property_readonly("base_type", &GateType::get_base_type, R"(
-            The base type of the gate typ, which can be either 'combinatorial', 'lut', ‘ff', or 'latch'.
+        py_gate_type.def_property_readonly("properties", &GateType::get_properties, R"(
+            The properties assigned to the gate type.
 
-            :type: hal_py.GateType.BaseType
+            :type: set[hal_py.GateTypeProperty]
         )");
 
-        py_gate_type.def("get_base_type", &GateType::get_base_type, R"(
-            Get the base type of the gate type.
-            The base type can be either 'combinatorial', 'lut', ‘ff', or 'latch'.
+        py_gate_type.def("get_properties", &GateType::get_properties, R"(
+            Get the properties assigned to the gate type.
 
-            :returns: The base type of the gate type.
-            :rtype: hal_py.GateType.BaseType
+            :returns: The properties of the gate type.
+            :rtype: set[hal_py.GateTypeProperty]
+        )");
+
+        py_gate_type.def("has_property", &GateType::has_property, R"(
+            Check whether the gate type has the specified property.
+
+            :param hal_py.GateTypeProperty type: The property to check for.
+            :returns: True if the gate type has the specified property, false otherwise.
+            :rtype: bool
         )");
 
         py_gate_type.def_property_readonly("gate_library", &GateType::get_gate_library, R"(

@@ -57,6 +57,14 @@ namespace hal
     class NetLayoutJunctionHash;
     class NetLayoutJunctionEntries;
 
+    /**
+     * The abstract parent class for all graph layouters. The graph layouter is responsible for building up the scene
+     * using the information given in the passed GraphContext. It places the respective GraphicItems for the given gates
+     * and modules in positions that are calculated intelligently considering their order, connections and dimensions.
+     * Afterwards, the paths of GraphicsNet objects will be computed to visualize the nets between gates/modules. <br>
+     * If the GraphContext changes later on (e.g. gates/modules are added/removed), the GraphLayouter has the task to
+     * apply the changes in the scene.
+     */
     class GraphLayouter : public QObject
     {
         Q_OBJECT
@@ -202,17 +210,48 @@ namespace hal
         };
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param context - The GraphContext the layouter works on
+         * @param parent - The parent QObject
+         */
         explicit GraphLayouter(const GraphContext* const context, QObject* parent = nullptr);
 
+        /**
+         * Destructor.
+         */
+        ~GraphLayouter();
+
+        /**
+         * Gets the name of the layouter.
+         *
+         * @returns the name of the layouter.
+         */
         virtual QString name() const        = 0;
+
+        /**
+         * Gets an inforaml description of the layouter.
+         *
+         * @returns the description of the layouter.
+         */
         virtual QString mDescription() const = 0;
 
         virtual void add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, PlacementHint placement = PlacementHint())    = 0;
+
         virtual void remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets) = 0;
 
+        /**
+         * Does the actual layout process.
+         */
         void layout();
         void alternateLayout();
 
+        /**
+         * Gets the GraphicsScene the layouter works on.
+         *
+         * @returns the GraphicScene.
+         */
         GraphicsScene* scene() const;
 
         const QMap<Node, QPoint> nodeToPositionMap() const;
@@ -250,6 +289,8 @@ namespace hal
     protected:
         GraphicsScene* mScene;
         const GraphContext* const mContext;
+        QMap<Node, QPoint> mNodeToPositionMap;
+        QMap<QPoint, Node> mPositionToNodeMap;
 
     private:
         void clearLayoutData();
@@ -350,9 +391,6 @@ namespace hal
 
         QMap<int, qreal> mMaxLeftIoPaddingForChannelX;
         QMap<int, qreal> mMaxRightIoPaddingForChannelX;
-
-        QMap<Node, QPoint> mNodeToPositionMap;
-        QMap<QPoint, Node> mPositionToNodeMap;
 
         int mMinXIndex;
         int mMinYIndex;

@@ -14,7 +14,7 @@ namespace hal
     /* forward declaration */
     class Netlist;
 
-    namespace z3_utils 
+    namespace z3_utils
     {
         class z3Wrapper
         {
@@ -30,6 +30,12 @@ namespace hal
              * @returns The Z3Wrapper around the provided expression.
              */
             z3Wrapper(std::unique_ptr<z3::context> ctx, std::unique_ptr<z3::expr> expr);
+
+            /** 
+             * TODO document this shit
+             */
+            bool operator==(const z3Wrapper& other) const;
+            bool oldeq(const z3Wrapper& other) const;
 
             /**
              * Specifc Function used to optimize z3 epxr with the help of the logic synthesis tool ABC - CURRENTLY NOT IMPLEMENTED
@@ -59,7 +65,7 @@ namespace hal
              * @returns The id of the  Z3Wrapper.
              */
             u32 get_id() const;
-            
+
             /**
              * Getter to the wrapped expr.
              * 
@@ -97,12 +103,15 @@ namespace hal
             std::vector<u32> get_inputs_net_ids() const;
 
             /**
-             * Used for the optimization with ABC - CURRENTLY NOT IMPLEMENTED
+             * Transforms the wrapped z3 expression into verligo syntax and writes it to a file.
+             * 
+             * @param[in] path - Path where the file is written to.
+             * @returns True in case of success, false otherwise.
              */
-            //bool write_verilog_file(const std::filesystem::path& path) const;
+            bool write_verilog_file(const std::filesystem::path& path) const;
 
             /**
-             * Transforms the wrapped z3 expression into efficent c code and writed it to a file.
+             * Transforms the wrapped z3 expression into efficent c code and writes it to a file.
              * 
              * @param[in] path - Path where the file is written to.
              * @returns True in case of success, false otherwise.
@@ -114,8 +123,14 @@ namespace hal
              * 
              * @param[in] nl - Pointer to the netlist that includedes the GND and VCC gates to replace.
              */
-            
             void remove_global_inputs(const Netlist* nl);
+
+            /**
+             * Removes all static constants from the wrapped expression and replaces them with nets that are driven by GND or VCC gates.
+             * 
+             * @param[in] nl - Pointer to the netlist that includedes the GND and VCC gates to replace.
+             */
+            void remove_static_inputs(const Netlist* nl);
 
         private:
             u32 m_z3_wrapper_id;

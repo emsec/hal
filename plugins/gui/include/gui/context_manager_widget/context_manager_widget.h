@@ -97,6 +97,7 @@ namespace hal
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
 
+        void handleOpenContextClicked();
     public Q_SLOTS:
         //void handleContextCreated(GraphContext* context);
         //void handleContextRenamed(GraphContext* context);
@@ -137,7 +138,6 @@ namespace hal
         QString mSearchIconStyle;
 
         void handleCreateContextClicked();
-        void handleOpenContextClicked();
         void handleRenameContextClicked();
         void handleDuplicateContextClicked();
         void handleDeleteContextClicked();

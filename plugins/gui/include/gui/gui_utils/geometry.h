@@ -29,6 +29,13 @@ namespace hal
 {
     namespace gui_utility
     {
+        /**
+         * Tries to display the given widget completely on the screen (e.g. when its partially out of bounds).
+         * It checks the geometry (size) of the screen and the widget and moves the widget accordingly,
+         * prioritizing the widget's top side and left side to be seen.
+         *
+         * @param w- The widget to be (fully) displayed on the screen.
+         */
         void ensureOnScreen(QWidget* w);
     }
 }

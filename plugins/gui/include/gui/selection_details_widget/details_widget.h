@@ -31,10 +31,18 @@
 
 namespace hal
 {
+    /**
+     * The base-class for the specific gate, net and module details widgets. It defines commonly shared
+     * information and functions such as the keyfont and the current id and makes these accessible.
+     */
     class DetailsWidget : public QWidget
     {
         Q_OBJECT
     public:
+
+        /**
+         * This enum is used by the subclasses to specify which details widget it is.
+         */
         enum DetailsType
         {
             ModuleDetails,
@@ -42,10 +50,33 @@ namespace hal
             NetDetails
         };
 
+        /**
+         * The constructor.
+         *
+         * @param tp - The type of the specific subclass widget.
+         * @param parent - The widget's parent.
+         */
         explicit DetailsWidget(DetailsType tp, QWidget* parent = nullptr);
 
+        /**
+         * Get the font that is used for the information table's key entries.
+         *
+         * @return The keyfont.
+         */
         QFont keyFont() const;
+
+        /**
+         * Get the currently displayed id of the corresponding item.
+         *
+         * @return The item's id.
+         */
         u32 currentId() const;
+
+        /**
+         * Get the type of the subclass widget as a string by converting the DetailsType enum.
+         *
+         * @return The widget's type.
+         */
         QString detailsTypeName() const;
         QLabel* bigIcon();
 

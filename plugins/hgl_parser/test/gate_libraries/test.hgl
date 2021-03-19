@@ -3,7 +3,7 @@
     "cells": [
         {
             "name": "gt_combinational",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -34,7 +34,7 @@
         },
         {
             "name": "gt_group",
-            "type": "combinational",
+            "types": ["combinational"],
             "pins": [
                 {
                     "name": "VDD",
@@ -107,7 +107,7 @@
         },
         {
             "name": "gt_lut_asc",
-            "type": "lut",
+            "types": ["lut","combinational"],
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
@@ -131,7 +131,7 @@
         },
         {
             "name": "gt_lut_desc",
-            "type": "lut",
+            "types": ["lut","combinational"],
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
@@ -155,7 +155,7 @@
         },
         {
             "name": "gt_ff",
-            "type": "ff",
+            "types": ["ff"],
             "ff_config": {
                 "next_state": "D",
                 "clocked_on": "CLK & EN",
@@ -206,7 +206,7 @@
         },
         {
             "name": "gt_latch",
-            "type": "latch",
+            "types": ["latch"],
             "latch_config": {
                 "data_in": "D",
                 "enable_on": "EN",
@@ -250,7 +250,7 @@
         },
         {
             "name": "gt_ram",
-            "type": "ram",
+            "types": ["ram"],
             "pins": [
                 {
                     "name": "DI(0)",

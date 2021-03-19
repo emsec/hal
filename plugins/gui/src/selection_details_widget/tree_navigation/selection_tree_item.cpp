@@ -46,12 +46,12 @@ namespace hal
         switch (column) {
         case 0: return name();
         case 1: return mId;
-        case 2: return gateType();
+        case 2: return boxType();
         }
         return QVariant();
     }
 
-    QVariant SelectionTreeItem::gateType() const
+    QVariant SelectionTreeItem::boxType() const
     {
         return QVariant();
     }
@@ -61,7 +61,12 @@ namespace hal
         if (!regex.isValid()) return true;
         return  regex.match(name().toString()).hasMatch() ||
                 regex.match(QString::number(mId)).hasMatch() ||
-                regex.match(gateType().toString()).hasMatch();
+                regex.match(boxType().toString()).hasMatch();
+    }
+
+    bool SelectionTreeItem::isEqual(const SelectionTreeItem* sti) const
+    {
+        return mItemType == sti->mItemType && mId == sti->mId;
     }
 
     //------- Module ----
@@ -119,6 +124,13 @@ namespace hal
         mChildItem.append(cld);
     }
 
+    QVariant SelectionTreeItemModule::boxType() const
+    {
+        Module* module = gNetlist->get_module_by_id(mId);
+        if(!module) return QVariant();
+        return QString::fromStdString(module->get_type());
+    }
+
     bool SelectionTreeItemModule::match(const QRegularExpression& regex) const
     {
         for (SelectionTreeItem* sti : mChildItem)
@@ -155,7 +167,7 @@ namespace hal
         return *sIconInstance;
     }
 
-    QVariant SelectionTreeItemGate::gateType() const
+    QVariant SelectionTreeItemGate::boxType() const
     {
         Gate* gate = gNetlist->get_gate_by_id(mId);
         if(!gate) return QVariant();

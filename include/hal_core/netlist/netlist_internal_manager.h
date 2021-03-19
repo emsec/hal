@@ -75,7 +75,6 @@ namespace hal
         Module* create_module(u32 id, Module* parent, const std::string& name);
         bool delete_module(Module* module);
         bool module_assign_gate(Module* m, Gate* g);
-        bool module_remove_gate(Module* m, Gate* g);
 
         // grouping functions
         Grouping* create_grouping(u32 id, const std::string name);

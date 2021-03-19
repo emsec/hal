@@ -53,12 +53,13 @@ namespace hal
         virtual SelectionTreeItem* child(int row) const;
         virtual QVariant data(int column) const;
         virtual QVariant name() const = 0; // implemented in subclass
-        virtual QVariant gateType() const;
+        virtual QVariant boxType() const;
         virtual const QIcon& icon() const = 0;
         virtual bool     match(const QRegularExpression& regex) const;
 
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const = 0;
+        bool isEqual(const SelectionTreeItem* sti) const;
     protected:
         TreeItemType mItemType;
         u32 mId;
@@ -73,6 +74,7 @@ namespace hal
         virtual int childCount() const;
         virtual SelectionTreeItem* child(int row) const;
         virtual QVariant name() const;
+        virtual QVariant boxType() const;
         virtual const QIcon& icon() const;
         virtual bool     match(const QRegularExpression& regex) const;
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
@@ -98,7 +100,7 @@ namespace hal
         SelectionTreeItemGate(u32 id_);
         virtual QVariant name() const;
         virtual const QIcon& icon() const;
-        virtual QVariant gateType() const;
+        virtual QVariant boxType() const;
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const;
     private:

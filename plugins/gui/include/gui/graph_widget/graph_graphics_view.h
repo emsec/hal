@@ -41,16 +41,34 @@ namespace hal
     enum class grid_type;
     }
 
+    /**
+     * The GraphGraphicsView is the GraphicsView for a GraphicsScene. (Its like the camera that shows a section of
+     * the scene)
+     */
     class GraphGraphicsView : public QGraphicsView
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent GraphWidget
+         */
         GraphGraphicsView(GraphWidget* parent);
 
-        //zooms into the mouse position
+        /**
+         * Zoom in/out at the position of the mouse.
+         *
+         * @param factor - The new zoom factor
+         */
         void gentleZoom(const qreal factor);
-        //zooms into the center of the viewport
+
+        /**
+         * Zoom in/out at the center of the viewport.
+         *
+         * @param factor - The new zoom factor
+         */
         void viewportCenterZoom(const qreal factor);
 
         GraphicsScene::GridType gridType();
@@ -63,12 +81,18 @@ namespace hal
         void setPanModifier(Qt::KeyboardModifier panModifier);
 
     Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted whenever the user double-clicks a module in the current view. <br>
+         * Note that this signal is not emitted for double-clicks on gates or nets.
+         *
+         * @param id - The id of the module that was double clicked.
+         */
         void moduleDoubleClicked(u32 id);
 
     private Q_SLOTS:
         void conditionalUpdate();
-        void handleChangeColorAction();
         void handleIsolationViewAction();
+        void handleRemoveFromView();
         void handleMoveAction(QAction* action);
         void handleMoveNewAction();
         void handleRenameAction();
@@ -108,7 +132,6 @@ namespace hal
         void toggleAntialiasing();
 
         bool itemDraggable(GraphicsItem* item);
-        void groupingAssignInternal(Grouping* grp);
 
         struct LayouterPoint
         {

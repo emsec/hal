@@ -27,17 +27,52 @@
 
 namespace hal
 {
+    /**
+     * Abstract base class used for all types of separated GraphicsNets. <br>
+     * An example for SeparatedGraphicNets are the little arrow shaped boxes that represent global in- and outputs. They
+     * also appear in labeled versions to represent constant signals from GND/VCC gates.
+     */
     class SeparatedGraphicsNet : public GraphicsNet
     {
     public:
+        /**
+         * Updates the alpha value (transparency) of the SeparatedGraphicsNet based on the current level-of-detail.
+         */
         static void updateAlpha();
 
+        /**
+         * Constructor.
+         *
+         * @param n - The underlying net
+         */
         SeparatedGraphicsNet(Net* n);
 
+        /**
+         * Add the an input pin as a destination of the SeparatedGraphicsNet
+         *
+         * @param scene_position - The scene position of the input pin
+         */
         virtual void addInput(const QPointF& scene_position) = 0;
+
+        /**
+         * Add the an output pin as a source of the SeparatedGraphicsNet
+         *
+         * @param scene_position - The scene position of the output pin
+         */
         virtual void addOutput(const QPointF& scene_position) = 0;
 
+        /**
+         * Get the width of one entire input (including the line and the box) of the SeparatedGraphicsNet
+         *
+         * @returns the width of an input
+         */
         virtual qreal inputWidth() const = 0;
+
+        /**
+         * Get the width of one entire output (including the line and the box) of the SeparatedGraphicsNet
+         *
+         * @returns the width of an output
+         */
         virtual qreal outputWidth() const = 0;
 
         virtual void finalize();

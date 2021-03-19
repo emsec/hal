@@ -71,13 +71,17 @@ namespace hal
         static const int sTypeColumn = 2;
         static const int sMaxColumn  = 3;
 
+    public Q_SLOTS:
+        void handleGateItemChanged(Gate* gate);
+        void handleModuleItemChanged(Module* module);
 
     private:
 
         void moduleRecursion(SelectionTreeItemModule* modItem);
         bool doNotDisturb(const QModelIndex& inx = QModelIndex()) const;
         SelectionTreeItem* itemFromIndex(const QModelIndex& index) const;
-
+        SelectionTreeItem* getItem(SelectionTreeItem *parentItem,
+                                   const SelectionTreeItem& needle) const;
 
         SelectionTreeItemRoot* mRootItem;
 

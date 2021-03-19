@@ -24,8 +24,10 @@
 #pragma once
 
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/utilities/enums.h"
 
 #include <map>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -35,6 +37,68 @@ namespace hal
     class GateLibrary;
 
     /**
+     * A set of available properties for a gate type.
+     */
+    enum class GateTypeProperty
+    {
+        combinational, /**< Combinational gate type. **/
+        sequential,    /**< Sequential gate type. **/
+        power,         /**< Power gate type. **/
+        ground,        /**< Ground gate type. **/
+        lut,           /**< LUT gate type. **/
+        ff,            /**< Flip-flop gate type. **/
+        latch,         /**< Latch gate type. **/
+        ram,           /**< RAM gate type. **/
+        io,            /**< IO gate type. **/
+        dsp,           /**< DSP gate type. **/
+        mux,           /**< MUX gate type. **/
+        buffer,        /**< Buffer gate type. **/
+        carry          /**< Carry gate type. **/
+    };
+
+    template<>
+    std::vector<std::string> EnumStrings<GateTypeProperty>::data;
+
+    /**
+     * Defines the direction of a pin.
+     */
+    enum class PinDirection
+    {
+        none,    /**< Invalid pin. **/
+        input,   /**< Input pin. **/
+        output,  /**< Output pin. **/
+        inout,   /**< Inout pin. **/
+        internal /**< Internal pin. **/
+    };
+
+    template<>
+    std::vector<std::string> EnumStrings<PinDirection>::data;
+
+    /**
+     * Defines the type of a pin.
+     */
+    enum class PinType
+    {
+        none,      /**< Default pin. **/
+        power,     /**< Power pin. **/
+        ground,    /**< Ground pin. **/
+        lut,       /**< Pin that generates output from LUT initialization string. **/
+        state,     /**< Pin that generates output from internal state. **/
+        neg_state, /**< Pin that generates output from negated internal state. **/
+        clock,     /**< Clock pin. **/
+        enable,    /**< Enable pin. **/
+        set,       /**< Set/preset pin. **/
+        reset,     /**< Reset/clear pin. **/
+        data,      /**< Data pin. **/
+        address,   /**< Address pin. **/
+        io_pad,    /**< IO pad pin. **/
+        select     /**< Select pin. **/
+    };
+
+    template<>
+    std::vector<std::string> EnumStrings<PinType>::data;
+    
+    /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
      *
      * @ingroup gate_lib
@@ -43,63 +107,16 @@ namespace hal
     {
     public:
         /**
-         * Defines the base type of a gate type.
-         */
-        enum class BaseType
-        {
-            combinational, /**< Represents a combinational gate type. **/
-            lut,           /**< Represents a combinational LUT gate type. **/
-            ff,            /**< Represents a sequential FF gate type. **/
-            latch,         /**< Represents a sequential latch gate type. **/
-            ram,           /**< Represents a sequential RAM gate type. **/
-            io,            /**< Represents an IO gate type. **/
-            dsp            /**< Represents a sequential DSP gate type. **/
-        };
-
-        /**
-         * Defines the direction of a pin.
-         */
-        enum class PinDirection
-        {
-            none,    /**< Invalid pin. **/
-            input,   /**< Input pin. **/
-            output,  /**< Output pin. **/
-            inout,   /**< Inout pin. **/
-            internal /**< Internal pin. **/
-        };
-
-        /**
-         * Defines the type of a pin.
-         */
-        enum class PinType
-        {
-            none,      /**< Default pin. **/
-            power,     /**< Power pin. **/
-            ground,    /**< Ground pin. **/
-            lut,       /**< Pin that generates output from LUT initialization string. **/
-            state,     /**< Pin that generates output from internal state. **/
-            neg_state, /**< Pin that generates output from negated internal state. **/
-            clock,     /**< Clock pin. **/
-            enable,    /**< Enable pin. **/
-            set,       /**< Set/preset pin. **/
-            reset,     /**< Reset/clear pin. **/
-            data,      /**< Data pin. **/
-            address,   /**< Address pin. **/
-            io_pad,    /**< IO pad pin. **/
-            select     /**< Select pin. **/
-        };
-
-        /**
          * Defines the behavior of the gate type in case both clear and preset are active at the same time.
          */
         enum class ClearPresetBehavior
         {
-            U = 0, /**< Default value when no behavior is specified. **/
-            L = 1, /**< Set the internal state to \p 0. **/
-            H = 2, /**< Set the internal state to \p 1. **/
-            N = 3, /**< Do not change the internal state. **/
-            T = 4, /**< Toggle, i.e., invert the internal state. **/
-            X = 5  /**< Set the internal state to \p X. **/
+            L,    /**< Set the internal state to \p 0. **/
+            H,    /**< Set the internal state to \p 1. **/
+            N,    /**< Do not change the internal state. **/
+            T,    /**< Toggle, i.e., invert the internal state. **/
+            X,    /**< Set the internal state to \p X. **/
+            undef /**< Invalid behavior, used by default. **/
         };
 
         /**
@@ -117,11 +134,19 @@ namespace hal
         const std::string& get_name() const;
 
         /**
-         * Get the base type of the gate type, which can be either combinatorial, lut, ff, or latch.
+         * Get the properties assigned to the gate type.
          *
-         * @returns The base type of the gate type.
+         * @returns The properties of the gate type.
          */
-        BaseType get_base_type() const;
+        std::set<GateTypeProperty> get_properties() const;
+
+        /**
+         * Check whether the gate type has the specified property.
+         *
+         * @param[in] property - The property to check for.
+         * @returns True if the gate type has the specified property, false otherwise.
+         */
+        bool has_property(GateTypeProperty property) const;
 
         /**
          * Get the gate library this gate type is associated with.
@@ -145,33 +170,6 @@ namespace hal
          * @returns An output stream.
          */
         friend std::ostream& operator<<(std::ostream& os, const GateType& gate_type);
-
-        /**
-         * Insert the base type string representation to an output stream.
-         *
-         * @param[in] os - The output stream.
-         * @param[in] base_type - The base type.
-         * @returns An output stream.
-         */
-        friend std::ostream& operator<<(std::ostream& os, BaseType base_type);
-
-        /**
-         * Insert the pin direction string representation to an output stream.
-         *
-         * @param[in] os - The output stream.
-         * @param[in] direction - The pin direction.
-         * @returns An output stream.
-         */
-        friend std::ostream& operator<<(std::ostream& os, PinDirection direction);
-
-        /**
-         * Insert the pin type string representation to an output stream.
-         *
-         * @param[in] os - The output stream.
-         * @param[in] pin_type - The pin type.
-         * @returns An output stream.
-         */
-        friend std::ostream& operator<<(std::ostream& os, PinType pin_type);
 
         /**
          * Check whether two gate types are equal.
@@ -233,7 +231,7 @@ namespace hal
 
         /**
          * Add a pin of the specified direction and type to the gate type.
-         * 
+         *
          * @param[in] pin - The pin.
          * @param[in] direction - The pin direction to be assigned.
          * @param[in] pin_type - The pin type to be assigned.
@@ -243,7 +241,7 @@ namespace hal
 
         /**
          * Add a vector of pin of the specified direction and type to the gate type.
-         * 
+         *
          * @param[in] pins - The pins.
          * @param[in] direction - The pin direction to be assigned.
          * @param[in] pin_type - The pin type to be assigned.
@@ -251,16 +249,16 @@ namespace hal
          */
         bool add_pins(const std::vector<std::string>& pins, PinDirection direction, PinType pin_type = PinType::none);
 
-        /** 
+        /**
          * Get all pins belonging to the gate type.
-         * 
+         *
          * @returns A vector of pins.
          */
         const std::vector<std::string>& get_pins() const;
 
         /**
          * Get the pin direction of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the direction 'internal' will be returned.
-         * 
+         *
          * @param[in] pin - The pin.
          * @returns The pin direction.
          */
@@ -268,14 +266,14 @@ namespace hal
 
         /**
          * Get the pin directions of all pins as a map.
-         * 
+         *
          * @returns A map from pin to pin direction.
          */
         const std::unordered_map<std::string, PinDirection>& get_pin_directions() const;
 
-        /** 
+        /**
          * Get all pins of the specified pin direction.
-         * 
+         *
          * @param[in] direction - The pin direction.
          * @returns A set of pins.
          */
@@ -283,7 +281,7 @@ namespace hal
 
         /**
          * Assign a pin type to the given pin. The pin must have been added to the gate type beforehand.
-         * 
+         *
          * @param[in] pin - The pin.
          * @param[in] pin_type - The pin type to be assigned.
          * @returns True on success, false otherwise.
@@ -292,7 +290,7 @@ namespace hal
 
         /**
          * Get the pin type of the given pin. The user has to make sure that the pin exists before calling this function. If the pin does not exist, the type 'none' will be returned.
-         * 
+         *
          * @param[in] pin - The pin.
          * @returns The pin type.
          */
@@ -300,14 +298,14 @@ namespace hal
 
         /**
          * Get the pin types of all pins as a map.
-         * 
+         *
          * @returns A map from pin to pin type.
          */
         const std::unordered_map<std::string, PinType>& get_pin_types() const;
 
-        /** 
+        /**
          * Get all pins of the specified pin type.
-         * 
+         *
          * @param[in] pin_type - The pin type.
          * @returns A set of pins.
          */
@@ -422,12 +420,7 @@ namespace hal
         GateLibrary* m_gate_library;
         u32 m_id;
         std::string m_name;
-        BaseType m_base_type;
-
-        // enum to string
-        static const std::unordered_map<BaseType, std::string> m_base_type_to_string;
-        static const std::unordered_map<PinDirection, std::string> m_pin_direction_to_string;
-        static const std::unordered_map<PinType, std::string> m_pin_type_to_string;
+        std::set<GateTypeProperty> m_properties;
 
         // pins
         std::vector<std::string> m_pins;
@@ -449,14 +442,17 @@ namespace hal
         std::unordered_map<std::string, BooleanFunction> m_functions;
 
         // sequential and LUT stuff
-        std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior;
-        std::string m_config_data_category   = "";
-        std::string m_config_data_identifier = "";
-        bool m_ascending                     = true;
+        std::pair<ClearPresetBehavior, ClearPresetBehavior> m_clear_preset_behavior = {ClearPresetBehavior::undef, ClearPresetBehavior::undef};
+        std::string m_config_data_category                                          = "";
+        std::string m_config_data_identifier                                        = "";
+        bool m_ascending                                                            = true;
 
-        GateType(GateLibrary* gate_library, u32 id, const std::string& name, BaseType base_type);
+        GateType(GateLibrary* gate_library, u32 id, const std::string& name, std::set<GateTypeProperty> properties);
 
         GateType(const GateType&) = delete;
         GateType& operator=(const GateType&) = delete;
     };
+
+    template<>
+    std::vector<std::string> EnumStrings<GateType::ClearPresetBehavior>::data;
 }    // namespace hal

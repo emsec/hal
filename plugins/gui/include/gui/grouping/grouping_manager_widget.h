@@ -103,19 +103,42 @@ namespace hal
         void handleNewEntryAdded(const QModelIndex& modelIndex);
         void handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
         void handleCurrentChanged(const QModelIndex &current = QModelIndex(), const QModelIndex &previous = QModelIndex());
+        void handleGraphSelectionChanged(void* sender);
 
     private Q_SLOTS:
         void toggleSearchbar();
         void filter(const QString& text);
         void handleCreateGroupingClicked();
+        void handleToolboxClicked();
         void handleRenameGroupingClicked();
         void handleColorSelectClicked();
         void handleToSelectionClicked();
         void handleDeleteGroupingClicked();
-
+        void handleToolboxPredecessor();
+        void handleToolboxSuccessor();
+        void handleToolboxPredecessorDistance();
+        void handleToolboxSuccessorDistance();
         void handleContextMenuRequest(const QPoint& point);
 
     private:
+        class ToolboxModuleHash
+        {
+        public:
+            QHash<Gate*,Module*> mHash;
+            ToolboxModuleHash(const Node& nd);
+        };
+
+        class ToolboxNode
+        {
+        public:
+            QString mName;
+            Node mNode;
+            ToolboxNode(Endpoint* ep = nullptr, const ToolboxModuleHash* tmh = nullptr);
+            std::vector<Net*> inputNets() const;
+            std::vector<Net*> outputNets() const;
+        };
+
+        QIcon toolboxIcon() const;
         GraphTabWidget* mTabView;
         QTableView* mGroupingTableView;
         GroupingTableModel* mGroupingTableModel;
@@ -126,6 +149,7 @@ namespace hal
         QString mNewGroupingIconPath;
         QString mNewGroupingIconStyle;
 
+        QAction* mToolboxAction;
         QAction* mRenameAction;
         QString mRenameGroupingIconPath;
         QString mRenameGroupingIconStyle;

@@ -127,6 +127,7 @@ namespace hal
         //context menu connects
         connect(mInputPinsTable, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handleInputPinTableMenuRequested);
         connect(mOutputPinsTable, &QTableWidget::customContextMenuRequested, this, &GateDetailsWidget::handleOutputPinTableMenuRequested);
+        connect(gNetlistRelay, &NetlistRelay::gateNameChanged, this, &GateDetailsWidget::handleGateNameChanged);
 
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
 
@@ -235,21 +236,20 @@ namespace hal
         if(sources.empty() || clicked_net->is_global_input_net())
         {
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedNets.insert(mNetId);
+            gSelectionRelay->addNet(mNetId);
             gSelectionRelay->relaySelectionChanged(this);
         }
         else if(sources.size() == 1)
         {
             auto ep = *sources.begin();
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedGates.insert(ep->get_gate()->get_id());
-            gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-            gSelectionRelay->mFocusId   = ep->get_gate()->get_id();
-            gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::Right;
+            gSelectionRelay->addGate(ep->get_gate()->get_id());
 
             auto pins                          = ep->get_gate()->get_output_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
-            gSelectionRelay->mSubfocusIndex = index;
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,
+                                      ep->get_gate()->get_id(),
+                                      SelectionRelay::Subfocus::Right,index);
 
             update(ep->get_gate()->get_id());
             gSelectionRelay->relaySelectionChanged(this);
@@ -283,21 +283,20 @@ namespace hal
         if(destinations.empty() || clicked_net->is_global_output_net())
         {
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedNets.insert(mNetId);
+            gSelectionRelay->addNet(mNetId);
             gSelectionRelay->relaySelectionChanged(this);
         }
         else if (destinations.size() == 1)
         {
             auto ep = *destinations.begin();
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedGates.insert(ep->get_gate()->get_id());
-            gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-            gSelectionRelay->mFocusId   = ep->get_gate()->get_id();
-            gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::Left;
+            gSelectionRelay->addGate(ep->get_gate()->get_id());
 
             auto pins                          = ep->get_gate()->get_input_pins();
             auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), ep->get_pin()));
-            gSelectionRelay->mSubfocusIndex = index;
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,
+                                      ep->get_gate()->get_id(),
+                                      SelectionRelay::Subfocus::Left,index);
 
             update(ep->get_gate()->get_id());
             gSelectionRelay->relaySelectionChanged(this);
@@ -574,27 +573,25 @@ namespace hal
 
         mNavigationTable->hide();
         gSelectionRelay->clear();
-        gSelectionRelay->mSelectedGates = to_gates;
+        gSelectionRelay->setSelectedGates(to_gates);
         if (to_gates.size() == 1)
         {
-            gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-            auto g                         = gNetlist->get_gate_by_id(*to_gates.constBegin());
-            gSelectionRelay->mFocusId   = g->get_id();
-            gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::Left;
+            auto g = gNetlist->get_gate_by_id(*to_gates.constBegin());
 
             u32 index_cnt = 0;
             for (const auto& pin : g->get_input_pins())
             {
                 if (g->get_fan_in_net(pin) == n)
                 {
-                    gSelectionRelay->mSubfocusIndex = index_cnt;
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,
+                                              g->get_id(),
+                                              SelectionRelay::Subfocus::Left,index_cnt);
                     break;
                 }
                 index_cnt++;
             }
-
-            gSelectionRelay->relaySelectionChanged(this);
         }
+        gSelectionRelay->relaySelectionChanged(this);
         mNavigationTable->hide();
 
         // TODO ensure gates mVisible in graph
@@ -615,7 +612,7 @@ namespace hal
         if (item->row() == m_ModuleItem->row() && item->column() == m_ModuleItem->column())
         {
             gSelectionRelay->clear();
-            gSelectionRelay->mSelectedModules.insert(m_ModuleItem->data(Qt::UserRole).toInt());
+            gSelectionRelay->addModule(m_ModuleItem->data(Qt::UserRole).toInt());
             gSelectionRelay->relaySelectionChanged(this);
         }
     }

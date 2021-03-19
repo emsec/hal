@@ -88,6 +88,11 @@ namespace hal
         return mGroupingManagerWidget;
     }
 
+    ModuleWidget* ContentManager::getModuleWidget()
+    {
+        return mModuleWidget;
+    }
+
     ContextManagerWidget* ContentManager::getContextManagerWidget()
     {
         return mContextManagerWidget;
@@ -121,6 +126,7 @@ namespace hal
 
             mContextManagerWidget->selectViewContext(new_context);
             gGraphContextManager->restoreFromFile();
+            new_context->setDirty(false);
         });
 
         //why does this segfault without a timer?

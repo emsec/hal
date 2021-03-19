@@ -129,8 +129,6 @@ namespace hal
         void relayNetEvent(net_event_handler::event ev, Net* object, u32 associated_data);
         void relayGroupingEvent(grouping_event_handler::event ev, Grouping* object, u32 associated_data);
 
-        QMap<u32, QColor> mModuleColors;
-
         QMap<u32, QString> mGateAliases;
         QMap<u32, QString> mNetAliases;
 

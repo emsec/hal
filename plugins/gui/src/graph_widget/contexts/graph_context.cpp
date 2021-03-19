@@ -6,7 +6,9 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/layouters/layouter_task.h"
 #include "gui/gui_globals.h"
-
+#include "gui/gui_def.h"
+#include "gui/implementations/qpoint_extension.h"
+#include "gui/user_action/user_action_manager.h"
 #include <QVector>
 #include <QJsonArray>
 
@@ -18,35 +20,48 @@ namespace hal
         : QObject(parent),
           mId(id_),
           mName(name),
+          mDirty(false),
+          mLayouter(nullptr),
+          mShader(nullptr),
           mUserUpdateCount(0),
           mUnappliedChanges(false),
           mSceneUpdateRequired(false),
           mSceneUpdateInProgress(false)
     {
         mTimestamp = QDateTime::currentDateTime();
-    }
-
-    void GraphContext::setLayouter(GraphLayouter* layouter)
-    {
-        assert(layouter);
-
-        connect(layouter, qOverload<int>(&GraphLayouter::statusUpdate), this, qOverload<int>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
-        connect(layouter, qOverload<const QString&>(&GraphLayouter::statusUpdate), this, qOverload<const QString&>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
-
-        mLayouter = layouter;
-    }
-
-    void GraphContext::setShader(GraphShader* shader)
-    {
-        assert(shader);
-
-        mShader = shader;
+        UserActionManager::instance()->clearWaitCount();
     }
 
     GraphContext::~GraphContext()
     {
         for (GraphContextSubscriber* subscriber : mSubscribers)
             subscriber->handleContextAboutToBeDeleted();
+
+        delete mLayouter;
+        delete mShader;
+    }
+
+    void GraphContext::setLayouter(GraphLayouter* layouter)
+    {
+        assert(layouter);
+
+        if (mLayouter)
+            delete mLayouter;
+
+        mLayouter = layouter;
+
+        connect(layouter, qOverload<int>(&GraphLayouter::statusUpdate), this, qOverload<int>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
+        connect(layouter, qOverload<const QString&>(&GraphLayouter::statusUpdate), this, qOverload<const QString&>(&GraphContext::handleLayouterUpdate), Qt::ConnectionType::QueuedConnection);
+    }
+
+    void GraphContext::setShader(GraphShader* shader)
+    {
+        assert(shader);
+
+        if (mShader)
+            delete mShader;
+
+        mShader = shader;
     }
 
     void GraphContext::subscribe(GraphContextSubscriber* const subscriber)
@@ -97,20 +112,15 @@ namespace hal
         mAddedModules += new_modules;
         mAddedGates += new_gates;
 
-        for (const u32 m : new_modules)
-        {
-            mModuleHints.insert(placement, m);
-        }
-        for (const u32 g : new_gates)
-        {
-            mGateHints.insert(placement, g);
-        }
+        mPlacementList[placement.mode()].append(
+                    PlacementEntry(placement,new_modules,new_gates));
 
         if (mUserUpdateCount == 0)
         {
             evaluateChanges();
             update();
         }
+        if (!new_modules.isEmpty() || !new_gates.isEmpty()) setDirty(true);
     }
 
     void GraphContext::remove(const QSet<u32>& modules, const QSet<u32>& gates)
@@ -124,9 +134,9 @@ namespace hal
         mAddedModules -= modules;
         mAddedGates -= gates;
 
-        // We don't update mModuleHints and mGateHints here. Keeping elements
+        // We don't update mPlacementList here. Keeping elements
         // in memory is less of an issue than finding the modules/gates _by value_
-        // in the maps and removing them. At the end of applyChanges() the maps are
+        // in the maps and removing them. At the end of applyChanges() the lists are
         // cleared anyway.
 
         if (mUserUpdateCount == 0)
@@ -134,6 +144,7 @@ namespace hal
             evaluateChanges();
             update();
         }
+        if (!old_modules.isEmpty() || !old_gates.isEmpty()) setDirty(true);
     }
 
     void GraphContext::clear()
@@ -144,8 +155,8 @@ namespace hal
         mAddedModules.clear();
         mAddedGates.clear();
 
-        mModuleHints.clear();
-        mGateHints.clear();
+        for (int i=0; i<4; i++)
+            mPlacementList[i].clear();
 
         if (mUserUpdateCount == 0)
         {
@@ -154,27 +165,27 @@ namespace hal
         }
     }
 
-    void GraphContext::foldModuleOfGate(const u32 id)
+    bool GraphContext::foldModuleAction(u32 moduleId, const PlacementHint &plc)
     {
-        auto contained_gates = mGates + mAddedGates - mRemovedGates;
-        if (contained_gates.find(id) != contained_gates.end())
-        {
-            auto m = gNetlist->get_gate_by_id(id)->get_module();
-            QSet<u32> gates;
-            QSet<u32> modules;
-            for (const auto& g : m->get_gates(nullptr, true))
-            {
-                gates.insert(g->get_id());
-            }
-            for (auto sm : m->get_submodules(nullptr, true))
-            {
-                modules.insert(sm->get_id());
-            }
-            beginChange();
-            remove(modules, gates);
-            add({m->get_id()}, {});
-            endChange();
-        }
+        Module* m = gNetlist->get_module_by_id(moduleId);
+        if (!m) return false;
+        QSet<u32> gats;
+        QSet<u32> mods;
+        for (const auto& g : m->get_gates(nullptr, true))
+            gats.insert(g->get_id());
+        for (auto sm : m->get_submodules(nullptr, true))
+            mods.insert(sm->get_id());
+        beginChange();
+        remove(mods, gats);
+        add({m->get_id()}, {}, plc);
+        endChange();
+        return true;
+    }
+
+    bool GraphContext::isGateUnfolded(u32 gateId) const
+    {
+        QSet<u32> containedGates = mGates + mAddedGates - mRemovedGates;
+        return containedGates.contains(gateId);
     }
 
     void GraphContext::unfoldModule(const u32 id)
@@ -204,6 +215,7 @@ namespace hal
             add(modules, gates);
             endChange();
         }
+        setDirty(false);
     }
 
     bool GraphContext::empty() const
@@ -340,6 +352,7 @@ namespace hal
 
     QString GraphContext::name() const
     {
+        if (mDirty) return mName + "*";
         return mName;
     }
 
@@ -397,6 +410,15 @@ namespace hal
     {
         for (GraphContextSubscriber* s : mSubscribers)
             s->handleStatusUpdate(message);
+    }
+
+    void GraphContext::moveNodeAction(const QPoint& from, const QPoint& to)
+    {
+        const QMap<QPoint,Node> nodeMap = mLayouter->positionToNodeMap();
+        auto it = nodeMap.find(from);
+        if (it==nodeMap.constEnd()) return;
+        mLayouter->setNodePosition(it.value(),to);
+        scheduleSceneUpdate();
     }
 
     void GraphContext::handleLayouterFinished()
@@ -479,27 +501,21 @@ namespace hal
             }
         }
 
-        // number of placement hints is small, not performance critical
-        QVector<PlacementHint> queued_hints;
-        queued_hints.append(mModuleHints.uniqueKeys().toVector());
-        // we can't use QSet for enum class
-        for (auto h : mGateHints.uniqueKeys())
+        int placementOrder[4] = { PlacementHint::GridPosition,
+                                  PlacementHint::PreferLeft,
+                                  PlacementHint::PreferRight,
+                                  PlacementHint::Standard};
+
+        for (int iplc = 0; iplc<4; iplc++)
         {
-            if (!queued_hints.contains(h))
+            for (const PlacementEntry& plcEntry : mPlacementList[placementOrder[iplc]])
             {
-                queued_hints.append(h);
+                QSet<u32> modsForHint = plcEntry.mModules;
+                modsForHint &= mAddedModules; // may contain obsolete entries that we must filter out
+                QSet<u32> gatsForHint = plcEntry.mGates;
+                gatsForHint &= mAddedGates;
+                mLayouter->add(modsForHint, gatsForHint, mNets, plcEntry.mPlacementHint);
             }
-        }
-
-        for (PlacementHint h : queued_hints)
-        {
-            // call the placer once for each placement hint
-
-            QSet<u32> modules_for_hint = QSet<u32>::fromList(mModuleHints.values(h));
-            modules_for_hint &= mAddedModules; // may contain obsolete entries that we must filter out
-            QSet<u32> gates_for_hint = QSet<u32>::fromList(mGateHints.values(h));
-            gates_for_hint &= mAddedGates;
-            mLayouter->add(modules_for_hint, gates_for_hint, mNets, h);
         }
 
         mShader->add(mAddedModules, mAddedGates, mNets);
@@ -510,8 +526,8 @@ namespace hal
         mRemovedModules.clear();
         mRemovedGates.clear();
 
-        mModuleHints.clear();
-        mGateHints.clear();
+        for (int i=0; i<4; i++)
+            mPlacementList[i].clear();
 
         mUnappliedChanges     = false;
         mSceneUpdateRequired = true;
@@ -597,6 +613,7 @@ namespace hal
         }
 
         scheduleSceneUpdate();
+        setDirty(false);
     }
 
     void GraphContext::writeToFile(QJsonObject& json)
@@ -644,5 +661,13 @@ namespace hal
             jsonNets.append(jsonNet);
         }
         json["nets"] = jsonNets;
+        setDirty(false);
+    }
+
+    void GraphContext::setDirty(bool dty)
+    {
+        if (mDirty==dty) return;
+        mDirty = dty;
+        Q_EMIT(dataChanged());
     }
 }

@@ -1604,8 +1604,6 @@ qproperty-disabledIconStyle: "all->#515050";
 qproperty-searchActiveIconStyle: "all->#30ac4f";
 qproperty-searchIconStyle: "all->#e8e8e8";
 qproperty-searchIconPath: ":/icons/search";
-qproperty-restoreIconStyle: "all->#e8e8e8";
-qproperty-restoreIconPath: ":/icons/undo2";
 qproperty-toGroupingIconStyle: "all->#e8e8e8";
 qproperty-toGroupingIconPath: ":/icons/to_grouping";
 qproperty-toModuleIconStyle: "all->#e8e8e8";
@@ -1636,6 +1634,11 @@ qproperty-contentIconPath: ":/icons/content";
 
 qproperty-settingsIconStyle: "all->#AFB1B3";
 qproperty-settingsIconPath: ":/icons/settings";
+
+qproperty-undoIconStyle: "all->#e8e8e8";
+qproperty-undoIconPath: ":/icons/undo2";
+
+qproperty-disabledIconStyle: "all->#515050";
 }
 
 hal--PythonQssAdapter {

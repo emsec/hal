@@ -24,6 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/utilities/enums.h"
 #include "z3++.h"
 
 #include <algorithm>
@@ -48,9 +49,10 @@ namespace hal
          */
         enum Value
         {
-            X    = -1, /**< Represents an undefined value. */
-            ZERO = 0,  /**< Represents a logical 0. */
-            ONE  = 1   /**< Represents a logical 1 */
+            ZERO = 0, /**< Represents a logical 0. */
+            ONE  = 1, /**< Represents a logical 1 */
+            Z,        /**< Represents an undefined value. */
+            X         /**< Represents an undefined value. */
         };
 
         /**
@@ -298,6 +300,13 @@ namespace hal
         BooleanFunction optimize() const;
 
         /**
+         * Removes constant values whenever possible.
+         * 
+         * @return The optimized Boolean function.
+         */
+        BooleanFunction optimize_constants() const;
+
+        /**
          * Get the truth table outputs of the function.
          *
          * WARNING: Exponential runtime in the number of variables!
@@ -357,9 +366,6 @@ namespace hal
         // helper function 2
         std::vector<BooleanFunction> get_AND_terms() const;
 
-        // merges constants if possible and resolves duplicates
-        BooleanFunction optimize_constants() const;
-
         // merges nested expressions of the same operands
         static std::vector<std::vector<Value>> qmc(std::vector<std::vector<Value>> terms);
 
@@ -384,4 +390,7 @@ namespace hal
         operation m_op;
         std::vector<BooleanFunction> m_operands;
     };
+
+    template<>
+    std::vector<std::string> EnumStrings<BooleanFunction::Value>::data;
 }    // namespace hal

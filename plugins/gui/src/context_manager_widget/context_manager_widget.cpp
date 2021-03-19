@@ -26,6 +26,11 @@
 //#include <QStringListModel>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_delete_object.h"
+#include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/user_action_compound.h"
 
 namespace hal
 {
@@ -51,11 +56,11 @@ namespace hal
         mDeleteAction->setToolTip("Delete");
         mSearchAction->setToolTip("Search");
 
-        mOpenAction->setText("Open View");
-        mNewViewAction->setText("Create New View");
-        mRenameAction->setText("Rename View");
-        mDuplicateAction->setText("Duplicate View");
-        mDeleteAction->setText("Delete View");
+        mOpenAction->setText("Open view");
+        mNewViewAction->setText("Create new view");
+        mRenameAction->setText("Rename view");
+        mDuplicateAction->setText("Duplicate view");
+        mDeleteAction->setText("Delete view");
 
         //mOpenAction->setEnabled(false);
         //mRenameAction->setEnabled(false);
@@ -104,9 +109,12 @@ namespace hal
 
     void ContextManagerWidget::handleCreateContextClicked()
     {
-        GraphContext* new_context = nullptr;
-        new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
-        new_context->add({gNetlist->get_top_module()->get_id()}, {});
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context,
+                  QString::fromStdString(gNetlist->get_top_module()->get_name())));
+        act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
+        act->exec();
     }
 
     void ContextManagerWidget::handleOpenContextClicked()
@@ -134,20 +142,29 @@ namespace hal
         ipd.addValidator(&empty_validator);
 
         if (ipd.exec() == QDialog::Accepted)
-            gGraphContextManager->renameGraphContext(clicked_context, ipd.textValue());
+        {
+            ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+            act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::Context));
+            act->exec();
+        }
     }
 
     void ContextManagerWidget::handleDuplicateContextClicked()
     {
         GraphContext* clicked_context = getCurrentContext();
-        GraphContext* new_context     = gGraphContextManager->createNewContext(clicked_context->name() + " (Copy)");
-        new_context->add(clicked_context->modules(), clicked_context->gates());
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context,clicked_context->name() + " (Copy)"));
+        act->addAction(new ActionAddItemsToObject(clicked_context->modules(),clicked_context->gates()));
+        act->exec();
     }
 
     void ContextManagerWidget::handleDeleteContextClicked()
     {
         GraphContext* clicked_context = getCurrentContext();
-        gGraphContextManager->deleteGraphContext(clicked_context);
+        ActionDeleteObject* act = new ActionDeleteObject;
+        act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::Context));
+        act->exec();
     }
 
     void ContextManagerWidget::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)

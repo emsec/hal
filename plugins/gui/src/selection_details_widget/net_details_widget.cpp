@@ -296,14 +296,11 @@ namespace hal
             return;
 
         gSelectionRelay->clear();
-        gSelectionRelay->mSelectedGates.insert(gate_id);
-        gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-        gSelectionRelay->mFocusId   = gate_id;
-        gSelectionRelay->mSubfocus   = focus;
+        gSelectionRelay->addGate(gate_id);
 
         auto pins                          = (sender_table == mSourcePinsTable) ? clicked_gate->get_output_pins() : clicked_gate->get_input_pins();
         auto index                         = std::distance(pins.begin(), std::find(pins.begin(), pins.end(), pin));
-        gSelectionRelay->mSubfocusIndex = index;
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,gate_id,focus,index);
 
         gSelectionRelay->relaySelectionChanged(this);
     }

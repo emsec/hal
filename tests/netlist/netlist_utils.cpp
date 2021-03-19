@@ -43,29 +43,39 @@ namespace hal
             return n;
         }
 
-        std::unique_ptr<GateLibrary> create_lut_buffer_lib() 
+        std::unique_ptr<GateLibrary> create_buffer_lib() 
         {
             std::unique_ptr<GateLibrary> lib = std::unique_ptr<GateLibrary>(new GateLibrary("dummy_path", "dummy_name"));
-            GateType* gnd = lib->create_gate_type("GND", GateType::BaseType::combinational);
-            gnd->add_pin("O", GateType::PinDirection::output);
+            GateType* gnd = lib->create_gate_type("GND", {GateTypeProperty::combinational, GateTypeProperty::ground});
+            gnd->add_pin("O", PinDirection::output);
             gnd->add_boolean_function("O", BooleanFunction::from_string("0"));
             lib->mark_gnd_gate_type(gnd);
 
-            GateType* vdd = lib->create_gate_type("VDD", GateType::BaseType::combinational);
-            vdd->add_pin("O", GateType::PinDirection::output);
-            vdd->add_boolean_function("O", BooleanFunction::from_string("1"));
-            lib->mark_vcc_gate_type(vdd);
+            GateType* vcc = lib->create_gate_type("VCC", {GateTypeProperty::combinational, GateTypeProperty::power});
+            vcc->add_pin("O", PinDirection::output);
+            vcc->add_boolean_function("O", BooleanFunction::from_string("1"));
+            lib->mark_vcc_gate_type(vcc);
 
-            GateType* lut4 = lib->create_gate_type("LUT4", GateType::BaseType::lut);
-            lut4->add_input_pins({"I0", "I1", "I2", "I3"});
-            lut4->add_output_pin("O");
-            lut4->assign_pin_type("O", GateType::PinType::lut);
+            GateType* and2 = lib->create_gate_type("AND2", {GateTypeProperty::combinational});
+            and2->add_pins({"I0", "I1"}, PinDirection::input);
+            and2->add_pin("O", PinDirection::output);
+            and2->add_boolean_function("O", BooleanFunction::from_string("I0 & I1"));
+
+            GateType* lut2 = lib->create_gate_type("LUT2", {GateTypeProperty::combinational, GateTypeProperty::lut});
+            lut2->add_pins({"I0", "I1"}, PinDirection::input);
+            lut2->add_pin("O", PinDirection::output, PinType::lut);
+            lut2->set_config_data_category("generic");
+            lut2->set_config_data_identifier("INIT");
+
+            GateType* lut4 = lib->create_gate_type("LUT4", {GateTypeProperty::combinational, GateTypeProperty::lut});
+            lut4->add_pins({"I0", "I1", "I2", "I3"}, PinDirection::input);
+            lut4->add_pin("O", PinDirection::output, PinType::lut);
             lut4->set_config_data_category("generic");
             lut4->set_config_data_identifier("INIT");
 
-            GateType* buf = lib->create_gate_type("BUF", GateType::BaseType::combinational);
-            buf->add_input_pin("I");
-            buf->add_output_pin("O");
+            GateType* buf = lib->create_gate_type("BUF", {GateTypeProperty::combinational});
+            buf->add_pin("I", PinDirection::input);
+            buf->add_pin("O", PinDirection::output);
             buf->add_boolean_function("O", BooleanFunction::from_string("I"));
 
             return std::move(lib);
@@ -368,7 +378,7 @@ namespace hal
     {
         TEST_START
 
-        std::unique_ptr<GateLibrary> lib = create_lut_buffer_lib();
+        std::unique_ptr<GateLibrary> lib = create_buffer_lib();
 
         std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
         ASSERT_NE(nl, nullptr);
@@ -402,70 +412,133 @@ namespace hal
     {
         TEST_START
 
-        std::unique_ptr<GateLibrary> lib = create_lut_buffer_lib();
+        std::unique_ptr<GateLibrary> lib = create_buffer_lib();
 
         {
             std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
             ASSERT_NE(nl, nullptr);
 
-            Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
-            Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
-            Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
-            Gate* l3 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l3");
-            Gate* l4 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
+            Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
+            nl->mark_gnd_gate(gnd_gate);
+            Net* gnd_net = nl->create_net("gnd");
+            gnd_net->add_source(gnd_gate, "O");
+            Gate* vcc_gate = nl->create_gate(lib->get_gate_type_by_name("VCC"), "vcc");
+            nl->mark_vcc_gate(vcc_gate);
+            Net* vcc_net = nl->create_net("vcc");
+            vcc_net->add_source(vcc_gate, "O");
 
-            Gate* b0 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "b0");
-            Gate* b1 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "b1");
-            Gate* b2 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "b2");
-            Gate* b3 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "b3");
+            Gate* g0 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g0");
+            Gate* g1 = nl->create_gate(lib->get_gate_type_by_name("BUF"), "g1");
+            Gate* g2 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g2");
 
-            Gate* l5 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l5");
-            l5->add_boolean_function("O", BooleanFunction::from_string("I2"));
-            Gate* l6 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l6");
-            l6->add_boolean_function("O", BooleanFunction::from_string("I2 & I3"));
+            Net* n0 = nl->create_net("n0");
+            n0->add_destination(g0, "I0");
+            n0->mark_global_input_net();
 
-            Net* n0 = connect(nl.get(), l0, "O", b0, "I");
-            Net* n1 = connect(nl.get(), l1, "O", b1, "I");
-            Net* n2 = connect(nl.get(), l2, "O", b2, "I");
-            Net* n3 = connect(nl.get(), l3, "O", b3, "I");
+            Net* n1 = nl->create_net("n1");
+            n1->add_destination(g0, "I1");
+            n1->mark_global_input_net();
 
-            Net* n4 = connect(nl.get(), b0, "O", l4, "I0");
-            Net* n5 = connect(nl.get(), b1, "O", l4, "I1");
-            Net* n6 = connect(nl.get(), b2, "O", l5, "I2");
-            Net* n7 = connect(nl.get(), b3, "O", l6, "I2");
-            Net* n8 = connect(nl.get(), b3, "O", l6, "I3");
+            Net* n2 = nl->create_net("n2");
+            n2->add_destination(g2, "I1");
+            n2->mark_global_input_net();
 
-            Net* n9 = connect(nl.get(), l5, "O", l4, "I2");
-            Net* n10 = connect(nl.get(), l6, "O", l4, "I3");
-
-            EXPECT_EQ(nl->get_gates().size(), 11);
-            EXPECT_EQ(nl->get_nets().size(), 10);
+            Net* n3 = connect(nl.get(), g0, "O", g1, "I");
+            Net* n4 = connect(nl.get(), g1, "O", g2, "I0");
 
             netlist_utils::remove_buffers(nl.get());
 
-            std::vector<Gate*> gates = nl->get_gates();
-            std::vector<Net*> nets = nl->get_nets();
+            ASSERT_EQ(nl->get_gates().size(), 4);
+            ASSERT_EQ(nl->get_nets().size(), 6);
 
-            EXPECT_EQ(gates.size(), 6);
-            EXPECT_EQ(nets.size(), 5);
-
-            for (const auto gate : gates) 
-            {
-                EXPECT_NE(gate->get_type()->get_base_type(), GateType::BaseType::combinational);
-            }
-
-            EXPECT_EQ(l0->get_successor("O")->get_gate(), l4);
-            EXPECT_EQ(l1->get_successor("O")->get_gate(), l4);
-            EXPECT_EQ(l2->get_successor("O")->get_gate(), l4);
-            ASSERT_EQ(l3->get_successors().size(), 2);
-            EXPECT_EQ(l3->get_successors().at(0)->get_gate(), l6);
-            EXPECT_EQ(l3->get_successors().at(1)->get_gate(), l6);
-            EXPECT_EQ(l6->get_successor("O")->get_gate(), l4);
-
-            EXPECT_EQ(std::find(gates.begin(), gates.end(), l5), gates.end());
-            EXPECT_NE(std::find(gates.begin(), gates.end(), l6), gates.end());
+            EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
         }
 
+        {
+            std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
+            nl->mark_gnd_gate(gnd_gate);
+            Net* gnd_net = nl->create_net("gnd");
+            gnd_net->add_source(gnd_gate, "O");
+            Gate* vcc_gate = nl->create_gate(lib->get_gate_type_by_name("VCC"), "vcc");
+            nl->mark_vcc_gate(vcc_gate);
+            Net* vcc_net = nl->create_net("vcc");
+            vcc_net->add_source(vcc_gate, "O");
+
+            Gate* g0 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g0");
+            Gate* g1 = nl->create_gate(lib->get_gate_type_by_name("LUT2"), "g1");
+            g1->add_boolean_function("O", BooleanFunction::from_string("I1"));
+            Gate* g2 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g2");
+
+            Net* n0 = nl->create_net("n0");
+            n0->add_destination(g0, "I0");
+            n0->mark_global_input_net();
+
+            Net* n1 = nl->create_net("n1");
+            n1->add_destination(g0, "I1");
+            n1->mark_global_input_net();
+
+            Net* n2 = nl->create_net("n2");
+            n2->add_destination(g2, "I1");
+            n2->mark_global_input_net();
+
+            gnd_net->add_destination(g1, "I0");
+
+            Net* n3 = connect(nl.get(), g0, "O", g1, "I1");
+            Net* n4 = connect(nl.get(), g1, "O", g2, "I0");
+
+            netlist_utils::remove_buffers(nl.get());
+
+            ASSERT_EQ(nl->get_gates().size(), 4);
+            ASSERT_EQ(nl->get_nets().size(), 6);
+
+            EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
+        }
+
+        {
+            std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
+            nl->mark_gnd_gate(gnd_gate);
+            Net* gnd_net = nl->create_net("gnd");
+            gnd_net->add_source(gnd_gate, "O");
+            Gate* vcc_gate = nl->create_gate(lib->get_gate_type_by_name("VCC"), "vcc");
+            nl->mark_vcc_gate(vcc_gate);
+            Net* vcc_net = nl->create_net("vcc");
+            vcc_net->add_source(vcc_gate, "O");
+
+            Gate* g0 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g0");
+            Gate* g1 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g1");
+            Gate* g2 = nl->create_gate(lib->get_gate_type_by_name("AND2"), "g2");
+
+            Net* n0 = nl->create_net("n0");
+            n0->add_destination(g0, "I0");
+            n0->mark_global_input_net();
+
+            Net* n1 = nl->create_net("n1");
+            n1->add_destination(g0, "I1");
+            n1->mark_global_input_net();
+
+            Net* n2 = nl->create_net("n2");
+            n2->add_destination(g2, "I1");
+            n2->mark_global_input_net();
+
+            vcc_net->add_destination(g1, "I0");
+
+            Net* n3 = connect(nl.get(), g0, "O", g1, "I1");
+            Net* n4 = connect(nl.get(), g1, "O", g2, "I0");
+
+            netlist_utils::remove_buffers(nl.get());
+
+            ASSERT_EQ(nl->get_gates().size(), 4);
+            ASSERT_EQ(nl->get_nets().size(), 6);
+
+            EXPECT_EQ(g0->get_successor("O")->get_gate(), g2);
+        }
+        
         TEST_END
     }
 
@@ -478,7 +551,7 @@ namespace hal
     {
         TEST_START
 
-        std::unique_ptr<GateLibrary> lib = create_lut_buffer_lib();
+        std::unique_ptr<GateLibrary> lib = create_buffer_lib();
 
         std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
         ASSERT_NE(nl, nullptr);
@@ -528,6 +601,55 @@ namespace hal
         EXPECT_EQ(l5->get_predecessor("I1")->get_gate(), gnd_gate);
         EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
         EXPECT_EQ(l5->get_predecessor("I3")->get_gate(), gnd_gate);
+
+        TEST_END
+    } 
+
+    /**
+     * Testing detection of common inputs of gates.
+     *
+     * Functions: get_common_inputs
+     */
+    TEST_F(NetlistUtilsTest, check_get_common_inputs)
+    {
+        TEST_START
+
+        std::unique_ptr<GateLibrary> lib = create_buffer_lib();
+
+        std::unique_ptr<Netlist> nl = std::make_unique<Netlist>(lib.get());
+        ASSERT_NE(nl, nullptr);
+
+        Gate* gnd_gate = nl->create_gate(lib->get_gate_type_by_name("GND"), "gnd");
+        nl->mark_gnd_gate(gnd_gate);
+
+        Gate* l0 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l0");
+        Gate* l1 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l1");
+        Gate* l2 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l2");
+        Gate* l3 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l3");
+        Gate* l4 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
+        Gate* l5 = nl->create_gate(lib->get_gate_type_by_name("LUT4"), "l4");
+
+        Net* gnd_net = connect(nl.get(), gnd_gate, "O", l2, "I0");
+        connect(nl.get(), gnd_gate, "O", l3, "I0");
+        connect(nl.get(), gnd_gate, "O", l4, "I0");
+        connect(nl.get(), gnd_gate, "O", l5, "I0");
+        Net* common_net4 = connect(nl.get(), l0, "O", l2, "I2");
+        connect(nl.get(), l0, "O", l3, "I2");
+        connect(nl.get(), l0, "O", l4, "I2");
+        connect(nl.get(), l0, "O", l5, "I2");
+        Net* common_net2 = connect(nl.get(), l1, "O", l2, "I1");
+        connect(nl.get(), l1, "O", l3, "I1");
+
+        std::vector<Gate*> gates = {l2, l3, l4, l5};
+        std::vector<Net*> common_nets4 = netlist_utils::get_common_inputs(gates);
+        std::vector<Net*> common_nets2 = netlist_utils::get_common_inputs(gates, 2);
+
+        ASSERT_EQ(common_nets4.size(), 1);
+        EXPECT_TRUE(std::find(common_nets4.begin(), common_nets4.end(), common_net4) != common_nets4.end());
+
+        ASSERT_EQ(common_nets2.size(), 2);
+        EXPECT_TRUE(std::find(common_nets2.begin(), common_nets2.end(), common_net2) != common_nets2.end());
+        EXPECT_TRUE(std::find(common_nets2.begin(), common_nets2.end(), common_net4) != common_nets2.end());
 
         TEST_END
     } 
