@@ -81,9 +81,9 @@ namespace hal
           mDescriptionText(new QTextEdit(this)), mRestoreDefaults(new QPushButton()),
           mCancel(new QPushButton()), mOk(new QPushButton())
     {
-        mSearchbarContainer = new QFrame();
+        mSearchbarContainer = new QFrame(this);
         mSearchbarLayout = new QHBoxLayout();
-        mSearchbar = new Searchbar();
+        mSearchbar = new Searchbar(mSearchbarContainer);
 
 
         setWindowModality(Qt::ApplicationModal);
@@ -159,7 +159,7 @@ namespace hal
         connect(mOk, &QPushButton::clicked, this, &MainSettingsWidgetNew::handleOkClicked);
 
         connect(mExpandingListWidget, &ExpandingListWidget::buttonSelected, this, &MainSettingsWidgetNew::handleButtonSelected);
-
+        connect(mSearchbar,&Searchbar::textEdited,this,&MainSettingsWidgetNew::searchSettings);
     }
 
     void MainSettingsWidgetNew::initWidgets()
@@ -198,6 +198,7 @@ namespace hal
 
     void MainSettingsWidgetNew::makeSection(const QString& label, const QString& iconPath)
     {
+        Q_UNUSED(iconPath);
         ExpandingListButton* btn = new ExpandingListButton();
         btn->setObjectName(label);
         btn->setText(label);

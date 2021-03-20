@@ -66,7 +66,6 @@ namespace hal
         bool handleAboutToClose();
         void activate();
         void showAllSettings();
-        void searchSettings(const QString& needle);
 
     Q_SIGNALS:
         void close();
@@ -78,6 +77,7 @@ namespace hal
         void handleButtonSelected(ExpandingListButton* button);
         void handleDescriptionUpdate(SettingsItem* activeSettingsItem);
         void handleWidgetRemove(SettingsWidgetNew* widget);
+        void searchSettings(const QString& needle);
 
     private:
         void initWidgets();
