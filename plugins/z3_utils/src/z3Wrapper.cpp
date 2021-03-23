@@ -100,9 +100,9 @@ namespace hal
             }
             z3::solver s = {comp_ctx};
 
-            z3::params p(comp_ctx);
-            p.set(":timeout", 60000u);
-            s.set(p);
+            z3::params params(comp_ctx);
+            params.set(":timeout", 60000u);
+            s.set(params);
 
             // Create a solver using "qe" and "smt" tactics
             /*
@@ -350,6 +350,11 @@ namespace hal
                     auto start_index = line.find_first_of('|') + 1;    // variable name starts after the '|'
                     auto end_index   = line.find_first_of('|', start_index);
 
+                    if (start_index == std::string::npos + 1 || end_index == std::string::npos) {
+                        log_debug("z3_utils", "Some variables seem to be of other format than net ids. Some wrapper functions are specifically desigend for net ids. Be careful when using the wrapper with this expression.");
+                        continue;
+                    }
+
                     auto var_name = line.substr(start_index, end_index - start_index);
                     auto net_id   = std::stoi(var_name);
                     auto z3_expr  = m_ctx->bv_const(var_name.c_str(), 1);
@@ -419,11 +424,11 @@ namespace hal
             std::string directory = "/tmp/boolean_influence_tmp/";
             std::filesystem::create_directory(directory);
 
-            log_debug("boolean_function", "directory created");
+            log_debug("z3_utils", "directory created");
 
             std::string filename = directory + "boolean_func_" + std::to_string(omp_get_thread_num()) + "_" + std::to_string(m_z3_wrapper_id) + ".c";
 
-            log_debug("boolean_function", "creating file: {}", filename);
+            log_debug("z3_utils", "creating file: {}", filename);
 
             if (!this->write_c_file(filename))
             {
@@ -431,13 +436,13 @@ namespace hal
                 return std::unordered_map<u32, double>();
             }
 
-            log_debug("boolean_function", "file created: {}", filename);
+            log_debug("z3_utils", "file created: {}", filename);
 
             const std::string program_name    = filename.substr(0, filename.size() - 2);
             const std::string compile_command = "g++ -o " + program_name + " " + filename + " -O3";
             system(compile_command.c_str());
 
-            log_debug("boolean_function", "{}", compile_command);
+            log_debug("z3_utils", "{}", compile_command);
 
             // run boolean function program for every input
             for (auto it = m_inputs_net_ids.begin(); it < m_inputs_net_ids.end(); it++)
@@ -447,7 +452,7 @@ namespace hal
                 std::array<char, 128> buffer;
                 std::string result;
 
-                log_debug("boolean_function", "{}", run_command);
+                log_debug("z3_utils", "{}", run_command);
 
                 FILE* pipe = popen(run_command.c_str(), "r");
                 if (!pipe)
@@ -464,7 +469,7 @@ namespace hal
                 const u32 count = std::stoi(result);
                 double cv       = double(count) / double(evaluation_count);
 
-                log_debug("boolean_function", "calculation done");
+                log_debug("z3_utils", "calculation done");
 
                 influences.insert({*it, cv});
             }
@@ -475,7 +480,7 @@ namespace hal
 
             //std::filesystem::remove(directory);
 
-            log_debug("boolean_function", "returning influences");
+            log_debug("z3_utils", "returning influences");
 
             return influences;
         }
