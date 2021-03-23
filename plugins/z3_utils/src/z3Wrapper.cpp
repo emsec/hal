@@ -18,7 +18,7 @@ namespace hal
 {
     namespace z3_utils
     {
-        z3Wrapper::z3Wrapper(std::unique_ptr<z3::context> ctx, std::unique_ptr<z3::expr> expr) : m_ctx(std::move(ctx)), m_expr(std::move(expr)), m_z3_wrapper_id(create_id())
+        z3Wrapper::z3Wrapper(std::unique_ptr<z3::context> ctx, std::unique_ptr<z3::expr> expr) : m_z3_wrapper_id(create_id()), m_ctx(std::move(ctx)), m_expr(std::move(expr))
         {
             this->extract_function_inputs();
         }
@@ -440,7 +440,8 @@ namespace hal
 
             const std::string program_name    = filename.substr(0, filename.size() - 2);
             const std::string compile_command = "g++ -o " + program_name + " " + filename + " -O3";
-            system(compile_command.c_str());
+            int res = system(compile_command.c_str());
+            UNUSED(res);
 
             log_debug("z3_utils", "{}", compile_command);
 
