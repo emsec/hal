@@ -31,7 +31,7 @@ namespace hal
 {
     /**
      * TODO: Belongs in the python directory?
-     * A syntax highlighter that fits for python code. The following sections are distinguished and its color can be
+     * A syntax highlighter that fits for python code. The following sections are distinguished and their color can be
      * configured in the qss file: <ul>
      *   <li> Python Keywords (e.g. if, and, break, class, True, ...)
      *   <li> Operators (e.g. =, +, -, ==, &, <<, ...)

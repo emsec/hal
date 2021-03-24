@@ -28,14 +28,29 @@
 
 namespace hal
 {
+    /**
+     * A syntax highlighter that fits for a vhdl file. The following sections are distinguished and their color can be
+     * configured in the qss file: <ul>
+     *   <li> Keywords (e.g. begin, downto, entity, signal, ...)
+     *   <li> Types (e.g. ns, rising_edge, true, in, out, ...)
+     *   <li> Numbers
+     *   <li> Strings ("string")
+     *   <li> Comments
+     */
     class VhdlSyntaxHighlighter : public QSyntaxHighlighter
     {
         Q_OBJECT
 
     public:
+        /**
+        * Constructor. Initializes the syntax highlight patterns.
+        *
+        * @param parent - The parent text document
+        */
         explicit VhdlSyntaxHighlighter(QTextDocument* parent = nullptr);
 
     protected:
+
         void highlightBlock(const QString& text) override;
         //void run_current_state(const QString &text, int offset = 0);
 
