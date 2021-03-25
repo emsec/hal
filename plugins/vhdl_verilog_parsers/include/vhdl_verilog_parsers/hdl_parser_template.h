@@ -212,9 +212,9 @@ namespace hal
                                 else if (const auto pin_group_it = pin_groups.find(port.get_name()); pin_group_it != pin_groups.end())
                                 {
                                     std::vector<u32> range;
-                                    for (const auto& pin : pin_group_it->second)
+                                    for (auto pin_index_it = pin_group_it->second.rbegin(); pin_index_it != pin_group_it->second.rend(); pin_index_it++)
                                     {
-                                        range.push_back(pin.first);
+                                        range.push_back(pin_index_it->first);
                                     }
                                     port.set_ranges({range});
                                 }
