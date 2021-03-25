@@ -1,7 +1,15 @@
 option(PL_GUI "PL_GUI" ON)
 if(PL_GUI OR BUILD_ALL_PLUGINS)
+    cmake_minimum_required(VERSION 3.1.0)
 
-    find_package(Qt5Widgets)
+
+    if(APPLE AND CMAKE_HOST_APPLE)
+        set (CMAKE_PREFIX_PATH "/usr/local/Cellar/qt/5.15.2")
+    endif(APPLE AND CMAKE_HOST_APPLE)    
+
+    find_package(Qt5 COMPONENTS Core REQUIRED )
+
+    find_package(Qt5 COMPONENTS Widgets REQUIRED)
     if(Qt5Widgets_FOUND)
         message(VERBOSE "Qt5Widgets_INCLUDE_DIRS: ${Qt5Widgets_INCLUDE_DIRS}")
         message(VERBOSE "Qt5Widgets_LIBRARIES: ${Qt5Widgets_LIBRARIES}")
@@ -12,7 +20,8 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
             message(STATUS "    brew install qt")
         endif(APPLE AND CMAKE_HOST_APPLE)
     endif(Qt5Widgets_FOUND)
-    find_package(Qt5Concurrent)
+
+    find_package(Qt5 COMPONENTS Concurrent REQUIRED)
     if(Qt5Concurrent_FOUND)
         message(VERBOSE "Qt5Concurrent_INCLUDE_DIRS: ${Qt5Concurrent_INCLUDE_DIRS}")
         message(VERBOSE "Qt5Concurrent_LIBRARIES: ${Qt5Concurrent_LIBRARIES}")
@@ -23,7 +32,8 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
             message(STATUS "    brew install qt5")
         endif(APPLE AND CMAKE_HOST_APPLE)
     endif(Qt5Concurrent_FOUND)
-    find_package(Qt5Svg)
+
+    find_package(Qt5 COMPONENTS Svg REQUIRED)
     if(Qt5Svg_FOUND)
         message(VERBOSE "Qt5Svg_INCLUDE_DIRS: ${Qt5Svg_INCLUDE_DIRS}")
         message(VERBOSE "Qt5Svg_LIBRARIES: ${Qt5Svg_LIBRARIES}")
