@@ -441,7 +441,6 @@ namespace hal
         QStackedWidget* mStackedWidget;
 
         PluginScheduleWidget* mScheduleWidget;
-        MainSettingsWidget* mSettings;
         MainSettingsWidgetNew* mSettingsNew;
         WelcomeScreen* mWelcomeScreen;
         QHBoxLayout* mToolBarLayout;

@@ -9,8 +9,9 @@
 
 namespace hal
 {
+
     ExpandingListWidget::ExpandingListWidget(QWidget* parent)
-        : QScrollArea(parent), mContent(new QFrame()), mContentLayout(new QVBoxLayout()), mSpacer(new QFrame()), mSelectedButton(nullptr), mExtendedItem(nullptr), mOffset(0)
+        : QScrollArea(parent), mContent(new QFrame()), mContentLayout(new QVBoxLayout()), mSpacer(new QFrame()), mSelectedButton(nullptr), mOffset(0)
     {
         setFrameStyle(QFrame::NoFrame);
         setWidget(mContent);
@@ -26,20 +27,14 @@ namespace hal
         mContentLayout->addWidget(mSpacer);
     }
 
-    void ExpandingListWidget::appendItem(ExpandingListButton* button, ExpandingListButton* parentButton)
+    void ExpandingListWidget::appendItem(ExpandingListButton* button, const QString& groupName)
     {
-        if (parentButton)
-        {
-            for (ExpandingListItem* item : mItems)
-                if (parentButton == item->parentButton())
-                    item->appendChildButton(button);
-        }
-        else
-        {
-            ExpandingListItem* item = new ExpandingListItem(button);
-            mItems.append(item);
-            mContentLayout->addWidget(item);
-        }
+        ExpandingListItem* item = new ExpandingListItem(button);
+        mItems.append(item);
+        mContentLayout->addWidget(item);
+
+        if (!groupName.isEmpty())
+            mButtonGroup[groupName].append(item);
         connect(button, &ExpandingListButton::clicked, this, &ExpandingListWidget::handleClicked);
     }
 
@@ -56,37 +51,15 @@ namespace hal
                 mSelectedButton = nullptr;
             }
 
-            if (mExtendedItem)
-            {
-                mExtendedItem->setExpanded(false);
-                mExtendedItem->collapse();
-                mExtendedItem = nullptr;
-            }
             return;
         }
 
+        mSelectedButton = button;
         for (ExpandingListItem* item : mItems)
-            if (item->contains(button))
-            {
-                if (mSelectedButton)
-                    mSelectedButton->setSelected(false);
-
-                mSelectedButton = button;
-                mSelectedButton->setSelected(true);
-
-                if (item != mExtendedItem)
-                {
-                    if (mExtendedItem)
-                    {
-                        mExtendedItem->setExpanded(false);
-                        mExtendedItem->collapse();
-                    }
-
-                    mExtendedItem = item;
-                    mExtendedItem->setExpanded(true);
-                    mExtendedItem->expand();
-                }
-            }
+        {
+            ExpandingListButton* but = item->button();
+            but->setSelected(but == mSelectedButton);
+        }
 
         Q_EMIT buttonSelected(button);
     }
@@ -96,7 +69,7 @@ namespace hal
         if (index < 0 || index >= mItems.size())
             return;
 
-        selectButton(mItems.at(index)->parentButton());
+        selectButton(mItems.at(index)->button());
     }
 
     void ExpandingListWidget::repolish()
@@ -114,6 +87,34 @@ namespace hal
     {
         QObject* obj                  = sender();
         ExpandingListButton* button = static_cast<ExpandingListButton*>(obj);
+
+        auto grpIt = mButtonGroup.find(button->text());
+        if (grpIt != mButtonGroup.end())
+        {
+            grpIt->toggleCollapsed(mSelectedButton); // except selected
+            return;
+        }
+
         selectButton(button);
+    }
+
+    bool ExpandingListWidget::hasGroup(const QString& groupName) const
+    {
+        return mButtonGroup.contains(groupName);
+    }
+
+    void ExpandingListGroup::toggleCollapsed(ExpandingListButton* exceptSelected)
+    {
+        mCollapsed = !mCollapsed;
+        for (ExpandingListItem* item : *this)
+        {
+            if (mCollapsed)
+            {
+                if (item->button() != exceptSelected)
+                    item->collapse();
+            }
+            else
+                item->expand();
+        }
     }
 }

@@ -81,7 +81,7 @@ namespace hal
 
     private:
         void initWidgets();
-        void makeSection(const QString& label, const QString& iconPath);
+        void makeSection(const QString& label);
         void hideAllSettings();
         bool saveSettings();
 

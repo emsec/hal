@@ -599,9 +599,16 @@ hal--MainSettingsWidget hal--ExpandingListButton * {
     background-color : transparent;
 }
 
-hal--MainSettingsWidget hal--ExpandingListButton #left-border {
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton[level="0"] #left-border {
     min-width : 4px;
     max-width : 4px;
+    /*padding-right: 40px;*/
+}
+
+hal--MainSettingsWidgetNew hal--ExpandingListButton[level="1"] #left-border {
+    min-width : 22px;
+    max-width : 22px;
     /*padding-right: 40px;*/
 }
 
@@ -726,12 +733,6 @@ hal--MainSettingsWidgetNew hal--ExpandingListButton[type="child"][selected=true]
 hal--MainSettingsWidgetNew hal--ExpandingListButton * {
     font             : 14px bold "Helvetica";
     background-color : transparent;
-}
-
-hal--MainSettingsWidgetNew hal--ExpandingListButton #left-border {
-    min-width : 4px;
-    max-width : 4px;
-    /*padding-right: 40px;*/
 }
 
 hal--MainSettingsWidgetNew hal--ExpandingListButton #icon-label {

@@ -21,8 +21,6 @@
 #include <QVBoxLayout>
 #include <QTextEdit>
 
-#include <QDebug>
-
 namespace hal
 {
     MainSettingsList::~MainSettingsList()
@@ -173,7 +171,7 @@ namespace hal
             if (catg.isEmpty()) catg = "Other";
             if (!registeredCategories.contains(catg))
             {
-                makeSection(catg,QString(":/icon/%1.png").arg(catg));  // TODO: no icons defined in demo
+                makeSection(catg);
                 registeredCategories.insert(catg);
             }
 
@@ -196,15 +194,35 @@ namespace hal
         }
     }
 
-    void MainSettingsWidgetNew::makeSection(const QString& label, const QString& iconPath)
+    void MainSettingsWidgetNew::makeSection(const QString& label)
     {
-        Q_UNUSED(iconPath);
-        ExpandingListButton* btn = new ExpandingListButton();
-        btn->setObjectName(label);
-        btn->setText(label);
+        int colon = label.indexOf(':');
+        QString topLabel;
+        QString subLabel;
+        int level = 0;
+        if (colon<0)
+            subLabel = label;
+        else
+        {
+            topLabel = label.left(colon);
+            subLabel = label.mid(colon+1);
+            if (!mExpandingListWidget->hasGroup(topLabel))
+            {
+                ExpandingListButton* topBtn = new ExpandingListButton(0);
+                topBtn->setObjectName(topLabel);
+                topBtn->setText(topLabel);
+                topBtn->setDefaultIcon(topLabel);
+                mExpandingListWidget->appendItem(topBtn);
+                mSectionNames.insert(topBtn,topLabel);
+            }
+            level = 1;
+        }
+        ExpandingListButton* btn = new ExpandingListButton(level);
+        btn->setObjectName(subLabel);
+        btn->setText(subLabel);
+        btn->setDefaultIcon(subLabel);
         //btn->setIconPath(iconPath);
-        btn->setIconPath(":/icons/python");
-        mExpandingListWidget->appendItem(btn);
+        mExpandingListWidget->appendItem(btn,topLabel);
         mSectionNames.insert(btn, label);
     }
 

@@ -274,7 +274,7 @@ namespace hal
 
     void MainSettingsWidget::makeSection(const QString& label, const QString& name, const QString& iconPath)
     {
-        ExpandingListButton* btn = new ExpandingListButton();
+        ExpandingListButton* btn = new ExpandingListButton(0);
         btn->setObjectName(name);
         btn->setText(label);
         btn->setIconPath(iconPath);
