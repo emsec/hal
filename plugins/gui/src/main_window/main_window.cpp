@@ -93,8 +93,8 @@ namespace hal
 
         mStackedWidget->addWidget(mScheduleWidget);
 
-        mSettingsNew = new MainSettingsWidgetNew();
-        mStackedWidget->addWidget(mSettingsNew);
+        mSettings = new MainSettingsWidget;
+        mStackedWidget->addWidget(mSettings);
 
         mLayoutArea = new ContentLayoutArea();
         mStackedWidget->addWidget(mLayoutArea);
@@ -289,7 +289,7 @@ namespace hal
         connect(mActionAbout, &Action::triggered, mAboutDialog, &AboutDialog::exec);
 //        connect(mActionSchedule, &Action::triggered, this, &MainWindow::toggleSchedule);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::toggleSettings);
-        connect(mSettingsNew, &MainSettingsWidgetNew::close, this, &MainWindow::closeSettings);
+        connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         //debug
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
@@ -562,20 +562,20 @@ namespace hal
 
     void MainWindow::toggleSettings()
     {
-        if (mStackedWidget->currentWidget() == mSettingsNew)
+        if (mStackedWidget->currentWidget() == mSettings)
         {
             closeSettings();
         }
         else
         {
-            mSettingsNew->activate();
-            mStackedWidget->setCurrentWidget(mSettingsNew);
+            mSettings->activate();
+            mStackedWidget->setCurrentWidget(mSettings);
         }
     }
 
     void MainWindow::closeSettings()
     {
-        if (!mSettingsNew->handleAboutToClose())
+        if (!mSettings->handleAboutToClose())
             return;
         if (FileManager::get_instance()->fileOpen())
             mStackedWidget->setCurrentWidget(mLayoutArea);

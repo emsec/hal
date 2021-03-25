@@ -29,7 +29,6 @@
 #include "gui/plugin_manager/plugin_manager_widget.h"
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/settings/main_settings_widget.h"
-#include "gui/settings/main_settings_widget_new.h"
 
 #include "gui/splitter/splitter.h"
 #include <QLayout>
@@ -441,7 +440,7 @@ namespace hal
         QStackedWidget* mStackedWidget;
 
         PluginScheduleWidget* mScheduleWidget;
-        MainSettingsWidgetNew* mSettingsNew;
+        MainSettingsWidget* mSettings;
         WelcomeScreen* mWelcomeScreen;
         QHBoxLayout* mToolBarLayout;
         QToolBar* mLeftToolBar;

@@ -1,4 +1,4 @@
-#include "gui/settings/main_settings_widget_new.h"
+#include "gui/settings/main_settings_widget.h"
 #include "gui/settings/settings_manager_new.h"
 
 #include "gui/expanding_list/expanding_list_button.h"
@@ -71,7 +71,7 @@ namespace hal
         return retval;
     }
 
-    MainSettingsWidgetNew::MainSettingsWidgetNew(QWidget* parent)
+    MainSettingsWidget::MainSettingsWidget(QWidget* parent)
         : QWidget(parent), mLayout(new QHBoxLayout()), mExpandingListWidget(new ExpandingListWidget()), mVerticalLayout(new QVBoxLayout()), mScrollbar(new QScrollBar()),
           mScrollArea(new QScrollArea()), mContent(new QFrame()),
           mContentLayout(new QHBoxLayout()), mSettingsContainer(new QFrame()),
@@ -152,15 +152,15 @@ namespace hal
         mButtonLayout->addWidget(mCancel, Qt::AlignRight);
         mButtonLayout->addWidget(mOk, Qt::AlignRight);
 
-        connect(mRestoreDefaults, &QPushButton::clicked, this, &MainSettingsWidgetNew::handleRestoreDefaultsClicked);
-        connect(mCancel, &QPushButton::clicked, this, &MainSettingsWidgetNew::handleCancelClicked);
-        connect(mOk, &QPushButton::clicked, this, &MainSettingsWidgetNew::handleOkClicked);
+        connect(mRestoreDefaults, &QPushButton::clicked, this, &MainSettingsWidget::handleRestoreDefaultsClicked);
+        connect(mCancel, &QPushButton::clicked, this, &MainSettingsWidget::handleCancelClicked);
+        connect(mOk, &QPushButton::clicked, this, &MainSettingsWidget::handleOkClicked);
 
-        connect(mExpandingListWidget, &ExpandingListWidget::buttonSelected, this, &MainSettingsWidgetNew::handleButtonSelected);
-        connect(mSearchbar,&Searchbar::textEdited,this,&MainSettingsWidgetNew::searchSettings);
+        connect(mExpandingListWidget, &ExpandingListWidget::buttonSelected, this, &MainSettingsWidget::handleButtonSelected);
+        connect(mSearchbar,&Searchbar::textEdited,this,&MainSettingsWidget::searchSettings);
     }
 
-    void MainSettingsWidgetNew::initWidgets()
+    void MainSettingsWidget::initWidgets()
     {
         QSet<const SettingsItem*> registeredItems = QSet<const SettingsItem*>::fromList(mSettingsList.getItems());
         QSet<QString> registeredCategories = QSet<QString>::fromList(mSectionNames.values());
@@ -176,8 +176,8 @@ namespace hal
             }
 
             SettingsWidgetNew* widget = si->editWidget();
-            connect(widget,&SettingsWidgetNew::triggerDescriptionUpdate,this,&MainSettingsWidgetNew::handleDescriptionUpdate);
-            connect(widget,&SettingsWidgetNew::triggerRemoveWidget,this,&MainSettingsWidgetNew::handleWidgetRemove);
+            connect(widget,&SettingsWidgetNew::triggerDescriptionUpdate,this,&MainSettingsWidget::handleDescriptionUpdate);
+            connect(widget,&SettingsWidgetNew::triggerRemoveWidget,this,&MainSettingsWidget::handleWidgetRemove);
             mSettingsList.registerWidget(catg,widget);
             registeredItems.insert(si);
             mContainerLayout->addWidget(widget);
@@ -194,7 +194,7 @@ namespace hal
         }
     }
 
-    void MainSettingsWidgetNew::makeSection(const QString& label)
+    void MainSettingsWidget::makeSection(const QString& label)
     {
         int colon = label.indexOf(':');
         QString topLabel;
@@ -226,13 +226,13 @@ namespace hal
         mSectionNames.insert(btn, label);
     }
 
-    void MainSettingsWidgetNew::handleWidgetRemove(SettingsWidgetNew* widget)
+    void MainSettingsWidget::handleWidgetRemove(SettingsWidgetNew* widget)
     {
         mContainerLayout->removeWidget(widget);
         mSettingsList.unregisterWidget(widget);
     }
 
-    bool MainSettingsWidgetNew::handleAboutToClose()
+    bool MainSettingsWidget::handleAboutToClose()
     {
         bool dirty = false;
         for (SettingsWidgetNew* widget : mSettingsList)
@@ -256,7 +256,7 @@ namespace hal
         return true;
     }
 
-    void MainSettingsWidgetNew::handleRestoreDefaultsClicked()
+    void MainSettingsWidget::handleRestoreDefaultsClicked()
     {
         QList<SettingsWidgetNew*> widgetList = mSettingsList.section(mActiveSection);
 
@@ -266,18 +266,18 @@ namespace hal
         }
     }
 
-    void MainSettingsWidgetNew::handleCancelClicked()
+    void MainSettingsWidget::handleCancelClicked()
     {
         Q_EMIT close();
     }
 
-    void MainSettingsWidgetNew::handleOkClicked()
+    void MainSettingsWidget::handleOkClicked()
     {
         saveSettings();
         Q_EMIT close();
     }
 
-    void MainSettingsWidgetNew::activate()
+    void MainSettingsWidget::activate()
     {
         initWidgets();
 
@@ -291,7 +291,7 @@ namespace hal
 
     }
 
-    void MainSettingsWidgetNew::handleDescriptionUpdate(SettingsItem* activeSettingsItem)
+    void MainSettingsWidget::handleDescriptionUpdate(SettingsItem* activeSettingsItem)
     {
         if (!activeSettingsItem)
         {
@@ -303,7 +303,7 @@ namespace hal
         mDescriptionText->setHtml(html);
     }
 
-    void MainSettingsWidgetNew::handleButtonSelected(ExpandingListButton* button)
+    void MainSettingsWidget::handleButtonSelected(ExpandingListButton* button)
     {
         mResetToFirstElement = false;
         mResetToFirstElement = true;
@@ -324,13 +324,13 @@ namespace hal
         }
     }
 
-    void MainSettingsWidgetNew::hideAllSettings()
+    void MainSettingsWidget::hideAllSettings()
     {
         for (SettingsWidgetNew* widget : mSettingsList)
             widget->hide();
     }
 
-    void MainSettingsWidgetNew::showAllSettings()
+    void MainSettingsWidget::showAllSettings()
     {
         for (ExpandingListButton* but : mSectionNames.keys())
             but->setSelected(false);
@@ -338,7 +338,7 @@ namespace hal
             widget->show();
     }
 
-    void MainSettingsWidgetNew::searchSettings(const QString& needle)
+    void MainSettingsWidget::searchSettings(const QString& needle)
     {
         for (ExpandingListButton* but : mSectionNames.keys())
             but->setSelected(false);
@@ -349,7 +349,7 @@ namespace hal
                 widget->hide();
     }
 
-    bool MainSettingsWidgetNew::saveSettings()
+    bool MainSettingsWidget::saveSettings()
     {
         bool changed = false;
         for (SettingsWidgetNew* widget : mSettingsList)

@@ -34,14 +34,28 @@ class QPushButton;
 class QScrollArea;
 class QVBoxLayout;
 class QScrollBar;
+class QTextEdit;
 
 namespace hal
 {
     class ExpandingListButton;
     class ExpandingListWidget;
-    class Searchbar;
     class SettingsDisplay;
-    class SettingsWidget;
+    class SettingsWidgetNew;
+    class SettingsItem;
+    class Searchbar;
+
+    class MainSettingsList : public QList<SettingsWidgetNew*>
+    {
+        QMap<QString,QList<SettingsWidgetNew*> > mSectionMap;
+    public:
+        ~MainSettingsList();
+        void registerWidget(const QString& sectionName, SettingsWidgetNew* widget);
+        void unregisterWidget(SettingsWidgetNew* widget);
+        QList<SettingsWidgetNew*> section(const QString& s) const { return mSectionMap.value(s); }
+        QList<const SettingsItem *> getItems() const;
+        QStringList emptySections() const;
+    };
 
     class MainSettingsWidget : public QWidget
     {
@@ -50,6 +64,8 @@ namespace hal
     public:
         explicit MainSettingsWidget(QWidget* parent = 0);
         bool handleAboutToClose();
+        void activate();
+        void showAllSettings();
 
     Q_SIGNALS:
         void close();
@@ -59,22 +75,15 @@ namespace hal
         void handleCancelClicked();
         void handleOkClicked();
         void handleButtonSelected(ExpandingListButton* button);
-        void handleTextEdited(const QString& text);
-        void handleSettingUpdated(SettingsWidget* sender, const QString& key, const QVariant& value);
+        void handleDescriptionUpdate(SettingsItem* activeSettingsItem);
+        void handleWidgetRemove(SettingsWidgetNew* widget);
+        void searchSettings(const QString& needle);
 
     private:
         void initWidgets();
-        void makeSection(const QString& label, const QString& name, const QString& iconPath);
-        void registerWidget(const QString& section_name, SettingsWidget* widget);
-        bool checkConflict(SettingsWidget* widget, const QVariant& value) const;
-        void makeExclusiveGroup(const QString& name);
-        void assignExclusiveGroup(const QString& group_name, SettingsWidget* widget);
-        void releaseExclusiveGroup(const QString& group_name, SettingsWidget* widget);
+        void makeSection(const QString& label);
         void hideAllSettings();
-        void showAllSettings();
-        void removeAllHighlights();
         bool saveSettings();
-        void rollbackSettings();
 
         QHBoxLayout* mLayout;
         ExpandingListWidget* mExpandingListWidget;
@@ -92,20 +101,16 @@ namespace hal
         QVBoxLayout* mContainerLayout;
 
         QHBoxLayout* mButtonLayout;
+        QTextEdit* mDescriptionText;
 
         QPushButton* mRestoreDefaults;
         QPushButton* mCancel;
         QPushButton* mOk;
 
-        QMap<QString, QList<SettingsWidget*>*> mMap;
-        QMap<QString, ExpandingListButton*> mSections;
+        QMap<ExpandingListButton*,QString> mSectionNames;
         QString mActiveSection;
 
-        QList<SettingsWidget*> mAllSettings;
-
-        QList<QString> mExclusiveGroups;
-        QMap<SettingsWidget*, QString> mExclusiveW2g;
-        QMap<QString, QList<SettingsWidget*>*> mExclusiveG2w;
+        MainSettingsList mSettingsList;
 
         bool mResetToFirstElement;
     };
