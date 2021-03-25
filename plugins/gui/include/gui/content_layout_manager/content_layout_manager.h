@@ -27,6 +27,10 @@
 
 namespace hal
 {
+    /*
+     * Unused.
+     * TODO: Remove me?
+     */
     class ContentLayoutManager : public QObject
     {
         Q_OBJECT

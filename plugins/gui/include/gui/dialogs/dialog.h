@@ -8,6 +8,9 @@ class QPropertyAnimation;
 
 namespace hal
 {
+    /**
+     * TODO: Unused class. Remove me (with subclasses)?
+     */
     class Dialog : public QFrame
     {
         Q_OBJECT

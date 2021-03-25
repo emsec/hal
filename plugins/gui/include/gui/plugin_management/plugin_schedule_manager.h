@@ -38,6 +38,9 @@ namespace hal
         bool mChecked;
     };
 
+    /**
+     * TODO: This class and all classes in this folder are not used in this version. Remove mfolder from compilation?
+     */
     class PluginScheduleManager : public QObject
     {
         using schedule = QList<QPair<QString, QList<Argument>>>;

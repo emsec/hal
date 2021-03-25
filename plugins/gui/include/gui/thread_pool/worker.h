@@ -29,6 +29,9 @@ namespace hal
 {
     class Task;
 
+    /**
+     * TODO: ThreadPool is not used (yet?)...
+     */
     class Worker : public QThread
     {
         Q_OBJECT

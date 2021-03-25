@@ -35,6 +35,9 @@ namespace hal
     class SharedPropertiesQssAdapter;
     class VhdlQssAdapter;
 
+    /**
+     * TODO: Unused class. Remove me?
+     */
     class StyleManager : public QObject
     {
         Q_OBJECT

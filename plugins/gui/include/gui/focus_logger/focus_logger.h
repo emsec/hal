@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * Unused class. Remove me?
+     */
     class FocusLogger : public QObject
     {
         Q_OBJECT

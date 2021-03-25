@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * Unused class. Remove me?
+     */
     class OverlayEffect : public QGraphicsEffect
     {
     public:

@@ -29,6 +29,9 @@ class QKeyEvent;
 
 namespace hal
 {
+    /**
+     * TODO: Unused class. Remove me?
+     */
     class WindowEffectLayer : public QFrame
     {
         Q_OBJECT

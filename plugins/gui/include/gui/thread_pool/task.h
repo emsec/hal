@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * TODO: Unused...
+     */
     class Task : public QObject
     {
         Q_OBJECT

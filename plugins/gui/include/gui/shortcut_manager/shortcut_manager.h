@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * TODO: Unused class. Remove me?
+     */
     class ShortcutManager : public QObject
     {
         Q_OBJECT

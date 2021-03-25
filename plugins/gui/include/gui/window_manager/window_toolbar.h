@@ -30,6 +30,9 @@ class QHBoxLayout;
 
 namespace hal
 {
+    /**
+     * TODO: Unused class. Remove me?
+     */
     class WindowToolbar final : public QFrame
     {
         Q_OBJECT

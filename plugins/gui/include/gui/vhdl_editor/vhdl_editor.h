@@ -30,6 +30,9 @@ namespace hal
 {
     class Searchbar;
 
+    /**
+     * TODO: Unused class. Remove me?
+     */
     class VhdlEditor : public ContentWidget
     {
         Q_OBJECT

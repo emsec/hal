@@ -32,6 +32,9 @@ namespace hal
     class Task;
     class Worker;
 
+    /**
+     * TODO: Global ThreadPool is not used (yet?)...
+     */
     class ThreadPool : public QObject
     {
         Q_OBJECT

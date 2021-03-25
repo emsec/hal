@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * TODO: Unused class. Remove me?
+     */
     class Workspace final : public QFrame
     {
         Q_OBJECT

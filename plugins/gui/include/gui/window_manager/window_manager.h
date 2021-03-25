@@ -36,6 +36,9 @@ namespace hal
     class Window;
     class WindowToolbar;
 
+    /*
+     * TODO: Unused class. Remove me?
+     */
     class WindowManager final : public QObject
     {
         Q_OBJECT

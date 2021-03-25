@@ -30,6 +30,9 @@ namespace hal
 {
     class Notification;
 
+    /**
+     * TODO: Unused class (i.e. the global notification manager is not used). Remove me?
+     */
     class NotificationManager : public QObject
     {
         Q_OBJECT

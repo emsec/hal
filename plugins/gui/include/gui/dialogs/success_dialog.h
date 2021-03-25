@@ -6,6 +6,9 @@
 
 namespace hal
 {
+    /**
+     * TODO: Unused class. Remove me?
+     */
     class SuccessDialog : public Dialog
     {
         Q_OBJECT

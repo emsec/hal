@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * TODO: Unused class. Remove me?
+     */
     class StyleableWidget : public QWidget
     {
         Q_OBJECT

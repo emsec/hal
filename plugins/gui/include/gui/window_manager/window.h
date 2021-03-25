@@ -35,6 +35,9 @@ namespace hal
     class Overlay;
     class Workspace;
 
+    /**
+     * TODO: Unused class. Remove me?
+     */
     class Window final : public QFrame
     {
         Q_OBJECT

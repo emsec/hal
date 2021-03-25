@@ -31,7 +31,19 @@ namespace hal
 {
     namespace style
     {
+        /**
+         * TODO: Unused.
+         *
+         * @return
+         */
         extern QString getStylesheet();
+
+        /**
+         * TODO: Only used by unused window manager
+         * @param from_to_colors
+         * @param svg_path
+         * @return
+         */
         extern QIcon getStyledSvgIcon(const QString& from_to_colors, const QString& svg_path);
 
         extern void debugUpdate(); // PLACEHOLDER

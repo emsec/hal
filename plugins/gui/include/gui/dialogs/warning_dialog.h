@@ -6,6 +6,9 @@
 
 namespace hal
 {
+    /**
+     * TODO: Unused class. Remove me? (Some for )
+     */
     class WarningDialog : public Dialog
     {
         Q_OBJECT

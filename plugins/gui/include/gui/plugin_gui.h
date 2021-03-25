@@ -26,6 +26,9 @@
 #include "hal_core/plugin_system/plugin_interface_ui.h"
 namespace hal
 {
+    /**
+     * TODO: Unused in current version...
+     */
     class PluginGui : public UIPluginInterface
     {
     public:
