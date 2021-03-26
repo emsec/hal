@@ -243,7 +243,7 @@ namespace hal
             "HAL Shortcut 'Create Empty Netlist'",
             "keybind/project_create_file",
             QKeySequence("Ctrl+N"),
-            "Keybindings: Global",
+            "Keybindings:Global",
             "Keybind for creating a new and empty netlist in HAL."
         );
 
@@ -251,7 +251,7 @@ namespace hal
             "HAL Shortcut 'Open File'",
             "keybind/project_open_file",
             QKeySequence("Ctrl+O"),
-            "Keybindings: Global",
+            "Keybindings:Global",
             "Keybind for opening a new File in HAL."
         );
 
@@ -259,27 +259,38 @@ namespace hal
             "HAL Shortcut 'Save File'",
             "keybind/project_save_file",
             QKeySequence("Ctrl+S"),
-            "Keybindings: Global",
+            "Keybindings:Global",
             "Keybind for saving the currently opened file."
+        );
+
+        mSettingUndoLast = new SettingsItemKeybind(
+            "Undo Last Action",
+            "keybind/action_undo",
+            QKeySequence("Ctrl+Z"),
+            "Keybindings:Global",
+            "Keybind for having last user interaction undone."
         );
 
         QShortcut* shortCutNewFile = new QShortcut(mSettingCreateFile->value().toString(), this);
         QShortcut* shortCutOpenFile = new QShortcut(mSettingOpenFile->value().toString(), this);
         QShortcut* shortCutSaveFile = new QShortcut(mSettingSaveFile->value().toString(), this);
+        QShortcut* shortCutUndoLast = new QShortcut(mSettingUndoLast->value().toString(), this);
 
         connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortCutNewFile, &QShortcut::setKey);
         connect(mSettingOpenFile, &SettingsItemKeybind::keySequenceChanged, shortCutOpenFile, &QShortcut::setKey);
         connect(mSettingSaveFile, &SettingsItemKeybind::keySequenceChanged, shortCutSaveFile, &QShortcut::setKey);
+        connect(mSettingUndoLast, &SettingsItemKeybind::keySequenceChanged, shortCutUndoLast, &QShortcut::setKey);
 
         connect(shortCutNewFile, &QShortcut::activated, mActionNew, &QAction::trigger);
         connect(shortCutOpenFile, &QShortcut::activated, mActionOpen, &QAction::trigger);
         connect(shortCutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
+        connect(shortCutUndoLast, &QShortcut::activated, mActionUndo, &QAction::trigger);
 
         mSettingStyle = new SettingsItemDropdown(
             "Theme",
             "style/main_theme",
             StyleSheetOption::Darcula,
-            "Style",
+            "Appearance:Style",
             "Specifies which theme should be used. For the effects to take place you must restart HAL."
         );
         mSettingStyle->setValueNames<StyleSheetOption>();

@@ -504,6 +504,7 @@ namespace hal
         SettingsItemKeybind* mSettingCreateFile;
         SettingsItemKeybind* mSettingOpenFile;
         SettingsItemKeybind* mSettingSaveFile;
+        SettingsItemKeybind* mSettingUndoLast;
 
         SettingsItemDropdown* mSettingStyle;
     };

@@ -14,7 +14,8 @@ namespace hal
         return inst;
     }
 
-    SettingsManagerNew::SettingsManagerNew(QObject* parent) : QObject(parent), mSettingsFile("emsec", "settings") {}
+    SettingsManagerNew::SettingsManagerNew(QObject* parent)
+        : QObject(parent), mSettingsFile("emsec", "settings") {}
 
     void SettingsManagerNew::registerSetting(SettingsItem* item)
     {

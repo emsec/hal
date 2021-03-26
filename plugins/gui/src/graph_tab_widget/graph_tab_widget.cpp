@@ -32,7 +32,7 @@ namespace hal
             "Background Grid",
             "graph_view/grid_type",
             GraphicsScene::GridType::None,
-            "Graph View",
+            "Appearance:Graph View",
             "Specifies the grid pattern in the background of the Graph View scene"
         );
         mSettingGridType->setValueNames<GraphicsScene::GridType>();
@@ -65,7 +65,7 @@ namespace hal
             "Graph View Zoom In",
             "keybind/graph_zoom_in",
             QKeySequence("Ctrl++"),
-            "Keybindings: Graph",
+            "Keybindings:Graph",
             "Keybind for zooming in in the Graph View."
         );
 
@@ -73,7 +73,7 @@ namespace hal
             "Graph View Zoom Out",
             "keybind/graph_zoom_out",
             QKeySequence("Ctrl+-"),
-            "Keybindings: Graph",
+            "Keybindings:Graph",
             "Keybind for zooming out in the Graph View."
         );
     }

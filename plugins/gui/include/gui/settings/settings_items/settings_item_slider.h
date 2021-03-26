@@ -38,7 +38,7 @@ namespace hal
         virtual QVariant value() const override;
         virtual QVariant defaultValue() const override;
         virtual void setValue(const QVariant& v) override;
-        virtual SettingsWidgetNew* editWidget(QWidget* parent = nullptr) override;
+        virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
 
         void setRange(int min, int max);
 

@@ -40,7 +40,7 @@ namespace hal
         Q_EMIT boolChanged(v.toBool());
     }
 
-    SettingsWidgetNew* SettingsItemCheckbox::editWidget(QWidget* parent)
+    SettingsWidget* SettingsItemCheckbox::editWidget(QWidget* parent)
     {
         return new SettingsWidgetCheckbox(this, parent);
     }

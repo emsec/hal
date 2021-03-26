@@ -1,4 +1,4 @@
-#include "gui/settings/settings_widgets/settings_widget_new.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 
 #include <QBoxLayout>
 #include <QLabel>
@@ -11,14 +11,14 @@
 
 namespace hal
 {
-    SettingsWidgetNew::SettingsWidgetNew(SettingsItem* item, QWidget* parent)
+    SettingsWidget::SettingsWidget(SettingsItem* item, QWidget* parent)
         : QFrame(parent), m_layout(new QVBoxLayout()),
           mContainer(new QBoxLayout(QBoxLayout::TopToBottom)), m_top_bar(new QHBoxLayout()),
           mNameLabel(new QLabel(this)), mRevertButton(new QToolButton()),
           mDefaultButton(new QToolButton()), mSettingsItem(item),
           mHighlightColor(52, 56, 57)
     {
-        connect(mSettingsItem,&SettingsItem::destroyed,this,&SettingsWidgetNew::handleItemDestroyed);
+        connect(mSettingsItem,&SettingsItem::destroyed,this,&SettingsWidget::handleItemDestroyed);
         setFrameStyle(QFrame::NoFrame);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         m_layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -37,7 +37,7 @@ namespace hal
         QSizePolicy sp_revert = mRevertButton->sizePolicy();
         sp_revert.setRetainSizeWhenHidden(true);
         mRevertButton->setSizePolicy(sp_revert);
-        connect(mRevertButton, &QToolButton::clicked, this, &SettingsWidgetNew::handleRevertModification);
+        connect(mRevertButton, &QToolButton::clicked, this, &SettingsWidget::handleRevertModification);
         mDefaultButton->setText("Default");
         mDefaultButton->setToolTip("Load the default value");
         mDefaultButton->setVisible(false);
@@ -45,7 +45,7 @@ namespace hal
         QSizePolicy sp_default = mDefaultButton->sizePolicy();
         sp_default.setRetainSizeWhenHidden(true);
         mDefaultButton->setSizePolicy(sp_default);
-        connect(mDefaultButton, &QToolButton::clicked, this, &SettingsWidgetNew::handleSetDefaultValue);
+        connect(mDefaultButton, &QToolButton::clicked, this, &SettingsWidget::handleSetDefaultValue);
         m_top_bar->addWidget(mNameLabel);
         m_top_bar->addStretch();
         m_top_bar->addWidget(mRevertButton);
@@ -56,17 +56,17 @@ namespace hal
         hide();
     }
 
-    QColor SettingsWidgetNew::highlightColor()
+    QColor SettingsWidget::highlightColor()
     {
         return mHighlightColor;
     }
 
-    void SettingsWidgetNew::setHighlightColor(const QColor& color)
+    void SettingsWidget::setHighlightColor(const QColor& color)
     {
         mHighlightColor = color;
     }
 
-    void SettingsWidgetNew::reset_labels()
+    void SettingsWidget::reset_labels()
     {
         for (QPair<QLabel*, QString>& pair : m_labels)
         {
@@ -82,13 +82,13 @@ namespace hal
         }
     }
 
-    bool SettingsWidgetNew::matchLabel(const QString& needle)
+    bool SettingsWidget::matchLabel(const QString& needle)
     {
         if (!mSettingsItem) return false;
         return mSettingsItem->label().indexOf(needle,0,Qt::CaseInsensitive) >= 0;
     }
 
-    void SettingsWidgetNew::trigger_setting_updated()
+    void SettingsWidget::trigger_setting_updated()
     {
 
         if (!mSettingsItem) return;
@@ -97,28 +97,28 @@ namespace hal
         mDefaultButton->setEnabled(mSettingsItem->defaultValue() != val);
     }
 
-    void SettingsWidgetNew::handleSetDefaultValue()
+    void SettingsWidget::handleSetDefaultValue()
     {
         if (!mSettingsItem) return;
         load(mSettingsItem->defaultValue());
         trigger_setting_updated();
     }
 
-    void SettingsWidgetNew::handleRevertModification()
+    void SettingsWidget::handleRevertModification()
     {
         if (!mSettingsItem) return;
         load(mSettingsItem->value());
         trigger_setting_updated();
     }
 
-    void SettingsWidgetNew::handleItemDestroyed()
+    void SettingsWidget::handleItemDestroyed()
     {
         mSettingsItem = nullptr;
         Q_EMIT triggerRemoveWidget(this);
         close();
     }
 
-    void SettingsWidgetNew::setDirty(bool dirty)
+    void SettingsWidget::setDirty(bool dirty)
     {
         mDirty = dirty;
         mRevertButton->setEnabled(dirty);
@@ -128,12 +128,12 @@ namespace hal
         s->polish(this);
     }
 
-    bool SettingsWidgetNew::dirty() const
+    bool SettingsWidget::dirty() const
     {
         return mDirty;
     }
 
-    void SettingsWidgetNew::prepare()
+    void SettingsWidget::prepare()
     {
         if (!mSettingsItem) return;
         load(mSettingsItem->value());
@@ -141,7 +141,7 @@ namespace hal
         mDefaultButton->setEnabled(!mSettingsItem->isDefaultValue());
     }
 
-    void SettingsWidgetNew::enterEvent(QEvent* event)
+    void SettingsWidget::enterEvent(QEvent* event)
     {
         Q_UNUSED(event);
         mRevertButton->setVisible(true);
@@ -149,7 +149,7 @@ namespace hal
         Q_EMIT triggerDescriptionUpdate(mSettingsItem);
     }
 
-    void SettingsWidgetNew::leaveEvent(QEvent* event)
+    void SettingsWidget::leaveEvent(QEvent* event)
     {
         Q_UNUSED(event);
         mRevertButton->setVisible(false);
@@ -157,20 +157,20 @@ namespace hal
         Q_EMIT triggerDescriptionUpdate(nullptr);
     }
 
-    void SettingsWidgetNew::acceptValue()
+    void SettingsWidget::acceptValue()
     {
         if (!mSettingsItem) return;
         mSettingsItem->setValue(value());
         setDirty(false);
     }
 
-    void SettingsWidgetNew::restoreDefault()
+    void SettingsWidget::restoreDefault()
     {
         if (!mSettingsItem) return;
         load(mSettingsItem->defaultValue());
     }
 
-    void SettingsWidgetNew::loadCurrentValue()
+    void SettingsWidget::loadCurrentValue()
     {
         if (!mSettingsItem) return;
         load(mSettingsItem->value());

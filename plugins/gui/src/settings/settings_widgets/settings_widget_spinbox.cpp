@@ -13,7 +13,7 @@
 namespace hal
 {
     SettingsWidgetSpinbox::SettingsWidgetSpinbox(SettingsItemSpinbox *item, QWidget *parent)
-        : SettingsWidgetNew(item, parent)
+        : SettingsWidget(item, parent)
     {
         mSpinbox = new QSpinBox(this);
         mSpinbox->setMinimum(item->minimum());

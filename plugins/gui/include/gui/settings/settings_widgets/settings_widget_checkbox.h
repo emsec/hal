@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "gui/settings/settings_widgets/settings_widget_new.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 #include <QCheckBox>
 
 namespace hal
@@ -31,7 +31,7 @@ namespace hal
     class SettingsItemCheckbox;
     class SettingsItemNew;
 
-    class SettingsWidgetCheckbox : public SettingsWidgetNew
+    class SettingsWidgetCheckbox : public SettingsWidget
     {
         Q_OBJECT
 

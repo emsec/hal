@@ -26,7 +26,7 @@ namespace hal
             "UserAction Debug",
             "debug/user_action",
             false,
-            "Debug",
+            "eXpert Settings:Debug",
             "Specifies whether hal opens an extra window to list all executed instances of UserAction"
         );
         connect(mSettingDumpAction,&SettingsItemCheckbox::boolChanged,this,&UserActionManager::handleSettingDumpActionChanged);

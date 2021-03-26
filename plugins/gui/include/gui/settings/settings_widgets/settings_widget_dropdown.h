@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "gui/settings/settings_widgets/settings_widget_new.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 #include <QComboBox>
 #include <QStringList>
 
@@ -31,7 +31,7 @@ namespace hal
 {
     class SettingsItemDropdown;
 
-    class SettingsWidgetDropdown : public SettingsWidgetNew
+    class SettingsWidgetDropdown : public SettingsWidget
     {
         Q_OBJECT
 

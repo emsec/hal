@@ -41,7 +41,7 @@ namespace hal
         Q_EMIT keySequenceChanged(v.toString());
     }
 
-    SettingsWidgetNew* SettingsItemKeybind::editWidget(QWidget* parent)
+    SettingsWidget* SettingsItemKeybind::editWidget(QWidget* parent)
     {
         return new SettingsWidgetKeybind(this, parent);
     }

@@ -14,7 +14,7 @@
 namespace hal
 {
     SettingsWidgetDropdown::SettingsWidgetDropdown(SettingsItemDropdown *item, QWidget *parent)
-        : SettingsWidgetNew(item, parent), mOptions(item->valueNames())
+        : SettingsWidget(item, parent), mOptions(item->valueNames())
     {
         mComboBox = new QComboBox(this);
         mComboBox->addItems(mOptions);

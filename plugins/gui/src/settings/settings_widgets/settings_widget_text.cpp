@@ -13,15 +13,14 @@
 
 namespace hal
 {
-    SettingsWidgetText::SettingsWidgetText(SettingsItemText *item, QWidget *parent) : SettingsWidgetNew(item, parent)
+    SettingsWidgetText::SettingsWidgetText(SettingsItemText *item, QWidget *parent)
+        : SettingsWidget(item, parent)
     {
         m_textfield = new QLineEdit(this);
         m_textfield->setPlaceholderText(QString());
         m_textfield->setStyleSheet("QLineEdit{width: 200px;}");
         connect(m_textfield, &QLineEdit::textChanged, this, &SettingsWidgetText::on_text_changed);
         mContainer->addWidget(m_textfield);
-
-
 
         load(item->value());
     }

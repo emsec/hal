@@ -6,7 +6,7 @@
 #include "gui/gui_globals.h"
 //#include "checkbox_setting.h"
 //#include "dropdown_setting.h"
-#include "gui/settings/settings_widgets/settings_widget_new.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 //#include "spinbox_setting.h"
 //#include "text_setting.h"
 #include "gui/searchbar/searchbar.h"
@@ -25,11 +25,11 @@ namespace hal
 {
     MainSettingsList::~MainSettingsList()
     {
-        for (SettingsWidgetNew* widget : *this)
+        for (SettingsWidget* widget : *this)
             delete widget;
     }
 
-    void MainSettingsList::registerWidget(const QString& sectionName, SettingsWidgetNew* widget)
+    void MainSettingsList::registerWidget(const QString& sectionName, SettingsWidget* widget)
     {
         append(widget);
         mSectionMap[sectionName].append(widget);
@@ -38,12 +38,12 @@ namespace hal
     QList<const SettingsItem*> MainSettingsList::getItems() const
     {
         QList<const SettingsItem*> retval;
-        for (SettingsWidgetNew* widget : *this)
+        for (SettingsWidget* widget : *this)
             retval.append(widget->settingsItem());
         return retval;
     }
 
-    void MainSettingsList::unregisterWidget(SettingsWidgetNew* widget)
+    void MainSettingsList::unregisterWidget(SettingsWidget* widget)
     {
         for (auto it = mSectionMap.begin(); it != mSectionMap.end(); ++it)
         {
@@ -175,9 +175,9 @@ namespace hal
                 registeredCategories.insert(catg);
             }
 
-            SettingsWidgetNew* widget = si->editWidget();
-            connect(widget,&SettingsWidgetNew::triggerDescriptionUpdate,this,&MainSettingsWidget::handleDescriptionUpdate);
-            connect(widget,&SettingsWidgetNew::triggerRemoveWidget,this,&MainSettingsWidget::handleWidgetRemove);
+            SettingsWidget* widget = si->editWidget();
+            connect(widget,&SettingsWidget::triggerDescriptionUpdate,this,&MainSettingsWidget::handleDescriptionUpdate);
+            connect(widget,&SettingsWidget::triggerRemoveWidget,this,&MainSettingsWidget::handleWidgetRemove);
             mSettingsList.registerWidget(catg,widget);
             registeredItems.insert(si);
             mContainerLayout->addWidget(widget);
@@ -226,7 +226,7 @@ namespace hal
         mSectionNames.insert(btn, label);
     }
 
-    void MainSettingsWidget::handleWidgetRemove(SettingsWidgetNew* widget)
+    void MainSettingsWidget::handleWidgetRemove(SettingsWidget* widget)
     {
         mContainerLayout->removeWidget(widget);
         mSettingsList.unregisterWidget(widget);
@@ -235,7 +235,7 @@ namespace hal
     bool MainSettingsWidget::handleAboutToClose()
     {
         bool dirty = false;
-        for (SettingsWidgetNew* widget : mSettingsList)
+        for (SettingsWidget* widget : mSettingsList)
         {
             if (widget->dirty())
             {
@@ -258,9 +258,9 @@ namespace hal
 
     void MainSettingsWidget::handleRestoreDefaultsClicked()
     {
-        QList<SettingsWidgetNew*> widgetList = mSettingsList.section(mActiveSection);
+        QList<SettingsWidget*> widgetList = mSettingsList.section(mActiveSection);
 
-        for (SettingsWidgetNew* widget : widgetList)
+        for (SettingsWidget* widget : widgetList)
         {
             widget->restoreDefault();
         }
@@ -281,14 +281,13 @@ namespace hal
     {
         initWidgets();
 
-        mExpandingListWidget->selectItem(0);
+        mExpandingListWidget->selectFirstItem();
         mExpandingListWidget->repolish();
-        for (SettingsWidgetNew* widget : mSettingsList)
+        for (SettingsWidget* widget : mSettingsList)
         {
             if (widget)
                 widget->loadCurrentValue();
         }
-
     }
 
     void MainSettingsWidget::handleDescriptionUpdate(SettingsItem* activeSettingsItem)
@@ -315,9 +314,9 @@ namespace hal
 
         QString sectionName  = mSectionNames.value(button);
         mActiveSection       = sectionName;
-        QList<SettingsWidgetNew*> widgetList = mSettingsList.section(sectionName);
+        QList<SettingsWidget*> widgetList = mSettingsList.section(sectionName);
 
-        for (SettingsWidgetNew* widget : widgetList)
+        for (SettingsWidget* widget : widgetList)
         {
             if (widget)
                 widget->show();
@@ -326,7 +325,7 @@ namespace hal
 
     void MainSettingsWidget::hideAllSettings()
     {
-        for (SettingsWidgetNew* widget : mSettingsList)
+        for (SettingsWidget* widget : mSettingsList)
             widget->hide();
     }
 
@@ -334,7 +333,7 @@ namespace hal
     {
         for (ExpandingListButton* but : mSectionNames.keys())
             but->setSelected(false);
-        for (SettingsWidgetNew* widget : mSettingsList)
+        for (SettingsWidget* widget : mSettingsList)
             widget->show();
     }
 
@@ -342,7 +341,7 @@ namespace hal
     {
         for (ExpandingListButton* but : mSectionNames.keys())
             but->setSelected(false);
-        for (SettingsWidgetNew* widget : mSettingsList)
+        for (SettingsWidget* widget : mSettingsList)
             if (widget->matchLabel(needle))
                 widget->show();
             else
@@ -352,7 +351,7 @@ namespace hal
     bool MainSettingsWidget::saveSettings()
     {
         bool changed = false;
-        for (SettingsWidgetNew* widget : mSettingsList)
+        for (SettingsWidget* widget : mSettingsList)
         {
             if (widget->dirty())
             {

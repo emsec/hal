@@ -23,14 +23,14 @@
 
 #pragma once
 
-#include "gui/settings/settings_widgets/settings_widget_new.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 #include <QLineEdit>
 
 namespace hal
 {
     class SettingsItemText;
 
-    class SettingsWidgetText : public SettingsWidgetNew
+    class SettingsWidgetText : public SettingsWidget
     {
         Q_OBJECT
 

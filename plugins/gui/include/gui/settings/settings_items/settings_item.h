@@ -29,7 +29,7 @@
 
 namespace hal
 {
-    class SettingsWidgetNew;
+    class SettingsWidget;
 
     class SettingsItem : public QObject
     {
@@ -42,7 +42,7 @@ namespace hal
         virtual QVariant value() const = 0;
         virtual QVariant defaultValue() const = 0;
         virtual void setValue(const QVariant& v) = 0;
-        virtual  SettingsWidgetNew* editWidget(QWidget* parent = nullptr) = 0;
+        virtual  SettingsWidget* editWidget(QWidget* parent = nullptr) = 0;
 
         virtual bool isDefaultValue() const
         {

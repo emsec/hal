@@ -183,7 +183,7 @@ namespace hal
             "Sort Mechanism",
             "misc/sort_mechanism",
             gui_utility::mSortMechanism::lexical,
-            "Miscellaneous",
+            "eXpert Settings:Miscellaneous",
             "Specifies the sort mechanism used in every list "
         );
         mSettingSortMechanism->setValueNames<gui_utility::mSortMechanism>();
@@ -206,7 +206,7 @@ namespace hal
             "Search",
             "keybind/search",
             QKeySequence("Ctrl+F"),
-            "Keybindings: Global",
+            "Keybindings:Global",
             "Keybind for toggeling the searchbar in widgets where available (Selection Details Widget, Modules Widget, Python Editor, Views Widget, Grouping Widget)."
         );
 

@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "gui/settings/settings_widgets/settings_widget_new.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 #include <QSlider>
 #include <QStringList>
 
@@ -31,7 +31,7 @@ namespace hal
 {
     class SettingsItemSlider;
 
-    class SettingsWidgetSlider : public SettingsWidgetNew
+    class SettingsWidgetSlider : public SettingsWidget
     {
         Q_OBJECT
 

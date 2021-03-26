@@ -41,7 +41,7 @@ namespace hal
         Q_EMIT stringChanged(v.toString());
     }
     
-    SettingsWidgetNew* SettingsItemText::editWidget(QWidget* parent)
+    SettingsWidget* SettingsItemText::editWidget(QWidget* parent)
     {
         return new SettingsWidgetText(this, parent);
     }

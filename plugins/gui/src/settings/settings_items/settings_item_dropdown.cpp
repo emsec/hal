@@ -40,7 +40,7 @@ namespace hal
         Q_EMIT intChanged(v.toInt());
     }
 
-    SettingsWidgetNew* SettingsItemDropdown::editWidget(QWidget* parent)
+    SettingsWidget* SettingsItemDropdown::editWidget(QWidget* parent)
     {
         SettingsWidgetDropdown* retval = new SettingsWidgetDropdown(this, parent);
         return retval;

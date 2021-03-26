@@ -46,8 +46,10 @@ namespace hal
                                   "navig", "graph",
                                   "pytho", "python",
                                   "selec", "gen-window",
-                                  "advan", "preferences",
+                                  "appea", "preferences",
+                                  "exper", "preferences",
                                   "keybi", "keyboard",
+                                  "autos", "save",
                                   "debug", "bug",
                                   nullptr, nullptr};
         QHash<QString,QString> retval;

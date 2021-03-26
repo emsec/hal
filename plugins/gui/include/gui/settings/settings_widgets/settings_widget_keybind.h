@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "gui/settings/settings_widgets/settings_widget_new.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 
 
 #include "gui/keybind_edit/keybind_edit.h"
@@ -35,7 +35,7 @@ namespace hal
 {
     class SettingsItemKeybind;
 
-    class SettingsWidgetKeybind : public SettingsWidgetNew
+    class SettingsWidgetKeybind : public SettingsWidget
     {
         Q_OBJECT
 

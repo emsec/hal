@@ -23,14 +23,14 @@
 
 #pragma once
 
-#include "gui/settings/settings_widgets/settings_widget_new.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 #include <QSpinBox>
 
 namespace hal
 {
     class SettingsItemSpinbox;
 
-    class SettingsWidgetSpinbox : public SettingsWidgetNew
+    class SettingsWidgetSpinbox : public SettingsWidget
     {
         Q_OBJECT
 

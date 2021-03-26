@@ -18,7 +18,8 @@
 
 namespace hal
 {
-    SettingsWidgetKeybind::SettingsWidgetKeybind(SettingsItemKeybind* item, QWidget* parent) : SettingsWidgetNew(item, parent)
+    SettingsWidgetKeybind::SettingsWidgetKeybind(SettingsItemKeybind* item, QWidget* parent)
+        : SettingsWidget(item, parent)
     {
 
         QVBoxLayout* layout = new QVBoxLayout();

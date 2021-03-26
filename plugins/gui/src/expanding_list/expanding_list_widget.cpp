@@ -30,8 +30,12 @@ namespace hal
     void ExpandingListWidget::appendItem(ExpandingListButton* button, const QString& groupName)
     {
         ExpandingListItem* item = new ExpandingListItem(button);
-        mItems.append(item);
-        mContentLayout->addWidget(item);
+        QString tag = button->text();
+        if (!groupName.isEmpty()) tag.prepend(groupName + ":");
+        auto itInsert = mItemMap.insert(tag,item);
+        int inx = 0;
+        for (auto it=mItemMap.begin(); it!=itInsert; ++it) ++inx;
+        mContentLayout->insertWidget(inx,item);
 
         if (!groupName.isEmpty())
             mButtonGroup[groupName].append(item);
@@ -55,8 +59,9 @@ namespace hal
         }
 
         mSelectedButton = button;
-        for (ExpandingListItem* item : mItems)
+        for (auto it = mItemMap.begin(); it!=mItemMap.end(); ++it)
         {
+            ExpandingListItem* item = it.value();
             ExpandingListButton* but = item->button();
             but->setSelected(but == mSelectedButton);
         }
@@ -64,12 +69,12 @@ namespace hal
         Q_EMIT buttonSelected(button);
     }
 
-    void ExpandingListWidget::selectItem(int index)
-    {
-        if (index < 0 || index >= mItems.size())
-            return;
 
-        selectButton(mItems.at(index)->button());
+    void ExpandingListWidget::selectFirstItem()
+    {
+        if (mItemMap.isEmpty()) return;
+
+        selectButton(mItemMap.begin().value()->button());
     }
 
     void ExpandingListWidget::repolish()
@@ -79,8 +84,8 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        for (ExpandingListItem* item : mItems)
-            item->repolish();
+        for (auto it = mItemMap.begin(); it!=mItemMap.end(); ++it)
+            it.value()->repolish();
     }
 
     void ExpandingListWidget::handleClicked()

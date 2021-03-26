@@ -129,27 +129,11 @@ namespace hal
         mSelectionToGrouping->setDisabled(true);
         mSelectionToModule->setDisabled(true);
 
-        mSettingVisible = new SettingsItemCheckbox(
-            "Big Icon",
-            "selection_details/big_icon",
-            true,
-            "Selection Details",
-            "Specifies wheter an big icon representing the current selection is shown in the Selection Details Widget."
-        );
-
-        mGateDetails->bigIcon()->setVisible(mSettingVisible->value().toBool());
-        mNetDetails->bigIcon()->setVisible(mSettingVisible->value().toBool());
-        mModuleDetails->bigIcon()->setVisible(mSettingVisible->value().toBool());
-
-        connect(mSettingVisible, &SettingsItemCheckbox::boolChanged, mGateDetails->bigIcon(), &QLabel::setVisible);
-        connect(mSettingVisible, &SettingsItemCheckbox::boolChanged, mNetDetails->bigIcon(), &QLabel::setVisible);
-        connect(mSettingVisible, &SettingsItemCheckbox::boolChanged, mModuleDetails->bigIcon(), &QLabel::setVisible);
-
         mSettingHideEmpty = new SettingsItemCheckbox(
             "Hide Empty Section",
-            "selection_details/hide_empty",
+            "selection_details/hide_empty_sections",
             false,
-            "Selection Details",
+            "Appearance:Selection Details",
             "Specifies wheter empty sections are hidden or shown in the Selection Details Widget."
         );
 

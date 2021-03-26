@@ -54,7 +54,7 @@ namespace hal
 
         void appendItem(ExpandingListButton* button, const QString& groupName = QString());
         void selectButton(ExpandingListButton* button);
-        void selectItem(int index);
+        void selectFirstItem();
 
         void repolish();
         bool hasGroup(const QString& groupName) const;
@@ -70,7 +70,7 @@ namespace hal
         QVBoxLayout* mContentLayout;
         QFrame* mSpacer;
 
-        QList<ExpandingListItem*> mItems;
+        QMap<QString,ExpandingListItem*> mItemMap;
 
         ExpandingListButton* mSelectedButton;
 

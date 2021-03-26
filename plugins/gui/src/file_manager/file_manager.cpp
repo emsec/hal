@@ -29,7 +29,7 @@ namespace hal
             "Autosave",
             "advanced/autosave",
             true,
-            "Advanced",
+            "eXpert Settings:Autosave",
             "Specifies wheather HAL should autosave."
         );
 
@@ -37,7 +37,7 @@ namespace hal
             "Autosave Interval",
             "advanced/autosave_interval",
             30,
-            "Advanced",
+            "eXpert Settings:Autosave",
             "Sets after how much time in seconds an autosave will occur."
         );
 

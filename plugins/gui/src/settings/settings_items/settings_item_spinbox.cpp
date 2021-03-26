@@ -51,7 +51,7 @@ namespace hal
         Q_EMIT intChanged(v.toInt());
     }
 
-    SettingsWidgetNew* SettingsItemSpinbox::editWidget(QWidget* parent)
+    SettingsWidget* SettingsItemSpinbox::editWidget(QWidget* parent)
     {
         return new SettingsWidgetSpinbox(this, parent);
     }

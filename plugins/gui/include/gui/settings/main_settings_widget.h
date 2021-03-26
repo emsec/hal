@@ -41,18 +41,18 @@ namespace hal
     class ExpandingListButton;
     class ExpandingListWidget;
     class SettingsDisplay;
-    class SettingsWidgetNew;
+    class SettingsWidget;
     class SettingsItem;
     class Searchbar;
 
-    class MainSettingsList : public QList<SettingsWidgetNew*>
+    class MainSettingsList : public QList<SettingsWidget*>
     {
-        QMap<QString,QList<SettingsWidgetNew*> > mSectionMap;
+        QMap<QString,QList<SettingsWidget*> > mSectionMap;
     public:
         ~MainSettingsList();
-        void registerWidget(const QString& sectionName, SettingsWidgetNew* widget);
-        void unregisterWidget(SettingsWidgetNew* widget);
-        QList<SettingsWidgetNew*> section(const QString& s) const { return mSectionMap.value(s); }
+        void registerWidget(const QString& sectionName, SettingsWidget* widget);
+        void unregisterWidget(SettingsWidget* widget);
+        QList<SettingsWidget*> section(const QString& s) const { return mSectionMap.value(s); }
         QList<const SettingsItem *> getItems() const;
         QStringList emptySections() const;
     };
@@ -76,7 +76,7 @@ namespace hal
         void handleOkClicked();
         void handleButtonSelected(ExpandingListButton* button);
         void handleDescriptionUpdate(SettingsItem* activeSettingsItem);
-        void handleWidgetRemove(SettingsWidgetNew* widget);
+        void handleWidgetRemove(SettingsWidget* widget);
         void searchSettings(const QString& needle);
 
     private:

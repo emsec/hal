@@ -28,7 +28,7 @@ namespace hal
             "GUI Debug Grid",
             "debug/grid",
             false,
-            "Debug",
+            "eXpert Settings:Debug",
             "Specifies whether the debug grid is displayed in the Graph View. The gird represents the scene as the layouter interprets it."
         );
     

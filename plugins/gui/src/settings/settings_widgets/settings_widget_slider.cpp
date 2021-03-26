@@ -17,7 +17,8 @@
 
 namespace hal
 {
-    SettingsWidgetSlider::SettingsWidgetSlider(SettingsItemSlider *item, QWidget *parent) : SettingsWidgetNew(item, parent)
+    SettingsWidgetSlider::SettingsWidgetSlider(SettingsItemSlider *item, QWidget *parent)
+        : SettingsWidget(item, parent)
     {
 
         QHBoxLayout* layout = new QHBoxLayout();

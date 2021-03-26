@@ -51,7 +51,7 @@ namespace hal
         Q_EMIT intChanged(v.toInt());
     }
 
-    SettingsWidgetNew* SettingsItemSlider::editWidget(QWidget* parent)
+    SettingsWidget* SettingsItemSlider::editWidget(QWidget* parent)
     {
         //SettingsWidgetSlider* editWidget = new SettingsWidgetSlider(this, parent);
         //connect(editWidget, &SettingsWidgetSlider::valueChanged, this, &SettingsItemSlider::handleValueChanged);

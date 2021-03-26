@@ -25,7 +25,7 @@
 
 #include <QCheckBox>
 #include "gui/settings/settings_items/settings_item.h"
-#include "gui/settings/settings_widgets/settings_widget_new.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 
 
 namespace hal
@@ -40,7 +40,7 @@ namespace hal
         virtual QVariant value() const override;
         virtual QVariant defaultValue() const override;
         virtual void setValue(const QVariant& v) override;
-        virtual SettingsWidgetNew* editWidget(QWidget* parent = nullptr) override;
+        virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
 
     Q_SIGNALS:
         void boolChanged(bool);

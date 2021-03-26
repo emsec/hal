@@ -13,7 +13,8 @@
 
 namespace hal
 {
-    SettingsWidgetCheckbox::SettingsWidgetCheckbox(SettingsItemCheckbox *item, QWidget *parent): SettingsWidgetNew(item, parent)
+    SettingsWidgetCheckbox::SettingsWidgetCheckbox(SettingsItemCheckbox *item, QWidget *parent)
+        : SettingsWidget(item, parent)
     {
         QHBoxLayout* layout = new QHBoxLayout();
         mContainer->addLayout(layout);
