@@ -1,6 +1,6 @@
 #include "gui/settings/settings_items/settings_item_text.h"
 
-#include "gui/settings/settings_manager_new.h"
+#include "gui/settings/settings_manager.h"
 #include "gui/settings/settings_widgets/settings_widget_text.h"
 
 namespace hal
@@ -15,7 +15,7 @@ namespace hal
         mDescription = descr;
         mIsGlobal = isGlobal;
         
-        SettingsManagerNew::instance()->registerSetting(this);
+        SettingsManager::instance()->registerSetting(this);
     }
 
     QVariant SettingsItemText::value() const

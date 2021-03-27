@@ -47,7 +47,6 @@ namespace hal {
         mLayout->addWidget(mHeader);
 
         connect(mHeader,&QPushButton::clicked,this,&DetailsSectionWidget::toggleBodyVisible);
-        //connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &DetailsSectionWidget::handleGlobalSettingsChanged);
     }
 
     QTableWidget* DetailsSectionWidget::table() const

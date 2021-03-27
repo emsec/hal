@@ -4,20 +4,18 @@
 
 namespace hal
 {
-    SettingsItemCheckbox* DisputedBigIcon::sShowIconSetting = nullptr;
-
+    SettingsItemCheckbox* DisputedBigIcon::sShowIconSetting =
+            new SettingsItemCheckbox(
+                "Big Icon",
+                "selection_details/show_big_icon",
+                true,
+                "Appearance:Selection Details",
+                "Specifies wheter an big icon representing the current selection is shown in the Selection Details Widget."
+                );
 
     DisputedBigIcon::DisputedBigIcon(const QString &iconName, QWidget *parent)
         : QLabel(parent)
     {
-        if (!sShowIconSetting)
-            sShowIconSetting = new SettingsItemCheckbox(
-                        "Big Icon",
-                        "selection_details/show_big_icon",
-                        true,
-                        "Appearance:Selection Details",
-                        "Specifies wheter an big icon representing the current selection is shown in the Selection Details Widget."
-                        );
         mIsVisible = sShowIconSetting->value().toBool();
         connect(sShowIconSetting,&SettingsItemCheckbox::boolChanged,this,&DisputedBigIcon::setVisible);
 

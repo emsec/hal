@@ -31,6 +31,7 @@
 #include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/user_action_compound.h"
+#include <QShortcut>
 
 namespace hal
 {

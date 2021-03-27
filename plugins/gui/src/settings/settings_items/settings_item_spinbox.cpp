@@ -1,6 +1,6 @@
 #include "gui/settings/settings_items/settings_item_spinbox.h"
 #include "gui/settings/settings_widgets/settings_widget_spinbox.h"
-#include "gui/settings/settings_manager_new.h"
+#include "gui/settings/settings_manager.h"
 
 #include <algorithm>
 
@@ -19,7 +19,7 @@ namespace hal
         mDescription = desc;
         mIsGlobal = isGlobal;
 
-        SettingsManagerNew::instance()->registerSetting(this);
+        SettingsManager::instance()->registerSetting(this);
     }
 
     void SettingsItemSpinbox::setRange(int min, int max)

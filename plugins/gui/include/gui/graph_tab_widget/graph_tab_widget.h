@@ -160,12 +160,16 @@ namespace hal
         void zoomInShortcut();
         void zoomOutShortcut();
 
-        SettingsItemDropdown* mSettingGridType;
-        SettingsItemDropdown* mSettingDragModifier;
-        SettingsItemDropdown* mSettingPanModifier;
+        static SettingsItemDropdown* sSettingGridType;
+        static SettingsItemDropdown* sSettingDragModifier;
+        static SettingsItemDropdown* sSettingPanModifier;
 
-        SettingsItemKeybind* mSettingZoomIn;
-        SettingsItemKeybind* mSettingZoomOut;
+        static SettingsItemKeybind* sSettingZoomIn;
+        static SettingsItemKeybind* sSettingZoomOut;
+
+        static bool sSettingsInitialized;
+
+        static bool initSettings();
 
         QMap<KeyboardModifier, Qt::KeyboardModifier> mKeyModifierMap;
     };

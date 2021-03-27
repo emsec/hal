@@ -329,8 +329,6 @@ namespace hal
 
     void GraphicsScene::connectAll()
     {
-        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphicsScene::handleGlobalSettingChanged);
-
         connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
 
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GraphicsScene::handleExternSelectionChanged);
@@ -347,8 +345,6 @@ namespace hal
 
     void GraphicsScene::disconnectAll()
     {
-        disconnect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphicsScene::handleGlobalSettingChanged);
-
         disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
 
         disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GraphicsScene::handleExternSelectionChanged);
@@ -591,18 +587,6 @@ namespace hal
         QGraphicsScene::mousePressEvent(event);
     }
 
-    void GraphicsScene::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
-    {
-        Q_UNUSED(sender)
-
-        #ifdef GUI_DEBUG_GRID
-        if (key == "debug/grid")
-        {
-            mDebugGridEnable = value.toBool();
-        }
-        #endif
-    }
-
     void GraphicsScene::drawBackground(QPainter* painter, const QRectF& rect)
     {
         if (!sGridEnabled)
@@ -776,7 +760,6 @@ namespace hal
     void GraphicsScene::setDebugGridEnabled(bool enabled)
     {
         mDebugGridEnable = enabled;
-        qDebug() << "SCENE: " << mDebugGridEnable;
     }
 
     bool GraphicsScene::debugGridEnabled()

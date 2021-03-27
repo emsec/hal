@@ -1,76 +1,66 @@
 #include "gui/settings/settings_manager.h"
 
 #include <QDebug>
-#include "hal_core/utilities/utils.h"
-#include "hal_core/defines.h"
-#include "gui/gui_globals.h"
-
-#include <QSettings>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QRect>
 
 namespace hal
 {
-    SettingsManager::SettingsManager(QObject* parent) : QObject(parent),
-        mSettings(new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat)),
-        mDefaults(new QSettings(QString::fromStdString((utils::get_config_directory() / "guidefaults.ini").string()), QSettings::IniFormat))
+    SettingsManager* SettingsManager:: inst = nullptr;
+
+    SettingsManager* SettingsManager:: instance()
     {
-        //gSettingsRelay->registerSender(this, name());
-        if (mSettings->status() != QSettings::NoError) {
-            qDebug() << "Failed to load guisettings.ini";
-        }
-        if (mDefaults->status() != QSettings::NoError) {
-            qDebug() << "Failed to load guidefaults.ini";
-        }
+        if(!inst)
+            inst = new SettingsManager;
+
+        return inst;
     }
 
-    SettingsManager::~SettingsManager()
+    SettingsManager::SettingsManager(QObject* parent)
+        : QObject(parent), mSettingsFile("emsec", "settings") {}
+
+    void SettingsManager::registerSetting(SettingsItem* item)
     {
-        //gSettingsRelay->removeSender(this);
+        mSettingsList.append(item);
+
+        if(mSettingsFile.contains(item->tag()))
+            item->restoreFromSettings(mSettingsFile.value(item->tag()));
+
+        connect(item, &SettingsItem::destroyed, this, &SettingsManager::handleItemDestroyed);
+
+        qDebug() << "new setting " << item << " " << item->tag();
     }
 
-    QVariant SettingsManager::get(const QString& key)
+    void SettingsManager::handleItemDestroyed(QObject* obj)
     {
-        return this->get(key, getDefault(key));
+        SettingsItem* item = static_cast<SettingsItem*>(obj);
+        mSettingsList.removeAll(item);
     }
 
-    QVariant SettingsManager::get(const QString& key, const QVariant& defaultVal)
+    void SettingsManager::persistUserSettings()
     {
-        return mSettings->value(key, defaultVal);
+        for(SettingsItem* item : mSettingsList)
+            mSettingsFile.setValue(item->tag(), item->value());
+
+        mSettingsFile.sync();
     }
 
-    QVariant SettingsManager::getDefault(const QString& key)
+    QPoint SettingsManager::mainWindowPosition() const
     {
-        return mDefaults->value(key);
+        return mSettingsFile.value("MainWindow/position", QPoint(0, 0)).toPoint();
     }
 
-    QVariant SettingsManager::reset(const QString& key)
+    QSize SettingsManager::mainWindowSize() const
     {
-        QVariant value = this->getDefault(key);
-        mSettings->remove(key);
-        gSettingsRelay->relaySettingChanged(this, key, value);
-        return value;
+        QRect rect = QApplication::desktop()->screenGeometry();
+        return mSettingsFile.value("MainWindow/size", rect.size()).toSize();
     }
 
-    void SettingsManager::update(const QString& key, const QVariant& value)
+    void SettingsManager::mainWindowSaveGeometry(const QPoint& pos, const QSize& size)
     {
-        QVariant current = this->get(key, QVariant(QVariant::Invalid));
-        if (mDefaults->value(key) == value)
-        {
-            // if the user sets something to default, remove it from the settings file
-            mSettings->remove(key);
-        }
-        else
-        {
-            mSettings->setValue(key, value);
-        }
-
-        if (current != value)
-        {
-            gSettingsRelay->relaySettingChanged(this, key, value);
-        }
-    }
-
-    void SettingsManager::sync()
-    {
-        mSettings->sync();
+        mSettingsFile.setValue("MainWindow/position", pos);
+        mSettingsFile.setValue("MainWindow/size", size);
+        mSettingsFile.sync();
     }
 }

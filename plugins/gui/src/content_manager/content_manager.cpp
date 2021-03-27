@@ -38,6 +38,32 @@
 
 namespace hal
 {
+    SettingsItemDropdown* ContentManager::sSettingSortMechanism;
+    SettingsItemKeybind* ContentManager::sSettingSearch;
+    bool ContentManager::sSettingsInitialized = initializeSettins();
+    bool ContentManager::initializeSettins()
+    {
+        sSettingSortMechanism = new SettingsItemDropdown(
+            "Sort Mechanism",
+            "misc/sort_mechanism",
+            gui_utility::mSortMechanism::lexical,
+            "eXpert Settings:Miscellaneous",
+            "Specifies the sort mechanism used in every list "
+        );
+        sSettingSortMechanism->setValueNames<gui_utility::mSortMechanism>();
+
+        sSettingSearch = new SettingsItemKeybind(
+            "Search",
+            "keybind/search",
+            QKeySequence("Ctrl+F"),
+            "Keybindings:Global",
+            "Keybind for toggeling the searchbar in widgets where available (Selection Details Widget, Modules Widget, Python Editor, Views Widget, Grouping Widget)."
+        );
+
+        return true;
+    }
+
+
     ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent)
     {
         // has to be created this early in order to receive deserialization by the core signals
@@ -179,44 +205,27 @@ namespace hal
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWidget, &GraphTabWidget::handleNetFocus);
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusModuleClicked, mGraphTabWidget, &GraphTabWidget::handleModuleFocus);
 
-        mSettingSortMechanism = new SettingsItemDropdown(
-            "Sort Mechanism",
-            "misc/sort_mechanism",
-            gui_utility::mSortMechanism::lexical,
-            "eXpert Settings:Miscellaneous",
-            "Specifies the sort mechanism used in every list "
-        );
-        mSettingSortMechanism->setValueNames<gui_utility::mSortMechanism>();
-
-        connect(mSettingSortMechanism, &SettingsItemDropdown::intChanged, mSelectionDetailsWidget, [this](int value){
+        connect(sSettingSortMechanism, &SettingsItemDropdown::intChanged, mSelectionDetailsWidget, [this](int value){
             mSelectionDetailsWidget->selectionTreeView()->proxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
         });
 
-        connect(mSettingSortMechanism, &SettingsItemDropdown::intChanged, mModuleWidget, [this](int value){
+        connect(sSettingSortMechanism, &SettingsItemDropdown::intChanged, mModuleWidget, [this](int value){
             mModuleWidget->proxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
         });
 
-        connect(mSettingSortMechanism, &SettingsItemDropdown::intChanged, mGroupingManagerWidget, [this](int value){
+        connect(sSettingSortMechanism, &SettingsItemDropdown::intChanged, mGroupingManagerWidget, [this](int value){
             mGroupingManagerWidget->getProxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
         });
 
-        mSettingSortMechanism->intChanged(mSettingSortMechanism->value().toInt());
+        sSettingSortMechanism->intChanged(sSettingSortMechanism->value().toInt());
 
-        mSettingSearch = new SettingsItemKeybind(
-            "Search",
-            "keybind/search",
-            QKeySequence("Ctrl+F"),
-            "Keybindings:Global",
-            "Keybind for toggeling the searchbar in widgets where available (Selection Details Widget, Modules Widget, Python Editor, Views Widget, Grouping Widget)."
-        );
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mContextManagerWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mModuleWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mPythonWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mGroupingManagerWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mSelectionDetailsWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
 
-        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mContextManagerWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
-        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mModuleWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
-        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mPythonWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
-        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mGroupingManagerWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
-        connect(mSettingSearch, &SettingsItemKeybind::keySequenceChanged, mSelectionDetailsWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
-
-        mSettingSearch->keySequenceChanged(mSettingSearch->value().toString());
+        sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
     }
 
     void ContentManager::handleFilsystemDocChanged(const QString& fileName)

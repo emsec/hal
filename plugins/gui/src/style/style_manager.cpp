@@ -40,7 +40,7 @@ namespace hal
         if (!app)
             return;
 
-        QString path = gSettingsManager->get("stylesheet/base").toString();
+        QString path /*= gSettingsManager->get("stylesheet/base").toString()*/;
         QFile stylesheet(path);
 
         if (!stylesheet.exists())
@@ -57,7 +57,7 @@ namespace hal
             return;
         }
 
-        path = gSettingsManager->get("stylesheet/definitions").toString();
+        // path = gSettingsManager->get("stylesheet/definitions").toString();
 
         if (path.isEmpty())
         {

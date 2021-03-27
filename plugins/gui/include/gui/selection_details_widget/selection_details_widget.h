@@ -390,6 +390,6 @@ namespace hal
 
         static const QString sAddToGrouping;
 
-        SettingsItemCheckbox* mSettingHideEmpty;
+        static SettingsItemCheckbox* sSettingHideEmpty;
     };
 }

@@ -14,6 +14,7 @@
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/user_action_compound.h"
+#include "gui/action/action.h"
 #include "hal_core/utilities/log.h"
 
 #include <QAction>
@@ -25,6 +26,7 @@
 #include <QHeaderView>
 #include <QColorDialog>
 #include <QStringList>
+#include <QShortcut>
 
 namespace hal
 {

@@ -1,5 +1,5 @@
 #include "gui/settings/settings_items/settings_item_keybind.h"
-#include "gui/settings/settings_manager_new.h"
+#include "gui/settings/settings_manager.h"
 #include "gui/settings/settings_widgets/settings_widget_keybind.h"
 
 
@@ -15,7 +15,7 @@ namespace hal
         mDescription = descr;
         mIsGlobal = isGlobal;
         
-        SettingsManagerNew::instance()->registerSetting(this);
+        SettingsManager::instance()->registerSetting(this);
     }
 
     QVariant SettingsItemKeybind::value() const

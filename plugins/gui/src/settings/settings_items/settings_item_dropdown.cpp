@@ -1,5 +1,5 @@
 #include "gui/settings/settings_items/settings_item_dropdown.h"
-#include "gui/settings/settings_manager_new.h"
+#include "gui/settings/settings_manager.h"
 #include "gui/settings/settings_widgets/settings_widget_dropdown.h"
 
 namespace hal
@@ -14,7 +14,7 @@ namespace hal
         mDescription = desc;
         mIsGlobal = isGlobal;
 
-        SettingsManagerNew::instance()->registerSetting(this);
+        SettingsManager::instance()->registerSetting(this);
     }
 
     QVariant SettingsItemDropdown::value() const
@@ -84,6 +84,6 @@ namespace hal
 
     void SettingsItemDropdown::reloadSettings()
     {
-        restoreFromSettings(SettingsManagerNew::instance()->settingsValue(this->tag()));
+        restoreFromSettings(SettingsManager::instance()->settingsValue(this->tag()));
     }
 }

@@ -15,6 +15,63 @@
 
 namespace hal
 {
+    SettingsItemDropdown* GraphTabWidget::sSettingGridType;
+    SettingsItemDropdown* GraphTabWidget::sSettingDragModifier;
+    SettingsItemDropdown* GraphTabWidget::sSettingPanModifier;
+
+    SettingsItemKeybind* GraphTabWidget::sSettingZoomIn;
+    SettingsItemKeybind* GraphTabWidget::sSettingZoomOut;
+
+    bool GraphTabWidget::sSettingsInitialized = initSettings();
+
+    bool GraphTabWidget::initSettings()
+    {
+        sSettingGridType = new SettingsItemDropdown(
+            "Background Grid",
+            "graph_view/grid_type",
+            GraphicsScene::GridType::None,
+            "Appearance:Graph View",
+            "Specifies the grid pattern in the background of the Graph View scene"
+        );
+        sSettingGridType->setValueNames<GraphicsScene::GridType>();
+
+        sSettingDragModifier = new SettingsItemDropdown(
+            "Move/Swap Modifier",
+            "graph_view/drag_mode_modifier",
+            KeyboardModifier::Alt,
+            "Graph View",
+            "Specifies the key which can be pressed to switch the position of two Module/Gates in the Graph View while dragging."
+        );
+        sSettingDragModifier->setValueNames<KeyboardModifier>();
+
+        sSettingPanModifier = new SettingsItemDropdown(
+            "Pan Scene Modifier",
+            "graph_view/pan_modifier",
+            KeyboardModifier::Shift,
+            "Graph View",
+            "Specifies the key which can be pressed to pan the scene in the Graph View while left clicking."
+        );
+        sSettingPanModifier->setValueNames<KeyboardModifier>();
+
+        sSettingZoomIn = new SettingsItemKeybind(
+            "Graph View Zoom In",
+            "keybind/graph_zoom_in",
+            QKeySequence("Ctrl++"),
+            "Keybindings:Graph",
+            "Keybind for zooming in in the Graph View."
+        );
+
+        sSettingZoomOut = new SettingsItemKeybind(
+            "Graph View Zoom Out",
+            "keybind/graph_zoom_out",
+            QKeySequence("Ctrl+-"),
+            "Keybindings:Graph",
+            "Keybind for zooming out in the Graph View."
+        );
+
+        return true;
+    }
+
     GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2)
     {
         mContentLayout->addWidget(mTabWidget);
@@ -28,66 +85,24 @@ namespace hal
         connect(gGraphContextManager, &GraphContextManager::deletingContext, this, &GraphTabWidget::handleContextRemoved);
         connect(gGuiApi, &GuiApi::navigationRequested, this, &GraphTabWidget::ensureSelectionVisible);
         
-        mSettingGridType = new SettingsItemDropdown(
-            "Background Grid",
-            "graph_view/grid_type",
-            GraphicsScene::GridType::None,
-            "Appearance:Graph View",
-            "Specifies the grid pattern in the background of the Graph View scene"
-        );
-        mSettingGridType->setValueNames<GraphicsScene::GridType>();
-
-        mSettingDragModifier = new SettingsItemDropdown(
-            "Move/Swap Modifier",
-            "graph_view/drag_mode_modifier",
-            KeyboardModifier::Alt,
-            "Graph View",
-            "Specifies the key which can be pressed to switch the position of two Module/Gates in the Graph View while dragging."
-       );
-        mSettingDragModifier->setValueNames<KeyboardModifier>();
-
-        mSettingPanModifier = new SettingsItemDropdown(
-            "Pan Scene Modifier",
-            "graph_view/pan_modifier",
-            KeyboardModifier::Shift,
-            "Graph View",
-            "Specifies the key which can be pressed to pan the scene in the Graph View while left clicking."
-        );
-        mSettingPanModifier->setValueNames<KeyboardModifier>();
 
         //cant use the qt enum Qt::KeyboardModifer, therefore a map as santas little helper
         mKeyModifierMap = QMap<KeyboardModifier, Qt::KeyboardModifier>();
         mKeyModifierMap.insert(KeyboardModifier::Alt, Qt::KeyboardModifier::AltModifier);
         mKeyModifierMap.insert(KeyboardModifier::Ctrl, Qt::KeyboardModifier::ControlModifier);
         mKeyModifierMap.insert(KeyboardModifier::Shift, Qt::KeyboardModifier::ShiftModifier);
-
-        mSettingZoomIn = new SettingsItemKeybind(
-            "Graph View Zoom In",
-            "keybind/graph_zoom_in",
-            QKeySequence("Ctrl++"),
-            "Keybindings:Graph",
-            "Keybind for zooming in in the Graph View."
-        );
-
-        mSettingZoomOut = new SettingsItemKeybind(
-            "Graph View Zoom Out",
-            "keybind/graph_zoom_out",
-            QKeySequence("Ctrl+-"),
-            "Keybindings:Graph",
-            "Keybind for zooming out in the Graph View."
-        );
     }
 
     QList<QShortcut *> GraphTabWidget::createShortcuts()
     {
-        QShortcut* zoomInShortcut = new QShortcut(mSettingZoomIn->value().toString(), this);
-        QShortcut* zoomOutShortcut = new QShortcut(mSettingZoomOut->value().toString(), this);
+        QShortcut* zoomInShortcut = new QShortcut(sSettingZoomIn->value().toString(), this);
+        QShortcut* zoomOutShortcut = new QShortcut(sSettingZoomOut->value().toString(), this);
 
         connect(zoomInShortcut, &QShortcut::activated, this, &GraphTabWidget::zoomInShortcut);
         connect(zoomOutShortcut, &QShortcut::activated, this, &GraphTabWidget::zoomOutShortcut);
 
-        connect(mSettingZoomIn, &SettingsItemKeybind::keySequenceChanged, zoomInShortcut, &QShortcut::setKey);
-        connect(mSettingZoomOut, &SettingsItemKeybind::keySequenceChanged, zoomOutShortcut, &QShortcut::setKey);
+        connect(sSettingZoomIn, &SettingsItemKeybind::keySequenceChanged, zoomInShortcut, &QShortcut::setKey);
+        connect(sSettingZoomOut, &SettingsItemKeybind::keySequenceChanged, zoomOutShortcut, &QShortcut::setKey);
 
         QList<QShortcut*> list;
         list.append(zoomInShortcut);
@@ -182,19 +197,19 @@ namespace hal
     {
         GraphWidget* new_graph_widget = new GraphWidget(context);
 
-        new_graph_widget->view()->setGridType((GraphicsScene::GridType(mSettingGridType->value().toInt())));
-        new_graph_widget->view()->setDragModifier(mKeyModifierMap.value((KeyboardModifier)mSettingDragModifier->value().toInt()));
-        new_graph_widget->view()->setPanModifier(mKeyModifierMap.value((KeyboardModifier)mSettingPanModifier->value().toInt()));
+        new_graph_widget->view()->setGridType((GraphicsScene::GridType(sSettingGridType->value().toInt())));
+        new_graph_widget->view()->setDragModifier(mKeyModifierMap.value((KeyboardModifier)sSettingDragModifier->value().toInt()));
+        new_graph_widget->view()->setPanModifier(mKeyModifierMap.value((KeyboardModifier)sSettingPanModifier->value().toInt()));
 
-        connect(mSettingGridType, &SettingsItemDropdown::intChanged, new_graph_widget, [new_graph_widget](int value){
+        connect(sSettingGridType, &SettingsItemDropdown::intChanged, new_graph_widget, [new_graph_widget](int value){
             new_graph_widget->view()->setGridType((GraphicsScene::GridType(value)));
         });
 
-        connect(mSettingDragModifier, &SettingsItemDropdown::intChanged, new_graph_widget, [new_graph_widget, this](int value){
+        connect(sSettingDragModifier, &SettingsItemDropdown::intChanged, new_graph_widget, [new_graph_widget, this](int value){
             new_graph_widget->view()->setDragModifier(mKeyModifierMap.value((KeyboardModifier)value));
         });
 
-        connect(mSettingPanModifier, &SettingsItemDropdown::intChanged, new_graph_widget, [new_graph_widget, this](int value){
+        connect(sSettingPanModifier, &SettingsItemDropdown::intChanged, new_graph_widget, [new_graph_widget, this](int value){
             new_graph_widget->view()->setPanModifier(mKeyModifierMap.value((KeyboardModifier)value));
         });
 

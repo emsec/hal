@@ -31,6 +31,7 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
+#include "gui/settings/settings_manager.h"
 
 #include "gui/user_action/action_open_netlist_file.h"
 
@@ -42,7 +43,6 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QSettings>
 #include <QShortcut>
 #include <QtConcurrent>
 
@@ -839,10 +839,9 @@ namespace hal
 
     void MainWindow::restoreState()
     {
-        QPoint pos = gSettingsManager->get("MainWindow/position", QPoint(0, 0)).toPoint();
+        QPoint pos = SettingsManager::instance()->mainWindowPosition();
         move(pos);
-        QRect rect = QApplication::desktop()->screenGeometry();
-        QSize size = gSettingsManager->get("MainWindow/size", QSize(rect.width(), rect.height())).toSize();
+        QSize size = SettingsManager::instance()->mainWindowSize();
         resize(size);
         //restore state of all subwindows
         mLayoutArea->initSplitterSize(size);
@@ -850,9 +849,6 @@ namespace hal
 
     void MainWindow::saveState()
     {
-        gSettingsManager->update("MainWindow/position", pos());
-        gSettingsManager->update("MainWindow/size", size());
-        //save state of all subwindows and everything else that might need to be restored on the next program start
-        gSettingsManager->sync();
+        SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
 }    // namespace hal

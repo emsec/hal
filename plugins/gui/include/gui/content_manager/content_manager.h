@@ -154,8 +154,10 @@ namespace hal
         SelectionDetailsWidget* mSelectionDetailsWidget;
         LoggerWidget* mLoggerWidget;
 
-        SettingsItemDropdown* mSettingSortMechanism;
-        SettingsItemKeybind* mSettingSearch;
+        static SettingsItemDropdown* sSettingSortMechanism;
+        static SettingsItemKeybind* sSettingSearch;
+        static bool sSettingsInitialized;
+        static bool initializeSettins();
 
 #ifdef HAL_STUDY
         SpecialLogContentManager* mSpecialLogContentManager;

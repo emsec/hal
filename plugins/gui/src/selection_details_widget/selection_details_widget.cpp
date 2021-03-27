@@ -44,6 +44,15 @@ namespace hal
 {
     const QString SelectionDetailsWidget::sAddToGrouping("Add to grouping ");
 
+    SettingsItemCheckbox* SelectionDetailsWidget::sSettingHideEmpty =
+            new SettingsItemCheckbox(
+                "Hide Empty Section",
+                "selection_details/hide_empty_sections",
+                false,
+                "Appearance:Selection Details",
+                "Specifies wheter empty sections are hidden or shown in the Selection Details Widget."
+                );
+
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), mNumberSelectedItems(0),
           mSelectionToGrouping(new QAction),
@@ -129,21 +138,13 @@ namespace hal
         mSelectionToGrouping->setDisabled(true);
         mSelectionToModule->setDisabled(true);
 
-        mSettingHideEmpty = new SettingsItemCheckbox(
-            "Hide Empty Section",
-            "selection_details/hide_empty_sections",
-            false,
-            "Appearance:Selection Details",
-            "Specifies wheter empty sections are hidden or shown in the Selection Details Widget."
-        );
+        mGateDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
+        mModuleDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
+        mNetDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
 
-        mGateDetails->hideSectionsWhenEmpty(mSettingHideEmpty->value().toBool());
-        mModuleDetails->hideSectionsWhenEmpty(mSettingHideEmpty->value().toBool());
-        mNetDetails->hideSectionsWhenEmpty(mSettingHideEmpty->value().toBool());
-
-        connect(mSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mGateDetails, &GateDetailsWidget::hideSectionsWhenEmpty);
-        connect(mSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mModuleDetails, &ModuleDetailsWidget::hideSectionsWhenEmpty);
-        connect(mSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mNetDetails, &NetDetailsWidget::hideSectionsWhenEmpty);
+        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mGateDetails, &GateDetailsWidget::hideSectionsWhenEmpty);
+        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mModuleDetails, &ModuleDetailsWidget::hideSectionsWhenEmpty);
+        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mNetDetails, &NetDetailsWidget::hideSectionsWhenEmpty);
 
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);

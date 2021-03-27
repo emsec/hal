@@ -317,9 +317,6 @@ namespace hal
          */
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
-    private Q_SLOTS:
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
-
     private:
         struct ModuleData
         {

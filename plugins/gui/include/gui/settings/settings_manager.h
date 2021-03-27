@@ -24,24 +24,42 @@
 #pragma once
 
 #include <QObject>
+#include <QList>
 #include <QSettings>
+#include "gui/settings/settings_items/settings_item.h"
+#include <QPoint>
+#include <QSize>
 
 namespace hal
 {
     class SettingsManager : public QObject
     {
+        Q_OBJECT
+
     public:
-        explicit SettingsManager(QObject* parent = nullptr);
-        ~SettingsManager();
-        QVariant get(const QString& key);
-        QVariant get(const QString& key, const QVariant& defaultVal);
-        QVariant getDefault(const QString& key);
-        QVariant reset(const QString& key);
-        void update(const QString& key, const QVariant& value);
-        void sync();
+        static SettingsManager* instance();
+        
+        void registerSetting(SettingsItem* item);
+        QList<SettingsItem*> mSettingsList;
+
+        void persistUserSettings();
+
+        QPoint mainWindowPosition() const;
+        QSize mainWindowSize() const;
+        void mainWindowSaveGeometry(const QPoint& pos, const QSize& size);
+
+        QVariant settingsValue(const QString& tag) const
+        {
+            return mSettingsFile.value(tag);
+        }
+
+    public Q_SLOTS:
+        void handleItemDestroyed(QObject* obj);
 
     private:
-        QSettings* mSettings;
-        QSettings* mDefaults;
+        SettingsManager(QObject *parent = nullptr);
+        static SettingsManager* inst;
+
+        QSettings mSettingsFile;
     };
 }

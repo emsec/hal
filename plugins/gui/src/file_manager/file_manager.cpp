@@ -44,8 +44,6 @@ namespace hal
         mAutosaveEnabled = mSettingAutosave->value().toBool();
         mAutosaveInterval = mSettingAutosaveInterval->value().toInt();
 
-        //mAutosaveEnabled  = gSettingsManager->get("advanced/autosave").toBool();
-        //mAutosaveInterval = gSettingsManager->get("advanced/autosave_interval").toInt();
         if (mAutosaveInterval < 30)    // failsafe in case somebody sets "0" in the .ini
             mAutosaveInterval = 30;
 

@@ -11,9 +11,6 @@
 #include "gui/plugin_management/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/settings/keybind_manager.h"
-#include "gui/settings/settings_manager.h"
-#include "gui/settings/settings_relay.h"
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
@@ -44,11 +41,8 @@ namespace hal
         return std::make_unique<PluginGui>();
     }
 
-    SettingsManager* gSettingsManager             = nullptr;    // this relay MUST be initialized before everything else since other components need to connect() to it when initializing
     QSettings* mGSettings                           = nullptr;
     QSettings* gGuiState                          = nullptr;
-    SettingsRelay* gSettingsRelay                 = nullptr;
-    KeybindManager* gKeybindManager               = nullptr;
     WindowManager* gWindowManager                 = nullptr;
     NotificationManager* gNotificationManager     = nullptr;
     ContentManager* gContentManager               = nullptr;
@@ -79,16 +73,13 @@ namespace hal
 
     static void cleanup()
     {
-        delete gSettingsManager;
         delete mGSettings;
         delete gGuiState;
-        delete gKeybindManager;
         delete gFileStatusManager;
         delete gGraphContextManager;
         delete gNetlistRelay;
         delete gPluginRelay;
         delete gSelectionRelay;
-        delete gSettingsRelay;
         delete gNotificationManager;
         //    delete gWindowManager;
     }
@@ -187,14 +178,11 @@ namespace hal
 
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
-        gSettingsManager      = new SettingsManager();
         mGSettings              = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
         gGuiState             = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
         gNetlistRelay         = new NetlistRelay();
         gPluginRelay          = new PluginRelay();
         gSelectionRelay       = new SelectionRelay();
-        gSettingsRelay        = new SettingsRelay();
-        gKeybindManager       = new KeybindManager();
         gFileStatusManager   = new FileStatusManager();
         gGraphContextManager = new GraphContextManager();
 

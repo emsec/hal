@@ -1,5 +1,5 @@
 #include "gui/settings/main_settings_widget.h"
-#include "gui/settings/settings_manager_new.h"
+#include "gui/settings/settings_manager.h"
 
 #include "gui/expanding_list/expanding_list_button.h"
 #include "gui/expanding_list/expanding_list_widget.h"
@@ -164,7 +164,7 @@ namespace hal
     {
         QSet<const SettingsItem*> registeredItems = QSet<const SettingsItem*>::fromList(mSettingsList.getItems());
         QSet<QString> registeredCategories = QSet<QString>::fromList(mSectionNames.values());
-        for (SettingsItem* si : SettingsManagerNew::instance()->mSettingsList)
+        for (SettingsItem* si : SettingsManager::instance()->mSettingsList)
         {
             if (registeredItems.contains(si)) continue;
             QString catg = si->category();
@@ -360,7 +360,7 @@ namespace hal
             }
         }
         if (changed)
-            SettingsManagerNew::instance()->persistUserSettings();
+            SettingsManager::instance()->persistUserSettings();
         return true;
     }
 }

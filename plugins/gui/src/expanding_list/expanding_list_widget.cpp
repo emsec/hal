@@ -11,7 +11,8 @@ namespace hal
 {
 
     ExpandingListWidget::ExpandingListWidget(QWidget* parent)
-        : QScrollArea(parent), mContent(new QFrame()), mContentLayout(new QVBoxLayout()), mSpacer(new QFrame()), mSelectedButton(nullptr), mOffset(0)
+        : QScrollArea(parent), mContent(new QFrame()), mContentLayout(new QVBoxLayout()),
+          mSpacer(new QFrame()), mSelectedButton(nullptr), mOffset(0)
     {
         setFrameStyle(QFrame::NoFrame);
         setWidget(mContent);
@@ -74,7 +75,15 @@ namespace hal
     {
         if (mItemMap.isEmpty()) return;
 
-        selectButton(mItemMap.begin().value()->button());
+        if (mSelectedButton)
+        {
+            selectButton(mSelectedButton);
+            return;
+        }
+
+        ExpandingListItem* first = mItemMap.value("Appearance:Style");
+        if (!first) first = mItemMap.begin().value();
+        selectButton(first->button());
     }
 
     void ExpandingListWidget::repolish()
