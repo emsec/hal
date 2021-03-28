@@ -143,7 +143,7 @@ namespace hal
         void setText(const QString& text);
 
         /**
-         * Applies the style that is currently set through "the" stylesheet.
+         * Applies the style that is currently set through the (globally set) stylesheet.
          */
         void repolish();
 
