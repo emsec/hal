@@ -75,6 +75,7 @@ namespace hal
          * @returns the list of created shortcuts
          */
         virtual QList<QShortcut*> createShortcuts() override;
+        void openModuleInView(u32 moduleId, bool unfold);
 
     public Q_SLOTS:
         /**

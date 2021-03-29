@@ -7,6 +7,7 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/utilities/log.h"
 
+#include <deque>
 #include <queue>
 #include <unordered_set>
 
@@ -496,14 +497,13 @@ namespace hal
             return nets;
         }
 
-        void remove_buffers(Netlist* netlist)
+        void remove_buffers(Netlist* netlist, bool analyze_inputs)
         {
             u32 num_gates = 0;
 
             Net* gnd_net = netlist->get_gnd_gates().front()->get_fan_out_nets().front();
             Net* vcc_net = netlist->get_vcc_gates().front()->get_fan_out_nets().front();
 
-            // buffers can only be of these base types
             for (const auto& gate : netlist->get_gates())
             {
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
@@ -538,25 +538,28 @@ namespace hal
                 std::vector<Endpoint*> fan_in = gate->get_fan_in_endpoints();
                 BooleanFunction func          = functions.begin()->second;
 
-                for (Endpoint* ep : fan_in)
+                if (analyze_inputs)
                 {
-                    auto sources = ep->get_net()->get_sources();
-                    if (sources.size() != 1)
+                    for (Endpoint* ep : fan_in)
                     {
-                        break;
+                        auto sources = ep->get_net()->get_sources();
+                        if (sources.size() != 1)
+                        {
+                            break;
+                        }
+
+                        if (sources.front()->get_gate()->is_gnd_gate())
+                        {
+                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ZERO);
+                        }
+                        else if (sources.front()->get_gate()->is_vcc_gate())
+                        {
+                            func = func.substitute(ep->get_pin(), BooleanFunction::Value::ONE);
+                        }
                     }
 
-                    if (sources.front()->get_gate()->is_gnd_gate())
-                    {
-                        func = func.substitute(ep->get_pin(), BooleanFunction::Value::ZERO);
-                    }
-                    else if (sources.front()->get_gate()->is_vcc_gate())
-                    {
-                        func = func.substitute(ep->get_pin(), BooleanFunction::Value::ONE);
-                    }
+                    func = func.optimize_constants();
                 }
-
-                func = func.optimize_constants();
 
                 std::string func_str                    = func.to_string();
                 std::unordered_set<std::string> in_pins = gt->get_pins_of_direction(PinDirection::input);
@@ -884,6 +887,85 @@ namespace hal
             }
 
             return true;
+        }
+
+        std::vector<Gate*> get_gate_chain(Gate* start_gate, const std::string& pin, const std::function<bool(const Gate*)>& filter)
+        {
+            if (!filter(start_gate))
+            {
+                return {};
+            }
+
+            std::deque<Gate*> gate_chain = {start_gate};
+
+            const GateType* target_type = start_gate->get_type();
+
+            // move forward
+            bool found_next_gate;
+            const Gate* current_gate = start_gate;
+            do
+            {
+                found_next_gate = false;
+
+                // check all successors of current gate
+                std::vector<Endpoint*> successors = current_gate->get_successors();
+                for (const Endpoint* suc_ep : successors)
+                {
+                    // check pin name and gate type
+                    Gate* suc_gate = suc_ep->get_gate();
+                    if (suc_ep->get_pin() == pin && suc_gate->get_type() == target_type)
+                    {
+                        // check filter condition
+                        if (!filter(suc_gate))
+                        {
+                            continue;
+                        }
+
+                        // check if more than one successor
+                        if (!found_next_gate)
+                        {
+                            gate_chain.push_back(suc_gate);
+                            current_gate    = suc_gate;
+                            found_next_gate = true;
+                            log_debug("netlist_utils", "found successor gate with ID {}.", suc_gate->get_id());
+                        }
+                        else
+                        {
+                            log_error("netlist_utils",
+                                      "detected more than one valid successor gate for gate '{}' with ID {} in netlist with ID {}.",
+                                      suc_gate->get_name(),
+                                      suc_gate->get_id(),
+                                      suc_gate->get_netlist()->get_id());
+                            return {start_gate};
+                        }
+                    }
+                }
+            } while (found_next_gate);
+
+            // move backwards
+            current_gate = start_gate;
+            do
+            {
+                found_next_gate = false;
+                if (Endpoint* pred_ep = current_gate->get_predecessor(pin); pred_ep != nullptr)
+                {
+                    Gate* pred_gate = pred_ep->get_gate();
+
+                    if (pred_gate->get_type() == target_type)
+                    {
+                        // check filter condition
+                        if (filter(pred_gate))
+                        {
+                            gate_chain.push_front(pred_gate);
+                            current_gate    = pred_gate;
+                            found_next_gate = true;
+                            log_debug("netlist_utils", "found predecessor gate with ID {}.", pred_gate->get_id());
+                        }
+                    }
+                }
+            } while (found_next_gate);
+
+            return std::vector<Gate*>(gate_chain.begin(), gate_chain.end());
         }
     }    // namespace netlist_utils
 }    // namespace hal

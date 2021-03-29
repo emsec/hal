@@ -125,8 +125,8 @@ namespace hal
          *
          * @param id - The id of the gate
          */
-        void foldModuleOfGate(const u32 id);
-
+        bool isGateUnfolded(u32 gateId) const;
+        bool foldModuleAction(u32 moduleId, const PlacementHint& plc);
         /**
          * Unfold a specific module. The specified module is removed from the context and replaced by its gates and
          * submodules.
@@ -252,6 +252,11 @@ namespace hal
         const GraphLayouter* getLayouter() const { return mLayouter; }
 
         /**
+		 * Move node to antother grid location
+		 */
+        void moveNodeAction(const QPoint& from, const QPoint& to);
+		
+        /**
          * Returns whether the scene is in an updating process (i.e. layouter process) or not.
          *
          * @returns <b>true</b> while the scene updates.
@@ -296,6 +301,12 @@ namespace hal
 
         void readFromFile(const QJsonObject& json);
 
+        void setDirty(bool dty);
+        bool isDirty() const {return mDirty; }
+
+    Q_SIGNALS:
+        void dataChanged();
+
     private Q_SLOTS:
         void handleLayouterUpdate(const int percent);
         void handleLayouterUpdate(const QString& message);
@@ -312,6 +323,7 @@ namespace hal
 
         u32 mId;
         QString mName;
+        bool mDirty;
 
         GraphLayouter* mLayouter;
         GraphShader* mShader;
@@ -323,8 +335,7 @@ namespace hal
         QSet<u32> mAddedModules;
         QSet<u32> mAddedGates;
 
-        QMultiMap<PlacementHint, u32> mModuleHints;
-        QMultiMap<PlacementHint, u32> mGateHints;
+        QList<PlacementEntry> mPlacementList[4];
 
         QSet<u32> mRemovedModules;
         QSet<u32> mRemovedGates;

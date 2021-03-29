@@ -225,8 +225,9 @@ namespace hal {
          *
          * @param irow - The table row index of the grouping to rename
          * @param groupingName - The new name
+         * @returns The old name.
          */
-        void renameGrouping(int irow, const QString& groupingName);
+        QString renameGrouping(u32 id, const QString& groupingName);
 
         /**
          * Gets a list of all currently used grouping names.
@@ -242,6 +243,14 @@ namespace hal {
          * @param grp - The removed grouping.
          */
         void deleteGroupingEvent(Grouping* grp);
+
+        /**
+         * TODO: DOCUMENT!
+         * @param id
+         * @param groupingColor
+         * @return
+         */
+        QColor recolorGrouping(u32 id, const QColor& groupingColor);
 
         /**
          * Q_SLOT to handle that a grouping has been created.

@@ -132,7 +132,7 @@ namespace hal
          *
          * @return The gate type.
          */
-        virtual QVariant gateType() const;
+        //virtual QVariant gateType() const;
 
         /**
          * Get the icon for either the module, gate, or net item. Must be implemented by
@@ -141,6 +141,12 @@ namespace hal
          * @return The subclasse's specific icon.
          */
         virtual const QIcon& icon() const = 0;
+
+        /**
+         * TODO: DOCUMENT!
+         * @return
+         */
+        virtual QVariant boxType() const;
 
         /**
          * Matches the given regex against the name, id, and in case if the the item is a gate type,
@@ -165,6 +171,7 @@ namespace hal
          */
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const = 0;
+        bool isEqual(const SelectionTreeItem* sti) const;
     protected:
         TreeItemType mItemType;
         u32 mId;
@@ -222,6 +229,12 @@ namespace hal
         virtual const QIcon& icon() const;
 
         /**
+         * TODO: Implement
+         * @return
+         */
+        virtual QVariant boxType() const;
+
+        /**
          * Calls the match() function of its children and matches the regex against its id and name.
          *
          * @param regex -  The regex to match against.
@@ -230,7 +243,7 @@ namespace hal
         virtual bool     match(const QRegularExpression& regex) const;
 
         /**
-         * Matches itself against the given regex. If no match was found or the module item is the root of
+         * Matches itself against the given regex. If no mbrief boxTypeatch was found or the module item is the root of
          * the model, the item inserts itself in the modIds list. This function is then invoked on all of its
          * children.
          *
@@ -303,13 +316,12 @@ namespace hal
          * @return The gate specific icon.
          */
         virtual const QIcon& icon() const;
-
         /**
          * Get the name of the gate's type (e.g. LUT5 or FF).
          *
          * @return The gate type.
          */
-        virtual QVariant gateType() const;
+        //virtual QVariant gateType() const;
 
         /**
          * Matches itself against the given regex. If no match was found it appends itself (its id)
@@ -322,6 +334,12 @@ namespace hal
          */
         virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                  const QRegularExpression& regex) const;
+
+        /**
+         * TODO: DOCUMENT!
+         * @return
+         */
+        virtual QVariant boxType() const;
     private:
         static QIcon* sIconInstance;
     };

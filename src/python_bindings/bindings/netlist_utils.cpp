@@ -167,10 +167,12 @@ namespace hal
             :rtype: set[hal_py.Net]
         )");
 
-        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), R"(
+        py_netlist_utils.def("remove_buffers", netlist_utils::remove_buffers, py::arg("netlist"), py::arg("analyze_inputs") = false, R"(
             Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
+            If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.
 
             :param hal_py.Netlist netlist: The target netlist.
+            :param bool analyze_inputs: Set True to dynamically analyze the inputs, False otherwise.
         )");
 
         py_netlist_utils.def("remove_unused_lut_endpoints", netlist_utils::remove_unused_lut_endpoints, py::arg("netlist"), R"(
@@ -206,6 +208,19 @@ namespace hal
             :param dict[str,str] pin_map: A dict from old to new pin names.
             :returns: True on success, False otherwise.
             :rtype: bool
+        )");
+
+        py_netlist_utils.def("get_gate_chain", netlist_utils::get_gate_chain, py::arg("start_gate"), py::arg("pin"), py::arg("filter"), R"(
+            Find a chain of identical gates within the netlist.
+            The start gate may be any gate within a chain, it is not reuired to be the first or last gate.
+            A pin must be specified through which the gates are expected to be connected.
+            A user-defined filter is evaluated in every candidate gate before it is added to the chain.
+
+            :param hal_py.Gate start_gate: The gate at which to start the chain detection.
+            :param str pin: The pin through which the gates are connected.
+            :param lambda filter: A filter that is evaluated on all candidates.
+            :returns: A list of gates that form a chain.
+            :rtype: list[hal_py.Gate]
         )");
     }
 }    // namespace hal

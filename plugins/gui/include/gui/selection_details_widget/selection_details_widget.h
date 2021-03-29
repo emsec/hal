@@ -42,6 +42,8 @@ namespace hal
     class GateDetailsWidget;
     class NetDetailsWidget;
     class SelectionHistoryNavigator;
+    class UserAction;
+    class UserActionObject;
 
     /**
      * The SelectionDetailsWidget class is primarily a container used to display on the left side the complete
@@ -56,8 +58,6 @@ namespace hal
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
-        Q_PROPERTY(QString restoreIconPath READ restoreIconPath WRITE setRestoreIconPath)
-        Q_PROPERTY(QString restoreIconStyle READ restoreIconStyle WRITE setRestoreIconStyle)
         Q_PROPERTY(QString toGroupingIconPath READ toGroupingIconPath WRITE setToGroupingIconPath)
         Q_PROPERTY(QString toGroupingIconStyle READ toGroupingIconStyle WRITE setToGroupingIconStyle)
         Q_PROPERTY(QString toModuleIconPath READ toModuleIconPath WRITE setToModuleIconPath)
@@ -123,15 +123,12 @@ namespace hal
          *
          * @return The "restore" icon path.
          */
-        QString restoreIconPath() const;
 
         /**
          * Q_PROPERTY READ function for the "restore"-icon style.
          *
          * @return The "restore" icon style.
          */
-        QString restoreIconStyle() const;
-
         /**
          * Q_PROPERTY READ function for the "to grouping"-icon path.
          *
@@ -193,15 +190,12 @@ namespace hal
          *
          * @param path - The new path.
          */
-        void setRestoreIconPath(const QString &path);
 
         /**
          * Q_PROPERTY WRITE function for the "restore"-icon style.
          *
          * @param style - The new style.
          */
-        void setRestoreIconStyle(const QString &style);
-
         /**
          * Q_PROPERTY WRITE function for the "to grouping"-icon path.
          *
@@ -234,9 +228,9 @@ namespace hal
         /**
          * Adds the current selection to the given grouping. The selection is cleared afterwards.
          *
-         * @param grp - The grouping to which the selection is added.
          */
-        void selectionToGroupingInternal(Grouping* grp);
+        void selectionToGroupingAction(const QString& existingGrpName = QString());
+        UserAction* groupingUnassignActionFactory(const UserActionObject& obj) const;
 
     Q_SIGNALS:
 
@@ -302,7 +296,6 @@ namespace hal
         /**
          * Restores the previous selection that is contained in its history.
          */
-        void restoreLastSelection();
 
         /**
          * Opens a context menu and calls, depending on the cosen action, either selectionToNewGrouping()
@@ -372,7 +365,6 @@ namespace hal
 
         Searchbar* mSearchbar;
 
-        QAction* mRestoreLastSelection;
         QAction* mSelectionToGrouping;
         QAction* mSelectionToModule;
         QAction* mSearchAction;
@@ -383,19 +375,13 @@ namespace hal
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
 
-        QString mRestoreIconPath;
-        QString mRestoreIconStyle;
-
         QString mToGroupingIconPath;
         QString mToGroupingIconStyle;
         
         QString mToModuleIconPath;
         QString mToModuleIconStyle;
         
-        SelectionHistoryNavigator* mHistory;
-
         void handleFilterTextChanged(const QString& filter_text);
-        void canRestoreSelection();
         void canMoveToModule(int nodes);
         void enableSearchbar(bool enable);
 

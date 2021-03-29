@@ -198,10 +198,10 @@ namespace hal
             case SelectionRelay::Subfocus::None:
                 return;
             case SelectionRelay::Subfocus::Left:
-                netId = nbox->item()->inputNets().at(gSelectionRelay->mSubfocusIndex);
+                netId = nbox->item()->inputNets().at(gSelectionRelay->subfocusIndex());
                 break;
             case SelectionRelay::Subfocus::Right:
-                netId = nbox->item()->outputNets().at(gSelectionRelay->mSubfocusIndex);
+                netId = nbox->item()->outputNets().at(gSelectionRelay->subfocusIndex());
                 break;
         }
 
@@ -211,14 +211,25 @@ namespace hal
     QStringList GraphNavigationWidget::moduleEntry(Module* m, Endpoint* ep)
     {
         Module* pm    = m->get_parent_module();
-        QString pname = pm ? QString::fromStdString(pm->get_name()) : QString("top level");
+        QString parentName = pm
+                ? QString::fromStdString(pm->get_name())
+                : QString("top level");
         QString mtype = QString::fromStdString(m->get_type());
         if (mtype.isEmpty())
             mtype = "module";
         else
             mtype += " (module)";
 
-        return QStringList() << QString::fromStdString(m->get_name()) << QString::number(m->get_id()) << mtype << QString::fromStdString(ep->get_pin()) << pname;
+        QString pinName = QString::fromStdString(ep->get_pin());
+        Net* epNet = ep->get_net();
+        if (epNet)
+        {
+            if (ep->is_source_pin())
+                pinName = QString::fromStdString(m->get_output_port_name(epNet));
+            else
+                pinName = QString::fromStdString(m->get_input_port_name(epNet));
+        }
+        return QStringList() << QString::fromStdString(m->get_name()) << QString::number(m->get_id()) << mtype << pinName << parentName;
     }
 
     QStringList GraphNavigationWidget::gateEntry(Gate* g, Endpoint* ep)
@@ -271,35 +282,29 @@ namespace hal
         return true;
     }
 
-    bool GraphNavigationWidget::addNavigateItem(Endpoint* ep)
+    void GraphNavigationWidget::addNavigateItem(Endpoint* ep, const Node& targetNode)
     {
         Gate* g = ep->get_gate();
-        if (!g)
-            return false;
-
-        const NodeBoxes& boxes = gContentManager->getContextManagerWidget()->getCurrentContext()->getLayouter()->boxes();
-        const NodeBox* nbox    = boxes.boxForGate(g);
-        if (!nbox)
-            return false;
+        Q_ASSERT(g);
 
         QStringList fields;
 
-        switch (nbox->type())
+        switch (targetNode.type())
         {
             case Node::None:
-                return false;
+                return;
             case Node::Gate:
                 fields = gateEntry(g, ep);
                 break;
             case Node::Module:
-                Module* m = gNetlist->get_module_by_id(nbox->id());
+                Module* m = gNetlist->get_module_by_id(targetNode.id());
                 Q_ASSERT(m);
                 fields = moduleEntry(m, ep);
                 break;
         }
 
         int n = mNavigateWidget->rowCount();
-        mNavigateNodes.append(nbox->getNode());
+        mNavigateNodes.append(targetNode);
         mNavigateWidget->insertRow(n);
         for (int icol = 0; icol < fields.size(); icol++)
         {
@@ -310,7 +315,6 @@ namespace hal
                 cell->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
             mNavigateWidget->setItem(n, icol, cell);
         }
-        return true;
     }
 
     void GraphNavigationWidget::setup(Node origin, Net* via_net, SelectionRelay::Subfocus dir)
@@ -326,20 +330,20 @@ namespace hal
         mViaNet    = nullptr;
         mDirection = direction;
 
-        switch (gSelectionRelay->mFocusType)
+        switch (gSelectionRelay->focusType())
         {
             case SelectionRelay::ItemType::Net:
-                mViaNet = gNetlist->get_net_by_id(gSelectionRelay->mFocusId);
+                mViaNet = gNetlist->get_net_by_id(gSelectionRelay->focusId());
                 break;
             case SelectionRelay::ItemType::Gate: {
-                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->mFocusId);
+                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->focusId());
                 Q_ASSERT(g);
                 mOrigin = Node(g->get_id(), Node::Gate);
                 viaNetByNode();
                 break;
             }
             case SelectionRelay::ItemType::Module: {
-                Module* m = gNetlist->get_module_by_id(gSelectionRelay->mFocusId);
+                Module* m = gNetlist->get_module_by_id(gSelectionRelay->focusId());
                 Q_ASSERT(m);
                 mOrigin = Node(m->get_id(), Node::Module);
                 viaNetByNode();
@@ -429,10 +433,30 @@ namespace hal
         setModulesInView();
         mNavigateVisible = false;
 
-        for (Endpoint* ep : (mDirection == SelectionRelay::Subfocus::Left) ? mViaNet->get_sources() : mViaNet->get_destinations())
+        QSet<Node> listedTargets;
+
+        for (Endpoint* ep : (mDirection == SelectionRelay::Subfocus::Left)
+             ? mViaNet->get_sources()
+             : mViaNet->get_destinations())
         {
-            if (addNavigateItem(ep))
+            Gate* g = ep->get_gate();
+            if (!g) continue; // gate not connected
+
+            const NodeBoxes& boxes = gContentManager->getContextManagerWidget()->getCurrentContext()->getLayouter()->boxes();
+            const NodeBox* nbox    = boxes.boxForGate(g);
+            if (nbox)
+            {
+                Node targetNode = nbox->getNode();
+                if (targetNode==mOrigin) // net loops back to origin
+                    continue;
+
+                if (listedTargets.contains(targetNode)) // already listed
+                    continue;
+
+                listedTargets.insert(targetNode);
+                addNavigateItem(ep,targetNode);
                 mNavigateVisible = true;
+            }
             else
                 mEndpointNotInView.append(ep);
         }

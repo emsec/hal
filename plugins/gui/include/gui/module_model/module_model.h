@@ -30,6 +30,7 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
+#include <QColor>
 #include <set>
 
 namespace hal
@@ -186,6 +187,12 @@ namespace hal
          */
         void updateModule(const u32 id);
 
+//        void addModule(u32 id, u32 parent_module);
+//        void addRecursively(const std::vector<Module*>& modules);
+//        void remove_module(u32 id);
+//        void updateModule(u32 id);
+
+
         /**
          * Returns <b>true</b> if the item model is currently changed/updated. This is the case while adding and
          * removing modules to/from the item model. It can be used to ignore certain signals sent by the item model
@@ -194,11 +201,18 @@ namespace hal
          * @returns <b>true</b> while the item model is modified. Returns <b>false</b> otherwise.
          */
         bool isModifying();
+        QColor moduleColor(u32 id) const;
+
+        /// returns old color for undo action
+        QColor setModuleColor(u32 id, const QColor& col);
+        QColor setRandomColor(u32 id);
+        void removeColor(u32 id);
 
     private:
         ModuleItem* mTopModuleItem;
 
         QMap<u32, ModuleItem*> mModuleItems;
+        QMap<u32, QColor> mModuleColors;
 
         bool mIsModifying;
     };

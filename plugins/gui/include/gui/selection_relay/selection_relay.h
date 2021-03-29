@@ -25,17 +25,21 @@
 
 #include "hal_core/defines.h"
 #include "hal_config.h"
-
+#include <vector>
 #include <QObject>
 #include <QPair>
 #include <QVector>
 #include <QSet>
+#include <QList>
 
 namespace hal
 {
     class Gate;
     class Module;
     class Net;
+
+    class ActionSetSelectionFocus;
+    class UserActionObject;
 
     /**
      * The SelectionRelay is used to manage the selection and the focus of modules, gates and nets. <br>
@@ -154,24 +158,6 @@ namespace hal
         void navigateDown();
 
         /**
-         * Navigates left in/from the currently focused object. It adjusts the sub-focus and the sub-focus index and
-         * emits subfocusChanged if necessary. <br>
-         * If the focused item is left (i.e. navigating left while an input pin is in focus),
-         * the focus type mFocusType and the id of the focused item mFocusId are modified accordingly and
-         * the selectionChanged signal is emitted.
-         */
-        void navigateLeft();
-
-        /**
-         * Navigates right in/from the currently focused object. It adjusts the sub-focus and the sub-focus index and
-         * emits subfocusChanged if necessary. <br>
-         * If the focused item is left (i.e. navigating right while an output pin is in focus),
-         * the focus type mFocusType and the id of the focused item mFocusId are modified accordingly and
-         * the selectionChanged signal is emitted.
-         */
-        void navigateRight();
-
-        /**
          * Called whenever a module was removed from the netlist. Used to remove the id of the removed module from the
          * selection (if available).
          *
@@ -239,6 +225,40 @@ namespace hal
                                 const QList<u32>& gatIds = QList<u32>(),
                                 const QList<u32>& netIds = QList<u32>());
 
+        QList<u32> selectedGatesList()   const { return mSelectedGates.toList(); }
+        QList<u32> selectedNetsList()    const { return mSelectedNets.toList(); }
+        QList<u32> selectedModulesList() const { return mSelectedModules.toList(); }
+
+        std::vector<u32> selectedGatesVector()   const { return std::vector<u32>(mSelectedGates.begin(), mSelectedGates.end()); }
+        std::vector<u32> selectedNetsVector()    const { return std::vector<u32>(mSelectedNets.begin(), mSelectedNets.end()); }
+        std::vector<u32> selectedModulesVector() const { return std::vector<u32>(mSelectedModules.begin(), mSelectedModules.end()); }
+
+        const QSet<u32>& selectedGates()   const { return mSelectedGates; }
+        const QSet<u32>& selectedNets()    const { return mSelectedNets; }
+        const QSet<u32>& selectedModules() const { return mSelectedModules; }
+
+        int numberSelectedGates()   const { return mSelectedGates.size(); }
+        int numberSelectedNets()    const { return mSelectedNets.size(); }
+        int numberSelectedModules() const { return mSelectedModules.size(); }
+        int numberSelectedNodes()   const { return mSelectedGates.size() + mSelectedModules.size(); }
+        int numberSelectedItems()   const { return mSelectedGates.size() + mSelectedModules.size() + mSelectedNets.size(); }
+
+        bool containsGate(u32 id) const   { return mSelectedGates.contains(id); }
+        bool containsNet(u32 id) const    { return mSelectedNets.contains(id); }
+        bool containsModule(u32 id) const { return mSelectedModules.contains(id); }
+
+        void addGate(u32 id);
+        void addNet(u32 id);
+        void addModule(u32 id);
+
+        void setSelectedGates(const QSet<u32>& ids);
+        void setSelectedNets(const QSet<u32>& ids);
+        void setSelectedModules(const QSet<u32>& ids);
+        void actionSetSelected(const QSet<u32>& mods, const QSet<u32>& gats, const QSet<u32>& nets);
+
+        void removeGate(u32 id);
+        void removeNet(u32 id);
+        void removeModule(u32 id);
     Q_SIGNALS:
         // TEST SIGNAL
         // ADD ADDITIONAL INFORMATION (LIKE PREVIOUS FOCUS) OR LEAVE THAT TO SUBSCRIBERS ???
@@ -268,32 +288,41 @@ namespace hal
          * Contains the currently selected gates. <br>
          * Please call relaySelectionChanged after manipulations of this member.
          */
-        QSet<u32> mSelectedGates;
+        ItemType focusType() const { return mFocusType; }
 
         /**
          * Contains the currently selected nets. <br>
          * Please call relaySelectionChanged after manipulations of this member.
          */
-        QSet<u32> mSelectedNets;
+        u32 focusId()        const { return mFocusId; }
 
         /**
          * Contains the currently selected modules. <br>
          * Please call relaySelectionChanged after manipulations of this member.
          */
-        QSet<u32> mSelectedModules;
+        Subfocus subfocus()  const { return mSubfocus; }
+        u32 subfocusIndex()  const { return mSubfocusIndex; }
 
-        // MAYBE UNNECESSARY
+        void setFocus(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
         /**
          * <b>Unused!</b> <br>
          * \deprecated Please use mFocusType to access the ItemType of the current focus.
          */
-        ItemType mCurrentType;
+        void setFocusDirect(ItemType ftype, u32 fid, Subfocus sfoc = Subfocus::None, u32 sfinx = 0);
 
         /**
          * <b>Unused!</b> <br>
          * \deprecated Please use mFocusId to access the id of the current focused item.
          */
-        u32 mCurrentId;
+
+        QList<UserActionObject> toUserActionObject() const;
+
+    private:
+        void initializeAction();
+        void executeAction();
+
+        ActionSetSelectionFocus* mAction;
+        bool mDisableExecution;
 
         // USE ARRAY[0] INSTEAD OF MEMBER ???
         /**
@@ -322,7 +351,10 @@ namespace hal
          */
         u32 mSubfocusIndex;    // HANDLE VIA INT OR STRING ?? INDEX HAS TO BE KNOWN ANYWAY TO FIND NEXT / PREVIOUS BOTH OPTIONS KIND OF BAD
 
-    private:
+        QSet<u32> mSelectedGates;
+        QSet<u32> mSelectedNets;
+        QSet<u32> mSelectedModules;
+
         QSet<u32> mModulesSuppressedByFilter;
         QSet<u32> mGatesSuppressedByFilter;
         QSet<u32> mNetsSuppressedByFilter;
@@ -330,14 +362,8 @@ namespace hal
         static bool sNavigationSkipsEnabled;    // DOES THIS HAVE ANY USE ???
 
         // RENAME THESE METHODS ???
-        void followGateInputPin(Gate* g, u32 input_pin_index);
-        void followGateOutputPin(Gate* g, u32 output_pin_index);
         void followModuleInputPin(Module* m, u32 input_pin_index);
         void followModuleOutputPin(Module* m, u32 output_pin_index);
-
-        void followNetToSource(Net* n);
-        void followNetToDestination(Net* n, u32 dst_index);
-
 
 #ifdef HAL_STUDY
         void evaluateSelectionChanged(void* sender);

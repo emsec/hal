@@ -1,6 +1,7 @@
 #include "gui/graph_widget/graph_widget.h"
 
 #include "gui/content_manager/content_manager.h"
+#include "gui/user_action/action_unfold_module.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
@@ -10,12 +11,16 @@
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
+#include "gui/module_widget/module_widget.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/netlist.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/overlay/widget_overlay.h"
 #include "gui/toolbar/toolbar.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_rename_object.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -289,7 +294,9 @@ namespace hal
                     }
                     if (!found)
                     {
-                        gGraphContextManager->renameGraphContext(mContext, new_name);
+                        ActionRenameObject* act = new ActionRenameObject(new_name);
+                        act->setObject(UserActionObject(mContext->id(),UserActionObjectType::Context));
+                        act->exec();
                         break;
                     }
                 }
@@ -350,10 +357,19 @@ namespace hal
                     : PlacementHint::PreferLeft;
 
             // add all new gates and modules
-            mContext->beginChange();
-            mContext->remove(remove_modules, remove_gates);
-            mContext->add(nonvisible_modules, nonvisible_gates, PlacementHint{placementMode, origin});
-            mContext->endChange();
+            if (!remove_modules.isEmpty() || !remove_gates.isEmpty())
+            {
+                ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(remove_modules, remove_gates);
+                act->setObject(UserActionObject(mContext->id(),UserActionObjectType::Context));
+                act->exec();
+            }
+            if (!nonvisible_modules.isEmpty() || !nonvisible_gates.isEmpty())
+            {
+                ActionAddItemsToObject* act = new ActionAddItemsToObject(nonvisible_modules, nonvisible_gates);
+                act->setPlacementHint(PlacementHint(placementMode,origin));
+                act->setObject(UserActionObject(mContext->id(),UserActionObjectType::Context));
+                act->exec();
+            }
 
             // FIXME find out how to do this properly
             // If we have added any gates, the scene may have resized. In that case, the animation can be erratic,
@@ -371,11 +387,12 @@ namespace hal
 
         // SELECT IN RELAY
         gSelectionRelay->clear();
-        gSelectionRelay->mSelectedGates   = final_gates;
-        gSelectionRelay->mSelectedModules = final_modules;
 
         // TODO implement subselections on modules, then add a case for when the
         // selection is only one module (instead of one gate)
+
+        SelectionRelay::Subfocus sfoc = SelectionRelay::Subfocus::None;
+        u32 sfinx = 0;
 
         if (final_gates.size() == 1 && final_modules.empty())
         {
@@ -383,83 +400,68 @@ namespace hal
             u32 gid = *final_gates.begin();
             auto g  = gNetlist->get_gate_by_id(gid);
 
-            gSelectionRelay->mFocusType = SelectionRelay::ItemType::Gate;
-            gSelectionRelay->mFocusId   = gid;
-            gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
-
             u32 cnt = 0;
             // TODO simplify (we do actually know if we're navigating left or right)
             for (const auto& pin : g->get_input_pins())
             {
                 if (g->get_fan_in_net(pin) == n)    // input net
                 {
-                    gSelectionRelay->mSubfocus       = SelectionRelay::Subfocus::Left;
-                    gSelectionRelay->mSubfocusIndex = cnt;
+                    sfoc  = SelectionRelay::Subfocus::Left;
+                    sfinx = cnt;
                     break;
                 }
                 cnt++;
             }
-            if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::None)
+            if (sfoc == SelectionRelay::Subfocus::None)
             {
                 cnt = 0;
                 for (const auto& pin : g->get_output_pins())
                 {
                     if (g->get_fan_out_net(pin) == n)    // input net
                     {
-                        gSelectionRelay->mSubfocus       = SelectionRelay::Subfocus::Right;
-                        gSelectionRelay->mSubfocusIndex = cnt;
+                        sfoc  = SelectionRelay::Subfocus::Right;
+                        sfinx = cnt;
                         break;
                     }
                     cnt++;
                 }
             }
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,gid,sfoc,sfinx);
         }
         else if (final_modules.size() == 1 && final_gates.empty())
         {
             // subfocus only possible when just one module selected
             u32 mid = *final_modules.begin();
             auto m  = gNetlist->get_module_by_id(mid);
-
-            gSelectionRelay->mFocusType = SelectionRelay::ItemType::Module;
-            gSelectionRelay->mFocusId   = mid;
-            gSelectionRelay->mSubfocus   = SelectionRelay::Subfocus::None;
-
-            u32 cnt = 0;
-            // FIXME this is super hacky because currently we have no way of
-            // properly indexing port names on modules (since no order is guaranteed
-            // on the port names (different to pin names in gates), but our GUI
-            // wants integer indexes)
-            // (what we use here is the fact that GraphicsModule builds its port
-            // list by traversing m->get_input_nets(), so we just use that order and
-            // hope nobody touches that implementation)
+            Q_ASSERT(m);
 
             // TODO simplify (we do actually know if we're navigating left or right)
-            for (const auto& inet : m->get_input_nets())
+            Node needle(mid,Node::Module);
+            const NodeBox* nbox = mContext->getLayouter()->boxes().boxForNode(needle);
+            Q_ASSERT(nbox);
+            const GraphicsNode* gnode = static_cast<const GraphicsNode*>(nbox->item());
+            Q_ASSERT(gnode);
+
+            int inx = gnode->inputByNet(n->get_id());
+            if (inx < 0)
             {
-                if (inet == n)    // input net
+                inx = gnode->outputByNet(n->get_id());
+                if (inx >= 0)
                 {
-                    gSelectionRelay->mSubfocus       = SelectionRelay::Subfocus::Left;
-                    gSelectionRelay->mSubfocusIndex = cnt;
-                    break;
-                }
-                cnt++;
-            }
-            if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::None)
-            {
-                cnt = 0;
-                for (const auto& inet : m->get_output_nets())
-                {
-                    if (inet == n)    // input net
-                    {
-                        gSelectionRelay->mSubfocus       = SelectionRelay::Subfocus::Right;
-                        gSelectionRelay->mSubfocusIndex = cnt;
-                        break;
-                    }
-                    cnt++;
+                    sfoc  = SelectionRelay::Subfocus::Right;
+                    sfinx = inx;
                 }
             }
+            else
+            {
+                sfoc  = SelectionRelay::Subfocus::Left;
+                sfinx = inx;
+            }
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,mid,sfoc,sfinx);
         }
 
+        gSelectionRelay->setSelectedModules(final_modules);
+        gSelectionRelay->setSelectedGates(final_gates);
         gSelectionRelay->relaySelectionChanged(nullptr);
 
         // FIXME If the scene has been resized during this method, the animation triggered by
@@ -483,20 +485,20 @@ namespace hal
     void GraphWidget::handleNavigationLeftRequest()
     {
         const SelectionRelay::Subfocus navigateLeft = SelectionRelay::Subfocus::Left;
-        switch (gSelectionRelay->mFocusType)
+        switch (gSelectionRelay->focusType())
         {
         case SelectionRelay::ItemType::None: {
                 return;
             }
         case SelectionRelay::ItemType::Gate: {
-                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->mFocusId);
+                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->focusId());
 
                 if (!g)
                     return;
 
-                if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Left)
+                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left)
                 {
-                    std::string pin_type = g->get_input_pins()[gSelectionRelay->mSubfocusIndex];
+                    std::string pin_type = g->get_input_pins()[gSelectionRelay->subfocusIndex()];
                     Net* n               = g->get_fan_in_net(pin_type);
 
                     if (!n)
@@ -505,9 +507,8 @@ namespace hal
                     if (n->get_num_of_sources() == 0)
                     {
                         gSelectionRelay->clear();
-                        gSelectionRelay->mSelectedNets.insert(n->get_id());
-                        gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                        gSelectionRelay->mFocusId   = n->get_id();
+                        gSelectionRelay->addNet(n->get_id());
+                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,n->get_id());
                         gSelectionRelay->relaySelectionChanged(nullptr);
                     }
                     else if (n->get_num_of_sources() == 1)
@@ -523,16 +524,16 @@ namespace hal
                 }
                 else if (g->get_input_pins().size())
                 {
-                    gSelectionRelay->mSubfocus       = SelectionRelay::Subfocus::Left;
-                    gSelectionRelay->mSubfocusIndex = 0;
-
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, g->get_id(),
+                                              SelectionRelay::Subfocus::Left, 0);
                     gSelectionRelay->relaySubfocusChanged(nullptr);
+                    gSelectionRelay->relaySelectionChanged(nullptr);
                 }
 
                 return;
             }
         case SelectionRelay::ItemType::Net: {
-                Net* n = gNetlist->get_net_by_id(gSelectionRelay->mFocusId);
+                Net* n = gNetlist->get_net_by_id(gSelectionRelay->focusId());
 
                 if (!n)
                     return;
@@ -554,31 +555,26 @@ namespace hal
                 return;
             }
         case SelectionRelay::ItemType::Module: {
-                Module* m = gNetlist->get_module_by_id(gSelectionRelay->mFocusId);
+                Module* m = gNetlist->get_module_by_id(gSelectionRelay->focusId());
 
                 if (!m)
                     return;
 
-                if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Left)
+                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left)
                 {
-                    // FIXME this is super hacky because currently we have no way of
-                    // properly indexing port names on modules (since no order is guaranteed
-                    // on the port names (different to pin names in gates), but our GUI
-                    // wants integer indexes)
-                    // (what we use here is the fact that GraphicsModule builds its port
-                    // list by traversing m->get_input_nets(), so we just use that order and
-                    // hope nobody touches that implementation)
-                    auto nets = m->get_input_nets();
-                    auto it   = nets.begin();
-                    if (gSelectionRelay->mSubfocusIndex > 0)
-                        std::advance(it, gSelectionRelay->mSubfocusIndex);
-                    auto n = *it;
+                    Node needle(m->get_id(),Node::Module);
+                    const NodeBox* nbox = mContext->getLayouter()->boxes().boxForNode(needle);
+                    Q_ASSERT(nbox);
+                    const GraphicsNode* gnode = static_cast<const GraphicsNode*>(nbox->item());
+                    Q_ASSERT(gnode);
+                    Net* n = gNetlist->get_net_by_id(gnode->inputNets().at(gSelectionRelay->subfocusIndex()));
+                    Q_ASSERT(n);
+
                     if (n->get_num_of_sources() == 0)
                     {
                         gSelectionRelay->clear();
-                        gSelectionRelay->mSelectedNets.insert(n->get_id());
-                        gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                        gSelectionRelay->mFocusId   = n->get_id();
+                        gSelectionRelay->addNet(n->get_id());
+                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,n->get_id());
                         gSelectionRelay->relaySelectionChanged(nullptr);
                     }
                     else if (n->get_num_of_sources() == 1)
@@ -594,9 +590,8 @@ namespace hal
                 }
                 else if (m->get_input_nets().size())
                 {
-                    gSelectionRelay->mSubfocus       = SelectionRelay::Subfocus::Left;
-                    gSelectionRelay->mSubfocusIndex = 0;
-
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,m->get_id(),
+                                              SelectionRelay::Subfocus::Left,0);
                     gSelectionRelay->relaySubfocusChanged(nullptr);
                 }
 
@@ -608,7 +603,7 @@ namespace hal
     void GraphWidget::handleNavigationRightRequest()
     {
         const SelectionRelay::Subfocus navigateRight = SelectionRelay::Subfocus::Right;
-        switch (gSelectionRelay->mFocusType)
+        switch (gSelectionRelay->focusType())
         {
         case SelectionRelay::ItemType::None:
             {
@@ -616,20 +611,19 @@ namespace hal
             }
         case SelectionRelay::ItemType::Gate:
             {
-                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->mFocusId);
+                Gate* g = gNetlist->get_gate_by_id(gSelectionRelay->focusId());
 
                 if (!g)
                     return;
 
-                if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Right)
+                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right)
                 {
-                    auto n = g->get_fan_out_net(g->get_output_pins()[gSelectionRelay->mSubfocusIndex]);
+                    auto n = g->get_fan_out_net(g->get_output_pins()[gSelectionRelay->subfocusIndex()]);
                     if (n->get_num_of_destinations() == 0)
                     {
                         gSelectionRelay->clear();
-                        gSelectionRelay->mSelectedNets.insert(n->get_id());
-                        gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                        gSelectionRelay->mFocusId   = n->get_id();
+                        gSelectionRelay->addNet(n->get_id());
+                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,n->get_id());
                         gSelectionRelay->relaySelectionChanged(nullptr);
                     }
                     else if (n->get_num_of_destinations() == 1)
@@ -645,9 +639,8 @@ namespace hal
                 }
                 else if (g->get_output_pins().size())
                 {
-                    gSelectionRelay->mSubfocus       = SelectionRelay::Subfocus::Right;
-                    gSelectionRelay->mSubfocusIndex = 0;
-
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,g->get_id(),
+                                              SelectionRelay::Subfocus::Right,0);
                     gSelectionRelay->relaySubfocusChanged(nullptr);
                 }
 
@@ -655,7 +648,7 @@ namespace hal
             }
         case SelectionRelay::ItemType::Net:
             {
-                Net* n = gNetlist->get_net_by_id(gSelectionRelay->mFocusId);
+                Net* n = gNetlist->get_net_by_id(gSelectionRelay->focusId());
 
                 if (!n)
                     return;
@@ -677,31 +670,26 @@ namespace hal
                 return;
             }
         case SelectionRelay::ItemType::Module: {
-                Module* m = gNetlist->get_module_by_id(gSelectionRelay->mFocusId);
+                Module* m = gNetlist->get_module_by_id(gSelectionRelay->focusId());
 
                 if (!m)
                     return;
 
-                if (gSelectionRelay->mSubfocus == SelectionRelay::Subfocus::Right)
+                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right)
                 {
-                    // FIXME this is super hacky because currently we have no way of
-                    // properly indexing port names on modules (since no order is guaranteed
-                    // on the port names (different to pin names in gates), but our GUI
-                    // wants integer indexes)
-                    // (what we use here is the fact that GraphicsModule builds its port
-                    // list by traversing m->get_input_nets(), so we just use that order and
-                    // hope nobody touches that implementation)
-                    auto nets = m->get_output_nets();
-                    auto it   = nets.begin();
-                    if (gSelectionRelay->mSubfocusIndex > 0)
-                        std::advance(it, gSelectionRelay->mSubfocusIndex);
-                    auto n = *it;
+                    Node needle(m->get_id(),Node::Module);
+                    const NodeBox* nbox = mContext->getLayouter()->boxes().boxForNode(needle);
+                    Q_ASSERT(nbox);
+                    const GraphicsNode* gnode = static_cast<const GraphicsNode*>(nbox->item());
+                    Q_ASSERT(gnode);
+                    Net* n = gNetlist->get_net_by_id(gnode->outputNets().at(gSelectionRelay->subfocusIndex()));
+                    Q_ASSERT(n);
+
                     if (n->get_num_of_destinations() == 0)
                     {
                         gSelectionRelay->clear();
-                        gSelectionRelay->mSelectedNets.insert(n->get_id());
-                        gSelectionRelay->mFocusType = SelectionRelay::ItemType::Net;
-                        gSelectionRelay->mFocusId   = n->get_id();
+                        gSelectionRelay->addNet(n->get_id());
+                        gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,n->get_id());
                         gSelectionRelay->relaySelectionChanged(nullptr);
                     }
                     else if (n->get_num_of_destinations() == 1)
@@ -717,9 +705,8 @@ namespace hal
                 }
                 else if (m->get_output_nets().size())
                 {
-                    gSelectionRelay->mSubfocus       = SelectionRelay::Subfocus::Right;
-                    gSelectionRelay->mSubfocusIndex = 0;
-
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,m->get_id(),
+                                              SelectionRelay::Subfocus::Right,0);
                     gSelectionRelay->relaySubfocusChanged(nullptr);
                 }
             }
@@ -729,16 +716,16 @@ namespace hal
     void GraphWidget::handleNavigationUpRequest()
     {
         // FIXME this is ugly
-        if ((gSelectionRelay->mFocusType == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->mFocusId))
-            || (gSelectionRelay->mFocusType == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->mFocusId)))
+        if ((gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->focusId()))
+            || (gSelectionRelay->focusType() == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->focusId())))
             gSelectionRelay->navigateUp();
     }
 
     void GraphWidget::handleNavigationDownRequest()
     {
         // FIXME this is ugly
-        if ((gSelectionRelay->mFocusType == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->mFocusId))
-            || (gSelectionRelay->mFocusType == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->mFocusId)))
+        if ((gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->focusId()))
+            || (gSelectionRelay->focusType() == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->focusId())))
             gSelectionRelay->navigateDown();
     }
 
@@ -759,32 +746,12 @@ namespace hal
 
         if (mContext->gates().isEmpty() && mContext->modules() == QSet<u32>({id}))
         {
-            mContext->unfoldModule(id);
-            return;
+            ActionUnfoldModule* act = new ActionUnfoldModule(id);
+            act->setContextId(mContext->id());
+            act->exec();
         }
-
-        QSet<u32> gate_ids;
-        QSet<u32> module_ids;
-        for (const auto& g : m->get_gates())
-        {
-            gate_ids.insert(g->get_id());
-        }
-        for (auto sm : m->get_submodules())
-        {
-            module_ids.insert(sm->get_id());
-        }
-
-        for (const auto& ctx : gGraphContextManager->getContexts())
-        {
-            if ((ctx->gates().isEmpty() && ctx->modules() == QSet<u32>({id})) || (ctx->modules() == module_ids && ctx->gates() == gate_ids))
-            {
-                gContentManager->getGraphTabWidget()->showContext(ctx);
-                return;
-            }
-        }
-
-        auto ctx = gGraphContextManager->createNewContext(QString::fromStdString(m->get_name()));
-        ctx->add(module_ids, gate_ids);
+        else
+            gContentManager->getModuleWidget()->openModuleInView(id,true);
     }
 
     void GraphWidget::ensureItemsVisible(const QSet<u32>& gates, const QSet<u32>& modules)
@@ -828,8 +795,8 @@ namespace hal
         if (mContext->sceneUpdateInProgress())
             return;
 
-        if (mContext->gates().contains(gSelectionRelay->mSelectedGates) == false || mContext->nets().contains(gSelectionRelay->mSelectedNets) == false
-            || mContext->modules().contains(gSelectionRelay->mSelectedModules) == false)
+        if (!mContext->gates().contains(gSelectionRelay->selectedGates()) || !mContext->nets().contains(gSelectionRelay->selectedNets())
+            || !mContext->modules().contains(gSelectionRelay->selectedModules()))
             return;
 
         int min_x = INT_MAX;
@@ -837,7 +804,7 @@ namespace hal
         int max_x = INT_MIN;
         int max_y = INT_MIN;
 
-        for (auto id : gSelectionRelay->mSelectedGates)
+        for (auto id : gSelectionRelay->selectedGatesList())
         {
             auto rect = mContext->scene()->getGateItem(id)->sceneBoundingRect();
 
@@ -847,7 +814,7 @@ namespace hal
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
         }
 
-        for (auto id : gSelectionRelay->mSelectedNets)
+        for (auto id : gSelectionRelay->selectedNetsList())
         {
             auto rect = mContext->scene()->getNetItem(id)->sceneBoundingRect();
 
@@ -857,7 +824,7 @@ namespace hal
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
         }
 
-        for (auto id : gSelectionRelay->mSelectedModules)
+        for (auto id : gSelectionRelay->selectedModulesList())
         {
             auto rect = mContext->scene()->getModuleItem(id)->sceneBoundingRect();
 

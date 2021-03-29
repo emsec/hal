@@ -4,6 +4,7 @@
 #include "gui/gui_globals.h"
 #include <QTextStream>
 #include <QDebug>
+#include <QMap>
 
 namespace hal
 {

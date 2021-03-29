@@ -162,6 +162,7 @@ namespace hal
          * @param previous - The index of the previous current item.
          */
         void handleCurrentChanged(const QModelIndex &current = QModelIndex(), const QModelIndex &previous = QModelIndex());
+        void handleGraphSelectionChanged(void* sender);
 
     private Q_SLOTS:
         /**
@@ -209,7 +210,32 @@ namespace hal
          */
         void handleContextMenuRequest(const QPoint& point);
 
+        // TODO: DOCUMENT!
+        void handleToolboxClicked();
+        void handleToolboxPredecessor();
+        void handleToolboxSuccessor();
+        void handleToolboxPredecessorDistance();
+        void handleToolboxSuccessorDistance();
+
     private:
+        class ToolboxModuleHash
+        {
+        public:
+            QHash<Gate*,Module*> mHash;
+            ToolboxModuleHash(const Node& nd);
+        };
+
+        class ToolboxNode
+        {
+        public:
+            QString mName;
+            Node mNode;
+            ToolboxNode(Endpoint* ep = nullptr, const ToolboxModuleHash* tmh = nullptr);
+            std::vector<Net*> inputNets() const;
+            std::vector<Net*> outputNets() const;
+        };
+
+        QIcon toolboxIcon() const;
         GraphTabWidget* mTabView;
         QTableView* mGroupingTableView;
         GroupingTableModel* mGroupingTableModel;
@@ -220,6 +246,7 @@ namespace hal
         QString mNewGroupingIconPath;
         QString mNewGroupingIconStyle;
 
+        QAction* mToolboxAction;
         QAction* mRenameAction;
         QString mRenameGroupingIconPath;
         QString mRenameGroupingIconStyle;

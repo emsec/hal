@@ -26,6 +26,7 @@
 #include <QVector>
 #include <QPoint>
 #include <QHash>
+#include <QSet>
 #include "gui/gui_def.h"
 #include "hal_core/netlist/gate.h"
 
@@ -189,6 +190,8 @@ namespace hal {
          * Mostly used to find NodeBox selected in QGraphicsView engine, e.g. by mouse position
          */
         NodeBox* boxForItem(GraphicsNode* item) const { return mItemHash.value(item); }
+
+        QSet<u32> filterNotInView(const QSet<u32>& gats) const;
     private:
         QHash<Gate*,NodeBox*>         mGateHash;
         QHash<QPoint,NodeBox*>        mPointHash;
