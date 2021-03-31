@@ -38,6 +38,19 @@ namespace hal
         return mDefaultValue;
     }
 
+    void SettingsItemSlider::setDefaultValue(const QVariant& dv)
+    {
+        int newDefaultValue = dv.toInt();
+
+        if(mDefaultValue == newDefaultValue)
+            return;
+
+        bool hasDefaultValue = (mValue == mDefaultValue);
+        mDefaultValue = newDefaultValue;
+
+        if (hasDefaultValue) setValue(mDefaultValue);
+    }
+
     void SettingsItemSlider::setValue(const QVariant& v)
     {
         int newValue = v.toInt();

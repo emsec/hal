@@ -28,6 +28,19 @@ namespace hal
         return mDefaultValue;
     }
 
+    void SettingsItemText::setDefaultValue(const QVariant& dv)
+    {
+        QString newDefaultValue = dv.toString();
+
+        if(mDefaultValue == newDefaultValue)
+            return;
+
+        bool hasDefaultValue = (mValue == mDefaultValue);
+        mDefaultValue = newDefaultValue;
+
+        if (hasDefaultValue) setValue(mDefaultValue);
+    }
+
     void SettingsItemText::setValue(const QVariant& v)
     {
         QString newValue = v.toString();
@@ -38,7 +51,7 @@ namespace hal
         mValue = newValue;
         
         Q_EMIT valueChanged();
-        Q_EMIT stringChanged(v.toString());
+        Q_EMIT stringChanged(mValue);
     }
     
     SettingsWidget* SettingsItemText::editWidget(QWidget* parent)

@@ -2,14 +2,12 @@
 
 #include <QEvent>
 #include <QKeyEvent>
-#include <QDebug>
+#include <QMessageBox>
 
 namespace hal
 {
-    KeybindEdit::KeybindEdit(QWidget* parent): QKeySequenceEdit(parent), mValidator(StackedValidator()), mOldSequence(QKeySequence())
-    {
-        // do nothing
-    }
+    KeybindEdit::KeybindEdit(QWidget* parent): QKeySequenceEdit(parent)
+    {;}
 
     void KeybindEdit::addValidator(Validator* v)
     {
@@ -18,8 +16,7 @@ namespace hal
 
     void KeybindEdit::setValidated(bool validated)
     {
-        qDebug() << validated;
-        mValidated = validated;
+       mValidated = validated;
     }
 
     bool KeybindEdit::validated()
@@ -54,7 +51,13 @@ namespace hal
                 if (!mValidator.validate(keySequence().toString()))
                 {
                     // revert
+                    QKeySequence failed = keySequence();
                     setKeySequence(mOldSequence);
+                    if (failed != mFailedValidate)
+                    {
+                        QMessageBox::warning(this, "Rejected!", mValidator.failText());
+                        mFailedValidate = failed;
+                    }
                     Q_EMIT(editRejected());
                 }
                 else

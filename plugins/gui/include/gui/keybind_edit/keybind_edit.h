@@ -50,6 +50,7 @@ namespace hal
     private:
         StackedValidator mValidator;
         QKeySequence mOldSequence;
+        QKeySequence mFailedValidate;
         bool mValidated = true;
     };
 }

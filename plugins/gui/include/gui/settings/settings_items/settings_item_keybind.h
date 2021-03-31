@@ -26,6 +26,7 @@
 #include "gui/settings/settings_items/settings_item.h"
 
 #include <QObject>
+#include <QMap>
 #include <QKeySequence>
 
 namespace hal
@@ -40,7 +41,9 @@ namespace hal
         virtual QVariant value() const override;
         virtual QVariant defaultValue() const override;
         virtual void setValue(const QVariant& v) override;
+        virtual void setDefaultValue(const QVariant& dv) override;
         virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
+        static SettingsItemKeybind* currentKeybindAssignment(const QKeySequence& needle);
 
     Q_SIGNALS:
         void keySequenceChanged(QKeySequence value);
@@ -48,5 +51,8 @@ namespace hal
     private:
         QKeySequence mValue;
         QKeySequence mDefaultValue;
+
+        static void registerKeybind(const QKeySequence& key, SettingsItemKeybind* setting);
+        static QMap<QKeySequence,SettingsItemKeybind*>* sKeysAssigned;
     };
 }

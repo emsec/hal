@@ -27,6 +27,19 @@ namespace hal
         return mDefaultValue;
     }
 
+    void SettingsItemDropdown::setDefaultValue(const QVariant& dv)
+    {
+        int newDefaultValue = valueFromString(dv.toString());
+
+        if(mDefaultValue == newDefaultValue)
+            return;
+
+        bool hasDefaultValue = (mValue == mDefaultValue);
+        mDefaultValue = newDefaultValue;
+
+        if (hasDefaultValue) setValue(mDefaultValue);
+    }
+
     void SettingsItemDropdown::setValue(const QVariant& v)
     {
         int newValue = v.toInt();
@@ -54,32 +67,28 @@ namespace hal
         return mValue;
     }
 
-        void SettingsItemDropdown::restoreFromSettings(const QVariant& val)
+    void SettingsItemDropdown::restoreFromSettings(const QVariant& val)
     {
         QString s = val.toString();
 
         if (s.isEmpty())
             return;
 
+        mValue = valueFromString(s);
+    }
+
+    int SettingsItemDropdown::valueFromString(const QString &s) const
+    {
         if (s.at(0).isDigit())
+            return s.toInt();
+
+        for (int i=0; i<mValueNames.size(); i++)
         {
-            mValue = val.toInt();
-
+            if (s == mValueNames.at(i))
+                return i;
         }
-        else
-        {
-            mValue = -1;
 
-            for (int i=0; i<mValueNames.size(); i++)
-            {
-                if (s == mValueNames.at(i))
-                {
-                    mValue = i;
-                    return;
-                }
-            }
-
-        }
+        return -1; // enum name not found
     }
 
     void SettingsItemDropdown::reloadSettings()

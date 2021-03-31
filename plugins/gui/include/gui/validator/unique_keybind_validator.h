@@ -23,43 +23,17 @@
 
 #pragma once
 
-#include <QObject>
-#include "gui/settings/settings_items/settings_item.h"
+#include "gui/validator/validator.h"
+
+#include <QStringList>
 
 namespace hal
 {
-    class SettingsItemSpinbox : public SettingsItem
+    class UniqueKeybindValidator : public Validator
     {
-        Q_OBJECT
+        public:
+            UniqueKeybindValidator();
 
-    public:
-        SettingsItemSpinbox(const QString& label, const QString& tag, int defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
-
-        virtual QVariant value() const override;
-        virtual QVariant defaultValue() const override;
-        virtual void setValue(const QVariant& v) override;
-        virtual void setDefaultValue(const QVariant& dv) override;
-        virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
-
-        void setRange(int min, int max);
-
-        int minimum() const
-        {
-            return mMinimum;
-        }
-
-        int maximum() const
-        {
-            return mMaximum;
-        }
-
-    Q_SIGNALS:
-        void intChanged(int value);
-
-    private:
-        int mValue;
-        int mDefaultValue;
-        int mMinimum;
-        int mMaximum;
+            bool validate(const QString &input);
     };
 }

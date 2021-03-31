@@ -27,6 +27,19 @@ namespace hal
         return mDefaultValue;
     }
 
+    void SettingsItemCheckbox::setDefaultValue(const QVariant& dv)
+    {
+        bool newDefaultValue = dv.toBool();
+
+        if(mDefaultValue == newDefaultValue)
+            return;
+
+        bool hasDefaultValue = (mValue == mDefaultValue);
+        mDefaultValue = newDefaultValue;
+
+        if (hasDefaultValue) setValue(mDefaultValue);
+    }
+
     void SettingsItemCheckbox::setValue(const QVariant& v)
     {
         bool newValue = v.toBool();
@@ -37,7 +50,7 @@ namespace hal
         mValue = newValue;
 
         Q_EMIT valueChanged();
-        Q_EMIT boolChanged(v.toBool());
+        Q_EMIT boolChanged(mValue);
     }
 
     SettingsWidget* SettingsItemCheckbox::editWidget(QWidget* parent)

@@ -48,10 +48,7 @@ namespace hal
         QSize mainWindowSize() const;
         void mainWindowSaveGeometry(const QPoint& pos, const QSize& size);
 
-        QVariant settingsValue(const QString& tag) const
-        {
-            return mSettingsFile.value(tag);
-        }
+        QVariant settingsValue(const QString& tag) const;
 
     public Q_SLOTS:
         void handleItemDestroyed(QObject* obj);
@@ -60,6 +57,7 @@ namespace hal
         SettingsManager(QObject *parent = nullptr);
         static SettingsManager* inst;
 
-        QSettings mSettingsFile;
+        QSettings mDefaultSettingsFile;
+        QSettings mUserSettingsFile;
     };
 }

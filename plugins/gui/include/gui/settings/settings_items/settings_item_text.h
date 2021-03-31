@@ -38,6 +38,7 @@ namespace hal
         virtual QVariant value() const override;
         virtual QVariant defaultValue() const override;
         virtual void setValue(const QVariant& v) override;
+        virtual void setDefaultValue(const QVariant& dv) override;
         virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
 
     Q_SIGNALS:

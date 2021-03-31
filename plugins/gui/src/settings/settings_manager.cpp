@@ -18,14 +18,21 @@ namespace hal
     }
 
     SettingsManager::SettingsManager(QObject* parent)
-        : QObject(parent), mSettingsFile("emsec", "settings") {}
+        : QObject(parent)
+    {
+        mUserSettingsFile = QSettings("emsec", "settings");
+    }
 
     void SettingsManager::registerSetting(SettingsItem* item)
     {
         mSettingsList.append(item);
 
-        if(mSettingsFile.contains(item->tag()))
-            item->restoreFromSettings(mSettingsFile.value(item->tag()));
+        QString tag = item->tag();
+        if (mDefaultSettingsFile.contains(tag))
+            item->setDefaultValue(tag);
+
+        if (mUserSettingsFile.contains(tag))
+            item->restoreFromSettings(mUserSettingsFile.value(tag));
 
         connect(item, &SettingsItem::destroyed, this, &SettingsManager::handleItemDestroyed);
 

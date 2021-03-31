@@ -42,6 +42,7 @@ namespace hal
         virtual QVariant value() const = 0;
         virtual QVariant defaultValue() const = 0;
         virtual void setValue(const QVariant& v) = 0;
+        virtual void setDefaultValue(const QVariant& dv) = 0;
         virtual  SettingsWidget* editWidget(QWidget* parent = nullptr) = 0;
 
         virtual bool isDefaultValue() const

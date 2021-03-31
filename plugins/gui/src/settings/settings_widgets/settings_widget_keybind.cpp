@@ -1,7 +1,7 @@
 #include "gui/settings/settings_widgets/settings_widget_keybind.h"
 
 #include "gui/label_button/label_button.h"
-#include "gui/validator/unique_string_validator.h"
+#include "gui/validator/unique_keybind_validator.h"
 
 #include <QFormLayout>
 #include <QVBoxLayout>
@@ -29,8 +29,8 @@ namespace hal
         layout->addWidget(label);
 
         mKeybindEdit = new KeybindEdit(this);
-        //UniqueStringValidator* v = new UniqueStringValidator(); // TODO
-        //mKeybindEdit->addValidator(v);
+        UniqueKeybindValidator* v = new UniqueKeybindValidator();
+        mKeybindEdit->addValidator(v);
         connect(mKeybindEdit, &KeybindEdit::editingFinished, this, &SettingsWidgetKeybind::onKeybindChanged);
         connect(mKeybindEdit, &KeybindEdit::editRejected, this, &SettingsWidgetKeybind::onKeybindEditRejected);
         layout->addWidget(mKeybindEdit);
