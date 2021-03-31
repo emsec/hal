@@ -46,7 +46,7 @@ namespace hal
 
         sSettingPanModifier = new SettingsItemDropdown(
             "Pan Scene Modifier",
-            "graph_view/pan_modifier",
+            "graph_view/move_modifier",
             KeyboardModifier::Shift,
             "Graph View",
             "Specifies the key which can be pressed to pan the scene in the Graph View while left clicking."
@@ -55,7 +55,7 @@ namespace hal
 
         sSettingZoomIn = new SettingsItemKeybind(
             "Graph View Zoom In",
-            "keybind/graph_zoom_in",
+            "keybinds/graph_view_zoom_in",
             QKeySequence("Ctrl++"),
             "Keybindings:Graph",
             "Keybind for zooming in in the Graph View."
@@ -63,7 +63,7 @@ namespace hal
 
         sSettingZoomOut = new SettingsItemKeybind(
             "Graph View Zoom Out",
-            "keybind/graph_zoom_out",
+            "keybinds/graph_view_zoom_out",
             QKeySequence("Ctrl+-"),
             "Keybindings:Graph",
             "Keybind for zooming out in the Graph View."

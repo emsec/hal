@@ -57,7 +57,7 @@ namespace hal
         SettingsManager(QObject *parent = nullptr);
         static SettingsManager* inst;
 
-        QSettings mDefaultSettingsFile;
-        QSettings mUserSettingsFile;
+        QSettings* mDefaultSettingsFile;
+        QSettings* mUserSettingsFile;
     };
 }

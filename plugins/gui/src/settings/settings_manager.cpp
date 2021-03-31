@@ -1,6 +1,6 @@
 #include "gui/settings/settings_manager.h"
-
-#include <QDebug>
+#include "hal_core/utilities/utils.h"
+#include <QDir>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QRect>
@@ -20,7 +20,11 @@ namespace hal
     SettingsManager::SettingsManager(QObject* parent)
         : QObject(parent)
     {
-        mUserSettingsFile = QSettings("emsec", "settings");
+        QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory().string()));
+        QDir defaultConfigDir(QString::fromStdString(utils::get_config_directory().string()));
+
+        mUserSettingsFile = new QSettings(userConfigDir.absoluteFilePath("guisettings.ini"), QSettings::IniFormat);
+        mDefaultSettingsFile = new QSettings(defaultConfigDir.absoluteFilePath("guidefaults.ini"), QSettings::IniFormat);
     }
 
     void SettingsManager::registerSetting(SettingsItem* item)
@@ -28,15 +32,15 @@ namespace hal
         mSettingsList.append(item);
 
         QString tag = item->tag();
-        if (mDefaultSettingsFile.contains(tag))
-            item->setDefaultValue(tag);
+        if (mDefaultSettingsFile->contains(tag))
+            item->setDefaultValue(mDefaultSettingsFile->value(tag));
 
-        if (mUserSettingsFile.contains(tag))
-            item->restoreFromSettings(mUserSettingsFile.value(tag));
+        if (mUserSettingsFile->contains(tag))
+            item->restoreFromSettings(mUserSettingsFile->value(tag));
 
         connect(item, &SettingsItem::destroyed, this, &SettingsManager::handleItemDestroyed);
 
-        qDebug() << "new setting " << item << " " << item->tag();
+        // qDebug() << "new setting " << item << " " << item->tag();
     }
 
     void SettingsManager::handleItemDestroyed(QObject* obj)
@@ -48,26 +52,27 @@ namespace hal
     void SettingsManager::persistUserSettings()
     {
         for(SettingsItem* item : mSettingsList)
-            mSettingsFile.setValue(item->tag(), item->value());
+            if (item->value() != item->defaultValue())
+                mUserSettingsFile->setValue(item->tag(), item->value());
 
-        mSettingsFile.sync();
+        mUserSettingsFile->sync();
     }
 
     QPoint SettingsManager::mainWindowPosition() const
     {
-        return mSettingsFile.value("MainWindow/position", QPoint(0, 0)).toPoint();
+        return mUserSettingsFile->value("MainWindow/position", QPoint(0, 0)).toPoint();
     }
 
     QSize SettingsManager::mainWindowSize() const
     {
         QRect rect = QApplication::desktop()->screenGeometry();
-        return mSettingsFile.value("MainWindow/size", rect.size()).toSize();
+        return mUserSettingsFile->value("MainWindow/size", rect.size()).toSize();
     }
 
     void SettingsManager::mainWindowSaveGeometry(const QPoint& pos, const QSize& size)
     {
-        mSettingsFile.setValue("MainWindow/position", pos);
-        mSettingsFile.setValue("MainWindow/size", size);
-        mSettingsFile.sync();
+        mUserSettingsFile->setValue("MainWindow/position", pos);
+        mUserSettingsFile->setValue("MainWindow/size", size);
+        mUserSettingsFile->sync();
     }
 }

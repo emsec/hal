@@ -120,7 +120,7 @@ namespace hal
 
         mSettingMinimap = new SettingsItemCheckbox(
             "Code Minimap",
-            "python_editor/minimap",
+            "python/minimap",
             false,
             "Python Editor",
             "Enable code minimap."
@@ -128,7 +128,7 @@ namespace hal
 
         mSettingOpenFile = new SettingsItemKeybind(
             "PyEditor Shortcut 'Open Python File'",
-            "keybind/python_open_file",
+            "keybinds/python_open_file",
             QKeySequence("Ctrl+Shift+O"),
             "Keybindings: PyEditor",
             "Keybind for opening a python file in the Python Editor."
@@ -136,7 +136,7 @@ namespace hal
 
         mSettingSaveFile = new SettingsItemKeybind(
             "PyEditor Shortcut 'Save Python File'",
-            "keybind/python_save_file",
+            "keybinds/python_save_file",
             QKeySequence("Ctrl+Shift+S"),
             "Keybindings: PyEditor",
             "Keybind for saving a python file in the Python Editor."
@@ -144,7 +144,7 @@ namespace hal
 
         mSettingSaveFileAs = new SettingsItemKeybind(
             "PyEditor Shortcut 'Save Python File As'",
-            "keybind/python_save_file_as",
+            "keybinds/python_save_file_as",
             QKeySequence("Ctrl+Alt+S"),
             "Keybindings: PyEditor",
             "Keybind for saving a python file in the Python Editor 'as ...' in the Python Editor."
@@ -152,7 +152,7 @@ namespace hal
 
         mSettingRunFile = new SettingsItemKeybind(
             "PyEditor Shortcut 'Run Python File'",
-            "keybind/python_run_file",
+            "keybinds/python_run_file",
             QKeySequence("Ctrl+R"),
             "Keybindings: PyEditor",
             "Keybind for executing a python file in the Python Editor."
@@ -160,7 +160,7 @@ namespace hal
 
         mSettingCreateFile = new SettingsItemKeybind(
             "PyEditor Shortcut 'Create New Python File'",
-            "keybind/python_create_file",
+            "keybinds/python_create_file",
             QKeySequence("Ctrl+Shift+N"),
             "Keybindings: PyEditor",
             "Keybind for creating a new python file in the Python Editor."

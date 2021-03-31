@@ -45,7 +45,7 @@ namespace hal
     {
         sSettingSortMechanism = new SettingsItemDropdown(
             "Sort Mechanism",
-            "misc/sort_mechanism",
+            "navigation/sort_mechanism",
             gui_utility::mSortMechanism::lexical,
             "eXpert Settings:Miscellaneous",
             "Specifies the sort mechanism used in every list "
@@ -54,7 +54,7 @@ namespace hal
 
         sSettingSearch = new SettingsItemKeybind(
             "Search",
-            "keybind/search",
+            "keybinds/searchbar_toggle",
             QKeySequence("Ctrl+F"),
             "Keybindings:Global",
             "Keybind for toggeling the searchbar in widgets where available (Selection Details Widget, Modules Widget, Python Editor, Views Widget, Grouping Widget)."

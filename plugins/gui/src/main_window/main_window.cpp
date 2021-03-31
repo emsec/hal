@@ -241,7 +241,7 @@ namespace hal
 
         mSettingCreateFile = new SettingsItemKeybind(
             "HAL Shortcut 'Create Empty Netlist'",
-            "keybind/project_create_file",
+            "keybinds/project_create_file",
             QKeySequence("Ctrl+N"),
             "Keybindings:Global",
             "Keybind for creating a new and empty netlist in HAL."
@@ -249,7 +249,7 @@ namespace hal
 
         mSettingOpenFile = new SettingsItemKeybind(
             "HAL Shortcut 'Open File'",
-            "keybind/project_open_file",
+            "keybinds/project_open_file",
             QKeySequence("Ctrl+O"),
             "Keybindings:Global",
             "Keybind for opening a new File in HAL."
@@ -257,7 +257,7 @@ namespace hal
 
         mSettingSaveFile = new SettingsItemKeybind(
             "HAL Shortcut 'Save File'",
-            "keybind/project_save_file",
+            "keybinds/project_save_file",
             QKeySequence("Ctrl+S"),
             "Keybindings:Global",
             "Keybind for saving the currently opened file."
@@ -265,7 +265,7 @@ namespace hal
 
         mSettingUndoLast = new SettingsItemKeybind(
             "Undo Last Action",
-            "keybind/action_undo",
+            "keybinds/action_undo",
             QKeySequence("Ctrl+Z"),
             "Keybindings:Global",
             "Keybind for having last user interaction undone."
@@ -288,7 +288,7 @@ namespace hal
 
         mSettingStyle = new SettingsItemDropdown(
             "Theme",
-            "style/main_theme",
+            "main_style/theme",
             StyleSheetOption::Darcula,
             "Appearance:Style",
             "Specifies which theme should be used. For the effects to take place you must restart HAL."
