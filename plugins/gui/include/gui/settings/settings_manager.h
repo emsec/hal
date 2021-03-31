@@ -49,6 +49,7 @@ namespace hal
         void mainWindowSaveGeometry(const QPoint& pos, const QSize& size);
 
         QVariant settingsValue(const QString& tag) const;
+        QVariant defaultValue(const QString& tag) const;
 
     public Q_SLOTS:
         void handleItemDestroyed(QObject* obj);

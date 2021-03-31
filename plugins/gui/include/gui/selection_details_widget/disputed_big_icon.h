@@ -49,7 +49,7 @@ namespace hal
         DisputedBigIcon(const QString& iconName, QWidget* parent = nullptr);
 
     public Q_SLOTS:
-        void setVisible(bool vis);
+        void setVisibleStatus(bool vis);
 
     private:
         void showOrHide();

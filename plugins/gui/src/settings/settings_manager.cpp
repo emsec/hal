@@ -58,6 +58,16 @@ namespace hal
         mUserSettingsFile->sync();
     }
 
+    QVariant SettingsManager::defaultValue(const QString& tag) const
+    {
+        return mDefaultSettingsFile->value(tag);
+    }
+
+    QVariant SettingsManager::settingsValue(const QString& tag) const
+    {
+        return mUserSettingsFile->value(tag);
+    }
+
     QPoint SettingsManager::mainWindowPosition() const
     {
         return mUserSettingsFile->value("MainWindow/position", QPoint(0, 0)).toPoint();

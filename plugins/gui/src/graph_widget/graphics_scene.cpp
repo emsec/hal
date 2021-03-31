@@ -121,7 +121,7 @@ namespace hal
 
     GraphicsScene::~GraphicsScene()
     {
-        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        disconnect(this, &QGraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
         for (QGraphicsItem* gi : items())
         {
             removeItem(gi);
@@ -329,7 +329,7 @@ namespace hal
 
     void GraphicsScene::connectAll()
     {
-        connect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        connect(this, &QGraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
 
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GraphicsScene::handleExternSelectionChanged);
         connect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphicsScene::handleExternSubfocusChanged);
@@ -345,7 +345,7 @@ namespace hal
 
     void GraphicsScene::disconnectAll()
     {
-        disconnect(this, &GraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        disconnect(this, &QGraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
 
         disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GraphicsScene::handleExternSelectionChanged);
         disconnect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphicsScene::handleExternSubfocusChanged);

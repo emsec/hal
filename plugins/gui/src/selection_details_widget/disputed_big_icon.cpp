@@ -17,7 +17,7 @@ namespace hal
         : QLabel(parent)
     {
         mIsVisible = sShowIconSetting->value().toBool();
-        connect(sShowIconSetting,&SettingsItemCheckbox::boolChanged,this,&DisputedBigIcon::setVisible);
+        connect(sShowIconSetting,&SettingsItemCheckbox::boolChanged,this,&DisputedBigIcon::setVisibleStatus);
 
         if (!iconName.isEmpty())
             setPixmap(QPixmap(QString(":/icons/%1").arg(iconName),"PNG").scaled(64,64));
@@ -25,7 +25,7 @@ namespace hal
         showOrHide();
     }
 
-    void DisputedBigIcon::setVisible(bool vis)
+    void DisputedBigIcon::setVisibleStatus(bool vis)
     {
         if (mIsVisible==vis) return; // nothing to do
         mIsVisible = vis;

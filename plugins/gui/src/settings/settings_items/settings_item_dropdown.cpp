@@ -1,6 +1,7 @@
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/settings/settings_manager.h"
 #include "gui/settings/settings_widgets/settings_widget_dropdown.h"
+//#include <QDebug>
 
 namespace hal
 {
@@ -29,7 +30,10 @@ namespace hal
 
     void SettingsItemDropdown::setDefaultValue(const QVariant& dv)
     {
-        int newDefaultValue = valueFromString(dv.toString());
+        QString s = dv.toString();
+
+        if (s.isEmpty()) return;
+        int newDefaultValue = valueFromString(s);
 
         if(mDefaultValue == newDefaultValue)
             return;
@@ -71,9 +75,7 @@ namespace hal
     {
         QString s = val.toString();
 
-        if (s.isEmpty())
-            return;
-
+        if (s.isEmpty()) return;
         mValue = valueFromString(s);
     }
 
@@ -88,11 +90,20 @@ namespace hal
                 return i;
         }
 
+        // case insensitive values for backward compatibility
+        for (int i=0; i<mValueNames.size(); i++)
+        {
+            if (s.trimmed().toLower() == mValueNames.at(i).trimmed().toLower())
+                return i;
+        }
+
+//        qDebug() << "SettingsItemDropdown: key not supported" << tag() << s << mValueNames;
         return -1; // enum name not found
     }
 
     void SettingsItemDropdown::reloadSettings()
     {
+        setDefaultValue(SettingsManager::instance()->defaultValue(this->tag()));
         restoreFromSettings(SettingsManager::instance()->settingsValue(this->tag()));
     }
 }
