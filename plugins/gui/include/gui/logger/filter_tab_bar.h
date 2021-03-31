@@ -32,6 +32,9 @@ namespace hal
 {
     struct FilterItem;
 
+    /**
+     * TODO: Unused?
+     */
     class FilterTabBar : public QTabBar
     {
         Q_OBJECT

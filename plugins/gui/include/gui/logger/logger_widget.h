@@ -43,31 +43,106 @@ namespace hal
     struct FilterItem;
     class ChannelSelector;
 
+    /**
+     * The LoggerWidget is the content widget that displays the current hal log.
+     */
     class LoggerWidget : public ContentWidget
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
         LoggerWidget(QWidget* parent = nullptr);
         ~LoggerWidget() override;
 
+        /**
+         * Initializes the toolbar of the LoggerWidget. It creates the ChannelSelector for the logger channels within
+         * the toolbar.
+         *
+         * @param Toolbar - The toolbar to initialize
+         */
         virtual void setupToolbar(Toolbar* Toolbar) override;
 
+        /**
+         * Gets the underlying (read only) QPlainTextEdit object this LoggerWidget uses to display the log.
+         *
+         * @returns the underlying QPlainTextEdit object
+         */
         QPlainTextEdit* getPlainTextEdit();
 
+        /**
+         * Gets the FilterTabBar of this widget.
+         * TODO: FilterTabBar unused?
+         *
+         * @returns the FilterTabBar of this widget
+         */
         FilterTabBar* getTabBar();
 
+        /**
+         * Overrides the QWidget resizeEvent. After resizing the logger should be scrolled to the bottom, but only
+         * if the user hasn't interacted with the scrollbar before.
+         *
+         * @param event
+         */
         void resizeEvent(QResizeEvent* event) override;
 
     Q_SIGNALS:
+        /**
+         * TODO: Unused Q_SIGNAL
+         */
         void queueLogUpdate(spdlog::level::level_enum t, QString const& msg, FilterItem* filter);
 
     public Q_SLOTS:
+        /**
+         * TODO: Unused Q_SLOT
+         *
+         * @param t
+         * @param msg
+         */
         void handleCurrentChannelUpdated(spdlog::level::level_enum t, QString const& msg);
+
+        /**
+         * Q_SLOT to handle that the log manager has received a new message.
+         *
+         * @param t - The type of the message
+         * @param logger_name - The channel of the message
+         * @param msg - The message itself
+         */
         void handleChannelUpdated(spdlog::level::level_enum t, const std::string& logger_name, std::string const& msg);
+
+        /**
+         * Q_SLOT to handle that the currently selected logger channel has been changed (e.g. by choosing another one
+         * in the ChannelSelector combobox).
+         *
+         * @param index - The new channel index
+         */
         void handleCurrentChannelChanged(int index);
+
+        /**
+         * TODO: Unused Q_SLOT. Remove me?
+         *
+         * @param point
+         */
         void showTextEditContextMenu(const QPoint& point);
+
+        /**
+         * TODO: TabBar is unused?
+         * Q_SLOT to handle a click on the filter bar.
+         *
+         * @param index - The index of the filter that was clicked
+         */
         void filterItemClicked(const int& index);
+
+        /**
+         * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont
+         * be locked at the bottom anymore (e.g. after a resize event).
+         *
+         * @param value - The new scroll position of the scrollbar (unused)
+         */
         void handleFirstUserInteraction(int value);
 
     private:

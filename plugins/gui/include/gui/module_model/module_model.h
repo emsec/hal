@@ -201,10 +201,30 @@ namespace hal
          * @returns <b>true</b> while the item model is modified. Returns <b>false</b> otherwise.
          */
         bool isModifying();
+
+        /**
+         * Gets the module color of a module of a specific id.
+         *
+         * @param id - The module id of the module to get the color for
+         * @returns the color of the module
+         */
         QColor moduleColor(u32 id) const;
 
-        /// returns old color for undo action
+        /**
+         * Changes the color of a module.
+         *
+         * @param id - The id of the module
+         * @param col - The new color
+         * @returns the old color of the module (used to create an undo action easier)
+         */
         QColor setModuleColor(u32 id, const QColor& col);
+
+        /**
+         * Changes the color of a module to a random color.
+         *
+         * @param id - The id of the module
+         * @returns the old color of the module (used to create an undo action easier)
+         */
         QColor setRandomColor(u32 id);
         void removeColor(u32 id);
 

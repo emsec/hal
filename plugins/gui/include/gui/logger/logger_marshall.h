@@ -34,19 +34,42 @@ namespace hal
 {
     struct FilterItem;
 
+    /**
+     * The LoggerMarshall outsources the logic of appending a log to the QPlaintTextEdit of the LoggerWidget it belongs to.
+     * By calling appendLog the LoggerMarshall will transform the received log message to an html string with the color
+     * of the respective type of the message (e.g. error (red), debug (yellow), etc.).
+     */
     class LoggerMarshall : public QObject
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param edit - The QPlainTextEdit of the LoggerWidget this LoggerMarshall should belong to.
+         * @param parent - The parent widget
+         */
         explicit LoggerMarshall(QPlainTextEdit* edit, QObject* parent = 0);
 
     Q_SIGNALS:
 
     public Q_SLOTS:
 
+        /**
+         * Given a message type, a message and a filter this function wraps the message in an html string of the
+         * respective color of the channel type, applies the filter and appends the final html string to the
+         * QPlainTextEdit of the LoggerWidget this LoggerMarshall belongs to.
+         *
+         * @param log_type - The message type
+         * @param msg - The message
+         * @param filter - The filter
+         */
         void appendLog(spdlog::level::level_enum log_type, QString const& msg, FilterItem* filter);
 
+        /**
+         * TODO: Does nothing. (Remove me?)
+         */
         void highlightCurrentLine();
 
     private:
