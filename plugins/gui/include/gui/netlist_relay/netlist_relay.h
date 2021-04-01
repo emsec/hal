@@ -43,7 +43,7 @@ namespace hal
      * These objects may connect to one of the numerous Q_SIGNALS provided by this class to implement an individual
      * reaction to the registered events.
      *
-     * Also the NetlistRelay stores the color for modules wich can accessed via NetlistRelay::getModuleColor
+     * Also the NetlistRelay stores the color for modules which can accessed via NetlistRelay::getModuleColor
      */
     class NetlistRelay : public QObject
     {

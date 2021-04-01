@@ -33,8 +33,8 @@ namespace hal
     class Toolbar;
 
     /**
-     * The ContentFrame class wrapps the ContentWidget class. It displays the toolbar as well as
-     * the name and plays an important role in the docking system regarding the detachement functionality.
+     * The ContentFrame class wraps the ContentWidget class. It displays the toolbar as well as
+     * the name and plays an important role in the docking system regarding the detachment functionality.
      */
     class ContentFrame : public QWidget
     {

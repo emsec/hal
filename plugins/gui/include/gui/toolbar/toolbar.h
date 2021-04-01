@@ -27,15 +27,30 @@
 
 namespace hal
 {
+    /**
+     * The Toolbar is a QToolBar that is used in the ContentFrame of all ContentWidgets.
+     */
     class Toolbar : public QToolBar
     {
         Q_OBJECT
 
     public:
+        /**
+         * Constructor.
+         *
+         * @param parent - The parent widget
+         */
         Toolbar(QWidget* parent = nullptr);
 
+        /**
+         * TODO: Unused (and hacky?). Remove me?
+         * Adds a dummy widget to create some space between two toolbar actions.
+         */
         void addSpacer();
 
+        /**
+         * Re-initializes the appearance of the Toolbar.
+         */
         void repolish();
     };
 }

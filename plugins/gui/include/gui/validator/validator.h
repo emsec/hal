@@ -26,15 +26,41 @@
 #include <QString>
 namespace hal
 {
+    /**
+     * A <i>Validator</i> can be used to check if a string meets certain requirements. It is intended to be used in
+     * and input dialog to dynamically validate the input string of the user. If the input is not considered valid
+     * and the validation fails the Validator provides a 'fail text' that can be inserted in the input dialog widget
+     * to provide further information about the reason why the validation failed.
+     */
     class Validator
     {
         public:
+            /**
+             * Given any input string this function returns true if the Validator considers this string as valid.
+             * It returns false otherwise.
+             *
+             * @param input - The input string
+             * @returns <b>true</b> iff the string is considered valid
+             */
             virtual bool validate(const QString &input) = 0;
 
+            /**
+             * Configures the fail text that describes the reason for a failed validation. It can be accessed via
+             * Validator::failText.
+             *
+             * @param text - The new fail text
+             */
             void setFailText(const QString& text);
+
+            /**
+             * Accesses the fail text configured via Validator::setFailText (or a default fail text if no text was
+             * configured).
+             *
+             * @returns the fail text
+             */
             QString failText() const;
 
         protected:
-            QString mFailText = "Choosen input is not allowed.";
+            QString mFailText = "Chosen input is not allowed.";
     };
 }

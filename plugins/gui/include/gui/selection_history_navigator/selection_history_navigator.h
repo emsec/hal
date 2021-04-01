@@ -30,6 +30,9 @@
 
 namespace hal
 {
+    /**
+     * TODO: Unused. Remove me (+history entry)?
+     */
     class SelectionHistoryNavigator
     {
 
