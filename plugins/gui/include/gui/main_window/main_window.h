@@ -337,6 +337,8 @@ namespace hal
 
         void clear();
 
+        static SettingsItemDropdown* sSettingStyle;
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted, after the current project is stored as a .hal file.
@@ -412,6 +414,8 @@ namespace hal
         void handleActionUndo();
 
         void enableUndo(bool enable=true);
+
+        void reloadStylsheet(int istyle);
 
     private:
         /**
@@ -506,6 +510,5 @@ namespace hal
         SettingsItemKeybind* mSettingSaveFile;
         SettingsItemKeybind* mSettingUndoLast;
 
-        SettingsItemDropdown* mSettingStyle;
     };
 }

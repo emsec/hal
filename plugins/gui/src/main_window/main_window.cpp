@@ -50,6 +50,8 @@
 
 namespace hal
 {
+    SettingsItemDropdown* MainWindow::sSettingStyle = nullptr;
+
     MainWindow::MainWindow(QWidget* parent) : QWidget(parent), mScheduleWidget(new PluginScheduleWidget())
       // , mActionSchedule(new Action(this))
       // , mActionContent(new Action(this))
@@ -286,15 +288,6 @@ namespace hal
         connect(shortCutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
         connect(shortCutUndoLast, &QShortcut::activated, mActionUndo, &QAction::trigger);
 
-        mSettingStyle = new SettingsItemDropdown(
-            "Theme",
-            "main_style/theme",
-            StyleSheetOption::Darcula,
-            "Appearance:Style",
-            "Specifies which theme should be used. For the effects to take place you must restart HAL."
-        );
-        mSettingStyle->setValueNames<StyleSheetOption>();
-
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
         connect(mActionOpen, &Action::triggered, this, &MainWindow::handleActionOpen);
         connect(mActionAbout, &Action::triggered, mAboutDialog, &AboutDialog::exec);
@@ -314,6 +307,7 @@ namespace hal
         connect(this, &MainWindow::saveTriggered, gGraphContextManager, &GraphContextManager::handleSaveTriggered);
 
         connect(UserActionManager::instance(), &UserActionManager::canUndoLastAction, this, &MainWindow::enableUndo);
+        connect(sSettingStyle, &SettingsItemDropdown::intChanged, this, &MainWindow::reloadStylsheet);
         enableUndo(false);
 
         restoreState();
@@ -326,6 +320,26 @@ namespace hal
 
         //ReminderOverlay* o = new ReminderOverlay(this);
         //Q_UNUSED(o)
+    }
+
+    void MainWindow::reloadStylsheet(int istyle)
+    {
+        QString styleSheetToOpen;
+
+        switch(istyle)
+        {
+        case StyleSheetOption::Darcula:
+            styleSheetToOpen = ":/style/darcula";
+            break;
+        case StyleSheetOption::Sunny:
+            styleSheetToOpen = ":/style/sunny";
+            break;
+        default:
+            return;
+        }
+        QFile stylesheet(styleSheetToOpen);
+        stylesheet.open(QFile::ReadOnly);
+        qApp->setStyleSheet(QString(stylesheet.readAll()));
     }
 
     QString MainWindow::halIconPath() const

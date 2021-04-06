@@ -54,6 +54,8 @@ namespace hal
         for(SettingsItem* item : mSettingsList)
             if (item->value() != item->defaultValue())
                 mUserSettingsFile->setValue(item->tag(), item->value());
+            else
+                mUserSettingsFile->remove(item->tag());
 
         mUserSettingsFile->sync();
     }

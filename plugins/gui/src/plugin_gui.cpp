@@ -15,12 +15,14 @@
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
 #include "gui/user_action/user_action_manager.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
+#include <QDir>
 #include <QApplication>
 #include <QFile>
 #include <QFont>
@@ -157,8 +159,19 @@ namespace hal
         //this settingsobject is currently neccessary to read from the settings from here, because the mGSettings are not yet initialized(?)
         QString styleSheetToOpen;
 
-        QSettings tempSettingsToReadFrom("emsec", "settings");
-        MainWindow::StyleSheetOption theme = MainWindow::StyleSheetOption(tempSettingsToReadFrom.value("style/main_theme").toInt());
+        MainWindow::sSettingStyle = new SettingsItemDropdown(
+            "Theme",
+            "main_style/theme",
+            MainWindow::StyleSheetOption::Darcula,
+            "Appearance:Style",
+            "Specifies which theme should be used. Light style 'Sunny' is designed to print screenshots and not recommended for regular use."
+        );
+        MainWindow::sSettingStyle->setValueNames<MainWindow::StyleSheetOption>();
+
+//        QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory().string()));
+//        QSettings tempSettingsToReadFrom(userConfigDir.absoluteFilePath("guisettings.ini"), QSettings::IniFormat);
+
+        MainWindow::StyleSheetOption theme = static_cast<MainWindow::StyleSheetOption>(MainWindow::sSettingStyle->value().toInt());
 
         switch(theme)
         {
