@@ -51,6 +51,7 @@ namespace hal
 
     class SettingsItemCheckbox;
     class SettingsItemKeybind;
+    class SettingsItemSpinbox;
  
     /**
      * Widget that contains the python editor. It manages all CodeEditor objects (open tabs). The logic to save, open
@@ -668,6 +669,8 @@ namespace hal
          * Map: tab -> snapshot path
          */
         QMap<PythonCodeEditor*, QString> mTabToSnapshotPath;
+
+        SettingsItemSpinbox* mSettingFontSize;
 
         SettingsItemCheckbox* mSettingLineNumbers;
         SettingsItemCheckbox* mSettingHighlight;

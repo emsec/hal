@@ -14,6 +14,7 @@
 #include "gui/toolbar/toolbar.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
+#include "gui/settings/settings_items/settings_item_spinbox.h"
 
 #include <QAction>
 #include <QFileDialog>
@@ -93,6 +94,15 @@ namespace hal
         mFileWatcher = new QFileSystemWatcher(this);
         connect(mFileWatcher, &QFileSystemWatcher::fileChanged, this, &PythonEditor::handleTabFileChanged);
         connect(mFileWatcher, &QFileSystemWatcher::fileChanged, mFileModifiedBar, &FileModifiedBar::handleFileChanged);
+
+        mSettingFontSize = new SettingsItemSpinbox(
+                    "Font Size",
+                    "python/font_size",
+                    11,
+                    "Python Editor",
+                    "Size of Font measured in pt"
+                    );
+        mSettingFontSize->setRange(6,48);
 
         mSettingLineNumbers = new SettingsItemCheckbox(
             "Line Numbers",
