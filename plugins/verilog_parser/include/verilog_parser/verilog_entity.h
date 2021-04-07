@@ -2,8 +2,8 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "verilog_parser/verilog_instance.h"
 #include "verilog_parser/verilog_signal.h"
-
 namespace hal
 {
     class VerilogEntity
@@ -137,7 +137,7 @@ namespace hal
          *
          * @param[in] inst - The instance.
          */
-        void add_instance(const instance& inst)
+        void add_instance(const VerilogInstance& inst)
         {
             m_instances.emplace(inst.get_name(), inst);
         }
@@ -147,7 +147,7 @@ namespace hal
          *
          * @returns A map from the instance name to the respective instance.
          */
-        std::map<std::string, instance>& get_instances()
+        std::map<std::string, VerilogInstance>& get_instances()
         {
             return m_instances;
         }
@@ -155,7 +155,7 @@ namespace hal
         /**
          * @copydoc get_instances()
          */
-        const std::map<std::string, instance>& get_instances() const
+        const std::map<std::string, VerilogInstance>& get_instances() const
         {
             return m_instances;
         }
@@ -249,7 +249,7 @@ namespace hal
         std::vector<std::pair<std::vector<VerilogSignal>, std::vector<VerilogSignal>>> m_assignments;
 
         // instances: instance_name -> instance
-        std::map<std::string, instance> m_instances;
+        std::map<std::string, VerilogInstance> m_instances;
 
         // attributes: set(attribute_name, attribute_type, attribute_value)
         std::vector<std::tuple<std::string, std::string, std::string>> m_attributes;

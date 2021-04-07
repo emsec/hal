@@ -172,7 +172,7 @@ namespace hal
         std::map<std::string, std::string> internal_attributes;
 
         m_token_stream.consume("module", true);
-        const auto line_number        = m_token_stream.peek().number;
+        const u32 line_number         = m_token_stream.peek().number;
         const std::string entity_name = m_token_stream.consume();
 
         // verify entity name
@@ -198,7 +198,7 @@ namespace hal
 
         m_token_stream.consume(";", true);
 
-        auto next_token = m_token_stream.peek();
+        Token<std::string> next_token = m_token_stream.peek();
         while (next_token != "endmodule")
         {
             if (next_token == "input" || next_token == "output" || next_token == "inout")
@@ -267,12 +267,12 @@ namespace hal
     bool HDLParserVerilog::parse_port_list(VerilogEntity& e, std::set<std::string>& port_names)
     {
         m_token_stream.consume("(", true);
-        auto ports_str = m_token_stream.extract_until(")");
+        TokenStream<std::string> ports_str = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
 
         while (ports_str.remaining() > 0)
         {
-            auto next_token = ports_str.consume();
+            Token<std::string> next_token = ports_str.consume();
 
             // ANSI-style port list
             if (next_token == "input" || next_token == "output" || next_token == "inout")
@@ -289,7 +289,7 @@ namespace hal
                     std::vector<std::vector<u32>> ranges;
                     while (ports_str.consume("["))
                     {
-                        const auto range = parse_range(ports_str);
+                        const std::vector<u32> range = parse_range(ports_str);
                         ports_str.consume("]", true);
 
                         ranges.emplace_back(range);
@@ -322,9 +322,9 @@ namespace hal
 
     bool HDLParserVerilog::parse_port_definition(VerilogEntity& e, const std::set<std::string>& port_names, std::map<std::string, std::string>& attributes)
     {
-        const auto line_number   = m_token_stream.peek().number;
-        const auto direction_str = m_token_stream.consume().string;
-        auto ports               = parse_signal_list();
+        const u32 line_number                      = m_token_stream.peek().number;
+        const std::string direction_str            = m_token_stream.consume().string;
+        std::map<std::string, VerilogSignal> ports = parse_signal_list();
 
         PinDirection direction = enum_from_string<PinDirection>(direction_str, PinDirection::none);
         if (direction == PinDirection::none || direction == PinDirection::internal)
@@ -365,7 +365,7 @@ namespace hal
     bool HDLParserVerilog::parse_signal_definition(VerilogEntity& e, std::map<std::string, std::string>& attributes)
     {
         m_token_stream.consume("wire", true);
-        auto signals = parse_signal_list();
+        std::map<std::string, VerilogSignal> signals = parse_signal_list();
 
         if (signals.empty())
         {
@@ -395,11 +395,11 @@ namespace hal
 
     bool HDLParserVerilog::parse_assign(VerilogEntity& e)
     {
-        const auto line_number = m_token_stream.peek().number;
+        const u32 line_number = m_token_stream.peek().number;
         m_token_stream.consume("assign", true);
-        auto left_str = m_token_stream.extract_until("=");
+        TokenStream<std::string> left_str = m_token_stream.extract_until("=");
         m_token_stream.consume("=", true);
-        auto right_str = m_token_stream.extract_until(";");
+        TokenStream<std::string> right_str = m_token_stream.extract_until(";");
         m_token_stream.consume(";", true);
 
         // extract assignments for each bit
@@ -427,7 +427,7 @@ namespace hal
     bool HDLParserVerilog::parse_attribute(std::map<std::string, std::string>& attributes)
     {
         m_token_stream.consume("(*", true);
-        auto attribute_str = m_token_stream.extract_until("*)");
+        TokenStream<std::string> attribute_str = m_token_stream.extract_until("*)");
         m_token_stream.consume("*)", true);
 
         // extract attributes
@@ -457,8 +457,8 @@ namespace hal
 
     bool HDLParserVerilog::parse_instance(VerilogEntity& e, std::map<std::string, std::string>& attributes)
     {
-        const auto line_number   = m_token_stream.peek().number;
-        const auto instance_type = m_token_stream.consume().string;
+        const u32 line_number           = m_token_stream.peek().number;
+        const std::string instance_type = m_token_stream.consume().string;
         VerilogInstance inst(line_number, instance_type);
 
         // parse generics map
@@ -471,7 +471,7 @@ namespace hal
         }
 
         // parse instance name
-        const auto instance_name = m_token_stream.consume().string;
+        const std::string instance_name = m_token_stream.consume().string;
         inst.set_name(instance_name);
 
         // parse port map
@@ -481,7 +481,7 @@ namespace hal
         }
 
         // verify instance name
-        const auto& instances = e.get_instances();
+        const std::map<std::string, VerilogInstance>& instances = e.get_instances();
         if (instances.find(instance_name) != instances.end())
         {
             log_error("hdl_parser", "an instance with the name '{}' does already exist (see line {} and line {})", instance_name, line_number, instances.at(instance_name).get_line_number());
@@ -508,15 +508,15 @@ namespace hal
     bool HDLParserVerilog::parse_port_assign(VerilogEntity& e, VerilogInstance& inst)
     {
         m_token_stream.consume("(", true);
-        auto port_str = m_token_stream.extract_until(")");
+        TokenStream<std::string> port_str = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
 
         while (port_str.remaining() > 0)
         {
             port_str.consume(".", true);
-            auto left_str = port_str.consume();
+            Token<std::string> left_str = port_str.consume();
             port_str.consume("(", true);
-            auto right_str = port_str.extract_until(")");
+            TokenStream<std::string> right_str = port_str.extract_until(")");
             port_str.consume(")", true);
             port_str.consume(",", port_str.remaining() > 0);
 
@@ -544,18 +544,18 @@ namespace hal
 
     bool HDLParserVerilog::parse_generic_assign(VerilogInstance& inst)
     {
-        auto generic_str = m_token_stream.extract_until(")");
+        TokenStream<std::string> generic_str = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
 
         while (generic_str.remaining() > 0)
         {
             std::string value, data_type;
 
-            const auto line_number = generic_str.peek().number;
+            const u32 line_number = generic_str.peek().number;
             generic_str.consume(".", true);
-            const auto lhs = generic_str.join_until("(", "");
+            const Token<std::string> lhs = generic_str.join_until("(", "");
             generic_str.consume("(", true);
-            const auto rhs = generic_str.join_until(")", "");
+            const Token<std::string> rhs = generic_str.join_until(")", "");
             generic_str.consume(")", true);
             generic_str.consume(",", generic_str.remaining() > 0);
 
@@ -621,9 +621,9 @@ namespace hal
                 break;
             }
 
-            const auto single_line_comment_begin = line.find("//");
-            const auto multi_line_comment_begin  = line.find("/*");
-            const auto multi_line_comment_end    = line.find("*/");
+            const size_t single_line_comment_begin = line.find("//");
+            const size_t multi_line_comment_begin  = line.find("/*");
+            const size_t multi_line_comment_end    = line.find("*/");
 
             std::string begin = "";
             std::string end   = "";
@@ -700,13 +700,13 @@ namespace hal
         std::map<std::string, VerilogSignal> signals;
         std::vector<std::vector<u32>> ranges;
 
-        auto signal_str = m_token_stream.extract_until(";");
+        TokenStream<std::string> signal_str = m_token_stream.extract_until(";");
         m_token_stream.consume(";", true);
 
         // extract bounds
         while (signal_str.consume("["))
         {
-            const auto range = parse_range(signal_str);
+            const std::vector<u32> range = parse_range(signal_str);
             signal_str.consume("]", true);
 
             ranges.emplace_back(range);
@@ -715,7 +715,7 @@ namespace hal
         // extract names
         do
         {
-            const auto signal_name = signal_str.consume();
+            const Token<std::string> signal_name = signal_str.consume();
 
             VerilogSignal s(signal_name.number, signal_name.string, ranges);
             signals.emplace(signal_name, s);
@@ -744,7 +744,7 @@ namespace hal
         {
             signal_str.consume("{", true);
 
-            auto assignment_list_str = signal_str.extract_until("}");
+            TokenStream<std::string> assignment_list_str = signal_str.extract_until("}");
             signal_str.consume("}", true);
 
             do
@@ -757,11 +757,11 @@ namespace hal
             parts.push_back(signal_str);
         }
 
-        for (auto& part_stream : parts)
+        for (TokenStream<std::string>& part_stream : parts)
         {
-            const auto signal_name_token = part_stream.consume();
-            const auto line_number       = signal_name_token.number;
-            auto signal_name             = signal_name_token.string;
+            const Token<std::string> signal_name_token = part_stream.consume();
+            const u32 line_number                      = signal_name_token.number;
+            std::string signal_name                    = signal_name_token.string;
             std::vector<std::vector<u32>> ranges;
             bool is_binary = false;
 
@@ -787,8 +787,8 @@ namespace hal
             {
                 std::vector<std::vector<u32>> reference_ranges;
 
-                const auto& signals = e.get_signals();
-                const auto& ports   = e.get_ports();
+                const std::map<std::string, VerilogSignal>& signals                        = e.get_signals();
+                const std::map<std::string, std::pair<PinDirection, VerilogSignal>>& ports = e.get_ports();
                 if (const auto signal_it = signals.find(signal_name); signal_it != signals.end())
                 {
                     reference_ranges = signal_it->second.get_ranges();
@@ -810,7 +810,7 @@ namespace hal
                     // (5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
                     do
                     {
-                        auto range_str = part_stream.extract_until("]");
+                        TokenStream<std::string> range_str = part_stream.extract_until("]");
                         ranges.emplace_back(parse_range(range_str));
                         part_stream.consume("]", true);
                     } while (part_stream.consume("[", false));
@@ -852,8 +852,8 @@ namespace hal
 
     std::string HDLParserVerilog::get_bin_from_literal(const Token<std::string>& value_token)
     {
-        const auto line_number = value_token.number;
-        const auto value       = utils::to_lower(utils::replace(value_token.string, std::string("_"), std::string("")));
+        const u32 line_number   = value_token.number;
+        const std::string value = utils::to_lower(utils::replace(value_token.string, std::string("_"), std::string("")));
 
         i32 len = -1;
         std::string prefix;
@@ -880,7 +880,7 @@ namespace hal
         switch (prefix.at(0))
         {
             case 'b': {
-                for (const auto& c : number)
+                for (const char c : number)
                 {
                     if (c >= '0' && c <= '1')
                     {
@@ -896,7 +896,7 @@ namespace hal
             }
 
             case 'o':
-                for (const auto& c : number)
+                for (const char c : number)
                 {
                     if (c >= '0' && c <= '7')
                     {
@@ -913,7 +913,7 @@ namespace hal
             case 'd': {
                 u64 tmp_val = 0;
 
-                for (const auto& c : number)
+                for (const char c : number)
                 {
                     if (c >= '0' && c <= '9')
                     {
@@ -935,7 +935,7 @@ namespace hal
             }
 
             case 'h': {
-                for (const auto& c : number)
+                for (const char c : number)
                 {
                     if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))
                     {
@@ -970,8 +970,8 @@ namespace hal
 
     std::string HDLParserVerilog::get_hex_from_literal(const Token<std::string>& value_token)
     {
-        const auto line_number = value_token.number;
-        const auto value       = utils::to_lower(utils::replace(value_token.string, std::string("_"), std::string("")));
+        const u32 line_number   = value_token.number;
+        const std::string value = utils::to_lower(utils::replace(value_token.string, std::string("_"), std::string("")));
 
         i32 len = -1;
         std::string prefix;
@@ -1033,7 +1033,7 @@ namespace hal
             case 'h': {
                 std::string res;
 
-                for (const auto& c : number)
+                for (const char c : number)
                 {
                     if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))
                     {
@@ -1102,7 +1102,7 @@ namespace hal
     {
         std::vector<std::string> res;
 
-        for (auto bin_value : s.get_name())
+        for (const char bin_value : s.get_name())
         {
             res.push_back("'" + std::string(1, bin_value) + "'");
         }
@@ -1124,7 +1124,7 @@ namespace hal
         // expand signal recursively
         if (ranges.size() > dimension)
         {
-            for (const auto& index : ranges[dimension])
+            for (const u32 index : ranges[dimension])
             {
                 expand_signal_recursively(expanded_signal, current_signal + "(" + core_strings::convert_string<std::string, std::string>(std::to_string(index)) + ")", ranges, dimension + 1);
             }
@@ -1140,7 +1140,7 @@ namespace hal
     {
         std::vector<std::string> res;
 
-        for (const auto& s : signals)
+        for (const VerilogSignal& s : signals)
         {
             std::vector<std::string> expanded;
 
