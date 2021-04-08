@@ -33,7 +33,9 @@
 namespace hal
 {
     /**
-     * The ChannelEntry struct is used by the ChannelItem class to store a single entry.
+     * @ingroup gui
+     * @brief The ChannelEntry struct is used by the ChannelItem class to store a single entry.
+     *
      * An entry consists of the message itself and and its type (error, debug, etc.).
      */
     struct ChannelEntry
@@ -75,7 +77,7 @@ namespace hal
     };
 
     /**
-     * This class represents a channel in the channel model. It primarily holds the channel
+     * @brief This class represents a channel in the channel model. It primarily holds the channel
      * name and its entries.
      */
     class ChannelItem

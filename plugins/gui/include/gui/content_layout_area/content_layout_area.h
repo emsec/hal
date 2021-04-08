@@ -47,8 +47,10 @@ namespace hal
     };
 
     /**
+     * @brief Manages the layout of all ContentWidget%s
+     *
      * The ContentLayoutArea manages the main layout of the content widgets that appears after a file was opened.
-     * It owns the hierarchy of the layout down to the Splitters/SplitterAnchors. In provides a function to move
+     * It owns the hierarchy of the layout down to the Splitters/SplitterAnchor%s. In provides a function to move
      * content widgets to one of its content anchors.
      *
      * The ContentLayoutArea builds up the following layout hierarchy to achieve the desired

@@ -29,7 +29,9 @@
 namespace hal
 {
     /**
-     * A syntax highlighter that fits for a vhdl file. The following sections are distinguished and their color can be
+     * @brief A syntax highlighter that fits for a vhdl file.
+     *
+     * The following sections are distinguished and their color can be
      * configured in the qss file: <ul>
      *   <li> Keywords (e.g. begin, downto, entity, signal, ...)
      *   <li> Types (e.g. ns, rising_edge, true, in, out, ...)

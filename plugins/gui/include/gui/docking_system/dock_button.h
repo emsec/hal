@@ -30,8 +30,8 @@ namespace hal
     class ContentWidget;
 
     /**
-     * This enum represents the orientation of a dockbutton. A dockbutton is either
-     * placed in horizontal or vertical dockbar. Depending on this orientation the width, height
+     * This enum represents the orientation of a DockButton. A DockButton is either
+     * placed in horizontal or vertical DockBar. Depending on this orientation the width, height
      * and text is displayed accordingly.
      */
     enum class button_orientation
@@ -42,7 +42,9 @@ namespace hal
     };
 
     /**
-     * The dockbutton is placed and displayed in a dockbar to determine the position and appearence
+     * @brief A button of in the DockerBar
+     *
+     * The DockButton is placed and displayed in a DockBar to determine the position and appearance
      * of a content widget. It computes and holds necessary information for the docking system such as
      * its size, the associated content widget as well as his hidden/show status.
      */

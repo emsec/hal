@@ -32,7 +32,7 @@ namespace hal
 {
 
     /**
-     * The scrollbar of the CodeEditorMinimap.
+     * @brief The scrollbar of the CodeEditorMinimap
      */
     class MinimapScrollbar : public QWidget
     {

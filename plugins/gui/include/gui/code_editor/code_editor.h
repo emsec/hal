@@ -39,9 +39,10 @@ namespace hal
     class LineNumberArea;
 
     /**
-     * The Code Editor is a plain text edit widget that is intended to edit code. Therefore it has numbered lines
-     * and provides a code minimap for easier navigation in larger files. Moreover it supports a search function
-     * to mark all occurrences of a specified string.
+     * @brief A plain text edit widget that is intended for editing code.
+     *
+     * Therefore it has numbered lines and provides a code minimap for easier navigation in larger files.
+     * Moreover it supports a search function to mark all occurrences of a specified string.
      */
     class CodeEditor : public QPlainTextEdit
     {

@@ -34,9 +34,10 @@ namespace hal
     class MinimapScrollbar;
 
     /**
-     * The CodeEditorMinimap is a minimap that supports an easier navigation in larger files. It shows the zoomed out
-     * content of the file the associated CodeEditor currently works on. Moreover it adapts the functionality of the
-     * default scroll bar which is extended by this minimap.
+     * @brief A minimap that supports an easier navigation in larger files.
+     *
+     * It shows the zoomed out content of the file the associated CodeEditor currently works on.
+     * Moreover it adapts the functionality of the default scroll bar which is extended by this minimap.
      */
     class CodeEditorMinimap : public QWidget
     {

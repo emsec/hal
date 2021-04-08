@@ -21,28 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#pragma once
-
-#include <QObject>
-
-namespace hal
-{
-    /**
-     * @brief Unused.
-     *
-     * TODO: Remove me?
-     */
-    class ContentLayoutManager : public QObject
-    {
-        Q_OBJECT
-
-    public:
-        explicit ContentLayoutManager(QObject* parent = 0);
-
-    Q_SIGNALS:
-
-    public Q_SLOTS:
-
-    private:
-    };
-}
+/**
+ * @defgroup gui HAL Gui
+ * The Gui is a huge plugin that provides a graphical user interface to load and work with netlists. If compiled
+ * it can be started using the '-g'/'--gui' flag.
+ */

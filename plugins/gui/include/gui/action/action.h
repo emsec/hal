@@ -27,6 +27,7 @@
 
 namespace hal
 {
+
     class Action : public QAction
     {
         Q_OBJECT

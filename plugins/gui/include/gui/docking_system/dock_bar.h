@@ -36,7 +36,9 @@ namespace hal
     class ContentWidget;
 
     /**
-     * This class is used by the splitter anchor to store and handle dockbuttons. It manages information
+     * @brief Contains and handles DockButton%s
+     *
+     * This class is used by the splitter anchor to store and handle DockButton%s. It manages information
      * including, but not limited to, the start/end of a drag action and the arrangement of the buttons.
      */
     class DockBar : public QFrame

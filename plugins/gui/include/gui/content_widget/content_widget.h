@@ -37,6 +37,8 @@ namespace hal
     class Toolbar;
 
     /**
+     * @brief Abstract class for Widget%s within HALs content area
+     *
      * The ContentWidget class is the base class that has to be derived from in order to be put in hal's content area. It
      * provides the necessary interface for the docking system as well as functions that can be overwritten to configure its
      * shortcuts and toolbar.
