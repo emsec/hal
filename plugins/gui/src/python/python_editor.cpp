@@ -398,10 +398,10 @@ namespace hal
         connect(shortcutRun, &QShortcut::activated, mActionRun, &QAction::trigger);
 
         connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
-        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
-        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
-        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
-        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
+        connect(mSettingOpenFile, &SettingsItemKeybind::keySequenceChanged, shortcutOpenFile, &QShortcut::setKey);
+        connect(mSettingSaveFile, &SettingsItemKeybind::keySequenceChanged, shortcutSaveFile, &QShortcut::setKey);
+        connect(mSettingSaveFileAs, &SettingsItemKeybind::keySequenceChanged, shortcutSaveFileAs, &QShortcut::setKey);
+        connect(mSettingRunFile, &SettingsItemKeybind::keySequenceChanged, shortcutRun, &QShortcut::setKey);
 
         QList<QShortcut*> list;
         list.append(shortcutNewFile);
