@@ -31,6 +31,26 @@
 
 namespace hal
 {
+    class SettingsItemKeybind;
+
+    class AssignedKeybindMap
+    {
+        static AssignedKeybindMap* inst;
+        AssignedKeybindMap() {;}
+
+        QMap<QKeySequence,SettingsItemKeybind*> mAssignedMap;
+        QMap<QKeySequence,SettingsItemKeybind*> mTempMap;
+
+    public:
+        void registerKeybind(const QKeySequence &key, SettingsItemKeybind *setting);
+        void tempAssign(const QKeySequence& newkey, SettingsItemKeybind *setting, const QKeySequence& oldkey=QKeySequence());
+
+        SettingsItemKeybind* currentAssignment(const QKeySequence& needle) const { return mTempMap.value(needle); }
+        void initTempMap() { mTempMap = mAssignedMap; }
+        void acceptTempMap() { mAssignedMap = mTempMap; }
+        static AssignedKeybindMap* instance();
+    };
+
     class SettingsItemKeybind : public SettingsItem
     {
         Q_OBJECT
@@ -43,7 +63,6 @@ namespace hal
         virtual void setValue(const QVariant& v) override;
         virtual void setDefaultValue(const QVariant& dv) override;
         virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
-        static SettingsItemKeybind* currentKeybindAssignment(const QKeySequence& needle);
 
     Q_SIGNALS:
         void keySequenceChanged(QKeySequence value);
@@ -51,8 +70,5 @@ namespace hal
     private:
         QKeySequence mValue;
         QKeySequence mDefaultValue;
-
-        static void registerKeybind(const QKeySequence& key, SettingsItemKeybind* setting);
-        static QMap<QKeySequence,SettingsItemKeybind*>* sKeysAssigned;
     };
 }

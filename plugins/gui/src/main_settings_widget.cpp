@@ -1,4 +1,5 @@
 #include "gui/settings/main_settings_widget.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
 #include "gui/settings/settings_manager.h"
 
 #include "gui/expanding_list/expanding_list_button.h"
@@ -162,6 +163,7 @@ namespace hal
 
     void MainSettingsWidget::initWidgets()
     {
+        AssignedKeybindMap::instance()->initTempMap();
         QSet<const SettingsItem*> registeredItems = QSet<const SettingsItem*>::fromList(mSettingsList.getItems());
         QSet<QString> registeredCategories = QSet<QString>::fromList(mSectionNames.values());
         for (SettingsItem* si : SettingsManager::instance()->mSettingsList)
@@ -360,7 +362,10 @@ namespace hal
             }
         }
         if (changed)
+        {
+            AssignedKeybindMap::instance()->acceptTempMap();
             SettingsManager::instance()->persistUserSettings();
+        }
         return true;
     }
 }

@@ -30,6 +30,9 @@
 
 #include <QCheckBox>
 #include <QStringList>
+#include <QLabel>
+
+class QTimer;
 
 namespace hal
 {
@@ -47,8 +50,11 @@ namespace hal
 
     private:
         KeybindEdit* mKeybindEdit;
-        void onKeybindChanged();
-        void onKeybindEditRejected();
+        QLabel* mErrorMessage;
 
+    private Q_SLOTS:
+        void clearErrorMessage();
+        void onKeybindEditAccepted();
+        void onKeybindEditRejected(const QString& errMsg);
     };
 }

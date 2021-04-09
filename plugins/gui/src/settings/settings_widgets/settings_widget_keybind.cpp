@@ -1,7 +1,6 @@
 #include "gui/settings/settings_widgets/settings_widget_keybind.h"
 
 #include "gui/label_button/label_button.h"
-#include "gui/validator/unique_keybind_validator.h"
 
 #include <QFormLayout>
 #include <QVBoxLayout>
@@ -11,10 +10,10 @@
 #include <QCheckBox>
 #include <QKeySequenceEdit>
 #include <QStringList>
+#include <QTimer>
 #include "gui/gui_globals.h"
 
 #include "gui/settings/settings_items/settings_item_keybind.h"
-
 
 namespace hal
 {
@@ -25,22 +24,27 @@ namespace hal
         QVBoxLayout* layout = new QVBoxLayout();
         mContainer->addLayout(layout);
 
-        QLabel* label = new QLabel();
+        QLabel* label = new QLabel(this);
         layout->addWidget(label);
 
         mKeybindEdit = new KeybindEdit(this);
-        UniqueKeybindValidator* v = new UniqueKeybindValidator();
-        mKeybindEdit->addValidator(v);
-        connect(mKeybindEdit, &KeybindEdit::editingFinished, this, &SettingsWidgetKeybind::onKeybindChanged);
+        connect(mKeybindEdit, &QKeySequenceEdit::editingFinished, this, &SettingsWidgetKeybind::clearErrorMessage);
+        connect(mKeybindEdit, &KeybindEdit::editAccepted, this, &SettingsWidgetKeybind::onKeybindEditAccepted);
         connect(mKeybindEdit, &KeybindEdit::editRejected, this, &SettingsWidgetKeybind::onKeybindEditRejected);
         layout->addWidget(mKeybindEdit);
 
+        mErrorMessage = new QLabel(this);
+        mErrorMessage->setStyleSheet("color: red;");
+        layout->addWidget(mErrorMessage);
         load(item->value());
     }
 
     void SettingsWidgetKeybind::load(const QVariant& value)
     {
-        mKeybindEdit->setKeySequence(value.toString()); // auto-cast
+        SettingsItemKeybind* sik = static_cast<SettingsItemKeybind*>(mSettingsItem);
+        QKeySequence currentSeq(value.toString());
+        mKeybindEdit->load(currentSeq, sik);
+        mErrorMessage->setText(QString());
     }
 
     QVariant SettingsWidgetKeybind::value()
@@ -51,13 +55,20 @@ namespace hal
         return QVariant(seq); // auto-cast
     }
 
-    void SettingsWidgetKeybind::onKeybindChanged()
+    void SettingsWidgetKeybind::onKeybindEditAccepted()
     {
-       this->trigger_setting_updated();
+        trigger_setting_updated();
     }
 
-    void SettingsWidgetKeybind::onKeybindEditRejected()
+    void SettingsWidgetKeybind::clearErrorMessage()
     {
-        this->setDirty(false);
+        mErrorMessage->setText(QString());
+    }
+
+    void SettingsWidgetKeybind::onKeybindEditRejected(const QString& errMsg)
+    {
+        mErrorMessage->setText(errMsg);
+
+        QTimer::singleShot(2500, this, &SettingsWidgetKeybind::clearErrorMessage);
     }
 }

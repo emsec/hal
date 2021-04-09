@@ -664,15 +664,17 @@ namespace hal
     void PythonEditor::handleActionNewTab()
     {
         PythonCodeEditor* editor = new PythonCodeEditor();
+        editor->setFontSize(mSettingFontSize->value().toInt());
         editor->setMinimapEnabled(mSettingMinimap->value().toBool());
         editor->setLineWrapEnabled(mSettingLineWrap->value().toBool());
         editor->setHighlightCurrentLineEnabled(mSettingHighlight->value().toBool());
         editor->setLineNumberEnabled(mSettingLineNumbers->value().toBool());
 
-        connect(mSettingMinimap, &SettingsItemCheckbox::boolChanged, editor, &PythonCodeEditor::setMinimapEnabled);
-        connect(mSettingLineWrap, &SettingsItemCheckbox::boolChanged, editor, &PythonCodeEditor::setLineWrapEnabled);
-        connect(mSettingHighlight, &SettingsItemCheckbox::boolChanged, editor, &PythonCodeEditor::setHighlightCurrentLineEnabled);
-        connect(mSettingLineNumbers, &SettingsItemCheckbox::boolChanged, editor, &PythonCodeEditor::setLineNumberEnabled);
+        connect(mSettingFontSize, &SettingsItemSpinbox::intChanged, editor, &CodeEditor::setFontSize);
+        connect(mSettingMinimap, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setMinimapEnabled);
+        connect(mSettingLineWrap, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setLineWrapEnabled);
+        connect(mSettingHighlight, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setHighlightCurrentLineEnabled);
+        connect(mSettingLineNumbers, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setLineNumberEnabled);
 
         new PythonSyntaxHighlighter(editor->document());
         new PythonSyntaxHighlighter(editor->minimap()->document());

@@ -405,8 +405,20 @@ hal--SettingsWidget[conflicts=true] {
     background-color : rgb(70, 35, 35);
 }
 
-hal--SettingsWidget[dirty=true][conflicts=false] {
+hal--SettingsWidget[dirty=true] {
     border-left      : 5px solid rgb(73, 200, 76);
+}
+
+hal--KeybindEdit QLineEdit {
+    border-left      : 5px solid rgb(10, 11, 12);
+    background       : rgb(0,0,0);
+    selection-background-color: rgb(0,0,0);
+}
+
+hal--KeybindEdit[hasGrab=true] QLineEdit {
+    border-left      : 5px solid rgb(20, 40, 80);
+    background       : rgb(0,0,40);
+    selection-background-color: rgb(0,0,40);
 }
 
 hal--SettingsWidget QLabel {

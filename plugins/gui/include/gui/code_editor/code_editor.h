@@ -75,7 +75,7 @@ namespace hal
         QColor lineNumberHighlightBackground() const;
         QColor currentLineBackground() const;
 
-        void setLineNumberFont(QFont& font);
+        void setLineNumberFont(const QFont& font);
         void setLineNumberColor(QColor& color);
         void setLineNumberBackground(QColor& color);
         void setLineNumberHighlightColor(QColor& color);
@@ -92,6 +92,7 @@ namespace hal
 
         void toggleLineNumbers();
         void toggleMinimap();
+        void setFontSize(int pt);
 
     protected:
         virtual void resizeEvent(QResizeEvent* event) override;

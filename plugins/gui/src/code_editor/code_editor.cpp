@@ -287,6 +287,13 @@ namespace hal
         mAnimation->start();
     }
 
+    void CodeEditor::setFontSize(int pt)
+    {
+        QFont font = QPlainTextEdit::font();
+        font.setPointSize(pt);
+        QPlainTextEdit::setFont(font);
+    }
+
     void CodeEditor::handleWheelEvent(QWheelEvent* event)
     {
         QPlainTextEdit::wheelEvent(event);
@@ -327,7 +334,7 @@ namespace hal
         return mCurrentLineBackground;
     }
 
-    void CodeEditor::setLineNumberFont(QFont& font)
+    void CodeEditor::setLineNumberFont(const QFont &font)
     {
         mLineNumberFont = font;
     }
