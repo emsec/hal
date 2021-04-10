@@ -164,12 +164,6 @@ namespace hal
         setDirty(false);
     }
 
-    void SettingsWidget::restoreDefault()
-    {
-        if (!mSettingsItem) return;
-        load(mSettingsItem->defaultValue());
-    }
-
     void SettingsWidget::loadCurrentValue()
     {
         if (!mSettingsItem) return;

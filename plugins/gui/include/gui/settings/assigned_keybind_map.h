@@ -23,9 +23,6 @@
 
 #pragma once
 
-#include "gui/settings/settings_items/settings_item.h"
-
-#include <QObject>
 #include <QMap>
 #include <QKeySequence>
 
@@ -33,24 +30,18 @@ namespace hal
 {
     class SettingsItemKeybind;
 
-    class SettingsItemKeybind : public SettingsItem
+    class AssignedKeybindMap
     {
-        Q_OBJECT
+        static AssignedKeybindMap* inst;
+        AssignedKeybindMap() {;}
+
+        QMap<QKeySequence,SettingsItemKeybind*> mKeybindMap;
 
     public:
-        SettingsItemKeybind(const QString& label, const QString& tag, const QKeySequence& defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
-
-        virtual QVariant value() const override;
-        virtual QVariant defaultValue() const override;
-        virtual void setValue(const QVariant& v) override;
-        virtual void setDefaultValue(const QVariant& dv) override;
-        virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
-
-    Q_SIGNALS:
-        void keySequenceChanged(QKeySequence value);
-
-    private:
-        QKeySequence mValue;
-        QKeySequence mDefaultValue;
+        void assign(const QKeySequence& newkey, SettingsItemKeybind *setting, const QKeySequence& oldkey=QKeySequence());
+        SettingsItemKeybind* currentAssignment(const QKeySequence& needle) const { return mKeybindMap.value(needle); }
+        void initMap() { mKeybindMap.clear(); }
+        static AssignedKeybindMap* instance();
     };
 }
+

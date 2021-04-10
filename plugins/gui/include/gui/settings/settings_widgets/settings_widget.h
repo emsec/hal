@@ -58,7 +58,6 @@ namespace hal
 
         const SettingsItem* settingsItem() const { return mSettingsItem; }
         virtual void acceptValue();
-        virtual void restoreDefault();
         virtual void loadCurrentValue();
 
         virtual void load(const QVariant& value) = 0;
@@ -66,7 +65,7 @@ namespace hal
 
     public Q_SLOTS:
         void handleRevertModification();
-        void handleSetDefaultValue();
+        virtual void handleSetDefaultValue();
         void handleItemDestroyed();
 
     Q_SIGNALS:

@@ -1,3 +1,4 @@
+#include "gui/settings/assigned_keybind_map.h"
 #include "gui/settings/main_settings_widget.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
 #include "gui/settings/settings_manager.h"
@@ -137,7 +138,7 @@ namespace hal
 
         mVerticalLayout->addLayout(mButtonLayout);
 
-        mRestoreDefaults->setText("Restore Defaults");
+        mRestoreDefaults->setText("Restore default values for all settings");
         mRestoreDefaults->setToolTip("Clear user preferences for this page");
         mCancel->setText("Cancel");
         mOk->setText("OK");
@@ -163,7 +164,7 @@ namespace hal
 
     void MainSettingsWidget::initWidgets()
     {
-        AssignedKeybindMap::instance()->initTempMap();
+        AssignedKeybindMap::instance()->initMap();
         QSet<const SettingsItem*> registeredItems = QSet<const SettingsItem*>::fromList(mSettingsList.getItems());
         QSet<QString> registeredCategories = QSet<QString>::fromList(mSectionNames.values());
         for (SettingsItem* si : SettingsManager::instance()->mSettingsList)
@@ -260,11 +261,9 @@ namespace hal
 
     void MainSettingsWidget::handleRestoreDefaultsClicked()
     {
-        QList<SettingsWidget*> widgetList = mSettingsList.section(mActiveSection);
-
-        for (SettingsWidget* widget : widgetList)
+        for (SettingsWidget* widget : mSettingsList)
         {
-            widget->restoreDefault();
+            widget->handleSetDefaultValue();
         }
     }
 
@@ -363,7 +362,6 @@ namespace hal
         }
         if (changed)
         {
-            AssignedKeybindMap::instance()->acceptTempMap();
             SettingsManager::instance()->persistUserSettings();
         }
         return true;

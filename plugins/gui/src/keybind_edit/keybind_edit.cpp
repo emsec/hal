@@ -1,4 +1,5 @@
 #include "gui/keybind_edit/keybind_edit.h"
+#include "gui/settings/assigned_keybind_map.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include <QEvent>
@@ -50,7 +51,7 @@ namespace hal
         setValidated(ok);
         if (ok)
         {
-            AssignedKeybindMap::instance()->tempAssign(current,mItem,mOldSequence);
+            AssignedKeybindMap::instance()->assign(current,mItem,mOldSequence);
             mOldSequence = current;
             Q_EMIT(editAccepted());
         }
@@ -68,9 +69,11 @@ namespace hal
 
     void KeybindEdit::load(const QKeySequence& seq, SettingsItemKeybind* item)
     {
+        QKeySequence previousSequence = keySequence();
         mOldSequence = seq;
         mItem = item;
         QKeySequenceEdit::setKeySequence(seq);
+        AssignedKeybindMap::instance()->assign(seq, item, previousSequence);
     }
 
     void KeybindEdit::restoreOldSequence()

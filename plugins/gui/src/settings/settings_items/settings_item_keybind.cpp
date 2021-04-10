@@ -5,25 +5,6 @@
 
 namespace hal
 {
-    AssignedKeybindMap* AssignedKeybindMap::inst = nullptr;
-
-    AssignedKeybindMap* AssignedKeybindMap::instance()
-    {
-        if (!inst) inst = new AssignedKeybindMap;
-        return inst;
-    }
-
-    void AssignedKeybindMap::registerKeybind(const QKeySequence &key, SettingsItemKeybind *setting)
-    {
-        mAssignedMap.insert(key,setting);
-    }
-
-    void AssignedKeybindMap::tempAssign(const QKeySequence& newkey, SettingsItemKeybind *setting, const QKeySequence& oldkey)
-    {
-        if (!oldkey.isEmpty())
-            mTempMap.remove(oldkey);
-        mTempMap.insert(newkey,setting);
-    }
 
     SettingsItemKeybind::SettingsItemKeybind(const QString& label, const QString& tag, const QKeySequence& defVal, const QString& cat, const QString& descr, bool isGlobal)
     {
@@ -36,8 +17,7 @@ namespace hal
         mIsGlobal = isGlobal;
         
         SettingsManager::instance()->registerSetting(this);
-        AssignedKeybindMap::instance()->registerKeybind(mValue,this);
-    }
+   }
 
     QVariant SettingsItemKeybind::value() const
     {
