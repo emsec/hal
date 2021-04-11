@@ -121,13 +121,7 @@ namespace hal
         {
             for (const auto& group_val : gate_type["groups"].GetArray())
             {
-                auto group = parse_group(group_val, name);
-                if (!group.has_value())
-                {
-                    return false;
-                }
-
-                if (!gt->assign_pin_group(group->first, group->second))
+                if (!parse_group(gt, group_val, name))
                 {
                     return false;
                 }
@@ -252,34 +246,40 @@ namespace hal
         return true;
     }
 
-    std::optional<std::pair<std::string, std::map<u32, std::string>>> HGLParser::parse_group(const rapidjson::Value& group, const std::string& gt_name)
+    bool HGLParser::parse_group(GateType* gt, const rapidjson::Value& group, const std::string& gt_name)
     {
         // read name
         std::string name;
         if (!group.HasMember("name") || !group["name"].IsString())
         {
             log_error("hgl_parser", "invalid name for at least one pin of gate type '{}'.", gt_name);
-            return std::nullopt;
+            return false;
         }
         name = group["name"].GetString();
 
         // read index to pin mapping
-        std::map<u32, std::string> index_to_pin;
-        if (!group.HasMember("pins") || !group["pins"].IsObject())
+        if (!group.HasMember("pins") || !group["pins"].IsArray())
         {
-            log_error("hgl_parser", "no pins given for group '{}' of gate type '{}'.", name, gt_name);
-            return std::nullopt;
+            log_error("hgl_parser", "no valid pins given for group '{}' of gate type '{}'.", name, gt_name);
+            return false;
         }
 
+        std::vector<std::pair<u32, std::string>> pins;
         const auto pins_obj = group["pins"].GetObject();
-        for (auto it = pins_obj.MemberBegin(); it != pins_obj.MemberEnd(); ++it)
+        for (const auto& pin_obj : group["pins"].GetArray())
         {
-            u32 pin_index        = std::stoul(it->name.GetString());
-            std::string pin_name = it->value.GetString();
-            index_to_pin.emplace(pin_index, pin_name);
+            if(!pin_obj.IsObject()) 
+            {
+                log_error("hgl_parser", "invalid pin group assignment given for group '{}' of gate type '{}'.", name, gt_name);
+                return false;
+            }
+            const auto pin_val   = pin_obj.GetObject().MemberBegin();
+            u32 pin_index        = std::stoul(pin_val->name.GetString());
+            std::string pin_name = pin_val->value.GetString();
+            pins.push_back(std::make_pair(pin_index, pin_name));
         }
 
-        return std::make_pair(name, index_to_pin);
+        return gt->assign_pin_group(name, pins);
     }
 
     bool HGLParser::parse_lut_config(GateType* gt_lut, const rapidjson::Value& lut_config)

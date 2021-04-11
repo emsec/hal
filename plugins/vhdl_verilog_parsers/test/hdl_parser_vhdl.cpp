@@ -1335,19 +1335,19 @@ namespace hal {
 
                 Net* net_0 = gate_0->get_fan_in_net("I(0)");
                 ASSERT_NE(net_0, nullptr);
-                EXPECT_EQ(net_0->get_name(), "'0'");
+                EXPECT_EQ(net_0->get_name(), "'1'");
 
                 Net* net_1 = gate_0->get_fan_in_net("I(1)");
                 ASSERT_NE(net_1, nullptr);
-                EXPECT_EQ(net_1->get_name(), "'1'");
+                EXPECT_EQ(net_1->get_name(), "'0'");
 
                 Net* net_2 = gate_0->get_fan_in_net("I(2)");
                 ASSERT_NE(net_2, nullptr);
-                EXPECT_EQ(net_2->get_name(), "'0'");
+                EXPECT_EQ(net_2->get_name(), "'1'");
 
                 Net* net_3 = gate_0->get_fan_in_net("I(3)");
                 ASSERT_NE(net_3, nullptr);
-                EXPECT_EQ(net_3->get_name(), "'1'");
+                EXPECT_EQ(net_3->get_name(), "'0'");
             }
             {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(4) with l_vec(4))
@@ -1357,7 +1357,7 @@ namespace hal {
                                         "  );\n"
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
-                                        "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
+                                        "  signal l_vec : STD_LOGIC_VECTOR ( 3 downto 0 );\n"
                                         "begin\n"
                                         "  gate_0 : pin_group_gate_4_to_4\n"
                                         "    port map (\n"
@@ -1404,11 +1404,11 @@ namespace hal {
                                         "  );\n"
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
-                                        "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
+                                        "  signal l_vec : STD_LOGIC_VECTOR ( 3 downto 0 );\n"
                                         "begin\n"
                                         "  gate_0 : pin_group_gate_4_to_4\n"
                                         "    port map (\n"
-                                        "      O(3 downto 2) => l_vec(1 to 2)\n"
+                                        "      O(3 downto 2) => l_vec(2 downto 1)\n"
                                         "    );\n"
                                         "end STRUCTURE;");
                 test_def::capture_stdout();
@@ -1442,7 +1442,7 @@ namespace hal {
                                         "  );\n"
                                         "end TEST_Comp;\n"
                                         "architecture STRUCTURE of TEST_Comp is\n"
-                                        "  signal l_vec : STD_LOGIC_VECTOR ( 0 to 3 );\n"
+                                        "  signal l_vec : STD_LOGIC_VECTOR ( 3 downto 0 );\n"
                                         "begin\n"
                                         "  gate_0 : pin_group_gate_4_to_4\n"
                                         "    port map (\n"

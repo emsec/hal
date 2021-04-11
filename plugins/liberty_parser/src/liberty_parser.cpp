@@ -621,7 +621,8 @@ namespace hal
         {
             auto pin_name = bus.name + "(" + std::to_string(index) + ")";
             bus.pin_names.push_back(pin_name);
-            bus.index_to_pin_name.emplace(index, pin_name);
+            bus.pin_indices.push_back(std::make_pair(index, pin_name));
+            bus.index_to_pin.emplace(index, pin_name);
         }
 
         if (bus.direction == PinDirection::none)
@@ -837,7 +838,7 @@ namespace hal
         std::vector<std::string> input_pins;
         std::vector<std::string> output_pins;
 
-        std::unordered_map<std::string, std::map<u32, std::string>> groups;
+        std::unordered_map<std::string, std::vector<std::pair<u32, std::string>>> groups;
 
         bool has_inputs        = false;
         bool has_single_output = false;
@@ -913,7 +914,7 @@ namespace hal
                 log_error("liberty_parser", "pin group must have unique name in gate type '{}' near line {}.", cell.name, cell.line_number);
                 return false;
             }
-            groups[bus.first].insert(bus.second.index_to_pin_name.begin(), bus.second.index_to_pin_name.end());
+            groups[bus.first].insert(groups[bus.first].end(), bus.second.pin_indices.begin(), bus.second.pin_indices.end());
         }
 
         if (cell.properties.find(GateTypeProperty::ff) != cell.properties.end())
@@ -1314,7 +1315,7 @@ namespace hal
 
                         for (const auto& name : pin_names)
                         {
-                            res[name] += tmp + it->second.index_to_pin_name.at(start);
+                            res[name] += tmp + it->second.index_to_pin.at(start);
                             start += direction;
                         }
 
@@ -1326,7 +1327,7 @@ namespace hal
 
                         for (const auto& name : pin_names)
                         {
-                            res[name] += tmp + it->second.index_to_pin_name.at(index);
+                            res[name] += tmp + it->second.index_to_pin.at(index);
                         }
 
                         i += 3;
@@ -1376,7 +1377,7 @@ namespace hal
                 {
                     u32 index = std::stoul(tokenized_funtion.at(i + 2));
 
-                    res += it->second.index_to_pin_name.at(index);
+                    res += it->second.index_to_pin.at(index);
 
                     i += 3;
                 }

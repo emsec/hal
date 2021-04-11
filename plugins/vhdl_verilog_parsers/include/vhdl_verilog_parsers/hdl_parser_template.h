@@ -181,7 +181,7 @@ namespace hal
                     {
                         // cache pin types
                         std::vector<T> pins;
-                        std::unordered_map<T, std::map<u32, std::string>> pin_groups;
+                        std::unordered_map<T, std::vector<std::pair<u32, std::string>>> pin_groups;
 
                         if constexpr (std::is_same<T, std::string>::value)
                         {
@@ -195,9 +195,9 @@ namespace hal
                                 pins.push_back(core_strings::convert_string<std::string, T>(pin));
                             }
 
-                            for (const auto& [group, index_to_pin] : gate_it->second->get_pin_groups())
+                            for (const auto& [group, pins_and_indices] : gate_it->second->get_pin_groups())
                             {
-                                pin_groups.emplace(core_strings::convert_string<std::string, T>(group), index_to_pin);
+                                pin_groups.emplace(core_strings::convert_string<std::string, T>(group), pins_and_indices);
                             }
                         }
 
@@ -212,7 +212,7 @@ namespace hal
                                 else if (const auto pin_group_it = pin_groups.find(port.get_name()); pin_group_it != pin_groups.end())
                                 {
                                     std::vector<u32> range;
-                                    for (auto pin_index_it = pin_group_it->second.rbegin(); pin_index_it != pin_group_it->second.rend(); pin_index_it++)
+                                    for (auto pin_index_it = pin_group_it->second.begin(); pin_index_it != pin_group_it->second.end(); pin_index_it++)
                                     {
                                         range.push_back(pin_index_it->first);
                                     }
@@ -1456,21 +1456,20 @@ namespace hal
                         }
                     }
 
+                    u32 max_size;
                     if (expanded_assignment.size() <= expanded_port.size())
                     {
-                        for (u32 i = 0; i < expanded_assignment.size(); i++)
-                        {
-                            expanded_ports.push_back(expanded_port.at(i));
-                            expanded_assignments.push_back(expanded_assignment.at(i));
-                        }
+                        max_size = expanded_assignment.size();
                     }
                     else
                     {
-                        for (u32 i = 0; i < expanded_port.size(); i++)
-                        {
-                            expanded_ports.push_back(expanded_port.at(i));
-                            expanded_assignments.push_back(expanded_assignment.at(i));
-                        }
+                        max_size = expanded_port.size();
+                    }
+
+                    for (u32 i = 0; i < max_size; i++)
+                    {
+                        expanded_ports.push_back(expanded_port.at(i));
+                        expanded_assignments.push_back(expanded_assignment.at(max_size - 1 - i));
                     }
                 }
 

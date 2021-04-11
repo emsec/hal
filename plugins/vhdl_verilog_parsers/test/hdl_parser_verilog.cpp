@@ -1405,19 +1405,19 @@ namespace hal {
                 Gate* gate_0 = *(nl->get_gates(test_utils::gate_filter("pin_group_gate_4_to_4", "gate_0")).begin());
                 Net* net_0 = gate_0->get_fan_in_net("I(0)");
                 ASSERT_NE(net_0, nullptr);
-                EXPECT_EQ(net_0->get_name(), "'0'");
+                EXPECT_EQ(net_0->get_name(), "'1'");
 
                 Net* net_1 = gate_0->get_fan_in_net("I(1)");
                 ASSERT_NE(net_1, nullptr);
-                EXPECT_EQ(net_1->get_name(), "'1'");
+                EXPECT_EQ(net_1->get_name(), "'0'");
 
                 Net* net_2 = gate_0->get_fan_in_net("I(2)");
                 ASSERT_NE(net_2, nullptr);
-                EXPECT_EQ(net_2->get_name(), "'0'");
+                EXPECT_EQ(net_2->get_name(), "'1'");
 
                 Net* net_3 = gate_0->get_fan_in_net("I(3)");
                 ASSERT_NE(net_3, nullptr);
-                EXPECT_EQ(net_3->get_name(), "'1'");
+                EXPECT_EQ(net_3->get_name(), "'0'");
 
             }
             {
@@ -1442,26 +1442,25 @@ namespace hal {
 
                 Net* net_0 = gate_0->get_fan_out_net("O(0)");
                 ASSERT_NE(net_0, nullptr);
-                EXPECT_EQ(net_0->get_name(), "net_0");
+                EXPECT_EQ(net_0->get_name(), "l_vec(1)");
 
                 Net* net_1 = gate_0->get_fan_out_net("O(1)");
                 ASSERT_NE(net_1, nullptr);
-                EXPECT_EQ(net_1->get_name(), "net_1");
+                EXPECT_EQ(net_1->get_name(), "l_vec(0)");
 
                 Net* net_2 = gate_0->get_fan_out_net("O(2)");
                 ASSERT_NE(net_2, nullptr);
-                EXPECT_EQ(net_2->get_name(), "l_vec(0)");
+                EXPECT_EQ(net_2->get_name(), "net_1");
 
                 Net* net_3 = gate_0->get_fan_out_net("O(3)");
                 ASSERT_NE(net_3, nullptr);
-                EXPECT_EQ(net_3->get_name(), "l_vec(1)");
-
+                EXPECT_EQ(net_3->get_name(), "net_0");
             }
             {
                 // Connect a vector of output pins with a vector of nets (O(0) with l_vec(0),...,O(4) with l_vec(4))
                 std::stringstream input("module top (\n"
                                         " ) ;\n"
-                                        "  wire [0:3] l_vec;\n"
+                                        "  wire [3:0] l_vec;\n"
                                         "  wire net_1 ;\n"
                                         "pin_group_gate_4_to_4 gate_0 (\n"
                                         "  .O (l_vec)\n"
@@ -1497,7 +1496,7 @@ namespace hal {
                 // but the vector has a smaller size
                 std::stringstream input("module top (\n"
                                         " ) ;\n"
-                                        "  wire [0:2] l_vec;\n"
+                                        "  wire [2:0] l_vec;\n"
                                         "pin_group_gate_4_to_4 gate_0 (\n"
                                         "  .O (l_vec)\n"
                                         " ) ;\n"
@@ -1529,8 +1528,8 @@ namespace hal {
             {
                 // Test assigning 2-bit input and 3-bit output wires to 4-bit ports
                 std::stringstream input("module top (in, out) ;\n"
-                                        "  input [0:1] in;\n"
-                                        "  output [0:2] out;\n"
+                                        "  input [1:0] in;\n"
+                                        "  output [2:0] out;\n"
                                         "pin_group_gate_4_to_4 gate_0 (\n"
                                         "  .I (in),\n"
                                         "  .O (out)\n"

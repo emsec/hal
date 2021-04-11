@@ -71,12 +71,11 @@ namespace hal
         struct GroupCtx
         {
             std::string name;
-            std::map<u32, std::string> index_to_pin;
+            std::vector<std::pair<u32, std::string>> pins;
         };
 
         bool write_gate_library(rapidjson::Document& document, const GateLibrary* gate_lib);
 
         std::vector<PinCtx> get_pins(GateType* gt, const std::unordered_map<std::string, BooleanFunction>& functions);
-        std::vector<GroupCtx> get_groups(GateType* gt);
     };
 }    // namespace hal
