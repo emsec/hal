@@ -39,7 +39,7 @@ namespace hal
 
     public:
         void assign(const QKeySequence& newkey, SettingsItemKeybind *setting, const QKeySequence& oldkey=QKeySequence());
-        SettingsItemKeybind* currentAssignment(const QKeySequence& needle) const { return mKeybindMap.value(needle); }
+        SettingsItemKeybind* currentAssignment(const QKeySequence& needle) const;
         void initMap() { mKeybindMap.clear(); }
         static AssignedKeybindMap* instance();
     };

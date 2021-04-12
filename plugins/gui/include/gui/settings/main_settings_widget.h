@@ -55,6 +55,7 @@ namespace hal
         QList<SettingsWidget*> section(const QString& s) const { return mSectionMap.value(s); }
         QList<const SettingsItem *> getItems() const;
         QStringList emptySections() const;
+        void clearAll();
     };
 
     class MainSettingsWidget : public QWidget

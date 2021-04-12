@@ -1,5 +1,6 @@
 #include "gui/settings/settings_widgets/settings_widget_keybind.h"
-
+#include "gui/settings/settings_items/settings_item_keybind.h"
+#include "gui/settings/assigned_keybind_map.h"
 #include "gui/label_button/label_button.h"
 
 #include <QFormLayout>
@@ -55,6 +56,37 @@ namespace hal
         return QVariant(seq); // auto-cast
     }
 
+    bool SettingsWidgetKeybind::isKeybindUsed(const QVariant& testValue)
+    {
+        if (!mSettingsItem) return false;
+        const SettingsItemKeybind* setting = static_cast<const SettingsItemKeybind*>(mSettingsItem);
+        QKeySequence testKey = testValue.toString();
+        SettingsItemKeybind* item = AssignedKeybindMap::instance()->currentAssignment(testKey);
+        if (item && item!=setting)
+        {
+            onKeybindEditRejected(QString("<%1> is already assigned:\n<%2>")
+                                  .arg(testKey.toString())
+                                  .arg(item->label()));
+            return true;
+        }
+        return false;
+    }
+
+    void SettingsWidgetKeybind::handleRevertModification()
+    {
+        if (isKeybindUsed(mSettingsItem->value())) return;
+        SettingsWidget::handleRevertModification();
+    }
+
+    void SettingsWidgetKeybind::handleSetDefaultValue(bool setAll)
+    {
+        if (!setAll)
+        {
+            if (isKeybindUsed(mSettingsItem->defaultValue())) return;
+        }
+        SettingsWidget::handleSetDefaultValue(setAll);
+    }
+
     void SettingsWidgetKeybind::onKeybindEditAccepted()
     {
         trigger_setting_updated();
@@ -63,6 +95,11 @@ namespace hal
     void SettingsWidgetKeybind::clearErrorMessage()
     {
         mErrorMessage->setText(QString());
+    }
+
+    void SettingsWidgetKeybind::clearEditor()
+    {
+        mKeybindEdit->clear();
     }
 
     void SettingsWidgetKeybind::onKeybindEditRejected(const QString& errMsg)

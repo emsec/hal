@@ -97,8 +97,9 @@ namespace hal
         mDefaultButton->setEnabled(mSettingsItem->defaultValue() != val);
     }
 
-    void SettingsWidget::handleSetDefaultValue()
+    void SettingsWidget::handleSetDefaultValue(bool setAll)
     {
+        Q_UNUSED(setAll);
         if (!mSettingsItem) return;
         load(mSettingsItem->defaultValue());
         trigger_setting_updated();
@@ -168,5 +169,6 @@ namespace hal
     {
         if (!mSettingsItem) return;
         load(mSettingsItem->value());
+        trigger_setting_updated();
     }
 }

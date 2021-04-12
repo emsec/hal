@@ -37,6 +37,12 @@ namespace hal
         mSectionMap[sectionName].append(widget);
     }
 
+    void MainSettingsList::clearAll()
+    {
+         for (SettingsWidget* widget : *this)
+            widget->clearEditor();
+    }
+
     QList<const SettingsItem*> MainSettingsList::getItems() const
     {
         QList<const SettingsItem*> retval;
@@ -169,7 +175,9 @@ namespace hal
         QSet<QString> registeredCategories = QSet<QString>::fromList(mSectionNames.values());
         for (SettingsItem* si : SettingsManager::instance()->mSettingsList)
         {
-            if (registeredItems.contains(si)) continue;
+            if (registeredItems.contains(si))
+                continue;
+
             QString catg = si->category();
             if (catg.isEmpty()) catg = "Other";
             if (!registeredCategories.contains(catg))
@@ -263,7 +271,7 @@ namespace hal
     {
         for (SettingsWidget* widget : mSettingsList)
         {
-            widget->handleSetDefaultValue();
+            widget->handleSetDefaultValue(true);
         }
     }
 
@@ -284,6 +292,9 @@ namespace hal
 
         mExpandingListWidget->selectFirstItem();
         mExpandingListWidget->repolish();
+
+        mSettingsList.clearAll();
+
         for (SettingsWidget* widget : mSettingsList)
         {
             if (widget)

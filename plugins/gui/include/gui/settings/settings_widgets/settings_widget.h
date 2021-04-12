@@ -62,10 +62,11 @@ namespace hal
 
         virtual void load(const QVariant& value) = 0;
         virtual QVariant value()                 = 0;
+        virtual void clearEditor() {;}
 
     public Q_SLOTS:
-        void handleRevertModification();
-        virtual void handleSetDefaultValue();
+        virtual void handleRevertModification();
+        virtual void handleSetDefaultValue(bool setAll=false);
         void handleItemDestroyed();
 
     Q_SIGNALS:

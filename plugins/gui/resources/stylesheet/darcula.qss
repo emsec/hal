@@ -469,50 +469,18 @@ hal--SettingsWidget hal--keybind_edit[validated=false] QLineEdit {
     /*color: red;*/
 }
 
-hal--SettingsWidgetNew {
-    background-color : #25292D;
-    padding          : 10px;
-    margin-bottom    : 20px;
-    font             : 14px bold "Helvetica";
-    border-left      : 5px solid rgb(73, 74, 76);
+
+hal--SettingsWidgetDropdown QComboBox  {
+    background -color : rgb(32, 43, 63);
+    border-radius: 2px;
+    border: 1px solid rgb(10, 11, 12);
 }
 
-hal--SettingsWidgetNew[dirty=true] {
-    border-left      : 5px solid rgb(73, 200, 76);
+hal--SettingsWidgetDropdown QComboBox:hover  {
+    background-color : rgb(32, 53, 100);
+    border-radius: 2px;
+    border: 1px solid rgb(10, 11, 50);
 }
-
-hal--SettingsWidgetNew QLabel {
-    color            : #D3DCE6;
-    background-color : rgba(255, 255, 255, 0);
-    margin-right     : 10px;
-}
-
-hal--SettingsWidgetNew #name-label {
-    min-height : 42px;
-    max-height : 42px;
-    font       : 14px bold "Helvetica";
-}
-
-hal--SettingsWidgetNew QToolButton {
-    color : #D3DCE6;
-}
-
-hal--SettingsWidgetNew QToolButton:disabled {
-    color : #888888;
-}
-
-/* LABEL_BUTTON */
-
-hal--SettingsWidgetNew hal--label_button {
-    font           : bold "Helvetica";
-    border         : 1px solid rgb(228, 228, 228);
-    padding-top    : 4px;
-    padding-bottom : 4px;
-    padding-left   : 14px;
-    padding-right  : 14px;
-    min-width      : 50px;
-}
-
 
 /* MainSettingsWidget */
 

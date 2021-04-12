@@ -33,6 +33,9 @@ namespace hal
         int inx = value.toInt();
         if (inx < 0 || inx >= mOptions.size()) inx = 0;
         mComboBox->setCurrentText(mOptions.at(inx));
+        QStyle* s = mComboBox->style();
+        s->unpolish(mComboBox);
+        s->polish(mComboBox);
     }
 
     QVariant SettingsWidgetDropdown::value()

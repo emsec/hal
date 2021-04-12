@@ -11,6 +11,11 @@ namespace hal
         return inst;
     }
 
+    SettingsItemKeybind* AssignedKeybindMap::currentAssignment(const QKeySequence& needle) const
+    {
+        return mKeybindMap.value(needle);
+    }
+
     void AssignedKeybindMap::assign(const QKeySequence& newkey, SettingsItemKeybind *setting, const QKeySequence& oldkey)
     {
         if (!oldkey.isEmpty())

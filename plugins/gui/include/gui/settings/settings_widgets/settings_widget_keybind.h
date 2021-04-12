@@ -47,10 +47,17 @@ namespace hal
 
         virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
         virtual QVariant value() Q_DECL_OVERRIDE;
+        virtual void clearEditor() Q_DECL_OVERRIDE;
 
     private:
         KeybindEdit* mKeybindEdit;
         QLabel* mErrorMessage;
+
+        bool isKeybindUsed(const QVariant& testValue);
+
+    public Q_SLOTS:
+        void handleRevertModification() Q_DECL_OVERRIDE;
+        void handleSetDefaultValue(bool setAll=false) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void clearErrorMessage();
