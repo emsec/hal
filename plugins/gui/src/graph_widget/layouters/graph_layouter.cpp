@@ -15,6 +15,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+
 #include <qmath.h>
 #include <QDebug>
 #include <QElapsedTimer>
@@ -38,7 +39,7 @@ namespace hal
     const static qreal sMinimumVChannelWidth  = 20;
     const static qreal sMinimumHChannelHeight = 20;
 
-    GraphLayouter::GraphLayouter(const GraphContext* const context, QObject* parent) : QObject(parent), mScene(new GraphicsScene(this)), mContext(context), mDone(false)
+    GraphLayouter::GraphLayouter(const GraphContext* const context, QObject* parent) : QObject(parent), mScene(new GraphicsScene(this)), mContext(context), mDone(false), mOptimizeNetLayout(true)
     {
         SelectionDetailsWidget* details = gContentManager->getSelectionDetailsWidget();
         if (details) connect(details, &SelectionDetailsWidget::triggerHighlight, mScene, &GraphicsScene::handleHighlight);
@@ -199,7 +200,7 @@ namespace hal
         clearLayoutData();
 
         createBoxes();
-        if (gSettingsManager->get("graph_view/layout_nets").toBool())
+        if (mOptimizeNetLayout)
         {
             alternateLayout();
             qDebug() << "elapsed time (experimental new) layout [ms]" << timer.elapsed();
@@ -2717,4 +2718,13 @@ namespace hal
         return false;
     }
 
+    bool GraphLayouter::optimizeNetLayoutEnabled()
+    {
+        return mOptimizeNetLayout;
+    }
+
+    void GraphLayouter::setOptimizeNetLayoutEnabled(bool enabled)
+    {
+        mOptimizeNetLayout = enabled;
+    }
 }

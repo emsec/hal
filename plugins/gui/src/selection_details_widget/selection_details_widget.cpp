@@ -13,6 +13,8 @@
 #include "gui/user_action/action_set_selection_focus.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/user_action_object.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
+
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
@@ -41,6 +43,15 @@
 namespace hal
 {
     const QString SelectionDetailsWidget::sAddToGrouping("Add to grouping ");
+
+    SettingsItemCheckbox* SelectionDetailsWidget::sSettingHideEmpty =
+            new SettingsItemCheckbox(
+                "Hide Empty Section",
+                "selection_details/hide_empty_sections",
+                false,
+                "Appearance:Selection Details",
+                "Specifies wheter empty sections are hidden or shown in the Selection Details Widget."
+                );
 
     SelectionDetailsWidget::SelectionDetailsWidget(QWidget* parent)
         : ContentWidget("Selection Details", parent), mNumberSelectedItems(0),
@@ -126,6 +137,14 @@ namespace hal
         enableSearchbar(false);  // enable upon first non-zero selection
         mSelectionToGrouping->setDisabled(true);
         mSelectionToModule->setDisabled(true);
+
+        mGateDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
+        mModuleDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
+        mNetDetails->hideSectionsWhenEmpty(sSettingHideEmpty->value().toBool());
+
+        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mGateDetails, &GateDetailsWidget::hideSectionsWhenEmpty);
+        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mModuleDetails, &ModuleDetailsWidget::hideSectionsWhenEmpty);
+        connect(sSettingHideEmpty, &SettingsItemCheckbox::boolChanged, mNetDetails, &NetDetailsWidget::hideSectionsWhenEmpty);
 
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
@@ -476,10 +495,13 @@ namespace hal
 
     QList<QShortcut *> SelectionDetailsWidget::createShortcuts()
     {
-        QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"),this);
-        connect(search_shortcut, &QShortcut::activated, this, &SelectionDetailsWidget::toggleSearchbar);
+        mSearchShortcut = new QShortcut(mSearchKeysequence, this);
+        connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
 
-        return (QList<QShortcut*>() << search_shortcut);
+        QList<QShortcut*> list;
+        list.append(mSearchShortcut);
+
+        return list;
     }
 
     void SelectionDetailsWidget::toggleSearchbar()
@@ -522,6 +544,11 @@ namespace hal
         toolbar->addAction(mSelectionToGrouping);
         toolbar->addAction(mSelectionToModule);
         toolbar->addAction(mSearchAction);
+    }
+
+    SelectionTreeView* SelectionDetailsWidget::selectionTreeView()
+    {
+        return mSelectionTreeView;
     }
 
     QString SelectionDetailsWidget::disabledIconStyle() const

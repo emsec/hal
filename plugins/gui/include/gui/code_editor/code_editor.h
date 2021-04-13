@@ -75,18 +75,24 @@ namespace hal
         QColor lineNumberHighlightBackground() const;
         QColor currentLineBackground() const;
 
-        void setLineNumberFont(QFont& font);
+        void setLineNumberFont(const QFont& font);
         void setLineNumberColor(QColor& color);
         void setLineNumberBackground(QColor& color);
         void setLineNumberHighlightColor(QColor& color);
         void setLineNumberHighlightBackground(QColor& color);
         void setCurrentLineBackground(QColor& color);
 
+        void setLineNumberEnabled(bool enabled);
+        void setHighlightCurrentLineEnabled(bool enabled);
+        void setLineWrapEnabled(bool enabled);
+        void setMinimapEnabled(bool enabled);
+
     public Q_SLOTS:
         void search(const QString& string);
 
         void toggleLineNumbers();
         void toggleMinimap();
+        void setFontSize(int pt);
 
     protected:
         virtual void resizeEvent(QResizeEvent* event) override;
@@ -96,7 +102,6 @@ namespace hal
         void handleBlockCountChanged(int new_block_count);
         void updateLineNumberArea(const QRect& rect, int dy);
         void updateMinimap(const QRect& rect, int dy);
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         void updateLayout();

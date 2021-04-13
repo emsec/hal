@@ -23,31 +23,29 @@
 
 #pragma once
 
-#include <QObject>
-#include <QPair>
-#include <QVector>
+#include "gui/settings/settings_widgets/settings_widget.h"
+#include <QComboBox>
+#include <QStringList>
 
 namespace hal
 {
-    class SettingsRelay : public QObject
+    class SettingsItemDropdown;
+
+    class SettingsWidgetDropdown : public SettingsWidget
     {
         Q_OBJECT
 
     public:
-        explicit SettingsRelay(QObject* parent = nullptr);
-        // TODO do we need a sender registry?
-        // void registerSender(void* sender, QString name);
-        // void removeSender(void* sender);
+        SettingsWidgetDropdown(SettingsItemDropdown* item, QWidget* parent = 0);
 
-        void relaySettingChanged(void* sender, const QString& key, const QVariant& val);
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
 
-    Q_SIGNALS:
-        void settingChanged(void* sender, const QString& key, const QVariant& val);
+    private:
+        SettingsItemDropdown* mSettingsItem;
+        QStringList mOptions;
+        QComboBox* mComboBox;
+        void on_index_changed(QString text);
 
-    public Q_SLOTS:
-        void debug(void* sender, const QString& key, const QVariant& val);
-
-    // private:
-    //     QVector<QPair<void*, QString>> mSenderRegister;
     };
 }

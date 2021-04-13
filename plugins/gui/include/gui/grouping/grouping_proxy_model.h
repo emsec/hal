@@ -36,12 +36,12 @@ namespace hal
     public:
         GroupingProxyModel(QObject* parent = nullptr);
 
+        gui_utility::mSortMechanism sortMechanism();
+        void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
-
-    private Q_SLOTS:
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

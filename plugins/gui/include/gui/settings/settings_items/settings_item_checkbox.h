@@ -23,23 +23,31 @@
 
 #pragma once
 
-#include "gui/settings/preview_widget.h"
+#include <QCheckBox>
+#include "gui/settings/settings_items/settings_item.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 
-#include <QLabel>
-#include <QFrame>
 
 namespace hal
 {
-    class FontsizePreviewWidget : public PreviewWidget
+    class SettingsItemCheckbox : public SettingsItem
     {
         Q_OBJECT
 
     public:
-        explicit FontsizePreviewWidget(const QString& text, const QFont& font, QWidget* parent = 0);
-        void update(const QVariant& value) override;
+        SettingsItemCheckbox(const QString& label, const QString& tag, bool defVal, const QString& cat = QString(), const QString& descr = QString(), bool isGlobal = true);
+
+        virtual QVariant value() const override;
+        virtual QVariant defaultValue() const override;
+        virtual void setValue(const QVariant& v) override;
+        virtual void setDefaultValue(const QVariant& dv) override;
+        virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
+
+    Q_SIGNALS:
+        void boolChanged(bool);
 
     private:
-        QLabel* mLabel;
-        QFont mFont;
+        bool mValue;
+        bool mDefaultValue;
     };
 }

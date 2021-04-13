@@ -11,19 +11,18 @@
 #include "gui/plugin_management/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/settings/keybind_manager.h"
-#include "gui/settings/settings_manager.h"
-#include "gui/settings/settings_relay.h"
 #include "gui/style/style.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
 #include "gui/user_action/user_action_manager.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
+#include <QDir>
 #include <QApplication>
 #include <QFile>
 #include <QFont>
@@ -35,6 +34,7 @@
 #include <QDebug>
 #include <gui/focus_logger/focus_logger.h>
 #include <signal.h>
+#include <QDebug>
 
 namespace hal
 {
@@ -43,11 +43,8 @@ namespace hal
         return std::make_unique<PluginGui>();
     }
 
-    SettingsManager* gSettingsManager             = nullptr;    // this relay MUST be initialized before everything else since other components need to connect() to it when initializing
     QSettings* mGSettings                           = nullptr;
     QSettings* gGuiState                          = nullptr;
-    SettingsRelay* gSettingsRelay                 = nullptr;
-    KeybindManager* gKeybindManager               = nullptr;
     WindowManager* gWindowManager                 = nullptr;
     NotificationManager* gNotificationManager     = nullptr;
     ContentManager* gContentManager               = nullptr;
@@ -78,16 +75,13 @@ namespace hal
 
     static void cleanup()
     {
-        delete gSettingsManager;
         delete mGSettings;
         delete gGuiState;
-        delete gKeybindManager;
         delete gFileStatusManager;
         delete gGraphContextManager;
         delete gNetlistRelay;
         delete gPluginRelay;
         delete gSelectionRelay;
-        delete gSettingsRelay;
         delete gNotificationManager;
         //    delete gWindowManager;
     }
@@ -163,15 +157,31 @@ namespace hal
 
         //TEMPORARY CODE TO CHANGE BETWEEN THE 2 STYLESHEETS WITH SETTINGS (NOT FINAL)
         //this settingsobject is currently neccessary to read from the settings from here, because the mGSettings are not yet initialized(?)
-        QSettings tempsettings_to_read_from(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
-        QString stylesheet_to_open = ":/style/darcula";    //default style
+        QString styleSheetToOpen;
 
-        if (tempsettings_to_read_from.value("main_style/theme", "") == "" || tempsettings_to_read_from.value("main_style/theme", "") == "darcula")
-            stylesheet_to_open = ":/style/darcula";
-        else if (tempsettings_to_read_from.value("main_style/theme", "") == "sunny")
-            stylesheet_to_open = ":/style/sunny";
+        MainWindow::sSettingStyle = new SettingsItemDropdown(
+            "Theme",
+            "main_style/theme",
+            MainWindow::StyleSheetOption::Darcula,
+            "Appearance:Style",
+            "Specifies which theme should be used. Light style 'Sunny' is designed to print screenshots and not recommended for regular use."
+        );
+        MainWindow::sSettingStyle->setValueNames<MainWindow::StyleSheetOption>();
 
-        QFile stylesheet(stylesheet_to_open);
+//        QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory().string()));
+//        QSettings tempSettingsToReadFrom(userConfigDir.absoluteFilePath("guisettings.ini"), QSettings::IniFormat);
+
+        MainWindow::StyleSheetOption theme = static_cast<MainWindow::StyleSheetOption>(MainWindow::sSettingStyle->value().toInt());
+
+        switch(theme)
+        {
+            case MainWindow::StyleSheetOption::Darcula : styleSheetToOpen =  ":/style/darcula"; break;
+            case MainWindow::StyleSheetOption::Sunny : styleSheetToOpen =  ":/style/sunny"; break;
+
+            default: styleSheetToOpen =  ":/style/darcula";
+        }
+
+        QFile stylesheet(styleSheetToOpen);
         stylesheet.open(QFile::ReadOnly);
         a.setStyleSheet(QString(stylesheet.readAll()));
         stylesheet.close();
@@ -181,14 +191,11 @@ namespace hal
 
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
 
-        gSettingsManager      = new SettingsManager();
         mGSettings              = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
         gGuiState             = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);
         gNetlistRelay         = new NetlistRelay();
         gPluginRelay          = new PluginRelay();
         gSelectionRelay       = new SelectionRelay();
-        gSettingsRelay        = new SettingsRelay();
-        gKeybindManager       = new KeybindManager();
         gFileStatusManager   = new FileStatusManager();
         gGraphContextManager = new GraphContextManager();
 

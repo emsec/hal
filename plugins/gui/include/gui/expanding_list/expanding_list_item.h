@@ -40,34 +40,29 @@ namespace hal
         Q_PROPERTY(int fixedHeight READ fixedHeight WRITE setFixedHeight)
 
     public:
-        ExpandingListItem(ExpandingListButton* parentButton, QWidget* parent = 0);
+        ExpandingListItem(ExpandingListButton* but, QWidget* parent = 0);
 
         virtual QSize minimumSizeHint() const override;
         virtual QSize sizeHint() const override;
         virtual void resizeEvent(QResizeEvent* event) override;
 
-        bool expanded();
-        int fixedHeight();
-        bool contains(ExpandingListButton* button);
-        ExpandingListButton* parentButton();
-        void appendChildButton(ExpandingListButton* button);
+        bool expanded() const;
+        int fixedHeight() const;
+        ExpandingListButton* button() const;
+  //      void appendChildButton(ExpandingListButton* button);
 
         void repolish();
 
         void collapse();
         void expand();
 
-        void setExpanded(bool expanded);
         void setFixedHeight(int height);
 
     private:
-        ExpandingListButton* mParentButton;
-        QList<ExpandingListButton*> mChildButtons;
+        ExpandingListButton* mButton;
 
         int mCollapsedHeight;
         int mExpandedHeight;
-
-        QPropertyAnimation* mAnimation;
 
         bool mExpanded;
         int mFixedHeight;

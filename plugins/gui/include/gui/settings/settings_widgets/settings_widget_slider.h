@@ -23,27 +23,27 @@
 
 #pragma once
 
-#include "gui/settings/settings_widget.h"
+#include "gui/settings/settings_widgets/settings_widget.h"
 #include <QSlider>
 #include <QStringList>
 
 namespace hal
 {
-    class SliderSetting : public SettingsWidget
+    class SettingsItemSlider;
+
+    class SettingsWidgetSlider : public SettingsWidget
     {
         Q_OBJECT
 
     public:
-        SliderSetting(const QString& key, const QString& title, const int min, const int max, const QString& mDescription, QWidget* parent = 0);
+        SettingsWidgetSlider(SettingsItemSlider* item, QWidget* parent = 0);
 
-        virtual void load(const QVariant& value) override;
-        virtual QVariant value() override;
-        //virtual void rollback() override;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value() Q_DECL_OVERRIDE;
 
     private:
         QSlider* mSlider;
         QLabel* mNumber;
-        void onSliderValueChanged();
-
+        void onSliderValueChanged(int value);
     };
 }

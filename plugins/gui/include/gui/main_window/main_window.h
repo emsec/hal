@@ -29,6 +29,7 @@
 #include "gui/plugin_manager/plugin_manager_widget.h"
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/settings/main_settings_widget.h"
+
 #include "gui/splitter/splitter.h"
 #include <QLayout>
 #include <QMenuBar>
@@ -48,6 +49,8 @@ namespace hal
     class ContentManager;
     class AboutDialog;
     class WelcomeScreen;
+    class SettingsItemKeybind;
+    class SettingsItemDropdown;
 
     /**
      * The top level widget
@@ -82,6 +85,9 @@ namespace hal
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
 
     public:
+        enum StyleSheetOption {Darcula, Sunny};
+        Q_ENUM(StyleSheetOption)
+		
         /**
          * The Constructor.
          *
@@ -331,6 +337,8 @@ namespace hal
 
         void clear();
 
+        static SettingsItemDropdown* sSettingStyle;
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted, after the current project is stored as a .hal file.
@@ -406,6 +414,8 @@ namespace hal
         void handleActionUndo();
 
         void enableUndo(bool enable=true);
+
+        void reloadStylsheet(int istyle);
 
     private:
         /**
@@ -489,9 +499,16 @@ namespace hal
 
         QString mSettingsIconPath;
         QString mSettingsIconStyle;
-
-        QString mUndoIconPath;
+		
+   		QString mUndoIconPath;
         QString mUndoIconStyle;
-        QString mDisabledIconStyle;
+
+       QString mDisabledIconStyle;
+ 
+        SettingsItemKeybind* mSettingCreateFile;
+        SettingsItemKeybind* mSettingOpenFile;
+        SettingsItemKeybind* mSettingSaveFile;
+        SettingsItemKeybind* mSettingUndoLast;
+
     };
 }

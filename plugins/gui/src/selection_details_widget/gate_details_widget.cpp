@@ -90,13 +90,13 @@ namespace hal
         mBooleanFunctionsSection = new DetailsSectionWidget(mBooleanFunctionsContainer, "Boolean Functions (%1)", this);
 
         // place gate icon
-        QLabel* img = new DisputedBigIcon("sel_gate", this);
+        mBigIcon = new DisputedBigIcon("sel_gate", this);
 
         //adding things to intermediate layout (the one thats neccessary for the left spacing)
         intermediate_layout_gt->addWidget(mGeneralView);
         intermediate_layout_gt->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-        intermediate_layout_gt->addWidget(img);
-        intermediate_layout_gt->setAlignment(img,Qt::AlignTop);
+        intermediate_layout_gt->addWidget(mBigIcon);
+        intermediate_layout_gt->setAlignment(mBigIcon,Qt::AlignTop);
 
         //adding things to the main layout
         mTopLvlLayout->addWidget(mGeneralInfoButton);
@@ -595,6 +595,14 @@ namespace hal
         mNavigationTable->hide();
 
         // TODO ensure gates mVisible in graph
+    }
+    
+    void GateDetailsWidget::hideSectionsWhenEmpty(bool hide)
+    {
+        mInputPinsSection->hideWhenEmpty(hide);
+        mOutputPinsSection->hideWhenEmpty(hide);
+        mDataFieldsSection->hideWhenEmpty(hide);
+        mBooleanFunctionsSection->hideWhenEmpty(hide);  
     }
 /*
     void GateDetailsWidget::handle_general_table_item_clicked(const QTableWidgetItem *item)
