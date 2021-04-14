@@ -24,7 +24,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/hdl_parser/hdl_parser.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser.h"
 #include "hal_core/utilities/program_options.h"
 
 #include <functional>
@@ -40,9 +40,9 @@ namespace hal
     /**
      * @ingroup netlist_parser
      */
-    namespace hdl_parser_manager
+    namespace netlist_parser_manager
     {
-        using ParserFactory = std::function<std::unique_ptr<HDLParser>()>;
+        using ParserFactory = std::function<std::unique_ptr<NetlistParser>()>;
 
         /**
          * Returns the command line interface options of the hdl parser manager
@@ -93,5 +93,5 @@ namespace hal
           * @returns A vector containing one netlist per matching gate library.
           */
         std::vector<std::unique_ptr<Netlist>> parse_all(const std::filesystem::path& file_name);
-    }    // namespace hdl_parser_manager
+    }    // namespace netlist_parser_manager
 }    // namespace hal

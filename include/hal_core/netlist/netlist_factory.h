@@ -54,20 +54,20 @@ namespace hal
         /**
          * Create a netlist from the given file using the specified gate library file.
          *
-         * @param[in] hdl_file - Path to the file.
+         * @param[in] netlist_file - Path to the netlist file.
          * @param[in] gate_library_file - Path to the gate library file.
          * @returns The netlist on success, nullptr otherwise.
          */
-        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file);
 
         /**
          * Create a netlist from the given '.hal' file.
          *
-         * @param[in] hal_file - Path to the '.hal' file.
+         * @param[in] netlist_file - Path to the '.hal' file.
          * file.
          * @returns The netlist on success, nullptr otherwise.
          */
-        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& hal_file);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file);
 
         /**
          * Create a netlist using information specified in command line arguments on startup.<br>
@@ -81,9 +81,9 @@ namespace hal
         /**
           * Create a netlist from a given file for each matching pre-loaded gate library.
           *
-          * @param[in] hdl_file - Path to the file.
+          * @param[in] netlist_file - Path to the netlist file.
           * @returns A vector of netlists.
           */
-        NETLIST_API std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& hdl_file);
+        NETLIST_API std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file);
     }    // namespace netlist_factory
 }    // namespace hal
