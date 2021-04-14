@@ -7,7 +7,8 @@
 4. [Quickstart Guide](#quickstart)
 5. [Academic Context](#academic-context)
 
-# Welcome to HAL! <a name="introduction"></a>
+<a name="introduction"></a>
+# Welcome to HAL! 
 
 HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
 
@@ -54,14 +55,16 @@ A comprehensive documentation of HAL's features from a user perspective is avail
 For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@csp.mpg.de](mailto:hal@csp.mpg.de). To receive an invite to our dedicated hal-support Slack workspace, please write us an e-mail as well.
 
 
-# Install Instructions <a name="install-instructions"></a>
+<a name="install-instructions"></a>
+# Install Instructions 
 
 ## Ubuntu
 
 HAL releases are available via it's own ppa, which can be found here: [ppa:sebastian-wallat/hal](https://launchpad.net/~sebastian-wallat/+archive/ubuntu/hal)
 
 
-# Build Instructions <a name="build-instructions"></a>
+<a name="build-instructions"></a>
+# Build Instructions 
 
 If you want to build HAL locally on your machine, run the following commands:
 
@@ -93,7 +96,8 @@ To let cmake know of the custom compiler use following command.
 `cmake .. -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++`
 
 
-# Quickstart Guide <a name="quickstart"></a>
+<a name="quickstart"></a>
+# Quickstart Guide 
 
 Install HAL or build HAL and start the GUI via `hal -g`. You can list all available options via `hal [--help|-h]`.
 We included some example netlists in `examples` together with the implementation of the respective example gate library in `plugins/example_gate_library`.
@@ -158,7 +162,8 @@ Start Docker build via:
 
 `git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges`
 
-# Academic Context <a name="academic-context"></a>
+<a name="academic-context"></a>
+# Academic Context 
 
 If you use HAL in an academic context, please cite the framework using the reference below:
 ```latex
