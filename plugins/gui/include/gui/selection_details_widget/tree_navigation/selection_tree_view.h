@@ -122,6 +122,7 @@ namespace hal
          * @return The item that is represented. Returns a nullptr if the index is invalid or the conversion fails.
          */
         SelectionTreeItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
+        SelectionTreeProxyModel* proxyModel();
 
     private Q_SLOTS:
         void handleCustomContextMenuRequested(const QPoint& point);

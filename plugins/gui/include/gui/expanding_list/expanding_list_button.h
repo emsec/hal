@@ -39,18 +39,19 @@ namespace hal
     class ExpandingListButton : public QFrame
     {
         Q_OBJECT
+        Q_PROPERTY(int level READ level)
         Q_PROPERTY(bool hover READ hover)
         Q_PROPERTY(bool selected READ selected)
-        Q_PROPERTY(QString type READ type)
         Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
         /**
          * The constructor.
          *
+         * @param levl - The level this button is at
          * @param parent - The button's parent.
          */
-        ExpandingListButton(QWidget* parent = 0);
+        ExpandingListButton(int levl, QWidget* parent = 0);
 
         /**
          * Overwritten qt function that is triggered when the mouse enters the button.
@@ -80,32 +81,39 @@ namespace hal
         void mousePressEvent(QMouseEvent* event) override;
 
         /**
+         * Gets the level the this ExpandingListButton is at.
+         *
+         * @returns the level
+         */
+	    int level() const;
+
+        /**
          * Get the button's hover state.
          *
          * @return True if the mouse is currently over the button. False otherwise.
          */
-        bool hover();
+        bool hover() const;
 
         /**
          * Get the button's selected state.
          *
          * @return True if the button is currently selected. False otherwise.
          */
-        bool selected();
+        bool selected() const;
 
         /**
-         * Get the button's type.
+         * Gets the text this ExpandingListButton displays
          *
-         * @return The type.
+         * @returns the ExpandingListButton%s text
          */
-        QString type();
+	    QString text() const;
 
         /**
          * Get the icon stlye of the button.
          *
          * @return The button's icon style.
          */
-        QString iconStyle();
+        QString iconStyle() const;
 
         /**
          * Set or unset the button's selected state.
@@ -115,18 +123,18 @@ namespace hal
         void setSelected(bool selected);
 
         /**
-         * Sets the button's type.
-         *
-         * @param type - The type.
-         */
-        void set_type(const QString& type);
-
-        /**
          * Sets the button's icon style.
          *
          * @param style - The style.
          */
         void setIconStyle(const QString& style);
+
+        /**
+         * Sets the icon to a default one with the given label text.
+         *
+         * @param text - The label text
+         */
+	    void setDefaultIcon(const QString& text);
 
         /**
          * Sets the path of the button's icon.
@@ -161,10 +169,13 @@ namespace hal
         QLabel* mTextLabel;
         QFrame* mRightBorder;
 
+        int mLevel;
         bool mHover;
         bool mSelected;
-        QString mType;
         QString mIconStyle;
         QString mIconPath;
+
+        static QHash<QString,QString> sIconMap;
+        static QHash<QString,QString> defaultIconMap();
     };
 }

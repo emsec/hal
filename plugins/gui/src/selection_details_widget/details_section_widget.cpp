@@ -38,7 +38,7 @@ namespace hal {
         mRows        = 0;
         mBodyVisible = true;
         mHeaderText  = txt;
-        mHideEmpty   = gSettingsManager->get("selection_details/hide_empty_sections", false).toBool();
+        mHideEmpty   = false;
         mLayout      = new QVBoxLayout(this);
 
         // remove placeholder text from initial view
@@ -47,7 +47,6 @@ namespace hal {
         mLayout->addWidget(mHeader);
 
         connect(mHeader,&QPushButton::clicked,this,&DetailsSectionWidget::toggleBodyVisible);
-        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &DetailsSectionWidget::handleGlobalSettingsChanged);
     }
 
     QTableWidget* DetailsSectionWidget::table() const
@@ -63,16 +62,6 @@ namespace hal {
         {
             show();
             bodyVisible();
-        }
-    }
-
-    void DetailsSectionWidget::handleGlobalSettingsChanged(void* sender, const QString& key, const QVariant& value)
-    {
-        Q_UNUSED(sender)
-        if(key == "selection_details/hide_empty_sections")
-        {
-            mHideEmpty = value.toBool();
-            hideEmpty();
         }
     }
 
@@ -99,4 +88,9 @@ namespace hal {
             mBody->hide();
     }
 
+    void DetailsSectionWidget::hideWhenEmpty(bool hide)
+    {
+        mHideEmpty = hide;
+        hideEmpty();
+    }
 }

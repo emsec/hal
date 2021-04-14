@@ -28,6 +28,8 @@
 
 namespace hal
 {
+    class SettingsItemCheckbox;
+
     /**
      * The DisputedBigIcon class is a utiliy class used for displaying big icons. It functions as a container
      * for the actual icon and is usually shown to display the gate, net and module specific icons within the
@@ -47,20 +49,11 @@ namespace hal
         DisputedBigIcon(const QString& iconName, QWidget* parent = nullptr);
 
     public Q_SLOTS:
-
-        /**
-         * A handler function for the settings-relay. It checks wether the key is the one that belongs to
-         * this specific widget. If yes, the value that belongs to the key is updated (in this case wether the
-         * icon shall be hidden or displayed).
-         *
-         * @param sender - The sender that triggered the setting change.
-         * @param key - The setting's key.
-         * @param value - The new setting's value.
-         */
-        void handleGlobalSettingsChanged(void* sender, const QString& key, const QVariant& value);
+        void setVisibleStatus(bool vis);
 
     private:
         void showOrHide();
         bool mIsVisible;
+        static SettingsItemCheckbox* sShowIconSetting;
     };
 }    // namespace hal

@@ -36,6 +36,7 @@ namespace hal
     class UserAction;
     class UserActionFactory;
     class GraphContext;
+    class SettingsItemCheckbox;
 
     class UserActionManager : public QObject
     {
@@ -93,6 +94,10 @@ namespace hal
 
         static UserActionManager* inst;
         QPlainTextEdit* mDumpAction;
+        SettingsItemCheckbox* mSettingDumpAction;
+
+    public Q_SLOTS:
+        void handleSettingDumpActionChanged(bool wantDump);
 
     Q_SIGNALS:
         void canUndoLastAction(bool yesWeCan);

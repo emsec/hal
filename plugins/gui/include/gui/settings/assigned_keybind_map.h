@@ -23,24 +23,25 @@
 
 #pragma once
 
-#include "gui/settings/settings_widget.h"
-#include <QSpinBox>
+#include <QMap>
+#include <QKeySequence>
 
 namespace hal
 {
-    class SpinboxSetting : public SettingsWidget
+    class SettingsItemKeybind;
+
+    class AssignedKeybindMap
     {
-        Q_OBJECT
+        static AssignedKeybindMap* inst;
+        AssignedKeybindMap() {;}
+
+        QMap<QKeySequence,SettingsItemKeybind*> mKeybindMap;
 
     public:
-        SpinboxSetting(const QString& key, const QString& title, const int min, const int max, const QString& mDescription, QWidget* parent = 0);
-
-        virtual void load(const QVariant& value) override;
-        virtual QVariant value() override;
-
-    private:
-        QSpinBox* mSpinbox;
-        void onSpinboxValueChanged(int value);
-
+        void assign(const QKeySequence& newkey, SettingsItemKeybind *setting, const QKeySequence& oldkey=QKeySequence());
+        SettingsItemKeybind* currentAssignment(const QKeySequence& needle) const;
+        void initMap() { mKeybindMap.clear(); }
+        static AssignedKeybindMap* instance();
     };
 }
+

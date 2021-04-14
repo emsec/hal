@@ -24,6 +24,8 @@
 #pragma once
 
 #include <QScrollArea>
+#include <QHash>
+#include <QList>
 
 class QFrame;
 class QVBoxLayout;
@@ -32,6 +34,14 @@ namespace hal
 {
     class ExpandingListButton;
     class ExpandingListItem;
+
+    class ExpandingListGroup : public QList<ExpandingListItem*>
+    {
+    public:
+        bool mCollapsed;
+        ExpandingListGroup() : mCollapsed(false) {;}
+        void toggleCollapsed(ExpandingListButton* exceptSelected);
+    };
 
     /**
      * The ExpandingListWidget class is a list in which each top-level-item can be expanded
@@ -53,8 +63,6 @@ namespace hal
          */
         ExpandingListWidget(QWidget* parent = 0);
 
-        //    bool eventFilter(QObject* object, QEvent* event) override;
-
         /**
          * Appends a button to the list. If an optional parent button is specified, the button
          * is added as a child to the parent and then hidden from the user. When the user clicks
@@ -63,7 +71,7 @@ namespace hal
          * @param button - The button to add to the list.
          * @param parentButton - The parent to which the button is added (optional).
          */
-        void appendItem(ExpandingListButton* button, ExpandingListButton* parentButton = 0);
+        void appendItem(ExpandingListButton* button, const QString& groupName = QString());
 
         /**
          * Selects a specific button within the list. It collapses or expands all necessary
@@ -72,6 +80,11 @@ namespace hal
          * @param button - The button to select.
          */
         void selectButton(ExpandingListButton* button);
+
+        /**
+         * Select the first ExpandingListItem of this widget.
+         */
+        void selectFirstItem();
 
         /**
          * Selects a specific item within the list. An item is a wrapper for a top-level button
@@ -85,6 +98,14 @@ namespace hal
          * Applies the currently set style (e.g. stylesheet) to itself and all of its items.
          */
         void repolish();
+
+        /**
+         * Returns <b>true</b> iff this ExpandingListWidget has a ExpandingListGroup with the specified name.
+         *
+         * @param groupName - The name of the ExpandingListGroup to search for
+         * @returns <b>true</b> iff the the group exists
+         */
+        bool hasGroup(const QString& groupName) const;
 
     Q_SIGNALS:
         /**
@@ -106,12 +127,13 @@ namespace hal
         QVBoxLayout* mContentLayout;
         QFrame* mSpacer;
 
-        QList<ExpandingListItem*> mItems;
+        QMap<QString,ExpandingListItem*> mItemMap;
 
         ExpandingListButton* mSelectedButton;
-        ExpandingListItem* mExtendedItem;
+        //ExpandingListItem* mExtendedItem;
 
         int mItemWidth;
         int mOffset;
+        QHash<QString,ExpandingListGroup> mButtonGroup;
     };
 }

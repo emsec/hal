@@ -62,6 +62,8 @@ namespace hal
         connect(mTreeView, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handleItemDoubleClicked);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleWidget::handleModuleRemoved);
+
+        connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
     }
 
     void ModuleWidget::setupToolbar(Toolbar* Toolbar)
@@ -71,11 +73,11 @@ namespace hal
 
     QList<QShortcut*> ModuleWidget::createShortcuts()
     {
-        QShortcut* search_shortcut = gKeybindManager->makeShortcut(this, "keybinds/searchbar_toggle");
-        connect(search_shortcut, &QShortcut::activated, this, &ModuleWidget::toggleSearchbar);
+        mSearchShortcut = new QShortcut(mSearchKeysequence, this);
+        connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
 
         QList<QShortcut*> list;
-        list.append(search_shortcut);
+        list.append(mSearchShortcut);
 
         return list;
     }
@@ -261,5 +263,10 @@ namespace hal
     ModuleItem* ModuleWidget::getModuleItemFromIndex(const QModelIndex& index)
     {
         return gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(index));
+    }
+
+    ModuleProxyModel* ModuleWidget::proxyModel()
+    {
+        return mModuleProxyModel;
     }
 }

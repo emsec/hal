@@ -32,7 +32,9 @@ class QFileSystemWatcher;
 
 namespace hal
 {
-    /**
+    class SettingsItemCheckbox;
+    class SettingsItemSpinbox;
+   /**
      * The filemanager handles the status and information of the currently opened netlist file
      * including whether a file is opened or not. This class is implemented with a singleton pattern.
      */
@@ -133,15 +135,6 @@ namespace hal
          */
         void autosave();
 
-        /**
-         * This function updates its state when settings regarding the autosave are changed.
-         *
-         * @param sender - The sender that requested the changes.
-         * @param key - The key of the setting that was changed.
-         * @param value - The new setting value.
-         */
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
-
     private Q_SLOTS:
         void handleFileChanged(const QString& path);
         void handleDirectoryChanged(const QString& path);
@@ -197,5 +190,8 @@ namespace hal
         QTimer* mTimer;
         bool mAutosaveEnabled;
         int mAutosaveInterval;
+
+        SettingsItemCheckbox* mSettingAutosave;
+        SettingsItemSpinbox* mSettingAutosaveInterval;
     };
 }

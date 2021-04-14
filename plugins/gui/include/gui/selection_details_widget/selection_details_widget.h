@@ -44,6 +44,7 @@ namespace hal
     class SelectionHistoryNavigator;
     class UserAction;
     class UserActionObject;
+    class SettingsItemCheckbox;
 
     /**
      * The SelectionDetailsWidget class is primarily a container used to display on the left side the complete
@@ -232,6 +233,8 @@ namespace hal
         void selectionToGroupingAction(const QString& existingGrpName = QString());
         UserAction* groupingUnassignActionFactory(const UserActionObject& obj) const;
 
+        SelectionTreeView* selectionTreeView();
+
     Q_SIGNALS:
 
         /**
@@ -386,5 +389,7 @@ namespace hal
         void enableSearchbar(bool enable);
 
         static const QString sAddToGrouping;
+
+        static SettingsItemCheckbox* sSettingHideEmpty;
     };
 }

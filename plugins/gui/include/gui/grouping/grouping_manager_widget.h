@@ -132,6 +132,7 @@ namespace hal
          * @returns the GroupingTableModel of this GroupingManagerWidget
          */
         GroupingTableModel* getModel() const { return mGroupingTableModel; }
+        GroupingProxyModel* getProxyModel() const {return mProxyModel; }
 
     public Q_SLOTS:
         /**

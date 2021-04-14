@@ -30,6 +30,8 @@ namespace hal
 {
     namespace gui_utility
     {
+        Q_NAMESPACE
+		
         /**
          * The NumeratedString class extends the information of a normal QString by extracting
          * the in the QString contained numbers and saving these to a list. The remaining characters
@@ -45,6 +47,7 @@ namespace hal
         };
 
         /**
+         * TODO: Rename me...
          * An enum for convenience purposes. Used in the compare function to determine which compare
          * criteria should be used.
          */
@@ -55,6 +58,8 @@ namespace hal
             numerated = 2
         };
 
+        Q_ENUM_NS(mSortMechanism)
+		
         /**
          * Compares two strings by the natural order critera (e.g. z2 < z11).
          *
@@ -94,9 +99,9 @@ namespace hal
         int numericStringCompare(QString a_num, QString b_num);
 
         /**
-         * Compares to string by the preferred compare critera.
+         * Compares two strings using a specific comparison criteria.
          *
-         * @param mechanism - The critera by which the 2 strings should be compared with.
+         * @param mechanism - The criteria by which the 2 strings should be compared with.
          * @param a - The first string to compare.
          * @param b - The second string to compare.
          * @return True if a < b, false otherwise.

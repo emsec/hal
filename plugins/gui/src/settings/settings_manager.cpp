@@ -1,76 +1,90 @@
 #include "gui/settings/settings_manager.h"
-
-#include <QDebug>
 #include "hal_core/utilities/utils.h"
-#include "hal_core/defines.h"
-#include "gui/gui_globals.h"
-
-#include <QSettings>
+#include <QDir>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QRect>
 
 namespace hal
 {
-    SettingsManager::SettingsManager(QObject* parent) : QObject(parent),
-        mSettings(new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat)),
-        mDefaults(new QSettings(QString::fromStdString((utils::get_config_directory() / "guidefaults.ini").string()), QSettings::IniFormat))
+    SettingsManager* SettingsManager:: inst = nullptr;
+
+    SettingsManager* SettingsManager:: instance()
     {
-        //gSettingsRelay->registerSender(this, name());
-        if (mSettings->status() != QSettings::NoError) {
-            qDebug() << "Failed to load guisettings.ini";
-        }
-        if (mDefaults->status() != QSettings::NoError) {
-            qDebug() << "Failed to load guidefaults.ini";
-        }
+        if(!inst)
+            inst = new SettingsManager;
+
+        return inst;
     }
 
-    SettingsManager::~SettingsManager()
+    SettingsManager::SettingsManager(QObject* parent)
+        : QObject(parent)
     {
-        //gSettingsRelay->removeSender(this);
+        QDir userConfigDir(QString::fromStdString(utils::get_user_config_directory().string()));
+        QDir defaultConfigDir(QString::fromStdString(utils::get_config_directory().string()));
+
+        mUserSettingsFile = new QSettings(userConfigDir.absoluteFilePath("guisettings.ini"), QSettings::IniFormat);
+        mDefaultSettingsFile = new QSettings(defaultConfigDir.absoluteFilePath("guidefaults.ini"), QSettings::IniFormat);
     }
 
-    QVariant SettingsManager::get(const QString& key)
+    void SettingsManager::registerSetting(SettingsItem* item)
     {
-        return this->get(key, getDefault(key));
+        mSettingsList.append(item);
+
+        QString tag = item->tag();
+        if (mDefaultSettingsFile->contains(tag))
+            item->setDefaultValue(mDefaultSettingsFile->value(tag));
+
+        if (mUserSettingsFile->contains(tag))
+            item->restoreFromSettings(mUserSettingsFile->value(tag));
+
+        connect(item, &SettingsItem::destroyed, this, &SettingsManager::handleItemDestroyed);
+
+        // qDebug() << "new setting " << item << " " << item->tag();
     }
 
-    QVariant SettingsManager::get(const QString& key, const QVariant& defaultVal)
+    void SettingsManager::handleItemDestroyed(QObject* obj)
     {
-        return mSettings->value(key, defaultVal);
+        SettingsItem* item = static_cast<SettingsItem*>(obj);
+        mSettingsList.removeAll(item);
     }
 
-    QVariant SettingsManager::getDefault(const QString& key)
+    void SettingsManager::persistUserSettings()
     {
-        return mDefaults->value(key);
+        for(SettingsItem* item : mSettingsList)
+            if (item->value() != item->defaultValue())
+                mUserSettingsFile->setValue(item->tag(), item->value());
+            else
+                mUserSettingsFile->remove(item->tag());
+
+        mUserSettingsFile->sync();
     }
 
-    QVariant SettingsManager::reset(const QString& key)
+    QVariant SettingsManager::defaultValue(const QString& tag) const
     {
-        QVariant value = this->getDefault(key);
-        mSettings->remove(key);
-        gSettingsRelay->relaySettingChanged(this, key, value);
-        return value;
+        return mDefaultSettingsFile->value(tag);
     }
 
-    void SettingsManager::update(const QString& key, const QVariant& value)
+    QVariant SettingsManager::settingsValue(const QString& tag) const
     {
-        QVariant current = this->get(key, QVariant(QVariant::Invalid));
-        if (mDefaults->value(key) == value)
-        {
-            // if the user sets something to default, remove it from the settings file
-            mSettings->remove(key);
-        }
-        else
-        {
-            mSettings->setValue(key, value);
-        }
-
-        if (current != value)
-        {
-            gSettingsRelay->relaySettingChanged(this, key, value);
-        }
+        return mUserSettingsFile->value(tag);
     }
 
-    void SettingsManager::sync()
+    QPoint SettingsManager::mainWindowPosition() const
     {
-        mSettings->sync();
+        return mUserSettingsFile->value("MainWindow/position", QPoint(0, 0)).toPoint();
+    }
+
+    QSize SettingsManager::mainWindowSize() const
+    {
+        QRect rect = QApplication::desktop()->screenGeometry();
+        return mUserSettingsFile->value("MainWindow/size", rect.size()).toSize();
+    }
+
+    void SettingsManager::mainWindowSaveGeometry(const QPoint& pos, const QSize& size)
+    {
+        mUserSettingsFile->setValue("MainWindow/position", pos);
+        mUserSettingsFile->setValue("MainWindow/size", size);
+        mUserSettingsFile->sync();
     }
 }

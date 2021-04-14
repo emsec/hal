@@ -30,7 +30,6 @@ class QAction;
 
 namespace hal
 {
-    class MainSettingsWidget;
     class PluginScheduleWidget;
     class WelcomeScreen;
     class Window;
@@ -96,6 +95,5 @@ namespace hal
 
         WelcomeScreen* mWelcomeScreen;
         PluginScheduleWidget* mPluginScheduleWidget;
-        MainSettingsWidget* mMainSettingsWidget;
     };
 }

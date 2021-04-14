@@ -7,6 +7,8 @@
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 #include "gui/graph_widget/shaders/module_shader.h"
 #include "gui/gui_globals.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
+#include "gui/graph_widget/graphics_scene.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
@@ -21,13 +23,48 @@
 namespace hal
 {
     GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTableModel()), mMaxContextId(0)
-    {;}
+    {    
+        mSettingDebugGrid = new SettingsItemCheckbox(
+            "GUI Debug Grid",
+            "debug/grid",
+            false,
+            "eXpert Settings:Debug",
+            "Specifies whether the debug grid is displayed in the Graph View. The gird represents the scene as the layouter interprets it."
+        );
+    
+        mSettingNetLayout = new SettingsItemCheckbox(
+            "Optimize Net Layout",
+            "graph_view/layout_nets",
+            true,
+            "Graph View",
+            "Net optimization - not fully tested yet."
+        );
+
+        mSettingParseLayout = new SettingsItemCheckbox(
+            "Apply Parsed Position",
+            "graph_view/layout_parse",
+            true,
+            "Graph View",
+            "Use parsed verilog coordinates if available."
+        );
+
+        mSettingLayoutBoxes = new SettingsItemCheckbox(
+            "Optimize Box Layout",
+            "graph_view/layout_boxes",
+            true,
+            "Graph View",
+            "If disabled faster randomized placement."
+        );
+    }
 
     GraphContext* GraphContextManager::createNewContext(const QString& name)
     {
         GraphContext* context = new GraphContext(++mMaxContextId, name);
         context->setLayouter(getDefaultLayouter(context));
         context->setShader(getDefaultShader(context));
+        
+        context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
+        connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
 
         mContextTableModel->beginInsertContext(context);
         mContextTableModel->addContext(context);
@@ -376,7 +413,16 @@ namespace hal
 
     GraphLayouter* GraphContextManager::getDefaultLayouter(GraphContext* const context) const
     {
-        return new StandardGraphLayouter(context);
+        StandardGraphLayouter* layouter = new StandardGraphLayouter(context);
+        layouter->setOptimizeNetLayoutEnabled(mSettingNetLayout->value().toBool());
+        layouter->setParseLayoutEnabled(mSettingParseLayout->value().toBool());
+        layouter->setLayoutBoxesEnabled(mSettingLayoutBoxes->value().toBool());
+
+        connect(mSettingNetLayout, &SettingsItemCheckbox::boolChanged, layouter, &GraphLayouter::setOptimizeNetLayoutEnabled);
+        connect(mSettingParseLayout, &SettingsItemCheckbox::boolChanged, layouter, &StandardGraphLayouter::setParseLayoutEnabled);
+        connect(mSettingLayoutBoxes, &SettingsItemCheckbox::boolChanged, layouter, &StandardGraphLayouter::setLayoutBoxesEnabled);
+
+        return layouter;
     }
 
     GraphShader* GraphContextManager::getDefaultShader(GraphContext* const context) const

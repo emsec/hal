@@ -13,25 +13,23 @@ namespace hal
 {
 
     CodeEditor::CodeEditor(QWidget* parent) : QPlainTextEdit(parent),
-          mScrollbar(new CodeEditorScrollbar(this)),
-          mLineNumberArea(new LineNumberArea(this)),
-          mMinimap(new CodeEditorMinimap(this)),
-          mAnimation(new QPropertyAnimation(mScrollbar, "value", this))
+        mScrollbar(new CodeEditorScrollbar(this)),
+        mLineNumberArea(new LineNumberArea(this)),
+        mMinimap(new CodeEditorMinimap(this)),
+        mAnimation(new QPropertyAnimation(mScrollbar, "value", this)),
+        mLineNumbersEnabled(true),
+        mLineHighlightEnabled(true),
+        mMinimapEnabled(false),
+        mLineWrapEnabled(false)
     {
         connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::handleBlockCountChanged);
         connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumberArea);
         connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateMinimap);
 
-        mLineHighlightEnabled = gSettingsManager->get("python/highlightCurrentLine").toBool();
         if (mLineHighlightEnabled)
         {
             connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
         }
-        mLineNumbersEnabled = gSettingsManager->get("python/line_numbers").toBool();
-        mLineWrapEnabled = gSettingsManager->get("python/line_wrap").toBool();
-        mMinimapEnabled = gSettingsManager->get("python/minimap").toBool();
-
-        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &CodeEditor::handleGlobalSettingChanged);
 
         setVerticalScrollBar(mScrollbar);
         mScrollbar->setMinimapScrollbar(mMinimap->scrollbar());
@@ -217,43 +215,6 @@ namespace hal
         mMinimap->update();
     }
 
-    void CodeEditor::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
-    {
-        Q_UNUSED(sender);
-        if (key == "python/highlightCurrentLine")
-        {
-            bool enable = value.toBool();
-            if (enable == mLineHighlightEnabled)
-                return;
-            mLineHighlightEnabled = enable;
-            if (enable)
-            {
-                connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
-                highlightCurrentLine();
-            }
-            else
-            {
-                disconnect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
-                clearLineHighlight();
-            }
-        }
-        else if (key == "python/line_numbers")
-        {
-            mLineNumbersEnabled = value.toBool();
-            updateLayout();
-        }
-        else if (key == "python/line_wrap")
-        {
-            mLineWrapEnabled = value.toBool();
-            setLineWrapMode(mLineWrapEnabled ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
-        }
-        else if (key == "python/minimap")
-        {
-            mMinimapEnabled = value.toBool();
-            updateLayout();
-        }
-    }
-
     void CodeEditor::search(const QString& string)
     {
         // THREAD ?
@@ -326,6 +287,13 @@ namespace hal
         mAnimation->start();
     }
 
+    void CodeEditor::setFontSize(int pt)
+    {
+        QFont font = QPlainTextEdit::font();
+        font.setPointSize(pt);
+        QPlainTextEdit::setFont(font);
+    }
+
     void CodeEditor::handleWheelEvent(QWheelEvent* event)
     {
         QPlainTextEdit::wheelEvent(event);
@@ -366,7 +334,7 @@ namespace hal
         return mCurrentLineBackground;
     }
 
-    void CodeEditor::setLineNumberFont(QFont& font)
+    void CodeEditor::setLineNumberFont(const QFont &font)
     {
         mLineNumberFont = font;
     }
@@ -422,5 +390,42 @@ namespace hal
             mMinimap->hide();
 
         setViewportMargins(left_margin, 0, right_margin, 0);
+    }
+
+    void CodeEditor::setLineNumberEnabled(bool enabled)
+    {
+        mLineNumbersEnabled = enabled;
+        updateLayout();
+    }
+
+    void CodeEditor::setHighlightCurrentLineEnabled(bool enabled)
+    {
+        mLineHighlightEnabled = enabled;
+
+            if(enabled)
+            {
+                connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+                highlightCurrentLine();
+            }
+            else
+            {
+                disconnect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+                clearLineHighlight();
+            }
+
+        updateLayout();
+    }
+
+    void CodeEditor::setLineWrapEnabled(bool enabled)
+    {
+        mLineWrapEnabled = enabled;
+        setLineWrapMode(mLineWrapEnabled ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+        updateLayout();
+    }
+
+    void CodeEditor::setMinimapEnabled(bool enabled)
+    {
+        mMinimapEnabled = enabled;
+        updateLayout();
     }
 }

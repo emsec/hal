@@ -45,14 +45,13 @@ namespace hal
         Q_PROPERTY(int fixedHeight READ fixedHeight WRITE setFixedHeight)
 
     public:
-
         /**
          * The constructor.
          *
          * @param parentButton - The button to wrap.
          * @param parent - The parent widget.
          */
-        ExpandingListItem(ExpandingListButton* parentButton, QWidget* parent = 0);
+        ExpandingListItem(ExpandingListButton* but, QWidget* parent = 0);
 
         /**
          * Overwritten Qt-function. Returns the recommended minimum size for the item.
@@ -81,7 +80,7 @@ namespace hal
          *
          * @return True if the item's children are expanded. False otherwise.
          */
-        bool expanded();
+        bool expanded() const;
 
         /**
          * Get the the fixed height property of this item. It is initially set to the
@@ -89,30 +88,14 @@ namespace hal
          *
          * @return The item's fixed height.
          */
-        int fixedHeight();
+        int fixedHeight() const;
 
         /**
-         * Checks if the given button is either the wrapped button or on the item's
-         * children.
+         * Gets the ExpandingListButton that belongs to this ExpandingListItem
          *
-         * @param button - The button to check for.
-         * @return True if the button is contained, false otherwise.
+         * @returns the ExpandingListButton
          */
-        bool contains(ExpandingListButton* button);
-
-        /**
-         * Get the wrapped button.
-         *
-         * @return The button.
-         */
-        ExpandingListButton* parentButton();
-
-        /**
-         * Appends the given button to this item's child list.
-         *
-         * @param button - The button to append.
-         */
-        void appendChildButton(ExpandingListButton* button);
+        ExpandingListButton* button() const;
 
         /**
          * Applies the style that is currently set through the (globally set) stylesheet
@@ -134,13 +117,6 @@ namespace hal
         void expand();
 
         /**
-         * Sets the expanded property to the given value.
-         *
-         * @param expanded - The new value.
-         */
-        void setExpanded(bool expanded);
-
-        /**
          * Sets the fixed height property of this item. This function is called in the
          * repolish function and the fixed height is set to the height this item has when
          * it is collapsed.
@@ -150,13 +126,10 @@ namespace hal
         void setFixedHeight(int height);
 
     private:
-        ExpandingListButton* mParentButton;
-        QList<ExpandingListButton*> mChildButtons;
+        ExpandingListButton* mButton;
 
         int mCollapsedHeight;
         int mExpandedHeight;
-
-        QPropertyAnimation* mAnimation;
 
         bool mExpanded;
         int mFixedHeight;

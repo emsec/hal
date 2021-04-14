@@ -23,26 +23,26 @@
 
 #pragma once
 
-#include "gui/settings/settings_widget.h"
-#include <QCheckBox>
-#include <QStringList>
+#include "gui/settings/settings_widgets/settings_widget.h"
+#include <QSpinBox>
 
 namespace hal
 {
-    class CheckboxSetting : public SettingsWidget
+    class SettingsItemSpinbox;
+
+    class SettingsWidgetSpinbox : public SettingsWidget
     {
         Q_OBJECT
 
     public:
-        CheckboxSetting(const QString& key, const QString& title, const QString& text, const QString& mDescription, QWidget* parent = 0);
+        SettingsWidgetSpinbox(SettingsItemSpinbox* item, QWidget* parent = 0);
 
-        virtual void load(const QVariant& value) override;
-        virtual QVariant value() override;
-        //virtual void rollback() override;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value()                 Q_DECL_OVERRIDE;
 
     private:
-        QCheckBox* mCheckBox;
-        void onStateChanged(bool mChecked);
+        QSpinBox* mSpinbox;
+        void on_spinbox_value_changed(int value);
 
     };
 }

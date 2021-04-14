@@ -18,6 +18,8 @@
 #include "gui/plugin_manager/plugin_model.h"
 #include "gui/python/python_editor.h"
 #include "gui/welcome_screen/welcome_screen.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_controls.h"
@@ -29,6 +31,7 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
+#include "gui/settings/settings_manager.h"
 
 #include "gui/user_action/action_open_netlist_file.h"
 
@@ -40,12 +43,15 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QSettings>
 #include <QShortcut>
 #include <QtConcurrent>
 
+#include <QDebug>
+
 namespace hal
 {
+    SettingsItemDropdown* MainWindow::sSettingStyle = nullptr;
+
     MainWindow::MainWindow(QWidget* parent) : QWidget(parent), mScheduleWidget(new PluginScheduleWidget())
       // , mActionSchedule(new Action(this))
       // , mActionContent(new Action(this))
@@ -89,7 +95,7 @@ namespace hal
 
         mStackedWidget->addWidget(mScheduleWidget);
 
-        mSettings = new MainSettingsWidget();
+        mSettings = new MainSettingsWidget;
         mStackedWidget->addWidget(mSettings);
 
         mLayoutArea = new ContentLayoutArea();
@@ -203,12 +209,6 @@ namespace hal
         //    mRightToolBar->addSeparator();
         mRightToolBar->addAction(mActionSettings);
 
-        gKeybindManager->bind(mActionNew, "keybinds/project_create_file");
-        gKeybindManager->bind(mActionOpen, "keybinds/project_open_file");
-        gKeybindManager->bind(mActionSave, "keybinds/project_save_file");
-        gKeybindManager->bind(mActionUndo, "keybinds/action_undo");
- //       gKeybindManager->bind(mActionRunSchedule, "keybinds/schedule_run");
-
         mActionStartRecording->setText("Start recording");
         mActionStopRecording->setText("Stop recording");
         mActionPlayMacro->setText("Play macro");
@@ -240,6 +240,54 @@ namespace hal
 
         gContentManager = new ContentManager(this);
 
+
+        mSettingCreateFile = new SettingsItemKeybind(
+            "HAL Shortcut 'Create Empty Netlist'",
+            "keybinds/project_create_file",
+            QKeySequence("Ctrl+N"),
+            "Keybindings:Global",
+            "Keybind for creating a new and empty netlist in HAL."
+        );
+
+        mSettingOpenFile = new SettingsItemKeybind(
+            "HAL Shortcut 'Open File'",
+            "keybinds/project_open_file",
+            QKeySequence("Ctrl+O"),
+            "Keybindings:Global",
+            "Keybind for opening a new File in HAL."
+        );
+
+        mSettingSaveFile = new SettingsItemKeybind(
+            "HAL Shortcut 'Save File'",
+            "keybinds/project_save_file",
+            QKeySequence("Ctrl+S"),
+            "Keybindings:Global",
+            "Keybind for saving the currently opened file."
+        );
+
+        mSettingUndoLast = new SettingsItemKeybind(
+            "Undo Last Action",
+            "keybinds/action_undo",
+            QKeySequence("Ctrl+Z"),
+            "Keybindings:Global",
+            "Keybind for having last user interaction undone."
+        );
+
+        QShortcut* shortCutNewFile = new QShortcut(mSettingCreateFile->value().toString(), this);
+        QShortcut* shortCutOpenFile = new QShortcut(mSettingOpenFile->value().toString(), this);
+        QShortcut* shortCutSaveFile = new QShortcut(mSettingSaveFile->value().toString(), this);
+        QShortcut* shortCutUndoLast = new QShortcut(mSettingUndoLast->value().toString(), this);
+
+        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortCutNewFile, &QShortcut::setKey);
+        connect(mSettingOpenFile, &SettingsItemKeybind::keySequenceChanged, shortCutOpenFile, &QShortcut::setKey);
+        connect(mSettingSaveFile, &SettingsItemKeybind::keySequenceChanged, shortCutSaveFile, &QShortcut::setKey);
+        connect(mSettingUndoLast, &SettingsItemKeybind::keySequenceChanged, shortCutUndoLast, &QShortcut::setKey);
+
+        connect(shortCutNewFile, &QShortcut::activated, mActionNew, &QAction::trigger);
+        connect(shortCutOpenFile, &QShortcut::activated, mActionOpen, &QAction::trigger);
+        connect(shortCutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
+        connect(shortCutUndoLast, &QShortcut::activated, mActionUndo, &QAction::trigger);
+
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
         connect(mActionOpen, &Action::triggered, this, &MainWindow::handleActionOpen);
         connect(mActionAbout, &Action::triggered, mAboutDialog, &AboutDialog::exec);
@@ -259,6 +307,7 @@ namespace hal
         connect(this, &MainWindow::saveTriggered, gGraphContextManager, &GraphContextManager::handleSaveTriggered);
 
         connect(UserActionManager::instance(), &UserActionManager::canUndoLastAction, this, &MainWindow::enableUndo);
+        connect(sSettingStyle, &SettingsItemDropdown::intChanged, this, &MainWindow::reloadStylsheet);
         enableUndo(false);
 
         restoreState();
@@ -271,6 +320,26 @@ namespace hal
 
         //ReminderOverlay* o = new ReminderOverlay(this);
         //Q_UNUSED(o)
+    }
+
+    void MainWindow::reloadStylsheet(int istyle)
+    {
+        QString styleSheetToOpen;
+
+        switch(istyle)
+        {
+        case StyleSheetOption::Darcula:
+            styleSheetToOpen = ":/style/darcula";
+            break;
+        case StyleSheetOption::Sunny:
+            styleSheetToOpen = ":/style/sunny";
+            break;
+        default:
+            return;
+        }
+        QFile stylesheet(styleSheetToOpen);
+        stylesheet.open(QFile::ReadOnly);
+        qApp->setStyleSheet(QString(stylesheet.readAll()));
     }
 
     QString MainWindow::halIconPath() const
@@ -523,7 +592,10 @@ namespace hal
             closeSettings();
         }
         else
+        {
+            mSettings->activate();
             mStackedWidget->setCurrentWidget(mSettings);
+        }
     }
 
     void MainWindow::closeSettings()
@@ -781,10 +853,9 @@ namespace hal
 
     void MainWindow::restoreState()
     {
-        QPoint pos = gSettingsManager->get("MainWindow/position", QPoint(0, 0)).toPoint();
+        QPoint pos = SettingsManager::instance()->mainWindowPosition();
         move(pos);
-        QRect rect = QApplication::desktop()->screenGeometry();
-        QSize size = gSettingsManager->get("MainWindow/size", QSize(rect.width(), rect.height())).toSize();
+        QSize size = SettingsManager::instance()->mainWindowSize();
         resize(size);
         //restore state of all subwindows
         mLayoutArea->initSplitterSize(size);
@@ -792,9 +863,6 @@ namespace hal
 
     void MainWindow::saveState()
     {
-        gSettingsManager->update("MainWindow/position", pos());
-        gSettingsManager->update("MainWindow/size", size());
-        //save state of all subwindows and everything else that might need to be restored on the next program start
-        gSettingsManager->sync();
+        SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
 }    // namespace hal

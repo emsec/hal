@@ -8,6 +8,7 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/user_action/action_unfold_module.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "hal_core/utilities/log.h"
 #include <QTextCursor>
 
@@ -21,21 +22,41 @@ namespace hal
           mDumpAction(nullptr)
     {
         mElapsedTime.start();
+        mSettingDumpAction = new SettingsItemCheckbox(
+            "UserAction Debug",
+            "debug/user_action",
+            false,
+            "eXpert Settings:Debug",
+            "Specifies whether hal opens an extra window to list all executed instances of UserAction"
+        );
+        connect(mSettingDumpAction,&SettingsItemCheckbox::boolChanged,this,&UserActionManager::handleSettingDumpActionChanged);
+    }
+
+    void UserActionManager::handleSettingDumpActionChanged(bool wantDump)
+    {
+        if (!wantDump && mDumpAction)
+        {
+            mDumpAction->deleteLater();
+            mDumpAction = nullptr;
+        }
     }
 
     void UserActionManager::addExecutedAction(UserAction* act)
     {
         mActionHistory.append(act);
 
-        if (!mDumpAction)
+        if (mSettingDumpAction->value().toBool())
         {
-            mDumpAction = new QPlainTextEdit;
-            mDumpAction->show();
-        }
+            if (!mDumpAction)
+            {
+                mDumpAction = new QPlainTextEdit;
+                mDumpAction->show();
+            }
 
-        mDumpAction->moveCursor (QTextCursor::End);
-        mDumpAction->insertPlainText(act->debugDump());
-        mDumpAction->moveCursor(QTextCursor::End);
+            mDumpAction->moveCursor (QTextCursor::End);
+            mDumpAction->insertPlainText(act->debugDump());
+            mDumpAction->moveCursor(QTextCursor::End);
+        }
         testUndo();
     }
 

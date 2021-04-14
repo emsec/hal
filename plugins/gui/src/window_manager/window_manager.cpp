@@ -4,7 +4,6 @@
 #include "gui/overlay/dialog_overlay.h"
 #include "gui/overlay/overlay.h"
 #include "gui/plugin_management/plugin_schedule_widget.h"
-#include "gui/settings/main_settings_widget.h"
 #include "gui/style/style.h"
 #include "gui/style/shared_properties_qss_adapter.h"
 #include "gui/welcome_screen/welcome_screen.h"
@@ -31,8 +30,7 @@ namespace hal
         mActionSettings       (new QAction("Settings", this)),
         mActionAbout          (new QAction("About", this)),
         mWelcomeScreen        (new WelcomeScreen()),
-        mPluginScheduleWidget(new PluginScheduleWidget()),
-        mMainSettingsWidget  (new MainSettingsWidget())
+        mPluginScheduleWidget(new PluginScheduleWidget())
     {
         connect(mActionOpenFile,    &QAction::triggered, this, &WindowManager::handleActionOpen);
         connect(mActionCloseFile,   &QAction::triggered, this, &WindowManager::handleActionClose);

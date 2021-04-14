@@ -44,6 +44,8 @@ namespace hal
     class SelectionDetailsWidget;
     class ModuleWidget;
     class LoggerWidget;
+    class SettingsItemDropdown;
+    class SettingsItemKeybind;
 
 
     /**
@@ -153,6 +155,11 @@ namespace hal
         GroupingManagerWidget* mGroupingManagerWidget;
         SelectionDetailsWidget* mSelectionDetailsWidget;
         LoggerWidget* mLoggerWidget;
+
+        static SettingsItemDropdown* sSettingSortMechanism;
+        static SettingsItemKeybind* sSettingSearch;
+        static bool sSettingsInitialized;
+        static bool initializeSettins();
 
 #ifdef HAL_STUDY
         SpecialLogContentManager* mSpecialLogContentManager;

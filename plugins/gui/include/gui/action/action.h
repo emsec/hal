@@ -38,9 +38,11 @@ namespace hal
         explicit Action(const QIcon &icon, const QString &text, QObject *parent = nullptr);
 
         // hides non-virtual methods in QAction
-        void setText(const QString& text);
-        void setShortcut(const QKeySequence &shortcut);
+        void setText(const QString& text);        
         void setToolTip(const QString& tooltip);
+
+    public Q_SLOTS:
+        void setShortcut(const QKeySequence &shortcut);
 
     private:
         QString mDescriptionText;

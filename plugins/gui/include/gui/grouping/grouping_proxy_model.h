@@ -46,8 +46,21 @@ namespace hal
          */
         GroupingProxyModel(QObject* parent = nullptr);
 
-    protected:
+        /**
+         * Gets the mSortMechanism that should be applied to sort groupings (by their name).
+         *
+         * @returns the currently configured sorting mechanism
+         */
+        gui_utility::mSortMechanism sortMechanism();
 
+        /**
+         * Configures the mSortMechanism that should be applied to sort groupings (by their name).
+         *
+         * @param sortMechanism - the new sorting mechanism
+         */
+        void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+
+    protected:
         /**
          * Overrides QSortFilterProxyModel::filterAcceptsRow to implement the filter logic based on the regular
          * expression stored by setFilterRegExp.<br>
@@ -68,17 +81,6 @@ namespace hal
          * @returns <b>true</b> iff the element at source_left is considered less than the element at source_right
          */
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
-
-    private Q_SLOTS:
-        /**
-         * Q_SLOT to call whenever the global settings were changed. It is used to apply changes in the sort mechanism
-         * settings.
-         *
-         * @param sender - The sender of the signal
-         * @param key - The settings key
-         * @param value - The new value of the setting
-         */
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

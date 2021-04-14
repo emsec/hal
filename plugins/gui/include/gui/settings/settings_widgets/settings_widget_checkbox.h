@@ -23,27 +23,28 @@
 
 #pragma once
 
-#include "gui/settings/settings_widget.h"
-#include <QComboBox>
-#include <QStringList>
+#include "gui/settings/settings_widgets/settings_widget.h"
+#include <QCheckBox>
 
 namespace hal
 {
-    class DropdownSetting : public SettingsWidget
+    class SettingsItemCheckbox;
+    class SettingsItemNew;
+
+    class SettingsWidgetCheckbox : public SettingsWidget
     {
         Q_OBJECT
 
     public:
-        DropdownSetting(const QString& key, const QString& title, const QMap<QString, QVariant>& options, const QString& mDescription, QWidget* parent = 0);
+        SettingsWidgetCheckbox(SettingsItemCheckbox* item, QWidget* parent = 0);
 
-        virtual void load(const QVariant& value) override;
-        virtual QVariant value() override;
-        //virtual void rollback() override;
+        virtual void load(const QVariant& value) Q_DECL_OVERRIDE;
+        virtual QVariant value()                 Q_DECL_OVERRIDE;
 
     private:
-        QMap<QString, QVariant> mOptions;
-        QComboBox* mComboBox;
-        void onIndexChanged(QString text);
-
+        QCheckBox* m_check_box;
+        void on_state_changed(bool checked);
+        
+        SettingsItemNew* mSettingsItem;
     };
 }

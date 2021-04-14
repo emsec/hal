@@ -33,8 +33,6 @@
 #include "gui/plugin_management/plugin_relay.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
-#include "gui/settings/keybind_manager.h"
-#include "gui/settings/settings_relay.h"
 #include "gui/settings/settings_manager.h"
 #include "gui/thread_pool/thread_pool.h"
 #include "gui/window_manager/window_manager.h"
@@ -94,21 +92,6 @@ namespace hal
      * The global SelectionRelay (see doc)
      */
     extern SelectionRelay* gSelectionRelay;
-
-    /**
-     * The global SettingsRelay. Used to notify various objects about setting changes.
-     */
-    extern SettingsRelay* gSettingsRelay;
-
-    /**
-     * The global SettingsManager. Used to get, change and persist the settings for the hal gui.
-     */
-    extern SettingsManager* gSettingsManager;
-
-    /**
-     * The global KeybindManager (see docs)
-     */
-    extern KeybindManager* gKeybindManager;
 
     /**
      * The global FileStatusManager (see doc)

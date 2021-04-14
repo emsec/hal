@@ -25,6 +25,12 @@
 #include "gui/vhdl_editor/vhdl_editor.h"
 #include "gui/gui_utils/special_log_content_manager.h"
 //#include "hal_config.h"
+#include "gui/gui_utils/sort.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/grouping/grouping_proxy_model.h"
+#include "gui/module_model/module_proxy_model.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -32,6 +38,32 @@
 
 namespace hal
 {
+    SettingsItemDropdown* ContentManager::sSettingSortMechanism;
+    SettingsItemKeybind* ContentManager::sSettingSearch;
+    bool ContentManager::sSettingsInitialized = initializeSettins();
+    bool ContentManager::initializeSettins()
+    {
+        sSettingSortMechanism = new SettingsItemDropdown(
+            "Sort Mechanism",
+            "navigation/sort_mechanism",
+            gui_utility::mSortMechanism::lexical,
+            "eXpert Settings:Miscellaneous",
+            "Specifies the sort mechanism used in every list "
+        );
+        sSettingSortMechanism->setValueNames<gui_utility::mSortMechanism>();
+
+        sSettingSearch = new SettingsItemKeybind(
+            "Search",
+            "keybinds/searchbar_toggle",
+            QKeySequence("Ctrl+F"),
+            "Keybindings:Global",
+            "Keybind for toggeling the searchbar in widgets where available (Selection Details Widget, Modules Widget, Python Editor, Views Widget, Grouping Widget)."
+        );
+
+        return true;
+    }
+
+
     ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent)
     {
         // has to be created this early in order to receive deserialization by the core signals
@@ -172,6 +204,28 @@ namespace hal
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusGateClicked, mGraphTabWidget, &GraphTabWidget::handleGateFocus);
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWidget, &GraphTabWidget::handleNetFocus);
         connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusModuleClicked, mGraphTabWidget, &GraphTabWidget::handleModuleFocus);
+
+        connect(sSettingSortMechanism, &SettingsItemDropdown::intChanged, mSelectionDetailsWidget, [this](int value){
+            mSelectionDetailsWidget->selectionTreeView()->proxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
+        });
+
+        connect(sSettingSortMechanism, &SettingsItemDropdown::intChanged, mModuleWidget, [this](int value){
+            mModuleWidget->proxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
+        });
+
+        connect(sSettingSortMechanism, &SettingsItemDropdown::intChanged, mGroupingManagerWidget, [this](int value){
+            mGroupingManagerWidget->getProxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
+        });
+
+        sSettingSortMechanism->intChanged(sSettingSortMechanism->value().toInt());
+
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mContextManagerWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mModuleWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mPythonWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mGroupingManagerWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+        connect(sSettingSearch, &SettingsItemKeybind::keySequenceChanged, mSelectionDetailsWidget, &ContextManagerWidget::handleSearchKeysequenceChanged);
+
+        sSettingSearch->keySequenceChanged(sSettingSearch->value().toString());
     }
 
     void ContentManager::handleFilsystemDocChanged(const QString& fileName)

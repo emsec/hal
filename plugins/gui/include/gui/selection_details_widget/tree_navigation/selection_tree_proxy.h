@@ -60,6 +60,9 @@ namespace hal
          */
         bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 
+        gui_utility::mSortMechanism sortMechanism();
+        void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+
     protected:
 
         /**
@@ -82,9 +85,6 @@ namespace hal
          * @param filter_text - The text to filter the model by.
          */
         void handleFilterTextChanged(const QString& filter_text);
-
-    private Q_SLOTS:
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

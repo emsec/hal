@@ -9,11 +9,17 @@
 
 namespace hal
 {
-    ExpandingListButton::ExpandingListButton(QWidget* parent)
-        : QFrame(parent), mLayout(new QHBoxLayout()), mLeftBorder(new QFrame()), mIconLabel(new QLabel()), mTextLabel(new QLabel()), mRightBorder(new QFrame()), mHover(false), mSelected(false),
-          mType(""), mIconStyle(""), mIconPath("")
+    QHash<QString,QString> ExpandingListButton::sIconMap = ExpandingListButton::defaultIconMap();
+
+    ExpandingListButton::ExpandingListButton(int levl, QWidget* parent)
+        : QFrame(parent),
+          mLayout(new QHBoxLayout(this)),
+          mLeftBorder(new QFrame(this)),
+          mIconLabel(new QLabel(this)),
+          mTextLabel(new QLabel(this)),
+          mRightBorder(new QFrame(this)),
+          mLevel(levl), mHover(false), mSelected(false)
     {
-        setLayout(mLayout);
         mLayout->setContentsMargins(0, 0, 0, 0);
         mLayout->setSpacing(0);
 
@@ -31,6 +37,27 @@ namespace hal
         mRightBorder->setObjectName("right-border");
         mRightBorder->setFrameStyle(QFrame::NoFrame);
         mLayout->addWidget(mRightBorder);
+    }
+
+    QHash<QString,QString> ExpandingListButton::defaultIconMap()
+    {
+        const char* iconList[] = {"style", "eye",
+                                  "graph", "graph",
+                                  "navig", "graph",
+                                  "pytho", "python",
+                                  "selec", "gen-window",
+                                  "appea", "preferences",
+                                  "exper", "preferences",
+                                  "keybi", "keyboard",
+                                  "autos", "save",
+                                  "debug", "bug",
+                                  nullptr, nullptr};
+        QHash<QString,QString> retval;
+        int i = 0;
+        const char* key;
+        while ( (key=iconList[i++]) )
+            retval[key] = QString(":/icons/%1").arg(iconList[i++]);
+        return retval;
     }
 
     void ExpandingListButton::enterEvent(QEvent* event)
@@ -57,22 +84,34 @@ namespace hal
         event->accept();
     }
 
-    bool ExpandingListButton::hover()
+    QString ExpandingListButton::text() const
+    {
+        return mTextLabel->text();
+    }
+
+    int ExpandingListButton::level() const
+    {
+        return mLevel;
+    }
+
+    bool ExpandingListButton::hover() const
     {
         return mHover;
     }
 
-    bool ExpandingListButton::selected()
+    bool ExpandingListButton::selected() const
     {
         return mSelected;
     }
 
+    /*
     QString ExpandingListButton::type()
     {
         return mType;
     }
+*/
 
-    QString ExpandingListButton::iconStyle()
+    QString ExpandingListButton::iconStyle() const
     {
         return mIconStyle;
     }
@@ -86,6 +125,7 @@ namespace hal
         repolish();
     }
 
+    /*
     void ExpandingListButton::set_type(const QString& type)
     {
         if (mType == type)
@@ -94,6 +134,7 @@ namespace hal
         mType = type;
         repolish();
     }
+*/
 
     void ExpandingListButton::setIconStyle(const QString& style)
     {
@@ -111,6 +152,13 @@ namespace hal
 
         mIconPath = path;
         repolish();
+    }
+
+    void ExpandingListButton::setDefaultIcon(const QString& text)
+    {
+        QString iconPath = sIconMap.value(text.left(5).toLower());
+        if (iconPath.isEmpty()) iconPath = ":/icons/python";
+        setIconPath(iconPath);
     }
 
     void ExpandingListButton::setText(const QString& text)

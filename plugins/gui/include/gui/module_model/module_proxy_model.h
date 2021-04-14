@@ -45,6 +45,20 @@ namespace hal
          */
         ModuleProxyModel(QObject* parent = nullptr);
 
+        /**
+         * Gets the mSortMechanism that should be applied to sort modules (by their name).
+         *
+         * @returns the currently configured sorting mechanism
+         */
+        gui_utility::mSortMechanism sortMechanism();
+
+        /**
+         * Configures the mSortMechanism that should be applied to sort groupings (by their name).
+         *
+         * @param sortMechanism - the new sorting mechanism
+         */
+        void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+
     protected:
         /**
          * Overrides QSortFilterProxyModel::filterAcceptsRow to implement the filter logic based on the regular
@@ -76,7 +90,7 @@ namespace hal
          * @param key - The settings key
          * @param value - The new value of the setting
          */
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
+        //-void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

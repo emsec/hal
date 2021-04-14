@@ -5,11 +5,13 @@
 #include "gui/graph_widget/layouters/wait_to_be_seated.h"
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/layouters/coordinate_from_data.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
+
 #include <QDebug>
 
 namespace hal
 {
-    StandardGraphLayouter::StandardGraphLayouter(const GraphContext* const context) : GraphLayouter(context)
+    StandardGraphLayouter::StandardGraphLayouter(const GraphContext* const context) : GraphLayouter(context), mParseLayout(true), mLayoutBoxes(true)
     {
     }
 
@@ -48,7 +50,7 @@ namespace hal
 
         CoordinateFromDataMap cfdMap(modules,gates);
         if (mPositionToNodeMap.isEmpty() &&
-                gSettingsManager->get("graph_view/layout_parse").toBool() &&
+        	mParseLayout &&
                 !gFileStatusManager->modifiedFilesExisting() &&
                 cfdMap.good())
         {
@@ -97,7 +99,7 @@ namespace hal
     {
         Q_UNUSED(nets)
 
-        if (gSettingsManager->get("graph_view/layout_boxes").toBool())
+        if (mLayoutBoxes)
         {
             addWaitToBeSeated(modules, gates, nets);
             return;
@@ -217,7 +219,6 @@ namespace hal
         }
     }
 
-
     void StandardGraphLayouter::remove(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets)
     {
         Q_UNUSED(nets)
@@ -227,5 +228,25 @@ namespace hal
 
         for (u32 id : gates)
             removeNodeFromMaps(Node(id,Node::Gate));
+    }
+
+    bool StandardGraphLayouter::parseLayoutEnabled()
+    {
+        return mParseLayout;
+    }
+
+    void StandardGraphLayouter::setParseLayoutEnabled(bool enabled)
+    {
+        mParseLayout = enabled;
+    }
+
+    bool StandardGraphLayouter::layoutBoxesEnabled()
+    {
+        return mLayoutBoxes;
+    }
+
+    void StandardGraphLayouter::setLayoutBoxesEnabled(bool enabled)
+    {
+        mLayoutBoxes = enabled;
     }
 }

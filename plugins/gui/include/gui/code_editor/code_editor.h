@@ -147,15 +147,21 @@ namespace hal
         QColor lineNumberHighlightColor() const;
         QColor lineNumberHighlightBackground() const;
         QColor currentLineBackground() const;
+
         ///@}
         /** @name Q_PROPERTY WRITE Functions */
         ///@{
-        void setLineNumberFont(QFont& font);
+        void setLineNumberFont(const QFont& font);
         void setLineNumberColor(QColor& color);
         void setLineNumberBackground(QColor& color);
         void setLineNumberHighlightColor(QColor& color);
         void setLineNumberHighlightBackground(QColor& color);
         void setCurrentLineBackground(QColor& color);
+
+	void setLineNumberEnabled(bool enabled);
+        void setHighlightCurrentLineEnabled(bool enabled);
+        void setLineWrapEnabled(bool enabled);
+        void setMinimapEnabled(bool enabled);
         ///@}
 
     public Q_SLOTS:
@@ -175,6 +181,13 @@ namespace hal
          * Shows/Hides the minimap of the code editor.
          */
         void toggleMinimap();
+
+        /**
+         * Configures the font size of the code editor.
+         *
+         * @param pt - The new font size
+         */
+	    void setFontSize(int pt);
 
     protected:
         /**

@@ -77,6 +77,8 @@ namespace hal
         virtual QList<QShortcut*> createShortcuts() override;
         void openModuleInView(u32 moduleId, bool unfold);
 
+        ModuleProxyModel* proxyModel();
+
     public Q_SLOTS:
         /**
          * Q_SLOT to open/close the searchbar of the ModuleWidget depending on whether it is already open or not.

@@ -12,6 +12,9 @@
 #include "gui/searchbar/searchbar.h"
 #include "gui/splitter/splitter.h"
 #include "gui/toolbar/toolbar.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
+#include "gui/settings/settings_items/settings_item_spinbox.h"
 
 #include <QAction>
 #include <QFileDialog>
@@ -58,12 +61,6 @@ namespace hal
         mActionToggleMinimap->setIcon(gui_utility::getStyledSvgIcon(mToggleMinimapIconStyle, mToggleMinimapIconPath));
         mActionNewFile->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
 
-        gKeybindManager->bind(mActionOpenFile, "keybinds/python_open_file");
-        gKeybindManager->bind(mActionSave, "keybinds/python_save_file");
-        gKeybindManager->bind(mActionSaveAs, "keybinds/python_save_file_as");
-        gKeybindManager->bind(mActionRun, "keybinds/python_run_file");
-        gKeybindManager->bind(mActionNewFile, "keybinds/python_create_file");
-
         mActionOpenFile->setText("Open Script");
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save as");
@@ -77,6 +74,7 @@ namespace hal
         connect(mActionRun, &Action::triggered, this, &PythonEditor::handleActionRun);
         connect(mActionNewFile, &Action::triggered, this, &PythonEditor::handleActionNewTab);
         connect(mActionToggleMinimap, &Action::triggered, this, &PythonEditor::handleActionToggleMinimap);
+        connect(mSearchAction, &QAction::triggered, this, &PythonEditor::toggleSearchbar);
 
         connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::handleSearchbarTextEdited);
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
@@ -96,6 +94,87 @@ namespace hal
         mFileWatcher = new QFileSystemWatcher(this);
         connect(mFileWatcher, &QFileSystemWatcher::fileChanged, this, &PythonEditor::handleTabFileChanged);
         connect(mFileWatcher, &QFileSystemWatcher::fileChanged, mFileModifiedBar, &FileModifiedBar::handleFileChanged);
+
+        mSettingFontSize = new SettingsItemSpinbox(
+                    "Font Size",
+                    "python/font_size",
+                    11,
+                    "Python Editor",
+                    "Size of Font measured in pt"
+                    );
+        mSettingFontSize->setRange(6,48);
+
+        mSettingLineNumbers = new SettingsItemCheckbox(
+            "Line Numbers",
+            "python/line_numbers",
+            true,
+            "Python Editor",
+            "Enables line numbers."
+        );
+
+        mSettingHighlight = new SettingsItemCheckbox(
+            "Highlight Current Lines",
+            "python/highlight_current_line",
+            true,
+            "Python Editor",
+            "The current line in the editor gets highlighted if enabled."
+        );
+
+        mSettingLineWrap = new SettingsItemCheckbox(
+            "Line Wrap",
+            "python/line_wrap",
+            false,
+            "Python Editor",
+            "Autowraps lines in the editor to prevent horizontal scroll bars."
+        );
+
+        mSettingMinimap = new SettingsItemCheckbox(
+            "Code Minimap",
+            "python/minimap",
+            false,
+            "Python Editor",
+            "Enable code minimap."
+        );
+
+        mSettingOpenFile = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Open Python File'",
+            "keybinds/python_open_file",
+            QKeySequence("Ctrl+Shift+O"),
+            "Keybindings: PyEditor",
+            "Keybind for opening a python file in the Python Editor."
+        );
+
+        mSettingSaveFile = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Save Python File'",
+            "keybinds/python_save_file",
+            QKeySequence("Ctrl+Shift+S"),
+            "Keybindings: PyEditor",
+            "Keybind for saving a python file in the Python Editor."
+        );
+
+        mSettingSaveFileAs = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Save Python File As'",
+            "keybinds/python_save_file_as",
+            QKeySequence("Ctrl+Alt+S"),
+            "Keybindings: PyEditor",
+            "Keybind for saving a python file in the Python Editor 'as ...' in the Python Editor."
+        );
+
+        mSettingRunFile = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Run Python File'",
+            "keybinds/python_run_file",
+            QKeySequence("Ctrl+R"),
+            "Keybindings: PyEditor",
+            "Keybind for executing a python file in the Python Editor."
+        );
+
+        mSettingCreateFile = new SettingsItemKeybind(
+            "PyEditor Shortcut 'Create New Python File'",
+            "keybinds/python_create_file",
+            QKeySequence("Ctrl+Shift+N"),
+            "Keybindings: PyEditor",
+            "Keybind for creating a new python file in the Python Editor."
+        );
 
         handleActionNewTab();
 
@@ -304,11 +383,33 @@ namespace hal
 
     QList<QShortcut*> PythonEditor::createShortcuts()
     {
-        QShortcut* search_shortcut = new QShortcut(QKeySequence("Ctrl+f"), this);
-        connect(search_shortcut, &QShortcut::activated, this, &PythonEditor::toggleSearchbar);
+        QShortcut* shortcutNewFile = new QShortcut(mSettingCreateFile->value().toString(),this );
+        QShortcut* shortcutOpenFile = new QShortcut(mSettingOpenFile->value().toString(),this );
+        QShortcut* shortcutSaveFile = new QShortcut(mSettingSaveFile->value().toString(),this );
+        QShortcut* shortcutSaveFileAs = new QShortcut(mSettingSaveFileAs->value().toString(),this );
+        QShortcut* shortcutRun = new QShortcut(mSettingRunFile->value().toString(),this );
+        mSearchShortcut = new QShortcut(mSearchKeysequence, this);
+
+        connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
+        connect(shortcutNewFile, &QShortcut::activated, mActionNewFile, &QAction::trigger);
+        connect(shortcutOpenFile, &QShortcut::activated, mActionOpenFile, &QAction::trigger);
+        connect(shortcutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
+        connect(shortcutSaveFileAs, &QShortcut::activated, mActionSaveAs, &QAction::trigger);
+        connect(shortcutRun, &QShortcut::activated, mActionRun, &QAction::trigger);
+
+        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortcutNewFile, &QShortcut::setKey);
+        connect(mSettingOpenFile, &SettingsItemKeybind::keySequenceChanged, shortcutOpenFile, &QShortcut::setKey);
+        connect(mSettingSaveFile, &SettingsItemKeybind::keySequenceChanged, shortcutSaveFile, &QShortcut::setKey);
+        connect(mSettingSaveFileAs, &SettingsItemKeybind::keySequenceChanged, shortcutSaveFileAs, &QShortcut::setKey);
+        connect(mSettingRunFile, &SettingsItemKeybind::keySequenceChanged, shortcutRun, &QShortcut::setKey);
 
         QList<QShortcut*> list;
-        list.append(search_shortcut);
+        list.append(shortcutNewFile);
+        list.append(shortcutOpenFile);
+        list.append(shortcutSaveFile);
+        list.append(shortcutSaveFileAs);
+        list.append(shortcutRun);
+        list.append(mSearchShortcut);
 
         return list;
     }
@@ -563,6 +664,18 @@ namespace hal
     void PythonEditor::handleActionNewTab()
     {
         PythonCodeEditor* editor = new PythonCodeEditor();
+        editor->setFontSize(mSettingFontSize->value().toInt());
+        editor->setMinimapEnabled(mSettingMinimap->value().toBool());
+        editor->setLineWrapEnabled(mSettingLineWrap->value().toBool());
+        editor->setHighlightCurrentLineEnabled(mSettingHighlight->value().toBool());
+        editor->setLineNumberEnabled(mSettingLineNumbers->value().toBool());
+
+        connect(mSettingFontSize, &SettingsItemSpinbox::intChanged, editor, &CodeEditor::setFontSize);
+        connect(mSettingMinimap, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setMinimapEnabled);
+        connect(mSettingLineWrap, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setLineWrapEnabled);
+        connect(mSettingHighlight, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setHighlightCurrentLineEnabled);
+        connect(mSettingLineNumbers, &SettingsItemCheckbox::boolChanged, editor, &CodeEditor::setLineNumberEnabled);
+
         new PythonSyntaxHighlighter(editor->document());
         new PythonSyntaxHighlighter(editor->minimap()->document());
         mTabWidget->addTab(editor, QString("New File ").append(QString::number(++mNewFileCounter)));
