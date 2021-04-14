@@ -35,6 +35,9 @@ namespace hal
     class DropMarker;
     class ScheduledPluginItem;
 
+    /**
+     * @ingroup gui
+     */
     class ScheduledPluginItemArea : public QFrame
     {
         Q_OBJECT

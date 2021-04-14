@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class NotificationManagerQssAdapter : public QWidget
     {
         Q_OBJECT

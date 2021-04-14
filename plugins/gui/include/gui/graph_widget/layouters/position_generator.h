@@ -4,6 +4,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class PositionGenerator
     {
         int mN;  // size of square

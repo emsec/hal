@@ -42,6 +42,7 @@ namespace hal
     }
 
     /**
+     * @ingroup gui
      * The GraphGraphicsView is the GraphicsView for a GraphicsScene. (Its like the camera that shows a section of
      * the scene)
      */

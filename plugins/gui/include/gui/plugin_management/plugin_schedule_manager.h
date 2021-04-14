@@ -39,6 +39,7 @@ namespace hal
     };
 
     /**
+     * @ingroup gui
      * TODO: This class and all classes in this folder are not used in this version. Remove mfolder from compilation?
      */
     class PluginScheduleManager : public QObject

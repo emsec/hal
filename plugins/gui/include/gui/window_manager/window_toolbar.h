@@ -31,6 +31,7 @@ class QHBoxLayout;
 namespace hal
 {
     /**
+     * @ingroup gui
      * TODO: Unused class. Remove me?
      */
     class WindowToolbar final : public QFrame

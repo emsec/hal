@@ -44,6 +44,10 @@ namespace hal
     class GraphContext;
     class GraphTabWidget;
 
+    /**
+     * @ingroup gui
+     * TODO
+     */
     class ContextManagerWidget : public ContentWidget
     {
         Q_OBJECT

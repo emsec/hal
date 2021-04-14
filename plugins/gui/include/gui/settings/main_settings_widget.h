@@ -45,6 +45,9 @@ namespace hal
     class SettingsItem;
     class Searchbar;
 
+    /**
+     * @ingroup gui
+     */
     class MainSettingsList : public QList<SettingsWidget*>
     {
         QMap<QString,QList<SettingsWidget*> > mSectionMap;

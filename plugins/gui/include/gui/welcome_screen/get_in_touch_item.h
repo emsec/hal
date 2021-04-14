@@ -33,6 +33,7 @@ class QVBoxLayout;
 namespace hal
 {
     /**
+     * @ingroup gui
      * Widget that represents one item of the GetInTouchWidget
      */
     class GetInTouchItem : public QFrame

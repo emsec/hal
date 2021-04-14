@@ -36,6 +36,7 @@ namespace hal
     class ContentWidget;
 
     /**
+     * @ingroup gui
      * The SplitterAnchor class provides with the TabWidget the functionality to add content widgets to hal's main content area on the "lowest"
      * level as well as the area (via the Splitter) to do so. It is the bridge between the dockbar and its corresponding area (the splitter)
      * and manages/synchronizes the information between them.

@@ -28,6 +28,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * TODO: Unused class. Remove me?
      */
     class StyleableWidget : public QWidget

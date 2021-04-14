@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class SettingsItemSlider : public SettingsItem
     {
         Q_OBJECT

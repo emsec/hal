@@ -29,6 +29,9 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class WidgetOverlay : public Overlay
     {
         Q_OBJECT

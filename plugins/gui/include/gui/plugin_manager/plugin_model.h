@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class PluginModel : public QAbstractItemModel
     {
         Q_OBJECT

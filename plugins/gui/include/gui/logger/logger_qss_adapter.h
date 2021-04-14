@@ -28,6 +28,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * QSS Adapter that provide the color configurations used for the different channel types of the logger.
      */
     class LoggerQssAdapter : public QWidget

@@ -45,6 +45,7 @@ namespace hal
     class Searchbar;
 
     /**
+     * @ingroup gui
      * The ContentWidget that manages the groupings. <br>
      * Groupings are disjoint subsets of gates, modules and nets that can be used to categorize these objects. In the
      * GUI the groupings are drawn in their specified color. The objects of one grouping can be easily selected

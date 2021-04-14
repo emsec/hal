@@ -30,6 +30,7 @@ namespace hal
     class Task;
 
     /**
+     * @ingroup gui
      * TODO: ThreadPool is not used (yet?)...
      */
     class Worker : public QThread

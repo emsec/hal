@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class SettingsItemText : public SettingsItem
     {
         Q_OBJECT

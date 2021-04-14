@@ -3,6 +3,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class ActionRemoveItemsFromObject : public UserAction
     {
         QSet<u32> mModules;
@@ -20,6 +23,9 @@ namespace hal
         void addToHash(QCryptographicHash& cryptoHash) const override;
     };
 
+    /**
+     * @ingroup gui
+     */
     class ActionRemoveItemsFromObjectFactory : public UserActionFactory
     {
     public:

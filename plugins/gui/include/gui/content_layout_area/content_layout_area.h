@@ -47,6 +47,7 @@ namespace hal
     };
 
     /**
+     * @ingroup gui
      * @brief Manages the layout of all ContentWidget%s
      *
      * The ContentLayoutArea manages the main layout of the content widgets that appears after a file was opened.

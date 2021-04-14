@@ -31,6 +31,7 @@ class QVBoxLayout;
 namespace hal
 {
     /**
+     * @ingroup gui
      * The "Open File"-widget in the center of the welcome screen where the user can drag&drop a file to open/parse a
      * the netlist of the file.
      */

@@ -27,6 +27,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * PluginGui is a huge plugin that provides a graphical user interface to load and work with netlists. If compiled
      * it can be started using the '-g'/'--gui' flag.
      */

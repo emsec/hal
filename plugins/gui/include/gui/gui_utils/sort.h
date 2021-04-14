@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     namespace gui_utility
     {
         Q_NAMESPACE

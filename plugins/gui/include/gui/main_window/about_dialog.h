@@ -31,6 +31,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * @brief A dialog that displays the Qt version and our open source license
      *
      * The AboutDialog is a QDialog that can be opened via Help->About.

@@ -27,6 +27,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * Interface for handling python outputs.
      */
     class PythonContextSubscriber

@@ -30,6 +30,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The ModuleProxyModel is the QSortFilterProxyModel between the ModuleModel (source model) and the tree view
      * of the ModuleWidget. Its filtering possibilities are needed to provide a searchbar in the module widget.
      */

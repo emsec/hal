@@ -4,6 +4,7 @@
 
 namespace hal {
     /**
+     * @ingroup gui
      * QStyledItemDelegate used for displaying a colored box in the 'Color'-column
      * within the grouping_manager_widget table.
      */

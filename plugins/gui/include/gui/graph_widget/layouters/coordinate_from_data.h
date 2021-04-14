@@ -15,6 +15,10 @@ namespace hal {
     class Gate;
     class Node;
 
+    /**
+     * @ingroup gui
+     * TODO
+     */
     class CoordinateFromData : public QPoint
     {
     public:

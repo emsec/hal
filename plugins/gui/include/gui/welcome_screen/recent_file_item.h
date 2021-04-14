@@ -34,6 +34,7 @@ class QToolButton;
 namespace hal
 {
     /**
+     * @ingroup gui
      * One entry in the RecentFileWidget. It represents one recently used file and can be clicked to open the netlist
      * (i.e. parse hdl file or open .hal file) of the file.
      */

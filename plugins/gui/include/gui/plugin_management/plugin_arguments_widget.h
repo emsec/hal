@@ -39,6 +39,9 @@ namespace hal
     class CLIPluginInterface;
     class ProgramArguments;
 
+    /**
+     * @ingroup gui
+     */
     class PluginArgumentsWidget : public QFrame
     {
         Q_OBJECT

@@ -28,6 +28,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The SvgIconEngine is a QIconEngine that is used for create QIcons from given svg data.
      */
     class SvgIconEngine : public QIconEngine

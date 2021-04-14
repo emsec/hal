@@ -38,6 +38,9 @@ namespace hal
     class GraphContext;
     class SettingsItemCheckbox;
 
+    /**
+     * @ingroup gui
+     */
     class UserActionManager : public QObject
     {
         Q_OBJECT

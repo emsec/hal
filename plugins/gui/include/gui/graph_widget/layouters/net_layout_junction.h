@@ -16,6 +16,9 @@ QColor colorFromId(u32 netId);
 
 namespace hal {
 
+    /**
+     * @ingroup gui
+     */
     class NetLayoutJunctionWireIntersection : public QPoint
     {
         bool mValid;
@@ -27,6 +30,9 @@ namespace hal {
         QGraphicsEllipseItem* graphicsFactory(u32 netId) const;
     };
 
+    /**
+     * @ingroup gui
+     */
     class NetLayoutJunctionWire
     {
     public:
@@ -41,6 +47,9 @@ namespace hal {
         int centralEnd() const;
     };
 
+    /**
+     * @ingroup gui
+     */
     class NetLayoutJunctionEntries
     {
         friend class NetLayoutJunction;
@@ -54,6 +63,9 @@ namespace hal {
         void setEntries(NetLayoutDirection dir, const QList<u32>& entries_);
     };
 
+    /**
+     * @ingroup gui
+     */
     class NetLayoutJunctionNet
     {
         u32 mPattern;
@@ -81,6 +93,9 @@ namespace hal {
                               = NetLayoutJunctionWireIntersection::Normal);
     };
 
+    /**
+     * @ingroup gui
+     */
     class NetLayoutJunctionRange
     {
         u32 mNetId;
@@ -104,6 +119,9 @@ namespace hal {
         static NetLayoutJunctionRange entryRange(NetLayoutDirection dir, int iroad, u32 netId);
     };
 
+    /**
+     * @ingroup gui
+     */
     class NetLayoutJunctionOccupied : public QList<NetLayoutJunctionRange>
     {
     public:
@@ -111,6 +129,9 @@ namespace hal {
         bool canJoin(u32 netId, int pos) const;
     };
 
+    /**
+     * @ingroup gui
+     */
     class NetLayoutJunction
     {
     public:
@@ -143,6 +164,9 @@ namespace hal {
         mErrorT mError;
     };
 
+    /**
+     * @ingroup gui
+     */
     class NetLayoutJunctionHash : public QHash<NetLayoutPoint,NetLayoutJunction*>
     {
     public:

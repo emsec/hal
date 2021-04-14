@@ -33,6 +33,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The ModuleItem is one item in the ModuleModel item model. It represents one module of the netlist.
      */
     class ModuleItem

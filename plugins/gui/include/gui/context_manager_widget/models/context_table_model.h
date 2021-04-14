@@ -30,6 +30,10 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * TODO
+     */
     class ContextTableModel : public QAbstractTableModel
     {
         Q_OBJECT

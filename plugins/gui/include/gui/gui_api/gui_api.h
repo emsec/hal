@@ -36,6 +36,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The GuiApi is a class that contains several functions to simulate various actions within the gui like selecting
      * a graphical item (e.g. a gate) or to get a list of all currently selected items.
      *

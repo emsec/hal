@@ -41,6 +41,7 @@ namespace hal
     class ContentWidget;
 
     /**
+     * @ingroup gui
      * The TabWidget class provides with the SplitterAnchor the functionality to add content widgets
      * to hal's main content area on the "lowest" level.
      */

@@ -31,6 +31,9 @@ namespace hal
 {
     class SettingsItemSlider;
 
+    /**
+     * @ingroup gui
+     */
     class SettingsWidgetSlider : public SettingsWidget
     {
         Q_OBJECT

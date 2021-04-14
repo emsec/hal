@@ -31,6 +31,9 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class ReminderOverlay : public Overlay
     {
         Q_OBJECT

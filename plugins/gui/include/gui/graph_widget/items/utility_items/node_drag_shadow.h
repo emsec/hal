@@ -27,6 +27,10 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * TODO
+     */
     class NodeDragShadow : public QGraphicsObject
     {
         Q_OBJECT

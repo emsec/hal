@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class PluginRelay : public QObject
     {
         Q_OBJECT

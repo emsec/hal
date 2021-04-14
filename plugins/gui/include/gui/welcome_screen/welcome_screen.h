@@ -35,6 +35,7 @@ namespace hal
     class LabeledFrame;
 
     /**
+     * @ingroup gui
      * The welcome screen shown at the start of the gui.
      */
     class WelcomeScreen : public QFrame

@@ -37,6 +37,7 @@ namespace hal
     class Toolbar;
 
     /**
+     * @ingroup gui
      * @brief Abstract class for Widget%s within HALs content area
      *
      * The ContentWidget class is the base class that has to be derived from in order to be put in hal's content area. It

@@ -39,6 +39,7 @@ namespace hal
     class Module;
 
     /**
+     * @ingroup gui
      * The NetlistRelay is used to capture events from the hal-core and to delegate their handling to various gui objects.
      * These objects may connect to one of the numerous Q_SIGNALS provided by this class to implement an individual
      * reaction to the registered events.

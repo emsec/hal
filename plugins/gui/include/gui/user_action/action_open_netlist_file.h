@@ -3,6 +3,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class ActionOpenNetlistFile : public UserAction
     {
         QString mFilename;
@@ -15,6 +18,9 @@ namespace hal
         void addToHash(QCryptographicHash& cryptoHash) const override;
     };
 
+    /**
+     * @ingroup gui
+     */
     class ActionOpenNetlistFileFactory : public UserActionFactory
     {
     public:

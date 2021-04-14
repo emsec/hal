@@ -31,6 +31,7 @@ namespace hal
     class SettingsItemCheckbox;
 
     /**
+     * @ingroup gui
      * The DisputedBigIcon class is a utiliy class used for displaying big icons. It functions as a container
      * for the actual icon and is usually shown to display the gate, net and module specific icons within the
      * details widget.

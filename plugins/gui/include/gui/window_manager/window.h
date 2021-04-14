@@ -36,6 +36,7 @@ namespace hal
     class Workspace;
 
     /**
+     * @ingroup gui
      * TODO: Unused class. Remove me?
      */
     class Window final : public QFrame

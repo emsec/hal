@@ -33,6 +33,7 @@ namespace hal
     class Worker;
 
     /**
+     * @ingroup gui
      * TODO: Global ThreadPool is not used (yet?)...
      */
     class ThreadPool : public QObject

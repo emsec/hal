@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     namespace style
     {
         /**

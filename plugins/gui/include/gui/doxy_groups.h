@@ -24,5 +24,6 @@
 /**
  * @defgroup gui HAL Gui
  * The Gui is a huge plugin that provides a graphical user interface to load and work with netlists. If compiled
- * it can be started using the '-g'/'--gui' flag.
+ * it can be started using the '-g'/'--gui' flag. To learn more about the GUI and its structure make sure to check
+ * out our [GitHub Wiki](https://github.com/emsec/hal/wiki/GUI)!
  */

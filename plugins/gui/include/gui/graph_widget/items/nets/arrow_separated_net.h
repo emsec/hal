@@ -28,6 +28,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The SeparatedGraphicsNet that is used to represent global in- and outputs as well as sources and destinations that
      * are not included in the current view.
      */

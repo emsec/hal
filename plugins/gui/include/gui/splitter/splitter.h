@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class Splitter : public QSplitter
     {
         Q_OBJECT

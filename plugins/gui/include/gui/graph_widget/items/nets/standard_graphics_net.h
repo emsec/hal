@@ -33,6 +33,7 @@ namespace hal
     class Net;
 
     /**
+     * @ingroup gui
      * The GraphicsNet that is (currently) used to display nets in the scene. It provides functions to build up a net
      * line by line (using the Lines struct).
      */

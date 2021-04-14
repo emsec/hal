@@ -39,6 +39,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class ExtendedCliDialog : public QDialog
     {
         Q_OBJECT

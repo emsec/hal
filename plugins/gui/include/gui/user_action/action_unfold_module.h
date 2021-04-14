@@ -6,6 +6,9 @@ namespace hal
     class Module;
     class GraphContext;
 
+    /**
+     * @ingroup gui
+     */
     class ActionUnfoldModule : public UserAction
     {
         u32 mContextId;
@@ -21,6 +24,9 @@ namespace hal
         void execInternal(Module* m, GraphContext* currentContext);
     };
 
+    /**
+     * @ingroup gui
+     */
     class ActionUnfoldModuleFactory : public UserActionFactory
     {
     public:

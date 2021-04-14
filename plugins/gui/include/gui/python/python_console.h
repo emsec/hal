@@ -33,6 +33,7 @@ namespace hal
     class PythonConsoleHistory;
 
     /**
+     * @ingroup gui
      * A widget that represents a simple python console with various features that most python consoles provide.
      */
     class PythonConsole : public QTextEdit, public PythonContextSubscriber

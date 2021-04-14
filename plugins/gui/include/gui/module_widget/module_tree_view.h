@@ -30,6 +30,7 @@ namespace hal
 
 
     /**
+     * @ingroup gui
      * This class wraps the QTreeView used for the ModuleWidget.
      *
      * It is necessary to prevent that a right click on the tree-view selects the

@@ -33,9 +33,9 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The SelectionTreeView class displays the entirety of the current selection in a
      * tree-styled fashion (hence the name). It is embedded in the SelectionDetailsWidget.
-     *
      */
     class SelectionTreeView : public QTreeView
     {

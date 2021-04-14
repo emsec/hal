@@ -40,6 +40,7 @@ namespace hal
 {
 
     /**
+     * @ingroup gui
      * TODO: Legacy?
      */
     class ModuleRelay : public QObject

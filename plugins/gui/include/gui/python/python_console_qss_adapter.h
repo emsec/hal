@@ -29,6 +29,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * Singleton class that provides access to the style sheets configuration of the python console.
      */
     class PythonConsoleQssAdapter : public QWidget

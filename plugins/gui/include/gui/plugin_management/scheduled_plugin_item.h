@@ -32,6 +32,9 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class ScheduledPluginItem : public QFrame
     {
         Q_OBJECT

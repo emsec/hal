@@ -6,6 +6,7 @@
 namespace hal {
 
     /**
+     * @ingroup gui
      * The GraphicsNet that can be used to display nets in the scene. TODO: Purpose?
      */
     class StandardArrowNet : public StandardGraphicsNet

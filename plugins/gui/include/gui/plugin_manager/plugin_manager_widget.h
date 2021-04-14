@@ -33,6 +33,7 @@ namespace hal
     class Toolbar;
 
     /**
+     * @ingroup gui
      * TODO: The plugin manager widget is disabled in the current version.
      */
     class PluginManagerWidget : public ContentWidget

@@ -33,6 +33,9 @@ namespace hal
 {
     class SettingsItemKeybind;
 
+    /**
+     * @ingroup gui
+     */
     class KeybindEdit : public QKeySequenceEdit
     {
     Q_OBJECT

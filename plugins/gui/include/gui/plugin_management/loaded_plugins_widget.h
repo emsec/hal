@@ -30,6 +30,9 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class LoadedPluginsWidget : public QScrollArea
     {
         Q_OBJECT

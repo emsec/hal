@@ -36,6 +36,7 @@ namespace hal
     class ContentWidget;
 
     /**
+     * @ingroup gui
      * @brief Contains and handles DockButton%s
      *
      * This class is used by the splitter anchor to store and handle DockButton%s. It manages information

@@ -44,6 +44,7 @@ namespace hal
     class ChannelSelector;
 
     /**
+     * @ingroup gui
      * The LoggerWidget is the content widget that displays the current hal log.
      */
     class LoggerWidget : public ContentWidget

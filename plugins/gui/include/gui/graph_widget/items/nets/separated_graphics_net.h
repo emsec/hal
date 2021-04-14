@@ -28,6 +28,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * Abstract base class used for all types of separated GraphicsNets. <br>
      * An example for SeparatedGraphicNets are the little arrow shaped boxes that represent global in- and outputs. They
      * also appear in labeled versions to represent constant signals from GND/VCC gates.

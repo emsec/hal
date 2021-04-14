@@ -28,6 +28,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * Class to capsule all QSS Property functions used for Graphics
      */
     class GraphicsQssAdapter : public QWidget

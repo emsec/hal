@@ -35,6 +35,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The dialog widget that appears when the user uses auto-completion within the python editor. The user may select
      * one of many (at least two) possible completions.
      * For every auto-completion a new instance of this class is created.

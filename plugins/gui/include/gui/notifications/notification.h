@@ -29,6 +29,9 @@ class QPropertyAnimation;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class Notification : public QFrame
     {
         Q_OBJECT

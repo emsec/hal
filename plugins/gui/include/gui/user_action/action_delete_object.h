@@ -3,6 +3,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class ActionDeleteObject : public UserAction
     {
     public:
@@ -11,6 +14,9 @@ namespace hal
         QString tagname() const override;
     };
 
+    /**
+     * @ingroup gui
+     */
     class ActionDeleteObjectFactory : public UserActionFactory
     {
     public:

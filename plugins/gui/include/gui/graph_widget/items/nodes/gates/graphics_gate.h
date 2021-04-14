@@ -33,6 +33,7 @@ namespace hal
     class Gate;
 
     /**
+     * @ingroup gui
      * Abstract base class for GraphicsGates. Besides the functionality already provided by its superclass GraphicsNode
      * it stores the list of input and output pin type names of the GraphicsGate as well as the typename of the
      * GraphicsGate itself.

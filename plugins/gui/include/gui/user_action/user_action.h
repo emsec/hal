@@ -30,6 +30,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * @brief The UserAction class is the abstract base class for user interactions
      *
      * It is expected that the exec() method gets called eventually. The derived classes
@@ -120,6 +121,7 @@ namespace hal
     };
 
     /**
+     * @ingroup gui
      * @brief The UserActionFactory is the abstract base class for registration
      *
      * Each class derived from UserAction is supposed to come with a derived factory as

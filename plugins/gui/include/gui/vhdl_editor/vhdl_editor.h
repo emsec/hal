@@ -31,6 +31,7 @@ namespace hal
     class Searchbar;
 
     /**
+     * @ingroup gui
      * TODO: Unused class. Remove me?
      */
     class VhdlEditor : public ContentWidget

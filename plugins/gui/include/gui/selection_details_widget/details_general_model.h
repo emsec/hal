@@ -37,6 +37,7 @@
 namespace hal {
 
     /**
+     * @ingroup gui
      * The item class that is used by the GeneralDetailsModel to store and display its entries. It consists
      * of a key(label) and a value string that are both displayed in the view. Furthermore this item class
      * stores (if available) python code as a string to access it later (e.g. via a contextmenu).

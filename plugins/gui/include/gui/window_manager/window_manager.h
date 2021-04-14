@@ -35,7 +35,8 @@ namespace hal
     class Window;
     class WindowToolbar;
 
-    /*
+    /**
+     * @ingroup gui
      * TODO: Unused class. Remove me?
      */
     class WindowManager final : public QObject

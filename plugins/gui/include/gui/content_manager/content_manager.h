@@ -49,6 +49,7 @@ namespace hal
 
 
     /**
+     * @ingroup gui
      * @brief Manages all ContentWidget%s
      *
      * The ContentManager class manages the creation and deletion of hal's subwidgets such as the python editor or the

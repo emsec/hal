@@ -31,6 +31,9 @@ namespace hal
 {
     class SettingsItemDropdown;
 
+    /**
+     * @ingroup gui
+     */
     class SettingsWidgetDropdown : public SettingsWidget
     {
         Q_OBJECT

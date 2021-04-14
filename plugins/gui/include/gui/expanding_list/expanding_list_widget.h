@@ -44,6 +44,7 @@ namespace hal
     };
 
     /**
+     * @ingroup gui
      * The ExpandingListWidget class is a list in which each top-level-item can be expanded
      * to display other items below it (e.g. a flattened tree with 2 levels). This widget
      * primarily functions as a navigation or section menu (as can be seen in the settings).

@@ -5,6 +5,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class ActionAddItemsToObject : public UserAction
     {
         QSet<u32> mModules;
@@ -27,6 +30,9 @@ namespace hal
         void addToHash(QCryptographicHash& cryptoHash) const override;
     };
 
+    /**
+     * @ingroup gui
+     */
     class ActionAddItemsToObjectFactory : public UserActionFactory
     {
     public:

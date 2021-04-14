@@ -30,6 +30,7 @@ namespace hal
     class CodeEditor;
 
     /**
+     * @ingroup gui
      * @brief Shows line numbers next to a CodeEditor
      *
      * The LineNumberArea is a widget next to its associated CodeEditor widget that shows the line numbers for the

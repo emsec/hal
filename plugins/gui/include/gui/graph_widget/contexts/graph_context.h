@@ -37,6 +37,7 @@ namespace hal
     class GraphContextSubscriber;
 
     /**
+     * @ingroup gui
      * The GraphContext is a container that holds all elements (modules, gates, nets) that should be drawn in the
      * scene. It uses a GraphLayouter to layout its elements and creates a scene with the corresponding graphic items.
      * Afterwards this scene can be shown in a GraphWidgets GraphGraphicsView. <br>

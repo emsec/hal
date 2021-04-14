@@ -42,6 +42,7 @@ namespace hal
     class SelectionTreeItemRoot;
 
     /**
+     * @ingroup gui
      * A model that manages the current selection in a tree-styled fashion.
      * Its most important function is fetchSelection that automatically updates
      * the model's internal data.

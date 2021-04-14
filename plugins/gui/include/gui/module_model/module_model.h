@@ -38,6 +38,7 @@ namespace hal
     class ModuleItem;
 
     /**
+     * @ingroup gui
      * The ModuleModel is the item model that represents the modules and their hierarchy in the netlist.
      */
     class ModuleModel : public QAbstractItemModel

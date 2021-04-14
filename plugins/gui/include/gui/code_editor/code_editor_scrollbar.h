@@ -29,6 +29,7 @@ namespace hal
     class MinimapScrollbar;
 
     /**
+     * @ingroup gui
      * @brief Represents the scrollbar of the CodeEditor.
      *
      * It overrides the QScrollBar class to extend its functionality so that

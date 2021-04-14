@@ -30,6 +30,9 @@ namespace hal
 {
     class SettingsItemKeybind;
 
+    /**
+     * @ingroup gui
+     */
     class AssignedKeybindMap
     {
         static AssignedKeybindMap* inst;

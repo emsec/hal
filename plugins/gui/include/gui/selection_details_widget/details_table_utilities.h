@@ -31,6 +31,7 @@ class QTableWidget;
 namespace hal {
 
     /**
+     * @ingroup gui
      * A utility class used to gather details-tables related helperfunctions.
      */
     class DetailsTableUtilities

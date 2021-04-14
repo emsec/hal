@@ -27,7 +27,10 @@
 
 namespace hal
 {
-
+    /**
+     * @ingroup gui
+     * TODO
+     */
     class Action : public QAction
     {
         Q_OBJECT

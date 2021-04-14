@@ -29,6 +29,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The GraphicsModule that is (currently) used to display modules in the scene.
      */
     class StandardGraphicsModule final : public GraphicsModule

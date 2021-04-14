@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class PhysicalGraphLayouter final : public GraphLayouter
     {
     public:

@@ -34,6 +34,7 @@ namespace hal
     class DataContainer;
 
     /**
+     * @ingroup gui
      * A specific tablewidget to display the data fields of gate, net or module (or any data that is given to
      * the updateData function).
      */

@@ -29,6 +29,9 @@ namespace hal
 {
     class ScheduledPluginItemArea;
 
+    /**
+     * @ingroup gui
+     */
     class ScheduledPluginsWidget : public QScrollArea
     {
         Q_OBJECT

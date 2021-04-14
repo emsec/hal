@@ -33,6 +33,9 @@ namespace hal
 {
     class SettingsItemKeybind;
 
+    /**
+     * @ingroup gui
+     */
     class SettingsItemKeybind : public SettingsItem
     {
         Q_OBJECT

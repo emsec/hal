@@ -44,6 +44,7 @@ namespace hal
 
     class SettingsItemCheckbox;
     /**
+     * @ingroup gui
      * The GraphContextManager is a manager class that contains and manages all GraphContexts. <br>
      * It can be used to create, delete or rename GraphContexts.  <br>
      * Moreover it is responsible for applying changes of the netlist to the contexts. Therefore it inspects which

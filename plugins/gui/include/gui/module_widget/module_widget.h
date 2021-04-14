@@ -45,6 +45,7 @@ namespace hal
     class ModuleProxyModel;
 
     /**
+     * @ingroup gui
      * The ModuleWidget shows the modules of the netlist hierarchical in a tree view.
      *
      * By right-clicking a module in the widget the user can do various actions with the module like changing the name and

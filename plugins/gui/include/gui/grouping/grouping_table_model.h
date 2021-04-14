@@ -13,6 +13,7 @@
 namespace hal {
 
     /**
+     * @ingroup gui
      * The GroupingTableEntry represents one entry in the groupings table. Therefore it stores information about
      * the grouping and its color. It also provides and interface to change these fields.
      */

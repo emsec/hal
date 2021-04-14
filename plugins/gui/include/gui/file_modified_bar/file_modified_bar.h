@@ -34,6 +34,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The FileModifiedBar class is a utlity class for every widget that (might) interacts with
      * files on the disk. It provides a basic window with 3 situation dependent buttons
      * (Ok, Reload, Ignore). This class should be connected to a file watcher object so that

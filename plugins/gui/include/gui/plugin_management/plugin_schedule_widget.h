@@ -38,6 +38,9 @@ namespace hal
     class ScheduledPluginsWidget;
     class Searchbar;
 
+    /**
+     * @ingroup gui
+     */
     class PluginScheduleWidget : public QFrame
     {
         Q_OBJECT

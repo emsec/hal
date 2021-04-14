@@ -30,6 +30,10 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     * TODO
+     */
     class ContextTableProxyModel : public QSortFilterProxyModel
     {
         Q_OBJECT

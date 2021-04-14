@@ -4,6 +4,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class ActionRenameObject : public UserAction
     {
         QString mNewName;
@@ -21,6 +24,9 @@ namespace hal
         void setOutputNetId(u32 id) { mPortType=Output; mNetId=id; }
     };
 
+    /**
+     * @ingroup gui
+     */
     class ActionRenameObjectFactory : public UserActionFactory
     {
     public:

@@ -29,6 +29,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * Unused class. Remove me?
      */
     class FocusLogger : public QObject

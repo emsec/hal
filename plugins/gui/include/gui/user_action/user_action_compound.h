@@ -27,6 +27,9 @@
 #include <QList>
 
 namespace hal {
+    /**
+     * @ingroup gui
+     */
     class UserActionCompound : public UserAction
     {
     public:
@@ -43,6 +46,9 @@ namespace hal {
         bool mUseCreatedObject;
     };
 
+    /**
+     * @ingroup gui
+     */
     class UserActionCompoundFactory : public UserActionFactory
     {
     public:

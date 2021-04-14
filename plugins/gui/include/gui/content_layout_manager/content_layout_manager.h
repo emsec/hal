@@ -28,6 +28,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * @brief Unused.
      *
      * TODO: Remove me?

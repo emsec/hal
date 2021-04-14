@@ -28,6 +28,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     namespace graph_widget_constants
     {
         Q_NAMESPACE

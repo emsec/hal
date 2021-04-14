@@ -38,6 +38,9 @@ namespace hal
 {
     class SettingsItem;
 
+    /**
+     * @ingroup gui
+     */
     class SettingsWidget : public QFrame
     {
         Q_OBJECT

@@ -40,6 +40,7 @@ namespace hal
     class SettingsItemKeybind;
 	
    /**
+    * @ingroup gui
      * ContentWidget that holds all GraphWidget objects (graph view) as tabs of a QTabWidget.
      */
     class GraphTabWidget : public ContentWidget

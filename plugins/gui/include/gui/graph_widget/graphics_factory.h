@@ -34,6 +34,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The GraphicsFactory namespace provides functions to create GraphicsModules and GraphicsGates
      */
     namespace GraphicsFactory

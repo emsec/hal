@@ -29,6 +29,9 @@ class QVBoxLayout;
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class SettingsDisplay : public QScrollArea
     {
     public:

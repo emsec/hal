@@ -30,6 +30,9 @@ namespace hal
 {
     class SettingsItemText;
 
+    /**
+     * @ingroup gui
+     */
     class SettingsWidgetText : public SettingsWidget
     {
         Q_OBJECT

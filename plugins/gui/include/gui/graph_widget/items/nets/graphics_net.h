@@ -32,6 +32,7 @@ namespace hal
     class Net;
 
     /**
+     * @ingroup gui
      * The GraphicsItem that represents a single net in the scene.
      */
     class GraphicsNet : public GraphicsItem

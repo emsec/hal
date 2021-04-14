@@ -31,7 +31,8 @@
 
 namespace hal {
 
-     /**
+    /**
+     * @ingroup gui
      * @brief The UserActionObjectType class provides the type for UserActionObject
      *
      * There are conversation methods to conveniently convert the type for persistance

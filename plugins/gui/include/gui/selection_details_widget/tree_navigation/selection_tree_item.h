@@ -34,6 +34,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The basic tree item class for the SelectionTreeModel. It is the base class for every other
      * subitem (except for SelectionTreeItemRoot) as it provides all commonly shared and necessary
      * functions for the model and related events.

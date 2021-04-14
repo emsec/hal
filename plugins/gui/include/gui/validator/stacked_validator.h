@@ -30,6 +30,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * The StackedValidator is a Validator that combines multiple other Validators. Its validate function returns
      * <b>true</b> iff all added Validators accept the string. <br>
      * The fail text will be chosen from the firstly added validator which validation fails.

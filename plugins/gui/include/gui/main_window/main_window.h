@@ -53,6 +53,7 @@ namespace hal
     class SettingsItemDropdown;
 
     /**
+     * @ingroup gui
      * The top level widget
      *
      * <i>One widget to rule them all, <br>

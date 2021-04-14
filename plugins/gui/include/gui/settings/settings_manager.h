@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * @ingroup gui
+     */
     class SettingsManager : public QObject
     {
         Q_OBJECT

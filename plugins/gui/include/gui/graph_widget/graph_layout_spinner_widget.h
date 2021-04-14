@@ -29,6 +29,7 @@
 namespace hal
 {
     /**
+     * @ingroup gui
      * This widget represents a loading wheel that appears while the layouter is in progress. <br>
      * <i>Currently unused...</i>
      */
