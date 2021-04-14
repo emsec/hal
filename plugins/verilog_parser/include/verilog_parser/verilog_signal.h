@@ -10,7 +10,7 @@ namespace hal
     {
     public:
         /**
-         * Constructs a VerilogSignal object.
+         * Construct a VerilogSignal object.
          *
          * @param[in] line_number - The line number of the signal definition within the HDL file.
          * @param[in] name - The name of the signal.
@@ -18,7 +18,7 @@ namespace hal
          * @param[in] binary - Binary signal ('true') or not ('false'). If true, the signal name holds the signals values as bits.
          * @param[in] ranges_known - Ranges are known on construction ('true') or not ('false').
          */
-        VerilogSignal(u32 line_number, const std::string& name, const std::vector<std::vector<u32>>& ranges = {}, bool binary = false, bool ranges_known = true)
+        VerilogSignal(u32 line_number, const std::string& name, const std::vector<std::vector<u32>> ranges = {}, bool binary = false, bool ranges_known = true)
             : m_line_number(line_number), m_name(name), m_ranges(ranges), m_binary(binary), m_ranges_known(ranges_known)
         {
             compute_size();

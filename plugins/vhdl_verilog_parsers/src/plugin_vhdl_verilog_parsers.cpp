@@ -24,7 +24,7 @@ namespace hal
 
     void VhdlVerilogParsersPlugin::on_load()
     {
-        hdl_parser_manager::register_parser("Default Verilog Parser", [](){return std::make_unique<HDLParserVerilog>();}, {".v"});
+        // hdl_parser_manager::register_parser("Default Verilog Parser", [](){return std::make_unique<HDLParserVerilog>();}, {".v"});
         hdl_parser_manager::register_parser("Default VHDL Parser", [](){return std::make_unique<HDLParserVHDL>();}, {".vhd", ".vhdl"});
     }
 

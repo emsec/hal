@@ -1,6 +1,7 @@
-#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 #include "verilog_parser/plugin_verilog_parser.h"
-#include "vhdl_verilog_parsers/hdl_parser_verilog.h"
+
+#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
+#include "verilog_parser/verilog_parser.h"
 
 namespace hal
 {
@@ -21,11 +22,11 @@ namespace hal
 
     void VerilogParserPlugin::on_load()
     {
-        hdl_parser_manager::register_parser("Default Verilog Parser", []() { return std::make_unique<HDLParserVerilog>(); }, {".v"});
+        netlist_parser_manager::register_parser("Default Verilog Parser", []() { return std::make_unique<NetlistParserVerilog>(); }, {".v"});
     }
 
     void VerilogParserPlugin::on_unload()
     {
-        hdl_parser_manager::unregister_parser("Default Verilog Parser");
+        netlist_parser_manager::unregister_parser("Default Verilog Parser");
     }
 }    // namespace hal
