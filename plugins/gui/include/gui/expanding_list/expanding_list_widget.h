@@ -24,6 +24,8 @@
 #pragma once
 
 #include <QScrollArea>
+#include <QHash>
+#include <QList>
 
 class QFrame;
 class QVBoxLayout;
@@ -32,6 +34,14 @@ namespace hal
 {
     class ExpandingListButton;
     class ExpandingListItem;
+
+    class ExpandingListGroup : public QList<ExpandingListItem*>
+    {
+    public:
+        bool mCollapsed;
+        ExpandingListGroup() : mCollapsed(false) {;}
+        void toggleCollapsed(ExpandingListButton* exceptSelected);
+    };
 
     class ExpandingListWidget : public QScrollArea
     {
@@ -42,11 +52,12 @@ namespace hal
 
         //    bool eventFilter(QObject* object, QEvent* event) override;
 
-        void appendItem(ExpandingListButton* button, ExpandingListButton* parentButton = 0);
+        void appendItem(ExpandingListButton* button, const QString& groupName = QString());
         void selectButton(ExpandingListButton* button);
-        void selectItem(int index);
+        void selectFirstItem();
 
         void repolish();
+        bool hasGroup(const QString& groupName) const;
 
     Q_SIGNALS:
         void buttonSelected(ExpandingListButton* button);
@@ -59,12 +70,12 @@ namespace hal
         QVBoxLayout* mContentLayout;
         QFrame* mSpacer;
 
-        QList<ExpandingListItem*> mItems;
+        QMap<QString,ExpandingListItem*> mItemMap;
 
         ExpandingListButton* mSelectedButton;
-        ExpandingListItem* mExtendedItem;
 
         int mItemWidth;
         int mOffset;
+        QHash<QString,ExpandingListGroup> mButtonGroup;
     };
 }

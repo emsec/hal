@@ -42,6 +42,7 @@ namespace hal
 
     class ContextTableModel;
 
+    class SettingsItemCheckbox;
     /**
      * The GraphContextManager is a manager class that contains and manages all GraphContexts. <br>
      * It can be used to create, delete or rename GraphContexts.  <br>
@@ -358,5 +359,9 @@ namespace hal
         ContextTableModel* mContextTableModel;
         u32 mMaxContextId;
         void dump(const QString& title, u32 mid, u32 xid) const;
+        SettingsItemCheckbox* mSettingDebugGrid;
+        SettingsItemCheckbox* mSettingNetLayout;
+        SettingsItemCheckbox* mSettingParseLayout;
+        SettingsItemCheckbox* mSettingLayoutBoxes;
     };
 }

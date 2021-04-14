@@ -38,15 +38,15 @@ namespace hal
         void applyFilterOnGraphics();
         bool isGraphicsBusy() const { return mGraphicsBusy > 0; }
 
+        gui_utility::mSortMechanism sortMechanism();
+        void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+
     protected:
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 
     public Q_SLOTS:
         void handleFilterTextChanged(const QString& filter_text);
-
-    private Q_SLOTS:
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

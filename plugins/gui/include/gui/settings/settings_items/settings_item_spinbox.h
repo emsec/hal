@@ -23,52 +23,43 @@
 
 #pragma once
 
-#include "gui/action/action.h"
-
-#include <QAction>
-#include <QHash>
 #include <QObject>
-#include <QSet>
-#include <QShortcut>
+#include "gui/settings/settings_items/settings_item.h"
 
 namespace hal
 {
-    class KeybindManager : public QObject
+    class SettingsItemSpinbox : public SettingsItem
     {
         Q_OBJECT
 
     public:
-        explicit KeybindManager(QObject* parent = nullptr);
-        void bind(Action* action, const QString& key);
-        void bind(QShortcut* shortcut, const QString& key);
-        void release(Action* action);
-        void release(QShortcut* shortcut);
-        QShortcut* makeShortcut(QWidget* parent, const QString& key);
+        SettingsItemSpinbox(const QString& label, const QString& tag, int defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
 
-    private Q_SLOTS:
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
+        virtual QVariant value() const override;
+        virtual QVariant defaultValue() const override;
+        virtual void setValue(const QVariant& v) override;
+        virtual void setDefaultValue(const QVariant& dv) override;
+        virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
+
+        void setRange(int min, int max);
+
+        int minimum() const
+        {
+            return mMinimum;
+        }
+
+        int maximum() const
+        {
+            return mMaximum;
+        }
+
+    Q_SIGNALS:
+        void intChanged(int value);
 
     private:
-        QHash<QString, Action*> mBindingsActions;
-        QSet<Action*> mBoundActions;
-
-        QHash<QString, QShortcut*> mBindingsShortcuts;
-        QSet<QShortcut*> mBoundShortcuts;
+        int mValue;
+        int mDefaultValue;
+        int mMinimum;
+        int mMaximum;
     };
-
-    template<typename T>
-    void deleteAllValues(QHash<QString, T> map, T value)
-    {
-        for (auto it = map.begin(); it != map.end();)
-        {
-            if (it.value() == value)
-            {
-                it = map.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
-        }
-    }
 }

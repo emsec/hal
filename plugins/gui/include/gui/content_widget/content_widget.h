@@ -203,6 +203,7 @@ namespace hal
          * Closes (hides) the widget in its anchor (related to the docking system).
          */
         void close();
+        void handleSearchKeysequenceChanged(QKeySequence seq);
 
     private:
         void closeEvent(QCloseEvent* event);
@@ -217,5 +218,8 @@ namespace hal
 
     protected:
         QVBoxLayout* mContentLayout;
+        QAction* mSearchAction;
+        QShortcut* mSearchShortcut;
+        QKeySequence mSearchKeysequence;
     };
 }

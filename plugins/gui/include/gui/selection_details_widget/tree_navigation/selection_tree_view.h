@@ -54,6 +54,7 @@ namespace hal
         void clearHide();
         void populate(bool mVisible);
         SelectionTreeItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
+        SelectionTreeProxyModel* proxyModel();
 
     private Q_SLOTS:
         void handleCustomContextMenuRequested(const QPoint& point);

@@ -61,44 +61,23 @@ namespace hal
     const QString GraphGraphicsView::sAssignToGrouping("Assign to grouping ");
 
     GraphGraphicsView::GraphGraphicsView(GraphWidget* parent)
-        : QGraphicsView(parent), mGraphWidget(parent), mMinimapEnabled(false), mGridEnabled(true), mGridClustersEnabled(true), mGridType(graph_widget_constants::grid_type::Lines),
-          mZoomModifier(Qt::NoModifier), mZoomFactorBase(1.0015)
+        : QGraphicsView(parent), mGraphWidget(parent),
+          mMinimapEnabled(false), mGridEnabled(true), mGridClustersEnabled(true),
+          mGridType(GraphicsScene::GridType::Dots),
+          mDragModifier(Qt::KeyboardModifier::AltModifier),
+          mPanModifier(Qt::KeyboardModifier::ShiftModifier),
+          mZoomModifier(Qt::NoModifier),
+          mZoomFactorBase(1.0015)
     {
         connect(gSelectionRelay, &SelectionRelay::subfocusChanged, this, &GraphGraphicsView::conditionalUpdate);
         connect(this, &GraphGraphicsView::customContextMenuRequested, this, &GraphGraphicsView::showContextMenu);
-        connect(gSettingsRelay, &SettingsRelay::settingChanged, this, &GraphGraphicsView::handleGlobalSettingChanged);
-
-        initializeSettings();
-
+ 
         setContextMenuPolicy(Qt::CustomContextMenu);
         setOptimizationFlags(QGraphicsView::DontSavePainterState);
         setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
         setAcceptDrops(true);
         setMouseTracking(true);
-    }
-
-    void GraphGraphicsView::initializeSettings()
-    {
-        unsigned int drag_modifier_setting = gSettingsManager->get("graph_view/drag_mode_modifier").toUInt();
-        mDragModifier                    = Qt::KeyboardModifier(drag_modifier_setting);
-        unsigned int move_modifier_setting = gSettingsManager->get("graph_view/move_modifier").toUInt();
-        mMoveModifier                    = Qt::KeyboardModifier(move_modifier_setting);
-
-        // might think about Q_ENUM to avoid separate enum and config file tokens
-        const char* gridTypeNames[] = {"lines", "dots", "none", 0};
-
-        QString sGridType = gSettingsManager->get("graph_view/grid_type").toString();
-        for (int i = 0; gridTypeNames[i]; i++)
-            if (sGridType == gridTypeNames[i])
-            {
-                mGridType = static_cast<graph_widget_constants::grid_type>(i);
-                break;
-            }
-
-#ifdef GUI_DEBUG_GRID
-        mDebugGridposEnable = gSettingsManager->get("debug/grid").toBool();
-#endif
     }
 
     void GraphGraphicsView::conditionalUpdate()
@@ -306,7 +285,7 @@ namespace hal
         Q_UNUSED(rect)
 
 #ifdef GUI_DEBUG_GRID
-        if (mDebugGridposEnable)
+        if(mGraphWidget->getContext()->scene()->debugGridEnabled())
             debugDrawLayouterGridpos(painter);
 #endif
 
@@ -330,7 +309,7 @@ namespace hal
 
     void GraphGraphicsView::mousePressEvent(QMouseEvent* event)
     {
-        if (event->modifiers() == mMoveModifier)
+        if (event->modifiers() == mPanModifier)
         {
             if (event->button() == Qt::LeftButton)
                 mMovePosition = event->pos();
@@ -371,7 +350,7 @@ namespace hal
 
         if (event->buttons().testFlag(Qt::LeftButton))
         {
-            if (event->modifiers() == mMoveModifier)
+            if (event->modifiers() == mPanModifier)
             {
                 QScrollBar* hBar  = horizontalScrollBar();
                 QScrollBar* vBar  = verticalScrollBar();
@@ -964,27 +943,6 @@ namespace hal
         }
     }
 
-    void GraphGraphicsView::handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value)
-    {
-        UNUSED(sender);
-        if (key == "graph_view/drag_mode_modifier")
-        {
-            unsigned int modifier = value.toUInt();
-            mDragModifier       = Qt::KeyboardModifier(modifier);
-        }
-        else if (key == "graph_view/move_modifier")
-        {
-            unsigned int modifier = value.toUInt();
-            mMoveModifier       = Qt::KeyboardModifier(modifier);
-        }
-#ifdef GUI_DEBUG_GRID
-        else if (key == "debug/grid")
-        {
-            mDebugGridposEnable = value.toBool();
-        }
-#endif
-    }
-
     void GraphGraphicsView::handleFoldSingleAction()
     {
         auto context = mGraphWidget->getContext();
@@ -1186,5 +1144,35 @@ namespace hal
             }
         }
         return LayouterPoint{index, pos};
+    }
+
+    GraphicsScene::GridType GraphGraphicsView::gridType()
+    {
+        return mGridType;
+    }
+
+    void GraphGraphicsView::setGridType(GraphicsScene::GridType gridType)
+    {
+        mGridType = gridType;
+    }
+
+    Qt::KeyboardModifier GraphGraphicsView::dragModifier()
+    {
+        return mDragModifier;
+    }
+
+    void GraphGraphicsView::setDragModifier(Qt::KeyboardModifier dragModifier)
+    {
+        mDragModifier = dragModifier;
+    }
+
+    Qt::KeyboardModifier GraphGraphicsView::panModifier()
+    {
+        return mPanModifier;
+    }
+
+    void GraphGraphicsView::setPanModifier(Qt::KeyboardModifier panModifier)
+    {
+        mPanModifier = panModifier;
     }
 }    // namespace hal

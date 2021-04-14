@@ -27,6 +27,7 @@
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_widget.h"
+#include "gui/graph_widget/graphics_scene.h"
 
 #include <QMap>
 
@@ -35,7 +36,10 @@ class QVBoxLayout;
 
 namespace hal
 {
-    /**
+    class SettingsItemDropdown;
+    class SettingsItemKeybind;
+	
+   /**
      * ContentWidget that holds all GraphWidget objects (graph view) as tabs of a QTabWidget.
      */
     class GraphTabWidget : public ContentWidget
@@ -79,6 +83,9 @@ namespace hal
          * GraphicsItem can be seen.
          */
         void ensureSelectionVisible();
+
+        enum KeyboardModifier{Alt, Ctrl, Shift};
+        Q_ENUM(KeyboardModifier)
 
     public Q_SLOTS:
         /**
@@ -152,5 +159,18 @@ namespace hal
 
         void zoomInShortcut();
         void zoomOutShortcut();
+
+        static SettingsItemDropdown* sSettingGridType;
+        static SettingsItemDropdown* sSettingDragModifier;
+        static SettingsItemDropdown* sSettingPanModifier;
+
+        static SettingsItemKeybind* sSettingZoomIn;
+        static SettingsItemKeybind* sSettingZoomOut;
+
+        static bool sSettingsInitialized;
+
+        static bool initSettings();
+
+        QMap<KeyboardModifier, Qt::KeyboardModifier> mKeyModifierMap;
     };
 }

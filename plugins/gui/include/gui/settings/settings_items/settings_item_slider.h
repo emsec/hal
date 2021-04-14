@@ -23,30 +23,43 @@
 
 #pragma once
 
-#include "gui/settings/settings_widget.h"
-
-#include "gui/keybind_edit/keybind_edit.h"
-
-#include <QCheckBox>
-#include <QStringList>
+#include <QObject>
+#include "gui/settings/settings_items/settings_item.h"
 
 namespace hal
 {
-    class KeybindSetting : public SettingsWidget
+    class SettingsItemSlider : public SettingsItem
     {
         Q_OBJECT
 
     public:
-        KeybindSetting(const QString& key, const QString& title, const QString& mDescription, QWidget *parent = nullptr);
+        SettingsItemSlider(const QString& label, const QString& tag, int defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
 
-        virtual void load(const QVariant& value) override;
-        virtual QVariant value() override;
-        //virtual void rollback() override;
+        virtual QVariant value() const override;
+        virtual QVariant defaultValue() const override;
+        virtual void setValue(const QVariant& v) override;
+        virtual void setDefaultValue(const QVariant& dv) override;
+        virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
+
+        void setRange(int min, int max);
+
+        int minimum() const
+        {
+            return mMinimum;
+        }
+
+        int maximum() const
+        {
+            return mMaximum;
+        }
+
+    Q_SIGNALS:
+        void intChanged(int value);
 
     private:
-        KeybindEdit* mKeybindEdit;
-        void onKeybindChanged();
-        void onKeybindEditRejected();
-
+        int mValue;
+        int mDefaultValue;
+        int mMinimum;
+        int mMaximum;
     };
 }

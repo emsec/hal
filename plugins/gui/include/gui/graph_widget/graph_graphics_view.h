@@ -26,6 +26,7 @@
 #include "hal_core/defines.h"
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
+#include "gui/graph_widget/graphics_scene.h"
 
 #include <QGraphicsView>
 #include <QAction>
@@ -70,6 +71,15 @@ namespace hal
          */
         void viewportCenterZoom(const qreal factor);
 
+        GraphicsScene::GridType gridType();
+        void setGridType(GraphicsScene::GridType gridType);
+
+        Qt::KeyboardModifier dragModifier();
+        void setDragModifier(Qt::KeyboardModifier dragModifier);
+
+        Qt::KeyboardModifier panModifier();
+        void setPanModifier(Qt::KeyboardModifier panModifier);
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted whenever the user double-clicks a module in the current view. <br>
@@ -100,8 +110,6 @@ namespace hal
         void handleGroupingAssignNew();
         void handleGroupingAssingExisting();
 
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
-
     private:
         void paintEvent(QPaintEvent* event) override;
         void drawForeground(QPainter* painter, const QRectF& rect) override;
@@ -116,8 +124,6 @@ namespace hal
         void keyPressEvent(QKeyEvent* event) override;
         void keyReleaseEvent(QKeyEvent* event) override;
         void resizeEvent(QResizeEvent* event) override;
-
-        void initializeSettings();
 
         void showContextMenu(const QPoint& pos);
 
@@ -139,7 +145,7 @@ namespace hal
         void debugShowLayouterGridpos(const QPoint& mouse_pos);
         void debugDrawLayouterGridpos(QPainter* painter);
         QPoint m_debug_gridpos = QPoint(0,0);
-        bool mDebugGridposEnable;
+        bool mDebugGridposEnable = true;
         #endif
 
         GraphWidget* mGraphWidget;
@@ -150,7 +156,7 @@ namespace hal
 
         bool mGridEnabled;
         bool mGridClustersEnabled;
-        graph_widget_constants::grid_type mGridType;
+        GraphicsScene::GridType mGridType;
 
         QPoint mDragMousedownPosition;
         QPoint mDragStartGridpos;
@@ -162,7 +168,7 @@ namespace hal
         Qt::KeyboardModifier mDragModifier;
 
         QPoint mMovePosition;
-        Qt::KeyboardModifier mMoveModifier;
+        Qt::KeyboardModifier mPanModifier;
 
         Qt::KeyboardModifier mZoomModifier;
         qreal mZoomFactorBase;

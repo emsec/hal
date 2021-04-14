@@ -72,6 +72,7 @@ namespace hal
          * @param rc - The new rowcount of the widget's table.
          */
         void setRowCount(int rc);
+        void hideWhenEmpty(bool hide);
 
     private Q_SLOTS:
 
@@ -89,7 +90,6 @@ namespace hal
          * @param key - The setting's key.
          * @param value - The new value of the setting.
          */
-        void handleGlobalSettingsChanged(void* sender, const QString& key, const QVariant& value);
 
     private:
         /**

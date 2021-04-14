@@ -96,6 +96,7 @@ namespace hal
         void setToSelectionIconStyle(const QString &style);
 
         GroupingTableModel* getModel() const { return mGroupingTableModel; }
+        GroupingProxyModel* getProxyModel() const {return mProxyModel; }
 
     public Q_SLOTS:
         void handleLastEntryDeleted();

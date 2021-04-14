@@ -27,6 +27,7 @@
 
 #include <QFont>
 #include <QWidget>
+#include <QLabel>
 
 namespace hal
 {
@@ -77,11 +78,15 @@ namespace hal
          * @return The widget's type.
          */
         QString detailsTypeName() const;
+        QLabel* bigIcon();
+
+        virtual void hideSectionsWhenEmpty(bool hide);
 
     protected:
         DetailsType mDetailsType;
         u32 mCurrentId;
         QFont mKeyFont;
         bool mHideEmptySections;
+        QLabel* mBigIcon;
     };
 }    // namespace hal

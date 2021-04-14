@@ -49,6 +49,10 @@ namespace hal
 
     class PythonCodeEditor;
 
+    class SettingsItemCheckbox;
+    class SettingsItemKeybind;
+    class SettingsItemSpinbox;
+ 
     /**
      * Widget that contains the python editor. It manages all CodeEditor objects (open tabs). The logic to save, open
      * and execute scripts as well as the automatically creation of snapshot files (backups) is handles by this class.
@@ -665,5 +669,18 @@ namespace hal
          * Map: tab -> snapshot path
          */
         QMap<PythonCodeEditor*, QString> mTabToSnapshotPath;
+
+        SettingsItemSpinbox* mSettingFontSize;
+
+        SettingsItemCheckbox* mSettingLineNumbers;
+        SettingsItemCheckbox* mSettingHighlight;
+        SettingsItemCheckbox* mSettingLineWrap;
+        SettingsItemCheckbox* mSettingMinimap;
+
+        SettingsItemKeybind* mSettingOpenFile;
+        SettingsItemKeybind* mSettingSaveFile;
+        SettingsItemKeybind* mSettingSaveFileAs;
+        SettingsItemKeybind* mSettingRunFile;
+        SettingsItemKeybind* mSettingCreateFile;
     };
 }

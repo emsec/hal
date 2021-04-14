@@ -23,25 +23,34 @@
 
 #pragma once
 
-#include "gui/settings/settings_widget.h"
-#include <QLineEdit>
+#include "gui/settings/settings_items/settings_item.h"
+
+#include <QObject>
+#include <QMap>
+#include <QKeySequence>
 
 namespace hal
 {
-    class TextSetting : public SettingsWidget
+    class SettingsItemKeybind;
+
+    class SettingsItemKeybind : public SettingsItem
     {
         Q_OBJECT
 
     public:
-        TextSetting(const QString& key, const QString& title, const QString& mDescription, const QString& placeholder = "", QWidget* parent = 0);
+        SettingsItemKeybind(const QString& label, const QString& tag, const QKeySequence& defVal, const QString& cat = QString(), const QString& desc = QString(), bool isGlobal = true);
 
-        virtual void load(const QVariant& value) override;
-        virtual QVariant value() override;
-        //virtual void rollback() override;
+        virtual QVariant value() const override;
+        virtual QVariant defaultValue() const override;
+        virtual void setValue(const QVariant& v) override;
+        virtual void setDefaultValue(const QVariant& dv) override;
+        virtual SettingsWidget* editWidget(QWidget* parent = nullptr) override;
+
+    Q_SIGNALS:
+        void keySequenceChanged(QKeySequence value);
 
     private:
-        QLineEdit* mTextfield;
-        void onTextChanged();
-
+        QKeySequence mValue;
+        QKeySequence mDefaultValue;
     };
 }

@@ -55,6 +55,8 @@ namespace hal
         virtual QList<QShortcut*> createShortcuts() override;
         void openModuleInView(u32 moduleId, bool unfold);
 
+        ModuleProxyModel* proxyModel();
+
     public Q_SLOTS:
         void toggleSearchbar();
         void filter(const QString& text);

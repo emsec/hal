@@ -36,27 +36,31 @@ namespace hal
     class ExpandingListButton : public QFrame
     {
         Q_OBJECT
+        Q_PROPERTY(int level READ level)
         Q_PROPERTY(bool hover READ hover)
         Q_PROPERTY(bool selected READ selected)
-        Q_PROPERTY(QString type READ type)
+//        Q_PROPERTY(QString type READ type)
         Q_PROPERTY(QString iconStyle READ iconStyle WRITE setIconStyle)
 
     public:
-        ExpandingListButton(QWidget* parent = 0);
+        ExpandingListButton(int levl, QWidget* parent = 0);
 
         void enterEvent(QEvent* event) override;
         void leaveEvent(QEvent* event) override;
         void mousePressEvent(QMouseEvent* event) override;
 
-        bool hover();
-        bool selected();
-        QString type();
-        QString iconStyle();
+        int level() const;
+        bool hover() const;
+        bool selected() const;
+//        QString type();
+        QString text() const;
+        QString iconStyle() const;
 
         void setSelected(bool selected);
-        void set_type(const QString& type);
+//        void set_type(const QString& type);
         void setIconStyle(const QString& style);
 
+        void setDefaultIcon(const QString& text);
         void setIconPath(const QString& path);
         void setText(const QString& text);
 
@@ -72,10 +76,14 @@ namespace hal
         QLabel* mTextLabel;
         QFrame* mRightBorder;
 
+        int mLevel;
         bool mHover;
         bool mSelected;
-        QString mType;
+//        QString mType;
         QString mIconStyle;
         QString mIconPath;
+
+        static QHash<QString,QString> sIconMap;
+        static QHash<QString,QString> defaultIconMap();
     };
 }

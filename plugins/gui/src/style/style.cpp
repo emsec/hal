@@ -45,7 +45,7 @@ namespace hal
         {
             QString stylesheet;
             {
-                QString path = gSettingsManager->get("stylesheet/base").toString();
+                QString path ; // TODO : stylesheet/base = gSettingsManager->get("stylesheet/base").toString();
                 QFile file(path);
 
                 if (!file.exists())
@@ -64,7 +64,7 @@ namespace hal
                 file.close();
             }
 
-            QString path = gSettingsManager->get("stylesheet/definitions").toString();
+            QString path; // TODO : stylesheet/definitions = gSettingsManager->get("stylesheet/definitions").toString();
 
             if (path.isEmpty())
                 return stylesheet;

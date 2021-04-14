@@ -5,12 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-* fixed drag'n drop bug related to negative coordinates
 * added user action system to enable recording and reverting actions within the GUI
   * moved most GUI actions to the new user action system, including interactions with the graph view and view management
   * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting
   * recording of the user actions is automatically dumped on crash
   * users can now revert actions executed within the GUI
+* rebuild the settings system from scratch to allow for easier integration of new settings
+  * theme setting (and many others) can now be changed during the session
+  * added a warning when attempting to assign a keybinding that is already in use
+  * added incremental search for settings
+  * added setting to enable/disable extra window to list all executed instances from UserAction
 * added `remove from view` action to context menu for gates and modules
 * added grouping toolbox feature to highlight successors or predecessors
 * added an indicator showing whether views have been modified
@@ -22,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * fixed selection details not being updated immediately when renaming or or changing a type
 * fixed navigation bug where ports and nets did not match for modules
 * fixed list of navigation targets containing duplicates and/or loops
+* fixed drag'n drop bug related to negative coordinates
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`

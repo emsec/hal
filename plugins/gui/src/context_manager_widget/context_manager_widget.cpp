@@ -31,12 +31,13 @@
 #include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/user_action_compound.h"
+#include <QShortcut>
 
 namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
         : ContentWidget("Views", parent), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
-          mDeleteAction(new QAction(this)), mOpenAction(new QAction(this)), mSearchAction(new QAction(this))
+          mDeleteAction(new QAction(this)), mOpenAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -258,11 +259,11 @@ namespace hal
 
     QList<QShortcut*> ContextManagerWidget::createShortcuts()
     {
-        QShortcut* search_shortcut = gKeybindManager->makeShortcut(this, "keybinds/searchbar_toggle");
-        connect(search_shortcut, &QShortcut::activated, this, &ContextManagerWidget::toggleSearchbar);
+        mSearchShortcut = new QShortcut(mSearchKeysequence, this);
+        connect(mSearchShortcut, &QShortcut::activated, mSearchAction, &QAction::trigger);
 
         QList<QShortcut*> list;
-        list.append(search_shortcut);
+        list.append(mSearchShortcut);
 
         return list;
     }

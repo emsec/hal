@@ -130,6 +130,7 @@ namespace hal
 
     void ContentLayoutArea::removeContent(ContentWidget* widget)
     {
+        Q_UNUSED(widget);
         // IMPLEMENT
     }
 

@@ -44,11 +44,6 @@ namespace hal
     class GraphicsModule;
     class GraphicsNet;
 
-    namespace graph_widget_constants
-    {
-    enum class grid_type;
-    }
-
     /**
      * The GraphicsScene is the scene where the GraphicsItems of the gates, nets and modules are placed in by the layouter.
      * Besides the functions that are provided by its parent class QGraphicScene, it offers functions to work on a grid,
@@ -60,6 +55,9 @@ namespace hal
         Q_OBJECT
 
     public:
+        enum GridType {None, Dots, Lines};
+        Q_ENUM(GridType)
+		
         /**
          * Sets the Level of Detail (LOD) of the scene. If the LOD falls below a certain threshold, the grid in the
          * background won't be drawn anymore.
@@ -88,7 +86,7 @@ namespace hal
          *
          * @param grid_type
          */
-        static void setGridType(const graph_widget_constants::grid_type& grid_type);
+        static void setGridType(const GridType& gridType);
 
         /**
          * Sets the color of the grid base lines (not the clusters). <br>
@@ -244,6 +242,8 @@ namespace hal
 
         #ifdef GUI_DEBUG_GRID
         void debugSetLayouterGrid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
+        void setDebugGridEnabled(bool enabled);
+        bool debugGridEnabled();
         #endif
 
     public Q_SLOTS:
@@ -317,9 +317,6 @@ namespace hal
          */
         void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
-    private Q_SLOTS:
-        void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);
-
     private:
         struct ModuleData
         {
@@ -346,7 +343,7 @@ namespace hal
 
         static bool sGridEnabled;
         static bool sGridClustersEnabled;
-        static graph_widget_constants::grid_type sGridType;
+        static GraphicsScene::GridType sGridType;
 
         static QColor sGridBaseLineColor;
         static QColor sGridClusterLineColor;

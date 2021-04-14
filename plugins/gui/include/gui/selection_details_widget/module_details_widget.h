@@ -77,6 +77,8 @@ namespace hal
          */
         void update(const u32 module_id);
 
+        void hideSectionsWhenEmpty(bool hide) override;
+
     public Q_SLOTS:
 
         /**
