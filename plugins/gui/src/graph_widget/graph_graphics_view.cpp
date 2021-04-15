@@ -31,6 +31,7 @@
 #include "gui/user_action/action_set_selection_focus.h"
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
+#include "gui/module_dialog/module_dialog.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -40,7 +41,6 @@
 #include <QAction>
 #include <QApplication>
 #include <QColorDialog>
-#include <QDebug>
 #include <QDrag>
 #include <QInputDialog>
 #include <QLabel>
@@ -52,6 +52,8 @@
 #include <QStyleOptionGraphicsItem>
 #include <QWheelEvent>
 #include <QWidgetAction>
+#include <QDebug>
+
 #include <algorithm>
 #include <qmath.h>
 
@@ -133,9 +135,8 @@ namespace hal
         }
     }
 
-    void GraphGraphicsView::handleMoveAction(QAction* action)
+    void GraphGraphicsView::handleMoveAction(u32 moduleId)
     {
-        u32 moduleId = action->data().toInt();
         ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
                                                                  gSelectionRelay->selectedGates());
         act->setObject(UserActionObject(moduleId,UserActionObjectType::Module));
@@ -666,30 +667,8 @@ namespace hal
                 // only allow move actions on anything that is not the top module
                 if (!(isModule && m == gNetlist->get_top_module()))
                 {
-                    QMenu* module_submenu = context_menu.addMenu("  Move to module …");
-
-                    action = module_submenu->addAction("New module …");
-                    QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleMoveNewAction);
-                    module_submenu->addSeparator();
-
-                    QActionGroup* module_actions = new QActionGroup(module_submenu);
-                    for (auto& module : gNetlist->get_modules())
-                    {
-                        // don't allow a gate to be moved into its current module
-                        // && don't allow a module to be moved into its current module
-                        // && don't allow a module to be moved into itself
-                        // (either check automatically passes if g respective m is nullptr, so we
-                        // don't have to create two loops)
-                        if (!module->contains_gate(g) && !module->contains_module(m) && module != m && (!m || !m->contains_module(module)))
-                        {
-                            QString mod_name = QString::fromStdString(module->get_name());
-                            const u32 mod_id = module->get_id();
-                            action           = module_submenu->addAction(mod_name);
-                            module_actions->addAction(action);
-                            action->setData(mod_id);
-                        }
-                    }
-                    QObject::connect(module_actions, SIGNAL(triggered(QAction*)), this, SLOT(handleMoveAction(QAction*)));
+                    action = context_menu.addAction("  Move to module …");
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleModuleDialog);
                 }
 
                 Grouping* assignedGrouping = nullptr;
@@ -802,6 +781,18 @@ namespace hal
         QPointF target_pos = mapToScene(viewport()->rect().center());
         scale(factor, factor);
         centerOn(target_pos.toPoint());
+    }
+
+    void GraphGraphicsView::handleModuleDialog()
+    {
+        ModuleDialog md(this);
+        if (md.exec() != QDialog::Accepted) return;
+        if (md.isNewModule())
+        {
+            handleMoveNewAction();
+            return;
+        }
+        handleMoveAction(md.selectedId());
     }
 
     void GraphGraphicsView::handleSelectOutputs()

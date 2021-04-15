@@ -4,6 +4,7 @@
 #include "gui/selection_details_widget/gate_details_widget.h"
 #include "gui/selection_details_widget/net_details_widget.h"
 #include "gui/selection_details_widget/module_details_widget.h"
+#include "gui/module_dialog/module_dialog.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/selection_history_navigator/selection_history_navigator.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
@@ -161,59 +162,18 @@ namespace hal
     void SelectionDetailsWidget::selectionToModuleMenu()
     {
         if (gSelectionRelay->numberSelectedNodes() <= 0) return;
-        QMenu* menu = new QMenu(this);
-        QAction* action = menu->addAction("New module …");
-        action->setData(-1);
-        connect(action, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleAction);
-        menu->addSeparator();
 
-        for (Module* module : gNetlist->get_modules())
-        {
-            bool canAdd = true;
+        ModuleDialog md = new ModuleDialog(this);
+        if (md.exec() != QDialog::Accepted) return;
 
-            for (u32 mid : gSelectionRelay->selectedModulesList())
-            {
-                Module* m = gNetlist->get_module_by_id(mid);
-                if (!m) continue;
-                if (module == m || module->contains_module(m) || m->contains_module(module))
-                {
-                    canAdd = false;
-                    break;
-                }
-            }
-            if (canAdd)
-                for (u32 gid : gSelectionRelay->selectedGatesList())
-                {
-                    Gate* g = gNetlist->get_gate_by_id(gid);
-                    if (!g) continue;
-                    if (module->contains_gate(g))
-                    {
-                        canAdd = false;
-                        break;
-                    }
-                }
-            // don't allow a gate to be moved into its current module
-            // && don't allow a module to be moved into its current module
-            // && don't allow a module to be moved into itself
-            // (either check automatically passes if g respective m is nullptr, so we
-            // don't have to create two loops)
-            if (canAdd)
-            {
-                QString modName = QString::fromStdString(module->get_name());
-                const u32 modId = module->get_id();
-                action          = menu->addAction(modName);
-                connect(action, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleAction);
-                action->setData(modId);
-            }
-        }
-        menu->exec(mapToGlobal(geometry().topLeft()+QPoint(120,0)));
+        if (md.isNewModule())
+            SelectionDetailsWidget::selectionToModuleAction(-1);
+        else
+            SelectionDetailsWidget::selectionToModuleAction(md.selectedId());
     }
 
-    void SelectionDetailsWidget::selectionToModuleAction()
+    void SelectionDetailsWidget::selectionToModuleAction(int actionCode)
     {
-        const QAction* senderAction = static_cast<const QAction*>(sender());
-        Q_ASSERT(senderAction);
-        int actionCode = senderAction->data().toInt();
 
         ActionAddItemsToObject* actAddSelected =
                 new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
