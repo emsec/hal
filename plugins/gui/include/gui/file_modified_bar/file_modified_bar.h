@@ -35,10 +35,12 @@ namespace hal
 {
     /**
      * @ingroup gui
-     * The FileModifiedBar class is a utlity class for every widget that (might) interacts with
+     * @brief A dialog in form of a bar to let the user decide how to handle file changes outside of HAL.
+     *
+     * The FileModifiedBar class is a utility class for every widget that (might) interacts with
      * files on the disk. It provides a basic window with 3 situation dependent buttons
      * (Ok, Reload, Ignore). This class should be connected to a file watcher object so that
-     * this classe's handleFileChanged method can be correctly invoked.
+     * this classes handleFileChanged method can be correctly invoked.
      */
     class FileModifiedBar : public QFrame
     {

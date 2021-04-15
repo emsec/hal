@@ -45,11 +45,13 @@ namespace hal
 
     /**
      * @ingroup gui
+     * @brief A selection menu with a hierarchic structure.
+     *
      * The ExpandingListWidget class is a list in which each top-level-item can be expanded
      * to display other items below it (e.g. a flattened tree with 2 levels). This widget
      * primarily functions as a navigation or section menu (as can be seen in the settings).
      * Each of the list's item can either be selected or not, and only one item can be
-     * selected at a time (thus showing which section is currently displayedn).
+     * selected at a time (thus showing which section is currently displayed).
      */
     class ExpandingListWidget : public QScrollArea
     {

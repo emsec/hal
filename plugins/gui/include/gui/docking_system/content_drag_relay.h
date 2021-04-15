@@ -29,7 +29,7 @@ namespace hal
 {
     /**
      * @ingroup gui
-     * @brief This relay provides the timing information when a dockbutton is dragged.
+     * @brief This relay provides the timing information when a DockButton is dragged.
      * It is implemented as a singleton pattern.
      */
     class ContentDragRelay : public QObject

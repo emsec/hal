@@ -34,6 +34,8 @@ namespace hal
 
     /**
      * @ingroup gui
+     * @brief One button of the ExpandingListWidget.
+     *
      * An ExpandingListButton can be added to an ExpandingListWidget and is then
      * displayed as an item. Its primary feature is to be either selected or not.
      */

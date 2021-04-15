@@ -41,7 +41,7 @@ namespace hal
 	
    /**
     * @ingroup gui
-     * ContentWidget that holds all GraphWidget objects (graph view) as tabs of a QTabWidget.
+     * @brief A ContentWidget that holds all GraphWidget objects (GraphView) as tabs of a QTabWidget.
      */
     class GraphTabWidget : public ContentWidget
     {

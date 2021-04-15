@@ -34,8 +34,10 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief Holds information about the state (e.g. saved/unsaved) of all laded files (i.e. .hal/.python files).
+     *
      * The FileStatusManager class is the central point to store the status of any file
-     * (or element) that can be modified, such as the midifications to the current netlist
+     * (or element) that can be modified, such as the modifications to the current netlist
      * or (yet to be created /saved) python tabs / files.
      */
     class FileStatusManager : public QObject
