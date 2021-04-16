@@ -6,6 +6,8 @@
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "hal_core/netlist/module.h"
+#include "gui/content_manager/content_manager.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QApplication>
@@ -225,6 +227,12 @@ namespace hal {
     }
     //---------------- PICKER -----------------------------------------
 
+    ModuleSelectPicker::ModuleSelectPicker()
+    {
+        connect(this,&ModuleSelectPicker::triggerModuleCursor,gContentManager->getGraphTabWidget(),&GraphTabWidget::setModuleSelectCursor);
+        Q_EMIT(triggerModuleCursor(true));
+    }
+
     void ModuleSelectPicker::handleSelectionChanged(void* sender)
     {
         Q_UNUSED(sender);
@@ -283,6 +291,7 @@ namespace hal {
 
         if (terminate)
         {
+            triggerModuleCursor(false);
             disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleSelectPicker::handleSelectionChanged);
             deleteLater();
         }

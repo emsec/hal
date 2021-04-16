@@ -80,7 +80,10 @@ namespace hal {
         Q_OBJECT
         ModuleSelectExclude mSelectExclude;
     public:
-        ModuleSelectPicker() {;}
+        ModuleSelectPicker();
+
+    Q_SIGNALS:
+        void triggerModuleCursor(bool on);
 
     public Q_SLOTS:
         void handleSelectionChanged(void* sender);

@@ -396,6 +396,10 @@ hal--Searchbar QToolButton {
     border           : none;
 }
 
+hal--GraphTabWidget {
+    qproperty-darkCursor : true;
+}
+
 hal--SettingsWidget {
     /*background-color : #c1bdb3;*/
     background-color : rgb(189, 189, 189);
