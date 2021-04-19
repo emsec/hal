@@ -45,7 +45,6 @@ namespace hal
     class GraphTabWidget : public ContentWidget
     {
         Q_OBJECT
-        Q_PROPERTY(bool darkCursor READ darkCursor WRITE setDarkCursor);
 
     public:
         /**
@@ -84,16 +83,6 @@ namespace hal
          * GraphicsItem can be seen.
          */
         void ensureSelectionVisible();
-
-        /**
-         * Getter for darkCursor property used for module selection
-         */
-        bool darkCursor() const;
-
-        /**
-         * Setter for darkCursor property used for module selection
-         */
-        void setDarkCursor(bool dark);
 
         enum KeyboardModifier{Alt, Ctrl, Shift};
         Q_ENUM(KeyboardModifier)
@@ -191,6 +180,5 @@ namespace hal
 
         QMap<KeyboardModifier, Qt::KeyboardModifier> mKeyModifierMap;
         bool mModuleSelectCursor;
-        bool mDarkCursor;
     };
 }

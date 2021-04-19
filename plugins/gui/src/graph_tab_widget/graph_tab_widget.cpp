@@ -13,7 +13,7 @@
 #include <QShortcut>
 #include <QKeySequence>
 #include <QCursor>
-#include <QBitmap>
+#include <QPixmap>
 
 namespace hal
 {
@@ -76,7 +76,7 @@ namespace hal
 
     GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent),
         mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2),
-        mModuleSelectCursor(false), mDarkCursor(false)
+        mModuleSelectCursor(false)
     {
         mContentLayout->addWidget(mTabWidget);
         mTabWidget->setTabsClosable(true);
@@ -254,17 +254,6 @@ namespace hal
         }
         return -1;
     }
-    bool GraphTabWidget::darkCursor() const
-    {
-        return mDarkCursor;
-    }
-
-    void GraphTabWidget::setDarkCursor(bool dark)
-    {
-        if (dark==mDarkCursor) return;
-        mDarkCursor = dark;
-        setModuleSelectCursor(mModuleSelectCursor);
-    }
 
     void GraphTabWidget::setModuleSelectCursor(bool on)
     {
@@ -272,14 +261,8 @@ namespace hal
         int n = mTabWidget->count();
         if (mModuleSelectCursor)
         {
-            QBitmap bitmap(":/icons/module_cursor","PNG");
-            QCursor modCurs(bitmap,bitmap);
-            if (!mDarkCursor)
-            {
-                QBitmap filled(bitmap);
-                filled.fill(Qt::white);
-                modCurs = QCursor(filled,bitmap);
-            }
+            ;
+            QCursor modCurs(QPixmap(":/icons/module_cursor","PNG"));
             for (int i=0; i<n; i++)
                 mTabWidget->widget(i)->setCursor(modCurs);
         }
