@@ -665,10 +665,18 @@ namespace hal
                 Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
                 // only allow move actions on anything that is not the top module
-                if (!(isModule && m == gNetlist->get_top_module()))
+                if (gContentManager->getGraphTabWidget()->isModuleSelectCursor())
                 {
-                    action = context_menu.addAction("  Move to module …");
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleModuleDialog);
+                    action = context_menu.addAction("  Cancel pick-module mode");
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleCancelPickModule);
+                }
+                else
+                {
+                    if (!(isModule && m == gNetlist->get_top_module()))
+                    {
+                        action = context_menu.addAction("  Move to module …");
+                        connect(action, &QAction::triggered, this, &GraphGraphicsView::handleModuleDialog);
+                    }
                 }
 
                 Grouping* assignedGrouping = nullptr;
@@ -781,6 +789,11 @@ namespace hal
         QPointF target_pos = mapToScene(viewport()->rect().center());
         scale(factor, factor);
         centerOn(target_pos.toPoint());
+    }
+
+    void GraphGraphicsView::handleCancelPickModule()
+    {
+        ModuleSelectPicker::terminateCurrentPicker();
     }
 
     void GraphGraphicsView::handleModuleDialog()

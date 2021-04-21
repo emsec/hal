@@ -111,6 +111,7 @@ namespace hal
         void handleGroupingAssingExisting();
 
         void handleModuleDialog();
+        void handleCancelPickModule();
 
     private:
         void paintEvent(QPaintEvent* event) override;

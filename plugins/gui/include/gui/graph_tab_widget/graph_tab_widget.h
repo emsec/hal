@@ -84,6 +84,11 @@ namespace hal
          */
         void ensureSelectionVisible();
 
+        /**
+         * returns whether shape of cursor has been changed to indicate pick-select-module mode
+         */
+        bool isModuleSelectCursor() const { return mModuleSelectCursor; }
+
         enum KeyboardModifier{Alt, Ctrl, Shift};
         Q_ENUM(KeyboardModifier)
 

@@ -227,9 +227,13 @@ namespace hal {
     }
 
     //---------------- PICKER -----------------------------------------
+    ModuleSelectPicker* ModuleSelectPicker::sCurrentPicker = nullptr;
+
     ModuleSelectPicker::ModuleSelectPicker()
     {
+        if (sCurrentPicker) sCurrentPicker->deleteLater();
         connect(this,&ModuleSelectPicker::triggerModuleCursor,gContentManager->getGraphTabWidget(),&GraphTabWidget::setModuleSelectCursor);
+        sCurrentPicker = this;
         Q_EMIT(triggerModuleCursor(true));
     }
 
@@ -289,12 +293,17 @@ namespace hal {
         else
             terminate = false;
 
-        if (terminate)
-        {
-            triggerModuleCursor(false);
-            disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleSelectPicker::handleSelectionChanged);
-            deleteLater();
-        }
+        if (terminate) terminateCurrentPicker();
+    }
+
+    void ModuleSelectPicker::terminateCurrentPicker()
+    {
+        if (!sCurrentPicker) return;
+        ModuleSelectPicker* toDelete = sCurrentPicker;
+        sCurrentPicker = nullptr;
+        toDelete->triggerModuleCursor(false);
+        disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, toDelete, &ModuleSelectPicker::handleSelectionChanged);
+        toDelete->deleteLater();
     }
 
     //---------------- VIEW -------------------------------------------

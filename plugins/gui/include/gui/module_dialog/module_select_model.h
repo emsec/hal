@@ -137,8 +137,12 @@ namespace hal {
     {
         Q_OBJECT
         ModuleSelectExclude mSelectExclude;
+        static ModuleSelectPicker* sCurrentPicker;
+
     public:
         ModuleSelectPicker();
+
+        static void terminateCurrentPicker();
 
     Q_SIGNALS:
         void triggerModuleCursor(bool on);
