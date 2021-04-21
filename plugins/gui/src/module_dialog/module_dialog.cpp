@@ -26,9 +26,9 @@ namespace hal {
         connect(butNew, &QPushButton::pressed, this, &ModuleDialog::handleCreateNewModule);
         layout->addWidget(butNew, 0, 0);
 
-        QPushButton* butPick = new QPushButton("Pick module from graph", this);
-        connect(butPick, &QPushButton::pressed, this, &ModuleDialog::handlePickFromGraph);
-        layout->addWidget(butPick, 0, 1);
+        mButtonPick = new QPushButton("Pick module from graph", this);
+        connect(mButtonPick, &QPushButton::pressed, this, &ModuleDialog::handlePickFromGraph);
+        layout->addWidget(mButtonPick, 0, 1);
 
         mSearchbar = new Searchbar(this);
         layout->addWidget(mSearchbar, 1, 0, 1, 2);
@@ -71,7 +71,7 @@ namespace hal {
         addAction(mToggleSearchbar);
 
         mTabWidget->setCurrentIndex(1);
-        testOkEnabled();
+        enableButtons();
 
         connect(mToggleSearchbar,&QAction::triggered,this,&ModuleDialog::handleToggleSearchbar);
         connect(ContentManager::sSettingSearch,&SettingsItemKeybind::keySequenceChanged,this,&ModuleDialog::keybindToggleSearchbar);
@@ -80,9 +80,17 @@ namespace hal {
         connect(mTreeView->selectionModel(),&QItemSelectionModel::currentChanged,this,&ModuleDialog::handleTreeSelectionChanged);
     }
 
-    void ModuleDialog::testOkEnabled()
+    void ModuleDialog::enableButtons()
     {
         mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(mSelectedId>0);
+        mButtonPick->setEnabled(mTableView->model()->rowCount()>0);
+        QString target = "…";
+        if (mSelectedId>0)
+        {
+            Module* m = gNetlist->get_module_by_id(mSelectedId);
+            if (m) target = QString("%1[%2]").arg(QString::fromStdString(m->get_name())).arg(mSelectedId);
+        }
+        setWindowTitle("Move to module " + target);
     }
 
      u32 ModuleDialog::treeModuleId(const QModelIndex& index)
@@ -111,10 +119,9 @@ namespace hal {
 
     void ModuleDialog::handleTableSelection(u32 id, bool doubleClick)
     {
-        if (!mSelectExclude.isAccepted(id)) return;
-        mSelectedId = id;
-        testOkEnabled();
-        if (doubleClick) accept();
+        mSelectedId = mSelectExclude.isAccepted(id) ? id : 0;
+        enableButtons();
+        if (mSelectedId && doubleClick) accept();
     }
 
     void ModuleDialog::handlePickFromGraph()

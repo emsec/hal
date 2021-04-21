@@ -33,6 +33,7 @@
 class QDialogButtonBox;
 class QTreeView;
 class QTabWidget;
+class QPushButton;
 
 namespace hal {
 
@@ -80,9 +81,10 @@ namespace hal {
         QAction* mToggleSearchbar;
         ModuleSelectExclude mSelectExclude;
 
+        QPushButton* mButtonPick;
         bool mNewModule;
 
-        void testOkEnabled();
+        void enableButtons();
         u32 treeModuleId(const QModelIndex& index);
     };
 }

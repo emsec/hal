@@ -314,7 +314,7 @@ namespace hal {
         connect(selectionModel(),&QItemSelectionModel::currentChanged,this,&ModuleSelectView::handleCurrentChanged);
         connect(this,&QTableView::doubleClicked,this,&ModuleSelectView::handleDoubleClick);
         setSortingEnabled(true);
-        sortByColumn(history ? -1 : 1,Qt::AscendingOrder);
+        sortByColumn(history ? -1 : 2,Qt::AscendingOrder);
         resizeColumnsToContents();
         horizontalHeader()->setStretchLastSection(true);
         verticalHeader()->hide();
