@@ -88,7 +88,7 @@ namespace hal
          * settings.
          *
          * @param sender - The sender of the signal
-         * @param key - The settings key
+         * @param key - The setting's key
          * @param value - The new value of the setting
          */
         //-void handleGlobalSettingChanged(void* sender, const QString& key, const QVariant& value);

@@ -30,7 +30,7 @@ namespace hal
     /**
      * @ingroup gui
      * The SeparatedGraphicsNet that is used to visualize constant inputs (and outputs from GND/VCC gates).
-     * The inputs and outputs of the net are displayed as a small box that contains the constants value as a text.
+     * The inputs and outputs of the net are displayed as a small box that contains the constant's value as a text.
      */
     class LabeledSeparatedNet : public SeparatedGraphicsNet
     {

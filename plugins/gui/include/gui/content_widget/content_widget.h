@@ -38,9 +38,9 @@ namespace hal
 
     /**
      * @ingroup gui
-     * @brief Abstract class for Widget%s within HALs content area
+     * @brief Abstract class for Widget%s within HAL's ContentArea
      *
-     * The ContentWidget class is the base class that has to be derived from in order to be put in hal's content area. It
+     * The ContentWidget class is the base class that has to be derived from in order to be put in hal's ContentArea. It
      * provides the necessary interface for the docking system as well as functions that can be overwritten to configure its
      * shortcuts and toolbar.
      */

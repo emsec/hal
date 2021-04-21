@@ -64,7 +64,7 @@ namespace hal
         ModuleWidget(QWidget* parent = nullptr);
 
         /**
-         * Configures the ModuleWidgets toolbar. Since the ModuleWidget has no toolbar actions, nothing is done here.
+         * Configures the ModuleWidget's toolbar. Since the ModuleWidget has no toolbar actions, nothing is done here.
          *
          * @param Toolbar - The toolbar to configure
          */

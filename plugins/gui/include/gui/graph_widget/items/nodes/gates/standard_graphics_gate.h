@@ -68,7 +68,7 @@ namespace hal
          *
          * @param mNetId - The net id
          * @param pin_type - The input pin type
-         * @returns The pins position in the scene
+         * @returns The pin's position in the scene
          */
         QPointF getInputScenePosition(const u32 mNetId, const QString& pin_type) const override;
 
@@ -78,7 +78,7 @@ namespace hal
          *
          * @param mNetId - The net id
          * @param pin_type - The output pin type
-         * @returns The pins position in the scene
+         * @returns The pin's position in the scene
          */
         QPointF getOutputScenePosition(const u32 mNetId, const QString& pin_type) const override;
 

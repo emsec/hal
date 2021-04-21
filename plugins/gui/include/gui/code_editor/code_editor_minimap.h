@@ -55,7 +55,7 @@ namespace hal
         /**
          * Gets the minimap scrollbar of the minimap.
          *
-         * @returns the minimaps scrollbar
+         * @returns the minimap's scrollbar
          */
         MinimapScrollbar* scrollbar();
 

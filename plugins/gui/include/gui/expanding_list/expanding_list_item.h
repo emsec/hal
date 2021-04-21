@@ -35,9 +35,9 @@ namespace hal
 
     /**
      * @ingroup gui
-     * @brief Wrapper for ExpandingListButtons.
+     * @brief Wrapper for ExpandingListButton%s.
      *
-     * The ExpandingListItem class is a wrapper class for the ExpandingListButtons on the first
+     * The ExpandingListItem class is a wrapper class for the ExpandingListButton%s on the first
      * level of the ExpandingListWidget. It adds the ability to add child buttons -that can either
      * be hidden or expanded- to the wrapped object.
      */
