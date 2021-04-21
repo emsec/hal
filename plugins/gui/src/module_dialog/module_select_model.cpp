@@ -225,8 +225,8 @@ namespace hal {
         }
         return retval;
     }
-    //---------------- PICKER -----------------------------------------
 
+    //---------------- PICKER -----------------------------------------
     ModuleSelectPicker::ModuleSelectPicker()
     {
         connect(this,&ModuleSelectPicker::triggerModuleCursor,gContentManager->getGraphTabWidget(),&GraphTabWidget::setModuleSelectCursor);
@@ -266,7 +266,7 @@ namespace hal {
                                   .arg(mSelectExclude.selectionToString())
                                   .arg(QString::fromStdString(firstAccepted->get_name()))
                                   .arg(moduleId),
-                                  QMessageBox::Ok | QMessageBox::Cancel))
+                                  QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok)
             {
                 ActionAddItemsToObject* act = new ActionAddItemsToObject(mSelectExclude.modules(), mSelectExclude.gates());
                 act->setObject(UserActionObject(moduleId,UserActionObjectType::Module));
@@ -298,7 +298,6 @@ namespace hal {
     }
 
     //---------------- VIEW -------------------------------------------
-
     ModuleSelectView::ModuleSelectView(bool history, Searchbar *sbar, QWidget* parent)
         : QTableView(parent)
     {

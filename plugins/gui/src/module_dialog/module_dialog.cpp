@@ -44,8 +44,13 @@ namespace hal {
         if (!ModuleSelectHistory::instance()->isEmpty())
         {
             mLastUsed = new ModuleSelectView(true,mSearchbar,mTabWidget);
-            connect(mLastUsed,&ModuleSelectView::moduleSelected,this,&ModuleDialog::handleTableSelection);
-            mTabWidget->addTab(mLastUsed, "Recent selection");
+            if (mLastUsed->model()->rowCount())
+            {
+                connect(mLastUsed,&ModuleSelectView::moduleSelected,this,&ModuleDialog::handleTableSelection);
+                mTabWidget->addTab(mLastUsed, "Recent selection");
+            }
+            else
+                delete mLastUsed;
         }
 
         layout->addWidget(mTabWidget, 2, 0, 1, 2);
