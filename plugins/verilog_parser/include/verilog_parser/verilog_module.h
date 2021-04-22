@@ -30,18 +30,22 @@ namespace hal
         // ports
         std::vector<std::string> m_port_identifiers;                                                                          // external port names (in order)
         std::unordered_set<std::string> m_port_expressions;                                                                   // internal port names
-        std::unordered_map<std::string, std::vector<std::string>> m_port_ident_to_expr;                                       // external port names to internal port names
+        std::unordered_map<std::string, std::string> m_port_ident_to_expr;                                                    // external port names to internal port names
         std::unordered_map<std::string, PinDirection> m_port_directions;                                                      // internal port names to direction
         std::unordered_map<std::string, std::vector<std::vector<u32>>> m_port_ranges;                                         // internal port names to ranges
         std::unordered_map<std::string, std::vector<std::tuple<std::string, std::string, std::string>>> m_port_attributes;    // internal port attributes
+        std::unordered_map<std::string, std::vector<std::string>> m_expanded_port_identifiers;
+        std::unordered_map<std::string, std::string> m_expanded_port_ident_to_expr;
 
         // signals
         std::vector<std::string> m_signals;                                                                                     // signal names
         std::unordered_map<std::string, std::vector<std::vector<u32>>> m_signal_ranges;                                         // signal ranges
         std::unordered_map<std::string, std::vector<std::tuple<std::string, std::string, std::string>>> m_signal_attributes;    // signal attributes
+        std::unordered_map<std::string, std::vector<std::string>> m_expanded_signals;
 
         // assignments
         std::vector<std::pair<TokenStream<std::string>, TokenStream<std::string>>> m_assignments;    // signal assignments
+        std::vector<std::pair<std::string, std::string>> m_expanded_assignments;
 
         // instances
         std::vector<std::string> m_instances;                                                                                                 // instance names

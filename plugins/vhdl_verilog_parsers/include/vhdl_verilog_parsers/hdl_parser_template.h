@@ -27,11 +27,11 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
-#include "hal_core/netlist/hdl_parser/hdl_parser.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/netlist_parser/netlist_parser.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/special_strings.h"
 
@@ -55,10 +55,10 @@ namespace hal
     class GateLibrary;
 
     /**
-     * @ingroup hdl_parsers
+     * @ingroup netlist_parser
      */
     template<typename T>
-    class NETLIST_API HDLParserTemplate : public HDLParser
+    class NETLIST_API HDLParserTemplate : public NetlistParser
     {
     public:
         /**
@@ -74,11 +74,12 @@ namespace hal
         virtual ~HDLParserTemplate() = default;
 
         /**
-         * Parses a netlist into an intermediate format.
+         * Parse a Verilog netlist into an internal intermediate format.
          *
+         * @param[in] file_path - Path to the Verilog netlist file.
          * @returns True on success, false otherwise.
          */
-        virtual bool parse(std::stringstream& stream) = 0;
+        bool parse(const std::filesystem::path& file_path) = 0;
 
         /**
          * Instantiates a previously parsed netlist using the specified gate library.
@@ -992,8 +993,9 @@ namespace hal
             std::map<T, T> m_expanded_assignments;
         };
 
-        // stores the input stream to the file
-        std::stringstream* m_fs;
+        // stores the input file and stream
+        std::filesystem::path m_path;
+        std::stringstream m_fs;
 
         // map of all entities
         std::unordered_map<T, entity> m_entities;

@@ -1,9 +1,8 @@
 #include "vhdl_verilog_parsers/plugin_vhdl_verilog_parsers.h"
 
+#include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "vhdl_verilog_parsers/hdl_parser_verilog.h"
 #include "vhdl_verilog_parsers/hdl_parser_vhdl.h"
-
-#include "hal_core/netlist/hdl_parser/hdl_parser_manager.h"
 
 namespace hal
 {
@@ -24,13 +23,13 @@ namespace hal
 
     void VhdlVerilogParsersPlugin::on_load()
     {
-        // hdl_parser_manager::register_parser("Default Verilog Parser", [](){return std::make_unique<HDLParserVerilog>();}, {".v"});
-        hdl_parser_manager::register_parser("Default VHDL Parser", [](){return std::make_unique<HDLParserVHDL>();}, {".vhd", ".vhdl"});
+        // netlist_parser_manager::register_parser("Default Verilog Parser", [](){return std::make_unique<HDLParserVerilog>();}, {".v"});
+        netlist_parser_manager::register_parser("Default VHDL Parser", []() { return std::make_unique<HDLParserVHDL>(); }, {".vhd", ".vhdl"});
     }
 
     void VhdlVerilogParsersPlugin::on_unload()
     {
-        hdl_parser_manager::unregister_parser("Default Verilog Parser");
-        hdl_parser_manager::unregister_parser("Default VHDL Parser");
+        netlist_parser_manager::unregister_parser("Default Verilog Parser");
+        netlist_parser_manager::unregister_parser("Default VHDL Parser");
     }
 }    // namespace hal

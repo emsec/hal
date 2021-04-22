@@ -11,9 +11,22 @@ namespace hal
     // ###########          Parse HDL into intermediate format          ##########
     // ###########################################################################
 
-    bool HDLParserVerilog::parse(std::stringstream& stream)
+    bool HDLParserVerilog::parse(const std::filesystem::path& file_path)
     {
-        m_fs = &stream;
+        m_path = file_path;
+
+        {
+            std::ifstream ifs;
+            ifs.open(m_path.string(), std::ifstream::in);
+            if (!ifs.is_open())
+            {
+                log_error("verilog_parser", "unable to open '{}'.", m_path.string());
+                return false;
+            }
+            m_fs << ifs.rdbuf();
+            ifs.close();
+        }
+
         // tokenize file
         if (!tokenize())
         {
@@ -61,7 +74,7 @@ namespace hal
         bool multi_line_comment = false;
 
         std::vector<Token<std::string>> parsed_tokens;
-        while (std::getline(*m_fs, line))
+        while (std::getline(m_fs, line))
         {
             line_number++;
             this->remove_comments(line, multi_line_comment);

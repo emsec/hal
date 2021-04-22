@@ -37,7 +37,7 @@
 namespace hal
 {
     /**
-     * @ingroup hdl_parsers
+     * @ingroup netlist_parser
      */
     class NETLIST_API HDLParserVerilog : public HDLParserTemplate<std::string>
     {
@@ -46,12 +46,12 @@ namespace hal
         ~HDLParserVerilog() = default;
 
         /**
-         * Parses a verilog netlist into an intermediate format.
+         * Parse a Verilog netlist into an internal intermediate format.
          *
-         * @param[in] stream - The string stream filled with the hdl code.
+         * @param[in] file_path - Path to the Verilog netlist file.
          * @returns True on success, false otherwise.
          */
-        bool parse(std::stringstream& stream) override;
+        bool parse(const std::filesystem::path& file_path) override;
 
     private:
         TokenStream<std::string> m_token_stream;

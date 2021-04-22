@@ -23,11 +23,11 @@
 
 #pragma once
 
-#include "hal_core/utilities/token_stream.h"
 #include "hal_core/defines.h"
-#include "vhdl_verilog_parsers/hdl_parser_template.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/utilities/token_stream.h"
+#include "vhdl_verilog_parsers/hdl_parser_template.h"
 
 #include <optional>
 #include <unordered_map>
@@ -37,21 +37,21 @@
 namespace hal
 {
     /**
-     * @ingroup hdl_parsers
+     * @ingroup netlist_parser
      */
     class NETLIST_API HDLParserVHDL : public HDLParserTemplate<core_strings::CaseInsensitiveString>
     {
     public:
-        HDLParserVHDL() = default;
+        HDLParserVHDL()  = default;
         ~HDLParserVHDL() = default;
 
         /**
-         * Parses a VHDL netlist into an intermediate format.
+         * Parse a VHDL netlist into an internal intermediate format.
          *
-         * @param[in] stream - The string stream filled with the hdl code.
+         * @param[in] file_path - Path to the VHDL netlist file.
          * @returns True on success, false otherwise.
          */
-        bool parse(std::stringstream& stream) override;
+        bool parse(const std::filesystem::path& file_path) override;
 
     private:
         enum class AttributeTarget
