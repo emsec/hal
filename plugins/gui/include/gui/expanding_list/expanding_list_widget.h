@@ -25,6 +25,8 @@
 
 #include <QScrollArea>
 #include <QHash>
+#include <QMap>
+#include <QString>
 #include <QList>
 
 class QFrame;

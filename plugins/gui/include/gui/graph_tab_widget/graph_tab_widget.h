@@ -85,6 +85,11 @@ namespace hal
          */
         void ensureSelectionVisible();
 
+        /**
+         * returns whether shape of cursor has been changed to indicate pick-select-module mode
+         */
+        bool isModuleSelectCursor() const { return mModuleSelectCursor; }
+
         enum KeyboardModifier{Alt, Ctrl, Shift};
         Q_ENUM(KeyboardModifier)
 
@@ -143,6 +148,13 @@ namespace hal
          */
         void handleModuleFocus(u32 moduleId);
 
+        /**
+         * Change shape of cursor to indicate that a module should be picked by user
+         *
+         * @param on - true=on,  false=off
+         */
+        void setModuleSelectCursor(bool on);
+
     private:
         QTabWidget* mTabWidget;
         QVBoxLayout* mLayout;
@@ -173,5 +185,6 @@ namespace hal
         static bool initSettings();
 
         QMap<KeyboardModifier, Qt::KeyboardModifier> mKeyModifierMap;
+        bool mModuleSelectCursor;
     };
 }

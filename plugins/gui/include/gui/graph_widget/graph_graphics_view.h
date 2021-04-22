@@ -94,7 +94,7 @@ namespace hal
         void conditionalUpdate();
         void handleIsolationViewAction();
         void handleRemoveFromView();
-        void handleMoveAction(QAction* action);
+        void handleMoveAction(u32 moduleId);
         void handleMoveNewAction();
         void handleRenameAction();
         void handleChangeTypeAction();
@@ -110,6 +110,9 @@ namespace hal
         void handleGroupingUnassign();
         void handleGroupingAssignNew();
         void handleGroupingAssingExisting();
+
+        void handleModuleDialog();
+        void handleCancelPickModule();
 
     private:
         void paintEvent(QPaintEvent* event) override;

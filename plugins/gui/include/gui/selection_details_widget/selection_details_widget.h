@@ -331,12 +331,6 @@ namespace hal
         void selectionToExistingGrouping();
 
         /**
-         * Adds the current selection to a module that isbased on the before selected QAction
-         * in the ContextMenu created by selectionToModuleMenu().
-         */
-        void selectionToModuleAction();
-
-        /**
          * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
          * type of the clicked item.
          *
@@ -353,6 +347,12 @@ namespace hal
          * @param sti - The item that is to be displayed.
          */
         void singleSelectionInternal(const SelectionTreeItem* sti);
+
+        /**
+         * Adds the current selection to a module selected by id (=actionCode if positive).
+         * Create new module an pops up new module dialog if actionCode is negative.
+         */
+        void selectionToModuleAction(int actionCode);
 
         QSplitter*           mSplitter;
         SelectionTreeView*   mSelectionTreeView;

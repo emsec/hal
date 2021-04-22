@@ -140,6 +140,9 @@ namespace hal
          */
         void handleSaveTriggered();
 
+    public:
+        static SettingsItemKeybind* sSettingSearch;
+
     private:
         MainWindow* mMainWindow;
         QString mWindowTitle;
@@ -158,7 +161,6 @@ namespace hal
         LoggerWidget* mLoggerWidget;
 
         static SettingsItemDropdown* sSettingSortMechanism;
-        static SettingsItemKeybind* sSettingSearch;
         static bool sSettingsInitialized;
         static bool initializeSettins();
 
