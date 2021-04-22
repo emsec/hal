@@ -87,6 +87,7 @@
         <file alias="sel_net">icons/sel_net.png</file>
         <file alias="toolbox">icons/toolbox.png</file>
         <file alias="undo2">icons/0104-undo2.svg</file>
+        <file alias="module_cursor">icons/module_cursor.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="hal">images/hal_9000_by_johnnyslowhand.png</file>
