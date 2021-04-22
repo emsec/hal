@@ -31,7 +31,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      * TODO: Plugin management is disabled in the current version
      */
     namespace plugin_access_manager

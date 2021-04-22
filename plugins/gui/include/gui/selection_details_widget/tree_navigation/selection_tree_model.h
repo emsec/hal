@@ -42,7 +42,7 @@ namespace hal
     class SelectionTreeItemRoot;
 
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-selection_details
      * A model that manages the current selection in a tree-styled fashion.
      * Its most important function is fetchSelection that automatically updates
      * the model's internal data.
@@ -161,6 +161,7 @@ namespace hal
     };
 
     /**
+     * @ingroup utility_widgets-selection_details
      * A utility class to delete the current model. The current root item of the
      * model is given to the disposer and deleted when dispose is called.
      */

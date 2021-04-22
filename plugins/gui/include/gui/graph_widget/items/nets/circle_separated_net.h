@@ -28,7 +28,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup graph-visuals-net
      * A type of separated nets with circles as in- and output symbols. Currently unused.
      */
     class CircleSeparatedNet : public SeparatedGraphicsNet

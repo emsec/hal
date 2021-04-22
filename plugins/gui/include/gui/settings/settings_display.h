@@ -30,7 +30,7 @@ class QVBoxLayout;
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class SettingsDisplay : public QScrollArea
     {

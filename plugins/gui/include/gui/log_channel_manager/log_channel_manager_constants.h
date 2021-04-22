@@ -26,7 +26,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     namespace LogChannelManager_constants
     {

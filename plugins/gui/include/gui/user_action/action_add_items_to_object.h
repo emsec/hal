@@ -6,7 +6,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionAddItemsToObject : public UserAction
     {

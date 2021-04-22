@@ -31,7 +31,7 @@ namespace hal
     class SettingsItemText;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class SettingsWidgetText : public SettingsWidget
     {

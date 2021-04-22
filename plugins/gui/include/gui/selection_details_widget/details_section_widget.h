@@ -33,7 +33,7 @@ namespace hal
 {
 
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-selection_details
      * The details section encapsulates a header and its corresponding content into a single object. These sections
      * are used by the specific details widgets to display its data. The visibility of the contents can be toggled
      * by clicking on the header.

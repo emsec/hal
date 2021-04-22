@@ -32,7 +32,7 @@ namespace hal
     class SettingsItemNew;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class SettingsWidgetCheckbox : public SettingsWidget
     {

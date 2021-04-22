@@ -30,7 +30,7 @@ namespace hal
     class ScheduledPluginItemArea;
 
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class ScheduledPluginsWidget : public QScrollArea
     {

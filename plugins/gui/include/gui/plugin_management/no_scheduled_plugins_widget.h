@@ -31,7 +31,7 @@ class QVBoxLayout;
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class NoScheduledPluginsWidget : public QFrame
     {

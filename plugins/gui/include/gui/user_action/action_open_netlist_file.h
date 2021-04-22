@@ -4,7 +4,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionOpenNetlistFile : public UserAction
     {
@@ -19,7 +19,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionOpenNetlistFileFactory : public UserActionFactory
     {

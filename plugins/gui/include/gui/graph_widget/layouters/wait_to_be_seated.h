@@ -12,7 +12,7 @@ namespace hal
    class WaitToBeSeatedWaiting;
 
    /**
-    * @ingroup gui
+    * @ingroup graph-layouter
     */
    class WaitToBeSeatedEntry
    {
@@ -39,7 +39,7 @@ namespace hal
    };
 
    /**
-    * @ingroup gui
+    * @ingroup graph-layouter
     */
    class WaitToBeSeatedList : public QList<WaitToBeSeatedEntry*>
    {

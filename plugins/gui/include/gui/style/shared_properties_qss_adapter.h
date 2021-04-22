@@ -28,7 +28,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class SharedPropertiesQssAdapter : public QWidget
     {

@@ -31,7 +31,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class SettingsItemDropdown : public SettingsItem
     {

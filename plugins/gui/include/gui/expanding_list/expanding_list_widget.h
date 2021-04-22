@@ -46,7 +46,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      * @brief A selection menu with a hierarchic structure.
      *
      * The ExpandingListWidget class is a list in which each top-level-item can be expanded

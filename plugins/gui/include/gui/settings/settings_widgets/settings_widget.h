@@ -39,7 +39,7 @@ namespace hal
     class SettingsItem;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class SettingsWidget : public QFrame
     {

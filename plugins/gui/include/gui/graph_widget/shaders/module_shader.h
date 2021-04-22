@@ -28,7 +28,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup graph-visuals
      */
     class ModuleShader final : public GraphShader
     {

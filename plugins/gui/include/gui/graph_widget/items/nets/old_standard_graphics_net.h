@@ -33,7 +33,7 @@ namespace hal
     class Net;
 
     /**
-     * @ingroup gui
+     * @ingroup unused
      * An old version of the StandardGraphicsNet that is used to display (normal) nets in the scene.
      * \deprecated Please use StandardGraphicsNet instead!
      */

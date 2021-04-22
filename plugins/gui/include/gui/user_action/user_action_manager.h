@@ -39,7 +39,7 @@ namespace hal
     class SettingsItemCheckbox;
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class UserActionManager : public QObject
     {

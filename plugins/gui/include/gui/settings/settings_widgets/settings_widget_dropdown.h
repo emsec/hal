@@ -32,7 +32,7 @@ namespace hal
     class SettingsItemDropdown;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class SettingsWidgetDropdown : public SettingsWidget
     {

@@ -30,7 +30,7 @@ namespace hal
     class ContentWidget;
 
     /**
-     * @ingroup gui
+     * @ingroup docking
      * This enum represents the orientation of a DockButton. A DockButton is either
      * placed in horizontal or vertical DockBar. Depending on this orientation the width, height
      * and text is displayed accordingly.

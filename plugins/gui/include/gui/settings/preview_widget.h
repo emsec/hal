@@ -29,7 +29,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class PreviewWidget : public QFrame
     {

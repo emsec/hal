@@ -28,7 +28,7 @@
 
 namespace hal {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class UserActionCompound : public UserAction
     {
@@ -47,7 +47,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class UserActionCompoundFactory : public UserActionFactory
     {

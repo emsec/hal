@@ -31,7 +31,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class SelectionHistoryEntry
     {

@@ -33,7 +33,7 @@ class QVBoxLayout;
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class ScheduledPluginItem : public QFrame
     {

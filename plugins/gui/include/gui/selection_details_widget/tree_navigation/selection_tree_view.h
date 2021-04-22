@@ -33,7 +33,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-selection_details
      * The SelectionTreeView class displays the entirety of the current selection in a
      * tree-styled fashion (hence the name). It is embedded in the SelectionDetailsWidget.
      */

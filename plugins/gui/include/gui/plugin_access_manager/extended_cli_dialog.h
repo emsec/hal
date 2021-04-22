@@ -40,7 +40,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class ExtendedCliDialog : public QDialog
     {

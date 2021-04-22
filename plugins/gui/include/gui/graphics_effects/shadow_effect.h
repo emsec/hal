@@ -29,7 +29,7 @@ namespace hal
 {
 
     /**
-     * @ingroup gui
+     * @ingroup graph-visuals
      * The ShadowEffect is a graphics effect that simulates a small shadow around the outline of the object
      * it is applied on.
      */

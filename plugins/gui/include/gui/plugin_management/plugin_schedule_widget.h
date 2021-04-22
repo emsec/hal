@@ -39,7 +39,7 @@ namespace hal
     class Searchbar;
 
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class PluginScheduleWidget : public QFrame
     {

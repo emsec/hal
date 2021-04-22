@@ -34,7 +34,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup graph-visuals
      * Superclass for all graphic items used in the GraphicsScene. It contains information about the underlying objects
      * that are represented, i.e. the type and the id.
      */

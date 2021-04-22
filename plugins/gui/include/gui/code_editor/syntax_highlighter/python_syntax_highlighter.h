@@ -30,7 +30,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup python
      * @brief A syntax highlighter that fits for python code.
      *
      * TODO: Belongs in the python directory?

@@ -31,7 +31,7 @@ namespace hal
     class Notification;
 
     /**
-     * @ingroup gui
+     * @ingroup unused
      * TODO: Unused class (i.e. the global notification manager is not used). Remove me?
      */
     class NotificationManager : public QObject

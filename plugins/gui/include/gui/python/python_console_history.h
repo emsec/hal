@@ -29,7 +29,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup python-console
      * This class manages the history of python console inputs. It can be used to access previous inputs.
      */
     class PythonConsoleHistory

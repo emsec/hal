@@ -38,7 +38,7 @@ namespace hal
     class GraphContext;
 
     /**
-     * @ingroup gui
+     * @ingroup graph-visuals
      */
     class GraphShader
     {

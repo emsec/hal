@@ -49,7 +49,7 @@ namespace hal
     class DetailsGeneralModel;
 
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-selection_details
      * The ModuleDetailsWidget class displays detailed information about a module including name, type
      * and input as well as output ports by calling its update(module-id) function. It is embedded within the
      * SelectionDetailsWidget and uses multiple tables to display the module's information.

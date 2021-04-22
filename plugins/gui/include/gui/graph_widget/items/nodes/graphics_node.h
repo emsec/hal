@@ -30,7 +30,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup graph-visuals
      * Abstract base class of every node in the netlist graph, i.e. GraphicsGates and GraphicsModules.
      */
     class GraphicsNode : public GraphicsItem

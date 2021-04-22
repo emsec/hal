@@ -28,7 +28,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class StandardGraphLayouter final : public GraphLayouter
     {

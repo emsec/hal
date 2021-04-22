@@ -46,7 +46,7 @@ namespace hal
     class Searchbar;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class MainSettingsList : public QList<SettingsWidget*>
     {

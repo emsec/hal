@@ -36,7 +36,7 @@ namespace hal
     class ScheduledPluginItem;
 
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class ScheduledPluginItemArea : public QFrame
     {

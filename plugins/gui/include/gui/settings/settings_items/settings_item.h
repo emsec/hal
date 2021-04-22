@@ -32,7 +32,7 @@ namespace hal
     class SettingsWidget;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class SettingsItem : public QObject
     {

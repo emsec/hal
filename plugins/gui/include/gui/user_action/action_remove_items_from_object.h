@@ -4,7 +4,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionRemoveItemsFromObject : public UserAction
     {
@@ -24,7 +24,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionRemoveItemsFromObjectFactory : public UserActionFactory
     {

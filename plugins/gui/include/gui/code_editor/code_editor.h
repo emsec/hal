@@ -39,7 +39,7 @@ namespace hal
     class LineNumberArea;
 
     /**
-     * @ingroup gui
+     * @ingroup python-editor
      * @brief A plain text edit widget that is intended for editing code.
      *
      * Therefore it has numbered lines and provides a code minimap for easier navigation in larger files.

@@ -32,7 +32,7 @@ namespace hal
 {
 
     /**
-     * @ingroup gui
+     * @ingroup python-editor
      * @brief The scrollbar of the CodeEditorMinimap
      */
     class MinimapScrollbar : public QWidget

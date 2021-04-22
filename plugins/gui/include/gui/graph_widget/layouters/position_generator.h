@@ -5,7 +5,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class PositionGenerator
     {

@@ -31,7 +31,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutJunctionWire
     {
@@ -48,7 +48,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutJunctionEntries
     {
@@ -64,7 +64,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutJunctionNet
     {
@@ -94,7 +94,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutJunctionRange
     {
@@ -120,7 +120,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutJunctionOccupied : public QList<NetLayoutJunctionRange>
     {
@@ -130,7 +130,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutJunction
     {
@@ -165,7 +165,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutJunctionHash : public QHash<NetLayoutPoint,NetLayoutJunction*>
     {

@@ -29,7 +29,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup graph
      */
     namespace graph_widget_constants
     {

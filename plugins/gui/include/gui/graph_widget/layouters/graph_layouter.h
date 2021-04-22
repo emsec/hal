@@ -58,7 +58,7 @@ namespace hal
     class NetLayoutJunctionEntries;
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      * The abstract parent class for all graph layouters. The graph layouter is responsible for building up the scene
      * using the information given in the passed GraphContext. It places the respective GraphicItems for the given gates
      * and modules in positions that are calculated intelligently considering their order, connections and dimensions.

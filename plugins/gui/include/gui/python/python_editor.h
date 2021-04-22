@@ -54,7 +54,7 @@ namespace hal
     class SettingsItemSpinbox;
  
     /**
-     * @ingroup gui
+     * @ingroup python-editor
      * Widget that contains the python editor. It manages all CodeEditor objects (open tabs). The logic to save, open
      * and execute scripts as well as the automatically creation of snapshot files (backups) is handles by this class.
      */

@@ -31,7 +31,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      * TODO: Unused. Remove me (+history entry)?
      */
     class SelectionHistoryNavigator

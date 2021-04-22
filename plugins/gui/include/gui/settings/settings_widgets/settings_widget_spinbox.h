@@ -31,7 +31,7 @@ namespace hal
     class SettingsItemSpinbox;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class SettingsWidgetSpinbox : public SettingsWidget
     {

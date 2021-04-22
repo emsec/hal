@@ -4,7 +4,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionDeleteObject : public UserAction
     {
@@ -15,7 +15,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionDeleteObjectFactory : public UserActionFactory
     {

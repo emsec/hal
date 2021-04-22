@@ -41,7 +41,7 @@ namespace hal {
     class GraphNavigationWidget;
 
     /**
-     * @ingroup gui
+     * @ingroup graph
      * A QTableWidget that is used to navigate from a pin with multiple adjacent pins. The table shows information about
      * the Gate%s/Module%s that are connected to the starting pin, such as name, id, type, the adjacent input/ouput pin
      * and the parent Module's name. <br>

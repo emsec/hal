@@ -30,7 +30,7 @@ namespace hal
     class GraphLayouter;
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class LayouterTask : public Task
     {

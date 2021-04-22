@@ -28,7 +28,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup docking
      * @brief This relay provides the timing information when a DockButton is dragged.
      * It is implemented as a singleton pattern.
      */

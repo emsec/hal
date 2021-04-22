@@ -17,7 +17,7 @@ typedef quint32 u32;
 namespace hal {
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutDirection
     {
@@ -45,7 +45,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutPoint : public QPoint
     {
@@ -64,7 +64,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutWire
     {
@@ -84,7 +84,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutConnection : public QList<NetLayoutWire>
     {
@@ -101,7 +101,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutMetric
     {
@@ -119,7 +119,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutConnectionFactory
     {
@@ -136,7 +136,7 @@ namespace hal {
     };
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      */
     class NetLayoutConnectionMetric : public QMap<NetLayoutMetric,NetLayoutConnection*>
     {

@@ -34,7 +34,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup file_management
      * @brief A dialog in form of a bar to let the user decide how to handle file changes outside of HAL.
      *
      * The FileModifiedBar class is a utility class for every widget that (might) interacts with

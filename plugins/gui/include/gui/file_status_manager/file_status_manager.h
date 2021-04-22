@@ -33,7 +33,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup file_management
      * @brief Holds information about the state (e.g. saved/unsaved) of all laded files (i.e. .hal/.python files).
      *
      * The FileStatusManager class is the central point to store the status of any file

@@ -30,7 +30,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class PluginRelay : public QObject
     {

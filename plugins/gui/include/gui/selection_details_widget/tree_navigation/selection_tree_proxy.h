@@ -31,7 +31,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-selection_details
      * A proxy model to filter the SelectionTreeModel. This allows to search efficiently through the
      * model and the results can be displayed within the view in a tree-styled fashion.
      */

@@ -30,7 +30,7 @@ class QPropertyAnimation;
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class Notification : public QFrame
     {

@@ -28,7 +28,7 @@ namespace hal
     class ContentWidget;
 
     /**
-     * @ingroup gui
+     * @ingroup docking
      */
     class ContentAnchor
     {

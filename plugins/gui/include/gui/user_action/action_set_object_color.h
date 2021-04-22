@@ -5,7 +5,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionSetObjectColor : public UserAction
     {
@@ -20,7 +20,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionSetObjectColorFactory : public UserActionFactory
     {

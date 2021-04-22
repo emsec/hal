@@ -4,7 +4,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionCreateObject : public UserAction
     {
@@ -22,7 +22,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionCreateObjectFactory : public UserActionFactory
     {

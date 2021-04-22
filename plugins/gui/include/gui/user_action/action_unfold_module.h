@@ -7,7 +7,7 @@ namespace hal
     class GraphContext;
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionUnfoldModule : public UserAction
     {
@@ -25,7 +25,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionUnfoldModuleFactory : public UserActionFactory
     {

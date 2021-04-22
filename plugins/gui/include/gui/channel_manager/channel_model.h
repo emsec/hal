@@ -34,7 +34,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup logging
      * @brief Table model for log channels
      *
      * This model handles incoming callbacks from the core's log manager. It creates new channels and updates existing ones and is

@@ -5,7 +5,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     namespace GraphicsEffectFactory
     {

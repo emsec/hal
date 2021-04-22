@@ -29,7 +29,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      * @brief A syntax highlighter that fits for a vhdl file.
      *
      * The following sections are distinguished and their color can be

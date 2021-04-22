@@ -31,7 +31,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-context
      * TODO
      */
     class ContextTableModel : public QAbstractTableModel

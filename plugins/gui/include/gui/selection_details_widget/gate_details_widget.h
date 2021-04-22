@@ -50,7 +50,7 @@ namespace hal
     class DetailsGeneralModel;
 
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-selection_details
      * The GateDetailsWidget class displays detailed information about a gate including name, type
      * and input / output pins by calling its update(gate-id) function. It is embedded in the
      * SelectionDetailsWidget and uses multiple tables to display the gate's information.

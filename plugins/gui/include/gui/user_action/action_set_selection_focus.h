@@ -5,7 +5,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionSetSelectionFocus : public UserAction
     {
@@ -31,7 +31,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionSetSelectionFocusFactory : public UserActionFactory
     {

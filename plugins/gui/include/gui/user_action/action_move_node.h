@@ -6,7 +6,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionMoveNode : public UserAction
     {
@@ -24,7 +24,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionMoveNodeFactory : public UserActionFactory
     {

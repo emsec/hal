@@ -30,7 +30,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class PluginModel : public QAbstractItemModel
     {

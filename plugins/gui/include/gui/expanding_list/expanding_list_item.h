@@ -34,7 +34,7 @@ namespace hal
     class ExpandingListButton;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      * @brief Wrapper for ExpandingListButton%s.
      *
      * The ExpandingListItem class is a wrapper class for the ExpandingListButton%s on the first

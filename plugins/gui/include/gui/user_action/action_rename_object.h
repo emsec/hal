@@ -5,7 +5,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionRenameObject : public UserAction
     {
@@ -25,7 +25,7 @@ namespace hal
     };
 
     /**
-     * @ingroup gui
+     * @ingroup user_action
      */
     class ActionRenameObjectFactory : public UserActionFactory
     {

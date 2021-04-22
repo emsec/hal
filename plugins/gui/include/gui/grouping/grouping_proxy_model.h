@@ -30,7 +30,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-grouping
      * The QSortFilterProxyModel set between the view of the GroupingManagerWidget and the
      * GroupingTableModel (source model) to support data filtering.
      * It is used to provide a search bar (<i>CTRL+F</i>) for groupings.

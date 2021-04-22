@@ -31,7 +31,7 @@ namespace hal
     class SettingsItemKeybind;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class AssignedKeybindMap
     {

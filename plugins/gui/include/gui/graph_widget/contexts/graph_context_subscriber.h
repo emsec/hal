@@ -27,7 +27,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup graph-contexts
      * Interface for a class that is a subscriber of a GraphContext. A subscriber will be notified about changes of the
      * layout status and about the deletion of the subscribed context.
      */

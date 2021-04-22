@@ -29,7 +29,7 @@ namespace hal
     class MinimapScrollbar;
 
     /**
-     * @ingroup gui
+     * @ingroup python-editor
      * @brief Represents the scrollbar of the CodeEditor.
      *
      * It overrides the QScrollBar class to extend its functionality so that

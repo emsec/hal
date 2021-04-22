@@ -38,7 +38,7 @@ namespace hal
     /**
      * @ingroup gui
      * The SpecialLogContentManager class creates special log content that is used for meta analysis.
-     * It takes screenshots of the mainwindow (and all detached widgets) as well as dumps every python editor tabs
+     * It takes screenshots of the MainWindow (and all detached widgets) as well as dumps every python editor tabs
      * in a certain interval. The logged content is saved in a directory that is located next to the opened file.
      */
     class SpecialLogContentManager : public QObject

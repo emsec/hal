@@ -28,7 +28,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup graph-visuals-gate
      * The GraphicsGate that is (currently) used to display gates in the scene.
      */
     class StandardGraphicsGate final : public GraphicsGate

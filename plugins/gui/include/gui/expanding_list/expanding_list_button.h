@@ -33,7 +33,7 @@ namespace hal
     class ExpandingListWidget;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      * @brief One button of the ExpandingListWidget.
      *
      * An ExpandingListButton can be added to an ExpandingListWidget and is then

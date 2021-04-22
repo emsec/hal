@@ -37,7 +37,7 @@ namespace hal
     class FilterTabBar;
 
     /**
-     * @ingroup gui
+     * @ingroup unused
      * TODO: Unused (cause FilterTabBar unused).
      */
     class FilterDialog : public QDialog

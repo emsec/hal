@@ -30,7 +30,7 @@ class QKeyEvent;
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      * TODO: Unused class. Remove me?
      */
     class WindowEffectLayer : public QFrame

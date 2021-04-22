@@ -40,7 +40,7 @@ namespace hal
     class ProgramArguments;
 
     /**
-     * @ingroup gui
+     * @ingroup unused
      */
     class PluginArgumentsWidget : public QFrame
     {

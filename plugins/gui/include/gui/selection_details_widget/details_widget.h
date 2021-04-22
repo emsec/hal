@@ -32,7 +32,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup utility_widgets-selection_details
      * The base-class for the specific gate, net and module details widgets. It defines commonly shared
      * information and functions such as the keyfont and the current id and makes these accessible.
      */

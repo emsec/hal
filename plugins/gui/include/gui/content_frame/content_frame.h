@@ -33,7 +33,7 @@ namespace hal
     class Toolbar;
 
     /**
-     * @ingroup gui
+     * @ingroup docking
      * @brief Wraps the ContentWidget class.
      *
      * It displays the toolbar as well as the name and plays an important role in the docking system

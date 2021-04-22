@@ -34,7 +34,7 @@ namespace hal
     class MinimapScrollbar;
 
     /**
-     * @ingroup gui
+     * @ingroup python-editor
      * @brief A minimap that supports an easier navigation in larger files.
      *
      * It shows the zoomed out content of the file the associated CodeEditor currently works on.

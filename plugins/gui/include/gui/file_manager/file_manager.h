@@ -35,7 +35,7 @@ namespace hal
     class SettingsItemCheckbox;
     class SettingsItemSpinbox;
    /**
-    * @ingroup gui
+    * @ingroup file_management
     * @brief Stores information about the currently opened netlist.
     *
      * The FileManager handles the status and information of the currently opened netlist file

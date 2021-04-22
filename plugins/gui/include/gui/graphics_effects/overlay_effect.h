@@ -28,7 +28,7 @@
 namespace hal
 {
     /**
-     * @ingroup gui
+     * @ingroup unused
      * Unused class. Remove me?
      */
     class OverlayEffect : public QGraphicsEffect

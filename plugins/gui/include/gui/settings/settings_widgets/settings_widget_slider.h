@@ -32,7 +32,7 @@ namespace hal
     class SettingsItemSlider;
 
     /**
-     * @ingroup gui
+     * @ingroup settings
      */
     class SettingsWidgetSlider : public SettingsWidget
     {

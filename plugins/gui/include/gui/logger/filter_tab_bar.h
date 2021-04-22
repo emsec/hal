@@ -33,7 +33,7 @@ namespace hal
     struct FilterItem;
 
     /**
-     * @ingroup gui
+     * @ingroup unused
      * TODO: Unused?
      */
     class FilterTabBar : public QTabBar

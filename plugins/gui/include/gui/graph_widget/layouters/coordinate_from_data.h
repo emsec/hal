@@ -16,7 +16,7 @@ namespace hal {
     class Node;
 
     /**
-     * @ingroup gui
+     * @ingroup graph-layouter
      * TODO
      */
     class CoordinateFromData : public QPoint

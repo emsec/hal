@@ -36,7 +36,7 @@ namespace hal
     class VhdlQssAdapter;
 
     /**
-     * @ingroup gui
+     * @ingroup unused
      * TODO: Unused class. Remove me?
      */
     class StyleManager : public QObject
