@@ -14,7 +14,7 @@
 
 namespace hal
 {
-    bool NetlistParserVerilog::parse(const std::filesystem::path& file_path)
+    bool VerilogParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
 
@@ -142,7 +142,7 @@ namespace hal
         return true;
     }
 
-    std::unique_ptr<Netlist> NetlistParserVerilog::instantiate(const GateLibrary* gate_library)
+    std::unique_ptr<Netlist> VerilogParser::instantiate(const GateLibrary* gate_library)
     {
         // create empty netlist
         std::unique_ptr<Netlist> result = netlist_factory::create_netlist(gate_library);
@@ -261,7 +261,7 @@ namespace hal
     // ###########          Parse HDL into Intermediate Format          ##########
     // ###########################################################################
 
-    bool NetlistParserVerilog::tokenize()
+    bool VerilogParser::tokenize()
     {
         const std::string delimiters = "`,()[]{}\\#*: ;=.";
         std::string current_token;
@@ -352,7 +352,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_tokens()
+    bool VerilogParser::parse_tokens()
     {
         std::map<std::string, std::string> attributes;
 
@@ -382,7 +382,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_module(std::map<std::string, std::string>& attributes)
+    bool VerilogParser::parse_module(std::map<std::string, std::string>& attributes)
     {
         std::set<std::string> port_names;
         std::map<std::string, std::string> internal_attributes;
@@ -492,7 +492,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_port_list(VerilogModule& module)
+    bool VerilogParser::parse_port_list(VerilogModule& module)
     {
         TokenStream<std::string> ports_stream = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
@@ -525,7 +525,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_port_declaration_list(VerilogModule& module)
+    bool VerilogParser::parse_port_declaration_list(VerilogModule& module)
     {
         TokenStream<std::string> ports_stream = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
@@ -575,7 +575,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_port_definition(VerilogModule& module, std::map<std::string, std::string>& attributes)
+    bool VerilogParser::parse_port_definition(VerilogModule& module, std::map<std::string, std::string>& attributes)
     {
         // port direction
         const Token<std::string> direction_token = m_token_stream.consume();
@@ -625,7 +625,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_signal_definition(VerilogModule& module, std::map<std::string, std::string>& attributes)
+    bool VerilogParser::parse_signal_definition(VerilogModule& module, std::map<std::string, std::string>& attributes)
     {
         m_token_stream.consume("wire", true);
 
@@ -660,7 +660,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_assignment(VerilogModule& module)
+    bool VerilogParser::parse_assignment(VerilogModule& module)
     {
         m_token_stream.consume("assign", true);
         TokenStream<std::string> left_stream = m_token_stream.extract_until("=");
@@ -673,7 +673,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_attribute(std::map<std::string, std::string>& attributes)
+    bool VerilogParser::parse_attribute(std::map<std::string, std::string>& attributes)
     {
         m_token_stream.consume("(*", true);
 
@@ -704,7 +704,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_instance(VerilogModule& module, std::map<std::string, std::string>& attributes)
+    bool VerilogParser::parse_instance(VerilogModule& module, std::map<std::string, std::string>& attributes)
     {
         const std::string instance_type = m_token_stream.consume().string;
 
@@ -742,7 +742,7 @@ namespace hal
         return true;
     }
 
-    bool NetlistParserVerilog::parse_port_assign(VerilogModule& module, const std::string& instance_name)
+    bool VerilogParser::parse_port_assign(VerilogModule& module, const std::string& instance_name)
     {
         m_token_stream.consume("(", true);
 
@@ -768,7 +768,7 @@ namespace hal
         return true;
     }
 
-    std::vector<std::tuple<std::string, std::string, std::string>> NetlistParserVerilog::parse_generic_assign()
+    std::vector<std::tuple<std::string, std::string, std::string>> VerilogParser::parse_generic_assign()
     {
         std::vector<std::tuple<std::string, std::string, std::string>> generics;
 
@@ -837,7 +837,7 @@ namespace hal
     // ###########      Assemble Netlist from Intermediate Format       ##########
     // ###########################################################################
 
-    bool NetlistParserVerilog::construct_netlist(VerilogModule& top_module)
+    bool VerilogParser::construct_netlist(VerilogModule& top_module)
     {
         m_netlist->set_design_name(top_module.m_name);
 
@@ -1069,7 +1069,7 @@ namespace hal
         return true;
     }
 
-    Module* NetlistParserVerilog::instantiate_module(const std::string& instance_identifier,
+    Module* VerilogParser::instantiate_module(const std::string& instance_identifier,
                                                      VerilogModule& verilog_module,
                                                      Module* parent,
                                                      const std::map<std::string, std::string>& parent_module_assignments)
@@ -1327,9 +1327,66 @@ namespace hal
                 }
 
                 // cache pin types
-                std::unordered_map<std::string, PinDirection> pin_to_direction = new_gate->get_type()->get_pin_directions();
+                std::unordered_map<std::string, PinDirection> pin_to_direction = gate_type_it->second->get_pin_directions();
+                std::unordered_map<std::string, std::vector<std::string>> pin_groups;
+                for (const auto& [group_name, pins] : gate_type_it->second->get_pin_groups())
+                {
+                    for (const auto& [index, pin] : pins)
+                    {
+                        pin_groups[group_name].push_back(pin + "(" + std::to_string(index) + ")");
+                    }
+                }
 
-                // TODO map port assignments
+                // expand port assignments
+                for (auto& [port, assignments] : verilog_module.m_instance_port_assignments.at(inst_identifier))
+                {
+                    std::vector<std::string> left_port;
+                    if (const auto group_it = pin_groups.find(port); group_it != pin_groups.end())
+                    {
+                        left_port = group_it->second;
+                    }
+                    else
+                    {
+                        left_port.push_back(port);
+                    }
+                    const std::vector<std::string> right_port = get_expanded_assignment_signal(verilog_module, assignments, true);
+
+                    u32 max_size;
+                    if (right_port.size() <= left_port.size())
+                    {
+                        max_size = right_port.size();
+                    }
+                    else
+                    {
+                        max_size = left_port.size();
+                    }
+
+                    for (u32 i = 0; i < max_size; i++)
+                    {
+                        const std::string& rhs = right_port.at(i);
+                        const std::string& lhs = left_port.at(i);
+                        if (const auto it = parent_module_assignments.find(rhs); it != parent_module_assignments.end())
+                        {
+                            instance_assignments[lhs] = it->second;
+                        }
+                        else
+                        {
+                            if (const auto alias_it = signal_alias.find(rhs); alias_it != signal_alias.end())
+                            {
+                                instance_assignments[lhs] = alias_it->second;
+                            }
+                            else if (rhs == "'0'" || rhs == "'1'" || rhs == "'Z'")
+                            {
+                                instance_assignments[lhs] = rhs;
+                            }
+                            else
+                            {
+                                log_error("verilog_parser", "pin assignment \"{} = {}\" is invalid for instance '{}' of type '{}'", lhs, rhs, inst_identifier, inst_type);
+                                return nullptr;
+                            }
+                        }
+                    }
+                }
 
                 // check for port
                 for (const auto& [port, assignment] : instance_assignments)
@@ -1427,7 +1484,7 @@ namespace hal
     // ###################          Helper Functions          ####################
     // ###########################################################################
 
-    void NetlistParserVerilog::remove_comments(std::string& line, bool& multi_line_comment) const
+    void VerilogParser::remove_comments(std::string& line, bool& multi_line_comment) const
     {
         bool repeat = true;
 
@@ -1494,7 +1551,7 @@ namespace hal
         }
     }
 
-    std::vector<u32> NetlistParserVerilog::parse_range(TokenStream<std::string>& range_str) const
+    std::vector<u32> VerilogParser::parse_range(TokenStream<std::string>& range_str) const
     {
         if (range_str.remaining() == 1)
         {
@@ -1516,7 +1573,7 @@ namespace hal
         return res;
     }
 
-    std::vector<std::string> NetlistParserVerilog::get_expanded_assignment_signal(VerilogModule& module, TokenStream<std::string>& signal_str, bool allow_numerics)
+    std::vector<std::string> VerilogParser::get_expanded_assignment_signal(VerilogModule& module, TokenStream<std::string>& signal_str, bool allow_numerics)
     {
         // PARSE ASSIGNMENT
         //   assignment can currently be one of the following:
@@ -1652,7 +1709,7 @@ namespace hal
                                                                         {'f', {"1", "1", "1", "1"}}};
 
     // TODO add high-impedance support
-    std::vector<std::string> NetlistParserVerilog::get_bin_from_literal(const Token<std::string>& value_token) const
+    std::vector<std::string> VerilogParser::get_bin_from_literal(const Token<std::string>& value_token) const
     {
         const u32 line_number   = value_token.number;
         const std::string value = utils::to_lower(utils::replace(value_token.string, std::string("_"), std::string("")));
@@ -1775,7 +1832,7 @@ namespace hal
         return res;
     }
 
-    std::string NetlistParserVerilog::get_hex_from_literal(const Token<std::string>& value_token) const
+    std::string VerilogParser::get_hex_from_literal(const Token<std::string>& value_token) const
     {
         const u32 line_number   = value_token.number;
         const std::string value = utils::to_lower(utils::replace(value_token.string, std::string("_"), std::string("")));
@@ -1875,7 +1932,7 @@ namespace hal
         return ss.str();
     }
 
-    bool NetlistParserVerilog::is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const
+    bool VerilogParser::is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const
     {
         if (bounds.size() != reference_bounds.size())
         {
@@ -1905,7 +1962,7 @@ namespace hal
         return true;
     }
 
-    std::vector<std::string> NetlistParserVerilog::expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const
+    std::vector<std::string> VerilogParser::expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const
     {
         std::vector<std::string> res;
 
@@ -1914,7 +1971,7 @@ namespace hal
         return res;
     }
 
-    void NetlistParserVerilog::expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const
+    void VerilogParser::expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const
     {
         // expand signal recursively
         if (ranges.size() > dimension)
@@ -1931,7 +1988,7 @@ namespace hal
         }
     }
 
-    std::string NetlistParserVerilog::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
+    std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
         // if the name only appears once, we don't have to suffix it
         if (name_occurrences[name] < 2)

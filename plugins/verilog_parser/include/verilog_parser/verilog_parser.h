@@ -40,13 +40,13 @@
 namespace hal
 {
     /**
-     * @ingroup hdl_parsers
+     * @ingroup netlist_parser
      */
-    class NETLIST_API NetlistParserVerilog : public NetlistParser
+    class NETLIST_API VerilogParser : public NetlistParser
     {
     public:
-        NetlistParserVerilog()  = default;
-        ~NetlistParserVerilog() = default;
+        VerilogParser()  = default;
+        ~VerilogParser() = default;
 
         /**
          * Parse a Verilog netlist into an internal intermediate format.

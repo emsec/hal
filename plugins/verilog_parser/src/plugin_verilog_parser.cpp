@@ -22,7 +22,7 @@ namespace hal
 
     void VerilogParserPlugin::on_load()
     {
-        netlist_parser_manager::register_parser("Default Verilog Parser", []() { return std::make_unique<NetlistParserVerilog>(); }, {".v"});
+        netlist_parser_manager::register_parser("Default Verilog Parser", []() { return std::make_unique<VerilogParser>(); }, {".v"});
     }
 
     void VerilogParserPlugin::on_unload()
