@@ -3,7 +3,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
     cmake_minimum_required(VERSION 3.1.0)
 
 
-    if(APPLE AND CMAKE_HOST_APPLE)
+    if(APPLE AND CMAKE_HOST_APPLE AND NOT Qt5_DIR)
         set (Qt5_DIR "/usr/local/bin/qt@5/5.15.2/lib/cmake" )
     endif(APPLE AND CMAKE_HOST_APPLE)    
 
@@ -17,7 +17,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
         set(Missing_package "TRUE")
         if(APPLE AND CMAKE_HOST_APPLE)
             message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install q@t")
+            message(STATUS "    brew install qt@5")
         endif(APPLE AND CMAKE_HOST_APPLE)
     endif(Qt5Widgets_FOUND)
 
