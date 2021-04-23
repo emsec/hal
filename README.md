@@ -1,4 +1,13 @@
+
+# Welcome to HAL! <a name="introduction"></a>
 [![macOS Workflow](https://github.com/emsec/hal/workflows/Github%20CI/badge.svg?branch=master)](https://github.com/emsec/hal/actions?query=branch%3Amaster+workflow%3A%22Github+CI%22) [![Doc: C++](https://img.shields.io/badge/doc-c%2B%2B-orange)](https://emsec.github.io/hal/doc/) [![Doc: Python](https://img.shields.io/badge/doc-python-red)](https://emsec.github.io/hal/pydoc/) [![deployment](https://gitlab.com/swallat/hal/badges/master/pipeline.svg)](https://gitlab.com/swallat/hal/commits/master) 
+
+HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
+
+![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")
+
+
+
 
 # Navigation
 1. [Introduction](#introduction)
@@ -6,13 +15,6 @@
 3. [Build Instructions](#build-instructions)
 4. [Quickstart Guide](#quickstart)
 5. [Academic Context](#academic-context)
-
-# Welcome to HAL! <a name="introduction"></a>
-
-HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
-
-![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")
-
 
 ## What the hell is HAL?
 Virtually all available research on netlist analysis operates on a graph-based representation of the netlist under inspection.
