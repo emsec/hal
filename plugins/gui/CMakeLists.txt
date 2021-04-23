@@ -4,7 +4,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
 
 
     if(APPLE AND CMAKE_HOST_APPLE)
-        set (Qt5_DIR "/usr/local/Cellar/qt@5/5.15.2/lib/cmake" )
+        set (Qt5_DIR "/usr/local/bin/qt@5/5.15.2/lib/cmake" )
     endif(APPLE AND CMAKE_HOST_APPLE)    
 
     find_package(Qt5 COMPONENTS Core REQUIRED )
@@ -17,7 +17,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
         set(Missing_package "TRUE")
         if(APPLE AND CMAKE_HOST_APPLE)
             message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt")
+            message(STATUS "    brew install q@t")
         endif(APPLE AND CMAKE_HOST_APPLE)
     endif(Qt5Widgets_FOUND)
 
@@ -29,7 +29,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
         set(Missing_package "TRUE")
         if(APPLE AND CMAKE_HOST_APPLE)
             message(STATUS "To install qt5 on MacOS using homebrew run following command:")
-            message(STATUS "    brew install qt5")
+            message(STATUS "    brew install qt@5")
         endif(APPLE AND CMAKE_HOST_APPLE)
     endif(Qt5Concurrent_FOUND)
 
