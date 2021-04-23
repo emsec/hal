@@ -4,7 +4,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
 
 
     if(APPLE AND CMAKE_HOST_APPLE AND NOT Qt5_DIR)
-        set (Qt5_DIR "/usr/local/bin/qt@5/5.15.2/lib/cmake" )
+        set (Qt5_DIR "/usr/local/opt/qt@5/lib/cmake" )
     endif(APPLE AND CMAKE_HOST_APPLE)    
 
     find_package(Qt5 COMPONENTS Core REQUIRED )

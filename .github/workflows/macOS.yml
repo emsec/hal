@@ -85,6 +85,7 @@ jobs:
         # Note the current convention is to use the -S and -B options here to specify source
         # and build directories, but this is only available with CMake 3.13 and higher.
         # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+        # brew link --force qt@5
         run: |
           mkdir -p build
           cd build
@@ -92,8 +93,8 @@ jobs:
           ls ..
           cmake -G Ninja .. -DQt5_DIR=/usr/local/opt/qt@5/lib/cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DPL_GUI=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++
         env:
-          LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-          CPPFLAGS: "-I/usr/local/opt/qt/lib/cmake -I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
+          LDFLAGS: "-L/usr/local/opt/qt@5/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          CPPFLAGS: "-I/usr/local/opt/llvm/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
@@ -109,8 +110,8 @@ jobs:
           export PATH="/usr/local/opt/qt/bin:$PATH"
           cmake --build . --target all --clean-first --config $BUILD_TYPE
         env:
-          LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-          CPPFLAGS: "-I/usr/local/opt/qt/lib/cmake -I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
+          LDFLAGS: "-L/usr/local/opt/qt@5/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          CPPFLAGS: "-I/usr/local/opt/llvm/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
@@ -131,8 +132,8 @@ jobs:
         #  ninja -v hal_coverage
         # bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
         env:
-          LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-          CPPFLAGS: "-I/usr/local/opt/qt/lib/cmake -I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
+          LDFLAGS: "-L/usr/local/opt/qt@5/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          CPPFLAGS: "-I/usr/local/opt/llvm/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
