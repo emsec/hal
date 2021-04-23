@@ -13,9 +13,6 @@ fi
 if [[ "$platform" == 'macOS' ]]; then
     echo "Executing brew bundle"
     brew bundle
-    brew link qt@5 --force
-    brew info qt@5
-    qmake
     pip3 install -r requirements.txt
     if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
        grep -Fxq 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' ~/.zshrc
