@@ -12,6 +12,8 @@
 #include <QVBoxLayout>
 #include <QShortcut>
 #include <QKeySequence>
+#include <QCursor>
+#include <QPixmap>
 
 namespace hal
 {
@@ -72,7 +74,9 @@ namespace hal
         return true;
     }
 
-    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent), mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2)
+    GraphTabWidget::GraphTabWidget(QWidget* parent) : ContentWidget("Graph-Views", parent),
+        mTabWidget(new QTabWidget()), mLayout(new QVBoxLayout()), mZoomFactor(1.2),
+        mModuleSelectCursor(false)
     {
         mContentLayout->addWidget(mTabWidget);
         mTabWidget->setTabsClosable(true);
@@ -249,5 +253,21 @@ namespace hal
             }
         }
         return -1;
+    }
+
+    void GraphTabWidget::setModuleSelectCursor(bool on)
+    {
+        mModuleSelectCursor = on;
+        int n = mTabWidget->count();
+        if (mModuleSelectCursor)
+        {
+            ;
+            QCursor modCurs(QPixmap(":/icons/module_cursor","PNG"));
+            for (int i=0; i<n; i++)
+                mTabWidget->widget(i)->setCursor(modCurs);
+        }
+        else
+            for (int i=0; i<n; i++)
+                mTabWidget->widget(i)->unsetCursor();
     }
 }

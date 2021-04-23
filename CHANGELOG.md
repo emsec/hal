@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added a warning when attempting to assign a keybinding that is already in use
   * added incremental search for settings
   * added setting to enable/disable extra window to list all executed instances from UserAction
+* added new 'Move to module ...' dialog 
+  * allows to create new module or select from existing modules
+  * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
+  * enables searching for existing modules
+  * added cursor to indicate that user is in module pick mode
 * added `remove from view` action to context menu for gates and modules
 * added grouping toolbox feature to highlight successors or predecessors
 * added an indicator showing whether views have been modified
