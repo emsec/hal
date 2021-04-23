@@ -30,7 +30,7 @@ namespace hal
 {
     /**
      * @ingroup python
-     * @brief QSS Adapter to provide the color configurations used by the PythonSyntaxHighlighter
+     * @brief QSS Adapter to provide the color configurations used by the PythonSyntaxHighlighter.
      */
     class PythonQssAdapter : public QWidget
     {

@@ -29,6 +29,8 @@ namespace hal
 
     /**
      * @ingroup docking
+     * @brief An abstract class that provides the interface for specific anchors
+     * (see SplitterAnchor or TabWidget ).
      */
     class ContentAnchor
     {

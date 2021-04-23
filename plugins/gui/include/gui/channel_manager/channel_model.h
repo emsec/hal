@@ -35,7 +35,7 @@ namespace hal
 {
     /**
      * @ingroup logging
-     * @brief Table model for log channels
+     * @brief Table model for log channels.
      *
      * This model handles incoming callbacks from the core's log manager. It creates new channels and updates existing ones and is
      * realized through a singleton pattern.

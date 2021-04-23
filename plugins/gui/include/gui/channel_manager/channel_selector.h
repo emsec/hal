@@ -28,7 +28,7 @@ namespace hal
 {
     /**
      * @ingroup logging
-     * @brief A combobox for selecting a logger channel
+     * @brief A combobox for selecting a logger channel.
      *
      * This class is a simple combobox that displays each channel through its underlying channel model.
      */
