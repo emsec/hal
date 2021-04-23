@@ -293,11 +293,10 @@ namespace hal
             else if (next_token == "pg_pin")
             {
                 auto pin = parse_pg_pin(cell_str, cell);
-                if (!pin.has_value())
+                if (pin.has_value())
                 {
-                    return std::nullopt;
+                    cell.pins.push_back(pin.value());
                 }
-                cell.pins.push_back(pin.value());
             }
             else if (next_token == "bus")
             {
@@ -497,12 +496,12 @@ namespace hal
 
         if (pin_names_str.size() == 0)
         {
-            log_error("liberty_parser", "no pg_pin name given near line {}.", pin.line_number);
+            log_warning("liberty_parser", "no pg_pin name given near line {}.", pin.line_number);
             return std::nullopt;
         }
         else if (pin_names_str.size() > 1)
         {
-            log_error("liberty_parser", "more than one pg_pin name given near line {}.", pin.line_number);
+            log_warning("liberty_parser", "more than one pg_pin name given near line {}.", pin.line_number);
             return std::nullopt;
         }
 
@@ -510,7 +509,7 @@ namespace hal
 
         if (const auto pin_it = cell.pin_names.find(name); pin_it != cell.pin_names.end())
         {
-            log_error("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", name, cell.name);
+            log_warning("liberty_parser", "a pin with name '{}' does already exist for cell '{}'.", name, cell.name);
             return std::nullopt;
         }
 
@@ -536,7 +535,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("liberty_parser", "unsupported pg_type '{}' of pg_pin '{}' for cell '{}'.", type, name, cell.name);
+                    log_warning("liberty_parser", "unsupported pg_type '{}' of pg_pin '{}' for cell '{}'.", type, name, cell.name);
                     return std::nullopt;
                 }
                 pin_str.consume(";", true);
