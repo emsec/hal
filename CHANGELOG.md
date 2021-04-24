@@ -5,8 +5,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-* 'Move to module ...' dialog added allowing to select target module from table, tree-view or graphic pick
-* New cursor to indicate that graphics is in module pick mode
 * added user action system to enable recording and reverting actions within the GUI
   * moved most GUI actions to the new user action system, including interactions with the graph view and view management
   * user actions can be recorded and exported as a macro file allowing easier debugging and crash reporting
@@ -17,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * added a warning when attempting to assign a keybinding that is already in use
   * added incremental search for settings
   * added setting to enable/disable extra window to list all executed instances from UserAction
+* added new 'Move to module ...' dialog 
+  * allows to create new module or select from existing modules
+  * existing modules can be selected from a table, tree-view, or using a module picker within the graph view
+  * enables searching for existing modules
+  * added cursor to indicate that user is in module pick mode
 * added `remove from view` action to context menu for gates and modules
 * added grouping toolbox feature to highlight successors or predecessors
 * added an indicator showing whether views have been modified
@@ -28,7 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * fixed selection details not being updated immediately when renaming or or changing a type
 * fixed navigation bug where ports and nets did not match for modules
 * fixed list of navigation targets containing duplicates and/or loops
-* fixed drag'n drop bug related to negative coordinates
+* fixed drag'n'drop bug related to negative coordinates
+* fixed liberty parser aborting on unknown `pg_type`
 
 ## [3.2.6] - 2021-03-03 09:30:00+02:00 (urgency: medium)
 * added support for multiple properties (formerly refered to as "base type") for a single instance of class `GateType`

@@ -15,9 +15,9 @@ if [[ "$platform" == 'macOS' ]]; then
     brew bundle
     pip3 install -r requirements.txt
     if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
-       grep -Fxq 'export PATH="/usr/local/opt/qt/bin:$PATH"' ~/.zshrc
+       grep -Fxq 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' ~/.zshrc
        if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc
+            echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.zshrc
        fi
 
        grep -Fxq 'export PATH="/usr/local/opt/flex/bin:$PATH"' ~/.zshrc
@@ -31,9 +31,9 @@ if [[ "$platform" == 'macOS' ]]; then
        fi
        source ~/.zshrc
     elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
-       grep -Fxq 'export PATH="/usr/local/opt/qt/bin:$PATH"' ~/.bash_profile
+       grep -Fxq 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' ~/.bash_profile
        if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.bash_profile
+            echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.bash_profile
        fi
 
        grep -Fxq 'export PATH="/usr/local/opt/flex/bin:$PATH"' ~/.bash_profile

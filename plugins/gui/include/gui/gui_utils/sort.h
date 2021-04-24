@@ -25,6 +25,7 @@
 
 #include <QString>
 #include <QList>
+#include <QtCore/qobjectdefs.h>
 
 namespace hal
 {
