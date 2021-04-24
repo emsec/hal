@@ -39,6 +39,7 @@ namespace hal
 
     /**
      * @ingroup graph-visuals
+     * @brief Base class to store and update visual information about the graph.
      */
     class GraphShader
     {

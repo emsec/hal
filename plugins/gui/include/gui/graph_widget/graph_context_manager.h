@@ -45,8 +45,10 @@ namespace hal
     class SettingsItemCheckbox;
     /**
      * @ingroup graph-contexts
-     * The GraphContextManager is a manager class that contains and manages all GraphContexts. <br>
-     * It can be used to create, delete or rename GraphContexts.  <br>
+     * @brief User interface to manage all GraphContext%s.
+     *
+     * The GraphContextManager is a manager class that contains and manages all GraphContext%s. <br>
+     * It can be used to create, delete or rename GraphContext%s.  <br>
      * Moreover it is responsible for applying changes of the Netlist to the contexts. Therefore it inspects which
      * contexts are affected by the corresponding changes to only adjust the relevant contexts.
      */

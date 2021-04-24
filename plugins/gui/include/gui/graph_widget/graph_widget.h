@@ -42,6 +42,8 @@ namespace hal
 
     /**
      * @ingroup graph
+     * @brief Wraps a GraphContext and a GraphGraphicsView.
+     *
      * The content widget that wraps a graph view of a certain GraphContext. <br>
      * It represents one tab of the GraphTabWidgets QTabWidget.
      */

@@ -33,6 +33,8 @@ namespace hal
 
     /**
      * @ingroup graph-visuals-net
+     * @brief The basic net class all other nets inherit from.
+     *
      * The GraphicsItem that represents a single net in the scene.
      */
     class GraphicsNet : public GraphicsItem

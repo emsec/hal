@@ -29,6 +29,8 @@ namespace hal
 {
     /**
      * @ingroup graph-visuals-gate
+     * @brief The standard gate to visualize netlist gates.
+     *
      * The GraphicsGate that is (currently) used to display gates in the scene.
      */
     class StandardGraphicsGate final : public GraphicsGate

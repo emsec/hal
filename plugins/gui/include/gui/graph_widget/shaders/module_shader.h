@@ -29,6 +29,7 @@ namespace hal
 {
     /**
      * @ingroup graph-visuals
+     * @brief Specifically stores/updates visual information about a module and its items.
      */
     class ModuleShader final : public GraphShader
     {

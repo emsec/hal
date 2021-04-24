@@ -29,6 +29,10 @@ namespace hal {
         static CoordinateFromData fromData(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& dc);
     };
 
+    /**
+     * @ingroup graph-layouter
+     * TODO
+     */
     class CoordinateFromDataMap : public QHash<hal::Node,CoordinateFromData>
     {
     public:

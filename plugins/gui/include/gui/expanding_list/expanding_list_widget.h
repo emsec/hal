@@ -37,6 +37,10 @@ namespace hal
     class ExpandingListButton;
     class ExpandingListItem;
 
+    /**
+     * @ingroup settings
+     * @brief A helpter class to group related list items (buttons).
+     */
     class ExpandingListGroup : public QList<ExpandingListItem*>
     {
     public:

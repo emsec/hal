@@ -43,6 +43,7 @@ namespace hal
     };
 
     /**
+     * @ingroup docking
      * @brief A button of in the DockerBar
      *
      * The DockButton is placed and displayed in a DockBar to determine the position and appearance

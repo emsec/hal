@@ -29,8 +29,10 @@ namespace hal
 {
     /**
      * @ingroup graph-visuals-net
+     * @brief Used to display all nets which destinations are not in the current view.
+     *
      * The SeparatedGraphicsNet that is used to represent global in- and outputs as well as sources and destinations that
-     * are not included in the current view.
+     * are not included in the current view. The endings are shaped as arrows.
      */
     class ArrowSeparatedNet : public SeparatedGraphicsNet
     {

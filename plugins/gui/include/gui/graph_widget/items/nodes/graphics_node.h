@@ -31,6 +31,8 @@ namespace hal
 {
     /**
      * @ingroup graph-visuals
+     * @brief Abstract base class for nodes (e.g. gates, modules)
+     *
      * Abstract base class of every node in the netlist graph, i.e. GraphicsGates and GraphicsModules.
      */
     class GraphicsNode : public GraphicsItem
