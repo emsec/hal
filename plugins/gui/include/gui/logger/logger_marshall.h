@@ -36,6 +36,8 @@ namespace hal
 
     /**
      * @ingroup logging
+     * @brief Appends log messages to the corresponding LoggerWidget.
+     *
      * The LoggerMarshall outsources the logic of appending a log to the QPlaintTextEdit of the LoggerWidget it belongs to.
      * By calling appendLog the LoggerMarshall will transform the received log message to an html string with the color
      * of the respective type of the message (e.g. error (red), debug (yellow), etc.).

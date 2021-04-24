@@ -30,6 +30,8 @@ namespace hal
 
     /**
      * @ingroup graph-visuals
+     * @brief Creates a shadow effect around QObject%s.
+     *
      * The ShadowEffect is a graphics effect that simulates a small shadow around the outline of the object
      * it is applied on.
      */

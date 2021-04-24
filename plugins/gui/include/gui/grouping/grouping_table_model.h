@@ -14,6 +14,8 @@ namespace hal {
 
     /**
      * @ingroup utility_widgets-grouping
+     * @brief An entry within a GroupingTableModel.
+     *
      * The GroupingTableEntry represents one entry in the groupings table. Therefore it stores information about
      * the grouping and its color. It also provides and interface to change these fields.
      */
@@ -94,6 +96,9 @@ namespace hal {
     };
 
     /**
+     * @ingroup utility_widgets-grouping
+     * @brief Table that holds information about all groupings.
+     *
      * The table model used for groupings within the GroupingsManagerWidget. <br>
      * Read the Qt documentation for further descriptions of the table model system.
      */

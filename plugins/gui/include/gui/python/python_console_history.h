@@ -30,6 +30,8 @@ namespace hal
 {
     /**
      * @ingroup python-console
+     * @brief Stores the history of python commands.
+     *
      * This class manages the history of python console inputs. It can be used to access previous inputs.
      */
     class PythonConsoleHistory

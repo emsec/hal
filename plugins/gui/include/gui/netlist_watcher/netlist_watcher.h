@@ -31,6 +31,8 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief Observes changes of the netlist and notifies the FileStatusManager.
+     *
      * The NetlistWatcher observes changes of the netlist. Its main purpose is to notify the FileStatusManager about
      * any changes that occur (especially outside the gui). Afterwards the FileStatusManager marks the netlist as
      * modified until the next save.

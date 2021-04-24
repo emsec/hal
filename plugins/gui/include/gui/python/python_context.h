@@ -44,6 +44,8 @@ namespace hal
     namespace py = pybind11;
     /**
      * @ingroup python
+     * @brief Interface for pybind11.
+     *
      * This class provides an interface for using pybind11. It can call a python interpreter to run python expressions and
      * scripts. Moreover it provides a function to get auto-completion candidates that are available in the context.
      */

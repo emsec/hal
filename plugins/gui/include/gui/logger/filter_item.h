@@ -30,6 +30,8 @@ namespace hal
 {
     /**
      * @ingroup logging
+     * @brief Item to filter different message types.
+     *
      * A filter for message types of the logger. Every message type is assigned one of the following rules: <br>
      * <b> ShowAll, HideAll, Process </b> <br>
      * The following message types are distinguished: <br>

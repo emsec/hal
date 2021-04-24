@@ -5,6 +5,8 @@
 namespace hal {
     /**
      * @ingroup utility_widgets-grouping
+     * @brief Displays a colored box for the GroupingManagerWidget.
+     *
      * QStyledItemDelegate used for displaying a colored box in the 'Color'-column
      * within the grouping_manager_widget table.
      */

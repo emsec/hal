@@ -31,7 +31,7 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-module
-     * This class wraps the QTreeView used for the ModuleWidget.
+     * @brief Wraps the QTreeView used for the ModuleWidget.
      *
      * It is necessary to prevent that a right click on the tree-view selects the
      * underlying item and overwrites the previous selection. Otherwise you cant select the option

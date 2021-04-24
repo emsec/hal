@@ -30,6 +30,8 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief Adds button functionality to a QLabel.
+     *
      * The LabelButton is a QLabel that can be used as a button.
      */
     class LabelButton : public QLabel

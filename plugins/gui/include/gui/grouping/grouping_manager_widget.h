@@ -46,7 +46,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-grouping
-     * The ContentWidget that manages the groupings. <br>
+     * @brief User interface for Groupings.
+     *
      * Groupings are disjoint subsets of Gate%s, Module%s and Net%s that can be used to categorize these objects. In the
      * GUI the groupings are drawn in their specified color. The objects of one grouping can be easily selected
      * all together to simplify the work with gates/modules/nets that share a certain property.

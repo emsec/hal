@@ -46,7 +46,7 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-module
-     * The ModuleWidget shows the modules of the netlist hierarchical in a tree view.
+     * @brief Shows the modules of the netlist hierarchical in a tree view.
      *
      * By right-clicking a module in the widget the user can do various actions with the module like changing the name and
      * type, move, append or delete the module.

@@ -45,6 +45,8 @@ namespace hal
 
     /**
      * @ingroup logging
+     * @brief Displays the logs in the gui.
+     *
      * The LoggerWidget is the content widget that displays the current hal log.
      */
     class LoggerWidget : public ContentWidget
