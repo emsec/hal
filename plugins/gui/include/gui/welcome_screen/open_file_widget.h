@@ -32,6 +32,8 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief The welcome screen's OpenFile section.
+     *
      * The "Open File"-widget in the center of the welcome screen where the user can drag&drop a file to open/parse a
      * the netlist of the file.
      */

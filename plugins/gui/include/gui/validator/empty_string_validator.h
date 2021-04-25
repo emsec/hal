@@ -29,7 +29,9 @@ namespace hal
 {
     /**
      * @ingroup gui
-     * The EmptyStringValidator is a Validator which validate function returns <b>true</b> iff the candidate string
+     * @brief Checks if a given string is not empty.
+     *
+     * The EmptyStringValidator is a Validator which validate function returns <b>true</b> if the candidate string
      * contains at least one non-whitespace character.
      * It should be used whenever an input must not be empty.
      */

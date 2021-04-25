@@ -34,6 +34,8 @@ namespace hal
 
     /**
      * @ingroup gui
+     * @brief The welcome screen's GetInTouch section.
+     *
      * The "Get In Touch"-widget at the right side in the welcome screen. The user can click a field to show
      * license and version information, the c++/python documentation or the github bug report site in the browser.
      */

@@ -48,6 +48,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Container for all specific details widgets.
+     *
      * The SelectionDetailsWidget class is primarily a container used to display on the left side the complete
      * selection as a tree (via a treeview) and on the right side the specific details of a single item chosen
      * from the complete selection (via a stackedwidget containing the specific-details-widgets). This class manages

@@ -34,6 +34,8 @@ namespace hal
 {
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Displays the current selection.
+     *
      * The SelectionTreeView class displays the entirety of the current selection in a
      * tree-styled fashion (hence the name). It is embedded in the SelectionDetailsWidget.
      */

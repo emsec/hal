@@ -34,6 +34,8 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief One item in the welcome screen's GetInTouch section.
+     *
      * Widget that represents one item of the GetInTouchWidget
      */
     class GetInTouchItem : public QFrame

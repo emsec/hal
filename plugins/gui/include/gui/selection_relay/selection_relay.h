@@ -43,6 +43,8 @@ namespace hal
 
     /**
      * @ingroup gui
+     * @brief Stores and manages the gui's selection state.
+     *
      * The SelectionRelay is used to manage the selection and the focus of Module%s, Gate%s and Net%s. <br>
      * There can be any number of selected modules and/or gates and/or nets, but only one focused item at a time. <br>
      * This class contains signals to notify objects about changes of the focus and the selection. However these

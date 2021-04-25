@@ -29,6 +29,8 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief A QWidget customized for hal.
+     *
      * The Widget class extends the QWidget with the following Q_SIGNALS: <ul>
      * <li> If the parent of a widget is changed a signal 'parentSetTo' is emitted.
      * <li >If the widget becomes hidden/shown the signals 'hidden'/'shown' are emitted.

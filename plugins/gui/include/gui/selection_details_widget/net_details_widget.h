@@ -50,6 +50,8 @@ namespace hal
 
     /**
      * @ingroup utility_widgets-selection_details
+     * @brief Displays specific net details.
+     *
      * The NetDetailsWidget class displays detailed information about a net including name, type
      * and destination / sources by calling its update(net-id) function. It is embedded within the
      * SelectionDetaisWidget and uses multiple tables to display the net's information.

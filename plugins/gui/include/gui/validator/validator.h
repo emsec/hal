@@ -28,6 +28,8 @@ namespace hal
 {
     /**
      * @ingroup gui
+     * @brief Base class for any string validator.
+     *
      * A <i>Validator</i> can be used to check if a string meets certain requirements. It is intended to be used in
      * and input dialog to dynamically validate the input string of the user. If the input is not considered valid
      * and the validation fails the Validator provides a 'fail text' that can be inserted in the input dialog widget
