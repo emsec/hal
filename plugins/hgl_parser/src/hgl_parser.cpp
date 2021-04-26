@@ -265,7 +265,6 @@ namespace hal
         }
 
         std::vector<std::pair<u32, std::string>> pins;
-        const auto pins_obj = group["pins"].GetObject();
         for (const auto& pin_obj : group["pins"].GetArray())
         {
             if(!pin_obj.IsObject()) 
