@@ -80,9 +80,9 @@ namespace hal
 
         // some caching
         std::unordered_map<std::string, GateType*> m_gate_types;
-        std::unordered_map<Net*, std::tuple<PinDirection, std::string, Module*>> m_module_ports;
         std::unordered_map<std::string, GateType*> m_vcc_gate_types;
         std::unordered_map<std::string, GateType*> m_gnd_gate_types;
+        std::unordered_map<Net*, std::tuple<PinDirection, std::string, Module*>> m_module_ports;
 
         // unique aliases
         std::unordered_map<std::string, u32> m_signal_name_occurrences;
@@ -110,15 +110,14 @@ namespace hal
 
         // construct netlist from intermediate format
         bool construct_netlist(VerilogModule& top_module);
-        Module* instantiate_module(const std::string& instance_name, VerilogModule& verilog_module, Module* parent, const std::map<std::string, std::string>& parent_module_assignments);
+        Module* instantiate_module(const std::string& instance_name, VerilogModule& verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
 
         // helper functions
         void remove_comments(std::string& line, bool& multi_line_comment) const;
         std::vector<u32> parse_range(TokenStream<std::string>& range_str) const;
-        std::vector<std::string> get_expanded_assignment_signal(VerilogModule& module, TokenStream<std::string>& signal_str, bool allow_numerics);
         std::vector<std::string> get_bin_from_literal(const Token<std::string>& value_token) const;
         std::string get_hex_from_literal(const Token<std::string>& value_token) const;
-        bool is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const;
+        std::vector<std::string> expand_assignment_signal(VerilogModule& module, TokenStream<std::string>& signal_str, bool allow_numerics);
         std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;
         void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
         std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;

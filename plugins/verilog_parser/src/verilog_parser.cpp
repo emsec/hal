@@ -16,6 +16,8 @@ namespace hal
 {
     bool VerilogParser::parse(const std::filesystem::path& file_path)
     {
+        m_modules.clear();
+
         m_path = file_path;
 
         {
@@ -110,8 +112,12 @@ namespace hal
             // expand assignments
             for (auto& [left_stream, right_stream] : module.m_assignments)
             {
-                std::vector<std::string> left_signals  = get_expanded_assignment_signal(module, left_stream, false);
-                std::vector<std::string> right_signals = get_expanded_assignment_signal(module, left_stream, false);
+                const std::vector<std::string> left_signals  = expand_assignment_signal(module, left_stream, false);
+                const std::vector<std::string> right_signals = expand_assignment_signal(module, right_stream, true);
+                if (left_signals.empty() || right_signals.empty())
+                {
+                    return false;
+                }
 
                 u32 left_size  = left_signals.size();
                 u32 right_size = right_signals.size();
@@ -139,6 +145,45 @@ namespace hal
             }
         }
 
+        // expand module port assignments
+        for (auto& [module_name, module] : m_modules)
+        {
+            for (const std::string& instance_name : module.m_instances)
+            {
+                const std::string& instance_type = module.m_instance_types.at(instance_name);
+                if (auto module_it = m_modules.find(instance_type); module_it != m_modules.end())
+                {
+                    if (auto inst_it = module.m_instance_assignments.find(instance_name); inst_it != module.m_instance_assignments.end())
+                    {
+                        for (auto& [port_token, assignment_stream] : inst_it->second)
+                        {
+                            const std::vector<std::string>& left_port = module_it->second.m_expanded_port_identifiers.at(port_token.string);
+                            const std::vector<std::string> right_port = expand_assignment_signal(module, assignment_stream, true);
+                            if (left_port.empty() || right_port.empty())
+                            {
+                                return false;
+                            }
+
+                            u32 max_size;
+                            if (right_port.size() <= left_port.size())
+                            {
+                                max_size = right_port.size();
+                            }
+                            else
+                            {
+                                max_size = left_port.size();
+                            }
+
+                            for (u32 i = 0; i < max_size; i++)
+                            {
+                                module.m_expanded_module_assignments[instance_name].push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         return true;
     }
 
@@ -147,7 +192,6 @@ namespace hal
         // create empty netlist
         std::unique_ptr<Netlist> result = netlist_factory::create_netlist(gate_library);
         m_netlist                       = result.get();
-
         if (m_netlist == nullptr)
         {
             // error printed in subfunction
@@ -160,6 +204,15 @@ namespace hal
             log_error("verilog_parser", "file did not contain any modules.");
             return nullptr;
         }
+
+        m_gate_types.clear();
+        m_gnd_gate_types.clear();
+        m_vcc_gate_types.clear();
+        m_instance_name_occurrences.clear();
+        m_signal_name_occurrences.clear();
+        m_net_by_name.clear();
+        m_nets_to_merge.clear();
+        m_module_ports.clear();
 
         // buffer gate types
         m_gate_types     = gate_library->get_gate_types();
@@ -189,49 +242,53 @@ namespace hal
         }
 
         // add global GND gate if required by any instance
-        // TODO add check whether GND gate already exists
-        if (!m_zero_net->get_destinations().empty())
+        if (m_netlist->get_gnd_gates().empty())
         {
-            const auto gnd_type   = m_gnd_gate_types.begin()->second;
-            const auto output_pin = gnd_type->get_output_pins().at(0);
-            const auto gnd        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
-
-            if (!m_netlist->mark_gnd_gate(gnd))
+            if (!m_zero_net->get_destinations().empty())
             {
-                return nullptr;
-            }
+                GateType* gnd_type           = m_gnd_gate_types.begin()->second;
+                const std::string output_pin = *gnd_type->get_pins_of_direction(PinDirection::output).begin();
+                Gate* gnd                    = m_netlist->create_gate(m_netlist->get_unique_gate_id(), gnd_type, "global_gnd");
 
-            if (auto gnd_net = m_net_by_name.find("'0'")->second; !gnd_net->add_source(gnd, output_pin))
-            {
-                return nullptr;
+                if (!m_netlist->mark_gnd_gate(gnd))
+                {
+                    return nullptr;
+                }
+
+                if (!m_zero_net->add_source(gnd, output_pin))
+                {
+                    return nullptr;
+                }
             }
-        }
-        else
-        {
-            m_netlist->delete_net(m_zero_net);
+            else
+            {
+                m_netlist->delete_net(m_zero_net);
+            }
         }
 
         // add global VCC gate if required by any instance
-        // TODO add check whether VCC gate already exists
-        if (!m_one_net->get_destinations().empty())
+        if (m_netlist->get_vcc_gates().empty())
         {
-            const auto vcc_type   = m_vcc_gate_types.begin()->second;
-            const auto output_pin = vcc_type->get_output_pins().at(0);
-            const auto vcc        = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
-
-            if (!m_netlist->mark_vcc_gate(vcc))
+            if (!m_one_net->get_destinations().empty())
             {
-                return nullptr;
-            }
+                GateType* vcc_type           = m_vcc_gate_types.begin()->second;
+                const std::string output_pin = *vcc_type->get_pins_of_direction(PinDirection::output).begin();
+                Gate* vcc                    = m_netlist->create_gate(m_netlist->get_unique_gate_id(), vcc_type, "global_vcc");
 
-            if (auto vcc_net = m_net_by_name.find("'1'")->second; !vcc_net->add_source(vcc, output_pin))
-            {
-                return nullptr;
+                if (!m_netlist->mark_vcc_gate(vcc))
+                {
+                    return nullptr;
+                }
+
+                if (!m_one_net->add_source(vcc, output_pin))
+                {
+                    return nullptr;
+                }
             }
-        }
-        else
-        {
-            m_netlist->delete_net(m_one_net);
+            else
+            {
+                m_netlist->delete_net(m_one_net);
+            }
         }
 
         // delete unused nets
@@ -246,13 +303,6 @@ namespace hal
         }
 
         // TODO load gate coordinates
-
-        m_gate_types.clear();
-        m_gnd_gate_types.clear();
-        m_vcc_gate_types.clear();
-        m_instance_name_occurrences.clear();
-        m_signal_name_occurrences.clear();
-        m_module_ports.clear();
 
         return result;
     }
@@ -629,12 +679,15 @@ namespace hal
     {
         m_token_stream.consume("wire", true);
 
+        TokenStream<std::string> signal_stream = m_token_stream.extract_until(";");
+        m_token_stream.consume(";", true);
+
         // extract bounds
         std::vector<std::vector<u32>> ranges;
-        while (m_token_stream.consume("["))
+        while (signal_stream.consume("["))
         {
-            const std::vector<u32> range = parse_range(m_token_stream);
-            m_token_stream.consume("]", true);
+            const std::vector<u32> range = parse_range(signal_stream);
+            signal_stream.consume("]", true);
 
             ranges.emplace_back(range);
         }
@@ -642,19 +695,26 @@ namespace hal
         // extract names
         do
         {
-            std::string signal_name = m_token_stream.consume().string;
-            module.m_signals.push_back(signal_name);
+            Token<std::string> signal_name = signal_stream.consume();
+            if (signal_stream.peek() == "=")
+            {
+                TokenStream<std::string> left_stream(std::vector<Token<std::string>>({signal_name}));
+                signal_stream.consume("=", true);
+                TokenStream<std::string> right_stream = signal_stream.extract_until(",");
+                module.m_assignments.push_back(std::make_pair(left_stream, right_stream));
+            }
+
+            module.m_signals.push_back(signal_name.string);
             if (!ranges.empty())
             {
-                module.m_signal_ranges[signal_name] = ranges;
+                module.m_signal_ranges[signal_name.string] = ranges;
             }
             for (const auto& [attribute_name, attribute_value] : attributes)
             {
-                module.m_signal_attributes[signal_name].push_back(std::make_tuple(attribute_name, "unknown", attribute_value));
+                module.m_signal_attributes[signal_name.string].push_back(std::make_tuple(attribute_name, "unknown", attribute_value));
             }
-        } while (m_token_stream.consume(",", false));
+        } while (signal_stream.consume(",", false));
 
-        m_token_stream.consume(";", true);
         attributes.clear();
 
         return true;
@@ -757,7 +817,7 @@ namespace hal
 
                 if (right_stream.size() != 0)
                 {
-                    module.m_instance_port_assignments[instance_name].push_back(std::make_pair(left_token, right_stream));
+                    module.m_instance_assignments[instance_name].push_back(std::make_pair(left_token, right_stream));
                 }
             }
         } while (m_token_stream.consume(",", false));
@@ -879,17 +939,76 @@ namespace hal
             }
         }
 
-        // detect unused entities
-        for (const auto& module : m_modules)
+        for (auto& [module_name, module] : m_modules)
         {
-            if (instantiation_count[module.first] == 0)
+            // detect unused modules
+            if (instantiation_count[module_name] == 0)
             {
-                log_warning("verilog_parser", "module '{}' has been defined in the netlist but is not instantiated.", module.first);
+                log_warning("verilog_parser", "module '{}' has been defined in the netlist but is not instantiated.", module_name);
+                continue;
+            }
+
+            // clear gate assignments for every initialization attempt
+            module.m_expanded_gate_assignments.clear();
+
+            // expand gate pin assignments
+            for (const std::string& instance_name : module.m_instances)
+            {
+                const std::string& instance_type = module.m_instance_types.at(instance_name);
+
+                if (const auto gate_type_it = m_gate_types.find(instance_type); gate_type_it != m_gate_types.end())
+                {
+                    // cache pin groups
+                    std::unordered_map<std::string, std::vector<std::string>> pin_groups;
+                    for (const auto& [group_name, pins] : gate_type_it->second->get_pin_groups())
+                    {
+                        for (const auto& pin : pins)
+                        {
+                            pin_groups[group_name].push_back(pin.second);
+                        }
+                    }
+
+                    if (auto inst_it = module.m_instance_assignments.find(instance_name); inst_it != module.m_instance_assignments.end())
+                    {
+                        for (auto [pin_token, assignment_stream] : inst_it->second)
+                        {
+                            std::vector<std::string> left_port;
+                            if (const auto group_it = pin_groups.find(pin_token.string); group_it != pin_groups.end())
+                            {
+                                left_port = group_it->second;
+                            }
+                            else
+                            {
+                                left_port.push_back(pin_token.string);
+                            }
+                            const std::vector<std::string> right_port = expand_assignment_signal(module, assignment_stream, true);
+                            if (right_port.empty())
+                            {
+                                return false;
+                            }
+
+                            u32 max_size;
+                            if (right_port.size() <= left_port.size())
+                            {
+                                max_size = right_port.size();
+                            }
+                            else
+                            {
+                                max_size = left_port.size();
+                            }
+
+                            for (u32 i = 0; i < max_size; i++)
+                            {
+                                module.m_expanded_gate_assignments[instance_name].push_back(std::make_pair(left_port.at(i), right_port.at(i)));
+                            }
+                        }
+                    }
+                }
             }
         }
 
         // for the top module, generate global i/o signals for all ports
-        std::map<std::string, std::string> top_assignments;
+        std::unordered_map<std::string, std::string> top_assignments;
         for (const auto& [port_identifier, expanded_port_identifiers] : top_module.m_expanded_port_identifiers)
         {
             PinDirection direction;
@@ -1031,7 +1150,6 @@ namespace hal
                         m_module_ports.erase(it);
                     }
 
-                    // make sure to keep module ports up to date
                     m_netlist->delete_net(slave_net);
                     m_net_by_name.erase(slave);
                 }
@@ -1043,7 +1161,7 @@ namespace hal
 
             if (!progress_made)
             {
-                log_error("hdl_parser", "cyclic dependency between signals detected, cannot parse netlist.");
+                log_error("verilog_parser", "cyclic dependency between signals detected, cannot parse netlist.");
                 return false;
             }
         }
@@ -1070,9 +1188,9 @@ namespace hal
     }
 
     Module* VerilogParser::instantiate_module(const std::string& instance_identifier,
-                                                     VerilogModule& verilog_module,
-                                                     Module* parent,
-                                                     const std::map<std::string, std::string>& parent_module_assignments)
+                                              VerilogModule& verilog_module,
+                                              Module* parent,
+                                              const std::unordered_map<std::string, std::string>& parent_module_assignments)
     {
         std::unordered_map<std::string, std::string> signal_alias;
         std::unordered_map<std::string, std::string> instance_alias;
@@ -1134,7 +1252,7 @@ namespace hal
 
             PinDirection direction = verilog_module.m_port_directions.at(internal_identifier);
 
-            for (const auto& expanded_identifier : expanded_port_identifiers)
+            for (const std::string& expanded_identifier : expanded_port_identifiers)
             {
                 if (const auto it = parent_module_assignments.find(expanded_identifier); it != parent_module_assignments.end())
                 {
@@ -1218,7 +1336,8 @@ namespace hal
             }
             else
             {
-                log_warning("verilog_parser", "cannot find alias for net '{}' of instance '{}' of type '{}'.", a, instance_identifier, instance_type);
+                log_error("verilog_parser", "cannot find alias for net '{}' of instance '{}' of type '{}'.", a, instance_identifier, instance_type);
+                return nullptr;
             }
 
             if (const auto parent_it = parent_module_assignments.find(b); parent_it != parent_module_assignments.end())
@@ -1231,7 +1350,8 @@ namespace hal
             }
             else if (b != "'0'" && b != "'1'" && b != "'Z'")
             {
-                log_warning("verilog_parser", "cannot find alias for net '{}' of instance '{}' of type '{}'.", b, instance_identifier, instance_type);
+                log_error("verilog_parser", "cannot find alias for net '{}' of instance '{}' of type '{}'.", b, instance_identifier, instance_type);
+                return nullptr;
             }
 
             m_nets_to_merge[b].push_back(a);
@@ -1246,58 +1366,43 @@ namespace hal
             DataContainer* container;
 
             // assign actual signal names to ports
-            std::map<std::string, std::string> instance_assignments;
+            std::unordered_map<std::string, std::string> instance_assignments;
 
             // if the instance is another entity, recursively instantiate it
             if (auto module_it = m_modules.find(inst_type); module_it != m_modules.end())
             {
-                // expand port assignments
-                for (auto& [port, assignments] : verilog_module.m_instance_port_assignments.at(inst_identifier))
+                if (const auto inst_it = verilog_module.m_expanded_module_assignments.find(inst_identifier); inst_it != verilog_module.m_expanded_module_assignments.end())
                 {
-                    const std::vector<std::string>& left_port = module_it->second.m_expanded_port_identifiers.at(port);
-                    const std::vector<std::string> right_port = get_expanded_assignment_signal(verilog_module, assignments, true);
-
-                    u32 max_size;
-                    if (right_port.size() <= left_port.size())
+                    // expand port assignments
+                    for (const auto& [port, assignment] : inst_it->second)
                     {
-                        max_size = right_port.size();
-                    }
-                    else
-                    {
-                        max_size = left_port.size();
-                    }
-
-                    for (u32 i = 0; i < max_size; i++)
-                    {
-                        const std::string& rhs = right_port.at(i);
-                        const std::string& lhs = left_port.at(i);
-                        if (const auto it = parent_module_assignments.find(rhs); it != parent_module_assignments.end())
+                        if (const auto it = parent_module_assignments.find(assignment); it != parent_module_assignments.end())
                         {
-                            instance_assignments[lhs] = it->second;
+                            instance_assignments[port] = it->second;
                         }
                         else
                         {
-                            if (const auto alias_it = signal_alias.find(rhs); alias_it != signal_alias.end())
+                            if (const auto alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())
                             {
-                                instance_assignments[lhs] = alias_it->second;
+                                instance_assignments[port] = alias_it->second;
                             }
-                            else if (rhs == "'0'" || rhs == "'1'" || rhs == "'Z'")
+                            else if (assignment == "'0'" || assignment == "'1'" || assignment == "'Z'")
                             {
-                                instance_assignments[lhs] = rhs;
+                                instance_assignments[port] = assignment;
                             }
                             else
                             {
-                                log_error("verilog_parser", "port assignment \"{} = {}\" is invalid for instance '{}' of type '{}'", lhs, rhs, inst_identifier, inst_type);
+                                log_error("verilog_parser", "port assignment \"{} = {}\" is invalid for instance '{}' of type '{}'.", port, assignment, inst_identifier, inst_type);
                                 return nullptr;
                             }
                         }
                     }
-                }
 
-                container = instantiate_module(inst_identifier, module_it->second, module, instance_assignments);
-                if (container == nullptr)
-                {
-                    return nullptr;
+                    container = instantiate_module(inst_identifier, module_it->second, module, instance_assignments);
+                    if (container == nullptr)
+                    {
+                        return nullptr;
+                    }
                 }
             }
             // otherwise it has to be an element from the gate library
@@ -1313,7 +1418,11 @@ namespace hal
                     return nullptr;
                 }
 
-                module->assign_gate(new_gate);
+                if (!module->is_top_module())
+                {
+                    module->assign_gate(new_gate);
+                }
+
                 container = new_gate;
 
                 // if gate is of a GND or VCC gate type, mark it as such
@@ -1326,112 +1435,76 @@ namespace hal
                     return nullptr;
                 }
 
-                // cache pin types
-                std::unordered_map<std::string, PinDirection> pin_to_direction = gate_type_it->second->get_pin_directions();
-                std::unordered_map<std::string, std::vector<std::string>> pin_groups;
-                for (const auto& [group_name, pins] : gate_type_it->second->get_pin_groups())
+                if (const auto inst_it = verilog_module.m_expanded_gate_assignments.find(inst_identifier); inst_it != verilog_module.m_expanded_gate_assignments.end())
                 {
-                    for (const auto& [index, pin] : pins)
-                    {
-                        pin_groups[group_name].push_back(pin + "(" + std::to_string(index) + ")");
-                    }
-                }
+                    // cache pin directions
+                    std::unordered_map<std::string, PinDirection> pin_to_direction = gate_type_it->second->get_pin_directions();
 
-                // expand port assignments
-                for (auto& [port, assignments] : verilog_module.m_instance_port_assignments.at(inst_identifier))
-                {
-                    std::vector<std::string> left_port;
-                    if (const auto group_it = pin_groups.find(port); group_it != pin_groups.end())
+                    // expand port assignments
+                    for (const auto& [pin, assignment] : inst_it->second)
                     {
-                        left_port = group_it->second;
-                    }
-                    else
-                    {
-                        left_port.push_back(port);
-                    }
-                    const std::vector<std::string> right_port = get_expanded_assignment_signal(verilog_module, assignments, true);
+                        std::string signal;
 
-                    u32 max_size;
-                    if (right_port.size() <= left_port.size())
-                    {
-                        max_size = right_port.size();
-                    }
-                    else
-                    {
-                        max_size = left_port.size();
-                    }
-
-                    for (u32 i = 0; i < max_size; i++)
-                    {
-                        const std::string& rhs = right_port.at(i);
-                        const std::string& lhs = left_port.at(i);
-                        if (const auto it = parent_module_assignments.find(rhs); it != parent_module_assignments.end())
+                        if (const auto parent_it = parent_module_assignments.find(assignment); parent_it != parent_module_assignments.end())
                         {
-                            instance_assignments[lhs] = it->second;
+                            signal = parent_it->second;
+                        }
+                        else if (const auto alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())
+                        {
+                            signal = alias_it->second;
+                        }
+                        else if (assignment == "'0'" || assignment == "'1'" || assignment == "'Z'")
+                        {
+                            signal = assignment;
                         }
                         else
                         {
-                            if (const auto alias_it = signal_alias.find(rhs); alias_it != signal_alias.end())
+                            log_error("verilog_parser", "pin assignment \"{} = {}\" is invalid for instance '{}' of type '{}'", pin, assignment, inst_identifier, inst_type);
+                            return nullptr;
+                        }
+
+                        // get the respective net for the assignment
+                        if (const auto net_it = m_net_by_name.find(signal); net_it == m_net_by_name.end())
+                        {
+                            log_error("verilog_parser", "signal '{}' of instance '{}' of type '{}' has not been declared.", signal, inst_identifier, inst_type);
+                            return nullptr;
+                        }
+                        else
+                        {
+                            Net* current_net = net_it->second;
+
+                            // add net src/dst by pin types
+                            bool is_input  = false;
+                            bool is_output = false;
+
+                            if (const auto it = pin_to_direction.find(pin); it != pin_to_direction.end())
                             {
-                                instance_assignments[lhs] = alias_it->second;
+                                if (it->second == PinDirection::input || it->second == PinDirection::inout)
+                                {
+                                    is_input = true;
+                                }
+
+                                if (it->second == PinDirection::output || it->second == PinDirection::inout)
+                                {
+                                    is_output = true;
+                                }
                             }
-                            else if (rhs == "'0'" || rhs == "'1'" || rhs == "'Z'")
+
+                            if (!is_input && !is_output)
                             {
-                                instance_assignments[lhs] = rhs;
-                            }
-                            else
-                            {
-                                log_error("verilog_parser", "pin assignment \"{} = {}\" is invalid for instance '{}' of type '{}'", lhs, rhs, inst_identifier, inst_type);
+                                log_error("verilog_parser", "undefined pin '{}' for gate '{}' of type '{}'.", pin, new_gate->get_name(), new_gate->get_type()->get_name());
                                 return nullptr;
                             }
-                        }
-                    }
-                }
 
-                // check for port
-                for (const auto& [port, assignment] : instance_assignments)
-                {
-                    // get the respective net for the assignment
-                    if (const auto net_it = m_net_by_name.find(assignment); net_it == m_net_by_name.end())
-                    {
-                        log_error("verilog_parser", "signal '{}' of instance '{}' of type '{}' has not been declared.", assignment, inst_identifier, inst_type);
-                        return nullptr;
-                    }
-                    else
-                    {
-                        auto current_net = net_it->second;
-
-                        // add net src/dst by pin types
-                        bool is_input  = false;
-                        bool is_output = false;
-
-                        if (const auto it = pin_to_direction.find(port); it != pin_to_direction.end())
-                        {
-                            if (it->second == PinDirection::input || it->second == PinDirection::inout)
+                            if (is_output && !current_net->add_source(new_gate, pin))
                             {
-                                is_input = true;
+                                return nullptr;
                             }
 
-                            if (it->second == PinDirection::output || it->second == PinDirection::inout)
+                            if (is_input && !current_net->add_destination(new_gate, pin))
                             {
-                                is_output = true;
+                                return nullptr;
                             }
-                        }
-
-                        if (!is_input && !is_output)
-                        {
-                            log_error("verilog_parser", "undefined pin '{}' for gate '{}' of type '{}'.", port, new_gate->get_name(), new_gate->get_type()->get_name());
-                            return nullptr;
-                        }
-
-                        if (is_output && !current_net->add_source(new_gate, port))
-                        {
-                            return nullptr;
-                        }
-
-                        if (is_input && !current_net->add_destination(new_gate, port))
-                        {
-                            return nullptr;
                         }
                     }
                 }
@@ -1443,36 +1516,42 @@ namespace hal
             }
 
             // assign instance attributes
-            for (const auto& attribute : verilog_module.m_instance_attributes.at(inst_identifier))
+            if (const auto& attr_it = verilog_module.m_instance_attributes.find(inst_identifier); attr_it != verilog_module.m_instance_attributes.end())
             {
-                if (!container->set_data("attribute", std::get<0>(attribute), std::get<1>(attribute), std::get<2>(attribute)))
+                for (const auto& attribute : attr_it->second)
                 {
-                    log_warning("verilog_parser",
-                                "could not set attribute ({}, {}, {}) for instance '{}' of type '{}' within instance '{}' of type '{}'.",
-                                std::get<0>(attribute),
-                                std::get<1>(attribute),
-                                std::get<2>(attribute),
-                                inst_identifier,
-                                inst_type,
-                                instance_identifier,
-                                instance_type);
+                    if (!container->set_data("attribute", std::get<0>(attribute), std::get<1>(attribute), std::get<2>(attribute)))
+                    {
+                        log_warning("verilog_parser",
+                                    "could not set attribute ({}, {}, {}) for instance '{}' of type '{}' within instance '{}' of type '{}'.",
+                                    std::get<0>(attribute),
+                                    std::get<1>(attribute),
+                                    std::get<2>(attribute),
+                                    inst_identifier,
+                                    inst_type,
+                                    instance_identifier,
+                                    instance_type);
+                    }
                 }
             }
 
             // process generics
-            for (const auto& generic : verilog_module.m_instance_generic_assignments.at(inst_identifier))
+            if (const auto& gen_it = verilog_module.m_instance_generic_assignments.find(inst_identifier); gen_it != verilog_module.m_instance_generic_assignments.end())
             {
-                if (!container->set_data("generic", std::get<0>(generic), std::get<1>(generic), std::get<2>(generic)))
+                for (const auto& generic : gen_it->second)
                 {
-                    log_warning("verilog_parser",
-                                "could not set generic ({}, {}, {}) for instance '{}' of type '{}' within instance '{}' of type '{}'.",
-                                std::get<0>(generic),
-                                std::get<1>(generic),
-                                std::get<2>(generic),
-                                inst_identifier,
-                                inst_type,
-                                instance_identifier,
-                                instance_type);
+                    if (!container->set_data("generic", std::get<0>(generic), std::get<1>(generic), std::get<2>(generic)))
+                    {
+                        log_warning("verilog_parser",
+                                    "could not set generic ({}, {}, {}) for instance '{}' of type '{}' within instance '{}' of type '{}'.",
+                                    std::get<0>(generic),
+                                    std::get<1>(generic),
+                                    std::get<2>(generic),
+                                    inst_identifier,
+                                    inst_type,
+                                    instance_identifier,
+                                    instance_type);
+                    }
                 }
             }
         }
@@ -1551,29 +1630,29 @@ namespace hal
         }
     }
 
-    std::vector<u32> VerilogParser::parse_range(TokenStream<std::string>& range_str) const
+    std::vector<u32> VerilogParser::parse_range(TokenStream<std::string>& ranges_stream) const
     {
-        if (range_str.remaining() == 1)
+        if (ranges_stream.remaining() == 1)
         {
-            return {(u32)std::stoi(range_str.consume().string)};
+            return {(u32)std::stoi(ranges_stream.consume().string)};
         }
 
         // MSB to LSB
-        const int end = std::stoi(range_str.consume().string);
-        range_str.consume(":", true);
-        const int start = std::stoi(range_str.consume().string);
+        const int end = std::stoi(ranges_stream.consume().string);
+        ranges_stream.consume(":", true);
+        const int start = std::stoi(ranges_stream.consume().string);
 
         const int direction = (start <= end) ? 1 : -1;
 
-        std::vector<u32> res;
+        std::vector<u32> result;
         for (int i = start; i != end + direction; i += direction)
         {
-            res.push_back((u32)i);
+            result.push_back((u32)i);
         }
-        return res;
+        return result;
     }
 
-    std::vector<std::string> VerilogParser::get_expanded_assignment_signal(VerilogModule& module, TokenStream<std::string>& signal_str, bool allow_numerics)
+    std::vector<std::string> VerilogParser::expand_assignment_signal(VerilogModule& module, TokenStream<std::string>& signal_stream, bool allow_numerics)
     {
         // PARSE ASSIGNMENT
         //   assignment can currently be one of the following:
@@ -1584,18 +1663,18 @@ namespace hal
         //   (5) NAME[BEGIN_INDEX1:END_INDEX1][BEGIN_INDEX2:END_INDEX2]...
         //   (6) {(1 - 5), (1 - 5), ...}
 
-        std::vector<std::string> res;
+        std::vector<std::string> result;
         std::vector<TokenStream<std::string>> parts;
 
         // always go LSB to MSB (from right to left)
 
         // (6) {(1) - (5), (1) - (5), ...}
-        if (signal_str.peek() == "{")
+        if (signal_stream.peek() == "{")
         {
-            signal_str.consume("{", true);
+            signal_stream.consume("{", true);
 
-            TokenStream<std::string> assignment_list_str = signal_str.extract_until("}");
-            signal_str.consume("}", true);
+            TokenStream<std::string> assignment_list_str = signal_stream.extract_until("}");
+            signal_stream.consume("}", true);
 
             do
             {
@@ -1604,7 +1683,7 @@ namespace hal
         }
         else
         {
-            parts.push_back(signal_str);
+            parts.push_back(signal_stream);
         }
 
         for (auto it = parts.rbegin(); it != parts.rend(); it++)
@@ -1629,7 +1708,7 @@ namespace hal
                 {
                     return {};
                 }
-                res.insert(res.end(), binary_vector.begin(), binary_vector.end());
+                result.insert(result.end(), binary_vector.begin(), binary_vector.end());
             }
             else
             {
@@ -1669,60 +1748,57 @@ namespace hal
                 if (!ranges.empty())
                 {
                     std::vector<std::string> expanded_signal = expand_ranges(signal_name, ranges);
-                    res.insert(res.end(), expanded_signal.begin(), expanded_signal.end());
+                    result.insert(result.end(), expanded_signal.begin(), expanded_signal.end());
                 }
                 else
                 {
-                    res.push_back(signal_name);
+                    result.push_back(signal_name);
                 }
             }
-
-            // create new signal for assign
         }
 
-        return res;
+        return result;
     }
 
-    static const std::map<char, std::vector<std::string>> oct_to_bin = {{'0', {"0", "0", "0"}},
-                                                                        {'1', {"1", "0", "0"}},
-                                                                        {'2', {"0", "1", "0"}},
-                                                                        {'3', {"1", "1", "0"}},
-                                                                        {'4', {"0", "0", "1"}},
-                                                                        {'5', {"1", "0", "1"}},
-                                                                        {'6', {"0", "1", "1"}},
-                                                                        {'7', {"1", "1", "1"}}};
-    static const std::map<char, std::vector<std::string>> hex_to_bin = {{'0', {"0", "0", "0", "0"}},
-                                                                        {'1', {"1", "0", "0", "0"}},
-                                                                        {'2', {"0", "1", "0", "0"}},
-                                                                        {'3', {"1", "1", "0", "0"}},
-                                                                        {'4', {"0", "0", "1", "0"}},
-                                                                        {'5', {"1", "0", "1", "0"}},
-                                                                        {'6', {"0", "1", "1", "0"}},
-                                                                        {'7', {"1", "1", "1", "0"}},
-                                                                        {'8', {"0", "0", "0", "1"}},
-                                                                        {'9', {"1", "0", "0", "1"}},
-                                                                        {'a', {"0", "1", "0", "1"}},
-                                                                        {'b', {"1", "1", "0", "1"}},
-                                                                        {'c', {"0", "0", "1", "1"}},
-                                                                        {'d', {"1", "0", "1", "1"}},
-                                                                        {'e', {"0", "1", "1", "1"}},
-                                                                        {'f', {"1", "1", "1", "1"}}};
+    static const std::map<char, std::vector<std::string>> oct_to_bin = {{'0', {"'0'", "'0'", "'0'"}},
+                                                                        {'1', {"'1'", "'0'", "'0'"}},
+                                                                        {'2', {"'0'", "'1'", "'0'"}},
+                                                                        {'3', {"'1'", "'1'", "'0'"}},
+                                                                        {'4', {"'0'", "'0'", "'1'"}},
+                                                                        {'5', {"'1'", "'0'", "'1'"}},
+                                                                        {'6', {"'0'", "'1'", "'1'"}},
+                                                                        {'7', {"'1'", "'1'", "'1'"}}};
+    static const std::map<char, std::vector<std::string>> hex_to_bin = {{'0', {"'0'", "'0'", "'0'", "'0'"}},
+                                                                        {'1', {"'1'", "'0'", "'0'", "'0'"}},
+                                                                        {'2', {"'0'", "'1'", "'0'", "'0'"}},
+                                                                        {'3', {"'1'", "'1'", "'0'", "'0'"}},
+                                                                        {'4', {"'0'", "'0'", "'1'", "'0'"}},
+                                                                        {'5', {"'1'", "'0'", "'1'", "'0'"}},
+                                                                        {'6', {"'0'", "'1'", "'1'", "'0'"}},
+                                                                        {'7', {"'1'", "'1'", "'1'", "'0'"}},
+                                                                        {'8', {"'0'", "'0'", "'0'", "'1'"}},
+                                                                        {'9', {"'1'", "'0'", "'0'", "'1'"}},
+                                                                        {'A', {"'0'", "'1'", "'0'", "'1'"}},
+                                                                        {'B', {"'1'", "'1'", "'0'", "'1'"}},
+                                                                        {'C', {"'0'", "'0'", "'1'", "'1'"}},
+                                                                        {'D', {"'1'", "'0'", "'1'", "'1'"}},
+                                                                        {'E', {"'0'", "'1'", "'1'", "'1'"}},
+                                                                        {'F', {"'1'", "'1'", "'1'", "'1'"}}};
 
-    // TODO add high-impedance support
     std::vector<std::string> VerilogParser::get_bin_from_literal(const Token<std::string>& value_token) const
     {
         const u32 line_number   = value_token.number;
-        const std::string value = utils::to_lower(utils::replace(value_token.string, std::string("_"), std::string("")));
+        const std::string value = utils::to_upper(utils::replace(value_token.string, std::string("_"), std::string("")));
 
         i32 len = -1;
         std::string prefix;
         std::string number;
-        std::vector<std::string> res;
+        std::vector<std::string> result;
 
         // base specified?
         if (value.find('\'') == std::string::npos)
         {
-            prefix = "d";
+            prefix = "D";
             number = value;
         }
         else
@@ -1738,13 +1814,13 @@ namespace hal
         // select base
         switch (prefix.at(0))
         {
-            case 'b': {
+            case 'B': {
                 for (auto it = number.rbegin(); it != number.rend(); it++)
                 {
                     const char c = *it;
-                    if (c >= '0' && c <= '1')
+                    if (c == '0' || c == '1' || c == 'Z')
                     {
-                        res.push_back(std::string(1, c));
+                        result.push_back("'" + std::string(1, c) + "'");
                     }
                     else
                     {
@@ -1755,14 +1831,14 @@ namespace hal
                 break;
             }
 
-            case 'o':
+            case 'O':
                 for (auto it = number.rbegin(); it != number.rend(); it++)
                 {
                     const char c = *it;
                     if (c >= '0' && c <= '7')
                     {
                         const std::vector<std::string>& bits = oct_to_bin.at(c);
-                        res.insert(res.end(), bits.begin(), bits.end());
+                        result.insert(result.end(), bits.begin(), bits.end());
                     }
                     else
                     {
@@ -1772,7 +1848,7 @@ namespace hal
                 }
                 break;
 
-            case 'd': {
+            case 'D': {
                 u64 tmp_val = 0;
 
                 for (const char c : number)
@@ -1790,20 +1866,20 @@ namespace hal
 
                 do
                 {
-                    res.push_back(((tmp_val & 1) == 1) ? "1" : "0");
+                    result.push_back(((tmp_val & 1) == 1) ? "'1'" : "'0'");
                     tmp_val >>= 1;
                 } while (tmp_val != 0);
                 break;
             }
 
-            case 'h': {
+            case 'H': {
                 for (auto it = number.rbegin(); it != number.rend(); it++)
                 {
                     const char c = *it;
-                    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
                     {
                         const std::vector<std::string>& bits = hex_to_bin.at(c);
-                        res.insert(res.end(), bits.begin(), bits.end());
+                        result.insert(result.end(), bits.begin(), bits.end());
                     }
                     else
                     {
@@ -1823,19 +1899,19 @@ namespace hal
         if (len != -1)
         {
             // fill with '0'
-            for (i32 i = 0; i < len - (i32)res.size(); i++)
+            for (i32 i = 0; i < len - (i32)result.size(); i++)
             {
-                res.push_back("0");
+                result.push_back("'0'");
             }
         }
 
-        return res;
+        return result;
     }
 
     std::string VerilogParser::get_hex_from_literal(const Token<std::string>& value_token) const
     {
         const u32 line_number   = value_token.number;
-        const std::string value = utils::to_lower(utils::replace(value_token.string, std::string("_"), std::string("")));
+        const std::string value = utils::to_upper(utils::replace(value_token.string, std::string("_"), std::string("")));
 
         i32 len = -1;
         std::string prefix;
@@ -1845,7 +1921,7 @@ namespace hal
         // base specified?
         if (value.find('\'') == std::string::npos)
         {
-            prefix = "d";
+            prefix = "D";
             number = value;
         }
         else
@@ -1861,10 +1937,10 @@ namespace hal
         // select base
         switch (prefix.at(0))
         {
-            case 'b': {
+            case 'B': {
                 if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '1'); }))
                 {
-                    log_error("verilog_parser", "invalid character within binary number literal {} in line {}", value, line_number);
+                    log_error("verilog_parser", "invalid character within binary number literal {} in line {}.", value, line_number);
                     return "";
                 }
 
@@ -1872,10 +1948,10 @@ namespace hal
                 break;
             }
 
-            case 'o': {
+            case 'O': {
                 if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '7'); }))
                 {
-                    log_error("verilog_parser", "invalid character within octal number literal {} in line {}", value, line_number);
+                    log_error("verilog_parser", "invalid character within octal number literal {} in line {}.", value, line_number);
                     return "";
                 }
 
@@ -1883,10 +1959,10 @@ namespace hal
                 break;
             }
 
-            case 'd': {
+            case 'D': {
                 if (!std::all_of(number.begin(), number.end(), [](const char& c) { return (c >= '0' && c <= '9'); }))
                 {
-                    log_error("verilog_parser", "invalid character within decimal number literal {} in line {}", value, line_number);
+                    log_error("verilog_parser", "invalid character within decimal number literal {} in line {}.", value, line_number);
                     return "";
                 }
 
@@ -1894,18 +1970,18 @@ namespace hal
                 break;
             }
 
-            case 'h': {
+            case 'H': {
                 std::string res;
 
                 for (const char c : number)
                 {
-                    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))
                     {
                         res += c;
                     }
                     else
                     {
-                        log_error("verilog_parser", "invalid character within hexadecimal number literal {} in line {}", value, line_number);
+                        log_error("verilog_parser", "invalid character within hexadecimal number literal {} in line {}.", value, line_number);
                         return "";
                     }
                 }
@@ -1914,7 +1990,7 @@ namespace hal
             }
 
             default: {
-                log_error("verilog_parser", "invalid base '{}' within number literal {} in line {}", prefix, value, line_number);
+                log_error("verilog_parser", "invalid base '{}' within number literal {} in line {}.", prefix, value, line_number);
                 return "";
             }
         }
@@ -1923,43 +1999,13 @@ namespace hal
         if (len != -1)
         {
             // fill with '0'
-            ss << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(number, 0, base);
+            ss << std::uppercase << std::setfill('0') << std::setw((len + 3) / 4) << std::hex << stoull(number, 0, base);
         }
         else
         {
-            ss << std::hex << stoull(number, 0, base);
+            ss << std::uppercase << std::hex << stoull(number, 0, base);
         }
         return ss.str();
-    }
-
-    bool VerilogParser::is_in_bounds(const std::vector<std::pair<i32, i32>>& bounds, const std::vector<std::pair<i32, i32>>& reference_bounds) const
-    {
-        if (bounds.size() != reference_bounds.size())
-        {
-            return false;
-        }
-
-        for (u32 i = 0; i < bounds.size(); i++)
-        {
-            i32 ref_max, ref_min;
-            if (reference_bounds[i].first < reference_bounds[i].second)
-            {
-                ref_min = reference_bounds[i].first;
-                ref_max = reference_bounds[i].second;
-            }
-            else
-            {
-                ref_min = reference_bounds[i].second;
-                ref_max = reference_bounds[i].first;
-            }
-
-            if (!(((ref_min <= bounds[i].first) && (bounds[i].first <= ref_max)) && ((ref_min <= bounds[i].second) && (bounds[i].second <= ref_max))))
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     std::vector<std::string> VerilogParser::expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const
@@ -1978,7 +2024,7 @@ namespace hal
         {
             for (const u32 index : ranges[dimension])
             {
-                expand_ranges_recursively(expanded_names, current_name + "(" + core_strings::convert_string<std::string, std::string>(std::to_string(index)) + ")", ranges, dimension + 1);
+                expand_ranges_recursively(expanded_names, current_name + "(" + std::to_string(index) + ")", ranges, dimension + 1);
             }
         }
         else

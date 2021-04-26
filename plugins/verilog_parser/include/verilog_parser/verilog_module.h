@@ -48,10 +48,12 @@ namespace hal
         std::vector<std::pair<std::string, std::string>> m_expanded_assignments;
 
         // instances
-        std::vector<std::string> m_instances;                                                                                                 // instance names
-        std::unordered_map<std::string, std::string> m_instance_types;                                                                        // instance types
-        std::unordered_map<std::string, std::vector<std::pair<Token<std::string>, TokenStream<std::string>>>> m_instance_port_assignments;    // port assignments
-        std::unordered_map<std::string, std::vector<std::tuple<std::string, std::string, std::string>>> m_instance_generic_assignments;       // generic assignments
-        std::unordered_map<std::string, std::vector<std::tuple<std::string, std::string, std::string>>> m_instance_attributes;                // instance attributes
+        std::vector<std::string> m_instances;                                                                                              // instance names
+        std::unordered_map<std::string, std::string> m_instance_types;                                                                     // instance types
+        std::unordered_map<std::string, std::vector<std::pair<Token<std::string>, TokenStream<std::string>>>> m_instance_assignments;      // port assignments
+        std::unordered_map<std::string, std::vector<std::tuple<std::string, std::string, std::string>>> m_instance_generic_assignments;    // generic assignments
+        std::unordered_map<std::string, std::vector<std::tuple<std::string, std::string, std::string>>> m_instance_attributes;             // instance attributes
+        std::unordered_map<std::string, std::vector<std::pair<std::string, std::string>>> m_expanded_gate_assignments;
+        std::unordered_map<std::string, std::vector<std::pair<std::string, std::string>>> m_expanded_module_assignments;
     };
 }    // namespace hal
